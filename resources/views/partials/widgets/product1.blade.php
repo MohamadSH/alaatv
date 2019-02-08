@@ -2,7 +2,7 @@
 @include('partials.widgets.product1',[
                 'widgetTitle'      => $product->name,
                 'widgetPic'        => $product->photo,
-                'widgetLink'       => action("ProductController@show", $product),
+                'widgetLink'       => action("Web\ProductController@show", $product),
                 'widgetPrice'      => $lesson["content_count"],
                 'widgetPriceLabel' => ($product->isFree || $product->basePrice == 0 ? 0 : 1)
                 ])

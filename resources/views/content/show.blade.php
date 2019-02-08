@@ -9,11 +9,11 @@
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
                 <i class = "flaticon-home-2 m--padding-right-5"></i>
-                <a class = "m-link" href = "{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item">
                 <i class = "flaticon-photo-camera m--padding-right-5"></i>
-                <a class = "m-link" href = "{{ action("ContentController@index") }}">@lang('content.Educational Content Of Alaa')</a>
+                <a class = "m-link" href = "{{ action("Web\ContentController@index") }}">@lang('content.Educational Content Of Alaa')</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
                 <a class = "m-link" href = "#"> {{ $content->displayName }} </a>
@@ -22,8 +22,8 @@
     </nav>
     <input id = "js-var-contentId" class = "m--hide" type = "hidden" value = '{{ $content->id }}'>
     <input id = "js-var-contentDName" class = "m--hide" type = "hidden" value = '{{ $content->displayName }}'>
-    <input id = "js-var-contentUrl" class = "m--hide" type = "hidden" value = '{{action("ContentController@show" , $content)}}'>
-    <input id = "js-var-contentEmbedUrl" class = "m--hide" type = "hidden" value = '{{action("ContentController@embed" , $content)}}'>
+    <input id = "js-var-contentUrl" class = "m--hide" type = "hidden" value = '{{action("Web\ContentController@show" , $content)}}'>
+    <input id = "js-var-contentEmbedUrl" class = "m--hide" type = "hidden" value = '{{action("Web\ContentController@embed" , $content)}}'>
 @endsection
 
 
@@ -49,7 +49,7 @@
                                     <nav aria-label = "Page navigation" class = "table-responsive">
                                         <ul class = "pagination justify-content-center">
                                             <li class = "page-item">
-                                                <a class = "page-link" href = "{{action("ContentController@show" , $videosWithSameSet->first()["content"])}}" aria-label = "اولین">
+                                                <a class = "page-link" href = "{{action("Web\ContentController@show" , $videosWithSameSet->first()["content"])}}" aria-label = "اولین">
                                                     <span aria-hidden = "true">&laquo;</span>
                                                     <span class = "sr-only">اولین</span>
                                                 </a>
@@ -57,19 +57,19 @@
                                             @foreach($videosWithSameSetL->take(-5) as $item)
 
                                                 <li class = "page-item @if($item["content"]->id == $content->id) active @endif">
-                                                    <a class = "page-link" href = "{{action("ContentController@show" , $item["content"])}}">{{ $item["content"]->order }}</a>
+                                                    <a class = "page-link" href = "{{action("Web\ContentController@show" , $item["content"])}}">{{ $item["content"]->order }}</a>
                                                 </li>
 
                                             @endforeach
                                             @foreach($videosWithSameSetR->take(6) as $item)
 
                                                 <li class = "page-item @if($item["content"]->id == $content->id) active @endif">
-                                                    <a class = "page-link" href = "{{action("ContentController@show" , $item["content"])}}">{{ $item["content"]->order }}</a>
+                                                    <a class = "page-link" href = "{{action("Web\ContentController@show" , $item["content"])}}">{{ $item["content"]->order }}</a>
                                                 </li>
 
                                             @endforeach
                                             <li class = "page-item">
-                                                <a class = "page-link" href = "{{action("ContentController@show" , $videosWithSameSet->last()["content"])}}" aria-label = "آخرین">
+                                                <a class = "page-link" href = "{{action("Web\ContentController@show" , $videosWithSameSet->last()["content"])}}" aria-label = "آخرین">
                                                     <span aria-hidden = "true">&raquo;</span>
                                                     <span class = "sr-only">آخرین</span>
                                                 </a>
@@ -286,7 +286,7 @@
                                                 <img src = "/assets/app/media/img/files/pdf.svg" alt = "">
                                             </div>
                                             <div class = "m-widget4__info">
-                                                <a href = "{{ action("ContentController@show" , $item["content"]) }}" class = "m-link m--font-light">
+                                                <a href = "{{ action("Web\ContentController@show" , $item["content"]) }}" class = "m-link m--font-light">
                                                 <span class = "m-widget4__text ">
                                                 {{ $item["content"]->name }}
                                                 </span>
@@ -345,7 +345,7 @@
                                                     {{ $item["content"]->display_name }}
                                                 </h4>
                                                 <div class = "m-widget5__info">
-                                                    <a href = "{{action("ContentController@show" , $item["content"])}}"> link</a>
+                                                    <a href = "{{action("Web\ContentController@show" , $item["content"])}}"> link</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -379,7 +379,7 @@
                 @else
             {
                 thumb: '{{(isset($item["thumbnail"]))?$item["thumbnail"]:""}}',
-                url: '{{action("ContentController@show" , $item["content"])}}',
+                url: '{{action("Web\ContentController@show" , $item["content"])}}',
                 title: ' {{($item["content"]->display_name)}}',
                 duration: '20:00'
             },

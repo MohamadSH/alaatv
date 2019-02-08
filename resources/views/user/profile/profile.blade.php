@@ -24,7 +24,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -120,7 +120,7 @@
                                                     {{--</div>--}}
                                                     {{--<div class="portlet-body">--}}
                                                         {{--<div class="row">--}}
-                                                            {{--<form action="{{ action("UserController@sendGeneratedPassword") }}"--}}
+                                {{--<form action="{{ action("Web\UserController@sendGeneratedPassword") }}"--}}
                                                                   {{--method="post">--}}
                                                                 {{--{{ csrf_field() }}--}}
                                                                 {{--<div class="form-actions">--}}
@@ -314,7 +314,7 @@
                                         }
                                         userAjax = $.ajax({
                                             type: "POST",
-                                            url: "{{action("UserController@removeFromLottery")}}",
+                                            url: "{{action("Web\UserController@removeFromLottery")}}",
                                             contentType: "application/json",
                                             dataType: "json",
                                             statusCode: {
@@ -381,7 +381,7 @@
         {{--}--}}
         {{--userAjax = $.ajax({--}}
         {{--type: "POST",--}}
-        {{--url: "{{action("OrderController@addToArabiHozouri")}}",--}}
+        {{--url: "{{action("Web\OrderController@addToArabiHozouri")}}",--}}
         {{--contentType: "application/json",--}}
         {{--dataType: "json",--}}
         {{--statusCode: {--}}
@@ -434,7 +434,7 @@
         {{--}--}}
         {{--userAjax = $.ajax({--}}
         {{--type: "POST",--}}
-        {{--url: "{{action("OrderController@removeArabiHozouri")}}",--}}
+        {{--url: "{{action("Web\OrderController@removeArabiHozouri")}}",--}}
         {{--contentType: "application/json",--}}
         {{--dataType: "json",--}}
         {{--statusCode: {--}}

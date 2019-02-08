@@ -50,7 +50,7 @@
                 <div id="js-grid-lightbox-gallery" class="cbp">
                     @foreach( $landingProducts as $product)
                         <div class="cbp-item @foreach ($product["majors"] as $major) {{ $major }} @endforeach">
-                            <a href="{{action("ProductController@show" , $product["product"]->id)}}" class="cbp-caption"
+                            <a href = "{{action("Web\ProductController@show" , $product["product"]->id)}}" class = "cbp-caption"
                                data-title="{{$product["product"]->name}}" rel="nofollow">
                                 <div class="cbp-caption-defaultWrap">
                                     @if(isset($product["product"]->image[0]))

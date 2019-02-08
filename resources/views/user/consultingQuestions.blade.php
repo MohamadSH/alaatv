@@ -14,7 +14,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -64,8 +64,7 @@
                                         <td> {{$counter}} </td>
                                         <td>@if(strlen($question->title) > 0)  {{$question->title}} @else <span
                                                     class="label label-sm label-danger">بدون عنوان </span> @endif</td>
-                                        <td> @if(strlen($question->file) > 0)  <a target="_blank"
-                                                                                  href="{{action("HomeController@download" , ["content"=>"سؤال مشاوره ای","fileName"=>$question->file ])}}"
+                                        <td> @if(strlen($question->file) > 0)  <a target="_blank" href = "{{action("Web\HomeController@download" , ["content"=>"سؤال مشاوره ای","fileName"=>$question->file ])}}"
                                                                                   id="link_{{$counter}}"
                                                                                   class="btn btn-icon-only blue"><i
                                                         class="fa fa-download"></i></a>@else <span

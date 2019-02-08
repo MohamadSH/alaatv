@@ -17,7 +17,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -60,7 +60,7 @@
             {{--{{$belonging->CreatedAt_Jalali()}}--}}
             {{--</div>--}}
             {{--<div class="mt-footer-button">--}}
-            {{--<a href="{{action("HomeController@download" , ["content"=>"سند فنی دارایی","fileName"=>$belonging->file ])}}"  class="btn btn-circle btn-danger btn-sm">دانلود سند فنی</a>--}}
+            {{--<a href="{{action("Web\HomeController@download" , ["content"=>"سند فنی دارایی","fileName"=>$belonging->file ])}}"  class="btn btn-circle btn-danger btn-sm">دانلود سند فنی</a>--}}
             {{--</div>--}}
             {{--</div>--}}
             {{--</div>--}}
@@ -124,7 +124,7 @@
                                             <a href="javascript:">{{$belonging->name}}</a>
                                         </h3>
                                         <p>
-                                            <a href="{{action("HomeController@download" , ["content"=>"سند فنی دارایی","fileName"=>$belonging->file ])}}"
+                                            <a href = "{{action("Web\HomeController@download" , ["content"=>"سند فنی دارایی","fileName"=>$belonging->file ])}}"
                                                class="btn btn-circle btn-danger btn-sm">دانلود سند فنی</a></p>
                                     </div>
                                 </li>

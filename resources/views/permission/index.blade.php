@@ -22,7 +22,7 @@
                 <ul class="dropdown-menu" role="menu">
                     @permission((Config::get('constants.SHOW_PERMISSION_ACCESS')))
                     <li>
-                        <a href="{{action("PermissionController@edit" , $permission)}}">
+                        <a href = "{{action("Web\PermissionController@edit" , $permission)}}">
                             <i class="fa fa-pencil"></i> اصلاح </a>
                     </li>
                     @endpermission
@@ -43,8 +43,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                        <button type="button" data-dismiss="modal" class="btn green"
-                                onclick="removePermission('{{action("PermissionController@destroy" , $permission)}}');">
+                        <button type="button" data-dismiss="modal" class="btn green" onclick = "removePermission('{{action("Web\PermissionController@destroy" , $permission)}}');">
                             بله
                         </button>
                     </div>

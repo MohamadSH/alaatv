@@ -771,11 +771,11 @@
         </fieldset>
         <div class="form-actions" style="text-align: center">
             @if(isset($formByPass) && !$formByPass)
-                <button type="button" class="btn blue"
-                        onclick="location.href = '@if(session()->has("redirectTo"))  {{session()->get("redirectTo")}}@else {{action("IndexPageController")}} @endif' ">
+                <button type="button" class="btn blue" onclick = "location.href = '@if(session()->has("redirectTo"))  {{session()->get("redirectTo")}}@else {{action("Web\IndexPageController")}} @endif' ">
                     بعدا پر می کنم
                 </button>
-            @elseif(isset($hasHomeButton)) <a href="{{action("IndexPageController")}}" class="btn red"> @lang('page.Home') </a>
+            @elseif(isset($hasHomeButton))
+                <a href = "{{action("Web\IndexPageController")}}" class = "btn red"> @lang('page.Home') </a>
             @endif
             @if(!Auth::user()->lockProfile)
                 <button type="submit" class="btn green"> ادامه</button>

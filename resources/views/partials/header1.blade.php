@@ -11,7 +11,7 @@
             <div class = "m-stack__item m-brand  m-brand--skin-dark ">
                 <div class = "m-stack m-stack--ver m-stack--general">
                     <div class = "m-stack__item m-stack__item--middle m-brand__logo">
-                        <a href = "{{action("IndexPageController")}}" class = "m-brand__logo-wrapper">
+                        <a href = "{{action("Web\IndexPageController")}}" class = "m-brand__logo-wrapper">
                             <img alt = "لوگوی سایت آلاء" src = "{{route('image', ['category'=>'11','w'=>'135' , 'h'=>'67' ,  'filename' =>  optional($wSetting->site)->siteLogo ])}}"/>
                         </a>
                     </div>
@@ -260,7 +260,7 @@
                                     </li>
                                 @endif
                                 <li class = "m-nav__item">
-                                    <a href = "{{ action("UserController@userOrders") }}" class = "m-nav__link">
+                                    <a href = "{{ action("Web\UserController@userOrders") }}" class = "m-nav__link">
                                         <span class = "m-nav__link-icon">
                                             <span class = "m-nav__link-icon-wrapper"><i class = "flaticon-coins"></i></span>
                                             <span class = "m-nav__link-badge m-badge  m-badge--accent">{{ number_format(Auth::user()->getTotalWalletBalance()) }}</span>
@@ -268,7 +268,7 @@
                                     </a>
                                 </li>
                                 <li class = "m-nav__item">
-                                    <a href = "{{ action("OrderController@checkoutReview") }}" class = "m-nav__link">
+                                    <a href = "{{ action("Web\OrderController@checkoutReview") }}" class = "m-nav__link">
                                         <span class = "m-nav__link-icon">
                                             <span class = "m-nav__link-icon-wrapper"><i class = "flaticon-shopping-basket"></i></span>
                                             <span class = "m-nav__link-badge m-badge m-badge--danger">{{ Auth::user()->numberOfProductsInBasket }}</span>
@@ -314,7 +314,7 @@
                                                     </li>
                                                     @if( Auth::check() )
                                                         <li class = "m-nav__item">
-                                                            <a href = "{{ action("UserController@show",Auth::user()) }}" class = "m-nav__link">
+                                                            <a href = "{{ action("Web\UserController@show",Auth::user()) }}" class = "m-nav__link">
                                                                 <i class = "m-nav__link-icon flaticon-profile-1"></i>
                                                                 <span class = "m-nav__link-title">
                                                                 <span class = "m-nav__link-wrap">
@@ -325,13 +325,13 @@
                                                         </li>
 
                                                         <li class = "m-nav__item">
-                                                            <a href = "{{ action("UserController@userProductFiles")  }}" class = "m-nav__link">
+                                                            <a href = "{{ action("Web\UserController@userProductFiles")  }}" class = "m-nav__link">
                                                                 <i class = "m-nav__link-icon flaticon-share"></i>
                                                                 <span class = "m-nav__link-text">فیلم ها و جزوه های من</span>
                                                             </a>
                                                         </li>
                                                         <li class = "m-nav__item">
-                                                            <a href = "{{ action("UserController@userOrders")  }}" class = "m-nav__link">
+                                                            <a href = "{{ action("Web\UserController@userOrders")  }}" class = "m-nav__link">
                                                                 <i class = "m-nav__link-icon flaticon-chat-1"></i>
                                                                 <span class = "m-nav__link-text">سفارشهای من</span>
                                                             </a>

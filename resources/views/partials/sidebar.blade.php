@@ -11,14 +11,14 @@
                 <i class = "m-menu__section-icon flaticon-more-v2"></i>
             </li>
             <li class = "m-menu__item  @if(isset($pageName) && strcmp($pageName , "dashboard")==0) m-menu__item--active @endif" aria-haspopup = "true">
-                <a href = "{{ action("IndexPageController") }}" class = "m-menu__link ">
+                <a href = "{{ action("Web\IndexPageController") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
                     <i class = "m-menu__link-icon flaticon-line-graph"></i>
                     <span class = "m-menu__link-text">صفحه اصلی</span>
                 </a>
             </li>
             <li class = "m-menu__item  @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0) m-menu__item--active @endif" aria-haspopup = "true">
-                <a href = "{{ action("ShopPageController") }}" class = "m-menu__link ">
+                <a href = "{{ action("Web\ShopPageController") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
                     <i class = "m-menu__link-icon flaticon-shopping-basket"></i>
                     <span class = "m-menu__link-text">محصولات آموزشی</span>
@@ -44,7 +44,7 @@
                         </li>
                         @foreach($sections as $section)
                             <li class = "m-menu__item " aria-haspopup = "true"  m-menu-link-redirect = "1">
-                                <a href = "{{ urldecode(action("ContentController@index" , ["tags" => $section["tags"]])) }}" class = "m-menu__link ">
+                                <a href = "{{ urldecode(action("Web\ContentController@index" , ["tags" => $section["tags"]])) }}" class = "m-menu__link ">
                                     <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                         <span></span>
                                     </i>
@@ -57,7 +57,7 @@
             </li>
 
             <li class = "m-menu__item @if(isset($pageName) && strcmp($pageName , "donate")==0) m-menu__item--active @endif" aria-haspopup = "true" m-menu-link-redirect = "1">
-                <a href = "{{ action("DonateController") }}" class = "m-menu__link ">
+                <a href = "{{ action("Web\DonateController") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
                     <i class = "m-menu__link-icon flaticon-suitcase"></i>
                     <span class = "m-menu__link-text">کمک مالی به آلاء</span>
@@ -65,7 +65,7 @@
             </li>
             @if(Auth::check())
             <li class = "m-menu__item @if(isset($pageName) && strcmp($pageName , "submitKonkurResult")==0) m-menu__item--active @endif" aria-haspopup = "true" m-menu-link-redirect = "1">
-                <a href = "{{ action("HomeController@submitKonkurResult") }}" class = "m-menu__link ">
+                <a href = "{{ action("Web\HomeController@submitKonkurResult") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
                     <i class = "m-menu__link-icon fa fa-graduation-cap"></i>
                     <span class = "m-menu__link-text">ثبت رتبه 97</span>
@@ -73,14 +73,14 @@
             </li>
             @endif
             <li class = "m-menu__item @if(isset($pageName) && strcmp($pageName , "rules")==0) m-menu__item--active @endif" aria-haspopup = "true" m-menu-link-redirect = "1">
-                <a href = "{{ action("RulesPageController") }}" class = "m-menu__link ">
+                <a href = "{{ action("Web\RulesPageController") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
                     <i class = "m-menu__link-icon flaticon-warning-sign"></i>
                     <span class = "m-menu__link-text">قوانین</span>
                 </a>
             </li>
             <li class = "m-menu__item @if(isset($pageName) && strcmp($pageName , "contactUs")==0) m-menu__item--active @endif" aria-haspopup = "true" m-menu-link-redirect = "1">
-                <a href = "{{ action("ContactUsController") }}" class = "m-menu__link ">
+                <a href = "{{ action("Web\ContactUsController") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
                     <i class = "m-menu__link-icon flaticon-support"></i>
                     <span class = "m-menu__link-text">@lang('page.contact us')</span>
@@ -118,7 +118,7 @@
                             </span>
                             </li>
                             <li class = "m-menu__item " aria-haspopup = "true"  m-menu-link-redirect = "1">
-                                <a  target="_blank" href = "{{ action("HomeController@adminBot" , ["bot"=>"wallet"]) }}" class = "m-menu__link ">
+                                <a target = "_blank" href = "{{ action("Web\HomeController@adminBot" , ["bot"=>"wallet"]) }}" class = "m-menu__link ">
                                     <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                         <span></span>
                                     </i>
@@ -126,7 +126,7 @@
                                 </a>
                             </li>
                             <li class = "m-menu__item " aria-haspopup = "true"  m-menu-link-redirect = "1">
-                                <a  target="_blank" href = "{{ action("HomeController@adminBot" , ["bot"=>"excel"]) }}" class = "m-menu__link ">
+                                <a target = "_blank" href = "{{ action("Web\HomeController@adminBot" , ["bot"=>"excel"]) }}" class = "m-menu__link ">
                                     <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                         <span></span>
                                     </i>
@@ -134,7 +134,7 @@
                                 </a>
                             </li>
                             <li class = "m-menu__item " aria-haspopup = "true"  m-menu-link-redirect = "1">
-                                <a  target="_blank" href = "{{action("HomeController@bot" , ["voucherbot"=>1])}}" class = "m-menu__link ">
+                                <a target = "_blank" href = "{{action("Web\HomeController@bot" , ["voucherbot"=>1])}}" class = "m-menu__link ">
                                     <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                         <span></span>
                                     </i>
@@ -148,7 +148,7 @@
 
                 @ability(Config::get('constants.ROLE_ADMIN'),Config::get('constants.TELEMARKETING_PANEL_ACCESS'))
                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                    <a href = "{{action("HomeController@adminTeleMarketing")}}" class = "m-menu__link ">
+                    <a href = "{{action("Web\HomeController@adminTeleMarketing")}}" class = "m-menu__link ">
                         <span class = "m-menu__item-here"></span>
                         <i class = "m-menu__link-icon flaticon-graphic"></i>
                         <span class = "m-menu__link-text">تله مارکتینگ</span>
@@ -174,7 +174,7 @@
                             </span>
                             </li>
                             <li class = "m-menu__item " aria-haspopup = "true"  m-menu-link-redirect = "1">
-                                <a  target="_blank" href = "{{ action("HomeController@adminLottery" , ["lottery"=>"hamyeshDey"]) }}" class = "m-menu__link ">
+                                <a target = "_blank" href = "{{ action("Web\HomeController@adminLottery" , ["lottery"=>"hamyeshDey"]) }}" class = "m-menu__link ">
                                     <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                         <span></span>
                                     </i>
@@ -182,7 +182,7 @@
                                 </a>
                             </li>
                             <li class = "m-menu__item " aria-haspopup = "true"  m-menu-link-redirect = "1">
-                                <a  target="_blank" href = "{{ action("HomeController@adminLottery" , ["lottery"=>"hamyeshTalai"]) }}" class = "m-menu__link ">
+                                <a target = "_blank" href = "{{ action("Web\HomeController@adminLottery" , ["lottery"=>"hamyeshTalai"]) }}" class = "m-menu__link ">
                                     <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                         <span></span>
                                     </i>
@@ -190,7 +190,7 @@
                                 </a>
                             </li>
                             <li class = "m-menu__item " aria-haspopup = "true"  m-menu-link-redirect = "1">
-                                <a  target="_blank" href = "{{ action("HomeController@adminLottery" , ["lottery"=>"eideFetr"]) }}" class = "m-menu__link ">
+                                <a target = "_blank" href = "{{ action("Web\HomeController@adminLottery" , ["lottery"=>"eideFetr"]) }}" class = "m-menu__link ">
                                     <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                         <span></span>
                                     </i>
@@ -220,7 +220,7 @@
                             </li>
                             @permission((Config::get('constants.SHOW_SITE_CONFIG_ACCESS')))
                             <li class = "m-menu__item " aria-haspopup = "true"  m-menu-link-redirect = "1">
-                                <a href = "{{ action("HomeController@adminSiteConfig") }}" class = "m-menu__link ">
+                                <a href = "{{ action("Web\HomeController@adminSiteConfig") }}" class = "m-menu__link ">
                                     <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                         <span></span>
                                     </i>
@@ -230,7 +230,7 @@
                             @endpermission
                             @permission((Config::get('constants.LIST_SLIDESHOW_ACCESS')))
                             <li class = "m-menu__item " aria-haspopup = "true"  m-menu-link-redirect = "1">
-                                <a href = "{{ action("HomeController@adminSlideShow") }}" class = "m-menu__link ">
+                                <a href = "{{ action("Web\HomeController@adminSlideShow") }}" class = "m-menu__link ">
                                     <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                         <span></span>
                                     </i>
@@ -240,7 +240,7 @@
                             @endpermission
 
                             <li class = "m-menu__item " aria-haspopup = "true"  m-menu-link-redirect = "1">
-                                <a href = "{{ action("AfterLoginFormController@index") }}" class = "m-menu__link ">
+                                <a href = "{{ action("Web\AfterLoginFormController@index") }}" class = "m-menu__link ">
                                     <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                         <span></span>
                                     </i>
@@ -254,14 +254,14 @@
 
                 @ability(Config::get('constants.ROLE_ADMIN'),Config::get('constants.USER_ADMIN_PANEL_ACCESS'))
                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                    <a href = "{{ action("HomeController@admin") }}" class = "m-menu__link ">
+                    <a href = "{{ action("Web\HomeController@admin") }}" class = "m-menu__link ">
                         <span class = "m-menu__item-here"></span>
                         <i class = "m-menu__link-icon flaticon-network"></i>
                         <span class = "m-menu__link-text">کاربران</span>
                     </a>
                 </li>
                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                    <a href = "{{ action("HomeController@specialAddUser") }}" class = "m-menu__link ">
+                    <a href = "{{ action("Web\HomeController@specialAddUser") }}" class = "m-menu__link ">
                         <span class = "m-menu__item-here"></span>
                         <i class = "m-menu__link-icon flaticon-network"></i>
                         <span class = "m-menu__link-text">درج کاربر با سفارش</span>
@@ -270,7 +270,7 @@
                 @endability
                 @permission((Config::get('constants.ORDER_ADMIN_PANEL_ACCESS')))
                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                    <a href = "{{ action("HomeController@adminOrder") }}" class = "m-menu__link ">
+                    <a href = "{{ action("Web\HomeController@adminOrder") }}" class = "m-menu__link ">
                         <span class = "m-menu__item-here"></span>
                         <i class = "m-menu__link-icon flaticon-network"></i>
                         <span class = "m-menu__link-text"> سفارش ها</span>
@@ -280,7 +280,7 @@
 
                 @permission((Config::get('constants.PRODUCT_ADMIN_PANEL_ACCESS')))
                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                    <a href = "{{ action("HomeController@adminProduct") }}" class = "m-menu__link ">
+                    <a href = "{{ action("Web\HomeController@adminProduct") }}" class = "m-menu__link ">
                         <span class = "m-menu__item-here"></span>
                         <i class = "m-menu__link-icon flaticon-technology"></i>
                         <span class = "m-menu__link-text">محصولات</span>
@@ -290,7 +290,7 @@
 
                 @permission((Config::get('constants.CONTENT_ADMIN_PANEL_ACCESS')))
                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                    <a href = "{{ action("HomeController@adminContent") }}" class = "m-menu__link ">
+                    <a href = "{{ action("Web\HomeController@adminContent") }}" class = "m-menu__link ">
                         <span class = "m-menu__item-here"></span>
                         <i class = "m-menu__link-icon flaticon-technology"></i>
                         <span class = "m-menu__link-text">محتوا</span>
@@ -300,7 +300,7 @@
 
                 @permission((Config::get('constants.SMS_ADMIN_PANEL_ACCESS')))
                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                    <a href = "{{ action("HomeController@adminSMS") }}" class = "m-menu__link ">
+                    <a href = "{{ action("Web\HomeController@adminSMS") }}" class = "m-menu__link ">
                         <span class = "m-menu__item-here"></span>
                         <i class = "m-menu__link-icon flaticon-technology"></i>
                         <span class = "m-menu__link-text">ارسال پیامک</span>
@@ -310,7 +310,7 @@
 
                 @permission((Config::get('constants.REPORT_ADMIN_PANEL_ACCESS')))
                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                    <a href = "{{ action("HomeController@adminReport") }}" class = "m-menu__link ">
+                    <a href = "{{ action("Web\HomeController@adminReport") }}" class = "m-menu__link ">
                         <span class = "m-menu__item-here"></span>
                         <i class = "m-menu__link-icon flaticon-technology"></i>
                         <span class = "m-menu__link-text">گزارش</span>
@@ -326,7 +326,7 @@
 
 
                 <li class = "m-menu__item  @if(isset($pageName) && strcmp($pageName , "time-staff")==0) m-menu__item--active @endif" aria-haspopup = "true" m-menu-link-redirect = "1">
-                    <a href = "{{ action("EmployeetimesheetController@create") }}" class = "m-menu__link ">
+                    <a href = "{{ action("Web\EmployeetimesheetController@create") }}" class = "m-menu__link ">
                         <span class = "m-menu__item-here"></span>
                         <i class = "m-menu__link-icon flaticon-clock"></i>
                         <span class = "m-menu__link-text">ثبت ساعت کار</span>

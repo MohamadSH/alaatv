@@ -4,15 +4,14 @@
         <div class="caption">
             <i class="icon-settings font-dark"></i>
             <span class="caption-subject font-dark sbold uppercase">@if($product->producttype->id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))
-                    پیکربندی محصول ٬@endif<a
-                        href="{{action("ProductController@show" , $product)}}">{{$product->name}}</a></span>
+                    پیکربندی محصول ٬@endif<a href = "{{action("Web\ProductController@show" , $product)}}">{{$product->name}}</a></span>
         </div>
         @permission((Config::get('constants.EDIT_CONFIGURE_PRODUCT_ACCESS')))
 
         @endpermission
         {{--<div class="actions">--}}
         {{--<div class="btn-group">--}}
-        {{--<a class="btn btn-sm btn-info dropdown-toggle" href="{{action("ProductController@completeEachChild", $product)}}" >افزودن فرزند--}}
+        {{--<a class="btn btn-sm btn-info dropdown-toggle" href="{{action("Web\ProductController@completeEachChild", $product)}}" >افزودن فرزند--}}
         {{--<i class="fa fa-angle-left"></i>--}}
         {{--</a>--}}
         {{--</div>--}}
@@ -43,8 +42,7 @@
                             @else
                                 <td class="col-md-2 text-center">{!! Form::submit('فعال کردن' , ['class' => 'btn green-meadow']) !!} </td>
                             @endif
-                            <td class="col-md-2 text-center"><a class="btn btn-info"
-                                                                href="{{action("ProductController@edit" , $child)}}">اصلاح</a>
+                            <td class="col-md-2 text-center"><a class="btn btn-info" href = "{{action("Web\ProductController@edit" , $child)}}">اصلاح</a>
                             </td>
                             @endpermission
                         </tr>
@@ -62,8 +60,7 @@
 {{--<!-- BEGIN SAMPLE FORM PORTLET-->--}}
 {{--<div class="portlet light ">--}}
 {{--<div class="portlet-body">--}}
-{{--<div class="clearfix text-center">--}}
-{{--<a href="{{action("ProductController@createConfiguration" , $product)}}" type="button" class="btn btn-info btn-lg bold">--}}
+{{--<div class="clearfix text-center">--}}{{--<a href="{{action("Web\ProductController@createConfiguration" , $product)}}" type="button" class="btn btn-info btn-lg bold">--}}
 {{--<li class="fa fa-plus-circle"></li>  ایجاد پیکر بندی</a>--}}
 {{--</div>--}}
 {{--</div>--}}

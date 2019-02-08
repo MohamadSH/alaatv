@@ -123,10 +123,8 @@
                                                         <img src="/acm/extra/gift-box.png" width="25">
                                                     @endif
                                                     <a style="color:#607075" target="_blank"
-                                                       href="@if($orderproduct->product->hasParents())
-                                                       {{action("ProductController@show",$orderproduct->product->parents->first())}}
-                                                       @else
-                                                       {{action("ProductController@show",$orderproduct->product)}}
+                                                       href="@if($orderproduct->product->hasParents()){{action("Web\ProductController@show",$orderproduct->product->parents->first())}}
+                                                       @else{{action("Web\ProductController@show",$orderproduct->product)}}
                                                        @endif"
                                                     >
                                                         {{$orderproduct->product->name}}
@@ -170,11 +168,9 @@
                                     @else
                                         <br>
                                         @foreach($order->successfulTransactions as $successfulTransaction)
-                                            <a target="_blank"
-                                               href="{{action("TransactionController@edit" ,$successfulTransaction )}}"
+                                            <a target="_blank" href = "{{action("Web\TransactionController@edit" ,$successfulTransaction )}}"
                                                class="btn btn-xs blue-sharp btn-outline  sbold">اصلاح</a>
-                                            @if($successfulTransaction->getGrandParent() !== false)<a target="_blank"
-                                                                                                      href="{{action("TransactionController@edit" ,$successfulTransaction->getGrandParent() )}}"
+                                            @if($successfulTransaction->getGrandParent() !== false)<a target="_blank" href = "{{action("Web\TransactionController@edit" ,$successfulTransaction->getGrandParent() )}}"
                                                                                                       class="btn btn-xs blue-sharp btn-outline  sbold">رفتن
                                                 به تراکنش والد</a>@endif
                                             @if(isset($successfulTransaction->paymentmethod->displayName)) {{ $successfulTransaction->paymentmethod->displayName}} @else
@@ -202,8 +198,7 @@
                                     @else
                                         <br>
                                         @foreach($order->pendingTransactions as $pendingTransaction)
-                                            <a target="_blank"
-                                               href="{{action("TransactionController@edit" ,$pendingTransaction )}}"
+                                            <a target="_blank" href = "{{action("Web\TransactionController@edit" ,$pendingTransaction )}}"
                                                class="btn btn-xs blue-sharp btn-outline  sbold">اصلاح</a>
                                             @if(isset($pendingTransaction->paymentmethod->displayName)) {{$pendingTransaction->paymentmethod->displayName}} @endif
                                             @if(isset($pendingTransaction->transactionID))  ,شماره
@@ -233,7 +228,7 @@
                                     @else
                                         <br>
                                         @foreach($order->unpaidTransactions as $unpaid)
-                                            <a target="_blank" href="{{action("TransactionController@edit" ,$unpaid )}}"
+                                            <a target = "_blank" href = "{{action("Web\TransactionController@edit" ,$unpaid )}}"
                                                class="btn btn-xs blue-sharp btn-outline  sbold">اصلاح</a>
                                             @if(isset($unpaid->cost))  ,مبلغ: {{ number_format($unpaid->cost) }} @else
                                                 <span class="bold font-red">بدون مبلغ</span>  @endif

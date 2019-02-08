@@ -104,7 +104,7 @@ class Block extends BaseModel
      */
     public function getUrlAttribute($value): ?string
     {
-        return $this->type == self::$BLOCK_TYPE_MAIN ? urldecode(action("ContentController@index", ["tags" => $this->tags])) : urldecode(action("ProductController@index", ["tags" => $this->tags]));
+        return $this->type == self::$BLOCK_TYPE_MAIN ? urldecode(action("Web\ContentController@index", ["tags" => $this->tags])) : urldecode(action("Web\ProductController@index", ["tags" => $this->tags]));
     }
 
     public static function getShopBlocks()

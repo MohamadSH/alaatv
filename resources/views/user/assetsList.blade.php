@@ -21,7 +21,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -101,8 +101,8 @@
                         <div class="col-md-12 text-center">
                             <!-- BEGIN SAMPLE FORM PORTLET-->
                             <h2 class="block bold font-yellow">شما محصولی سفارش نداده اید!</h2>
-                            <a href="{{action("ProductController@search")}}" class="btn yellow-casablanca btn-outline">اردوها
-                                و همایش ها</a>
+                            <a href = "{{action("Web\ProductController@search")}}" class = "btn yellow-casablanca btn-outline">اردوها
+                                                                                                                               و همایش ها</a>
                             <!-- END SAMPLE FORM PORTLET-->
                         </div>
                     </div>
@@ -148,7 +148,7 @@
                                                                     <div class="list-item-content">
                                                                         <p class="uppercase"
                                                                            style="    font-size: 16px;">
-                                                                            <a href="{{action("HomeController@download" , ["content"=>"فایل محصول","fileName"=>$pamphlet["file"] , "pId"=>$pamphlet["product_id"] ])}}">دانلود {{$pamphlet["name"]}}</a>
+                                                                            <a href = "{{action("Web\HomeController@download" , ["content"=>"فایل محصول","fileName"=>$pamphlet["file"] , "pId"=>$pamphlet["product_id"] ])}}">دانلود {{$pamphlet["name"]}}</a>
                                                                         </p>
                                                                     </div>
                                                                 </li>
@@ -206,7 +206,7 @@
                                                                     <div class="list-item-content">
                                                                         <p class="uppercase"
                                                                            style="    font-size: 16px;">
-                                                                            <a href="{{action("HomeController@download" , ["content"=>"فایل محصول","fileName"=>$video["file"] , "pId"=>$video["product_id"]  ])}}">دانلود {{$video["name"]}}</a>
+                                                                            <a href = "{{action("Web\HomeController@download" , ["content"=>"فایل محصول","fileName"=>$video["file"] , "pId"=>$video["product_id"]  ])}}">دانلود {{$video["name"]}}</a>
                                                                         </p>
                                                                     </div>
                                                                 </li>

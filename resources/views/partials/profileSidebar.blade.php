@@ -12,7 +12,7 @@
                                                                 <span class="btn green btn-file">
                                                                     <span class="fileinput-new"> انتخاب عکس </span>
                                                                     <span class="fileinput-exists"> تغییر </span>
-                                                                    {!! Form::file('photo' , ['id'=>'profilePhotoFile' , 'data-action'=>action("UserController@updateProfile")]) !!}
+                                                                    {!! Form::file('photo' , ['id'=>'profilePhotoFile' , 'data-action'=>action("Web\UserController@updateProfile")]) !!}
                                                                 </span>
                     <span class="fileinput-filename"> </span> &nbsp;
                     <a href="javascript:" class="close fileinput-exists" data-dismiss="fileinput"
@@ -45,29 +45,29 @@
     @if(isset($withNavigation) && $withNavigation)
         <div class="profile-usermenu">
             <ul class="nav">
-                <li @if(strcmp(url()->current() , action("UserController@show",$user)) == 0) class="active" @endif >
-                    <a href="{{ action("UserController@show",$user) }}">
+                <li @if(strcmp(url()->current() , action("Web\UserController@show",$user)) == 0) class = "active" @endif >
+                    <a href = "{{ action("Web\UserController@show",$user) }}">
                         <i class="icon-settings"></i> تنظیمات حساب کاربری </a>
                 </li>
-                <li @if(strcmp(url()->current() , action("UserController@userProductFiles")) == 0) class="active" @endif >
-                    <a href="{{action("UserController@userProductFiles")}}" class="font-yellow">
+                <li @if(strcmp(url()->current() , action("Web\UserController@userProductFiles")) == 0) class = "active" @endif >
+                    <a href = "{{action("Web\UserController@userProductFiles")}}" class = "font-yellow">
                         <i class="fa fa-cloud-download "></i> فیلم ها و جزوه ها </a></li>
-                {{--<li class="@if(strcmp(url()->current() , action("UserController@showBelongings")) == 0) active @endif">--}}
-                {{--<a  href="{{action("UserController@showBelongings")}}">--}}
+                {{--<li class="@if(strcmp(url()->current() , action("Web\UserController@showBelongings")) == 0) active @endif">--}}
+                {{--<a  href="{{action("Web\UserController@showBelongings")}}">--}}
                 {{--<i class="fa fa-address-card" aria-hidden="true"></i>پروفایل فنی من</a>--}}
                 {{--</li>--}}
                 @if(isset($hasCompleteProfile) && $hasCompleteProfile)
-                    <li @if(strcmp(url()->current() , action("UserController@information" , $user)) == 0) class="active" @endif >
-                        <a href="{{action("UserController@information" , $user)}}" class="font-red">
+                    <li @if(strcmp(url()->current() , action("Web\UserController@information" , $user)) == 0) class = "active" @endif >
+                        <a href = "{{action("Web\UserController@information" , $user)}}" class = "font-red">
                             <i class="fa fa-pencil"></i> تکمیل اطلاعات (مخصوص اردویی ها) </a>
                     </li>
                 @endif
-                <li @if(strcmp(url()->current() , action("HomeController@submitKonkurResult")) == 0) class="active" @endif >
-                    <a href="{{action("HomeController@submitKonkurResult")}}">
+                <li @if(strcmp(url()->current() , action("Web\HomeController@submitKonkurResult")) == 0) class = "active" @endif >
+                    <a href = "{{action("Web\HomeController@submitKonkurResult")}}">
                         <i class="fa fa-graduation-cap"></i> ثبت رتبه 97 </a>
                 </li>
-                {{--<li @if(strcmp(url()->current() , action("UserController@voucherRequest")) == 0) class="active" @endif >--}}
-                {{--<a href="{{action("UserController@voucherRequest")}}">--}}
+                {{--<li @if(strcmp(url()->current() , action("Web\UserController@voucherRequest")) == 0) class="active" @endif >--}}
+                {{--<a href="{{action("Web\UserController@voucherRequest")}}">--}}
                 {{--<i class="fa fa-registered"></i>ثبت درخواست اینترنت آسیاتک</a>--}}
                 {{--</li>--}}
             </ul>
@@ -121,7 +121,7 @@
                             <button type="submit" class="btn green">تایید کد</button>
                         </fieldset>
                         <fieldset id="hasntRequestedVerificationCode" class="">
-                            <a href="{{action("MobileVerificationController@resend")}}" class="btn blue"
+                            <a href = "{{action("Web\MobileVerificationController@resend")}}" class = "btn blue"
                                id="sendVerificationCodeButton">@if(isset($mobileVerificationCode)) درخواست مجدد کد @else
                                     درخواست ارسال کد@endif</a>
                         </fieldset>

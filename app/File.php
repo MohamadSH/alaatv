@@ -87,7 +87,7 @@ class File extends BaseModel
             }
             return $fileRemotePath;
         } else {
-            return action("HomeController@error404");
+            return action("Web\HomeController@error404");
         }
 
     }

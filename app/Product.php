@@ -1363,7 +1363,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function getUrlAttribute($value): string
     {
-        return action("ProductController@show", $this);
+        return action("Web\ProductController@show", $this);
     }
 
     public function getGiftAttribute(): ProductCollection
@@ -1640,10 +1640,10 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
             $grandParent = $this->grandParent;
             if (isset($grandParent)) {
                 if ($grandParent->enable)
-                    $link = action("ProductController@show", $this->grandParent);
+                    $link = action("Web\ProductController@show", $this->grandParent);
             } else {
                 if ($this->enable)
-                    $link = action("ProductController@show", $this);
+                    $link = action("Web\ProductController@show", $this);
             }
             return $link;
         });

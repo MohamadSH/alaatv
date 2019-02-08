@@ -71,8 +71,7 @@
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a target="_blank" class="btn default btn-outline"
-                                                       href="{{action("HomeController@download" , ["content"=>"عکس محصول","fileName"=>$photo->file ])}}">
+                                                    <a target="_blank" class="btn default btn-outline" href = "{{action("Web\HomeController@download" , ["content"=>"عکس محصول","fileName"=>$photo->file ])}}">
                                                         <i class="icon-link"></i>
                                                     </a>
                                                 </li>
@@ -104,12 +103,11 @@
                                         class="label label-sm label-danger"> غیر فعال </span>  @endif</td>
                             <td>
                                 @permission((Config::get('constants.EDIT_PRODUCT_SAMPLE_PHOTO_ACCESS')))
-                                <a class="btn btn-info" href="{{action("ProductphotoController@edit" , $photo)}}">
+                                <a class = "btn btn-info" href = "{{action("Web\ProductphotoController@edit" , $photo)}}">
                                     <i class="fa fa-pencil"></i> اصلاح </a>
                                 @endpermission
                                 @permission((Config::get('constants.REMOVE_PRODUCT_SAMPLE_PHOTO_ACCESS')))
-                                <a class="btn btn-danger"
-                                   onclick="removePhoto('{{action("ProductphotoController@destroy" , $photo)}}')"
+                                <a class="btn btn-danger" onclick = "removePhoto('{{action("Web\ProductphotoController@destroy" , $photo)}}')"
                                    data-id="{{$photo->id}}">
                                     <i class="fa fa-times"></i> حذف </a>
                                 @endpermission

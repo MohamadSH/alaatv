@@ -64,8 +64,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a target="_blank" class="btn default btn-outline"
-                                       href="{{action("HomeController@download" , ["content"=>"تامبنیل مشاوره","fileName"=>$consultation->thumbnail ])}}">
+                                    <a target="_blank" class="btn default btn-outline" href = "{{action("Web\HomeController@download" , ["content"=>"تامبنیل مشاوره","fileName"=>$consultation->thumbnail ])}}">
                                         <i class="icon-link"></i>
                                     </a>
                                 </li>
@@ -116,7 +115,7 @@
                     <ul class="dropdown-menu" role="menu">
                         @permission((Config::get('constants.SHOW_CONSULTATION_ACCESS')))
                         <li>
-                            <a href="{{action("ConsultationController@edit" , $consultation)}}">
+                            <a href = "{{action("Web\ConsultationController@edit" , $consultation)}}">
                                 <i class="fa fa-pencil"></i> اصلاح </a>
                         </li>
                         @endpermission
@@ -138,8 +137,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                            <button type="button" data-dismiss="modal" class="btn green"
-                                    onclick="removeConsultation('{{action("ConsultationController@destroy" , $consultation)}}');">
+                            <button type="button" data-dismiss="modal" class="btn green" onclick = "removeConsultation('{{action("Web\ConsultationController@destroy" , $consultation)}}');">
                                 بله
                             </button>
                         </div>

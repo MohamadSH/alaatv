@@ -89,7 +89,7 @@
         @if($section['lessons']->count() > 0)
             <div class = "row {{$section["class"]}}">
                 <div class = "col-xl-12 m--margin-bottom-5">
-                    <a href = "{{urldecode(action("ContentController@index" , ["tags" => $section["tags"]]))}}" class = "m-link m-link--primary">
+                    <a href = "{{urldecode(action("Web\ContentController@index" , ["tags" => $section["tags"]]))}}" class = "m-link m-link--primary">
                         <h3 style = "font-weight: bold">{{$section["descriptiveName"]}} </h3>
                     </a>
                 </div>
@@ -101,7 +101,7 @@
                     'widgetTitle'      => $lesson["displayName"],
                     'widgetPic'        => (isset($lesson["pic"]) && strlen($lesson["pic"])>0 ?  $lesson["pic"]."?w=253&h=142" : 'https://via.placeholder.com/235x142'),
                     'widgetAuthor' => $lesson["author"],
-                    'widgetLink'       => (isset($lesson["content_id"]) && $lesson["content_id"]>0 ? action("ContentController@show", $lesson["content_id"]):""),
+                    'widgetLink'       => (isset($lesson["content_id"]) && $lesson["content_id"]>0 ? action("Web\ContentController@show", $lesson["content_id"]):""),
                     'widgetCount' => $lesson["content_count"],
                     'widgetScroll' => 1
                     ])

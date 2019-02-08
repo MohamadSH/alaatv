@@ -36,8 +36,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                        <button type="button" data-dismiss="modal" class="btn green"
-                                onclick="removeComplimentary('{{action("ProductController@removeComplimentary" , $complimentary , ["product" => $product])}}');">
+                        <button type="button" data-dismiss="modal" class="btn green" onclick = "removeComplimentary('{{action("Web\ProductController@removeComplimentary" , $complimentary , ["product" => $product])}}');">
                             بله
                         </button>
                     </div>

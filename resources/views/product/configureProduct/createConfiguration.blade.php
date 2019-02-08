@@ -5,15 +5,15 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <a href="{{action("HomeController@adminProduct")}}">پنل مدیریتی محصولات</a>
+                <a href = "{{action("Web\HomeController@adminProduct")}}">پنل مدیریتی محصولات</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <a href="{{action("ProductController@edit" , $product)}}">اصلاح محصول {{$product->name}}</a>
+                <a href = "{{action("Web\ProductController@edit" , $product)}}">اصلاح محصول {{$product->name}}</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -31,13 +31,11 @@
                 <div class="portlet-title">
                     <div class="caption">
                         <i class="icon-settings font-dark"></i>
-                        <span class="caption-subject font-dark sbold uppercase">پیکر بندی محصول <a
-                                    href="{{action("ProductController@show" , $product)}}">{{$product->name}}</a></span>
+                        <span class="caption-subject font-dark sbold uppercase">پیکر بندی محصول <a href = "{{action("Web\ProductController@show" , $product)}}">{{$product->name}}</a></span>
                     </div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn btn-sm dark dropdown-toggle"
-                               href="{{action("ProductController@edit" , $product)}}"> بازگشت
+                            <a class="btn btn-sm dark dropdown-toggle" href = "{{action("Web\ProductController@edit" , $product)}}"> بازگشت
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         </div>

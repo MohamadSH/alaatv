@@ -18,7 +18,7 @@
                 <ul class="dropdown-menu" role="menu" id="{{$employeeTimeSheet->id}}">
                     @permission((Config::get('constants.EDIT_EMPLOPYEE_WORK_SHEET')))
                     <li>
-                        <a target="_blank" href="{{action("EmployeetimesheetController@edit" , $employeeTimeSheet)}}">
+                        <a target = "_blank" href = "{{action("Web\EmployeetimesheetController@edit" , $employeeTimeSheet)}}">
                             <i class="fa fa-pencil"></i> اصلاح </a>
                     </li>
                     @endpermission

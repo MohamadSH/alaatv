@@ -9,11 +9,11 @@
             @foreach($items as $content)
                 @include('partials.widgets.video1',[
                 'widgetActionName' => ''.'پخش / دانلود',
-                'widgetActionLink' => action("ContentController@show" , $content),
+                'widgetActionLink' => action("Web\ContentController@show" , $content),
                 'widgetTitle'      => $content->name ?? $content->name ,
                 'widgetPic'        => $content->thumbnail ??  $content->thumbnail,
                 'widgetAuthor'     => optional($content->author),
-                'widgetLink'       => action("ContentController@show" , $content),
+                'widgetLink'       => action("Web\ContentController@show" , $content),
                 'widgetCount'      => 0,
                 'widgetScroll'     => 1
                 ])

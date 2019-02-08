@@ -22,7 +22,7 @@ class IsOrderEmpty
             if(isset($order))
             {
                 if($order->orderproducts->isEmpty())
-                    return redirect(action("OrderController@checkoutReview"));
+                    return redirect(action("Web\OrderController@checkoutReview"));
             }
         }
 
