@@ -54,7 +54,7 @@ class Block extends BaseModel
     protected static $actionLookupTable = [
         "1" => "Web\ContentController@index",
         "2" => "Web\ProductController@index",
-        "3" => "Web\ProductController@index",
+        "3" => null,
     ];
 
     protected $isOfferBlock = false;
@@ -127,7 +127,7 @@ class Block extends BaseModel
      */
     public function getUrlAttribute($value): ?string
     {
-        return $this->makeUrl(self::$actionLookupTable[$this->type], $this->tags);
+        return isset(self::$actionLookupTable[$this->type]) ? $this->makeUrl(self::$actionLookupTable[$this->type], $this->tags) : null;
     }
 
     private function makeUrl($action, $input = null)

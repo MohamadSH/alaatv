@@ -40,15 +40,15 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Query\Builder|\App\Contentset withoutTrashed()
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset active()
- * @property-read \App\Collection\UserCollection|\App\User[]       $favoriteBy
- * @property string|null                                           $small_name
- * @property-read mixed                                            $short_name
+ * @property-read \App\Collection\UserCollection|\App\User[] $favoriteBy
+ * @property string|null                                     $small_name
+ * @property-read mixed                                      $short_name
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereSmallName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset query()
- * @property-read mixed $author
- * @property-read mixed $url
+ * @property-read mixed                                      $author
+ * @property-read mixed                                      $url
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
@@ -65,14 +65,15 @@ class Contentset extends BaseModel implements Taggable
         'photo',
     ];
 
-    protected $withCount =[
+    protected $withCount = [
         'contents',
     ];
 
     protected $appends = [
         'url',
+        'apiUrl',
         'shortName',
-        'author'
+        'author',
     ];
 
     protected $hidden = [
@@ -83,6 +84,7 @@ class Contentset extends BaseModel implements Taggable
         'display',
 
     ];
+
     /**
      * Create a new Eloquent Collection instance.
      *
@@ -177,8 +179,16 @@ class Contentset extends BaseModel implements Taggable
         return isset($contentId) ? action("Web\ContentController@show", $contentId) : "";
     }
 
+    public function getApiUrlAttribute($value): array
+    {
+        return [
+            'v1' => action("Api\SetController@show", $this),
+        ];
+    }
+
     /**
      * @param $value
+     *
      * @return User|null
      */
     public function getAuthorAttribute($value): ?User
@@ -189,7 +199,7 @@ class Contentset extends BaseModel implements Taggable
                 'id',
                 'firstName',
                 'lastName',
-                'photo'
+                'photo',
             ]);
     }
 

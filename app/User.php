@@ -407,7 +407,12 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
 
     public function getAppToken()
     {
-        return $this->createToken('Alaa App.')->accessToken;
+        $tokenResult = $this->createToken('Alaa App.');
+        return [
+            'access_token'     => $tokenResult->accessToken,
+            'token_type'       => 'Bearer',
+            'token_expires_at' => Carbon::parse($tokenResult->token->expires_at)->toDateTimeString(),
+        ];
     }
 
     /** Setter mutator for major_id
