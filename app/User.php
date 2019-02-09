@@ -1266,11 +1266,11 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
 
     /**  Determines whether user has this content or not
      *
-     * @param  $contentId
+     * @param \App\Content $content
      *
      * @return bool
      */
-    public function hasContent($contentId)
+    public function hasContent(Content $content)
     {
         return true;
     }

@@ -29,7 +29,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('debug', 'Api\HomeController@debug');
     Route::get('authTest', 'Api\HomeController@authTest');
 
-    Route::resource('c', 'Api\ContentController');
-    Route::resource('product', 'Api\ProductController');
-    Route::resource('set', 'Api\SetController');
+    Route::get('c/{c}', 'Api\ContentController@show');
+    Route::get('product/{product}', 'Api\ProductController@show');
+    Route::get('set/{set}', 'Api\SetController@show');
 });

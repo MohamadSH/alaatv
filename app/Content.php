@@ -10,6 +10,7 @@ use App\Classes\SEO\SeoInterface;
 use App\Classes\SEO\SeoMetaTagsGenerator;
 use App\Classes\Taggable;
 use App\Collection\ContentCollection;
+use App\Collection\ProductCollection;
 use App\Traits\APIRequestCommon;
 use App\Traits\favorableTraits;
 use App\Traits\ModelTrackerTrait;
@@ -684,6 +685,16 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             ], JSON_UNESCAPED_UNICODE);
 
         $this->attributes['tags'] = $tags;
+    }
+
+    /**
+     * every products that have this content.
+     *
+     * @return \App\Collection\ProductCollection
+     */
+    public function products()
+    {
+        return new ProductCollection();
     }
 
     public function grades()
