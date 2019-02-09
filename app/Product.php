@@ -318,6 +318,15 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $products;
     }
 
+    //TODO://make a query!
+    public static function getProductsHaveBestOffer()
+    {
+        return Product::find([
+            225,
+            226,
+        ]);
+    }
+
     /*
     |--------------------------------------------------------------------------
     |  Cache

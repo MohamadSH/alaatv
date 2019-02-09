@@ -49,6 +49,14 @@ class Block extends BaseModel
 {
     public static $BLOCK_TYPE_MAIN = 1;
     public static $BLOCK_TYPE_SHOP = 2;
+    public static $BLOCK_TYPE_OFFER = 3;
+
+    protected static $actionLookupTable = [
+        "1" => "Web\ContentController@index",
+        "2" => "Web\ProductController@index",
+        "3" => "Web\ProductController@index",
+    ];
+
     protected $isOfferBlock = false;
 
     protected $cascadeDeletes = [
@@ -74,6 +82,7 @@ class Block extends BaseModel
         'created_at',
         'class',
         'deleted_at',
+        'type',
     ];
 
 
@@ -118,13 +127,22 @@ class Block extends BaseModel
      */
     public function getUrlAttribute($value): ?string
     {
-        return $this->type == self::$BLOCK_TYPE_MAIN ? urldecode(action("Web\ContentController@index", ["tags" => $this->tags])) : urldecode(action("Web\ProductController@index", ["tags" => $this->tags]));
+        return $this->makeUrl(self::$actionLookupTable[$this->type], $this->tags);
+    }
+
+    private function makeUrl($action, $input = null)
+    {
+        if ($input)
+            return urldecode(action($action, ["tags" => $input]));
+        else
+            return urldecode(action($action));
     }
 
     public static function getShopBlocks()
     {
         $blocks = Cache::tags('block')
                        ->remember('getShopBlocks', config('constants.CACHE_600'), function () {
+                           $offerBlock = self::getOfferBlock();
                            $blocks = Block::shop()->get()
                                           ->sortBy('order')
                                           ->loadMissing([
@@ -133,9 +151,26 @@ class Block extends BaseModel
                                               'products',
                                               'banners',
                                           ]);
-                           return $blocks;
+                           return $blocks->prepend($offerBlock);
                        });
         return $blocks;
+    }
+
+    /**
+     * @return \App\Block
+     */
+    protected static function getOfferBlock(): Block
+    {
+        $offerBlock = new Block;
+        $offerBlock->id = 0;
+        $offerBlock->offer = true;
+        $offerBlock->type = 3;
+        $offerBlock->order = 0;
+        $offerBlock->title = 'محصولات شگفت انگیز';
+        $ProductsHaveOffer = Product::getProductsHaveBestOffer();
+        foreach ($ProductsHaveOffer as $product)
+            $offerBlock->products->add($product);
+        return $offerBlock;
     }
 
     public static function getMainBlocks()
