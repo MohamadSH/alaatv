@@ -49,6 +49,8 @@ class Block extends BaseModel
 {
     public static $BLOCK_TYPE_MAIN = 1;
     public static $BLOCK_TYPE_SHOP = 2;
+    protected $isOfferBlock = false;
+
     protected $cascadeDeletes = [
         'blockables',
     ];
@@ -64,12 +66,14 @@ class Block extends BaseModel
 
     protected $appends = [
         'url',
+        'offer',
     ];
     protected $hidden = [
         'enable',
         'tags',
         'created_at',
         'class',
+        'deleted_at',
     ];
 
 
@@ -95,6 +99,16 @@ class Block extends BaseModel
     public function scopeMain($query)
     {
         return $query->where('type', '=', 1);
+    }
+
+    public function getOfferAttribute($value)
+    {
+        return $this->isOfferBlock;
+    }
+
+    public function setOfferAttribute($value)
+    {
+        return $this->isOfferBlock = (boolean)$value;
     }
 
     /**
@@ -136,6 +150,7 @@ class Block extends BaseModel
                                               'products',
                                               'banners',
                                           ]);
+
                            return $blocks;
                        });
         return $blocks;

@@ -154,9 +154,7 @@ class HomeController extends Controller
     {
         try{
 
-            return response()->json([
-                'debug' => 1,
-            ]);
+            return Block::getShopBlocks();
 
             $contentsets = [
                 [
