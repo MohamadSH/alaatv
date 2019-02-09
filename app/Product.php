@@ -755,6 +755,14 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return json_decode($value);
     }
 
+    public function getRedirectUrlAttribute($value)
+    {
+        if ($value == null)
+            return $value;
+        $value = parse_url($value);
+        return url($value['path']);
+    }
+
     /**
      * @param User|null $user
      *

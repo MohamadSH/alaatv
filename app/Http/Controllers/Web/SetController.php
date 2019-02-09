@@ -114,7 +114,7 @@ class SetController extends Controller
      */
     public function show(Request $request, Contentset $set)
     {
-        if ($request->wantsJson())
+        if ($request->expectsJson())
             return response()->json($set);
 
         $contents = $set->contents()
