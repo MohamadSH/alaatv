@@ -19,7 +19,6 @@ class ProductController extends Controller
      */
     public function show(Request $request, Product $product)
     {
-//        dd($product->redirectUrl);
         if (isset($product->redirectUrl))
             return redirect($this->convertRedirectUrlToApiVersion($product->redirectUrl), Response::HTTP_MOVED_PERMANENTLY, $request->headers->all());
 
@@ -33,8 +32,6 @@ class ProductController extends Controller
 
     private function convertRedirectUrlToApiVersion($url)
     {
-//        url()
-//        dd($url);
         $url = parse_url($url);
         return url('/api/v1' . $url['path']);
     }

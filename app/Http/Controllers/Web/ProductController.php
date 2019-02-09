@@ -321,9 +321,6 @@ class ProductController extends Controller
      */
     public function show(Request $request, Product $product)
     {
-//        dump($product);
-//        dd($request->headers->all());
-//        dd($product->redirectUrl);
         if (isset($product->redirectUrl))
             return redirect($product->redirectUrl, 301, $request->headers->all());
 
