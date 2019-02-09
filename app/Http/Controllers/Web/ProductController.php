@@ -8,6 +8,7 @@ use App\{Attribute,
     Bon,
     Classes\Search\ProductSearch,
     Classes\SEO\SeoDummyTags,
+    Collection\ProductCollection,
     Http\Requests\AddComplimentaryProductRequest,
     Http\Requests\EditProductRequest,
     Http\Requests\InsertProductRequest,
@@ -465,27 +466,26 @@ class ProductController extends Controller
      */
     public function refreshPrice(Request $request, Product $product)
     {
-
+        /** @var ProductCollection $selectedSubProducts */
         $mainAttributeValues = $request->get("mainAttributeValues");
         $selectedSubProductIds = $request->get("products");
         $extraAttributeValues = $request->get("extraAttributeValues");
         $user = $request->user();
-        //        return (new AlaaProductPriceCalculator($product,$user))->getPrice();
 
-        $key = "product:refreshPrice:Product"
-            . "\\"
+        $key = "product:refreshPrice:"
             . $product->cacheKey()
-            . "-user"
+            . "-user\\"
             . (isset($user) && !is_null($user) ? $user->cacheKey() : "")
-            . "\\mainAttributeValues:"
+            . "-mainAttributeValues\\"
             . (isset($mainAttributeValues) ? implode("", $mainAttributeValues) : "-")
-            . "\\subProducts:"
+            . "-subProducts\\"
             . (isset($selectedSubProductIds) ? implode("", $selectedSubProductIds) : "-")
-            . "\\extraAttributeValues:"
+            . "-extraAttributeValues\\"
             . (isset($extraAttributeValues) ? implode("", $extraAttributeValues) : "-");
 
+        //ToDo : set cache time
         return Cache::tags('bon')
-                    ->remember($key, config("constants.CACHE_60"), function () use ($product, $user, $mainAttributeValues, $selectedSubProductIds, $extraAttributeValues) {
+                    ->remember($key, config("constants.CACHE_0"), function () use ($product, $user, $mainAttributeValues, $selectedSubProductIds, $extraAttributeValues) {
                         $productType = optional($product->producttype)->id;
                         $intendedProducts = collect();
                         switch ($productType) {
@@ -501,8 +501,8 @@ class ProductController extends Controller
                                 break;
                             case config("constants.PRODUCT_TYPE_SELECTABLE"):
                                 if (isset($selectedSubProductIds)) {
-                                    $selectedSubProducts = Product::whereIn('id', $selectedSubProductIds)
-                                                                  ->get();
+                                    /** @var ProductCollection $selectedSubProducts */
+                                    $selectedSubProducts = Product::whereIn('id', $selectedSubProductIds)->get();
                                     $selectedSubProducts->load('parents');
                                     $selectedSubProducts->keepOnlyParents();
 
@@ -515,35 +515,36 @@ class ProductController extends Controller
 
                         $cost = 0;
                         $costForCustomer = 0;
-                        foreach ($intendedProducts as $product) {
-                            if ($product->isInStock()) {
-                                if (isset($user))
-                                    $costArray = $product->calculatePayablePrice($user);
-                                else
-                                    $costArray = $product->calculatePayablePrice();
+                        if($intendedProducts->isNotEmpty())
+                        {
+                            foreach ($intendedProducts as $product) {
+                                if ($product->isInStock()) {
+                                    if (isset($user))
+                                        $costArray = $product->calculatePayablePrice($user);
+                                    else
+                                        $costArray = $product->calculatePayablePrice();
 
-                                $cost += $costArray["cost"];
-                                $costForCustomer += $costArray["customerPrice"];
+                                    $cost += $costArray["cost"];
+                                    $costForCustomer += $costArray["customerPrice"];
+                                }else{
+                                    //ToDo : Intended product is out of stock
+                                }
                             }
-                            //TODO:// age mahsool tamumshod ya yaft nashod chi?
-                            //            elseif (!isset($simpleProduct))
-                            //            {
-                            //                $result = ['productWarning' => "محصول مورد نظر یافت نشد"];
-                            //            } else
-                            //            {
-                            //                $result = ['productWarning' => "محصول مورد نظر تمام شده است"];
-                            //            }
+                        }else{
+                            //ToDo : No product found
                         }
-                        $result = [
-                            "cost"            => $cost,
-                            "costForCustomer" => $costForCustomer,
-                        ];
 
                         $totalExtraCost = 0;
                         if (is_array($extraAttributeValues))
                             $totalExtraCost = $this->productExtraCostFromAttributes($product, $extraAttributeValues);
 
-                        $result = array_add($result, 'totalExtraCost', $totalExtraCost);
+                        $result = [
+                            'cost' => [
+                                'base'      => $cost ,
+                                'discount'  => $cost - $costForCustomer,
+                                'final'     => $costForCustomer + $totalExtraCost
+                            ]
+                        ];
 
                         return json_encode($result, JSON_UNESCAPED_UNICODE);
                     });
