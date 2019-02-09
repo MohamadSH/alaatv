@@ -4,6 +4,7 @@ namespace App;
 
 
 use App\Classes\Taggable;
+use App\Collection\ContentCollection;
 use App\Collection\SetCollection;
 use App\Traits\favorableTraits;
 use Illuminate\Support\Facades\Cache;
@@ -12,10 +13,10 @@ use Illuminate\Support\Facades\Config;
 /**
  * App\Contentset
  *
- * @property int                                                   $id
- * @property string|null                                           $name        نام
- * @property string|null                                           $description توضیح
- * @property string|null                                           $photo       عکس پوستر
+ * @property int                                             $id
+ * @property string|null                                     $name        نام
+ * @property string|null                                     $description توضیح
+ * @property string|null                                     $photo       عکس پوستر
  * @property string|null                                           $tags        تگ ها
  * @property int                                                   $enable      فعال/غیرفعال
  * @property int                                                   $display     نمایش/عدم نمایش
@@ -74,6 +75,7 @@ class Contentset extends BaseModel implements Taggable
         'apiUrl',
         'shortName',
         'author',
+        'contentUrl',
     ];
 
     protected $hidden = [
@@ -126,12 +128,31 @@ class Contentset extends BaseModel implements Taggable
         $key = "ContentSet:getLastContent" . $this->cacheKey();
         return Cache::tags('set')
                     ->remember($key, Config::get("constants.CACHE_300"), function () {
+
+                        $contentCollection = optional($this->getContents())
+                            ->sortByDesc("order");
+                        return optional($contentCollection)
+                            ->first();
+                    });
+    }
+
+    public function getContents(): ?ContentCollection
+    {
+        $key = "ContentSet:getContents" . $this->cacheKey();
+        return Cache::tags('set')
+                    ->remember($key, Config::get("constants.CACHE_300"), function () {
                         return $this->contents()
                                     ->active()
-                                    ->get()
-                                    ->sortByDesc("order")
-                                    ->first();
+                                    ->get();
                     });
+    }
+
+    public function getContentUrlAttribute($value)
+    {
+        return action('Web\ContentController@index', [
+            'set'         => $this->id,
+            'contentOnly' => true,
+        ]);
     }
 
     /*
