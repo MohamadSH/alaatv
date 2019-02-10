@@ -7,7 +7,7 @@
                     <img class="item-pic"
                          @if(strlen($question->user->photo)>0) src="{{ route('image', ['category'=>'1','w'=>'30' , 'h'=>'30' ,  'filename' => $question->user->photo ]) }}"
                          alt="عکس پروفایل" @endif>
-                    <a href="{{action("UseruploadController@show" , $question)}}"
+                    <a href = "{{action("Web\UseruploadController@show" , $question)}}"
                        class="item-name primary-link">@if(isset($question->user->id)) @if(isset($question->user->firstName) && strlen($question->user->firstName)>0 || isset($question->user->lastName) && strlen($question->user->lastName)>0) @if(isset($question->user->firstName) && strlen($question->user->firstName)>0) {{ $question->user->firstName}} @endif @if(isset($question->user->lastName) && strlen($question->user->lastName)>0) {{$question->user->lastName}} @endif @else
                             <span class="label label-sm label-danger"> کاربر ناشناس </span> @endif @endif</a>
                     <span class="item-label">پرسیده شده در {{$question->CreatedAt_Jalali()}}</span>
@@ -32,8 +32,7 @@
         <tr id="{{$question->id}}">
             <th></th>
             <td>@if(isset($question->user->id)) @if(strlen($question->user->reverse_full_name) > 0) <a
-                        target="_blank"
-                        href="{{action("UserController@edit" , $question->user)}}">{{$question->user->reverse_full_name}}</a> @else
+                        target="_blank" href = "{{action("Web\UserController@edit" , $question->user)}}">{{$question->user->reverse_full_name}}</a> @else
                     <span class="label label-sm label-danger"> درج نشده </span> @endif @endif</td>
             <td>@if(strlen($question->title) > 0)  {{$question->title}} @else <span class="label label-sm label-danger">بدون عنوان </span> @endif
             </td>
@@ -65,8 +64,7 @@
                     </div>
                 </div>
             </td>
-            <td style="text-align: center">@if(strlen($question->file) > 0)  <a target="_blank"
-                                                                                href="{{action("HomeController@download" , ["content"=>"سؤال مشاوره ای","fileName"=>$question->file ])}}"
+            <td style="text-align: center">@if(strlen($question->file) > 0)  <a target="_blank" href = "{{action("Web\HomeController@download" , ["content"=>"سؤال مشاوره ای","fileName"=>$question->file ])}}"
                                                                                 id="link_{{$counter}}"
                                                                                 class="btn btn-icon-only blue"><i
                             class="fa fa-download"></i></a>@else <span

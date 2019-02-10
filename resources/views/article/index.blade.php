@@ -12,7 +12,7 @@
             {{--<div class="timeline-body-arrow"> </div>--}}
             {{--<div class="timeline-body-head">--}}
             {{--<div class="timeline-body-head-caption">--}}
-            {{--<a href="{{action("ArticleController@show", $article)}}" class="timeline-body-title font-blue-madison pull-left" >{{ $article->title }}</a>--}}
+            {{--<a href="{{action("Web\ArticleController@show", $article)}}" class="timeline-body-title font-blue-madison pull-left" >{{ $article->title }}</a>--}}
             {{--<span class="timeline-body-time font-grey-cascade">{{$article->CreatedAt_Jalali()}}</span>--}}
             {{--</div>--}}
             {{--</div>--}}
@@ -22,7 +22,7 @@
             {{--</div>--}}
             {{--</div>--}}
             <li>
-                <a href="{{action("ArticleController@show", $article)}}">
+                <a href = "{{action("Web\ArticleController@show", $article)}}">
                     <div class="col1">
                         <div class="cont">
                             <div class="cont-col1">
@@ -50,8 +50,8 @@
     @foreach( $articles as $article)
         <tr id="{{$article->id}}">
             <th></th>
-            <td>@if(isset($article->title) && strlen($article->title)>0) <a
-                        href="{{action("ArticleController@show", $article->id)}}">{{ $article->title}}</a> @else <span
+            <td>@if(isset($article->title) && strlen($article->title)>0) <a href = "{{action("Web\ArticleController@show", $article->id)}}">{{ $article->title}}</a> @else
+                    <span
                         class="label label-sm label-danger"> درج نشده </span> @endif </td>
             <td>
                 <div class="mt-element-overlay">
@@ -66,8 +66,7 @@
                                        href="#articleImage-{{$article->id}}"><i class="icon-magnifier"></i></a>
                                 </li>
                                 <li>
-                                    <a target="_blank" class="btn default btn-outline"
-                                       href="{{action("HomeController@download" , ["content"=>"عکس مقاله","fileName"=>$article->image ])}}">
+                                    <a target="_blank" class="btn default btn-outline" href = "{{action("Web\HomeController@download" , ["content"=>"عکس مقاله","fileName"=>$article->image ])}}">
                                         <i class="icon-link"></i>
                                     </a>
                                 </li>
@@ -110,7 +109,7 @@
                     <ul class="dropdown-menu" role="menu">
                         @permission((Config::get('constants.SHOW_ARTICLE_ACCESS')))
                         <li>
-                            <a href="{{action("ArticleController@edit" , $article)}}">
+                            <a href = "{{action("Web\ArticleController@edit" , $article)}}">
                                 <i class="fa fa-pencil"></i> اصلاح </a>
                         </li>
                         @endpermission
@@ -131,8 +130,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                            <button type="button" data-dismiss="modal" class="btn green"
-                                    onclick="removeArticle('{{action("ArticleController@destroy" , $article)}}');">بله
+                            <button type="button" data-dismiss="modal" class="btn green" onclick = "removeArticle('{{action("Web\ArticleController@destroy" , $article)}}');">بله
                             </button>
                         </div>
                     </div>

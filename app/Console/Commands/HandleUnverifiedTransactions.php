@@ -3,13 +3,11 @@
 namespace App\Console\Commands;
 
 use App\Classes\Payment\Gateway\GatewayFactory;
+use App\Classes\Payment\Gateway\Zarinpal\Zarinpal;
+use App\Http\Requests\Request;
 use App\Transaction;
 use App\Transactiongateway;
-use App\Http\Controllers\OnlinePaymentController;
-use App\Http\Controllers\TransactionController;
-use App\Http\Requests\Request;
 use Illuminate\Console\Command;
-use App\Classes\Payment\Gateway\Zarinpal\Zarinpal;
 use Zarinpal\Zarinpal as ZarinpalComposer;
 
 class HandleUnverifiedTransactions extends Command

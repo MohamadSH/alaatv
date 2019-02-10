@@ -12,11 +12,11 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <a href="{{action("HomeController@adminSlideShow")}}">پنل مدیریتی اسلاید شو صفحه اصلی</a>
+                <a href = "{{action("Web\HomeController@adminSlideShow")}}">پنل مدیریتی اسلاید شو صفحه اصلی</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -39,8 +39,7 @@
                 <div class="portlet-title">
                     <div class="caption">
                         <i class="icon-settings font-dark"></i>
-                        <span class="caption-subject font-dark sbold uppercase">اصلاح اطلاعات <a
-                                    href="{{action("ProductController@show" , $slide)}}">{{$slide->name}}</a></span>
+                        <span class="caption-subject font-dark sbold uppercase">اصلاح اطلاعات <a href = "{{action("Web\ProductController@show" , $slide)}}">{{$slide->name}}</a></span>
                     </div>
                     <div class="actions">
                         <div class="btn-group">

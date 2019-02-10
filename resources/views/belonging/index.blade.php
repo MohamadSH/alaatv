@@ -21,13 +21,13 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             @if(isset($user))
                 <li>
                     <i class="fa fa-cogs"></i>
-                    <a href="{{action("HomeController@admin")}}">مدیریت کاربران</a>
+                    <a href = "{{action("Web\HomeController@admin")}}">مدیریت کاربران</a>
                     <i class="fa fa-angle-left"></i>
                 </li>
             @endif
@@ -154,9 +154,8 @@
                                     <td id="belongingFullName_{{$belonging->id}}">@if(isset($belonging->name) && strlen($belonging->name)>0 ) {{ $belonging->name}} @else
                                             <span class="label label-sm label-danger">بدون توضیح</span> @endif</td>
                                     {{--                                    <td >@if(isset($belonging->description) && strlen($belonging->description)>0 ) {{ $belonging->description}} @else <span class="label label-sm label-warning">بدون توضیح</span> @endif</td>--}}
-                                    <td>@if(isset($belonging->file) && strlen($belonging->file)>0 ) <a
-                                                href="{{action("HomeController@download" , ["content"=>"سند فنی دارایی","fileName"=>$belonging->file ])}}"
-                                                class="btn btn-xs red">دانلود فایل</a> @else <span
+                                    <td>@if(isset($belonging->file) && strlen($belonging->file)>0 ) <a href = "{{action("Web\HomeController@download" , ["content"=>"سند فنی دارایی","fileName"=>$belonging->file ])}}"
+                                                                                                       class="btn btn-xs red">دانلود فایل</a> @else <span
                                                 class="label label-sm label-danger">درج نشده</span> @endif</td>
                                     <td>@if(isset($belonging->created_at) ) {{ $belonging->CreatedAt_Jalali()}} @else
                                             <span class="label label-sm label-danger">درج نشده</span> @endif</td>

@@ -27,11 +27,11 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <a href="{{action("HomeController@adminContent")}}">مدیریت محتوا</a>
+                <a href = "{{action("Web\HomeController@adminContent")}}">مدیریت محتوا</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -463,7 +463,7 @@
                     // Gets triggered when the files have successfully been sent.
                     // Redirect user or notify of success
 
-                    {{--files.previewElement.querySelector('.form-horizontal').action="{{action("ContentController@store")}}"+"/"+response;--}}
+                    {{--files.previewElement.querySelector('.form-horizontal').action="{{action("Web\ContentController@store")}}"+"/"+response;--}}
                     //                    files.previewElement.querySelector('.form-horizontal').method="POST";
                     //                    var methodInput = Dropzone.createElement("<input type='hidden' name='_method' value='PUT'>");
                     //                    files.previewElement.querySelector('.form-horizontal').appendChild(methodInput);
@@ -543,7 +543,7 @@
                             '        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>\n' +
                             '        <i class="fa fa-check-circle"></i>\n' +
                             'محتوا با موفقیت ذخیره شد . آیدی محتوا : ' +
-                            '<a target="_blank" href="{{action("ContentController@index")}}/' + id + '/edit">' + id + '</a>' +
+                            '<a target="_blank" href="{{action("Web\ContentController@index")}}/' + id + '/edit">' + id + '</a>' +
                             '    </div>';
                         $("#messageDiv").append(message);
                         toastr["success"]("محتوا با موقیت درج شد", "پیام سیستم");

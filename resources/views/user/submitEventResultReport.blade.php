@@ -18,7 +18,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -62,9 +62,8 @@
                                                 </h2>
                                             </div>
                                             <div class="col-md-12">
-                                                <a target="_blank" class="btn blue"
-                                                   href="{{action("HomeController@download" , ["content"=>"فایل کارنامه","fileName"=>$userEventReport->reportFile ])}}">دانلود
-                                                    فایل کارنامه</a>
+                                                <a target="_blank" class="btn blue" href = "{{action("Web\HomeController@download" , ["content"=>"فایل کارنامه","fileName"=>$userEventReport->reportFile ])}}">دانلود
+                                                                                                                                                                                                               فایل کارنامه</a>
                                             </div>
                                         </div>
                                         <div class="col-md-6">

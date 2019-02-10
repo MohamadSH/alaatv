@@ -5,15 +5,15 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <a href="{{action("HomeController@adminProduct")}}">پنل مدیریتی محصولات</a>
+                <a href = "{{action("Web\HomeController@adminProduct")}}">پنل مدیریتی محصولات</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <a href="{{action("ProductController@edit" , $product)}}">اصلاح محصول {{$product->name}}</a>
+                <a href = "{{action("Web\ProductController@edit" , $product)}}">اصلاح محصول {{$product->name}}</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>

@@ -25,15 +25,15 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <a href="{{action("HomeController@adminProduct")}}">مدیریت محصولات</a>
+                <a href = "{{action("Web\HomeController@adminProduct")}}">مدیریت محصولات</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <a href="{{action("ProductController@edit" , $product)}}">اصلاح محصول {{$product->name}}</a>
+                <a href = "{{action("Web\ProductController@edit" , $product)}}">اصلاح محصول {{$product->name}}</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -313,7 +313,7 @@
                     // Gets triggered when the files have successfully been sent.
                     // Redirect user or notify of success
 
-                    {{--files.previewElement.querySelector('.form-horizontal').action="{{action("ContentController@store")}}"+"/"+response;--}}
+                    {{--files.previewElement.querySelector('.form-horizontal').action="{{action("Web\ContentController@store")}}"+"/"+response;--}}
                     //                    files.previewElement.querySelector('.form-horizontal').method="POST";
                     //                    var methodInput = Dropzone.createElement("<input type='hidden' name='_method' value='PUT'>");
                     //                    files.previewElement.querySelector('.form-horizontal').appendChild(methodInput);

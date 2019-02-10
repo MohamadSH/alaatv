@@ -5,7 +5,7 @@
     {{--<ul class="page-breadcrumb">--}}
     {{--<li>--}}
     {{--<i class="icon-home"></i>--}}
-    {{--<a href="{{action("IndexPageController")}}">@lang('page.Home')</a>--}}
+    {{--<a href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>--}}
     {{--<i class="fa fa-angle-left"></i>--}}
     {{--</li>--}}
     {{--</ul>--}}
@@ -48,7 +48,7 @@
     {{--<h4 class="bold text-center font-red" style="line-height: 2">ضمن عرض پوزش ، پخش آنلاین همایش به دلیل انتخابات ریاست جمهوری قطع می باشد.</h4>--}}
     {{--<p>شما عزیزان می توانید فردای روز برگزاری همایش ، فیلمهای همایش به همراه جزوات ارائه شده را با مراجعه به همین صفحه دانلود نمایید</p>--}}
     {{--<p style="">همچنین در صورتی که  مایل هستید فیلمها و جزوات را از طریق پست دریافت نمایید ، لازم است ابتدا با مراجعه به پروفایل خود ، قسمت آدرس را تکمیل نموده و سپس درخواست ارسال پستی را از طریق کانال تلگرام و یا تماس تلفنی به ما اعلام نمایید. لازم به ذکر است فیلم ها و جزوات از طریق پست پیشتاز برای شما ارسال خواهند شد و  <span class="font-red-thunderbird" style="font-size: larger">ارسال پستی رایگان بوده و هزینه ای دریافت نخواهد شد.</span></p>--}}
-    {{--<p class="text-center"><a href="{{action("UserController@showProfile")}}"  class="btn btn-lg purple" style="font-size: larger">تکمیل آدرس پستی</a></p>--}}
+    {{--<p class="text-center"><a href="{{action("Web\UserController@showProfile")}}"  class="btn btn-lg purple" style="font-size: larger">تکمیل آدرس پستی</a></p>--}}
     {{--</div>--}}
     {{--</div>--}}
     {{--@else--}}
@@ -58,11 +58,11 @@
     {{--<div class="clearfix">--}}
     {{--<h4 class="block bold"><i class="fa fa-video-camera font-dark"></i>     فیلم ها</h4>--}}
     {{--@if($product->id == 65)--}}
-    {{--<a  class="btn blue btn-outline  btn-block" href="{{action("HomeController@download" , ["content"=>"فیلم همایش","fileName"=>"partOne" ])}}" ><i class="fa fa-download"></i>قسمت اول</a>--}}
+    {{--<a  class="btn blue btn-outline  btn-block" href="{{action("Web\HomeController@download" , ["content"=>"فیلم همایش","fileName"=>"partOne" ])}}" ><i class="fa fa-download"></i>قسمت اول</a>--}}
     {{--<a  class="btn blue btn-outline  btn-block" href="#" ><i class="fa fa-download"></i>قسمت دوم</a>--}}
     {{--<a  class="btn blue btn-outline  btn-block" href="#" ><i class="fa fa-download"></i>قسمت سوم</a>--}}
     {{--@elseif($product->id == 85)--}}
-    {{--<a  class="btn blue btn-outline  btn-block" href="{{action("HomeController@download" , ["content"=>"فیلم همایش","fileName"=>"partOne" ])}}" ><i class="fa fa-download"></i>قسمت اول</a>--}}
+    {{--<a  class="btn blue btn-outline  btn-block" href="{{action("Web\HomeController@download" , ["content"=>"فیلم همایش","fileName"=>"partOne" ])}}" ><i class="fa fa-download"></i>قسمت اول</a>--}}
     {{--<a  class="btn blue btn-outline  btn-block" href="#" ><i class="fa fa-download"></i>قسمت دوم</a>--}}
     {{--<a  class="btn blue btn-outline  btn-block" href="#" ><i class="fa fa-download"></i>قسمت سوم</a>--}}
     {{--@endif--}}
@@ -81,14 +81,14 @@
 
     {{--@foreach($product->validProductfiles()->get() as $productFile)--}}
     {{--@if($productFile->enable)--}}
-    {{--<a href="{{action("HomeController@download" , ["content"=>"فایل محصول","fileName"=>$productFile->file ])}}" class="btn red btn-outline  btn-block">--}}
+    {{--<a href="{{action("Web\HomeController@download" , ["content"=>"فایل محصول","fileName"=>$productFile->file ])}}" class="btn red btn-outline  btn-block">--}}
     {{--<i class="fa fa-download"></i> @if(isset($productFile->name) && strlen($productFile->name)>0){{$productFile->name}}@else {{$productFile->file}} @endif </a>--}}
     {{--@endif--}}
     {{--@endforeach--}}
     {{--@if(!$product->parents->isEmpty())--}}
     {{--@foreach($product->parents->first()->validProductfiles()->get() as $productFile)--}}
     {{--@if($productFile->enable)--}}
-    {{--<a href="{{action("HomeController@download" , ["content"=>"فایل محصول","fileName"=>$productFile->file ])}}" class="btn red btn-outline  btn-block">--}}
+    {{--<a href="{{action("Web\HomeController@download" , ["content"=>"فایل محصول","fileName"=>$productFile->file ])}}" class="btn red btn-outline  btn-block">--}}
     {{--<i class="fa fa-download"></i> @if(isset($productFile->name) && strlen($productFile->name)>0){{$productFile->name}}@else {{$productFile->file}} @endif </a><br>--}}
     {{--@endif--}}
     {{--@endforeach--}}

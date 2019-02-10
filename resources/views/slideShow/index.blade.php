@@ -22,8 +22,7 @@
                                        href="#profileimage-{{$slide->id}}"><i class="icon-magnifier"></i></a>
                                 </li>
                                 <li>
-                                    <a target="_blank" class="btn default btn-outline"
-                                       href="{{action("HomeController@download" , ["content"=>$slideContentName,"fileName"=>$slide->photo ])}}">
+                                    <a target="_blank" class="btn default btn-outline" href = "{{action("Web\HomeController@download" , ["content"=>$slideContentName,"fileName"=>$slide->photo ])}}">
                                         <i class="icon-link"></i>
                                     </a>
                                 </li>
@@ -69,8 +68,10 @@
         <td>
             <span class="slide_id hidden" id="{{$slide->id}}"></span>
             @permission((Config::get('constants.EDIT_SLIDESHOW_ACCESS')))
-            <a class="btn btn-outline btn-circle dark btn-sm blue deleteSlide"
-               href="{{action("SlideShowController@edit" , $slide)}}"><i class="fa fa-pencil"></i> اصلاح</a>
+            <a class="btn btn-outline btn-circle dark btn-sm blue deleteSlide" href = "{{action("Web\SlideShowController@edit" , $slide)}}">
+                <i class = "fa fa-pencil"></i>
+                اصلاح
+            </a>
             @endpermission
             @permission((Config::get('constants.REMOVE_SLIDESHOW_ACCESS')))
             <a class="btn btn-outline btn-circle dark btn-sm red deleteSlide" data-toggle="modal"

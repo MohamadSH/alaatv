@@ -3,17 +3,17 @@
 namespace App\Console\Commands;
 
 //use App\Classes\Search\Tag\ProductTagManagerViaApi;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Web\ProductController;
 use App\Orderproduct;
 use App\Product;
 use App\Traits\APIRequestCommon;
 use App\Traits\ProductCommon;
-//use App\Traits\TaggableTrait;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Schema;
+
+//use App\Traits\TaggableTrait;
 
 class MergeProductCommand extends Command
 {
@@ -594,7 +594,7 @@ class MergeProductCommand extends Command
         $newProduct->name = $title;
         $newProduct->basePrice = $newCost;
         $newProduct->discount = $newDiscount;
-        $newProduct->redirectUrl = action("ProductController@show", $grandParent);
+        $newProduct->redirectUrl = action("Web\ProductController@show", $grandParent);
     }
 
     /**

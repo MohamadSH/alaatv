@@ -9,7 +9,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -49,7 +49,7 @@
                                         <ul>
                                             @foreach($products as $product)
                                                 <li data-jstree='{ "type" : "file","disabled" : true }'>
-                                                    <a href="{{ action("ProductController@show",$product) }}">
+                                                    <a href = "{{ action("Web\ProductController@show",$product) }}">
                                                         {{ $product->name }}
                                                     </a>
                                                 </li>
@@ -68,7 +68,7 @@
                                             <ul>
                                                 @foreach($ac->articles as $article)
                                                     <li data-jstree='{ "type" : "file","disabled" : true }'>
-                                                        <a href="{{ action("ArticleController@show",$article) }}">
+                                                        <a href = "{{ action("Web\ArticleController@show",$article) }}">
                                                             {{ $article->title }}
                                                         </a>
                                                     </li>
@@ -78,7 +78,7 @@
                                     @endforeach
                                     @foreach($articlesWithoutCategory as $article)
                                         <li data-jstree='{ "type" : "file","disabled" : true }'>
-                                            <a href="{{ action("ArticleController@show",$article) }}">
+                                            <a href = "{{ action("Web\ArticleController@show",$article) }}">
                                                 {{ $article->title }}
                                             </a>
                                         </li>
@@ -86,12 +86,12 @@
                                 </ul>
                             </li>
                             <li data-jstree='{ "type" : "file","disabled" : false }'>
-                                <a href="{{ action("ContactUsController") }}">
+                                <a href = "{{ action("Web\ContactUsController") }}">
                                     @lang('page.contact us')
                                 </a>
                             </li>
                             <li data-jstree='{ "type" : "file","disabled" : false }'>
-                                <a href="{{ action("HomeController@certificates") }}">
+                                <a href = "{{ action("Web\HomeController@certificates") }}">
                                     مجوزها
                                 </a>
                             </li>

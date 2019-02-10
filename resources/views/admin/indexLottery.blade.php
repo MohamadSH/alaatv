@@ -28,7 +28,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -49,7 +49,7 @@
             <div class="portlet light">
                 <div class="portlet-body">
                     <span class="bold" style="font-size: larger"></span>&nbsp;&nbsp;
-                    <a class="btn btn-default" href="{{action("HomeController@pointBot")}}"
+                    <a class = "btn btn-default" href = "{{action("Web\HomeController@pointBot")}}"
                        {{($pointsGiven)?"disabled":""}} target="_blank">
                         اهدای امتیاز به کاربران
                     </a>
@@ -85,12 +85,12 @@
                             <div class="col-md-6">
                                 <div class="btn-group">
                                     @if(isset($userlotteries) && $userlotteries->isEmpty())
-                                        <a href="{{action("LotteryController@holdLottery" , ["lottery"=>$lotteryName])}}"
+                                        <a href = "{{action("Web\LotteryController@holdLottery" , ["lottery"=>$lotteryName])}}"
                                            class="btn btn-outline blue-dark" target="_blank">
                                             برگزاری قرعه کشی
                                         </a>
                                     @else
-                                        <a href="{{action("LotteryController@givePrizes", ["lottery"=>$lotteryName])}}"
+                                        <a href = "{{action("Web\LotteryController@givePrizes", ["lottery"=>$lotteryName])}}"
                                            class="btn btn-outline red" target="_blank">
                                             اهدای جوایز </a>
                                     @endif
@@ -114,7 +114,8 @@
                             <tr>
                                 <td></td>
                                 <td>{{$userlottery->pivot->rank}}</td>
-                                <td><a href="{{action("UserController@edit", $userlottery)}}"
+                                <td>
+                                    <a href = "{{action("Web\UserController@edit", $userlottery)}}"
                                        target="_blank">{{$userlottery->full_name}}</a></td>
                                 <td>{{$userlottery->mobile}}</td>
                                 <td>

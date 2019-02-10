@@ -20,6 +20,7 @@ class ContentSearch extends SearchAbstract
 //    protected $numberOfItemInEachPage = 2;
     protected $validFilters = [
         'name',
+        'set',
         'tags',
         'contentType',
         'createdAtSince',
@@ -32,11 +33,15 @@ class ContentSearch extends SearchAbstract
         $items = collect();
         foreach ($contentTypes as $contentType) {
             ${$contentType . 'Result'} = $this->getFiltered($filters,['contentType' => (array) $contentType]);
-            $items->offsetSet($contentType,${$contentType . 'Result'});
+            $items->offsetSet($contentType, $this->normalizeResult(${$contentType . 'Result'}));
         }
         return $items;
     }
 
+    private function normalizeResult(LengthAwarePaginator $resutl)
+    {
+        return $resutl->count() > 0 ? $resutl : null;
+    }
     /**
      * @param array ...$filters
      * @return LengthAwarePaginator|null

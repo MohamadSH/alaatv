@@ -28,7 +28,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -128,12 +128,12 @@
 
                                 <div class="btn-group">
                                     @permission((Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS')))
-                                    {{--                                        <a  class="btn btn-outline red" target="_blank" href="{{action("ContentController@create2")}}"><i class="fa fa-plus"></i> افزودن محتوا </a>--}}
-                                    <a class="btn btn-outline red" target="_blank"
-                                       href="{{action("ContentController@create2")}}"><i class="fa fa-plus"></i>
+                                    {{--                                        <a  class="btn btn-outline red" target="_blank" href="{{action("Web\ContentController@create2")}}"><i class="fa fa-plus"></i> افزودن محتوا </a>--}}
+                                    <a class="btn btn-outline red" target="_blank" href = "{{action("Web\ContentController@create2")}}">
+                                        <i class = "fa fa-plus"></i>
                                         افزودن محتوا </a>
-                                    <a class="btn btn-outline red-flamingo" target="_blank"
-                                       href="{{action("ContentController@create")}}"><i class="fa fa-plus"></i>
+                                    <a class="btn btn-outline red-flamingo" target="_blank" href = "{{action("Web\ContentController@create")}}">
+                                        <i class = "fa fa-plus"></i>
                                         آپلود محتوا </a>
                                     @endpermission
                                 </div>
@@ -641,7 +641,7 @@
 
             {{--<div class="btn-group">--}}
             {{--@permission((Config::get('constants.INSERT_ARTICLE_ACCESS')))--}}
-            {{--<a id="sample_editable_1_new" class="btn btn-outline blue-steel" href="{{action("ArticleController@create")}}"><i class="fa fa-plus"></i> افزودن مقاله </a>--}}
+            {{--<a id="sample_editable_1_new" class="btn btn-outline blue-steel" href="{{action("Web\ArticleController@create")}}"><i class="fa fa-plus"></i> افزودن مقاله </a>--}}
             {{--@endpermission--}}
             {{--</div>--}}
             {{--</div>--}}

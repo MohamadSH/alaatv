@@ -46,6 +46,7 @@ namespace App;
  */
 class Major extends BaseModel
 {
+
     /**
      * @var array
      */

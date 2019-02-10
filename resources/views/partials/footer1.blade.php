@@ -23,22 +23,22 @@
                         </a>
                     </li>--}}
                     <li class = "m-nav__item">
-                        <a href = "{{ action("RulesPageController") }}" class = "m-nav__link">
+                        <a href = "{{ action("Web\RulesPageController") }}" class = "m-nav__link">
                             <span class = "m-nav__link-text">قوانین</span>
                         </a>
                     </li>
                     <li class = "m-nav__item">
-                        <a href = "{{ action("ProductController@search") }}" class = "m-nav__link">
+                        <a href = "{{ action("Web\ProductController@search") }}" class = "m-nav__link">
                             <span class = "m-nav__link-text">همایش ها</span>
                         </a>
                     </li>
                     <li class = "m-nav__item">
-                        <a href = "{{ action("OrderController@checkoutReview") }}" class = "m-nav__link">
+                        <a href = "{{ action("Web\OrderController@checkoutReview") }}" class = "m-nav__link">
                             <span class = "m-nav__link-text">سبد خرید</span>
                         </a>
                     </li>
                     <li class = "m-nav__item m-nav__item">
-                        <a href = "{{ action("ContactUsController") }}" class = "m-nav__link" data-toggle = "m-tooltip" title = "@lang('page.contact us')" data-placement = "left">
+                        <a href = "{{ action("Web\ContactUsController") }}" class = "m-nav__link" data-toggle = "m-tooltip" title = "@lang('page.contact us')" data-placement = "left">
                             <i class = "m-nav__link-icon flaticon-info m--icon-font-size-lg3"></i>
                         </a>
                     </li>
