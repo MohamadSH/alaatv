@@ -29,6 +29,6 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['middleware' => 'auth:api'], function () {
         Route::get('debug', 'Api\HomeController@debug');
         Route::get('authTest', 'Api\HomeController@authTest');
-//        Route::post('getPrice/{product}', 'Api\ProductController@refreshPrice');
+        Route::post('getPrice/{product}', 'Api\ProductController@refreshPrice');
     });
 });
