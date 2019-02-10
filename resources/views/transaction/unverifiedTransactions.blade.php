@@ -11,12 +11,12 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
                 <i class="fa fa-cogs"></i>
-                <a href="{{action("HomeController@adminOrder")}}">مدیریت سفارش ها</a>
+                <a href = "{{action("Web\HomeController@adminOrder")}}">مدیریت سفارش ها</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -60,8 +60,7 @@
                                 <th></th>
                                 <td>
                                     @if(strlen($transaction["firstName"])>0 || strlen($transaction["lastName"])>0)
-                                        <a target="_blank"
-                                           href="{{action("UserController@edit" , (isset($transaction["userId"]))?$transaction["userId"]:0 )}}">
+                                        <a target="_blank" href = "{{action("Web\UserController@edit" , (isset($transaction["userId"]))?$transaction["userId"]:0 )}}">
                                             {{$transaction["firstName"]}} {{$transaction["lastName"]}}
                                         </a>
                                     @else

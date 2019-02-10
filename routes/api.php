@@ -13,16 +13,23 @@
 
 Auth::routes(['verify' => true]);
 
-Route::post('uploadFile', 'HomeController@uploadFile');
+Route::post('uploadFile', 'Web\HomeController@uploadFile');
 
 Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'rt'], function () {
 
-        Route::get('id/{bucket}/{id}', "API\TagController@get");
-        Route::put('id/{bucket}/{id}', "API\TagController@add");
-        Route::delete('id/{bucket}/{id}', "API\TagController@remove");
-        Route::get('tags/{bucket}', "API\TagController@index");
-        Route::get('flush', "API\TagController@flush");
+        Route::get('id/{bucket}/{id}', "Api\TagController@get");
+        Route::put('id/{bucket}/{id}', "Api\TagController@add");
+        Route::delete('id/{bucket}/{id}', "Api\TagController@remove");
+        Route::get('tags/{bucket}', "Api\TagController@index");
+        Route::get('flush', "Api\TagController@flush");
 
     });
+
+    Route::get('debug', 'Api\HomeController@debug');
+    Route::get('authTest', 'Api\HomeController@authTest');
+
+    Route::get('c/{c}', 'Api\ContentController@show');
+    Route::get('product/{product}', 'Api\ProductController@show');
+    Route::get('set/{set}', 'Api\SetController@show');
 });

@@ -4,15 +4,16 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\{Controller};
 use App\Traits\CharacterCommon;
+use App\Traits\RedirectTrait;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\{Facades\Auth, Facades\URL};
 
 class LoginController extends Controller
 {
 
     use CharacterCommon;
+    use RedirectTrait;
     /**
      * @var RegisterController
      */
@@ -54,16 +55,38 @@ class LoginController extends Controller
     }
 
     /**
+     * Log the user out of the application.
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        if ($request->expectsJson()) {
+            //TODO:// revoke all apps!!!
+            $request->user()->token()->revoke();
+        } else
+            $request->session()->invalidate();
+
+
+        return $this->loggedOut($request) ? : redirect('/');
+    }
+
+    /**
      * Handle a login request to the application.
      *
      * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function login(Request $request)
     {
-        $request->offsetSet("nationalCode", substr($request->get("password"),0,10));
+        $request->offsetSet("nationalCode", substr($request->get("password"), 0, 10));
         $request->offsetSet("userstatus_id", 1);
 
         /**
@@ -105,6 +128,22 @@ class LoginController extends Controller
     }
 
     /**
+     * Send the response after the user was authenticated.
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    protected function sendLoginResponse(Request $request)
+    {
+        if (!$request->expectsJson())
+            $request->session()->regenerate();
+        $this->clearLoginAttempts($request);
+        return $this->authenticated($request, $this->guard()->user())
+            ? : redirect()->intended($this->redirectPath());
+    }
+
+    /**
      * Show the application login form.
      *
      * @return \Illuminate\Http\Response
@@ -118,6 +157,7 @@ class LoginController extends Controller
      * Get the needed authorization credentials from the request.
      *
      * @param  \Illuminate\Http\Request $request
+     *
      * @return array
      */
     protected function credentials(Request $request)
@@ -125,51 +165,44 @@ class LoginController extends Controller
         return $request->only($this->username(), 'nationalCode', 'password');
     }
 
-    protected function redirectTo()
-    {
-        $baseUrl = url("/");
-        $targetUrl = redirect()
-            ->intended()
-            ->getTargetUrl();
-        $redirectTo = $baseUrl;
-        if (strcmp($targetUrl, $baseUrl) == 0) {
-            // Indicates a strange situation when target url is the home page despite
-            // the fact that there is a probability that user must be redirected to another page except home page
-
-            if (strcmp(URL::previous(), route('login')) != 0)
-                // User first had opened a page and then went to login
-                $redirectTo = URL::previous();
-        } else {
-            $redirectTo = $targetUrl;
-        }
-
-        if (Auth::user()->completion("afterLoginForm") != 100) {
-            if (strcmp(URL::previous(), action("OrderController@checkoutAuth")) == 0) {
-                $redirectTo = action("OrderController@checkoutCompleteInfo");
-            } else {
-                $redirectTo = action("UserController@completeRegister", ["redirect" => $redirectTo]);
-            }
-        }
-        return $redirectTo;
-    }
-
     /**
      * The user has been authenticated.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  mixed $user
+     * @param  mixed                    $user
+     *
      * @return mixed
      */
     protected function authenticated(Request $request, $user)
     {
+        if ($request->expectsJson()) {
+            $token = $user->getAppToken();
+            $data = array_merge([
+                'user' => $user,
+            ], $token);
+            return response()->json([
+                'status'     => 1,
+                'msg'        => 'user sign in.',
+                'redirectTo' => $this->redirectTo($request),
+                'data'       => $data,
+            ], Response::HTTP_OK);
+        }
+    }
+
+    /**
+     * The user has logged out of the application.
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return mixed
+     */
+    protected function loggedOut(Request $request)
+    {
         if ($request->expectsJson())
             return response()->json([
-                'status' => 1,
-                'msg' => 'user sign in.',
-                'redirectTo' => $this->redirectTo(),
-                'data' => [
-                    '   user' => $user
-                ]
+                'status'     => 1,
+                'msg'        => 'user sign out.',
+                'redirectTo' => action("Web\IndexPageController"),
             ], Response::HTTP_OK);
     }
 }

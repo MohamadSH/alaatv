@@ -18,7 +18,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -61,8 +61,7 @@
                                 <div class="caption caption-md">
                                     <i class="icon-bar-chart theme-font hide"></i>
                                     <span class="caption-subject font-blue-madison bold uppercase">جدول اسلایدهای صفحه اصلی</span>
-                                    <span class="caption-helper"><a target="_blank"
-                                                                    href="{{action("IndexPageController")}}">رفتن به صفحه ی اصلی</a></span>
+                                    <span class="caption-helper"><a target="_blank" href = "{{action("Web\IndexPageController")}}">رفتن به صفحه ی اصلی</a></span>
                                 </div>
                                 <div class="actions">
                                     @permission((Config::get('constants.INSERT_SLIDESHOW_ACCESS')))

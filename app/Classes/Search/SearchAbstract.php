@@ -10,7 +10,6 @@ namespace App\Classes\Search;
 
 
 use App\Classes\Search\Filters\Filter;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Config;
 use LogicException;
@@ -26,7 +25,7 @@ abstract class SearchAbstract
     protected $dummyFilterCallBack;
     protected $pageName               = 'page';
     protected $pageNum;
-    protected $numberOfItemInEachPage = 25;
+    protected $numberOfItemInEachPage = 10;
 
     public function __construct()
     {

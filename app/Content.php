@@ -10,6 +10,7 @@ use App\Classes\SEO\SeoInterface;
 use App\Classes\SEO\SeoMetaTagsGenerator;
 use App\Classes\Taggable;
 use App\Collection\ContentCollection;
+use App\Collection\ProductCollection;
 use App\Traits\APIRequestCommon;
 use App\Traits\favorableTraits;
 use App\Traits\ModelTrackerTrait;
@@ -90,23 +91,23 @@ use Stevebauman\Purify\Facades\Purify;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereFile($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereIsFree($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereThumbnail($value)
- * @property-read mixed                                                       $author
- * @property-read mixed                                                       $meta_description
- * @property-read mixed                                                       $meta_title
- * @property-read mixed                                                       $title
- * @property int|null                                                         $contentset_id
- * @property string|null                                                      $slug            slug
- * @property-read \App\Collection\UserCollection|\App\User[]                  $favoriteBy
- * @property-read \App\Contentset|null                                        $set
+ * @property-read mixed                                      $author
+ * @property-read mixed                                      $meta_description
+ * @property-read mixed                                      $meta_title
+ * @property-read mixed                                      $title
+ * @property int|null                                        $contentset_id
+ * @property string|null                                     $slug            slug
+ * @property-read \App\Collection\UserCollection|\App\User[] $favoriteBy
+ * @property-read \App\Contentset|null                       $set
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereContentsetId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereSlug($value)
- * @property mixed $page_view
+ * @property mixed                                           $page_view
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content wherePageView($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content query()
- * @property-read mixed $author_name
- * @property-read mixed $url
+ * @property-read mixed                                      $author_name
+ * @property-read mixed                                      $url
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
@@ -129,14 +130,14 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     |--------------------------------------------------------------------------
     */
 
-    public const CONTENT_TYPE_PAMPHLET     = 1;
-    public const CONTENT_TYPE_EXAM         = 2;
-    public const CONTENT_TYPE_BOOK         = 7;
-    public const CONTENT_TYPE_VIDEO        = 8;
-    public const CONTENT_TYPE_ARTICLE      = 9;
-    public const CONTENT_TEMPLATE_VIDEO    = 1;
+    public const CONTENT_TYPE_PAMPHLET = 1;
+    public const CONTENT_TYPE_EXAM = 2;
+    public const CONTENT_TYPE_BOOK = 7;
+    public const CONTENT_TYPE_VIDEO = 8;
+    public const CONTENT_TYPE_ARTICLE = 9;
+    public const CONTENT_TEMPLATE_VIDEO = 1;
     public const CONTENT_TEMPLATE_PAMPHLET = 2;
-    public const CONTENT_TEMPLATE_EXAM     = 2;
+    public const CONTENT_TEMPLATE_EXAM = 2;
     protected static $purifyNullConfig = ['HTML.Allowed' => ''];
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = [
@@ -174,24 +175,25 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     protected $appends = [
         'url',
-        'author'
+        'apiUrl',
+        'author',
     ];
 
     protected $hidden = [
-      'user',
-      'deleted_at',
-      'validSince',
-      'enable',
-      'metaKeywords',
-      'metaDescription',
-      'metaTitle',
-      'author_id',
-      'template_id',
-      'slug',
-      'contentsets',
-      'contentset_id',
-      'template',
-      'contenttype'
+        'user',
+        'deleted_at',
+        'validSince',
+        'enable',
+        'metaKeywords',
+        'metaDescription',
+        'metaTitle',
+        'author_id',
+        'template_id',
+        'slug',
+        'contentsets',
+        'contentset_id',
+        'template',
+        'contenttype',
     ];
 
 
@@ -300,7 +302,14 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function getUrlAttribute($value): string
     {
-        return action("ContentController@show",$this);
+        return action("Web\ContentController@show", $this);
+    }
+
+    public function getApiUrlAttribute($value): array
+    {
+        return [
+            'v1' => action("Api\ContentController@show", $this),
+        ];
     }
 
     /**
@@ -387,15 +396,14 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                         $fileCollection->transform(function ($item, $key) {
                             $l = new LinkGenerator($item);
                             $item->link = $this->isFree ? $l->getLinks() : $l->getLinks([
-                                                                                            "content_id" => $this->id,
-                                                                                        ]);
+                                "content_id" => $this->id,
+                            ]);
                             return $item;
                         });
 
                         return $fileCollection->groupBy('type');
                     });
     }
-
 
 
     /**
@@ -426,14 +434,14 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $content = $this;
         $key = "content:author" . $content->cacheKey();
         return Cache::tags(["user"])
-                       ->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
-                           return $this->user->setVisible([
-                               'id',
-                               'firstName',
-                               'lastName',
-                               'photo'
-                           ]);
-                       });
+                    ->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
+                        return $this->user->setVisible([
+                            'id',
+                            'firstName',
+                            'lastName',
+                            'photo',
+                        ]);
+                    });
     }
 
     public function getAuthorNameAttribute(): string
@@ -542,8 +550,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 return $displayName;
             });
 
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -630,7 +637,6 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     }
 
 
-
     /**
      * Set the content's thumbnail.
      *
@@ -674,11 +680,21 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $tags = null;
         if (!empty($value))
             $tags = json_encode([
-                                    "bucket" => "content",
-                                    "tags"   => $value,
-                                ], JSON_UNESCAPED_UNICODE);
+                "bucket" => "content",
+                "tags"   => $value,
+            ], JSON_UNESCAPED_UNICODE);
 
         $this->attributes['tags'] = $tags;
+    }
+
+    /**
+     * every products that have this content.
+     *
+     * @return \App\Collection\ProductCollection
+     */
+    public function products()
+    {
+        return new ProductCollection();
     }
 
     public function grades()
@@ -767,16 +783,16 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
 
                     $files->push([
-                                     "uuid"     => $file->uuid,
-                                     "disk"     => "alaaCdnSFTP",
-                                     "url"      => $url,
-                                     "fileName" => parse_url($url)['path'],
-                                     "size"     => $size,
-                                     "caption"  => $caption,
-                                     "res"      => $res,
-                                     "type"     => $type,
-                                     "ext"      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
-                                 ]);
+                        "uuid"     => $file->uuid,
+                        "disk"     => "alaaCdnSFTP",
+                        "url"      => $url,
+                        "fileName" => parse_url($url)['path'],
+                        "size"     => $size,
+                        "caption"  => $caption,
+                        "res"      => $res,
+                        "type"     => $type,
+                        "ext"      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
+                    ]);
                 }
 
                 $file = $content->files->where("pivot.label", "hq")
@@ -789,16 +805,16 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     $type = "video";
 
                     $files->push([
-                                     "uuid"     => $file->uuid,
-                                     "disk"     => "alaaCdnSFTP",
-                                     "url"      => $url,
-                                     "fileName" => parse_url($url)['path'],
-                                     "size"     => $size,
-                                     "caption"  => $caption,
-                                     "res"      => $res,
-                                     "type"     => $type,
-                                     "ext"      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
-                                 ]);
+                        "uuid"     => $file->uuid,
+                        "disk"     => "alaaCdnSFTP",
+                        "url"      => $url,
+                        "fileName" => parse_url($url)['path'],
+                        "size"     => $size,
+                        "caption"  => $caption,
+                        "res"      => $res,
+                        "type"     => $type,
+                        "ext"      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
+                    ]);
                 }
 
 
@@ -812,16 +828,16 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     $type = "video";
 
                     $files->push([
-                                     "uuid"     => $file->uuid,
-                                     "disk"     => "alaaCdnSFTP",
-                                     "url"      => $url,
-                                     "fileName" => parse_url($url)['path'],
-                                     "size"     => $size,
-                                     "caption"  => $caption,
-                                     "res"      => $res,
-                                     "type"     => $type,
-                                     "ext"      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
-                                 ]);
+                        "uuid"     => $file->uuid,
+                        "disk"     => "alaaCdnSFTP",
+                        "url"      => $url,
+                        "fileName" => parse_url($url)['path'],
+                        "size"     => $size,
+                        "caption"  => $caption,
+                        "res"      => $res,
+                        "type"     => $type,
+                        "ext"      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
+                    ]);
                 }
 
 
@@ -860,16 +876,16 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     }
 
                     $files->push([
-                                     "uuid"     => $file->uuid,
-                                     "disk"     => (isset($diskName) ? $diskName : null),
-                                     "url"      => null,
-                                     "fileName" => $file->name,
-                                     "size"     => null,
-                                     "caption"  => $caption,
-                                     "res"      => $res,
-                                     "type"     => $type,
-                                     "ext"      => pathinfo($file->name, PATHINFO_EXTENSION),
-                                 ]);
+                        "uuid"     => $file->uuid,
+                        "disk"     => (isset($diskName) ? $diskName : null),
+                        "url"      => null,
+                        "fileName" => $file->name,
+                        "size"     => null,
+                        "caption"  => $caption,
+                        "res"      => $res,
+                        "type"     => $type,
+                        "ext"      => pathinfo($file->name, PATHINFO_EXTENSION),
+                    ]);
 
                 }
                 break;

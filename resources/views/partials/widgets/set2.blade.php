@@ -1,11 +1,11 @@
 {{--
 @include('partials.widgets.set1',[
                 'widgetActionName' => $section["descriptiveName"].'/ نمایش همه',
-                'widgetActionLink' => urldecode(action("ContentController@index" , ["tags" => $section["tags"]])),
+                'widgetActionLink' => urldecode(action("Web\ContentController@index" , ["tags" => $section["tags"]])),
                 'widgetTitle'      => $lesson["displayName"],
                 'widgetPic'        => (isset($lesson["pic"]) && strlen($lesson["pic"])>0 ?  $lesson["pic"]."?w=253&h=142" : 'https://via.placeholder.com/235x142'),
                 'widgetAuthor' => $lesson["author"],
-                'widgetLink'       => (isset($lesson["content_id"]) && $lesson["content_id"]>0 ? action("ContentController@show", $lesson["content_id"]):""),
+                'widgetLink'       => (isset($lesson["content_id"]) && $lesson["content_id"]>0 ? action("Web\ContentController@show", $lesson["content_id"]):""),
                 'widgetCount' => $lesson["content_count"],
                 'widgetScroll' => 1
                 ])

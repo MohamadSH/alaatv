@@ -28,7 +28,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -419,7 +419,7 @@
                     <label class="btn btn-outline sbold green-haze">مجموع مبالغ آیتم های اضافه : <span
                                 id="totalFilteredExtraCost"></span> تومان</label><br>
                     @endpermission
-                    <a target="_blank" href="{{action("TransactionController@getUnverifiedTransactions")}}"
+                    <a target = "_blank" href = "{{action("Web\TransactionController@getUnverifiedTransactions")}}"
                        class="btn red btn-lg">لیست تراکنشهای ثبت نشده</a>
                     <div class="table-toolbar">
                     </div>

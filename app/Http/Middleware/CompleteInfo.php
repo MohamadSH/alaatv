@@ -20,13 +20,13 @@ class CompleteInfo
     {
         if (Auth::guard($guard)->check() && $request->user()->completion("afterLoginForm") != 100) {
             switch ($request->fullUrl()) {
-                case action("OrderController@checkoutReview") :
-                case action("OrderController@checkoutPayment") :
-                    return redirect(action("OrderController@checkoutCompleteInfo"));
+                case action("Web\OrderController@checkoutReview") :
+                case action("Web\OrderController@checkoutPayment") :
+                    return redirect(action("Web\OrderController@checkoutCompleteInfo"));
                     break;
                 default :
                     session()->put("redirectTo", $request->fullUrl());
-                    return redirect(action("UserController@completeRegister"));
+                    return redirect(action("Web\UserController@completeRegister"));
                     break;
             }
         }

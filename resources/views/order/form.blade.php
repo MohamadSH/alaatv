@@ -128,9 +128,8 @@
         <label class="col-md-2 control-label" for="questionFile">فایل سفارش</label>
         <div class="col-md-10">
             @if(!$order->files->isEmpty())
-                <a target="_blank" class="btn blue"
-                   href="{{action("HomeController@download" , ["content"=>"فایل سفارش","fileName"=>$order->files->first()->file ])}}">دانلود
-                    فایل</a>
+                <a target="_blank" class="btn blue" href = "{{action("Web\HomeController@download" , ["content"=>"فایل سفارش","fileName"=>$order->files->first()->file ])}}">دانلود
+                                                                                                                                                                             فایل</a>
             @else
                 <div class="fileinput fileinput-new" data-provides="fileinput">
                     <div class="input-group input-large ">

@@ -3,8 +3,7 @@
     <tr id="{{$userbon->id}}">
         <th></th>
         <td id="userBonFullName_{{$userbon->id}}">@if(strlen($userbon->user->reverse_full_name) > 0) <a
-                    target="_blank"
-                    href="{{action("UserController@edit" , $userbon->user)}}">{{$userbon->user->reverse_full_name}}</a> @else
+                    target="_blank" href = "{{action("Web\UserController@edit" , $userbon->user)}}">{{$userbon->user->reverse_full_name}}</a> @else
                 <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
         <td>@if(isset($userbon->totalNumber) && strlen($userbon->totalNumber)>0 ) {{ $userbon->totalNumber }}  @else
                 <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
@@ -26,7 +25,7 @@
                 <ul class="dropdown-menu" role="menu" id="{{$userbon->id}}">
                     {{--@userbon((Config::get('constants.SHOW_userbon_ACCESS')))--}}
                     {{--<li>--}}
-                    {{--<a href="{{action("userbonController@edit" , $userbon)}}">--}}
+                    {{--<a href="{{action("Web\userbonController@edit" , $userbon)}}">--}}
                     {{--<i class="fa fa-pencil"></i> اصلاح </a>--}}
                     {{--</li>--}}
                     {{--@enduserbon--}}

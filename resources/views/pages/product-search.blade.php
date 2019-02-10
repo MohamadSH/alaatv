@@ -8,7 +8,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <i class="flaticon-home-2"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
                 محصولات
@@ -29,7 +29,7 @@
                 @include('partials.widgets.product1',[
                 'widgetTitle'      => $product->name,
                 'widgetPic'        => $product->photo,
-                'widgetLink'       => action("ProductController@show", $product),
+                'widgetLink'       => action("Web\ProductController@show", $product),
                 'widgetPrice'      => $product->priceText,
                 'widgetPriceLabel' => ($product->isFree || $product->basePrice == 0 ? 0 : 1)
                 ])

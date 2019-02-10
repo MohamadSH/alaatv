@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\{Auth, Cache, Config, DB, Log};
+use Illuminate\Support\Facades\{Auth, Cache, Config, DB};
 use Kalnoy\Nestedset\QueryBuilder;
 use Laratrust\Traits\LaratrustUserTrait;
 use Laravel\Passport\HasApiTokens;
@@ -226,21 +226,21 @@ use Schema;
  *                    $favoredSet
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMobileVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMobileVerifiedCode($value)
- * @property string|null $email_verified_at
- * @property-read mixed $reverse_full_name
- * @property-write mixed $first_name
- * @property-write mixed $last_name
- * @property-write mixed $medical_condition
- * @property-write mixed $postal_code
+ * @property string|null                                                     $email_verified_at
+ * @property-read mixed                                                      $reverse_full_name
+ * @property-write mixed                                                     $first_name
+ * @property-write mixed                                                     $last_name
+ * @property-write mixed                                                     $medical_condition
+ * @property-write mixed                                                     $postal_code
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmailVerifiedAt($value)
  * @property-read \App\Collection\OrderproductCollection|\App\Orderproduct[] $closedorderproducts
- * @property mixed mobile
- * @property string lastName
- * @property string firstName
- * @property int id
+ * @property mixed                                                           mobile
+ * @property string                                                          lastName
+ * @property string                                                          firstName
+ * @property int                                                             id
  * @method static \Illuminate\Database\Eloquent\Builder|User active()
  * @method static select()
  * @property-read mixed                                                      $number_of_products_in_basket
@@ -272,12 +272,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     */
 
     protected $appends = [
-        'majorInfo',
-        'gradeInfo',
-        'genderInfo',
-        'walletInfo',
-        'completionInfo'
-        ];
+        'info',
+    ];
 
     protected $cascadeDeletes = [
         'orders',
@@ -286,10 +282,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'bankaccounts',
         'contacts',
         'mbtianswers',
-//        'favorables',
+        //        'favorables',
     ];
     /**      * The attributes that should be mutated to dates.        */
-    protected $dates       = [
+    protected $dates = [
         'created_at',
         'updated_at',
         'deleted_at',
@@ -324,7 +320,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         "medicalCondition",
         "diet",
     ];
-    protected $medicalInfo  = [
+    protected $medicalInfo = [
         "bloodtype_id",
         "allergy",
         "medicalCondition",
@@ -336,6 +332,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
      * @var array
      */
     protected $fillable = [
+        'mobile',
         'province',
         'city',
         'address',
@@ -355,6 +352,14 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'allergy',
         'medicalCondition',
         'diet',
+        "firstName",
+        "lastName",
+        "password",
+        "nationalCode",
+        "nameSlug",
+        "mobile",
+        "userstatus_id",
+        "techCode",
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -383,6 +388,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'photo',
     ];
 
+    //TODO:// remove!
     private static $secureFillable = [
         "firstName",
         "lastName",
@@ -394,10 +400,20 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         "techCode",
     ];
 
+
     private static $beProtected = [
         "roles",
     ];
 
+    public function getAppToken()
+    {
+        $tokenResult = $this->createToken('Alaa App.');
+        return [
+            'access_token'     => $tokenResult->accessToken,
+            'token_type'       => 'Bearer',
+            'token_expires_at' => Carbon::parse($tokenResult->token->expires_at)->toDateTimeString(),
+        ];
+    }
 
     /** Setter mutator for major_id
      *
@@ -781,7 +797,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array $roles
+     * @param array                                 $roles
+     *
      * @return mixed
      */
     public function scopeRole($query, array $roles)
@@ -794,11 +811,12 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return mixed
      */
     public function scopeActive($query)
     {
-        return $query->where("userstatus_id" , config("constants.USER_STATUS_ACTIVE"));
+        return $query->where("userstatus_id", config("constants.USER_STATUS_ACTIVE"));
     }
 
     public function major()
@@ -824,10 +842,11 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     public function openOrders()
     {
         return $this->hasMany('App\Order')
-                    ->where("orderstatus_id",config("constants.ORDER_STATUS_OPEN"));
+                    ->where("orderstatus_id", config("constants.ORDER_STATUS_OPEN"));
     }
 
-    public function getNumberOfProductsInBasketAttribute(){
+    public function getNumberOfProductsInBasketAttribute()
+    {
         return $this->openOrders->getNumberOfProductsInThisOrderCollection();
     }
 
@@ -1016,8 +1035,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
                     ->join('users', 'users.id', '=', 'orders.user_id')
                     ->select([
 
-                                 "products.*",
-                             ])
+                        "products.*",
+                    ])
                     ->where('users.id', '=', $this->getKey())
 //                    ->orderBy("products.created_at")
                     ->whereNull('products.deleted_at')
@@ -1035,7 +1054,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
      */
     public function userHasBon($bonName = null): int
     {
-        if(is_null($bonName ))
+        if (is_null($bonName))
             $bonName = config("constants.BON1");
         $key = "user:userHasBon:" . $this->cacheKey() . "-" . $bonName;
 
@@ -1078,8 +1097,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     /**
      * returns user valid bons of the specified bons
      *
-     * @param \app\Bon  $bon
-     * @param User $user
+     * @param \app\Bon $bon
+     * @param User     $user
      *
      * @return  \Illuminate\Database\Eloquent\Collection a collection of user valid bons of specified bon
      */
@@ -1191,7 +1210,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         if ($numberOfColumns > 0) {
             foreach ($tableColumns as $tableColumn) {
                 if (in_array($tableColumn, $importantColumns)) {
-                    if (strcmp($tableColumn, "photo") == 0 && strcmp(Auth::user()->photo, Config::get('constants.PROFILE_DEFAULT_IMAGE')) == 0) {
+                    if (strcmp($tableColumn, "photo") == 0 && strcmp(Auth::user()->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0) {
                         $unsetColumns++;
                     }
                     if (!isset($this->$tableColumn) || strlen(preg_replace('/\s+/', '', $this->$tableColumn)) == 0) {
@@ -1211,16 +1230,21 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     public function getPhotoAttribute($value)
     {
         $profileImage = ($value != null ? $value : Config::get('constants.PROFILE_DEFAULT_IMAGE'));
-        $profileImage = route('image', ['category'=>'1','w'=>'39' , 'h'=>'39' ,  'filename' =>  $profileImage ]);
+        $profileImage = route('image', [
+            'category' => '1',
+            'w'        => '39',
+            'h'        => '39',
+            'filename' => $profileImage,
+        ]);
 
         return $profileImage;
     }
 
     public function getShortNameAttribute()
     {
-        if(isset($this->firstName))
+        if (isset($this->firstName))
             return ucfirst($this->firstName);
-        if(isset($this->lastName))
+        if (isset($this->lastName))
             return ucfirst($this->lastName);
         return 'کاربر آلایی';
     }
@@ -1242,11 +1266,11 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
 
     /**  Determines whether user has this content or not
      *
-     * @param  $contentId
+     * @param \App\Content $content
      *
      * @return bool
      */
-    public function hasContent($contentId)
+    public function hasContent(Content $content)
     {
         return true;
     }
@@ -1384,29 +1408,52 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         return self::$beProtected;
     }
 
-    public function getMajorInfoAttribute()
+    public function getInfoAttribute()
+    {
+        return Cache::tags([
+            'user',
+            'major',
+            'grade',
+            'gender',
+            'completion',
+            'wallet',
+        ])->remember($this->cacheKey(), config("constants.CACHE_600"), function () {
+            return [
+                'major'      => $this->getMajor(),
+                'grade'      => $this->getGrade(),
+                'gender'     => $this->getGender(),
+                'completion' => (int)$this->completion(),
+                'wallet'     => $this->getWallet(),
+            ];
+        });
+
+    }
+
+    protected function getMajor()
     {
         $major = $this->major;
         if (isset($major)) {
             $majorReturn = [
-                'id'   => $major->id,
-                'name' => $major->name,
+                'id'          => $major->id,
+                'name'        => $major->name,
                 'description' => $major->description,
             ];
         } else {
             $majorReturn = null;
         }
         return $majorReturn;
+
     }
 
-    public function getGradeInfoAttribute()
+    protected function getGrade()
     {
+
         $grade = $this->grade;
         if (isset($grade)) {
             $gradeReturn = [
-                'id'   => $grade->id,
-                'name' => $grade->name,
-                'hint' => $grade->displayName,
+                'id'          => $grade->id,
+                'name'        => $grade->name,
+                'hint'        => $grade->displayName,
                 'description' => $grade->description,
             ];
         } else {
@@ -1415,14 +1462,14 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         return $gradeReturn;
     }
 
-    public function getGenderInfoAttribute()
+    protected function getGender()
     {
         $gender = $this->gender;
         if (isset($gender)) {
             $genderReturn = [
-                'id'   => $gender->id,
-                'name' => $gender->name,
-                'description' => $gender->description
+                'id'          => $gender->id,
+                'name'        => $gender->name,
+                'description' => $gender->description,
             ];
         } else {
             $genderReturn = null;
@@ -1430,27 +1477,23 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         return $genderReturn;
     }
 
-    public function getCompletionInfoAttribute()
-    {
-        return (int)$this->completion();
-    }
-
-    public function getWalletInfoAttribute()
+    protected function getWallet()
     {
         $wallets = $this->wallets()->with('walletType')->get();
         $walletsArrayForReturn = [];
         foreach ($wallets as $wallet) {
             array_push($walletsArrayForReturn, [
-                'id' => $wallet->id,
-                'name' => $wallet->walletType->name,
-                'hint' => $wallet->walletType->displayName,
-                'balance' => $this->getWalletBalance($wallet->wallettype_id)
+                'id'      => $wallet->id,
+                'name'    => $wallet->walletType->name,
+                'hint'    => $wallet->walletType->displayName,
+                'balance' => $this->getWalletBalance($wallet->wallettype_id),
             ]);
         }
-        return $walletsArrayForReturn;
+        return $walletsArrayForReturn ? : null;
     }
 
-    public function getOpenOrder(): Order {
+    public function getOpenOrder(): Order
+    {
         $openOrder = $this->firstOrCreateOpenOrder($this);
         return $openOrder;
     }

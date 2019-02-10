@@ -19,7 +19,7 @@
                 <ul class="dropdown-menu" role="menu">
                     @permission((Config::get('constants.SHOW_ATTRIBUTESET_ACCESS')))
                     <li>
-                        <a href="{{action("AttributesetController@edit" , $attributeset)}}">
+                        <a href = "{{action("Web\AttributesetController@edit" , $attributeset)}}">
                             <i class="fa fa-pencil"></i> اصلاح </a>
                     </li>
                     @endpermission
@@ -40,8 +40,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                        <button type="button" data-dismiss="modal" class="btn green"
-                                onclick="removeAttributesets('{{action("AttributesetController@destroy" , $attributeset)}}');">
+                        <button type="button" data-dismiss="modal" class="btn green" onclick = "removeAttributesets('{{action("Web\AttributesetController@destroy" , $attributeset)}}');">
                             بله
                         </button>
                     </div>

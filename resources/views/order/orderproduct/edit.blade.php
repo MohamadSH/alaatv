@@ -23,11 +23,11 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
-                <a href="{{action("HomeController@adminOrder")}}">پنل مدیریتی</a>
+                <a href = "{{action("Web\HomeController@adminOrder")}}">پنل مدیریتی</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -59,8 +59,7 @@
                     </div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn btn-sm dark dropdown-toggle"
-                               href="{{action("OrderController@edit" , $orderproduct->order)}}"> بازگشت
+                            <a class="btn btn-sm dark dropdown-toggle" href = "{{action("Web\OrderController@edit" , $orderproduct->order)}}"> بازگشت
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         </div>

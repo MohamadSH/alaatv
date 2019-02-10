@@ -13,7 +13,7 @@
         <ul class="page-breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="{{action("IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
                 <i class="fa fa-angle-left"></i>
             </li>
             <li>
@@ -23,8 +23,9 @@
         <div class="page-toolbar">
             <div class="btn-group pull-right">
 
-                <a class="btn btn-fit-height bg-red-soft bg-font-dark "
-                   href="{{ action("UserController@userProductFiles")  }}"><i class="fa fa-download"></i>فیلم ها و جزوه
+                <a class="btn btn-fit-height bg-red-soft bg-font-dark " href = "{{ action("Web\UserController@userProductFiles")  }}">
+                    <i class = "fa fa-download"></i>
+                    فیلم ها و جزوه
                     ها</a>
             </div>
         </div>
@@ -304,8 +305,7 @@
                                                                 <span class="bold " style="font-style: italic; ">@if($orderproduct->orderproducttype_id == Config::get("constants.ORDER_PRODUCT_GIFT"))
                                                                         <img src="/acm/extra/gift-box.png"
                                                                              width="25">@endif<a style="color:#607075"
-                                                                                                 target="_blank"
-                                                                                                 href="@if($orderproduct->product->hasParents()){{action("ProductController@show",$orderproduct->product->parents->first())}} @else  {{action("ProductController@show",$orderproduct->product)}} @endif">
+                                                                                                 target="_blank" href = "@if($orderproduct->product->hasParents()){{action("Web\ProductController@show",$orderproduct->product->parents->first())}} @else  {{action("Web\ProductController@show",$orderproduct->product)}} @endif">
                                                                     {{$orderproduct->product->name}}
                                                                 </a></span><br>
 
@@ -552,7 +552,7 @@
                                                             </button>
                                                         </li>
                                                         {{--<li>--}}
-                                                        {{--<button   data-target="#ATMPaymentModal"  data-toggle="modal"  class="btn btn-xs bg-font-blue ATMPayment" style="width: 100px;background: #00c4e6" id="ATMPayment-button" data-role="{{$transaction->id}}" data-action="{{action("TransactionController@limitedUpdate" , $transaction)}}" data-control="POST" rel="{{$transaction->order_id}}" >کارت به کارت</button>--}}
+                                                        {{--<button   data-target="#ATMPaymentModal"  data-toggle="modal"  class="btn btn-xs bg-font-blue ATMPayment" style="width: 100px;background: #00c4e6" id="ATMPayment-button" data-role="{{$transaction->id}}" data-action="{{action("Web\TransactionController@limitedUpdate" , $transaction)}}" data-control="POST" rel="{{$transaction->order_id}}" >کارت به کارت</button>--}}
                                                         {{--</li>--}}
                                                     </ul>
                                                 </td>
@@ -630,7 +630,7 @@
                 $("#ATMTransactionCost-static").text($("#instalmentCost_" + transaction_id).text()).number(true).show()
             } else {
                 // Initializing form attributes
-                $("#offlinePaymentForm").attr("action", "{{action("TransactionController@store")}}");
+                $("#offlinePaymentForm").attr("action", "{{action("Web\TransactionController@store")}}");
                 $("#offlinePaymentForm").attr("method", "POST");
                 // Initializing form elements
                 $("input[name=transaction_id]").prop("disabled", true);

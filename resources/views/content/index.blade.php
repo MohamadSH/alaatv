@@ -3,7 +3,7 @@
     @foreach($contentCollection as $content)
         <!-- TIMELINE ITEM -->
             <li>
-                <a href="{{action("ContentController@show", $content["id"])}}">
+                <a href = "{{action("Web\ContentController@show", $content["id"])}}">
                     <div class="col1">
                         <div class="cont">
                             <div class="cont-col1">
@@ -33,8 +33,7 @@
         <tr>
             <th></th>
             {{--        @if(isset($columns) && in_array("name",$columns))--}}
-            <td>@if(isset($item->name[0])) <a target="_blank"
-                                              href="{{action("ContentController@show" , $item)}}"> {{ $item->name }} </a> @else
+            <td>@if(isset($item->name[0])) <a target="_blank" href = "{{action("Web\ContentController@show" , $item)}}"> {{ $item->name }} </a> @else
                     <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
             {{--@endif--}}
             {{--        @if(isset($columns) && in_array("order",$columns))--}}
@@ -79,7 +78,7 @@
             {{--@endif--}}
             {{--@if(isset($columns) && in_array("show",$columns))--}}
             {{--<td style="text-align: center">--}}
-            {{--<a target="_blank" href="{{action("ContentController@show" , $item)}}" class="btn blue"  >نمایش/ دانلود </a>--}}
+            {{--<a target="_blank" href="{{action("Web\ContentController@show" , $item)}}" class="btn blue"  >نمایش/ دانلود </a>--}}
             {{--</td>--}}
             {{--@endif--}}
             {{--@if(isset($columns) && in_array("description",$columns))--}}
@@ -122,7 +121,7 @@
                     <ul class="dropdown-menu" role="menu">
                         @permission((Config::get('constants.EDIT_EDUCATIONAL_CONTENT')))
                         <li>
-                            <a target="_blank" href="{{action("ContentController@edit" , $item)}}">
+                            <a target = "_blank" href = "{{action("Web\ContentController@edit" , $item)}}">
                                 <i class="fa fa-pencil"></i> اصلاح </a>
                         </li>
                         @endpermission
@@ -144,8 +143,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                            <button type="button" data-dismiss="modal" class="btn green"
-                                    onclick="removeContent('{{action("ContentController@destroy" , $item)}}');">بله
+                            <button type="button" data-dismiss="modal" class="btn green" onclick = "removeContent('{{action("Web\ContentController@destroy" , $item)}}');">بله
                             </button>
                         </div>
                     </div>
