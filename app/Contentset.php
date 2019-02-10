@@ -4,6 +4,7 @@ namespace App;
 
 
 use App\Classes\Taggable;
+use App\Collection\ContentCollection;
 use App\Collection\SetCollection;
 use App\Traits\favorableTraits;
 use Illuminate\Support\Facades\Cache;
@@ -12,10 +13,10 @@ use Illuminate\Support\Facades\Config;
 /**
  * App\Contentset
  *
- * @property int                                                   $id
- * @property string|null                                           $name        نام
- * @property string|null                                           $description توضیح
- * @property string|null                                           $photo       عکس پوستر
+ * @property int                                             $id
+ * @property string|null                                     $name        نام
+ * @property string|null                                     $description توضیح
+ * @property string|null                                     $photo       عکس پوستر
  * @property string|null                                           $tags        تگ ها
  * @property int                                                   $enable      فعال/غیرفعال
  * @property int                                                   $display     نمایش/عدم نمایش
@@ -40,15 +41,15 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Query\Builder|\App\Contentset withoutTrashed()
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset active()
- * @property-read \App\Collection\UserCollection|\App\User[]       $favoriteBy
- * @property string|null                                           $small_name
- * @property-read mixed                                            $short_name
+ * @property-read \App\Collection\UserCollection|\App\User[] $favoriteBy
+ * @property string|null                                     $small_name
+ * @property-read mixed                                      $short_name
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereSmallName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset query()
- * @property-read mixed $author
- * @property-read mixed $url
+ * @property-read mixed                                      $author
+ * @property-read mixed                                      $url
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  */
@@ -65,14 +66,16 @@ class Contentset extends BaseModel implements Taggable
         'photo',
     ];
 
-    protected $withCount =[
+    protected $withCount = [
         'contents',
     ];
 
     protected $appends = [
         'url',
+        'apiUrl',
         'shortName',
-        'author'
+        'author',
+        'contentUrl',
     ];
 
     protected $hidden = [
@@ -83,6 +86,7 @@ class Contentset extends BaseModel implements Taggable
         'display',
 
     ];
+
     /**
      * Create a new Eloquent Collection instance.
      *
@@ -124,12 +128,31 @@ class Contentset extends BaseModel implements Taggable
         $key = "ContentSet:getLastContent" . $this->cacheKey();
         return Cache::tags('set')
                     ->remember($key, Config::get("constants.CACHE_300"), function () {
+
+                        $contentCollection = optional($this->getContents())
+                            ->sortByDesc("order");
+                        return optional($contentCollection)
+                            ->first();
+                    });
+    }
+
+    public function getContents(): ?ContentCollection
+    {
+        $key = "ContentSet:getContents" . $this->cacheKey();
+        return Cache::tags('set')
+                    ->remember($key, Config::get("constants.CACHE_300"), function () {
                         return $this->contents()
                                     ->active()
-                                    ->get()
-                                    ->sortByDesc("order")
-                                    ->first();
+                                    ->get();
                     });
+    }
+
+    public function getContentUrlAttribute($value)
+    {
+        return action('Web\ContentController@index', [
+            'set'         => $this->id,
+            'contentOnly' => true,
+        ]);
     }
 
     /*
@@ -177,8 +200,16 @@ class Contentset extends BaseModel implements Taggable
         return isset($contentId) ? action("Web\ContentController@show", $contentId) : "";
     }
 
+    public function getApiUrlAttribute($value): array
+    {
+        return [
+            'v1' => action("Api\SetController@show", $this),
+        ];
+    }
+
     /**
      * @param $value
+     *
      * @return User|null
      */
     public function getAuthorAttribute($value): ?User
@@ -189,7 +220,7 @@ class Contentset extends BaseModel implements Taggable
                 'id',
                 'firstName',
                 'lastName',
-                'photo'
+                'photo',
             ]);
     }
 

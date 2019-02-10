@@ -151,12 +151,14 @@ class ContentController extends Controller
     public function index(ContentIndexRequest $request)
     {
         $contentTypes = array_filter($request->get('contentType',Contenttype::List()));
+        $contentOnly = $request->get('contentOnly', false);
         $tags = (array)$request->get('tags');
         $filters = $request->all();
 
         $result = $this->contentSearch->get(compact('filters','contentTypes'));
-        $result->offsetSet('set', $this->setSearch->get($filters));
-        $result->offsetSet('product', $this->productSearch->get($filters));
+
+        $result->offsetSet('set', !$contentOnly ? $this->setSearch->get($filters) : null);
+        $result->offsetSet('product', !$contentOnly ? $this->productSearch->get($filters) : null);
 
         $pageName = "content-search";
         if (request()->expectsJson() || true) {
@@ -164,7 +166,7 @@ class ContentController extends Controller
                 ->setStatusCode(Response::HTTP_OK)
                 ->setContent([
                     'result' => $result,
-                    'tags' => $tags
+                    'tags'   => empty($tags) ? null : $tags,
                 ]);
         }
         return view("pages.content-search", compact("result", "contentTypes", 'tags','pageName'));
