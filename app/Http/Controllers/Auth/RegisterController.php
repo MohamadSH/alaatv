@@ -98,14 +98,15 @@ class RegisterController extends Controller
     protected function registered(Request $request, User $user)
     {
         if ($request->expectsJson()) {
+            $token = $user->getAppToken();
+            $data = array_merge([
+                'user' => $user,
+            ], $token);
             return response()->json([
                 'status'     => 1,
                 'msg'        => 'user registered',
                 'redirectTo' => $this->redirectTo($request),
-                'data'       => [
-                    'user'  => $user,
-                    'token' => $user->getAppToken(),
-                ],
+                'data'       => $data,
             ], Response::HTTP_OK);
         }
     }

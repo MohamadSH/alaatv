@@ -13,9 +13,10 @@ class HomeController extends Controller
         $this->middleware('auth:api');
     }
 
-    public function debug()
+    public function debug(Request $request)
     {
         return response()->json([
+            'user'  => $request->user(),
             'debug' => 2,
         ]);
     }

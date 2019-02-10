@@ -154,6 +154,7 @@ class HomeController extends Controller
     {
         try{
 
+            dd("here");
             return Block::getShopBlocks();
 
             $contentsets = [

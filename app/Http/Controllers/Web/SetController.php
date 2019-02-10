@@ -107,11 +107,16 @@ class SetController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  Contentset  $set
+     * @param \Illuminate\Http\Request $request
+     * @param  Contentset              $set
+     *
      * @return \Illuminate\Http\Response
      */
-    public function show(Contentset $set)
+    public function show(Request $request, Contentset $set)
     {
+        if ($request->expectsJson())
+            return response()->json($set);
+
         $contents = $set->contents()
                         ->get();
         return view('listTest', compact('set', 'contents'));

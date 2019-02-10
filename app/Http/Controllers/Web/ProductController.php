@@ -323,10 +323,10 @@ class ProductController extends Controller
     public function show(Request $request, Product $product)
     {
         if (isset($product->redirectUrl))
-            return redirect($product->redirectUrl, 301);
+            return redirect($product->redirectUrl, 301, $request->headers->all());
 
         if ($product->grandParent != null)
-            return redirect($product->grandParent->url, 301);
+            return redirect($product->grandParent->url, 301, $request->headers->all());
 
         $this->generateSeoMetaTags($product);
 
@@ -338,7 +338,6 @@ class ProductController extends Controller
 //        dd((array)$product->attributes->get('main'));
         return view("product.show", compact("product" ));
     }
-
 
     /**
      * Show the form for editing the specified resource.
