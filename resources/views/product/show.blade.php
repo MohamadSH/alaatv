@@ -66,18 +66,6 @@
                                                             <span class="m-list-search__result-category m-list-search__result-category--first">
                                                                 ویژگی‌ها
                                                             </span>
-                                                            {{--@foreach($simpleInfoAttributes as $key => $simpleInfoAttribute)--}}
-                                                                {{--<a href="#" class="m-list-search__result-item">--}}
-                                                                    {{--<span class="m-list-search__result-item-icon"><i class="flaticon-like m--font-warning"></i></span>--}}
-                                                                    {{--<span class="m-list-search__result-item-text">{{$key . ': ' . collect($simpleInfoAttribute)->implode('name',',') }}</span>--}}
-                                                                {{--</a>--}}
-                                                                {{--@foreach($simpleInfoAttribute as $k => $info)--}}
-                                                                    {{--@if(isset($info["type"]) && strcmp($info["type"],"information") != 0 )--}}
-                                                                        {{--<input type = "hidden" value = "{{ $info["value"] }}" name = "attribute[]">--}}
-                                                                    {{--@endif--}}
-                                                                {{--@endforeach--}}
-                                                            {{--@endforeach--}}
-
 
                                                             @if(optional($product->attributes->get('information'))->count()> 0)
                                                                 @foreach($product->attributes->get('information') as $key => $informationItem)
@@ -105,12 +93,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-6">
-                                                    {{--@if(isset($product->type['type']) && $product->type['type']=='selectable' && $product->children->isNotEmpty()   )--}}
+
+                                                    {{--@if(isset($product->type['type']) && $product->type['type']=='selectable' && $product->children->isNotEmpty())--}}
                                                         {{--<div class="m-list-search">--}}
                                                             {{--<div class="m-list-search__results">--}}
-                                                        {{--<span class="m-list-search__result-category m-list-search__result-category--first">--}}
-                                                            {{--دارای--}}
-                                                        {{--</span>--}}
+                                                                {{--<span class="m-list-search__result-category m-list-search__result-category--first">--}}
+                                                                    {{--دارای--}}
+                                                                {{--</span>--}}
                                                                 {{--@foreach($product->children as $child)--}}
                                                                     {{--@foreach($checkboxArray as $info)--}}
                                                                         {{--<a href="#" class="m-list-search__result-item">--}}

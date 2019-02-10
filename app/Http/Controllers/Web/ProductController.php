@@ -335,7 +335,13 @@ class ProductController extends Controller
                ->setContent($product);
         }
 
-//        dd((array)$product->attributes->get('main'));
+
+
+//        return $product->type['type'];
+//        return $product->type['type'];
+//        return $product->attributes->get('main');
+//        return $product->type->get('main');
+
         return view("product.show", compact("product" ));
     }
 

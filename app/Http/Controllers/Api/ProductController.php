@@ -22,7 +22,6 @@ class ProductController extends Controller
         if (isset($product->redirectUrl))
             return redirect($this->convertRedirectUrlToApiVersion($product->redirectUrl), Response::HTTP_MOVED_PERMANENTLY, $request->headers->all());
 
-
         if ($product->grandParent != null)
             return redirect($product->grandParent->apiUrl['v1'], Response::HTTP_MOVED_PERMANENTLY, $request->headers->all());
 
