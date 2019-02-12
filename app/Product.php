@@ -196,6 +196,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'url',
         'apiUrl',
         'type',
+        'price',
         'photo',
         'attributes',
         'samplePhotos',
@@ -1488,7 +1489,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $costArray["productDiscountAmount"] = $costInfo->info->discount->info->product->info->amount;
         $costArray["bonDiscount"] = $costInfo->info->discount->info->bon->info->$bonName->totalPercentage;
         $costArray["customerDiscount"] = $costInfo->info->discount->totalAmount;
-        array_push($costArray, []);
         return $costArray;
     }
 
@@ -2003,5 +2003,14 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getAttributesValueByIds(array $attributesId)
     {
         return $this->attributevalues->whereIn("id", $attributesId);
+    }
+
+    public function getPriceAttribute()
+    {
+        $priceArray = $this->calculatePayablePrice();
+        return [
+            'basePrice'         =>  $priceArray['cost'],
+            'priceWithDiscount' =>  $priceArray['customerPrice']
+        ];
     }
 }

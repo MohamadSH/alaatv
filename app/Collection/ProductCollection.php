@@ -29,18 +29,19 @@ class ProductCollection extends Collection
                 if ($this->contains($parent)) {
                     $this->forget($key);
                 } else {
+                    //ToDo :  bug: it includes grand parent in collection when the collection includes children in first depth
+
                     // if all children selected and father not selected then select father and remove all children
-                    $children = $parent->children;
+                    /*$children = $parent->children;
                     $allChildIsChecked = true;
                     foreach ($children as $child) {
-                        if (!$this->contains($child)) {
+                        if (!$this->contains($child))
                             $allChildIsChecked = false;
-                        }
                     }
                     if ($allChildIsChecked) {
                         $this->removeProductDescendants($parent);
                         $this->push($parent);
-                    }
+                    }*/
                 }
             }
         }
@@ -58,7 +59,7 @@ class ProductCollection extends Collection
         $children = $product->children;
 
         foreach ($children as $child) {
-          /*$ck = $this->search($child); // didn't work!!*/
+//          $ck = $this->search($child);  didn't work!!
             $findChildInCollection = $this->where('id' , $child->id);
             foreach ($findChildInCollection as $key => $grandChild)
             {
