@@ -99,7 +99,6 @@ class ProductController extends Controller
             'except' => [
                 'index',
                 'show',
-                'refreshPrice',
                 'search',
                 'showPartial',
                 'landing1',

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Collection\ProductCollection;
 use App\Http\Controllers\Controller;
 use App\Product;
+use App\Traits\ProductCommon;
+use Illuminate\Filesystem\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -21,13 +24,11 @@ class ProductController extends Controller
      */
     public function show(Request $request, Product $product)
     {
-        if (isset($product->redirectUrl))
+        if (!is_null($product->redirectUrl))
             return redirect($this->convertRedirectUrlToApiVersion($product->redirectUrl), Response::HTTP_MOVED_PERMANENTLY, $request->headers->all());
 
-
-        if ($product->grandParent != null)
+        if (!is_null($product->grandParent))
             return redirect($product->grandParent->apiUrl['v1'], Response::HTTP_MOVED_PERMANENTLY, $request->headers->all());
-
 
         return response()->json($product);
     }
