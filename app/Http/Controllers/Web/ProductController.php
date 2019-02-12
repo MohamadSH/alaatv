@@ -8,6 +8,7 @@ use App\{Attribute,
     Bon,
     Classes\Search\ProductSearch,
     Classes\SEO\SeoDummyTags,
+    Collection\ProductCollection,
     Http\Requests\AddComplimentaryProductRequest,
     Http\Requests\EditProductRequest,
     Http\Requests\InsertProductRequest,
@@ -98,7 +99,6 @@ class ProductController extends Controller
             'except' => [
                 'index',
                 'show',
-                'refreshPrice',
                 'search',
                 'showPartial',
                 'landing1',
@@ -453,102 +453,6 @@ class ProductController extends Controller
             return redirect()->back();
         }
     }
-
-    /**
-     *
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param Product $product
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function refreshPrice(Request $request, Product $product)
-    {
-
-        $mainAttributeValues = $request->get("mainAttributeValues");
-        $selectedSubProductIds = $request->get("products");
-        $extraAttributeValues = $request->get("extraAttributeValues");
-        $user = $request->user();
-        //        return (new AlaaProductPriceCalculator($product,$user))->getPrice();
-
-        $key = "product:refreshPrice:Product"
-            . "\\"
-            . $product->cacheKey()
-            . "-user"
-            . (isset($user) && !is_null($user) ? $user->cacheKey() : "")
-            . "\\mainAttributeValues:"
-            . (isset($mainAttributeValues) ? implode("", $mainAttributeValues) : "-")
-            . "\\subProducts:"
-            . (isset($selectedSubProductIds) ? implode("", $selectedSubProductIds) : "-")
-            . "\\extraAttributeValues:"
-            . (isset($extraAttributeValues) ? implode("", $extraAttributeValues) : "-");
-
-        return Cache::tags('bon')
-                    ->remember($key, config("constants.CACHE_60"), function () use ($product, $user, $mainAttributeValues, $selectedSubProductIds, $extraAttributeValues) {
-                        $productType = optional($product->producttype)->id;
-                        $intendedProducts = collect();
-                        switch ($productType) {
-                            case config("constants.PRODUCT_TYPE_SIMPLE"):
-                                $intendedProducts->push($product);
-                                break;
-                            case config("constants.PRODUCT_TYPE_CONFIGURABLE"):
-                                $simpleProduct = $this->findProductChildViaAttributes($product, $mainAttributeValues);
-                                if (isset($simpleProduct)) {
-                                    $intendedProducts->push($simpleProduct);
-                                }
-
-                                break;
-                            case config("constants.PRODUCT_TYPE_SELECTABLE"):
-                                if (isset($selectedSubProductIds)) {
-                                    $selectedSubProducts = Product::whereIn('id', $selectedSubProductIds)
-                                                                  ->get();
-                                    $selectedSubProducts->load('parents');
-                                    $selectedSubProducts->keepOnlyParents();
-
-                                    $intendedProducts = $selectedSubProducts;
-                                }
-                                break;
-                            default :
-                                break;
-                        }
-
-                        $cost = 0;
-                        $costForCustomer = 0;
-                        foreach ($intendedProducts as $product) {
-                            if ($product->isInStock()) {
-                                if (isset($user))
-                                    $costArray = $product->calculatePayablePrice($user);
-                                else
-                                    $costArray = $product->calculatePayablePrice();
-
-                                $cost += $costArray["cost"];
-                                $costForCustomer += $costArray["customerPrice"];
-                            }
-                            //TODO:// age mahsool tamumshod ya yaft nashod chi?
-                            //            elseif (!isset($simpleProduct))
-                            //            {
-                            //                $result = ['productWarning' => "محصول مورد نظر یافت نشد"];
-                            //            } else
-                            //            {
-                            //                $result = ['productWarning' => "محصول مورد نظر تمام شده است"];
-                            //            }
-                        }
-                        $result = [
-                            "cost"            => $cost,
-                            "costForCustomer" => $costForCustomer,
-                        ];
-
-                        $totalExtraCost = 0;
-                        if (is_array($extraAttributeValues))
-                            $totalExtraCost = $this->productExtraCostFromAttributes($product, $extraAttributeValues);
-
-                        $result = array_add($result, 'totalExtraCost', $totalExtraCost);
-
-                        return json_encode($result, JSON_UNESCAPED_UNICODE);
-                    });
-
-    }
-
 
     /**
      * Search for a product

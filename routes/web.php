@@ -31,7 +31,6 @@ Route::post('sendMail', 'Web\HomeController@sendMail');
 Route::post('user/getPassword', 'Web\UserController@sendGeneratedPassword');
 Route::get('product/search', 'Web\ProductController@search');
 Route::get('showPartial/{product}', 'Web\ProductController@showPartial');
-Route::post('refreshPrice/{product}', 'Web\ProductController@refreshPrice');
 Route::get('Sanati-Sharif-Lesson/{lId?}/{dId?}', 'Web\SanatisharifmergeController@redirectLesson');
 Route::get('sanati-sharif-lesson/{lId?}/{dId?}', 'Web\SanatisharifmergeController@redirectLesson');
 Route::get('Sanati-Sharif-Video/{lId?}/{dId?}/{vId?}', 'Web\SanatisharifmergeController@redirectVideo');
