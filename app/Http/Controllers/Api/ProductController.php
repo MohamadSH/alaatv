@@ -6,9 +6,9 @@ use App\Collection\ProductCollection;
 use App\Http\Controllers\Controller;
 use App\Product;
 use App\Traits\ProductCommon;
-use Illuminate\Filesystem\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 
 class ProductController extends Controller
 {
