@@ -23,7 +23,8 @@ function refreshPrice(mainAttributeState , productState , extraAttributeState) {
     $('#a_product-price').html('<div class="m-loader m-loader--success" style="width: 30px; display: inline-block;"></div>');
     $.ajax({
         type: "POST",
-        url: "/refreshPrice/"+product,
+        // url: "/refreshPrice/"+product,
+        url: "/api/v1/getPrice/"+product,
         data: { mainAttributeValues: mainAttributeState , products: productState , extraAttributeValues: extraAttributeState },
         statusCode: {
             //The status for when action was successful
@@ -101,7 +102,7 @@ function refreshPrice(mainAttributeState , productState , extraAttributeState) {
                 window.location.replace("/403");
             },
             404: function (response) {
-                window.location.replace("/404");
+                // window.location.replace("/404");
             },
             //The status for when form data is not valid
             422: function (response) {
