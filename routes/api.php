@@ -32,4 +32,5 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('c/{c}', 'Api\ContentController@show');
     Route::get('product/{product}', 'Api\ProductController@show');
     Route::get('set/{set}', 'Api\SetController@show');
+    Route::post('getPrice/{product}', 'Api\ProductController@refreshPrice');
 });

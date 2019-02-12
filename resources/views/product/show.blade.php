@@ -67,8 +67,8 @@
                                                                 ویژگی‌ها
                                                             </span>
 
-                                                            @if(optional($product->attributes->get('information'))->count()> 0)
-                                                                @foreach($product->attributes->get('information') as $key => $informationItem)
+                                                            @if(optional(optional($product->attributes->get('information'))->where('control', 'simple'))->count())
+                                                                @foreach($product->attributes->get('information')->where('control', 'simple') as $key => $informationItem)
                                                                     <a href = "#" class = "m-list-search__result-item">
                                                                         <span class = "m-list-search__result-item-icon"><i class = "flaticon-like m--font-info"></i></span>
                                                                         <span class = "m-list-search__result-item-text">{{ $informationItem->title . ': ' . $informationItem->data[0]->name }}</span>
@@ -94,41 +94,22 @@
                                                 </div>
                                                 <div class="col-lg-6">
 
-                                                    {{--@if(isset($product->type['type']) && $product->type['type']=='selectable' && $product->children->isNotEmpty())--}}
-                                                        {{--<div class="m-list-search">--}}
-                                                            {{--<div class="m-list-search__results">--}}
-                                                                {{--<span class="m-list-search__result-category m-list-search__result-category--first">--}}
-                                                                    {{--دارای--}}
-                                                                {{--</span>--}}
-                                                                {{--@foreach($product->children as $child)--}}
-                                                                    {{--@foreach($checkboxArray as $info)--}}
-                                                                        {{--<a href="#" class="m-list-search__result-item">--}}
-                                                                            {{--<span class="m-list-search__result-item-icon"><i class="la la-check m--font-focus"></i></span>--}}
-                                                                            {{--<span class="m-list-search__result-item-text">{{ $info["index"]  }}</span>--}}
-                                                                        {{--</a>--}}
-                                                                    {{--@endforeach--}}
-                                                                {{--@endforeach--}}
-                                                            {{--</div>--}}
-                                                        {{--</div>--}}
-                                                    {{--@endif--}}
+                                                    @if(optional(optional($product->attributes->get('information'))->where('control', 'checkBox'))->count())
+                                                        <div class="m-list-search">
+                                                            <div class="m-list-search__results">
+                                                                <span class="m-list-search__result-category m-list-search__result-category--first">
+                                                                    دارای
+                                                                </span>
+                                                                @foreach($product->attributes->get('information')->where('control', 'checkBox') as $key => $informationItem)
+                                                                    <a href = "#" class = "m-list-search__result-item">
+                                                                        <span class = "m-list-search__result-item-icon"><i class="fa fa-check"></i></span>
+                                                                        <span class = "m-list-search__result-item-text">{{ $informationItem->title . ': ' . $informationItem->data[0]->name }}</span>
+                                                                    </a>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                    @endif
 
-                                                    {{--@if(isset($checkboxInfoAttributes) && !$checkboxInfoAttributes->isEmpty())--}}
-                                                        {{--<div class="m-list-search">--}}
-                                                            {{--<div class="m-list-search__results">--}}
-                                                            {{--<span class="m-list-search__result-category m-list-search__result-category--first">--}}
-                                                                {{--دارای--}}
-                                                            {{--</span>--}}
-                                                                {{--@foreach($checkboxInfoAttributes as $checkboxArray)--}}
-                                                                    {{--@foreach($checkboxArray as $info)--}}
-                                                                        {{--<a href="#" class="m-list-search__result-item">--}}
-                                                                            {{--<span class="m-list-search__result-item-icon"><i class="la la-check m--font-focus"></i></span>--}}
-                                                                            {{--<span class="m-list-search__result-item-text">{{ $info["index"]  }}</span>--}}
-                                                                        {{--</a>--}}
-                                                                    {{--@endforeach--}}
-                                                                {{--@endforeach--}}
-                                                            {{--</div>--}}
-                                                        {{--</div>--}}
-                                                    {{--@endif--}}
                                                 </div>
                                             </div>
                                                 <div class = "m-separator m-separator--space m-separator--dashed"></div>

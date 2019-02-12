@@ -1,7 +1,4 @@
 <style>
-    .parentNavTitle {
-        position: relative;
-    }
     .parentCheckBox {
         position: absolute;
         z-index: 1;
@@ -10,7 +7,7 @@
     }
 </style>
 @if(count($product->children)>0)
-    <li class = "m-nav__item  m-nav__item--active parentNavTitle">
+    <li class = "m-nav__item  m-nav__item--active position-relative">
         {{--@if(isset($product->pivot->control_id) && ( $product->pivot->control_id ==  config("constants.CONTROL_SWITCH") || $product->pivot->control_id == Config::get("constants.CONTROL_GROUPED_CHECKBOX") ))--}}
             <span class = "m-switch m-switch--icon {{ $colors[$color] }} float-left a--font-line-height-10 m--padding-right-5 parentCheckBox">
                 <label class="m--marginless">
@@ -21,7 +18,7 @@
             </span>
         {{--@else--}}
         {{--@endif--}}
-        <a  class = "m-nav__link a--radius-2" role = "tab" id = "m_nav_link_{{ $product->id }}" data-toggle="collapse" href="#m_nav_sub_{{ $product->id }}" aria-expanded = " false">
+        <a  class = "m-nav__link a--radius-2 m--padding-left-65" role = "tab" id = "m_nav_link_{{ $product->id }}" data-toggle="collapse" href="#m_nav_sub_{{ $product->id }}" aria-expanded = " false">
 @else
     <li class = "m-nav__item">
         <a class = "m-nav__link ">
