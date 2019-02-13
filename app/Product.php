@@ -13,7 +13,7 @@ use App\Traits\{APIRequestCommon, favorableTraits, ModelTrackerTrait, ProductCom
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\{Eloquent\Builder};
-use Illuminate\Support\{Collection, Facades\Cache, Facades\Config};
+use Illuminate\Support\{Collection, Facades\Cache, Facades\Config, Facades\Log};
 use Kalnoy\Nestedset\QueryBuilder;
 
 /**
@@ -124,6 +124,7 @@ use Kalnoy\Nestedset\QueryBuilder;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                          $active
+ * @property Product grandParent
  */
 class Product extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
@@ -196,10 +197,10 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'url',
         'apiUrl',
         'type',
-        'price',
         'photo',
         'attributes',
         'samplePhotos',
+        'price'
     ];
 
     protected $hidden = [
@@ -716,15 +717,15 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $key = "product:hasParents:" . $depth . "-" . $this->cacheKey();
         return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($depth) {
-            $counter = 0;
-            $myProduct = $this;
-            while ($myProduct->parents->isNotEmpty()) {
+            $counter = 1;
+            $myParent = $this->parents->first();
+            while (isset($myParent)) {
                 if ($counter >= $depth)
                     break;
-                $myProduct = $myProduct->parents->first();
+                $myParent = $myParent->parents->first();
                 $counter++;
             }
-            if ($myProduct->id == $this->id || $counter != $depth)
+            if (!isset($myParent) || $counter != $depth)
                 return false;
             else
                 return true;
@@ -773,8 +774,9 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if ($this->isFree)
             return 'رایگان';
-        if ($this->basePrice == 0)
-            return 'تعیین قیمت: پس از انتخاب محصول';
+//Commented by Mohammad: The product might have default price
+//        if ($this->basePrice == 0)
+//            return 'تعیین قیمت: پس از انتخاب محصول';
         return number_format($this->calculatePayablePrice($user)['cost']) . ' ' . 'تومان';
     }
 
@@ -1321,6 +1323,11 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return ($this->isFree) ? true : false;
     }
 
+    public function isRoot():bool
+    {
+        return is_null($this->grand_id) ;
+    }
+
     /**
      *
      * Checks whether this product has this coupon or not
@@ -1367,7 +1374,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getGifts(): ProductCollection
     {
         $key = "product:getGifts:" . $this->cacheKey();
-        return Cache::remember($key, Config::get("constants.CACHE_60"), function () {
+        return Cache::remember($key, config("constants.CACHE_60"), function () {
             return $this->gifts->merge(optional($this->grandParent)->gift ?? collect());
         });
     }
@@ -1727,40 +1734,76 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      *
      * @return int
      */
-    public function obtainPrice()
+    public function obtainPrice() :int
     {
-        $cost = 0;
-        if (!$this->isFree())
-            if ($this->hasParents()) {
-                $grandParent = $this->grandParent;
-                $grandParentProductType = $grandParent->producttype_id;
-                if ($grandParentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
-                    if ($this->basePrice != 0 && $this->basePrice != $grandParent->basePrice)
-                        $cost += $this->basePrice;
-                    else
-                        $cost += $grandParent->basePrice;
-                } else if ($grandParentProductType == config("constants.PRODUCT_TYPE_SELECTABLE")) {
-                    if ($this->basePrice == 0) {
-                        $children = $this->children;
-                        foreach ($children as $child) {
-                            $cost += $child->basePrice;
+        Log::debug($this->id);
+        $key = "product:obtainPrice:" . $this->cacheKey();
+        //ToDo : cache time
+        return Cache::remember($key, config("constants.CACHE_0"), function () {
+            return 0 ;
+            $cost = 0;
+            if (!$this->isFree())
+                if ($this->isRoot()) {
+                    Log::debug("is root");
+                    if($this->producttype_id == config("constants.PRODUCT_TYPE_CONFIGURABLE"))
+                    {
+                        /** @var Collection $enableChildren */
+                        $enableChildren = $this->children->where("enable" , 1); // It is not query efficient to use scopeEnable
+                        if($enableChildren->count() == 1 )
+                            $cost += $enableChildren->first()->obtainPrice();
+                        else
+                            $cost += $this->basePrice;
+                    }elseif($this->producttype_id == config("constants.PRODUCT_TYPE_SELECTABLE")){
+                        $allChildren =  $this->getAllChildren()->where("pivot.isDefault" , 1);
+                        Log::debug("isRoot children: ".$allChildren->count());
+                        if($allChildren->isNotEmpty())
+                        {
+                            foreach ($allChildren as $product) {
+                                /** @var Product $product */
+                                $cost += $product->obtainPrice();
+                            }
+                        }else{
+                            $cost += $this->basePrice;
                         }
-                    } else {
+                    } else{
                         $cost += $this->basePrice;
                     }
+                    Log::debug("isRoot cost: $cost");
+
+                } else {
+                    Log::debug("is not root");
+                    $grandParent = $this->grandParent;
+                    $grandParentProductType = $grandParent->producttype_id;
+                    if ($grandParentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
+                        if ($this->basePrice != 0)
+                            $cost += $this->basePrice;
+                        else
+                            $cost += $grandParent->basePrice;
+
+                        //ToDo :Commented for the sake of reducing queries . This snippet gives a second approach for calculating children's cost of a configurable product
+                        /*$attributevalues = $this->attributevalues->where("attributetype_id", config("constants.ATTRIBUTE_TYPE_MAIN"));
+                        foreach ($attributevalues as $attributevalue) {
+                            if (isset($attributevalue->pivot->extraCost))
+                                $cost += $attributevalue->pivot->extraCost;
+                        }*/
+                    } else if ($grandParentProductType == config("constants.PRODUCT_TYPE_SELECTABLE")) {
+                        Log::debug("is not root selectable");
+                        if ($this->basePrice == 0) {
+                            Log::debug("is not root selectable price 0");
+                            $children = $this->children;
+                            foreach ($children as $child) {
+                                $cost += $child->basePrice;
+                            }
+                        } else {
+                            Log::debug("is not root selectable basePrice");
+                            $cost += $this->basePrice;
+                        }
+                    }
                 }
-            } else {
-                $cost += $this->basePrice;
-            }
 
-        // ToDo: Hard code
-        $attributevalues = $this->attributevalues->where("attributetype_id", 1);
-        foreach ($attributevalues as $attributevalue) {
-            if (isset($attributevalue->pivot->extraCost))
-                $cost += $attributevalue->pivot->extraCost;
-        }
-
-        return $cost;
+            Log::debug("final cost: $cost");
+            return $cost;
+        });
     }
 
     public function attributevalues($attributeType = null)
@@ -1898,9 +1941,9 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     /**
      * Gets a collection containing all of product children
      *
-     * @return mixed
+     * @return Collection
      */
-    public function getAllChildren()
+    public function getAllChildren():Collection
     {
         $key = "product:makeChildrenArray:" . $this->cacheKey();
         return Cache::remember($key, Config::get("constants.CACHE_0"), function () {
@@ -2007,10 +2050,18 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function getPriceAttribute()
     {
-        $priceArray = $this->calculatePayablePrice();
+        Log::debug("getPriceAttribute $this->id");
+        if ($this->isFree)
+            return 'رایگان';
+
+//        $costArray = $this->calculatePayablePrice();
+//        $costArray = $this->obtainPrice();
+        $costArray = 0 ;
+        Log::debug("$this->id cost ".$costArray);
+        return $costArray;
         return [
-            'basePrice'         =>  $priceArray['cost'],
-            'priceWithDiscount' =>  $priceArray['customerPrice']
+            'basePrice'         =>  $costArray['cost'],
+            'priceWithDiscount' =>  $costArray['customerPrice'],
         ];
     }
 }

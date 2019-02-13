@@ -119,10 +119,19 @@ trait ProductCommon
                 break;
             }
         }
-        return $simpleProduct;
+        if(isset($simpleProduct))
+            return $simpleProduct;
+        else
+            return null ;
     }
 
-    protected function makeCostCollection($products)
+    /**
+     * Calculates costs of a product collection
+     *
+     * @param Collection $products
+     * @return mixed
+     */
+    protected function makeCostCollection(Collection  $products)
     {
         $key = null;
         foreach ($products as $product)
@@ -132,15 +141,16 @@ trait ProductCommon
         return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($products) {
             $costCollection = collect();
             foreach ($products as $product) {
-                if($product->producttype_id == 2)
+                if($product->producttype_id == config("constants.PRODUCT_TYPE_CONFIGURABLE"))
                 {
-                    $enableChildren = $product->children->where("enable" , 1);
+                    /** @var Collection $enableChildren */
+                    $enableChildren = $product->children->where("enable" , 1); // It is not query efficient to use scopeEnable
                     if($enableChildren->count() == 1 )
-                    {
                         $costArray = $enableChildren->first()->calculatePayablePrice();
-                    }else $costArray  = $product->calculatePayablePrice();
+                    else
+                        $costArray  = $product->calculatePayablePrice();
 
-                }elseif($product->producttype_id == 3){
+                }elseif($product->producttype_id == config("constants.PRODUCT_TYPE_SELECTABLE")){
                     $allChildren =  $product->getAllChildren()->where("pivot.isDefault" , 1);
                     $costArray = [];
                     $costArray["productDiscount"] = null;
