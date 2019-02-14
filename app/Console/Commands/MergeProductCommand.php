@@ -457,14 +457,14 @@ class MergeProductCommand extends Command
 
                          $this->copyProductBelongings($originalProduct, $newProduct, $grandChild["title"]);
 
-                         $originalProduct->disable();
+                         $originalProduct->setDisable();
                          $originalProduct->update();
 
                          if ($originalProduct->hasParents()) {
                              $originalProductParent = $originalProduct->parents->first();
                              $this->copyProductBelongings($originalProductParent, $newProduct, $grandChild["title"]);
 
-                             $originalProductParent->disable();
+                             $originalProductParent->setDisable();
                              $originalProductParent->update();
                          }
 

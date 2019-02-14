@@ -45,25 +45,6 @@ trait ProductCommon
 
     /**
      * @param Product $product
-     * @param         $chunk
-     *
-     * @return Collection
-     */
-    public function makeOtherProducts(Product $product, $chunk)
-    {
-        $exclusiveOtherProducts = Product::getExclusiveOtherProducts();
-
-        $otherProducts = $product->getOtherProducts()->sortByDesc("created_at" );
-
-        $totalOtherProducts = $this->mergeCollections($exclusiveOtherProducts, $otherProducts);
-
-        $otherProductChunks = $totalOtherProducts->chunk($chunk);
-
-        return $otherProductChunks;
-    }
-
-    /**
-     * @param Product $product
      * @param         $extraAttributeValues
      *
      * @return int|float
