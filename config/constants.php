@@ -446,4 +446,8 @@ return [
     //COUPON TYPES
     'COUPON_TYPE_OVERALL'                      => 1,
     'COUPON_TYPE_PARTIAL'                      => 2,
+
+    'ATTRIBUTE_TYPE_MAIN'                      => 1,
+    'ATTRIBUTE_TYPE_EXTRA'                     => 2,
+    'ATTRIBUTE_TYPE_INFORMATION'               => 3
 ];
