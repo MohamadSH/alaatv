@@ -196,7 +196,7 @@
     <div class="container">
         <div class="row align-items-center m--margin-top-100">
             <div class="col align-self-center text-center">
-                <img src="{{ $paymentMethodImage }}" class="img-responsive img-thumbnail rounded">
+                <img src="{{ asset('acm/extra/payment/gateway/zarinpal.png') }}" class="img-responsive img-thumbnail rounded">
             </div>
             <div class="col align-self-center text-center">
                 <div id="spinningSquaresG">

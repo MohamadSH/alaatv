@@ -1,6 +1,24 @@
+<style>
+    .parentCheckBox {
+        position: absolute;
+        z-index: 1;
+        right: 9px;
+        top: 6px;
+    }
+</style>
 @if(count($product->children)>0)
-    <li class = "m-nav__item  m-nav__item--active">
-        <a  class = "m-nav__link a--radius-2" role = "tab" id = "m_nav_link_{{ $product->id }}" data-toggle="collapse" href="#m_nav_sub_{{ $product->id }}" aria-expanded = " false">
+    <li class = "m-nav__item  m-nav__item--active position-relative">
+        {{--@if(isset($product->pivot->control_id) && ( $product->pivot->control_id ==  config("constants.CONTROL_SWITCH") || $product->pivot->control_id == Config::get("constants.CONTROL_GROUPED_CHECKBOX") ))--}}
+            <span class = "m-switch m-switch--icon {{ $colors[$color] }} float-left a--font-line-height-10 m--padding-right-5 parentCheckBox">
+                <label class="m--marginless">
+                    <input name = "products[]" value = "{{ $product->id }}" type = "checkbox" class = "hasParent_{{ $product->pivot->parent_id }} {{ count($product->children)>0 ? "hasChildren" : "" }} product"
+                            {{ isset($product->pivot->isDefault) && $product->pivot->isDefault ? 'checked="checked"':'' }}>
+                    <span></span>
+                </label>
+            </span>
+        {{--@else--}}
+        {{--@endif--}}
+        <a  class = "m-nav__link a--radius-2 m--padding-left-65" role = "tab" id = "m_nav_link_{{ $product->id }}" data-toggle="collapse" href="#m_nav_sub_{{ $product->id }}" aria-expanded = " false">
 @else
     <li class = "m-nav__item">
         <a class = "m-nav__link ">
@@ -8,16 +26,18 @@
             <span class = "m-nav__link-title a--full-width">
                 <span class = "m-nav__link-wrap">
                     <span class = "m-nav__link-text">
-                        {{--@if(isset($product->pivot->control_id) && ( $product->pivot->control_id ==  config("constants.CONTROL_SWITCH") || $product->pivot->control_id == Config::get("constants.CONTROL_GROUPED_CHECKBOX") ))--}}
-                            <span class = "m-switch m-switch--icon {{ $colors[$color] }} float-left a--font-line-height-10 m--padding-right-5">
-                                <label class="m--marginless">
-                                    <input name = "products[]" value = "{{ $product->id }}" type = "checkbox" class = "hasParent_{{ $product->pivot->parent_id }} {{ count($product->children)>0 ? "hasChildren" : "" }} product"
-                                            {{ isset($product->pivot->isDefault) && $product->pivot->isDefault ? 'checked="checked"':'' }}>
-                                    <span></span>
-                                </label>
-                            </span>
-                        {{--@else--}}
-                        {{--@endif--}}
+                        @if(!count($product->children)>0)
+                            {{--@if(isset($product->pivot->control_id) && ( $product->pivot->control_id ==  config("constants.CONTROL_SWITCH") || $product->pivot->control_id == Config::get("constants.CONTROL_GROUPED_CHECKBOX") ))--}}
+                                <span class = "m-switch m-switch--icon {{ $colors[$color] }} float-left a--font-line-height-10 m--padding-right-5">
+                                    <label class="m--marginless">
+                                        <input name = "products[]" value = "{{ $product->id }}" type = "checkbox" class = "hasParent_{{ $product->pivot->parent_id }} {{ count($product->children)>0 ? "hasChildren" : "" }} product"
+                                                {{ isset($product->pivot->isDefault) && $product->pivot->isDefault ? 'checked="checked"':'' }}>
+                                        <span></span>
+                                    </label>
+                                </span>
+                            {{--@else--}}
+                            {{--@endif--}}
+                        @endif
                         <div class="m--padding-5">
                             {{$product->name}}
                             {{--@if((int)$product->cost > 0)--}}

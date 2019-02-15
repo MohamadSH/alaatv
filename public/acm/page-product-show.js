@@ -40,6 +40,7 @@ var ProductSwitch = function () {
 
     function checkChildProduct(parentId, report) {
         let items = $("input[name='products[]'].product.hasParent_"+parentId);
+        report.counter++;
         for (let index in items) {
             if(!isNaN(index)) {
                 let defaultValue = items[index].defaultValue;
@@ -54,7 +55,6 @@ var ProductSwitch = function () {
                     report.allChildIsNotChecked = false;
                 }
                 if (hasChildren) {
-                    report.counter++;
                     report = checkChildProduct(defaultValue, report);
                 } else {
                     report.allChildIsNotChecked = false;

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Web;
 
 use App\Bankaccount;
 use App\Bon;
-use App\Classes\Payment\Gateway\GatewayFactory;
 use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
 use App\Classes\Payment\RefinementRequest\Strategies\{ChargingWalletRefinement,
@@ -13,6 +12,7 @@ use App\Classes\Payment\RefinementRequest\Strategies\{ChargingWalletRefinement,
     TransactionRefinement};
 use App\Http\Controllers\Controller;
 use App\Order;
+use App\Traits\Gateway;
 use App\Traits\OrderCommon;
 use App\Transaction;
 use App\Transactiongateway;
@@ -20,10 +20,12 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\{Request, Response};
 use Illuminate\Support\Facades\Cache;
+use Zarinpal\Zarinpal as ZarinpalComposer;
 
 class OnlinePaymentController extends Controller
 {
     use OrderCommon;
+    use Gateway;
 
     /**
      * @var OrderController
@@ -53,20 +55,13 @@ class OnlinePaymentController extends Controller
      */
     public function paymentRedirect(string $paymentMethod, string $device, Request $request)
     {
+        //ToDo: Should remove after adding unit test
         /*$request->offsetSet('order_id', 137);*/
         /*$request->offsetSet('transaction_id', 65);*/
         /*$request->offsetSet('payByWallet', true);*/
 
         /*$request->offsetSet('walletId', 1);*/
         /*$request->offsetSet('walletChargingAmount', 50000);*/
-
-        $transactiongateway = $this->getGateway($paymentMethod);
-
-        if(!isset($transactiongateway)) {
-            return response()->json([
-                'error' => 'اطلاعات درگاه مورد نظر یافت نشد.'
-            ], Response::HTTP_BAD_REQUEST);
-        }
 
         $inputData = $request->all();
         $inputData['transactionController'] = $this->transactionController;
@@ -100,28 +95,26 @@ class OnlinePaymentController extends Controller
 
         if ($this->isRedirectable($cost)) {
 
+            $transactiongateway = $this->getGateway($paymentMethod);
+
+            if(!isset($transactiongateway)) {
+                return response()->json([
+                    'error' => 'اطلاعات درگاه مورد نظر یافت نشد.'
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
             $callbackUrl = action('OnlinePaymentController@verifyPayment', ['paymentMethod' => $paymentMethod, 'device' => $device]);
 
-            $gateWay = (new GatewayFactory())->setGateway($paymentMethod, $this->setDataForGateway($transactiongateway, $paymentMethod));
-            $paymentRequestData = [
-                'amount'=>$cost,
-                'callbackUrl'=>$callbackUrl,
-                'description'=>$description
-            ];
-            $result = $gateWay->paymentRequest($paymentRequestData);
+            $gateWay = new ZarinpalComposer($transactiongateway->merchantNumber);
+            $authority = $this->paymentRequest($gateWay , $callbackUrl , $cost , $description);
 
-            if ($result['status']) {
+            if (isset($authority)) {
 
-                $transactionModifyResult = $this->setAuthorityForTransaction($result['data']['Authority'], $transactiongateway->id, $transaction);
+                $transactionModifyResult = $this->setAuthorityForTransaction($authority, $transactiongateway->id, $transaction);
 
                 if ($transactionModifyResult['statusCode'] == Response::HTTP_OK) {
-                    $redirectData = $gateWay->getRedirectData([]);
-                    $paymentMethodImage = $this->getPaymentMethodImage($paymentMethod);
-                    return view("order.checkout.gatewayRedirect", compact('redirectData', 'paymentMethodImage'));
-//
-//                    return response()->json([
-//                        'message' => 'مشکلی در انتقال به درگاه وجود دارد.'
-//                    ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                    $redirectData = $this->getRedirectData($gateWay->redirectUrl());
+                    return view("order.checkout.gatewayRedirect", compact('redirectData'));
                 } else {
                     return response()->json([
                         'message' => 'مشکلی در ویرایش تراکنش رخ داده است.'
@@ -129,21 +122,11 @@ class OnlinePaymentController extends Controller
                 }
             } else {
                 return response()->json([
-                    'message' => $result['message']
+                    'message' => 'پاسخی از بانک دریافت نشد'
                 ], Response::HTTP_SERVICE_UNAVAILABLE);
             }
         } else {
             return redirect(action('OfflinePaymentController@verifyPayment', ['device' => $device, 'paymentMethod' => 'wallet', 'coi' => (isset($order)?$order->id:null)]));
-        }
-    }
-
-    private function getPaymentMethodImage(string $paymentMethod) {
-        switch ($paymentMethod) {
-            case 'zarinpal':
-                return asset('acm/extra/payment/gateway/zarinpal.png');
-            default:
-                // zarinpal
-                return asset('acm/extra/payment/gateway/zarinpal.png');
         }
     }
 
@@ -238,19 +221,15 @@ class OnlinePaymentController extends Controller
      */
     public function verifyPayment(string $paymentMethod, string $device, Request $request)
     {
+        $paymentData = $request->all();
+
         $transactiongateway = $this->getGateway($paymentMethod);
         if(!isset($transactiongateway)) {
             return response()->json([
                 'error' => 'اطلاعات درگاه مورد نظر یافت نشد.'
             ], Response::HTTP_BAD_REQUEST);
         }
-
-
-        $gateWay = (new GatewayFactory())->setGateway($paymentMethod, $this->setDataForGateway($transactiongateway, $paymentMethod));
-        $callbackData = $gateWay->readCallbackData($request->all());
-        $authority = $callbackData['data']['Authority'];
-
-        $transaction = Transaction::authority($authority)->first();
+        $transaction = Transaction::authority($paymentData["Authority"])->first();
 
         if(!isset($transaction)) {
             return response()->json([
@@ -260,10 +239,9 @@ class OnlinePaymentController extends Controller
 
         $verifyResult = [];
 
-        $data = $request->all();
-        $dataForGatewayVerify = $this->setDataForGatewayVerify($paymentMethod, $transaction);
-        $data = array_merge($data, $dataForGatewayVerify);
-        $gateWayVerify = $gateWay->verify($data);
+        $amount = $this->setDataForGatewayVerify($paymentMethod, $transaction);
+        $gateWay = new ZarinpalComposer($transactiongateway->merchantNumber);
+        $gateWayVerify = $this->verify($gateWay ,$amount, $paymentData);
         $verifyResult['gateWayVerify'] = $gateWayVerify;
 
         if (isset($transaction->order_id)) {
@@ -449,39 +427,20 @@ class OnlinePaymentController extends Controller
     }
 
     /**
-     * @param Transactiongateway $transactiongateway
-     * @param string $paymentMethod
-     * @return array
-     */
-    private function setDataForGateway(Transactiongateway $transactiongateway, string $paymentMethod): array {
-        $data = [];
-        switch ($paymentMethod) {
-            case 'zarinpal':
-                $data['merchantID'] = $transactiongateway->merchantNumber;
-                break;
-            default:
-                // zarinpal
-                $data['merchantID'] = $transactiongateway->merchantNumber;
-        }
-        return $data;
-    }
-
-    /**
      * @param string $paymentMethod
      * @param Transaction $transaction
-     * @return array
+     * @return int
      */
-    private function setDataForGatewayVerify(string $paymentMethod, Transaction $transaction): array {
-        $data = [];
+    private function setDataForGatewayVerify(string $paymentMethod, Transaction $transaction): int {
         switch ($paymentMethod) {
             case 'zarinpal':
-                $data['amount'] = isset($transaction->wallet_id)?($transaction->cost*-1):$transaction->cost;
+                $amount = isset($transaction->wallet_id)?($transaction->cost*-1):$transaction->cost;
                 break;
             default:
                 // zarinpal
-                $data['amount'] = isset($transaction->wallet_id)?($transaction->cost*-1):$transaction->cost;
+                $amount = isset($transaction->wallet_id)?($transaction->cost*-1):$transaction->cost;
         }
-        return $data;
+        return $amount;
     }
 
     /**

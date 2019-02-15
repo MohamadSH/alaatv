@@ -13,7 +13,7 @@ use App\Traits\{APIRequestCommon, favorableTraits, ModelTrackerTrait, ProductCom
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\{Eloquent\Builder};
-use Illuminate\Support\{Collection, Facades\Cache, Facades\Config};
+use Illuminate\Support\{Collection, Facades\Cache, Facades\Config, Facades\Log};
 use Kalnoy\Nestedset\QueryBuilder;
 
 /**
@@ -124,6 +124,7 @@ use Kalnoy\Nestedset\QueryBuilder;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                          $active
+ * @property Product grandParent
  */
 class Product extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
@@ -199,6 +200,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'photo',
         'attributes',
         'samplePhotos',
+        'price'
     ];
 
     protected $hidden = [
@@ -222,7 +224,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'created_at',
         'attributevalues',
         'grand',
-
     ];
 
     /**
@@ -244,12 +245,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     | overwrite methods
     |--------------------------------------------------------------------------
     */
-
-
-    public static function getDonateProductCost()
-    {
-        return Product::find(self::DONATE_PRODUCT[0])->basePrice;
-    }
 
     /**
      * Gets specific number of products
@@ -715,20 +710,19 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $key = "product:hasParents:" . $depth . "-" . $this->cacheKey();
         return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($depth) {
-            $counter = 0;
-            $myProduct = $this;
-            while ($myProduct->parents->isNotEmpty()) {
+            $counter = 1;
+            $myParent = $this->parents->first();
+            while (isset($myParent)) {
                 if ($counter >= $depth)
                     break;
-                $myProduct = $myProduct->parents->first();
+                $myParent = $myParent->parents->first();
                 $counter++;
             }
-            if ($myProduct->id == $this->id || $counter != $depth)
+            if (!isset($myParent) || $counter != $depth)
                 return false;
             else
                 return true;
         });
-
     }
 
     /**
@@ -772,9 +766,29 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if ($this->isFree)
             return 'رایگان';
-        if ($this->basePrice == 0)
-            return 'تعیین قیمت: پس از انتخاب محصول';
+//Commented by Mohammad: The product might have default price
+//        if ($this->basePrice == 0)
+//            return 'تعیین قیمت: پس از انتخاب محصول';
         return number_format($this->calculatePayablePrice($user)['cost']) . ' ' . 'تومان';
+    }
+
+
+    /**
+     * @return array|string
+     */
+    public function getPriceAttribute()
+    {
+        $costArray = $this->calculatePayablePrice();
+        $cost          = $costArray["cost"];
+        $customerPrice = $costArray["customerPrice"];
+        if(isset($cost))
+            return [
+                'base'         =>  $cost,
+                'discount'     =>  $cost - $customerPrice,
+                'final'        =>  $customerPrice,
+            ];
+        else
+            return null ;
     }
 
     public function getPhotoAttribute()
@@ -817,30 +831,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     */
 
     /**
-     * @return ProductCollection
-     */
-    public function getOtherProducts(): ProductCollection
-    {
-        $key = "product:otherProducts:" . $this->cacheKey();
-        $excludedProducts = self::EXCLUDED_RELATED_PRODUCTS;
-
-        $otherProducts = Cache::remember($key, config("constants.CACHE_60"), function () use ($excludedProducts) {
-            return $otherProducts = self::getProducts(0, 1, $excludedProducts, "created_at", "desc")
-                                        ->where("id", "<>", $this->id)
-                                        ->get();
-        });
-        return $otherProducts;
-    }
-
-    /**
-     *
-     */
-    public function getDiscount()
-    {
-
-    }
-
-    /**
      * Gets products total bons = also checks whether his parents have any bons or not
      *
      * @param $bonName
@@ -849,20 +839,23 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function getTotalBons($bonName): Collection
     {
-        $bons = $this->getBons($bonName);
-        if ($bons->isEmpty()) {
-            $parentsArray = $this->makeParentArray($this);
-            if (!empty($parentsArray)) {
-                foreach ($parentsArray as $parent) {
-                    // ToDo : It does not check parents in a hierarchy to the root
-                    /** @var Product $parent */
-                    $bons = $parent->getBons($bonName);
-                    if ($bons->isNotEmpty())
-                        break;
+        $key = "product:getTotalBons:" . $this->cacheKey() . "-bone:" . $bonName;
+        return Cache::remember($key, Config::get("constants.CACHE_600"), function () use ($bonName, $enable) {
+            $bons = $this->getBons($bonName);
+            if ($bons->isEmpty()) {
+                $parentsArray = $this->makeParentArray($this);
+                if (!empty($parentsArray)) {
+                    foreach ($parentsArray as $parent) {
+                        // ToDo : It does not check parents in a hierarchy to the root
+                        /** @var Product $parent */
+                        $bons = $parent->getBons($bonName);
+                        if ($bons->isNotEmpty())
+                            break;
+                    }
                 }
             }
-        }
-        return $bons;
+            return $bons;
+        });
     }
 
     /**
@@ -875,7 +868,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function getBons($bonName = "", $enable = 1): Collection
     {
-        $key = "product:BoneName:" . $this->cacheKey() . "-bone:" . $bonName;
+        $key = "product:getBons:" . $this->cacheKey() . "-bone:" . $bonName;
         return Cache::remember($key, Config::get("constants.CACHE_600"), function () use ($bonName, $enable) {
             /** @var Bon $bons */
             $bons = $this->bons();
@@ -1136,8 +1129,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
 
         if ($fileType == "video")
-            $fileTypeId = Config::get("constants.PRODUCT_FILE_TYPE_VIDEO"); else if ($fileType == "pamphlet")
-            $fileTypeId = Config::get("constants.PRODUCT_FILE_TYPE_PAMPHLET");
+            $fileTypeId = config("constants.PRODUCT_FILE_TYPE_VIDEO"); else if ($fileType == "pamphlet")
+            $fileTypeId = config("constants.PRODUCT_FILE_TYPE_PAMPHLET");
 
         if (isset($fileTypeId))
             $files->where('productfiletype_id', $fileTypeId);
@@ -1264,7 +1257,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if ($this->enable)
             return true;
-        return false;
+        return
+            false;
     }
 
     /**
@@ -1320,41 +1314,24 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return ($this->isFree) ? true : false;
     }
 
-    /**
-     *
-     * Checks whether this product has this coupon or not
-     *
-     * @param Coupon $coupon
-     *
-     * @return bool
-     */
-    public function hasThisCoupon(Coupon $coupon): bool
+    public function isRoot():bool
     {
-        $flag = true;
-        if (!in_array($coupon->id, $this->coupons->pluck('id')->toArray())) {
-            $flag = false;
-            $parentsArray = $this->makeParentArray($this);
-            foreach ($parentsArray as $parent) {
-                if (in_array($coupon->id, $parent->coupons->pluck('id')->toArray())) {
-                    $flag = true;
-                    break;
-                }
-            }
-        }
-
-        return $flag;
+        return is_null($this->grand_id) ;
     }
+
 
     /**
      * Checks whether this product has this bon or not
      *
-     * @param $bonId
-     *
+     * @param int $bonId
      * @return bool
      */
-    public function hasBon($bonId)
+    public function hasBon(int $bonId):bool
     {
-        return $this->bons->where("id", $bonId)->isNotEmpty();
+        $key = "product:hasBon:-bonId:$bonId" . $this->cacheKey();
+        return Cache::remember($key, config("constants.CACHE_600"), function () use ($bonId) {
+            return $this->bons->where("id", $bonId)->isNotEmpty();
+        });
     }
 
     /*
@@ -1366,7 +1343,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getGifts(): ProductCollection
     {
         $key = "product:getGifts:" . $this->cacheKey();
-        return Cache::remember($key, Config::get("constants.CACHE_60"), function () {
+        return Cache::remember($key, config("constants.CACHE_60"), function () {
             return $this->gifts->merge(optional($this->grandParent)->gift ?? collect());
         });
     }
@@ -1488,7 +1465,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $costArray["productDiscountAmount"] = $costInfo->info->discount->info->product->info->amount;
         $costArray["bonDiscount"] = $costInfo->info->discount->info->bon->info->$bonName->totalPercentage;
         $costArray["customerDiscount"] = $costInfo->info->discount->totalAmount;
-        array_push($costArray, []);
         return $costArray;
     }
 
@@ -1549,24 +1525,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         unset($array['validUntil']);
 
         return $array;
-    }
-
-    public function isHappening()
-    {
-        $isHappening = false;
-        $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                     ->timezone('Asia/Tehran');
-        if ($this->id == 183) {
-            $productStartTime = Carbon::create(2018, 03, 03, 22, 47, 20, 'Asia/Tehran');
-            $productEndTime = Carbon::create(2018, 03, 03, 23, 47, 20, 'Asia/Tehran');
-            if ($now->between($productStartTime, $productEndTime))
-                $isHappening = 0;
-            else if ($now->diffInMinutes($productStartTime, false) > 0)
-                $isHappening = $now->diffInMinutes($productStartTime, false);
-            else
-                $isHappening = $now->diffInMinutes($productEndTime, false);
-        }
-        return $isHappening;
     }
 
     /**
@@ -1648,18 +1606,20 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function hasChildren($depth = 1): bool
     {
+        //ToDo: This method only works fine for depth value 1 . For depth values more than 1 it does not return the correct output
         $key = "product:hasChildren:" . $depth . $this->cacheKey();
         return Cache::remember($key, Config::get("constants.CACHE_600"), function () use ($depth) {
-            $counter = 0;
-            $myProduct = $this;
-            while ($myProduct->children->isNotEmpty()) {
+            $counter = 1;
+            $myChildren = $this->children->first();
+            while (isset($myChildren)) {
                 if ($counter >= $depth)
                     break;
-                $myProduct = $myProduct->children->first();
+                $myChildren = $myChildren->children->first();
                 $counter++;
             }
-            if ($myProduct->id == $this->id || $counter != $depth)
-                return false; else
+            if (!isset($myChildren) || $counter != $depth)
+                return false;
+            else
                 return true;
         });
     }
@@ -1725,42 +1685,72 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     /**
      * Obtains product's price (rawCost)
      *
-     * @return int
+     * @return int|null
      */
-    public function obtainPrice()
+    public function obtainPrice() :?int
     {
-        $cost = 0;
-        if (!$this->isFree())
-            if ($this->hasParents()) {
-                $grandParent = $this->grandParent;
-                $grandParentProductType = $grandParent->producttype_id;
-                if ($grandParentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
-                    if ($this->basePrice != 0 && $this->basePrice != $grandParent->basePrice)
-                        $cost += $this->basePrice;
-                    else
-                        $cost += $grandParent->basePrice;
-                } else if ($grandParentProductType == config("constants.PRODUCT_TYPE_SELECTABLE")) {
-                    if ($this->basePrice == 0) {
-                        $children = $this->children;
-                        foreach ($children as $child) {
-                            $cost += $child->basePrice;
+        $key = "product:obtainPrice:" . $this->cacheKey();
+        return Cache::remember($key, config("constants.CACHE_10"), function () {
+            if (!$this->isFree())
+                if ($this->isRoot()) {
+                    if($this->producttype_id == config("constants.PRODUCT_TYPE_CONFIGURABLE"))
+                    {
+                        /** @var Collection $enableChildren */
+                        $enableChildren = $this->children->where("enable" , 1); // It is not query efficient to use scopeEnable
+                        if($enableChildren->count() == 1 )
+                            $cost = $enableChildren->first()->obtainPrice();
+                        else
+                            $cost = $this->basePrice;
+                    }elseif($this->producttype_id == config("constants.PRODUCT_TYPE_SELECTABLE")){
+                        $allChildren =  $this->getAllChildren()->where("pivot.isDefault" , 1);
+                        if($allChildren->isNotEmpty())
+                        {
+                            $cost = 0 ;
+                            foreach ($allChildren as $product) {
+                                /** @var Product $product */
+                                $cost += $product->obtainPrice();
+                            }
+                        }else{
+                            if($this->basePrice != 0)
+                                $cost = $this->basePrice;
                         }
-                    } else {
-                        $cost += $this->basePrice;
+                    } else{
+                        $cost = $this->basePrice;
+                    }
+
+                } else {
+                    $grandParent = $this->grandParent;
+                    $grandParentProductType = $grandParent->producttype_id;
+                    if ($grandParentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
+                        if ($this->basePrice != 0)
+                            $cost = $this->basePrice;
+                        else
+                            $cost = $grandParent->basePrice;
+
+                        //ToDo :Commented for the sake of reducing queries . This snippet gives a second approach for calculating children's cost of a configurable product
+                        /*$attributevalues = $this->attributevalues->where("attributetype_id", config("constants.ATTRIBUTE_TYPE_MAIN"));
+                        foreach ($attributevalues as $attributevalue) {
+                            if (isset($attributevalue->pivot->extraCost))
+                                $cost += $attributevalue->pivot->extraCost;
+                        }*/
+                    } else if ($grandParentProductType == config("constants.PRODUCT_TYPE_SELECTABLE")) {
+                        if ($this->basePrice == 0) {
+                            $children = $this->children;
+                            $cost = 0 ;
+                            foreach ($children as $child) {
+                                $cost = $child->basePrice;
+                            }
+                        } else {
+                            $cost = $this->basePrice;
+                        }
                     }
                 }
-            } else {
-                $cost += $this->basePrice;
-            }
 
-        // ToDo: Hard code
-        $attributevalues = $this->attributevalues->where("attributetype_id", 1);
-        foreach ($attributevalues as $attributevalue) {
-            if (isset($attributevalue->pivot->extraCost))
-                $cost += $attributevalue->pivot->extraCost;
-        }
-
-        return $cost;
+            if(isset($cost))
+                return $cost;
+            else
+                return null;
+        });
     }
 
     public function attributevalues($attributeType = null)
@@ -1790,24 +1780,25 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function getFinalDiscountValue()
     {
-        $discount = 0;
-        if ($this->hasParents()) {
-            $grandParent = $this->grandParent;
-            $grandParentProductType = $grandParent->producttype_id;
-            if ($grandParentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
-                if ($this->discount > 0)
-                    $discount += $this->discount;
-                else if ($grandParent->discount > 0)
-                    $discount += $this->parents->first()->discount;
-            } else if ($grandParentProductType == config("constants.PRODUCT_TYPE_SELECTABLE")) {
-                if ($this->basePrice != 0) {
-                    $discount = $this->discount;
+        $key = "product:getFinalDiscountValue:" . $this->cacheKey();
+        return Cache::remember($key, config("constants.CACHE_10"), function () {
+            $discount = 0;
+            if (!$this->isRoot()) {
+                $grandParent = $this->grandParent;
+                $grandParentProductType = $grandParent->producttype_id;
+                if ($grandParentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
+                    if ($this->discount > 0)
+                        $discount += $this->discount;
+                    else if ($grandParent->discount > 0)
+                        $discount += $this->parents->first()->discount;
+                } else if ($grandParentProductType == config("constants.PRODUCT_TYPE_SELECTABLE")) {
+                        $discount = $this->discount;
                 }
+            } else {
+                $discount = $this->discount;
             }
-        } else {
-            $discount = $this->discount;
-        }
-        return $discount;
+            return $discount;
+        });
     }
 
     /**
@@ -1830,27 +1821,30 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function obtainBonDiscount($bonName)
     {
-        $discount = 0;
-        $bons = $this->getBons($bonName);
-        if ($bons->isEmpty()) {
-            $parentsArray = $this->makeParentArray($this);
-            if (!empty($parentsArray)) {
-                foreach ($parentsArray as $parent) {
-                    // ToDo : It does not check parents in a hierarchy to the root
-                    /** @var Product $parent */
-                    $bons = $parent->getBons($bonName);
-                    if ($bons->isNotEmpty()) {
-                        $bon = $bons->first();
-                        $discount = $bon->pivot->discount;
-                        break;
+        $key = "product:obtainBonDiscount:$bonName" . $this->cacheKey();
+        return Cache::remember($key, config("constants.CACHE_10"), function () use ($bonName) {
+            $discount = 0;
+            $bons = $this->getBons($bonName);
+            if ($bons->isEmpty()) {
+                $parentsArray = $this->makeParentArray($this);
+                if (!empty($parentsArray)) {
+                    foreach ($parentsArray as $parent) {
+                        // ToDo : It does not check parents in a hierarchy to the root
+                        /** @var Product $parent */
+                        $bons = $parent->getBons($bonName);
+                        if ($bons->isNotEmpty()) {
+                            $bon = $bons->first();
+                            $discount = $bon->pivot->discount;
+                            break;
+                        }
                     }
                 }
+            } else {
+                $bon = $bons->first();
+                $discount = $bon->pivot->discount;
             }
-        } else {
-            $bon = $bons->first();
-            $discount = $bon->pivot->discount;
-        }
-        return $discount / 100;
+            return $discount / 100;
+        });
     }
 
     /**
@@ -1860,28 +1854,31 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function obtainDiscountAmount(): int
     {
-        $discountAmount = 0;
-        if ($this->hasParents()) {
-            $parent = $this->parents->first();
-            $parentProductType = $parent->producttype_id;
-            if ($parentProductType == config("constants.PRODUCT_TYPE_SELECTABLE")) {
-                if ($this->basePrice == 0) {
-                    $children = $this->children;
-                    foreach ($children as $child) {
-                        $discountAmount += ($child->discount / 100) * $child->basePrice;
+        $key = "product:obtainDiscountAmount:" . $this->cacheKey();
+        return Cache::remember($key, config("constants.CACHE_10"), function () {
+            $discountAmount = 0;
+            if (!$this->isRoot()) {
+                $grandParent = $this->grandParent;
+                $grandParentProductType = $grandParent->producttype_id;
+                if ($grandParentProductType == config("constants.PRODUCT_TYPE_SELECTABLE")) {
+                    if ($this->basePrice == 0) {
+                        $children = $this->children;
+                        foreach ($children as $child) {
+                            $discountAmount += ($child->discount / 100) * $child->basePrice;
+                        }
                     }
                 }
             }
-        }
 
-        return $discountAmount;
+            return $discountAmount;
+        });
     }
 
     /**
      * Disables the product
      *
      */
-    public function disable(): void
+    public function setDisable(): void
     {
         $this->enable = 0;
     }
@@ -1898,12 +1895,12 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     /**
      * Gets a collection containing all of product children
      *
-     * @return mixed
+     * @return Collection
      */
-    public function getAllChildren()
+    public function getAllChildren():Collection
     {
         $key = "product:makeChildrenArray:" . $this->cacheKey();
-        return Cache::remember($key, Config::get("constants.CACHE_0"), function () {
+        return Cache::remember($key, config("constants.CACHE_60"), function () {
             $children = collect();
             if ($this->hasChildren()) {
                 $thisChildren = $this->children;
@@ -1978,7 +1975,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      *
      * @return bool
      */
-    public function canApplyBon($bon)
+    public function canApplyBon($bon):bool
     {
         /** @var Collection $bon */
         return (
