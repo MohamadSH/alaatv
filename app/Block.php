@@ -191,6 +191,7 @@ class Block extends BaseModel
         return $blocks;
     }
 
+
     /**
      * Create a new Eloquent Collection instance.
      *
