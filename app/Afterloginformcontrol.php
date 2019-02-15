@@ -32,6 +32,10 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Afterloginformcontrol query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property int|null    $control_id آی دی مشخص کننده کنترل فیلد مثلا تکس باکس
+ * @property string|null $source مسیر سرور جهت تغذیه فیلد (مثلا تغذیه آیتم های دراپ دان)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Afterloginformcontrol whereControlId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Afterloginformcontrol whereSource($value)
  */
 class Afterloginformcontrol extends BaseModel
 {

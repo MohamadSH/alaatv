@@ -48,10 +48,12 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset query()
- * @property-read mixed                                      $author
- * @property-read mixed                                      $url
+ * @property-read mixed $author
+ * @property-read mixed $url
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed $api_url
+ * @property-read mixed $content_url
  */
 class Contentset extends BaseModel implements Taggable
 {

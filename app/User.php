@@ -249,12 +249,15 @@ use Laravel\Passport\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User active()
  * @method static select()
  * @property-read mixed                                                      $number_of_products_in_basket
- * @property-read mixed                                                      $short_name
- * @property-read mixed                                                      $completion_info
- * @property-read mixed                                                      $gender_info
- * @property-read mixed                                                      $grade_info
- * @property-read mixed                                                      $major_info
- * @property-read mixed                                                      $wallet_info
+ * @property-read mixed                                                               $short_name
+ * @property-read mixed                                                               $completion_info
+ * @property-read mixed                                                               $gender_info
+ * @property-read mixed                                                               $grade_info
+ * @property-read mixed                                                               $major_info
+ * @property-read mixed                                                               $wallet_info
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Client[] $clients
+ * @property-read mixed                                                               $info
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[]  $tokens
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail
 {

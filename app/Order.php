@@ -91,6 +91,7 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed      $invoice
+ * @property-read mixed      $info
  */
 class Order extends BaseModel
 {
@@ -135,6 +136,11 @@ class Order extends BaseModel
     protected $appends = [
           'info',
 //        "invoice"
+    ];
+    const OPEN_ORDER_STATUSES = [
+        1,
+        4,
+        8,
     ];
 
     protected $hidden = [

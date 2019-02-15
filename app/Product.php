@@ -13,16 +13,16 @@ use App\Traits\{APIRequestCommon, favorableTraits, ModelTrackerTrait, ProductCom
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\{Eloquent\Builder};
-use Illuminate\Support\{Collection, Facades\Cache, Facades\Config, Facades\Log};
+use Illuminate\Support\{Collection, Facades\Cache, Facades\Config};
 use Kalnoy\Nestedset\QueryBuilder;
 
 /**
  * App\Product
  *
- * @property int                                                                 $id
- * @property string|null                                                         $name               نام  کالا
- * @property int                                                                 $basePrice          قیمت پایه  کالا
- * @property float                                                               $discount           میزان تخفیف کالا
+ * @property int               $id
+ * @property string|null       $name               نام  کالا
+ * @property int               $basePrice          قیمت پایه  کالا
+ * @property float             $discount           میزان تخفیف کالا
  *           برای همه به درصد
  * @property int                                                                 $isFree             رایگان بودن یا
  *           نبودن محصول
@@ -118,13 +118,16 @@ use Kalnoy\Nestedset\QueryBuilder;
  * @property-read mixed                                                          $gift
  * @property-read mixed                                                          $grand_parent
  * @property-read mixed                                                          $type
- * @property-read mixed                                                          $url
- * @property-read \App\Product                                                   $grand
+ * @property-read mixed        $url
+ * @property-read \App\Product $grand
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereGrandId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed                                                          $active
- * @property Product grandParent
+ * @property-read mixed        $active
+ * @property Product           grandParent
+ * @property-read mixed        $api_url
+ * @property-read array|string $price
+ * @property-read mixed        $redirect_url
  */
 class Product extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {

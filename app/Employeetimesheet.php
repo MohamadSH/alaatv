@@ -2,21 +2,19 @@
 
 namespace App;
 
-use Carbon\Carbon;
 use Barryvdh\LaravelIdeHelper\Eloquent;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent as EloquentAlias;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Employeetimesheet
  *
- * @property int $id
- * @property int $user_id آیدی مشخص کننده کارمند
- * @property string $date تاریخ ساعت کاری
+ * @property int         $id
+ * @property int         $user_id آیدی مشخص کننده کارمند
+ * @property string      $date تاریخ ساعت کاری
  * @property string|null $userBeginTime ساعت شروع شیفت کارمند
  * @property string|null $userFinishTime ساعت پایان شیفت کارمند
- * @property int|null $allowedLunchBreakInSec مدت زمان مجاز برای استراحت ناهار
+ * @property int|null    $allowedLunchBreakInSec مدت زمان مجاز برای استراحت ناهار
  * @property string|null $clockIn زمان ورود به محل کار
  * @property string|null $beginLunchBreak زمان خروج برای استراحت ناهار
  * @property string|null $finishLunchBreak زمان پایان استراحت ناهار
@@ -82,6 +80,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @mixin Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property int         $overtime_confirmation تاییدیه اضافه کاری
+ * @property-read mixed  $obtain_work_and_shift_diff_in_hour
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereOvertimeConfirmation($value)
  */
 class Employeetimesheet extends BaseModel
 {

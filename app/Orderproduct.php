@@ -66,6 +66,7 @@ use Illuminate\Support\Facades\Config;
  * @property-read float|int $discount_percentage
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed     $orderproducttype_info
  */
 class Orderproduct extends BaseModel
 {
