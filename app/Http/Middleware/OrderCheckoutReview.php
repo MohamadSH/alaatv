@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Controllers\OrderproductController;
+use App\Http\Controllers\Web\OrderproductController;
 use Closure;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
