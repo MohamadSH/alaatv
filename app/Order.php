@@ -9,6 +9,7 @@ use App\Collection\OrderCollections;
 use App\Traits\ProductCommon;
 use Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * App\Order
@@ -132,13 +133,25 @@ class Order extends BaseModel
     ];
 
     protected $appends = [
+          'info',
 //        "invoice"
     ];
 
-    const OPEN_ORDER_STATUSES = [
-        1,
-        4,
-        8,
+    protected $hidden = [
+            'id',
+            'couponDiscount',
+            'orderstatus_id',
+            'orderstatus',
+            'paymentstatus_id',
+            'paymentstatus',
+            'checkOutDateTime',
+            'couponDiscountAmount',
+            'coupon',
+            'coupon_id',
+            'user_id',
+            'updated_at',
+            'deleted_at',
+            'created_at',
     ];
 
     /**
@@ -817,5 +830,47 @@ class Order extends BaseModel
         }
 
         return $totalWalletRefund;
+    }
+
+    public function getInfoAttribute()
+    {
+        return Cache::tags([
+            'orderstatus',
+        ])->remember($this->cacheKey(), config("constants.CACHE_60"), function () {
+            return [
+                'orderstatus'      => $this->orderstatus,
+                'paymentstatus'    => $this->paymentstatus,
+                'coupon'           => $this->getCoupon(),
+            ];
+        });
+    }
+
+    public function getCoupon()
+    {
+        $couponDiscount = 0 ;
+        if(isset($this->couponDiscount))
+            $couponDiscount = $this->couponDiscount ;
+        elseif(isset($this->couponDiscountAmount))
+            $couponDiscount = $this->couponDiscountAmount ;
+
+        $coupon = $this->coupon;
+        if (isset($coupon)) {
+            $couponReturn = [
+                'name'        => $coupon->name,
+                'code'        => $coupon->code,
+                'discount'    => [
+                    'type'  =>   $coupon->discounttype->name,
+                    'value'  =>  $couponDiscount,
+                    ]
+            ];
+        } else {
+            $couponReturn = null;
+        }
+        return $couponReturn;
+    }
+
+    public function getCost()
+    {
+
     }
 }
