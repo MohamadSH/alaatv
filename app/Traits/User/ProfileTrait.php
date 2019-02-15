@@ -9,7 +9,9 @@
 namespace App\Traits\User;
 
 
+use App\Afterloginformcontrol;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 
 trait ProfileTrait
 {
@@ -162,13 +164,13 @@ trait ProfileTrait
             case "lockProfile":
                 $customColumns = $this->lockProfile;
                 $importantColumns = array_unique(array_merge($customColumns, Afterloginformcontrol::getFormFields()
-                                                                                                  ->pluck('name', 'id')
-                                                                                                  ->toArray()));
+                    ->pluck('name', 'id')
+                    ->toArray()));
                 break;
             case "afterLoginForm" :
                 $importantColumns = Afterloginformcontrol::getFormFields()
-                                                         ->pluck('name', 'id')
-                                                         ->toArray();
+                    ->pluck('name', 'id')
+                    ->toArray();
                 break;
             case "completeInfo":
                 $importantColumns = $this->completeInfo;
