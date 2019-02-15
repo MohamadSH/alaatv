@@ -10,7 +10,6 @@ namespace App\Collection;
 
 use App\Orderproduct;
 use Illuminate\Database\Eloquent\Collection;
-use App\Http\Controllers\OrderproductController;
 use App\Classes\Checkout\Alaa\GroupOrderproductCheckout;
 use App\Classes\Abstracts\Pricing\OrderproductPriceCalculator;
 
@@ -98,8 +97,7 @@ class OrderproductCollection extends Collection
     {
         foreach ($this as $orderproduct) {
             if (!$orderproduct->isPurchasable()) {
-                $orderproductController = new OrderproductController();
-                $orderproductController->destroy($orderproduct);
+                $orderproduct->delete();
             } else {
 
                 //ToDo : Should be removed and be replaced with an event

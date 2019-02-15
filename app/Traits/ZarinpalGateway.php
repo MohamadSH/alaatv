@@ -9,7 +9,7 @@
 namespace App\Traits;
 
 
-trait Gateway
+trait ZarinpalGateway
 {
 
     /**

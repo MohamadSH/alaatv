@@ -154,6 +154,9 @@ class HomeController extends Controller
     {
         try{
 
+            $order = \App\Order::find(248132);
+            dd($order->orderstatus);
+
             dd("here");
             return Block::getShopBlocks();
 

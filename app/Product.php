@@ -840,7 +840,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getTotalBons($bonName): Collection
     {
         $key = "product:getTotalBons:" . $this->cacheKey() . "-bone:" . $bonName;
-        return Cache::remember($key, Config::get("constants.CACHE_600"), function () use ($bonName, $enable) {
+        return Cache::remember($key, Config::get("constants.CACHE_600"), function () use ($bonName) {
             $bons = $this->getBons($bonName);
             if ($bons->isEmpty()) {
                 $parentsArray = $this->makeParentArray($this);
