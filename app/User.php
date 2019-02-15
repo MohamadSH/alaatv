@@ -13,6 +13,7 @@ use App\Traits\HasWallet;
 use App\Traits\Helper;
 use App\Traits\MustVerifyMobileNumberTrait;
 use App\Traits\OrderCommon;
+use App\Traits\User\DashboardTrait;
 use Carbon\Carbon;
 use Hash;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
@@ -264,6 +265,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     use APIRequestCommon;
     use CharacterCommon;
     use OrderCommon;
+    use DashboardTrait;
 
     /*
     |--------------------------------------------------------------------------
@@ -1274,7 +1276,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     {
         return true;
     }
-
 
     public function seensitepages()
     {
