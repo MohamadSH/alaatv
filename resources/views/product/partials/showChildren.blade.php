@@ -42,13 +42,30 @@
                             {{$product->name}}
                             {{--@if((int)$product->cost > 0)--}}
                             <span class = "m-nav__link-badge float-right">
-                                <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded">
-                                    {{ $product->priceText }}
+                                <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
+                                    <span class="m-badge m-badge--warning a--productRealPrice">14,000</span>
+                                    {{ trim($product->priceText) }}
+                                    <span class="m-badge m-badge--info a--productDiscount">20%</span>
                                 </span>
                             </span>
                             {{--@endif--}}
                         </div>
                         <div class="m--clearfix"></div>
+
+                        @if(isset($product->introVideo))
+                            <button type="button"
+                                    class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger"
+                                    id="btnShowVideoLink"
+                                    data-videosrc="{{ $product->introVideo }}"
+                                    data-videotitle="{{ $product->name }}"
+                                    data-videodes="{{ $product->shortDescription }}">
+                                <span>
+                                    <i class="fa fa-play-circle"></i>
+                                    <span>نمایش کلیپ معرفی</span>
+                                </span>
+                            </button>
+                        @endif
+
                     </span>
 
                 </span>

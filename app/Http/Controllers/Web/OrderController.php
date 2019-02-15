@@ -858,7 +858,7 @@ class OrderController extends Controller
             $response = response(["invoiceInfo"=>$invoiceInfo] , Response::HTTP_OK);
         }
 
-        if ($request->expectsJson() || true)
+        if ($request->expectsJson())
             return $response;
 
         return view("order.checkout.review", compact("invoiceInfo"));

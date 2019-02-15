@@ -1,13 +1,3 @@
-$(function() {
-    /**
-     * Set token for ajax request
-     */
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': window.Laravel.csrfToken,
-        }
-    });
-});
 
 var totalExtraCost = 0 ;
 var bonDiscount = 0 ;
@@ -21,9 +11,31 @@ function refreshPrice(mainAttributeState , productState , extraAttributeState) {
     var product = $("input[name=product_id]").val();
 
     $('#a_product-price').html('<div class="m-loader m-loader--success" style="width: 30px; display: inline-block;"></div>');
+    if (mainAttributeState.length === 0 && productState.length === 0 && extraAttributeState.length === 0) {
+
+        $('#a_product-price').html('قیمت محصول: '+'پس از انتخاب محصول');
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-bottom-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+        toastr.warning("شما هیچ محصولی را انتخاب نکرده اید.", "توجه!");
+        return false;
+    }
     $.ajax({
         type: "POST",
-        // url: "/refreshPrice/"+product,
         url: "/api/v1/getPrice/"+product,
         data: { mainAttributeValues: mainAttributeState , products: productState , extraAttributeValues: extraAttributeState },
         statusCode: {
@@ -32,19 +44,38 @@ function refreshPrice(mainAttributeState , productState , extraAttributeState) {
 
                 // console.log(response);
 
+
                 response = $.parseJSON(response);
 
 
-                // {"cost":136000,"costForCustomer":136000,"totalExtraCost":0}
-                totalExtraCost = parseInt(response.totalExtraCost);
-                let response_cost = parseInt(response.cost);
-                let response_costForCustomer = parseInt(response.costForCustomer);
+                if (response.error!=null) {
+                    Swal({
+                        title: 'توجه!',
+                        text: response.error.message + '('+ response.error.code +')',
+                        type: 'warning',
+                        confirmButtonText: 'بستن'
+                    });
+                    $('#a_product-price').html('قیمت محصول: '+'پس از انتخاب محصول');
+                }if (response.cost!=null) {
+                    let response_cost = parseInt(response.cost.base);
+                    let response_costForCustomer = parseInt(response.cost.final);
 
-                if(response_costForCustomer<response_cost) {
-                    $('#a_product-price').html('قیمت محصول: <strike>'+response_cost+'</strike> تومان <br>قیمت برای مشتری: '+response_costForCustomer+' تومان ');
+                    if(response_costForCustomer<response_cost) {
+                        $('#a_product-price').html('قیمت محصول: <strike>'+response_cost+'</strike> تومان <br>قیمت برای مشتری: '+response_costForCustomer+' تومان ');
+                    } else {
+                        $('#a_product-price').html('قیمت محصول: '+response_costForCustomer+' تومان ');
+                    }
                 } else {
-                    $('#a_product-price').html('قیمت محصول: '+response_costForCustomer+' تومان ');
+                    Swal({
+                        title: 'توجه!',
+                        text: 'خطایی رخ داده است.',
+                        type: 'danger',
+                        confirmButtonText: 'بستن'
+                    });
+                    $('#a_product-price').html('-');
                 }
+                // {"cost":136000,"costForCustomer":136000,"totalExtraCost":0}
+                // totalExtraCost = parseInt(response.totalExtraCost);
 
                 // var currentPrice = parseInt($("#price").attr("value"));
                 // var currentCustomerPrice = parseInt($("#customerPrice").attr("value"));
@@ -58,17 +89,6 @@ function refreshPrice(mainAttributeState , productState , extraAttributeState) {
                 //     $("#customerPrice").text(currentCustomerPrice+parseInt(totalExtraCost)).number(true).append("تومان");
                 // }
                 //
-                if(response.productWarning)
-                {
-
-                    Swal({
-                        title: 'توجه!',
-                        text: response.productWarning,
-                        type: 'warning',
-                        confirmButtonText: 'بستن'
-                    });
-                    // toastr["warning"]("توجه!",response.productWarning);
-                }
                 // else {
                 //     cost = response.cost;
                 //     costForCustomer = response.costForCustomer;
@@ -110,8 +130,13 @@ function refreshPrice(mainAttributeState , productState , extraAttributeState) {
             },
             //The status for when there is error php code
             500: function (response) {
-                console.log(response.responseText);
-//                            toastr["error"]("خطای برنامه!", "پیام سیستم");
+                Swal({
+                    title: 'توجه!',
+                    text: 'خطایی رخ داده است.',
+                    type: 'danger',
+                    confirmButtonText: 'بستن'
+                });
+                $('#a_product-price').html('-');
             },
             //The status for when there is error php code
             503: function (response) {
@@ -158,7 +183,16 @@ function getExtraAttributeStates()
     var c = $.merge(selectAttributeState , checkboxAttributeState);
     var attributeState= c.filter(function (item, pos) {return c.indexOf(item) == pos});
 
-    return attributeState;
+    let extraAttributes = [];
+
+    for (let index in attributeState) {
+        if(!isNaN(index)) {
+            extraAttributes.push({
+                'id': attributeState[index]
+            });
+        }
+    }
+    return extraAttributes;
 }
 
 function getProductSelectValues()

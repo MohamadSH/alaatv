@@ -402,16 +402,18 @@ class Orderproduct extends BaseModel
         $extraAttributes = $this->attributevalues;
         $myParent = $this->product->grandParent;
 
-        foreach ($extraAttributes as $extraAttribute) {
-            $productAttributevalue = $myParent->attributevalues->where("id", $extraAttribute->id)->first();
+        if (isset($myParent)) {
+            foreach ($extraAttributes as $extraAttribute) {
+                $productAttributevalue = $myParent->attributevalues->where("id", $extraAttribute->id)->first();
 
-            if (!isset($productAttributevalue)) {
-                $this->attributevalues()
-                    ->detach($productAttributevalue);
-            } else {
-                $newExtraCost = $productAttributevalue->pivot->extraCost;
-                $this->attributevalues()
-                    ->updateExistingPivot($extraAttribute->id, ["extraCost" => $newExtraCost]);
+                if (!isset($productAttributevalue)) {
+                    $this->attributevalues()
+                        ->detach($productAttributevalue);
+                } else {
+                    $newExtraCost = $productAttributevalue->pivot->extraCost;
+                    $this->attributevalues()
+                        ->updateExistingPivot($extraAttribute->id, ["extraCost" => $newExtraCost]);
+                }
             }
         }
     }

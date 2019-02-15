@@ -18,37 +18,330 @@
     <div class="hidden">
         @include("systemMessage.flash")
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="portlet light bordered">
-                <div class="portlet-body">
-                    <div class="row">
-                        @include("partials.checkoutSteps" , ["step"=>2])
-                        @if( !isset($invoiceInfo["purchasedOrderproducts"]) || $invoiceInfo["purchasedOrderproducts"]->isEmpty() )
-                            <div class="row static-info">
-                                <div class="col-md-12 " style="text-align: center">
-                                    <h3 class="bold font-yellow-gold">موردی انتخاب نشده است!</h3>
-                                </div>
-                            </div>
-                            <div class="row static-info margin-top-40" style="text-align: center;">
-                                <a href = "{{action("Web\ProductController@search")}}" class = "btn yellow btn-outline">اردوها و
-                                                                                                                        همایش ها</a>
-                            </div>
-                        @else
-                            <div class="col-md-12" id="printBill-div" style="direction: rtl">
-                                <div class="portlet @if($invoiceInfo["purchasedOrderproducts"]->isEmpty() ) yellow-gold @else dark @endif  box">
-                                    <div class="portlet-title">
-                                        <div class="caption">
-                                            فاکتور سفارش
-                                            @if(session()->has("adminOrder_id"))
-                                                برای {{Session::get("customer_firstName")}} {{Session::get("customer_lastName")}}
-                                                {{--@else--}}
-                                                {{--{{ Auth::user()->firstName.Auth::user()->lastName }}--}}
-                                            @endif
 
+<style>
+    /*media query*/
+    @media (max-width: 767.98px) {
+        .a--userCartList .m-widget5__pic {
+            display: block !important;
+            margin: auto !important;
+            width: auto !important;
+            text-align: center !important;
+        }
+    }
+</style>
+
+    <div class="row">
+        <div class="col-xl-8 a--userCartList">
+            <!--begin:: Widgets/Best Sellers-->
+            <div class="m-portlet m-portlet--full-height ">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                سبد خرید
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="m-portlet__head-tools">
+                    </div>
+                </div>
+                <div class="m-portlet__body">
+                    <!--begin::Content-->
+                    <div class="tab-content">
+                        <!--begin::m-widget5-->
+                        <div class="m-widget5">
+                            <div class="m-widget5__item">
+                                <div class="m-widget5__content">
+                                    <div class="m-widget5__pic" style="padding: 0px; width: auto;">
+                                        <button type="button" class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5">
+                                            <span>
+                                                <i class="flaticon-close"></i>
+                                                <span>حذف</span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                    <div class="m-widget5__pic">
+                                        <img class="m-widget7__img" src="/assets/app/media/img//products/product6.jpg" alt="">
+                                    </div>
+                                    <div class="m-widget5__section">
+                                        <div class=" d-none d-md-block d-lg-block d-xl-block">
+                                            <h4 class="m-widget5__title">
+                                                جزوه دوره جنسی خانم ها
+                                            </h4>
+                                            <span class="m-widget5__desc">
+                                            دبیر : جلال موقاری
+                                        </span>
                                         </div>
                                     </div>
-                                    <div class="portlet-body">
+                                    <div class="d-sm-none d-md-none d-lg-none m--margin-top-10">
+                                        <h4 class="m-widget5__title">
+                                            جزوه دوره جنسی خانم ها
+                                        </h4>
+                                        <span class="m-widget5__desc">
+                                            دبیر : جلال موقاری
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="m-widget5__content">
+                                    <div class="m-widget5__stats1">
+                                        <span class = "m-nav__link-badge">
+                                            <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
+                                                <span class="m-badge m-badge--warning a--productRealPrice">14,000</span>
+                                                15,000 تومان
+                                                <span class="m-badge m-badge--info a--productDiscount">20%</span>
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="m-widget5__stats2 d-sm-none d-md-none d-lg-none float-right">
+                                        <button type="button" class="btn btn-sm m-btn--pill m-btn--air btn-danger">
+                                            <span>
+                                                <i class="flaticon-close"></i>
+                                                <span>حذف</span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-widget5__item">
+                                <div class="m-widget5__content">
+                                    <div class="m-widget5__pic" style="padding: 0px; width: auto;">
+                                        <button type="button" class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5">
+                                            <span>
+                                                <i class="flaticon-close"></i>
+                                                <span>حذف</span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                    <div class="m-widget5__pic">
+                                        <img class="m-widget7__img" src="/assets/app/media/img//products/product6.jpg" alt="">
+                                    </div>
+                                    <div class="m-widget5__section">
+                                        <div class=" d-none d-md-block d-lg-block d-xl-block">
+                                            <h4 class="m-widget5__title">
+                                                جزوه دوره جنسی خانم ها
+                                            </h4>
+                                            <span class="m-widget5__desc">
+                                            دبیر : جلال موقاری
+                                        </span>
+                                        </div>
+                                    </div>
+                                    <div class="d-sm-none d-md-none d-lg-none m--margin-top-10">
+                                        <h4 class="m-widget5__title">
+                                            جزوه دوره جنسی خانم ها
+                                        </h4>
+                                        <span class="m-widget5__desc">
+                                            دبیر : جلال موقاری
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="m-widget5__content">
+                                    <div class="m-widget5__stats1">
+                                        <span class = "m-nav__link-badge">
+                                            <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
+                                                <span class="m-badge m-badge--warning a--productRealPrice">14,000</span>
+                                                15,000 تومان
+                                                <span class="m-badge m-badge--info a--productDiscount">20%</span>
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="m-widget5__stats2 d-sm-none d-md-none d-lg-none float-right">
+                                        <button type="button" class="btn btn-sm m-btn--pill m-btn--air btn-danger">
+                                            <span>
+                                                <i class="flaticon-close"></i>
+                                                <span>حذف</span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-widget5__item">
+                                <div class="m-widget5__content">
+                                    <div class="m-widget5__pic" style="padding: 0px; width: auto;">
+                                        <button type="button" class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5">
+                                            <span>
+                                                <i class="flaticon-close"></i>
+                                                <span>حذف</span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                    <div class="m-widget5__pic">
+                                        <img class="m-widget7__img" src="/assets/app/media/img//products/product6.jpg" alt="">
+                                    </div>
+                                    <div class="m-widget5__section">
+                                        <div class=" d-none d-md-block d-lg-block d-xl-block">
+                                            <h4 class="m-widget5__title">
+                                                جزوه دوره جنسی خانم ها
+                                            </h4>
+                                            <span class="m-widget5__desc">
+                                            دبیر : جلال موقاری
+                                        </span>
+                                        </div>
+                                    </div>
+                                    <div class="d-sm-none d-md-none d-lg-none m--margin-top-10">
+                                        <h4 class="m-widget5__title">
+                                            جزوه دوره جنسی خانم ها
+                                        </h4>
+                                        <span class="m-widget5__desc">
+                                            دبیر : جلال موقاری
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="m-widget5__content">
+                                    <div class="m-widget5__stats1">
+                                        <span class = "m-nav__link-badge">
+                                            <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
+                                                <span class="m-badge m-badge--warning a--productRealPrice">14,000</span>
+                                                15,000 تومان
+                                                <span class="m-badge m-badge--info a--productDiscount">20%</span>
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="m-widget5__stats2 d-sm-none d-md-none d-lg-none float-right">
+                                        <button type="button" class="btn btn-sm m-btn--pill m-btn--air btn-danger">
+                                            <span>
+                                                <i class="flaticon-close"></i>
+                                                <span>حذف</span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-widget5__item">
+                                <div class="m-widget5__content">
+                                    <div class="m-widget5__pic" style="padding: 0px; width: auto;">
+                                        <button type="button" class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5">
+                                            <span>
+                                                <i class="flaticon-close"></i>
+                                                <span>حذف</span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                    <div class="m-widget5__pic">
+                                        <img class="m-widget7__img" src="/assets/app/media/img//products/product6.jpg" alt="">
+                                    </div>
+                                    <div class="m-widget5__section">
+                                        <div class=" d-none d-md-block d-lg-block d-xl-block">
+                                            <h4 class="m-widget5__title">
+                                                جزوه دوره جنسی خانم ها
+                                            </h4>
+                                            <span class="m-widget5__desc">
+                                            دبیر : جلال موقاری
+                                        </span>
+                                        </div>
+                                    </div>
+                                    <div class="d-sm-none d-md-none d-lg-none m--margin-top-10">
+                                        <h4 class="m-widget5__title">
+                                            جزوه دوره جنسی خانم ها
+                                        </h4>
+                                        <span class="m-widget5__desc">
+                                            دبیر : جلال موقاری
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="m-widget5__content">
+                                    <div class="m-widget5__stats1">
+                                        <span class = "m-nav__link-badge">
+                                            <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
+                                                <span class="m-badge m-badge--warning a--productRealPrice">14,000</span>
+                                                15,000 تومان
+                                                <span class="m-badge m-badge--info a--productDiscount">20%</span>
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="m-widget5__stats2 d-sm-none d-md-none d-lg-none float-right">
+                                        <button type="button" class="btn btn-sm m-btn--pill m-btn--air btn-danger">
+                                            <span>
+                                                <i class="flaticon-close"></i>
+                                                <span>حذف</span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::m-widget5-->
+                    </div>
+                    <!--end::Content-->
+                </div>
+            </div>
+            <!--end:: Widgets/Best Sellers-->  </div>
+        <div class="col-xl-4">
+            <!--begin:: Widgets/Authors Profit-->
+            <div class="m-portlet m-portlet--bordered-semi">
+                <div class="m-portlet__body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-6">
+                                مبلغ کل (4 کالا) :
+                            </div>
+                            <div class="col-6">
+                                ۲۰,۰۰۰ تومان
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                سود شما از خرید :
+                            </div>
+                            <div class="col-6">
+                                (۲۶٪) ۵,۱۰۰ تومان
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col text-center">
+                                <span>مبلغ قابل پرداخت: </span>
+                                <br>
+                                <span>۱۴,۹۰۰ تومان</span>
+                            </div>
+                        </div>
+
+                        هنوز دکمه افزودن محصول و دکمه ثبت و ادامه فرایند خرید مونده
+                    </div>
+                </div>
+            </div>
+            <!--end:: Widgets/Authors Profit-->  </div>
+    </div>
+
+
+
+
+
+    {{----}}
+    {{--<div class="row">--}}
+        {{--<div class="col-md-12">--}}
+            {{--<div class="portlet light bordered">--}}
+                {{--<div class="portlet-body">--}}
+                    {{--<div class="row">--}}
+                        {{--@include("partials.checkoutSteps" , ["step"=>2])--}}
+                        {{--@if( !isset($invoiceInfo["purchasedOrderproducts"]) || $invoiceInfo["purchasedOrderproducts"]->isEmpty() )--}}
+                            {{--<div class="row static-info">--}}
+                                {{--<div class="col-md-12 " style="text-align: center">--}}
+                                    {{--<h3 class="bold font-yellow-gold">موردی انتخاب نشده است!</h3>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            {{--<div class="row static-info margin-top-40" style="text-align: center;">--}}
+                                {{--<a href = "{{action("Web\ProductController@search")}}" class = "btn yellow btn-outline">اردوها و--}}
+                                                                                                                        {{--همایش ها</a>--}}
+                            {{--</div>--}}
+                        {{--@else--}}
+                            {{--<div class="col-md-12" id="printBill-div" style="direction: rtl">--}}
+                                {{--<div class="portlet @if($invoiceInfo["purchasedOrderproducts"]->isEmpty() ) yellow-gold @else dark @endif  box">--}}
+                                    {{--<div class="portlet-title">--}}
+                                        {{--<div class="caption">--}}
+                                            {{--فاکتور سفارش--}}
+                                            {{--@if(session()->has("adminOrder_id"))--}}
+                                                {{--برای {{Session::get("customer_firstName")}} {{Session::get("customer_lastName")}}--}}
+                                                {{--@else--}}
+                                                {{--{{ Auth::user()->firstName.Auth::user()->lastName }}--}}
+                                            {{--@endif--}}
+
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="portlet-body">--}}
 
                                         {{--@if( $invoiceInfo["purchasedOrderproducts"]->isEmpty() )--}}
                                         {{--<div class="row static-info">--}}
@@ -60,244 +353,248 @@
                                         {{--<a href="{{action("Web\ProductController@search")}}"   class="btn yellow-casablanca btn-outline">اردوها و همایش ها</a>--}}
                                         {{--</div>--}}
                                         {{--@else--}}
-                                        <div class="clearfix" style="height: 15px;"></div>
-                                        @foreach($invoiceInfo["purchasedOrderproducts"] as $orderproduct)
-                                            <div class="row ">
-                                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 no-print">
-                                                    @if(isset($invoiceInfo["orderproductLinks"]) && $invoiceInfo["orderproductLinks"]->has($orderproduct->id))
-                                                        <a target="_blank"
-                                                           href="{{$invoiceInfo["orderproductLinks"][$orderproduct->id]}}"><img
-                                                                    src="{{ route('image', ['category'=>'4','w'=>'148' , 'h'=>'148' ,  'filename' =>  $orderproduct->product->getRootImage() ]) }}"
-                                                                    alt="عکس محصول" width="100%"></a>
-                                                    @else
-                                                        <img src="{{ route('image', ['category'=>'4','w'=>'148' , 'h'=>'148' ,  'filename' =>  $orderproduct->product->getRootImage() ]) }}"
-                                                             alt="عکس محصول" width="100%">
-                                                    @endif
-                                                </div>
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-8">
-                                                    <div class="row static-info">
-                                                        <div class="col-md-4 name" style="font-style: italic"> نام</div>
-                                                        <div class="col-md-8 value">
+                                        {{--<div class="clearfix" style="height: 15px;"></div>--}}
+                                        {{--@foreach($invoiceInfo["purchasedOrderproducts"] as $orderproduct)--}}
+                                            {{--<div class="row ">--}}
+                                                {{--<div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 no-print">--}}
+                                                    {{--@if(isset($invoiceInfo["orderproductLinks"]) && $invoiceInfo["orderproductLinks"]->has($orderproduct->id))--}}
+                                                        {{--<a target="_blank"--}}
+                                                           {{--href="{{$invoiceInfo["orderproductLinks"][$orderproduct->id]}}"><img--}}
+                                                                    {{--src="{{ route('image', ['category'=>'4','w'=>'148' , 'h'=>'148' ,  'filename' =>  $orderproduct->product->getRootImage() ]) }}"--}}
+                                                                    {{--alt="عکس محصول" width="100%"></a>--}}
+                                                    {{--@else--}}
+                                                        {{--<img src="{{ route('image', ['category'=>'4','w'=>'148' , 'h'=>'148' ,  'filename' =>  $orderproduct->product->getRootImage() ]) }}"--}}
+                                                             {{--alt="عکس محصول" width="100%">--}}
+                                                    {{--@endif--}}
+                                                {{--</div>--}}
+                                                {{--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-8">--}}
+                                                    {{--<div class="row static-info">--}}
+                                                        {{--<div class="col-md-4 name" style="font-style: italic"> نام</div>--}}
+                                                        {{--<div class="col-md-8 value">--}}
                                                             {{--                                                                        @if($orderproduct->product->hasParents()){{$orderproduct->product->parents->first()->name}}--}}
                                                             {{--                                                                        @else {{$orderproduct->product->name}}--}}
                                                             {{--@endif--}}
-                                                            {{$orderproduct->product->name}}
-                                                        </div>
-                                                    </div>
-                                                    @if($orderproduct->product->grandParent && $orderproduct->product->grandParent->producttype_id == Config::get("constants.PRODUCT_TYPE_SELECTABLE"))
-                                                        @if($orderproduct->product->attributevalueTree('main')->isNotEmpty())
-                                                            <div class="row static-info">
-                                                                <div class="col-md-4 name" style="font-style: italic">
-                                                                    ویژگی ها
-                                                                </div>
-                                                                <div class="col-md-8 value">
-                                                                    @foreach($orderproduct->product->attributevalueTree('main') as $attributevalue)
-                                                                        {{$attributevalue["attribute"]->displayName}} :
-                                                                        <span style="font-weight: normal">{{$attributevalue["attributevalue"]->name}} @if(isset(   $attributevalue["attributevalue"]->pivot->description) && strlen($attributevalue["attributevalue"]->pivot->description)>0 ) {{$attributevalue["attributevalue"]->pivot->description}} @endif</span></br>
-                                                                    @endforeach
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                    @else
-                                                        @if($orderproduct->product->attributevalues('main')->get()->isNotEmpty())
-                                                            <div class="row static-info">
-                                                                <div class="col-md-4 name" style="font-style: italic">
-                                                                    ویژگی ها
-                                                                </div>
-                                                                <div class="col-md-8 value">
-                                                                    @foreach($orderproduct->product->attributevalues('main')->get() as $attributevalue)
-                                                                        {{$attributevalue->attribute->displayName}} :
-                                                                        <span style="font-weight: normal">{{$attributevalue->name}} @if(isset(   $attributevalue->pivot->description) && strlen($attributevalue->pivot->description)>0 ) {{$attributevalue->pivot->description}} @endif</span></br>
-                                                                    @endforeach
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                    @endif
-                                                    <hr>
-                                                    @if($orderproduct->product->isFree ||  ($orderproduct->product->hasParents() && $orderproduct->product->parents->first()->isFree) )
-                                                        <div class="row static-info">
-                                                            <div class="col-md-4 name" style="font-style: italic"> قیمت
-                                                                محصول
-                                                            </div>
-                                                            <div class="col-md-8 value font-red"> رایگان</div>
-                                                        </div>
+                                                            {{--{{$orderproduct->product->name}}--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    {{--@if($orderproduct->product->grandParent && $orderproduct->product->grandParent->producttype_id == Config::get("constants.PRODUCT_TYPE_SELECTABLE"))--}}
+                                                        {{--@if($orderproduct->product->attributevalueTree('main')->isNotEmpty())--}}
+                                                            {{--<div class="row static-info">--}}
+                                                                {{--<div class="col-md-4 name" style="font-style: italic">--}}
+                                                                    {{--ویژگی ها--}}
+                                                                {{--</div>--}}
+                                                                {{--<div class="col-md-8 value">--}}
+                                                                    {{--@foreach($orderproduct->product->attributevalueTree('main') as $attributevalue)--}}
+                                                                        {{--{{$attributevalue["attribute"]->displayName}} :--}}
+                                                                        {{--<span style="font-weight: normal">{{$attributevalue["attributevalue"]->name}} @if(isset(   $attributevalue["attributevalue"]->pivot->description) && strlen($attributevalue["attributevalue"]->pivot->description)>0 ) {{$attributevalue["attributevalue"]->pivot->description}} @endif</span></br>--}}
+                                                                    {{--@endforeach--}}
+                                                                {{--</div>--}}
+                                                            {{--</div>--}}
+                                                        {{--@endif--}}
+                                                    {{--@else--}}
+                                                        {{--@if($orderproduct->product->attributevalues('main')->get()->isNotEmpty())--}}
+                                                            {{--<div class="row static-info">--}}
+                                                                {{--<div class="col-md-4 name" style="font-style: italic">--}}
+                                                                    {{--ویژگی ها--}}
+                                                                {{--</div>--}}
+                                                                {{--<div class="col-md-8 value">--}}
+                                                                    {{--@foreach($orderproduct->product->attributevalues('main')->get() as $attributevalue)--}}
+                                                                        {{--{{$attributevalue->attribute->displayName}} :--}}
+                                                                        {{--<span style="font-weight: normal">{{$attributevalue->name}} @if(isset(   $attributevalue->pivot->description) && strlen($attributevalue->pivot->description)>0 ) {{$attributevalue->pivot->description}} @endif</span></br>--}}
+                                                                    {{--@endforeach--}}
+                                                                {{--</div>--}}
+                                                            {{--</div>--}}
+                                                        {{--@endif--}}
+                                                    {{--@endif--}}
+                                                    {{--<hr>--}}
+                                                    {{--@if($orderproduct->product->isFree ||  ($orderproduct->product->hasParents() && $orderproduct->product->parents->first()->isFree) )--}}
+                                                        {{--<div class="row static-info">--}}
+                                                            {{--<div class="col-md-4 name" style="font-style: italic"> قیمت--}}
+                                                                {{--محصول--}}
+                                                            {{--</div>--}}
+                                                            {{--<div class="col-md-8 value font-red"> رایگان</div>--}}
+                                                        {{--</div>--}}
                                                         {{--<div class="row static-info margin-top-40 no-print" style="text-align: center;">--}}
                                                         {{--<a href="{{action("Web\OrderController@verifyPayment")}}"   class="btn green btn-outline">تکمیل سفارش<i class="fa fa-arrow-left" aria-hidden="true"></i></a>--}}
                                                         {{--</div>--}}
-                                                    @else
-                                                        @if($invoiceInfo["costCollection"][$orderproduct->id]["cost"] == 0)
-                                                            <div class="row static-info">
-                                                                <div class="col-md-4 name" style="font-style: italic">
-                                                                    قیمت محصول
-                                                                </div>
-                                                                <div class="col-md-8 value">{{number_format($invoiceInfo["costCollection"][$orderproduct->id]["cost"])}}
-                                                                    تومان
-                                                                </div>
-                                                                @if($invoiceInfo["costCollection"][$orderproduct->id]["extraCost"]>0)
-                                                                    <div class="col-md-4 name"
-                                                                         style="font-style: italic"> قیمت برای شما
-                                                                    </div>
-                                                                    <div class="col-md-8 value"> {{number_format($invoiceInfo["costCollection"][$orderproduct->id]["cost"]+$invoiceInfo["costCollection"][$orderproduct->id]["extraCost"])}}
-                                                                        تومان
-                                                                    </div>
-                                                                @endif
-                                                            </div>
-                                                        @else
-                                                            <div class="row static-info">
-                                                                <div class="col-md-4 name" style="font-style: italic">
-                                                                    قیمت محصول
-                                                                </div>
-                                                                <div class="col-md-8 value"> {{number_format($invoiceInfo["costCollection"][$orderproduct->id]["cost"])}}
-                                                                    تومان
-                                                                </div>
-                                                                @if($orderproduct->isGiftType())
-                                                                    <div class="col-md-4 name font-red bold"
-                                                                         style="font-style: italic"> تخفیف
-                                                                    </div>
-                                                                    <div class="col-md-8 value font-red bold"> {{number_format($invoiceInfo["costCollection"][$orderproduct->id]["cost"])}}
-                                                                        تومان
-                                                                    </div>
-                                                                @else
-                                                                    @if($invoiceInfo["costCollection"][$orderproduct->id]["productDiscount"] > 0 || $invoiceInfo["costCollection"][$orderproduct->id]["productDiscountAmount"]>0)
-                                                                        <div class="col-md-4 name font-red bold"
-                                                                             style="font-style: italic"> تخفیف محصول
-                                                                        </div>
-                                                                        <div class="col-md-8 value font-red bold"> {{number_format((($invoiceInfo["costCollection"][$orderproduct->id]["productDiscount"]/100)*$invoiceInfo["costCollection"][$orderproduct->id]["cost"]) + $invoiceInfo["costCollection"][$orderproduct->id]["productDiscountAmount"])}}
-                                                                            تومان
-                                                                        </div>
-                                                                    @endif
-                                                                    @if($invoiceInfo["costCollection"][$orderproduct->id]["bonDiscount"]>0)
-                                                                        <div class="col-md-4 name font-red-intense bold"
-                                                                             style="font-style: italic"> تخفیف بن
-                                                                        </div>
+                                                    {{--@else--}}
+                                                        {{--@if($invoiceInfo["costCollection"][$orderproduct->id]["cost"] == 0)--}}
+                                                            {{--<div class="row static-info">--}}
+                                                                {{--<div class="col-md-4 name" style="font-style: italic">--}}
+                                                                    {{--قیمت محصول--}}
+                                                                {{--</div>--}}
+                                                                {{--<div class="col-md-8 value">{{number_format($invoiceInfo["costCollection"][$orderproduct->id]["cost"])}}--}}
+                                                                    {{--تومان--}}
+                                                                {{--</div>--}}
+                                                                {{--@if($invoiceInfo["costCollection"][$orderproduct->id]["extraCost"]>0)--}}
+                                                                    {{--<div class="col-md-4 name"--}}
+                                                                         {{--style="font-style: italic"> قیمت برای شما--}}
+                                                                    {{--</div>--}}
+                                                                    {{--<div class="col-md-8 value"> {{number_format($invoiceInfo["costCollection"][$orderproduct->id]["cost"]+$invoiceInfo["costCollection"][$orderproduct->id]["extraCost"])}}--}}
+                                                                        {{--تومان--}}
+                                                                    {{--</div>--}}
+                                                                {{--@endif--}}
+                                                            {{--</div>--}}
+                                                        {{--@else--}}
+                                                            {{--<div class="row static-info">--}}
+                                                                {{--<div class="col-md-4 name" style="font-style: italic">--}}
+                                                                    {{--قیمت محصول--}}
+                                                                {{--</div>--}}
+                                                                {{--<div class="col-md-8 value"> {{number_format($invoiceInfo["costCollection"][$orderproduct->id]["cost"])}}--}}
+                                                                    {{--تومان--}}
+                                                                {{--</div>--}}
+                                                                {{--@if($orderproduct->isGiftType())--}}
+                                                                    {{--<div class="col-md-4 name font-red bold"--}}
+                                                                         {{--style="font-style: italic"> تخفیف--}}
+                                                                    {{--</div>--}}
+                                                                    {{--<div class="col-md-8 value font-red bold"> {{number_format($invoiceInfo["costCollection"][$orderproduct->id]["cost"])}}--}}
+                                                                        {{--تومان--}}
+                                                                    {{--</div>--}}
+                                                                {{--@else--}}
+                                                                    {{--@if($invoiceInfo["costCollection"][$orderproduct->id]["productDiscount"] > 0 || $invoiceInfo["costCollection"][$orderproduct->id]["productDiscountAmount"]>0)--}}
+                                                                        {{--<div class="col-md-4 name font-red bold"--}}
+                                                                             {{--style="font-style: italic"> تخفیف محصول--}}
+                                                                        {{--</div>--}}
+                                                                        {{--<div class="col-md-8 value font-red bold"> {{number_format((($invoiceInfo["costCollection"][$orderproduct->id]["productDiscount"]/100)*$invoiceInfo["costCollection"][$orderproduct->id]["cost"]) + $invoiceInfo["costCollection"][$orderproduct->id]["productDiscountAmount"])}}--}}
+                                                                            {{--تومان--}}
+                                                                        {{--</div>--}}
+                                                                    {{--@endif--}}
+                                                                    {{--@if($invoiceInfo["costCollection"][$orderproduct->id]["bonDiscount"]>0)--}}
+                                                                        {{--<div class="col-md-4 name font-red-intense bold"--}}
+                                                                             {{--style="font-style: italic"> تخفیف بن--}}
+                                                                        {{--</div>--}}
 
-                                                                        <div class="col-md-8 value font-red-intense"> {{number_format(($invoiceInfo["costCollection"][$orderproduct->id]["bonDiscount"]/100) * ( ( (1-($invoiceInfo["costCollection"][$orderproduct->id]["productDiscount"]/100))*$invoiceInfo["costCollection"][$orderproduct->id]["cost"]) - $invoiceInfo["costCollection"][$orderproduct->id]["productDiscountAmount"])) }}
-                                                                            تومان
-                                                                            ({{$orderproduct->userbons->sum("pivot.usageNumber")}}
-                                                                            بن)
-                                                                        </div>
-                                                                    @endif
-                                                                    @if($orderproduct->attributevalues->isNotEmpty())
-                                                                        <div class="col-md-4 name"
-                                                                             style="font-style: italic"> ویژگی های
-                                                                            افزوده
-                                                                        </div>
-                                                                        <div class="col-md-8 value">
-                                                                            @foreach($orderproduct->attributevalues as $extraAttributevalue)
-                                                                                {{$extraAttributevalue->attribute->displayName}}
-                                                                                :
-                                                                                <span style="font-weight: normal">{{$extraAttributevalue->name}} @if(isset($extraAttributevalue->pivot->extraCost) && $extraAttributevalue->pivot->extraCost>0)
-                                                                                        (+ {{number_format($extraAttributevalue->pivot->extraCost)}}
-                                                                                        تومان)@endif</span></br>
-                                                                            @endforeach
-                                                                        </div>
-                                                                    @endif
-                                                                @endif
-                                                            </div>
-                                                            <hr>
-                                                            <div class="row static-info">
-                                                                <div class="col-md-4 name font-blue-steel bold"
-                                                                     style="font-style: italic"> قیمت برای شما
-                                                                </div>
-                                                                <div class="col-md-8 value font-blue-steel"> {{number_format((int)((1-($invoiceInfo["costCollection"][$orderproduct->id]["bonDiscount"]/100)) * ( ( (1-($invoiceInfo["costCollection"][$orderproduct->id]["productDiscount"]/100))*$invoiceInfo["costCollection"][$orderproduct->id]["cost"]) - $invoiceInfo["costCollection"][$orderproduct->id]["productDiscountAmount"]))+$invoiceInfo["costCollection"][$orderproduct->id]["extraCost"])}}
-                                                                    تومان
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                    @endif
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <div class="row static-info no-print" style="text-align: center;">
-                                                        @if($orderproduct->orderproducttype_id == Config::get("constants.ORDER_PRODUCT_GIFT"))
-                                                            <img src="/acm/extra/gift-box.png">
-                                                        @elseif(($orderproduct->product_id != Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_DEFAULT")) || ($orderproduct->product_id == Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_DEFAULT") && !$orderHasOrdrooGheireHozoori))
-                                                            <button class="btn red btn-outline btn-circle btn-lg removeOrderproduct" data-action = "{{action("Web\OrderproductController@destroy",$orderproduct->id)}}">
-                                                                <i class="fa fa-times" aria-hidden="true"></i></button>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            @if(!$orderproduct->product->isFree)
-                                                @if(isset($invoiceInfo["costCollection"][$orderproduct->id]["bonDiscount"]) &&
-                                                          $invoiceInfo["costCollection"][$orderproduct->id]["bonDiscount"]==0 &&
-                                                          Auth::check() && Auth::user()->userHasBon(Config::get("constants.BON1")) &&
-                                                          !$orderproduct->product->bons->where("name" , Config::get("constants.BON1"))->where("pivot.discount",">","0")->where("isEnable" , 1)->isEmpty())
-                                                    <div class="custom-alerts alert alert-warning fade in margin-top-40 no-print">
-                                                        <i class="fa fa-exclamation-circle"></i> توجه
-                                                        </br>
-                                                        <span>{{Auth::user()->userHasBon(Config::get("constants.BON1"))}}
-                                                            عدد {{$bonName}} شما لحاظ نشده است. اگر مایل هستید از آنها استفاده نمایید، باید سفارش را حذف نموده و مجددا اقدام به سفارش نمایید.</span>
-                                                    </div>
-                                                @endif
-                                            @endif
-                                            <hr style=" border: none;height: 1px;/* Set the hr color */color: #333; /* old IE */background-color: #333; /* Modern Browsers */">
-                                        @endforeach
-                                        <div class="row static-info margin-top-40" style="text-align: center;">
-                                            <div class="col-md-12">
-                                                <div class="well">
-                                                    <div class="row static-info align-reverse">
-                                                        <div class="col-md-12 name  bold" style="text-align: center">
-                                                            جمع کل : {{number_format($invoiceInfo["orderproductsRawCost"])}} تومان
-                                                        </div>
-                                                    </div>
-                                                    @if($invoiceInfo["orderproductsRawCost"] > $invoiceInfo["totalCost"])
-                                                        <div class="row static-info align-reverse">
-                                                            <div class="col-md-12 name bold font-red"
-                                                                 style="text-align: center"> مبلغ با لحاظ تخفیف
-                                                                : {{number_format($invoiceInfo["totalCost"])}} تومان
-                                                            </div>
-                                                        </div>
-                                                    @endif
-                                                    <div class="row static-info align-reverse">
-                                                        <div class="col-md-12 name bold" style="text-align: center">
-                                                            استفاده از کیف پول : {{number_format($invoiceInfo["paidByWallet"])}} تومان
-                                                        </div>
-                                                    </div>
-                                                    <div class="row static-info align-reverse">
-                                                        <div class="col-md-12 name font-blue bold"
-                                                             style="text-align: center"> قابل پرداخت
-                                                            : {{number_format($invoiceInfo["payableCost"])}} تومان
-                                                        </div>
-                                                    </div>
-                                                    <div class="row static-info align-reverse no-print">
-                                                        <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">
-                                                            <button class="btn dark btn-outline" id="printBill"
-                                                                    style="width: 150px"><i class="fa fa-print"
-                                                                                            aria-hidden="true"></i>پرینت
-                                                            </button>
-                                                        </div>
-                                                        <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">
-                                                            <a href = "{{action("Web\ProductController@search")}}"
-                                                               class="btn blue-madison btn-outline"
-                                                               style="width: 150px"><i class="fa fa-plus"
-                                                                                       aria-hidden="true"></i> افزودن
-                                                                محصول</a>
-                                                        </div>
-                                                        <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">
-                                                            <a href = "{{action("Web\OrderController@checkoutPayment")}}"
-                                                               class="btn green btn-outline" style="width: 150px">انتخاب
-                                                                روش پرداخت<i class="fa fa-chevron-left"
-                                                                             aria-hidden="true"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                                                        {{--<div class="col-md-8 value font-red-intense"> {{number_format(($invoiceInfo["costCollection"][$orderproduct->id]["bonDiscount"]/100) * ( ( (1-($invoiceInfo["costCollection"][$orderproduct->id]["productDiscount"]/100))*$invoiceInfo["costCollection"][$orderproduct->id]["cost"]) - $invoiceInfo["costCollection"][$orderproduct->id]["productDiscountAmount"])) }}--}}
+                                                                            {{--تومان--}}
+                                                                            {{--({{$orderproduct->userbons->sum("pivot.usageNumber")}}--}}
+                                                                            {{--بن)--}}
+                                                                        {{--</div>--}}
+                                                                    {{--@endif--}}
+                                                                    {{--@if($orderproduct->attributevalues->isNotEmpty())--}}
+                                                                        {{--<div class="col-md-4 name"--}}
+                                                                             {{--style="font-style: italic"> ویژگی های--}}
+                                                                            {{--افزوده--}}
+                                                                        {{--</div>--}}
+                                                                        {{--<div class="col-md-8 value">--}}
+                                                                            {{--@foreach($orderproduct->attributevalues as $extraAttributevalue)--}}
+                                                                                {{--{{$extraAttributevalue->attribute->displayName}}--}}
+                                                                                {{--:--}}
+                                                                                {{--<span style="font-weight: normal">{{$extraAttributevalue->name}} @if(isset($extraAttributevalue->pivot->extraCost) && $extraAttributevalue->pivot->extraCost>0)--}}
+                                                                                        {{--(+ {{number_format($extraAttributevalue->pivot->extraCost)}}--}}
+                                                                                        {{--تومان)@endif</span></br>--}}
+                                                                            {{--@endforeach--}}
+                                                                        {{--</div>--}}
+                                                                    {{--@endif--}}
+                                                                {{--@endif--}}
+                                                            {{--</div>--}}
+                                                            {{--<hr>--}}
+                                                            {{--<div class="row static-info">--}}
+                                                                {{--<div class="col-md-4 name font-blue-steel bold"--}}
+                                                                     {{--style="font-style: italic"> قیمت برای شما--}}
+                                                                {{--</div>--}}
+                                                                {{--<div class="col-md-8 value font-blue-steel"> {{number_format((int)((1-($invoiceInfo["costCollection"][$orderproduct->id]["bonDiscount"]/100)) * ( ( (1-($invoiceInfo["costCollection"][$orderproduct->id]["productDiscount"]/100))*$invoiceInfo["costCollection"][$orderproduct->id]["cost"]) - $invoiceInfo["costCollection"][$orderproduct->id]["productDiscountAmount"]))+$invoiceInfo["costCollection"][$orderproduct->id]["extraCost"])}}--}}
+                                                                    {{--تومان--}}
+                                                                {{--</div>--}}
+                                                            {{--</div>--}}
+                                                        {{--@endif--}}
+                                                    {{--@endif--}}
+                                                {{--</div>--}}
+                                                {{--<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">--}}
+                                                    {{--<div class="row static-info no-print" style="text-align: center;">--}}
+                                                        {{--@if($orderproduct->orderproducttype_id == Config::get("constants.ORDER_PRODUCT_GIFT"))--}}
+                                                            {{--<img src="/acm/extra/gift-box.png">--}}
+                                                        {{--@elseif(($orderproduct->product_id != Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_DEFAULT")) || ($orderproduct->product_id == Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_DEFAULT") && !$orderHasOrdrooGheireHozoori))--}}
+                                                            {{--<button class="btn red btn-outline btn-circle btn-lg removeOrderproduct" data-action = "{{action("Web\OrderproductController@destroy",$orderproduct->id)}}">--}}
+                                                                {{--<i class="fa fa-times" aria-hidden="true"></i></button>--}}
+                                                        {{--@endif--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                            {{--@if(!$orderproduct->product->isFree)--}}
+                                                {{--@if(isset($invoiceInfo["costCollection"][$orderproduct->id]["bonDiscount"]) &&--}}
+                                                          {{--$invoiceInfo["costCollection"][$orderproduct->id]["bonDiscount"]==0 &&--}}
+                                                          {{--Auth::check() && Auth::user()->userHasBon(Config::get("constants.BON1")) &&--}}
+                                                          {{--!$orderproduct->product->bons->where("name" , Config::get("constants.BON1"))->where("pivot.discount",">","0")->where("isEnable" , 1)->isEmpty())--}}
+                                                    {{--<div class="custom-alerts alert alert-warning fade in margin-top-40 no-print">--}}
+                                                        {{--<i class="fa fa-exclamation-circle"></i> توجه--}}
+                                                        {{--</br>--}}
+                                                        {{--<span>{{Auth::user()->userHasBon(Config::get("constants.BON1"))}}--}}
+                                                            {{--عدد {{$bonName}} شما لحاظ نشده است. اگر مایل هستید از آنها استفاده نمایید، باید سفارش را حذف نموده و مجددا اقدام به سفارش نمایید.</span>--}}
+                                                    {{--</div>--}}
+                                                {{--@endif--}}
+                                            {{--@endif--}}
+                                            {{--<hr style=" border: none;height: 1px;/* Set the hr color */color: #333; /* old IE */background-color: #333; /* Modern Browsers */">--}}
+                                        {{--@endforeach--}}
+                                        {{--<div class="row static-info margin-top-40" style="text-align: center;">--}}
+                                            {{--<div class="col-md-12">--}}
+                                                {{--<div class="well">--}}
+                                                    {{--<div class="row static-info align-reverse">--}}
+                                                        {{--<div class="col-md-12 name  bold" style="text-align: center">--}}
+                                                            {{--جمع کل : {{number_format($invoiceInfo["orderproductsRawCost"])}} تومان--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    {{--@if($invoiceInfo["orderproductsRawCost"] > $invoiceInfo["totalCost"])--}}
+                                                        {{--<div class="row static-info align-reverse">--}}
+                                                            {{--<div class="col-md-12 name bold font-red"--}}
+                                                                 {{--style="text-align: center"> مبلغ با لحاظ تخفیف--}}
+                                                                {{--: {{number_format($invoiceInfo["totalCost"])}} تومان--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                    {{--@endif--}}
+                                                    {{--<div class="row static-info align-reverse">--}}
+                                                        {{--<div class="col-md-12 name bold" style="text-align: center">--}}
+                                                            {{--استفاده از کیف پول : {{number_format($invoiceInfo["paidByWallet"])}} تومان--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    {{--<div class="row static-info align-reverse">--}}
+                                                        {{--<div class="col-md-12 name font-blue bold"--}}
+                                                             {{--style="text-align: center"> قابل پرداخت--}}
+                                                            {{--: {{number_format($invoiceInfo["payableCost"])}} تومان--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                    {{--<div class="row static-info align-reverse no-print">--}}
+                                                        {{--<div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">--}}
+                                                            {{--<button class="btn dark btn-outline" id="printBill"--}}
+                                                                    {{--style="width: 150px"><i class="fa fa-print"--}}
+                                                                                            {{--aria-hidden="true"></i>پرینت--}}
+                                                            {{--</button>--}}
+                                                        {{--</div>--}}
+                                                        {{--<div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">--}}
+                                                            {{--<a href = "{{action("Web\ProductController@search")}}"--}}
+                                                               {{--class="btn blue-madison btn-outline"--}}
+                                                               {{--style="width: 150px"><i class="fa fa-plus"--}}
+                                                                                       {{--aria-hidden="true"></i> افزودن--}}
+                                                                {{--محصول</a>--}}
+                                                        {{--</div>--}}
+                                                        {{--<div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">--}}
+                                                            {{--<a href = "{{action("Web\OrderController@checkoutPayment")}}"--}}
+                                                               {{--class="btn green btn-outline" style="width: 150px">انتخاب--}}
+                                                                {{--روش پرداخت<i class="fa fa-chevron-left"--}}
+                                                                             {{--aria-hidden="true"></i></a>--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
 
                                         {{--@endif--}}
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-                    <br/>
-                    <br/>
-                    <br/>
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--@endif--}}
+                    {{--</div>--}}
+                    {{--<br/>--}}
+                    {{--<br/>--}}
+                    {{--<br/>--}}
 
-                </div>
-            </div>
-        </div>
-    </div>
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
+
+
+
+
 @endsection
 
 @section("extraJS")

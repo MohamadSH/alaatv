@@ -6,8 +6,7 @@ use App\Traits\OrderCommon;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Web\OrderController;
 
 use App\Userbon;
 use App\User;
@@ -63,7 +62,6 @@ class CheckPermissionForSendOrderId
 //            $request->offsetSet('attribute', $sampleData['data']['attribute']);
 //            $request->offsetSet('extraAttribute', $sampleData['data']['extraAttribute']);
 //            $request->offsetSet('withoutBon', false);
-
 
             if($request->has('order_id')) {
                 if(!$this->user->can(config('constants.INSERT_ORDERPRODUCT_ACCESS'))) {

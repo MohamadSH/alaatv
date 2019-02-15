@@ -26,6 +26,28 @@
     <link href = "{{ mix('/css/all.css') }}" rel = "stylesheet" type = "text/css"/>
     <!--end::Global Theme Styles -->
 
+    <style>
+        /*custom component*/
+        .a--productPrice {
+            position: relative;
+            margin-top: 7px;
+            margin-right: 12px;
+        }
+        .a--productPrice .a--productRealPrice{
+            text-decoration: line-through;
+            position: absolute;
+            top: -8px;
+            right: -13px;
+            line-height: 12px;
+            min-height: 12px;
+        }
+        .a--productPrice .a--productDiscount{
+            position: absolute;
+            top: -10px;
+            left: -12px;
+        }
+    </style>
+
     @yield('page-css')
 
     <link rel = "shortcut icon" href = "@if(isset($wSetting->site->favicon)) {{route('image', ['category'=>'11','w'=>'150' , 'h'=>'150' ,  'filename' =>  $wSetting->site->favicon ])}} @endif"/>
@@ -168,6 +190,18 @@
 <!--begin::Global Theme Bundle -->
 <script src = "{{ mix('/js/all.js') }}" type = "text/javascript"></script>
 <!--end::Global Theme Bundle -->
+<script>
+    $(function() {
+        /**
+         * Set token for ajax request
+         */
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': window.Laravel.csrfToken,
+            }
+        });
+    });
+</script>
 @yield('page-js')
 </body>
 <!-- end::Body -->

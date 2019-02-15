@@ -171,11 +171,20 @@ class OrderproductController extends Controller
      */
     public function store(OrderProductStoreRequest $request)
     {
+        if ($request->has('extraAttribute')) {
+            if (!$request->user()->can(config("constants.ATTACH_EXTRA_ATTRIBUTE_ACCESS"))) {
+                $productId = $request->get('product_id');
+                $product = Product::findOrFail($productId);
+                $attributesValues = $this->getAttributesValuesFromProduct($request, $product);
+                $this->syncExtraAttributesCost($request, $attributesValues);
+                $request->offsetSet('parentProduct', $product);
+            }
+        }
+
         $orderproducts = $this->new($request->all());
 
         return $this->response->setStatusCode(Response::HTTP_OK)->setContent([
-//            "orderproducts" => $orderproducts,
-            'product saved'
+            'orderproducts' => $orderproducts,
         ]);
     }
 
