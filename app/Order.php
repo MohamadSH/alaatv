@@ -134,6 +134,7 @@ class Order extends BaseModel
     ];
 
     protected $appends = [
+          'price',
           'info',
 //        "invoice"
     ];
@@ -154,6 +155,8 @@ class Order extends BaseModel
             'couponDiscountAmount',
             'coupon',
             'coupon_id',
+            'cost',
+            'costwithoutcoupon',
             'user_id',
             'updated_at',
             'deleted_at',
@@ -875,8 +878,8 @@ class Order extends BaseModel
         return $couponReturn;
     }
 
-    public function getCost()
+    public function getPriceAttribute()
     {
-
+        return $this->cost + $this->costwithoutcoupon ;
     }
 }
