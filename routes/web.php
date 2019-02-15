@@ -134,6 +134,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'user'], function () {
 
 
+        Route::get('{user}/dashboard', 'Web\DashboardPageController')->name('web.user.dashboard');
         Route::get('profile', 'Web\UserController@show');
         Route::post('profile/update', 'Web\UserController@update');
 

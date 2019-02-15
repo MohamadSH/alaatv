@@ -44,6 +44,7 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property mixed $offer
  */
 class Block extends BaseModel
 {
@@ -190,6 +191,7 @@ class Block extends BaseModel
                        });
         return $blocks;
     }
+
 
     /**
      * Create a new Eloquent Collection instance.

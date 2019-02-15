@@ -78,6 +78,8 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction walletMethod()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property string|null $description توضیح تراکنش
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereDescription($value)
  */
 class Transaction extends BaseModel
 {
