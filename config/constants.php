@@ -374,6 +374,8 @@ return [
     'ORDER_STATUS_OPEN_DONATE'                 => 8,
     'ORDER_STATUS_PENDING'                     => 9,
 
+    'OPEN_ORDER_STATUSES'                      => [ 1 , 4 , 8] ,
+
     //TRANSACTION STATUSES CONSTANTS
     'TRANSACTION_STATUS_TRANSFERRED_TO_PAY'    => 1,
     'TRANSACTION_STATUS_UNSUCCESSFUL'          => 2,
