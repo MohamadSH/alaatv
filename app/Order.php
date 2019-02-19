@@ -4,7 +4,6 @@ namespace App;
 
 use App\Classes\Checkout\Alaa\OrderCheckout;
 use App\Classes\Checkout\Alaa\ReObtainOrderFromRecords;
-use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
 use App\Collection\OrderCollections;
 use App\Collection\OrderproductCollection;
 use App\Collection\ProductCollection;

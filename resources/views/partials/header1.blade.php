@@ -276,6 +276,108 @@
                                     </a>
                                 </li>
                             @endif
+
+                            {{--<li class="m-nav__item m-topbar__user-profile m-topbar__user-profile--img m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light"--}}
+                                {{--m-dropdown-toggle="click" aria-expanded="true">--}}
+                                {{--<a href="#" class="m-nav__link m-dropdown__toggle">--}}
+                                    {{--<span class="m-topbar__userpic">--}}
+                                        {{--<img src="/assets/app/media/img/users/user4.jpg--}}
+{{--{{ $profileImage }}--}}
+                                                {{--" class="m--img-rounded m--marginless" alt="عکس پروفایل">--}}
+                                    {{--</span>--}}
+                                    {{--<span class="m-topbar__username m--hide">--}}
+                                        {{--@if (Auth::check())--}}
+                                            {{--{{ Auth::user()->shortName }}--}}
+                                        {{--@endif--}}
+                                    {{--</span>--}}
+                                {{--</a>--}}
+                                {{--<div class="m-dropdown__wrapper" style="z-index: 101;">--}}
+                                    {{--<span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"--}}
+                                          {{--style="right: auto; left: 199.047px; margin-left: auto; margin-right: auto;"></span>--}}
+                                    {{--<div class="m-dropdown__inner">--}}
+                                        {{--<div class="m-dropdown__header m--align-center"--}}
+                                             {{--style="background: url(/assets/app/media/img/misc/quick_actions_bg.jpg); background-size: cover;">--}}
+                                            {{--<div class="m-card-user m-card-user--skin-dark">--}}
+                                                {{--<div class="m-card-user__pic">--}}
+                                                    {{--<img src="{{ $profileImage }}"--}}
+                                                         {{--class="m--img-rounded m--marginless" alt="">--}}
+                                                    {{--<!----}}
+                                                    {{--<span class="m-type m-type--lg m--bg-danger"><span class="m--font-light">S<span><span>--}}
+                                                    {{---->--}}
+                                                {{--</div>--}}
+                                                {{--@if( Auth::check() )--}}
+                                                    {{--<div class="m-card-user__details">--}}
+                                                        {{--<span class="m-card-user__name m--font-weight-500">{{ Auth::user()->fullName }}</span>--}}
+                                                        {{--<a href="" class="m-card-user__email m--font-weight-300 m-link">{{ Auth::user()->email }}</a>--}}
+                                                    {{--</div>--}}
+                                                {{--@endif--}}
+
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                        {{--<div class="m-dropdown__body">--}}
+                                            {{--<div class="m-dropdown__content">--}}
+                                                {{--<ul class="m-nav m-nav--skin-light">--}}
+                                                    {{--<li class="m-nav__section m--hide">--}}
+                                                        {{--<span class="m-nav__section-text">----</span>--}}
+                                                    {{--</li>--}}
+                                                    {{--@if( Auth::check() )--}}
+                                                        {{--<li class = "m-nav__item">--}}
+                                                            {{--<a href = "{{ action("Web\UserController@show",Auth::user()) }}" class = "m-nav__link">--}}
+                                                                {{--<i class="m-nav__link-icon flaticon-profile-1"></i>--}}
+                                                                {{--<span class="m-nav__link-title">--}}
+                                                                    {{--<span class="m-nav__link-wrap">--}}
+                                                                        {{--<span class="m-nav__link-text">پروفایل</span>--}}
+                                                                    {{--</span>--}}
+                                                                {{--</span>--}}
+                                                            {{--</span>--}}
+                                                            {{--</a>--}}
+                                                        {{--</li>--}}
+                                                        {{--<li class = "m-nav__item">--}}
+                                                            {{--<a href = "{{ action("Web\UserController@userProductFiles")  }}" class = "m-nav__link">--}}
+                                                                {{--<i class = "m-nav__link-icon flaticon-share"></i>--}}
+                                                                {{--<span class = "m-nav__link-text">فیلم ها و جزوه های من</span>--}}
+                                                            {{--</a>--}}
+                                                        {{--</li>--}}
+                                                        {{--<li class = "m-nav__item">--}}
+                                                            {{--<a href = "{{ action("Web\UserController@userOrders")  }}" class = "m-nav__link">--}}
+                                                                {{--<i class = "m-nav__link-icon flaticon-chat-1"></i>--}}
+                                                                {{--<span class = "m-nav__link-text">سفارشهای من</span>--}}
+                                                            {{--</a>--}}
+                                                        {{--</li>--}}
+                                                    {{--@endif--}}
+                                                    {{--<li class = "m-nav__separator m-nav__separator--fit"></li>--}}
+                                                    {{--<li class = "m-nav__item">--}}
+                                                        {{--@if( Auth::check() )--}}
+                                                            {{--<a href = "{{ url('/logout') }}" class = "btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">خروج</a>--}}
+                                                        {{--@else--}}
+
+                                                            {{--<a href = "{{ route("login") }}" class = "btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">ورود / ثبت نام</a>--}}
+                                                        {{--@endif--}}
+                                                    {{--</li>--}}
+                                                {{--</ul>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            {{--</li>--}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             <li class = "m-nav__item m-topbar__user-profile  m-dropdown m-dropdown--medium m-dropdown--arrow  m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light" m-dropdown-toggle = "click">
                                 <a href = "#" class = "m-nav__link m-dropdown__toggle">
                                     <span class = "m-topbar__userpic">
@@ -352,6 +454,8 @@
                                     </div>
                                 </div>
                             </li>
+
+
                             <li id = "m_quick_sidebar_toggle" class = "m-nav__item">
                                 <a href = "#" class = "m-nav__link m-dropdown__toggle">
                                     <span class = "m-nav__link-icon"><i class = "flaticon-grid-menu"></i></span>
