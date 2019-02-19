@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
@@ -15,12 +16,21 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return
+     * @param User $user
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|Response
      */
-    public function userOrders(Request $request)
+    public function userOrders(Request $request , User $user)
     {
         /** @var User $user */
-        $user = $request->user('api');
+        $authenticatedUser = $request->user('api');
+
+        if($authenticatedUser->id != $user->id)
+           return response([
+               'error' => [
+                   'code'   => Response::HTTP_FORBIDDEN ,
+                   'message'=> 'UnAuthorized'
+               ]
+           ], 403);
 
         $key = "user:orders:" . $user->cacheKey();
         $orders = Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {

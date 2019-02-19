@@ -4,12 +4,14 @@ namespace App;
 
 use App\Classes\Checkout\Alaa\OrderCheckout;
 use App\Classes\Checkout\Alaa\ReObtainOrderFromRecords;
-use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
 use App\Collection\OrderCollections;
+use App\Collection\OrderproductCollection;
 use App\Collection\ProductCollection;
 use App\Traits\ProductCommon;
 use Auth;
 use Carbon\Carbon;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -93,6 +95,8 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed      $invoice
  * @property-read mixed      $info
+ * @property mixed donates
+ * @property mixed donate_amount
  */
 class Order extends BaseModel
 {
@@ -136,8 +140,12 @@ class Order extends BaseModel
 
     protected $appends = [
           'price',
-          'info',
-//        "invoice"
+          'orderstatus',
+          'paymentstatus',
+          'orderproducts',
+          'couponInfo',
+          'paidPrice',
+//          'invoice'
     ];
     const OPEN_ORDER_STATUSES = [
         1,
@@ -146,23 +154,20 @@ class Order extends BaseModel
     ];
 
     protected $hidden = [
-        'id',
-        'couponDiscount',
-        'orderstatus_id',
-        'orderstatus',
-        'paymentstatus_id',
-        'paymentstatus',
-        'checkOutDateTime',
-        'couponDiscountAmount',
-        'coupon',
-        'coupon_id',
-        'cost',
-        'costwithoutcoupon',
-        'user_id',
-        'updated_at',
-        'deleted_at',
-        'created_at',
-        'customerExtraInfo',
+            'id',
+            'couponDiscount',
+            'coupon',
+            'orderstatus_id',
+            'paymentstatus_id',
+            'checkOutDateTime',
+            'couponDiscountAmount',
+            'coupon_id',
+            'cost',
+            'costwithoutcoupon',
+            'user_id',
+            'updated_at',
+            'deleted_at',
+            'created_at',
     ];
 
     /**
@@ -320,8 +325,8 @@ class Order extends BaseModel
      */
     public function obtainOrderCost($calculateOrderCost = false, $calculateOrderproductCost = true, $mode = "DEFAULT")
     {
-        $this->load('user' , 'user.wallets'  , 'normalOrderproducts' , 'normalOrderproducts.product' ,'normalOrderproducts.product.parents' , 'normalOrderproducts.userbons' , 'normalOrderproducts.attributevalues' , 'normalOrderproducts.product.attributevalues' );
         if($calculateOrderCost) {
+            $this->load('user' , 'user.wallets'  , 'normalOrderproducts' , 'normalOrderproducts.product' ,'normalOrderproducts.product.parents' , 'normalOrderproducts.userbons' , 'normalOrderproducts.attributevalues' , 'normalOrderproducts.product.attributevalues' );
             $orderproductsToCalculateFromBaseIds = [];
             if($calculateOrderproductCost)
             {
@@ -330,23 +335,23 @@ class Order extends BaseModel
 
             $reCheckIncludedOrderproductsInCoupon = false;
             if($this->hasCoupon())
-                $reCheckIncludedOrderproductsInCoupon = ($mode=="REOBTAIN")?false:true;
+                $reCheckIncludedOrderproductsInCoupon = ($mode=='REOBTAIN')?false:true;
             $alaaCashierFacade = new OrderCheckout($this , $orderproductsToCalculateFromBaseIds , $reCheckIncludedOrderproductsInCoupon );
         }
         else{
+            $this->load( 'normalOrderproducts' , 'normalOrderproducts.product' ,'normalOrderproducts.product.parents' , 'normalOrderproducts.userbons' , 'normalOrderproducts.attributevalues' , 'normalOrderproducts.product.attributevalues' );
             $alaaCashierFacade = new ReObtainOrderFromRecords($this);
         }
 
         $priceInfo = $alaaCashierFacade->checkout();
 
         return [
-            "sumOfOrderproductsRawCost" => $priceInfo["totalPriceInfo"]["sumOfOrderproductsRawCost"],
-            "rawCostWithDiscount"       => $priceInfo["totalPriceInfo"]["totalRawPriceWhichHasDiscount"],
-            'rawCostWithoutDiscount'    =>  $priceInfo["totalPriceInfo"]["totalRawPriceWhichDoesntHaveDiscount"],
-            "totalCost"                 => $priceInfo["totalPriceInfo"]["finalPrice"],
-            "priceToPay"                => $priceInfo["totalPriceInfo"]["priceToPay"],
-            "amountPaidByWallet"        => $priceInfo["totalPriceInfo"]["amountPaidByWallet"],
-            "calculatedOrderproducts"   => $priceInfo["orderproductsInfo"]["calculatedOrderproducts"],
+            'sumOfOrderproductsRawCost' => $priceInfo['totalPriceInfo']['sumOfOrderproductsRawCost'],
+            'rawCostWithDiscount'       => $priceInfo['totalPriceInfo']['totalRawPriceWhichHasDiscount'],
+            'rawCostWithoutDiscount'    => $priceInfo['totalPriceInfo']['totalRawPriceWhichDoesntHaveDiscount'],
+            'totalCost'                 => $priceInfo['totalPriceInfo']['finalPrice'],
+            'payableAmountByWallet'     => $priceInfo['totalPriceInfo']['payableAmountByWallet'],
+            'calculatedOrderproducts'   => $priceInfo['orderproductsInfo']['calculatedOrderproducts'],
         ];
     }
 
@@ -473,18 +478,33 @@ class Order extends BaseModel
 
     public function totalPaidCost()
     {
-        if ($this->transactions->isEmpty())
-            return 0;
-        else return $this->successfulTransactions->where('cost', '>', 0)
-                                                 ->sum("cost");
+        $order = $this ;
+        $key = "order:totalPaidCost:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_60"), function () use ($order) {
+                $totalPaidCost = 0 ;
+                $successfulTransactions = $order->successfulTransactions;
+                if($successfulTransactions->isNotEmpty())
+                    $totalPaidCost =  $order->successfulTransactions->where('cost', '>', 0)
+                        ->sum("cost");
+
+                return $totalPaidCost ;
+        });
     }
 
     public function totalRefund()
     {
-        if ($this->transactions->isEmpty())
-            return 0;
-        else return $this->successfulTransactions->where('cost', '<', 0)
-                                                 ->sum("cost");
+        $order = $this ;
+        $key = "order:totalRefund:" . $order->cacheKey();
+        return Cache::tags(["order"])
+               ->remember($key, config("constants.CACHE_60"), function () use ($order) {
+                $totalRefund = 0;
+                $successfulTransactions = $order->successfulTransactions;
+                if ($successfulTransactions->isNotEmpty())
+                    $totalRefund = $order->successfulTransactions->where('cost', '<', 0)->sum("cost");
+
+                return $totalRefund;
+        });
     }
 
 
@@ -761,12 +781,12 @@ class Order extends BaseModel
         }
     }
 
-    public function getInvoiceAttribute()
+/*    public function getInvoiceAttribute()
     {
         $invoiceGenerator = new AlaaInvoiceGenerator($this);
         $invoiceInfo = $invoiceGenerator->generateInvoice();
-        return $invoiceInfo;
-    }
+        return json_encode($invoiceInfo);
+    }*/
 
 
     /**
@@ -791,7 +811,7 @@ class Order extends BaseModel
     public function getDonateCost(): int
     {
         $donateCost = 0;
-        $orderProducts = $this->orderproducts->whereIn('product_id', Product::DONATE_PRODUCT);
+        $orderProducts = $this->orderproducts->whereIn('product_id', [ Product::CUSTOM_DONATE_PRODUCT ,  Product::DONATE_PRODUCT_5_HEZAR]);
         foreach ($orderProducts as $orderProduct) {
             $donateCost += $orderProduct->cost;
         }
@@ -843,45 +863,142 @@ class Order extends BaseModel
         return $totalWalletRefund;
     }
 
-    public function getInfoAttribute()
+    public function getOrderstatusAttribute()
     {
-        return Cache::tags([
-            'orderstatus',
-        ])->remember($this->cacheKey(), config("constants.CACHE_60"), function () {
-            return [
-                'orderstatus'      => $this->orderstatus,
-                'paymentstatus'    => $this->paymentstatus,
-                'coupon'           => $this->getCoupon(),
-            ];
+        //ToDo : every time it queries the database
+        $order = $this ;
+        $key = "order:orderstatus:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_10"), function () use ($order) {
+                return optional($order->orderstatus()->first())->setVisible([
+                    'name',
+                    'displayName',
+                    'description'
+                ]);
         });
     }
 
-    public function getCoupon()
+    public function getPaymentstatusAttribute()
     {
-        $couponDiscount = 0 ;
-        if(isset($this->couponDiscount))
-            $couponDiscount = $this->couponDiscount ;
-        elseif(isset($this->couponDiscountAmount))
-            $couponDiscount = $this->couponDiscountAmount ;
-
-        $coupon = $this->coupon;
-        if (isset($coupon)) {
-            $couponReturn = [
-                'name'        => $coupon->name,
-                'code'        => $coupon->code,
-                'discount'    => [
-                    'type'  =>   $coupon->discounttype->name,
-                    'value'  =>  $couponDiscount,
-                    ]
-            ];
-        } else {
-            $couponReturn = null;
-        }
-        return $couponReturn;
+        $order = $this ;
+        $key = "order:paymentstatus:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_10"), function () use ($order) {
+                return optional($order->paymentstatus()->first())->setVisible([
+                    'name',
+                    'displayName',
+                    'description'
+                ]);
+            });
     }
 
-    public function getPriceAttribute()
+    public function getCouponInfoAttribute()
+    {
+        $order = $this ;
+        $key = "order:coupon:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_10"), function () use ($order) {
+                $coupon = $order->coupon()->first();
+                if(!isset($coupon))
+                    return null ;
+
+                $coupon->setVisible([
+                    'name',
+                    'code',
+                    'discountType'
+                ]);
+                $couponDiscount = 0 ;
+                if(isset($order->couponDiscount))
+                    $couponDiscount = $order->couponDiscount ;
+                elseif(isset($order->couponDiscountAmount))
+                    $couponDiscount = $order->couponDiscountAmount ;
+
+                return [
+                    'coupon'    => $coupon,
+                    'discount'  => $couponDiscount
+                ];
+            });
+    }
+
+    /**
+     * @return int
+     */
+    public function getPriceAttribute():int
     {
         return $this->cost + $this->costwithoutcoupon ;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getOrderproductsAttribute():Collection
+    {
+        $order = $this ;
+        $key = "order:orderproducts:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_5"), function () use ($order) {
+                /** @var OrderproductCollection $orderproducts */
+                $orderproducts = $this->orderproducts()->get();
+                if($orderproducts->isNotEmpty())
+                    $orderproducts->setVisible([
+                        'id',
+                        'cost',
+                        'discountPercentage',
+                        'discountAmount',
+                        'quantity',
+                        'orderproducttype',
+                        'product',
+                        'grandId',
+                        'price',
+                        'bons',
+                        'attributevalues',
+                        'photo',
+                        'grandProduct'
+                    ]);
+                return $orderproducts;
+            });
+    }
+
+    /**
+     * @return int
+     */
+    public function getPaidPriceAttribute() :int
+    {
+        return $this->totalPaidCost() + $this->totalRefund();
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getDonatesAttribute():Collection{
+        $order = $this ;
+        $key = "order:donates:" . $order->cacheKey();
+        return Cache::tags(["order"])
+                ->remember($key, config("constants.CACHE_10"), function () use ($order) {
+                    return $this->orderproducts->whereIn('product_id', [Product::CUSTOM_DONATE_PRODUCT, Product::DONATE_PRODUCT_5_HEZAR]);
+        });
+    }
+
+    /**
+     * @return int
+     */
+    public function getDonateAmountAttribute():int{
+        $donateOrderProducts = $this->donates;
+
+        $donateCost = 0;
+        if ($donateOrderProducts->isNotEmpty()) {
+            $donateCost = $donateOrderProducts->sum("cost");
+        }
+
+        return $donateCost ;
+    }
+
+    public function getSuccessfulTransactionsAttribute(){
+        $order = $this ;
+        $key = "order:transactions:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_60"), function () use ($order) {
+
+            });
     }
 }

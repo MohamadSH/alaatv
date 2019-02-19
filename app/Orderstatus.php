@@ -43,13 +43,6 @@ class Orderstatus extends BaseModel
         'description',
     ];
 
-    protected $hidden = [
-        'id' ,
-        'created_at' ,
-        'updated_at' ,
-        'deleted_at'
-    ];
-
     public function orders()
     {
         return $this->hasMany('App\Order');

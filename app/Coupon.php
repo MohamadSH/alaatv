@@ -95,6 +95,14 @@ class Coupon extends BaseModel
         'discounttype_id',
     ];
 
+    protected $appends = [
+        'discountType'
+    ];
+
+    protected $hidden = [
+        'discounttype_id',
+    ];
+
     const COUPON_VALIDATION_STATUS_OK = 0;
     const COUPON_VALIDATION_STATUS_DISABLED = 1;
     const COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN = 2;
@@ -290,4 +298,12 @@ class Coupon extends BaseModel
         $this->usageNumber++;
     }
 
+    public function getDiscountTypeAttribute()
+    {
+        return $this->discounttype()->first()->setVisible([
+            'name',
+            'displayName',
+            'description'
+        ]);
+    }
 }
