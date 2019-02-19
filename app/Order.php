@@ -6,6 +6,7 @@ use App\Classes\Checkout\Alaa\OrderCheckout;
 use App\Classes\Checkout\Alaa\ReObtainOrderFromRecords;
 use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
 use App\Collection\OrderCollections;
+use App\Collection\ProductCollection;
 use App\Traits\ProductCommon;
 use Auth;
 use Carbon\Carbon;
@@ -145,22 +146,23 @@ class Order extends BaseModel
     ];
 
     protected $hidden = [
-            'id',
-            'couponDiscount',
-            'orderstatus_id',
-            'orderstatus',
-            'paymentstatus_id',
-            'paymentstatus',
-            'checkOutDateTime',
-            'couponDiscountAmount',
-            'coupon',
-            'coupon_id',
-            'cost',
-            'costwithoutcoupon',
-            'user_id',
-            'updated_at',
-            'deleted_at',
-            'created_at',
+        'id',
+        'couponDiscount',
+        'orderstatus_id',
+        'orderstatus',
+        'paymentstatus_id',
+        'paymentstatus',
+        'checkOutDateTime',
+        'couponDiscountAmount',
+        'coupon',
+        'coupon_id',
+        'cost',
+        'costwithoutcoupon',
+        'user_id',
+        'updated_at',
+        'deleted_at',
+        'created_at',
+        'customerExtraInfo',
     ];
 
     /**
