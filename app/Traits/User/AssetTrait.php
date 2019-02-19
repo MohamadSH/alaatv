@@ -9,6 +9,7 @@
 namespace App\Traits\User;
 
 
+use App\Collection\ProductCollection;
 use App\Content;
 use App\Product;
 use Illuminate\Support\Facades\Config;
@@ -18,7 +19,10 @@ trait AssetTrait
 {
     use FavoredTrait;
 
-    public function products()
+    /**
+     * @return \App\Collection\ProductCollection
+     */
+    public function products(): ProductCollection
     {
         $result = DB::table('products')
                     ->join('orderproducts', function ($join) {
@@ -44,9 +48,7 @@ trait AssetTrait
                     ->whereNull('products.deleted_at')
                     ->distinct()
                     ->get();
-        $result = Product::hydrate($result->toArray());
-
-        return $result;
+        return Product::hydrate($result->toArray());
     }
 
     /**  Determines whether user has this content or not
