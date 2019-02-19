@@ -1,6 +1,6 @@
 @if($product->samplePhotos != null)
 
-    <div class="m-portlet m-portlet--creative m-portlet--bordered-semi m--margin-top-25">
+    <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi m--margin-top-25">
         <div class="m-portlet__head">
             <div class="m-portlet__head-caption col">
                 <div class="m-portlet__head-title">

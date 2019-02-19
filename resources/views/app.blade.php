@@ -7,7 +7,7 @@
     <meta name = "csrf-token" content = "{{ csrf_token() }}">
 
     <!-- begin::seo meta tags -->
-{!! SEO::generate(true) !!}
+    {!! SEO::generate(true) !!}
     <!-- end:: seo meta tags -->
 
     <!--begin::Web font -->
@@ -45,6 +45,27 @@
             position: absolute;
             top: -10px;
             left: -12px;
+        }
+
+        /*fix them style*/
+        .m-portlet.m-portlet--head-overlay .m-portlet__body {
+            margin-top: auto;
+        }
+        .m-portlet.m-portlet--head-overlay > .m-portlet__body {
+            margin-top: -5.1rem;
+        }
+    </style>
+
+    <style>
+        /*fix IRANSans font for select input*/
+        .form-control {
+            font-family: IRANSans;
+            font-size: 11px;
+        }
+        /*fix rtl*/
+        .m-checkbox>span:after {
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
         }
     </style>
 
@@ -89,7 +110,7 @@
 
 <!-- begin:: Page -->
 <div class = "m-grid m-grid--hor m-grid--root m-page">
-    @section("body")
+    @section('body')
         <!-- BEGIN: Header -->
         @section("header")
             @include("partials.header1")
@@ -104,7 +125,7 @@
             <div class = "m-grid__item m-grid__item--fluid m-wrapper">
                 <div class = "m-content">
                     @yield('pageBar')
-                    @yield("content")
+                    @yield('content')
                 </div>
             </div>
 
@@ -162,7 +183,7 @@
     @include('partials.quickSidebar')
 @show
 <!-- begin::Scroll Top -->
-<div id = "m_scroll_top" class = "m-scroll-top">
+<div id="m_scroll_top" class="m-scroll-top">
     <i class = "la la-arrow-up"></i>
 </div>
 <!-- end::Scroll Top -->

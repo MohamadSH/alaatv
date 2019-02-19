@@ -66,13 +66,13 @@ var UesrCart = function () {
     function disableBtnAddToCart() {
         $('.btnAddToCart').attr('disabled', true);
         $('.btnAddToCart').addClass('disabled');
-        $('.btnAddToCart .flaticon-shopping-basket').fadeOut();
+        $('.btnAddToCart i').fadeOut();
         $('.btnAddToCart .fas.fa-sync-alt.fa-spin').fadeIn();
     }
     function enableBtnAddToCart() {
         $('.btnAddToCart').attr('disabled', false);
         $('.btnAddToCart').removeClass('disabled');
-        $('.btnAddToCart .flaticon-shopping-basket').fadeIn();
+        $('.btnAddToCart i').fadeIn();
         $('.btnAddToCart .fas.fa-sync-alt.fa-spin').fadeOut();
     }
 

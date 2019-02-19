@@ -1,20 +1,6 @@
 @extends("app")
 @section('page-css')
     <style>
-        /*fix rtl*/
-        .m-checkbox>span:after {
-            -webkit-transform: rotate(45deg);
-            transform: rotate(45deg);
-        }
-    </style>
-    <style>
-        /*fix IRANSans font for select input*/
-        .form-control {
-            font-family: IRANSans;
-            font-size: 11px;
-        }
-    </style>
-    <style>
         /*missed css*/
         .m-widget4__item.m-widget4__item--last, .m-widget4__item:last-child {
             border-bottom: 0;
@@ -40,6 +26,10 @@
         .productGifts {
             text-align: center;
         }
+        .productDetailes .m-portlet__head {
+            background: white;
+            z-index: 99 !important;
+        }
     </style>
     <link href = "{{ mix('/css/product-show/product-show.css') }}" rel = "stylesheet" type = "text/css"/>
 @endsection
@@ -61,7 +51,7 @@
         </ol>
     </nav>
 @endsection
-@section("content")
+@section('content')
     @include("systemMessage.flash")
     <div class = "row" id="a_top_section">
         <div class = "col-xl-12">
@@ -91,7 +81,7 @@
                                         @if(optional(optional($product->attributes->get('information'))->where('control', 'simple'))->count()>0 || optional($product->attributes->get('main'))->where('control', 'simple')->count()>0)
                                             <div class="col">
 
-                                                <div class="m-portlet">
+                                                <div class="m-portlet m-portlet--bordered m-portlet--full-height">
                                                     <div class="m-portlet__head">
                                                         <div class="m-portlet__head-caption">
                                                             <div class="m-portlet__head-title">
@@ -154,7 +144,7 @@
                                         @if(optional(optional($product->attributes->get('information'))->where('control', 'checkBox'))->count())
                                             <div class="col">
 
-                                                <div class="m-portlet">
+                                                <div class="m-portlet m-portlet--bordered m-portlet--full-height">
                                                     <div class="m-portlet__head">
                                                         <div class="m-portlet__head-caption">
                                                             <div class="m-portlet__head-title">
@@ -191,7 +181,7 @@
 
                                     {{--خدمات اضافی--}}
                                     @if(optional($product->attributes->get('extra'))->count())
-                                        <div class="m-portlet m-portlet--creative m-portlet--bordered-semi">
+                                        <div class="m-portlet  m-portlet--creative m-portlet--bordered-semi">
                                             <div class="m-portlet__head">
                                                 <div class="m-portlet__head-caption col">
                                                     <div class="m-portlet__head-title">
@@ -218,7 +208,7 @@
 
                                     {{--محصول ساده یا قابل پیکربندی و یا قابل انتخاب--}}
                                     @if(in_array($product->type['id'] ,[config("constants.PRODUCT_TYPE_SELECTABLE")]))
-                                        <div class="m-portlet m-portlet--creative m-portlet--bordered-semi">
+                                        <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi">
                                             <div class="m-portlet__head">
                                                 <div class="m-portlet__head-caption col">
                                                     <div class="m-portlet__head-title">
@@ -248,7 +238,7 @@
                                         </div>
                                     @elseif(in_array($product->type['id'] ,[Config::get("constants.PRODUCT_TYPE_SIMPLE")]))
                                     @elseif(in_array($product->type['id'], [Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")]))
-                                        <div class="m-portlet m-portlet--creative m-portlet--bordered-semi">
+                                        <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi">
                                             <div class="m-portlet__head">
                                                 <div class="m-portlet__head-caption col">
                                                     <div class="m-portlet__head-title">
@@ -340,7 +330,7 @@
 
                                         <button class="btn m-btn--pill m-btn--air btn-primary btn-lg m-btn--icon btnAddToCart">
                                             <span>
-                                                <i class="flaticon-shopping-basket"></i>
+                                                <i class="flaticon-bag"></i>
                                                 <i class="fas fa-sync-alt fa-spin" style="display: none;"></i>
                                                 <span>افزودن به سبد خرید</span>
                                             </span>
@@ -355,7 +345,6 @@
                                     @endif
 
                                 </div>
-
                                 <div class="col-lg-3">
                                     @if(isset($product->introVideo))
                                         <div class="m-portlet m-portlet--bordered-semi m-portlet--rounded-force m--margin-bottom-45">
@@ -419,7 +408,7 @@
                                             </div>
                                     @endif
                                     @if(isset($product->gift) && $product->gift->isNotEmpty())
-                                        <div class="m-portlet m-portlet--creative m-portlet--bordered-semi m--margin-top-25">
+                                        <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi m--margin-top-25">
                                             <div class="m-portlet__head">
                                                 <div class="m-portlet__head-caption col">
                                                     <div class="m-portlet__head-title">
@@ -490,121 +479,129 @@
     <div class = "row">
         <div class = "col">
 
-            {{--<div class="m-portlet m-portlet--tabs">--}}
-                {{--<div class="m-portlet__head">--}}
-                    {{--<div class="m-portlet__head-tools">--}}
-                        {{--<ul class="nav nav-tabs m-tabs m-tabs-line m-tabs-line--brand  m-tabs-line--right m-tabs-line-danger" role="tablist">--}}
-                            {{--<li class="nav-item m-tabs__item">--}}
-                                {{--<a class="nav-link m-tabs__link active show" data-toggle="tab" href="#productInformation" role="tab" aria-selected="true">--}}
-                                    {{--<i class="flaticon-information"></i>--}}
-                                    {{--<h5>بررسی محصول {{ $product->name }}</h5>--}}
-                                {{--</a>--}}
-                            {{--</li>--}}
-                        {{--</ul>--}}
-                    {{--</div>--}}
-                    {{--<div class="m-portlet__head-caption">--}}
-                        {{--<div class="m-portlet__head-title">--}}
-                            {{--<button class="btn m-btn--pill m-btn--air btn-primary btn-lg m-btn--icon btnAddToCart">--}}
-                                            {{--<span>--}}
-                                                {{--<i class="flaticon-shopping-basket"></i>--}}
-                                                {{--<i class="fas fa-sync-alt fa-spin" style="display: none;"></i>--}}
-                                                {{--<span>افزودن به سبد خرید</span>--}}
-                                            {{--</span>--}}
-                            {{--</button>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-                {{--<div class="m-portlet__body">--}}
-                    {{--<div class="tab-content">--}}
-                        {{--<div class="tab-pane active show" id="productInformation">--}}
-                            {{--{!! $product->shortDescription !!}--}}
-                            {{--@if( isset($product->longDescription[0] ) )--}}
-                                {{--<div>--}}
-                                    {{--{!!   $product->longDescription !!}--}}
-                                {{--</div>--}}
-                            {{--@endif--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            <!--begin::Portlet-->
-            <div class="m-portlet m-portlet--last m-portlet--head-lg m-portlet--responsive-mobile" id="main_portlet">
+            <div class="m-portlet m-portlet--tabs productDetailes">
                 <div class="m-portlet__head">
-                    <div class="m-portlet__head-progress">
-                        <div class="progress m-progress--sm">
-                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
+                    <div class="m-portlet__head-tools">
+                        <ul class="nav nav-tabs m-tabs m-tabs-line m-tabs-line--brand  m-tabs-line--right m-tabs-line-danger" role="tablist">
+                            <li class="nav-item m-tabs__item">
+                                <a class="nav-link m-tabs__link active show" data-toggle="tab" href="#productInformation" role="tab" aria-selected="true">
+                                    <i class="flaticon-information"></i>
+                                    <h5>بررسی محصول {{ $product->name }}</h5>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="m-portlet__head-wrapper">
-                        <div class="m-portlet__head-caption">
-                            <div class="m-portlet__head-title">
-						<span class="m-portlet__head-icon">
-							<i class="flaticon-notepad"></i>
-						</span>
-                                <h3 class="m-portlet__head-text">
-                                    بررسی محصول {{ $product->name }}
-                                </h3>
-                            </div>
-                        </div>
-                        <div class="m-portlet__head-tools">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-primary  m-btn m-btn--icon m-btn--wide m-btn--md btnAddToCart">
-                                    <span>
-                                        <i class="flaticon-shopping-basket"></i>
-                                        <span>افزودن به سبد خرید</span>
-                                    </span>
-                                </button>
-                            </div>
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <button class="btn m-btn--pill m-btn--air btn-primary btn-lg m-btn--icon btnAddToCart">
+                                <span>
+                                    <i class="flaticon-bag"></i>
+                                    <i class="fas fa-sync-alt fa-spin" style="display: none;"></i>
+                                    <span>افزودن به سبد خرید</span>
+                                </span>
+                            </button>
                         </div>
                     </div>
                 </div>
                 <div class="m-portlet__body">
-                    <form class="m-form m-form--label-align-left- m-form--state-" id="m_form">
-                        <!--begin: Form Body -->
-                        <div class="m-portlet__body">
-                            <div class="row">
-                                <div class="col-xl-8 offset-xl-2">
-                                    {!! $product->shortDescription !!}
-                                    @if( isset($product->longDescription[0] ) )
-                                        <div>
-                                            {!!   $product->longDescription !!}
-                                        </div>
-                                    @endif
+                    <div class="tab-content">
+                        <div class="tab-pane active show" id="productInformation">
+                            {!! $product->shortDescription !!}
+                            @if( isset($product->longDescription[0] ) )
+                                <div>
+                                    {!!   $product->longDescription !!}
                                 </div>
-                            </div>
+                            @endif
                         </div>
-                    </form>
+                    </div>
                 </div>
-
             </div>
-            <!--end::Portlet-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            {{--<!--begin::Portlet-->--}}
+            {{--<div class="m-portlet m-portlet--last m-portlet--head-lg m-portlet--responsive-mobile" id="main_portlet">--}}
+                {{--<div class="m-portlet__head">--}}
+                    {{--<div class="m-portlet__head-progress">--}}
+                        {{--<div class="progress m-progress--sm">--}}
+                            {{--<div class="progress-bar bg-warning" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                    {{--<div class="m-portlet__head-wrapper">--}}
+                        {{--<div class="m-portlet__head-caption">--}}
+                            {{--<div class="m-portlet__head-title">--}}
+                                {{--<span class="m-portlet__head-icon">--}}
+                                    {{--<i class="flaticon-notepad"></i>--}}
+                                {{--</span>--}}
+                                {{--<h3 class="m-portlet__head-text">--}}
+                                    {{--بررسی محصول {{ $product->name }}--}}
+                                {{--</h3>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="m-portlet__head-tools">--}}
+                            {{--<div class="btn-group">--}}
+                                {{--<button type="button" class="btn btn-primary  m-btn m-btn--icon m-btn--wide m-btn--md btnAddToCart">--}}
+                                    {{--<span>--}}
+                                        {{--<i class="flaticon-bag"></i>--}}
+                                        {{--<i class="fas fa-sync-alt fa-spin" style="display: none;"></i>--}}
+                                        {{--<span>افزودن به سبد خرید</span>--}}
+                                    {{--</span>--}}
+                                {{--</button>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+                {{--<div class="m-portlet__body">--}}
+                    {{--<form class="m-form m-form--label-align-left- m-form--state-" id="m_form">--}}
+                        {{--<!--begin: Form Body -->--}}
+                        {{--<div class="m-portlet__body">--}}
+                            {{--<div class="row">--}}
+                                {{--<div class="col-xl-8 offset-xl-2">--}}
+                                    {{--{!! $product->shortDescription !!}--}}
+                                    {{--@if( isset($product->longDescription[0] ) )--}}
+                                        {{--<div>--}}
+                                            {{--{!!   $product->longDescription !!}--}}
+                                        {{--</div>--}}
+                                    {{--@endif--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--</form>--}}
+                {{--</div>--}}
+
+            {{--</div>--}}
+            {{--<!--end::Portlet-->--}}
+
+
+
+
         </div>
     </div>
 @endsection
-@section("page-js")
-    {{--<script src="{{ mix('/js/product-show.js') }}"></script>--}}
-    <script src="{{ asset('/acm/product-show-v13.js') }}"></script>
+@section('page-js')
+    <script src="{{ mix('/js/product-show.js') }}"></script>
+    {{--<script src="{{ asset('/acm/product-show-v13.js') }}"></script>--}}
     {{--<script src="{{ asset('/acm/page-product-show.js') }}"></script>--}}
-    <script src="{{ asset('/acm/page-product-saveCookie.js') }}"></script>
+    {{--<script src="{{ asset('/acm/page-product-saveCookie.js') }}"></script>--}}
     <script>
         $(document).ready(function() {
+
+            $('.productDetailes .m-portlet__head').sticky({ topSpacing: 70 });
+
             $('.js-selectProduct-single').select2({
                 placeholder: 'یک محصول را انتخاب کنید:'
             });
