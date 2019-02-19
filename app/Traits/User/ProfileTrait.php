@@ -9,7 +9,10 @@
 namespace App\Traits\User;
 
 
+use App\Afterloginformcontrol;
+use App\User;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 
 trait ProfileTrait
 {
@@ -82,8 +85,14 @@ trait ProfileTrait
         });
     }
 
+    /**
+     * Gets an information array of user's major
+     *
+     * @return array|null
+     */
     protected function getMajor()
     {
+        /** @var User $this */
         $major = $this->major;
         if (isset($major)) {
             $majorReturn = [
@@ -98,9 +107,15 @@ trait ProfileTrait
 
     }
 
+    /**
+     * Gets an information array of user's grade
+     *
+     * @return array|null
+     */
     protected function getGrade()
     {
 
+        /** @var User $this */
         $grade = $this->grade;
         if (isset($grade)) {
             $gradeReturn = [
@@ -115,8 +130,14 @@ trait ProfileTrait
         return $gradeReturn;
     }
 
+    /**
+     * Gets an information array of user's gender
+     *
+     * @return array|null
+     */
     protected function getGender()
     {
+        /** @var User $this */
         $gender = $this->gender;
         if (isset($gender)) {
             $genderReturn = [
@@ -130,6 +151,13 @@ trait ProfileTrait
         return $genderReturn;
     }
 
+    /**
+     * Calculates user profile completion percentage based on passed mode
+     *
+     * @param string $type
+     * @param array $columns
+     * @return float|int
+     */
     public function completion($type = "full", $columns = [])
     {
         $tableColumns = Schema::getColumnListing("users");

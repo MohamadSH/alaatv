@@ -104,6 +104,11 @@ class Transaction extends BaseModel
         'completed_at',
     ];
 
+    protected $appends = [
+        'paymentmethod',
+        'transactiongateway'
+    ];
+
     public function transactiongateway()
     {
         return $this->belongsTo('App\Transactiongateway');
@@ -239,5 +244,21 @@ class Transaction extends BaseModel
             $response = ["result"=> false];
         }
         return $response;
+    }
+
+    public function getTransactionGatewayAttribute(){
+        return $this->transactiongateway()->first()->setVisible([
+            'name',
+            'displayName',
+            'description'
+        ]);
+    }
+
+    public function getPaymentmethodAttribute(){
+        return $this->paymentmethod()->first()->setVisible([
+            'name',
+            'displayName',
+            'description'
+        ]);
     }
 }

@@ -9,18 +9,21 @@
 namespace App\Classes\Pricing\Alaa;
 
 use App\Classes\Abstracts\Pricing\OrderInvoiceGenerator;
+use App\Collection\OrderproductCollection;
 use App\Order;
 
 class AlaaInvoiceGenerator extends OrderInvoiceGenerator
 {
     /**
      * @return array
+     * @throws \Exception
      */
     public function generateInvoice():array
     {
         $order = $this->order;
         $orderproductsInfo = $this->getOrderproductsInfo($order);
-        $orderproducts = $orderproductsInfo["purchasedOrderproducts"];
+        /** @var OrderproductCollection $orderproducts */
+        $orderproducts = $orderproductsInfo['purchasedOrderproducts'];
 
         $orderproducts->reCheckOrderproducs();
 
@@ -28,23 +31,22 @@ class AlaaInvoiceGenerator extends OrderInvoiceGenerator
 
         $orderPriceArray = $order->obtainOrderCost(true);
 
-        $calculatedOrderproducts = $orderPriceArray["calculatedOrderproducts"];
+        /** @var OrderproductCollection $calculatedOrderproducts */
+        $calculatedOrderproducts = $orderPriceArray['calculatedOrderproducts'];
         $calculatedOrderproducts->updateCostValues();
 
-        $costCollection = $calculatedOrderproducts->getNewPrices();
+//        $costCollection = $calculatedOrderproducts->getNewPrices();
 
-        $orderproductsRawCost = $orderPriceArray["sumOfOrderproductsRawCost"];
-        $totalCost = $orderPriceArray["totalCost"];
-        $payablePrice = $orderPriceArray["priceToPay"];
-        $paidByWallet = $orderPriceArray["amountPaidByWallet"];
-
+        $orderproductsRawCost = $orderPriceArray['sumOfOrderproductsRawCost'];
+        $totalCost = $orderPriceArray['totalCost'];
+        $payableByWallet = $orderPriceArray['payableAmountByWallet'];
+        $orderproducts = $orderproducts->groupBy('grandId');
         return [
-          "orderItems"              => $orderproducts,
-          "costCollection"          => $costCollection,
-          "orderproductsRawCost"    => $orderproductsRawCost,
-          "totalCost"               => $totalCost,
-          "paidByWallet"            => $paidByWallet,
-          "payableCost"             => $payablePrice,
+          'orderproducts'           => $orderproducts,
+//          'costCollection'          => $costCollection,
+          'orderproductsRawCost'    => $orderproductsRawCost,
+          'totalCost'               => $totalCost,
+          'payableByWallet'         => $payableByWallet,
         ];
     }
 
@@ -54,14 +56,15 @@ class AlaaInvoiceGenerator extends OrderInvoiceGenerator
      */
     private function getOrderproductsInfo(Order $order)
     {
-        $allOrderproducts = $order->orderproducts->sortByDesc("created_at");
+        /** @var OrderproductCollection $allOrderproducts */
+        $allOrderproducts = $order->orderproducts->sortByDesc('created_at');
 
-        $purchasedOrderproducts = $allOrderproducts->whereType([config("constants.ORDER_PRODUCT_TYPE_DEFAULT")]);
-        $giftOrderproducts = $allOrderproducts->whereType([config("constants.ORDER_PRODUCT_GIFT")]);
+        $purchasedOrderproducts = $allOrderproducts->whereType([config('constants.ORDER_PRODUCT_TYPE_DEFAULT')]);
+        $giftOrderproducts = $allOrderproducts->whereType([config('constants.ORDER_PRODUCT_GIFT')]);
 
         return [
-            "purchasedOrderproducts" => $purchasedOrderproducts,
-            "giftOrderproducts"      => $giftOrderproducts,
+            'purchasedOrderproducts' => $purchasedOrderproducts,
+            'giftOrderproducts'      => $giftOrderproducts,
         ];
     }
 }

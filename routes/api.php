@@ -36,6 +36,6 @@ Route::group(['prefix' => 'v1'], function () {
 
 
     Route::group(['middleware' => 'auth:api'], function () {
-        Route::get('user/orders', 'Api\UserController@userOrders');
+        Route::get('user/{user}/orders', 'Api\UserController@userOrders');
     });
 });

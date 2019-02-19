@@ -9,6 +9,7 @@
 namespace App\Collection;
 
 use App\Orderproduct;
+use App\Traits\JsonResponseFormat;
 use Illuminate\Database\Eloquent\Collection;
 use App\Classes\Checkout\Alaa\GroupOrderproductCheckout;
 use App\Classes\Abstracts\Pricing\OrderproductPriceCalculator;
@@ -18,6 +19,8 @@ class OrderproductCollection extends Collection
     const MODE = OrderproductPriceCalculator::ORDERPRODUCT_CALCULATOR_MODE_CALCULATE_FROM_BASE;
 
     private $newPrices = [];
+
+    use JsonResponseFormat;
 
     /**
      * Sets new price value in Newprices array for an item in the orderproduct collection
