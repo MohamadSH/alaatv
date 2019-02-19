@@ -43,7 +43,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
-use Zarinpal\Drivers\SoapDriver;
+//use Zarinpal\Drivers\SoapDriver;
 
 class OrderController extends Controller
 {
@@ -858,10 +858,12 @@ class OrderController extends Controller
             $response = response(["invoiceInfo"=>$invoiceInfo] , Response::HTTP_OK);
         }
 
-        if ($request->expectsJson() || true)
+        if ($request->expectsJson())
             return $response;
 
-        return view("order.checkout.review", compact("invoiceInfo"));
+//        return $invoiceInfo['purchasedOrderproducts'];
+//        return $invoiceInfo;
+        return view("order.checkout.review", compact('invoiceInfo'));
     }
 
 
