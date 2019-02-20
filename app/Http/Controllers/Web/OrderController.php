@@ -870,7 +870,18 @@ class OrderController extends Controller
             return response(["invoiceInfo"=>$invoiceInfo] , $responseStatus);
         }
 
-        return view("order.checkout.review", compact("invoiceInfo"));
+        $orderProductCount = 0;
+        foreach($invoiceInfo['orderproducts'] as $key=>$orderProductItem) {
+            if($orderProductItem->count()>1) {
+                foreach($orderProductItem as $keyChild=>$orderProductItemChild) {
+                    $orderProductCount++;
+                }
+            } else {
+                $orderProductCount++;
+            }
+        }
+//        return $invoiceInfo;
+        return view("order.checkout.review", compact("invoiceInfo", 'orderProductCount'));
     }
 
 
