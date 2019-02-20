@@ -33,4 +33,9 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('product/{product}', 'Api\ProductController@show');
     Route::get('set/{set}', 'Api\SetController@show');
     Route::post('getPrice/{product}', 'Api\ProductController@refreshPrice');
+
+
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::get('user/{user}/orders', 'Api\UserController@userOrders');
+    });
 });

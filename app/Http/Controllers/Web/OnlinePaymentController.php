@@ -12,8 +12,8 @@ use App\Classes\Payment\RefinementRequest\Strategies\{ChargingWalletRefinement,
     TransactionRefinement};
 use App\Http\Controllers\Controller;
 use App\Order;
-use App\Traits\Gateway;
 use App\Traits\OrderCommon;
+use App\Traits\ZarinpalGateway;
 use App\Transaction;
 use App\Transactiongateway;
 use App\User;
@@ -25,7 +25,7 @@ use Zarinpal\Zarinpal as ZarinpalComposer;
 class OnlinePaymentController extends Controller
 {
     use OrderCommon;
-    use Gateway;
+    use ZarinpalGateway;
 
     /**
      * @var OrderController

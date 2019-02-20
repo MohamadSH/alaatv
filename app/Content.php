@@ -106,10 +106,11 @@ use Stevebauman\Purify\Facades\Purify;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content query()
- * @property-read mixed                                      $author_name
- * @property-read mixed                                      $url
+ * @property-read mixed $author_name
+ * @property-read mixed $url
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed $api_url
  */
 class Content extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {

@@ -11,43 +11,24 @@ namespace App\Traits\Cashier;
 
 trait CashierWalletUnit
 {
-    protected $orderPriceExcludedFromWallet;
-    protected $amountPaidByWallet;
+    protected $payableAmountByWallet;
 
     /**
-     * @param mixed $orderPriceExcludedFromWallet
+     * @param mixed $payableAmountByWallet
      * @return mixed
      */
-    public function setOrderPriceExcludedFromWallet($orderPriceExcludedFromWallet)
+    public function setPayableAmountByWallet($payableAmountByWallet)
     {
-        $this->orderPriceExcludedFromWallet = $orderPriceExcludedFromWallet;
-        return $this;
-    }
-
-    /**
-     * @param mixed $amountPaidByWallet
-     * @return mixed
-     */
-    public function setAmountPaidByWallet($amountPaidByWallet)
-    {
-        $this->amountPaidByWallet = $amountPaidByWallet;
+        $this->payableAmountByWallet = $payableAmountByWallet;
         return $this;
     }
 
     /**
      * @return mixed
      */
-    public function getOrderPriceExcludedFromWallet()
+    public function getPayableAmountByWallet()
     {
-        return $this->orderPriceExcludedFromWallet;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAmountPaidByWallet()
-    {
-        return $this->amountPaidByWallet;
+        return $this->payableAmountByWallet;
     }
 
 }

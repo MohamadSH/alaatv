@@ -9,8 +9,8 @@
 namespace App\Collection;
 
 use App\Orderproduct;
+use App\Traits\JsonResponseFormat;
 use Illuminate\Database\Eloquent\Collection;
-use App\Http\Controllers\OrderproductController;
 use App\Classes\Checkout\Alaa\GroupOrderproductCheckout;
 use App\Classes\Abstracts\Pricing\OrderproductPriceCalculator;
 
@@ -19,6 +19,8 @@ class OrderproductCollection extends Collection
     const MODE = OrderproductPriceCalculator::ORDERPRODUCT_CALCULATOR_MODE_CALCULATE_FROM_BASE;
 
     private $newPrices = [];
+
+    use JsonResponseFormat;
 
     /**
      * Sets new price value in Newprices array for an item in the orderproduct collection
@@ -98,8 +100,7 @@ class OrderproductCollection extends Collection
     {
         foreach ($this as $orderproduct) {
             if (!$orderproduct->isPurchasable()) {
-                $orderproductController = new OrderproductController();
-                $orderproductController->destroy($orderproduct);
+                $orderproduct->delete();
             } else {
 
                 //ToDo : Should be removed and be replaced with an event

@@ -11,6 +11,7 @@ namespace App\Classes\Checkout\Alaa\Chains;
 use App\Classes\Abstracts\Checkout\OrderproductGroupPriceCalculatorFromNewBase;
 use App\Classes\Abstracts\Pricing\OrderproductPriceCalculator;
 use App\Classes\Pricing\Alaa\AlaaOrderproductPriceCalculator;
+use App\Collection\OrderproductCollection;
 use App\Orderproduct;
 use Illuminate\Support\Collection;
 
@@ -20,6 +21,8 @@ class AlaaOrderproductGroupPriceCalculatorFromNewBase extends OrderproductGroupP
 
     protected function getOrderproductGroupPrice(Collection $orderproductsToCalculateFromBase):Collection
     {
+        /** @var OrderproductCollection $orderproductsToCalculateFromBase */
+
         foreach ($orderproductsToCalculateFromBase as $orderproduct)
         {
             $priceInfo =  $this->getOrderproductPrice($orderproduct);
