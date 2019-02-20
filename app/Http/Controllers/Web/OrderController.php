@@ -864,10 +864,21 @@ class OrderController extends Controller
             $response = response(["invoiceInfo"=>$invoiceInfo] , Response::HTTP_OK);
         }
 
-        if ($request->expectsJson() || true)
+        if ($request->expectsJson())
             return $response;
 
-        return view("order.checkout.review", compact("invoiceInfo"));
+        $orderProductCount = 0;
+        foreach($invoiceInfo['orderproducts'] as $key=>$orderProductItem) {
+            if($orderProductItem->count()>1) {
+                foreach($orderProductItem as $keyChild=>$orderProductItemChild) {
+                    $orderProductCount++;
+                }
+            } else {
+                $orderProductCount++;
+            }
+        }
+//        return $invoiceInfo;
+        return view("order.checkout.review", compact("invoiceInfo", 'orderProductCount'));
     }
 
 
