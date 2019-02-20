@@ -402,13 +402,14 @@ class OrderproductController extends Controller
         $orderproduct_userbons = $orderproduct->userbons;
         foreach ($orderproduct_userbons as $orderproduct_userbon) {
             $orderproduct_userbon->usedNumber = $orderproduct_userbon->usedNumber - $orderproduct_userbon->pivot->usageNumber;
-            $orderproduct_userbon->userbonstatus_id = Config::get("constants.USERBON_STATUS_ACTIVE");
+            $orderproduct_userbon->userbonstatus_id = config("constants.USERBON_STATUS_ACTIVE");
             if ($orderproduct_userbon->usedNumber >= 0)
                 $orderproduct_userbon->update();
         }
         if ($orderproduct->delete())
             $deleteFlag = true;
-        else $deleteFlag = false;
+        else
+            $deleteFlag = false;
 
         $previousRoute = app('router')
             ->getRoutes()

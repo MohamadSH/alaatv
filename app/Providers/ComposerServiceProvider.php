@@ -24,7 +24,9 @@ class ComposerServiceProvider extends ServiceProvider
             'content.show',
             'pages.product-search',
             'product.show',
-            'pages.content-search'
+            'pages.content-search',
+            'pages.shop',
+
         ], function ($view) {
             $closedSideBar = true;
             $view->with(compact('closedSideBar'));

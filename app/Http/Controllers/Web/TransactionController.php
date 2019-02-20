@@ -235,7 +235,7 @@ class TransactionController extends Controller
                     $extraCost = 0;
                     if ($transactionOrderproducts->isNotEmpty()) {
                         $orderDiscount = $transaction->order->discount;
-                        $donateProducts = array_merge(Product::DONATE_PRODUCT, [Product::CUSTOM_DONATE_PRODUCT]);
+                        $donateProducts = [ Product::CUSTOM_DONATE_PRODUCT ,  Product::DONATE_PRODUCT_5_HEZAR];
                         $numOfOrderproducts = $transaction->order
                             ->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
                             ->whereNotIn("product_id", $donateProducts)

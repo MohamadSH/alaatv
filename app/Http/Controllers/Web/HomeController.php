@@ -154,6 +154,13 @@ class HomeController extends Controller
     {
         try{
 
+//            $orderproduct = \App\Orderproduct::findorfail(108221);
+//            return $orderproduct;
+
+            $order = \App\Order::find(248130);
+//            dd($order->orderproducts->first()->userbons);
+            dd($order->orderstatus);
+
             dd("here");
             return Block::getShopBlocks();
 

@@ -78,6 +78,8 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction walletMethod()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property string|null $description توضیح تراکنش
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereDescription($value)
  */
 class Transaction extends BaseModel
 {
@@ -100,6 +102,11 @@ class Transaction extends BaseModel
         'transactiongateway_id',
         'transactionstatus_id',
         'completed_at',
+    ];
+
+    protected $appends = [
+        'paymentmethod',
+        'transactiongateway'
     ];
 
     public function transactiongateway()
@@ -237,5 +244,21 @@ class Transaction extends BaseModel
             $response = ["result"=> false];
         }
         return $response;
+    }
+
+    public function getTransactionGatewayAttribute(){
+        return $this->transactiongateway()->first()->setVisible([
+            'name',
+            'displayName',
+            'description'
+        ]);
+    }
+
+    public function getPaymentmethodAttribute(){
+        return $this->paymentmethod()->first()->setVisible([
+            'name',
+            'displayName',
+            'description'
+        ]);
     }
 }

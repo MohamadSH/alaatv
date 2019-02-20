@@ -595,6 +595,7 @@ class UserController extends Controller
      */
     public function userProductFiles(Request $request)
     {
+        return redirect()->route('web.user.dashboard', [$request->user()]);
 
         $sideBarMode = "closed";
         $user = $request->user();

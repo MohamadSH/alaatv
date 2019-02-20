@@ -71,6 +71,7 @@ trait RequestCommon
      */
     public function trimUserFormRequest(\Illuminate\Http\Request &$request):void
     {
+        //ToDo : getSecureFillable has been removed
         $securedFields = \App\User::getSecureFillable();
         foreach ($request->all() as $key => $value)
         {

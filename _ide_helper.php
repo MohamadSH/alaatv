@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.7.19 on 2019-02-05 13:07:26.
+ * Generated for Laravel 5.7.25 on 2019-02-15 14:08:29.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -107,13 +107,27 @@ namespace Illuminate\Support\Facades {
         /**
          * Get the path to the application "app" directory.
          *
-         * @param string $path Optionally, a path to append to the app path
-         * @return string 
+         * @param string $path
+         *
+         * @return string
          * @static 
          */ 
         public static function path($path = '')
         {
             return \Illuminate\Foundation\Application::path($path);
+        }
+
+        /**
+         * Set the application directory.
+         *
+         * @param string $path
+         *
+         * @return $this
+         * @static
+         */
+        public static function useAppPath($path)
+        {
+            return \Illuminate\Foundation\Application::useAppPath($path);
         }
         
         /**
@@ -2545,9 +2559,9 @@ namespace Illuminate\Support\Facades {
      * @see \Illuminate\Cache\Repository
      */ 
     class Cache {
-        
+
         /**
-         * Get a cache store instance by name.
+         * Get a cache store instance by name, wrapped in a repository.
          *
          * @param string|null $name
          * @return \Illuminate\Contracts\Cache\Repository 
@@ -3077,6 +3091,20 @@ namespace Illuminate\Support\Facades {
         {
             return \Illuminate\Cache\Repository::macroCall($method, $parameters);
         }
+
+        /**
+         * Get a lock instance.
+         *
+         * @param string $name
+         * @param int    $seconds
+         *
+         * @return \Illuminate\Contracts\Cache\Lock
+         * @static
+         */
+        public static function lock($name, $seconds = 0)
+        {
+            return \Illuminate\Cache\RedisStore::lock($name, $seconds);
+        }
         
         /**
          * Remove all items from the cache.
@@ -3086,7 +3114,42 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function flush()
         {
-            return \Illuminate\Cache\ArrayStore::flush();
+            return \Illuminate\Cache\RedisStore::flush();
+        }
+
+        /**
+         * Get the Redis connection instance.
+         *
+         * @return \Predis\ClientInterface
+         * @static
+         */
+        public static function connection()
+        {
+            return \Illuminate\Cache\RedisStore::connection();
+        }
+
+        /**
+         * Set the connection name to be used.
+         *
+         * @param string $connection
+         *
+         * @return void
+         * @static
+         */
+        public static function setConnection($connection)
+        {
+            \Illuminate\Cache\RedisStore::setConnection($connection);
+        }
+
+        /**
+         * Get the Redis database instance.
+         *
+         * @return \Illuminate\Contracts\Redis\Factory
+         * @static
+         */
+        public static function getRedis()
+        {
+            return \Illuminate\Cache\RedisStore::getRedis();
         }
         
         /**
@@ -3097,7 +3160,20 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function getPrefix()
         {
-            return \Illuminate\Cache\ArrayStore::getPrefix();
+            return \Illuminate\Cache\RedisStore::getPrefix();
+        }
+
+        /**
+         * Set the cache key prefix.
+         *
+         * @param string $prefix
+         *
+         * @return void
+         * @static
+         */
+        public static function setPrefix($prefix)
+        {
+            \Illuminate\Cache\RedisStore::setPrefix($prefix);
         }
          
     }
@@ -6258,9 +6334,10 @@ namespace Illuminate\Support\Facades {
         /**
          * Queue a new e-mail message for sending.
          *
-         * @param string|array|\Illuminate\Contracts\Mail\Mailable $view
+         * @param \Illuminate\Contracts\Mail\Mailable $view
          * @param string|null $queue
-         * @return mixed 
+         *
+         * @return mixed
          * @throws \InvalidArgumentException
          * @static 
          */ 
@@ -6272,9 +6349,10 @@ namespace Illuminate\Support\Facades {
         /**
          * Queue a new e-mail message for sending on the given queue.
          *
-         * @param string $queue
-         * @param string|array $view
-         * @return mixed 
+         * @param string                              $queue
+         * @param \Illuminate\Contracts\Mail\Mailable $view
+         *
+         * @return mixed
          * @static 
          */ 
         public static function onQueue($queue, $view)
@@ -6287,9 +6365,10 @@ namespace Illuminate\Support\Facades {
          * 
          * This method didn't match rest of framework's "onQueue" phrasing. Added "onQueue".
          *
-         * @param string $queue
-         * @param string|array $view
-         * @return mixed 
+         * @param string                              $queue
+         * @param \Illuminate\Contracts\Mail\Mailable $view
+         *
+         * @return mixed
          * @static 
          */ 
         public static function queueOn($queue, $view)
@@ -6301,9 +6380,10 @@ namespace Illuminate\Support\Facades {
          * Queue a new e-mail message for sending after (n) seconds.
          *
          * @param \DateTimeInterface|\DateInterval|int $delay
-         * @param string|array|\Illuminate\Contracts\Mail\Mailable $view
+         * @param \Illuminate\Contracts\Mail\Mailable $view
          * @param string|null $queue
-         * @return mixed 
+         *
+         * @return mixed
          * @throws \InvalidArgumentException
          * @static 
          */ 
@@ -6315,10 +6395,11 @@ namespace Illuminate\Support\Facades {
         /**
          * Queue a new e-mail message for sending after (n) seconds on the given queue.
          *
-         * @param string $queue
+         * @param string                               $queue
          * @param \DateTimeInterface|\DateInterval|int $delay
-         * @param string|array $view
-         * @return mixed 
+         * @param \Illuminate\Contracts\Mail\Mailable $view
+         *
+         * @return mixed
          * @static 
          */ 
         public static function laterOn($queue, $delay, $view)
@@ -7197,6 +7278,17 @@ namespace Illuminate\Support\Facades {
         {
             return \Illuminate\Support\Testing\Fakes\QueueFake::bulk($jobs, $data, $queue);
         }
+
+        /**
+         * Get the jobs that have been pushed.
+         *
+         * @return array
+         * @static
+         */
+        public static function pushedJobs()
+        {
+            return \Illuminate\Support\Testing\Fakes\QueueFake::pushedJobs();
+        }
         
         /**
          * Get the connection name for the queue.
@@ -7219,6 +7311,130 @@ namespace Illuminate\Support\Facades {
         public static function setConnectionName($name)
         {
             return \Illuminate\Support\Testing\Fakes\QueueFake::setConnectionName($name);
+        }
+
+        /**
+         * Get the number of queue jobs that are ready to process.
+         *
+         * @param string|null $queue
+         *
+         * @return int
+         * @static
+         */
+        public static function readyNow($queue = null)
+        {
+            return \Laravel\Horizon\RedisQueue::readyNow($queue);
+        }
+
+        /**
+         * Migrate the delayed jobs that are ready to the regular queue.
+         *
+         * @param string $from
+         * @param string $to
+         *
+         * @return void
+         * @static
+         */
+        public static function migrateExpiredJobs($from, $to)
+        {
+            \Laravel\Horizon\RedisQueue::migrateExpiredJobs($from, $to);
+        }
+
+        /**
+         * Delete a reserved job from the queue.
+         *
+         * @param string                          $queue
+         * @param \Illuminate\Queue\Jobs\RedisJob $job
+         *
+         * @return void
+         * @static
+         */
+        public static function deleteReserved($queue, $job)
+        {
+            \Laravel\Horizon\RedisQueue::deleteReserved($queue, $job);
+        }
+
+        /**
+         * Delete a reserved job from the reserved queue and release it.
+         *
+         * @param string                          $queue
+         * @param \Illuminate\Queue\Jobs\RedisJob $job
+         * @param int                             $delay
+         *
+         * @return void
+         * @static
+         */
+        public static function deleteAndRelease($queue, $job, $delay)
+        {
+            \Laravel\Horizon\RedisQueue::deleteAndRelease($queue, $job, $delay);
+        }
+
+        /**
+         * Get the queue or return the default.
+         *
+         * @param string|null $queue
+         *
+         * @return string
+         * @static
+         */
+        public static function getQueue($queue)
+        {
+            //Method inherited from \Illuminate\Queue\RedisQueue            
+            return \Laravel\Horizon\RedisQueue::getQueue($queue);
+        }
+
+        /**
+         * Get the underlying Redis instance.
+         *
+         * @return \Illuminate\Contracts\Redis\Factory
+         * @static
+         */
+        public static function getRedis()
+        {
+            //Method inherited from \Illuminate\Queue\RedisQueue            
+            return \Laravel\Horizon\RedisQueue::getRedis();
+        }
+
+        /**
+         * Get the expiration timestamp for an object-based queue handler.
+         *
+         * @param mixed $job
+         *
+         * @return mixed
+         * @static
+         */
+        public static function getJobExpiration($job)
+        {
+            //Method inherited from \Illuminate\Queue\Queue            
+            return \Laravel\Horizon\RedisQueue::getJobExpiration($job);
+        }
+
+        /**
+         * Register a callback to be executed when creating job payloads.
+         *
+         * @param callable $callback
+         *
+         * @return void
+         * @static
+         */
+        public static function createPayloadUsing($callback)
+        {
+            //Method inherited from \Illuminate\Queue\Queue            
+            \Laravel\Horizon\RedisQueue::createPayloadUsing($callback);
+        }
+
+        /**
+         * Set the IoC container instance.
+         *
+         * @param \Illuminate\Container\Container $container
+         *
+         * @return void
+         * @static
+         */
+        public static function setContainer($container)
+        {
+            //Method inherited from \Illuminate\Queue\Queue            
+            \Laravel\Horizon\RedisQueue::setContainer($container);
         }
          
     }
@@ -7694,12 +7910,23 @@ namespace Illuminate\Support\Facades {
         /**
          * Determine if the request is the result of an PJAX call.
          *
-         * @return bool 
-         * @static 
-         */ 
+         * @return bool
+         * @static
+         */
         public static function pjax()
         {
             return \Illuminate\Http\Request::pjax();
+        }
+
+        /**
+         * Determine if the request is the result of an prefetch call.
+         *
+         * @return bool
+         * @static
+         */ 
+        public static function prefetch()
+        {
+            return \Illuminate\Http\Request::prefetch();
         }
         
         /**
@@ -9400,13 +9627,13 @@ namespace Illuminate\Support\Facades {
         {
             return \Illuminate\Http\Request::hasFile($key);
         }
-        
+
         /**
          * Retrieve a file from the request.
          *
          * @param string $key
          * @param mixed $default
-         * @return \Illuminate\Http\UploadedFile|array|null 
+         * @return \Illuminate\Http\UploadedFile|\Illuminate\Http\UploadedFile[]|array|null 
          * @static 
          */ 
         public static function file($key = null, $default = null)
@@ -11551,25 +11778,27 @@ namespace Illuminate\Support\Facades {
         /**
          * Assert that the given file exists.
          *
-         * @param string $path
-         * @return void 
+         * @param string|array $path
+         *
+         * @return $this
          * @static 
          */ 
         public static function assertExists($path)
         {
-            \Illuminate\Filesystem\FilesystemAdapter::assertExists($path);
+            return \Illuminate\Filesystem\FilesystemAdapter::assertExists($path);
         }
         
         /**
          * Assert that the given file does not exist.
          *
-         * @param string $path
-         * @return void 
+         * @param string|array $path
+         *
+         * @return $this
          * @static 
          */ 
         public static function assertMissing($path)
         {
-            \Illuminate\Filesystem\FilesystemAdapter::assertMissing($path);
+            return \Illuminate\Filesystem\FilesystemAdapter::assertMissing($path);
         }
         
         /**
@@ -12111,13 +12340,13 @@ namespace Illuminate\Support\Facades {
         {
             return \Illuminate\Routing\UrlGenerator::formatScheme($secure);
         }
-        
+
         /**
          * Create a signed route URL for a named route.
          *
          * @param string $name
          * @param array $parameters
-         * @param \DateTimeInterface|int $expiration
+         * @param \DateTimeInterface|\DateInterval|int $expiration
          * @param bool $absolute
          * @return string 
          * @static 
@@ -12131,7 +12360,7 @@ namespace Illuminate\Support\Facades {
          * Create a temporary signed route URL for a named route.
          *
          * @param string $name
-         * @param \DateTimeInterface|int $expiration
+         * @param \DateTimeInterface|\DateInterval|int $expiration
          * @param array $parameters
          * @param bool $absolute
          * @return string 
@@ -14507,9 +14736,9 @@ namespace Greggilbert\Recaptcha\Facades {
         {
             return \Greggilbert\Recaptcha\Recaptcha::render($options);
         }
-         
+
     }
- 
+
 }
 
 namespace Jenssegers\Agent\Facades { 
@@ -14522,7 +14751,7 @@ namespace Jenssegers\Agent\Facades {
         
         /**
          * Get all detection rules. These rules include the additional
-         * platforms and browsers.
+         * platforms and browsers and utilities.
          *
          * @return array 
          * @static 
@@ -14535,7 +14764,6 @@ namespace Jenssegers\Agent\Facades {
         /**
          * 
          *
-         * @inheritdoc 
          * @static 
          */ 
         public static function getRules()
@@ -14546,12 +14774,62 @@ namespace Jenssegers\Agent\Facades {
         /**
          * 
          *
-         * @return \Jenssegers\Agent\CrawlerDetect 
-         * @static 
-         */ 
+         * @return \Jenssegers\Agent\CrawlerDetect
+         * @static
+         */
         public static function getCrawlerDetect()
         {
             return \Jenssegers\Agent\Agent::getCrawlerDetect();
+        }
+
+        /**
+         *
+         *
+         * @static
+         */
+        public static function getBrowsers()
+        {
+            return \Jenssegers\Agent\Agent::getBrowsers();
+        }
+
+        /**
+         *
+         *
+         * @static
+         */
+        public static function getOperatingSystems()
+        {
+            return \Jenssegers\Agent\Agent::getOperatingSystems();
+        }
+
+        /**
+         *
+         *
+         * @static
+         */
+        public static function getPlatforms()
+        {
+            return \Jenssegers\Agent\Agent::getPlatforms();
+        }
+
+        /**
+         *
+         *
+         * @static
+         */
+        public static function getDesktopDevices()
+        {
+            return \Jenssegers\Agent\Agent::getDesktopDevices();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getProperties()
+        {
+            return \Jenssegers\Agent\Agent::getProperties();
         }
         
         /**
@@ -14655,7 +14933,6 @@ namespace Jenssegers\Agent\Facades {
         /**
          * 
          *
-         * @inheritdoc 
          * @static 
          */ 
         public static function version($propertyName, $type = 'text')
@@ -14870,18 +15147,6 @@ namespace Jenssegers\Agent\Facades {
         }
         
         /**
-         * Retrieve the list of known browsers. Specifically, the user agents.
-         *
-         * @return array List of browsers / user agents.
-         * @static 
-         */ 
-        public static function getBrowsers()
-        {
-            //Method inherited from \Mobile_Detect            
-            return \Jenssegers\Agent\Agent::getBrowsers();
-        }
-        
-        /**
          * Retrieve the list of known utilities.
          *
          * @return array List of utilities.
@@ -14921,18 +15186,6 @@ namespace Jenssegers\Agent\Facades {
         {
             //Method inherited from \Mobile_Detect            
             return \Jenssegers\Agent\Agent::getMobileDetectionRulesExtended();
-        }
-        
-        /**
-         * Retrieve the list of mobile operating systems.
-         *
-         * @return array The list of mobile operating systems.
-         * @static 
-         */ 
-        public static function getOperatingSystems()
-        {
-            //Method inherited from \Mobile_Detect            
-            return \Jenssegers\Agent\Agent::getOperatingSystems();
         }
         
         /**
@@ -15018,18 +15271,6 @@ namespace Jenssegers\Agent\Facades {
         {
             //Method inherited from \Mobile_Detect            
             return \Jenssegers\Agent\Agent::match($regex, $userAgent);
-        }
-        
-        /**
-         * Get the properties array.
-         *
-         * @return array 
-         * @static 
-         */ 
-        public static function getProperties()
-        {
-            //Method inherited from \Mobile_Detect            
-            return \Jenssegers\Agent\Agent::getProperties();
         }
         
         /**
@@ -16314,68 +16555,6 @@ namespace Artesaos\SEOTools\Facades {
  
 }
 
-namespace Larabookir\Gateway { 
-
-    /**
-     * 
-     *
-     * @see \Larabookir\Gateway\GatewayResolver
-     */ 
-    class Gateway {
-        
-        /**
-         * Get supported ports
-         *
-         * @return array 
-         * @static 
-         */ 
-        public static function getSupportedPorts()
-        {
-            return \Larabookir\Gateway\GatewayResolver::getSupportedPorts();
-        }
-        
-        /**
-         * Gets query builder from you transactions table
-         *
-         * @return mixed 
-         * @static 
-         */ 
-        public static function getTable()
-        {
-            return \Larabookir\Gateway\GatewayResolver::getTable();
-        }
-        
-        /**
-         * Callback
-         *
-         * @return \Larabookir\Gateway\$this->port 
-         * @throws InvalidRequestException
-         * @throws NotFoundTransactionException
-         * @throws PortNotFoundException
-         * @throws RetryException
-         * @static 
-         */ 
-        public static function verify()
-        {
-            return \Larabookir\Gateway\GatewayResolver::verify();
-        }
-        
-        /**
-         * Create new object from port class
-         *
-         * @param int $port
-         * @throws PortNotFoundException
-         * @static 
-         */ 
-        public static function make($port)
-        {
-            return \Larabookir\Gateway\GatewayResolver::make($port);
-        }
-         
-    }
- 
-}
-
 namespace Laravel\Horizon { 
 
     /**
@@ -16528,8 +16707,8 @@ namespace Zarinpal\Laravel\Facade {
         /**
          * 
          *
-         * @return string 
-         * @static 
+         * @return string
+         * @static
          */ 
         public static function redirectUrl()
         {
@@ -16539,7 +16718,7 @@ namespace Zarinpal\Laravel\Facade {
         /**
          * 
          *
-         * @return \Zarinpal\RestDriver 
+         * @return \Zarinpal\DriverInterface 
          * @static 
          */ 
         public static function getDriver()
@@ -17027,7 +17206,7 @@ namespace  {
              * @static 
              */ 
             public static function onDelete($callback)
-            {    
+            {
                 \Illuminate\Database\Eloquent\Builder::onDelete($callback);
             }
          
@@ -17035,18 +17214,18 @@ namespace  {
              * Call the given local model scopes.
              *
              * @param array $scopes
-             * @return mixed 
+             * @return static|mixed 
              * @static 
              */ 
             public static function scopes($scopes)
-            {    
+            {
                 return \Illuminate\Database\Eloquent\Builder::scopes($scopes);
             }
          
             /**
              * Apply the scopes to the Eloquent builder instance and return it.
              *
-             * @return \Illuminate\Database\Eloquent\Builder|static 
+             * @return static 
              * @static 
              */ 
             public static function applyScopes()
@@ -17218,14 +17397,14 @@ namespace  {
              * @static 
              */ 
             public static function when($value, $callback, $default = null)
-            {    
+            {
                 return \Illuminate\Database\Eloquent\Builder::when($value, $callback, $default);
             }
          
             /**
              * Pass the query to a given callback.
              *
-             * @param \Closure $callback
+             * @param callable $callback
              * @return \Illuminate\Database\Query\Builder 
              * @static 
              */ 
@@ -17556,7 +17735,7 @@ namespace  {
              * Add a "join where" clause to the query.
              *
              * @param string $table
-             * @param string $first
+             * @param \Closure|string $first
              * @param string $operator
              * @param string $second
              * @return \Illuminate\Database\Query\Builder|static 
@@ -17566,13 +17745,13 @@ namespace  {
             {    
                 return \Illuminate\Database\Query\Builder::leftJoinWhere($table, $first, $operator, $second);
             }
-         
-            /**
-             * Add a subquery left join to the query.
+
+        /**
+         * Add a subquery left join to the query.
              *
              * @param \Closure|\Illuminate\Database\Query\Builder|string $query
              * @param string $as
-             * @param string $first
+             * @param \Closure|string $first
              * @param string|null $operator
              * @param string|null $second
              * @return \Illuminate\Database\Query\Builder|static 
@@ -17602,7 +17781,7 @@ namespace  {
              * Add a "right join where" clause to the query.
              *
              * @param string $table
-             * @param string $first
+             * @param \Closure|string $first
              * @param string $operator
              * @param string $second
              * @return \Illuminate\Database\Query\Builder|static 
@@ -17612,13 +17791,13 @@ namespace  {
             {    
                 return \Illuminate\Database\Query\Builder::rightJoinWhere($table, $first, $operator, $second);
             }
-         
-            /**
-             * Add a subquery right join to the query.
+
+        /**
+         * Add a subquery right join to the query.
              *
              * @param \Closure|\Illuminate\Database\Query\Builder|string $query
              * @param string $as
-             * @param string $first
+             * @param \Closure|string $first
              * @param string|null $operator
              * @param string|null $second
              * @return \Illuminate\Database\Query\Builder|static 
@@ -19024,8 +19203,6 @@ namespace  {
     class OpenGraph extends \Artesaos\SEOTools\Facades\OpenGraph {}
 
     class Twitter extends \Artesaos\SEOTools\Facades\TwitterCard {}
-
-    class Gateway extends \Larabookir\Gateway\Gateway {}
 
     class Horizon extends \Laravel\Horizon\Horizon {}
 
