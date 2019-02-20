@@ -1675,14 +1675,16 @@
                                                             {{ $orderProductItem->product->name }}
                                                         </h4>
                                                         <span class="m-widget5__desc">
-                                                            @foreach($orderProductItem->product->attributes as $attributeGroupKey=>$attributeGroup)
-                                                                @foreach($attributeGroup as $attributeItem)
-                                                                    @if(($attributeGroupKey=='main' || $attributeGroupKey=='information') && $attributeItem->control=='simple')
-                                                                        {{ $attributeItem->title }} : {{ $attributeItem->data[0]->name }}
-                                                                        <br>
-                                                                    @endif
+                                                            @if(isset($orderProductItem->product->attributes))
+                                                                @foreach($orderProductItem->product->attributes as $attributeGroupKey=>$attributeGroup)
+                                                                    @foreach($attributeGroup as $attributeItem)
+                                                                        @if(($attributeGroupKey=='main' || $attributeGroupKey=='information') && $attributeItem->control=='simple')
+                                                                            {{ $attributeItem->title }} : {{ $attributeItem->data[0]->name }}
+                                                                            <br>
+                                                                        @endif
+                                                                    @endforeach
                                                                 @endforeach
-                                                            @endforeach
+                                                            @endif
                                                         </span>
                                                     </div>
                                                 </div>
@@ -1691,15 +1693,17 @@
                                                         {{ $orderProductItem->product->name }}
                                                     </h4>
                                                     <span class="m-widget5__desc">
+                                                        @if(isset($orderProductItem->product->attributes))
                                                             @foreach($orderProductItem->product->attributes as $attributeGroupKey=>$attributeGroup)
-                                                            @foreach($attributeGroup as $attributeItem)
-                                                                @if(($attributeGroupKey=='main' || $attributeGroupKey=='information') && $attributeItem->control=='simple')
-                                                                    {{ $attributeItem->title }} : {{ $attributeItem->data[0]->name }}
-                                                                    <br>
-                                                                @endif
+                                                                @foreach($attributeGroup as $attributeItem)
+                                                                    @if(($attributeGroupKey=='main' || $attributeGroupKey=='information') && $attributeItem->control=='simple')
+                                                                        {{ $attributeItem->title }} : {{ $attributeItem->data[0]->name }}
+                                                                        <br>
+                                                                    @endif
+                                                                @endforeach
                                                             @endforeach
-                                                        @endforeach
-                                                        </span>
+                                                        @endif
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div class="m-widget5__content">
