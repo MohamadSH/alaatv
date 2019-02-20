@@ -214,7 +214,7 @@ trait mutatorTrait
 
     public function getPhotoAttribute($value)
     {
-        $profileImage = ($value != null ? $value : Config::get('constants.PROFILE_DEFAULT_IMAGE'));
+        $profileImage = ($value != null ? $value : config('constants.PROFILE_DEFAULT_IMAGE'));
         $profileImage = route('image', [
             'category' => '1',
             'w'        => '39',
