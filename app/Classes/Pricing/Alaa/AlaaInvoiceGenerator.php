@@ -8,19 +8,19 @@
 
 namespace App\Classes\Pricing\Alaa;
 
-use App\Classes\Abstracts\Pricing\OrderInvoiceGenerator;
 use App\Collection\OrderproductCollection;
 use App\Order;
+use Illuminate\Support\Collection;
 
-class AlaaInvoiceGenerator extends OrderInvoiceGenerator
+class AlaaInvoiceGenerator
 {
     /**
+     * @param Order $order
      * @return array
      * @throws \Exception
      */
-    public function generateInvoice():array
+    public function generateOrderInvoice(Order $order):array
     {
-        $order = $this->order;
         $orderproductsInfo = $this->getOrderproductsInfo($order);
         /** @var OrderproductCollection $orderproducts */
         $orderproducts = $orderproductsInfo['purchasedOrderproducts'];
@@ -35,18 +35,37 @@ class AlaaInvoiceGenerator extends OrderInvoiceGenerator
         $calculatedOrderproducts = $orderPriceArray['calculatedOrderproducts'];
         $calculatedOrderproducts->updateCostValues();
 
-//        $costCollection = $calculatedOrderproducts->getNewPrices();
-
         $orderproductsRawCost = $orderPriceArray['sumOfOrderproductsRawCost'];
         $totalCost = $orderPriceArray['totalCost'];
         $payableByWallet = $orderPriceArray['payableAmountByWallet'];
-        $orderproducts = $orderproducts->groupBy('grandId');
+
+        $orderProductCount = $this->orderproductFormatter($orderproducts);
+        
         return [
-          'orderproducts'           => $orderproducts,
-//          'costCollection'          => $costCollection,
+          'orderproducts'           => $orderproducts, 
+          'orderproductCount'       => $orderProductCount ,
           'orderproductsRawCost'    => $orderproductsRawCost,
           'totalCost'               => $totalCost,
           'payableByWallet'         => $payableByWallet,
+        ];
+    }
+
+    /**
+     * @param Collection $fakeOrderproducts
+     * @return array
+     */
+    public function generateFakeOrderproductsInvoice(Collection $fakeOrderproducts){
+        /** @var OrderproductCollection $fakeOrderproducts */
+        $groupPriceInfo =  $fakeOrderproducts->calculateGroupPrice();
+
+        $orderProductCount = $this->orderproductFormatter($fakeOrderproducts);
+        
+       return [
+            'orderproducts'          => $fakeOrderproducts,
+            'orderproductCount'      => $orderProductCount ,
+            'orderproductsRawCost'   => $groupPriceInfo['rawCost'],
+            'totalCost'              => $groupPriceInfo['customerCost'],
+            'payableByWallet'        => 0 ,
         ];
     }
 
@@ -67,4 +86,23 @@ class AlaaInvoiceGenerator extends OrderInvoiceGenerator
             'giftOrderproducts'      => $giftOrderproducts,
         ];
     }
+
+    /**
+     * Formats orderproduct collection and return total number of orderproducts
+     * 
+     * @param Collection $orderproducts
+     * @return int
+     */
+    private function orderproductFormatter(Collection &$orderproducts):int{
+        $orderproducts = $orderproducts->groupBy('grandId');
+
+        $orderProductCount = 0;
+        /** @var Collection $orderProductItem */
+        foreach($orderproducts as $orderProductItem) {
+            $orderProductCount += $orderProductItem->count() ;
+        }
+        
+        return $orderProductCount;
+    }
+    
 }
