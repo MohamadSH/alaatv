@@ -10,6 +10,8 @@ namespace App\Traits\User;
 
 
 use App\Collection\UserCollection;
+use App\User;
+use Illuminate\Support\Facades\Cache;
 
 trait TeacherTrait
 {

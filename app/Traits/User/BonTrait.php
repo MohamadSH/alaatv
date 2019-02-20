@@ -31,10 +31,10 @@ trait BonTrait
         $key = "user:userValidBons:" . $this->cacheKey() . "-" . (isset($bon) ? $bon->cacheKey() : "");
 
         return Cache::tags('bon')
-                    ->remember($key, Config::get("constants.CACHE_60"), function () use ($bon) {
+                    ->remember($key, config("constants.CACHE_60"), function () use ($bon) {
                         return Userbon::where("user_id", $this->id)
                                       ->where("bon_id", $bon->id)
-                                      ->where("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"))
+                                      ->where("userbonstatus_id", config("constants.USERBON_STATUS_ACTIVE"))
                                       ->whereColumn('totalNumber', '>', 'usedNumber')
                                       ->where(function ($query) {
                                           /** @var QueryBuilder $query */
@@ -63,7 +63,7 @@ trait BonTrait
         $key = "user:userHasBon:" . $this->cacheKey() . "-" . $bonName;
 
         return Cache::tags('bon')
-                    ->remember($key, Config::get("constants.CACHE_60"), function () use ($bonName) {
+                    ->remember($key, config("constants.CACHE_60"), function () use ($bonName) {
 
                         $bon = Bon::all()
                                   ->where('name', $bonName)
@@ -73,7 +73,7 @@ trait BonTrait
                         /** @var Userbon $userbons */
                         $userbons = $this->userbons
                             ->where("bon_id", $bon->first()->id)
-                            ->where("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"));
+                            ->where("userbonstatus_id", config("constants.USERBON_STATUS_ACTIVE"));
                         $totalBonNumber = 0;
                         foreach ($userbons as $userbon) {
                             $totalBonNumber = $totalBonNumber + $userbon->validateBon();

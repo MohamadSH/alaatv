@@ -9,6 +9,10 @@
 namespace App\Traits\User;
 
 
+use App\Bon;
+use App\Lottery;
+use Carbon\Carbon;
+
 trait LotteryTrait
 {
     public function getLottery()
@@ -27,7 +31,7 @@ trait LotteryTrait
         $endTime2 = Carbon::create(2018, 06, 15, 23, 59, 30, 'Asia/Tehran');
         $flag2 = ($now->between($startTime2, $endTime2));
         if ($flag2) {
-            $bon = Bon::where("name", Config::get("constants.BON2"))
+            $bon = Bon::where("name", config("constants.BON2"))
                       ->first();
             $userPoints = 0;
             if (isset($bon)) {
@@ -35,7 +39,7 @@ trait LotteryTrait
                 $exchangeAmount = $userPoints * config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT");
             }
             if ($userPoints <= 0) {
-                $lottery = Lottery::where("name", Config::get("constants.LOTTERY_NAME"))
+                $lottery = Lottery::where("name", config("constants.LOTTERY_NAME"))
                                   ->get()
                                   ->first();
                 if (isset($lottery)) {
