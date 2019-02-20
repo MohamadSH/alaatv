@@ -843,15 +843,15 @@ class OrderController extends Controller
             {
                 $invoiceGenerator = new AlaaInvoiceGenerator($order);
                 $invoiceInfo = $invoiceGenerator->generateInvoice();
-                $response = response(["invoiceInfo"=>$invoiceInfo] , Response::HTTP_OK);
+                $responseStatus = Response::HTTP_OK;
             }
             else
-                $response = response(["message"=>"Order not found"] , Response::HTTP_BAD_REQUEST);
+                $responseStatus = Response::HTTP_BAD_REQUEST;
 
         }else{
-            $cookieOrderproducts = json_decode($_COOKIE["cartItems"]);
-            if(isset($cookieOrderproducts))
+            if(isset($_COOKIE["cartItems"]))
             {
+                $cookieOrderproducts = json_decode($_COOKIE["cartItems"]);
                 $fakeOrderproducts = $this->convertOrderproductObjectsToCollection($cookieOrderproducts);
                 $groupPriceInfo =  $fakeOrderproducts->calculateGroupPrice();
 
@@ -861,11 +861,14 @@ class OrderController extends Controller
                 $invoiceInfo["payableCost"]            = $invoiceInfo["totalCost"] = $groupPriceInfo["customerCost"];
                 $invoiceInfo["payableByWallet"]           = 0 ;
             }
-            $response = response(["invoiceInfo"=>$invoiceInfo] , Response::HTTP_OK);
+
+            $responseStatus = Response::HTTP_OK;
         }
 
         if ($request->expectsJson())
-            return $response;
+        {
+            return response(["invoiceInfo"=>$invoiceInfo] , $responseStatus);
+        }
 
         $orderProductCount = 0;
         foreach($invoiceInfo['orderproducts'] as $key=>$orderProductItem) {
@@ -978,7 +981,7 @@ class OrderController extends Controller
             $response = response(["message"=>"Order not found"] , Response::HTTP_BAD_REQUEST);
         }
 
-        if ($request->expectsJson() || true)
+        if ($request->expectsJson())
             return $response;
 
         return view("order.checkout.payment" ,
