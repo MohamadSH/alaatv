@@ -865,7 +865,7 @@ class OrderController extends Controller
             $responseStatus = Response::HTTP_OK;
         }
 
-        if ($request->expectsJson() || true)
+        if ($request->expectsJson())
         {
             return response(["invoiceInfo"=>$invoiceInfo] , $responseStatus);
         }
@@ -970,7 +970,7 @@ class OrderController extends Controller
             $response = response(["message"=>"Order not found"] , Response::HTTP_BAD_REQUEST);
         }
 
-        if ($request->expectsJson() || true)
+        if ($request->expectsJson())
             return $response;
 
         return view("order.checkout.payment" ,

@@ -48,6 +48,8 @@ class UserController extends Controller
      * @return
      */
     public function getTransactions(){
+        //ToDo
+        return response();
         /*$key = "user:transactions:" . $user->cacheKey();
         $transactions = Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
             return $user->getShowableTransactions()

@@ -485,8 +485,7 @@ class Order extends BaseModel
                 $totalPaidCost = 0 ;
                 $successfulTransactions = $order->successfulTransactions;
                 if($successfulTransactions->isNotEmpty())
-                    $totalPaidCost =  $order->successfulTransactions->where('cost', '>', 0)
-                        ->sum("cost");
+                    $totalPaidCost =  $successfulTransactions->where('cost', '>', 0)->sum("cost");
 
                 return $totalPaidCost ;
         });
@@ -501,7 +500,7 @@ class Order extends BaseModel
                 $totalRefund = 0;
                 $successfulTransactions = $order->successfulTransactions;
                 if ($successfulTransactions->isNotEmpty())
-                    $totalRefund = $order->successfulTransactions->where('cost', '<', 0)->sum("cost");
+                    $totalRefund = $successfulTransactions->where('cost', '<', 0)->sum("cost");
 
                 return $totalRefund;
         });
@@ -998,7 +997,7 @@ class Order extends BaseModel
         $key = "order:transactions:" . $order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_60"), function () use ($order) {
-
+                    return $order->successfulTransactions()->get();
             });
     }
 }

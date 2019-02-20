@@ -497,6 +497,7 @@ class Orderproduct extends BaseModel
                     'photo',
                     'url',
                     'apiUrl',
+                    'attributes'
                 ]);
             });
 
