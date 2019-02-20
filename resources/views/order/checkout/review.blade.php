@@ -95,6 +95,11 @@
         .orderproductWithChildWarper .childOfParent .childItem .childRemoveBtnWarper {
             position: relative;
         }
+
+        .orderproductWithChildWarper .m-widget7__img,
+        .orderproductWithoutChildWarper .m-widget5__pic .m-widget7__img {
+            max-width: 100%;
+        }
     </style>
 
     <style>
@@ -1426,240 +1431,115 @@
                         <div class="tab-content">
                             <!--begin::m-widget5-->
                             <div class="m-widget5">
-
-                                @foreach($invoiceInfo['purchasedOrderproducts'] as $key=>$orderProductItem)
-                                    @if(false)
+                                @foreach($invoiceInfo['orderproducts'] as $key=>$orderProductItem)
+                                    @if($orderProductItem->count()>1)
                                         <div class="orderproductWithChildWarper">
 
                                             <div class="m-widget5__item hasChild">
                                                 <div class="m-widget5__content">
                                                     <div class="m-widget5__pic" style="padding: 0px; width: auto;">
-                                                        <button type="button" class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5">
-                                                    <span>
-                                                        <i class="flaticon-circle"></i>
-                                                        <span>حذف</span>
-                                                    </span>
+                                                        <button class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5"
+                                                                type="button"
+                                                                data-action="">
+                                                            <span>
+                                                                <i class="flaticon-circle"></i>
+                                                                <span>حذف</span>
+                                                            </span>
                                                         </button>
                                                     </div>
                                                     <div class="m-widget5__pic">
-                                                        <img class="m-widget7__img" src="/assets/app/media/img//products/product6.jpg" alt="">
+                                                        <a class="m-link" target="_blank" href="{{ $orderProductItem[0]->grandProduct->url }}">
+                                                            <img class="m-widget7__img" src="{{ $orderProductItem[0]->grandProduct->photo }}" alt="">
+                                                        </a>
                                                     </div>
                                                     <div class="m-widget5__section">
                                                         <div class=" d-none d-md-block d-lg-block d-xl-block">
                                                             <h4 class="m-widget5__title">
-                                                                جزوه دوره جنسی خانم ها
+                                                                <a class="m-link" target="_blank" href="{{ $orderProductItem[0]->grandProduct->url }}">
+                                                                    {{ $orderProductItem[0]->grandProduct->name }}
+                                                                </a>
                                                             </h4>
                                                             <span class="m-widget5__desc">
-                                            دبیر : جلال موقاری
-                                        </span>
+                                                                #####################
+                                                            </span>
                                                         </div>
                                                     </div>
                                                     <div class="d-sm-none d-md-none d-lg-none m--margin-top-10">
                                                         <h4 class="m-widget5__title">
-                                                            جزوه دوره جنسی خانم ها
+                                                            {{ $orderProductItem[0]->grandProduct->name }}
                                                         </h4>
                                                         <span class="m-widget5__desc">
-                                            دبیر : جلال موقاری
-                                        </span>
+                                                            #####################
+                                                        </span>
                                                     </div>
                                                 </div>
                                                 <div class="m-widget5__content">
                                                     <div class="m-widget5__stats1">
-                                                <span class = "m-nav__link-badge">
-                                                    <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                                                        <span class="m-badge m-badge--warning a--productRealPrice">14,000</span>
-                                                        15,000 تومان
-                                                        <span class="m-badge m-badge--info a--productDiscount">20%</span>
-                                                    </span>
-                                                </span>
+                                                        {{--<span class = "m-nav__link-badge">--}}
+                                                            {{--<span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">--}}
+                                                                {{--<span class="m-badge m-badge--warning a--productRealPrice">14,000</span>--}}
+                                                                {{--15,000 تومان--}}
+                                                                {{--<span class="m-badge m-badge--info a--productDiscount">20%</span>--}}
+                                                            {{--</span>--}}
+                                                        {{--</span>--}}
                                                     </div>
                                                     <div class="m-widget5__stats2">
-                                                        <a href="#" class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill">
-                                                            <i class="la la-close"></i>
-                                                        </a>
+                                                        {{--<a href="#" class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill">--}}
+                                                            {{--<i class="la la-close"></i>--}}
+                                                        {{--</a>--}}
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="m-widget5__item childOfParent">
 
-                                                <div class="childItem">
+                                                @foreach($orderProductItem as $keyChild=>$orderProductItemChild)
+                                                    <div class="childItem">
 
-                                                    <div class="childRemoveBtnWarper">
-                                                        <button type="button" class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 btnRemoveOrderproduct">
-                                                    <span>
-                                                        <i class="flaticon-circle"></i>
-                                                        <span>حذف</span>
-                                                    </span>
+                                                        <div class="childRemoveBtnWarper">
+                                                            <button type="button"
+                                                                    data-action="{{action("Web\OrderproductController@destroy", $orderProductItemChild->id)}}"
+                                                                    class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 btnRemoveOrderproduct">
+                                                                <span>
+                                                                    <i class="flaticon-circle"></i>
+                                                                    <span>حذف</span>
+                                                                </span>
+                                                            </button>
+                                                        </div>
+
+                                                        <button type="button"
+                                                           data-action="{{action("Web\OrderproductController@destroy", $orderProductItemChild->id)}}"
+                                                           class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill btnRemoveOrderproduct btnRemoveOrderproduct-child">
+                                                            <i class="la la-close"></i>
                                                         </button>
+
+                                                        <div class="childTitle">
+                                                            {{ $orderProductItemChild->product->name }}
+                                                        </div>
+                                                        <div class="childPrice">
+                                                            <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
+                                                                @if($orderProductItemChild->price['customerPrice']!=$orderProductItemChild->price['cost'])
+                                                                    <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($orderProductItemChild->price['cost']+$orderProductItemChild->price['extraCost']) }}</span>
+                                                                @endif
+                                                                {{ number_format($orderProductItemChild->price['customerPrice']+$orderProductItemChild->price['extraCost']) }} تومان
+                                                                @if(($orderProductItemChild->price['bonDiscount']+$orderProductItemChild->price['productDiscount'])>0)
+                                                                    <span class="m-badge m-badge--info a--productDiscount">{{ $orderProductItemChild->price['bonDiscount']+$orderProductItemChild->price['productDiscount'] }}%</span>
+                                                                @endif
+                                                            </span>
+                                                        </div>
+
+                                                        <div class="clearfix"></div>
                                                     </div>
-
-                                                    <a href="#" class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill btnRemoveOrderproduct-child">
-                                                        <i class="la la-close"></i>
-                                                    </a>
-
-                                                    <div class="childTitle">
-                                                        جزوه دوره جنسی خانم ها
-                                                    </div>
-                                                    <div class="childPrice">
-                                                <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                                                    <span class="m-badge m-badge--warning a--productRealPrice">14,000</span>
-                                                    15,000 تومان
-                                                    <span class="m-badge m-badge--info a--productDiscount">20%</span>
-                                                </span>
-                                                    </div>
-
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                                <div class="childItem">
-
-                                                    <div class="childRemoveBtnWarper">
-                                                        <button type="button" class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 btnRemoveOrderproduct">
-                                                    <span>
-                                                        <i class="flaticon-circle"></i>
-                                                        <span>حذف</span>
-                                                    </span>
-                                                        </button>
-                                                    </div>
-
-                                                    <a href="#" class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill btnRemoveOrderproduct-child">
-                                                        <i class="la la-close"></i>
-                                                    </a>
-
-                                                    <div class="childTitle">
-                                                        جزوه دوره جنسی خانم ها
-                                                    </div>
-                                                    <div class="childPrice">
-                                                <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                                                    <span class="m-badge m-badge--warning a--productRealPrice">14,000</span>
-                                                    15,000 تومان
-                                                    <span class="m-badge m-badge--info a--productDiscount">20%</span>
-                                                </span>
-                                                    </div>
-
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                                <div class="childItem">
-
-                                                    <div class="childRemoveBtnWarper">
-                                                        <button type="button" class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 btnRemoveOrderproduct">
-                                                    <span>
-                                                        <i class="flaticon-circle"></i>
-                                                        <span>حذف</span>
-                                                    </span>
-                                                        </button>
-                                                    </div>
-
-                                                    <a href="#" class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill btnRemoveOrderproduct-child">
-                                                        <i class="la la-close"></i>
-                                                    </a>
-
-                                                    <div class="childTitle">
-                                                        جزوه دوره جنسی خانم ها
-                                                    </div>
-                                                    <div class="childPrice">
-                                                <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                                                    <span class="m-badge m-badge--warning a--productRealPrice">14,000</span>
-                                                    15,000 تومان
-                                                    <span class="m-badge m-badge--info a--productDiscount">20%</span>
-                                                </span>
-                                                    </div>
-
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                                <div class="childItem">
-
-                                                    <div class="childRemoveBtnWarper">
-                                                        <button type="button" class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 btnRemoveOrderproduct">
-                                                    <span>
-                                                        <i class="flaticon-circle"></i>
-                                                        <span>حذف</span>
-                                                    </span>
-                                                        </button>
-                                                    </div>
-
-                                                    <a href="#" class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill btnRemoveOrderproduct-child">
-                                                        <i class="la la-close"></i>
-                                                    </a>
-
-                                                    <div class="childTitle">
-                                                        جزوه دوره جنسی خانم ها
-                                                    </div>
-                                                    <div class="childPrice">
-                                                <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                                                    <span class="m-badge m-badge--warning a--productRealPrice">14,000</span>
-                                                    15,000 تومان
-                                                    <span class="m-badge m-badge--info a--productDiscount">20%</span>
-                                                </span>
-                                                    </div>
-
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                                <div class="childItem">
-
-                                                    <div class="childRemoveBtnWarper">
-                                                        <button type="button" class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 btnRemoveOrderproduct">
-                                                    <span>
-                                                        <i class="flaticon-circle"></i>
-                                                        <span>حذف</span>
-                                                    </span>
-                                                        </button>
-                                                    </div>
-
-                                                    <a href="#" class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill btnRemoveOrderproduct-child">
-                                                        <i class="la la-close"></i>
-                                                    </a>
-
-                                                    <div class="childTitle">
-                                                        جزوه دوره جنسی خانم ها
-                                                    </div>
-                                                    <div class="childPrice">
-                                                <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                                                    <span class="m-badge m-badge--warning a--productRealPrice">14,000</span>
-                                                    15,000 تومان
-                                                    <span class="m-badge m-badge--info a--productDiscount">20%</span>
-                                                </span>
-                                                    </div>
-
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                                <div class="childItem">
-
-                                                    <div class="childRemoveBtnWarper">
-                                                        <button type="button" class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 btnRemoveOrderproduct">
-                                                    <span>
-                                                        <i class="flaticon-circle"></i>
-                                                        <span>حذف</span>
-                                                    </span>
-                                                        </button>
-                                                    </div>
-
-                                                    <a href="#" class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill btnRemoveOrderproduct-child">
-                                                        <i class="la la-close"></i>
-                                                    </a>
-
-                                                    <div class="childTitle">
-                                                        جزوه دوره جنسی خانم ها
-                                                    </div>
-                                                    <div class="childPrice">
-                                                <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                                                    <span class="m-badge m-badge--warning a--productRealPrice">14,000</span>
-                                                    15,000 تومان
-                                                    <span class="m-badge m-badge--info a--productDiscount">20%</span>
-                                                </span>
-                                                    </div>
-
-                                                    <div class="clearfix"></div>
-                                                </div>
-
+                                                @endforeach
                                             </div>
-
                                         </div>
                                     @else
-                                        <div class="m-widget5__item">
+                                        <div class="m-widget5__item orderproductWithoutChildWarper">
                                             <div class="m-widget5__content">
                                                 <div class="m-widget5__pic" style="padding: 0px; width: auto;">
-                                                    <button type="button" class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5">
+                                                    <button type="button"
+                                                            data-action="{{action("Web\OrderproductController@destroy",$orderProductItem[0]->id)}}"
+                                                            class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 btnRemoveOrderproduct">
                                                         <span>
                                                             <i class="flaticon-circle"></i>
                                                             <span>حذف</span>
@@ -1667,15 +1547,44 @@
                                                     </button>
                                                 </div>
                                                 <div class="m-widget5__pic">
-                                                    <img class="m-widget7__img" src="{{ $orderProductItem->product->photo }}" alt="">
+                                                    <a class="m-link" target="_blank" href="{{ $orderProductItem[0]->product->url }}">
+                                                        <img class="m-widget7__img" src="{{ $orderProductItem[0]->product->photo }}" alt="">
+                                                    </a>
                                                 </div>
                                                 <div class="m-widget5__section">
                                                     <div class=" d-none d-md-block d-lg-block d-xl-block">
                                                         <h4 class="m-widget5__title">
-                                                            {{ $orderProductItem->product->name }}
+                                                            <a class="m-link" target="_blank" href="{{ $orderProductItem[0]->product->url }}">
+                                                                {{ $orderProductItem[0]->product->name }}
+                                                            </a>
                                                         </h4>
                                                         <span class="m-widget5__desc">
-                                                            @foreach($orderProductItem->product->attributes as $attributeGroupKey=>$attributeGroup)
+                                                            @if(isset($orderProductItem[0]->product->attributes))
+                                                                @foreach($orderProductItem[0]->product->attributes as $productAttributeGroupKey=>$productAttributeGroup)
+                                                                    @foreach($productAttributeGroup as $attributeItem)
+                                                                        @if(($productAttributeGroupKey=='main' || $productAttributeGroupKey=='information') && $attributeItem->control=='simple')
+                                                                            {{ $attributeItem->title }} : {{ $attributeItem->data[0]->name }}
+                                                                            <br>
+                                                                        @endif
+                                                                    @endforeach
+                                                                @endforeach
+                                                            @endif
+                                                            @if(isset($orderProductItem[0]->attributevalues))
+                                                                @foreach($orderProductItem[0]->attributevalues as $attributeGroupKey=>$attributeItem)
+                                                                    <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">{{ $attributeItem->name }}</span>
+                                                                    <br>
+                                                                @endforeach
+                                                            @endif
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="d-sm-none d-md-none d-lg-none m--margin-top-10">
+                                                    <h4 class="m-widget5__title">
+                                                        {{ $orderProductItem[0]->product->name }}
+                                                    </h4>
+                                                    <span class="m-widget5__desc">
+                                                        @if(isset($orderProductItem[0]->product->attributes))
+                                                            @foreach($orderProductItem[0]->product->attributes as $attributeGroupKey=>$attributeGroup)
                                                                 @foreach($attributeGroup as $attributeItem)
                                                                     @if(($attributeGroupKey=='main' || $attributeGroupKey=='information') && $attributeItem->control=='simple')
                                                                         {{ $attributeItem->title }} : {{ $attributeItem->data[0]->name }}
@@ -1683,37 +1592,28 @@
                                                                     @endif
                                                                 @endforeach
                                                             @endforeach
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div class="d-sm-none d-md-none d-lg-none m--margin-top-10">
-                                                    <h4 class="m-widget5__title">
-                                                        {{ $orderProductItem->product->name }}
-                                                    </h4>
-                                                    <span class="m-widget5__desc">
-                                                            @foreach($orderProductItem->product->attributes as $attributeGroupKey=>$attributeGroup)
-                                                            @foreach($attributeGroup as $attributeItem)
-                                                                @if(($attributeGroupKey=='main' || $attributeGroupKey=='information') && $attributeItem->control=='simple')
-                                                                    {{ $attributeItem->title }} : {{ $attributeItem->data[0]->name }}
-                                                                    <br>
-                                                                @endif
-                                                            @endforeach
-                                                        @endforeach
-                                                        </span>
+                                                        @endif
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div class="m-widget5__content">
                                                 <div class="m-widget5__stats1">
-                                                    <span class = "m-nav__link-badge">
-                                                        <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                                                            <span class="m-badge m-badge--warning a--productRealPrice">14,000</span>
-                                                            {{ number_format($orderProductItem->cost) }} تومان
-                                                            <span class="m-badge m-badge--info a--productDiscount">20%</span>
-                                                        </span>
+                                                <span class = "m-nav__link-badge">
+                                                    <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
+                                                        @if($orderProductItem[0]->price['customerPrice']!=$orderProductItem[0]->price['cost'])
+                                                            <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($orderProductItem[0]->price['cost']+$orderProductItem[0]->price['extraCost']) }}</span>
+                                                        @endif
+                                                        {{ number_format($orderProductItem[0]->price['customerPrice']+$orderProductItem[0]->price['extraCost']) }} تومان
+                                                        @if(($orderProductItem[0]->price['bonDiscount']+$orderProductItem[0]->price['productDiscount'])>0)
+                                                            <span class="m-badge m-badge--info a--productDiscount">{{ $orderProductItem[0]->price['bonDiscount']+$orderProductItem[0]->price['productDiscount'] }}%</span>
+                                                        @endif
                                                     </span>
+                                                </span>
                                                 </div>
                                                 <div class="m-widget5__stats2">
-                                                    <a href="#" class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill">
+                                                    <a href="#"
+                                                       data-action="{{action("Web\OrderproductController@destroy",$orderProductItem[0]->id)}}"
+                                                       class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill btnRemoveOrderproduct">
                                                         <i class="la la-close"></i>
                                                     </a>
                                                 </div>
@@ -1721,7 +1621,6 @@
                                         </div>
                                     @endIf
                                 @endforeach
-
                             </div>
                             <!--end::m-widget5-->
                         </div>
@@ -1742,17 +1641,17 @@
                                             مبلغ کل :
                                         </h3>
                                         <span class="m-widget1__desc">
-                                            شما {{ count($invoiceInfo['purchasedOrderproducts']) }} کالا انتخاب کرده اید
+                                            شما {{ $orderProductCount }} محصول انتخاب کرده اید
                                         </span>
                                     </div>
                                     <div class="col m--align-right">
                                     <span class="m-widget1__number m--font-danger">
-                                        {{ number_format($invoiceInfo['totalCost']) }} تومان
+                                        {{ number_format($invoiceInfo['orderproductsRawCost']) }} تومان
                                     </span>
                                     </div>
                                 </div>
                             </div>
-                            @if($invoiceInfo['totalCost']>$invoiceInfo['payableCost'])
+                            @if($invoiceInfo['orderproductsRawCost']>$invoiceInfo['totalCost'])
                                 <div class="m-widget1__item">
                                     <div class="row m-row--no-padding align-items-center">
                                         <div class="col">
@@ -1760,12 +1659,12 @@
                                                 سود شما از خرید :
                                             </h3>
                                             <span class="m-widget1__desc">
-                                            شما در مجموع {{ ($invoiceInfo['payableCost']/$invoiceInfo['totalCost'])*100 }}% تخفیف گرفته اید
+                                            شما در مجموع {{ round((1-($invoiceInfo['totalCost']/$invoiceInfo['orderproductsRawCost']))*100) }}% تخفیف گرفته اید
                                         </span>
                                         </div>
                                         <div class="col m--align-right">
                                         <span class="m-widget1__number m--font-success">
-                                            {{ number_format($invoiceInfo['totalCost']-$invoiceInfo['payableCost']) }} تومان
+                                            {{ number_format($invoiceInfo['orderproductsRawCost']-$invoiceInfo['totalCost']) }} تومان
                                         </span>
                                         </div>
                                     </div>
@@ -1782,7 +1681,7 @@
                                     </div>
                                     <div class="col m--align-right">
                                     <span class="m-widget1__number m--font-brand">
-                                         {{ number_format($invoiceInfo['payableCost']) }} تومان
+                                         {{ number_format($invoiceInfo['totalCost']) }} تومان
                                     </span>
                                     </div>
                                 </div>
@@ -1833,11 +1732,63 @@
                 topSpacing: 70,
                 zIndex: 99
             });
-            // $('.btnGotoCheckoutPayment').sticky({
-            //     topSpacing: 70,
-            //     zIndex: 99,
-            //     getWidthFrom: '.CheckoutReviewTotalPriceWarper'
-            // });
+
+            $(document).on('click', '.btnRemoveOrderproduct', function () {
+
+                mApp.block('.a--userCartList', {
+                    overlayColor: "#000000",
+                    type: "loader",
+                    state: "success",
+                    message: "کمی صبر کنید..."
+                });
+                mApp.block('.CheckoutReviewTotalPriceWarper', {
+                    type: "loader",
+                    state: "success",
+                });
+
+                $.ajax({
+                    type: 'DELETE',
+                    url: $(this).data('action'),
+                    data: {_token: "{{ csrf_token() }}" },
+                    statusCode: {
+                        //The status for when action was successful
+                        200: function (response) {
+                            // console.log(response);
+                            location.reload();
+                        },
+                        //The status for when the user is not authorized for making the request
+                        403: function (response) {
+                            window.location.replace("/403");
+                        },
+                        //The status for when the user is not authorized for making the request
+                        401: function (response) {
+                            window.location.replace("/403");
+                        },
+                        //Method Not Allowed
+                        405: function (response) {
+//                        console.log(response);
+//                        console.log(response.responseText);
+                            location.reload();
+                        },
+                        404: function (response) {
+                            window.location.replace("/404");
+                        },
+                        //The status for when form data is not valid
+                        422: function (response) {
+                            // console.log(response);
+                        },
+                        //The status for when there is error php code
+                        500: function (response) {
+                            // console.log(response.responseText);
+//                            toastr["error"]("خطای برنامه!", "پیام سیستم");
+                        },
+                        //The status for when there is error php code
+                        503: function (response) {
+                            toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+                        }
+                    }
+                });
+            });
         });
         // $(window).load(function(){
         //     $('.btnGotoCheckoutPayment').sticky({ topSpacing: 0 });
@@ -1863,50 +1814,6 @@
                 {{--title: "{{$wSetting->site->name}}",--}}
                 {{--noPrintSelector: ".no-print",--}}
 {{--//                    stylesheet:"/assets/global/css/components-md-rtl.min.css"--}}
-            {{--});--}}
-        {{--});--}}
-        {{--$(document).on("click", ".removeOrderproduct", function () {--}}
-            {{--$.ajax({--}}
-                {{--type: "DELETE",--}}
-                {{--url: $(this).data("action"),--}}
-                {{--data: {_token: "{{ csrf_token() }}" },--}}
-                {{--statusCode: {--}}
-                    {{--//The status for when action was successful--}}
-                    {{--200: function (response) {--}}
-                        {{--// console.log(response);--}}
-                        {{--location.reload();--}}
-                    {{--},--}}
-                    {{--//The status for when the user is not authorized for making the request--}}
-                    {{--403: function (response) {--}}
-                        {{--window.location.replace("/403");--}}
-                    {{--},--}}
-                    {{--//The status for when the user is not authorized for making the request--}}
-                    {{--401: function (response) {--}}
-                        {{--window.location.replace("/403");--}}
-                    {{--},--}}
-                    {{--//Method Not Allowed--}}
-                    {{--405: function (response) {--}}
-{{--//                        console.log(response);--}}
-{{--//                        console.log(response.responseText);--}}
-                        {{--location.reload();--}}
-                    {{--},--}}
-                    {{--404: function (response) {--}}
-                        {{--window.location.replace("/404");--}}
-                    {{--},--}}
-                    {{--//The status for when form data is not valid--}}
-                    {{--422: function (response) {--}}
-                        {{--// console.log(response);--}}
-                    {{--},--}}
-                    {{--//The status for when there is error php code--}}
-                    {{--500: function (response) {--}}
-                        {{--// console.log(response.responseText);--}}
-{{--//                            toastr["error"]("خطای برنامه!", "پیام سیستم");--}}
-                    {{--},--}}
-                    {{--//The status for when there is error php code--}}
-                    {{--503: function (response) {--}}
-                        {{--toastr["error"]("خطای پایگاه داده!", "پیام سیستم");--}}
-                    {{--}--}}
-                {{--}--}}
             {{--});--}}
         {{--});--}}
     </script>
