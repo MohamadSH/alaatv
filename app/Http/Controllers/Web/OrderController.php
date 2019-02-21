@@ -850,7 +850,6 @@ class OrderController extends Controller
                 $responseStatus = Response::HTTP_BAD_REQUEST;
 
         }else{
-
             if(isset($_COOKIE["cartItems"]))
             {
                 $cookieOrderproducts = json_decode($_COOKIE["cartItems"]);
@@ -1065,14 +1064,15 @@ class OrderController extends Controller
     public function submitCoupon(SubmitCouponRequest $request)
     {
         $couponCode = $request->coupon;
-        $coupon = Coupon::all()->where("code", $couponCode)->first();
+        $coupon = Coupon::all()->where('code', $couponCode)->first();
         if (isset($coupon)) {
             $order_id = $request->order_id;
             $order = Order::Find($order_id);
-            $order->load("coupon");
+            $order->load('coupon');
 
+            $resultCode = Response::HTTP_UNPROCESSABLE_ENTITY;
+            $resultText = 'Nothing was done!';
             $couponValidationStatus = $coupon->validateCoupon();
-
             if ($couponValidationStatus == Coupon::COUPON_VALIDATION_STATUS_OK) {
                     $oldCoupon = $order->coupon;
                     if (isset($oldCoupon)) {
@@ -1084,7 +1084,7 @@ class OrderController extends Controller
                                     $coupon->usageNumber = $coupon->usageNumber + 1;
                                     if ($coupon->update()) {
                                         $order->coupon_id = $coupon->id;
-                                        if ($coupon->discounttype_id == config("constants.DISCOUNT_TYPE_COST")) {
+                                        if ($coupon->discounttype_id == config('constants.DISCOUNT_TYPE_COST')) {
                                             $order->couponDiscount = 0;
                                             $order->couponDiscountAmount = (int)$coupon->discount;
                                         } else {
@@ -1092,28 +1092,32 @@ class OrderController extends Controller
                                             $order->couponDiscountAmount = 0;
                                         }
                                         if ($order->updateWithoutTimestamp()) {
-                                            session()->put('couponMessageSuccess', 'کپن شما با موفقیت ثبت شد!');
+                                            $resultCode     = Response::HTTP_OK;
+                                            $resultText   = 'Coupon attached successfully';
                                         } else {
                                             $oldCoupon->usageNumber = $oldCoupon->usageNumber + 1;
                                             $oldCoupon->update();
                                             $coupon->usageNumber = $coupon->usageNumber - 1;
                                             $coupon->update();
-                                            session()->put('couponMessageError', "خطای پایگاه داده در ثبت کپن!");
+                                            $resultCode     = Response::HTTP_SERVICE_UNAVAILABLE;
+                                            $resultText   = 'Database error';
                                         }
                                     } else {
                                         $oldCoupon->usageNumber = $oldCoupon->usageNumber + 1;
                                         $oldCoupon->update();
-                                        session()->put('couponMessageError', "خطای پایگاه داده در ثبت کپن!");
+                                        $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
+                                        $resultText   = 'Database error';
                                     }
                                 } else {
-                                    session()->put('couponMessageError', "خطای پایگاه داده در ثبت کپن!");
+                                    $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
+                                    $resultText   = 'Database error';
                                 }
                             }
                     } else {
                         $coupon->usageNumber = $coupon->usageNumber + 1;
                         if ($coupon->update()) {
                             $order->coupon_id = $coupon->id;
-                            if ($coupon->discounttype_id == config("constants.DISCOUNT_TYPE_COST")) {
+                            if ($coupon->discounttype_id == config('constants.DISCOUNT_TYPE_COST')) {
                                 $order->couponDiscount = 0;
                                 $order->couponDiscountAmount = (int)$coupon->discount;
                             } else {
@@ -1121,46 +1125,50 @@ class OrderController extends Controller
                                 $order->couponDiscountAmount = 0;
                             }
                             if ($order->updateWithoutTimestamp()) {
-                                session()->put('couponMessageSuccess', 'کپن شما با موفقیت ثبت شد!');
+                                $resultText   = 'Coupon attached successfully';
+                                $resultCode = Response::HTTP_OK;
                             } else {
                                 $coupon->usageNumber = $coupon->usageNumber - 1;
                                 $coupon->update();
-                                session()->put('couponMessageError', "خطای پایگاه داده در ثبت کپن!");
+                                $resultText   = 'Database error';
+                                $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
                             }
                         } else {
-                            session()->put('couponMessageError', "خطای پایگاه داده در ثبت کپن!");
+                            $resultText   = 'Database error';
+                            $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
                         }
                     }
             } else {
                 switch ($couponValidationStatus)
                 {
                     case Coupon::COUPON_VALIDATION_STATUS_DISABLED:
-                        $couponValidatonResponseText = "کپن وارد شده غیر فعال می باشد";
+                        $resultText = 'Coupon is disabled';
                         break;
                     case Coupon::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED:
-                        $couponValidatonResponseText = "تعداد مجاز استفاده از کپن به پایان رسیده است";
+                        $resultText = 'Coupon number is finished';
                         break;
                     case Coupon::COUPON_VALIDATION_STATUS_EXPIRED:
-                        $couponValidatonResponseText = "تاریخ استفاده از کپن به پایان رسیده است";
+                        $resultText = 'Coupon is expired';
                         break;
                     case Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN:
-                        $couponValidatonResponseText = "تاریخ استفاده از کپن آغاز نشده است";
+                        $resultText = 'Coupon usage period has not started';
                         break;
                     default:
-                        $couponValidatonResponseText="";
+                        $resultText='Coupon validation status is undetermined';
                         break;
                 }
-                session()->put('couponMessageError', $couponValidatonResponseText);
+                $resultCode = Response::HTTP_BAD_REQUEST;
             }
 
         } else {
-            session()->put('couponMessageError', "کد وارد شده اشتباه می باشد");
+            $resultText = 'Entered code is wrond';
         }
 
-        if ($request->expectsJson())
-            return response([],Response::HTTP_OK);
-        else
-            return redirect()->back();
+        $response = [
+            'error'     =>  $resultCode,
+            'message'   =>  $resultText
+        ];
+        return response($response,Response::HTTP_OK);
     }
 
     /**
