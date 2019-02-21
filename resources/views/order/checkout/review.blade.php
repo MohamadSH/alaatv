@@ -1479,8 +1479,8 @@
                                                         </button>
                                                     </div>
                                                     <div class = "m-widget5__pic">
-                                                        <a class = "m-link" target = "_blank" href = "{{ $orderProductItem->first()->grandProduct->url }}">
-                                                            <img class = "m-widget7__img" src = "{{ $orderProductItem->first()->grandProduct->photo }}" alt = "">
+                                                        <a class = "m-link" target = "_blank" href = "{{ optional($orderProductItem->first()->grandProduct)->url }}">
+                                                            <img class = "m-widget7__img" src = "{{ optional($orderProductItem->first()->grandProduct)->photo }}" alt = "">
                                                         </a>
                                                     </div>
 
@@ -1488,8 +1488,8 @@
                                                     <div class = "m-widget5__section">
                                                         <div class = " d-none d-md-block d-lg-block d-xl-block">
                                                             <h4 class = "m-widget5__title">
-                                                                <a class = "m-link" target = "_blank" href = "{{ $orderProductItem->first()->grandProduct->url }}">
-                                                                    {{ $orderProductItem->first()->grandProduct->name }}
+                                                                <a class = "m-link" target = "_blank" href = "{{ optional($orderProductItem->first()->grandProduct)->url }}">
+                                                                    {{ optional($orderProductItem->first()->grandProduct)->name }}
                                                                 </a>
                                                             </h4>
                                                             <span class = "m-widget5__desc">
@@ -1515,7 +1515,7 @@
                                                     {{--attribute value in mobile--}}
                                                     <div class = "d-sm-none d-md-none d-lg-none m--margin-top-10">
                                                         <h4 class = "m-widget5__title">
-                                                            {{ $orderProductItem->first()->grandProduct->name }}
+                                                            {{ optional($orderProductItem->first()->grandProduct)->name }}
                                                         </h4>
                                                         <span class = "m-widget5__desc">
                                                             @if(isset($orderProductItem->first()->grandProduct->attributes))
