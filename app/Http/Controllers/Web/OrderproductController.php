@@ -482,8 +482,8 @@ class OrderproductController extends Controller
         }*/
 
         $data = array_merge([
-            'product_id'       => null,
-            'order_id'      => null,
+            'product_id'     => null,
+            'order_id'       => null,
             'products'       => null,
             'attribute'      => null,
             'extraAttribute' => null,
@@ -560,18 +560,18 @@ class OrderproductController extends Controller
      */
     public function storeOrderproductJsonObject($orderproductJsonObject, array $data)
     {
-        $grandParentProductId = optional($orderproductJsonObject)->product_id;
-        $productIds = optional($orderproductJsonObject)->productIds;
-        $attributes = optional($orderproductJsonObject)->attributes;
+        $grandParentProductId   = optional($orderproductJsonObject)->product_id;
+        $productIds             = optional($orderproductJsonObject)->products;
+        $attributes             = optional($orderproductJsonObject)->attribute;
+        $extraAttributes        = optional($orderproductJsonObject)->extraAttribute;
 
-        $orderproductData["product_id"] = $grandParentProductId;
-        $orderproductData["products"] = $productIds;
-        $orderproductData["attributes"] = $attributes;
+        $orderproductData["product_id"]     = $grandParentProductId;
+        $orderproductData["products"]       = $productIds;
+        $orderproductData["attributes"]     = $attributes;
+        $orderproductData["extraAttribute"] = $extraAttributes;
         $orderproductData["order_id"] = isset($data["order_id"]) ? $data["order_id"] : null;
-        if (isset($this->orderproductController))
-            $response = $this->new($orderproductData);
-        else
-            $response = false;
+
+        $response = $this->new($orderproductData);
 
         return $response;
     }
