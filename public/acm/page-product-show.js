@@ -65,6 +65,9 @@ var ProductSwitch = function () {
     }
 
     function getChildLevel() {
+        if (typeof $("input[name='products[]'].product")[0] === "undefined") {
+            return 1;
+        }
         let firstDefaultValue = $("input[name='products[]'].product")[0].defaultValue;
         let report1 = {
             'allChildIsChecked': true,
