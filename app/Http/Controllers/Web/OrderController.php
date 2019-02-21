@@ -1072,6 +1072,7 @@ class OrderController extends Controller
 
             $resultCode = Response::HTTP_UNPROCESSABLE_ENTITY;
             $resultText = 'Nothing was done!';
+            /** @var Coupon $coupon */
             $couponValidationStatus = $coupon->validateCoupon();
             if ($couponValidationStatus == Coupon::COUPON_VALIDATION_STATUS_OK) {
                     $oldCoupon = $order->coupon;
@@ -1164,10 +1165,12 @@ class OrderController extends Controller
             $resultText = 'Entered code is wrond';
         }
 
-        $response = [
-            'error'     =>  $resultCode,
-            'message'   =>  $resultText
-        ];
+        $response = [];
+        if($resultCode != Response::HTTP_OK)
+            $response = [
+                'error'     =>  $resultCode,
+                'message'   =>  $resultText
+            ];
         return response($response,Response::HTTP_OK);
     }
 
@@ -1180,6 +1183,8 @@ class OrderController extends Controller
     public function removeCoupon(Request $request)
     {
         $order = Order::Find($request->get("order_id"));
+        $resultCode = Response::HTTP_UNPROCESSABLE_ENTITY;
+        $resultText = 'Nothing was done!';
         if(isset($order))
         {
             $order->load("coupon");
@@ -1190,31 +1195,28 @@ class OrderController extends Controller
                 if($order->updateWithoutTimestamp()) {
                     $coupon->decreaseUseNumber();
                     $coupon->update();
-                    $responseStatusCode = Response::HTTP_OK;
-                    $responseMessage = "کپن سفارش شما با موفیت حذف شد";
-                    $sessionIndex = "couponMessageSuccess";
+                    $resultCode = Response::HTTP_OK;
+                    $resultText = "Coupon detached successfully";
                 }else{
-                    $responseStatusCode = Response::HTTP_SERVICE_UNAVAILABLE;
-                    $responseMessage = "خطای پایگاه داده";
-                    $sessionIndex = "couponMessageError";
+                    $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
+                    $resultText = "Database error";
                 }
             }
 
         }else
         {
-            $responseStatusCode = Response::HTTP_BAD_REQUEST;
-            $responseMessage = "سفارش مورد نظر یافت نشد";
-            $sessionIndex = "couponMessageError";
+            $resultCode = Response::HTTP_BAD_REQUEST;
+            $resultText = "No order found";
         }
 
-        if ($request->expectsJson())
-        {
-           return response()->setStatusCode($responseStatusCode)->setContent($responseMessage);
-        }
-        else{
-            session()->put( $sessionIndex, $responseMessage);
-            return redirect()->back();
-        }
+        $response = [];
+        if($resultCode != Response::HTTP_OK)
+            $response = [
+                'error'     =>  $resultCode,
+                'message'   =>  $resultText
+            ];
+        
+        return response($response,Response::HTTP_OK);
     }
 
     public function exitAdminInsertOrder()
