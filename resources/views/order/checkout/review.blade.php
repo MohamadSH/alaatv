@@ -220,8 +220,10 @@
 
 @section('content')
 
-    <div class="hidden">
-        @include("systemMessage.flash")
+    <div class="row">
+        <div class="col">
+            @include("systemMessage.flash")
+        </div>
     </div>
 
     @if(isset(request()->route()->parameters['modelNo']) && request()->route()->parameters['modelNo']==2)
@@ -1415,14 +1417,14 @@
                             </div>
                         </div>
                         <div class="m-portlet__head-tools">
-                            <button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info btnAddMoreProductToCart-desktop">
-                                <i class="flaticon-bag"></i>
-                                افزودن محصول جدید به سبد
-                            </button>
-                            <button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info btnAddMoreProductToCart-mobile">
-                                <i class="flaticon-bag"></i>
-                                افزودن محصول جدید
-                            </button>
+                                <button onclick="window.location.href='{{action('Web\ProductController@search')}}';" type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info btnAddMoreProductToCart-desktop">
+                                    <i class="flaticon-bag"></i>
+                                    افزودن محصول جدید به سبد
+                                </button>
+                                <button onclick="window.location.href='{{action('Web\ProductController@search')}}';" type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info btnAddMoreProductToCart-mobile">
+                                    <i class="flaticon-bag"></i>
+                                    افزودن محصول جدید
+                                </button>
                         </div>
                     </div>
 
@@ -1440,7 +1442,7 @@
                                                     <div class="m-widget5__pic" style="padding: 0px; width: auto;">
                                                         <button class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5"
                                                                 type="button"
-                                                                data-action="">
+                                                                style="visibility: hidden;">
                                                             <span>
                                                                 <i class="flaticon-circle"></i>
                                                                 <span>حذف</span>
@@ -1448,30 +1450,62 @@
                                                         </button>
                                                     </div>
                                                     <div class="m-widget5__pic">
-                                                        <a class="m-link" target="_blank" href="{{ $orderProductItem[0]->grandProduct->url }}">
-                                                            <img class="m-widget7__img" src="{{ $orderProductItem[0]->grandProduct->photo }}" alt="">
+                                                        <a class="m-link" target="_blank" href="{{ $orderProductItem->first()->grandProduct->url }}">
+                                                            <img class="m-widget7__img" src="{{ $orderProductItem->first()->grandProduct->photo }}" alt="">
                                                         </a>
                                                     </div>
+
+                                                    {{--attribute value in desktop--}}
                                                     <div class="m-widget5__section">
                                                         <div class=" d-none d-md-block d-lg-block d-xl-block">
                                                             <h4 class="m-widget5__title">
-                                                                <a class="m-link" target="_blank" href="{{ $orderProductItem[0]->grandProduct->url }}">
-                                                                    {{ $orderProductItem[0]->grandProduct->name }}
+                                                                <a class="m-link" target="_blank" href="{{ $orderProductItem->first()->grandProduct->url }}">
+                                                                    {{ $orderProductItem->first()->grandProduct->name }}
                                                                 </a>
                                                             </h4>
                                                             <span class="m-widget5__desc">
-                                                                #####################
+                                                                @if(isset($orderProductItem->first()->grandProduct->attributes))
+                                                                    @foreach($orderProductItem->first()->grandProduct->attributes as $productAttributeGroupKey=>$productAttributeGroup)
+                                                                        @foreach($productAttributeGroup as $attributeItem)
+                                                                            @if(($productAttributeGroupKey=='main' || $productAttributeGroupKey=='information') && $attributeItem->control=='simple')
+                                                                                {{ $attributeItem->title }} : {{ $attributeItem->data[0]->name }}
+                                                                                <br>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    @endforeach
+                                                                @endif
+                                                                @if(isset($orderProductItem->first()->attributevalues))
+                                                                    @foreach($orderProductItem->first()->attributevalues as $attributeGroupKey=>$attributeItem)
+                                                                        <span class="m-badge m-badge--info m-badge--wide m-badge--rounded m--margin-bottom-5">{{ $attributeItem->name }}</span>
+                                                                    @endforeach
+                                                                @endif
                                                             </span>
                                                         </div>
                                                     </div>
+
+                                                    {{--attribute value in mobile--}}
                                                     <div class="d-sm-none d-md-none d-lg-none m--margin-top-10">
                                                         <h4 class="m-widget5__title">
-                                                            {{ $orderProductItem[0]->grandProduct->name }}
+                                                            {{ $orderProductItem->first()->grandProduct->name }}
                                                         </h4>
                                                         <span class="m-widget5__desc">
-                                                            #####################
+                                                            @if(isset($orderProductItem->first()->grandProduct->attributes))
+                                                                @foreach($orderProductItem->first()->grandProduct->attributes as $productAttributeGroupKey=>$productAttributeGroup)
+                                                                    @foreach($productAttributeGroup as $attributeItem)
+                                                                        @if(($productAttributeGroupKey=='main' || $productAttributeGroupKey=='information') && $attributeItem->control=='simple')
+                                                                            {{ $attributeItem->title }} : {{ $attributeItem->data[0]->name }}
+                                                                        @endif
+                                                                    @endforeach
+                                                                @endforeach
+                                                            @endif
+                                                            @if(isset($orderProductItem->first()->attributevalues))
+                                                                @foreach($orderProductItem->first()->attributevalues as $attributeGroupKey=>$attributeItem)
+                                                                    <span class="m-badge m-badge--info m-badge--wide m-badge--rounded m--margin-bottom-5">{{ $attributeItem->name }}</span>
+                                                                @endforeach
+                                                            @endif
                                                         </span>
                                                     </div>
+
                                                 </div>
                                                 <div class="m-widget5__content">
                                                     <div class="m-widget5__stats1">
@@ -1538,7 +1572,7 @@
                                             <div class="m-widget5__content">
                                                 <div class="m-widget5__pic" style="padding: 0px; width: auto;">
                                                     <button type="button"
-                                                            data-action="{{action("Web\OrderproductController@destroy",$orderProductItem[0]->id)}}"
+                                                            data-action="{{action("Web\OrderproductController@destroy",$orderProductItem->first()->id)}}"
                                                             class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 btnRemoveOrderproduct">
                                                         <span>
                                                             <i class="flaticon-circle"></i>
@@ -1547,20 +1581,20 @@
                                                     </button>
                                                 </div>
                                                 <div class="m-widget5__pic">
-                                                    <a class="m-link" target="_blank" href="{{ $orderProductItem[0]->product->url }}">
-                                                        <img class="m-widget7__img" src="{{ $orderProductItem[0]->product->photo }}" alt="">
+                                                    <a class="m-link" target="_blank" href="{{ $orderProductItem->first()->product->url }}">
+                                                        <img class="m-widget7__img" src="{{ $orderProductItem->first()->product->photo }}" alt="">
                                                     </a>
                                                 </div>
                                                 <div class="m-widget5__section">
                                                     <div class=" d-none d-md-block d-lg-block d-xl-block">
                                                         <h4 class="m-widget5__title">
-                                                            <a class="m-link" target="_blank" href="{{ $orderProductItem[0]->product->url }}">
-                                                                {{ $orderProductItem[0]->product->name }}
+                                                            <a class="m-link" target="_blank" href="{{ $orderProductItem->first()->product->url }}">
+                                                                {{ $orderProductItem->first()->product->name }}
                                                             </a>
                                                         </h4>
                                                         <span class="m-widget5__desc">
-                                                            @if(isset($orderProductItem[0]->product->attributes))
-                                                                @foreach($orderProductItem[0]->product->attributes as $productAttributeGroupKey=>$productAttributeGroup)
+                                                            @if(isset($orderProductItem->first()->product->attributes))
+                                                                @foreach($orderProductItem->first()->product->attributes as $productAttributeGroupKey=>$productAttributeGroup)
                                                                     @foreach($productAttributeGroup as $attributeItem)
                                                                         @if(($productAttributeGroupKey=='main' || $productAttributeGroupKey=='information') && $attributeItem->control=='simple')
                                                                             {{ $attributeItem->title }} : {{ $attributeItem->data[0]->name }}
@@ -1569,10 +1603,9 @@
                                                                     @endforeach
                                                                 @endforeach
                                                             @endif
-                                                            @if(isset($orderProductItem[0]->attributevalues))
-                                                                @foreach($orderProductItem[0]->attributevalues as $attributeGroupKey=>$attributeItem)
-                                                                    <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">{{ $attributeItem->name }}</span>
-                                                                    <br>
+                                                            @if(isset($orderProductItem->first()->attributevalues))
+                                                                @foreach($orderProductItem->first()->attributevalues as $attributeGroupKey=>$attributeItem)
+                                                                    <span class="m-badge m-badge--info m-badge--wide m-badge--rounded m--margin-bottom-5">{{ $attributeItem->name }}</span>
                                                                 @endforeach
                                                             @endif
                                                         </span>
@@ -1580,17 +1613,22 @@
                                                 </div>
                                                 <div class="d-sm-none d-md-none d-lg-none m--margin-top-10">
                                                     <h4 class="m-widget5__title">
-                                                        {{ $orderProductItem[0]->product->name }}
+                                                        {{ $orderProductItem->first()->product->name }}
                                                     </h4>
                                                     <span class="m-widget5__desc">
-                                                        @if(isset($orderProductItem[0]->product->attributes))
-                                                            @foreach($orderProductItem[0]->product->attributes as $attributeGroupKey=>$attributeGroup)
+                                                        @if(isset($orderProductItem->first()->product->attributes))
+                                                            @foreach($orderProductItem->first()->product->attributes as $attributeGroupKey=>$attributeGroup)
                                                                 @foreach($attributeGroup as $attributeItem)
                                                                     @if(($attributeGroupKey=='main' || $attributeGroupKey=='information') && $attributeItem->control=='simple')
                                                                         {{ $attributeItem->title }} : {{ $attributeItem->data[0]->name }}
                                                                         <br>
                                                                     @endif
                                                                 @endforeach
+                                                            @endforeach
+                                                        @endif
+                                                        @if(isset($orderProductItem->first()->attributevalues))
+                                                            @foreach($orderProductItem->first()->attributevalues as $attributeGroupKey=>$attributeItem)
+                                                                <span class="m-badge m-badge--info m-badge--wide m-badge--rounded m--margin-bottom-5">{{ $attributeItem->name }}</span>
                                                             @endforeach
                                                         @endif
                                                     </span>
@@ -1600,19 +1638,19 @@
                                                 <div class="m-widget5__stats1">
                                                 <span class = "m-nav__link-badge">
                                                     <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                                                        @if($orderProductItem[0]->price['customerPrice']!=$orderProductItem[0]->price['cost'])
-                                                            <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($orderProductItem[0]->price['cost']+$orderProductItem[0]->price['extraCost']) }}</span>
+                                                        @if($orderProductItem->first()->price['customerPrice']!=$orderProductItem->first()->price['cost'])
+                                                            <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($orderProductItem->first()->price['cost']+$orderProductItem->first()->price['extraCost']) }}</span>
                                                         @endif
-                                                        {{ number_format($orderProductItem[0]->price['customerPrice']+$orderProductItem[0]->price['extraCost']) }} تومان
-                                                        @if(($orderProductItem[0]->price['bonDiscount']+$orderProductItem[0]->price['productDiscount'])>0)
-                                                            <span class="m-badge m-badge--info a--productDiscount">{{ $orderProductItem[0]->price['bonDiscount']+$orderProductItem[0]->price['productDiscount'] }}%</span>
+                                                        {{ number_format($orderProductItem->first()->price['customerPrice']+$orderProductItem->first()->price['extraCost']) }} تومان
+                                                        @if(($orderProductItem->first()->price['bonDiscount']+$orderProductItem->first()->price['productDiscount'])>0)
+                                                            <span class="m-badge m-badge--info a--productDiscount">{{ $orderProductItem->first()->price['bonDiscount']+$orderProductItem->first()->price['productDiscount'] }}%</span>
                                                         @endif
                                                     </span>
                                                 </span>
                                                 </div>
                                                 <div class="m-widget5__stats2">
                                                     <a href="#"
-                                                       data-action="{{action("Web\OrderproductController@destroy",$orderProductItem[0]->id)}}"
+                                                       data-action="{{action("Web\OrderproductController@destroy",$orderProductItem->first()->id)}}"
                                                        class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill btnRemoveOrderproduct">
                                                         <i class="la la-close"></i>
                                                     </a>
@@ -1641,7 +1679,7 @@
                                             مبلغ کل :
                                         </h3>
                                         <span class="m-widget1__desc">
-                                            شما {{ $orderProductCount }} محصول انتخاب کرده اید
+                                            شما {{ $invoiceInfo['orderproductCount'] }} محصول انتخاب کرده اید
                                         </span>
                                     </div>
                                     <div class="col m--align-right">
@@ -1680,14 +1718,16 @@
                                         <span class="m-widget1__desc"></span>
                                     </div>
                                     <div class="col m--align-right">
-                                    <span class="m-widget1__number m--font-brand">
+                                    <span class="m-widget1__number m--font-primary">
                                          {{ number_format($invoiceInfo['totalCost']) }} تومان
                                     </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent btnGotoCheckoutPayment-desktop btnGotoCheckoutPayment">
+                        <button type="button"
+                                onclick="window.location.href='{{action('Web\OrderController@checkoutPayment')}}';"
+                                class="btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent btnGotoCheckoutPayment-desktop btnGotoCheckoutPayment">
                             ادامه و ثبت سفارش
                         </button>
                     </div>
@@ -1701,16 +1741,20 @@
         <div class="m-portlet__body">
             <div class="row">
                 <div class="col-6">
-                    <button type="button" class="btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent btnGotoCheckoutPayment">
+                    <button type="button"
+                            onclick="window.location.href='{{action('Web\OrderController@checkoutPayment')}}';"
+                            class="btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent btnGotoCheckoutPayment">
                         ثبت سفارش
                     </button>
                 </div>
                 <div class="col-6">
                     <div class="priceReport">
                         <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                            <span class="m-badge m-badge--warning a--productRealPrice">14,000</span>
-                            15,000 تومان
-                            <span class="m-badge m-badge--info a--productDiscount">20%</span>
+                            @if($invoiceInfo['orderproductsRawCost']>$invoiceInfo['totalCost'])
+                                <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($invoiceInfo['orderproductsRawCost']) }}</span>
+                                <span class="m-badge m-badge--info a--productDiscount">{{ round((1-($invoiceInfo['totalCost']/$invoiceInfo['orderproductsRawCost']))*100) }}%</span>
+                            @endif
+                            {{ number_format($invoiceInfo['totalCost']) }} تومان
                         </span>
                     </div>
                 </div>
@@ -1729,7 +1773,7 @@
 
         $(document).ready(function() {
             $('.a--userCartList .m-portlet__head').sticky({
-                topSpacing: 70,
+                topSpacing: $('#m_header').height(),
                 zIndex: 99
             });
 
