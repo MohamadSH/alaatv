@@ -159,7 +159,7 @@ class HomeController extends Controller
 
             $order = \App\Order::find(248130);
 //            dd($order->orderproducts->first()->userbons);
-            dd($order->orderstatus);
+            dd($order->successfulTransactions);
 
             dd("here");
             return Block::getShopBlocks();

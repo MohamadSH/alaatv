@@ -834,6 +834,8 @@ class OrderController extends Controller
         $invoiceInfo=[];
         $user = $request->user();
 
+        $invoiceGenerator = new AlaaInvoiceGenerator();
+
         if(isset($user))
         {
             $order = Order::Find($request->order_id);
@@ -841,45 +843,29 @@ class OrderController extends Controller
 
             if(isset($order))
             {
-                $invoiceGenerator = new AlaaInvoiceGenerator($order);
-                $invoiceInfo = $invoiceGenerator->generateInvoice();
+                $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
                 $responseStatus = Response::HTTP_OK;
             }
             else
                 $responseStatus = Response::HTTP_BAD_REQUEST;
 
         }else{
+
             if(isset($_COOKIE["cartItems"]))
             {
                 $cookieOrderproducts = json_decode($_COOKIE["cartItems"]);
-                $fakeOrderproducts = $this->convertOrderproductObjectsToCollection($cookieOrderproducts);
-                $groupPriceInfo =  $fakeOrderproducts->calculateGroupPrice();
-
-                $invoiceInfo["orderproducts"]          = $fakeOrderproducts;
-//                $invoiceInfo["costCollection"]         = $groupPriceInfo["newPrices"];
-                $invoiceInfo["orderproductsRawCost"]   = $groupPriceInfo["rawCost"];
-                $invoiceInfo["payableCost"]            = $invoiceInfo["totalCost"] = $groupPriceInfo["customerCost"];
-                $invoiceInfo["payableByWallet"]           = 0 ;
+                $fakeOrderproducts   = $this->convertOrderproductObjectsToCollection($cookieOrderproducts);
+                $invoiceInfo         = $invoiceGenerator->generateFakeOrderproductsInvoice($fakeOrderproducts);
             }
 
             $responseStatus = Response::HTTP_OK;
         }
 
-        if ($request->expectsJson())
+        if ($request->expectsJson() || true)
         {
             return response(["invoiceInfo"=>$invoiceInfo] , $responseStatus);
         }
 
-        $orderProductCount = 0;
-        foreach($invoiceInfo['orderproducts'] as $key=>$orderProductItem) {
-            if($orderProductItem->count()>1) {
-                foreach($orderProductItem as $keyChild=>$orderProductItemChild) {
-                    $orderProductCount++;
-                }
-            } else {
-                $orderProductCount++;
-            }
-        }
 //        return $invoiceInfo;
         return view("order.checkout.review", compact("invoiceInfo", 'orderProductCount'));
     }
@@ -965,8 +951,8 @@ class OrderController extends Controller
             $coupon = $order->coupon_info;
             $notIncludedProductsInCoupon = $order->reviewCouponProducts();
 
-            $invoiceGenerator = new AlaaInvoiceGenerator($order);
-            $invoiceInfo = $invoiceGenerator->generateInvoice();
+            $invoiceGenerator = new AlaaInvoiceGenerator();
+            $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
 
             $response = response([
 //                "order"                         => $order,
@@ -1878,10 +1864,13 @@ class OrderController extends Controller
 
             $products = (new RefinementFactory($grandParentProduct, $data))->getRefinementClass()->getProducts();
 
+            /** @var Product $product */
             foreach ($products as $product) {
                 $fakeOrderproduct = new Orderproduct();
                 $fakeOrderproduct->id = $product->id;
                 $fakeOrderproduct->product_id = $product->id;
+                $costInfo = $product->calculatePayablePrice();
+                $fakeOrderproduct->cost = $costInfo["cost"];
                 $fakeOrderproduct->updated_at = Carbon::now();
                 $fakeOrderproduct->created_at = Carbon::now();
 
