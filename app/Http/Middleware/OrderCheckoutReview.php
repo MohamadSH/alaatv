@@ -41,8 +41,7 @@ class OrderCheckoutReview
                     return response([] , Response::HTTP_FORBIDDEN);
             }else
             {
-                //ToDo $openOrder = $user->getOpenOrder();
-                $openOrder = $user->openOrders->first();
+                $openOrder = $user->getOpenOrder();
                 $request->offsetSet("order_id" , $openOrder->id);
 
                 $cookieOrderproducts = [];

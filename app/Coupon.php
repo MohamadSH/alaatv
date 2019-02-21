@@ -207,7 +207,7 @@ class Coupon extends BaseModel
             $validationStatus = Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN;
         }elseif(!$this->hasTimeToUntilTime()) {
             $validationStatus = Coupon::COUPON_VALIDATION_STATUS_EXPIRED;
-        }elseif(!$this->hasTotalNumberFinished()) {
+        }elseif($this->hasTotalNumberFinished()) {
             $validationStatus = Coupon::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED;
         }
 
