@@ -220,8 +220,10 @@
 
 @section('content')
 
-    <div class="hidden">
-        @include("systemMessage.flash")
+    <div class="row">
+        <div class="col">
+            @include("systemMessage.flash")
+        </div>
     </div>
 
     @if(isset(request()->route()->parameters['modelNo']) && request()->route()->parameters['modelNo']==2)
@@ -1677,7 +1679,7 @@
                                             مبلغ کل :
                                         </h3>
                                         <span class="m-widget1__desc">
-                                            شما {{ $orderProductCount }} محصول انتخاب کرده اید
+                                            شما {{ $invoiceInfo['orderproductCount'] }} محصول انتخاب کرده اید
                                         </span>
                                     </div>
                                     <div class="col m--align-right">

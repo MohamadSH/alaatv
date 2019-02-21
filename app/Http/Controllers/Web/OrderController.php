@@ -834,6 +834,8 @@ class OrderController extends Controller
         $invoiceInfo=[];
         $user = $request->user();
 
+        $invoiceGenerator = new AlaaInvoiceGenerator();
+
         if(isset($user))
         {
             $order = Order::Find($request->order_id);
@@ -949,8 +951,8 @@ class OrderController extends Controller
             $coupon = $order->coupon_info;
             $notIncludedProductsInCoupon = $order->reviewCouponProducts();
 
-            $invoiceGenerator = new AlaaInvoiceGenerator($order);
-            $invoiceInfo = $invoiceGenerator->generateInvoice();
+            $invoiceGenerator = new AlaaInvoiceGenerator();
+            $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
 
             $response = response([
 //                "order"                         => $order,
@@ -1862,10 +1864,13 @@ class OrderController extends Controller
 
             $products = (new RefinementFactory($grandParentProduct, $data))->getRefinementClass()->getProducts();
 
+            /** @var Product $product */
             foreach ($products as $product) {
                 $fakeOrderproduct = new Orderproduct();
                 $fakeOrderproduct->id = $product->id;
                 $fakeOrderproduct->product_id = $product->id;
+                $costInfo = $product->calculatePayablePrice();
+                $fakeOrderproduct->cost = $costInfo["cost"];
                 $fakeOrderproduct->updated_at = Carbon::now();
                 $fakeOrderproduct->created_at = Carbon::now();
 

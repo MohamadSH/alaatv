@@ -55,7 +55,20 @@
         #PaymentType-online .m-radio-inline .m-radio:last-child {
             margin-left: 15px;
         }
-
+        .discountCodeValueWarperCover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9;
+            background: #80808099;
+            -webkit-box-shadow: 0px 0px 20px 1px rgba(128, 128, 128, 1);
+            -moz-box-shadow: 0px 0px 20px 1px rgba(128, 128, 128, 1);
+            box-shadow: 0px 0px 20px 1px rgba(128, 128, 128, 1);
+            cursor: not-allowed;
+            display: none;
+        }
 
         @media (max-width: 1024px) {
             .m-portlet--creative.noHeadText > .m-portlet__body {
@@ -67,6 +80,12 @@
 
 @section('content')
 
+
+    <div class="row">
+        <div class="col">
+            @include("systemMessage.flash")
+        </div>
+    </div>
 
     <div class="row">
         {{--روش پرداخت--}}
@@ -155,11 +174,20 @@
 
                                     <div class="m-portlet PaymentType" id="PaymentType-card2card">
                                         <div class="m-portlet__body">
-                                            جهت تایید سفارش مبلغ 12،470 تومان به شماره کارت:
-                                            <br>
-                                            4444-4444-4444-4444
-                                            <br>
-                                            به نام فلان فلانی بانک فلان واریز نمایید.
+                                            <div class="row">
+                                                <div class="col-12 col-md-9">
+                                                    جهت تایید سفارش مبلغ
+                                                    <b class="finalPriceValue">{{ number_format($invoiceInfo['totalCost']) }}</b>
+                                                    تومان به شماره کارت:
+                                                    <br>
+                                                    4444-4444-4444-4444
+                                                    <br>
+                                                    به نام فلان فلانی بانک فلان واریز نمایید.
+                                                </div>
+                                                <div class="col-12 col-md-3">
+                                                    <img class="a--full-width" src="/acm/extra/payment/balance-transfer.png" alt="کارت به کارت">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -168,6 +196,9 @@
 
                             {{--dicount code--}}
                             <div class="row justify-content-center">
+                                <div class="col-12">
+                                    <hr>
+                                </div>
                                 <div class="col-12 col-sm-8 col-md-6 col-lg-6 m--margin-top-20 text-center">
                                     <span>
                                         <label for="hasntDiscountCode">
@@ -175,10 +206,13 @@
                                         </label>
                                     </span>
                                     <span class="m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
-
                                         <input type="checkbox"
                                           data-switch="true"
-                                          checked=""
+                                            @if(isset($coupon))
+                                               checked="true"
+                                            @else
+                                               checked="false"
+                                            @endif
                                           data-on-text="ندارم"
                                           data-on-color="danger"
                                           data-off-text="دارم"
@@ -190,26 +224,61 @@
                                 </div>
                                 <div class="col-12 col-md-6 m--margin-top-10">
                                     <div class="input-group discountCodeValueWarper">
-                                        <input type="text" class="form-control" placeholder="کد تخفیف ..." id="discountCodeValue">
-                                        <div class="input-group-prepend">
-                                            <button class="btn btn-success" type="button">ثبت</button>
+                                        <div class="discountCodeValueWarperCover"></div>
+                                        <input type="text"
+                                               class="form-control"
+                                               placeholder="کد تخفیف ..."
+                                               @if(isset($coupon))
+                                                value="{{ $coupon->code }}"
+                                               @endif
+                                               id="discountCodeValue">
+                                        <div class="input-group-prepend DiscountCodeActionsWarper">
+                                            @if(isset($coupon))
+                                                <button class="btn btn-danger" type="button" id="btnRemoveDiscountCodeValue">حذف</button>
+                                            @else
+                                                <button class="btn btn-success" type="button" id="btnSaveDiscountCodeValue">ثبت</button>
+                                            @endif
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col-12">
+                                    @if(isset($coupon))
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            </button>
+                                            @if($coupon->discounttype->id == Config::get("constants.DISCOUNT_TYPE_COST"))
+                                                کپن تخفیف
+                                                <strong>{{$coupon->name}}</strong>
+                                                با
+                                                {{number_format($coupon->discount)}}
+                                                تومان تخفیف برای سفارش شما ثبت شد.
+                                            @else
+                                                کپن تخفیف
+                                                <strong>{{$coupon->name}}</strong>
+                                                با
+                                                {{$coupon->discount}}
+                                                % تخفیف برای
+                                                سفارش شما ثبت شده است.
+                                            @endif
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
 
                             {{--user description--}}
                             <div class="row justify-content-center">
+                                <div class="col-12">
+                                    <hr>
+                                </div>
                                 <div class="col-12 col-sm-8 col-md-6 col-lg-6 m--margin-top-20 text-center">
                                     <div class="form-group m-form__group">
-                                        <label for="bio">اگر توضیحی</label>
+                                        <label for="bio">اگر توضیحی در مورد سفارش خود دارید اینجا بنویسید:</label>
                                         <div class="m-input-icon m-input-icon--left">
-                                            <textarea id="bio" class="form-control m-input m-input--air" placeholder="درباره ی شما" rows="13" name="bio" cols="50"></textarea>
+                                            <textarea id="bio" class="form-control m-input m-input--air" placeholder="توضیح شما..." rows="2" name="bio" cols="50"></textarea>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
 
                             {{--btn submit order--}}
                             <div class="row justify-content-center">
@@ -249,7 +318,7 @@
                                 <span>
                                     مبلغ قابل پرداخت:
                                     <br>
-                                    <b id="finalPriceValue">{{ number_format($invoiceInfo['totalCost']) }}</b>
+                                    <b class="finalPriceValue">{{ number_format($invoiceInfo['totalCost']) }}</b>
                                     تومان
                                     <hr>
                                     <small>
@@ -362,31 +431,13 @@
                         @include("partials.checkoutSteps" , ["step"=>3])
                         <div class="col-md-12">
                             <div class="portlet dark box">
-                                <div class="portlet-title">
-                                    <div class="caption">
-                                        @if(session()->has("adminOrder_id"))
-                                            ثبت نهایی سفارش
-                                            برای {{Session::get("customer_firstName")}} {{Session::get("customer_lastName")}}
-                                        @else
-                                            پرداخت
-                                        @endif
-                                    </div>
-                                </div>
+
                                 <div class="portlet-body">
                                     {{--<div class="row static-info margin-top-20">--}}
                                     @include("systemMessage.flash")
                                     {{--</div>--}}
 
                                     <div class="row margin-top-10">
-                                        @if(!isset($coupon))
-                                            <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12 text-center">
-                                                <label for="couponSwitch"></label>
-                                                <input type="checkbox" class="make-switch"
-                                                       data-on-text="&nbsp;کد&nbsp;تخفیف&nbsp;دارم&nbsp;"
-                                                       data-off-text="&nbsp;کد&nbsp;تخفیف&nbsp;ندارم&nbsp;"
-                                                       id="couponSwitch">
-                                            </div>
-                                        @endif
                                         <div class="col-lg-9 col-md-9 col-sd-9 col-xs-12"
                                              @if(!isset($coupon)) style="display: none" id="couponForm" @endif>
                                             {{--                                            {!! Form::open(['method' => 'POST','action' => ['OrderController@submitCoupon'] , 'class'=>'form-horizontal' ]) !!}--}}
@@ -620,6 +671,7 @@
     <script>
 
         jQuery(document).ready(function () {
+            var totalCost = {{ $invoiceInfo['totalCost'] }};
             function refreshUi() {
                 refreshUiBasedOnPaymentType();
                 refreshUiBasedOnDonateStatus();
@@ -668,23 +720,141 @@
                     return true;
                 }
             }
-            function refreshUiBasedOnDonateStatus() {
+            function refreshUiBasedOnDonateStatus(donateValue) {
                 if(getDonateStatus()) {
                     donate();
                 } else {
                     dontdonate();
+                    donateValue = 0;
                 }
+                let calcTotalCost = totalCost+(donateValue*1000);
+                $('.finalPriceValue').html(calcTotalCost.toLocaleString('fa'));
             }
             function refreshUiBasedOnHasntDiscountCodeStatus() {
                 $('#discountCodeValue').val('');
                 if(!$('#hasntDiscountCode').prop('checked')) {
-                    $('.discountCodeValueWarper').fadeIn();
+                    // $('.discountCodeValueWarper').fadeIn();
+                    $('.discountCodeValueWarperCover').fadeOut();
+                    $('#discountCodeValue').prop('disabled', false);
+                    $('#btnSaveDiscountCodeValue').prop('disabled', false);
+                    $('#discountCodeValue').prop('readonly', false);
+                    $('#btnSaveDiscountCodeValue').prop('readonly', false);
                 } else {
-                    $('.discountCodeValueWarper').fadeOut();
+                    // $('.discountCodeValueWarper').fadeOut();
+                    $('.discountCodeValueWarperCover').fadeIn();
+                    $('#discountCodeValue').prop('disabled', true);
+                    $('#btnSaveDiscountCodeValue').prop('disabled', true);
+                    $('#discountCodeValue').prop('readonly', true);
+                    $('#btnSaveDiscountCodeValue').prop('readonly', true);
                 }
             }
 
             refreshUi();
+
+
+
+            $(document).on('click', '#btnSaveDiscountCodeValue', function(e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ action('Web\OrderController@submitCoupon') }}',
+                    data: {
+                        coupon: $('#discountCodeValue').val()
+                    },
+                    statusCode: {
+                        //The status for when action was successful
+                        200: function (response) {
+                            console.log('submitCoupon: '+response);
+                            alert('hi!');
+                            if( false ) {
+
+                            } else {
+
+                            }
+                        },
+                        //The status for when the user is not authorized for making the request
+                        403: function (response) {
+                            window.location.replace("/403");
+                        },
+                        //The status for when the user is not authorized for making the request
+                        401: function (response) {
+                            window.location.replace("/403");
+                        },
+                        //Method Not Allowed
+                        405: function (response) {
+//                        console.log(response);
+//                        console.log(response.responseText);
+                            location.reload();
+                        },
+                        404: function (response) {
+                            window.location.replace("/404");
+                        },
+                        //The status for when form data is not valid
+                        422: function (response) {
+                            // console.log(response);
+                        },
+                        //The status for when there is error php code
+                        500: function (response) {
+                            // console.log(response.responseText);
+//                            toastr["error"]("خطای برنامه!", "پیام سیستم");
+                        },
+                        //The status for when there is error php code
+                        503: function (response) {
+                            // toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+                        }
+                    }
+                });
+            });
+            $(document).on('click', '#btnRemoveDiscountCodeValue', function(e) {
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ action('Web\OrderController@removeCoupon') }}',
+                    data: {
+                        coupon: $('#discountCodeValue').val()
+                    },
+                    statusCode: {
+                        //The status for when action was successful
+                        200: function (response) {
+                            console.log('submitCoupon: '+response);
+                            alert('hi!');
+                            if( false ) {
+
+                            } else {
+
+                            }
+                        },
+                        //The status for when the user is not authorized for making the request
+                        403: function (response) {
+                            window.location.replace("/403");
+                        },
+                        //The status for when the user is not authorized for making the request
+                        401: function (response) {
+                            window.location.replace("/403");
+                        },
+                        //Method Not Allowed
+                        405: function (response) {
+//                        console.log(response);
+//                        console.log(response.responseText);
+                            location.reload();
+                        },
+                        404: function (response) {
+                            window.location.replace("/404");
+                        },
+                        //The status for when form data is not valid
+                        422: function (response) {
+                            // console.log(response);
+                        },
+                        //The status for when there is error php code
+                        500: function (response) {
+                            // console.log(response.responseText);
+//                            toastr["error"]("خطای برنامه!", "پیام سیستم");
+                        },
+                        //The status for when there is error php code
+                        503: function (response) {
+                            // toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+                        }
+                    }
+                });
+            });
 
             $(document).on('change', 'input[type="radio"][name="radioPaymentType"]', function(e) {
                 refreshUiBasedOnPaymentType();
@@ -693,7 +863,7 @@
                 refreshUiBasedOnHasntDiscountCodeStatus();
             });
             $(document).on('switchChange.bootstrapSwitch', '#hasntDonate', function(e) {
-                refreshUiBasedOnDonateStatus();
+                refreshUiBasedOnDonateStatus($('#m_nouislider_1_input').val());
             });
 
             var e = document.getElementById('m_nouislider_1');
@@ -707,7 +877,7 @@
             var n = document.getElementById('m_nouislider_1_input');
             e.noUiSlider.on('update', function (e, t) {
                 n.value = e[t];
-                refreshUiBasedOnDonateStatus();
+                refreshUiBasedOnDonateStatus(n.value);
             }), n.addEventListener('change', function () {
                 e.noUiSlider.set(this.value)
             });

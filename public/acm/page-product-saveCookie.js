@@ -24,7 +24,7 @@ var UesrCart = function () {
     }
 
     function getUserCartFromCookie() {
-        let userCart = getCookie('UserCart');
+        let userCart = getCookie('cartItems');
         if(userCart.length>0) {
             return JSON.parse(userCart);
         } else {
@@ -58,9 +58,9 @@ var UesrCart = function () {
             userCart.push(data);
         }
 
-        setCookie('UserCart', JSON.stringify(userCart), 7);
+        setCookie('cartItems', JSON.stringify(userCart), 7);
 
-        console.log('UserCartFromCookie: ', getUserCartFromCookie());
+        console.log('cartItemsFromCookie: ', getUserCartFromCookie());
     }
 
     function disableBtnAddToCart() {
@@ -121,28 +121,33 @@ jQuery(document).ready(function() {
                     200: function (response) {
                         // console.log(response);
 
-                        toastr.options = {
-                            "closeButton": false,
-                            "debug": false,
-                            "newestOnTop": false,
-                            "progressBar": true,
-                            "positionClass": "toast-bottom-right",
-                            "preventDuplicates": false,
-                            "onclick": null,
-                            "showDuration": "300",
-                            "hideDuration": "1000",
-                            "timeOut": "5000",
-                            "extendedTimeOut": "1000",
-                            "showEasing": "swing",
-                            "hideEasing": "linear",
-                            "showMethod": "fadeIn",
-                            "hideMethod": "fadeOut"
-                        };
-                        toastr.success("محصول مورد نظر به سبد خرید اضافه شد.");
+                        $.notify('محصول مورد نظر به سبد خرید اضافه شد.', {
+                            type: 'success',
+                            allow_dismiss: true,
+                            newest_on_top: false,
+                            mouse_over: false,
+                            showProgressbar: false,
+                            spacing: 10,
+                            timer: 2000,
+                            placement: {
+                                from: 'top',
+                                align: 'center'
+                            },
+                            offset: {
+                                x: 30,
+                                y: 30
+                            },
+                            delay: 1000,
+                            z_index: 10000,
+                            animate: {
+                                enter: "animated flip",
+                                exit: "animated hinge"
+                            }
+                        });
 
                         setTimeout(function() {
                             window.location.replace('/checkout/review');
-                        }, 2000);
+                        }, 1000);
 
                     },
                     //The status for when the user is not authorized for making the request
@@ -187,37 +192,18 @@ jQuery(document).ready(function() {
 
             let data = {
                 'product_id':$('input[name="product_id"][type="hidden"]').val(),
-                'mainAttributeStates':mainAttributeStates,
-                'extraAttributeStates':extraAttributeStates,
-                'productSelectValues':productSelectValues,
+                'attribute':mainAttributeStates,
+                'extraAttribute':extraAttributeStates,
+                'products':productSelectValues,
             };
 
             UesrCart.addToCartInCookie(data);
-
-            toastr.options = {
-                "closeButton": false,
-                "debug": false,
-                "newestOnTop": false,
-                "progressBar": true,
-                "positionClass": "toast-bottom-right",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            };
-
-            toastr.success("محصول مورد نظر به سبد خرید اضافه شد.");
 
             setTimeout(function() {
                 window.location.replace('/checkout/review');
             }, 2000);
         }
+
     });
 });
 

@@ -46,6 +46,10 @@
             top: -10px;
             left: -12px;
         }
+        .a--full-width {
+            max-width: 100%;
+            min-width: 100%;
+        }
 
         /*fix them style*/
         .m-portlet.m-portlet--head-overlay .m-portlet__body {

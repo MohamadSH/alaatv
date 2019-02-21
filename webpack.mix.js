@@ -53,6 +53,7 @@ mix.babel(
             'node_modules/lightgallery/modules/lg-video.min.js',
             'node_modules/lightgallery/modules/lg-zoom.min.js',
             'node_modules/jquery-sticky/jquery.sticky.js',
+            'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
             'public/acm/video-js/video.js',
             'public/acm/video-js/videojs-ie8.min.js',
             'public/acm/video-js/nuevo/nuevo.min.js',
