@@ -28,7 +28,9 @@ class AttachExtraAttributesRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'extraAttribute.*.id' => 'required|exists:attributevalues,id',
+            'extraAttribute' => 'required|array',
+            'extraAttribute.*' => 'required|array',
+            'extraAttribute.*.id' => 'required|numeric',
             'extraAttribute.*.cost' => 'required|numeric'
         ];
         return $rules;

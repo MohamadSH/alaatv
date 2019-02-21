@@ -43,10 +43,79 @@ mix.scripts(
 // TODO : must convert to mix.script
 mix.babel(
     [
+            'node_modules/lightgallery/src/js/lightgallery.js',
+            'node_modules/lightgallery/modules/lg-thumbnail.min.js',
+            'node_modules/lightgallery/modules/lg-autoplay.min.js',
+            'node_modules/lightgallery/modules/lg-fullscreen.min.js',
+            'node_modules/lightgallery/modules/lg-pager.min.js',
+            'node_modules/lightgallery/modules/lg-hash.min.js',
+            'node_modules/lightgallery/modules/lg-share.min.js',
+            'node_modules/lightgallery/modules/lg-video.min.js',
+            'node_modules/lightgallery/modules/lg-zoom.min.js',
+            'node_modules/jquery-sticky/jquery.sticky.js',
+            'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
+            'public/acm/video-js/video.js',
+            'public/acm/video-js/videojs-ie8.min.js',
+            'public/acm/video-js/nuevo/nuevo.min.js',
             'public/acm/product-show-v13.js',
-            'public/acm/page-product-show.js'
+            'public/acm/page-product-show.js',
+            'public/acm/page-product-saveCookie.js'
     ],
     'public/js/product-show.js'
+).version();
+
+//scripts
+mix.scripts(
+    [
+        'node_modules/jquery-sticky/jquery.sticky.js'
+    ],
+    'public/js/checkout-review.js'
+).version();
+
+mix.scripts(
+    [
+        'public/assets/demo/demo12/custom/crud/forms/widgets/bootstrap-switch.js',
+        // 'public/assets/demo/demo12/custom/crud/forms/widgets/nouislider.js',
+    ],
+    'public/js/checkout-payment.js'
+).version();
+mix.scripts(
+    [
+        'node_modules/persian-date/dist/persian-date.js',
+        'node_modules/persian-datepicker/dist/js/persian-datepicker.js'
+    ],
+    'public/js/user-profile.js'
+).version();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+mix.styles(
+    [
+        'node_modules/persian-datepicker/dist/css/persian-datepicker.css',
+        'node_modules/bootstrap-fileinput/css/fileinput.css',
+        'node_modules/bootstrap-fileinput/css/fileinput-rtl.css',
+    ],
+    'public/css/user-profile.css'
+).version();
+
+mix.styles(
+    [
+        'node_modules/lightgallery/src/css/lightgallery.css',
+        'public/acm/video-js/video-js.css',
+    ],
+    'public/css/product-show/product-show.css'
 ).version();
 
 mix.scripts(

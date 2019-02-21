@@ -32,9 +32,9 @@ trait AssetTrait
                     ->join('orders', function ($join) {
                         $join->on('orders.id', '=', 'orderproducts.order_id')
                              ->whereIn('orders.orderstatus_id', [
-                                 Config::get("constants.ORDER_STATUS_CLOSED"),
-                                 Config::get("constants.ORDER_STATUS_POSTED"),
-                                 Config::get("constants.ORDER_STATUS_READY_TO_POST"),
+                                 config("constants.ORDER_STATUS_CLOSED"),
+                                 config("constants.ORDER_STATUS_POSTED"),
+                                 config("constants.ORDER_STATUS_READY_TO_POST"),
                              ])
                              ->whereNull('orders.deleted_at');
                     })

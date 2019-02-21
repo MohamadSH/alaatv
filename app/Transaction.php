@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Collection\TransactionCollection;
+
 /**
  * App\Transaction
  *
@@ -103,6 +105,23 @@ class Transaction extends BaseModel
         'transactionstatus_id',
         'completed_at',
     ];
+
+    protected $appends = [
+        'paymentmethod',
+        'transactiongateway'
+    ];
+
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array $models
+     *
+     * @return TransactionCollection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new TransactionCollection($models);
+    }
 
     public function transactiongateway()
     {
@@ -239,5 +258,21 @@ class Transaction extends BaseModel
             $response = ["result"=> false];
         }
         return $response;
+    }
+
+    public function getTransactionGatewayAttribute(){
+        return $this->transactiongateway()->first()->setVisible([
+            'name',
+            'displayName',
+            'description'
+        ]);
+    }
+
+    public function getPaymentmethodAttribute(){
+        return $this->paymentmethod()->first()->setVisible([
+            'name',
+            'displayName',
+            'description'
+        ]);
     }
 }

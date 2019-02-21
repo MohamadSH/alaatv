@@ -28,10 +28,14 @@ class OrderProductStoreRequest extends FormRequest
         $rules = [
             'order_id' => 'required|numeric',
             'product_id' => 'required|numeric',
-            'products.*' => 'sometimes|numeric',
-            'attribute.*' => 'sometimes|numeric',
-            'extraAttribute.*.id' => 'sometimes|numeric',
-            'withoutBon' => 'sometimes|boolean'
+            'products' => 'sometimes|required|array',
+            'products.*' => 'sometimes|required|numeric',
+            'attribute' => 'sometimes|required|array',
+            'attribute.*' => 'sometimes|required|numeric',
+            'extraAttribute' => 'sometimes|required|array',
+            'extraAttribute.*' => 'sometimes|required|array',
+            'extraAttribute.*.id' => 'sometimes|required|numeric',
+            'withoutBon' => 'sometimes|required|boolean'
         ];
         return $rules;
     }

@@ -16,7 +16,6 @@ trait CashierOrderUnit
     protected $totalPrice; // Total price before calculating Order's discount
     protected $temporaryFinalPrice;
     protected $finalPrice;
-    protected $priceToPay;
 
     /**
      * @param mixed $order
@@ -61,16 +60,6 @@ trait CashierOrderUnit
     }
 
     /**
-     * @param mixed $priceToPay
-     * @return mixed
-     */
-    public function setPriceToPay($priceToPay)
-    {
-        $this->priceToPay = $priceToPay;
-        return $this;
-    }
-
-    /**
      * @return Order
      */
     public function getOrder() :Order
@@ -100,13 +89,5 @@ trait CashierOrderUnit
     public function getFinalPrice()
     {
         return $this->finalPrice;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPriceToPay()
-    {
-        return $this->priceToPay;
     }
 }

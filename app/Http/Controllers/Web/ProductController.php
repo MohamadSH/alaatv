@@ -337,7 +337,8 @@ class ProductController extends Controller
 
 
 
-//        return $product->type['type'];
+//        dd($product);
+//        return $product;
 //        return $product->type['type'];
 //        return $product->attributes->get('main');
 //        return $product->type->get('main');

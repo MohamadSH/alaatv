@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Http\Controllers\Web\OrderproductController;
+use App\User;
 use Closure;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -31,6 +32,7 @@ class OrderCheckoutReview
     {
         if (Auth::guard($guard)->check())
         {
+            /** @var User $user */
             $user = Auth::guard($guard)->user();
 
             if($request->has("order_id"))
@@ -39,8 +41,7 @@ class OrderCheckoutReview
                     return response([] , Response::HTTP_FORBIDDEN);
             }else
             {
-                //ToDo $openOrder = $user->getOpenOrder();
-                $openOrder = $user->openOrders->first();
+                $openOrder = $user->getOpenOrder();
                 $request->offsetSet("order_id" , $openOrder->id);
 
                 $cookieOrderproducts = [];

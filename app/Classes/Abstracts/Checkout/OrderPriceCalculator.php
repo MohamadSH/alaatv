@@ -25,7 +25,6 @@ abstract class OrderPriceCalculator extends CheckoutProcessor
         $totalPrice =  $this->calculateOrderPrice($totalRawPriceWhichDoesntHaveDiscount , $totalPriceWithDiscount );
 
         $cashier->setTotalPrice($totalPrice);
-        $cashier->setPriceToPay($totalPrice);
         $cashier->setFinalPrice($totalPrice);
 
         return $this->next($cashier) ;

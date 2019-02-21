@@ -95,6 +95,14 @@ class Coupon extends BaseModel
         'discounttype_id',
     ];
 
+    protected $appends = [
+        'discountType'
+    ];
+
+    protected $hidden = [
+        'discounttype_id',
+    ];
+
     const COUPON_VALIDATION_STATUS_OK = 0;
     const COUPON_VALIDATION_STATUS_DISABLED = 1;
     const COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN = 2;
@@ -199,7 +207,7 @@ class Coupon extends BaseModel
             $validationStatus = Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN;
         }elseif(!$this->hasTimeToUntilTime()) {
             $validationStatus = Coupon::COUPON_VALIDATION_STATUS_EXPIRED;
-        }elseif(!$this->hasTotalNumberFinished()) {
+        }elseif($this->hasTotalNumberFinished()) {
             $validationStatus = Coupon::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED;
         }
 
@@ -290,4 +298,12 @@ class Coupon extends BaseModel
         $this->usageNumber++;
     }
 
+    public function getDiscountTypeAttribute()
+    {
+        return $this->discounttype()->first()->setVisible([
+            'name',
+            'displayName',
+            'description'
+        ]);
+    }
 }

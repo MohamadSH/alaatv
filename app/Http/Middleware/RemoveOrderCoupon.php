@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\User;
 use Closure;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,8 @@ class RemoveOrderCoupon
                     return response([] , Response::HTTP_FORBIDDEN);
             }else
             {
-                $openOrder = $user->openOrders->first();
+                /** @var User $user */
+                $openOrder = $user->getOpenOrder();
                 if(isset($openOrder))
                     $request->offsetSet("order_id" , $openOrder->id);
             }
