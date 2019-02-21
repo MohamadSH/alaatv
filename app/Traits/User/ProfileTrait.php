@@ -13,6 +13,7 @@ use App\Afterloginformcontrol;
 use App\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
+use Auth;
 
 trait ProfileTrait
 {

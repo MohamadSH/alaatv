@@ -531,12 +531,13 @@ class Orderproduct extends BaseModel
 
     }
 
-    public function getAttributeValuesAttribute()
+    public function getAttributevaluesAttribute()
     {
         $orderproduct = $this ;
         $key = "orderproduct:attributevalues:" . $orderproduct->cacheKey();
         return Cache::tags(["orderproduct"])
             ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
+                //ToDo : set visible
                     $attributevalues = $orderproduct->attributevalues()->get();
                     return $attributevalues;
             });

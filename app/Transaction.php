@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Collection\TransactionCollection;
+
 /**
  * App\Transaction
  *
@@ -108,6 +110,18 @@ class Transaction extends BaseModel
         'paymentmethod',
         'transactiongateway'
     ];
+
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array $models
+     *
+     * @return TransactionCollection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new TransactionCollection($models);
+    }
 
     public function transactiongateway()
     {

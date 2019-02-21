@@ -841,45 +841,30 @@ class OrderController extends Controller
 
             if(isset($order))
             {
-                $invoiceGenerator = new AlaaInvoiceGenerator($order);
-                $invoiceInfo = $invoiceGenerator->generateInvoice();
+                $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
                 $responseStatus = Response::HTTP_OK;
             }
             else
                 $responseStatus = Response::HTTP_BAD_REQUEST;
 
         }else{
+
             if(isset($_COOKIE["cartItems"]))
             {
                 $cookieOrderproducts = json_decode($_COOKIE["cartItems"]);
-                $fakeOrderproducts = $this->convertOrderproductObjectsToCollection($cookieOrderproducts);
-                $groupPriceInfo =  $fakeOrderproducts->calculateGroupPrice();
-
-                $invoiceInfo["orderproducts"]          = $fakeOrderproducts;
-//                $invoiceInfo["costCollection"]         = $groupPriceInfo["newPrices"];
-                $invoiceInfo["orderproductsRawCost"]   = $groupPriceInfo["rawCost"];
-                $invoiceInfo["payableCost"]            = $invoiceInfo["totalCost"] = $groupPriceInfo["customerCost"];
-                $invoiceInfo["payableByWallet"]           = 0 ;
+                $fakeOrderproducts   = $this->convertOrderproductObjectsToCollection($cookieOrderproducts);
+                $invoiceInfo         = $invoiceGenerator->generateFakeOrderproductsInvoice($fakeOrderproducts);
             }
 
             $responseStatus = Response::HTTP_OK;
         }
 
-        if ($request->expectsJson())
+        if ($request->expectsJson() || true)
         {
             return response(["invoiceInfo"=>$invoiceInfo] , $responseStatus);
         }
 
-        $orderProductCount = 0;
-        foreach($invoiceInfo['orderproducts'] as $key=>$orderProductItem) {
-            if($orderProductItem->count()>1) {
-                foreach($orderProductItem as $keyChild=>$orderProductItemChild) {
-                    $orderProductCount++;
-                }
-            } else {
-                $orderProductCount++;
-            }
-        }
+//        return $invoiceInfo;
         return view("order.checkout.review", compact("invoiceInfo", 'orderProductCount'));
     }
 
@@ -982,15 +967,6 @@ class OrderController extends Controller
 
         if ($request->expectsJson())
             return $response;
-
-//        return compact(
-//            "gateways",
-//            "coupon",
-//            "reviewCouponProductsWarning",
-//            "orderHasDonate",
-//            "credit",
-//            "invoiceInfo"
-//        );
 
         return view("order.checkout.payment" ,
                    compact(

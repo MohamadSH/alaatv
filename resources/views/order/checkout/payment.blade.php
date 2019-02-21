@@ -202,8 +202,10 @@
                             <div class="row justify-content-center">
                                 <div class="col-12 col-sm-8 col-md-6 col-lg-6 m--margin-top-20 text-center">
                                     <div class="form-group m-form__group">
-                                        <label for="exampleTextarea">Example textarea</label>
-                                        <textarea class="form-control m-input" id="exampleTextarea" rows="3"></textarea>
+                                        <label for="bio">اگر توضیحی</label>
+                                        <div class="m-input-icon m-input-icon--left">
+                                            <textarea id="bio" class="form-control m-input m-input--air" placeholder="درباره ی شما" rows="13" name="bio" cols="50"></textarea>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
