@@ -15,6 +15,7 @@ trait CashierWalletUnit
 
     /**
      * @param mixed $payableAmountByWallet
+     *
      * @return mixed
      */
     public function setPayableAmountByWallet($payableAmountByWallet)

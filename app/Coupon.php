@@ -96,7 +96,7 @@ class Coupon extends BaseModel
     ];
 
     protected $appends = [
-        'discountType'
+        'discountType',
     ];
 
     protected $hidden = [
@@ -207,7 +207,7 @@ class Coupon extends BaseModel
             $validationStatus = Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN;
         }elseif(!$this->hasTimeToUntilTime()) {
             $validationStatus = Coupon::COUPON_VALIDATION_STATUS_EXPIRED;
-        }elseif($this->hasTotalNumberFinished()) {
+        } else if ($this->hasTotalNumberFinished()) {
             $validationStatus = Coupon::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED;
         }
 
@@ -303,7 +303,7 @@ class Coupon extends BaseModel
         return $this->discounttype()->first()->setVisible([
             'name',
             'displayName',
-            'description'
+            'description',
         ]);
     }
 }

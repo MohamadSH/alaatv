@@ -1125,7 +1125,10 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return Cache::tags(["product"])->remember($key, config("constants.CACHE_600"), function () {
 
             //ToDo : should be removed in future
-            if (in_array($this->id, [ self::CUSTOM_DONATE_PRODUCT ,  self::DONATE_PRODUCT_5_HEZAR]))
+            if (in_array($this->id, [
+                self::CUSTOM_DONATE_PRODUCT,
+                self::DONATE_PRODUCT_5_HEZAR,
+            ]))
                 return true;
             $grandParent = $this->grandParent;
             if (isset($grandParent)) {

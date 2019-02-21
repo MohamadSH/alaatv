@@ -257,7 +257,7 @@ use Laravel\Passport\HasApiTokens;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Client[] $clients
  * @property-read mixed                                                               $info
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[]  $tokens
- * @property mixed openOrders
+ * @property mixed                                                                    openOrders
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail
 {

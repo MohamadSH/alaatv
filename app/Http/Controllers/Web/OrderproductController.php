@@ -560,14 +560,14 @@ class OrderproductController extends Controller
      */
     public function storeOrderproductJsonObject($orderproductJsonObject, array $data)
     {
-        $grandParentProductId   = optional($orderproductJsonObject)->product_id;
-        $productIds             = optional($orderproductJsonObject)->products;
-        $attributes             = optional($orderproductJsonObject)->attribute;
-        $extraAttributes        = optional($orderproductJsonObject)->extraAttribute;
+        $grandParentProductId = optional($orderproductJsonObject)->product_id;
+        $productIds = optional($orderproductJsonObject)->products;
+        $attributes = optional($orderproductJsonObject)->attribute;
+        $extraAttributes = optional($orderproductJsonObject)->extraAttribute;
 
-        $orderproductData["product_id"]     = $grandParentProductId;
-        $orderproductData["products"]       = $productIds;
-        $orderproductData["attributes"]     = $attributes;
+        $orderproductData["product_id"] = $grandParentProductId;
+        $orderproductData["products"] = $productIds;
+        $orderproductData["attributes"] = $attributes;
         $orderproductData["extraAttribute"] = $extraAttributes;
         $orderproductData["order_id"] = isset($data["order_id"]) ? $data["order_id"] : null;
 

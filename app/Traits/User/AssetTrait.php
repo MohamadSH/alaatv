@@ -12,7 +12,6 @@ namespace App\Traits\User;
 use App\Collection\ProductCollection;
 use App\Content;
 use App\Product;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 
 trait AssetTrait

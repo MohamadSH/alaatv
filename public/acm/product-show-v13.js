@@ -13,7 +13,7 @@ function refreshPrice(mainAttributeState , productState , extraAttributeState) {
     $('#a_product-price').html('<div class="m-loader m-loader--success" style="width: 30px; display: inline-block;"></div>');
     if (mainAttributeState.length === 0 && productState.length === 0 && extraAttributeState.length === 0) {
 
-        $('#a_product-price').html('قیمت محصول: '+'پس از انتخاب محصول');
+        $('#a_product-price').html('قیمت محصول: ' + 'پس از انتخاب محصول');
         toastr.options = {
             "closeButton": false,
             "debug": false,
@@ -48,22 +48,23 @@ function refreshPrice(mainAttributeState , productState , extraAttributeState) {
                 response = $.parseJSON(response);
 
 
-                if (response.error!=null) {
+                if (response.error != null) {
                     Swal({
                         title: 'توجه!',
-                        text: response.error.message + '('+ response.error.code +')',
+                        text: response.error.message + '(' + response.error.code + ')',
                         type: 'warning',
                         confirmButtonText: 'بستن'
                     });
-                    $('#a_product-price').html('قیمت محصول: '+'پس از انتخاب محصول');
-                }if (response.cost!=null) {
+                    $('#a_product-price').html('قیمت محصول: ' + 'پس از انتخاب محصول');
+                }
+                if (response.cost != null) {
                     let response_cost = parseInt(response.cost.base);
                     let response_costForCustomer = parseInt(response.cost.final);
 
-                    if(response_costForCustomer<response_cost) {
-                        $('#a_product-price').html('قیمت محصول: <strike>'+response_cost+'</strike> تومان <br>قیمت برای مشتری: '+response_costForCustomer+' تومان ');
+                    if (response_costForCustomer < response_cost) {
+                        $('#a_product-price').html('قیمت محصول: <strike>' + response_cost + '</strike> تومان <br>قیمت برای مشتری: ' + response_costForCustomer + ' تومان ');
                     } else {
-                        $('#a_product-price').html('قیمت محصول: '+response_costForCustomer+' تومان ');
+                        $('#a_product-price').html('قیمت محصول: ' + response_costForCustomer + ' تومان ');
                     }
                 } else {
                     Swal({
@@ -186,7 +187,7 @@ function getExtraAttributeStates()
     let extraAttributes = [];
 
     for (let index in attributeState) {
-        if(!isNaN(index)) {
+        if (!isNaN(index)) {
             extraAttributes.push({
                 'id': attributeState[index]
             });

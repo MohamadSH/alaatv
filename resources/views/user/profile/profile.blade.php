@@ -20,13 +20,13 @@
 @endsection
 
 @section("pageBar")
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <i class="flaticon-home-2"></i>
-                <a href="{{action("Web\IndexPageController")}}">خانه</a>
+    <nav aria-label = "breadcrumb">
+        <ol class = "breadcrumb">
+            <li class = "breadcrumb-item">
+                <i class = "flaticon-home-2"></i>
+                <a href = "{{action("Web\IndexPageController")}}">خانه</a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">
+            <li class = "breadcrumb-item active" aria-current = "page">
                 پروفایل
             </li>
         </ol>
@@ -40,16 +40,20 @@
         .datepicker-plot-area.datepicker-persian {
             font-family: IRANSans !important;
         }
+
         .userFullname {
             text-shadow: 1px 1px 2px black, 0 0 1em blue, 0 0 0.2em darkblue;
         }
+
         .btnEditProfilePic {
             box-shadow: 0px 0px 11px 0px #8EACED !important;
         }
+
         .profile-usermenu {
             margin-right: -29px;
             margin-left: -29px;
         }
+
         .profile-usermenu button {
             text-align: right;
             padding-right: 30px;
@@ -66,12 +70,14 @@
         .fileinput-frameClass .file-actions {
             display: none;
         }
+
         .fileinput-previewClass,
         .fileinput-previewClass .file-drop-zone {
             margin: 0px;
             padding: 0px;
             border: none;
         }
+
         .fileinput-previewClass .file-drop-zone {
         }
     </style>
@@ -82,7 +88,7 @@
 
 
     <div class="row">
-        <div class="col-12">
+        <div class = "col-12">
             {{--            Using this notification for some text at the top of the profile page        --}}
             {{--            @include("user.profile.topNotification")--}}
 
@@ -98,134 +104,135 @@
     </div>
 
     <div class="row">
-        <div class="col-md-3">
+        <div class = "col-md-3">
             <!-- BEGIN PROFILE SIDEBAR -->
-            @include('partials.profileSidebar',[
-                                            'user'=>$user ,
-                                            'withInfoBox'=>true ,
-                                            'withCompletionBox'=>true ,
-                                            'withRegisterationDate'=>true,
-                                            'withNavigation' => true,
-                                            'withPhotoUpload' => true ,
-                                              ]
-                                              )
-            <!-- END BEGIN PROFILE SIDEBAR -->
+        @include('partials.profileSidebar',[
+                                        'user'=>$user ,
+                                        'withInfoBox'=>true ,
+                                        'withCompletionBox'=>true ,
+                                        'withRegisterationDate'=>true,
+                                        'withNavigation' => true,
+                                        'withPhotoUpload' => true ,
+                                          ]
+                                          )
+        <!-- END BEGIN PROFILE SIDEBAR -->
         </div>
-        <div class="col-md-9">
+        <div class = "col-md-9">
             @if(!$user->lockProfile)
                 @include('user.profile.profileEditView' , ["withBio"=>true , "withBirthdate"=>false , "withIntroducer"=>false , "text2"=>"کاربر گرامی ، پس از تکمیل اطلاعات شخصی(فیلد های پایین) امکان اصلاح اطلاعات ثبت شده وجود نخواهد داشت. لذا خواهشمند هستیم این اطلاعات را در صحت و دقت کامل تکمیل نمایید . باتشکر"])
             @else
                 @include('user.profile.profileView')
             @endif
-            <div id="profileMenuPage-sabteRotbe" class="m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage">
-                <div class="m-portlet__head">
-                    <div class="m-portlet__head-caption">
-                        <div class="m-portlet__head-title">
-						<span class="m-portlet__head-icon m--hide">
-							<i class="flaticon-statistics"></i>
+            <div id = "profileMenuPage-sabteRotbe" class = "m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage">
+                <div class = "m-portlet__head">
+                    <div class = "m-portlet__head-caption">
+                        <div class = "m-portlet__head-title">
+						<span class = "m-portlet__head-icon m--hide">
+							<i class = "flaticon-statistics"></i>
 						</span>
-                            <h3 class="m-portlet__head-text">
+                            <h3 class = "m-portlet__head-text">
                                 فیلم ها و جزواتی که خریده اید:
                             </h3>
-                            <h2 class="m-portlet__head-label m-portlet__head-label--success">
-                                <span style="white-space: nowrap;">
-                                    <i class="la la-trophy"></i>
+                            <h2 class = "m-portlet__head-label m-portlet__head-label--success">
+                                <span style = "white-space: nowrap;">
+                                    <i class = "la la-trophy"></i>
                                     ثبت رتبه 97
                                 </span>
                             </h2>
                         </div>
                     </div>
-                    <div class="m-portlet__head-tools">
+                    <div class = "m-portlet__head-tools">
 
                     </div>
                 </div>
-                <div class="m-portlet__body">
-                    <form method="POST" action="https://sanatisharif.ir/eventresult" accept-charset="UTF-8" enctype="multipart/form-data"><input name="_token" type="hidden" value="Govi5kySbPo5DBVL0bg7X6ajjxwS5q1oNrKytqvU">
-                        <input type="hidden" name="_token" value="Govi5kySbPo5DBVL0bg7X6ajjxwS5q1oNrKytqvU">
-                        <input name="event_id" type="hidden" value="3">
-                        <input name="eventresultstatus_id" type="hidden" value="1">
-                        <div class="form-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group m-form__group">
-                                                <label for="rank">رتبه شما(الزامی)</label>
-                                                <div class="m-input-icon m-input-icon--left">
-                                                    <input type="text" name="rank" id="rank" class="form-control m-input m-input--air" placeholder="رتبه شما">
-                                                    <span class="m-input-icon__icon m-input-icon__icon--left">
+                <div class = "m-portlet__body">
+                    <form method = "POST" action = "https://sanatisharif.ir/eventresult" accept-charset = "UTF-8" enctype = "multipart/form-data">
+                        <input name = "_token" type = "hidden" value = "Govi5kySbPo5DBVL0bg7X6ajjxwS5q1oNrKytqvU">
+                        <input type = "hidden" name = "_token" value = "Govi5kySbPo5DBVL0bg7X6ajjxwS5q1oNrKytqvU">
+                        <input name = "event_id" type = "hidden" value = "3">
+                        <input name = "eventresultstatus_id" type = "hidden" value = "1">
+                        <div class = "form-body">
+                            <div class = "row">
+                                <div class = "col-md-12">
+                                    <div class = "row">
+                                        <div class = "col-md-6">
+                                            <div class = "form-group m-form__group">
+                                                <label for = "rank">رتبه شما(الزامی)</label>
+                                                <div class = "m-input-icon m-input-icon--left">
+                                                    <input type = "text" name = "rank" id = "rank" class = "form-control m-input m-input--air" placeholder = "رتبه شما">
+                                                    <span class = "m-input-icon__icon m-input-icon__icon--left">
                                                         <span>
-                                                            <i class="flaticon-placeholder"></i>
+                                                            <i class = "flaticon-placeholder"></i>
                                                         </span>
                                                     </span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group m-form__group">
-                                                <label for="participationCode">شماره داوطلبی شما</label>
-                                                <div class="m-input-icon m-input-icon--left">
-                                                    <input type="text" name="participationCode" id="participationCode" class="form-control m-input m-input--air" placeholder="شماره داوطلبی شما">
-                                                    <span class="m-input-icon__icon m-input-icon__icon--left">
+                                        <div class = "col-md-6">
+                                            <div class = "form-group m-form__group">
+                                                <label for = "participationCode">شماره داوطلبی شما</label>
+                                                <div class = "m-input-icon m-input-icon--left">
+                                                    <input type = "text" name = "participationCode" id = "participationCode" class = "form-control m-input m-input--air" placeholder = "شماره داوطلبی شما">
+                                                    <span class = "m-input-icon__icon m-input-icon__icon--left">
                                                         <span>
-                                                            <i class="flaticon-placeholder"></i>
+                                                            <i class = "flaticon-placeholder"></i>
                                                         </span>
                                                     </span>
                                                 </div>
-                                                <span class="m-form__help">شماره داوطلبی شما به صورت رمز شده ذخیره می شود و فقط مدیر سایت می تواند آن را مشاهده کند(حتی شما هم نمی بینید)</span>
+                                                <span class = "m-form__help">شماره داوطلبی شما به صورت رمز شده ذخیره می شود و فقط مدیر سایت می تواند آن را مشاهده کند(حتی شما هم نمی بینید)</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group m-form__group">
-                                                <label for="customFile">فایل کارنامه(الزامی)</label>
+                                <div class = "col-md-12">
+                                    <div class = "row">
+                                        <div class = "col-md-6">
+                                            <div class = "form-group m-form__group">
+                                                <label for = "customFile">فایل کارنامه(الزامی)</label>
                                                 <div></div>
-                                                <div class="custom-file">
-                                                    <input type="file" class="custom-file-input m-input m-input--air" id="customFile">
-                                                    <label class="custom-file-label" for="customFile">انتخاب فایل</label>
+                                                <div class = "custom-file">
+                                                    <input type = "file" class = "custom-file-input m-input m-input--air" id = "customFile">
+                                                    <label class = "custom-file-label" for = "customFile">انتخاب فایل</label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group m-form__group">
-                                                <div class="m-input-icon m-input-icon--left">
-                                                    <textarea rows="5" name="comment" placeholder="آلاء چه نقشی در نتیجه شما داشته و چطور به شما کمک کرده؟" class="form-control m-input m-input--air"></textarea>
+                                        <div class = "col-md-6">
+                                            <div class = "form-group m-form__group">
+                                                <div class = "m-input-icon m-input-icon--left">
+                                                    <textarea rows = "5" name = "comment" placeholder = "آلاء چه نقشی در نتیجه شما داشته و چطور به شما کمک کرده؟" class = "form-control m-input m-input--air"></textarea>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row margin-top-20">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <div class="m-checkbox-list">
-                                                <label class="m-checkbox m-checkbox--state-primary font-red bold">
-                                                    <input name="enableReportPublish" type="checkbox">
+                            <div class = "row margin-top-20">
+                                <div class = "col-md-12">
+                                    <div class = "form-group">
+                                        <div class = "input-group">
+                                            <div class = "m-checkbox-list">
+                                                <label class = "m-checkbox m-checkbox--state-primary font-red bold">
+                                                    <input name = "enableReportPublish" type = "checkbox">
                                                     اجازه انتشار رتبه خود را در سایت می دهم
                                                     <span></span>
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="m-alert m-alert--icon alert alert-accent" role="alert">
-                                        <div class="m-alert__icon">
-                                            <i class="la la-warning"></i>
+                                    <div class = "m-alert m-alert--icon alert alert-accent" role = "alert">
+                                        <div class = "m-alert__icon">
+                                            <i class = "la la-warning"></i>
                                         </div>
-                                        <div class="m-alert__text">
+                                        <div class = "m-alert__text">
                                             <strong>توضیح: </strong> با زدن تیک بالا شما به ما اجازه می دهید تا رتبه ی شما را در سایت آلاء اعلام کنیم. اگر تمایلی به این کار ندارید می توانید این تیک را نزنید. بدیهی است که با زدن تیک فوق ، درج شماره داوطلبی الزامی خواهد بود .
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-actions row">
-                            <div class="col-md-12 margiv-top-10">
-                                <button type="submit" class="btn m-btn--pill m-btn--air btn-primary">
+                        <div class = "form-actions row">
+                            <div class = "col-md-12 margiv-top-10">
+                                <button type = "submit" class = "btn m-btn--pill m-btn--air btn-primary">
                                     ثبت کارنامه
                                 </button>
                             </div>
@@ -233,41 +240,41 @@
                     </form>
                 </div>
             </div>
-            <div id="profileMenuPage-filmVaJozve" class="m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage">
-                <div class="m-portlet__head">
-                    <div class="m-portlet__head-caption">
-                        <div class="m-portlet__head-title">
-						<span class="m-portlet__head-icon m--hide">
-							<i class="flaticon-statistics"></i>
+            <div id = "profileMenuPage-filmVaJozve" class = "m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage">
+                <div class = "m-portlet__head">
+                    <div class = "m-portlet__head-caption">
+                        <div class = "m-portlet__head-title">
+						<span class = "m-portlet__head-icon m--hide">
+							<i class = "flaticon-statistics"></i>
 						</span>
-                            <h3 class="m-portlet__head-text">
+                            <h3 class = "m-portlet__head-text">
                                 فیلم ها و جزواتی که خریده اید:
                             </h3>
-                            <h2 class="m-portlet__head-label m-portlet__head-label--info">
-                                <span style="white-space: nowrap;">
-                                    <i class="flaticon-multimedia-4"></i>
+                            <h2 class = "m-portlet__head-label m-portlet__head-label--info">
+                                <span style = "white-space: nowrap;">
+                                    <i class = "flaticon-multimedia-4"></i>
                                     فیلم ها و جزوات
                                 </span>
                             </h2>
                         </div>
                     </div>
-                    <div class="m-portlet__head-tools">
+                    <div class = "m-portlet__head-tools">
 
                     </div>
                 </div>
-                <div class="m-portlet__body">
+                <div class = "m-portlet__body">
 
-                    <div class="m-alert m-alert--icon alert alert-warning" role="alert">
-                        <div class="m-alert__icon">
-                            <i class="la la-warning"></i>
+                    <div class = "m-alert m-alert--icon alert alert-warning" role = "alert">
+                        <div class = "m-alert__icon">
+                            <i class = "la la-warning"></i>
                         </div>
-                        <div class="m-alert__text">
+                        <div class = "m-alert__text">
                             <strong>شما محصولی سفارش نداده اید!</strong>
                         </div>
                     </div>
 
-                    <div class="text-center">
-                        <button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">
+                    <div class = "text-center">
+                        <button type = "button" class = "btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">
                             مشاهده اردوها و هایش ها
                         </button>
                     </div>
@@ -281,21 +288,21 @@
     {{--<input id="input-id" type="file" class="file" data-preview-file-type="text" >--}}
 
     {{--@if($user->bio != null)--}}
-        {{--<div class="portlet light ">--}}
-            {{--<div class="portlet-title tabbable-line">--}}
-                {{--<div class="caption caption-md">--}}
-                    {{--<i class="icon-globe theme-font hide"></i>--}}
-                    {{--<span class="caption-subject font-blue-madison bold uppercase">درباره من</span>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-            {{--<div class="portlet-body">--}}
-                {{--<div class="content">--}}
-                    {{--<p style=" text-align: justify; line-height: initial;">--}}
-                        {{--{!! $user->bio !!}--}}
-                    {{--</p>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-        {{--</div>--}}
+    {{--<div class="portlet light ">--}}
+    {{--<div class="portlet-title tabbable-line">--}}
+    {{--<div class="caption caption-md">--}}
+    {{--<i class="icon-globe theme-font hide"></i>--}}
+    {{--<span class="caption-subject font-blue-madison bold uppercase">درباره من</span>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--<div class="portlet-body">--}}
+    {{--<div class="content">--}}
+    {{--<p style=" text-align: justify; line-height: initial;">--}}
+    {{--{!! $user->bio !!}--}}
+    {{--</p>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--</div>--}}
     {{--@endif--}}
 
 
@@ -314,45 +321,45 @@
 
 
     {{--<div class="row">--}}
-        {{--<div class="col-md-12">--}}
-            {{--<!-- BEGIN PROFILE CONTENT -->--}}
-            {{--<div class="profile-content">--}}
-                {{--<div class="row">--}}
-                    {{--<div class="col-md-12">--}}
-                        {{--<div class="portlet light ">--}}
-                            {{--<div class="portlet-title tabbable-line">--}}
-                                {{--<div class="caption caption-md">--}}
-                                    {{--<i class="icon-globe theme-font hide"></i>--}}
-                                    {{--<span class="caption-subject font-blue-madison bold uppercase">--}}
-                                        {{--اصلاح پروفایل--}}
-                                    {{--</span>--}}
-                                {{--</div>--}}
-                                {{--<ul class="nav nav-tabs">--}}
-                                    {{--<li class="active">--}}
-                                        {{--<a href="#tab_1_1" data-toggle="tab">--}}
-                                            {{--اطلاعات شخصی--}}
-                                        {{--</a>--}}
-                                    {{--</li>--}}
+    {{--<div class="col-md-12">--}}
+    {{--<!-- BEGIN PROFILE CONTENT -->--}}
+    {{--<div class="profile-content">--}}
+    {{--<div class="row">--}}
+    {{--<div class="col-md-12">--}}
+    {{--<div class="portlet light ">--}}
+    {{--<div class="portlet-title tabbable-line">--}}
+    {{--<div class="caption caption-md">--}}
+    {{--<i class="icon-globe theme-font hide"></i>--}}
+    {{--<span class="caption-subject font-blue-madison bold uppercase">--}}
+    {{--اصلاح پروفایل--}}
+    {{--</span>--}}
+    {{--</div>--}}
+    {{--<ul class="nav nav-tabs">--}}
+    {{--<li class="active">--}}
+    {{--<a href="#tab_1_1" data-toggle="tab">--}}
+    {{--اطلاعات شخصی--}}
+    {{--</a>--}}
+    {{--</li>--}}
                                     {{--For re-enabling first you need to complete updating password in UserController@update (using the existed snippet)--}}
                                     {{--@permission((Config::get('constants.EDIT_USER_ACCESS')))--}}
                                     {{--<li @if(strcmp(session('tabPane') , "tab_1_3") == 0) {{ "class=active" }} @endif>--}}
                                         {{--<a href="#tab_1_3" data-toggle="tab">تغییر رمز عبور</a>--}}
                                     {{--</li>--}}
                                     {{--@endpermission--}}
-                                {{--</ul>--}}
-                            {{--</div>--}}
-                            {{--<div class="portlet-body">--}}
-                                {{--<div class="tab-content">--}}
-                                    {{--<!-- PERSONAL INFO TAB -->--}}
-                                    {{--<div class="tab-pane active" id="tab_1_1">--}}
-                                        {{--@if(!$user->lockProfile)--}}
-                                            {{--@include('user.profile.profileEditView' , ["withBio"=>true , "withBirthdate"=>false , "withIntroducer"=>false , "text2"=>"کاربر گرامی ، پس از تکمیل اطلاعات شخصی(فیلد های پایین) امکان اصلاح اطلاعات ثبت شده وجود نخواهد داشت. لذا خواهشمند هستیم این اطلاعات را در صحت و دقت کامل تکمیل نمایید . باتشکر"])--}}
-                                        {{--@else--}}
-                                            {{--@include('user.profile.profileView')--}}
-                                        {{--@endif--}}
-                                    {{--</div>--}}
-                                    {{--<!-- END PERSONAL INFO TAB -->--}}
-                                    {{--<!-- CHANGE PASSWORD TAB -->--}}
+    {{--</ul>--}}
+    {{--</div>--}}
+    {{--<div class="portlet-body">--}}
+    {{--<div class="tab-content">--}}
+    {{--<!-- PERSONAL INFO TAB -->--}}
+    {{--<div class="tab-pane active" id="tab_1_1">--}}
+    {{--@if(!$user->lockProfile)--}}
+    {{--@include('user.profile.profileEditView' , ["withBio"=>true , "withBirthdate"=>false , "withIntroducer"=>false , "text2"=>"کاربر گرامی ، پس از تکمیل اطلاعات شخصی(فیلد های پایین) امکان اصلاح اطلاعات ثبت شده وجود نخواهد داشت. لذا خواهشمند هستیم این اطلاعات را در صحت و دقت کامل تکمیل نمایید . باتشکر"])--}}
+    {{--@else--}}
+    {{--@include('user.profile.profileView')--}}
+    {{--@endif--}}
+    {{--</div>--}}
+    {{--<!-- END PERSONAL INFO TAB -->--}}
+    {{--<!-- CHANGE PASSWORD TAB -->--}}
                                     {{--<div class="tab-pane" id="tab_1_3">--}}
                                         {{--<div class="row">--}}
                                             {{--<div class="col-md-12">--}}
@@ -439,32 +446,32 @@
                                         {{--</div>--}}
 
                                     {{--</div>--}}
-                                    {{--<!-- END CHANGE PASSWORD TAB -->--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--@if($user->bio != null)--}}
-                            {{--<div class="portlet light ">--}}
-                                {{--<div class="portlet-title tabbable-line">--}}
-                                    {{--<div class="caption caption-md">--}}
-                                        {{--<i class="icon-globe theme-font hide"></i>--}}
-                                        {{--<span class="caption-subject font-blue-madison bold uppercase">درباره من</span>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                                {{--<div class="portlet-body">--}}
-                                    {{--<div class="content">--}}
-                                        {{--<p style=" text-align: justify; line-height: initial;">--}}
-                                            {{--{!! $user->bio !!}--}}
-                                        {{--</p>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--@endif--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-            {{--<!-- END PROFILE CONTENT -->--}}
-        {{--</div>--}}
+    {{--<!-- END CHANGE PASSWORD TAB -->--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--@if($user->bio != null)--}}
+    {{--<div class="portlet light ">--}}
+    {{--<div class="portlet-title tabbable-line">--}}
+    {{--<div class="caption caption-md">--}}
+    {{--<i class="icon-globe theme-font hide"></i>--}}
+    {{--<span class="caption-subject font-blue-madison bold uppercase">درباره من</span>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--<div class="portlet-body">--}}
+    {{--<div class="content">--}}
+    {{--<p style=" text-align: justify; line-height: initial;">--}}
+    {{--{!! $user->bio !!}--}}
+    {{--</p>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--@endif--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--<!-- END PROFILE CONTENT -->--}}
+    {{--</div>--}}
     {{--</div>--}}
 
 @endsection
@@ -473,25 +480,25 @@
 
 @section('page-js')
     <!-- the main fileinput plugin file -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/js/fileinput.min.js"></script>
-    <script src="{{ mix('/js/user-profile.js') }}"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/js/fileinput.min.js"></script>
+    <script src = "{{ mix('/js/user-profile.js') }}"></script>
 
-    <script type="text/javascript">
+    <script type = "text/javascript">
 
-        function getFormData($form){
+        function getFormData($form) {
             var unindexed_array = $form.serializeArray();
             var indexed_array = {};
 
-            $.map(unindexed_array, function(n, i){
+            $.map(unindexed_array, function (n, i) {
                 indexed_array[n['name']] = n['value'];
             });
 
             return indexed_array;
         }
 
-        $(document).ready(function() {
+        $(document).ready(function () {
 
-            $(document).on('click', '#btnEditUserPhoto', function() {
+            $(document).on('click', '#btnEditUserPhoto', function () {
                 $('#UserProfilePhoto').trigger('click');
             });
 
@@ -524,11 +531,11 @@
                 // ]
             });
 
-            $(document).on('change', '#UserProfilePhoto', function(event) {
+            $(document).on('change', '#UserProfilePhoto', function (event) {
 
                 var files = $(this)[0].files; // puts all files into an array
 
-                var filesize = ((files[0].size/1024)).toFixed(4); // KB
+                var filesize = ((files[0].size / 1024)).toFixed(4); // KB
 
                 if (filesize < 500) {
 
@@ -552,16 +559,19 @@
                 $('#profileMenuPage-filmVaJozve').slideUp();
                 $('#profileMenuPage-setting').slideUp();
             }
+
             function showFilmVaJozve() {
                 $('#profileMenuPage-filmVaJozve').slideDown();
                 $('#profileMenuPage-sabteRotbe').slideUp();
                 $('#profileMenuPage-setting').slideUp();
             }
+
             function showSetting() {
                 $('#profileMenuPage-setting').slideDown();
                 $('#profileMenuPage-filmVaJozve').slideUp();
                 $('#profileMenuPage-sabteRotbe').slideUp();
             }
+
             showSetting();
 
             $('#birthdate').persianDatepicker({
@@ -574,89 +584,89 @@
             {{--$(document).on('click', '#btnUpdateProfileInfoForm', function(){--}}
 
 
-                {{--var $form = $("#profileForm-setting");--}}
-                {{--var data = getFormData($form);--}}
-                {{--console.log(data);--}}
-                {{--mApp.block('#profileMenuPage-setting', {--}}
-                    {{--overlayColor: "#000000",--}}
-                    {{--type: "loader",--}}
-                    {{--state: "success",--}}
-                    {{--message: "کمی صبر کنید..."--}}
-                {{--});--}}
+            {{--var $form = $("#profileForm-setting");--}}
+            {{--var data = getFormData($form);--}}
+            {{--console.log(data);--}}
+            {{--mApp.block('#profileMenuPage-setting', {--}}
+            {{--overlayColor: "#000000",--}}
+            {{--type: "loader",--}}
+            {{--state: "success",--}}
+            {{--message: "کمی صبر کنید..."--}}
+            {{--});--}}
 
-                {{--setTimeout(function() {--}}
+            {{--setTimeout(function() {--}}
 
-                    {{--mApp.unblock('#profileMenuPage-setting');--}}
+            {{--mApp.unblock('#profileMenuPage-setting');--}}
 
-                    {{--Swal({--}}
-                        {{--title: '',--}}
-                        {{--text: 'اطلاعات شما ویرایش شد.',--}}
-                        {{--type: 'success',--}}
-                        {{--confirmButtonText: 'بستن'--}}
-                    {{--});--}}
+            {{--Swal({--}}
+            {{--title: '',--}}
+            {{--text: 'اطلاعات شما ویرایش شد.',--}}
+            {{--type: 'success',--}}
+            {{--confirmButtonText: 'بستن'--}}
+            {{--});--}}
 
-                {{--}, 2e3);--}}
+            {{--}, 2e3);--}}
 
-                {{--$.ajax({--}}
-                    {{--type: 'PUT',--}}
-                    {{--url: {{ [(isset($formAction))?$formAction:'Web\UserController@update' , Auth::user()] }},--}}
-                    {{--data: {},--}}
-                    {{--statusCode: {--}}
-                        {{--//The status for when action was successful--}}
-                        {{--200: function (response) {--}}
-                            {{--// console.log(response);--}}
+            {{--$.ajax({--}}
+            {{--type: 'PUT',--}}
+            {{--url: {{ [(isset($formAction))?$formAction:'Web\UserController@update' , Auth::user()] }},--}}
+            {{--data: {},--}}
+            {{--statusCode: {--}}
+            {{--//The status for when action was successful--}}
+            {{--200: function (response) {--}}
+            {{--// console.log(response);--}}
 
-                            {{--$('.inputVerificationWarper').fadeIn();--}}
-                            {{--mApp.unblock('.SendMobileVerificationCodeWarper');--}}
+            {{--$('.inputVerificationWarper').fadeIn();--}}
+            {{--mApp.unblock('.SendMobileVerificationCodeWarper');--}}
 
-                            {{--Swal({--}}
-                                {{--title: '',--}}
-                                {{--text: 'کد تایید برای شماره همراه شما پیامک شد.',--}}
-                                {{--type: 'success',--}}
-                                {{--confirmButtonText: 'بستن'--}}
-                            {{--});--}}
-                        {{--},--}}
-                        {{--//The status for when the user is not authorized for making the request--}}
-                        {{--403: function (response) {--}}
-                            {{--// window.location.replace("/403");--}}
-                        {{--},--}}
-                        {{--//The status for when the user is not authorized for making the request--}}
-                        {{--401: function (response) {--}}
-                            {{--// window.location.replace("/403");--}}
-                        {{--},--}}
-                        {{--404: function (response) {--}}
-                            {{--// window.location.replace("/404");--}}
-                        {{--},--}}
-                        {{--//The status for when form data is not valid--}}
-                        {{--422: function (response) {--}}
-                            {{--console.log(response);--}}
-                        {{--},--}}
-                        {{--//The status for when there is error php code--}}
-                        {{--500: function (response) {--}}
-                            {{--Swal({--}}
-                                {{--title: 'توجه!',--}}
-                                {{--text: 'خطای سیستمی رخ داده است.',--}}
-                                {{--type: 'danger',--}}
-                                {{--confirmButtonText: 'بستن'--}}
-                            {{--});--}}
-                        {{--},--}}
-                        {{--//The status for when there is error php code--}}
-                        {{--503: function (response) {--}}
-                            {{--Swal({--}}
-                                {{--title: 'توجه!',--}}
-                                {{--text: 'خطای پایگاه داده!',--}}
-                                {{--type: 'danger',--}}
-                                {{--confirmButtonText: 'بستن'--}}
-                            {{--});--}}
-                        {{--}--}}
-                    {{--}--}}
-                {{--});--}}
+            {{--Swal({--}}
+            {{--title: '',--}}
+            {{--text: 'کد تایید برای شماره همراه شما پیامک شد.',--}}
+            {{--type: 'success',--}}
+            {{--confirmButtonText: 'بستن'--}}
+            {{--});--}}
+            {{--},--}}
+            {{--//The status for when the user is not authorized for making the request--}}
+            {{--403: function (response) {--}}
+            {{--// window.location.replace("/403");--}}
+            {{--},--}}
+            {{--//The status for when the user is not authorized for making the request--}}
+            {{--401: function (response) {--}}
+            {{--// window.location.replace("/403");--}}
+            {{--},--}}
+            {{--404: function (response) {--}}
+            {{--// window.location.replace("/404");--}}
+            {{--},--}}
+            {{--//The status for when form data is not valid--}}
+            {{--422: function (response) {--}}
+            {{--console.log(response);--}}
+            {{--},--}}
+            {{--//The status for when there is error php code--}}
+            {{--500: function (response) {--}}
+            {{--Swal({--}}
+            {{--title: 'توجه!',--}}
+            {{--text: 'خطای سیستمی رخ داده است.',--}}
+            {{--type: 'danger',--}}
+            {{--confirmButtonText: 'بستن'--}}
+            {{--});--}}
+            {{--},--}}
+            {{--//The status for when there is error php code--}}
+            {{--503: function (response) {--}}
+            {{--Swal({--}}
+            {{--title: 'توجه!',--}}
+            {{--text: 'خطای پایگاه داده!',--}}
+            {{--type: 'danger',--}}
+            {{--confirmButtonText: 'بستن'--}}
+            {{--});--}}
+            {{--}--}}
+            {{--}--}}
+            {{--});--}}
 
 
 
             {{--});--}}
 
-            $(document).on('click', '#btnSendMobileVerificationCode', function(){
+            $(document).on('click', '#btnSendMobileVerificationCode', function () {
 
                 mApp.block('.SendMobileVerificationCodeWarper', {
                     overlayColor: "#000000",
@@ -665,7 +675,7 @@
                     message: "کمی صبر کنید..."
                 });
 
-                setTimeout(function() {
+                setTimeout(function () {
 
                     $('#btnSendMobileVerificationCode').fadeOut();
                     $('.inputVerificationWarper').fadeIn();
@@ -742,7 +752,7 @@
 
 
             });
-            $(document).on('click', '#btnVerifyMobileVerificationCode', function(){
+            $(document).on('click', '#btnVerifyMobileVerificationCode', function () {
 
                 mApp.block('.SendMobileVerificationCodeWarper', {
                     overlayColor: "#000000",
@@ -751,7 +761,7 @@
                     message: "کمی صبر کنید..."
                 });
 
-                setTimeout(function() {
+                setTimeout(function () {
 
                     $('.inputVerificationWarper').fadeOut();
                     $('.SendMobileVerificationCodeWarper').fadeOut();
@@ -832,13 +842,13 @@
 
             });
 
-            $(document).on('click', '.profile-usermenu button', function(){
+            $(document).on('click', '.profile-usermenu button', function () {
                 let menu = $(this).attr('menu');
-                if(menu=='profileMenuPage-sabteRotbe') {
+                if (menu == 'profileMenuPage-sabteRotbe') {
                     showSabteRotbe();
-                } else if(menu=='profileMenuPage-filmVaJozve') {
+                } else if (menu == 'profileMenuPage-filmVaJozve') {
                     showFilmVaJozve();
-                } else if(menu=='profileMenuPage-setting') {
+                } else if (menu == 'profileMenuPage-setting') {
                     showSetting();
                 }
                 mUtil.scrollTop();
