@@ -7,6 +7,7 @@ use App\Classes\Checkout\Alaa\ReObtainOrderFromRecords;
 use App\Collection\OrderCollections;
 use App\Collection\OrderproductCollection;
 use App\Collection\ProductCollection;
+use App\Collection\TransactionCollection;
 use App\Traits\ProductCommon;
 use Auth;
 use Carbon\Carbon;
@@ -145,6 +146,8 @@ class Order extends BaseModel
           'orderproducts',
           'couponInfo',
           'paidPrice',
+          'successfulTransactions',
+          'orderPostingInfo',
 //          'invoice'
     ];
     const OPEN_ORDER_STATUSES = [
@@ -997,7 +1000,30 @@ class Order extends BaseModel
         $key = "order:transactions:" . $order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_60"), function () use ($order) {
-                    return $order->successfulTransactions()->get();
+                /** @var TransactionCollection $successfulTransactions */
+                $successfulTransactions =  $order->successfulTransactions()->get();
+                $successfulTransactions->setVisible([
+                        'cost',
+                        'transactionID',
+                        'traceNumber',
+                        'referenceNumber',
+                        'paycheckNumber',
+                        'description',
+                        'completed_at',
+                        'paymentmethod',
+                        'transactiongateway'
+                ]);
+
+                return $successfulTransactions;
+            });
+    }
+
+    public function getOrderPostingInfoAttribute(){
+        $order = $this ;
+        $key = "order:postInfo:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($order) {
+                return $order->orderpostinginfos()->get();
             });
     }
 }
