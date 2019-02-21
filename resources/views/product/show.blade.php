@@ -600,7 +600,10 @@
     <script>
         $(document).ready(function() {
 
-            $('.productDetailes .m-portlet__head').sticky({ topSpacing: 70 });
+            $('.productDetailes .m-portlet__head').sticky({
+                topSpacing: $('#m_header').height(),
+                zIndex: 99
+            });
 
             $('.js-selectProduct-single').select2({
                 placeholder: 'یک محصول را انتخاب کنید:'

@@ -531,4 +531,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     {
         $this->fill(['password' => bcrypt($newPassword)]);
     }
+
+    public function getOpenOrder(): Order
+    {
+        $openOrder = $this->firstOrCreateOpenOrder($this);
+        return $openOrder;
+    }
 }
