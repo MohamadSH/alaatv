@@ -22,8 +22,17 @@ trait DashboardTrait
      */
     public function getDashboardBlocks(): ?BlockCollection
     {
-        $blocks = $this->makeBlockForUserProducts();
-        return isset($blocks) ? (new BlockCollection())->add($this->makeBlockForUserProducts()) : null;
+        $result = (new BlockCollection());
+        $blocks = [
+            'products' => $this->makeBlockForUserProducts(),
+            'favored'  => $this->makeBlockForUserFavored(),
+
+        ];
+        foreach ($blocks as $block)
+            if (isset($block))
+                $result->add($block);
+        return $result;
+
     }
 
     /**
@@ -33,7 +42,22 @@ trait DashboardTrait
     {
         $products = $this->products();
         if ($products->count() > 0)
-            return Block::getDummyBlock(false, 'محصولات من', $products);
+            return Block::getDummyBlock(false, trans('profile.My Products'), $products);
+        return null;
+    }
+
+    /**
+     * @return \App\Block
+     */
+    private function makeBlockForUserFavored(): ?Block
+    {
+        $favored = [
+            'content' => $this->favoredContent,
+            'set'     => $this->favoredSet,
+            'product' => $this->favoredProduct,
+        ];
+        if ($favored['product']->count() > 0 || $favored['set']->count() > 0 || $favored['content']->count() > 0)
+            return Block::getDummyBlock(false, trans('profile.Favored'), $favored['product'], $favored['set'], $favored['content']);
         return null;
     }
 

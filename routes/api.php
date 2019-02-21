@@ -36,6 +36,9 @@ Route::group(['prefix' => 'v1'], function () {
 
 
     Route::group(['middleware' => 'auth:api'], function () {
-        Route::get('user/orders', 'Api\UserController@userOrders');
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('orders', 'Api\UserController@userOrders');
+            Route::get('{user}/dashboard', 'Api\DashboardPageController')->name('api.user.dashboard');
+        });
     });
 });

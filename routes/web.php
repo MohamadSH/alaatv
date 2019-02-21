@@ -281,3 +281,5 @@ Route::group(['prefix' => 'mobile'], function () {
 });
 Route::post("cd3b472d9ba631a73cb7b66ba513df53", "Web\CouponController@generateRandomCoupon");
 Route::view('uiTest','pages.certificates');
+
+Route::view('testrtl', 'product.show_ali');
