@@ -18,6 +18,9 @@
         .noUi-handle {
             cursor: pointer;
         }
+        .noUi-target .noUi-connect {
+            background: #716aca;
+        }
     </style>
     <style>
         /*fix swithch*/
@@ -37,17 +40,17 @@
             border: none;
         }
         .m-portlet--creative.noHeadText > .m-portlet__body {
-            padding-bottom: 0px;
+            padding-bottom: 0;
             position: relative;
             z-index: 9;
         }
         .m-portlet--creative.noHeadText > .m-portlet__head {
-            height: 0px;
+            height: 0;
         }
         .bankLogo {
             max-width: 60px;
             border-radius: 4px;
-            box-shadow: 0px 0px 7px 0px #A5A5A5;
+            box-shadow: 0 0 7px 0 #A5A5A5;
         }
         #PaymentType-online .m-radio-inline .m-radio:last-child {
             margin-left: 15px;
@@ -66,138 +69,47 @@
 
 
     <div class="row">
+        {{--روش پرداخت--}}
         <div class="col-12 col-md-8 order-2 order-sm-2 order-md-1 order-lg-1">
-
-            <div class="m-portlet m-portlet--creative m-portlet--bordered">
-                <div class="m-portlet__head">
-                    <div class="m-portlet__head-caption">
-                        <div class="m-portlet__head-title">
-                            <h3 class="m-portlet__head-text">
-                                اگر کد تخفیف دارید، در این قسمت وارد کنید:
-                            </h3>
-                            <h2 class="m-portlet__head-label m-portlet__head-label--accent" style="white-space: nowrap;">
-                                <span>
-                                    <i class="fa fa-ticket-alt"></i>
-                                    کد تخفیف
-                                </span>
-                            </h2>
-                        </div>
-                    </div>
-                    <div class="m-portlet__head-tools">
-                    </div>
-                </div>
-                <div class="m-portlet__body">
-                    <div class="row">
-                        <div class="col-12 col-md-4 m--padding-top-5">
-                            <span>
-                                کد تخفیف:
-                            </span>
-                            <span class="m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
-                                <input type="checkbox"
-                                       data-switch="true"
-                                       checked=""
-                                       data-on-text="ندارم"
-                                       data-on-color="danger"
-                                       data-off-text="دارم"
-                                       data-off-color="success"
-                                       data-size="small"
-                                       {{--data-handle-width="40"--}}
-                                       id="hasntDiscountCode">
-                            </span>
-                        </div>
-                        <div class="col-12 col-md-8">
-                            <div class="input-group discountCodeValueWarper">
-                                <input type="text" class="form-control" placeholder="کد تخفیف ..." id="discountCodeValue">
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-success" type="button">ثبت</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="m-portlet m-portlet--creative m-portlet--bordered m-portlet--bordered-semi noHeadText">
-                <div class="m-portlet__head">
-                    <div class="m-portlet__head-caption">
-                        <div class="m-portlet__head-title">
-                            <h2 class="m-portlet__head-label m-portlet__head-label--accent" style="white-space: nowrap;">
+            <div class="row">
+                <div class="col">
+                    <div class="m-portlet m-portlet--creative m-portlet--bordered m-portlet--bordered-semi noHeadText">
+                        <div class="m-portlet__head">
+                            <div class="m-portlet__head-caption">
+                                <div class="m-portlet__head-title">
+                                    <h2 class="m-portlet__head-label m-portlet__head-label--accent" style="white-space: nowrap;">
                                 <span>
                                     <i class="la la-bank"></i>
                                     روش پرداخت
                                 </span>
-                            </h2>
+                                    </h2>
+                                </div>
+                            </div>
+                            <div class="m-portlet__head-tools"></div>
                         </div>
-                    </div>
-                    <div class="m-portlet__head-tools"></div>
-                </div>
-                <div class="m-portlet__body m--padding-bottom-10">
+                        <div class="m-portlet__body m--padding-bottom-10">
 
-
-
-                    <div class="row">
-                        <div class="col">
-                            <div class="m-form__group form-group">
-                                <label for="">
-                                    روش پرداخت را مشخص کنید:
-                                </label>
-                                <div class="m-radio-inline">
-                                    <label class="m-radio m-radio--solid m-radio--state-success">
-                                        <input type="radio" name="radioPaymentType" value="1" checked>
-                                        انترنتی
-                                        <span></span>
-                                    </label>
-                                    <label class="m-radio m-radio--solid m-radio--state-success">
-                                        <input type="radio" name="radioPaymentType" value="2">
-                                        حضوری
-                                        <span></span>
-                                    </label>
-                                    <label class="m-radio m-radio--solid m-radio--state-success">
-                                        <input type="radio" name="radioPaymentType" value="3">
-                                        کارت به کارت
-                                        <span></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-
-                            <div class="m-portlet" id="PaymentType-card2card">
-                                <div class="m-portlet__body">
-                                    جهت تایید سفارش مبلغ 12،470 تومان به شماره کارت:
-                                    <br>
-                                    4444-4444-4444-4444
-                                    <br>
-                                    به نام فلان فلانی بانک فلان واریز نمایید.
-                                </div>
-                            </div>
-                            <div class="m-portlet" id="PaymentType-hozoori">
-                                <div class="m-portlet__body">
-                                    بعد از ثبت سفارش مبلغ 12،470 تومان را به صورت حضوری پرداخت کنید.
-                                </div>
-                            </div>
-                            <div class="m-portlet" id="PaymentType-online">
-                                <div class="m-portlet__body">
-                                    <span>
-                                        یکی از درگاه های بانکی زیر را انتخاب کنید:
-                                    </span>
-                                    <div class="m-form__group form-group text-center m--margin-top-10">
+                            {{--tab title--}}
+                            <div class="row">
+                                <div class="col">
+                                    <div class="m-form__group form-group">
+                                        <label for="">
+                                            روش پرداخت را مشخص کنید:
+                                        </label>
                                         <div class="m-radio-inline">
-                                            <label class="m-radio m-radio--solid m-radio--state-info">
-                                                <input type="radio" name="radioBankType" value="1" checked>
-                                                <img src="/acm/extra/payment/gateway/zarinpal-logo.png" class="img-thumbnail bankLogo">
+                                            <label class="m-radio m-radio--solid m-radio--state-success">
+                                                <input type="radio" name="radioPaymentType" data-btntext="پرداخت" value="online" checked>
+                                                انترنتی
                                                 <span></span>
                                             </label>
-                                            <label class="m-radio m-radio--solid m-radio--state-info">
-                                                <input type="radio" name="radioBankType" value="2">
-                                                <img src="/acm/extra/payment/gateway/mellat-logo.png" class="img-thumbnail bankLogo">
-                                                <span></span>
-                                            </label>
-                                            <label class="m-radio m-radio--solid m-radio--state-info">
-                                                <input type="radio" name="radioBankType" value="3">
-                                                <img src="/acm/extra/payment/gateway/pasargad-logo.jpg" class="img-thumbnail bankLogo">
+                                            {{--<label class="m-radio m-radio--solid m-radio--state-success">--}}
+                                                {{--<input type="radio" name="radioPaymentType" data-btntext="ثبت سفارش" value="hozoori">--}}
+                                                {{--حضوری--}}
+                                                {{--<span></span>--}}
+                                            {{--</label>--}}
+                                            <label class="m-radio m-radio--solid m-radio--state-success">
+                                                <input type="radio" name="radioPaymentType" data-btntext="ثبت سفارش" value="card2card">
+                                                کارت به کارت
                                                 <span></span>
                                             </label>
                                         </div>
@@ -205,17 +117,117 @@
                                 </div>
                             </div>
 
+                            {{--tab content--}}
+                            <div class="row">
+                                <div class="col">
+
+                                    <div class="m-portlet PaymentType" id="PaymentType-online">
+                                        <div class="m-portlet__body">
+                                            <span>
+                                                یکی از درگاه های بانکی زیر را انتخاب کنید:
+                                            </span>
+                                            <div class="m-form__group form-group text-center m--margin-top-10">
+                                                <div class="m-radio-inline">
+                                                    <label class="m-radio m-radio--solid m-radio--state-info">
+                                                        <input type="radio" name="radioBankType" value="1" checked>
+                                                        <img src="/acm/extra/payment/gateway/zarinpal-logo.png" class="img-thumbnail bankLogo" alt="bank-logo">
+                                                        <span></span>
+                                                    </label>
+                                                    <label class="m-radio m-radio--solid m-radio--state-info">
+                                                        <input type="radio" name="radioBankType" value="2">
+                                                        <img src="/acm/extra/payment/gateway/mellat-logo.png" class="img-thumbnail bankLogo" alt="bank-logo">
+                                                        <span></span>
+                                                    </label>
+                                                    <label class="m-radio m-radio--solid m-radio--state-info">
+                                                        <input type="radio" name="radioBankType" value="3">
+                                                        <img src="/acm/extra/payment/gateway/pasargad-logo.jpg" class="img-thumbnail bankLogo" alt="bank-logo">
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{--<div class="m-portlet PaymentType" id="PaymentType-hozoori">--}}
+                                        {{--<div class="m-portlet__body">--}}
+                                            {{--بعد از ثبت سفارش مبلغ 12،470 تومان را به صورت حضوری پرداخت کنید.--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+
+                                    <div class="m-portlet PaymentType" id="PaymentType-card2card">
+                                        <div class="m-portlet__body">
+                                            جهت تایید سفارش مبلغ 12،470 تومان به شماره کارت:
+                                            <br>
+                                            4444-4444-4444-4444
+                                            <br>
+                                            به نام فلان فلانی بانک فلان واریز نمایید.
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            {{--dicount code--}}
+                            <div class="row justify-content-center">
+                                <div class="col-12 col-sm-8 col-md-6 col-lg-6 m--margin-top-20 text-center">
+                                    <span>
+                                        <label for="hasntDiscountCode">
+                                            کد تخفیف:
+                                        </label>
+                                    </span>
+                                    <span class="m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
+
+                                        <input type="checkbox"
+                                          data-switch="true"
+                                          checked=""
+                                          data-on-text="ندارم"
+                                          data-on-color="danger"
+                                          data-off-text="دارم"
+                                          data-off-color="success"
+                                          data-size="small"
+                                          {{--data-handle-width="40"--}}
+                                           id="hasntDiscountCode">
+                                    </span>
+                                </div>
+                                <div class="col-12 col-md-6 m--margin-top-10">
+                                    <div class="input-group discountCodeValueWarper">
+                                        <input type="text" class="form-control" placeholder="کد تخفیف ..." id="discountCodeValue">
+                                        <div class="input-group-prepend">
+                                            <button class="btn btn-success" type="button">ثبت</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{--user description--}}
+                            <div class="row justify-content-center">
+                                <div class="col-12 col-sm-8 col-md-6 col-lg-6 m--margin-top-20 text-center">
+                                    <div class="form-group m-form__group">
+                                        <label for="exampleTextarea">Example textarea</label>
+                                        <textarea class="form-control m-input" id="exampleTextarea" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            {{--btn submit order--}}
+                            <div class="row justify-content-center">
+                                <div class="col text-center">
+                                    <hr>
+                                    <button type="button"
+                                            class="btn btn-lg m-btn--pill m-btn--air m-btn m-btn--gradient-from-info
+                                            m-btn--gradient-to-accent m--padding-top-20 m--padding-bottom-20
+                                             m--padding-right-50 m--padding-left-50 btnSubmitOrder"></button>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
-
-
-
                 </div>
             </div>
-
         </div>
-        <div class="col-12 col-md-4 order-1 order-sm-1 order-md-2 order-lg-2">
 
+        {{--مبلغ قابل پرداخت--}}
+        <div class="col-12 col-md-4 order-1 order-sm-1 order-md-2 order-lg-2 finalPriceReportWarper">
             <div class="m-portlet m-portlet--head-overlay  m-portlet--full-heigh m-portlet--rounded-force">
                 <div class="m-portlet__head m-portlet__head--fit-">
                     <div class="m-portlet__head-caption">
@@ -234,7 +246,15 @@
                             <h3 class="m-widget27__title text-center paymentAndWalletValue m--font-light">
                                 <span>
                                     مبلغ قابل پرداخت:
-                                    12،470
+                                    <br>
+                                    <b id="finalPriceValue">{{ number_format($invoiceInfo['totalCost']) }}</b>
+                                    تومان
+                                    <hr>
+                                    <small>
+                                        کیف پول شما:
+                                        <br>
+                                        {{ number_format($credit) }} تومان
+                                    </small>
                                 </span>
                             </h3>
                         </div>
@@ -242,45 +262,7 @@
 
                             <div class="container-fluid">
                                 <div class="row">
-                                    <div class="col-12">
-                                        <div class="m-portlet m-portlet--creative noHeadText m-portlet--bordered m-portlet--full-height m--margin-top-25" >
-                                            <div class="m-portlet__head">
-                                                <div class="m-portlet__head-caption">
-                                                    <div class="m-portlet__head-title">
-                                                        <h2 class="m-portlet__head-label m-portlet__head-label--accent" style="white-space: nowrap;">
-                                                <span>
-                                                    <i class="fa fa-wallet"></i> کیف پول
-                                                </span>
-                                                        </h2>
-                                                    </div>
-                                                </div>
-                                                <div class="m-portlet__head-tools">
-                                                </div>
-                                            </div>
-                                            <div class="m-portlet__body m--padding-right-5 m--padding-left-5 text-center" style="font-size: 13px;font-weight: bold;">
 
-                                                <div>
-                                                    <span>
-                                                        کیف پول شما:
-                                                        8،250
-                                                    </span>
-                                                </div>
-                                                <div class="m--margin-top-20">
-                                                    <span> از کیف پول استفاده: </span>
-                                                    <span class="m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
-                                                        <input type="checkbox"
-                                                               data-switch="true"
-                                                               {{--checked="checked"--}}
-                                                               data-on-text="نمی کنم"
-                                                               data-on-color="danger"
-                                                               data-off-text="می کنم"
-                                                               data-off-color="success"
-                                                               data-size="small">
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="col-12">
                                         <div class="m-portlet m-portlet--creative noHeadText m-portlet--bordered m-portlet--full-height">
                                             <div class="m-portlet__head">
@@ -309,11 +291,18 @@
                                                         </span>
                                                         <span class="visibleInDonate"> هزار تومان </span>
                                                         <br>
-                                                        <span> به آلاء کمک </span>
+                                                        <span>
+                                                            <label for="hasntDonate">
+                                                        به آلاء کمک
+                                                            </label>
+                                                        </span>
                                                         <span class="m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
                                                             <input type="checkbox"
                                                                    data-switch="true"
+                                                                   @if(isset($orderHasDonate) && $orderHasDonate)
+                                                                   @else
                                                                    checked=""
+                                                                   @endif
                                                                    data-on-text="نمی کنم"
                                                                    data-on-color="danger"
                                                                    data-off-text="می کنم"
@@ -331,6 +320,7 @@
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
 
@@ -338,8 +328,8 @@
                     </div>
                 </div>
             </div>
-
         </div>
+
     </div>
 
 
@@ -388,6 +378,7 @@
                                     <div class="row margin-top-10">
                                         @if(!isset($coupon))
                                             <div class="col-lg-3 col-md-3 col-sd-3 col-xs-12 text-center">
+                                                <label for="couponSwitch"></label>
                                                 <input type="checkbox" class="make-switch"
                                                        data-on-text="&nbsp;کد&nbsp;تخفیف&nbsp;دارم&nbsp;"
                                                        data-off-text="&nbsp;کد&nbsp;تخفیف&nbsp;ندارم&nbsp;"
@@ -502,7 +493,7 @@
                                         </div>
                                     @else
                                         <div class="row">
-                                            {!! Form::open(['method' => 'POST','action' => ['TransactionController@create'] , 'id'=>'paymentForm' , 'class'=>'form-horizontal' ]) !!}
+                                            {!! Form::open(['method' => 'POST','action' => ['Web\TransactionController@create'] , 'id'=>'paymentForm' , 'class'=>'form-horizontal' ]) !!}
                                             <div class="form-group text-center">
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ">
                                                     <label class="col-lg-5 col-md-5 col-sd-5 col-xs-5 text-center control-label"
@@ -633,20 +624,29 @@
                 refreshUiBasedOnHasntDiscountCodeStatus();
             }
             function refreshUiBasedOnPaymentType() {
-                let radioPaymentType = $('input[type="radio"][name="radioPaymentType"]:checked').val();
-                if (radioPaymentType==1) {
-                    $('#PaymentType-online').slideDown();
-                    $('#PaymentType-hozoori').slideUp();
-                    $('#PaymentType-card2card').slideUp();
-                } else if (radioPaymentType==2) {
-                    $('#PaymentType-online').slideUp();
-                    $('#PaymentType-hozoori').slideDown();
-                    $('#PaymentType-card2card').slideUp();
-                } else if (radioPaymentType==3) {
-                    $('#PaymentType-online').slideUp();
-                    $('#PaymentType-hozoori').slideUp();
-                    $('#PaymentType-card2card').slideDown();
-                }
+                let selectedObject = $('input[type="radio"][name="radioPaymentType"]:checked');
+                let radioPaymentType = selectedObject.val();
+
+                $('.PaymentType').slideUp();
+                $('#PaymentType-'+radioPaymentType).slideDown();
+
+                // if (radioPaymentType==1) {
+                //     $('#PaymentType-online').slideDown();
+                //     $('#PaymentType-hozoori').slideUp();
+                //     $('#PaymentType-card2card').slideUp();
+                // } else if (radioPaymentType==2) {
+                //     $('#PaymentType-online').slideUp();
+                //     $('#PaymentType-hozoori').slideDown();
+                //     $('#PaymentType-card2card').slideUp();
+                // } else if (radioPaymentType==3) {
+                //     $('#PaymentType-online').slideUp();
+                //     $('#PaymentType-hozoori').slideUp();
+                //     $('#PaymentType-card2card').slideDown();
+                // }
+
+                let btntext = selectedObject.data('btntext');
+                $('.btnSubmitOrder').html(btntext);
+
             }
             function donate() {
                 $('.face-sad').fadeOut(0);
@@ -666,7 +666,6 @@
                     return true;
                 }
             }
-
             function refreshUiBasedOnDonateStatus() {
                 if(getDonateStatus()) {
                     donate();
@@ -684,6 +683,7 @@
             }
 
             refreshUi();
+
             $(document).on('change', 'input[type="radio"][name="radioPaymentType"]', function(e) {
                 refreshUiBasedOnPaymentType();
             });
@@ -693,7 +693,8 @@
             $(document).on('switchChange.bootstrapSwitch', '#hasntDonate', function(e) {
                 refreshUiBasedOnDonateStatus();
             });
-            var e = document.getElementById("m_nouislider_1");
+
+            var e = document.getElementById('m_nouislider_1');
             noUiSlider.create(e, {
                 start: [5],
                 connect: [!0, !1],
@@ -701,11 +702,11 @@
                 range: {min: [1], max: [50]},
                 format: wNumb({decimals: 0})
             });
-            var n = document.getElementById("m_nouislider_1_input");
-            e.noUiSlider.on("update", function (e, t) {
+            var n = document.getElementById('m_nouislider_1_input');
+            e.noUiSlider.on('update', function (e, t) {
                 n.value = e[t];
                 refreshUiBasedOnDonateStatus();
-            }), n.addEventListener("change", function () {
+            }), n.addEventListener('change', function () {
                 e.noUiSlider.set(this.value)
             });
         });

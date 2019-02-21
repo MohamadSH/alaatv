@@ -53,6 +53,9 @@ mix.babel(
             'node_modules/lightgallery/modules/lg-video.min.js',
             'node_modules/lightgallery/modules/lg-zoom.min.js',
             'node_modules/jquery-sticky/jquery.sticky.js',
+            'public/acm/video-js/video.js',
+            'public/acm/video-js/videojs-ie8.min.js',
+            'public/acm/video-js/nuevo/nuevo.min.js',
             'public/acm/product-show-v13.js',
             'public/acm/page-product-show.js',
             'public/acm/page-product-saveCookie.js'
@@ -82,6 +85,21 @@ mix.scripts(
     ],
     'public/js/user-profile.js'
 ).version();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 mix.styles(
     [
         'node_modules/persian-datepicker/dist/css/persian-datepicker.css',
@@ -94,6 +112,7 @@ mix.styles(
 mix.styles(
     [
         'node_modules/lightgallery/src/css/lightgallery.css',
+        'public/acm/video-js/video-js.css',
     ],
     'public/css/product-show/product-show.css'
 ).version();

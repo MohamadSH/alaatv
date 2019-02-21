@@ -880,7 +880,6 @@ class OrderController extends Controller
                 $orderProductCount++;
             }
         }
-//        return $invoiceInfo;
         return view("order.checkout.review", compact("invoiceInfo", 'orderProductCount'));
     }
 
@@ -983,6 +982,15 @@ class OrderController extends Controller
 
         if ($request->expectsJson())
             return $response;
+
+//        return compact(
+//            "gateways",
+//            "coupon",
+//            "reviewCouponProductsWarning",
+//            "orderHasDonate",
+//            "credit",
+//            "invoiceInfo"
+//        );
 
         return view("order.checkout.payment" ,
                    compact(
