@@ -20,6 +20,7 @@ use App\Traits\User\{BonTrait,
     ProfileTrait,
     TagTrait,
     TeacherTrait,
+    TrackTrait,
     VouchersTrait};
 use Carbon\Carbon;
 use Hash;
@@ -273,7 +274,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     use CharacterCommon;
     use OrderCommon;
 
-    use DashboardTrait, MutatorTrait, TeacherTrait, LotteryTrait, PaymentTrait, BonTrait, VouchersTrait, TagTrait, ProfileTrait;
+    use DashboardTrait, MutatorTrait, TeacherTrait, LotteryTrait, PaymentTrait, BonTrait, VouchersTrait, TagTrait, ProfileTrait, TrackTrait;
 
     /*
     |--------------------------------------------------------------------------
