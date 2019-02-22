@@ -493,6 +493,7 @@ class Orderproduct extends BaseModel
         return Cache::tags(["orderproduct"])
             ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
                 return optional($this->product->grand)->setVisible([
+                    'id',
                     'name',
                     'photo',
                     'url',
