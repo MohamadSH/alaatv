@@ -69,6 +69,7 @@ var UesrCart = function () {
         $('.btnAddToCart i').fadeOut();
         $('.btnAddToCart .fas.fa-sync-alt.fa-spin').fadeIn();
     }
+
     function enableBtnAddToCart() {
         $('.btnAddToCart').attr('disabled', false);
         $('.btnAddToCart').removeClass('disabled');
@@ -93,9 +94,9 @@ var UesrCart = function () {
 
 jQuery(document).ready(function() {
 
-    $(document).on('click', '.btnAddToCart', function() {
+    $(document).on('click', '.btnAddToCart', function () {
 
-        if($(this).attr('disabled')) {
+        if ($(this).attr('disabled')) {
             return false;
         }
 
@@ -105,7 +106,7 @@ jQuery(document).ready(function() {
         let extraAttributeStates = getExtraAttributeStates();
         let productSelectValues = getProductSelectValues() ;
 
-        if($('#js-var-userId').val()) {
+        if ($('#js-var-userId').val()) {
 
             $.ajax({
                 type: 'POST',
@@ -145,7 +146,7 @@ jQuery(document).ready(function() {
                             }
                         });
 
-                        setTimeout(function() {
+                        setTimeout(function () {
                             window.location.replace('/checkout/review');
                         }, 1000);
 
@@ -191,15 +192,15 @@ jQuery(document).ready(function() {
         } else {
 
             let data = {
-                'product_id':$('input[name="product_id"][type="hidden"]').val(),
-                'attribute':mainAttributeStates,
-                'extraAttribute':extraAttributeStates,
-                'products':productSelectValues,
+                'product_id': $('input[name="product_id"][type="hidden"]').val(),
+                'attribute': mainAttributeStates,
+                'extraAttribute': extraAttributeStates,
+                'products': productSelectValues,
             };
 
             UesrCart.addToCartInCookie(data);
 
-            setTimeout(function() {
+            setTimeout(function () {
                 window.location.replace('/checkout/review');
             }, 2000);
         }

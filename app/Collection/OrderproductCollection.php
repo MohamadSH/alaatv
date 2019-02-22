@@ -8,11 +8,11 @@
 
 namespace App\Collection;
 
+use App\Classes\Abstracts\Pricing\OrderproductPriceCalculator;
+use App\Classes\Checkout\Alaa\GroupOrderproductCheckout;
 use App\Orderproduct;
 use App\Traits\JsonResponseFormat;
 use Illuminate\Database\Eloquent\Collection;
-use App\Classes\Checkout\Alaa\GroupOrderproductCheckout;
-use App\Classes\Abstracts\Pricing\OrderproductPriceCalculator;
 
 class OrderproductCollection extends Collection
 {
@@ -81,8 +81,7 @@ class OrderproductCollection extends Collection
 
     public function updateCostValues()
     {
-        foreach ($this as $orderproduct)
-        {
+        foreach ($this as $orderproduct) {
             $newPriceInfo = $this->getNewPriceForItem($orderproduct);
 
             $orderproduct->fillCostValues($newPriceInfo);
@@ -129,8 +128,7 @@ class OrderproductCollection extends Collection
      */
     public function makeLinks():\Illuminate\Support\Collection{
         $orderproductLinks = collect();
-        foreach ($this as $orderproduct)
-        {
+        foreach ($this as $orderproduct) {
             $orderproductLink = $orderproduct->product->makeProductLink();
             if (strlen($orderproductLink) > 0)
                 $orderproductLinks->put($orderproduct->id, $orderproductLink);
@@ -152,8 +150,8 @@ class OrderproductCollection extends Collection
         $customerCost = $priceInfo["totalPriceInfo"]["sumOfOrderproductsCustomerCost"];
 
         return [
-            "newPrices" => $newPrices,
-            "rawCost" => $rawCost,
+            "newPrices"    => $newPrices,
+            "rawCost"      => $rawCost,
             "customerCost" => $customerCost,
         ];
     }
@@ -176,8 +174,7 @@ class OrderproductCollection extends Collection
     public function getProducts()
     {
         $products = new ProductCollection();
-        foreach ($this as $orderproduct)
-        {
+        foreach ($this as $orderproduct) {
             $products->push($orderproduct->product);
         }
 

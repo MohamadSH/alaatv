@@ -8,7 +8,6 @@ use App\Classes\Checkout\Alaa\OrderproductCheckout;
 use App\Collection\OrderproductCollection;
 use App\Traits\ProductCommon;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 use mysql_xdevapi\Collection;
 
 /**
@@ -105,7 +104,7 @@ class Orderproduct extends BaseModel
         'bons',
         'attributevalues',
         'photo',
-        'grandProduct'
+        'grandProduct',
     ];
 
     protected $hidden=[
@@ -136,15 +135,15 @@ class Orderproduct extends BaseModel
 
     public function getOrderproducttypeAttribute()
     {
-        $orderproduct = $this ;
+        $orderproduct = $this;
         $key = "orderproduct:type:" . $orderproduct->cacheKey();
         return Cache::tags(["orderproduct"])
-            ->remember($key, config("constants.CACHE_600"), function () use ($orderproduct) {
-                return optional($this->orderproducttype()->first())->setVisible([
-                    'name',
-                    'displayName'
-                ]);
-        });
+                    ->remember($key, config("constants.CACHE_600"), function () use ($orderproduct) {
+                        return optional($this->orderproducttype()->first())->setVisible([
+                            'name',
+                            'displayName',
+                        ]);
+                    });
     }
 
     /**
@@ -178,9 +177,9 @@ class Orderproduct extends BaseModel
     public function children()
     {
         return $this->belongsToMany('App\Orderproduct', 'orderproduct_orderproduct', 'op1_id', 'op2_id')
-            ->withPivot('relationtype_id')
-            ->join('orderproductinterrelations', 'relationtype_id', 'orderproductinterrelations.id')
-            ->where("relationtype_id", config("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD"));
+                    ->withPivot('relationtype_id')
+                    ->join('orderproductinterrelations', 'relationtype_id', 'orderproductinterrelations.id')
+                    ->where("relationtype_id", config("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD"));
     }
 
     public function orderproducttype()
@@ -416,11 +415,11 @@ class Orderproduct extends BaseModel
 
                 if (!isset($productAttributevalue)) {
                     $this->attributevalues()
-                        ->detach($productAttributevalue);
+                         ->detach($productAttributevalue);
                 } else {
                     $newExtraCost = $productAttributevalue->pivot->extraCost;
                     $this->attributevalues()
-                        ->updateExistingPivot($extraAttribute->id, ["extraCost" => $newExtraCost]);
+                         ->updateExistingPivot($extraAttribute->id, ["extraCost" => $newExtraCost]);
                 }
             }
         }
@@ -471,24 +470,26 @@ class Orderproduct extends BaseModel
         Cache::tags('bon')->flush();
     }
 
-    public function getProductAttribute(){
+    public function getProductAttribute()
+    {
         $orderproduct = $this;
         $key = "orderproduct:product" . $orderproduct->cacheKey();
         return Cache::tags(["orderproduct"])
-                ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
-                    return optional($this->product()->first())->setVisible([
-                        'id',
-                        'name',
-                        'url',
-                        'apiUrl',
-                        'photo',
-                        'attributes'
-                    ]);
-                });
+                    ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
+                        return optional($this->product()->first())->setVisible([
+                            'id',
+                            'name',
+                            'url',
+                            'apiUrl',
+                            'photo',
+                            'attributes',
+                        ]);
+                    });
     }
 
-    public function getGrandProductAttribute(){
-        $orderproduct = $this ;
+    public function getGrandProductAttribute()
+    {
+        $orderproduct = $this;
         $key = "orderproduct:grandProduct:" . $orderproduct->cacheKey();
         return Cache::tags(["orderproduct"])
             ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
@@ -504,52 +505,57 @@ class Orderproduct extends BaseModel
 
     }
 
-    public function getGrandIdAttribute(){
-        $orderproduct = $this ;
+    public function getGrandIdAttribute()
+    {
+        $orderproduct = $this;
         $key = "orderproduct:grandProduct:" . $orderproduct->cacheKey();
         return Cache::tags(["orderproduct"])
-            ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
-                return optional($orderproduct->product)->grand_id;
-            });
+                    ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
+                        return optional($orderproduct->product)->grand_id;
+                    });
     }
 
-    public function getPriceAttribute(){
-        $orderproduct = $this ;
+    public function getPriceAttribute()
+    {
+        $orderproduct = $this;
         $key = "orderproduct:price:" . $orderproduct->cacheKey();
         return Cache::tags(["orderproduct"])
-            ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
-                return $this->obtainOrderproductCost(false);
-            });
+                    ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
+                        return $this->obtainOrderproductCost(false);
+                    });
     }
 
-    public function getBonsAttribute(){$orderproduct = $this ;
+    public function getBonsAttribute()
+    {
+        $orderproduct = $this;
         $key = "orderproduct:bons:" . $orderproduct->cacheKey();
         return Cache::tags(["orderproduct"])
-            ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
-                $userbons = $this->userbons()->get();
-                 return $userbons;
-            });
+                    ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
+                        $userbons = $this->userbons()->get();
+                        return $userbons;
+                    });
 
     }
 
     public function getAttributevaluesAttribute()
     {
-        $orderproduct = $this ;
+        $orderproduct = $this;
         $key = "orderproduct:attributevalues:" . $orderproduct->cacheKey();
         return Cache::tags(["orderproduct"])
-            ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
-                //ToDo : set visible
-                    $attributevalues = $orderproduct->attributevalues()->get();
-                    return $attributevalues;
-            });
+                    ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
+                        //ToDo : set visible
+                        $attributevalues = $orderproduct->attributevalues()->get();
+                        return $attributevalues;
+                    });
     }
 
-    public function getPhotoAttribute(){
-        $orderproduct = $this ;
+    public function getPhotoAttribute()
+    {
+        $orderproduct = $this;
         $key = "orderproduct:photo:" . $orderproduct->cacheKey();
         return Cache::tags(["orderproduct"])
-            ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
-                return optional($this->product->grand)->photo;
-            });
+                    ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
+                        return optional($this->product->grand)->photo;
+                    });
     }
 }

@@ -161,7 +161,7 @@ class ContentController extends Controller
         $result->offsetSet('product', !$contentOnly ? $this->productSearch->get($filters) : null);
 
         $pageName = "content-search";
-        if (request()->expectsJson() || true) {
+        if (request()->expectsJson()) {
             return $this->response
                 ->setStatusCode(Response::HTTP_OK)
                 ->setContent([
