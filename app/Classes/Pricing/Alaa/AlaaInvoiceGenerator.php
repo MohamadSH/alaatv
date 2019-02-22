@@ -16,7 +16,6 @@ class AlaaInvoiceGenerator
 {
     /**
      * @param Order $order
-     *
      * @return array
      * @throws \Exception
      */
@@ -41,34 +40,32 @@ class AlaaInvoiceGenerator
         $payableByWallet = $orderPriceArray['payableAmountByWallet'];
 
         $orderProductCount = $this->orderproductFormatter($orderproducts);
-        
+
         return [
-            'orderproducts'        => $orderproducts,
-            'orderproductCount'    => $orderProductCount,
-            'orderproductsRawCost' => $orderproductsRawCost,
-            'totalCost'            => $totalCost,
-            'payableByWallet'      => $payableByWallet,
+          'items'           => $orderproducts,
+          'orderproductCount'       => $orderProductCount ,
+          'orderproductsRawCost'    => $orderproductsRawCost,
+          'totalCost'               => $totalCost,
+          'payableByWallet'         => $payableByWallet,
         ];
     }
 
     /**
      * @param Collection $fakeOrderproducts
-     *
      * @return array
      */
-    public function generateFakeOrderproductsInvoice(Collection $fakeOrderproducts)
-    {
+    public function generateFakeOrderproductsInvoice(Collection $fakeOrderproducts){
         /** @var OrderproductCollection $fakeOrderproducts */
-        $groupPriceInfo = $fakeOrderproducts->calculateGroupPrice();
+        $groupPriceInfo =  $fakeOrderproducts->calculateGroupPrice();
 
         $orderProductCount = $this->orderproductFormatter($fakeOrderproducts);
 
-        return [
-            'orderproducts'        => $fakeOrderproducts,
-            'orderproductCount'    => $orderProductCount,
-            'orderproductsRawCost' => $groupPriceInfo['rawCost'],
-            'totalCost'            => $groupPriceInfo['customerCost'],
-            'payableByWallet'      => 0,
+       return [
+            'items'          => $fakeOrderproducts,
+            'orderproductCount'      => $orderProductCount ,
+            'orderproductsRawCost'   => $groupPriceInfo['rawCost'],
+            'totalCost'              => $groupPriceInfo['customerCost'],
+            'payableByWallet'        => 0 ,
         ];
     }
 
@@ -93,21 +90,25 @@ class AlaaInvoiceGenerator
     /**
      * Formats orderproduct collection and return total number of orderproducts
      *
-     * @param Collection $orderproducts
-     *
+     * @param OrderproductCollection $orderproducts
      * @return int
      */
-    private function orderproductFormatter(Collection &$orderproducts): int
+    private function orderproductFormatter(OrderproductCollection &$orderproducts):int
     {
-        $orderproducts = $orderproducts->groupBy('grandId');
+        $newPrices = $orderproducts->getNewPrices();
 
         $orderProductCount = 0;
-        /** @var Collection $orderProductItem */
-        foreach ($orderproducts as $orderProductItem) {
-            $orderProductCount += $orderProductItem->count();
-        }
+        $orderproducts = new OrderproductCollection($orderproducts->groupBy('grandId')->map(function ($orderproducts,$grandId) use (&$orderProductCount){
+            $orderProductCount += $orderproducts->count() ;
+            return [
+              'grand' => $orderproducts->first()->grandProduct ?? null,
+               'orderproducts' =>  $orderproducts
+            ];
+        })->values()->all());
+
+        $orderproducts = $orderproducts->setNewPrices($newPrices);
 
         return $orderProductCount;
     }
-    
+
 }

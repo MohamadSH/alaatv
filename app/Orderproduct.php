@@ -492,15 +492,16 @@ class Orderproduct extends BaseModel
         $orderproduct = $this;
         $key = "orderproduct:grandProduct:" . $orderproduct->cacheKey();
         return Cache::tags(["orderproduct"])
-                    ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
-                        return optional($this->product->grand)->setVisible([
-                            'name',
-                            'photo',
-                            'url',
-                            'apiUrl',
-                            'attributes',
-                        ]);
-                    });
+            ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
+                return optional($this->product->grand)->setVisible([
+                    'id',
+                    'name',
+                    'photo',
+                    'url',
+                    'apiUrl',
+                    'attributes'
+                ]);
+            });
 
     }
 

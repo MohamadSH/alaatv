@@ -180,4 +180,14 @@ class OrderproductCollection extends Collection
 
         return $products;
     }
+
+    /**
+     * @param array $newPrices
+     * @return OrderproductCollection
+     */
+    public function setNewPrices(array $newPrices): OrderproductCollection
+    {
+        $this->newPrices = $newPrices;
+        return $this;
+    }
 }
