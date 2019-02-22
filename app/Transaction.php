@@ -7,18 +7,18 @@ use App\Collection\TransactionCollection;
 /**
  * App\Transaction
  *
- * @property int                                                              $id
- * @property int|null                                                         $order_id                  آیدی مشخص
+ * @property int         $id
+ * @property int|null    $order_id                  آیدی مشخص
  *           کننده سفارشی که تراکنش متعلق به آن است
- * @property int|null                                                         $wallet_id                 آیدی مشخص
+ * @property int|null    $wallet_id                 آیدی مشخص
  *           کننده کیف پولی که تراکنش متعلق به آن است
- * @property int|null                                                         $cost                      مبلغ تراکنش
- * @property string|null                                                      $authority                 شماره اتوریتی
+ * @property int|null    $cost                      مبلغ تراکنش
+ * @property string|null $authority                 شماره اتوریتی
  *           تولید شده از طرف درگاه
- * @property string|null                                                      $transactionID             کد پیگیری
+ * @property string|null $transactionID             کد پیگیری
  *           تراکنش
- * @property string|null                                                      $traceNumber               شماره پیگیری
- * @property string|null                                                      $referenceNumber           شماره مرجع
+ * @property string|null $traceNumber               شماره پیگیری
+ * @property string|null $referenceNumber           شماره مرجع
  * @property string|null                                                      $paycheckNumber            شماره چک (در
  *           صورت پرداخت با چک بانکی)
  * @property string|null                                                      $managerComment            توضیح مسئول
@@ -108,7 +108,7 @@ class Transaction extends BaseModel
 
     protected $appends = [
         'paymentmethod',
-        'transactiongateway'
+        'transactiongateway',
     ];
 
     /**
@@ -255,24 +255,26 @@ class Transaction extends BaseModel
         if (isset($wallet)) {
             $response = $wallet->deposit($amount);
         } else {
-            $response = ["result"=> false];
+            $response = ["result" => false];
         }
         return $response;
     }
 
-    public function getTransactionGatewayAttribute(){
+    public function getTransactionGatewayAttribute()
+    {
         return $this->transactiongateway()->first()->setVisible([
             'name',
             'displayName',
-            'description'
+            'description',
         ]);
     }
 
-    public function getPaymentmethodAttribute(){
+    public function getPaymentmethodAttribute()
+    {
         return $this->paymentmethod()->first()->setVisible([
             'name',
             'displayName',
-            'description'
+            'description',
         ]);
     }
 }

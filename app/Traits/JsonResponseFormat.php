@@ -16,12 +16,13 @@ trait JsonResponseFormat
 
     /**
      *  call setVisible for every item
+     *
      * @param array $attributes
      */
-    public function setVisible(array $attributes):void{
+    public function setVisible(array $attributes): void
+    {
         /** @var Orderproduct $item */
-        foreach ($this as $item)
-        {
+        foreach ($this as $item) {
             $item->setVisible($attributes);
         }
     }

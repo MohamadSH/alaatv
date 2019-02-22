@@ -14,5 +14,5 @@ use Illuminate\Database\Eloquent\Collection;
 
 class TransactionCollection extends Collection
 {
-    use JsonResponseFormat ;
+    use JsonResponseFormat;
 }

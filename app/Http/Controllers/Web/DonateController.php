@@ -118,7 +118,10 @@ class DonateController extends Controller
 
         /** END OF INITIALIZING   */
 
-        $donateProductArray = [ Product::CUSTOM_DONATE_PRODUCT ,  Product::DONATE_PRODUCT_5_HEZAR];
+        $donateProductArray = [
+            Product::CUSTOM_DONATE_PRODUCT,
+            Product::DONATE_PRODUCT_5_HEZAR,
+        ];
         array_push($donateProductArray, Product::CUSTOM_DONATE_PRODUCT);
         $orders = Order::whereHas("orderproducts", function ($q) use ($donateProductArray) {
             $q->whereIn("product_id", $donateProductArray);

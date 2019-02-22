@@ -12,8 +12,7 @@ use App\Traits\HasWallet;
 use App\Traits\Helper;
 use App\Traits\MustVerifyMobileNumberTrait;
 use App\Traits\OrderCommon;
-use App\Traits\User\{AssetTrait,
-    BonTrait,
+use App\Traits\User\{BonTrait,
     DashboardTrait,
     LotteryTrait,
     MutatorTrait,
@@ -21,6 +20,7 @@ use App\Traits\User\{AssetTrait,
     ProfileTrait,
     TagTrait,
     TeacherTrait,
+    TrackTrait,
     VouchersTrait};
 use Carbon\Carbon;
 use Hash;
@@ -258,7 +258,7 @@ use Laravel\Passport\HasApiTokens;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Client[] $clients
  * @property-read mixed                                                               $info
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[]  $tokens
- * @property mixed openOrders
+ * @property mixed                                                                    openOrders
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail
 {
@@ -274,7 +274,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     use CharacterCommon;
     use OrderCommon;
 
-    use DashboardTrait, MutatorTrait, TeacherTrait, LotteryTrait, PaymentTrait, BonTrait, VouchersTrait, AssetTrait, TagTrait, ProfileTrait;
+    use DashboardTrait, MutatorTrait, TeacherTrait, LotteryTrait, PaymentTrait, BonTrait, VouchersTrait, TagTrait, ProfileTrait, TrackTrait;
 
     /*
     |--------------------------------------------------------------------------
