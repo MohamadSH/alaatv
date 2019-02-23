@@ -859,10 +859,9 @@ class OrderController extends Controller
         }
 
         if ($request->expectsJson()) {
-            return response(["invoiceInfo" => $invoiceInfo], $responseStatus);
+            return response($invoiceInfo, $responseStatus);
         }
 
-//        return $invoiceInfo;
         return view("order.checkout.review", compact("invoiceInfo", 'orderProductCount'));
     }
 
@@ -1871,7 +1870,7 @@ class OrderController extends Controller
 
             $data = [
                 "products" => $childrenIds,
-                "atttibutes" => $attributes ,
+                "atttibute" => $attributes ,
                 'extraAttribute' => $extraAttributes,
             ];
 
