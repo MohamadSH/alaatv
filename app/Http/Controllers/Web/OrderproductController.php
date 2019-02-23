@@ -567,7 +567,7 @@ class OrderproductController extends Controller
 
         $orderproductData["product_id"] = $grandParentProductId;
         $orderproductData["products"] = $productIds;
-        $orderproductData["attributes"] = $attributes;
+        $orderproductData["attribute"] = $attributes;
         $orderproductData["extraAttribute"] = $extraAttributes;
         $orderproductData["order_id"] = isset($data["order_id"]) ? $data["order_id"] : null;
 
