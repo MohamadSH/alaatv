@@ -43,31 +43,29 @@ mix.scripts(
 // TODO : must convert to mix.script
 mix.babel(
     [
-            'node_modules/lightgallery/src/js/lightgallery.js',
-            'node_modules/lightgallery/modules/lg-thumbnail.min.js',
-            'node_modules/lightgallery/modules/lg-autoplay.min.js',
-            'node_modules/lightgallery/modules/lg-fullscreen.min.js',
-            'node_modules/lightgallery/modules/lg-pager.min.js',
-            'node_modules/lightgallery/modules/lg-hash.min.js',
-            'node_modules/lightgallery/modules/lg-share.min.js',
-            'node_modules/lightgallery/modules/lg-video.min.js',
-            'node_modules/lightgallery/modules/lg-zoom.min.js',
-            'node_modules/jquery-sticky/jquery.sticky.js',
-            'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
-            'public/acm/video-js/video.js',
-            'public/acm/video-js/videojs-ie8.min.js',
-            'public/acm/video-js/nuevo/nuevo.min.js',
-            'public/acm/product-show-v13.js',
-            'public/acm/page-product-show.js',
-            'public/acm/page-product-saveCookie.js'
+        'node_modules/lightgallery/src/js/lightgallery.js',
+        'node_modules/lightgallery/modules/lg-thumbnail.min.js',
+        'node_modules/lightgallery/modules/lg-autoplay.min.js',
+        'node_modules/lightgallery/modules/lg-fullscreen.min.js',
+        'node_modules/lightgallery/modules/lg-pager.min.js',
+        'node_modules/lightgallery/modules/lg-hash.min.js',
+        'node_modules/lightgallery/modules/lg-share.min.js',
+        'node_modules/lightgallery/modules/lg-video.min.js',
+        'node_modules/lightgallery/modules/lg-zoom.min.js',
+        'node_modules/jquery-sticky/jquery.sticky.js',
+        'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
+        'public/acm/video-js/video.js',
+        'public/acm/video-js/videojs-ie8.min.js',
+        'public/acm/video-js/nuevo/nuevo.min.js',
+        'public/acm/AlaatvCustomFiles/js/page-product-show.js'
     ],
     'public/js/product-show.js'
 ).version();
 
-//scripts
 mix.scripts(
     [
-        'node_modules/jquery-sticky/jquery.sticky.js'
+        'node_modules/jquery-sticky/jquery.sticky.js',
+        'public/acm/AlaatvCustomFiles/js/checkout-review.js'
     ],
     'public/js/checkout-review.js'
 ).version();
@@ -88,19 +86,6 @@ mix.scripts(
 ).version();
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 mix.styles(
     [
         'node_modules/persian-datepicker/dist/css/persian-datepicker.css',
@@ -113,10 +98,21 @@ mix.styles(
 mix.styles(
     [
         'node_modules/lightgallery/src/css/lightgallery.css',
+        'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
+        'public/acm/AlaatvCustomFiles/css/product-show.css',
         'public/acm/video-js/video-js.css',
     ],
     'public/css/product-show/product-show.css'
 ).version();
+
+
+mix.styles(
+    [
+        'public/acm/AlaatvCustomFiles/css/checkout-review.css',
+    ],
+    'public/css/checkout-review.css'
+).version();
+
 
 mix.scripts(
     [

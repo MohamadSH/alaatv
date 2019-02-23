@@ -2,16 +2,14 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Controllers\Web\OrderController;
 use App\Traits\OrderCommon;
+use App\User;
+use App\Userbon;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Controllers\Web\OrderController;
-
-use App\Userbon;
-use App\User;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class CheckPermissionForSendOrderId
 {
@@ -25,7 +23,8 @@ class CheckPermissionForSendOrderId
 
     /**
      * OrderCheck constructor.
-     * @param Request $request
+     *
+     * @param Request         $request
      * @param OrderController $controller
      */
     public function __construct(Request $request, OrderController $controller, $guard = null)
@@ -63,17 +62,17 @@ class CheckPermissionForSendOrderId
 //            $request->offsetSet('extraAttribute', $sampleData['data']['extraAttribute']);
 //            $request->offsetSet('withoutBon', false);
 
-            if($request->has('order_id')) {
-                if(!$this->user->can(config('constants.INSERT_ORDERPRODUCT_ACCESS'))) {
-                    return response()->json([
-                        'error' => 'You are not allowed to submit order_id: '.$request->get('order_id')
-                    ], Response::HTTP_FORBIDDEN);
-                }
-            } else {
-                $openOrder = $request->user()->getOpenOrder();;
-                $request->offsetSet('order_id', $openOrder->id);
-                $request->offsetSet('openOrder', $openOrder);
+        if ($request->has('order_id')) {
+            if (!$this->user->can(config('constants.INSERT_ORDERPRODUCT_ACCESS'))) {
+                return response()->json([
+                    'error' => 'You are not allowed to submit order_id: ' . $request->get('order_id'),
+                ], Response::HTTP_FORBIDDEN);
             }
+        } else {
+            $openOrder = $request->user()->getOpenOrder();;
+            $request->offsetSet('order_id', $openOrder->id);
+            $request->offsetSet('openOrder', $openOrder);
+        }
         return $next($request);
     }
 
@@ -99,19 +98,25 @@ class CheckPermissionForSendOrderId
                  * don't have extraAttribute
                  */
                 return [
-                    'orderId' => $orderId,
+                    'orderId'   => $orderId,
                     'productId' => 259,
-                    'data' => [
-                        'products' => [241, 247],
-                        'attribute' => [1,3,9,49,53],
+                    'data'      => [
+                        'products'       => [
+                            241,
+                            247,
+                        ],
+                        'attribute'      => [
+                            1,
+                            3,
+                            9, 49, 53],
                         'extraAttribute' => [
                             [
-                                'id'=>60,
-                                'cost'=>600
+                                'id'   => 60,
+                                'cost' =>600,
                             ],
                             [
-                                'id'=>21,
-                                'cost'=>700
+                                'id'   => 21,
+                                'cost' =>700,
                             ]
                         ]
                     ]
@@ -124,19 +129,19 @@ class CheckPermissionForSendOrderId
                  * don't have extraAttribute
                  */
                 return [
-                    'orderId' => $orderId,
+                    'orderId'   => $orderId,
                     'productId' => 270,
-                    'data' => [
-                        'products' => [],
-                        'attribute' => [],
+                    'data'      => [
+                        'products'       => [],
+                        'attribute'      => [],
                         'extraAttribute' => [
                             [
-                                'id'=>60,
-                                'cost'=>600
+                                'id'   => 60,
+                                'cost' =>600,
                             ],
                             [
-                                'id'=>21,
-                                'cost'=>700
+                                'id'   => 21,
+                                'cost' =>700,
                             ]
                         ]
                     ]
@@ -148,19 +153,25 @@ class CheckPermissionForSendOrderId
                  * with bon from father
                  */
                 return [
-                    'orderId' => $orderId,
+                    'orderId'   => $orderId,
                     'productId' => 157,
-                    'data' => [
-                        'products' => [241, 247],
-                        'attribute' => [1,3,9,49,53],
+                    'data'      => [
+                        'products'       => [
+                            241,
+                            247,
+                        ],
+                        'attribute'      => [
+                            1,
+                            3,
+                            9, 49, 53],
                         'extraAttribute' => [
                             [
-                                'id'=>60,
-                                'cost'=>600
+                                'id'   => 60,
+                                'cost' =>600,
                             ],
                             [
-                                'id'=>21,
-                                'cost'=>700
+                                'id'   => 21,
+                                'cost' =>700,
                             ]
                         ]
                     ]
@@ -171,11 +182,11 @@ class CheckPermissionForSendOrderId
                  * 5000
                  */
                 return [
-                    'orderId' => $orderId,
+                    'orderId'   => $orderId,
                     'productId' => 180,
-                    'data' => [
-                        'products' => [],
-                        'attribute' => [],
+                    'data'      => [
+                        'products'       => [],
+                        'attribute'      => [],
                         'extraAttribute' => []
                     ]
                 ];
@@ -185,11 +196,11 @@ class CheckPermissionForSendOrderId
                  * custom
                  */
                 return [
-                    'orderId' => $orderId,
+                    'orderId'   => $orderId,
                     'productId' => 181,
-                    'data' => [
-                        'products' => [],
-                        'attribute' => [],
+                    'data'      => [
+                        'products'       => [],
+                        'attribute'      => [],
                         'extraAttribute' => []
                     ]
                 ];
@@ -202,10 +213,10 @@ class CheckPermissionForSendOrderId
                  * don't have extraAttribute
                  */
                 return [
-                    'orderId' => $orderId,
+                    'orderId'   => $orderId,
                     'productId' => 240,
-                    'data' => [
-                        'products' => [
+                    'data'      => [
+                        'products'       => [
 //                            241,
 //
 //                                247,
@@ -214,18 +225,21 @@ class CheckPermissionForSendOrderId
 //                                    258,
 
 //                                248,
-                            259,
-                            260
+259,
+260,
                         ],
-                        'attribute' => [1,3,9,49,53],
+                        'attribute'      => [
+                            1,
+                            3,
+                            9, 49, 53],
                         'extraAttribute' => [
                             [
-                                'id'=>60,
-                                'cost'=>600
+                                'id'   => 60,
+                                'cost' =>600,
                             ],
                             [
-                                'id'=>21,
-                                'cost'=>700
+                                'id'   => 21,
+                                'cost' =>700,
                             ]
                         ]
                     ]
@@ -238,19 +252,29 @@ class CheckPermissionForSendOrderId
                  * configure product with child (156, 157)
                  */
                 return [
-                    'orderId' => $orderId,
+                    'orderId'   => $orderId,
                     'productId' => 155,
-                    'data' => [
-                        'products' => [241, 247],
-                        'attribute' => [1,3,9,49,53], // => 156
+                    'data'      => [
+                        'products'       => [
+                            241,
+                            247,
+                        ],
+                        'attribute'      => [
+                            1,
+                            3,
+                            9,
+                            49,
+                            53,
+                        ],
+                        // => 156
                         'extraAttribute' => [
                             [
-                                'id'=>60,
-                                'cost'=>600
+                                'id'   => 60,
+                                'cost' =>600,
                             ],
                             [
-                                'id'=>21,
-                                'cost'=>700
+                                'id'   => 21,
+                                'cost' =>700,
                             ]
                         ]
                     ]
@@ -262,10 +286,10 @@ class CheckPermissionForSendOrderId
                  * don't have extraAttribute
                  */
                 return [
-                    'orderId' => $orderId,
+                    'orderId'   => $orderId,
                     'productId' => 501,
-                    'data' => [
-                        'products' => [
+                    'data'      => [
+                        'products'       => [
                             508,
                             509,
                             510,
@@ -273,7 +297,7 @@ class CheckPermissionForSendOrderId
                             506,
                             507
                         ],
-                        'attribute' => [],
+                        'attribute'      => [],
                         'extraAttribute' => []
                     ]
                 ];

@@ -165,17 +165,14 @@ var UesrCart = function () {
     }
 
     function disableBtnAddToCart() {
-        $('.btnAddToCart').attr('disabled', true);
-        $('.btnAddToCart').addClass('disabled');
-        $('.btnAddToCart i').fadeOut();
-        $('.btnAddToCart .fas.fa-sync-alt.fa-spin').fadeIn();
+        mApp.block('.btnAddToCart', {
+            type: "loader",
+            state: "info",
+        });
     }
 
     function enableBtnAddToCart() {
-        $('.btnAddToCart').attr('disabled', false);
-        $('.btnAddToCart').removeClass('disabled');
-        $('.btnAddToCart i').fadeIn();
-        $('.btnAddToCart .fas.fa-sync-alt.fa-spin').fadeOut();
+        mApp.unblock('.btnAddToCart');
     }
 
     function refreshPrice(mainAttributeState , productState , extraAttributeState) {
@@ -212,12 +209,7 @@ var UesrCart = function () {
             statusCode: {
                 //The status for when action was successful
                 200: function (response) {
-
-                    // console.log(response);
-
-
                     response = $.parseJSON(response);
-
 
                     if (response.error != null) {
                         Swal({
@@ -246,44 +238,6 @@ var UesrCart = function () {
                         });
                         $('#a_product-price').html('-');
                     }
-                    // {"cost":136000,"costForCustomer":136000,"totalExtraCost":0}
-                    // totalExtraCost = parseInt(response.totalExtraCost);
-
-                    // var currentPrice = parseInt($("#price").attr("value"));
-                    // var currentCustomerPrice = parseInt($("#customerPrice").attr("value"));
-                    // if(currentPrice>0)
-                    // {
-                    //     if(currentPrice+parseInt(totalExtraCost) === 0 )
-                    //         $("#price").text("پس از انتخاب محصول");
-                    //     else
-                    //         $("#price").text(currentPrice+parseInt(totalExtraCost)).number(true).append("تومان");
-                    //
-                    //     $("#customerPrice").text(currentCustomerPrice+parseInt(totalExtraCost)).number(true).append("تومان");
-                    // }
-                    //
-                    // else {
-                    //     cost = response.cost;
-                    //     costForCustomer = response.costForCustomer;
-                    //     // productShortDescription = response.shortDescription ;
-                    //     // productLongDescription = response.longDescription ;
-                    //
-                    //     if(cost === 0 ) {
-                    //         $("#price").text("پس از انتخاب محصول");
-                    //         $("#customerPrice").text(0).number(true).append("تومان");
-                    //     }
-                    //     else {
-                    //         // $("#price").text(cost+totalExtraCost).number(true).append("تومان");
-                    //         // $("#customerPrice").text(costForCustomer+totalExtraCost).number(true).append("تومان");
-                    //     }
-                    //     $("#price").attr("value" , cost);
-                    //     $("#customerPrice").attr("value" , costForCustomer);
-                    //     var discount = parseInt(cost) - parseInt(costForCustomer);
-                    //     // $("#discount").text(discount).number(true).append("تومان");
-                    //     // $("#productShortDescription").html(productShortDescription);
-                    //     // $("#productLongDescription").html(productLongDescription);
-                    // }
-
-
                 },
                 //The status for when the user is not authorized for making the request
                 403: function (response) {
@@ -398,15 +352,15 @@ var UesrCart = function () {
         },
 
         getMainAttributeStates: function () {
-            getMainAttributeStates();
+            return getMainAttributeStates();
         },
 
         getExtraAttributeStates: function () {
-            getExtraAttributeStates();
+            return getExtraAttributeStates();
         },
 
         getProductSelectValues: function () {
-            getProductSelectValues();
+            return getProductSelectValues();
         },
     };
 }();
@@ -415,10 +369,66 @@ jQuery(document).ready(function() {
 
     let childLevel = ProductSwitch.init();
 
+    var player = null;
+
+    player = videojs('videoPlayer', {nuevo: true}, function () {
+        this.nuevoPlugin({
+            // plugin options here
+            logocontrolbar: '/assets/extra/Alaa-logo.gif',
+            logourl: '//sanatisharif.ir',
+
+            videoInfo: true,
+            relatedMenu: true,
+            zoomMenu: true,
+            mirrorButton: true,
+            // related: related_videos,
+            // endAction: 'related',
+        });
+    });
+
     let callBack = function () {
         let productsState = UesrCart.getProductSelectValues();
         UesrCart.refreshPrice([], productsState, []);
     };
+
+    $("#lightgallery").lightGallery();
+
+    $('.productDetailes .m-portlet__head').sticky({
+        topSpacing: $('#m_header').height(),
+        zIndex: 99
+    });
+
+    $(document).on('click', '.btnShowVideoLink', function () {
+
+        $([document.documentElement, document.body]).animate({
+            scrollTop: $("#videoPlayer").offset().top - $('#m_header').height()
+        }, 'slow');
+
+        $('.videoPlayerPortlet').fadeOut().removeClass('m--hide').fadeIn();
+
+        mApp.block('.videoPlayerPortlet', {
+            overlayColor: "#000000",
+            type: "loader",
+            state: "success"
+        });
+
+        var videoSrc = $(this).attr('data-videosrc');
+        var videoTitle = $(this).attr('data-videotitle');
+        var videoDescription = $(this).attr('data-videodes');
+        var sources = [{"type": "video/mp4", "src": videoSrc}];
+
+        $("#videoPlayer").find("#videosrc").attr("src", videoSrc);
+        $("#videoPlayerTitle").html(videoTitle);
+        $("#videoPlayerDescription").html(videoDescription);
+
+
+        mApp.unblock('.videoPlayerPortlet');
+
+        player.pause();
+        player.src(sources);
+        player.load();
+        // $("html, body").animate({ scrollTop: 0 }, "slow");
+    });
 
     $(document).on('change', "input[name='products[]'].product", function() {
         let thisValue = this.defaultValue;
@@ -430,10 +440,6 @@ jQuery(document).ready(function() {
     });
 
     $(document).on('click', '.btnAddToCart', function () {
-
-        if ($(this).attr('disabled')) {
-            return false;
-        }
 
         UesrCart.disableBtnAddToCart();
         var product = $("input[name=product_id]").val();
@@ -457,29 +463,38 @@ jQuery(document).ready(function() {
                     200: function (response) {
                         // console.log(response);
 
-                        $.notify('محصول مورد نظر به سبد خرید اضافه شد.', {
+                        let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
+
+                        Swal({
+                            title: '',
+                            text: successMessage,
                             type: 'success',
-                            allow_dismiss: true,
-                            newest_on_top: false,
-                            mouse_over: false,
-                            showProgressbar: false,
-                            spacing: 10,
-                            timer: 2000,
-                            placement: {
-                                from: 'top',
-                                align: 'center'
-                            },
-                            offset: {
-                                x: 30,
-                                y: 30
-                            },
-                            delay: 1000,
-                            z_index: 10000,
-                            animate: {
-                                enter: "animated flip",
-                                exit: "animated hinge"
-                            }
+                            confirmButtonText: 'بستن'
                         });
+
+                        // $.notify(successMessage, {
+                        //     type: 'success',
+                        //     allow_dismiss: true,
+                        //     newest_on_top: false,
+                        //     mouse_over: false,
+                        //     showProgressbar: false,
+                        //     spacing: 10,
+                        //     timer: 2000,
+                        //     placement: {
+                        //         from: 'top',
+                        //         align: 'center'
+                        //     },
+                        //     offset: {
+                        //         x: 30,
+                        //         y: 30
+                        //     },
+                        //     delay: 1000,
+                        //     z_index: 10000,
+                        //     animate: {
+                        //         enter: "animated flip",
+                        //         exit: "animated hinge"
+                        //     }
+                        // });
 
                         setTimeout(function () {
                             window.location.replace('/checkout/review');
@@ -560,11 +575,3 @@ jQuery(document).ready(function() {
         UesrCart.refreshPrice([] , productsState , []);
     });
 });
-
-var totalExtraCost = 0 ;
-var bonDiscount = 0 ;
-var productDiscount = 0 ;
-/*
-var productShortDescription = "";
-var productLongDescription = "";
-*/

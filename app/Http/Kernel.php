@@ -58,11 +58,11 @@ class Kernel extends HttpKernel
         'auth.basic'    => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings'      => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can'           => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest'         => Middleware\RedirectIfAuthenticated::class,
+        'guest'         => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle'      => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-        'completeInfo'  => Middleware\CompleteInfo::class,
+        'completeInfo'  => \App\Http\Middleware\CompleteInfo::class,
         'role'          => \Laratrust\Middleware\LaratrustRole::class,
         'permission'    => \Laratrust\Middleware\LaratrustPermission::class,
         'ability'       => \Laratrust\Middleware\LaratrustAbility::class,
@@ -77,5 +77,6 @@ class Kernel extends HttpKernel
         'OrderCheckoutPayment'    => Middleware\OrderCheckoutPayment::class,
         'SubmitOrderCoupon'    => Middleware\SubmitOrderCoupon::class,
         'OfflineVerifyPayment'    => Middleware\OfflineVerifyPayment::class,
+        'removeCoupon'    => \App\Http\Middleware\RemoveOrderCoupon::class,
     ];
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Web;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\User;
@@ -14,7 +14,7 @@ class DashboardPageController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth:api');
     }
 
     /**
@@ -30,13 +30,10 @@ class DashboardPageController extends Controller
 
         if ($request->user()->id != $user->id)
             abort(Response::HTTP_FORBIDDEN, 'you can\'nt get user ' . $user->id . ' dashboard!.');
-        $pageName = "shop";
         $userAssetsCollection = $user->getDashboardBlocks();
-        if ($request->expectsJson())
-            return response()->json([
-                'user_id' => $user->id,
-                'data'    => $userAssetsCollection,
-            ]);
-        return view('user.dashboard', compact('user', 'pageName', 'userAssetsCollection'));
+        return response()->json([
+            'user_id' => $user->id,
+            'data'    => $userAssetsCollection,
+        ]);
     }
 }

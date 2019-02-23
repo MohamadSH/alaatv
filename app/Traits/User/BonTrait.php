@@ -14,7 +14,6 @@ use App\User;
 use App\Userbon;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 
 trait BonTrait
 {

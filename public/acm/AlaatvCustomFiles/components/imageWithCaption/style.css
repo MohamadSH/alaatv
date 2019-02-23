@@ -1,0 +1,64 @@
+
+.a--imageWithCaption {
+    cursor: pointer;
+}
+
+.a--imageWithCaption img {
+
+}
+
+.a--imageWithCaption .a--imageCaptionWarper {
+    width: 100%;
+    position: absolute;
+    z-index: 2;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    display: table;
+    background-color: #ff9000;
+    opacity: 0;
+    -webkit-transition: opacity .35s ease-out;
+    transition: opacity .35s ease-out;
+}
+
+.a--imageWithCaption .a--imageCaptionWarper .a--imageCaptionContent {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.a--imageWithCaption .a--imageCaptionTitle {
+    position: relative;
+    bottom: 70px;
+    opacity: 0;
+    -webkit-transition: bottom .35s ease-out, opacity .35s ease-out;
+    transition: bottom .35s ease-out, opacity .35s ease-out;
+}
+
+.a--imageWithCaption .a--imageCaptionDescription {
+    position: relative;
+    opacity: 0;
+    top: 70px;
+    -webkit-transition: top .35s ease-out, opacity .35s ease-out;
+    transition: top .35s ease-out, opacity .35s ease-out;
+}
+
+.a--imageWithCaption:hover .a--imageCaptionTitle {
+    bottom: 0px;
+}
+
+.a--imageWithCaption:hover .a--imageCaptionDescription {
+    top: 0px;
+}
+
+.a--imageWithCaption:hover .a--imageCaptionTitle,
+.a--imageWithCaption:hover .a--imageCaptionDescription {
+    opacity: 1;
+    color: white;
+    font-weight: bold;
+    font-size: medium;
+}
+
+.a--imageWithCaption:hover .a--imageCaptionWarper {
+    opacity: 0.9;
+}

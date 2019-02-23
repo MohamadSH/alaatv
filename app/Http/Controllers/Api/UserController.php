@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 
@@ -16,27 +16,28 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @param User $user
+     * @param User    $user
+     *
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|Response
      */
-    public function userOrders(Request $request , User $user)
+    public function userOrders(Request $request, User $user)
     {
         /** @var User $user */
         $authenticatedUser = $request->user('api');
 
-        if($authenticatedUser->id != $user->id)
-           return response([
-               'error' => [
-                   'code'   => Response::HTTP_FORBIDDEN ,
-                   'message'=> 'UnAuthorized'
-               ]
-           ], 403);
+        if ($authenticatedUser->id != $user->id)
+            return response([
+                'error' => [
+                    'code'    => Response::HTTP_FORBIDDEN,
+                    'message' => 'UnAuthorized',
+                ],
+            ], 403);
 
         $key = "user:orders:" . $user->cacheKey();
         $orders = Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
             return $user->getClosedOrders()
-                ->orderBy('completed_at' , 'desc')
-                ->paginate(10 , ['*'] , 'orders');
+                        ->orderBy('completed_at', 'desc')
+                        ->paginate(10, ['*'], 'orders');
         });
 
         return response()->json($orders);
@@ -47,7 +48,8 @@ class UserController extends Controller
      *
      * @return
      */
-    public function getTransactions(){
+    public function getTransactions()
+    {
         //ToDo
         return response();
         /*$key = "user:transactions:" . $user->cacheKey();

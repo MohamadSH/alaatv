@@ -59,13 +59,7 @@ Route::group(['prefix' => 'checkout'], function () {
     Route::get('auth', "Web\OrderController@checkoutAuth");
     Route::get('completeInfo', 'Web\OrderController@checkoutCompleteInfo');
     Route::get('review', "Web\OrderController@checkoutReview");
-    Route::get('reviewali/{modelNo}', function () {
-        return view('order.checkout.review');
-    });
     Route::get('payment', "Web\OrderController@checkoutPayment");
-    Route::get('paymentali/{modelNo}', function () {
-        return view('order.checkout.payment');
-    });
     Route::any('verifyPayment/online/{paymentMethod}/{device}', "Web\OnlinePaymentController@verifyPayment");
     Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', "Web\OnlinePaymentController@showPaymentStatus");
     Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'Web\OfflinePaymentController@verifyPayment');
@@ -287,4 +281,5 @@ Route::group(['prefix' => 'mobile'], function () {
 });
 Route::post("cd3b472d9ba631a73cb7b66ba513df53", "Web\CouponController@generateRandomCoupon");
 Route::view('uiTest','pages.certificates');
-Route::view('testpageali','product.show1');
+
+Route::view('testrtl', 'product.show_ali');

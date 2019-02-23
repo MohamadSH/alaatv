@@ -40,9 +40,9 @@ class AlaaInvoiceGenerator
         $payableByWallet = $orderPriceArray['payableAmountByWallet'];
 
         $orderProductCount = $this->orderproductFormatter($orderproducts);
-        
+
         return [
-          'orderproducts'           => $orderproducts, 
+          'items'           => $orderproducts,
           'orderproductCount'       => $orderProductCount ,
           'orderproductsRawCost'    => $orderproductsRawCost,
           'totalCost'               => $totalCost,
@@ -59,9 +59,9 @@ class AlaaInvoiceGenerator
         $groupPriceInfo =  $fakeOrderproducts->calculateGroupPrice();
 
         $orderProductCount = $this->orderproductFormatter($fakeOrderproducts);
-        
+
        return [
-            'orderproducts'          => $fakeOrderproducts,
+            'items'          => $fakeOrderproducts,
             'orderproductCount'      => $orderProductCount ,
             'orderproductsRawCost'   => $groupPriceInfo['rawCost'],
             'totalCost'              => $groupPriceInfo['customerCost'],
@@ -89,20 +89,26 @@ class AlaaInvoiceGenerator
 
     /**
      * Formats orderproduct collection and return total number of orderproducts
-     * 
-     * @param Collection $orderproducts
+     *
+     * @param OrderproductCollection $orderproducts
      * @return int
      */
-    private function orderproductFormatter(Collection &$orderproducts):int{
-        $orderproducts = $orderproducts->groupBy('grandId');
+    private function orderproductFormatter(OrderproductCollection &$orderproducts):int
+    {
+        $newPrices = $orderproducts->getNewPrices();
 
         $orderProductCount = 0;
-        /** @var Collection $orderProductItem */
-        foreach($orderproducts as $orderProductItem) {
-            $orderProductCount += $orderProductItem->count() ;
-        }
-        
+        $orderproducts = new OrderproductCollection($orderproducts->groupBy('grandId')->map(function ($orderproducts,$grandId) use (&$orderProductCount){
+            $orderProductCount += $orderproducts->count() ;
+            return [
+              'grand' => $orderproducts->first()->grandProduct ?? null,
+               'orderproducts' =>  $orderproducts
+            ];
+        })->values()->all());
+
+        $orderproducts = $orderproducts->setNewPrices($newPrices);
+
         return $orderProductCount;
     }
-    
+
 }

@@ -18,19 +18,15 @@
         .noUi-handle {
             cursor: pointer;
         }
+
         .noUi-target .noUi-connect {
             background: #716aca;
-        }
-    </style>
-    <style>
-        /*fix swithch*/
-        .bootstrap-switch {
-            line-height: 6px;
         }
 
         .m-widget27 .m-widget27__pic .m-widget27__title.paymentAndWalletValue > span {
             font-size: 1.5rem;
         }
+
         #m_nouislider_1_input {
             display: inline-block;
             width: 20px;
@@ -39,22 +35,27 @@
             height: 30px;
             border: none;
         }
+
         .m-portlet--creative.noHeadText > .m-portlet__body {
             padding-bottom: 0;
             position: relative;
             z-index: 9;
         }
+
         .m-portlet--creative.noHeadText > .m-portlet__head {
             height: 0;
         }
+
         .bankLogo {
             max-width: 60px;
             border-radius: 4px;
             box-shadow: 0 0 7px 0 #A5A5A5;
         }
+
         #PaymentType-online .m-radio-inline .m-radio:last-child {
             margin-left: 15px;
         }
+
         .discountCodeValueWarperCover {
             position: absolute;
             top: 0;
@@ -81,43 +82,43 @@
 @section('content')
 
 
-    <div class="row">
-        <div class="col">
+    <div class = "row">
+        <div class = "col">
             @include("systemMessage.flash")
         </div>
     </div>
 
-    <div class="row">
+    <div class = "row">
         {{--روش پرداخت--}}
-        <div class="col-12 col-md-8 order-2 order-sm-2 order-md-1 order-lg-1">
-            <div class="row">
-                <div class="col">
-                    <div class="m-portlet m-portlet--creative m-portlet--bordered m-portlet--bordered-semi noHeadText">
-                        <div class="m-portlet__head">
-                            <div class="m-portlet__head-caption">
-                                <div class="m-portlet__head-title">
-                                    <h2 class="m-portlet__head-label m-portlet__head-label--accent" style="white-space: nowrap;">
+        <div class = "col-12 col-md-8 order-2 order-sm-2 order-md-1 order-lg-1">
+            <div class = "row">
+                <div class = "col">
+                    <div class = "m-portlet m-portlet--creative m-portlet--bordered m-portlet--bordered-semi noHeadText">
+                        <div class = "m-portlet__head">
+                            <div class = "m-portlet__head-caption">
+                                <div class = "m-portlet__head-title">
+                                    <h2 class = "m-portlet__head-label m-portlet__head-label--accent" style = "white-space: nowrap;">
                                 <span>
-                                    <i class="la la-bank"></i>
+                                    <i class = "la la-bank"></i>
                                     روش پرداخت
                                 </span>
                                     </h2>
                                 </div>
                             </div>
-                            <div class="m-portlet__head-tools"></div>
+                            <div class = "m-portlet__head-tools"></div>
                         </div>
-                        <div class="m-portlet__body m--padding-bottom-10">
+                        <div class = "m-portlet__body m--padding-bottom-10">
 
                             {{--tab title--}}
-                            <div class="row">
-                                <div class="col">
-                                    <div class="m-form__group form-group">
-                                        <label for="">
+                            <div class = "row">
+                                <div class = "col">
+                                    <div class = "m-form__group form-group">
+                                        <label for = "">
                                             روش پرداخت را مشخص کنید:
                                         </label>
-                                        <div class="m-radio-inline">
-                                            <label class="m-radio m-radio--solid m-radio--state-success">
-                                                <input type="radio" name="radioPaymentType" data-btntext="پرداخت" value="online" checked>
+                                        <div class = "m-radio-inline">
+                                            <label class = "m-radio m-radio--solid m-radio--state-success">
+                                                <input type = "radio" name = "radioPaymentType" data-btntext = "پرداخت" value = "online" checked>
                                                 انترنتی
                                                 <span></span>
                                             </label>
@@ -126,8 +127,8 @@
                                                 {{--حضوری--}}
                                                 {{--<span></span>--}}
                                             {{--</label>--}}
-                                            <label class="m-radio m-radio--solid m-radio--state-success">
-                                                <input type="radio" name="radioPaymentType" data-btntext="ثبت سفارش" value="card2card">
+                                            <label class = "m-radio m-radio--solid m-radio--state-success">
+                                                <input type = "radio" name = "radioPaymentType" data-btntext = "ثبت سفارش" value = "card2card">
                                                 کارت به کارت
                                                 <span></span>
                                             </label>
@@ -137,29 +138,29 @@
                             </div>
 
                             {{--tab content--}}
-                            <div class="row">
-                                <div class="col">
+                            <div class = "row">
+                                <div class = "col">
 
-                                    <div class="m-portlet PaymentType" id="PaymentType-online">
-                                        <div class="m-portlet__body">
+                                    <div class = "m-portlet PaymentType" id = "PaymentType-online">
+                                        <div class = "m-portlet__body">
                                             <span>
                                                 یکی از درگاه های بانکی زیر را انتخاب کنید:
                                             </span>
-                                            <div class="m-form__group form-group text-center m--margin-top-10">
-                                                <div class="m-radio-inline">
-                                                    <label class="m-radio m-radio--solid m-radio--state-info">
-                                                        <input type="radio" name="radioBankType" value="1" checked>
-                                                        <img src="/acm/extra/payment/gateway/zarinpal-logo.png" class="img-thumbnail bankLogo" alt="bank-logo">
+                                            <div class = "m-form__group form-group text-center m--margin-top-10">
+                                                <div class = "m-radio-inline">
+                                                    <label class = "m-radio m-radio--solid m-radio--state-info">
+                                                        <input type = "radio" name = "radioBankType" value = "1" checked>
+                                                        <img src = "/acm/extra/payment/gateway/zarinpal-logo.png" class = "img-thumbnail bankLogo" alt = "bank-logo">
                                                         <span></span>
                                                     </label>
-                                                    <label class="m-radio m-radio--solid m-radio--state-info">
-                                                        <input type="radio" name="radioBankType" value="2">
-                                                        <img src="/acm/extra/payment/gateway/mellat-logo.png" class="img-thumbnail bankLogo" alt="bank-logo">
+                                                    <label class = "m-radio m-radio--solid m-radio--state-info">
+                                                        <input type = "radio" name = "radioBankType" value = "2">
+                                                        <img src = "/acm/extra/payment/gateway/mellat-logo.png" class = "img-thumbnail bankLogo" alt = "bank-logo">
                                                         <span></span>
                                                     </label>
-                                                    <label class="m-radio m-radio--solid m-radio--state-info">
-                                                        <input type="radio" name="radioBankType" value="3">
-                                                        <img src="/acm/extra/payment/gateway/pasargad-logo.jpg" class="img-thumbnail bankLogo" alt="bank-logo">
+                                                    <label class = "m-radio m-radio--solid m-radio--state-info">
+                                                        <input type = "radio" name = "radioBankType" value = "3">
+                                                        <img src = "/acm/extra/payment/gateway/pasargad-logo.jpg" class = "img-thumbnail bankLogo" alt = "bank-logo">
                                                         <span></span>
                                                     </label>
                                                 </div>
@@ -172,20 +173,19 @@
                                         {{--</div>--}}
                                     {{--</div>--}}
 
-                                    <div class="m-portlet PaymentType" id="PaymentType-card2card">
-                                        <div class="m-portlet__body">
-                                            <div class="row">
-                                                <div class="col-12 col-md-9">
+                                    <div class = "m-portlet PaymentType" id = "PaymentType-card2card">
+                                        <div class = "m-portlet__body">
+                                            <div class = "row">
+                                                <div class = "col-12 col-md-9">
                                                     جهت تایید سفارش مبلغ
-                                                    <b class="finalPriceValue">{{ number_format($invoiceInfo['totalCost']) }}</b>
-                                                    تومان به شماره کارت:
+                                                    <b class = "finalPriceValue">{{ number_format($invoiceInfo['totalCost']) }}</b> تومان به شماره کارت:
                                                     <br>
                                                     4444-4444-4444-4444
                                                     <br>
                                                     به نام فلان فلانی بانک فلان واریز نمایید.
                                                 </div>
-                                                <div class="col-12 col-md-3">
-                                                    <img class="a--full-width" src="/acm/extra/payment/balance-transfer.png" alt="کارت به کارت">
+                                                <div class = "col-12 col-md-3">
+                                                    <img class = "a--full-width" src = "/acm/extra/payment/balance-transfer.png" alt = "کارت به کارت">
                                                 </div>
                                             </div>
                                         </div>
@@ -195,13 +195,13 @@
                             </div>
 
                             {{--dicount code--}}
-                            <div class="row justify-content-center">
-                                <div class="col-12">
+                            <div class = "row justify-content-center">
+                                <div class = "col-12">
                                     <hr>
                                 </div>
-                                <div class="col-12 col-sm-8 col-md-6 col-lg-6 m--margin-top-20 text-center">
+                                <div class = "col-12 col-sm-8 col-md-6 col-lg-6 m--margin-top-20 text-center">
                                     <span>
-                                        <label for="hasntDiscountCode">
+                                        <label for = "hasntDiscountCode">
                                             کد تخفیف:
                                         </label>
                                     </span>
@@ -236,8 +236,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12">
+                                <div class = "col-12">
                                     @if(isset($coupon))
+                                        <div class = "alert alert-success alert-dismissible fade show" role = "alert">
+                                            <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Close"></button>
+                                            @if($coupon->discounttype->id == Config::get("constants.DISCOUNT_TYPE_COST"))
                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                             </button>
@@ -261,26 +264,25 @@
                             </div>
 
                             {{--user description--}}
-                            <div class="row justify-content-center">
-                                <div class="col-12">
+                            <div class = "row justify-content-center">
+                                <div class = "col-12">
                                     <hr>
                                 </div>
-                                <div class="col-12 col-sm-8 col-md-6 col-lg-6 m--margin-top-20 text-center">
-                                    <div class="form-group m-form__group">
-                                        <label for="bio">اگر توضیحی در مورد سفارش خود دارید اینجا بنویسید:</label>
-                                        <div class="m-input-icon m-input-icon--left">
-                                            <textarea id="bio" class="form-control m-input m-input--air" placeholder="توضیح شما..." rows="2" name="bio" cols="50"></textarea>
+                                <div class = "col-12 col-sm-8 col-md-6 col-lg-6 m--margin-top-20 text-center">
+                                    <div class = "form-group m-form__group">
+                                        <label for = "bio">اگر توضیحی در مورد سفارش خود دارید اینجا بنویسید:</label>
+                                        <div class = "m-input-icon m-input-icon--left">
+                                            <textarea id = "bio" class = "form-control m-input m-input--air" placeholder = "توضیح شما..." rows = "2" name = "bio" cols = "50"></textarea>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             {{--btn submit order--}}
-                            <div class="row justify-content-center">
-                                <div class="col text-center">
+                            <div class = "row justify-content-center">
+                                <div class = "col text-center">
                                     <hr>
-                                    <button type="button"
-                                            class="btn btn-lg m-btn--pill m-btn--air m-btn m-btn--gradient-from-info
+                                    <button type = "button" class = "btn btn-lg m-btn--pill m-btn--air m-btn m-btn--gradient-from-info
                                             m-btn--gradient-to-accent m--padding-top-20 m--padding-bottom-20
                                              m--padding-right-50 m--padding-left-50 btnSubmitOrder"></button>
                                 </div>
@@ -293,27 +295,27 @@
         </div>
 
         {{--مبلغ قابل پرداخت--}}
-        <div class="col-12 col-md-4 order-1 order-sm-1 order-md-2 order-lg-2 finalPriceReportWarper">
-            <div class="m-portlet m-portlet--head-overlay  m-portlet--full-heigh m-portlet--rounded-force">
-                <div class="m-portlet__head m-portlet__head--fit-">
-                    <div class="m-portlet__head-caption">
-                        <div class="m-portlet__head-title">
+        <div class = "col-12 col-md-4 order-1 order-sm-1 order-md-2 order-lg-2 finalPriceReportWarper">
+            <div class = "m-portlet m-portlet--head-overlay  m-portlet--full-heigh m-portlet--rounded-force">
+                <div class = "m-portlet__head m-portlet__head--fit-">
+                    <div class = "m-portlet__head-caption">
+                        <div class = "m-portlet__head-title">
 
                         </div>
                     </div>
-                    <div class="m-portlet__head-tools">
+                    <div class = "m-portlet__head-tools">
 
                     </div>
                 </div>
-                <div class="m-portlet__body">
-                    <div class="m-widget27 m-portlet-fit--sides">
-                        <div class="m-widget27__pic">
-                            <img src="/assets/app/media/img//bg/bg-4.jpg" alt="">
-                            <h3 class="m-widget27__title text-center paymentAndWalletValue m--font-light">
+                <div class = "m-portlet__body">
+                    <div class = "m-widget27 m-portlet-fit--sides">
+                        <div class = "m-widget27__pic">
+                            <img src = "/assets/app/media/img//bg/bg-4.jpg" alt = "">
+                            <h3 class = "m-widget27__title text-center paymentAndWalletValue m--font-light">
                                 <span>
                                     مبلغ قابل پرداخت:
                                     <br>
-                                    <b class="finalPriceValue">{{ number_format($invoiceInfo['totalCost']) }}</b>
+                                    <b class = "finalPriceValue">{{ number_format($invoiceInfo['totalCost']) }}</b>
                                     تومان
                                     <hr>
                                     <small>
@@ -324,41 +326,40 @@
                                 </span>
                             </h3>
                         </div>
-                        <div class="m-widget27__container m--margin-top-5">
+                        <div class = "m-widget27__container m--margin-top-5">
 
-                            <div class="container-fluid">
-                                <div class="row">
+                            <div class = "container-fluid">
+                                <div class = "row">
 
-                                    <div class="col-12">
-                                        <div class="m-portlet m-portlet--creative noHeadText m-portlet--bordered m-portlet--full-height">
-                                            <div class="m-portlet__head">
-                                                <div class="m-portlet__head-caption">
-                                                    <div class="m-portlet__head-title">
-                                                        <h2 class="m-portlet__head-label m-portlet__head-label--accent" style="white-space: nowrap;">
+                                    <div class = "col-12">
+                                        <div class = "m-portlet m-portlet--creative noHeadText m-portlet--bordered m-portlet--full-height">
+                                            <div class = "m-portlet__head">
+                                                <div class = "m-portlet__head-caption">
+                                                    <div class = "m-portlet__head-title">
+                                                        <h2 class = "m-portlet__head-label m-portlet__head-label--accent" style = "white-space: nowrap;">
                                                             <span>
-                                                                <i class="fa fa-donate"></i>
+                                                                <i class = "fa fa-donate"></i>
                                                                 کمک به آلاء
                                                             </span>
                                                         </h2>
                                                     </div>
                                                 </div>
-                                                <div class="m-portlet__head-tools">
-                                                </div>
+                                                <div class = "m-portlet__head-tools"></div>
                                             </div>
-                                            <div class="m-portlet__body m--padding-right-5 m--padding-left-5">
-                                                <div class="row align-items-center">
-                                                    <div class="col-12">
-                                                        <div id="m_nouislider_1" class="m-nouislider m-nouislider--handle-danger m-nouislider--drag-danger noUi-target noUi-ltr noUi-horizontal visibleInDonate"></div>
+                                            <div class = "m-portlet__body m--padding-right-5 m--padding-left-5">
+                                                <div class = "row align-items-center">
+                                                    <div class = "col-12">
+                                                        <div id = "m_nouislider_1" class = "m-nouislider m-nouislider--handle-danger m-nouislider--drag-danger noUi-target noUi-ltr noUi-horizontal visibleInDonate"></div>
                                                     </div>
-                                                    <div class="col-12 m--margin-top-10 text-center">
-                                                        <span class="visibleInDonate"> مبلغ </span>
-                                                        <span class="visibleInDonate">
-                                                            <input type="text" class="form-control" id="m_nouislider_1_input" placeholder="مقدار کمک" readonly>
+                                                    <div class = "col-12 m--margin-top-10 text-center">
+                                                        <span class = "visibleInDonate"> مبلغ </span>
+                                                        <span class = "visibleInDonate">
+                                                            <input type = "text" class = "form-control" id = "m_nouislider_1_input" placeholder = "مقدار کمک" readonly>
                                                         </span>
-                                                        <span class="visibleInDonate"> هزار تومان </span>
+                                                        <span class = "visibleInDonate"> هزار تومان </span>
                                                         <br>
                                                         <span>
-                                                            <label for="hasntDonate">
+                                                            <label for = "hasntDonate">
                                                         به آلاء کمک
                                                             </label>
                                                         </span>
@@ -378,8 +379,8 @@
                                                                    id="hasntDonate">
                                                         </span>
                                                         <span>
-                                                            <img src="/acm/extra/sad.png" class="face-sad m--margin-top-20" alt="">
-                                                            <img src="/acm/extra/happy.png" class="face-happy m--margin-top-20" alt="">
+                                                            <img src = "/acm/extra/sad.png" class = "face-sad m--margin-top-20" alt = "">
+                                                            <img src = "/acm/extra/happy.png" class = "face-happy m--margin-top-20" alt = "">
                                                         </span>
                                                     </div>
                                                 </div>
@@ -454,7 +455,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-lg-12" style="text-align: center;">
-                                                    <a href="{{action("Web\OrderController@checkoutReview")}}"
+                                                    <a href = "{{action("Web\OrderController@checkoutReview")}}"
                                                        class="btn dark btn-outline"><i class="fa fa-chevron-right"
                                                                                        aria-hidden="true"></i>بازبینی</a>
                                                     <button type="submit" class="btn green btn-outline">ثبت نهایی
@@ -609,7 +610,7 @@
 
 @section('page-js')
 
-    <script src="{{ mix('/js/checkout-payment.js') }}"></script>
+    <script src = "{{ mix('/js/checkout-payment.js') }}"></script>
 
     <script>
 
@@ -627,12 +628,13 @@
                 refreshUiBasedOnDonateStatus();
                 refreshUiBasedOnHasntDiscountCodeStatus();
             }
+
             function refreshUiBasedOnPaymentType() {
                 let selectedObject = $('input[type="radio"][name="radioPaymentType"]:checked');
                 let radioPaymentType = selectedObject.val();
 
                 $('.PaymentType').slideUp();
-                $('#PaymentType-'+radioPaymentType).slideDown();
+                $('#PaymentType-' + radioPaymentType).slideDown();
 
                 // if (radioPaymentType==1) {
                 //     $('#PaymentType-online').slideDown();
@@ -652,32 +654,36 @@
                 $('.btnSubmitOrder').html(btntext);
 
             }
+
             function donate() {
                 $('.face-sad').fadeOut(0);
                 $('.face-happy').fadeIn(0);
-                $('.visibleInDonate').css({'visibility':'visible'});
+                $('.visibleInDonate').css({'visibility': 'visible'});
             }
+
             function dontdonate() {
                 $('.face-sad').fadeIn(0);
                 $('.face-happy').fadeOut(0);
-                $('.visibleInDonate').css({'visibility':'hidden'});
+                $('.visibleInDonate').css({'visibility': 'hidden'});
             }
+
             function getDonateStatus() {
                 let switchStatus = $('#hasntDonate').prop('checked');
-                if(switchStatus) {
+                if (switchStatus) {
                     return false;
                 } else {
                     return true;
                 }
             }
+
             function refreshUiBasedOnDonateStatus(donateValue) {
-                if(getDonateStatus()) {
+                if (getDonateStatus()) {
                     donate();
                 } else {
                     dontdonate();
                     donateValue = 0;
                 }
-                let calcTotalCost = totalCost+(donateValue*1000);
+                let calcTotalCost = totalCost + (donateValue * 1000);
                 $('.finalPriceValue').html(calcTotalCost.toLocaleString('fa'));
             }
             function setUiHasDiscountCode() {
@@ -708,8 +714,7 @@
             refreshUi();
 
 
-
-            $(document).on('click', '#btnSaveDiscountCodeValue', function(e) {
+            $(document).on('click', '#btnSaveDiscountCodeValue', function (e) {
                 $.ajax({
                     type: 'POST',
                     url: '{{ action('Web\OrderController@submitCoupon') }}',
@@ -719,6 +724,9 @@
                     statusCode: {
                         //The status for when action was successful
                         200: function (response) {
+                            console.log('submitCoupon: ' + response);
+                            alert('hi!');
+                            if (false) {
                             console.log('submitCoupon: '+response);
 
                             if (response.error) {
@@ -918,13 +926,13 @@
                 });
             });
 
-            $(document).on('change', 'input[type="radio"][name="radioPaymentType"]', function(e) {
+            $(document).on('change', 'input[type="radio"][name="radioPaymentType"]', function (e) {
                 refreshUiBasedOnPaymentType();
             });
-            $(document).on('switchChange.bootstrapSwitch', '#hasntDiscountCode', function(e) {
+            $(document).on('switchChange.bootstrapSwitch', '#hasntDiscountCode', function (e) {
                 refreshUiBasedOnHasntDiscountCodeStatus();
             });
-            $(document).on('switchChange.bootstrapSwitch', '#hasntDonate', function(e) {
+            $(document).on('switchChange.bootstrapSwitch', '#hasntDonate', function (e) {
                 refreshUiBasedOnDonateStatus($('#m_nouislider_1_input').val());
             });
 
