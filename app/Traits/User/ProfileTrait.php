@@ -11,9 +11,9 @@ namespace App\Traits\User;
 
 use App\Afterloginformcontrol;
 use App\User;
+use Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
-use Auth;
 
 trait ProfileTrait
 {
@@ -156,7 +156,8 @@ trait ProfileTrait
      * Calculates user profile completion percentage based on passed mode
      *
      * @param string $type
-     * @param array $columns
+     * @param array  $columns
+     *
      * @return float|int
      */
     public function completion($type = "full", $columns = [])

@@ -4,6 +4,9 @@ namespace App;
 
 
 use App\Collection\BlockCollection;
+use App\Collection\ContentCollection;
+use App\Collection\ProductCollection;
+use App\Collection\SetCollection;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -157,21 +160,52 @@ class Block extends BaseModel
         return $blocks;
     }
 
+    protected function addProducts($products)
+    {
+        if ($products != null) {
+            foreach ($products as $product)
+                $this->products->add($product);
+        }
+        return $this;
+    }
+
+    protected function addContents($contents)
+    {
+        if ($contents != null) {
+            foreach ($contents as $content)
+                $this->contents->add($content);
+        }
+        return $this;
+    }
+
+    protected function addSets($sets)
+    {
+        if ($sets != null) {
+            foreach ($sets as $set)
+                $this->contents->add($set);
+        }
+        return $this;
+    }
+
+    public static function getDummyBlock(bool $offer, string $title, ProductCollection $products = null, SetCollection $sets = null, ContentCollection $contents = null)
+    {
+        //TODO:// add Cache Layer!
+        $block = new Block;
+        $block->id = 0;
+        $block->offer = $offer;
+        $block->type = 3;
+        $block->order = 0;
+        $block->title = $title;
+        return $block->addProducts($products)
+                     ->addContents($contents)
+                     ->addSets($sets);
+    }
     /**
      * @return \App\Block
      */
     protected static function getOfferBlock(): Block
     {
-        $offerBlock = new Block;
-        $offerBlock->id = 0;
-        $offerBlock->offer = true;
-        $offerBlock->type = 3;
-        $offerBlock->order = 0;
-        $offerBlock->title = 'محصولات شگفت انگیز';
-        $ProductsHaveOffer = Product::getProductsHaveBestOffer();
-        foreach ($ProductsHaveOffer as $product)
-            $offerBlock->products->add($product);
-        return $offerBlock;
+        return self::getDummyBlock(true, 'محصولات شگفت انگیز', Product::getProductsHaveBestOffer());
     }
 
     public static function getMainBlocks()
@@ -191,7 +225,6 @@ class Block extends BaseModel
                        });
         return $blocks;
     }
-
 
     /**
      * Create a new Eloquent Collection instance.

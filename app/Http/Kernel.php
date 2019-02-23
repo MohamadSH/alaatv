@@ -77,5 +77,6 @@ class Kernel extends HttpKernel
         'OrderCheckoutPayment'    => \App\Http\Middleware\OrderCheckoutPayment::class,
         'SubmitOrderCoupon'    => \App\Http\Middleware\SubmitOrderCoupon::class,
         'OfflineVerifyPayment'    => \App\Http\Middleware\OfflineVerifyPayment::class,
+        'removeCoupon'    => \App\Http\Middleware\RemoveOrderCoupon::class,
     ];
 }

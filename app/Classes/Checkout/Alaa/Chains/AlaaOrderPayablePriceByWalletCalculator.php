@@ -10,13 +10,12 @@ namespace App\Classes\Checkout\Alaa\Chains;
 
 use App\Classes\Abstracts\Checkout\OrderPayablePriceByWalletCalculator;
 use App\Order;
-use App\Product;
 
 class AlaaOrderPayablePriceByWalletCalculator extends OrderPayablePriceByWalletCalculator
 {
-    protected function calculateAmountPaidByWallet(Order $order, $finalPrice):int
+    protected function calculateAmountPaidByWallet(Order $order, $finalPrice): int
     {
-        $donateCost = $order->donate_amount ;
+        $donateCost = $order->donate_amount;
 
         $payableByWallet = $finalPrice - $donateCost;
 

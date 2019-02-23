@@ -15,22 +15,22 @@ class AlaaCashier Extends Cashier
     public function getPrice()
     {
         $priceInfo = [
-            'order'=> $this->order ,
-            'totalPriceInfo' => [
-                    'totalRawPriceWhichHasDiscount'             => $this->totalRawPriceWhichHasDiscount,
-                    'totalRawPriceWhichDoesntHaveDiscount'      => $this->totalRawPriceWhichDoesntHaveDiscount ,
-                    'totalPriceWithDiscount'                    => $this->totalPriceWithDiscount ,
-                    'sumOfOrderproductsRawCost'                 => $this->sumOfOrderproductsRawCost,
-                    'sumOfOrderproductsCustomerCost'            => $this->sumOfOrderproductsCustomerCost,
-                    'totalPrice'                                => $this->totalPrice,
-                    'finalPrice'                                => $this->finalPrice ,
-                    'payableAmountByWallet'                     => $this->payableAmountByWallet,
+            'order'             => $this->order,
+            'totalPriceInfo'    => [
+                'totalRawPriceWhichHasDiscount'        => $this->totalRawPriceWhichHasDiscount,
+                'totalRawPriceWhichDoesntHaveDiscount' => $this->totalRawPriceWhichDoesntHaveDiscount,
+                'totalPriceWithDiscount'               => $this->totalPriceWithDiscount,
+                'sumOfOrderproductsRawCost'            => $this->sumOfOrderproductsRawCost,
+                'sumOfOrderproductsCustomerCost'       => $this->sumOfOrderproductsCustomerCost,
+                'totalPrice'                           => $this->totalPrice,
+                'finalPrice'                           => $this->finalPrice,
+                'payableAmountByWallet'                => $this->payableAmountByWallet,
             ],
             'orderproductsInfo' =>
             [
-                'rawOrderproductsToCalculateFromBase'           => $this->rawOrderproductsToCalculateFromBase ,
-                'rawOrderproductsToCalculateFromRecord'         => $this->rawOrderproductsToCalculateFromRecord ,
-                'calculatedOrderproducts'                       => $this->calculatedOrderproducts,
+                'rawOrderproductsToCalculateFromBase'   => $this->rawOrderproductsToCalculateFromBase,
+                'rawOrderproductsToCalculateFromRecord' => $this->rawOrderproductsToCalculateFromRecord,
+                'calculatedOrderproducts'               => $this->calculatedOrderproducts,
             ],
         ];
 //        return json_encode($priceInfo);

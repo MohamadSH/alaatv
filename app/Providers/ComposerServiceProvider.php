@@ -26,6 +26,7 @@ class ComposerServiceProvider extends ServiceProvider
             'product.show',
             'pages.content-search',
             'pages.shop',
+            'order.checkout.review',
 
         ], function ($view) {
             $closedSideBar = true;
