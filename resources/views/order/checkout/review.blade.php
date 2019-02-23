@@ -1,24 +1,14 @@
-@extends("app")
-
-@section("pageBar")
-
-@endsection
+@extends('app')
 
 @section('page-css')
     <link href = "{{ mix('/css/checkout-review.css') }}" rel = "stylesheet" type = "text/css"/>
 @endsection
 
-@section("metadata")
-    @parent
-    <meta name="_token" content="{{ csrf_token() }}">
-@endsection
-
-
 @section('content')
 
     <div class = "row">
         <div class = "col">
-            @include("systemMessage.flash")
+            @include('systemMessage.flash')
         </div>
     </div>
 
@@ -386,7 +376,5 @@
 @endsection
 
 @section('page-js')
-
     <script src = "{{ mix('/js/checkout-review.js') }}"></script>
-
 @endsection

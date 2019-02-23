@@ -1,0 +1,62 @@
+
+.noUi-handle {
+    cursor: pointer;
+}
+
+.noUi-target .noUi-connect {
+    background: #716aca;
+}
+
+.m-widget27 .m-widget27__pic .m-widget27__title.paymentAndWalletValue > span {
+    font-size: 1.5rem;
+}
+
+#m_nouislider_1_input {
+    display: inline-block;
+    width: 20px;
+    padding: 5px 1px;
+    text-align: center;
+    height: 30px;
+    border: none;
+}
+
+.m-portlet--creative.noHeadText > .m-portlet__body {
+    padding-bottom: 0;
+    position: relative;
+    z-index: 9;
+}
+
+.m-portlet--creative.noHeadText > .m-portlet__head {
+    height: 0;
+}
+
+.bankLogo {
+    max-width: 60px;
+    border-radius: 4px;
+    box-shadow: 0 0 7px 0 #A5A5A5;
+}
+
+#PaymentType-online .m-radio-inline .m-radio:last-child {
+    margin-left: 15px;
+}
+
+.discountCodeValueWarperCover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9;
+    background: #80808099;
+    -webkit-box-shadow: 0 0 20px 1px rgba(128, 128, 128, 1);
+    -moz-box-shadow: 0 0 20px 1px rgba(128, 128, 128, 1);
+    box-shadow: 0 0 20px 1px rgba(128, 128, 128, 1);
+    cursor: not-allowed;
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    .m-portlet--creative.noHeadText > .m-portlet__body {
+        padding-bottom: 2.2rem
+    }
+}

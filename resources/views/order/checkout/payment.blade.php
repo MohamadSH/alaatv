@@ -1,82 +1,7 @@
-@extends("app")
-
-@section("title")
-    <title>آلاء|پرداخت</title>
-@endsection
-
-@section("metadata")
-    @parent
-    <meta name="_token" content="{{ csrf_token() }}">
-@endsection
-
-@section('pageBar')
-
-@endsection
+@extends('app')
 
 @section('page-css')
-    <style>
-        .noUi-handle {
-            cursor: pointer;
-        }
-
-        .noUi-target .noUi-connect {
-            background: #716aca;
-        }
-
-        .m-widget27 .m-widget27__pic .m-widget27__title.paymentAndWalletValue > span {
-            font-size: 1.5rem;
-        }
-
-        #m_nouislider_1_input {
-            display: inline-block;
-            width: 20px;
-            padding: 5px 1px;
-            text-align: center;
-            height: 30px;
-            border: none;
-        }
-
-        .m-portlet--creative.noHeadText > .m-portlet__body {
-            padding-bottom: 0;
-            position: relative;
-            z-index: 9;
-        }
-
-        .m-portlet--creative.noHeadText > .m-portlet__head {
-            height: 0;
-        }
-
-        .bankLogo {
-            max-width: 60px;
-            border-radius: 4px;
-            box-shadow: 0 0 7px 0 #A5A5A5;
-        }
-
-        #PaymentType-online .m-radio-inline .m-radio:last-child {
-            margin-left: 15px;
-        }
-
-        .discountCodeValueWarperCover {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9;
-            background: #80808099;
-            -webkit-box-shadow: 0px 0px 20px 1px rgba(128, 128, 128, 1);
-            -moz-box-shadow: 0px 0px 20px 1px rgba(128, 128, 128, 1);
-            box-shadow: 0px 0px 20px 1px rgba(128, 128, 128, 1);
-            cursor: not-allowed;
-            display: none;
-        }
-
-        @media (max-width: 1024px) {
-            .m-portlet--creative.noHeadText > .m-portlet__body {
-                padding-bottom: 2.2rem
-            }
-        }
-    </style>
+    <link href = "{{ mix('/css/checkout-payment.css') }}" rel = "stylesheet" type = "text/css"/>
 @endsection
 
 @section('content')
@@ -84,7 +9,7 @@
 
     <div class = "row">
         <div class = "col">
-            @include("systemMessage.flash")
+            @include('systemMessage.flash')
         </div>
     </div>
 
@@ -98,10 +23,10 @@
                             <div class = "m-portlet__head-caption">
                                 <div class = "m-portlet__head-title">
                                     <h2 class = "m-portlet__head-label m-portlet__head-label--accent" style = "white-space: nowrap;">
-                                <span>
-                                    <i class = "la la-bank"></i>
-                                    روش پرداخت
-                                </span>
+                                        <span>
+                                            <i class = "la la-bank"></i>
+                                            روش پرداخت
+                                        </span>
                                     </h2>
                                 </div>
                             </div>
@@ -237,14 +162,10 @@
                                     </div>
                                 </div>
                                 <div class = "col-12">
-                                    @if(isset($coupon))
-                                        <div class = "alert alert-success alert-dismissible fade show" role = "alert">
-                                            <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Close"></button>
-                                            @if($coupon->discounttype->id == Config::get("constants.DISCOUNT_TYPE_COST"))
+                                    @if (isset($coupon))
                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            </button>
-                                            @if($coupon['coupon']->discounttype->id == Config::get("constants.DISCOUNT_TYPE_COST"))
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+                                            @if($coupon['coupon']->discounttype->id == config('constants.DISCOUNT_TYPE_COST'))
                                                 کپن تخفیف
                                                 <strong>{{$coupon['coupon']->name}}</strong>
                                                 با
@@ -293,19 +214,14 @@
                 </div>
             </div>
         </div>
-
         {{--مبلغ قابل پرداخت--}}
         <div class = "col-12 col-md-4 order-1 order-sm-1 order-md-2 order-lg-2 finalPriceReportWarper">
             <div class = "m-portlet m-portlet--head-overlay  m-portlet--full-heigh m-portlet--rounded-force">
                 <div class = "m-portlet__head m-portlet__head--fit-">
                     <div class = "m-portlet__head-caption">
-                        <div class = "m-portlet__head-title">
-
-                        </div>
+                        <div class = "m-portlet__head-title"></div>
                     </div>
-                    <div class = "m-portlet__head-tools">
-
-                    </div>
+                    <div class = "m-portlet__head-tools"></div>
                 </div>
                 <div class = "m-portlet__body">
                     <div class = "m-widget27 m-portlet-fit--sides">
@@ -398,8 +314,6 @@
         </div>
 
     </div>
-
-
 
     <br>
     <br>
@@ -606,365 +520,18 @@
             </div>
         </div>
     </div>
+
+    <input type="hidden" id="invoiceInfo-totalCost" value="{{ $invoiceInfo['totalCost'] }}">
+    <input type="hidden" id="invoiceInfo-couponCode" value="@if (isset($coupon)){{ $coupon['coupon']->code }}@endif">
+    <input type="hidden" id="OrderController-submitCoupon" value="{{ action('Web\OrderController@submitCoupon') }}">
+    <input type="hidden" id="OrderController-removeCoupon" value="{{ action('Web\OrderController@removeCoupon') }}">
+
 @endsection
 
 @section('page-js')
 
     <script src = "{{ mix('/js/checkout-payment.js') }}"></script>
-
-    <script>
-
-        jQuery(document).ready(function () {
-            var totalCost = {{ $invoiceInfo['totalCost'] }};
-            var couponCode = null;
-            var couponDiscount = null;
-            @if(isset($coupon))
-                couponCode = {{ $coupon['coupon']->code }};
-                couponDiscount = {{ $coupon['discount'] }};
-            @endif
-
-            function refreshUi() {
-                refreshUiBasedOnPaymentType();
-                refreshUiBasedOnDonateStatus();
-                refreshUiBasedOnHasntDiscountCodeStatus();
-            }
-
-            function refreshUiBasedOnPaymentType() {
-                let selectedObject = $('input[type="radio"][name="radioPaymentType"]:checked');
-                let radioPaymentType = selectedObject.val();
-
-                $('.PaymentType').slideUp();
-                $('#PaymentType-' + radioPaymentType).slideDown();
-
-                // if (radioPaymentType==1) {
-                //     $('#PaymentType-online').slideDown();
-                //     $('#PaymentType-hozoori').slideUp();
-                //     $('#PaymentType-card2card').slideUp();
-                // } else if (radioPaymentType==2) {
-                //     $('#PaymentType-online').slideUp();
-                //     $('#PaymentType-hozoori').slideDown();
-                //     $('#PaymentType-card2card').slideUp();
-                // } else if (radioPaymentType==3) {
-                //     $('#PaymentType-online').slideUp();
-                //     $('#PaymentType-hozoori').slideUp();
-                //     $('#PaymentType-card2card').slideDown();
-                // }
-
-                let btntext = selectedObject.data('btntext');
-                $('.btnSubmitOrder').html(btntext);
-
-            }
-
-            function donate() {
-                $('.face-sad').fadeOut(0);
-                $('.face-happy').fadeIn(0);
-                $('.visibleInDonate').css({'visibility': 'visible'});
-            }
-
-            function dontdonate() {
-                $('.face-sad').fadeIn(0);
-                $('.face-happy').fadeOut(0);
-                $('.visibleInDonate').css({'visibility': 'hidden'});
-            }
-
-            function getDonateStatus() {
-                let switchStatus = $('#hasntDonate').prop('checked');
-                if (switchStatus) {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-
-            function refreshUiBasedOnDonateStatus(donateValue) {
-                if (getDonateStatus()) {
-                    donate();
-                } else {
-                    dontdonate();
-                    donateValue = 0;
-                }
-                let calcTotalCost = totalCost + (donateValue * 1000);
-                $('.finalPriceValue').html(calcTotalCost.toLocaleString('fa'));
-            }
-            function setUiHasDiscountCode() {
-                // $('.discountCodeValueWarper').fadeIn();
-                $('.discountCodeValueWarperCover').fadeOut();
-                $('#discountCodeValue').prop('disabled', false);
-                $('#btnSaveDiscountCodeValue').prop('disabled', false);
-                $('#discountCodeValue').prop('readonly', false);
-                $('#btnSaveDiscountCodeValue').prop('readonly', false);
-            }
-            function setUiHasntDiscountCode() {
-                // $('.discountCodeValueWarper').fadeOut();
-                $('.discountCodeValueWarperCover').fadeIn();
-                $('#discountCodeValue').prop('disabled', true);
-                $('#btnSaveDiscountCodeValue').prop('disabled', true);
-                $('#discountCodeValue').prop('readonly', true);
-                $('#btnSaveDiscountCodeValue').prop('readonly', true);
-            }
-            function refreshUiBasedOnHasntDiscountCodeStatus() {
-                $('#discountCodeValue').val(couponCode);
-                if(!$('#hasntDiscountCode').prop('checked')) {
-                    setUiHasDiscountCode();
-                } else {
-                    setUiHasntDiscountCode();
-                }
-            }
-
-            refreshUi();
-
-
-            $(document).on('click', '#btnSaveDiscountCodeValue', function (e) {
-                $.ajax({
-                    type: 'POST',
-                    url: '{{ action('Web\OrderController@submitCoupon') }}',
-                    data: {
-                        coupon: $('#discountCodeValue').val()
-                    },
-                    statusCode: {
-                        //The status for when action was successful
-                        200: function (response) {
-                            console.log('submitCoupon: ' + response);
-                            alert('hi!');
-                            if (false) {
-                            console.log('submitCoupon: '+response);
-
-                            if (response.error) {
-
-                                $('#btnRemoveDiscountCodeValue').fadeOut(0);
-                                $('#btnSaveDiscountCodeValue').fadeIn();
-
-                                $.notify(response.message, {
-                                    type: 'danger',
-                                    allow_dismiss: true,
-                                    newest_on_top: false,
-                                    mouse_over: false,
-                                    showProgressbar: false,
-                                    spacing: 10,
-                                    timer: 2000,
-                                    placement: {
-                                        from: 'top',
-                                        align: 'center'
-                                    },
-                                    offset: {
-                                        x: 30,
-                                        y: 30
-                                    },
-                                    delay: 1000,
-                                    z_index: 10000,
-                                    animate: {
-                                        enter: "animated flip",
-                                        exit: "animated hinge"
-                                    }
-                                });
-                            } else {
-
-                                $('#btnSaveDiscountCodeValue').fadeOut(0);
-                                $('#btnRemoveDiscountCodeValue').fadeIn();
-
-                                $.notify(response.message, {
-                                    type: 'success',
-                                    allow_dismiss: true,
-                                    newest_on_top: false,
-                                    mouse_over: false,
-                                    showProgressbar: false,
-                                    spacing: 10,
-                                    timer: 2000,
-                                    placement: {
-                                        from: 'top',
-                                        align: 'center'
-                                    },
-                                    offset: {
-                                        x: 30,
-                                        y: 30
-                                    },
-                                    delay: 1000,
-                                    z_index: 10000,
-                                    animate: {
-                                        enter: "animated flip",
-                                        exit: "animated hinge"
-                                    }
-                                });
-                            }
-                        },
-                        //The status for when the user is not authorized for making the request
-                        403: function (response) {
-                            window.location.replace("/403");
-                        },
-                        //The status for when the user is not authorized for making the request
-                        401: function (response) {
-                            window.location.replace("/403");
-                        },
-                        //Method Not Allowed
-                        405: function (response) {
-//                        console.log(response);
-//                        console.log(response.responseText);
-                            location.reload();
-                        },
-                        404: function (response) {
-                            window.location.replace("/404");
-                        },
-                        //The status for when form data is not valid
-                        422: function (response) {
-                            // console.log(response);
-                        },
-                        //The status for when there is error php code
-                        500: function (response) {
-                            // console.log(response.responseText);
-//                            toastr["error"]("خطای برنامه!", "پیام سیستم");
-                        },
-                        //The status for when there is error php code
-                        503: function (response) {
-                            // toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
-                        }
-                    }
-                });
-            });
-            $(document).on('click', '#btnRemoveDiscountCodeValue', function(e) {
-                $.ajax({
-                    type: 'GET',
-                    url: '{{ action('Web\OrderController@removeCoupon') }}',
-                    data: {
-                        coupon: $('#discountCodeValue').val()
-                    },
-                    statusCode: {
-                        //The status for when action was successful
-                        200: function (response) {
-                            console.log('removeCoupon: '+response);
-
-                            if (response.error) {
-
-                                $('#btnRemoveDiscountCodeValue').fadeIn();
-                                $('#btnSaveDiscountCodeValue').fadeOut(0);
-
-                                $.notify(response.message, {
-                                    type: 'danger',
-                                    allow_dismiss: true,
-                                    newest_on_top: false,
-                                    mouse_over: false,
-                                    showProgressbar: false,
-                                    spacing: 10,
-                                    timer: 2000,
-                                    placement: {
-                                        from: 'top',
-                                        align: 'center'
-                                    },
-                                    offset: {
-                                        x: 30,
-                                        y: 30
-                                    },
-                                    delay: 1000,
-                                    z_index: 10000,
-                                    animate: {
-                                        enter: "animated flip",
-                                        exit: "animated hinge"
-                                    }
-                                });
-
-                            } else {
-
-                                $('#btnRemoveDiscountCodeValue').fadeOut(0);
-                                $('#btnSaveDiscountCodeValue').fadeIn();
-
-                                $.notify(response.message, {
-                                    type: 'success',
-                                    allow_dismiss: true,
-                                    newest_on_top: false,
-                                    mouse_over: false,
-                                    showProgressbar: false,
-                                    spacing: 10,
-                                    timer: 2000,
-                                    placement: {
-                                        from: 'top',
-                                        align: 'center'
-                                    },
-                                    offset: {
-                                        x: 30,
-                                        y: 30
-                                    },
-                                    delay: 1000,
-                                    z_index: 10000,
-                                    animate: {
-                                        enter: "animated flip",
-                                        exit: "animated hinge"
-                                    }
-                                });
-                            }
-
-                        },
-                        //The status for when the user is not authorized for making the request
-                        403: function (response) {
-                            window.location.replace("/403");
-                        },
-                        //The status for when the user is not authorized for making the request
-                        401: function (response) {
-                            window.location.replace("/403");
-                        },
-                        //Method Not Allowed
-                        405: function (response) {
-//                        console.log(response);
-//                        console.log(response.responseText);
-                            location.reload();
-                        },
-                        404: function (response) {
-                            window.location.replace("/404");
-                        },
-                        //The status for when form data is not valid
-                        422: function (response) {
-                            // console.log(response);
-                        },
-                        //The status for when there is error php code
-                        500: function (response) {
-                            // console.log(response.responseText);
-//                            toastr["error"]("خطای برنامه!", "پیام سیستم");
-                        },
-                        //The status for when there is error php code
-                        503: function (response) {
-                            // toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
-                        }
-                    }
-                });
-            });
-
-            $(document).on('change', 'input[type="radio"][name="radioPaymentType"]', function (e) {
-                refreshUiBasedOnPaymentType();
-            });
-            $(document).on('switchChange.bootstrapSwitch', '#hasntDiscountCode', function (e) {
-                refreshUiBasedOnHasntDiscountCodeStatus();
-            });
-            $(document).on('switchChange.bootstrapSwitch', '#hasntDonate', function (e) {
-                refreshUiBasedOnDonateStatus($('#m_nouislider_1_input').val());
-            });
-
-            var e = document.getElementById('m_nouislider_1');
-            noUiSlider.create(e, {
-                start: [5],
-                connect: [!0, !1],
-                step: 1,
-                range: {min: [1], max: [50]},
-                format: wNumb({decimals: 0})
-            });
-            var n = document.getElementById('m_nouislider_1_input');
-            e.noUiSlider.on('update', function (e, t) {
-                n.value = e[t];
-                refreshUiBasedOnDonateStatus(n.value);
-            }), n.addEventListener('change', function () {
-                e.noUiSlider.set(this.value)
-            });
-        });
-    </script>
-    {{--<script src="/js/extraJS/jQueryNumberFormat/jquery.number.min.js" type="text/javascript"></script>--}}
-    {{--<script type="text/javascript">--}}
-    {{--/**--}}
-    {{--* Set token for ajax request--}}
-    {{--*/--}}
-    {{--$(function () {--}}
-    {{--$.ajaxSetup({--}}
-    {{--headers: {--}}
-    {{--'X-CSRF-TOKEN': window.Laravel.csrfToken,--}}
-    {{--}--}}
-    {{--});--}}
-    {{--});--}}
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/checkout-payment.js') }}"></script>
 
     {{--function setPaymentController() {--}}
     {{--if ($("#paymentMethod").val() == "onlinePayment") {--}}

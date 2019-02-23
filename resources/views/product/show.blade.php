@@ -21,7 +21,13 @@
     </nav>
 @endsection
 @section('content')
-    @include('systemMessage.flash')
+
+    <div class = "row">
+        <div class = "col">
+            @include('systemMessage.flash')
+        </div>
+    </div>
+
     <div class = "row" id="a_top_section">
         <div class = "col-xl-12">
             <!--begin::Portlet-->

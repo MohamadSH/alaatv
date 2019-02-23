@@ -73,10 +73,12 @@ mix.scripts(
 mix.scripts(
     [
         'public/assets/demo/demo12/custom/crud/forms/widgets/bootstrap-switch.js',
+        // 'public/acm/AlaatvCustomFiles/js/checkout-payment.js',
         // 'public/assets/demo/demo12/custom/crud/forms/widgets/nouislider.js',
     ],
     'public/js/checkout-payment.js'
 ).version();
+
 mix.scripts(
     [
         'node_modules/persian-date/dist/persian-date.js',
@@ -113,6 +115,12 @@ mix.styles(
     'public/css/checkout-review.css'
 ).version();
 
+mix.styles(
+    [
+        'public/acm/AlaatvCustomFiles/css/checkout-payment.css',
+    ],
+    'public/css/checkout-payment.css'
+).version();
 
 mix.scripts(
     [
