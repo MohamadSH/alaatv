@@ -5,8 +5,12 @@ mix.styles(
         'public/acm/webFonts/css/fontiran.css',
         'public/assets/vendors/base/vendors.bundle.rtl.css',
         'public/assets/demo/demo12/base/style.bundle.rtl.css',
-        'public/acm/custom-css-app.css'
+        'public/acm/custom-css-app.css',
         // 'public/acm/cubeportfolio/css/cubeportfolio.min.css'
+
+        'public/acm/AlaatvCustomFiles/css/customStyle.css',
+        'public/acm/AlaatvCustomFiles/css/fixThemeStyle.css'
+
 
     ],
     'public/css/all.css')
