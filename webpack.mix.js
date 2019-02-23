@@ -5,8 +5,12 @@ mix.styles(
         'public/acm/webFonts/css/fontiran.css',
         'public/assets/vendors/base/vendors.bundle.rtl.css',
         'public/assets/demo/demo12/base/style.bundle.rtl.css',
-        'public/acm/custom-css-app.css'
+        'public/acm/custom-css-app.css',
         // 'public/acm/cubeportfolio/css/cubeportfolio.min.css'
+
+        'public/acm/AlaatvCustomFiles/css/customStyle.css',
+        'public/acm/AlaatvCustomFiles/css/fixThemeStyle.css'
+
 
     ],
     'public/css/all.css')
@@ -57,17 +61,15 @@ mix.babel(
         'public/acm/video-js/video.js',
         'public/acm/video-js/videojs-ie8.min.js',
         'public/acm/video-js/nuevo/nuevo.min.js',
-            'public/acm/product-show-v13.js',
-        'public/acm/page-product-show.js',
-        'public/acm/page-product-saveCookie.js'
+        'public/acm/AlaatvCustomFiles/js/page-product-show.js'
     ],
     'public/js/product-show.js'
 ).version();
 
-//scripts
 mix.scripts(
     [
-        'node_modules/jquery-sticky/jquery.sticky.js'
+        'node_modules/jquery-sticky/jquery.sticky.js',
+        'public/acm/AlaatvCustomFiles/js/checkout-review.js'
     ],
     'public/js/checkout-review.js'
 ).version();
@@ -75,10 +77,12 @@ mix.scripts(
 mix.scripts(
     [
         'public/assets/demo/demo12/custom/crud/forms/widgets/bootstrap-switch.js',
+        // 'public/acm/AlaatvCustomFiles/js/checkout-payment.js',
         // 'public/assets/demo/demo12/custom/crud/forms/widgets/nouislider.js',
     ],
     'public/js/checkout-payment.js'
 ).version();
+
 mix.scripts(
     [
         'node_modules/persian-date/dist/persian-date.js',
@@ -100,9 +104,26 @@ mix.styles(
 mix.styles(
     [
         'node_modules/lightgallery/src/css/lightgallery.css',
+        'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
+        'public/acm/AlaatvCustomFiles/css/product-show.css',
         'public/acm/video-js/video-js.css',
     ],
     'public/css/product-show/product-show.css'
+).version();
+
+
+mix.styles(
+    [
+        'public/acm/AlaatvCustomFiles/css/checkout-review.css',
+    ],
+    'public/css/checkout-review.css'
+).version();
+
+mix.styles(
+    [
+        'public/acm/AlaatvCustomFiles/css/checkout-payment.css',
+    ],
+    'public/css/checkout-payment.css'
 ).version();
 
 mix.scripts(

@@ -10,6 +10,7 @@ namespace App\Classes\OrderProduct\RefinementProduct;
 
 use App\Product;
 use App\Attributevalue;
+use Exception;
 use Illuminate\Support\Collection;
 use App\Collection\ProductCollection;
 use Illuminate\Support\Facades\Log;
