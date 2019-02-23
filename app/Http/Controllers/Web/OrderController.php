@@ -849,7 +849,7 @@ class OrderController extends Controller
                 $responseStatus = Response::HTTP_BAD_REQUEST;
 
         } else {
-            if (isset($_COOKIE["cartItems"])) {
+            if (isset($_COOKIE["cartItems"]) && strlen($_COOKIE["cartItems"]) > 0) {
                 $cookieOrderproducts = json_decode($_COOKIE["cartItems"]);
                 $fakeOrderproducts = $this->convertOrderproductObjectsToCollection($cookieOrderproducts);
                 $invoiceInfo = $invoiceGenerator->generateFakeOrderproductsInvoice($fakeOrderproducts);
@@ -1860,9 +1860,9 @@ class OrderController extends Controller
 
         foreach ($cookieOrderproducts as $key => $cookieOrderproduct) {
             $grandParentProductId = optional($cookieOrderproduct)->product_id;
-            $childrenIds = optional($cookieOrderproduct)->productIds;
-            $attributes = optional($cookieOrderproduct)->attributes;
-            $extraAttributes = optional($cookieOrderproduct)->extraAttributes;
+            $childrenIds = optional($cookieOrderproduct)->products;
+            $attributes = optional($cookieOrderproduct)->attribute;
+            $extraAttributes = optional($cookieOrderproduct)->extraAttribute;
 
             $grandParentProduct = Product::Find($grandParentProductId);
             if(!isset($grandParentProduct))
