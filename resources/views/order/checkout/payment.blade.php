@@ -208,10 +208,8 @@
                                     <span class="m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
                                         <input type="checkbox"
                                           data-switch="true"
-                                            @if(isset($coupon))
-                                               checked="true"
-                                            @else
-                                               checked="false"
+                                            @if(!isset($coupon))
+                                               checked="checked"
                                             @endif
                                           data-on-text="ندارم"
                                           data-on-color="danger"
@@ -229,15 +227,12 @@
                                                class="form-control"
                                                placeholder="کد تخفیف ..."
                                                @if(isset($coupon))
-                                                value="{{ $coupon->code }}"
+                                                value="{{ $coupon['coupon']->code }}"
                                                @endif
                                                id="discountCodeValue">
                                         <div class="input-group-prepend DiscountCodeActionsWarper">
-                                            @if(isset($coupon))
-                                                <button class="btn btn-danger" type="button" id="btnRemoveDiscountCodeValue">حذف</button>
-                                            @else
-                                                <button class="btn btn-success" type="button" id="btnSaveDiscountCodeValue">ثبت</button>
-                                            @endif
+                                            <button class="btn btn-danger" @if(!isset($coupon)) style="display: none;" @endif type="button" id="btnRemoveDiscountCodeValue">حذف</button>
+                                            <button class="btn btn-success" @if(isset($coupon)) style="display: none;" @endif type="button" id="btnSaveDiscountCodeValue">ثبت</button>
                                         </div>
                                     </div>
                                 </div>
@@ -246,17 +241,17 @@
                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                             </button>
-                                            @if($coupon->discounttype->id == Config::get("constants.DISCOUNT_TYPE_COST"))
+                                            @if($coupon['coupon']->discounttype->id == Config::get("constants.DISCOUNT_TYPE_COST"))
                                                 کپن تخفیف
-                                                <strong>{{$coupon->name}}</strong>
+                                                <strong>{{$coupon['coupon']->name}}</strong>
                                                 با
-                                                {{number_format($coupon->discount)}}
+                                                {{number_format($coupon['discount'])}}
                                                 تومان تخفیف برای سفارش شما ثبت شد.
                                             @else
                                                 کپن تخفیف
-                                                <strong>{{$coupon->name}}</strong>
+                                                <strong>{{$coupon['coupon']->name}}</strong>
                                                 با
-                                                {{$coupon->discount}}
+                                                {{$coupon['discount']}}
                                                 % تخفیف برای
                                                 سفارش شما ثبت شده است.
                                             @endif
@@ -433,58 +428,6 @@
                             <div class="portlet dark box">
 
                                 <div class="portlet-body">
-                                    {{--<div class="row static-info margin-top-20">--}}
-                                    @include("systemMessage.flash")
-                                    {{--</div>--}}
-
-                                    <div class="row margin-top-10">
-                                        <div class="col-lg-9 col-md-9 col-sd-9 col-xs-12"
-                                             @if(!isset($coupon)) style="display: none" id="couponForm" @endif>
-                                            {{--                                            {!! Form::open(['method' => 'POST','action' => ['OrderController@submitCoupon'] , 'class'=>'form-horizontal' ]) !!}--}}
-                                            <div class="form-group">
-                                                <label class="col-lg-2 col-md-2 col-sm-2 col-xs-12 control-label"
-                                                       for="gateway" style="text-align: right">کد تخفیف </label>
-                                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                                    <div class="input-group">
-                                                        @if(isset($coupon))
-                                                            {!! Form::text('coupon',$coupon->code,['class' => 'form-control' , ]) !!}
-                                                        @else
-                                                            {!! Form::text('coupon',null,['class' => 'form-control' ]) !!}
-                                                        @endif
-                                                        <span class="input-group-btn">
-                                                                        @if(isset($coupon))
-                                                                <a href="{{action("Web\OrderController@removeCoupon")}}"
-                                                                   class="btn red">حذف کد تخفیف</a>
-                                                            @else
-                                                                {!! Form::submit('ثبت کد تخفیف',['class' => 'btn blue']) !!}
-                                                            @endif
-                                                                        </span>
-                                                    </div>
-                                                </div>
-                                                @if(isset($coupon))
-                                                    <div class="col-lg-12">
-                                                        <span class="help-block small bold font-green">
-                                                            @if($coupon->discounttype->id == Config::get("constants.DISCOUNT_TYPE_COST"))
-                                                                کپن تخفیف  {{$coupon->name}}
-                                                                با {{number_format($coupon->discount)}}
-                                                                تومان تخفیف برای سفارش شما ثبت شد.
-                                                            @else
-                                                                کپن تخفیف {{$coupon->name}}
-                                                                با {{$coupon->discount}}% تخفیف برای
-                                                                سفارش شما ثبت شده است.
-                                                            @endif
-                                                        </span>
-                                                    </div>
-                                                @else
-                                                    <div class="col-lg-12">
-                                                        <span class="help-block font-blue small bold">پس از وارد کردن کد و زدن دکمه ثبت میزان تخفیف در مبلغ قابل پرداخت اعمال خواهد شد</span>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                            {{--                                            {!! Form::close() !!}--}}
-                                        </div>
-                                    </div>
-                                    <hr>
                                     <div class="row">
                                         <div class="col-lg-12">
                                             {{--                                            {!! Form::open(['method' => 'POST','action' => ['OrderController@addOrderproduct' , 180] , 'class'=>'form-horizontal' , 'id'=>'donateForm' ]) !!}--}}
@@ -672,6 +615,13 @@
 
         jQuery(document).ready(function () {
             var totalCost = {{ $invoiceInfo['totalCost'] }};
+            var couponCode = null;
+            var couponDiscount = null;
+            @if(isset($coupon))
+                couponCode = {{ $coupon['coupon']->code }};
+                couponDiscount = {{ $coupon['discount'] }};
+            @endif
+
             function refreshUi() {
                 refreshUiBasedOnPaymentType();
                 refreshUiBasedOnDonateStatus();
@@ -730,22 +680,28 @@
                 let calcTotalCost = totalCost+(donateValue*1000);
                 $('.finalPriceValue').html(calcTotalCost.toLocaleString('fa'));
             }
+            function setUiHasDiscountCode() {
+                // $('.discountCodeValueWarper').fadeIn();
+                $('.discountCodeValueWarperCover').fadeOut();
+                $('#discountCodeValue').prop('disabled', false);
+                $('#btnSaveDiscountCodeValue').prop('disabled', false);
+                $('#discountCodeValue').prop('readonly', false);
+                $('#btnSaveDiscountCodeValue').prop('readonly', false);
+            }
+            function setUiHasntDiscountCode() {
+                // $('.discountCodeValueWarper').fadeOut();
+                $('.discountCodeValueWarperCover').fadeIn();
+                $('#discountCodeValue').prop('disabled', true);
+                $('#btnSaveDiscountCodeValue').prop('disabled', true);
+                $('#discountCodeValue').prop('readonly', true);
+                $('#btnSaveDiscountCodeValue').prop('readonly', true);
+            }
             function refreshUiBasedOnHasntDiscountCodeStatus() {
-                $('#discountCodeValue').val('');
+                $('#discountCodeValue').val(couponCode);
                 if(!$('#hasntDiscountCode').prop('checked')) {
-                    // $('.discountCodeValueWarper').fadeIn();
-                    $('.discountCodeValueWarperCover').fadeOut();
-                    $('#discountCodeValue').prop('disabled', false);
-                    $('#btnSaveDiscountCodeValue').prop('disabled', false);
-                    $('#discountCodeValue').prop('readonly', false);
-                    $('#btnSaveDiscountCodeValue').prop('readonly', false);
+                    setUiHasDiscountCode();
                 } else {
-                    // $('.discountCodeValueWarper').fadeOut();
-                    $('.discountCodeValueWarperCover').fadeIn();
-                    $('#discountCodeValue').prop('disabled', true);
-                    $('#btnSaveDiscountCodeValue').prop('disabled', true);
-                    $('#discountCodeValue').prop('readonly', true);
-                    $('#btnSaveDiscountCodeValue').prop('readonly', true);
+                    setUiHasntDiscountCode();
                 }
             }
 
@@ -764,11 +720,63 @@
                         //The status for when action was successful
                         200: function (response) {
                             console.log('submitCoupon: '+response);
-                            alert('hi!');
-                            if( false ) {
 
+                            if (response.error) {
+
+                                $('#btnRemoveDiscountCodeValue').fadeOut(0);
+                                $('#btnSaveDiscountCodeValue').fadeIn();
+
+                                $.notify(response.message, {
+                                    type: 'danger',
+                                    allow_dismiss: true,
+                                    newest_on_top: false,
+                                    mouse_over: false,
+                                    showProgressbar: false,
+                                    spacing: 10,
+                                    timer: 2000,
+                                    placement: {
+                                        from: 'top',
+                                        align: 'center'
+                                    },
+                                    offset: {
+                                        x: 30,
+                                        y: 30
+                                    },
+                                    delay: 1000,
+                                    z_index: 10000,
+                                    animate: {
+                                        enter: "animated flip",
+                                        exit: "animated hinge"
+                                    }
+                                });
                             } else {
 
+                                $('#btnSaveDiscountCodeValue').fadeOut(0);
+                                $('#btnRemoveDiscountCodeValue').fadeIn();
+
+                                $.notify(response.message, {
+                                    type: 'success',
+                                    allow_dismiss: true,
+                                    newest_on_top: false,
+                                    mouse_over: false,
+                                    showProgressbar: false,
+                                    spacing: 10,
+                                    timer: 2000,
+                                    placement: {
+                                        from: 'top',
+                                        align: 'center'
+                                    },
+                                    offset: {
+                                        x: 30,
+                                        y: 30
+                                    },
+                                    delay: 1000,
+                                    z_index: 10000,
+                                    animate: {
+                                        enter: "animated flip",
+                                        exit: "animated hinge"
+                                    }
+                                });
                             }
                         },
                         //The status for when the user is not authorized for making the request
@@ -814,13 +822,67 @@
                     statusCode: {
                         //The status for when action was successful
                         200: function (response) {
-                            console.log('submitCoupon: '+response);
-                            alert('hi!');
-                            if( false ) {
+                            console.log('removeCoupon: '+response);
+
+                            if (response.error) {
+
+                                $('#btnRemoveDiscountCodeValue').fadeIn();
+                                $('#btnSaveDiscountCodeValue').fadeOut(0);
+
+                                $.notify(response.message, {
+                                    type: 'danger',
+                                    allow_dismiss: true,
+                                    newest_on_top: false,
+                                    mouse_over: false,
+                                    showProgressbar: false,
+                                    spacing: 10,
+                                    timer: 2000,
+                                    placement: {
+                                        from: 'top',
+                                        align: 'center'
+                                    },
+                                    offset: {
+                                        x: 30,
+                                        y: 30
+                                    },
+                                    delay: 1000,
+                                    z_index: 10000,
+                                    animate: {
+                                        enter: "animated flip",
+                                        exit: "animated hinge"
+                                    }
+                                });
 
                             } else {
 
+                                $('#btnRemoveDiscountCodeValue').fadeOut(0);
+                                $('#btnSaveDiscountCodeValue').fadeIn();
+
+                                $.notify(response.message, {
+                                    type: 'success',
+                                    allow_dismiss: true,
+                                    newest_on_top: false,
+                                    mouse_over: false,
+                                    showProgressbar: false,
+                                    spacing: 10,
+                                    timer: 2000,
+                                    placement: {
+                                        from: 'top',
+                                        align: 'center'
+                                    },
+                                    offset: {
+                                        x: 30,
+                                        y: 30
+                                    },
+                                    delay: 1000,
+                                    z_index: 10000,
+                                    animate: {
+                                        enter: "animated flip",
+                                        exit: "animated hinge"
+                                    }
+                                });
                             }
+
                         },
                         //The status for when the user is not authorized for making the request
                         403: function (response) {
