@@ -849,7 +849,7 @@ class OrderController extends Controller
                 $responseStatus = Response::HTTP_BAD_REQUEST;
 
         } else {
-            if (isset($_COOKIE["cartItems"])) {
+            if (isset($_COOKIE["cartItems"]) && strlen($_COOKIE["cartItems"]) > 0) {
                 $cookieOrderproducts = json_decode($_COOKIE["cartItems"]);
                 $fakeOrderproducts = $this->convertOrderproductObjectsToCollection($cookieOrderproducts);
                 $invoiceInfo = $invoiceGenerator->generateFakeOrderproductsInvoice($fakeOrderproducts);
