@@ -1,96 +1,14 @@
-@extends("app")
-
-@section("title")
-    <title>آلاء|پرداخت</title>
-@endsection
-
-@section("metadata")
-    @parent
-    <meta name="_token" content="{{ csrf_token() }}">
-@endsection
-
-@section('pageBar')
-
-@endsection
+@extends('app')
 
 @section('page-css')
-    <style>
-        .noUi-handle {
-            cursor: pointer;
-        }
-
-        .noUi-target .noUi-connect {
-            background: #716aca;
-        }
-    </style>
-    <style>
-        /*fix swithch*/
-        .bootstrap-switch {
-            line-height: 6px;
-        }
-
-        .m-widget27 .m-widget27__pic .m-widget27__title.paymentAndWalletValue > span {
-            font-size: 1.5rem;
-        }
-
-        #m_nouislider_1_input {
-            display: inline-block;
-            width: 20px;
-            padding: 5px 1px;
-            text-align: center;
-            height: 30px;
-            border: none;
-        }
-
-        .m-portlet--creative.noHeadText > .m-portlet__body {
-            padding-bottom: 0;
-            position: relative;
-            z-index: 9;
-        }
-
-        .m-portlet--creative.noHeadText > .m-portlet__head {
-            height: 0;
-        }
-
-        .bankLogo {
-            max-width: 60px;
-            border-radius: 4px;
-            box-shadow: 0 0 7px 0 #A5A5A5;
-        }
-
-        #PaymentType-online .m-radio-inline .m-radio:last-child {
-            margin-left: 15px;
-        }
-
-        .discountCodeValueWarperCover {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9;
-            background: #80808099;
-            -webkit-box-shadow: 0px 0px 20px 1px rgba(128, 128, 128, 1);
-            -moz-box-shadow: 0px 0px 20px 1px rgba(128, 128, 128, 1);
-            box-shadow: 0px 0px 20px 1px rgba(128, 128, 128, 1);
-            cursor: not-allowed;
-            display: none;
-        }
-
-        @media (max-width: 1024px) {
-            .m-portlet--creative.noHeadText > .m-portlet__body {
-                padding-bottom: 2.2rem
-            }
-        }
-    </style>
+    <link href = "{{ mix('/css/checkout-payment.css') }}" rel = "stylesheet" type = "text/css"/>
 @endsection
 
 @section('content')
 
-
     <div class = "row">
         <div class = "col">
-            @include("systemMessage.flash")
+            @include('systemMessage.flash')
         </div>
     </div>
 
@@ -103,11 +21,11 @@
                         <div class = "m-portlet__head">
                             <div class = "m-portlet__head-caption">
                                 <div class = "m-portlet__head-title">
-                                    <h2 class = "m-portlet__head-label m-portlet__head-label--accent" style = "white-space: nowrap;">
-                                <span>
-                                    <i class = "la la-bank"></i>
-                                    روش پرداخت
-                                </span>
+                                    <h2 class = "m-portlet__head-label m-portlet__head-label--accent a--white-space-nowrap">
+                                        <span>
+                                            <i class = "la la-bank"></i>
+                                            روش پرداخت
+                                        </span>
                                     </h2>
                                 </div>
                             </div>
@@ -129,9 +47,9 @@
                                                 <span></span>
                                             </label>
                                             {{--<label class="m-radio m-radio--solid m-radio--state-success">--}}
-                                            {{--<input type="radio" name="radioPaymentType" data-btntext="ثبت سفارش" value="hozoori">--}}
-                                            {{--حضوری--}}
-                                            {{--<span></span>--}}
+                                                {{--<input type="radio" name="radioPaymentType" data-btntext="ثبت سفارش" value="hozoori">--}}
+                                                {{--حضوری--}}
+                                                {{--<span></span>--}}
                                             {{--</label>--}}
                                             <label class = "m-radio m-radio--solid m-radio--state-success">
                                                 <input type = "radio" name = "radioPaymentType" data-btntext = "ثبت سفارش" value = "card2card">
@@ -174,9 +92,9 @@
                                         </div>
                                     </div>
                                     {{--<div class="m-portlet PaymentType" id="PaymentType-hozoori">--}}
-                                    {{--<div class="m-portlet__body">--}}
-                                    {{--بعد از ثبت سفارش مبلغ 12،470 تومان را به صورت حضوری پرداخت کنید.--}}
-                                    {{--</div>--}}
+                                        {{--<div class="m-portlet__body">--}}
+                                            {{--بعد از ثبت سفارش مبلغ 12،470 تومان را به صورت حضوری پرداخت کنید.--}}
+                                        {{--</div>--}}
                                     {{--</div>--}}
 
                                     <div class = "m-portlet PaymentType" id = "PaymentType-card2card">
@@ -211,38 +129,52 @@
                                             کد تخفیف:
                                         </label>
                                     </span>
-                                    <span class = "m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
-                                        <input type = "checkbox" data-switch = "true" @if(isset($coupon))checked = "true" @elsechecked = "false" @endifdata-on-text = "ندارم" data-on-color = "danger" data-off-text = "دارم" data-off-color = "success" data-size = "small" {{--data-handle-width="40"--}}id = "hasntDiscountCode">
+                                    <span class="m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
+                                        <input type="checkbox"
+                                          data-switch="true"
+                                            @if(!isset($coupon))
+                                               checked="checked"
+                                            @endif
+                                          data-on-text="ندارم"
+                                          data-on-color="danger"
+                                          data-off-text="دارم"
+                                          data-off-color="success"
+                                          data-size="small"
+                                          {{--data-handle-width="40"--}}
+                                           id="hasntDiscountCode">
                                     </span>
                                 </div>
-                                <div class = "col-12 col-md-6 m--margin-top-10">
-                                    <div class = "input-group discountCodeValueWarper">
-                                        <div class = "discountCodeValueWarperCover"></div>
-                                        <input type = "text" class = "form-control" placeholder = "کد تخفیف ..." @if(isset($coupon))value = "{{ $coupon->code }}" @endifid = "discountCodeValue">
-                                        <div class = "input-group-prepend DiscountCodeActionsWarper">
-                                            @if(isset($coupon))
-                                                <button class = "btn btn-danger" type = "button" id = "btnRemoveDiscountCodeValue">حذف</button>
-                                            @else
-                                                <button class = "btn btn-success" type = "button" id = "btnSaveDiscountCodeValue">ثبت</button>
-                                            @endif
+                                <div class="col-12 col-md-6 m--margin-top-10">
+                                    <div class="input-group discountCodeValueWarper">
+                                        <div class="discountCodeValueWarperCover"></div>
+                                        <input type="text"
+                                               class="form-control"
+                                               placeholder="کد تخفیف ..."
+                                               @if(isset($coupon))
+                                                value="{{ $coupon['coupon']->code }}"
+                                               @endif
+                                               id="discountCodeValue">
+                                        <div class="input-group-prepend DiscountCodeActionsWarper">
+                                            <button class="btn btn-danger@if(!isset($coupon)) a--d-none @endif" type="button" id="btnRemoveDiscountCodeValue">حذف</button>
+                                            <button class="btn btn-success@if(isset($coupon)) a--d-none @endif"  type="button" id="btnSaveDiscountCodeValue">ثبت</button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class = "col-12">
-                                    @if(isset($coupon))
-                                        <div class = "alert alert-success alert-dismissible fade show" role = "alert">
-                                            <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Close"></button>
-                                            @if($coupon->discounttype->id == Config::get("constants.DISCOUNT_TYPE_COST"))
+                                    @if (isset($coupon))
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+                                            @if($coupon['coupon']->discounttype->id == config('constants.DISCOUNT_TYPE_COST'))
                                                 کپن تخفیف
-                                                <strong>{{$coupon->name}}</strong>
+                                                <strong>{{$coupon['coupon']->name}}</strong>
                                                 با
-                                                {{number_format($coupon->discount)}}
+                                                {{number_format($coupon['discount'])}}
                                                 تومان تخفیف برای سفارش شما ثبت شد.
                                             @else
                                                 کپن تخفیف
-                                                    <strong>{{$coupon->name}}</strong>
+                                                <strong>{{$coupon['coupon']->name}}</strong>
                                                 با
-                                                    {{$coupon->discount}}
+                                                {{$coupon['discount']}}
                                                 % تخفیف برای
                                                 سفارش شما ثبت شده است.
                                             @endif
@@ -281,19 +213,14 @@
                 </div>
             </div>
         </div>
-
         {{--مبلغ قابل پرداخت--}}
         <div class = "col-12 col-md-4 order-1 order-sm-1 order-md-2 order-lg-2 finalPriceReportWarper">
             <div class = "m-portlet m-portlet--head-overlay  m-portlet--full-heigh m-portlet--rounded-force">
                 <div class = "m-portlet__head m-portlet__head--fit-">
                     <div class = "m-portlet__head-caption">
-                        <div class = "m-portlet__head-title">
-
-                        </div>
+                        <div class = "m-portlet__head-title"></div>
                     </div>
-                    <div class = "m-portlet__head-tools">
-
-                    </div>
+                    <div class = "m-portlet__head-tools"></div>
                 </div>
                 <div class = "m-portlet__body">
                     <div class = "m-widget27 m-portlet-fit--sides">
@@ -324,7 +251,7 @@
                                             <div class = "m-portlet__head">
                                                 <div class = "m-portlet__head-caption">
                                                     <div class = "m-portlet__head-title">
-                                                        <h2 class = "m-portlet__head-label m-portlet__head-label--accent" style = "white-space: nowrap;">
+                                                        <h2 class = "m-portlet__head-label m-portlet__head-label--accent a--white-space-nowrap">
                                                             <span>
                                                                 <i class = "fa fa-donate"></i>
                                                                 کمک به آلاء
@@ -351,8 +278,20 @@
                                                         به آلاء کمک
                                                             </label>
                                                         </span>
-                                                        <span class = "m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
-                                                            <input type = "checkbox" data-switch = "true" @if(isset($orderHasDonate) && $orderHasDonate)@elsechecked = "" @endifdata-on-text = "نمی کنم" data-on-color = "danger" data-off-text = "می کنم" data-off-color = "success" data-size = "small" {{--data-handle-width="40"--}}id = "hasntDonate">
+                                                        <span class="m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
+                                                            <input type="checkbox"
+                                                                   data-switch="true"
+                                                                   @if(isset($orderHasDonate) && $orderHasDonate)
+                                                                   @else
+                                                                   checked=""
+                                                                   @endif
+                                                                   data-on-text="نمی کنم"
+                                                                   data-on-color="danger"
+                                                                   data-off-text="می کنم"
+                                                                   data-off-color="success"
+                                                                   data-size="small"
+                                                                   {{--data-handle-width="40"--}}
+                                                                   id="hasntDonate">
                                                         </span>
                                                         <span>
                                                             <img src = "/acm/extra/sad.png" class = "face-sad m--margin-top-20" alt = "">
@@ -372,16 +311,10 @@
                 </div>
             </div>
         </div>
-
     </div>
 
 
 
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
 
 
 
@@ -390,489 +323,205 @@
 
 
 
+    {{--<div class="row">--}}
+        {{--<div class="col-md-12">--}}
+            {{--<div class="portlet light bordered ">--}}
+                {{--<div class="portlet-body">--}}
+                    {{--<div class="row">--}}
+                        {{--@include("partials.checkoutSteps" , ["step"=>3])--}}
+                        {{--<div class="col-md-12">--}}
+                            {{--<div class="portlet dark box">--}}
 
-
-
-
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="portlet light bordered ">
-                <div class="portlet-body">
-                    <div class="row">
-                        @include("partials.checkoutSteps" , ["step"=>3])
-                        <div class="col-md-12">
-                            <div class="portlet dark box">
-
-                                <div class="portlet-body">
-                                    {{--<div class="row static-info margin-top-20">--}}
-                                    @include("systemMessage.flash")
-                                    {{--</div>--}}
-
-                                    <div class="row margin-top-10">
-                                        <div class="col-lg-9 col-md-9 col-sd-9 col-xs-12"
-                                             @if(!isset($coupon)) style="display: none" id="couponForm" @endif>
-                                            {{--                                            {!! Form::open(['method' => 'POST','action' => ['OrderController@submitCoupon'] , 'class'=>'form-horizontal' ]) !!}--}}
-                                            <div class="form-group">
-                                                <label class="col-lg-2 col-md-2 col-sm-2 col-xs-12 control-label"
-                                                       for="gateway" style="text-align: right">کد تخفیف </label>
-                                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                                    <div class="input-group">
-                                                        @if(isset($coupon))
-                                                            {!! Form::text('coupon',$coupon->code,['class' => 'form-control' , ]) !!}
-                                                        @else
-                                                            {!! Form::text('coupon',null,['class' => 'form-control' ]) !!}
-                                                        @endif
-                                                        <span class="input-group-btn">
-                                                                        @if(isset($coupon))
-                                                                <a href = "{{action("Web\OrderController@removeCoupon")}}"
-                                                                   class="btn red">حذف کد تخفیف</a>
-                                                            @else
-                                                                {!! Form::submit('ثبت کد تخفیف',['class' => 'btn blue']) !!}
-                                                            @endif
-                                                                        </span>
-                                                    </div>
-                                                </div>
-                                                @if(isset($coupon))
-                                                    <div class="col-lg-12">
-                                                        <span class = "help-block small bold font-green">
-                                                            @if($coupon->discounttype->id == Config::get("constants.DISCOUNT_TYPE_COST"))
-                                                                کپن تخفیف  {{$coupon->name}}
-                                                                با {{number_format($coupon->discount)}}
-                                                                تومان تخفیف برای سفارش شما ثبت شد.
-                                                            @else
-                                                                کپن تخفیف {{$coupon->name}}
-                                                                با {{$coupon->discount}}% تخفیف برای
-                                                                سفارش شما ثبت شده است.
-                                                            @endif
-                                                        </span>
-                                                    </div>
-                                                @else
-                                                    <div class="col-lg-12">
-                                                        <span class="help-block font-blue small bold">پس از وارد کردن کد و زدن دکمه ثبت میزان تخفیف در مبلغ قابل پرداخت اعمال خواهد شد</span>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                            {{--                                            {!! Form::close() !!}--}}
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-lg-12">
+                                {{--<div class="portlet-body">--}}
+                                    {{--<div class="row">--}}
+                                        {{--<div class="col-lg-12">--}}
                                             {{--                                            {!! Form::open(['method' => 'POST','action' => ['OrderController@addOrderproduct' , 180] , 'class'=>'form-horizontal' , 'id'=>'donateForm' ]) !!}--}}
-                                            <label for="donateSwitch">5 هزار تومان مشارکت می کنم در هزینه های
-                                                آلاء</label>
-                                            <input type="hidden" name="mode" value="normal">
-                                            <input type="checkbox"
-                                                   @if(isset($orderHasDonate) && $orderHasDonate) checked
-                                                   @endif  id="donateSwitch" value="" class="make-switch"
-                                                   data-off-color="danger" data-on-color="success"
-                                                   data-off-text="&nbsp;کمک&nbsp;نمی&nbsp;کنم&nbsp;"
-                                                   data-on-text="&nbsp;کمک&nbsp;می&nbsp;کنم&nbsp;">
+                                            {{--<label for="donateSwitch">5 هزار تومان مشارکت می کنم در هزینه های--}}
+                                                {{--آلاء</label>--}}
+                                            {{--<input type="hidden" name="mode" value="normal">--}}
+                                            {{--<input type="checkbox"--}}
+                                                   {{--@if(isset($orderHasDonate) && $orderHasDonate) checked--}}
+                                                   {{--@endif  id="donateSwitch" value="" class="make-switch"--}}
+                                                   {{--data-off-color="danger" data-on-color="success"--}}
+                                                   {{--data-off-text="&nbsp;کمک&nbsp;نمی&nbsp;کنم&nbsp;"--}}
+                                                   {{--data-on-text="&nbsp;کمک&nbsp;می&nbsp;کنم&nbsp;">--}}
                                             {{--                                            {!! Form::close() !!}--}}
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    @if(session()->has("adminOrder_id") )
-                                        <div class="row">
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                    {{--<hr>--}}
+                                    {{--@if(session()->has("adminOrder_id") )--}}
+                                        {{--<div class="row">--}}
                                             {{--                                            {!! Form::open(['method' => 'GET','action' => ['OrderController@verifyPayment'] , 'id'=>'paymentForm' , 'class'=>'form-horizontal' ]) !!}--}}
-                                            <div class="form-group">
-                                                <div class="col-lg-12" style="text-align: center;">
-                                                    <span class="label bg-green-soft" style="font-size: 15px">مبلغ قابل پرداخت: {{number_format($cost)}}</span>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-lg-12" style="text-align: center;">
-                                                    <a href = "{{action("Web\OrderController@checkoutReview")}}"
-                                                       class="btn dark btn-outline"><i class="fa fa-chevron-right"
-                                                                                       aria-hidden="true"></i>بازبینی</a>
-                                                    <button type="submit" class="btn green btn-outline">ثبت نهایی
-                                                    </button>
-                                                </div>
-                                                {!! Form::hidden('paymentmethod','inPersonPayment') !!}
-                                            </div>
+                                            {{--<div class="form-group">--}}
+                                                {{--<div class="col-lg-12" style="text-align: center;">--}}
+                                                    {{--<span class="label bg-green-soft" style="font-size: 15px">مبلغ قابل پرداخت: {{number_format($cost)}}</span>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                            {{--<div class="form-group">--}}
+                                                {{--<div class="col-lg-12" style="text-align: center;">--}}
+                                                    {{--<a href = "{{action("Web\OrderController@checkoutReview")}}"--}}
+                                                       {{--class="btn dark btn-outline"><i class="fa fa-chevron-right"--}}
+                                                                                       {{--aria-hidden="true"></i>بازبینی</a>--}}
+                                                    {{--<button type="submit" class="btn green btn-outline">ثبت نهایی--}}
+                                                    {{--</button>--}}
+                                                {{--</div>--}}
+                                                {{--{!! Form::hidden('paymentmethod','inPersonPayment') !!}--}}
+                                            {{--</div>--}}
                                             {{--                                            {!! Form::close() !!}--}}
-                                        </div>
-                                    @elseif(!isset($invoiceInfo["totalCost"]) || $invoiceInfo["totalCost"] == 0)
-                                        <div class="row">
+                                        {{--</div>--}}
+                                    {{--@elseif(!isset($invoiceInfo["totalCost"]) || $invoiceInfo["totalCost"] == 0)--}}
+                                        {{--<div class="row">--}}
                                             {{--                                            {!! Form::open(['method' => 'GET','action' => ['OrderController@verifyPayment'] , 'id'=>'paymentForm' , 'class'=>'form-horizontal' ]) !!}--}}
-                                            <div class="col-md-12 margin-top-20">
-                                                {!! Form::textarea('customerDescription',null,['class' => 'form-control' , 'placeholder'=>'اگر توضیحی درباره سفارش خود دارید لطفا اینجا بنویسید' , 'rows'=>'3']) !!}
-                                            </div>
-                                            <div class="col-md-12 margin-top-40" style="text-align: center;">
-                                                    <span class = "label bg-green-soft" style = "font-size: 15px">
+                                            {{--<div class="col-md-12 margin-top-20">--}}
+                                                {{--{!! Form::textarea('customerDescription',null,['class' => 'form-control' , 'placeholder'=>'اگر توضیحی درباره سفارش خود دارید لطفا اینجا بنویسید' , 'rows'=>'3']) !!}--}}
+                                            {{--</div>--}}
+                                            {{--<div class="col-md-12 margin-top-40" style="text-align: center;">--}}
+                                                    {{--<span class="label bg-green-soft" style="font-size: 15px">--}}
                                                         {{--مبلغ قابل پرداخت: {{number_format($invoiceInfo["totalCost"])}}--}}
-                                                        15000
-                                                    </span>
-                                            </div>
-                                            <div class="col-md-12 margin-top-20" style="text-align: center;">
-                                                <a href = "{{action("Web\OrderController@checkoutReview")}}"
-                                                   class="btn dark btn-outline" style="width: 100px"><i
-                                                            class="fa fa-chevron-right"
-                                                            aria-hidden="true"></i>بازبینی</a>
-                                                <button type="submit" class="btn green btn-outline"
-                                                        style="width: 100px">ثبت نهایی
-                                                </button>
-                                            </div>
+                                                        {{--15000--}}
+                                                    {{--</span>--}}
+                                            {{--</div>--}}
+                                            {{--<div class="col-md-12 margin-top-20" style="text-align: center;">--}}
+                                                {{--<a href="{{action("Web\OrderController@checkoutReview")}}"--}}
+                                                   {{--class="btn dark btn-outline" style="width: 100px"><i--}}
+                                                            {{--class="fa fa-chevron-right"--}}
+                                                            {{--aria-hidden="true"></i>بازبینی</a>--}}
+                                                {{--<button type="submit" class="btn green btn-outline"--}}
+                                                        {{--style="width: 100px">ثبت نهایی--}}
+                                                {{--</button>--}}
+                                            {{--</div>--}}
                                             {{--                                            {!! Form::close() !!}--}}
-                                        </div>
-                                    @else
-                                        <div class="row">
-                                            {!! Form::open(['method' => 'POST','action' => ['Web\TransactionController@create'] , 'id'=>'paymentForm' , 'class'=>'form-horizontal' ]) !!}
-                                            <div class="form-group text-center">
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ">
-                                                    <label class="col-lg-5 col-md-5 col-sd-5 col-xs-5 text-center control-label"
-                                                           style="text-align: center" for="gateway">روش پرداخت </label>
-                                                    <div class="col-lg-7 col-md-7 col-sd-7 col-xs-7">
+                                        {{--</div>--}}
+                                    {{--@else--}}
+                                        {{--<div class="row">--}}
+                                            {{--{!! Form::open(['method' => 'POST','action' => ['Web\TransactionController@create'] , 'id'=>'paymentForm' , 'class'=>'form-horizontal' ]) !!}--}}
+                                            {{--<div class="form-group text-center">--}}
+                                                {{--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ">--}}
+                                                    {{--<label class="col-lg-5 col-md-5 col-sd-5 col-xs-5 text-center control-label"--}}
+                                                           {{--style="text-align: center" for="gateway">روش پرداخت </label>--}}
+                                                    {{--<div class="col-lg-7 col-md-7 col-sd-7 col-xs-7">--}}
                                                         {{--{!! Form::select('paymentmethod',["onlinePayment" => "آنلاین"],null,['class' => 'form-control' , 'id'=>'paymentMethod']) !!}--}}
-                                                        <text class = "form-control-static bold"> آنلاین</text>
-                                                        {!! Form::hidden('paymentmethod', 'onlinePayment' , ['id'=>'paymentMethod']) !!}
-                                                    </div>
+                                                        {{--<text class="form-control-static bold"> آنلاین</text>--}}
+                                                        {{--{!! Form::hidden('paymentmethod', 'onlinePayment' , ['id'=>'paymentMethod']) !!}--}}
+                                                    {{--</div>--}}
 
-                                                </div>
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 " id="gatewayDiv">
-                                                    <label class="col-lg-5 col-md-5 col-sd-5 col-xs-5 control-label"
-                                                           style="text-align: center" for="gateway">انتخاب
-                                                        درگاه </label>
-                                                    <div class="col-lg-7 col-md-7 col-sd-7 col-xs-7">
-                                                        {!! Form::select('gateway',$gateways,null,['class' => 'form-control' , 'id'=>'gatewaySelect' ]) !!}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-lg-3 col-md-3">
-                                                    <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-left control-label bold font-blue-sharp"
-                                                           style="text-align: center ; font-size: medium">
-                                                        کیف پول شما: {{number_format($credit)}} تومان
-                                                    </label>
-                                                    @if($credit > 0 )
-                                                        {!! Form::hidden('payByWallet',1 ) !!}
-                                                    @endif
-                                                    @if(isset($coupon))
-                                                        <div class="col-lg-12 col-md-12 margin-top-20 text-left">
-                                                            <span class="bold font-blue-sharp"
-                                                                  style="font-size: 15px; padding: 0px 5px 0px 5px;">
-                                                                {{($credit>0)?"جمع کل:":"مبلغ قابل پرداخت:"}}
-                                                                <lable id="totalCost"
-                                                                       style="text-decoration: line-through;">
+                                                {{--</div>--}}
+                                                {{--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 " id="gatewayDiv">--}}
+                                                    {{--<label class="col-lg-5 col-md-5 col-sd-5 col-xs-5 control-label"--}}
+                                                           {{--style="text-align: center" for="gateway">انتخاب--}}
+                                                        {{--درگاه </label>--}}
+                                                    {{--<div class="col-lg-7 col-md-7 col-sd-7 col-xs-7">--}}
+                                                        {{--{!! Form::select('gateway',$gateways,null,['class' => 'form-control' , 'id'=>'gatewaySelect' ]) !!}--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                            {{--<div class="form-group">--}}
+                                                {{--<div class="col-lg-3 col-md-3">--}}
+                                                    {{--<label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-left control-label bold font-blue-sharp"--}}
+                                                           {{--style="text-align: center ; font-size: medium">--}}
+                                                        {{--کیف پول شما: {{number_format($credit)}} تومان--}}
+                                                    {{--</label>--}}
+                                                    {{--@if($credit > 0 )--}}
+                                                        {{--{!! Form::hidden('payByWallet',1 ) !!}--}}
+                                                    {{--@endif--}}
+                                                    {{--@if(isset($coupon))--}}
+                                                        {{--<div class="col-lg-12 col-md-12 margin-top-20 text-left">--}}
+                                                            {{--<span class="bold font-blue-sharp"--}}
+                                                                  {{--style="font-size: 15px; padding: 0px 5px 0px 5px;">--}}
+                                                                {{--{{($credit>0)?"جمع کل:":"مبلغ قابل پرداخت:"}}--}}
+                                                                {{--<lable id="totalCost"--}}
+                                                                       {{--style="text-decoration: line-through;">--}}
                                                                     {{--{{number_format($invoiceInfo["totalCost"])}}--}}
-                                                                    15000
-                                                                </lable>
-                                                            تومان
-                                                            </span>
-                                                        </div>
-                                                        <div class="col-lg-12 col-md-12 margin-top-20 text-left">
-                                                            <span class="bold font-red"
-                                                                  style="padding: 0px 5px 0px 5px; font-size: 15px">
+                                                                    {{--15000--}}
+                                                                {{--</lable>--}}
+                                                            {{--تومان--}}
+                                                            {{--</span>--}}
+                                                        {{--</div>--}}
+                                                        {{--<div class="col-lg-12 col-md-12 margin-top-20 text-left">--}}
+                                                            {{--<span class="bold font-red"--}}
+                                                                  {{--style="padding: 0px 5px 0px 5px; font-size: 15px">--}}
                                                                     {{--برای شما {{number_format($invoiceInfo["totalCost"])}} تومان--}}
-                                                                15000
-                                                            </span>
-                                                        </div>
-                                                    @else
-                                                        <div class="col-lg-12 col-md-12 margin-top-20 text-left">
-                                                            <span class="bold font-blue-sharp" style="font-size: 15px">
-                                                                {{($credit>0)?"جمع کل:":"مبلغ قابل پرداخت:"}}
-                                                                <lable id="totalCost">
+                                                                {{--15000--}}
+                                                            {{--</span>--}}
+                                                        {{--</div>--}}
+                                                    {{--@else--}}
+                                                        {{--<div class="col-lg-12 col-md-12 margin-top-20 text-left">--}}
+                                                            {{--<span class="bold font-blue-sharp" style="font-size: 15px">--}}
+                                                                {{--{{($credit>0)?"جمع کل:":"مبلغ قابل پرداخت:"}}--}}
+                                                                {{--<lable id="totalCost">--}}
                                                                     {{--{{number_format($invoiceInfo["totalCost"])}}--}}
-                                                                    15000
-                                                                </lable>
-                                                            تومان
-                                                            </span>
-                                                        </div>
-                                                    @endif
-                                                    @if($credit > 0)
-                                                        <div class="col-lg-12 col-md-12 margin-top-20 text-left">
-                                                        <span class="bold font-blue-sharp" style="font-size: 15px">
-                                                            استفاده از کیف پول:
-                                                                    <lable id="totalCost">
-                                                                        {{number_format($invoiceInfo["paidByWallet"])}}
-                                                                    </lable>
-                                                                    تومان
-                                                        </span>
-                                                        </div>
-                                                        <div class="col-lg-12 col-md-12 margin-top-20 text-left">
-                                                            <span class="bold font-blue-sharp" style="font-size: 15px">مبلغ قابل پرداخت:
-                                                                        <lable id="totalCost">
+                                                                    {{--15000--}}
+                                                                {{--</lable>--}}
+                                                            {{--تومان--}}
+                                                            {{--</span>--}}
+                                                        {{--</div>--}}
+                                                    {{--@endif--}}
+                                                    {{--@if($credit > 0)--}}
+                                                        {{--<div class="col-lg-12 col-md-12 margin-top-20 text-left">--}}
+                                                        {{--<span class="bold font-blue-sharp" style="font-size: 15px">--}}
+                                                            {{--استفاده از کیف پول:--}}
+                                                                    {{--<lable id="totalCost">--}}
+                                                                        {{--{{number_format($invoiceInfo["paidByWallet"])}}--}}
+                                                                    {{--</lable>--}}
+                                                                    {{--تومان--}}
+                                                        {{--</span>--}}
+                                                        {{--</div>--}}
+                                                        {{--<div class="col-lg-12 col-md-12 margin-top-20 text-left">--}}
+                                                            {{--<span class="bold font-blue-sharp" style="font-size: 15px">مبلغ قابل پرداخت:--}}
+                                                                        {{--<lable id="totalCost">--}}
                                                                             {{--{{number_format( $invoiceInfo["payableCost"])}}--}}
-                                                                            15000
-                                                                        </lable>
-                                                                        تومان
-                                                            </span>
-                                                        </div>
-                                                    @endif
-                                                </div>
-                                                <div class="col-lg-9 col-md-9" style="    padding: 0px 30px 0px 30px;">
-                                                    {!! Form::textarea('customerDescription',null,['class' => 'form-control' , 'placeholder'=>'اگر توضیحی درباره سفارش خود دارید اینجا بنویسید' , 'rows'=>'3']) !!}
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-lg-12 col-md-12 margin-top-10 text-center">
-                                                    <a href = "{{action("Web\OrderController@checkoutReview")}}"
-                                                       class="btn dark btn-outline" style="width: 100px">
-                                                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                                                        بازبینی
-                                                    </a>
-                                                    <button type="submit" class="btn green btn-outline"
-                                                            style="width: 100px">
+                                                                            {{--15000--}}
+                                                                        {{--</lable>--}}
+                                                                        {{--تومان--}}
+                                                            {{--</span>--}}
+                                                        {{--</div>--}}
+                                                    {{--@endif--}}
+                                                {{--</div>--}}
+                                                {{--<div class="col-lg-9 col-md-9" style="    padding: 0px 30px 0px 30px;">--}}
+                                                    {{--{!! Form::textarea('customerDescription',null,['class' => 'form-control' , 'placeholder'=>'اگر توضیحی درباره سفارش خود دارید اینجا بنویسید' , 'rows'=>'3']) !!}--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                            {{--<div class="form-group">--}}
+                                                {{--<div class="col-lg-12 col-md-12 margin-top-10 text-center">--}}
+                                                    {{--<a href="{{action("Web\OrderController@checkoutReview")}}"--}}
+                                                       {{--class="btn dark btn-outline" style="width: 100px">--}}
+                                                        {{--<i class="fa fa-chevron-right" aria-hidden="true"></i>--}}
+                                                        {{--بازبینی--}}
+                                                    {{--</a>--}}
+                                                    {{--<button type="submit" class="btn green btn-outline"--}}
+                                                            {{--style="width: 100px">--}}
                                                         {{--{{($invoiceInfo["payableCost"] == 0)?"ثبت نهایی":"پرداخت"}}--}}
-                                                        15000
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            {!! Form::close() !!}
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br/>
-                    <br/>
-                    <br/>
+                                                        {{--15000--}}
+                                                    {{--</button>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                            {{--{!! Form::close() !!}--}}
+                                        {{--</div>--}}
+                                    {{--@endif--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                    {{--<br/>--}}
+                    {{--<br/>--}}
+                    {{--<br/>--}}
 
-                </div>
-            </div>
-        </div>
-    </div>
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
+
+    <input type="hidden" id="invoiceInfo-totalCost" value="{{ $invoiceInfo['totalCost'] }}">
+    <input type="hidden" id="invoiceInfo-couponCode" value="@if (isset($coupon)){{ $coupon['coupon']->code }}@endif">
+    <input type="hidden" id="OrderController-submitCoupon" value="{{ action('Web\OrderController@submitCoupon') }}">
+    <input type="hidden" id="OrderController-removeCoupon" value="{{ action('Web\OrderController@removeCoupon') }}">
+
 @endsection
 
 @section('page-js')
 
     <script src = "{{ mix('/js/checkout-payment.js') }}"></script>
-
-    <script>
-
-        jQuery(document).ready(function () {
-            var totalCost = {{ $invoiceInfo['totalCost'] }};
-
-            function refreshUi() {
-                refreshUiBasedOnPaymentType();
-                refreshUiBasedOnDonateStatus();
-                refreshUiBasedOnHasntDiscountCodeStatus();
-            }
-
-            function refreshUiBasedOnPaymentType() {
-                let selectedObject = $('input[type="radio"][name="radioPaymentType"]:checked');
-                let radioPaymentType = selectedObject.val();
-
-                $('.PaymentType').slideUp();
-                $('#PaymentType-' + radioPaymentType).slideDown();
-
-                // if (radioPaymentType==1) {
-                //     $('#PaymentType-online').slideDown();
-                //     $('#PaymentType-hozoori').slideUp();
-                //     $('#PaymentType-card2card').slideUp();
-                // } else if (radioPaymentType==2) {
-                //     $('#PaymentType-online').slideUp();
-                //     $('#PaymentType-hozoori').slideDown();
-                //     $('#PaymentType-card2card').slideUp();
-                // } else if (radioPaymentType==3) {
-                //     $('#PaymentType-online').slideUp();
-                //     $('#PaymentType-hozoori').slideUp();
-                //     $('#PaymentType-card2card').slideDown();
-                // }
-
-                let btntext = selectedObject.data('btntext');
-                $('.btnSubmitOrder').html(btntext);
-
-            }
-
-            function donate() {
-                $('.face-sad').fadeOut(0);
-                $('.face-happy').fadeIn(0);
-                $('.visibleInDonate').css({'visibility': 'visible'});
-            }
-
-            function dontdonate() {
-                $('.face-sad').fadeIn(0);
-                $('.face-happy').fadeOut(0);
-                $('.visibleInDonate').css({'visibility': 'hidden'});
-            }
-
-            function getDonateStatus() {
-                let switchStatus = $('#hasntDonate').prop('checked');
-                if (switchStatus) {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-
-            function refreshUiBasedOnDonateStatus(donateValue) {
-                if (getDonateStatus()) {
-                    donate();
-                } else {
-                    dontdonate();
-                    donateValue = 0;
-                }
-                let calcTotalCost = totalCost + (donateValue * 1000);
-                $('.finalPriceValue').html(calcTotalCost.toLocaleString('fa'));
-            }
-
-            function refreshUiBasedOnHasntDiscountCodeStatus() {
-                $('#discountCodeValue').val('');
-                if (!$('#hasntDiscountCode').prop('checked')) {
-                    // $('.discountCodeValueWarper').fadeIn();
-                    $('.discountCodeValueWarperCover').fadeOut();
-                    $('#discountCodeValue').prop('disabled', false);
-                    $('#btnSaveDiscountCodeValue').prop('disabled', false);
-                    $('#discountCodeValue').prop('readonly', false);
-                    $('#btnSaveDiscountCodeValue').prop('readonly', false);
-                } else {
-                    // $('.discountCodeValueWarper').fadeOut();
-                    $('.discountCodeValueWarperCover').fadeIn();
-                    $('#discountCodeValue').prop('disabled', true);
-                    $('#btnSaveDiscountCodeValue').prop('disabled', true);
-                    $('#discountCodeValue').prop('readonly', true);
-                    $('#btnSaveDiscountCodeValue').prop('readonly', true);
-                }
-            }
-
-            refreshUi();
-
-
-            $(document).on('click', '#btnSaveDiscountCodeValue', function (e) {
-                $.ajax({
-                    type: 'POST',
-                    url: '{{ action('Web\OrderController@submitCoupon') }}',
-                    data: {
-                        coupon: $('#discountCodeValue').val()
-                    },
-                    statusCode: {
-                        //The status for when action was successful
-                        200: function (response) {
-                            console.log('submitCoupon: ' + response);
-                            alert('hi!');
-                            if (false) {
-
-                            } else {
-
-                            }
-                        },
-                        //The status for when the user is not authorized for making the request
-                        403: function (response) {
-                            window.location.replace("/403");
-                        },
-                        //The status for when the user is not authorized for making the request
-                        401: function (response) {
-                            window.location.replace("/403");
-                        },
-                        //Method Not Allowed
-                        405: function (response) {
-//                        console.log(response);
-//                        console.log(response.responseText);
-                            location.reload();
-                        },
-                        404: function (response) {
-                            window.location.replace("/404");
-                        },
-                        //The status for when form data is not valid
-                        422: function (response) {
-                            // console.log(response);
-                        },
-                        //The status for when there is error php code
-                        500: function (response) {
-                            // console.log(response.responseText);
-//                            toastr["error"]("خطای برنامه!", "پیام سیستم");
-                        },
-                        //The status for when there is error php code
-                        503: function (response) {
-                            // toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
-                        }
-                    }
-                });
-            });
-            $(document).on('click', '#btnRemoveDiscountCodeValue', function (e) {
-                $.ajax({
-                    type: 'GET',
-                    url: '{{ action('Web\OrderController@removeCoupon') }}',
-                    data: {
-                        coupon: $('#discountCodeValue').val()
-                    },
-                    statusCode: {
-                        //The status for when action was successful
-                        200: function (response) {
-                            console.log('submitCoupon: ' + response);
-                            alert('hi!');
-                            if (false) {
-
-                            } else {
-
-                            }
-                        },
-                        //The status for when the user is not authorized for making the request
-                        403: function (response) {
-                            window.location.replace("/403");
-                        },
-                        //The status for when the user is not authorized for making the request
-                        401: function (response) {
-                            window.location.replace("/403");
-                        },
-                        //Method Not Allowed
-                        405: function (response) {
-//                        console.log(response);
-//                        console.log(response.responseText);
-                            location.reload();
-                        },
-                        404: function (response) {
-                            window.location.replace("/404");
-                        },
-                        //The status for when form data is not valid
-                        422: function (response) {
-                            // console.log(response);
-                        },
-                        //The status for when there is error php code
-                        500: function (response) {
-                            // console.log(response.responseText);
-//                            toastr["error"]("خطای برنامه!", "پیام سیستم");
-                        },
-                        //The status for when there is error php code
-                        503: function (response) {
-                            // toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
-                        }
-                    }
-                });
-            });
-
-            $(document).on('change', 'input[type="radio"][name="radioPaymentType"]', function (e) {
-                refreshUiBasedOnPaymentType();
-            });
-            $(document).on('switchChange.bootstrapSwitch', '#hasntDiscountCode', function (e) {
-                refreshUiBasedOnHasntDiscountCodeStatus();
-            });
-            $(document).on('switchChange.bootstrapSwitch', '#hasntDonate', function (e) {
-                refreshUiBasedOnDonateStatus($('#m_nouislider_1_input').val());
-            });
-
-            var e = document.getElementById('m_nouislider_1');
-            noUiSlider.create(e, {
-                start: [5],
-                connect: [!0, !1],
-                step: 1,
-                range: {min: [1], max: [50]},
-                format: wNumb({decimals: 0})
-            });
-            var n = document.getElementById('m_nouislider_1_input');
-            e.noUiSlider.on('update', function (e, t) {
-                n.value = e[t];
-                refreshUiBasedOnDonateStatus(n.value);
-            }), n.addEventListener('change', function () {
-                e.noUiSlider.set(this.value)
-            });
-        });
-    </script>
-    {{--<script src="/js/extraJS/jQueryNumberFormat/jquery.number.min.js" type="text/javascript"></script>--}}
-    {{--<script type="text/javascript">--}}
-    {{--/**--}}
-    {{--* Set token for ajax request--}}
-    {{--*/--}}
-    {{--$(function () {--}}
-    {{--$.ajaxSetup({--}}
-    {{--headers: {--}}
-    {{--'X-CSRF-TOKEN': window.Laravel.csrfToken,--}}
-    {{--}--}}
-    {{--});--}}
-    {{--});--}}
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/checkout-payment.js') }}"></script>
 
     {{--function setPaymentController() {--}}
     {{--if ($("#paymentMethod").val() == "onlinePayment") {--}}

@@ -1,43 +1,9 @@
-@extends("app")
+@extends('app')
 @section('page-css')
-    <style>
-        /*missed css*/
-        .m-widget4__item.m-widget4__item--last, .m-widget4__item:last-child {
-            border-bottom: 0;
-        }
-    </style>
-    <style>
-        /*media query*/
-        @media (max-width: 767.98px) {
-            .m-portlet__body {
-                padding: 5px !important;
-            }
-
-            .m-demo__preview {
-                padding: 0px !important;
-            }
-        }
-    </style>
-
-    <style>
-        /*product page css*/
-        .productGifts img {
-            max-width: 100%;
-        }
-
-        .productGifts {
-            text-align: center;
-        }
-
-        .productDetailes .m-portlet__head {
-            background: white;
-            z-index: 99 !important;
-        }
-    </style>
     <link href = "{{ mix('/css/product-show/product-show.css') }}" rel = "stylesheet" type = "text/css"/>
 @endsection
 
-@section("pageBar")
+@section('pageBar')
     <nav aria-label = "breadcrumb">
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
@@ -55,7 +21,13 @@
     </nav>
 @endsection
 @section('content')
-    @include("systemMessage.flash")
+
+    <div class = "row">
+        <div class = "col">
+            @include('systemMessage.flash')
+        </div>
+    </div>
+
     <div class = "row" id="a_top_section">
         <div class = "col-xl-12">
             <!--begin::Portlet-->
@@ -71,10 +43,13 @@
                                         <img src = "{{ route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]) }}" alt = "عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class = "img-fluid m--marginless"/>
                                     </div>
 
-                                    @if(isset($product->introVideo) || $product->gift->isNotEmpty())
+                                    {{--نمونه جزوه--}}
+                                    @include('product.partials.pamphlet')
+
+                                    {{--@if(isset($product->introVideo) || $product->gift->isNotEmpty())--}}
                                         {{--نمونه جزوه--}}
-                                        @include('product.partials.pamphlet')
-                                    @endif
+                                        {{--@include('product.partials.pamphlet')--}}
+                                    {{--@endif--}}
 
                                 </div>
                                 <div class = "col">
@@ -276,7 +251,6 @@
                                                         @endforeach
                                                     @endif
 
-
                                                     @if($product->attributes->get('main')->where('type', 'main')->where('control', 'checkBox')->count()>0)
                                                         @foreach($product->attributes->get('main')->where('type', 'main')->where('control', 'checkBox') as $index => $select)
 
@@ -287,29 +261,6 @@
                                                             </label>
 
                                                         @endforeach
-                                                    @endif
-
-                                                    @if(isset($groupedCheckboxCollection))
-                                                        <div class = "input-group">
-                                                            <div class = "icheck-list">
-                                                                @foreach($groupedCheckboxCollection as $checkboxArray)
-                                                                    @foreach($checkboxArray as $index => $checkbox)
-                                                                        <label>
-                                                                            {!! Form::checkbox('attribute[]', $index, null, ['class' => 'attribute icheck' , 'data-checkbox'=>'icheckbox_square-blue']) !!}
-                                                                            @if(isset($checkbox["index"])) {{$checkbox["index"]}} @endif
-                                                                            @if(isset($checkbox["extraCost"][0]))
-                                                                                (
-                                                                                <span style = "@if(isset($checkbox["extraCostWithDiscount"][0])) text-decoration: line-through;  @endif">{{$checkbox["extraCost"]}}</span>
-                                                                                @if(isset($checkbox["extraCostWithDiscount"][0]))
-                                                                                    <span class = "bg-font-dark" style = "background: #ff7272;    padding: 0px 5px 0px 5px;">برای شما </span>
-                                                                                    <span class = "bg-font-dark" style = "background: #ee5053;    padding: 0px 5px 0px 5px;">{{$checkbox["extraCostWithDiscount"]}}</span>
-                                                                                @endif
-                                                                            @endif
-                                                                        </label>
-                                                                    @endforeach
-                                                                @endforeach
-                                                            </div>
-                                                        </div>
                                                     @endif
 
                                                 @endif
@@ -332,7 +283,7 @@
                                         <button class = "btn m-btn--pill m-btn--air btn-primary btn-lg m-btn--icon btnAddToCart">
                                             <span>
                                                 <i class = "flaticon-bag"></i>
-                                                <i class = "fas fa-sync-alt fa-spin" style = "display: none;"></i>
+                                                <i class = "fas fa-sync-alt fa-spin m--hide"></i>
                                                 <span>افزودن به سبد خرید</span>
                                             </span>
                                         </button>
@@ -347,60 +298,37 @@
 
                                 </div>
                                 <div class = "col-lg-3">
-                                    @if(isset($product->introVideo))
-                                        <div class = "m-portlet m-portlet--bordered-semi m-portlet--rounded-force m--margin-bottom-45">
-                                            <div class = "m-portlet__head m-portlet__head--fit"></div>
-                                            <div class = "m-portlet__body m--padding-bottom-5">
-                                                <div class = "m-widget19">
-                                                    <div class = "m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" style = "min-height-: 286px">
 
-                                                        <video id = "videoPlayer" class = "video-js vjs-fluid vjs-default-skin vjs-big-play-centered" controls preload = "auto" style = "width: 100%" poster = 'https://cdn.sanatisharif.ir/media/204/240p/204054ssnv.jpg'>
+                                    <div class = "m-portlet m-portlet--bordered-semi m-portlet--rounded-force m--margin-bottom-45 videoPlayerPortlet @if(!isset($product->introVideo)) m--hide @endif">
+                                        <div class = "m-portlet__head m-portlet__head--fit"></div>
+                                        <div class = "m-portlet__body m--padding-bottom-5">
+                                            <div class = "m-widget19">
+                                                <div class = "m-widget19__pic m-portlet-fit--top m-portlet-fit--sides">
 
-                                                            <source src = "{{$product->introVideo}}" id = "videoPlayerSource" type = 'video/mp4'/>
+                                                    <video id = "videoPlayer"
+                                                           class = "video-js vjs-fluid vjs-default-skin vjs-big-play-centered a--full-width"
+                                                           controls preload = "auto"
+                                                           poster = 'https://cdn.sanatisharif.ir/media/204/240p/204054ssnv.jpg'>
 
-                                                            <p class = "vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>
-                                                        </video>
+                                                        <source src = "{{$product->introVideo}}" id = "videoPlayerSource" type = 'video/mp4'/>
 
+                                                        <p class = "vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>
+                                                    </video>
 
-                                                        {{--<video controls style="width: 100%">--}}
-                                                        {{--<source src="{{$product->introVideo}}" type="video/mp4">--}}
-                                                        {{--<span class="bold font-red">مرورگر شما HTML5 را پشتیبانی نمی کند</span>--}}
-                                                        {{--</video>--}}
-
-                                                        <div class = "m-widget19__shadow"></div>
-                                                    </div>
-                                                    <div class = "m-widget19__content">
-                                                        <div class = "m-widget19__header">
-                                                            <h4 id = "videoPlayerTitle">
-                                                                کلیپ معرفی
-                                                            </h4>
-                                                        </div>
-                                                        <div class = "m-widget19__body text-left" id = "videoPlayerDescription">
-                                                            {{----}}
-                                                            {{--Lorem Ipsum is simply dummy text of the printing and--}}
-                                                            {{--typesetting industry scrambled it to make text of the--}}
-                                                            {{--printing and typesetting industry scrambled a type--}}
-                                                            {{--specimen book text of the dummy text of the printing--}}
-                                                            {{--printing and typesetting industry scrambled dummy text--}}
-                                                            {{--of the printing.--}}
-                                                            {{--<button type="button"--}}
-                                                            {{--class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger"--}}
-                                                            {{--id="btnShowVideoLink"--}}
-                                                            {{--data-videosrc=""--}}
-                                                            {{--data-videotitle=""--}}
-                                                            {{--data-videodes="">--}}
-                                                            {{--<span>--}}
-                                                            {{--<i class="fa fa-play-circle"></i>--}}
-                                                            {{--<span>پخش</span>--}}
-                                                            {{--</span>--}}
-                                                            {{--</button>--}}
-
-                                                        </div>
-                                                    </div>
+                                                    <div class = "m-widget19__shadow"></div>
                                                 </div>
+                                                <div class = "m-widget19__content">
+                                                    <div class = "m-widget19__header">
+                                                        <h4 id = "videoPlayerTitle">
+                                                            کلیپ معرفی
+                                                        </h4>
+                                                    </div>
+                                                    <div class = "m-widget19__body text-left" id = "videoPlayerDescription"></div>
                                                 </div>
                                             </div>
-                                    @endif
+                                            </div>
+                                    </div>
+
                                     @if(isset($product->gift) && $product->gift->isNotEmpty())
                                         <div class = "m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi m--margin-top-25">
                                             <div class = "m-portlet__head">
@@ -450,10 +378,10 @@
                                         </div>
                                     @endif
 
-                                    @if(!isset($product->introVideo) && $product->gift->isEmpty())
+                                    {{--@if(!isset($product->introVideo) && $product->gift->isEmpty())--}}
                                         {{--نمونه جزوه--}}
-                                        @include('product.partials.pamphlet')
-                                    @endif
+                                        {{--@include('product.partials.pamphlet')--}}
+                                    {{--@endif--}}
                                 </div>
                             </div>
                             <!--end::Preview-->
@@ -490,7 +418,7 @@
                             <button class = "btn m-btn--pill m-btn--air btn-primary btn-lg m-btn--icon btnAddToCart">
                                 <span>
                                     <i class = "flaticon-bag"></i>
-                                    <i class = "fas fa-sync-alt fa-spin" style = "display: none;"></i>
+                                    <i class = "fas fa-sync-alt fa-spin m--hide"></i>
                                     <span>افزودن به سبد خرید</span>
                                 </span>
                             </button>
@@ -511,123 +439,12 @@
                 </div>
             </div>
 
-
-            {{--<!--begin::Portlet-->--}}
-            {{--<div class="m-portlet m-portlet--last m-portlet--head-lg m-portlet--responsive-mobile" id="main_portlet">--}}
-            {{--<div class="m-portlet__head">--}}
-            {{--<div class="m-portlet__head-progress">--}}
-            {{--<div class="progress m-progress--sm">--}}
-            {{--<div class="progress-bar bg-warning" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            {{--<div class="m-portlet__head-wrapper">--}}
-            {{--<div class="m-portlet__head-caption">--}}
-            {{--<div class="m-portlet__head-title">--}}
-            {{--<span class="m-portlet__head-icon">--}}
-            {{--<i class="flaticon-notepad"></i>--}}
-            {{--</span>--}}
-            {{--<h3 class="m-portlet__head-text">--}}
-            {{--بررسی محصول {{ $product->name }}--}}
-            {{--</h3>--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            {{--<div class="m-portlet__head-tools">--}}
-            {{--<div class="btn-group">--}}
-            {{--<button type="button" class="btn btn-primary  m-btn m-btn--icon m-btn--wide m-btn--md btnAddToCart">--}}
-            {{--<span>--}}
-            {{--<i class="flaticon-bag"></i>--}}
-            {{--<i class="fas fa-sync-alt fa-spin" style="display: none;"></i>--}}
-            {{--<span>افزودن به سبد خرید</span>--}}
-            {{--</span>--}}
-            {{--</button>--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            {{--<div class="m-portlet__body">--}}
-            {{--<form class="m-form m-form--label-align-left- m-form--state-" id="m_form">--}}
-            {{--<!--begin: Form Body -->--}}
-            {{--<div class="m-portlet__body">--}}
-            {{--<div class="row">--}}
-            {{--<div class="col-xl-8 offset-xl-2">--}}
-            {{--{!! $product->shortDescription !!}--}}
-            {{--@if( isset($product->longDescription[0] ) )--}}
-            {{--<div>--}}
-            {{--{!!   $product->longDescription !!}--}}
-            {{--</div>--}}
-            {{--@endif--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            {{--</form>--}}
-            {{--</div>--}}
-
-            {{--</div>--}}
-            {{--<!--end::Portlet-->--}}
-
-
-
-
         </div>
     </div>
 @endsection
 @section('page-js')
     <script src = "{{ mix('/js/product-show.js') }}"></script>
-    {{--<script src="{{ asset('/acm/product-show-v13.js') }}"></script>--}}
-    {{--<script src="{{ asset('/acm/page-product-show.js') }}"></script>--}}
-    {{--<script src="{{ asset('/acm/page-product-saveCookie.js') }}"></script>--}}
-    <script>
-        $(document).ready(function() {
-
-            $('.productDetailes .m-portlet__head').sticky({
-                topSpacing: $('#m_header').height(),
-                zIndex: 99
-            });
-
-            $('.js-selectProduct-single').select2({
-                placeholder: 'یک محصول را انتخاب کنید:'
-            });
-
-            var player = null;
-
-            player = videojs('videoPlayer', {nuevo: true}, function () {
-                this.nuevoPlugin({
-                    // plugin options here
-                    logocontrolbar: '/assets/extra/Alaa-logo.gif',
-                    logourl: '//sanatisharif.ir',
-
-                    videoInfo: true,
-                    relatedMenu: true,
-                    zoomMenu: true,
-                    mirrorButton: true,
-                    // related: related_videos,
-                    // endAction: 'related',
-                });
-            });
-
-            $(document).on('click', '.btnShowVideoLink', function () {
-                var videoSrc = $(this).attr('data-videosrc');
-                var videoTitle = $(this).attr('data-videotitle');
-                var videoDescription = $(this).attr('data-videodes');
-                var sources = [{"type": "video/mp4", "src": videoSrc}];
-
-                $("#videoPlayer").find("#videosrc").attr("src", videoSrc);
-                $("#videoPlayerTitle").html(videoTitle);
-                $("#videoPlayerDescription").html(videoDescription);
-
-                player.pause();
-                player.src(sources);
-                player.load();
-                // $("html, body").animate({ scrollTop: 0 }, "slow");
-                $([document.documentElement, document.body]).animate({
-                    scrollTop: $("#videoPlayer").offset().top
-                }, "slow");
-            });
-        });
-        $(document).ready(function () {
-            $("#lightgallery").lightGallery();
-        });
-    </script>
+{{--    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-product-show.js') }}"></script>--}}
 
 
 
