@@ -388,7 +388,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      *
      * @return Collection
      */
-    public function getFileAttribute($value): Collection
+    public function getFileAttribute($value): ?Collection
     {
         $key = "Content:File" . $this->cacheKey();
         return Cache::tags('content')
@@ -402,7 +402,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                             return $item;
                         });
 
-                        return $fileCollection->groupBy('type');
+                        return $fileCollection->count() > 0 ? $fileCollection->groupBy('type') : null;
                     });
     }
 
