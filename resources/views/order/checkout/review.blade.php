@@ -1,4 +1,7 @@
-@extends('app')
+@extends('app' , ["pageName"=>$pageName])
+
+@section('right-aside')
+@endsection
 
 @section('page-css')
     <link href = "{{ mix('/css/checkout-review.css') }}" rel = "stylesheet" type = "text/css"/>
