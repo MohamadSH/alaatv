@@ -39,10 +39,10 @@ class AlaaInvoiceGenerator
         $totalCost              = $orderPriceArray['totalCost'];
         $payableByWallet        = $orderPriceArray['payableAmountByWallet'];
 
-        $orderProductCount = $this->orderproductFormatter($orderproducts);
+        $orderProductCount = $this->orderproductFormatter($calculatedOrderproducts);
 
         return [
-          'items'                   => $orderproducts,
+          'items'                   => $calculatedOrderproducts,
           'orderproductCount'       => $orderProductCount ,
           'orderproductsRawCost'    => $orderproductsRawCost,
           'totalCost'               => $totalCost,
