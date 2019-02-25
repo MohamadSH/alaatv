@@ -41,7 +41,8 @@
                     <div class="tab-content">
                         <!--begin::m-widget5-->
                         <div class="m-widget5">
-                            @foreach($invoiceInfo['items'] as $key=>$orderProductItem)
+                            @if(isset($invoiceInfo['items']))
+                                @foreach($invoiceInfo['items'] as $key=>$orderProductItem)
                                 @if($orderProductItem['grand']==null)
                                     @foreach($orderProductItem['orderproducts'] as $key=>$simpleOrderProductItem)
                                         <div class="m-widget5__item orderproductWithoutChildWarper">
@@ -271,6 +272,7 @@
                                     </div>
                                 @endIf
                             @endforeach
+                            @endif
                         </div>
                         <!--end::m-widget5-->
                     </div>
