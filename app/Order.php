@@ -909,8 +909,7 @@ class Order extends BaseModel
 
                         return [
                             'coupon'   => $coupon,
-//                            'discount' => $this->coupon_discount_type,
-                            'discount' => 0,
+                            'discount' => $this->coupon_discount_type,
                         ];
                     });
     }
