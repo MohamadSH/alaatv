@@ -165,17 +165,17 @@
                                     <div class="alert alert-success alert-dismissible fade show couponReportWarper @if (!isset($coupon)) a--d-none @endif" role="alert">
                                         {{--<button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>--}}
                                         <div class="couponReport">
-                                            @if(isset($coupon) && $coupon['coupon']->discounttype->id == config('constants.DISCOUNT_TYPE_COST'))
+                                            @if(isset($coupon) && $coupon['discount']['type'] == config('constants.DISCOUNT_TYPE_COST'))
                                                 کپن تخفیف
                                                 <strong>{{$coupon['coupon']->name}}</strong>
                                                 با
-                                                {{number_format($coupon['discount'])}}
+                                                {{number_format($coupon['discount']['discount'])}}
                                                 تومان تخفیف برای سفارش شما ثبت شد.
                                             @elseif(isset($coupon))
                                                 کپن تخفیف
                                                 <strong>{{$coupon['coupon']->name}}</strong>
                                                 با
-                                                {{$coupon['discount']}}
+                                                {{$coupon['discount']['discount']}}
                                                 % تخفیف برای
                                                 سفارش شما ثبت شده است.
                                             @endif
