@@ -155,8 +155,8 @@
                                                @endif
                                                id="discountCodeValue">
                                         <div class="input-group-prepend DiscountCodeActionsWarper">
-                                            <button class="btn btn-danger@if(!isset($coupon)) a--d-none @endif" type="button" id="btnRemoveDiscountCodeValue">حذف</button>
-                                            <button class="btn btn-success@if(isset($coupon)) a--d-none @endif"  type="button" id="btnSaveDiscountCodeValue">ثبت</button>
+                                            <button class="btn btn-danger @if (!isset($coupon)) a--d-none @endif" type="button" id="btnRemoveDiscountCodeValue">حذف</button>
+                                            <button class="btn btn-success @if (isset($coupon)) a--d-none @endif"  type="button" id="btnSaveDiscountCodeValue">ثبت</button>
                                         </div>
                                     </div>
                                 </div>
@@ -202,7 +202,9 @@
                             <div class = "row justify-content-center">
                                 <div class = "col text-center">
                                     <hr>
-                                    <button type = "button" class = "btn btn-lg m-btn--pill m-btn--air m-btn m-btn--gradient-from-info
+                                    <button type = "button"
+                                            onclick="window.location.href='{{action('Web\OnlinePaymentController@paymentRedirect', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}';"
+                                            class = "btn btn-lg m-btn--pill m-btn--air m-btn m-btn--gradient-from-info
                                             m-btn--gradient-to-accent m--padding-top-20 m--padding-bottom-20
                                              m--padding-right-50 m--padding-left-50 btnSubmitOrder"></button>
                                 </div>
@@ -521,7 +523,7 @@
 @section('page-js')
 
     <script src = "{{ mix('/js/checkout-payment.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/checkout-payment.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-checkout-payment.js') }}"></script>
 
     {{--function setPaymentController() {--}}
     {{--if ($("#paymentMethod").val() == "onlinePayment") {--}}
