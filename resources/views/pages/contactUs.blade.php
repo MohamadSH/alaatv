@@ -1,21 +1,22 @@
-@extends("app" , ["pageName"=>"contactUs"])
+@extends('app' , ["pageName"=>"contactUs"])
 
-@section("pageBar")
-    <nav aria-label = "breadcrumb">
-        <ol class = "breadcrumb">
-            <li class = "breadcrumb-item">
-                <i class = "flaticon-home-2"></i>
-                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+@section('pageBar')
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <i class="flaticon-home-2"></i>
+                <a href="{{action('Web\IndexPageController')}}">@lang('page.Home')</a>
             </li>
-            <li class = "breadcrumb-item active" aria-current = "page">
+            <li class="breadcrumb-item active" aria-current="page">
                 @lang('page.contact us')
             </li>
         </ol>
     </nav>
 @endsection
 
-@section("content")
-    @include("systemMessage.flash")
+@section('content')
+
+    @include('systemMessage.flash')
 
     <div class = "row">
         <div class = "col-xl-6 col-md-6">
@@ -34,7 +35,7 @@
                     </div>
                 </div>
                 <!--begin::Form-->
-                {!! Form::open(['method' => 'POST','action' => ['HomeController@sendMail'],'class' => 'm-form']) !!}
+                {!! Form::open(['method' => 'POST','action' => ['Web\HomeController@sendMail'],'class' => 'm-form']) !!}
                     <div class = "m-portlet__body">
                         <div class = "form-group m-form__group row {{ $errors->has('fullName') ? ' has-danger' : '' }}">
                             <label for = "example-text-input" class = "col-3 col-form-label">نام کامل:</label>
@@ -49,7 +50,7 @@
                         <div class = "form-group m-form__group row {{ $errors->has('email') ? ' has-danger' : '' }}">
                             <label for = "example-text-input" class = "col-3 col-form-label">ایمیل شما:</label>
                             <div class = "col-9">
-                                <input type = "email" name="email" class = "form-control m-input" value="{{ old("email") }}" placeholder = "ایمیل خود را وارد نمایید">
+                                <input type = "text" name="email" dir="ltr" class = "form-control m-input" value="{{ old("email") }}" placeholder = "ایمیل خود را وارد نمایید">
                                 <span class = "m-form__help">ما ایمیل شما را به هیچ کس نخواهیم داد.</span>
                                 @if ($errors->has('email'))
                                     <div class="form-control-feedback">{{ $errors->first('email') }}</div>
@@ -59,7 +60,7 @@
                         <div class = "form-group m-form__group row {{ $errors->has('phone') ? ' has-danger' : '' }}">
                             <label for = "example-text-input" class = "col-3 col-form-label">شماره شما:</label>
                             <div class = "col-9">
-                                <input type = "number" name="phone" class = "form-control m-input" value="{{ old("phone") }}" placeholder = "شماره خود را وارد نمایید">
+                                <input type = "text" name="phone" dir="ltr" class = "form-control m-input" value="{{ old("phone") }}" placeholder = "شماره خود را وارد نمایید">
                                 <span class = "m-form__help">ما شماره شما را به هیچ کس نخواهیم داد.</span>
                                 @if ($errors->has('phone'))
                                     <div class="form-control-feedback">{{ $errors->first('phone') }}</div>
@@ -79,7 +80,7 @@
                         <div class = "form-group m-form__group row {{ $errors->has('g-recaptcha-response') ? ' has-danger' : '' }}">
                             <label for = "example-text-input" class = "col-3 col-form-label">ربات نیستم:</label>
                             <div class = "col-9">
-                                {!! Recaptcha::render() !!}
+                                {{--{!! Recaptcha::render() !!}--}}
                                 @if ($errors->has('g-recaptcha-response'))
                                     <div class="form-control-feedback">{{ $errors->first('g-recaptcha-response') }}</div>
                                 @endif
@@ -194,4 +195,8 @@
             <!--end:: Widgets/Blog-->
         </div>
     </div>
+@endsection
+
+@section('page-js')
+    <script src="{{ mix('/js/contactUs.js') }}"></script>
 @endsection

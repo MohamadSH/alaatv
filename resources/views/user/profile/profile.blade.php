@@ -6,28 +6,16 @@
     <link href="/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
 @endsection
 
-@section("headPageLevelStyle")
-    {{--<link rel="stylesheet" href="{{ mix('/css/page_level_style_all.css') }}">--}}
-@endsection
+@section('pageBar')
 
-@section("bodyClass")
-    class="page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-sidebar-closed page-md"
-@endsection
-
-@section("metadata")
-    @parent()
-    <meta name="_token" content="{{ csrf_token() }}">
-@endsection
-
-@section("pageBar")
     <nav aria-label = "breadcrumb">
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
-                <i class = "flaticon-home-2"></i>
-                <a href = "{{action("Web\IndexPageController")}}">خانه</a>
+                <i class = "flaticon-home-2 m--padding-right-5"></i>
+                <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
-                پروفایل
+                <a class = "m-link" href = "#"> پروفایل </a>
             </li>
         </ol>
     </nav>
@@ -85,14 +73,10 @@
 
 @section('content')
 
-    <div class = "row">
-        <div class = "col">
-            @include('systemMessage.flash')
-        </div>
-    </div>
+    @include('systemMessage.flash')
 
     <div class="row">
-        <div class = "col-12">
+        <div class = "col">
             {{--            Using this notification for some text at the top of the profile page        --}}
             {{--            @include("user.profile.topNotification")--}}
 

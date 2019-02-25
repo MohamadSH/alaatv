@@ -1,5 +1,4 @@
-{{--@permission((Config::get('constants.SHOW_PRODUCT_ACCESS')))--}}
-@extends("app",["pageName"=>"admin"])
+@extends('app',["pageName"=>"admin"])
 
 @section("headPageLevelPlugin")
     <link href="/assets/global/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet"

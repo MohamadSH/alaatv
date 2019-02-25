@@ -1,8 +1,8 @@
-@extends("app" , ["pageName"=>$pageName])
+@extends('app' , ["pageName"=>$pageName])
 
 @section('right-aside')
 @endsection
-@section("pageBar")
+@section('pageBar')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
@@ -16,8 +16,8 @@
     </nav>
 @endsection
 
-@section("content")
-    @include("partials.slideShow1" ,["marginBottom"=>"25"])
+@section('content')
+    @include('partials.slideShow1' ,['marginBottom'=>'25'])
     <div class = "m--clearfix"></div>
     <!--begin:: Widgets/Stats-->
     <div class = "m-portlet ">
@@ -33,8 +33,8 @@
                                 </h2>
                                 <br>
                                 <span class = "m-widget24__desc m--font-light">
-				            آلاء
-				            </span>
+                                آلاء
+                                </span>
                                 <div class = "m--space-10"></div>
                             </div>
                         </div>

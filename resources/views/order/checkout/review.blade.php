@@ -49,6 +49,7 @@
                                             <div class="m-widget5__pic btnRemoveOrderproduct-desktop-warper">
                                                 <button type="button"
                                                         data-action="{{action("Web\OrderproductController@destroy",$simpleOrderProductItem->id)}}"
+                                                        data-productid="{{ $simpleOrderProductItem->product->id }}"
                                                         class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 btnRemoveOrderproduct">
                                                     <span>
                                                         <i class="flaticon-circle"></i>
@@ -127,6 +128,7 @@
                                             <div class="m-widget5__stats2">
                                                 <a href="#"
                                                    data-action="{{action("Web\OrderproductController@destroy",$simpleOrderProductItem->id)}}"
+                                                   data-productid="{{ $simpleOrderProductItem->product->id }}"
                                                    class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill btnRemoveOrderproduct">
                                                     <i class="la la-close"></i>
                                                 </a>
@@ -134,11 +136,7 @@
                                         </div>
                                     </div>
                                     @endforeach
-                                @endIf
-                            @endforeach
-
-                            @foreach($invoiceInfo['items'] as $key=>$orderProductItem)
-                                @if($orderProductItem['grand']!=null)
+                                @else
                                     <div class="orderproductWithChildWarper">
 
                                         <div class="m-widget5__item hasChild">
@@ -235,6 +233,7 @@
                                                     <div class="childRemoveBtnWarper">
                                                         <button type="button"
                                                                 data-action="{{action("Web\OrderproductController@destroy", $orderProductItemChild->id)}}"
+                                                                data-productid="{{ $orderProductItemChild->product->id }}"
                                                                 class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 btnRemoveOrderproduct">
                                                         <span>
                                                             <i class="flaticon-circle"></i>
@@ -245,6 +244,7 @@
 
                                                     <button type="button"
                                                             data-action="{{action("Web\OrderproductController@destroy", $orderProductItemChild->id)}}"
+                                                            data-productid="{{ $orderProductItemChild->product->id }}"
                                                             class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill btnRemoveOrderproduct btnRemoveOrderproduct-child">
                                                         <i class="la la-close"></i>
                                                     </button>
@@ -377,4 +377,6 @@
 
 @section('page-js')
     <script src = "{{ mix('/js/checkout-review.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/UserCart.js') }}"></script>
+    <script src = "{{ asset('/acm/AlaatvCustomFiles/js/page-checkout-review.js') }}"></script>
 @endsection

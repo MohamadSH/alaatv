@@ -43,6 +43,12 @@ mix.scripts(
     'public/js/content-show.js'
 ).version();
 
+mix.scripts(
+    [
+        'public/acm/AlaatvCustomFiles/js/page-contactUs.js'
+    ],
+    'public/js/contactUs.js'
+).version();
 
 // TODO : must convert to mix.script
 mix.babel(
@@ -61,7 +67,7 @@ mix.babel(
         'public/acm/video-js/video.js',
         'public/acm/video-js/videojs-ie8.min.js',
         'public/acm/video-js/nuevo/nuevo.min.js',
-        'public/acm/AlaatvCustomFiles/js/page-product-show.js'
+        // 'public/acm/AlaatvCustomFiles/js/page-product-show.js'
     ],
     'public/js/product-show.js'
 ).version();
@@ -69,7 +75,7 @@ mix.babel(
 mix.scripts(
     [
         'node_modules/jquery-sticky/jquery.sticky.js',
-        'public/acm/AlaatvCustomFiles/js/checkout-review.js'
+        // 'public/acm/AlaatvCustomFiles/js/page-checkout-review.js'
     ],
     'public/js/checkout-review.js'
 ).version();
@@ -77,7 +83,7 @@ mix.scripts(
 mix.scripts(
     [
         'public/assets/demo/demo12/custom/crud/forms/widgets/bootstrap-switch.js',
-        // 'public/acm/AlaatvCustomFiles/js/checkout-payment.js',
+        // 'public/acm/AlaatvCustomFiles/js/page-checkout-payment.js',
         // 'public/assets/demo/demo12/custom/crud/forms/widgets/nouislider.js',
     ],
     'public/js/checkout-payment.js'
@@ -104,9 +110,9 @@ mix.styles(
 mix.styles(
     [
         'node_modules/lightgallery/src/css/lightgallery.css',
-        'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
-        'public/acm/AlaatvCustomFiles/css/product-show.css',
         'public/acm/video-js/video-js.css',
+        'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
+        'public/acm/AlaatvCustomFiles/css/page-product-show.css',
     ],
     'public/css/product-show/product-show.css'
 ).version();
@@ -114,17 +120,31 @@ mix.styles(
 
 mix.styles(
     [
-        'public/acm/AlaatvCustomFiles/css/checkout-review.css',
+        'public/acm/AlaatvCustomFiles/css/page-checkout-review.css',
     ],
     'public/css/checkout-review.css'
+).version();
+mix.styles(
+    [
+        'node_modules/slick-carousel/slick/slick.css',
+        'node_modules/slick-carousel/slick/slick-theme.css',
+    ],
+    'public/css/user-dashboard.css'
 ).version();
 
 mix.styles(
     [
-        'public/acm/AlaatvCustomFiles/css/checkout-payment.css',
+        'public/acm/AlaatvCustomFiles/css/page-checkout-payment.css',
     ],
     'public/css/checkout-payment.css'
 ).version();
+
+mix.scripts(
+    [
+        'node_modules/slick-carousel/slick/slick.js',
+    ],
+    'public/js/user-dashboard.js'
+);
 
 mix.scripts(
     [

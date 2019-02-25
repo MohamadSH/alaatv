@@ -98,71 +98,7 @@ var ProductSwitch = function () {
     };
 }();
 
-var UesrCart = function () {
-
-    function setCookie(cname, cvalue, exdays) {
-        var d = new Date();
-        d.setTime(d.getTime() + (exdays*24*60*60*1000));
-        var expires = "expires="+ d.toUTCString();
-        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-    }
-
-    function getCookie(cname) {
-        var name = cname + "=";
-        var decodedCookie = decodeURIComponent(document.cookie);
-        var ca = decodedCookie.split(';');
-        for(var i = 0; i <ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return "";
-    }
-
-    function getUserCartFromCookie() {
-        let userCart = getCookie('cartItems');
-        if(userCart.length>0) {
-            return JSON.parse(userCart);
-        } else {
-            return [];
-        }
-    }
-
-    function addToCartInCookie(data) {
-
-        let userCart = getUserCartFromCookie();
-
-        // let data = {
-        //     'product_id':productId,
-        //     'mainAttributeStates':mainAttributeStates,
-        //     'extraAttributeStates':extraAttributeStates,
-        //     'productSelectValues':productSelectValues,
-        // };
-
-
-
-        let userHaveThisProduct = false;
-        for (var index in userCart) {
-            if(userCart[index].product_id == data.product_id) {
-                userHaveThisProduct = true;
-                userCart[index] = data;
-            } else {
-                userHaveThisProduct = false;
-            }
-        }
-
-        if(!userHaveThisProduct) {
-            userCart.push(data);
-        }
-
-        setCookie('cartItems', JSON.stringify(userCart), 7);
-
-        console.log('cartItemsFromCookie: ', getUserCartFromCookie());
-    }
+var ProductShowPage = function () {
 
     function disableBtnAddToCart() {
         mApp.block('.btnAddToCart', {
@@ -335,10 +271,6 @@ var UesrCart = function () {
     }
 
     return {
-        addToCartInCookie: function (data) {
-            addToCartInCookie(data);
-        },
-
         disableBtnAddToCart: function () {
             disableBtnAddToCart();
         },
@@ -387,8 +319,8 @@ jQuery(document).ready(function() {
     });
 
     let callBack = function () {
-        let productsState = UesrCart.getProductSelectValues();
-        UesrCart.refreshPrice([], productsState, []);
+        let productsState = ProductShowPage.getProductSelectValues();
+        ProductShowPage.refreshPrice([], productsState, []);
     };
 
     $("#lightgallery").lightGallery();
@@ -441,11 +373,11 @@ jQuery(document).ready(function() {
 
     $(document).on('click', '.btnAddToCart', function () {
 
-        UesrCart.disableBtnAddToCart();
+        ProductShowPage.disableBtnAddToCart();
         var product = $("input[name=product_id]").val();
-        let mainAttributeStates = UesrCart.getMainAttributeStates();
-        let extraAttributeStates = UesrCart.getExtraAttributeStates();
-        let productSelectValues = UesrCart.getProductSelectValues() ;
+        let mainAttributeStates = ProductShowPage.getMainAttributeStates();
+        let extraAttributeStates = ProductShowPage.getExtraAttributeStates();
+        let productSelectValues = ProductShowPage.getProductSelectValues() ;
 
         if ($('#js-var-userId').val()) {
 
@@ -524,7 +456,7 @@ jQuery(document).ready(function() {
                             type: 'danger',
                             confirmButtonText: 'بستن'
                         });
-                        UesrCart.enableBtnAddToCart();
+                        ProductShowPage.enableBtnAddToCart();
                     },
                     //The status for when there is error php code
                     503: function (response) {
@@ -534,7 +466,7 @@ jQuery(document).ready(function() {
                             type: 'danger',
                             confirmButtonText: 'بستن'
                         });
-                        UesrCart.enableBtnAddToCart();
+                        ProductShowPage.enableBtnAddToCart();
                     }
                 }
             });
@@ -550,6 +482,15 @@ jQuery(document).ready(function() {
 
             UesrCart.addToCartInCookie(data);
 
+            let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
+
+            Swal({
+                title: '',
+                text: successMessage,
+                type: 'success',
+                confirmButtonText: 'بستن'
+            });
+
             setTimeout(function () {
                 window.location.replace('/checkout/review');
             }, 2000);
@@ -559,19 +500,19 @@ jQuery(document).ready(function() {
 
     $(document).on("ifChanged change", ".attribute", function ()
     {
-        var attributeState = UesrCart.getMainAttributeStates();
-        UesrCart.refreshPrice(attributeState , [] ,[]);
+        var attributeState = ProductShowPage.getMainAttributeStates();
+        ProductShowPage.refreshPrice(attributeState , [] ,[]);
     });
 
     $(document).on("ifChanged change", ".extraAttribute", function ()
     {
-        var attributeState = UesrCart.getExtraAttributeStates();
-        UesrCart.refreshPrice([] , [] , attributeState);
+        var attributeState = ProductShowPage.getExtraAttributeStates();
+        ProductShowPage.refreshPrice([] , [] , attributeState);
     });
 
     $(document).on("ifChanged switchChange.bootstrapSwitch", ".product", function ()
     {
-        var productsState = UesrCart.getProductSelectValues() ;
-        UesrCart.refreshPrice([] , productsState , []);
+        var productsState = ProductShowPage.getProductSelectValues() ;
+        ProductShowPage.refreshPrice([] , productsState , []);
     });
 });
