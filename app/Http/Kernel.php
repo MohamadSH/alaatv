@@ -70,13 +70,11 @@ class Kernel extends HttpKernel
         'trimUserUpdateRequest' => Middleware\TrimUserUpdateRequest::class,
         'CheckPermissionForSendOrderId' => Middleware\CheckPermissionForSendOrderId::class,
         'CheckHasOpenOrder' => Middleware\CheckHasOpenOrder::class,
-        'AddCookieToCart' => Middleware\AddCookieToCart::class,
         'CheckPermissionForSendExtraAttributesCost' => Middleware\CheckPermissionForSendExtraAttributesCost::class,
-        'StoreOrderproductCookieInOpenOrder'    => Middleware\StoreOrderproductCookieInOpenOrder::class,
         'OrderCheckoutReview'    => Middleware\OrderCheckoutReview::class,
         'OrderCheckoutPayment'    => Middleware\OrderCheckoutPayment::class,
         'SubmitOrderCoupon'    => Middleware\SubmitOrderCoupon::class,
         'OfflineVerifyPayment'    => Middleware\OfflineVerifyPayment::class,
-        'removeCoupon'    => \App\Http\Middleware\RemoveOrderCoupon::class,
+        'RemoveOrderCoupon'    => \App\Http\Middleware\RemoveOrderCoupon::class,
     ];
 }
