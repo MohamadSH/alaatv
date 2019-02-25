@@ -1,0 +1,34 @@
+
+/*fix them style*/
+.m-portlet.m-portlet--head-overlay .m-portlet__body {
+    margin-top: auto;
+}
+
+.m-portlet.m-portlet--head-overlay > .m-portlet__body {
+    margin-top: -5.1rem;
+}
+
+/*missed css*/
+.m-widget4__item.m-widget4__item--last, .m-widget4__item:last-child {
+    border-bottom: 0;
+}
+
+/*fix IRANSans font for select input*/
+.form-control {
+    font-family: IRANSans;
+    font-size: 11px;
+}
+
+/*fix swithch*/
+.bootstrap-switch {
+    line-height: 6px;
+}
+
+/*fix rtl*/
+.m-checkbox > span:after {
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.alert[data-notify] .close {
+    right: auto !important;
+}

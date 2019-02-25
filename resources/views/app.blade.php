@@ -7,7 +7,7 @@
     <meta name = "csrf-token" content = "{{ csrf_token() }}">
 
     <!-- begin::seo meta tags -->
-{!! SEO::generate(true) !!}
+    {!! SEO::generate(true) !!}
     <!-- end:: seo meta tags -->
 
     <!--begin::Web font -->
@@ -25,58 +25,6 @@
     <!--begin::Global Theme Styles -->
     <link href = "{{ mix('/css/all.css') }}" rel = "stylesheet" type = "text/css"/>
     <!--end::Global Theme Styles -->
-
-    <style>
-        /*custom component*/
-        .a--productPrice {
-            position: relative;
-            margin-top: 7px;
-            margin-right: 12px;
-        }
-
-        .a--productPrice .a--productRealPrice {
-            text-decoration: line-through;
-            position: absolute;
-            top: -8px;
-            right: -13px;
-            line-height: 12px;
-            min-height: 12px;
-        }
-
-        .a--productPrice .a--productDiscount {
-            position: absolute;
-            top: -10px;
-            left: -12px;
-        }
-
-        .a--full-width {
-            max-width: 100%;
-            min-width: 100%;
-        }
-
-        /*fix them style*/
-        .m-portlet.m-portlet--head-overlay .m-portlet__body {
-            margin-top: auto;
-        }
-
-        .m-portlet.m-portlet--head-overlay > .m-portlet__body {
-            margin-top: -5.1rem;
-        }
-    </style>
-
-    <style>
-        /*fix IRANSans font for select input*/
-        .form-control {
-            font-family: IRANSans;
-            font-size: 11px;
-        }
-
-        /*fix rtl*/
-        .m-checkbox > span:after {
-            -webkit-transform: rotate(45deg);
-            transform: rotate(45deg);
-        }
-    </style>
 
     @yield('page-css')
 

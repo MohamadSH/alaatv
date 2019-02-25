@@ -1,0 +1,44 @@
+
+.productGifts img {
+    max-width: 100%;
+}
+
+.productGifts {
+    text-align: center;
+}
+
+.productDetailes .m-portlet__head {
+    background: white;
+    z-index: 99 !important;
+}
+
+.productPamphletWarper .productPamphletBody {
+    height: 200px; overflow: hidden;
+}
+
+#a_product-price .m-loader.m-loader--success {
+    width: 30px; display: inline-block;
+}
+
+/*selectable product: child switch*/
+.parentCheckBox {
+    position: absolute;
+    z-index: 1;
+    right: 9px;
+    top: 6px;
+}
+
+.lg-slide {
+    direction: ltr;
+}
+
+/*media query*/
+@media (max-width: 767.98px) {
+    .m-portlet__body {
+        padding: 5px !important;
+    }
+
+    .m-demo__preview {
+        padding: 0px !important;
+    }
+}

@@ -98,84 +98,17 @@ var ProductSwitch = function () {
     };
 }();
 
-var UesrCart = function () {
-
-    function setCookie(cname, cvalue, exdays) {
-        var d = new Date();
-        d.setTime(d.getTime() + (exdays*24*60*60*1000));
-        var expires = "expires="+ d.toUTCString();
-        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-    }
-
-    function getCookie(cname) {
-        var name = cname + "=";
-        var decodedCookie = decodeURIComponent(document.cookie);
-        var ca = decodedCookie.split(';');
-        for(var i = 0; i <ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return "";
-    }
-
-    function getUserCartFromCookie() {
-        let userCart = getCookie('cartItems');
-        if(userCart.length>0) {
-            return JSON.parse(userCart);
-        } else {
-            return [];
-        }
-    }
-
-    function addToCartInCookie(data) {
-
-        let userCart = getUserCartFromCookie();
-
-        // let data = {
-        //     'product_id':productId,
-        //     'mainAttributeStates':mainAttributeStates,
-        //     'extraAttributeStates':extraAttributeStates,
-        //     'productSelectValues':productSelectValues,
-        // };
-
-
-
-        let userHaveThisProduct = false;
-        for (var index in userCart) {
-            if(userCart[index].product_id == data.product_id) {
-                userHaveThisProduct = true;
-                userCart[index] = data;
-            } else {
-                userHaveThisProduct = false;
-            }
-        }
-
-        if(!userHaveThisProduct) {
-            userCart.push(data);
-        }
-
-        setCookie('cartItems', JSON.stringify(userCart), 7);
-
-        console.log('cartItemsFromCookie: ', getUserCartFromCookie());
-    }
+var ProductShowPage = function () {
 
     function disableBtnAddToCart() {
-        $('.btnAddToCart').attr('disabled', true);
-        $('.btnAddToCart').addClass('disabled');
-        $('.btnAddToCart i').fadeOut();
-        $('.btnAddToCart .fas.fa-sync-alt.fa-spin').fadeIn();
+        mApp.block('.btnAddToCart', {
+            type: "loader",
+            state: "info",
+        });
     }
 
     function enableBtnAddToCart() {
-        $('.btnAddToCart').attr('disabled', false);
-        $('.btnAddToCart').removeClass('disabled');
-        $('.btnAddToCart i').fadeIn();
-        $('.btnAddToCart .fas.fa-sync-alt.fa-spin').fadeOut();
+        mApp.unblock('.btnAddToCart');
     }
 
     function refreshPrice(mainAttributeState , productState , extraAttributeState) {
@@ -212,12 +145,7 @@ var UesrCart = function () {
             statusCode: {
                 //The status for when action was successful
                 200: function (response) {
-
-                    // console.log(response);
-
-
                     response = $.parseJSON(response);
-
 
                     if (response.error != null) {
                         Swal({
@@ -246,44 +174,6 @@ var UesrCart = function () {
                         });
                         $('#a_product-price').html('-');
                     }
-                    // {"cost":136000,"costForCustomer":136000,"totalExtraCost":0}
-                    // totalExtraCost = parseInt(response.totalExtraCost);
-
-                    // var currentPrice = parseInt($("#price").attr("value"));
-                    // var currentCustomerPrice = parseInt($("#customerPrice").attr("value"));
-                    // if(currentPrice>0)
-                    // {
-                    //     if(currentPrice+parseInt(totalExtraCost) === 0 )
-                    //         $("#price").text("پس از انتخاب محصول");
-                    //     else
-                    //         $("#price").text(currentPrice+parseInt(totalExtraCost)).number(true).append("تومان");
-                    //
-                    //     $("#customerPrice").text(currentCustomerPrice+parseInt(totalExtraCost)).number(true).append("تومان");
-                    // }
-                    //
-                    // else {
-                    //     cost = response.cost;
-                    //     costForCustomer = response.costForCustomer;
-                    //     // productShortDescription = response.shortDescription ;
-                    //     // productLongDescription = response.longDescription ;
-                    //
-                    //     if(cost === 0 ) {
-                    //         $("#price").text("پس از انتخاب محصول");
-                    //         $("#customerPrice").text(0).number(true).append("تومان");
-                    //     }
-                    //     else {
-                    //         // $("#price").text(cost+totalExtraCost).number(true).append("تومان");
-                    //         // $("#customerPrice").text(costForCustomer+totalExtraCost).number(true).append("تومان");
-                    //     }
-                    //     $("#price").attr("value" , cost);
-                    //     $("#customerPrice").attr("value" , costForCustomer);
-                    //     var discount = parseInt(cost) - parseInt(costForCustomer);
-                    //     // $("#discount").text(discount).number(true).append("تومان");
-                    //     // $("#productShortDescription").html(productShortDescription);
-                    //     // $("#productLongDescription").html(productLongDescription);
-                    // }
-
-
                 },
                 //The status for when the user is not authorized for making the request
                 403: function (response) {
@@ -381,10 +271,6 @@ var UesrCart = function () {
     }
 
     return {
-        addToCartInCookie: function (data) {
-            addToCartInCookie(data);
-        },
-
         disableBtnAddToCart: function () {
             disableBtnAddToCart();
         },
@@ -398,15 +284,15 @@ var UesrCart = function () {
         },
 
         getMainAttributeStates: function () {
-            getMainAttributeStates();
+            return getMainAttributeStates();
         },
 
         getExtraAttributeStates: function () {
-            getExtraAttributeStates();
+            return getExtraAttributeStates();
         },
 
         getProductSelectValues: function () {
-            getProductSelectValues();
+            return getProductSelectValues();
         },
     };
 }();
@@ -415,10 +301,66 @@ jQuery(document).ready(function() {
 
     let childLevel = ProductSwitch.init();
 
+    var player = null;
+
+    player = videojs('videoPlayer', {nuevo: true}, function () {
+        this.nuevoPlugin({
+            // plugin options here
+            logocontrolbar: '/assets/extra/Alaa-logo.gif',
+            logourl: '//sanatisharif.ir',
+
+            videoInfo: true,
+            relatedMenu: true,
+            zoomMenu: true,
+            mirrorButton: true,
+            // related: related_videos,
+            // endAction: 'related',
+        });
+    });
+
     let callBack = function () {
-        let productsState = UesrCart.getProductSelectValues();
-        UesrCart.refreshPrice([], productsState, []);
+        let productsState = ProductShowPage.getProductSelectValues();
+        ProductShowPage.refreshPrice([], productsState, []);
     };
+
+    $("#lightgallery").lightGallery();
+
+    $('.productDetailes .m-portlet__head').sticky({
+        topSpacing: $('#m_header').height(),
+        zIndex: 99
+    });
+
+    $(document).on('click', '.btnShowVideoLink', function () {
+
+        $([document.documentElement, document.body]).animate({
+            scrollTop: $("#videoPlayer").offset().top - $('#m_header').height()
+        }, 'slow');
+
+        $('.videoPlayerPortlet').fadeOut().removeClass('m--hide').fadeIn();
+
+        mApp.block('.videoPlayerPortlet', {
+            overlayColor: "#000000",
+            type: "loader",
+            state: "success"
+        });
+
+        var videoSrc = $(this).attr('data-videosrc');
+        var videoTitle = $(this).attr('data-videotitle');
+        var videoDescription = $(this).attr('data-videodes');
+        var sources = [{"type": "video/mp4", "src": videoSrc}];
+
+        $("#videoPlayer").find("#videosrc").attr("src", videoSrc);
+        $("#videoPlayerTitle").html(videoTitle);
+        $("#videoPlayerDescription").html(videoDescription);
+
+
+        mApp.unblock('.videoPlayerPortlet');
+
+        player.pause();
+        player.src(sources);
+        player.load();
+        // $("html, body").animate({ scrollTop: 0 }, "slow");
+    });
 
     $(document).on('change', "input[name='products[]'].product", function() {
         let thisValue = this.defaultValue;
@@ -431,15 +373,11 @@ jQuery(document).ready(function() {
 
     $(document).on('click', '.btnAddToCart', function () {
 
-        if ($(this).attr('disabled')) {
-            return false;
-        }
-
-        UesrCart.disableBtnAddToCart();
+        ProductShowPage.disableBtnAddToCart();
         var product = $("input[name=product_id]").val();
-        let mainAttributeStates = UesrCart.getMainAttributeStates();
-        let extraAttributeStates = UesrCart.getExtraAttributeStates();
-        let productSelectValues = UesrCart.getProductSelectValues() ;
+        let mainAttributeStates = ProductShowPage.getMainAttributeStates();
+        let extraAttributeStates = ProductShowPage.getExtraAttributeStates();
+        let productSelectValues = ProductShowPage.getProductSelectValues() ;
 
         if ($('#js-var-userId').val()) {
 
@@ -457,29 +395,38 @@ jQuery(document).ready(function() {
                     200: function (response) {
                         // console.log(response);
 
-                        $.notify('محصول مورد نظر به سبد خرید اضافه شد.', {
+                        let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
+
+                        Swal({
+                            title: '',
+                            text: successMessage,
                             type: 'success',
-                            allow_dismiss: true,
-                            newest_on_top: false,
-                            mouse_over: false,
-                            showProgressbar: false,
-                            spacing: 10,
-                            timer: 2000,
-                            placement: {
-                                from: 'top',
-                                align: 'center'
-                            },
-                            offset: {
-                                x: 30,
-                                y: 30
-                            },
-                            delay: 1000,
-                            z_index: 10000,
-                            animate: {
-                                enter: "animated flip",
-                                exit: "animated hinge"
-                            }
+                            confirmButtonText: 'بستن'
                         });
+
+                        // $.notify(successMessage, {
+                        //     type: 'success',
+                        //     allow_dismiss: true,
+                        //     newest_on_top: false,
+                        //     mouse_over: false,
+                        //     showProgressbar: false,
+                        //     spacing: 10,
+                        //     timer: 2000,
+                        //     placement: {
+                        //         from: 'top',
+                        //         align: 'center'
+                        //     },
+                        //     offset: {
+                        //         x: 30,
+                        //         y: 30
+                        //     },
+                        //     delay: 1000,
+                        //     z_index: 10000,
+                        //     animate: {
+                        //         enter: "animated flip",
+                        //         exit: "animated hinge"
+                        //     }
+                        // });
 
                         setTimeout(function () {
                             window.location.replace('/checkout/review');
@@ -509,7 +456,7 @@ jQuery(document).ready(function() {
                             type: 'danger',
                             confirmButtonText: 'بستن'
                         });
-                        UesrCart.enableBtnAddToCart();
+                        ProductShowPage.enableBtnAddToCart();
                     },
                     //The status for when there is error php code
                     503: function (response) {
@@ -519,7 +466,7 @@ jQuery(document).ready(function() {
                             type: 'danger',
                             confirmButtonText: 'بستن'
                         });
-                        UesrCart.enableBtnAddToCart();
+                        ProductShowPage.enableBtnAddToCart();
                     }
                 }
             });
@@ -535,6 +482,15 @@ jQuery(document).ready(function() {
 
             UesrCart.addToCartInCookie(data);
 
+            let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
+
+            Swal({
+                title: '',
+                text: successMessage,
+                type: 'success',
+                confirmButtonText: 'بستن'
+            });
+
             setTimeout(function () {
                 window.location.replace('/checkout/review');
             }, 2000);
@@ -544,27 +500,19 @@ jQuery(document).ready(function() {
 
     $(document).on("ifChanged change", ".attribute", function ()
     {
-        var attributeState = UesrCart.getMainAttributeStates();
-        UesrCart.refreshPrice(attributeState , [] ,[]);
+        var attributeState = ProductShowPage.getMainAttributeStates();
+        ProductShowPage.refreshPrice(attributeState , [] ,[]);
     });
 
     $(document).on("ifChanged change", ".extraAttribute", function ()
     {
-        var attributeState = UesrCart.getExtraAttributeStates();
-        UesrCart.refreshPrice([] , [] , attributeState);
+        var attributeState = ProductShowPage.getExtraAttributeStates();
+        ProductShowPage.refreshPrice([] , [] , attributeState);
     });
 
     $(document).on("ifChanged switchChange.bootstrapSwitch", ".product", function ()
     {
-        var productsState = UesrCart.getProductSelectValues() ;
-        UesrCart.refreshPrice([] , productsState , []);
+        var productsState = ProductShowPage.getProductSelectValues() ;
+        ProductShowPage.refreshPrice([] , productsState , []);
     });
 });
-
-var totalExtraCost = 0 ;
-var bonDiscount = 0 ;
-var productDiscount = 0 ;
-/*
-var productShortDescription = "";
-var productLongDescription = "";
-*/
