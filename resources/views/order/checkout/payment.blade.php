@@ -161,16 +161,17 @@
                                     </div>
                                 </div>
                                 <div class = "col-12">
-                                    @if (isset($coupon))
-                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
-                                            @if($coupon['coupon']->discounttype->id == config('constants.DISCOUNT_TYPE_COST'))
+
+                                    <div class="alert alert-success alert-dismissible fade show couponReportWarper @if (!isset($coupon)) a--d-none @endif" role="alert">
+                                        {{--<button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>--}}
+                                        <div class="couponReport">
+                                            @if(isset($coupon) && $coupon['coupon']->discounttype->id == config('constants.DISCOUNT_TYPE_COST'))
                                                 کپن تخفیف
                                                 <strong>{{$coupon['coupon']->name}}</strong>
                                                 با
                                                 {{number_format($coupon['discount'])}}
                                                 تومان تخفیف برای سفارش شما ثبت شد.
-                                            @else
+                                            @elseif(isset($coupon))
                                                 کپن تخفیف
                                                 <strong>{{$coupon['coupon']->name}}</strong>
                                                 با
@@ -179,7 +180,8 @@
                                                 سفارش شما ثبت شده است.
                                             @endif
                                         </div>
-                                    @endif
+                                    </div>
+
                                 </div>
                             </div>
 
@@ -265,7 +267,7 @@
                                             </div>
                                             <div class = "m-portlet__body m--padding-right-5 m--padding-left-5">
                                                 <div class = "row align-items-center">
-                                                    <div class = "col-12">
+                                                    <div class = "col-12 d-none">
                                                         <div id = "m_nouislider_1" class = "m-nouislider m-nouislider--handle-danger m-nouislider--drag-danger noUi-target noUi-ltr noUi-horizontal visibleInDonate"></div>
                                                     </div>
                                                     <div class = "col-12 m--margin-top-10 text-center">

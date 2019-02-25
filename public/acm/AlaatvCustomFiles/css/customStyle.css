@@ -32,4 +32,6 @@
 .a--white-space-nowrap {
     white-space: nowrap;
 }
-.a--d-none
+.a--d-none {
+    display: none;
+}
