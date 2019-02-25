@@ -223,6 +223,7 @@ class Contentset extends BaseModel implements Taggable
                 'firstName',
                 'lastName',
                 'photo',
+                'full_name',
             ]);
     }
 

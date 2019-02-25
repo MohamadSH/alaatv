@@ -284,6 +284,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
 
     protected $appends = [
         'info',
+        'full_name',
     ];
 
     protected $cascadeDeletes = [
@@ -378,7 +379,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
      * @var array
      */
     protected $hidden = [
-        'id',
         'major',
         'major_id',
         'grade',
@@ -395,8 +395,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'password',
         'remember_token',
         'wallets',
-        'full_name',
-        'photo',
     ];
 
 
