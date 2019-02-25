@@ -840,7 +840,6 @@ class OrderController extends Controller
         if(isset($user))
         {
             $order = Order::Find($request->order_id);
-            $order->load(["orderproducts" , "orderproducts.userbons" , "orderproducts.attributevalues" ,  "orderproducts.product" ]);
 
             if (isset($order)) {
                 $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
@@ -954,12 +953,11 @@ class OrderController extends Controller
             $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
 
             $response = response([
-//                "order"                         => $order,
-"invoiceInfo"                 => $invoiceInfo,
-"credit"                      => $credit,
-"couponInfo"                  => $coupon,
-"notIncludedProductsInCoupon" => $notIncludedProductsInCoupon,
-"orderHasDonate"              => $orderHasDonate,
+                        "invoiceInfo"                 => $invoiceInfo,
+                        "credit"                      => $credit,
+                        "couponInfo"                  => $coupon,
+                        "notIncludedProductsInCoupon" => $notIncludedProductsInCoupon,
+                        "orderHasDonate"              => $orderHasDonate,
             ] , Response::HTTP_OK);
         }
         else {
@@ -978,7 +976,6 @@ class OrderController extends Controller
                         "credit",
                         "invoiceInfo"
                    ));
-
     }
 
     /**

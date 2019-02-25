@@ -53,11 +53,10 @@ class OrderCheckoutReview
                             $data = [ "order_id" => $openOrder->id ];
                             $this->orderproductController->storeOrderproductJsonObject($cookieOrderproduct, $data);
                         }
-
-                        unset($_COOKIE['cartItems']);
                     }
-                }
 
+                    setcookie('cartItems', $_COOKIE["cartItems"], time() - 3600 , '/' );
+                }
             }
         }
 

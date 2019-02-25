@@ -68,7 +68,7 @@ class OrderCheckout extends CheckoutInvoker
 
         $couponDiscountCostAmount = 0 ;
         $couponDiscountPercentage = 0;
-        $couponType = $this->order->getCouponDiscountTypeAttribute();
+        $couponType = $this->order->coupon_discount_type;
         if($couponType !== false)
         {
             if($couponType["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE"))
