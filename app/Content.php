@@ -441,6 +441,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                             'firstName',
                             'lastName',
                             'photo',
+                            'full_name',
                         ]);
                     });
     }

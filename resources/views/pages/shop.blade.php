@@ -107,7 +107,7 @@
                         <h3 style = "font-weight: bold">{{ $block->title }} </h3>
                     </a>
                 </div>
-                <div class="owl-carousel owl-theme">
+                <div class = "a--owl-carousel-type-1 owl-carousel owl-theme">
                 @foreach($block->products as $product)
                         @include('partials.widgets.product2',[
                     'widgetTitle'      => $product->name,

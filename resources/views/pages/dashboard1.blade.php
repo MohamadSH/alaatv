@@ -93,7 +93,7 @@
                         <h3 style = "font-weight: bold">{{$section["descriptiveName"]}} </h3>
                     </a>
                 </div>
-                <div class="owl-carousel owl-theme">
+                <div class = "a--owl-carousel-type-1 owl-carousel owl-theme">
                     @foreach($section["lessons"] as $lesson)
                         @include('partials.widgets.set1',[
                         'widgetActionName' => $section["descriptiveName"].'/ نمایش همه',

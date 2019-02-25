@@ -2,16 +2,17 @@ var Alaasearch = function () {
 
     var videoAjaxLock = 0;
     var setAjaxLock = 0;
-    function makeWidgetFromJsonResponse(data) {
+
+    function makeWidgetFromJsonResponse(data, type) {
 
         // console.log(data);
         var widgetActionLink = data.url;
-        var widgetActionName = 'پخش / دانلود';
-        var widgetPic = data.thumbnail;
+        var widgetActionName = type === 'set' ? 'نمایش این دوره' : 'پخش / دانلود';
+        var widgetPic = (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail : data.photo;
         var widgetTitle = data.name;
         var widgetAuthor = {
             photo : data.author.photo,
-            name :  data.author.name,
+            name: data.author.firstName,
             full_name: data.author.full_name
         };
         var widgetCount = 0 ;
@@ -71,13 +72,14 @@ var Alaasearch = function () {
 </div>';
 
     }
-    function addContentToOwl(owl,data) {
+
+    function addContentToOwl(owl, data, type) {
 
         $.each(data, function (index, value) {
             owl.trigger('add.owl.carousel',
                 [
                     // jQuery('<div class="owl-item">' + makeWidgetFromJsonResponse(value) + '</div>');
-                    jQuery( makeWidgetFromJsonResponse(value) )
+                    jQuery(makeWidgetFromJsonResponse(value, type))
                 ]
             );
         });
@@ -92,16 +94,19 @@ var Alaasearch = function () {
     }
     function loadData(owl , action,type,callback) {
         ajaxSetup();
+
         var fetchMoreData = $.ajax({
                 type: "GET",
                 url: action,
-                accepts: "application/json; charset=utf-8",
+            accept: "application/json; charset=utf-8",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 statusCode: {
                     200:function (response) {
                         console.log("type:"+type);
-                        addContentToOwl(owl,response.result[type].data);
+                        console.log(response);
+                        console.log("action:" + action);
+                        addContentToOwl(owl, response.result[type].data, type);
                         // responseMessage = response.responseText;
                         callback(response.result[type].next_page_url);
                     },
@@ -143,9 +148,12 @@ var Alaasearch = function () {
     }
 
     function load(event, nextPageUrl, owl, owlType, callback) {
+        var perPage = typeof (owl.data("per-page")) === "number" ? owl.data("per-page") : 6;
+
+        console.log('per page:' + perPage);
         if (nextPageUrl
             && event.namespace && event.property.name === 'position'
-            && event.property.value >= event.relatedTarget.items().length - 10) {
+            && event.property.value >= event.relatedTarget.items().length - perPage) {
             lockAjax(owlType);
             // load, add and update
             // console.log("next page Url: " + nextPageUrl);
@@ -178,6 +186,7 @@ var Alaasearch = function () {
             var owl = $(this);
             console.log("nextPageUrl:"+nextPageUrl.val());
             if( !setAjaxLock ) {
+                console.log("se Ajax is not lock!");
                 load(event, nextPageUrl.val(), owl, owlType,function (newPageUrl) {
                      console.log("PRE:" + nextPageUrl.val());
                     nextPageUrl.val(decodeURI(newPageUrl));

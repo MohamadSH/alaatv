@@ -5,7 +5,7 @@
         </a>
         <hr>
     </div>
-    <div id="video-carousel" class="owl-carousel owl-theme">
+    <div id = "video-carousel" class = "a--owl-carousel-type-1 owl-carousel owl-theme" data-per-page = "3">
             @foreach($items as $content)
                 @include('partials.widgets.video1',[
                 'widgetActionName' => ''.'پخش / دانلود',
