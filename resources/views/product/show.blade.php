@@ -2,7 +2,6 @@
 @section('page-css')
     <link href = "{{ mix('/css/product-show/product-show.css') }}" rel = "stylesheet" type = "text/css"/>
 @endsection
-
 @section('pageBar')
     <nav aria-label = "breadcrumb">
         <ol class = "breadcrumb">
@@ -444,8 +443,6 @@
 @endsection
 @section('page-js')
     <script src = "{{ mix('/js/product-show.js') }}"></script>
-{{--    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-product-show.js') }}"></script>--}}
-
-
-
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/UserCart.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-product-show.js') }}"></script>
 @endsection

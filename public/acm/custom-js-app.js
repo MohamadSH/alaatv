@@ -1,5 +1,5 @@
 jQuery(document).ready( function() {
-    var owl = jQuery('.owl-carousel');
+    var owl = jQuery('.konkoor2 .owl-carousel, .konkoor1 .owl-carousel, .yazdahom .owl-carousel, .dahom .owl-carousel, .hamayesh .owl-carousel');
     owl.each(function () {
         $(this).owlCarousel({
             stagePadding: 40,
