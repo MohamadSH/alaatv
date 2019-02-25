@@ -44,18 +44,20 @@ class OrderCheckoutReview
                 $openOrder = $user->getOpenOrder();
                 $request->offsetSet("order_id" , $openOrder->id);
 
-                $cookieOrderproducts = [];
                 if(isset($_COOKIE["cartItems"]))
-                    $cookieOrderproducts = json_decode($_COOKIE["cartItems"]);
-                if($this->validateCookieOrderproducts($cookieOrderproducts))
                 {
-                    foreach ($cookieOrderproducts as $cookieOrderproduct) {
-                        $data = [ "order_id" => $openOrder->id ];
-                        $this->orderproductController->storeOrderproductJsonObject($cookieOrderproduct, $data);
-                    }
+                    $cookieOrderproducts = json_decode($_COOKIE["cartItems"]);
+                    if($this->validateCookieOrderproducts($cookieOrderproducts))
+                    {
+                        foreach ($cookieOrderproducts as $cookieOrderproduct) {
+                            $data = [ "order_id" => $openOrder->id ];
+                            $this->orderproductController->storeOrderproductJsonObject($cookieOrderproduct, $data);
+                        }
 
-                    //ToDo : empty cookies
+                        unset($_COOKIE['cartItems']);
+                    }
                 }
+
             }
         }
 
@@ -68,6 +70,6 @@ class OrderCheckoutReview
      */
     private function validateCookieOrderproducts($cookieOrderproducts):bool
     {
-        return isset($cookieOrderproducts) && is_array($cookieOrderproducts) && !empty($cookieOrderproducts);
+        return is_array($cookieOrderproducts) && !empty($cookieOrderproducts);
     }
 }
