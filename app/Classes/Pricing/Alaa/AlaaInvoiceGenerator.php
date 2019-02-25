@@ -35,14 +35,14 @@ class AlaaInvoiceGenerator
         $calculatedOrderproducts = $orderPriceArray['calculatedOrderproducts'];
         $calculatedOrderproducts->updateCostValues();
 
-        $orderproductsRawCost = $orderPriceArray['sumOfOrderproductsRawCost'];
-        $totalCost = $orderPriceArray['totalCost'];
-        $payableByWallet = $orderPriceArray['payableAmountByWallet'];
+        $orderproductsRawCost   = $orderPriceArray['sumOfOrderproductsRawCost'];
+        $totalCost              = $orderPriceArray['totalCost'];
+        $payableByWallet        = $orderPriceArray['payableAmountByWallet'];
 
-        $orderProductCount = $this->orderproductFormatter($orderproducts);
+        $orderProductCount = $this->orderproductFormatter($calculatedOrderproducts);
 
         return [
-          'items'           => $orderproducts,
+          'items'                   => $calculatedOrderproducts,
           'orderproductCount'       => $orderProductCount ,
           'orderproductsRawCost'    => $orderproductsRawCost,
           'totalCost'               => $totalCost,
@@ -98,7 +98,7 @@ class AlaaInvoiceGenerator
         $newPrices = $orderproducts->getNewPrices();
 
         $orderProductCount = 0;
-        $orderproducts = new OrderproductCollection($orderproducts->groupBy('grandId')->map(function ($orderproducts,$grandId) use (&$orderProductCount){
+        $orderproducts = new OrderproductCollection($orderproducts->groupBy('grandId')->map(function ($orderproducts) use (&$orderProductCount){
             $orderProductCount += $orderproducts->count() ;
             return [
               'grand' => $orderproducts->first()->grandProduct ?? null,

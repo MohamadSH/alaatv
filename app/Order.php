@@ -149,7 +149,6 @@ class Order extends BaseModel
         'paidPrice',
         'successfulTransactions',
         'orderPostingInfo',
-        //          'invoice'
     ];
     const OPEN_ORDER_STATUSES = [
         1,
@@ -367,21 +366,22 @@ class Order extends BaseModel
      */
     public function getCouponDiscountTypeAttribute()
     {
-        if ($this->hasCoupon()) {
             if ($this->couponDiscount > 0) {
                 return [
-                    "type"     => config("constants.DISCOUNT_TYPE_PERCENTAGE"),
-                    "discount" => $this->couponDiscount,
+                    'typeId'       => config('constants.DISCOUNT_TYPE_PERCENTAGE'),
+                    'typeHint'     => 'percentage',
+                    'discount'     => $this->couponDiscount,
                 ];
-            } else {
+            } else if($this->couponDiscountAmount > 0){
                 return [
-                    "type"     => config("constants.DISCOUNT_TYPE_COST"),
-                    "discount" => $this->couponDiscountAmount,
+                    'type'          => config('constants.DISCOUNT_TYPE_COST'),
+                    'typeHint'      => 'amount',
+                    'discount'      => $this->couponDiscountAmount,
                 ];
             }
-        }
-        return
-            false;
+
+            return
+                false;
     }
 
     /**
@@ -784,13 +784,6 @@ class Order extends BaseModel
         }
     }
 
-    /*    public function getInvoiceAttribute()
-        {
-            $invoiceGenerator = new AlaaInvoiceGenerator($this);
-            $invoiceInfo = $invoiceGenerator->generateInvoice();
-            return json_encode($invoiceInfo);
-        }*/
-
 
     /**
      * @param ProductCollection $products
@@ -911,17 +904,12 @@ class Order extends BaseModel
                         $coupon->setVisible([
                             'name',
                             'code',
-                            'discountType',
+//                            'discountType',
                         ]);
-                        $couponDiscount = 0;
-                        if (isset($order->couponDiscount))
-                            $couponDiscount = $order->couponDiscount;
-                        else if (isset($order->couponDiscountAmount))
-                            $couponDiscount = $order->couponDiscountAmount;
 
                         return [
                             'coupon'   => $coupon,
-                            'discount' => $couponDiscount,
+                            'discount' => $this->coupon_discount_type,
                         ];
                     });
     }

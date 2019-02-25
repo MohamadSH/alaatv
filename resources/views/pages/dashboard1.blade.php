@@ -93,19 +93,19 @@
                         <h3 style = "font-weight: bold">{{$section["descriptiveName"]}} </h3>
                     </a>
                 </div>
-                <div class="owl-carousel owl-theme">
-                @foreach($section["lessons"] as $lesson)
-                    @include('partials.widgets.set1',[
-                    'widgetActionName' => $section["descriptiveName"].'/ نمایش همه',
-                    'widgetActionLink' => $section["url"],
-                    'widgetTitle'      => $lesson["displayName"],
-                    'widgetPic'        => (isset($lesson["pic"]) && strlen($lesson["pic"])>0 ?  $lesson["pic"]."?w=253&h=142" : 'https://via.placeholder.com/235x142'),
-                    'widgetAuthor' => $lesson["author"],
-                    'widgetLink'       => (isset($lesson["content_id"]) && $lesson["content_id"]>0 ? action("Web\ContentController@show", $lesson["content_id"]):""),
-                    'widgetCount' => $lesson["content_count"],
-                    'widgetScroll' => 1
-                    ])
-                @endforeach
+                <div class = "a--owl-carousel-type-1 owl-carousel owl-theme">
+                    @foreach($section["lessons"] as $lesson)
+                        @include('partials.widgets.set1',[
+                        'widgetActionName' => $section["descriptiveName"].'/ نمایش همه',
+                        'widgetActionLink' => $section["url"],
+                        'widgetTitle'      => $lesson["displayName"],
+                        'widgetPic'        => (isset($lesson["pic"]) && strlen($lesson["pic"])>0 ?  $lesson["pic"]."?w=253&h=142" : 'https://via.placeholder.com/235x142'),
+                        'widgetAuthor' => $lesson["author"],
+                        'widgetLink'       => (isset($lesson["content_id"]) && $lesson["content_id"]>0 ? action("Web\ContentController@show", $lesson["content_id"]):""),
+                        'widgetCount' => $lesson["content_count"],
+                        'widgetScroll' => 1
+                        ])
+                    @endforeach
                 </div>
             </div>
             <hr/>

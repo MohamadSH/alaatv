@@ -1,11 +1,11 @@
-@if($items->isNotEmpty())
+@if(optional($items)->isNotEmpty())
     <div class = "col-xl-12 m--margin-bottom-5">
         <a href = "#" class = "m-link m-link--primary">
             <h3 style = "font-weight: bold"><i class="la la-video-camera"></i>  فیلم های آموزشی</h3>
         </a>
         <hr>
     </div>
-    <div id="video-carousel" class="owl-carousel owl-theme">
+    <div id = "video-carousel" class = "a--owl-carousel-type-1 owl-carousel owl-theme" data-per-page = "3">
             @foreach($items as $content)
                 @include('partials.widgets.video1',[
                 'widgetActionName' => ''.'پخش / دانلود',
