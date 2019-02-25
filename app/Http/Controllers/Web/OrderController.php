@@ -1063,15 +1063,12 @@ class OrderController extends Controller
      */
     public function submitCoupon(SubmitCouponRequest $request)
     {
-        $couponCode = $request->coupon;
-        $coupon = Coupon::all()->where('code', $couponCode)->first();
+        $coupon = Coupon::code($request->coupon)->first();
+
         if (isset($coupon)) {
             $order_id = $request->order_id;
             $order = Order::Find($order_id);
-            $order->load('coupon');
 
-            $resultCode = Response::HTTP_UNPROCESSABLE_ENTITY;
-            $resultText = 'Nothing was done!';
             /** @var Coupon $coupon */
             $couponValidationStatus = $coupon->validateCoupon();
             if ($couponValidationStatus == Coupon::COUPON_VALIDATION_STATUS_OK) {
@@ -1113,6 +1110,9 @@ class OrderController extends Controller
                                     $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
                                     $resultText = 'Database error';
                                 }
+                            }else{
+                                $resultCode = Response::HTTP_BAD_REQUEST;
+                                $resultText = 'This coupon is already attached to the order';
                             }
                     } else {
                         $coupon->usageNumber = $coupon->usageNumber + 1;
@@ -1162,14 +1162,22 @@ class OrderController extends Controller
             }
 
         } else {
-            $resultText = 'Entered code is wrond';
+            $resultCode = Response::HTTP_BAD_REQUEST;
+            $resultText = 'The code is wrong';
         }
 
         $response = [];
-        if ($resultCode != Response::HTTP_OK)
+
+        if ($resultCode == Response::HTTP_OK)
             $response = [
-                'error'   => $resultCode,
-                'message' => $resultText,
+                $coupon
+            ];
+        else
+            $response = [
+                'error' =>  [
+                    'code' => $resultCode??$resultCode,
+                    'message' => $resultText??$resultText
+                ]
             ];
         return response($response, Response::HTTP_OK);
     }
@@ -1183,11 +1191,8 @@ class OrderController extends Controller
     public function removeCoupon(Request $request)
     {
         $order = Order::Find($request->get("order_id"));
-        $resultCode = Response::HTTP_UNPROCESSABLE_ENTITY;
-        $resultText = 'Nothing was done!';
         if(isset($order))
         {
-            $order->load("coupon");
             $coupon = $order->coupon;
             if(isset($coupon))
             {
@@ -1201,8 +1206,10 @@ class OrderController extends Controller
                     $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
                     $resultText = "Database error";
                 }
+            }else {
+                $resultCode = Response::HTTP_BAD_REQUEST;
+                $resultText = "No coupon found fot this order";
             }
-
         } else {
             $resultCode = Response::HTTP_BAD_REQUEST;
             $resultText = "No order found";
@@ -1211,8 +1218,10 @@ class OrderController extends Controller
         $response = [];
         if ($resultCode != Response::HTTP_OK)
             $response = [
-                'error'   => $resultCode,
-                'message' => $resultText,
+                'error' =>  [
+                    'code' => $resultCode??$resultCode,
+                    'message' => $resultText??$resultText
+                ]
             ];
 
         return response($response, Response::HTTP_OK);

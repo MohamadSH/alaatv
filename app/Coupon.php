@@ -35,7 +35,6 @@ use Carbon\Carbon;
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Coupon onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereCoupontypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereDeletedAt($value)
@@ -62,6 +61,7 @@ use Carbon\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon valid()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static code($couponCode)
  */
 class Coupon extends BaseModel
 {
@@ -184,6 +184,17 @@ class Coupon extends BaseModel
                 $q->where('validUntil', '>', $now)
                     ->orWhereNull('validUntil');
             });
+    }
+
+    /**
+     * Scope a query by coupon code
+     *
+     * @param $query
+     * @param string $code
+     * @return mixed
+     */
+    public function scopeCode($query , string $code){
+        return $query->where('code' , $code);
     }
 
     /*
