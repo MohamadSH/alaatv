@@ -11,6 +11,7 @@ namespace App\Classes;
 
 use App\Adapter\AlaaSftpAdapter;
 use App\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\FileNotFoundException;
 
@@ -150,9 +151,9 @@ class LinkGenerator
             $url = $this->fetchUrl($diskAdapter, $this->fileName);
             if (isset($paid)) {
                 $data = encrypt([
-                                    "url"  => $url,
-                                    "data" => $paid,
-                                ]);
+                    "url"  => $url,
+                    "data" => $paid,
+                ]);
                 return action(self::DOWNLOAD_CONTROLLER_NAME, $data);
 
             } else {
@@ -165,7 +166,18 @@ class LinkGenerator
 
     private function fetchUrl(AlaaSftpAdapter $diskAdapter, $fileName)
     {
-        return $diskAdapter->getUrl($fileName);
+        try {
+            return $diskAdapter->getUrl($fileName);
+        } catch (\Exception $exception) {
+            Log::error(json_encode([
+                "message"  => "fetchUrl failed!",
+                "error"    => $exception->getMessage(),
+                "line"     => $exception->getLine(),
+                "file"     => $exception->getFile(),
+                'fileName' => $fileName,
+            ], JSON_UNESCAPED_UNICODE));
+            return null;
+        }
     }
 
     /**
@@ -181,8 +193,7 @@ class LinkGenerator
             $result = [
                 "read-stream" => $stream,
             ];
-        }
-        catch (FileNotFoundException $e) {
+        } catch (FileNotFoundException $e) {
             $result = [
                 "read-stream" => null,
                 "exception"   => $e,

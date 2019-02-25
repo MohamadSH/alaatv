@@ -150,7 +150,11 @@ var Alaasearch = function () {
     function load(event, nextPageUrl, owl, owlType, callback) {
         var perPage = typeof (owl.data("per-page")) === "number" ? owl.data("per-page") : 6;
 
-        console.log('per page:' + perPage);
+        // console.log('per page:' + perPage);
+        // console.log('nextPageUrl:' + nextPageUrl);
+        // console.log('event.property.name',event.property.name);
+        // console.log('event.property.value',event.property.value);
+        // console.log('event.relatedTarget.items().length - perPage',event.relatedTarget.items().length - perPage);
         if (nextPageUrl
             && event.namespace && event.property.name === 'position'
             && event.property.value >= event.relatedTarget.items().length - perPage) {
