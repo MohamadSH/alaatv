@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Web;
+
 use App\Afterloginformcontrol;
 use App\Classes\OrderProduct\RefinementProduct\RefinementFactory;
 use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
@@ -60,7 +61,7 @@ class OrderController extends Controller
     use MetaCommon;
     use DateTrait;
 
-    function __construct(Websitesetting $setting  , Request $request)
+    function __construct(Websitesetting $setting, Request $request)
     {
         $this->response = new Response();
 
@@ -69,8 +70,14 @@ class OrderController extends Controller
         $this->middleware('permission:' . config('constants.REMOVE_ORDER_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . config('constants.SHOW_ORDER_ACCESS'), ['only' => 'edit']);
         $this->middleware('permission:' . config('constants.INSERT_ORDER_ACCESS'), ['only' => 'exitAdminInsertOrder']);
-        $this->middleware(['completeInfo','OrderCheckoutReview',], ['only' => ['checkoutReview',],]);
-        $this->middleware(['completeInfo','OrderCheckoutPayment',], ['only' => ['checkoutPayment'],]);
+        $this->middleware([
+            'completeInfo',
+            'OrderCheckoutReview',
+        ], ['only' => ['checkoutReview',],]);
+        $this->middleware([
+            'completeInfo',
+            'OrderCheckoutPayment',
+        ], ['only' => ['checkoutPayment'],]);
         $this->middleware('SubmitOrderCoupon', ['only' => ['submitCoupon'],]);
         $this->middleware('RemoveOrderCoupon', ['only' => ['removeCoupon'],]);
         $this->setting = $setting->setting;
@@ -596,7 +603,7 @@ class OrderController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \app\Http\Requests\EditOrderRequest $request
-     * @param  \App\Order $order
+     * @param  \App\Order                          $order
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
@@ -825,20 +832,19 @@ class OrderController extends Controller
     public function checkoutReview(CheckoutReviewRequest $request)
     {
         $this->generateCustomMeta([
-            "title"     => "آلاء|بازبینی سفارش",
-            "url"       => $request->url(),
-            'siteName'  => "آلاء" ,
-            "description"   => optional($this->setting)->site->seo->homepage->metaDescription,
-            "image" => optional($this->setting)->site->siteLogo
+            "title"       => "آلاء|بازبینی سفارش",
+            "url"         => $request->url(),
+            'siteName'    => "آلاء",
+            "description" => optional($this->setting)->site->seo->homepage->metaDescription,
+            "image"       => optional($this->setting)->site->siteLogo,
         ]);
 
-        $invoiceInfo=[];
+        $invoiceInfo = [];
         $user = $request->user();
 
         $invoiceGenerator = new AlaaInvoiceGenerator();
 
-        if(isset($user))
-        {
+        if (isset($user)) {
             $order = Order::Find($request->order_id);
 
             if (isset($order)) {
@@ -861,7 +867,8 @@ class OrderController extends Controller
             return response($invoiceInfo, $responseStatus);
         }
 
-        return view("order.checkout.review", compact("invoiceInfo", 'orderProductCount'));
+        $pageName = "review";
+        return view("order.checkout.review", compact("invoiceInfo", 'orderProductCount', 'pageName'));
     }
 
 
@@ -918,15 +925,15 @@ class OrderController extends Controller
     public function checkoutPayment(Request $request)
     {
         $this->generateCustomMeta([
-            "title"     => "آلاء|پرداخت",
-            "url"       => $request->url(),
-            'siteName'  => "آلاء" ,
-            "description"   => optional($this->setting)->site->seo->homepage->metaDescription,
-            "image" => optional($this->setting)->site->siteLogo
+            "title"       => "آلاء|پرداخت",
+            "url"         => $request->url(),
+            'siteName'    => "آلاء",
+            "description" => optional($this->setting)->site->seo->homepage->metaDescription,
+            "image"       => optional($this->setting)->site->siteLogo,
         ]);
 
         $order = Order::Find($request->order_id);
-        if(isset($order)) {
+        if (isset($order)) {
             $credit = optional($order->user)->getTotalWalletBalance();
             $orderHasDonate = $order->hasTheseProducts([
                 Product::CUSTOM_DONATE_PRODUCT,
@@ -936,10 +943,13 @@ class OrderController extends Controller
 
             $coupon = $order->coupon;
             $couponValidationStatus = optional($coupon)->validateCoupon();
-            if(in_array($couponValidationStatus , [Coupon::COUPON_VALIDATION_STATUS_DISABLED , Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN , Coupon::COUPON_VALIDATION_STATUS_EXPIRED]))
-            {
+            if (in_array($couponValidationStatus, [
+                Coupon::COUPON_VALIDATION_STATUS_DISABLED,
+                Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN,
+                Coupon::COUPON_VALIDATION_STATUS_EXPIRED,
+            ])) {
                 $order->detachCoupon();
-                if($order->updateWithoutTimestamp()) {
+                if ($order->updateWithoutTimestamp()) {
                     $coupon->decreaseUseNumber();
                     $coupon->update();
                 }
@@ -953,36 +963,38 @@ class OrderController extends Controller
             $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
 
             $response = response([
-                        "invoiceInfo"                 => $invoiceInfo,
-                        "credit"                      => $credit,
-                        "couponInfo"                  => $coupon,
-                        "notIncludedProductsInCoupon" => $notIncludedProductsInCoupon,
-                        "orderHasDonate"              => $orderHasDonate,
-            ] , Response::HTTP_OK);
-        }
-        else {
-            $response = response(["message"=>"Order not found"] , Response::HTTP_BAD_REQUEST);
+                "invoiceInfo"                 => $invoiceInfo,
+                "credit"                      => $credit,
+                "couponInfo"                  => $coupon,
+                "notIncludedProductsInCoupon" => $notIncludedProductsInCoupon,
+                "orderHasDonate"              => $orderHasDonate,
+            ], Response::HTTP_OK);
+        } else {
+            $response = response(["message" => "Order not found"], Response::HTTP_BAD_REQUEST);
         }
 
         if ($request->expectsJson())
             return $response;
 
-        return view("order.checkout.payment" ,
-                   compact(
-               "gateways",
-                        "coupon",
-                       "reviewCouponProductsWarning",
-                        "orderHasDonate",
-                        "credit",
-                        "invoiceInfo"
-                   ));
+        $pageName = "payment";
+        return view("order.checkout.payment",
+            compact(
+                "gateways",
+                "coupon",
+                "reviewCouponProductsWarning",
+                "orderHasDonate",
+                "credit",
+                "invoiceInfo",
+                'pageName'
+            ));
     }
 
     /**
      * Makes a copy from an order
      *
-     * @param Order $order
+     * @param Order                     $order
      * @param  \Illuminate\Http\Request $request
+     *
      * @return Response
      */
     public function copy(Order $order, Request $request)
@@ -1069,76 +1081,75 @@ class OrderController extends Controller
             /** @var Coupon $coupon */
             $couponValidationStatus = $coupon->validateCoupon();
             if ($couponValidationStatus == Coupon::COUPON_VALIDATION_STATUS_OK) {
-                    $oldCoupon = $order->coupon;
-                    if (isset($oldCoupon)) {
-                        $flag = ($oldCoupon->usageNumber > 0);
-                            if ($oldCoupon->id != $coupon->id) {
-                                if ($flag)
-                                    $oldCoupon->usageNumber = $oldCoupon->usageNumber - 1;
-                                if ($oldCoupon->update()) {
-                                    $coupon->usageNumber = $coupon->usageNumber + 1;
-                                    if ($coupon->update()) {
-                                        $order->coupon_id = $coupon->id;
-                                        if ($coupon->discounttype_id == config('constants.DISCOUNT_TYPE_COST')) {
-                                            $order->couponDiscount = 0;
-                                            $order->couponDiscountAmount = (int)$coupon->discount;
-                                        } else {
-                                            $order->couponDiscount = $coupon->discount;
-                                            $order->couponDiscountAmount = 0;
-                                        }
-                                        if ($order->updateWithoutTimestamp()) {
-                                            $resultCode = Response::HTTP_OK;
-                                            $resultText = 'Coupon attached successfully';
-                                        } else {
-                                            $oldCoupon->usageNumber = $oldCoupon->usageNumber + 1;
-                                            $oldCoupon->update();
-                                            $coupon->usageNumber = $coupon->usageNumber - 1;
-                                            $coupon->update();
-                                            $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
-                                            $resultText = 'Database error';
-                                        }
-                                    } else {
-                                        $oldCoupon->usageNumber = $oldCoupon->usageNumber + 1;
-                                        $oldCoupon->update();
-                                        $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
-                                        $resultText = 'Database error';
-                                    }
+                $oldCoupon = $order->coupon;
+                if (isset($oldCoupon)) {
+                    $flag = ($oldCoupon->usageNumber > 0);
+                    if ($oldCoupon->id != $coupon->id) {
+                        if ($flag)
+                            $oldCoupon->usageNumber = $oldCoupon->usageNumber - 1;
+                        if ($oldCoupon->update()) {
+                            $coupon->usageNumber = $coupon->usageNumber + 1;
+                            if ($coupon->update()) {
+                                $order->coupon_id = $coupon->id;
+                                if ($coupon->discounttype_id == config('constants.DISCOUNT_TYPE_COST')) {
+                                    $order->couponDiscount = 0;
+                                    $order->couponDiscountAmount = (int)$coupon->discount;
                                 } else {
+                                    $order->couponDiscount = $coupon->discount;
+                                    $order->couponDiscountAmount = 0;
+                                }
+                                if ($order->updateWithoutTimestamp()) {
+                                    $resultCode = Response::HTTP_OK;
+                                    $resultText = 'Coupon attached successfully';
+                                } else {
+                                    $oldCoupon->usageNumber = $oldCoupon->usageNumber + 1;
+                                    $oldCoupon->update();
+                                    $coupon->usageNumber = $coupon->usageNumber - 1;
+                                    $coupon->update();
                                     $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
                                     $resultText = 'Database error';
                                 }
-                            }else{
-                                $resultCode = Response::HTTP_BAD_REQUEST;
-                                $resultText = 'This coupon is already attached to the order';
-                            }
-                    } else {
-                        $coupon->usageNumber = $coupon->usageNumber + 1;
-                        if ($coupon->update()) {
-                            $order->coupon_id = $coupon->id;
-                            if ($coupon->discounttype_id == config('constants.DISCOUNT_TYPE_COST')) {
-                                $order->couponDiscount = 0;
-                                $order->couponDiscountAmount = (int)$coupon->discount;
                             } else {
-                                $order->couponDiscount = $coupon->discount;
-                                $order->couponDiscountAmount = 0;
-                            }
-                            if ($order->updateWithoutTimestamp()) {
-                                $resultText = 'Coupon attached successfully';
-                                $resultCode = Response::HTTP_OK;
-                            } else {
-                                $coupon->usageNumber = $coupon->usageNumber - 1;
-                                $coupon->update();
-                                $resultText = 'Database error';
+                                $oldCoupon->usageNumber = $oldCoupon->usageNumber + 1;
+                                $oldCoupon->update();
                                 $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
+                                $resultText = 'Database error';
                             }
                         } else {
+                            $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
+                            $resultText = 'Database error';
+                        }
+                    } else {
+                        $resultCode = Response::HTTP_BAD_REQUEST;
+                        $resultText = 'This coupon is already attached to the order';
+                    }
+                } else {
+                    $coupon->usageNumber = $coupon->usageNumber + 1;
+                    if ($coupon->update()) {
+                        $order->coupon_id = $coupon->id;
+                        if ($coupon->discounttype_id == config('constants.DISCOUNT_TYPE_COST')) {
+                            $order->couponDiscount = 0;
+                            $order->couponDiscountAmount = (int)$coupon->discount;
+                        } else {
+                            $order->couponDiscount = $coupon->discount;
+                            $order->couponDiscountAmount = 0;
+                        }
+                        if ($order->updateWithoutTimestamp()) {
+                            $resultText = 'Coupon attached successfully';
+                            $resultCode = Response::HTTP_OK;
+                        } else {
+                            $coupon->usageNumber = $coupon->usageNumber - 1;
+                            $coupon->update();
                             $resultText = 'Database error';
                             $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
                         }
+                    } else {
+                        $resultText = 'Database error';
+                        $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
                     }
+                }
             } else {
-                switch ($couponValidationStatus)
-                {
+                switch ($couponValidationStatus) {
                     case Coupon::COUPON_VALIDATION_STATUS_DISABLED:
                         $resultText = 'Coupon is disabled';
                         break;
@@ -1167,14 +1178,14 @@ class OrderController extends Controller
 
         if ($resultCode == Response::HTTP_OK)
             $response = [
-                $coupon
+                $coupon,
             ];
         else
             $response = [
-                'error' =>  [
-                    'code' => $resultCode??$resultCode,
-                    'message' => $resultText??$resultText
-                ]
+                'error' => [
+                    'code'    => $resultCode ?? $resultCode,
+                    'message' => $resultText ?? $resultText,
+                ],
             ];
         return response($response, Response::HTTP_OK);
     }
@@ -1183,18 +1194,17 @@ class OrderController extends Controller
      * Cancels a coupon for the order
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function removeCoupon(Request $request)
     {
         $order = Order::Find($request->get("order_id"));
-        if(isset($order))
-        {
+        if (isset($order)) {
             $coupon = $order->coupon;
-            if(isset($coupon))
-            {
+            if (isset($coupon)) {
                 $order->detachCoupon();
-                if($order->updateWithoutTimestamp()) {
+                if ($order->updateWithoutTimestamp()) {
                     $coupon->decreaseUseNumber();
                     $coupon->update();
                     $resultCode = Response::HTTP_OK;
@@ -1203,7 +1213,7 @@ class OrderController extends Controller
                     $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
                     $resultText = "Database error";
                 }
-            }else {
+            } else {
                 $resultCode = Response::HTTP_BAD_REQUEST;
                 $resultText = "No coupon found fot this order";
             }
@@ -1215,10 +1225,10 @@ class OrderController extends Controller
         $response = [];
         if ($resultCode != Response::HTTP_OK)
             $response = [
-                'error' =>  [
-                    'code' => $resultCode??$resultCode,
-                    'message' => $resultText??$resultText
-                ]
+                'error' => [
+                    'code'    => $resultCode ?? $resultCode,
+                    'message' => $resultText ?? $resultText,
+                ],
             ];
 
         return response($response, Response::HTTP_OK);
@@ -1683,17 +1693,16 @@ class OrderController extends Controller
             return $this->response
                 ->setStatusCode(503)
                 ->setContent(["errorMessage" => "cound not find order"]);
-        }
-        catch (\Exception    $e) {
+        } catch (\Exception    $e) {
             $message = "unexpected error";
             return $this->response
                 ->setStatusCode(500)
                 ->setContent([
-                                 "errorMessage" => $message,
-                                 "error"        => $e->getMessage(),
-                                 "line"         => $e->getLine(),
-                                 "file"         => $e->getFile(),
-                             ]);
+                    "errorMessage" => $message,
+                    "error"        => $e->getMessage(),
+                    "line"         => $e->getLine(),
+                    "file"         => $e->getFile(),
+                ]);
         }
     }
 
@@ -1730,8 +1739,8 @@ class OrderController extends Controller
                 return $this->response
                     ->setStatusCode(503)
                     ->setContent([
-                                     "message" => "شما همایش طلایی عربی ندارد",
-                                 ]);
+                        "message" => "شما همایش طلایی عربی ندارد",
+                    ]);
 
             $hozouriOrders = $user->orders()
                                   ->whereHas("orderproducts", function ($q) use ($hamayeshHozouriProductId) {
@@ -1792,17 +1801,16 @@ class OrderController extends Controller
             } else {
                 return $this->response->setStatusCode(503);
             }
-        }
-        catch (\Exception    $e) {
+        } catch (\Exception    $e) {
             $message = "unexpected error";
             return $this->response
                 ->setStatusCode(503)
                 ->setContent([
-                                 "message" => $message,
-                                 "error"   => $e->getMessage(),
-                                 "line"    => $e->getLine(),
-                                 "file"    => $e->getFile(),
-                             ]);
+                    "message" => $message,
+                    "error"   => $e->getMessage(),
+                    "line"    => $e->getLine(),
+                    "file"    => $e->getFile(),
+                ]);
         }
     }
 
@@ -1842,22 +1850,22 @@ class OrderController extends Controller
             } else {
                 return $this->response->setStatusCode(503);
             }
-        }
-        catch (\Exception    $e) {
+        } catch (\Exception    $e) {
             $message = "unexpected error";
             return $this->response
                 ->setStatusCode(503)
                 ->setContent([
-                                 "message" => $message,
-                                 "error"   => $e->getMessage(),
-                                 "line"    => $e->getLine(),
-                                 "file"    => $e->getFile(),
-                             ]);
+                    "message" => $message,
+                    "error"   => $e->getMessage(),
+                    "line"    => $e->getLine(),
+                    "file"    => $e->getFile(),
+                ]);
         }
     }
 
     /**
      * @param array $cookieOrderproducts
+     *
      * @return OrderproductCollection
      */
     private function convertOrderproductObjectsToCollection(array $cookieOrderproducts): OrderproductCollection
@@ -1871,12 +1879,12 @@ class OrderController extends Controller
             $extraAttributes = optional($cookieOrderproduct)->extraAttribute;
 
             $grandParentProduct = Product::Find($grandParentProductId);
-            if(!isset($grandParentProduct))
+            if (!isset($grandParentProduct))
                 continue;
 
             $data = [
-                "products" => $childrenIds,
-                "atttibute" => $attributes ,
+                "products"       => $childrenIds,
+                "atttibute"      => $attributes,
                 'extraAttribute' => $extraAttributes,
             ];
 
