@@ -11,6 +11,7 @@ use App\Collection\TransactionCollection;
 use App\Traits\ProductCommon;
 use Auth;
 use Carbon\Carbon;
+use DB;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
