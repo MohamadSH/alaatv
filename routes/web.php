@@ -148,8 +148,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('sendSMS', 'Web\UserController@sendSMS');
         Route::post('submitWorkTime', 'Web\UserController@submitWorkTime');
         Route::post('removeFromLottery', 'Web\UserController@removeFromLottery');
-        Route::post('addToArabiHozouri', 'Web\OrderController@addToArabiHozouri');
-        Route::post('removeArabiHozouri', 'Web\OrderController@removeArabiHozouri');
         Route::get('uploadQuestion', 'Web\UserController@uploadConsultingQuestion');
         Route::get('orders', 'Web\UserController@userOrders');
         Route::get('question', 'Web\UserController@uploads');
@@ -158,8 +156,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('sendSMS', 'Web\UserController@sendSMS');
         Route::post('submitWorkTime', 'Web\UserController@submitWorkTime');
         Route::post('removeFromLottery', 'Web\UserController@removeFromLottery');
-        Route::post('addToArabiHozouri', 'Web\OrderController@addToArabiHozouri');
-        Route::post('removeArabiHozouri', 'Web\OrderController@removeArabiHozouri');
         Route::get('uploadQuestion', 'Web\UserController@uploadConsultingQuestion');
     });
     Route::group(['prefix' => 'order'], function () {
