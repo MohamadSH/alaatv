@@ -53,17 +53,17 @@ trait ProfileTrait
 
     public function returnLockProfileItems()
     {
-        return $this->lockProfile;
+        return $this->lockProfileColumns;
     }
 
     public function returnCompletionItems()
     {
-        return $this->completeInfo;
+        return $this->completeInfoColumns;
     }
 
     public function returnMedicalItems()
     {
-        return $this->medicalInfo;
+        return $this->medicalInfoColumns;
     }
 
     public function getInfoAttribute()
@@ -190,7 +190,7 @@ trait ProfileTrait
                 ];
                 break;
             case "lockProfile":
-                $customColumns = $this->lockProfile;
+                $customColumns = $this->lockProfileColumns;
                 $importantColumns = array_unique(array_merge($customColumns, Afterloginformcontrol::getFormFields()
                                                                                                   ->pluck('name', 'id')
                                                                                                   ->toArray()));
@@ -201,7 +201,7 @@ trait ProfileTrait
                                                          ->toArray();
                 break;
             case "completeInfo":
-                $importantColumns = $this->completeInfo;
+                $importantColumns = $this->completeInfoColumns;
                 break;
             case "custom":
                 $importantColumns = $columns;
@@ -261,6 +261,19 @@ trait ProfileTrait
     public function isUserProfileLocked(): bool
     {
         return $this->lockProfile == 1;
+    }
+
+    /**
+     * Fills model from data provided by user
+     *
+     * @param array $data
+     */
+    public function fillByUser(array $data)
+    {
+        foreach ($this->fillableByUser as $fillable){
+            if(isset($data[$fillable]))
+                $this->$fillable = $data[$fillable];
+        }
     }
 
 }
