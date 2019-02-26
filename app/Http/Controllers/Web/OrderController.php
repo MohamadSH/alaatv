@@ -1072,7 +1072,7 @@ class OrderController extends Controller
      */
     public function submitCoupon(SubmitCouponRequest $request)
     {
-        $coupon = Coupon::code($request->code)->first();
+        $coupon = Coupon::code($request->get('code'))->first();
 
         if (isset($coupon)) {
             $order_id = $request->order_id;
