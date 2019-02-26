@@ -9,11 +9,7 @@
 
 @section('content')
 
-    <div class = "row">
-        <div class = "col">
-            @include('systemMessage.flash')
-        </div>
-    </div>
+    @include('systemMessage.flash')
 
     @if(isset($invoiceInfo['orderproductCount']) && $invoiceInfo['orderproductCount']>0)
         <div class="row">
