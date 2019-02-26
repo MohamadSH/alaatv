@@ -1215,7 +1215,7 @@ class OrderController extends Controller
                 }
             } else {
                 $resultCode = Response::HTTP_BAD_REQUEST;
-                $resultText = "No coupon found fot this order";
+                $resultText = "No coupon found for this order";
             }
         } else {
             $resultCode = Response::HTTP_BAD_REQUEST;
@@ -1267,15 +1267,16 @@ class OrderController extends Controller
                                 ]);
                 }
 
-                $openOrder = $openOrder->fresh();
+                /** Has been commented for better performance in removing donate */
+//                $openOrder = $openOrder->fresh();
+//
+//                $orderCost                      = $openOrder->obtainOrderCost(true, false);
+//                $openOrder->cost                = $orderCost["rawCostWithDiscount"];
+//                $openOrder->costwithoutcoupon   = $orderCost["rawCostWithoutDiscount"];
+//                $updateFlag                     = $openOrder->updateWithoutTimestamp();
+//                $cost                           = $openOrder->totalCost();
 
-                $orderCost                      = $openOrder->obtainOrderCost(true, false);
-                $openOrder->cost                = $orderCost["rawCostWithDiscount"];
-                $openOrder->costwithoutcoupon   = $orderCost["rawCostWithoutDiscount"];
-                $updateFlag                     = $openOrder->updateWithoutTimestamp();
-                $cost                           = $openOrder->totalCost();
-
-                if ($updateFlag) {
+                if (true) {
                     $resultCode = Response::HTTP_OK;
                     $resultText = 'Product removed successfully';
                 } else {
@@ -1294,7 +1295,7 @@ class OrderController extends Controller
 
         if ($resultCode == Response::HTTP_OK)
             $response = [
-                'cost'  => $cost ?? $cost,
+//                'cost'  => $cost ?? $cost,
             ];
         else
             $response = [
@@ -1692,6 +1693,7 @@ class OrderController extends Controller
                         $data['cost']  = $cost;
                     $data['withoutBon'] = true;
                     $result = $orderproductController->new($data);
+
                     if($result['status'])
                     {
                         $resultCode = Response::HTTP_OK;

@@ -46,7 +46,11 @@ class ProductController extends Controller
         $mainAttributeValues = $request->get("mainAttributeValues");
         $selectedSubProductIds = $request->get("products");
         $extraAttributeValues = $request->get("extraAttributeValues");
-        $user = $request->user();
+
+        $user = $request->user('api');
+        if(!isset($user))
+            $user = $request->user();
+        //ToDo : Should have a route in web\ProductController
 
         $key = "product:refreshPrice:"
             . $product->cacheKey()
