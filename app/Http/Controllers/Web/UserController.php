@@ -377,47 +377,27 @@ class UserController extends Controller
      * @return void
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    private function fillContentFromRequest(array $inputData, User $authenticatedUser = null, User &$user = null): void
+    private function fillContentFromRequest(array $inputData, User $authenticatedUser, User &$user): void
     {
-        $user->fill($inputData);
-
         if (optional($authenticatedUser)->can(config('constants.EDIT_USER_ACCESS'))) {
+            $user->fill($inputData);
             $hasMobileVerifiedAt = in_array("mobileNumberVerification" , $inputData);
-            $hasPassword = in_array("password" , $inputData);
-            $hasLockProfile = in_array("lockProfile" , $inputData);
-            $hasFirstName = in_array("firstName" , $inputData);
-            $hasLastName = in_array("lastName" , $inputData);
-            $hasNameSlug = in_array("nameSlug" , $inputData);
-            $hasMobile = in_array("mobile" , $inputData);
-            $hasNationalCode = in_array("nationalCode" , $inputData);
-            $hasUserStatusId = in_array("userstatus_id" , $inputData);
-            $hasTechCode = in_array("techCode" , $inputData);
+            $hasPassword         = in_array("password" , $inputData);
+            $hasLockProfile      = in_array("lockProfile" , $inputData);
 
             if ($hasMobileVerifiedAt)
                 $user->mobile_verified_at = ($inputData["mobileNumberVerification"] == "1") ? Carbon::now()
                     ->setTimezone("Asia/Tehran") : null;
             if ($hasPassword)
-                $user->password = bcrypt($inputData["password"]);
-            if ($hasFirstName)
-                $user->firstName = $inputData["firstName"];
-            if ($hasLastName)
-                $user->lastName = $inputData["lastName"];
-            if ($hasNameSlug)
-                $user->nameSlug = $inputData["nameSlug"];
-            if ($hasMobile)
-                $user->mobile = $inputData["mobile"];
-            if ($hasNationalCode)
-                $user->nationalCode = $inputData["nationalCode"];
-            if ($hasUserStatusId)
-                $user->userstatus_id = $inputData["userstatus_id"];
-            if ($hasTechCode)
-                $user->techCode = $inputData["techCode"];
+                $user->password     = bcrypt($inputData["password"]);
             if ($hasLockProfile)
-                $user->lockProfile = $inputData["lockProfile"] == "1" ? 1 : 0;
-        }
+                $user->lockProfile  = $inputData["lockProfile"] == "1" ? 1 : 0;
 
-        if (in_array("roles" , $inputData))
-            $this->attachRoles($inputData["roles"], $authenticatedUser , $user);
+            if (in_array("roles" , $inputData))
+                $this->attachRoles($inputData["roles"], $authenticatedUser , $user);
+        }else{
+            $user->fillByUser($inputData);
+        }
 
         $file = $this->getRequestFile($inputData, "photo");
         if ($file !== false)
@@ -1542,13 +1522,15 @@ class UserController extends Controller
      */
     public function update(EditUserRequest $request, User $user=null)
     {
+        $authenticatedUser = $request->user();
+
         if($user===null) {
-            $user = $request->user();
-        } elseif (!$request->user()->can(config('constants.EDIT_USER_ACCESS'))) {
+            $user = $authenticatedUser;
+        } elseif (!$authenticatedUser->can(config('constants.EDIT_USER_ACCESS'))) {
                 abort(Response::HTTP_FORBIDDEN);
         }
 
-        $this->fillContentFromRequest($request->all() , $request->user(), $user);
+        $this->fillContentFromRequest($request->all() , $authenticatedUser , $user);
 
         if ($user->completion("lockProfile") == 100)
             $user->lockProfile();
@@ -1874,7 +1856,7 @@ class UserController extends Controller
      * @param User|null $authenticatedUser
      * @return array
      */
-    public function new(array $data , User $authenticatedUser=null) : array
+    public function new(array $data , User $authenticatedUser) : array
     {
         //ToDo : To be placed in a middleware
         $softDeletedUsers = User::onlyTrashed()
