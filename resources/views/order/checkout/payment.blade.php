@@ -8,11 +8,7 @@
 
 @section('content')
 
-    <div class = "row">
-        <div class = "col">
-            @include('systemMessage.flash')
-        </div>
-    </div>
+    @include('systemMessage.flash')
 
     <div class = "row">
         {{--روش پرداخت--}}
@@ -101,17 +97,19 @@
 
                                     <div class = "m-portlet PaymentType" id = "PaymentType-card2card">
                                         <div class = "m-portlet__body">
-                                            <div class = "row">
+                                            <div class = "row text-center">
                                                 <div class = "col-12 col-md-9">
-                                                    جهت تایید سفارش مبلغ
-                                                    <b class = "finalPriceValue">{{ number_format($invoiceInfo['totalCost']) }}</b> تومان به شماره کارت:
-                                                    <br>
-                                                    4444-4444-4444-4444
-                                                    <br>
-                                                    به نام فلان فلانی بانک فلان واریز نمایید.
+                                                    <div class="m--margin-top-20">
+                                                        جهت تایید سفارش مبلغ
+                                                        <b class = "finalPriceValue">{{ number_format($invoiceInfo['totalCost']) }}</b> تومان به شماره کارت:
+                                                        <br>
+                                                        4444-4444-4444-4444
+                                                        <br>
+                                                        به نام فلان فلانی بانک فلان واریز نمایید.
+                                                    </div>
                                                 </div>
                                                 <div class = "col-12 col-md-3">
-                                                    <img class = "a--full-width" src = "/acm/extra/payment/balance-transfer.png" alt = "کارت به کارت">
+                                                    <img class="card2cardImage" src = "/acm/extra/payment/balance-transfer.png" alt = "کارت به کارت">
                                                 </div>
                                             </div>
                                         </div>
@@ -272,7 +270,7 @@
                                                     <div class = "col-12 d-none">
                                                         <div id = "m_nouislider_1" class = "m-nouislider m-nouislider--handle-danger m-nouislider--drag-danger noUi-target noUi-ltr noUi-horizontal visibleInDonate"></div>
                                                     </div>
-                                                    <div class = "col-12 m--margin-top-10 text-center">
+                                                    <div class = "col-12 m--margin-top-10 text-center addDonateWarper">
                                                         <span class = "visibleInDonate"> مبلغ </span>
                                                         <span class = "visibleInDonate">
                                                             <input type = "text" class = "form-control" id = "m_nouislider_1_input" placeholder = "مقدار کمک" readonly>
@@ -281,7 +279,7 @@
                                                         <br>
                                                         <span>
                                                             <label for = "hasntDonate">
-                                                        به آلاء کمک
+                                                                به آلاء کمک
                                                             </label>
                                                         </span>
                                                         <span class="m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
@@ -303,6 +301,10 @@
                                                             <img src = "/acm/extra/sad.png" class = "face-sad m--margin-top-20" alt = "">
                                                             <img src = "/acm/extra/happy.png" class = "face-happy m--margin-top-20" alt = "">
                                                         </span>
+                                                        <input type="hidden" id="addDonateUrl" value="{{ action('Web\OrderController@addOrderproduct' , 180) }}">
+                                                        <input type="hidden" id="removeDonateUrl" value="{{ action('Web\OrderController@removeOrderproduct' , 180) }}">
+                                                        <input type="hidden" id="orderHasDonate"
+                                                               value="@if(isset($orderHasDonate) && $orderHasDonate)1 @else 0 @endif">
                                                     </div>
                                                 </div>
                                             </div>
