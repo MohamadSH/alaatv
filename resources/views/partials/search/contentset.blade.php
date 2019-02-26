@@ -5,7 +5,7 @@
         </a>
         <hr>
     </div>
-    <div id = "set-carousel" class = "a--owl-carousel-type-1 owl-carousel owl-theme" data-per-page = "3">
+    <div id = "set-carousel" class = "a--owl-carousel-type-1 owl-carousel owl-theme" data-per-page = "7">
         @foreach($items as $lesson)
 
             @include('partials.widgets.set2',[

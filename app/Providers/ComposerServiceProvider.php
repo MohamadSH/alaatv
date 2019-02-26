@@ -27,6 +27,7 @@ class ComposerServiceProvider extends ServiceProvider
             'pages.content-search',
             'pages.shop',
             'order.checkout.review',
+            'order.checkout.payment',
 
         ], function ($view) {
             $closedSideBar = true;
@@ -41,7 +42,7 @@ class ComposerServiceProvider extends ServiceProvider
          */
         View::composer([
 //            'pages.dashboard1',
-            'partials.sidebar',
+'partials.sidebar',
         ], function ($view) {
 //            $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getMainBlocks());
             $sections = collect();
