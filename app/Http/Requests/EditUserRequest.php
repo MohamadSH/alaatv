@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Afterloginformcontrol;
-use App\Http\Middleware\TrimUserUpdateRequest;
 use App\Traits\CharacterCommon;
 use App\Traits\RequestCommon;
 use Illuminate\Foundation\Http\FormRequest;
@@ -13,6 +12,13 @@ class EditUserRequest extends FormRequest
 {
     use CharacterCommon;
     use RequestCommon ;
+
+    const USER_UPDATE_TYPE_TOTAL    = "total" ;
+    const USER_UPDATE_TYPE_PROFILE  = "profile" ;
+    const USER_UPDATE_TYPE_ATLOGIN  = "atLogin" ;
+    const USER_UPDATE_TYPE_PASSWORD = "password" ;
+    const USER_UPDATE_TYPE_PHOTO    = "photo" ;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -20,19 +26,23 @@ class EditUserRequest extends FormRequest
      */
     public function authorize()
     {
-        $user = $this->user();
+        return true;
+
+        //ToDo : Has put at the begining of UserController@update . Needs to be refactored
+
+        /*$user = $this->user();
         $updateType = $this->request->get("updateType");
         $authorized = true;
         switch ($updateType)
         {
-            case TrimUserUpdateRequest::USER_UPDATE_TYPE_TOTAL :
+            case self::USER_UPDATE_TYPE_TOTAL :
                 if (!$user->can(config('constants.EDIT_USER_ACCESS')))
                     $authorized = false;
                 break;
-            case TrimUserUpdateRequest::USER_UPDATE_TYPE_PASSWORD :
-            case TrimUserUpdateRequest::USER_UPDATE_TYPE_ATLOGIN :
-            case TrimUserUpdateRequest::USER_UPDATE_TYPE_PHOTO :
-            case TrimUserUpdateRequest::USER_UPDATE_TYPE_PROFILE :
+            case self::USER_UPDATE_TYPE_PASSWORD :
+            case self::USER_UPDATE_TYPE_ATLOGIN :
+            case self::USER_UPDATE_TYPE_PHOTO :
+            case self::USER_UPDATE_TYPE_PROFILE :
                 $isRequestedUserAndAuthSame = $this->hasRequestAuthUser($user , $this);
                 if(!$isRequestedUserAndAuthSame)
                     $authorized = false;
@@ -44,7 +54,7 @@ class EditUserRequest extends FormRequest
                 break;
         }
 
-        return $authorized;
+        return $authorized;*/
     }
 
     /**
@@ -56,10 +66,10 @@ class EditUserRequest extends FormRequest
     {
         $userId = $this->request->get("id");
 
-        $updateType = $this->request->get("updateType");
+        $updateType = $this->request->get("updateType" , self::USER_UPDATE_TYPE_TOTAL);
         switch ($updateType)
         {
-            case TrimUserUpdateRequest::USER_UPDATE_TYPE_TOTAL :
+            case self::USER_UPDATE_TYPE_TOTAL :
                 $rules = [
                     'firstName'     => 'required|max:255',
                     'lastName'      => 'required|max:255',
@@ -95,20 +105,20 @@ class EditUserRequest extends FormRequest
                     'techCode'      => 'sometimes|nullable|alpha_num|max:5|min:5|unique:users,techCode,' . $userId . ',id',
                 ];
                 break;
-            case TrimUserUpdateRequest::USER_UPDATE_TYPE_PROFILE :
+            case self::USER_UPDATE_TYPE_PROFILE :
                 $rules = [
-                    'postalCode' => 'numeric',
-                    'email'      => 'email',
-                    'photo'      => 'image|mimes:jpeg,jpg,png|max:800',
+                    'postalCode' => 'sometimes|nullable|numeric',
+                    'email'      => 'sometimes|nullable|email',
+                    'photo'      => 'sometimes|nullable|image|mimes:jpeg,jpg,png|max:800',
                     //ToDo: it needs to be required but will conflict with profile update
                 ];
                 break;
-            case TrimUserUpdateRequest::USER_UPDATE_TYPE_PHOTO :
+            case self::USER_UPDATE_TYPE_PHOTO :
                 $rules = [
                     'photo'      => 'required|image|mimes:jpeg,jpg,png|max:800',
                 ];
                 break;
-            case TrimUserUpdateRequest::USER_UPDATE_TYPE_ATLOGIN :
+            case self::USER_UPDATE_TYPE_ATLOGIN :
                 $afterLoginFields = $this->getAfterLoginFields();
 
                 //ToDo : Could be refactored to be more dynamic
@@ -126,7 +136,7 @@ class EditUserRequest extends FormRequest
                         $rules[$afterLoginField] = "required|max:255";
                 }
                 break;
-            case TrimUserUpdateRequest::USER_UPDATE_TYPE_PASSWORD :
+            case self::USER_UPDATE_TYPE_PASSWORD :
                 $rules =  [
                     'password'    => 'required|confirmed|min:6',
                     'oldPassword' => 'required',
