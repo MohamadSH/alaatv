@@ -266,6 +266,8 @@ use Laravel\Passport\HasApiTokens;
  * @property string password
  * @property int lockProfile
  * @property string photo
+ * @property mixed roles
+ * @property static|null mobile_verified_at
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail
 {
@@ -381,7 +383,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'techCode',
     ];
 
-    protected $fillableByUser=[
+    protected $fillableByPublic=[
         'province',
         'city',
         'address',

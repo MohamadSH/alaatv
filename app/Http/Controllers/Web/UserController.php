@@ -123,8 +123,7 @@ class UserController extends Controller
         $this->middleware('permission:' . config('constants.INSERT_USER_ACCESS'), ['only' => 'create']);
         $this->middleware('permission:' . config('constants.REMOVE_USER_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . config('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
-        $this->middleware('trimUserUpdateRequest', ['only' => 'update']);
-        $this->middleware('completeInfo', ['only' => ['uploadConsultingQuestion' , 'uploadConsultingQuestion']]);
+        $this->middleware('completeInfo', ['only' => ['uploadConsultingQuestion']]);
     }
 
     /**
@@ -371,35 +370,33 @@ class UserController extends Controller
 
     /**
      * @param array $inputData
-     * @param User $user
      * @param User $authenticatedUser
      *
+     * @param string $moderatorPermission
+     * @param User $user
      * @return void
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
-    private function fillContentFromRequest(array $inputData, User $authenticatedUser, User &$user): void
+    private function fillContentFromRequest(array $inputData, User $authenticatedUser , string $moderatorPermission, User &$user): void
     {
-        if (optional($authenticatedUser)->can(config('constants.EDIT_USER_ACCESS'))) {
+        if ($authenticatedUser->can($moderatorPermission)) {
             $user->fill($inputData);
-            $hasMobileVerifiedAt = in_array("mobileNumberVerification" , $inputData);
-            $hasPassword         = in_array("password" , $inputData);
-            $hasLockProfile      = in_array("lockProfile" , $inputData);
+            $hasMobileVerifiedAt = in_array('mobileNumberVerification' , $inputData);
+            $hasPassword         = in_array('password' , $inputData);
 
             if ($hasMobileVerifiedAt)
-                $user->mobile_verified_at = ($inputData["mobileNumberVerification"] == "1") ? Carbon::now()
-                    ->setTimezone("Asia/Tehran") : null;
-            if ($hasPassword)
-                $user->password     = bcrypt($inputData["password"]);
-            if ($hasLockProfile)
-                $user->lockProfile  = $inputData["lockProfile"] == "1" ? 1 : 0;
+                $user->mobile_verified_at = ($inputData['mobileNumberVerification'] == '1') ? Carbon::now()->setTimezone('Asia/Tehran') : null;
 
-            if (in_array("roles" , $inputData))
-                $this->attachRoles($inputData["roles"], $authenticatedUser , $user);
+            if ($hasPassword)
+                $user->password     = bcrypt($inputData['password']);
+
+            $user->lockProfile      = array_get($inputData , 'lockProfile' , $user->lockProfile);
+
         }else{
-            $user->fillByUser($inputData);
+            $user->fillByPublic($inputData);
         }
 
-        $file = $this->getRequestFile($inputData, "photo");
+        $file = $this->getRequestFile($inputData, 'photo');
         if ($file !== false)
             $this->storePhotoOfUser($user, $file);
     }
@@ -435,18 +432,18 @@ class UserController extends Controller
      * @param User  $staffUser
      * @param User  $user
      */
-    private function attachRoles(array $newRoleIds = [], User $staffUser, User $user): void
+    private function attachRoles(array $newRoleIds, User $staffUser, User $user): void
     {
-        if (isset($staffUser) && $staffUser->can(config('constants.INSET_USER_ROLE'))) {
-            $oldRolesIds = $user->roles->pluck("id")
-                                       ->toArray();
+        if ($staffUser->can(config('constants.INSET_USER_ROLE'))) {
+            $oldRolesIds = $user->roles->pluck("id")->toArray();
             $totalRoles = array_merge($oldRolesIds, $newRoleIds);
-            $this->checkGivenRoles($totalRoles, $staffUser);
-
+            /** snippet for checking system roles idea */
+            /*$this->checkGivenRoles($totalRoles, $staffUser);
             if (!empty($newRoleIds)) {
                 $user->roles()
                      ->sync($newRoleIds);
-            }
+            }*/
+            $user->roles()->attach($totalRoles);
         }
     }
 
@@ -1517,8 +1514,7 @@ class UserController extends Controller
      *
      * @param EditUserRequest $request
      * @param User $user
-     * @return Response
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @return array|Response
      */
     public function update(EditUserRequest $request, User $user=null)
     {
@@ -1526,37 +1522,43 @@ class UserController extends Controller
 
         if($user===null) {
             $user = $authenticatedUser;
+            if($user->isUserProfileLocked())
+                return response(
+                    [
+                        'error' =>[
+                            'code'  =>  Response::HTTP_BAD_REQUEST,
+                            'text'  =>  'User profile is locked!',
+                        ]
+                    ],
+                    Response::HTTP_OK
+                );
         } elseif (!$authenticatedUser->can(config('constants.EDIT_USER_ACCESS'))) {
                 abort(Response::HTTP_FORBIDDEN);
         }
 
-        $this->fillContentFromRequest($request->all() , $authenticatedUser , $user);
-
-        if ($user->completion("lockProfile") == 100)
-            $user->lockProfile();
-
-        /** snippet code for changing user's password
-         *  note that an admin user can change any passwords and that works fine
-         *  but when a user is updating his password it needs some extra work as you can see below
-         *  and this extra work should not conflict with updating passwords by admin
-         */
-        //        $oldPassword = $request->oldPassword;
-        //        $newPassword = $request->password;
-        //
-        //        $confirmation = $this->userPasswordConfirmation($user, $oldPassword, $newPassword);
-        //
-        //        if ($confirmation["confirmed"]) {
-        //            $user->changePassword($newPassword);
-        //            if ($user->update()) {
-        //                session()->put("success", "رمز عبور با موفقیت تغییر یافت.");
-        //            } else {
-        //                session()->put("error", "خطا در تغییر رمز عبور ، لطفا دوباره اقدام نمایید.");
-        //            }
-        //        } else {
-        //            session()->put("error", $confirmation["message"]);
-        //        }
+        try {
+            $this->fillContentFromRequest($request->all() , $authenticatedUser , config('constants.EDIT_USER_ACCESS') , $user);
+        } catch (FileNotFoundException $e) {
+            return response(
+                [
+                    "error" => [
+                        "text"       => $e->getMessage(),
+                        "line"       => $e->getLine(),
+                        "file"       => $e->getFile()
+                    ]
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
 
         if ($user->update()) {
+            //ToDo : place in UserObserver
+            if ($user->checkUserProfileForLocking())
+                $user->lockProfile();
+
+            //ToDo : place in UserObserver
+            if($request->has('roles'))
+                $this->attachRoles($request->get('roles'), $authenticatedUser , $user);
 
             $newPhotoSrc = route('image', [
                 'category' => '1',
@@ -1565,20 +1567,20 @@ class UserController extends Controller
                 'filename' => $user->photo,
             ]);
 
-            $message = "اطلاعات با موفقیت اصلاح شد";
+            $message = 'اطلاعات با موفقیت اصلاح شد';
             $status = Response::HTTP_OK;
-            session()->flash("success", $message);
+            session()->flash('success', $message);
         } else {
-            $message = \Lang::get("responseText.Database error.");
+            $message = 'Database error on updating user';
             $status = Response::HTTP_SERVICE_UNAVAILABLE;
-            session()->flash("error", $message);
+            session()->flash('error', $message);
         }
 
         if ($request->expectsJson()) {
             return response(
                 [
-                    "newPhoto" => isset($newPhotoSrc) ? $newPhotoSrc : null,
-                    "message"  => $message,
+                    'userPhoto' => $newPhotoSrc,
+                    'message'   => $message,
                 ],
                 $status
             );
@@ -1875,7 +1877,7 @@ class UserController extends Controller
 
         $user = new User();
         try {
-            $this->fillContentFromRequest($data , $authenticatedUser , $user);
+            $this->fillContentFromRequest($data , $authenticatedUser , config('constants.INSERT_USER_ACCESS') , $user);
         } catch (FileNotFoundException $e) {
             return [
                 "error" => true,
@@ -1890,6 +1892,9 @@ class UserController extends Controller
 
         $error = false;
         if ($user->save()) {
+            if ($user->checkUserProfileForLocking())
+                $user->lockProfile();
+
             if (in_array("roles" , $data))
                 $this->attachRoles($data["roles"], $authenticatedUser, $user);
 

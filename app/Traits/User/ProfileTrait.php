@@ -268,12 +268,21 @@ trait ProfileTrait
      *
      * @param array $data
      */
-    public function fillByUser(array $data)
+    public function fillByPublic(array $data)
     {
-        foreach ($this->fillableByUser as $fillable){
-            if(isset($data[$fillable]))
-                $this->$fillable = $data[$fillable];
+        foreach ($data as $key => $datum){
+            if( ( array_key_exists($key , $this->getAttributes())  && !isset($this->$key) ) || in_array($key , $this->fillableByPublic))
+                $this->$key = $datum;
         }
+    }
+
+    /**
+     * Determines whether user's profile should be locked or not
+     *
+     * @return bool
+     */
+    public function checkUserProfileForLocking():bool{
+        return $this->completion('lockProfile') == 100;
     }
 
 }
