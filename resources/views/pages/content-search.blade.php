@@ -12,19 +12,19 @@
         .a--multi-level-search {
             display: none;
             margin-bottom: 20px;
-        }
-        .a--multi-level-search .selectorItem {
-            background-color: #fff;
-            border-radius: 4px;
+            background: white;
+            padding-top: 35px;
             -webkit-box-shadow: 0px 0px 5px 2px rgba(221,221,221,1);
             -moz-box-shadow: 0px 0px 5px 2px rgba(221,221,221,1);
             box-shadow: 0px 0px 5px 2px rgba(221,221,221,1);
+        }
+        .a--multi-level-search .selectorItem {
+
         }
         .a--multi-level-search .selectorItem .selectorItemTitle {
             font-size: 20px;
             font-weight: bold;
             text-align: center;
-            border-bottom: dotted 2px gray;
         }
         .a--multi-level-search .selectorItem .subItem:hover {
             /*-webkit-box-shadow: 0px 0px 15px 0px #7FDBFF;*/
@@ -63,7 +63,7 @@
             border: solid 3px #dbdbdb;
         }
         .a--multi-level-search .filterNavigationWarper {
-            margin-bottom: 25px;
+            margin-bottom: 45px;
         }
         .a--multi-level-search .filterNavigationWarper .filterNavigationStep {
             text-align: center;
@@ -75,14 +75,14 @@
             position: absolute;
             width: 100%;
             height: 5px;
-            background-color: #00e333;
+            background-color: #42d70066;
             top: 8px;
             left: -50%;
             z-index: -1;
         }
         .a--multi-level-search .filterNavigationWarper .filterNavigationStep.current::before,
         .a--multi-level-search .filterNavigationWarper .filterNavigationStep.deactive::before {
-            background-color: gray;
+            background-color: #f2f3f8;
         }
         .a--multi-level-search .filterNavigationWarper .filterNavigationStep:last-child::before {
             display: none;
@@ -90,19 +90,50 @@
         .a--multi-level-search .filterNavigationWarper .filterNavigationStep::after {
 
         }
+        .a--multi-level-search .filterNavigationWarper .filterNavigationStep.active  .filterStepText {
+            box-shadow: 0px 0px 15px -1px rgba(0, 214, 64, 0.25);
+        }
         .a--multi-level-search .filterNavigationWarper .filterNavigationStep.current .filterStepText {
-            -webkit-box-shadow: 0px 0px 10px 2px rgba(0,227,51,1);
-            -moz-box-shadow: 0px 0px 10px 2px rgba(0,227,51,1);
-            box-shadow: 0px 0px 10px 2px rgba(0,227,51,1);
+            /*-webkit-box-shadow: 0px 0px 10px 2px rgba(0,227,51,1);*/
+            /*-moz-box-shadow: 0px 0px 10px 2px rgba(0,227,51,1);*/
+            /*box-shadow: 0px 0px 10px 2px rgba(0,227,51,1);*/
+            box-shadow: 0px 0px 15px -1px rgba(0, 214, 64, 0.55);
+        }
+        .a--multi-level-search .filterNavigationWarper .filterNavigationStep.deactive   .filterStepText {
+            /*-webkit-box-shadow: 0px 0px 15px 1px rgba(51, 40, 77, 0.21);*/
+            /*-moz-box-shadow: 0px 0px 15px 1px rgba(51, 40, 77, 0.21);*/
+            /*box-shadow: 0px 0px 15px 1px rgba(51, 40, 77, 0.21);*/
+            box-shadow: 0px 0px 15px -1px rgba(51, 40, 77, 0.17);
         }
         .a--multi-level-search .filterNavigationWarper .filterNavigationStep .filterStepText {
             display: initial;
             background: white;
             padding: 12px;
-            border: solid 2px gray;
             cursor: pointer;
         }
+        .a--multi-level-search .filterNavigationWarper .filterNavigationStep .filterStepSelectedText {
+            /*display: none;*/
+            position: relative;
+            top: 25px;
+            width: 100%;
+            text-align: center;
+            background-color: white;
+            -webkit-box-shadow: 0px 0px 5px 8px rgba(255,255,255,1);
+            -moz-box-shadow: 0px 0px 5px 8px rgba(255,255,255,1);
+            box-shadow: 0px 0px 5px 8px rgba(255,255,255,1);
+        }
 
+
+
+
+
+
+
+
+        .a--owl-carousel-type-1 .m-widget19__header {
+            margin-right: -15px;
+            margin-left: -15px;
+        }
     </style>
 
     <div class="row">
@@ -112,7 +143,7 @@
 
             </div>
 
-            <div class="row justify-content-center selectorItem" data-select-active="true" data-select-order="0" data-select-title="مقطع">
+            <div class="row justify-content-center selectorItem" data-select-order="0" data-select-title="مقطع" data-select-display="grid" data-select-value="چهارم دبیرستان">
                 <div class="col subItem">همه مقاطع</div>
                 <div class="col subItem">دهم</div>
                 <div class="col subItem">یازدهم</div>
@@ -124,14 +155,14 @@
                 <div class="col subItem">المپیاد</div>
             </div>
 
-            <div class="row justify-content-center selectorItem" data-select-order="1" data-select-title="رشته" data-select-display="grid">
+            <div class="row justify-content-center selectorItem" data-select-order="1" data-select-title="رشته" data-select-display="grid" data-select-value="ریاضی">
                 <div class="col subItem">همه رشته ها</div>
                 <div class="col subItem">ریاضی</div>
                 <div class="col subItem">تجربی</div>
                 <div class="col subItem">انسانی</div>
             </div>
 
-            <div class="row justify-content-center selectorItem" data-select-order="2" data-select-title="درس" data-select-display="grid" data-select-display-select2config="">
+            <div class="row justify-content-center selectorItem" data-select-order="2" data-select-title="درس" data-select-display="select2" data-select-value="المپیاد فیزیک">
                 <div class="col subItem">همه دروس</div>
                 <div class="col subItem">آمار و مدلسازی</div>
                 <div class="col subItem">اخلاق</div>
@@ -158,7 +189,7 @@
                 <div class="col subItem">گسسته</div>
             </div>
 
-            <div class="row justify-content-center selectorItem" data-select-order="3" data-select-title="دبیر" data-select-display="select2">
+            <div class="row justify-content-center selectorItem" data-select-order="3" data-select-title="دبیر" data-select-display="select2" data-select-value="ارشی" data-select-active="true">
                 <div class="col subItem" value=""> همه دبیرها</div>
                 <div class="col subItem" value="محمد_رضا_آقاجانی">محمد رضا آقاجانی</div>
                 <div class="col subItem" value="رضا_آقاجانی">رضا آقاجانی</div>
@@ -232,26 +263,256 @@
         @include("partials.search.tagLabel" , ["tags"=>$tags])
     @endif
 
+    <div class="row">
+        <div class="
+            @if(optional($result->get('pamphlet'))->isNotEmpty() || optional($result->get('article'))->isNotEmpty())
+                    col-12 col-md-9
+            @else
+                    col
+            @endif">
 
-    <div class="row">
-        @include('partials.search.contentset',['items' => $result->get('set')])
+            {{--{{ dd($result->get('product')) }}--}}
+            <div class="row">
+                @include('partials.search.video',[
+                'items' => $result->get('product'),
+                'title' => 'محصولات',
+                'carouselType' => 'a--owl-carousel-type-1',
+                'widgetId'=>'product-carousel',
+                'type' => 'product'
+                ])
+            </div>
+            <div class="row">
+                @include('partials.search.contentset',[
+                'items' => $result->get('set'),
+                'type' => 'set'
+                ])
+            </div>
+            <div class="row">
+                @include('partials.search.video',['items' => $result->get('video')])
+            </div>
+
+
+            <div class="row">
+                {{--@if(optional($result->get('product'))->isNotEmpty())--}}
+                    {{--<div class = "col-12 m--margin-bottom-5">--}}
+                        {{--<a href = "#" class = "m-link m-link--primary">--}}
+                            {{--<h3 style = "font-weight: bold"><i class="la la-video-camera"></i> محصولات </h3>--}}
+                        {{--</a>--}}
+                        {{--<hr>--}}
+                    {{--</div>--}}
+                    {{--<div class = "col">--}}
+                        {{--<div id = "video-carousel" class = "a--owl-carousel-type-1 owl-carousel owl-theme" data-per-page = "7">--}}
+                            {{--@foreach($result->get('product') as $product)--}}
+                                {{--<div class = "@if($widgetScroll) item @else col-lg-3 col-xl-4 col-md-4 col-xs-4 @endif">--}}
+                                    {{--<!--begin:: Widgets/Blog-->--}}
+                                    {{--<div class = "m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force" style="min-height-: 286px">--}}
+                                        {{--<div class = "m-portlet__head m-portlet__head--fit">--}}
+                                            {{--<div class = "m-portlet__head-caption">--}}
+                                                {{--<div class = "m-portlet__head-action">--}}
+                                                    {{--<a href="{{action("Web\ProductController@show" , $product)}}" class = "btn btn-sm m-btn--pill btn-brand">مشاهده</a>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                        {{--<div class = "m-portlet__body">--}}
+                                            {{--<div class = "m-widget19">--}}
+                                                {{--<div class = "m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" >--}}
+                                                    {{--<img src = "{{ $widgetPic }}" alt = " {{ $widgetTitle }}"/>--}}
+                                                    {{--<div class = "m-widget19__shadow"></div>--}}
+                                                {{--</div>--}}
+                                                {{--<div class = "m-widget19__content">--}}
+                                                    {{--<div class="m--margin-top-10">--}}
+                                                        {{--<a href = "{{ $widgetLink }}" class = "m-link">--}}
+                                                            {{--<h6>--}}
+                                                                {{--<span class="m-badge m-badge--info m-badge--dot"></span> {{ $widgetTitle }}--}}
+                                                            {{--</h6>--}}
+                                                        {{--</a>--}}
+                                                    {{--</div>--}}
+                                                    {{--<div class = "m-widget19__header m--margin-top-10">--}}
+                                                        {{--<div class = "m-widget19__user-img">--}}
+                                                            {{--<img class = "m-widget19__img" src = "{{ $widgetAuthor->photo }}" alt = "{{ $widgetAuthor->full_name }}">--}}
+                                                        {{--</div>--}}
+                                                        {{--<div class = "m-widget19__info">--}}
+                                                            {{--<span class = "m-widget19__username">--}}
+                                                                {{--{{ $widgetAuthor->full_name }}--}}
+                                                            {{--</span>--}}
+                                                            {{--<br>--}}
+                                                            {{--<span class = "m-widget19__time">--}}
+                                                                {{--موسسه غیرتجاری آلاء--}}
+                                                            {{--</span>--}}
+                                                        {{--</div>--}}
+                                                        {{--<div class = "m-widget19__stats">--}}
+                                                            {{--<span class = "m-widget19__number m--font-brand">--}}
+                                                                {{--{{ $widgetCount }}--}}
+                                                            {{--</span>--}}
+                                                            {{--<span class = "m-widget19__comment">--}}
+                                                                {{--محتوا--}}
+                                                            {{--</span>--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                                {{--<div class = "m-widget19__action">--}}
+                                                    {{--<a href = "{{ $widgetLink }}" class = "btn m-btn--pill    btn-outline-warning m-btn m-btn--outline-2x ">نمایش فیلم های این دوره</a>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                    {{--<!--end:: Widgets/Blog-->--}}
+                                {{--</div>--}}
+                            {{--@endforeach--}}
+                        {{--</div>--}}
+                        {{--<input id="owl--js-var-next-page-video-url" class = "m--hide" type = "hidden" value = '{{ $items->nextPageUrl() }}'>--}}
+                    {{--</div>--}}
+                {{--@endif--}}
+            </div>
+        </div>
+        @if(optional($result->get('pamphlet'))->isNotEmpty() || optional($result->get('article'))->isNotEmpty())
+            <div class="col-12 col-md-3">
+                <div class="row">
+
+                    {{--@include('partials.search.pamphlet',['items' => $result->get('pamphlet')])--}}
+                    @if(optional($result->get('pamphlet'))->isNotEmpty())
+                        <div class="col m-portlet m-portlet--full-height">
+                            <div class="m-portlet__head">
+                                <div class="m-portlet__head-caption">
+                                    <div class="m-portlet__head-title">
+                                        <h3 class="m-portlet__head-text">
+                                            <i class="la la-file-pdf-o"></i>جزوات آلاء
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-portlet__body m--padding-left-5 m--padding-right-5">
+                                <div class="tab-content">
+
+                                    <div class="m-widget4">
+
+                                        @foreach($result->get('pamphlet') as $content)
+                                            <div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">
+                                                <div class="m-widget4__img m-widget4__img--pic">
+                                                    <img src="@if(isset($content->author->photo)) {{ $content->author->photo }} @else /assets/app/media/img/users/100_14.jpg @endif" alt="">
+                                                </div>
+                                                <div class="m-widget4__info">
+                                                        <span class="m-widget4__title">
+                                                            <a href="{{ action("Web\ContentController@show" , $content) }}" class="m-link">
+                                                                {{ $content->name }}
+                                                            </a>
+                                                        </span>
+                                                    <br>
+                                                    <span class="m-widget4__sub">
+                                                            <a href="{{ action("Web\ContentController@show" , $content) }}" class="m-link">
+                                                                {{ $content->author->full_name }}
+                                                            </a>
+                                                        </span>
+                                                </div>
+                                                @if(isset($content->thumbnail))
+                                                    <div class="m-widget4__img m-widget4__img--pic">
+                                                        <img src="{{ $content->thumbnail }}" alt="">
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        @endforeach
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    {{--@include('partials.search.article',['items' => $result->get('article')])--}}
+                    @if(optional($result->get('article'))->isNotEmpty())
+                        <div class="col m-portlet m-portlet--full-height ">
+                            <div class="m-portlet__head">
+                                <div class="m-portlet__head-caption">
+                                    <div class="m-portlet__head-title">
+                                        <h3 class="m-portlet__head-text">
+                                            <i class="la la-comment"></i>مقالات آموزشی
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-portlet__body m--padding-left-5 m--padding-right-5">
+                                <div class="tab-content">
+
+                                    <div class="m-widget4">
+
+                                        @foreach($result->get('article') as $content)
+                                            <div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">
+                                                <div class="m-widget4__img m-widget4__img--pic">
+                                                    <img src="@if(isset($content->author->photo)) {{ $content->author->photo }} @else /assets/app/media/img/users/100_14.jpg @endif" alt="">
+                                                </div>
+                                                <div class="m-widget4__info">
+                                                        <span class="m-widget4__title">
+                                                            <a href="{{ action("Web\ContentController@show" , $content) }}" class="m-link">
+                                                                {{ $content->name }}
+                                                            </a>
+                                                        </span>
+                                                    <br>
+                                                    <span class="m-widget4__sub">
+                                                            <a href="{{ action("Web\ContentController@show" , $content) }}" class="m-link">
+                                                                {{ $content->author->full_name }}
+                                                            </a>
+                                                        </span>
+                                                </div>
+                                                @if(isset($content->thumbnail))
+                                                    <div class="m-widget4__img m-widget4__img--pic">
+                                                        <img src="{{ $content->thumbnail }}" alt="">
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        @endforeach
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                </div>
+            </div>
+        @endif
     </div>
-    <div class="row">
-        @include('partials.search.video',['items' => $result->get('video')])
-    </div>
-    <div class="row">
-        @include('partials.search.pamphlet',['items' => $result->get('pamphlet')])
-    </div>
-    <div class="row">
-        @include('partials.search.article',['items' => $result->get('article')])
-    </div>
+
 @endsection
 @section('page-js')
 
     <script src = "/acm/page-content-search.js" type = "text/javascript"></script>
-    {{--<script src = "{{ mix('/js/checkout-payment.js') }}"></script>--}}
     <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-content-search.js') }}"></script>
 
+    <script>
+        jQuery(document).ready( function() {
+            // var owl2 = jQuery('.a--owl-carousel-type-2.owl-carousel');
+            // owl2.each(function () {
+            //     $(this).owlCarousel({
+            //         stagePadding: 40,
+            //         loop: false,
+            //         rtl:true,
+            //         nav:false,
+            //         dots: false,
+            //         margin:15,
+            //         mouseDrag: true,
+            //         touchDrag: true,
+            //         pullDrag: true,
+            //         responsiveClass:true,
+            //         responsive:{
+            //             0:{
+            //                 items:1,
+            //             },
+            //             600:{
+            //                 items:2,
+            //             },
+            //             1200:{
+            //                 items:4
+            //             },
+            //             1600:{
+            //                 items:5
+            //             }
+            //         }
+            //     });
+            // });
+        });
+    </script>
 @endsection
 
 {{--

@@ -3,19 +3,76 @@ var Alaasearch = function () {
     var videoAjaxLock = 0;
     var setAjaxLock = 0;
 
-    function makeWidgetFromJsonResponse(data, type) {
+    function getProductCarouselItem(data) {
+        let widgetActionLink = data.url;
+        let widgetActionName = 'مشاهده و خرید';
+        let widgetPic = data.photo;
+        let widgetTitle = data.name;
+        let price = data.price;
+        let priceHtml = '';
+        if (price.base !== price.final) {
+            priceHtml =
+                '                                <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">\n'+
+                '                                    <span class = "m-badge m-badge--warning a--productRealPrice">'+price.base.toLocaleString('fa')+'</span>\n' +
+                '                                    '+price.final.toLocaleString('fa')+' تومان \n' +
+                '                                    <span class = "m-badge m-badge--info a--productDiscount">'+((1-(price.final/price.base))*100)+'%</span>\n' +
+                '                                </span>';
+        } else {
+            priceHtml =
+                '                                <span class = "m-widget6__text m--align-right m--font-boldest m--font-primary">\n'+
+                '                                    '+price.final.toLocaleString('fa')+' تومان \n' +
+                '                                </span>';
+        }
+        return '<div class = "item">\n' +
+            '    <!--begin:: Widgets/Blog-->\n' +
+            '    <div class = "m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force" style="min-height-: 286px">\n' +
+            '        <div class = "m-portlet__head m-portlet__head--fit">\n' +
+            '            <div class = "m-portlet__head-caption">\n' +
+            '                <div class = "m-portlet__head-action">\n' +
+            '                    <a href="'+widgetActionLink+'" class = "btn btn-sm m-btn--pill btn-brand">'+widgetActionName+'</a>\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '        </div>\n' +
+            '        <div class = "m-portlet__body">\n' +
+            '            <div class = "m-widget19">\n' +
+            '                <div class = "m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" >\n' +
+            '                    <img src = "'+widgetPic+'" alt = "'+widgetTitle+'"/>\n' +
+            '                    <div class = "m-widget19__shadow"></div>\n' +
+            '                </div>\n' +
+            '                <div class = "m-widget19__content">\n' +
+            '                    <div class="m--margin-top-10">\n' +
+            '                        <a href = "'+widgetActionLink+'" class = "m-link">\n' +
+            '                            <h6>\n' +
+            '                                <span class="m-badge m-badge--info m-badge--dot"></span> '+widgetTitle+'\n' +
+            '                            </h6>\n' +
+            '                        </a>\n' +
+            '                    </div>\n' +
+            '                    <div class = "m-widget19__header m--margin-top-10">\n' +
+            '                        <div class = "m-widget19__info">\n' +
+            priceHtml +
+            '                        </div>\n' +
+            '                    </div>\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '        </div>\n' +
+            '    </div>\n' +
+            '    <!--end:: Widgets/Blog-->\n' +
+            '</div>';
+    }
 
-        // console.log(data);
-        var widgetActionLink = data.url;
-        var widgetActionName = type === 'set' ? 'نمایش این دوره' : 'پخش / دانلود';
-        var widgetPic = (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail : data.photo;
-        var widgetTitle = data.name;
-        var widgetAuthor = {
+    function getSetCarouselItem(data) {
+
+        let widgetActionLink = data.url;
+        let widgetActionName = 'نمایش این دوره';
+        let widgetPic = (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail : data.photo;
+        let widgetTitle = data.name;
+        let widgetAuthor = {
             photo : data.author.photo,
             name: data.author.firstName,
             full_name: data.author.full_name
         };
-        var widgetCount = 0 ;
+
+        var widgetCount = data.contents_count ;
         var widgetLink = data.url;
         return '<div class = \"item\"> \
     <!--begin:: Widgets/Blog--> \
@@ -31,34 +88,36 @@ var Alaasearch = function () {
             <div class = \"m-widget19\"> \
                 <div class = \"m-widget19__pic m-portlet-fit--top m-portlet-fit--sides\" > \
                     <img src = \"'+ widgetPic +'\" alt = \" ' + widgetTitle +'\"/> \
-                    <h4 class = \"m-widget19__title m--font-light m--bg-brand m--padding-top-15 m--padding-right-25 a--opacity-7 a--full-width m--regular-font-size-lg2\"> \
-                        <a href = \"' + widgetLink + '\" class = \"m-link m--font-boldest m--font-light\"> \
-                            ' + widgetTitle + ' \
-                        </a> \
-                    </h4> \
                     <div class = \"m-widget19__shadow\"></div> \
                 </div> \
-                <div class = \"m-widget19__content\"> \
+                <div class = \"m-widget19__content\"> \n' +
+            '                    <div class="m--margin-top-10">\n' +
+            '                        <a href = "'+widgetActionLink+'" class = "m-link">\n' +
+            '                            <h6>\n' +
+            '                                <span class="m-badge m-badge--info m-badge--dot"></span> '+widgetTitle+'\n' +
+            '                            </h6>\n' +
+            '                        </a>\n' +
+            '                    </div>\
                     <div class = \"m-widget19__header\"> \
                         <div class = \"m-widget19__user-img\"> \
                             <img class = \"m-widget19__img\" src = \" ' + widgetAuthor.photo + '\" alt = \"' + widgetAuthor.name + '\"> \
                         </div> \
                         <div class = \"m-widget19__info\"> \
-                                            <span class = \"m-widget19__username\"> \
-                                            ' + widgetAuthor.full_name + ' \
-                                            </span> \
+                            <span class = \"m-widget19__username\"> \
+                            ' + widgetAuthor.full_name + ' \
+                            </span> \
                             <br> \
                             <span class = \"m-widget19__time\"> \
-                                            موسسه غیرتجاری آلاء \
-                                            </span> \
+                            موسسه غیرتجاری آلاء \
+                            </span> \
                         </div> \
                         <div class = \"m-widget19__stats\"> \
-                                            <span class = \"m-widget19__number m--font-brand\"> \
-                                            ' + widgetCount + ' \
-                                            </span> \
+                            <span class = \"m-widget19__number m--font-brand\"> \
+                            ' + widgetCount + ' \
+                            </span> \
                             <span class = \"m-widget19__comment\"> \
-                                            محتوا  \
-                                            </span> \
+                            محتوا  \
+                            </span> \
                         </div> \
                     </div> \
                 </div> \
@@ -70,11 +129,81 @@ var Alaasearch = function () {
     </div> \
     <!--end:: Widgets/Blog--> \
 </div>';
+    }
 
+    function getVideoCarouselItem(data) {
+
+        let widgetActionLink = data.url;
+        let widgetActionName = 'پخش / دانلود';
+        let widgetPic = (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail : data.photo;
+        let widgetTitle = data.name;
+        let widgetAuthor = {
+            photo : data.author.photo,
+            name: data.author.firstName,
+            full_name: data.author.full_name
+        };
+
+        var widgetLink = data.url;
+        return '<div class = \"item\"> \
+    <!--begin:: Widgets/Blog--> \
+    <div class = \"m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force\" style=\"min-height-: 286px\"> \
+        <div class = \"m-portlet__head m-portlet__head--fit\"> \
+            <div class = \"m-portlet__head-caption\"> \
+                <div class = \"m-portlet__head-action\"> \
+                    <a href=\"' + widgetActionLink +'\" class = \"btn btn-sm m-btn--pill btn-brand\">' + widgetActionName + '</a> \
+                </div> \
+            </div> \
+        </div> \
+        <div class = \"m-portlet__body\"> \
+            <div class = \"m-widget19\"> \
+                <div class = \"m-widget19__pic m-portlet-fit--top m-portlet-fit--sides\" > \
+                    <img src = \"'+ widgetPic +'\" alt = \" ' + widgetTitle +'\"/> \
+                    <div class = \"m-widget19__shadow\"></div> \
+                </div> \
+                <div class = \"m-widget19__content\"> \n' +
+            '                    <div class="m--margin-top-10">\n' +
+            '                        <a href = "'+widgetActionLink+'" class = "m-link">\n' +
+            '                            <h6>\n' +
+            '                                <span class="m-badge m-badge--info m-badge--dot"></span> '+widgetTitle+'\n' +
+            '                            </h6>\n' +
+            '                        </a>\n' +
+            '                    </div>\
+                    <div class = \"m-widget19__header\"> \
+                        <div class = \"m-widget19__user-img\"> \
+                            <img class = \"m-widget19__img\" src = \" ' + widgetAuthor.photo + '\" alt = \"' + widgetAuthor.name + '\"> \
+                        </div> \
+                        <div class = \"m-widget19__info\"> \
+                            <span class = \"m-widget19__username\"> \
+                            ' + widgetAuthor.full_name + ' \
+                            </span> \
+                            <br> \
+                            <span class = \"m-widget19__time\"> \
+                            موسسه غیرتجاری آلاء \
+                            </span> \
+                        </div> \
+                    </div> \
+                </div> \
+                <!--<div class = \"m-widget19__action\"> \
+                    <a href = \"' + widgetLink +'\" class = \"btn m-btn--pill    btn-outline-warning m-btn m-btn--outline-2x \">نمایش فیلم های این دوره</a> \
+                </div> --> \
+            </div> \
+        </div> \
+    </div> \
+    <!--end:: Widgets/Blog--> \
+</div>';
+    }
+
+    function makeWidgetFromJsonResponse(data, type) {
+        if (type === 'product') {
+            return getProductCarouselItem(data);
+        } else if (type === 'video') {
+            return getVideoCarouselItem(data);
+        } else if (type === 'set') {
+            return getSetCarouselItem(data);
+        }
     }
 
     function addContentToOwl(owl, data, type) {
-
         $.each(data, function (index, value) {
             owl.trigger('add.owl.carousel',
                 [
@@ -103,12 +232,10 @@ var Alaasearch = function () {
                 contentType: "application/json; charset=utf-8",
                 statusCode: {
                     200:function (response) {
-                        console.log("type:"+type);
-                        console.log(response);
-                        console.log("action:" + action);
                         addContentToOwl(owl, response.result[type].data, type);
                         // responseMessage = response.responseText;
                         callback(response.result[type].next_page_url);
+                        removeLoadingItem(owl);
                     },
                     403: function (response) {
                         // responseMessage = response.responseJSON.message;
@@ -122,6 +249,7 @@ var Alaasearch = function () {
                     //The status for when there is error php code
                     500: function (response) {
                         console.log(response);
+                        removeLoadingItem(owl);
                     }
                 }
             }
@@ -148,6 +276,7 @@ var Alaasearch = function () {
     }
 
     function load(event, nextPageUrl, owl, owlType, callback) {
+
         var perPage = typeof (owl.data("per-page")) === "number" ? owl.data("per-page") : 6;
 
         // console.log('per page:' + perPage);
@@ -183,18 +312,34 @@ var Alaasearch = function () {
             }
         });
     }
+    function loadAjaxProduct() {
+        $('#product-carousel.owl-carousel').on('change.owl.carousel', function(event) {
+            var owlType = 'product';
+            var nextPageUrl = $('#owl--js-var-next-page-product-carousel-url');
+            var owl = $(this);
+
+            if( !videoAjaxLock ) {
+                load(event, nextPageUrl.val(), owl, owlType,function (newPageUrl) {
+                    // console.log("PRE:" + nextPageUrl.val());
+                    nextPageUrl.val(decodeURI(newPageUrl));
+                    // console.log("NEW:" + nextPageUrl.val());
+                    unLockAjax(owlType);
+                });
+            }
+        });
+    }
     function loadAjaxSet() {
         $('#set-carousel.owl-carousel').on('change.owl.carousel', function(event) {
             var owlType = "set";
             var nextPageUrl = $('#owl--js-var-next-page-set-url');
             var owl = $(this);
-            console.log("nextPageUrl:"+nextPageUrl.val());
+            // console.log("nextPageUrl:"+nextPageUrl.val());
             if( !setAjaxLock ) {
-                console.log("se Ajax is not lock!");
+                // console.log("se Ajax is not lock!");
                 load(event, nextPageUrl.val(), owl, owlType,function (newPageUrl) {
-                     console.log("PRE:" + nextPageUrl.val());
+                     // console.log("PRE:" + nextPageUrl.val());
                     nextPageUrl.val(decodeURI(newPageUrl));
-                     console.log("NEW:" + nextPageUrl.val());
+                     // console.log("NEW:" + nextPageUrl.val());
                     unLockAjax(owlType);
                 });
             }
@@ -204,10 +349,21 @@ var Alaasearch = function () {
 
     }
     function loadAjaxContent() {
+        addLoadingItem($(this));
+        loadAjaxProduct();
         loadAjaxVideo();
         loadAjaxSet();
     }
 
+    function addLoadingItem(owl) {
+        // owl.owlCarousel('add', '<div><div style="width: 30px; display: inline-block;" class="m-loader m-loader--warning m-loader--lg"></div></div>')
+        //     .owlCarousel('update');
+    }
+
+    function removeLoadingItem(owl) {
+        // let lastIndex = owl.find('.owl-item').length;
+        // $(".owl-carousel").trigger('remove.owl.carousel', [lastIndex]).trigger('refresh.owl.carousel');
+    }
 
     return {
         init: function () {
