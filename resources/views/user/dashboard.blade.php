@@ -2,93 +2,9 @@
 
 @section('page-css')
     <link href="{{ mix('/css/user-dashboard.css') }}" rel="stylesheet" type="text/css"/>
+    {{--<link href="/acm/AlaatvCustomFiles/css/owl-carousel.css" rel="stylesheet" type="text/css"/>--}}
+
     <style>
-        .a--owlCarousel .carousel {
-            transition-property: transform;
-            transition-duration: 0.7s;
-        }
-
-        .btn-viewOwlcarousel {
-            display: none;
-        }
-
-        .a--owlCarousel .owl-item.active.center .carousel {
-            -moz-transform: scale(1.2);
-            -webkit-transform: scale(1.2);
-            -o-transform: scale(1.2);
-            -ms-transform: scale(1.2);
-            transform: scale(1.2);
-        }
-
-        .a--owlCarousel .owl-item.active.center .background-solid.carousel {
-            background-color: #3c00b14d !important;
-        }
-
-        .a--owlCarousel .owl-item.active.center .background-gradient.carousel {
-            background: rgb(255, 184, 34) !important;
-            background: linear-gradient(90deg, rgba(255, 184, 34, 1) 0%, rgba(52, 191, 163, 1) 100%) !important;
-        }
-
-        .a--owlCarousel .carousel .a--owlCarousel-item-image {
-            position: relative;
-            bottom: 20px;
-            width: 90%;
-            margin: auto;
-            border-radius: 4px;
-            -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
-            -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
-            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
-        }
-        .a--owlCarousel .carousel {
-            -webkit-box-shadow: 0 1px 15px 1px rgba(55, 41, 84, 0.3) !important;
-            box-shadow: 0 1px 15px 1px rgba(55, 41, 84, 0.3) !important;
-            margin-top: 45px !important;
-            margin-bottom: 30px !important;
-        }
-
-        .a--owlCarousel .owl-prev {
-            right: 0;
-            background: linear-gradient(270deg, rgba(47, 47, 47, 0.6) 0%, rgba(100, 94, 111, 0.5) 40%, rgba(216, 195, 255, 0) 100%) !important;
-        }
-
-        .a--owlCarousel .owl-next {
-            left: 0;
-            background: linear-gradient(90deg, rgba(47, 47, 47, 0.6) 0%, rgba(100, 94, 111, 0.5) 40%, rgba(216, 195, 255, 0) 100%) !important;
-        }
-
-        .a--owlCarousel .owl-prev, .a--owlCarousel .owl-next {
-            position: absolute;
-            top: 0;
-            height: 100%;
-            width: 40px;
-            color: white !important;
-            transition-property: width;
-            transition-duration: 0.5s;
-            /*background: rgb(47,47,47) !important;*/
-        }
-        .a--owlCarousel .owl-prev:hover,
-        .a--owlCarousel .owl-next:hover {
-            width: 70px;
-        }
-
-        .a--owlCarousel-slide-detailes {
-            position: relative;
-            -webkit-box-shadow: 0px -15px 60px -17px rgba(0,0,0,0.75);
-            -moz-box-shadow: 0px -15px 60px -17px rgba(0,0,0,0.75);
-            box-shadow: 0px -15px 60px -17px rgba(0,0,0,0.75);
-        }
-        .a--owlCarousel-slide-detailes::before {
-            content: ' ';
-            width: 0;
-            height: 0;
-            border-left: 21px solid transparent;
-            border-right: 20px solid transparent;
-            border-bottom: 20px solid white;
-            position: absolute;
-            top: -20px;
-            right: calc(50% - 20px);
-        }
-
 
 
 
@@ -168,9 +84,9 @@
                     <div class="m-widget30">
 
                         <div class="m-widget_head">
-                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owlCarousel myProduct">
+                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">
                                 <div class="m-widget_head-owlcarousel-item carousel background-gradient" data-position="0">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product7.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product7.jpg">
                                     حسابان
                                     <hr>
                                     <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
@@ -186,17 +102,17 @@
                                     </div>
                                 </div>
                                 <div class="m-widget_head-owlcarousel-item carousel" data-position="1">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product1.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product1.jpg">
                                     فیزیک
                                     <hr>
 
-                                    <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owlCarousel-show-detailes">
+                                    <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-type-2-show-detailes">
                                         <i class="flaticon-more-v6"></i>
                                     </a>
 
                                 </div>
                                 <div class="m-widget_head-owlcarousel-item carousel background-gradient" data-position="2">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product2.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product2.jpg">
                                     شیمی
                                     <hr>
                                     <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
@@ -212,7 +128,7 @@
                                     </div>
                                 </div>
                                 <div class="m-widget_head-owlcarousel-item carousel background-gradient" data-position="3">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product3.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product3.jpg">
                                     زیست
                                     <hr>
                                     <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
@@ -228,15 +144,15 @@
                                     </div>
                                 </div>
                                 <div class="m-widget_head-owlcarousel-item carousel" data-position="4">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product4.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product4.jpg">
                                     حسابان
                                     <hr>
-                                    <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owlCarousel-show-detailes">
+                                    <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-type-2-show-detailes">
                                         <i class="flaticon-more-v6"></i>
                                     </a>
                                 </div>
                                 <div class="m-widget_head-owlcarousel-item carousel background-gradient" data-position="5">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product5.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product5.jpg">
                                     هندسه
                                     <hr>
                                     <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
@@ -252,7 +168,7 @@
                                     </div>
                                 </div>
                                 <div class="m-widget_head-owlcarousel-item carousel background-gradient" data-position="6">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product6.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product6.jpg">
                                     حسابان
                                     <hr>
                                     <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
@@ -269,10 +185,10 @@
                                 </div>
                             </div>
 
-                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owlCarousel row gridView-myProduct">
+                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 row gridView-myProduct">
                             </div>
                         </div>
-                        <div class="m-portlet a--owlCarousel-slide-detailes">
+                        <div class="m-portlet a--owl-carousel-type-2-slide-detailes">
                             <div class="m-portlet__head">
                                 <div class="m-portlet__head-caption">
                                     <div class="m-portlet__head-title">
@@ -285,12 +201,12 @@
 
                                 </div>
                                 <div class="m-portlet__head-tools">
-                                    <a class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owlCarousel-hide-detailes">
+                                    <a class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-type-2-hide-detailes">
                                         <i class="la la-times"></i>
                                     </a>
                                 </div>
                             </div>
-                            <div class="m-portlet__body subCategoryWarper a--owlCarousel-slide-iteDetail-1">
+                            <div class="m-portlet__body subCategoryWarper a--owl-carousel-type-2-slide-iteDetail-1">
                                 <div class="row justify-content-center">
                                     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                                         <div class="subCategoryItem">
@@ -379,7 +295,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="m-portlet__body subCategoryWarper a--owlCarousel-slide-iteDetail-4">
+                            <div class="m-portlet__body subCategoryWarper a--owl-carousel-type-2-slide-iteDetail-4">
                                 <div class="row justify-content-center">
                                     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                                         <div class="subCategoryItem">
@@ -516,7 +432,7 @@
                     <div class="m-widget30">
 
                         <div class="m-widget_head">
-                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owlCarousel myFavoritSet">
+                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myFavoritSet">
                                 <div data-position="0" class="m-widget_head-owlcarousel-item carousel">
                                     فیزیک
                                 </div>
@@ -614,29 +530,29 @@
                     <div class="m-widget30">
 
                         <div class="m-widget_head">
-                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owlCarousel myFavoriteContent">
+                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myFavoriteContent">
                                 <div data-position="0" class="m-widget_head-owlcarousel-item carousel">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product11.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product11.jpg">
                                     فیزیک
                                 </div>
                                 <div data-position="1" class="m-widget_head-owlcarousel-item carousel">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product10.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product10.jpg">
                                     فیزیک
                                 </div>
                                 <div data-position="2" class="m-widget_head-owlcarousel-item carousel">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product9.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product9.jpg">
                                     فیزیک
                                 </div>
                                 <div data-position="3" class="m-widget_head-owlcarousel-item carousel">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product8.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product8.jpg">
                                     فیزیک
                                 </div>
                                 <div data-position="4" class="m-widget_head-owlcarousel-item carousel">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product7.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product7.jpg">
                                     فیزیک
                                 </div>
                                 <div data-position="5" class="m-widget_head-owlcarousel-item carousel">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product6.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product6.jpg">
                                     فیزیک
                                 </div>
                             </div>
@@ -721,29 +637,29 @@
                     <div class="m-widget30">
 
                         <div class="m-widget_head">
-                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owlCarousel myFavoriteProducts">
+                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myFavoriteProducts">
                                 <div data-position="0" class="m-widget_head-owlcarousel-item carousel">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product11.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product11.jpg">
                                     فیزیک
                                 </div>
                                 <div data-position="1" class="m-widget_head-owlcarousel-item carousel">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product10.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product10.jpg">
                                     فیزیک
                                 </div>
                                 <div data-position="2" class="m-widget_head-owlcarousel-item carousel">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product9.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product9.jpg">
                                     فیزیک
                                 </div>
                                 <div data-position="3" class="m-widget_head-owlcarousel-item carousel">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product8.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product8.jpg">
                                     فیزیک
                                 </div>
                                 <div data-position="4" class="m-widget_head-owlcarousel-item carousel">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product7.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product7.jpg">
                                     فیزیک
                                 </div>
                                 <div data-position="5" class="m-widget_head-owlcarousel-item carousel">
-                                    <img class="a--owlCarousel-item-image" src="/assets/app/media/img/products/product6.jpg">
+                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product6.jpg">
                                     فیزیک
                                 </div>
                             </div>
@@ -755,9 +671,6 @@
             </div>
         </div>
     </div>
-
-
-
 
     <!--begin::Modal-->
     <div class="modal fade" id="m_modal_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1042,12 +955,12 @@
                 // onDragged: callback,
                 onTranslated : callback
             };
-            let myProductAlaaOwlCarousel = $('.a--owlCarousel.myProduct');
-            let myFavoritSetAlaaOwlCarousel = $('.a--owlCarousel.myFavoritSet');
-            let myFavoritContentAlaaOwlCarousel = $('.a--owlCarousel.myFavoriteContent');
-            let myProductsContentAlaaOwlCarousel = $('.a--owlCarousel.myFavoriteProducts');
+            let myProductAlaaOwlCarousel = $('.a--owl-carousel-type-2.myProduct');
+            let myFavoritSetAlaaOwlCarousel = $('.a--owl-carousel-type-2.myFavoritSet');
+            let myFavoritContentAlaaOwlCarousel = $('.a--owl-carousel-type-2.myFavoriteContent');
+            let myProductsContentAlaaOwlCarousel = $('.a--owl-carousel-type-2.myFavoriteProducts');
 
-            // a--owlCarousel.owlCarousel('destroy');
+            // a--owl-carousel-type-2.owlCarousel('destroy');
             myProductAlaaOwlCarousel.owlCarousel(myProductAlaaOwlCarouselOptions);
             myFavoritSetAlaaOwlCarousel.owlCarousel({
                 center: true,
@@ -1127,9 +1040,9 @@
             }
 
             function showAlaaOwlCarouselItemDetail() {
-                let alaaOwlCarouselItemDetailClass = 'a--owlCarousel-slide-iteDetail-' + $('.a--owlCarousel .owl-item.active.center .carousel').data('position');
+                let alaaOwlCarouselItemDetailClass = 'a--owl-carousel-type-2-slide-iteDetail-' + $('.a--owl-carousel-type-2 .owl-item.active.center .carousel').data('position');
                 $('.subCategoryWarper').fadeOut();
-                let aOwlCarouselSlideDetailes = $('.a--owlCarousel-slide-detailes');
+                let aOwlCarouselSlideDetailes = $('.a--owl-carousel-type-2-slide-detailes');
                 let alaaOwlCarouselItemDetailObject = $('.'+alaaOwlCarouselItemDetailClass);
                 aOwlCarouselSlideDetailes.slideUp();
                 if (alaaOwlCarouselItemDetailObject.length>0) {
@@ -1164,13 +1077,13 @@
                 $('.gridView-myProduct').html('');
 
                 $('.subCategoryWarper').fadeOut(0);
-                $('.a--owlCarousel-slide-detailes').slideUp(0);
+                $('.a--owl-carousel-type-2-slide-detailes').slideUp(0);
                 $('.btn-viewAll').fadeOut(0);
                 $('.btn-viewAll').css('cssText', 'display: none !important;');
                 $('.btn-viewOwlcarousel').fadeIn(0);
 
                 let itemClass = $(this).data('itemclass');
-                $('.a--owlCarousel.' + itemClass).owlCarousel('destroy');
+                $('.a--owl-carousel-type-2.' + itemClass).owlCarousel('destroy');
                 let gridView = $('.gridView-' + itemClass);
                 $('.' + itemClass + ' .carousel').each(function() {
                     gridView.append('<div class="col-12 col-sm-6 col-md-3">' + $(this)[0].outerHTML + '</div>');
@@ -1182,12 +1095,12 @@
                 $('.gridView-myProduct').html('');
 
                 $('.subCategoryWarper').fadeOut(0);
-                $('.a--owlCarousel-slide-detailes').slideUp(0);
+                $('.a--owl-carousel-type-2-slide-detailes').slideUp(0);
                 $('.btn-viewAll').fadeIn(0);
                 $('.btn-viewOwlcarousel').fadeOut(0);
 
 
-                $('.m-portlet.a--owlCarousel-slide-detailes').css({
+                $('.m-portlet.a--owl-carousel-type-2-slide-detailes').css({
                     'display': 'block',
                     'position': 'relative',
                     'width': 'auto',
@@ -1198,21 +1111,21 @@
 
 
                 let itemClass = $(this).data('itemclass');
-                $('.a--owlCarousel.' + itemClass).owlCarousel(myProductAlaaOwlCarouselOptions);
+                $('.a--owl-carousel-type-2.' + itemClass).owlCarousel(myProductAlaaOwlCarouselOptions);
                 let gridView = $('.gridView-' + itemClass);
                 gridView.fadeOut(0);
                 $('.' + itemClass).fadeIn();
 
                 showAlaaOwlCarouselItemDetail();
             });
-            $(document).on('click', '.a--owlCarousel-hide-detailes', function () {
-                $('.a--owlCarousel-slide-detailes').slideUp();
+            $(document).on('click', '.a--owl-carousel-type-2-hide-detailes', function () {
+                $('.a--owl-carousel-type-2-slide-detailes').slideUp();
                 $('.subCategoryWarper').fadeOut();
                 $('.gridView-myProduct > div').css({
                     'margin-bottom': '0px'
                 });
             });
-            $(document).on('click', '.gridView-myProduct .a--owlCarousel-show-detailes', function () {
+            $(document).on('click', '.gridView-myProduct .a--owl-carousel-type-2-show-detailes', function () {
                 $('.gridView-myProduct > div').css({
                     'margin-bottom': '0px'
                 });
@@ -1221,10 +1134,10 @@
                 let position = parent.data('position');
 
 
-                let alaaOwlCarouselItemDetailClass = 'a--owlCarousel-slide-iteDetail-' + position;
+                let alaaOwlCarouselItemDetailClass = 'a--owl-carousel-type-2-slide-iteDetail-' + position;
                 $.when($('.subCategoryWarper').fadeOut(0)).done(function() {
 
-                    let aOwlCarouselSlideDetailes = $('.a--owlCarousel-slide-detailes');
+                    let aOwlCarouselSlideDetailes = $('.a--owl-carousel-type-2-slide-detailes');
                     let alaaOwlCarouselItemDetailObject = $('.'+alaaOwlCarouselItemDetailClass);
                     $.when(aOwlCarouselSlideDetailes.slideUp(0)).done(function() {
 
@@ -1234,7 +1147,7 @@
                         }
 
 
-                        let detailesWarper = $('.m-portlet.a--owlCarousel-slide-detailes');
+                        let detailesWarper = $('.m-portlet.a--owl-carousel-type-2-slide-detailes');
                         let target = $('.gridView-myProduct .carousel[data-position="' + position + '"]');
                         let targetCol = target.parent();
                         targetCol.css({
@@ -1255,7 +1168,7 @@
                         if (detailesWarperPointerStyle.length===0) {
                             detailesWarper.append('<div id="detailesWarperPointerStyle"></div>');
                         }
-                        $('#detailesWarperPointerStyle').html('<style>.a--owlCarousel-slide-detailes::before { right: auto; left: ' + positionLeftOfPointer + 'px; }</style>');
+                        $('#detailesWarperPointerStyle').html('<style>.a--owl-carousel-type-2-slide-detailes::before { right: auto; left: ' + positionLeftOfPointer + 'px; }</style>');
 
 
                     });

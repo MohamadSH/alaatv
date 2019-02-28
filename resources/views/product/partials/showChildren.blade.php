@@ -34,11 +34,17 @@
                             {{$product->name}}
                             {{--@if((int)$product->cost > 0)--}}
                             <span class = "m-nav__link-badge float-right">
-                                <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                                    <span class = "m-badge m-badge--warning a--productRealPrice">14,000</span>
-                                    {{ trim($product->priceText) }}
-                                    <span class = "m-badge m-badge--info a--productDiscount">20%</span>
-                                </span>
+                                @if($product->price['base']!==$product->price['final'])
+                                    <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
+                                        <span class = "m-badge m-badge--warning a--productRealPrice">{{ number_format($product->price['base']) }}</span>
+                                            {{ number_format($product->price['final']) }} تومان
+                                        <span class = "m-badge m-badge--info a--productDiscount">{{ (1-($product->price['final']/$product->price['base']))*100 }}%</span>
+                                    </span>
+                                @else
+                                    <span class = "m-widget6__text m--align-right m--font-boldest m--font-primary">
+                                        {{ number_format($product->price['final']) }} تومان
+                                    </span>
+                                @endIf
                             </span>
                             {{--@endif--}}
                         </div>

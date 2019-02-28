@@ -102,24 +102,31 @@
     @foreach($blocks as $block)
         @if($block->products->count() > 0)
             <div class = "row {{ $block->class }}">
-                <div class = "col-xl-12 m--margin-bottom-5">
-                    <a href = "{{ $block->url }}" class = "m-link m-link--primary">
-                        <h3 style = "font-weight: bold">{{ $block->title }} </h3>
-                    </a>
+
+                <div class = "col-12">
+                    <div class="a--devider-with-title">
+                        <div class="a--devider-title">
+                            <a href = "{{ $block->url }}" class = "m-link m-link--primary">
+                                {{ $block->title }}
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <div class = "a--owl-carousel-type-1 owl-carousel owl-theme">
-                @foreach($block->products as $product)
-                        @include('partials.widgets.product2',[
-                    'widgetTitle'      => $product->name,
-                    'widgetPic'        => $product->photo,
-                    'widgetLink'       => $product->url,
-                    'widgetPrice'      => $product->priceText,
-                    'widgetPriceLabel' => ($product->isFree || $product->basePrice == 0 ? 0 : 1)
-                    ])
-                @endforeach
+                <div class="col-12">
+                    <div class = "a--owl-carousel-type-1 owl-carousel owl-theme">
+                        @foreach($block->products as $product)
+                                @include('partials.widgets.product2',[
+                            'widgetTitle'      => $product->name,
+                            'widgetPic'        => $product->photo,
+                            'widgetLink'       => $product->url,
+                            'widgetPrice'      => $product->priceText,
+                            'widgetPriceLabel' => ($product->isFree || $product->basePrice == 0 ? 0 : 1)
+                            ])
+                        @endforeach
+                    </div>
                 </div>
             </div>
-            <hr/>
+
             {{--@foreach($section["ads"] as $image => $link)
                 @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
             @endforeach--}}
