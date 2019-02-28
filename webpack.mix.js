@@ -8,8 +8,10 @@ mix.styles(
         'public/acm/custom-css-app.css',
         // 'public/acm/cubeportfolio/css/cubeportfolio.min.css'
 
+        'public/acm/AlaatvCustomFiles/css/owl-carousel.css',
         'public/acm/AlaatvCustomFiles/css/customStyle.css',
-        'public/acm/AlaatvCustomFiles/css/fixThemeStyle.css'
+        'public/acm/AlaatvCustomFiles/css/fixThemeStyle.css',
+
 
 
     ],
@@ -141,7 +143,7 @@ mix.styles(
 
 mix.scripts(
     [
-        'node_modules/slick-carousel/slick/slick.js',
+
     ],
     'public/js/user-dashboard.js'
 );

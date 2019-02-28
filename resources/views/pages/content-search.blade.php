@@ -3,6 +3,35 @@
 @section('right-aside')
 @endsection
 
+
+@section('page-css')
+    {{--<link href="{{ mix('/css/user-dashboard.css') }}" rel="stylesheet" type="text/css"/>--}}
+    {{--<link href="/acm/AlaatvCustomFiles/css/owl-carousel.css" rel="stylesheet" type="text/css"/>--}}
+
+    <style>
+
+        .owl-carousel-fileTitle {
+            margin: 0 -30px !important;
+            padding: 5px 30px;
+            background: #000000b3;
+        }
+        .owl-carousel-fileTitle a {
+            color: white;
+            transition-property: all;
+            transition-duration: 0.3s;
+        }
+        .owl-carousel-fileTitle a:hover {
+            color: #8bccfe;
+        }
+        .owl-carousel-fileTitle a:hover::after {
+            border-bottom: 1px solid #fff;
+            opacity: 1;
+        }
+
+
+    </style>
+@endsection
+
 @section("pageBar")
 @endsection
 
@@ -13,7 +42,7 @@
             display: none;
             margin-bottom: 20px;
             background: white;
-            padding-top: 35px;
+            padding-top: 5px;
             -webkit-box-shadow: 0px 0px 5px 2px rgba(221,221,221,1);
             -moz-box-shadow: 0px 0px 5px 2px rgba(221,221,221,1);
             box-shadow: 0px 0px 5px 2px rgba(221,221,221,1);
@@ -25,6 +54,7 @@
             font-size: 20px;
             font-weight: bold;
             text-align: center;
+            display: none;
         }
         .a--multi-level-search .selectorItem .subItem:hover {
             /*-webkit-box-shadow: 0px 0px 15px 0px #7FDBFF;*/
@@ -62,66 +92,66 @@
             margin: 10px 0;
             border: solid 3px #dbdbdb;
         }
-        .a--multi-level-search .filterNavigationWarper {
-            margin-bottom: 45px;
-        }
-        .a--multi-level-search .filterNavigationWarper .filterNavigationStep {
-            text-align: center;
-            position: relative;
-            z-index: 0;
-        }
-        .a--multi-level-search .filterNavigationWarper .filterNavigationStep::before {
-            content: " ";
-            position: absolute;
-            width: 100%;
-            height: 5px;
-            background-color: #42d70066;
-            top: 8px;
-            left: -50%;
-            z-index: -1;
-        }
-        .a--multi-level-search .filterNavigationWarper .filterNavigationStep.current::before,
-        .a--multi-level-search .filterNavigationWarper .filterNavigationStep.deactive::before {
-            background-color: #f2f3f8;
-        }
-        .a--multi-level-search .filterNavigationWarper .filterNavigationStep:last-child::before {
-            display: none;
-        }
-        .a--multi-level-search .filterNavigationWarper .filterNavigationStep::after {
-
-        }
-        .a--multi-level-search .filterNavigationWarper .filterNavigationStep.active  .filterStepText {
-            box-shadow: 0px 0px 15px -1px rgba(0, 214, 64, 0.25);
-        }
-        .a--multi-level-search .filterNavigationWarper .filterNavigationStep.current .filterStepText {
-            /*-webkit-box-shadow: 0px 0px 10px 2px rgba(0,227,51,1);*/
-            /*-moz-box-shadow: 0px 0px 10px 2px rgba(0,227,51,1);*/
-            /*box-shadow: 0px 0px 10px 2px rgba(0,227,51,1);*/
-            box-shadow: 0px 0px 15px -1px rgba(0, 214, 64, 0.55);
-        }
-        .a--multi-level-search .filterNavigationWarper .filterNavigationStep.deactive   .filterStepText {
-            /*-webkit-box-shadow: 0px 0px 15px 1px rgba(51, 40, 77, 0.21);*/
-            /*-moz-box-shadow: 0px 0px 15px 1px rgba(51, 40, 77, 0.21);*/
-            /*box-shadow: 0px 0px 15px 1px rgba(51, 40, 77, 0.21);*/
-            box-shadow: 0px 0px 15px -1px rgba(51, 40, 77, 0.17);
-        }
-        .a--multi-level-search .filterNavigationWarper .filterNavigationStep .filterStepText {
-            display: initial;
-            background: white;
-            padding: 12px;
-            cursor: pointer;
-        }
-        .a--multi-level-search .filterNavigationWarper .filterNavigationStep .filterStepSelectedText {
+        /*.a--multi-level-search .filterNavigationWarper {*/
+            /*margin-bottom: 45px;*/
+        /*}*/
+        /*.a--multi-level-search .filterNavigationWarper .filterNavigationStep {*/
+            /*text-align: center;*/
+            /*position: relative;*/
+            /*z-index: 0;*/
+        /*}*/
+        /*.a--multi-level-search .filterNavigationWarper .filterNavigationStep::before {*/
+            /*content: " ";*/
+            /*position: absolute;*/
+            /*width: 100%;*/
+            /*height: 5px;*/
+            /*background-color: #42d70066;*/
+            /*top: 8px;*/
+            /*left: -50%;*/
+            /*z-index: -1;*/
+        /*}*/
+        /*.a--multi-level-search .filterNavigationWarper .filterNavigationStep.current::before,*/
+        /*.a--multi-level-search .filterNavigationWarper .filterNavigationStep.deactive::before {*/
+            /*background-color: #f2f3f8;*/
+        /*}*/
+        /*.a--multi-level-search .filterNavigationWarper .filterNavigationStep:last-child::before {*/
             /*display: none;*/
-            position: relative;
-            top: 25px;
-            width: 100%;
-            text-align: center;
-            background-color: white;
-            -webkit-box-shadow: 0px 0px 5px 8px rgba(255,255,255,1);
-            -moz-box-shadow: 0px 0px 5px 8px rgba(255,255,255,1);
-            box-shadow: 0px 0px 5px 8px rgba(255,255,255,1);
-        }
+        /*}*/
+        /*.a--multi-level-search .filterNavigationWarper .filterNavigationStep::after {*/
+
+        /*}*/
+        /*.a--multi-level-search .filterNavigationWarper .filterNavigationStep.active  .filterStepText {*/
+            /*box-shadow: 0px 0px 15px -1px rgba(0, 214, 64, 0.25);*/
+        /*}*/
+        /*.a--multi-level-search .filterNavigationWarper .filterNavigationStep.current .filterStepText {*/
+            /*!*-webkit-box-shadow: 0px 0px 10px 2px rgba(0,227,51,1);*!*/
+            /*!*-moz-box-shadow: 0px 0px 10px 2px rgba(0,227,51,1);*!*/
+            /*!*box-shadow: 0px 0px 10px 2px rgba(0,227,51,1);*!*/
+            /*box-shadow: 0px 0px 15px -1px rgba(0, 214, 64, 0.55);*/
+        /*}*/
+        /*.a--multi-level-search .filterNavigationWarper .filterNavigationStep.deactive   .filterStepText {*/
+            /*!*-webkit-box-shadow: 0px 0px 15px 1px rgba(51, 40, 77, 0.21);*!*/
+            /*!*-moz-box-shadow: 0px 0px 15px 1px rgba(51, 40, 77, 0.21);*!*/
+            /*!*box-shadow: 0px 0px 15px 1px rgba(51, 40, 77, 0.21);*!*/
+            /*box-shadow: 0px 0px 15px -1px rgba(51, 40, 77, 0.17);*/
+        /*}*/
+        /*.a--multi-level-search .filterNavigationWarper .filterNavigationStep .filterStepText {*/
+            /*display: initial;*/
+            /*background: white;*/
+            /*padding: 12px;*/
+            /*cursor: pointer;*/
+        /*}*/
+        /*.a--multi-level-search .filterNavigationWarper .filterNavigationStep .filterStepSelectedText {*/
+            /*!*display: none;*!*/
+            /*position: relative;*/
+            /*top: 25px;*/
+            /*width: 100%;*/
+            /*text-align: center;*/
+            /*background-color: white;*/
+            /*-webkit-box-shadow: 0px 0px 5px 8px rgba(255,255,255,1);*/
+            /*-moz-box-shadow: 0px 0px 5px 8px rgba(255,255,255,1);*/
+            /*box-shadow: 0px 0px 5px 8px rgba(255,255,255,1);*/
+        /*}*/
 
 
 
@@ -134,14 +164,90 @@
             margin-right: -15px;
             margin-left: -15px;
         }
+        .a--owl-carousel-type-1 .item .m-portlet > .m-portlet__body {
+            padding-bottom: 0px;
+        }
+        .a--owl-carousel-type-1 .item > .m-portlet {
+            margin-bottom: 0;
+        }
+        .a--vw-Loading {
+            text-align: center;
+            padding: 10px;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
     </style>
+
 
     <div class="row">
         <div class="col a--multi-level-search" id="contentSearchFilter">
 
-            <div class="row filterNavigationWarper">
 
+            <style>
+                .a--multi-level-search .filterNavigationWarper {
+                    background: #e9ecef;
+                    display: table;
+                    padding: 5px 20px;
+                    border-radius: 1px;
+                    margin: auto;
+                }
+                .a--multi-level-search .filterNavigationWarper,
+                .a--multi-level-search .filterNavigationWarper .filterNavigationStep {
+                    list-style: none;
+                }
+                .a--multi-level-search .filterNavigationWarper .filterNavigationStep {
+                    margin: 10px 5px;
+                    display: table-cell;
+                    vertical-align: middle;
+                    cursor: pointer;
+                }
+                .a--multi-level-search .filterNavigationWarper .filterNavigationStep.active {
+                    color: #36a3f7 !important;
+                }
+                .a--multi-level-search .filterNavigationWarper .filterNavigationStep.current {
+                    color: #34bfa3 !important;
+                }
+                .a--multi-level-search .filterNavigationWarper .filterNavigationStep.deactive {
+                    color: #ffb822 !important;
+                }
+                .a--multi-level-search .filterNavigationWarper .filterNavigationStep:after {
+                    content: '\f111';
+                    font: normal normal normal 16px/1 "LineAwesome";
+                    font-size: 20px;
+                    vertical-align: middle;
+                    cursor: default;
+                    margin-left: 15px;
+                    margin-right: 5px;
+                }
+                .a--multi-level-search .filterNavigationWarper .filterNavigationStep:last-child:after {
+                    content: '';
+                }
+            </style>
+
+            <div class="row">
+                <div class="col">
+                    <ol class="filterNavigationWarper">
+                        <li class="newwwww-filterNavigationItem">
+                            خانه
+                        </li>
+                        <li class="newwwww-filterNavigationItem">
+                            رشته
+                        </li>
+                    </ol>
+                </div>
             </div>
+
+
 
             <div class="row justify-content-center selectorItem" data-select-order="0" data-select-title="مقطع" data-select-display="grid" data-select-value="چهارم دبیرستان">
                 <div class="col subItem">همه مقاطع</div>
@@ -272,23 +378,28 @@
             @endif">
 
             {{--{{ dd($result->get('product')) }}--}}
-            <div class="row">
+            <div class="row" id="product-carousel-warper">
                 @include('partials.search.video',[
                 'items' => $result->get('product'),
                 'title' => 'محصولات',
                 'carouselType' => 'a--owl-carousel-type-1',
                 'widgetId'=>'product-carousel',
-                'type' => 'product'
+                'type' => 'product',
+                'loadChild' => false
                 ])
             </div>
-            <div class="row">
+            <div class="row" id="set-carousel-warper">
                 @include('partials.search.contentset',[
                 'items' => $result->get('set'),
-                'type' => 'set'
+                'type' => 'set',
+                'loadChild' => false
                 ])
             </div>
-            <div class="row">
-                @include('partials.search.video',['items' => $result->get('video')])
+            <div class="row" id="video-carousel-warper">
+                @include('partials.search.video',[
+                'items' => $result->get('video'),
+                'loadChild' => false
+                ])
             </div>
 
 
@@ -369,105 +480,89 @@
             <div class="col-12 col-md-3">
                 <div class="row">
 
-                    {{--@include('partials.search.pamphlet',['items' => $result->get('pamphlet')])--}}
-                    @if(optional($result->get('pamphlet'))->isNotEmpty())
-                        <div class="col m-portlet m-portlet--full-height">
-                            <div class="m-portlet__head">
-                                <div class="m-portlet__head-caption">
-                                    <div class="m-portlet__head-title">
-                                        <h3 class="m-portlet__head-text">
+                    <div class="m-portlet m-portlet--tabs a--full-width">
+                        <div class="m-portlet__head">
+                            <div class="m-portlet__head-tools">
+                                <ul class="nav nav-tabs m-tabs-line m-tabs-line--success m-tabs-line--2x" role="tablist">
+                                    <li class="nav-item m-tabs__item">
+                                        <a class="nav-link m-tabs__link active" data-toggle="tab" href="#pamphlet-vertical-tabpanel" role="tab">
                                             <i class="la la-file-pdf-o"></i>جزوات آلاء
-                                        </h3>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item m-tabs__item">
+                                        <a class="nav-link m-tabs__link" data-toggle="tab" href="#article-vertical-tabpanel" role="tab">
+                                            <i class="la la-comment"></i>مقالات آموزشی
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="m-portlet__body">
+                            <input type="hidden" id="vertical-widget--js-var-next-page-pamphlet-url" value="{{ $result->get('pamphlet')->nextPageUrl() }}">
+                            <input type="hidden" id="vertical-widget--js-var-next-page-article-url" value="{{ $result->get('article')->nextPageUrl() }}">
+                            <div class="tab-content">
+                                <div class="tab-pane active" role="tabpanel" id="pamphlet-vertical-tabpanel">
+                                    <div class="m-scrollable" data-scrollable="true" style="height: 500px">
+                                        <div class="m-widget4" id="pamphlet-vertical-widget"></div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="m-portlet__body m--padding-left-5 m--padding-right-5">
-                                <div class="tab-content">
-
-                                    <div class="m-widget4">
-
-                                        @foreach($result->get('pamphlet') as $content)
-                                            <div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">
-                                                <div class="m-widget4__img m-widget4__img--pic">
-                                                    <img src="@if(isset($content->author->photo)) {{ $content->author->photo }} @else /assets/app/media/img/users/100_14.jpg @endif" alt="">
-                                                </div>
-                                                <div class="m-widget4__info">
-                                                        <span class="m-widget4__title">
-                                                            <a href="{{ action("Web\ContentController@show" , $content) }}" class="m-link">
-                                                                {{ $content->name }}
-                                                            </a>
-                                                        </span>
-                                                    <br>
-                                                    <span class="m-widget4__sub">
-                                                            <a href="{{ action("Web\ContentController@show" , $content) }}" class="m-link">
-                                                                {{ $content->author->full_name }}
-                                                            </a>
-                                                        </span>
-                                                </div>
-                                                @if(isset($content->thumbnail))
-                                                    <div class="m-widget4__img m-widget4__img--pic">
-                                                        <img src="{{ $content->thumbnail }}" alt="">
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        @endforeach
-
+                                <div class="tab-pane" role="tabpanel" id="article-vertical-tabpanel">
+                                    <div class="m-scrollable" data-scrollable="true" style="height: 500px">
+                                        <div class="m-widget4" id="article-vertical-widget"></div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    </div>
+
+
+
+                    {{--@include('partials.search.pamphlet',['items' => $result->get('pamphlet')])--}}
+                    {{--@if(optional($result->get('pamphlet'))->isNotEmpty())--}}
+                        {{--<div class="col m-portlet m-portlet--full-height" id="pamphlet-warper">--}}
+                            {{--<div class="m-portlet__head">--}}
+                                {{--<div class="m-portlet__head-caption">--}}
+                                    {{--<div class="m-portlet__head-title">--}}
+                                        {{--<h3 class="m-portlet__head-text">--}}
+                                            {{--<i class="la la-file-pdf-o"></i>جزوات آلاء--}}
+                                        {{--</h3>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            {{--<div class="m-portlet__body m--padding-left-5 m--padding-right-5">--}}
+                                {{--<div class="tab-content">--}}
+
+
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--@endif--}}
 
                     {{--@include('partials.search.article',['items' => $result->get('article')])--}}
-                    @if(optional($result->get('article'))->isNotEmpty())
-                        <div class="col m-portlet m-portlet--full-height ">
-                            <div class="m-portlet__head">
-                                <div class="m-portlet__head-caption">
-                                    <div class="m-portlet__head-title">
-                                        <h3 class="m-portlet__head-text">
-                                            <i class="la la-comment"></i>مقالات آموزشی
-                                        </h3>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="m-portlet__body m--padding-left-5 m--padding-right-5">
-                                <div class="tab-content">
+                    {{--@if(optional($result->get('article'))->isNotEmpty())--}}
+                        {{--<div class="col m-portlet m-portlet--full-height" id="article-warper">--}}
+                            {{--<div class="m-portlet__head">--}}
+                                {{--<div class="m-portlet__head-caption">--}}
+                                    {{--<div class="m-portlet__head-title">--}}
+                                        {{--<h3 class="m-portlet__head-text">--}}
+                                            {{--<i class="la la-comment"></i>مقالات آموزشی--}}
+                                        {{--</h3>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            {{--<div class="m-portlet__body m--padding-left-5 m--padding-right-5">--}}
+                                {{--<div class="tab-content">--}}
 
-                                    <div class="m-widget4">
+                                    {{--<div class="m-widget4">--}}
 
-                                        @foreach($result->get('article') as $content)
-                                            <div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">
-                                                <div class="m-widget4__img m-widget4__img--pic">
-                                                    <img src="@if(isset($content->author->photo)) {{ $content->author->photo }} @else /assets/app/media/img/users/100_14.jpg @endif" alt="">
-                                                </div>
-                                                <div class="m-widget4__info">
-                                                        <span class="m-widget4__title">
-                                                            <a href="{{ action("Web\ContentController@show" , $content) }}" class="m-link">
-                                                                {{ $content->name }}
-                                                            </a>
-                                                        </span>
-                                                    <br>
-                                                    <span class="m-widget4__sub">
-                                                            <a href="{{ action("Web\ContentController@show" , $content) }}" class="m-link">
-                                                                {{ $content->author->full_name }}
-                                                            </a>
-                                                        </span>
-                                                </div>
-                                                @if(isset($content->thumbnail))
-                                                    <div class="m-widget4__img m-widget4__img--pic">
-                                                        <img src="{{ $content->thumbnail }}" alt="">
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        @endforeach
 
-                                    </div>
+                                    {{--</div>--}}
 
-                                </div>
-                            </div>
-                        </div>
-                    @endif
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--@endif--}}
 
                 </div>
             </div>
@@ -477,40 +572,37 @@
 @endsection
 @section('page-js')
 
+    <script>
+        var contentData = {!! $result !!};
+    </script>
+
     <script src = "/acm/page-content-search.js" type = "text/javascript"></script>
     <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-content-search.js') }}"></script>
 
     <script>
         jQuery(document).ready( function() {
-            // var owl2 = jQuery('.a--owl-carousel-type-2.owl-carousel');
-            // owl2.each(function () {
-            //     $(this).owlCarousel({
-            //         stagePadding: 40,
-            //         loop: false,
-            //         rtl:true,
-            //         nav:false,
-            //         dots: false,
-            //         margin:15,
-            //         mouseDrag: true,
-            //         touchDrag: true,
-            //         pullDrag: true,
-            //         responsiveClass:true,
-            //         responsive:{
-            //             0:{
-            //                 items:1,
-            //             },
-            //             600:{
-            //                 items:2,
-            //             },
-            //             1200:{
-            //                 items:4
-            //             },
-            //             1600:{
-            //                 items:5
-            //             }
-            //         }
-            //     });
+
+
+            // function isScrolledIntoView(elem)
+            // {
+            //     if (elem.length === 0) {
+            //         return false;
+            //     }
+            //     let docViewTop = $(window).scrollTop();
+            //     let docViewBottom = docViewTop + $(window).height();
+            //     let elemTop = $(elem).offset().top;
+            //     let elemBottom = elemTop + $(elem).height();
+            //     return ((elemBottom >= docViewTop) && (elemTop <= docViewBottom) && (elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+            // }
+            //
+            // $(window).scroll(function() {
+            //     if(isScrolledIntoView($('.scrollPositionTest')))
+            //     {
+            //         alert('visible');
+            //     }
             // });
+
+
         });
     </script>
 @endsection

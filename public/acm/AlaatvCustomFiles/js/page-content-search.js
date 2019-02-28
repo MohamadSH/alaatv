@@ -148,6 +148,41 @@ var MultiLevelSearch = function () {
                 // filterNavigationWarper.append('<div class="col ' + activeString + ' filterNavigationStep" data-select-order="' + order + '"><div class="filterStepText">' + title + '</div><div class="filterStepSelectedText">'+selectedText+'</div></div>');
 
                 if (selectedText === null || selectedText.trim().length === 0) {
+                    selectedText = '('+ 'انتخاب ' + title +')';
+                }
+                filterNavigationWarper.append('<li class="filterNavigationStep ' + activeString + '" data-select-order="' + order + '">' + selectedText + '</li>');
+            }
+        }
+    }
+
+    function refreshNavbar1(selectorIndex) {
+        let filterNavigationWarper = $('#' + selectorId + ' .filterNavigationWarper');
+        filterNavigationWarper.html('');
+
+        selectorItems = $('#' + selectorId + ' .selectorItem');
+        for (let index in selectorItems) {
+            if(!isNaN(index)) {
+
+                let title = $(selectorItems[index]).data('select-title');
+                let order = $(selectorItems[index]).data('select-order');
+                let activeString = 'deactive';
+                if (parseInt(order) < parseInt(selectorIndex)) {
+                    activeString = 'active';
+                } else if (parseInt(order) === parseInt(selectorIndex)) {
+                    activeString = 'current';
+                } else {
+                    setValueOfSelector(order, '');
+                }
+
+                let selectedText = '';
+                if (activeString === 'deactive') {
+                    $(selectorItems[index]).attr('data-select-value', '');
+                }
+                selectedText = getValueOfSelector(order);
+
+                // filterNavigationWarper.append('<div class="col ' + activeString + ' filterNavigationStep" data-select-order="' + order + '"><div class="filterStepText">' + title + '</div><div class="filterStepSelectedText">'+selectedText+'</div></div>');
+
+                if (selectedText === null || selectedText.trim().length === 0) {
                     selectedText = '('+title+')';
                 }
                 filterNavigationWarper.append('<div class="col ' + activeString + ' filterNavigationStep" data-select-order="' + order + '"><div class="filterStepText">' + selectedText + '</div></div>');
@@ -224,8 +259,9 @@ var MultiLevelSearch = function () {
                 onChangeFilter(selectorOrder, initOptions);
                 onChangeCallback();
             });
-            $(document).on('click', '#' + initOptions.selectorId + ' .filterStepText', function () {
-                let selectorOrder = $(this).parents('.filterNavigationStep').data('select-order');
+            $(document).on('click', '#' + initOptions.selectorId + ' .filterNavigationStep', function () {
+                // let selectorOrder = $(this).parents('.filterNavigationStep').data('select-order');
+                let selectorOrder = $(this).data('select-order');
                 onFilterNavCliked(selectorOrder, initOptions);
             });
             multiSelector.fadeIn();

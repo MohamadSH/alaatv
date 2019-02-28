@@ -1,12 +1,11 @@
 jQuery(document).ready( function() {
     var owl = jQuery('.a--owl-carousel-type-1.owl-carousel');
-    var owl2 = jQuery('.a--owl-carousel-type-2.owl-carousel');
     owl.each(function () {
         $(this).owlCarousel({
             stagePadding: 40,
             loop: false,
             rtl:true,
-            nav:false,
+            nav:true,
             dots: false,
             margin:15,
             mouseDrag: true,
@@ -36,34 +35,6 @@ jQuery(document).ready( function() {
             }
             e.preventDefault();
         });*/
-    });
-    owl2.each(function () {
-        $(this).owlCarousel({
-            stagePadding: 40,
-            loop: false,
-            rtl:true,
-            nav:false,
-            dots: false,
-            margin:15,
-            mouseDrag: true,
-            touchDrag: true,
-            pullDrag: true,
-            responsiveClass:true,
-            responsive:{
-                0:{
-                    items:1,
-                },
-                600:{
-                    items:2,
-                },
-                1200:{
-                    items:4
-                },
-                1600:{
-                    items:5
-                }
-            }
-        });
     });
 
     /*
