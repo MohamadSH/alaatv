@@ -11,7 +11,7 @@ trait RequestCommon
     public function getRequestFile(array $data, $index)
     {
         $hasFile = true;
-        if (in_array($index , $data)) {
+        if (array_key_exists($index , $data)) {
             $file = $data[$index];
             if (!is_file($file))
                 $hasFile = false;
@@ -62,40 +62,5 @@ trait RequestCommon
     static public function convertRequestToAjax(\Illuminate\Foundation\Http\FormRequest &$request):void
     {
         $request->headers->add(["X-Requested-With" => "XMLHttpRequest"]);
-    }
-
-    /**
-     * Trims user form request by unsetting forbidden keys
-     *
-     * @param \Illuminate\Http\Request $request
-     */
-    public function trimUserFormRequest(\Illuminate\Http\Request &$request):void
-    {
-        //ToDo : getSecureFillable has been removed
-        $securedFields = \App\User::getSecureFillable();
-        foreach ($request->all() as $key => $value)
-        {
-            if(in_array($key , $securedFields) && isset($user->$key))
-                $request->offsetUnset($key);
-        }
-
-        $protected = \App\User::getBeProtected();
-        foreach ($request->all() as $key => $value)
-        {
-            if(in_array($key , $protected))
-                $request->offsetUnset($key);
-        }
-    }
-
-    /**
-     * Determines whether intended request involves logged in user or another user
-     *
-     * @param $user
-     * @param \Illuminate\Foundation\Http\FormRequest $request
-     * @return bool
-     */
-    public function hasRequestAuthUser($user , \Illuminate\Foundation\Http\FormRequest $request) :bool
-    {
-        return $user->id == $request->user()->id;
     }
 }

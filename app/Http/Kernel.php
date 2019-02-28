@@ -67,7 +67,6 @@ class Kernel extends HttpKernel
         'permission'    => \Laratrust\Middleware\LaratrustPermission::class,
         'ability'       => \Laratrust\Middleware\LaratrustAbility::class,
         'convert'       => ModifyRequestInputMiddleware::class,
-        'trimUserUpdateRequest' => Middleware\TrimUserUpdateRequest::class,
         'CheckPermissionForSendOrderId' => Middleware\CheckPermissionForSendOrderId::class,
         'CheckHasOpenOrder' => Middleware\CheckHasOpenOrder::class,
         'CheckPermissionForSendExtraAttributesCost' => Middleware\CheckPermissionForSendExtraAttributesCost::class,

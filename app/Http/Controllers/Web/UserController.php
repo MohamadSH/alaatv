@@ -123,8 +123,7 @@ class UserController extends Controller
         $this->middleware('permission:' . config('constants.INSERT_USER_ACCESS'), ['only' => 'create']);
         $this->middleware('permission:' . config('constants.REMOVE_USER_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . config('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
-        $this->middleware('trimUserUpdateRequest', ['only' => 'update']);
-        $this->middleware('completeInfo', ['only' => ['uploadConsultingQuestion' , 'uploadConsultingQuestion']]);
+        $this->middleware('completeInfo', ['only' => ['uploadConsultingQuestion']]);
     }
 
     /**
@@ -341,27 +340,40 @@ class UserController extends Controller
         try {
             $result =  $this->new($request->all() , $request->user());
 
-            if($result["error"])
-                $responseContent = "خطا در ذخیره کاربر";
+            if($result['error'])
+            {
+                $resultMessage   = 'خطا در ذخیره کاربر';
+                $resultCode    =  Response::HTTP_INTERNAL_SERVER_ERROR;
+            }
             else
-                $responseContent = "درج کاربر با موفقیت انجام شد";
+            {
+                $resultMessage  = 'درج کاربر با موفقیت انجام شد';
+                $resultCode     =  Response::HTTP_OK;
+                $savedUser      = $result['user'];
+            }
 
-            return response(
-                [
-                    "message" => $responseContent,
-                    "user"    => $result["user"],
-                ],
-                $result["data"]["resultCode"]
-            );
+            if($resultCode == Response::HTTP_OK)
+                $responseContent = [
+                        'user'    => $savedUser??$savedUser,
+                    ];
+            else
+                $responseContent = [
+                        'error' =>[
+                            'message'   =>  $resultMessage
+                        ]
+                    ];
+
+            return response( $responseContent, Response::HTTP_OK);
+
         }
         catch (\Exception    $e) {
-            $message = "unexpected error";
+            $message = 'unexpected error';
             return response(
                 [
-                    "message" => $message,
-                    "error"   => $e->getMessage(),
-                    "line"    => $e->getLine(),
-                    "file"    => $e->getFile(),
+                    'message' => $message,
+                    'error'   => $e->getMessage(),
+                    'line'    => $e->getLine(),
+                    'file'    => $e->getFile(),
                 ],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
@@ -371,55 +383,33 @@ class UserController extends Controller
 
     /**
      * @param array $inputData
-     * @param User $user
      * @param User $authenticatedUser
      *
+     * @param string $moderatorPermission
+     * @param User $user
      * @return void
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
-    private function fillContentFromRequest(array $inputData, User $authenticatedUser = null, User &$user = null): void
+    private function fillContentFromRequest(array $inputData, User $authenticatedUser , string $moderatorPermission, User &$user): void
     {
-        $user->fill($inputData);
-
-        if (optional($authenticatedUser)->can(config('constants.EDIT_USER_ACCESS'))) {
-            $hasMobileVerifiedAt = in_array("mobileNumberVerification" , $inputData);
-            $hasPassword = in_array("password" , $inputData);
-            $hasLockProfile = in_array("lockProfile" , $inputData);
-            $hasFirstName = in_array("firstName" , $inputData);
-            $hasLastName = in_array("lastName" , $inputData);
-            $hasNameSlug = in_array("nameSlug" , $inputData);
-            $hasMobile = in_array("mobile" , $inputData);
-            $hasNationalCode = in_array("nationalCode" , $inputData);
-            $hasUserStatusId = in_array("userstatus_id" , $inputData);
-            $hasTechCode = in_array("techCode" , $inputData);
+        if ($authenticatedUser->can($moderatorPermission)) {
+            $user->fill($inputData);
+            $hasMobileVerifiedAt = in_array('mobileNumberVerification' , $inputData);
+            $hasPassword         = in_array('password' , $inputData);
 
             if ($hasMobileVerifiedAt)
-                $user->mobile_verified_at = ($inputData["mobileNumberVerification"] == "1") ? Carbon::now()
-                    ->setTimezone("Asia/Tehran") : null;
+                $user->mobile_verified_at = ($inputData['mobileNumberVerification'] == '1') ? Carbon::now()->setTimezone('Asia/Tehran') : null;
+
             if ($hasPassword)
-                $user->password = bcrypt($inputData["password"]);
-            if ($hasFirstName)
-                $user->firstName = $inputData["firstName"];
-            if ($hasLastName)
-                $user->lastName = $inputData["lastName"];
-            if ($hasNameSlug)
-                $user->nameSlug = $inputData["nameSlug"];
-            if ($hasMobile)
-                $user->mobile = $inputData["mobile"];
-            if ($hasNationalCode)
-                $user->nationalCode = $inputData["nationalCode"];
-            if ($hasUserStatusId)
-                $user->userstatus_id = $inputData["userstatus_id"];
-            if ($hasTechCode)
-                $user->techCode = $inputData["techCode"];
-            if ($hasLockProfile)
-                $user->lockProfile = $inputData["lockProfile"] == "1" ? 1 : 0;
+                $user->password     = bcrypt($inputData['password']);
+
+            $user->lockProfile      = array_get($inputData , 'lockProfile' , $user->lockProfile);
+
+        }else{
+            $user->fillByPublic($inputData);
         }
 
-        if (in_array("roles" , $inputData))
-            $this->attachRoles($inputData["roles"], $authenticatedUser , $user);
-
-        $file = $this->getRequestFile($inputData, "photo");
+        $file = $this->getRequestFile($inputData, 'photo');
         if ($file !== false)
             $this->storePhotoOfUser($user, $file);
     }
@@ -455,18 +445,18 @@ class UserController extends Controller
      * @param User  $staffUser
      * @param User  $user
      */
-    private function attachRoles(array $newRoleIds = [], User $staffUser, User $user): void
+    private function attachRoles(array $newRoleIds, User $staffUser, User $user): void
     {
-        if (isset($staffUser) && $staffUser->can(config('constants.INSET_USER_ROLE'))) {
-            $oldRolesIds = $user->roles->pluck("id")
-                                       ->toArray();
+        if ($staffUser->can(config('constants.INSET_USER_ROLE'))) {
+            $oldRolesIds = $user->roles->pluck("id")->toArray();
             $totalRoles = array_merge($oldRolesIds, $newRoleIds);
-            $this->checkGivenRoles($totalRoles, $staffUser);
-
+            /** snippet for checking system roles idea */
+            /*$this->checkGivenRoles($totalRoles, $staffUser);
             if (!empty($newRoleIds)) {
                 $user->roles()
                      ->sync($newRoleIds);
-            }
+            }*/
+            $user->roles()->attach($totalRoles);
         }
     }
 
@@ -1537,44 +1527,37 @@ class UserController extends Controller
      *
      * @param EditUserRequest $request
      * @param User $user
-     * @return Response
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @return array|Response
      */
     public function update(EditUserRequest $request, User $user=null)
     {
-        if($user===null) {
-            $user = $request->user();
-        } elseif (!$request->user()->can(config('constants.EDIT_USER_ACCESS'))) {
-                abort(Response::HTTP_FORBIDDEN);
+        $authenticatedUser = $request->user();
+        if($user===null)
+            $user = $authenticatedUser;
+
+        try {
+            $this->fillContentFromRequest($request->all() , $authenticatedUser , config('constants.EDIT_USER_ACCESS') , $user);
+        } catch (FileNotFoundException $e) {
+            return response(
+                [
+                    "error" => [
+                        "text"       => $e->getMessage(),
+                        "line"       => $e->getLine(),
+                        "file"       => $e->getFile()
+                    ]
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
 
-        $this->fillContentFromRequest($request->all() , $request->user(), $user);
-
-        if ($user->completion("lockProfile") == 100)
-            $user->lockProfile();
-
-        /** snippet code for changing user's password
-         *  note that an admin user can change any passwords and that works fine
-         *  but when a user is updating his password it needs some extra work as you can see below
-         *  and this extra work should not conflict with updating passwords by admin
-         */
-        //        $oldPassword = $request->oldPassword;
-        //        $newPassword = $request->password;
-        //
-        //        $confirmation = $this->userPasswordConfirmation($user, $oldPassword, $newPassword);
-        //
-        //        if ($confirmation["confirmed"]) {
-        //            $user->changePassword($newPassword);
-        //            if ($user->update()) {
-        //                session()->put("success", "رمز عبور با موفقیت تغییر یافت.");
-        //            } else {
-        //                session()->put("error", "خطا در تغییر رمز عبور ، لطفا دوباره اقدام نمایید.");
-        //            }
-        //        } else {
-        //            session()->put("error", $confirmation["message"]);
-        //        }
-
         if ($user->update()) {
+            //ToDo : place in UserObserver
+            if ($user->checkUserProfileForLocking())
+                $user->lockProfile();
+
+            //ToDo : place in UserObserver
+            if($request->has('roles'))
+                $this->attachRoles($request->get('roles'), $authenticatedUser , $user);
 
             $newPhotoSrc = route('image', [
                 'category' => '1',
@@ -1583,20 +1566,20 @@ class UserController extends Controller
                 'filename' => $user->photo,
             ]);
 
-            $message = "اطلاعات با موفقیت اصلاح شد";
+            $message = 'اطلاعات با موفقیت اصلاح شد';
             $status = Response::HTTP_OK;
-            session()->flash("success", $message);
+            session()->flash('success', $message);
         } else {
-            $message = \Lang::get("responseText.Database error.");
+            $message = 'Database error on updating user';
             $status = Response::HTTP_SERVICE_UNAVAILABLE;
-            session()->flash("error", $message);
+            session()->flash('error', $message);
         }
 
         if ($request->expectsJson()) {
             return response(
                 [
-                    "newPhoto" => isset($newPhotoSrc) ? $newPhotoSrc : null,
-                    "message"  => $message,
+                    'userPhoto' => $newPhotoSrc??$newPhotoSrc,
+                    'message'   => $message,
                 ],
                 $status
             );
@@ -1874,9 +1857,8 @@ class UserController extends Controller
      * @param User|null $authenticatedUser
      * @return array
      */
-    public function new(array $data , User $authenticatedUser=null) : array
+    public function new(array $data , User $authenticatedUser) : array
     {
-        //ToDo : To be placed in a middleware
         $softDeletedUsers = User::onlyTrashed()
             ->where("mobile", $data["mobile"])
             ->where("nationalCode", $data["nationalCode"])
@@ -1893,7 +1875,7 @@ class UserController extends Controller
 
         $user = new User();
         try {
-            $this->fillContentFromRequest($data , $authenticatedUser , $user);
+            $this->fillContentFromRequest($data , $authenticatedUser , config('constants.INSERT_USER_ACCESS') , $user);
         } catch (FileNotFoundException $e) {
             return [
                 "error" => true,
@@ -1906,24 +1888,35 @@ class UserController extends Controller
             ];
         }
 
-        $error = false;
         if ($user->save()) {
+            if ($user->checkUserProfileForLocking())
+                $user->lockProfile();
+
             if (in_array("roles" , $data))
                 $this->attachRoles($data["roles"], $authenticatedUser, $user);
 
-            $resultCode = Response::HTTP_OK;
+            $resultText =   'User save successfully';
+            $resultCode =    Response::HTTP_OK;
 
         } else {
-            $error = true;
-            $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
+            $resultText =   'Datebase error';
+            $resultCode =   Response::HTTP_SERVICE_UNAVAILABLE;
         }
 
-        return [
-            "error" => $error ,
-            "data" => [
-                "resultCode" => $resultCode,
-                "user"       => (!$error)?$user:null
-            ]
-        ];
+        if($resultCode == Response::HTTP_OK)
+        {
+            $response = [
+                'user'       => $user
+            ];
+        }else{
+            $response = [
+                'error'    => [
+                    'code'      =>  $resultCode,
+                    'message'   =>  $resultText
+                ]
+            ] ;
+        }
+
+        return $response;
     }
 }
