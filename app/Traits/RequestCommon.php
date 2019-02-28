@@ -63,16 +63,4 @@ trait RequestCommon
     {
         $request->headers->add(["X-Requested-With" => "XMLHttpRequest"]);
     }
-
-    /**
-     * Determines whether intended request involves logged in user or another user
-     *
-     * @param $user
-     * @param \Illuminate\Foundation\Http\FormRequest $request
-     * @return bool
-     */
-    public function hasRequestAuthUser($user , \Illuminate\Foundation\Http\FormRequest $request) :bool
-    {
-        return $user->id == $request->user()->id;
-    }
 }

@@ -340,27 +340,40 @@ class UserController extends Controller
         try {
             $result =  $this->new($request->all() , $request->user());
 
-            if($result["error"])
-                $responseContent = "خطا در ذخیره کاربر";
+            if($result['error'])
+            {
+                $resultMessage   = 'خطا در ذخیره کاربر';
+                $resultCode    =  Response::HTTP_INTERNAL_SERVER_ERROR;
+            }
             else
-                $responseContent = "درج کاربر با موفقیت انجام شد";
+            {
+                $resultMessage  = 'درج کاربر با موفقیت انجام شد';
+                $resultCode     =  Response::HTTP_OK;
+                $savedUser      = $result['user'];
+            }
 
-            return response(
-                [
-                    "message" => $responseContent,
-                    "user"    => $result["user"],
-                ],
-                $result["data"]["resultCode"]
-            );
+            if($resultCode == Response::HTTP_OK)
+                $responseContent = [
+                        'user'    => $savedUser??$savedUser,
+                    ];
+            else
+                $responseContent = [
+                        'error' =>[
+                            'message'   =>  $resultMessage
+                        ]
+                    ];
+
+            return response( $responseContent, Response::HTTP_OK);
+
         }
         catch (\Exception    $e) {
-            $message = "unexpected error";
+            $message = 'unexpected error';
             return response(
                 [
-                    "message" => $message,
-                    "error"   => $e->getMessage(),
-                    "line"    => $e->getLine(),
-                    "file"    => $e->getFile(),
+                    'message' => $message,
+                    'error'   => $e->getMessage(),
+                    'line'    => $e->getLine(),
+                    'file'    => $e->getFile(),
                 ],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
@@ -1519,22 +1532,8 @@ class UserController extends Controller
     public function update(EditUserRequest $request, User $user=null)
     {
         $authenticatedUser = $request->user();
-
-        if($user===null) {
+        if($user===null)
             $user = $authenticatedUser;
-            if($user->isUserProfileLocked())
-                return response(
-                    [
-                        'error' =>[
-                            'code'  =>  Response::HTTP_BAD_REQUEST,
-                            'text'  =>  'User profile is locked!',
-                        ]
-                    ],
-                    Response::HTTP_OK
-                );
-        } elseif (!$authenticatedUser->can(config('constants.EDIT_USER_ACCESS'))) {
-                abort(Response::HTTP_FORBIDDEN);
-        }
 
         try {
             $this->fillContentFromRequest($request->all() , $authenticatedUser , config('constants.EDIT_USER_ACCESS') , $user);
@@ -1579,7 +1578,7 @@ class UserController extends Controller
         if ($request->expectsJson()) {
             return response(
                 [
-                    'userPhoto' => $newPhotoSrc,
+                    'userPhoto' => $newPhotoSrc??$newPhotoSrc,
                     'message'   => $message,
                 ],
                 $status
@@ -1860,7 +1859,6 @@ class UserController extends Controller
      */
     public function new(array $data , User $authenticatedUser) : array
     {
-        //ToDo : To be placed in a middleware
         $softDeletedUsers = User::onlyTrashed()
             ->where("mobile", $data["mobile"])
             ->where("nationalCode", $data["nationalCode"])
@@ -1890,7 +1888,6 @@ class UserController extends Controller
             ];
         }
 
-        $error = false;
         if ($user->save()) {
             if ($user->checkUserProfileForLocking())
                 $user->lockProfile();
@@ -1898,19 +1895,28 @@ class UserController extends Controller
             if (in_array("roles" , $data))
                 $this->attachRoles($data["roles"], $authenticatedUser, $user);
 
-            $resultCode = Response::HTTP_OK;
+            $resultText =   'User save successfully';
+            $resultCode =    Response::HTTP_OK;
 
         } else {
-            $error = true;
-            $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
+            $resultText =   'Datebase error';
+            $resultCode =   Response::HTTP_SERVICE_UNAVAILABLE;
         }
 
-        return [
-            "error" => $error ,
-            "data" => [
-                "resultCode" => $resultCode,
-                "user"       => (!$error)?$user:null
-            ]
-        ];
+        if($resultCode == Response::HTTP_OK)
+        {
+            $response = [
+                'user'       => $user
+            ];
+        }else{
+            $response = [
+                'error'    => [
+                    'code'      =>  $resultCode,
+                    'message'   =>  $resultText
+                ]
+            ] ;
+        }
+
+        return $response;
     }
 }
