@@ -24,11 +24,11 @@ class OrderCollections extends Collection
         foreach ($items as $order) {
             $orderCoupon = $order->coupon_discount_type;
             if ($orderCoupon !== false) {
-                if ($orderCoupon["typeId"] == config("constants.DISCOUNT_TYPE_PERCENTAGE")) {
+                if ($orderCoupon["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE")) {
                     $result->put($order->id, [
                         "caption" => "کپن " . $order->coupon->name . " با " . $orderCoupon["discount"] . " % تخفیف",
                     ]);
-                } else if ($orderCoupon["typeId"] == config("constants.DISCOUNT_TYPE_COST")) {
+                } else if ($orderCoupon["type"] == config("constants.DISCOUNT_TYPE_COST")) {
                     $result->put($order->id, [
                         "caption" => "کپن " . $order->coupon->name . " با " . number_format($orderCoupon["discount"]) . " تومان تخفیف",
                     ]);

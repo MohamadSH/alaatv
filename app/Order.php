@@ -368,13 +368,13 @@ class Order extends BaseModel
     {
             if ($this->couponDiscount > 0) {
                 return [
-                    'typeId'       => config('constants.DISCOUNT_TYPE_PERCENTAGE'),
+                    'type'       => config('constants.DISCOUNT_TYPE_PERCENTAGE'),
                     'typeHint'     => 'percentage',
                     'discount'     => $this->couponDiscount,
                 ];
             } else if($this->couponDiscountAmount > 0){
                 return [
-                    'typeId'          => config('constants.DISCOUNT_TYPE_COST'),
+                    'type'          => config('constants.DISCOUNT_TYPE_COST'),
                     'typeHint'      => 'amount',
                     'discount'      => $this->couponDiscountAmount,
                 ];
