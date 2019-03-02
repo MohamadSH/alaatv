@@ -1,4 +1,10 @@
 $(document).ready(function () {
+
+    if ($('#js-var-userId').val()) {
+        $('.Step-warper').fadeIn();
+    }
+
+
     $('.a--userCartList .m-portlet__head').sticky({
         topSpacing: $('#m_header').height(),
         zIndex: 99

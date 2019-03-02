@@ -1,0 +1,90 @@
+
+.a--step-warper {
+    -webkit-box-shadow: 0 1px 15px 1px rgba(69,65,78,.08);
+    box-shadow: 0 1px 15px 1px rgba(69,65,78,.08);
+    margin-bottom: 25px;
+}
+.a--step-warper .a--step-item {
+    position: relative;
+    text-align: center;
+    background: white;
+    border: solid 1px rgba(34,36,38,.15);
+    border-left: none;
+    cursor: pointer;
+    color: white;
+    transition: background-color .4s ease,opacity .4s ease,color .4s ease,box-shadow .4s ease,-webkit-box-shadow .4s ease;
+}
+.a--step-warper .a--step-item.passed {
+    background: #34bfa3;
+}
+.a--step-warper .a--step-item.current {
+    background: #00c5dc;
+}
+.a--step-warper .a--step-item.notPassed {
+    background: #ffffff;
+    color: black;
+}
+.a--step-warper .a--step-item:after {
+    position: absolute;
+    z-index: 2;
+    content: '';
+    top: 50%;
+    left: 0;
+    background-color: #fff;
+    width: 1.143em;
+    height: 1.143em;
+    border-style: solid;
+    border-color: rgba(34,36,38,.15);
+    border-width: 0 1px 1px 0;
+    -webkit-transition: background-color .1s ease,opacity .1s ease,color .1s ease,-webkit-box-shadow .1s ease;
+    transition: background-color .4s ease,opacity .4s ease,color .4s ease,box-shadow .4s ease,-webkit-box-shadow .4s ease;
+    -webkit-transform: translateY(-50%) translateX(-50%) rotate(135deg);
+    transform: translateY(-50%) translateX(-50%) rotate(135deg);
+}
+.a--step-warper .a--step-item.passed:after {
+    background: #34bfa3;
+}
+.a--step-warper .a--step-item.current:after {
+    background: #00c5dc;
+}
+.a--step-warper .a--step-item.notPassed:after {
+    background: #ffffff;
+}
+
+.a--step-warper .a--step-item:hover {
+    background: #ccc;
+}
+.a--step-warper .a--step-item.passed:hover {
+    background: #34bfa3;
+    box-shadow: 0px 0px 30px 0px #34bfa3;
+}
+.a--step-warper .a--step-item.current:hover {
+    background: #00c5dc;
+    box-shadow: 0px 0px 30px 0px #00C5DC;
+}
+.a--step-warper .a--step-item.notPassed:hover {
+    background: #ffffff;
+    box-shadow: 0px 0px 30px 0px #c4c5d6;
+}
+.a--step-warper .a--step-item.passed:hover:after {
+    background: #34bfa3;
+}
+.a--step-warper .a--step-item.current:hover:after {
+    background: #00c5dc;
+}
+.a--step-warper .a--step-item.notPassed:hover:after {
+    background: #ffffff;
+}
+
+.a--step-warper .a--step-item:last-child {
+    border-left: solid 1px rgba(34,36,38,.15);
+}
+.a--step-warper .a--step-item:last-child:after {
+    display: none;
+}
+.a--step-warper .a--step-item .a--step-item-icon {
+
+}
+.a--step-warper .a--step-item .a--step-item-text {
+
+}
