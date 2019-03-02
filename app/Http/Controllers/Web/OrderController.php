@@ -1174,8 +1174,6 @@ class OrderController extends Controller
             $resultText = 'The code is wrong';
         }
 
-        $response = [];
-
         if ($resultCode == Response::HTTP_OK)
             $response = [
                 $coupon,
