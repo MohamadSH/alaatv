@@ -93,7 +93,7 @@
                     </div>
                 </div>
                 <div class="m-portlet__body">
-                    <form method="POST" action="{{ action('Web\EventresultController') }}" accept-charset="UTF-8" enctype="multipart/form-data">
+                    <form method="POST" action="{{ action('Web\EventresultController@store') }}" accept-charset="UTF-8" enctype="multipart/form-data">
                         @csrf
                         <input name="event_id" type="hidden" value="3">
                         <input name="eventresultstatus_id" type="hidden" value="1">
