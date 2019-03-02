@@ -1,0 +1,53 @@
+
+.datepicker-plot-area.datepicker-persian {
+    font-family: IRANSans !important;
+}
+
+.userFullname {
+    text-shadow: 1px 1px 2px black, 0 0 1em blue, 0 0 0.2em darkblue;
+}
+
+.btnEditProfilePic {
+    box-shadow: 0px 0px 11px 0px #8EACED !important;
+}
+
+.profile-usermenu {
+    margin-right: -29px;
+    margin-left: -29px;
+}
+
+.profile-usermenu button {
+    text-align: right;
+    padding-right: 30px;
+}
+#UserProfilePhoto,
+.file-input.theme-fas,
+.fileinput-btnBrowseUserImage,
+.fileinput-btnRemoveUserImage,
+.fileinput-previewClass .fileinput-remove,
+.fileinput-frameClass .file-footer-caption,
+.fileinput-frameClass .file-upload-indicator,
+.fileinput-frameClass .file-actions {
+    display: none;
+}
+
+.fileinput-previewClass .kv-fileinput-error.file-error-message,
+.fileinput-cancel-button,
+.fileinput-btnRemoveUserImage {
+    display: none !important;
+}
+
+.fileinput-previewClass,
+.fileinput-previewClass .file-drop-zone {
+    margin: 0px;
+    padding: 0px;
+    border: none;
+}
+.profilePhotoUploadProgressBar,
+.fileinput-previewClass .fileinput-frameClass .file-thumbnail-footer .file-thumb-progress {
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+}

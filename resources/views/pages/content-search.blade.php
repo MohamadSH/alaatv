@@ -41,11 +41,11 @@
         .a--multi-level-search {
             display: none;
             margin-bottom: 20px;
-            background: white;
+            /*background: white;*/
             padding-top: 5px;
-            -webkit-box-shadow: 0px 0px 5px 2px rgba(221,221,221,1);
-            -moz-box-shadow: 0px 0px 5px 2px rgba(221,221,221,1);
-            box-shadow: 0px 0px 5px 2px rgba(221,221,221,1);
+            /*-webkit-box-shadow: 0px 0px 5px 2px rgba(221,221,221,1);*/
+            /*-moz-box-shadow: 0px 0px 5px 2px rgba(221,221,221,1);*/
+            /*box-shadow: 0px 0px 5px 2px rgba(221,221,221,1);*/
         }
         .a--multi-level-search .selectorItem {
 
@@ -90,7 +90,11 @@
         }
         .a--multi-level-search .selectorItem .select2warper {
             margin: 10px 0;
-            border: solid 3px #dbdbdb;
+            background: white;
+            border: solid 1px #dbdbdb;
+            border-radius: 50px;
+            -webkit-box-shadow: 0px 5px 10px 2px rgba(196,197,214,0.36) !important;
+            box-shadow: 0px 5px 10px 2px rgba(196,197,214,0.36) !important;
         }
         /*.a--multi-level-search .filterNavigationWarper {*/
             /*margin-bottom: 45px;*/
@@ -195,11 +199,13 @@
 
             <style>
                 .a--multi-level-search .filterNavigationWarper {
-                    background: #e9ecef;
+                    background: #4c4c4c;
                     display: table;
                     padding: 5px 20px;
                     border-radius: 1px;
                     margin: auto;
+                    -webkit-box-shadow: 0px 5px 10px 2px rgba(196,197,214,0.36) !important;
+                    box-shadow: 0px 5px 10px 2px rgba(196,197,214,0.36) !important;
                 }
                 .a--multi-level-search .filterNavigationWarper,
                 .a--multi-level-search .filterNavigationWarper .filterNavigationStep {
