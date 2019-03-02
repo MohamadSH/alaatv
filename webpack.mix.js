@@ -93,8 +93,11 @@ mix.scripts(
 
 mix.scripts(
     [
+        'node_modules/bootstrap-fileinput/js/fileinput.js',
         'node_modules/persian-date/dist/persian-date.js',
-        'node_modules/persian-datepicker/dist/js/persian-datepicker.js'
+        'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
+
+        // 'public/acm/AlaatvCustomFiles/js/page-user-profile.js'
     ],
     'public/js/user-profile.js'
 ).version();
@@ -105,6 +108,8 @@ mix.styles(
         'node_modules/persian-datepicker/dist/css/persian-datepicker.css',
         'node_modules/bootstrap-fileinput/css/fileinput.css',
         'node_modules/bootstrap-fileinput/css/fileinput-rtl.css',
+
+        // 'public/acm/AlaatvCustomFiles/css/page-user-profile.css',
     ],
     'public/css/user-profile.css'
 ).version();

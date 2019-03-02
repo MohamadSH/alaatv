@@ -295,7 +295,9 @@ var CheckoutPaymentUi = function () {
                     $('#btnRemoveDiscountCodeValue').fadeOut(0);
                     $('#btnSaveDiscountCodeValue').fadeIn();
 
-                    $.notify(data.message, {
+                    // let message = data.error.message;
+                    let message = 'کد وارد شده معتبر نیست.';
+                    $.notify(message, {
                         type: 'danger',
                         allow_dismiss: true,
                         newest_on_top: false,
@@ -319,18 +321,17 @@ var CheckoutPaymentUi = function () {
                         }
                     });
                 } else {
-                    console.log('submitCoupon: ' + response[0].name);
 
                     $('.couponReportWarper').fadeIn();
                     let couponReport = ' کپن تخفیف ' +
-                        '<strong>' + response[0].name + '</strong>' +
-                        '(' + response[0].code + ')' +
+                        ' <strong>' + data[0].name + '</strong> ' +
+                        ' (' + data[0].code + ') ' +
                         ' با ' +
-                        response[0].discount;
+                        data[0].discount;
 
-                    if ( response[0].discountType.name === 'percentage') {
+                    if ( data[0].discountType.name === 'percentage') {
                         couponReport += '% تخفیف برای سفارش شما ثبت شده است.';
-                    } else if ( response[0].discountType.name === 'cost') {
+                    } else if ( data[0].discountType.name === 'cost') {
                         couponReport += ' تومان تخفیف برای سفارش شما ثبت شد. ';
                     }
                     $('.couponReport').html(couponReport);
@@ -421,7 +422,9 @@ var CheckoutPaymentUi = function () {
                     if (response.error) {
 
                         if (showMessage === true) {
-                            $.notify(response.error.message, {
+                            // let message = response.error.message;
+                            let message = 'مشکلی در از حذف کد تخفیف رخ داده است.';
+                            $.notify(message, {
                                 type: 'danger',
                                 allow_dismiss: true,
                                 newest_on_top: false,
@@ -530,9 +533,6 @@ var CheckoutPaymentUi = function () {
         },
         refreshUiBasedOnPaymentType:function () {
             refreshUiBasedOnPaymentType();
-        },
-        getDonateStatus:function () {
-            getDonateStatus();
         },
         refreshUiBasedOnDonateStatus:function (donateValue) {
             refreshUiBasedOnDonateStatus(donateValue);
