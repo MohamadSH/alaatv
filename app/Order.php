@@ -374,7 +374,7 @@ class Order extends BaseModel
                 ];
             } else if($this->couponDiscountAmount > 0){
                 return [
-                    'type'          => config('constants.DISCOUNT_TYPE_COST'),
+                    'typeId'          => config('constants.DISCOUNT_TYPE_COST'),
                     'typeHint'      => 'amount',
                     'discount'      => $this->couponDiscountAmount,
                 ];

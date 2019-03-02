@@ -71,9 +71,9 @@ class OrderCheckout extends CheckoutInvoker
         $couponType = $this->order->coupon_discount_type;
         if($couponType !== false)
         {
-            if($couponType["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE"))
+            if($couponType["typeId"] == config("constants.DISCOUNT_TYPE_PERCENTAGE"))
                 $couponDiscountPercentage = $couponType["discount"] / 100;
-            elseif($couponType["type"] == config("constants.DISCOUNT_TYPE_COST"))
+            elseif($couponType["typeId"] == config("constants.DISCOUNT_TYPE_COST"))
                 $couponDiscountCostAmount = $couponType["discount"];
         }
         $alaaCashier = new AlaaCashier();
