@@ -197,7 +197,7 @@
                                 <i class="flaticon-cogwheel"></i>
                                 تنظیمات حساب کاربری
                             </button>
-                            <button type="button" class="btn m-btn--air btn-outline-info btn-block" menu="profileMenuPage-filmVaJozve">
+                            <button type="button" class="btn m-btn--air btn-outline-info btn-block" menu="profileMenuPage-filmVaJozve" onclick="window.location.href='{{ route('web.user.dashboard', Auth::user()) }}';">
                                 <i class="flaticon-multimedia-4"></i>
                                 فیلم ها و جزوات
                             </button>
