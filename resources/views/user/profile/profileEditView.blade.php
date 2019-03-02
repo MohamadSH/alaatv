@@ -40,12 +40,13 @@
             <div class="form-group m-form__group {{ $errors->has('province') ? ' has-error' : '' }}">
                 <label for="province">استان</label>
                 <div class="m-input-icon m-input-icon--left">
-                    <input type="text" name="province" id="province" class="form-control m-input m-input--air" placeholder="استان">
+                    <input type="text" name="province" id="province" class="form-control m-input m-input--air"
+                           placeholder="استان">
                     <span class="m-input-icon__icon m-input-icon__icon--left">
-                                <span>
-                                    <i class="flaticon-placeholder"></i>
-                                </span>
-                            </span>
+                        <span>
+                            <i class="flaticon-placeholder"></i>
+                        </span>
+                    </span>
                 </div>
             </div>
             <div class="form-group m-form__group {{ $errors->has('city') ? ' has-error' : '' }}">
@@ -53,32 +54,34 @@
                 <div class="m-input-icon m-input-icon--left">
                     <input type="text" name="city" id="city" class="form-control m-input m-input--air" placeholder="شهر">
                     <span class="m-input-icon__icon m-input-icon__icon--left">
-                                <span>
-                                    <i class="flaticon-placeholder"></i>
-                                </span>
-                            </span>
+                        <span>
+                            <i class="flaticon-placeholder"></i>
+                        </span>
+                    </span>
                 </div>
             </div>
             <div class="form-group m-form__group {{ $errors->has('address') ? ' has-error' : '' }}">
                 <label for="address">آدرس محل سکونت</label>
                 <div class="m-input-icon m-input-icon--left">
-                    <input type="text" name="address" id="address" class="form-control m-input m-input--air" placeholder="آدرس محل سکونت">
+                    <input type="text" name="address" id="address" class="form-control m-input m-input--air"
+                           placeholder="آدرس محل سکونت">
                     <span class="m-input-icon__icon m-input-icon__icon--left">
-                                <span>
-                                    <i class="flaticon-map-location"></i>
-                                </span>
-                            </span>
+                        <span>
+                            <i class="flaticon-map-location"></i>
+                        </span>
+                    </span>
                 </div>
             </div>
             <div class="form-group m-form__group {{ $errors->has('postalCode') ? ' has-error' : '' }}">
                 <label for="postalCode">کد پستی</label>
                 <div class="m-input-icon m-input-icon--left">
-                    <input type="text" name="postalCode" id="postalCode" class="form-control m-input m-input--air" placeholder="کد پستی">
+                    <input type="text" name="postalCode" id="postalCode" class="form-control m-input m-input--air"
+                           placeholder="کد پستی">
                     <span class="m-input-icon__icon m-input-icon__icon--left">
-                                <span>
-                                    <i class="flaticon-mail-1"></i>
-                                </span>
-                            </span>
+                        <span>
+                            <i class="flaticon-mail-1"></i>
+                        </span>
+                    </span>
                 </div>
             </div>
             <div class="form-group m-form__group {{ $errors->has('gender_id') ? ' has-error' : '' }}">
@@ -86,10 +89,10 @@
                 <div class="m-input-icon m-input-icon--left">
                     {!! Form::select('gender_id',$genders,null,['class' => 'form-control m-input m-input--air', 'id' => 'gender_id']) !!}
                     <span class="m-input-icon__icon m-input-icon__icon--left">
-                                <span>
-                                    <i class="la la-user"></i>
-                                </span>
-                            </span>
+                        <span>
+                            <i class="la la-user"></i>
+                        </span>
+                    </span>
                 </div>
             </div>
 
@@ -100,10 +103,10 @@
                         <input class="form-control m-input m-input--air" name="birthdate" id="birthdate"/>
                         <input name="birthdateAlt" id="birthdateAlt" type="hidden"/>
                         <span class="m-input-icon__icon m-input-icon__icon--left">
-                            <span>
-                                <i class="flaticon-calendar-1"></i>
+                                <span>
+                                    <i class="flaticon-calendar-1"></i>
+                                </span>
                             </span>
-                        </span>
                     </div>
                 </div>
             @endif
@@ -111,12 +114,13 @@
             <div class="form-group m-form__group {{ $errors->has('school') ? ' has-error' : '' }}">
                 <label for="school">مدرسه</label>
                 <div class="m-input-icon m-input-icon--left">
-                    <input type="text" name="school" id="school" class="form-control m-input m-input--air" placeholder="مدرسه">
+                    <input type="text" name="school" id="school" class="form-control m-input m-input--air"
+                           placeholder="مدرسه">
                     <span class="m-input-icon__icon m-input-icon__icon--left">
-                                <span>
-                                    <i class="la la-university"></i>
+                                    <span>
+                                        <i class="la la-university"></i>
+                                    </span>
                                 </span>
-                            </span>
                 </div>
             </div>
             <div class="form-group m-form__group {{ $errors->has('major_id') ? ' has-error' : '' }}">
@@ -124,10 +128,10 @@
                 <div class="m-input-icon m-input-icon--left">
                     {!! Form::select('major_id',$majors,null,['class' => 'form-control m-input m-input--air', 'id' => 'major_id']) !!}
                     <span class="m-input-icon__icon m-input-icon__icon--left">
-                        <span>
-                            <i class="la la-mortar-board"></i>
+                            <span>
+                                <i class="la la-mortar-board"></i>
+                            </span>
                         </span>
-                    </span>
                 </div>
             </div>
 
@@ -135,12 +139,13 @@
                 <div class="form-group m-form__group {{ $errors->has('introducedBy') ? ' has-error' : '' }}">
                     <label for="introducedBy">چگونه با آلاء آشنا شدید؟</label>
                     <div class="m-input-icon m-input-icon--left">
-                        <input type="text" name="introducedBy" id="introducedBy" class="form-control m-input m-input--air" placeholder="ایمیل">
+                        <input type="text" name="introducedBy" id="introducedBy" class="form-control m-input m-input--air"
+                               placeholder="ایمیل">
                         <span class="m-input-icon__icon m-input-icon__icon--left">
-                        <span>
-                            <i class="la la-mortar-board"></i>
+                            <span>
+                                <i class="la la-mortar-board"></i>
+                            </span>
                         </span>
-                    </span>
                     </div>
                 </div>
             @endif
@@ -148,12 +153,13 @@
             <div class="form-group m-form__group {{ $errors->has('email') ? ' has-error' : '' }}">
                 <label for="email">ایمیل(اختیاری)</label>
                 <div class="m-input-icon m-input-icon--left">
-                    <input type="text" name="email" id="email" class="form-control m-input m-input--air" placeholder="ایمیل">
+                    <input type="text" name="email" id="email" class="form-control m-input m-input--air"
+                           placeholder="ایمیل">
                     <span class="m-input-icon__icon m-input-icon__icon--left">
-                                <span>
-                                    <i class="flaticon-mail"></i>
+                                    <span>
+                                        <i class="flaticon-mail"></i>
+                                    </span>
                                 </span>
-                            </span>
                 </div>
             </div>
 
@@ -161,7 +167,8 @@
                 <div class="form-group m-form__group {{ $errors->has('bio') ? ' has-error' : '' }}">
                     <label for="bio">درباره ی شما</label>
                     <div class="m-input-icon m-input-icon--left">
-                        <textarea id="bio" class="form-control m-input m-input--air" placeholder="درباره ی شما" rows="13" name="bio" cols="50"></textarea>
+                        <textarea id="bio" class="form-control m-input m-input--air" placeholder="درباره ی شما" rows="13"
+                                  name="bio" cols="50"></textarea>
                     </div>
                 </div>
             @endif
@@ -202,13 +209,16 @@
                 </div>
             @endif
 
-            <button type="submit" id="btnUpdateProfileInfoForm" class="btn m-btn--pill m-btn--air btn-primary">
+            <button type="button" id="btnUpdateProfileInfoForm" class="btn m-btn--pill m-btn--air btn-primary">
                 @if(isset($submitCaption))
                     {{$submitCaption}}
                 @else
                     ثبت درخواست
                 @endif
             </button>
+
+            <input type="hidden" id="userUpdateProfileUrl"
+                   value="{{ action((isset($formAction))?$formAction:'Web\UserController@update' , Auth::user()) }}">
 
         {!! Form::close() !!}
     </div>

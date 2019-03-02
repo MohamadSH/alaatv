@@ -324,8 +324,8 @@ var CheckoutPaymentUi = function () {
 
                     $('.couponReportWarper').fadeIn();
                     let couponReport = ' کپن تخفیف ' +
-                        '<strong>' + data[0].name + '</strong>' +
-                        '(' + data[0].code + ')' +
+                        ' <strong>' + data[0].name + '</strong> ' +
+                        ' (' + data[0].code + ') ' +
                         ' با ' +
                         data[0].discount;
 
