@@ -3,6 +3,7 @@ var CheckoutPaymentUi = function () {
     let totalCost = $('#invoiceInfo-totalCost').val();
     let couponCode = $('#invoiceInfo-couponCode').val();
     var lockDonateAjax = false;
+    var lockCouponAjax = false;
 
     function refreshUiBasedOnPaymentType() {
         let selectedObject = $('input[type="radio"][name="radioPaymentType"]:checked');
@@ -72,31 +73,35 @@ var CheckoutPaymentUi = function () {
                 success: function (data) {
                     lockDonateAjax = true;
                     if (data.error) {
-                        dontdonate();
-                        donateValue = 0;
-                        $.notify('مشکلی رخ داده است. مجدد سعی کنید.', {
-                            type: 'warning',
-                            allow_dismiss: true,
-                            newest_on_top: false,
-                            mouse_over: false,
-                            showProgressbar: false,
-                            spacing: 10,
-                            timer: 2000,
-                            placement: {
-                                from: 'top',
-                                align: 'center'
-                            },
-                            offset: {
-                                x: 30,
-                                y: 30
-                            },
-                            delay: 1000,
-                            z_index: 10000,
-                            animate: {
-                                enter: "animated flip",
-                                exit: "animated hinge"
-                            }
-                        });
+                        if(data.error.code === 503) {
+                            donate();
+                        } else {
+                            dontdonate();
+                            donateValue = 0;
+                            $.notify('مشکلی رخ داده است. مجدد سعی کنید.', {
+                                type: 'warning',
+                                allow_dismiss: true,
+                                newest_on_top: false,
+                                mouse_over: false,
+                                showProgressbar: false,
+                                spacing: 10,
+                                timer: 2000,
+                                placement: {
+                                    from: 'top',
+                                    align: 'center'
+                                },
+                                offset: {
+                                    x: 30,
+                                    y: 30
+                                },
+                                delay: 1000,
+                                z_index: 10000,
+                                animate: {
+                                    enter: "animated flip",
+                                    exit: "animated hinge"
+                                }
+                            });
+                        }
                     } else {
                         donate();
                     }
@@ -145,7 +150,7 @@ var CheckoutPaymentUi = function () {
                 state: 'info',
             });
             $.ajax({
-                type: 'POST',
+                type: 'DELETE',
                 url: $('#removeDonateUrl').val(),
                 data: {
                     mode: 'normal'
@@ -276,6 +281,10 @@ var CheckoutPaymentUi = function () {
                     exit: "animated hinge"
                 }
             });
+            return false;
+        }
+
+        if (lockCouponAjax) {
             return false;
         }
 
@@ -411,111 +420,85 @@ var CheckoutPaymentUi = function () {
 
     function detachCoupon(showMessage) {
 
-        let discountCodeValue = $('#discountCodeValue').val();
+        if (lockCouponAjax) {
+            return false;
+        }
+
+        mApp.block('.discountCodeValueWarper', {
+            type: 'loader',
+            state: 'info',
+        });
         $.ajax({
             type: 'GET',
             url: $('#OrderController-removeCoupon').val(),
             data: {},
-            statusCode: {
-                //The status for when action was successful
-                200: function (response) {
-                    if (response.error) {
-
-                        if (showMessage === true) {
-                            // let message = response.error.message;
-                            let message = 'مشکلی در از حذف کد تخفیف رخ داده است.';
-                            $.notify(message, {
-                                type: 'danger',
-                                allow_dismiss: true,
-                                newest_on_top: false,
-                                mouse_over: false,
-                                showProgressbar: false,
-                                spacing: 10,
-                                timer: 2000,
-                                placement: {
-                                    from: 'top',
-                                    align: 'center'
-                                },
-                                offset: {
-                                    x: 30,
-                                    y: 30
-                                },
-                                delay: 1000,
-                                z_index: 10000,
-                                animate: {
-                                    enter: "animated flip",
-                                    exit: "animated hinge"
-                                }
-                            });
-                            $('#btnSaveDiscountCodeValue').fadeOut(0);
-                            $('#btnRemoveDiscountCodeValue').fadeIn();
-                        }
-
-                    } else {
-
-                        $('.couponReportWarper').fadeOut();
-                        $('#btnRemoveDiscountCodeValue').fadeOut(0);
-                        $('#btnSaveDiscountCodeValue').fadeIn();
-                        $('#discountCodeValue').val('');
-
-                        if (showMessage === true) {
-                            $.notify('کد تخفیف شما حذف شد.', {
-                                type: 'success',
-                                allow_dismiss: true,
-                                newest_on_top: false,
-                                mouse_over: false,
-                                showProgressbar: false,
-                                spacing: 10,
-                                timer: 2000,
-                                placement: {
-                                    from: 'top',
-                                    align: 'center'
-                                },
-                                offset: {
-                                    x: 30,
-                                    y: 30
-                                },
-                                delay: 1000,
-                                z_index: 10000,
-                                animate: {
-                                    enter: "animated flip",
-                                    exit: "animated hinge"
-                                }
-                            });
-                        }
+            success: function (data) {
+                if (data.error) {
+                    if (showMessage === true) {
+                        // let message = response.error.message;
+                        let message = 'مشکلی در حذف کد تخفیف رخ داده است.';
+                        $.notify(message, {
+                            type: 'danger',
+                            allow_dismiss: true,
+                            newest_on_top: false,
+                            mouse_over: false,
+                            showProgressbar: false,
+                            spacing: 10,
+                            timer: 2000,
+                            placement: {
+                                from: 'top',
+                                align: 'center'
+                            },
+                            offset: {
+                                x: 30,
+                                y: 30
+                            },
+                            delay: 1000,
+                            z_index: 10000,
+                            animate: {
+                                enter: "animated flip",
+                                exit: "animated hinge"
+                            }
+                        });
+                        $('#btnSaveDiscountCodeValue').fadeOut(0);
+                        $('#btnRemoveDiscountCodeValue').fadeIn();
                     }
-                    mApp.unblock('.discountCodeValueWarper');
-                },
-                //The status for when the user is not authorized for making the request
-                403: function (response) {
-                    window.location.replace("/403");
-                },
-                //The status for when the user is not authorized for making the request
-                401: function (response) {
-                    window.location.replace("/403");
-                },
-                //Method Not Allowed
-                405: function (response) {
-                    //                        console.log(response);
-                    //                        console.log(response.responseText);
-                    location.reload();
-                },
-                404: function (response) {
-                    window.location.replace("/404");
-                },
-                //The status for when form data is not valid
-                422: function (response) {
+                } else {
+                    $('.couponReportWarper').fadeOut();
+                    $('#btnRemoveDiscountCodeValue').fadeOut(0);
+                    $('#btnSaveDiscountCodeValue').fadeIn();
+                    $('#discountCodeValue').val('');
 
-                },
-                //The status for when there is error php code
-                500: function (response) {
-                    // console.log(response.responseText);
-                    //                            toastr["error"]("خطای برنامه!", "پیام سیستم");
-                },
-                //The status for when there is error php code
-                503: function (response) {
-                    // toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+                    if (showMessage === true) {
+                        $.notify('کد تخفیف شما حذف شد.', {
+                            type: 'success',
+                            allow_dismiss: true,
+                            newest_on_top: false,
+                            mouse_over: false,
+                            showProgressbar: false,
+                            spacing: 10,
+                            timer: 2000,
+                            placement: {
+                                from: 'top',
+                                align: 'center'
+                            },
+                            offset: {
+                                x: 30,
+                                y: 30
+                            },
+                            delay: 1000,
+                            z_index: 10000,
+                            animate: {
+                                enter: "animated flip",
+                                exit: "animated hinge"
+                            }
+                        });
+                    }
                 }
+                mApp.unblock('.discountCodeValueWarper');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                mApp.unblock('.discountCodeValueWarper');
             }
         });
     }
@@ -523,10 +506,12 @@ var CheckoutPaymentUi = function () {
     return {
         refreshUi:function () {
             lockDonateAjax = true;
+            lockCouponAjax = true;
             refreshUiBasedOnPaymentType();
             refreshUiBasedOnDonateStatus();
             refreshUiBasedOnHasntDiscountCodeStatus();
             lockDonateAjax = false;
+            lockCouponAjax = false;
         },
         refreshUiBasedOnHasntDiscountCodeStatus:function () {
             refreshUiBasedOnHasntDiscountCodeStatus();
@@ -546,7 +531,7 @@ var CheckoutPaymentUi = function () {
     };
 }();
 
-
+var lockDonateAjaxForSliderInit = true;
 jQuery(document).ready(function () {
     let n = document.getElementById('m_nouislider_1_input');
     let e = document.getElementById('m_nouislider_1');
@@ -583,7 +568,10 @@ jQuery(document).ready(function () {
 
     e.noUiSlider.on('update', function (e, t) {
         n.value = e[t];
-        CheckoutPaymentUi.refreshUiBasedOnDonateStatus(n.value);
+        if (!lockDonateAjaxForSliderInit) {
+            CheckoutPaymentUi.refreshUiBasedOnDonateStatus(n.value);
+        }
+        lockDonateAjaxForSliderInit = false;
     });
 
     n.addEventListener('change', function () {

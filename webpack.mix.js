@@ -127,6 +127,8 @@ mix.styles(
 
 mix.styles(
     [
+        // 'public/acm/AlaatvCustomFiles/components/step/step.css',
+
         'public/acm/AlaatvCustomFiles/css/page-checkout-review.css',
     ],
     'public/css/checkout-review.css'
@@ -141,6 +143,7 @@ mix.styles(
 
 mix.styles(
     [
+        // 'public/acm/AlaatvCustomFiles/components/step/step.css',
         'public/acm/AlaatvCustomFiles/css/page-checkout-payment.css',
     ],
     'public/css/checkout-payment.css'

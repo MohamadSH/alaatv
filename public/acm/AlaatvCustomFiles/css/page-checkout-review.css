@@ -111,6 +111,10 @@
     padding: 0px;
 }
 
+.Step-warper {
+    display: none;
+}
+
 /*media query*/
 @media (min-width: 767.98px) {
     .btnAddMoreProductToCart-desktop {

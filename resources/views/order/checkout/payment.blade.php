@@ -4,11 +4,51 @@
 @endsection
 @section('page-css')
     <link href = "{{ mix('/css/checkout-payment.css') }}" rel = "stylesheet" type = "text/css"/>
+    <link href = "{{ asset('/acm/AlaatvCustomFiles/components/step/step.css') }}" rel = "stylesheet" type = "text/css"/>
 @endsection
 
 @section('content')
 
     @include('systemMessage.flash')
+
+    <div class="row">
+        <div class="col">
+            <div class="row a--step-warper">
+                <div class="col a--step-item passed">
+                    <div class="a--step-item-icon">
+                        <i class="flaticon-lock"></i>
+                    </div>
+                    <div class="a--step-item-text">
+                        ورود
+                    </div>
+                </div>
+                <div class="col a--step-item passed">
+                    <div class="a--step-item-icon">
+                        <i class="flaticon-information"></i>
+                    </div>
+                    <div class="a--step-item-text">
+                        تکمیل اطلاعات
+                    </div>
+                </div>
+                <div class="col a--step-item passed">
+                    <div class="a--step-item-icon">
+                        <i class="flaticon-list-3"></i>
+                    </div>
+                    <div class="a--step-item-text">
+                        بازبینی
+                    </div>
+                </div>
+                <div class="col a--step-item current">
+                    <div class="a--step-item-icon">
+                        <i class="la la-money"></i>
+                    </div>
+                    <div class="a--step-item-text">
+                        اطلاعات پرداخت
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class = "row">
         {{--روش پرداخت--}}
