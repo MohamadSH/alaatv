@@ -1,8 +1,5 @@
 <div class="m-portlet m-portlet--bordered-semi m-portlet--rounded-force">
-    @if(isset($withPhotoUpload) && $withPhotoUpload)
-    {!! Form::open(['action' => ['Web\UserController@update' , Auth::user()], 'method' => 'PUT', 'id'=>'profilePhotoAjaxForm' ]) !!}
-        @csrf
-    @endif
+
         <div class="m-portlet__head m-portlet__head--fit">
             <div class="m-portlet__head-caption">
                 <div class="m-portlet__head-action">
@@ -15,8 +12,6 @@
                         <button type="button" id="uploadProfilePhotoAjaxSubmit" class="btn btn-sm m-btn--pill m-btn--gradient-from-info m-btn--gradient-to-warning submitProfilePic" style="display: none;">
                             ثبت
                         </button>
-                        <input type="hidden" name="updateType" value="photo">
-                        <input type="hidden" id="profilePhotoAjaxUploadActionUrl" value="{{ action('Web\UserController@update' , Auth::user()) }}">
                     @endif
 
                 </div>
@@ -30,7 +25,17 @@
                         <div class="progress-bar progress-bar-striped progress-bar-animated  bg-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
 
+                    @if(isset($withPhotoUpload) && $withPhotoUpload)
+                        {!! Form::open(['action' => ['Web\UserController@update' , Auth::user()], 'method' => 'PUT', 'id'=>'profilePhotoAjaxForm' ]) !!}
+                        @csrf
+
+                        <input type="hidden" name="updateType" value="photo">
+                        <input type="hidden" id="profilePhotoAjaxUploadActionUrl" value="{{ action('Web\UserController@update' , Auth::user()) }}">
+
                     <input type="file" name="photo" id="UserProfilePhoto" accept=".jpg,.gif,.png">
+
+                        {!! Form::close() !!}
+                    @endif
 
                     <img @if(!isset($user->photo))
                             src="{{ route('image', ['category'=>'1','w'=>'150' , 'h'=>'150' ,  'filename' => $user->photo ]) }}"
@@ -210,9 +215,6 @@
                 </div>
             </div>
         </div>
-    @if(isset($withPhotoUpload) && $withPhotoUpload)
-    {!! Form::close() !!}
-    @endif
 </div>
 
 
