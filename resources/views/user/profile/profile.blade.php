@@ -210,20 +210,20 @@
                 </div>
                 <div class="m-portlet__body">
 
-                    <div class="m-alert m-alert--icon alert alert-warning" role="alert">
-                        <div class="m-alert__icon">
-                            <i class="la la-warning"></i>
-                        </div>
-                        <div class="m-alert__text">
-                            <strong>شما محصولی سفارش نداده اید!</strong>
-                        </div>
-                    </div>
+                    {{--<div class="m-alert m-alert--icon alert alert-warning" role="alert">--}}
+                        {{--<div class="m-alert__icon">--}}
+                            {{--<i class="la la-warning"></i>--}}
+                        {{--</div>--}}
+                        {{--<div class="m-alert__text">--}}
+                            {{--<strong>شما محصولی سفارش نداده اید!</strong>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
 
-                    <div class="text-center">
-                        <button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">
-                            مشاهده اردوها و هایش ها
-                        </button>
-                    </div>
+                    {{--<div class="text-center">--}}
+                        {{--<button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">--}}
+                            {{--مشاهده اردوها و هایش ها--}}
+                        {{--</button>--}}
+                    {{--</div>--}}
 
                 </div>
             </div>
