@@ -262,7 +262,7 @@ class Transaction extends BaseModel
 
     public function getTransactionGatewayAttribute()
     {
-        return $this->transactiongateway()->first()->setVisible([
+        return optional($this->transactiongateway()->first())->setVisible([
             'name',
             'displayName',
             'description',
@@ -271,7 +271,7 @@ class Transaction extends BaseModel
 
     public function getPaymentmethodAttribute()
     {
-        return $this->paymentmethod()->first()->setVisible([
+        return optional($this->paymentmethod()->first())->setVisible([
             'name',
             'displayName',
             'description',
