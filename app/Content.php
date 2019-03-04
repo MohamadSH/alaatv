@@ -179,6 +179,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     protected $appends = [
         'url',
         'apiUrl',
+//        'nextUrl',
+//        'nextApiUrl',
+//        'previousUrl',
+//        'previousApiUrl',
         'author',
     ];
 
@@ -304,21 +308,29 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     */
 
     public function getPreviousContentAttribute($value){
-        $set                    =  $this->contentset ;
-        $previousContentOrder   =  $this->order - 1;
-        /** @var Content $previousContent */
-        $previousContent        =  $set->contents->where('order' , $previousContentOrder)->first();
+        $key = "Content:previousContent" . $this->cacheKey();
+        return Cache::tags('content')
+            ->remember($key, config("constants.CACHE_600"), function () use ($value) {
+                $set                    =  $this->set ;
+                $previousContentOrder   =  $this->order - 1;
+                /** @var Content $previousContent */
+                $previousContent        =  $set->contents->where('order' , $previousContentOrder)->first();
 
-        return $previousContent??$previousContent;
+                return $previousContent??$previousContent;
+            });
     }
 
     public function getNextContentAttribute($value){
-        $set                =  $this->contentset ;
-        $nextContentOrder   =  $this->order + 1;
-        /** @var Content $nextContent */
-        $nextContent        =  $set->contents->where('order' , $nextContentOrder)->first();
+        $key = "Content:nextContent" . $this->cacheKey();
+        return Cache::tags('content')
+            ->remember($key, config("constants.CACHE_600"), function () use ($value) {
+                $set                =  $this->set ;
+                $nextContentOrder   =  $this->order + 1;
+                /** @var Content $nextContent */
+                $nextContent        =  $set->contents->where('order' , $nextContentOrder)->first();
 
-        return $nextContent??$nextContent ;
+                return $nextContent??$nextContent ;
+        });
     }
 
     public function getUrlAttribute($value): string
@@ -326,11 +338,11 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return action("Web\ContentController@show", $this);
     }
 
-    public function getPreviousUrl($value){
+    public function getPreviousUrlAttribute($value){
         return optional($this->previous_content)->url ;
     }
 
-    public function getNextUrl($value){
+    public function getNextUrlAttribute($value){
         return optional($this->next_content)->url ;
     }
 
@@ -340,22 +352,12 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         ];
     }
 
-    public function getPreviousApiUrl($value){
-        $set                    =  $this->contentset ;
-        $previousContentOrder   =  $this->order - 1;
-        /** @var Content $previousContent */
-        $previousContent        =  $set->contents->where('order' , $previousContentOrder)->first();
-
-        return $previousContent->api_url ;
+    public function getPreviousApiUrlAttribute($value){
+        return optional($this->previous_content)->api_url ;
     }
 
-    public function getNextApiUrl($value){
-        $set                =  $this->contentset ;
-        $nextContentOrder   =  $this->order + 1;
-        /** @var Content $nextContent */
-        $nextContent        =  $set->contents->where('order' , $nextContentOrder)->first();
-
-        return $nextContent->api_url ;
+    public function getNextApiUrlAttribute($value){
+        return optional($this->next_content)->api_url ;
     }
 
     /**
