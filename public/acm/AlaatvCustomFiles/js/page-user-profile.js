@@ -115,9 +115,12 @@ $(document).ready(function () {
     });
 
     function showSabteRotbe() {
-        $('#profileMenuPage-sabteRotbe').slideDown();
-        $('#profileMenuPage-filmVaJozve').slideUp();
-        $('#profileMenuPage-setting').slideUp();
+        $('#profileMenuPage-filmVaJozve').fadeOut(0);
+        $('#profileMenuPage-setting').fadeOut(0);
+        $('#profileMenuPage-sabteRotbe').fadeIn();
+        $([document.documentElement, document.body]).animate({
+            scrollTop: $('#profileMenuPage-sabteRotbe').offset().top - $('#m_header').height() - 30
+        }, 500);
     }
 
     function showFilmVaJozve() {
@@ -127,9 +130,12 @@ $(document).ready(function () {
     }
 
     function showSetting() {
-        $('#profileMenuPage-setting').slideDown();
-        $('#profileMenuPage-filmVaJozve').slideUp();
-        $('#profileMenuPage-sabteRotbe').slideUp();
+        $('#profileMenuPage-filmVaJozve').fadeOut(0);
+        $('#profileMenuPage-sabteRotbe').fadeOut(0);
+        $('#profileMenuPage-setting').fadeIn();
+        $([document.documentElement, document.body]).animate({
+            scrollTop: $('#profileMenuPage-setting').offset().top - $('#m_header').height() - 30
+        }, 500);
     }
 
     showSetting();
@@ -384,7 +390,9 @@ $(document).ready(function () {
         } else if (menu === 'profileMenuPage-setting') {
             showSetting();
         }
-        mUtil.scrollTop();
+        // mUtil.getScroll(document.getElementById('profileMenuPage-sabteRotbe'), 'Top');
+        //
+        // mUtil.scrollTop();
     });
 
 });
