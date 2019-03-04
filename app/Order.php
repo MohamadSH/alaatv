@@ -149,7 +149,9 @@ class Order extends BaseModel
         'paidPrice',
         'successfulTransactions',
         'orderPostingInfo',
-        'debt'
+        'debt',
+        'usedBonSum',
+        'addedBonSum'
     ];
     const OPEN_ORDER_STATUSES = [
         1,
@@ -311,11 +313,16 @@ class Order extends BaseModel
 
     public function debt()
     {
-        $cost = $this->obtainOrderCost()["totalCost"];
-        if ( $this->orderstatus_id == config("constants.ORDER_STATUS_REFUNDED"))
-            return -($this->totalPaidCost() + $this->totalRefund());
-        else
-            return $cost - ($this->totalPaidCost() + $this->totalRefund());
+        $order = $this;
+        $key = "order:debt:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_60"), function () use ($order) {
+                $cost = $this->obtainOrderCost()["totalCost"];
+                if ( $this->orderstatus_id == config("constants.ORDER_STATUS_REFUNDED"))
+                    return -($this->totalPaidCost() + $this->totalRefund());
+                else
+                    return $cost - ($this->totalPaidCost() + $this->totalRefund());
+            });
     }
 
     /**
@@ -529,32 +536,42 @@ class Order extends BaseModel
 
     public function usedBonSum()
     {
-        $bonSum = 0;
-        if (isset($this->orderproducts))
-            foreach ($this->orderproducts as $orderproduct) {
-                $bonSum += $orderproduct->userbons->sum("pivot.usageNumber");
-            }
-        return $bonSum;
+        $order = $this;
+        $key = "order:usedBonSum:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($order) {
+                $bonSum = 0;
+                if (isset($this->orderproducts))
+                    foreach ($this->orderproducts as $orderproduct) {
+                        $bonSum += $orderproduct->userbons->sum("pivot.usageNumber");
+                    }
+                return $bonSum;
+        });
     }
 
     public function addedBonSum($intendedUser = null)
     {
-        $bonSum = 0;
-        if (isset($intendedUser)) {
-            $user = $intendedUser;
-        } else if (Auth::check()) {
-            $user = Auth::user();
-        }
+        $order = $this;
+        $key = "order:addedBonSum:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($order) {
+                $bonSum = 0;
+                if (isset($intendedUser)) {
+                    $user = $intendedUser;
+                } else if (Auth::check()) {
+                    $user = Auth::user();
+                }
 
-        if (isset($user)) {
-            foreach ($this->orderproducts as $orderproduct) {
-                if (!$user->userbons->where("orderproduct_id", $orderproduct->id)
-                                    ->isEmpty())
-                    $bonSum += $user->userbons->where("orderproduct_id", $orderproduct->id)
-                                              ->sum("totalNumber");
-            }
-        }
-        return $bonSum;
+                if (isset($user)) {
+                    foreach ($this->orderproducts as $orderproduct) {
+                        if (!$user->userbons->where("orderproduct_id", $orderproduct->id)
+                            ->isEmpty())
+                            $bonSum += $user->userbons->where("orderproduct_id", $orderproduct->id)
+                                ->sum("totalNumber");
+                    }
+                }
+                return $bonSum;
+        });
     }
 
     /**
@@ -1028,11 +1045,14 @@ class Order extends BaseModel
     }
 
     public function getDebtAttribute(){
-        $order = $this;
-        $key = "order:Debt:" . $order->cacheKey();
-        return Cache::tags(["order"])
-            ->remember($key, config("constants.CACHE_60"), function () use ($order) {
-                 return $order->debt();
-            });
+             return $this->debt();
+    }
+
+    public function getUsedBonSumAttribute(){
+            return $this->usedBonSum();
+    }
+
+    public function getAddedBonSumAttribute(){
+            return $this->addedBonSum();
     }
 }
