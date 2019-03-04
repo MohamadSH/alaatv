@@ -27,13 +27,10 @@
 
                     @if(isset($withPhotoUpload) && $withPhotoUpload)
                         {!! Form::open(['action' => ['Web\UserController@update' , Auth::user()], 'method' => 'PUT', 'id'=>'profilePhotoAjaxForm' ]) !!}
-                        @csrf
-
-                        <input type="hidden" name="updateType" value="photo">
-                        <input type="hidden" id="profilePhotoAjaxUploadActionUrl" value="{{ action('Web\UserController@update' , Auth::user()) }}">
-
-                    <input type="file" name="photo" id="UserProfilePhoto" accept=".jpg,.gif,.png">
-
+                            @csrf
+                            <input type="hidden" name="updateType" value="photo">
+                            <input type="hidden" id="profilePhotoAjaxUploadActionUrl" value="{{ action('Web\UserController@update' , Auth::user()) }}">
+                            <input type="file" name="photo" id="UserProfilePhoto" accept=".jpg,.gif,.png">
                         {!! Form::close() !!}
                     @endif
 
@@ -114,7 +111,7 @@
                             @if(!$user->hasVerifiedMobile() )
                                 <div class="row SendMobileVerificationCodeWarper">
                                     <div class="col-12 text-center">
-                                        <input type="hidden" id="SendMobileVerificationCodeActionUrl" value="{{ action('Web\MobileVerificationController@verify') }}">
+                                        <input type="hidden" id="SendMobileVerificationCodeActionUrl" value="{{ action('Web\MobileVerificationController@resend') }}">
                                         <button type="button" id="btnSendMobileVerificationCode" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent m--margin-top-10">تایید شماره موبایل</button>
                                     </div>
                                     <div class="col-12 text-center inputVerificationWarper d-none">

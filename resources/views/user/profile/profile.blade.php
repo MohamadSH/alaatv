@@ -53,16 +53,16 @@
     <div class="row">
         <div class="col-md-3">
             <!-- BEGIN PROFILE SIDEBAR -->
-        @include('partials.profileSidebar',[
-                                        'user'=>$user ,
-                                        'withInfoBox'=>true ,
-                                        'withCompletionBox'=>true ,
-                                        'withRegisterationDate'=>true,
-                                        'withNavigation' => true,
-                                        'withPhotoUpload' => true ,
-                                          ]
-                                          )
-        <!-- END BEGIN PROFILE SIDEBAR -->
+            @include('partials.profileSidebar',[
+                                            'user'=>$user ,
+                                            'withInfoBox'=>true ,
+                                            'withCompletionBox'=>true ,
+                                            'withRegisterationDate'=>true,
+                                            'withNavigation' => true,
+                                            'withPhotoUpload' => true ,
+                                              ]
+                                              )
+            <!-- END BEGIN PROFILE SIDEBAR -->
         </div>
         <div class="col-md-9">
             @if(!$user->lockProfile)

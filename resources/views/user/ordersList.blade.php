@@ -6,8 +6,8 @@
 
 @section('page-css')
     {{--<link href="{{ mix('/css/user-profile.css') }}" rel="stylesheet" type="text/css"/>--}}
-    <link href="{{ asset('/assets/vendors/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/assets/vendors/custom/datatables/datatables.bundle.rtl.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/acm/AlaatvCustomFiles/css/page-user-orders.css') }}" rel="stylesheet" type="text/css"/>
+    {{--<link href="{{ asset('/assets/vendors/custom/datatables/datatables.bundle.rtl.css') }}" rel="stylesheet" type="text/css"/>--}}
 @endsection
 
 @section('pageBar')
@@ -27,6 +27,9 @@
 @endsection
 
 @section('content')
+
+    @include("systemMessage.flash")
+
     <div class="row">
         <div class="col">
 
@@ -36,63 +39,819 @@
                     <div class="m-portlet__head-tools">
                         <ul class="nav nav-tabs m-tabs-line m-tabs-line--success m-tabs-line--2x" role="tablist">
                             <li class="nav-item m-tabs__item">
-                                <a class="nav-link m-tabs__link active" data-toggle="tab" href="#m_portlet_base_demo_1_1_tab_content" role="tab">
-                                    <i class="la la-money"></i>
-                                    لیست پرداخت ها
-                                </a>
-                            </li>
-                            <li class="nav-item m-tabs__item">
-                                <a class="nav-link m-tabs__link" data-toggle="tab" href="#m_portlet_base_demo_1_2_tab_content" role="tab">
+                                <a class="nav-link m-tabs__link active" data-toggle="tab" href="#user-orderList" role="tab">
                                     <i class="la la-shopping-cart"></i>
                                     لیست سفارشات
                                 </a>
                             </li>
+                            <li class="nav-item m-tabs__item">
+                                <a class="nav-link m-tabs__link" data-toggle="tab" href="#user-paymentsList" role="tab">
+                                    <i class="la la-money"></i>
+                                    لیست پرداخت ها
+                                </a>
+                            </li>
+                            @if((isset($instalments) && $instalments->isNotEmpty()) || true)
+                                <li class="nav-item m-tabs__item">
+                                    <a class="nav-link m-tabs__link" data-toggle="tab" href="#user-instalmentsList" role="tab">
+                                        <i class="la la-bank"></i>
+                                        لیست قسط های شما
+                                    </a>
+                                </li>
+                            @endif
 
                         </ul>
                     </div>
                 </div>
                 <div class="m-portlet__body">
                     <div class="tab-content">
-                        <div class="tab-pane active" id="m_portlet_base_demo_1_1_tab_content" role="tabpanel">
+                        <div class="tab-pane active" id="user-orderList" role="tabpanel">
 
                             <div class="m-section">
                                 <div class="m-section__content">
-                                    <table class="table m-table m-table--head-bg-success">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>First Name</th>
-                                            <th>Last Name</th>
-                                            <th>Username</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Jhon</td>
-                                            <td>Stone</td>
-                                            <td>@jhon</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Lisa</td>
-                                            <td>Nilson</td>
-                                            <td>@lisa</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Larry</td>
-                                            <td>the Bird</td>
-                                            <td>@twitter</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="table-responsive">
+
+                                        <table class="table m-table m-table--head-bg-success table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>وضعیت سفارش</th>
+                                                    <th>وضعیت پرداخت</th>
+                                                    <th>مبلغ(تومان)</th>
+                                                    <th>پرداخت شده(تومان)</th>
+                                                    <th>تاریخ ثبت نهایی</th>
+                                                    <th>جزییات</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach($orders as $orderKey=>$order)
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <span class="m-badge m-badge--wide
+                                                            @if(isset($order->orderstatus->id) && $order->orderstatus->id == config("constants.ORDER_STATUS_CLOSED"))
+                                                                    m-badge--success
+                                                            @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == config("constants.ORDER_STATUS_CANCELED"))
+                                                                    m-badge--danger
+                                                            @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == config("constants.ORDER_STATUS_POSTED") )
+                                                                    m-badge--info
+                                                            @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == config("constants.ORDER_STATUS_REFUNDED") )
+                                                                    m-badge--metal
+                                                            @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == config("constants.ORDER_STATUS_READY_TO_POST") )
+                                                                    m-badge--info
+                                                            @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == config("constants.ORDER_STATUS_PENDING") )
+                                                                    m-badge--primary
+                                                            @endif
+                                                            ">
+                                                                {{$order->orderstatus->displayName}}
+                                                            </span>
+                                                        </td>
+                                                        <td class="text-center">
+
+                                                            @if(isset($order->paymentstatus->id) && $order->paymentstatus->id == config("constants.PAYMENT_STATUS_PAID"))
+                                                                <span class="m-badge m-badge--wide m-badge--success">
+                                                                    {{$order->paymentstatus->displayName}}
+                                                                </span>
+                                                            @elseif(isset($order->paymentstatus->id) && $order->paymentstatus->id == config("constants.PAYMENT_STATUS_UNPAID"))
+                                                                <span class="m-badge m-badge--wide m-badge--warning">
+                                                                    {{$order->paymentstatus->displayName}}
+                                                                </span>
+                                                                @if(isset($order->orderstatus->id) &&
+                                                                    (
+                                                                        $order->orderstatus->id == config("constants.ORDER_STATUS_CLOSED") ||
+                                                                        $order->orderstatus->id == config("constants.ORDER_STATUS_POSTED")
+                                                                    )
+                                                                )
+                                                                    <button type="button"
+                                                                            class="btn btn-sm m-btn--pill m-btn--air btn-accent"
+                                                                            data-target="#onlinePaymentModal"
+                                                                            data-toggle="modal"
+                                                                            rel="{{$order->id}}">
+                                                                        پرداخت
+                                                                    </button>
+                                                                @endif
+                                                            @elseif(isset($order->paymentstatus->id) && $order->paymentstatus->id == config("constants.PAYMENT_STATUS_INDEBTED"))
+
+                                                                <button type="button"
+                                                                        class="btn btn-sm m-btn--pill m-btn--air btn-accent"
+                                                                        data-target="#onlinePaymentModal"
+                                                                        data-toggle="modal"
+                                                                        rel="{{$order->id}}">
+                                                                    پرداخت
+                                                                </button>
+                                                                <span class="m-badge m-badge--wide m-badge--warning">
+                                                                    {{$order->paymentstatus->displayName}}
+                                                                </span>
+                                                            @else
+                                                                <span class="m-badge m-badge--wide m-badge--info">
+                                                                    ندارد
+                                                                </span>
+                                                            @endif
+
+                                                        </td>
+                                                        <td>
+                                                            @if(isset($order->cost) || isset($order->costwithoutcoupon))
+                                                                {{number_format($order->totalCost() )}}
+                                                            @else
+                                                                <span class="label label-info">بدون مبلغ</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            @if(isset($order->cost) || isset($order->costwithoutcoupon))
+                                                                {{number_format($order->totalPaidCost() + $order->totalRefund())}}
+                                                            @else
+                                                                <span class="label label-info">بدون مبلغ</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            @if(isset($order->completed_at))
+                                                                {{$order->CompletedAt_Jalali()}}
+                                                            @else
+                                                                <span class="label label-info">درج نشده</span>
+                                                            @endif
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <a onclick="event.preventDefault();"
+                                                               data-order-key="{{ $orderKey  }}"
+                                                               class="btn btn-outline-accent m-btn m-btn--icon btn-lg m-btn--icon-only m-btn--pill m-btn--air btnViewOrderDetailes">
+                                                                <i class="flaticon-mark"></i>
+                                                            </a>
+                                                        </td>
+                                                        {{--<td>@if($order->orderproducts)--}}
+                                                                {{--<br>--}}
+                                                                {{--@foreach($order->orderproducts as $orderproduct)--}}
+                                                                    {{--@if(isset($orderproduct->product->id))--}}
+                                                                        {{--<span class="bold " style="font-style: italic; ">@if($orderproduct->orderproducttype_id == config("constants.ORDER_PRODUCT_GIFT"))--}}
+                                                                                {{--<img src="/acm/extra/gift-box.png"--}}
+                                                                                     {{--width="25">@endif<a style="color:#607075"--}}
+                                                                                                         {{--target="_blank" href = "@if($orderproduct->product->hasParents()){{action("Web\ProductController@show",$orderproduct->product->parents->first())}} @else  {{action("Web\ProductController@show",$orderproduct->product)}} @endif">--}}
+                                                                            {{--{{$orderproduct->product->name}}--}}
+                                                                        {{--</a></span><br>--}}
+
+                                                                        {{--@foreach($orderproduct->product->attributevalues('main')->get() as $attributevalue)--}}
+                                                                            {{--{{$attributevalue->attribute->displayName}} : <span--}}
+                                                                                    {{--style="font-weight: normal">{{$attributevalue->name}} @if(isset(   $attributevalue->pivot->description) && strlen($attributevalue->pivot->description)>0 ) {{$attributevalue->pivot->description}} @endif</span>--}}
+                                                                            {{--<br>--}}
+                                                                        {{--@endforeach--}}
+                                                                        {{--@foreach($orderproduct->attributevalues as $extraAttributevalue)--}}
+                                                                            {{--{{$extraAttributevalue->attribute->displayName}} :--}}
+                                                                            {{--<span style="font-weight: normal">{{$extraAttributevalue->name}}--}}
+                                                                                {{--(+ {{number_format($extraAttributevalue->pivot->extraCost)}}--}}
+                                                                                {{--تومان)</span><br>--}}
+                                                                        {{--@endforeach--}}
+
+                                                                        {{--<br>--}}
+                                                                    {{--@endif--}}
+                                                                {{--@endforeach--}}
+                                                            {{--@else--}}
+                                                                {{--<span class="label label-danger">ندارد</span>--}}
+                                                            {{--@endif--}}
+                                                        {{--</td>--}}
+                                                        {{--<td>--}}
+                                                            {{--@if(!$order->orderpostinginfos->isEmpty())--}}
+                                                                {{--<span class="font-red bold">--}}
+                                                                {{--@foreach($order->orderpostinginfos as $postingInfo)--}}
+                                                                        {{--{{$postingInfo->postCode}}<br>--}}
+                                                                    {{--@endforeach</span>--}}
+                                                            {{--@else--}}
+                                                                {{--<span class="label label-info">پست نشده</span>--}}
+                                                            {{--@endif--}}
+                                                        {{--</td>--}}
+                                                        {{--<td>@if($order->successfulTransactions->isEmpty())--}}
+                                                                {{--<span class="label label-warning">تراکنشی یافت نشد</span>--}}
+                                                            {{--@else--}}
+                                                                {{--<br>--}}
+                                                                {{--@foreach($order->successfulTransactions as $successfulTransaction)--}}
+                                                                    {{--@if(isset($successfulTransaction->paymentmethod->displayName)) {{ $successfulTransaction->paymentmethod->displayName}} @else--}}
+                                                                        {{--<span class="label label-danger">- نحوه پرداخت نامشخص</span> @endif--}}
+                                                                    {{--@if($successfulTransaction->getGrandParent() === false)--}}
+                                                                        {{--@if($successfulTransaction->getCode() !== false)--}}
+                                                                            {{--- {{$successfulTransaction->getCode()}} @endif--}}
+                                                                        {{--- مبلغ: @if($successfulTransaction->cost >= 0)--}}
+                                                                            {{--{{ number_format($successfulTransaction->cost) }}--}}
+                                                                            {{--<br>--}}
+                                                                        {{--@else--}}
+                                                                            {{--{{ number_format(-$successfulTransaction->cost) }}--}}
+                                                                            {{--(دریافت) <br>--}}
+                                                                        {{--@endif--}}
+                                                                    {{--@else--}}
+                                                                        {{--@if($successfulTransaction->getGrandParent()->getCode() === false)--}}
+                                                                            {{--- کد نامشخص @else--}}
+                                                                            {{--- {{$successfulTransaction->getGrandParent()->getCode()}} @endif--}}
+                                                                        {{-----}}
+                                                                        {{--مبلغ: @if($successfulTransaction->getGrandParent()->cost >= 0)--}}
+                                                                            {{--{{ number_format($successfulTransaction->getGrandParent()->cost) }}--}}
+                                                                            {{--<br>--}}
+                                                                        {{--@else--}}
+                                                                            {{--{{ number_format(-$successfulTransaction->getGrandParent()->cost) }}--}}
+                                                                            {{--(پرداخت) <br>--}}
+                                                                        {{--@endif--}}
+                                                                    {{--@endif--}}
+
+                                                                {{--@endforeach--}}
+                                                            {{--@endif--}}
+                                                        {{--</td>--}}
+                                                        {{--<td>@if($order->pendingTransactions->isEmpty())--}}
+                                                                {{--<span class="label label-success">تراکنشی یافت نشد</span>--}}
+                                                            {{--@else--}}
+                                                                {{--<br>--}}
+                                                                {{--@foreach($order->pendingTransactions as $pendingTransaction)--}}
+                                                                    {{--@if(isset($pendingTransaction->paymentmethod->displayName)) {{$pendingTransaction->paymentmethod->displayName}} @endif--}}
+                                                                    {{--@if(isset($pendingTransaction->transactionID))  ,شماره--}}
+                                                                    {{--تراکنش: {{ $pendingTransaction->transactionID }}--}}
+                                                                    {{--مبلغ: {{ number_format($pendingTransaction->cost) }}@endif--}}
+                                                                    {{--@if(isset($pendingTransaction->traceNumber))  ,شماره--}}
+                                                                    {{--پیگیری:{{$pendingTransaction->traceNumber}}--}}
+                                                                    {{--مبلغ: {{ number_format($pendingTransaction->cost) }}@endif--}}
+                                                                    {{--@if(isset($pendingTransaction->referenceNumber))  ,شماره--}}
+                                                                    {{--مرجع:{{$pendingTransaction->referenceNumber}}--}}
+                                                                    {{--مبلغ: {{ number_format($pendingTransaction->cost) }}@endif--}}
+                                                                    {{--@if(isset($pendingTransaction->paycheckNumber))  ,شماره--}}
+                                                                    {{--چک:{{$pendingTransaction->paycheckNumber}}--}}
+                                                                    {{--مبلغ: {{ number_format($pendingTransaction->cost) }}@endif--}}
+                                                                    {{--,توضیح مدیریتی: @if(strlen($pendingTransaction->managerComment)>0) <span class="bold font-blue">{{$pendingTransaction->managerComment}}</span>  @else <span class="label label-warning">ندارد</span>@endif--}}
+                                                                    {{--<br>--}}
+                                                                {{--@endforeach--}}
+                                                            {{--@endif--}}
+                                                        {{--</td>--}}
+                                                        {{--<td>@if($order->unpaidTransactions->isEmpty())--}}
+                                                                {{--<span class="label label-success">قسطی ندارید</span>--}}
+                                                            {{--@else--}}
+                                                                {{--<br>--}}
+                                                                {{--@foreach($order->unpaidTransactions as $instalment)--}}
+                                                                    {{--@if($instalment->cost)--}}
+                                                                        {{--مبلغ: {{ number_format($instalment->cost) }}@endif--}}
+                                                                    {{--مهلت--}}
+                                                                    {{--پرداخت: @if(isset($instalment->deadline_at)){{$instalment->DeadlineAt_Jalali()}}@endif--}}
+                                                                    {{--,توضیح مدیریتی: @if(strlen($instalment->managerComment)>0) <span class="bold font-blue">{{$instalment->managerComment}}</span>  @else <span class="label label-warning">ندارد</span>@endif--}}
+                                                                    {{--<br>--}}
+                                                                {{--@endforeach--}}
+                                                            {{--@endif--}}
+                                                        {{--</td>--}}
+                                                        {{--<td id="cost_{{$order->id}}">@if(isset($order->cost)|| isset($order->costwithoutcoupon)){{number_format($order->debt())}} @else--}}
+                                                                {{--0 @endif</td>--}}
+                                                        {{--<td>--}}
+                                                            {{--@if(isset($order->customerDescription) && strlen($order->customerDescription)>0)--}}
+                                                                {{--<span class="font-red bold">{{$order->customerDescription}}</span>--}}
+                                                            {{--@else--}}
+                                                                {{--<span class="label label-warning">بدون توضیح</span>--}}
+                                                            {{--@endif--}}
+                                                        {{--</td>--}}
+                                                        {{--<td>--}}
+                                                            {{--@if(isset($orderCoupons[$order->id]))--}}
+                                                                {{--{{$orderCoupons[$order->id]["caption"]}}--}}
+                                                            {{--@else--}}
+                                                                {{--<span class="label label-info">کپن ندارد</span>--}}
+                                                            {{--@endif--}}
+                                                        {{--</td>--}}
+                                                        {{--<td>{{$order->usedBonSum()}}</td>--}}
+                                                        {{--<td>--}}
+                                                            {{--@if($order->orderproducts->isNotEmpty())--}}
+                                                                {{--{{$order->addedBonSum()}}--}}
+
+                                                            {{--@else--}}
+                                                                {{--<span class="label label-info">سفارش خالی است!</span>--}}
+                                                            {{--@endif--}}
+                                                        {{--</td>--}}
+                                                        {{--<td>@if(isset($order->created_at)) {{$order->CreatedAt_Jalali()}} @else--}}
+                                                                {{--<span class="label label-info">درج نشده</span> @endif</td>--}}
+                                                    </tr>
+                                                @endforeach
+
+                                            </tbody>
+                                        </table>
+
+                                        <!--begin::Modal-->
+                                        <div class="modal fade" id="orderDetailesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">
+                                                            جزییات سفارش
+                                                        </h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+
+
+                                                        <div class="m-portlet m-portlet--skin-dark m-portlet--bordered-semi">
+                                                            <div class="m-portlet__head">
+                                                                <div class="m-portlet__head-caption">
+                                                                    <div class="m-portlet__head-title">
+                                                                        <span class="m-portlet__head-icon">
+                                                                            <i class="flaticon-statistics"></i>
+                                                                        </span>
+                                                                        <h3 class="m-portlet__head-text">
+                                                                            اطلاعات کلی
+                                                                        </h3>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="m-portlet__body">
+
+                                                                <div class="row">
+                                                                    <div class="col col-md-6">
+                                                                        <table class="table table-sm m-table m-table--head-bg-accent">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td>وضعیت سفارش</td>
+                                                                                <td class="orderDetailes-orderStatus"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>وضعیت پرداخت</td>
+                                                                                <td class="orderDetailes-paymentStatus"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>مبلغ(تومان)</td>
+                                                                                <td class="orderDetailes-price"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>پرداخت شده(تومان)</td>
+                                                                                <td class="orderDetailes-paidPrice"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>تاریخ ثبت نهایی</td>
+                                                                                <td class="orderDetailes-completed_at"></td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="col col-md-6">
+                                                                        <table class="table table-sm m-table m-table--head-bg-accent">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td>کد مرسوله پست شده</td>
+                                                                                <td class="orderDetailes-orderPostingInfo"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>بدهی(تومان)</td>
+                                                                                <td class="orderDetailes-debt"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>کپن استفاده شده</td>
+                                                                                <td class="orderDetailes-paymentStatus"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>1111111</td>
+                                                                                <td class="orderDetailes-price"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>111111111</td>
+                                                                                <td class="orderDetailes-paidPrice"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>1111111111</td>
+                                                                                <td class="orderDetailes-completed_at"></td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+
+
+                                                                {{--<th>توضیح شما</th>--}}
+
+                                                                {{--<th>:</th>--}}
+                                                                {{--<th>تعداد بن استفاده شده:</th>--}}
+                                                                {{--<th>تعداد بن اضافه شده به شما از این سفارش:</th>--}}
+                                                                {{--<th>تاریخ ایجاد اولیه</th>--}}
+
+
+
+
+                                                                {{--<td>--}}
+                                                                {{--@if(!$order->orderpostinginfos->isEmpty())--}}
+                                                                {{--<span class="font-red bold">--}}
+                                                                {{--@foreach($order->orderpostinginfos as $postingInfo)--}}
+                                                                {{--{{$postingInfo->postCode}}<br>--}}
+                                                                {{--@endforeach</span>--}}
+                                                                {{--@else--}}
+                                                                {{--<span class="label label-info">پست نشده</span>--}}
+                                                                {{--@endif--}}
+                                                                {{--</td>--}}
+                                                                {{--<td>@if($order->successfulTransactions->isEmpty())--}}
+                                                                {{--<span class="label label-warning">تراکنشی یافت نشد</span>--}}
+                                                                {{--@else--}}
+                                                                {{--<br>--}}
+                                                                {{--@foreach($order->successfulTransactions as $successfulTransaction)--}}
+                                                                {{--@if(isset($successfulTransaction->paymentmethod->displayName)) {{ $successfulTransaction->paymentmethod->displayName}} @else--}}
+                                                                {{--<span class="label label-danger">- نحوه پرداخت نامشخص</span> @endif--}}
+                                                                {{--@if($successfulTransaction->getGrandParent() === false)--}}
+                                                                {{--@if($successfulTransaction->getCode() !== false)--}}
+                                                                {{--- {{$successfulTransaction->getCode()}} @endif--}}
+                                                                {{--- مبلغ: @if($successfulTransaction->cost >= 0)--}}
+                                                                {{--{{ number_format($successfulTransaction->cost) }}--}}
+                                                                {{--<br>--}}
+                                                                {{--@else--}}
+                                                                {{--{{ number_format(-$successfulTransaction->cost) }}--}}
+                                                                {{--(دریافت) <br>--}}
+                                                                {{--@endif--}}
+                                                                {{--@else--}}
+                                                                {{--@if($successfulTransaction->getGrandParent()->getCode() === false)--}}
+                                                                {{--- کد نامشخص @else--}}
+                                                                {{--- {{$successfulTransaction->getGrandParent()->getCode()}} @endif--}}
+                                                                {{-----}}
+                                                                {{--مبلغ: @if($successfulTransaction->getGrandParent()->cost >= 0)--}}
+                                                                {{--{{ number_format($successfulTransaction->getGrandParent()->cost) }}--}}
+                                                                {{--<br>--}}
+                                                                {{--@else--}}
+                                                                {{--{{ number_format(-$successfulTransaction->getGrandParent()->cost) }}--}}
+                                                                {{--(پرداخت) <br>--}}
+                                                                {{--@endif--}}
+                                                                {{--@endif--}}
+
+                                                                {{--@endforeach--}}
+                                                                {{--@endif--}}
+                                                                {{--</td>--}}
+                                                                {{--<td>@if($order->pendingTransactions->isEmpty())--}}
+                                                                {{--<span class="label label-success">تراکنشی یافت نشد</span>--}}
+                                                                {{--@else--}}
+                                                                {{--<br>--}}
+                                                                {{--@foreach($order->pendingTransactions as $pendingTransaction)--}}
+                                                                {{--@if(isset($pendingTransaction->paymentmethod->displayName)) {{$pendingTransaction->paymentmethod->displayName}} @endif--}}
+                                                                {{--@if(isset($pendingTransaction->transactionID))  ,شماره--}}
+                                                                {{--تراکنش: {{ $pendingTransaction->transactionID }}--}}
+                                                                {{--مبلغ: {{ number_format($pendingTransaction->cost) }}@endif--}}
+                                                                {{--@if(isset($pendingTransaction->traceNumber))  ,شماره--}}
+                                                                {{--پیگیری:{{$pendingTransaction->traceNumber}}--}}
+                                                                {{--مبلغ: {{ number_format($pendingTransaction->cost) }}@endif--}}
+                                                                {{--@if(isset($pendingTransaction->referenceNumber))  ,شماره--}}
+                                                                {{--مرجع:{{$pendingTransaction->referenceNumber}}--}}
+                                                                {{--مبلغ: {{ number_format($pendingTransaction->cost) }}@endif--}}
+                                                                {{--@if(isset($pendingTransaction->paycheckNumber))  ,شماره--}}
+                                                                {{--چک:{{$pendingTransaction->paycheckNumber}}--}}
+                                                                {{--مبلغ: {{ number_format($pendingTransaction->cost) }}@endif--}}
+                                                                {{--,توضیح مدیریتی: @if(strlen($pendingTransaction->managerComment)>0) <span class="bold font-blue">{{$pendingTransaction->managerComment}}</span>  @else <span class="label label-warning">ندارد</span>@endif--}}
+                                                                {{--<br>--}}
+                                                                {{--@endforeach--}}
+                                                                {{--@endif--}}
+                                                                {{--</td>--}}
+                                                                {{--<td>@if($order->unpaidTransactions->isEmpty())--}}
+                                                                {{--<span class="label label-success">قسطی ندارید</span>--}}
+                                                                {{--@else--}}
+                                                                {{--<br>--}}
+                                                                {{--@foreach($order->unpaidTransactions as $instalment)--}}
+                                                                {{--@if($instalment->cost)--}}
+                                                                {{--مبلغ: {{ number_format($instalment->cost) }}@endif--}}
+                                                                {{--مهلت--}}
+                                                                {{--پرداخت: @if(isset($instalment->deadline_at)){{$instalment->DeadlineAt_Jalali()}}@endif--}}
+                                                                {{--,توضیح مدیریتی: @if(strlen($instalment->managerComment)>0) <span class="bold font-blue">{{$instalment->managerComment}}</span>  @else <span class="label label-warning">ندارد</span>@endif--}}
+                                                                {{--<br>--}}
+                                                                {{--@endforeach--}}
+                                                                {{--@endif--}}
+                                                                {{--</td>--}}
+                                                                {{--<td id="cost_{{$order->id}}">@if(isset($order->cost)|| isset($order->costwithoutcoupon)){{number_format($order->debt())}} @else--}}
+                                                                {{--0 @endif</td>--}}
+                                                                {{--<td>--}}
+                                                                {{--@if(isset($order->customerDescription) && strlen($order->customerDescription)>0)--}}
+                                                                {{--<span class="font-red bold">{{$order->customerDescription}}</span>--}}
+                                                                {{--@else--}}
+                                                                {{--<span class="label label-warning">بدون توضیح</span>--}}
+                                                                {{--@endif--}}
+                                                                {{--</td>--}}
+                                                                {{--<td>--}}
+                                                                {{--@if(isset($orderCoupons[$order->id]))--}}
+                                                                {{--{{$orderCoupons[$order->id]["caption"]}}--}}
+                                                                {{--@else--}}
+                                                                {{--<span class="label label-info">کپن ندارد</span>--}}
+                                                                {{--@endif--}}
+                                                                {{--</td>--}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                {{--<td>{{$order->usedBonSum()}}</td>--}}
+                                                                {{--<td>--}}
+                                                                {{--@if($order->orderproducts->isNotEmpty())--}}
+                                                                {{--{{$order->addedBonSum()}}--}}
+
+                                                                {{--@else--}}
+                                                                {{--<span class="label label-info">سفارش خالی است!</span>--}}
+                                                                {{--@endif--}}
+                                                                {{--</td>--}}
+                                                                {{--<td>@if(isset($order->created_at)) {{$order->CreatedAt_Jalali()}} @else--}}
+                                                                {{--<span class="label label-info">درج نشده</span> @endif</td>--}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                {{--<td class="text-center">--}}
+                                                            {{--<span class="m-badge m-badge--wide--}}
+                                                            {{--@if(isset($order->orderstatus->id) && $order->orderstatus->id == config("constants.ORDER_STATUS_CLOSED"))--}}
+                                                                    {{--m-badge--success--}}
+                                                            {{--@elseif(isset($order->orderstatus->id) && $order->orderstatus->id == config("constants.ORDER_STATUS_CANCELED"))--}}
+                                                                    {{--m-badge--danger--}}
+                                                            {{--@elseif(isset($order->orderstatus->id) && $order->orderstatus->id == config("constants.ORDER_STATUS_POSTED") )--}}
+                                                                    {{--m-badge--info--}}
+                                                            {{--@elseif(isset($order->orderstatus->id) && $order->orderstatus->id == config("constants.ORDER_STATUS_REFUNDED") )--}}
+                                                                    {{--m-badge--metal--}}
+                                                            {{--@elseif(isset($order->orderstatus->id) && $order->orderstatus->id == config("constants.ORDER_STATUS_READY_TO_POST") )--}}
+                                                                    {{--m-badge--info--}}
+                                                            {{--@elseif(isset($order->orderstatus->id) && $order->orderstatus->id == config("constants.ORDER_STATUS_PENDING") )--}}
+                                                                    {{--m-badge--primary--}}
+                                                            {{--@endif--}}
+                                                                    {{--">--}}
+                                                                {{--{{$order->orderstatus->displayName}}--}}
+                                                            {{--</span>--}}
+                                                                {{--</td>--}}
+                                                                {{--<td class="text-center">--}}
+
+                                                                    {{--@if(isset($order->paymentstatus->id) && $order->paymentstatus->id == config("constants.PAYMENT_STATUS_PAID"))--}}
+                                                                        {{--<span class="m-badge m-badge--wide m-badge--success">--}}
+                                                                    {{--{{$order->paymentstatus->displayName}}--}}
+                                                                {{--</span>--}}
+                                                                    {{--@elseif(isset($order->paymentstatus->id) && $order->paymentstatus->id == config("constants.PAYMENT_STATUS_UNPAID"))--}}
+                                                                        {{--<span class="m-badge m-badge--wide m-badge--warning">--}}
+                                                                    {{--{{$order->paymentstatus->displayName}}--}}
+                                                                {{--</span>--}}
+                                                                        {{--@if(isset($order->orderstatus->id) &&--}}
+                                                                            {{--(--}}
+                                                                                {{--$order->orderstatus->id == config("constants.ORDER_STATUS_CLOSED") ||--}}
+                                                                                {{--$order->orderstatus->id == config("constants.ORDER_STATUS_POSTED")--}}
+                                                                            {{--)--}}
+                                                                        {{--)--}}
+                                                                            {{--<button type="button"--}}
+                                                                                    {{--class="btn btn-sm m-btn--pill m-btn--air btn-accent"--}}
+                                                                                    {{--data-target="#onlinePaymentModal"--}}
+                                                                                    {{--data-toggle="modal"--}}
+                                                                                    {{--rel="{{$order->id}}">--}}
+                                                                                {{--پرداخت--}}
+                                                                            {{--</button>--}}
+                                                                        {{--@endif--}}
+                                                                    {{--@elseif(isset($order->paymentstatus->id) && $order->paymentstatus->id == config("constants.PAYMENT_STATUS_INDEBTED"))--}}
+
+                                                                        {{--<button type="button"--}}
+                                                                                {{--class="btn btn-sm m-btn--pill m-btn--air btn-accent"--}}
+                                                                                {{--data-target="#onlinePaymentModal"--}}
+                                                                                {{--data-toggle="modal"--}}
+                                                                                {{--rel="{{$order->id}}">--}}
+                                                                            {{--پرداخت--}}
+                                                                        {{--</button>--}}
+                                                                        {{--<span class="m-badge m-badge--wide m-badge--warning">--}}
+                                                                    {{--{{$order->paymentstatus->displayName}}--}}
+                                                                {{--</span>--}}
+                                                                    {{--@else--}}
+                                                                        {{--<span class="m-badge m-badge--wide m-badge--info">--}}
+                                                                    {{--ندارد--}}
+                                                                {{--</span>--}}
+                                                                    {{--@endif--}}
+
+                                                                {{--</td>--}}
+                                                                {{--<td>--}}
+                                                                    {{--@if(isset($order->cost) || isset($order->costwithoutcoupon))--}}
+                                                                        {{--{{number_format($order->totalCost() )}}--}}
+                                                                    {{--@else--}}
+                                                                        {{--<span class="label label-info">بدون مبلغ</span>--}}
+                                                                    {{--@endif--}}
+                                                                {{--</td>--}}
+                                                                {{--<td>--}}
+                                                                    {{--@if(isset($order->cost) || isset($order->costwithoutcoupon))--}}
+                                                                        {{--{{number_format($order->totalPaidCost() + $order->totalRefund())}}--}}
+                                                                    {{--@else--}}
+                                                                        {{--<span class="label label-info">بدون مبلغ</span>--}}
+                                                                    {{--@endif--}}
+                                                                {{--</td>--}}
+                                                                {{--<td>--}}
+                                                                    {{--@if(isset($order->completed_at))--}}
+                                                                        {{--{{$order->CompletedAt_Jalali()}}--}}
+                                                                    {{--@else--}}
+                                                                        {{--<span class="label label-info">درج نشده</span>--}}
+                                                                    {{--@endif--}}
+                                                                {{--</td>--}}
+
+
+
+
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
+                                                            <div class="m-portlet__head">
+                                                                <div class="m-portlet__head-caption">
+                                                                    <div class="m-portlet__head-title">
+                                                                        <h3 class="m-portlet__head-text">
+                                                                            لیست محصولات
+                                                                        </h3>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="m-portlet__body">
+                                                                <div class="m-widget3">
+                                                                    <div class="m-widget3__item">
+                                                                        <div class="m-widget3__header">
+                                                                            <div class="m-widget3__user-img">
+                                                                                <img class="m-widget3__img" src="/assets/app/media/img/users/user1.jpg" alt="">
+                                                                            </div>
+                                                                            <div class="m-widget3__info">
+                                                                                <span class="m-widget3__username">
+                                                                                Melania Trump
+                                                                                </span>
+                                                                                <br>
+                                                                                <span class="m-widget3__time">
+                                                                                2 day ago
+                                                                                </span>
+                                                                            </div>
+                                                                            <span class="m-widget3__status m--font-info">
+                                                                                Pending
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="m-widget3__body">
+                                                                            <p class="m-widget3__text">
+                                                                                Lorem ipsum dolor sit amet,consectetuer edipiscing elit,sed diam nonummy nibh euismod tinciduntut laoreet doloremagna aliquam erat volutpat.
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="m-widget3__item">
+                                                                        <div class="m-widget3__header">
+                                                                            <div class="m-widget3__user-img">
+                                                                                <img class="m-widget3__img" src="/assets/app/media/img/users/user1.jpg" alt="">
+                                                                            </div>
+                                                                            <div class="m-widget3__info">
+                                                                                <span class="m-widget3__username">
+                                                                                Melania Trump
+                                                                                </span>
+                                                                                <br>
+                                                                                <span class="m-widget3__time">
+                                                                                2 day ago
+                                                                                </span>
+                                                                            </div>
+                                                                            <span class="m-widget3__status m--font-info">
+                                                                                Pending
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="m-widget3__body">
+                                                                            <p class="m-widget3__text">
+                                                                                Lorem ipsum dolor sit amet,consectetuer edipiscing elit,sed diam nonummy nibh euismod tinciduntut laoreet doloremagna aliquam erat volutpat.
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="m-widget3__item">
+                                                                        <div class="m-widget3__header">
+                                                                            <div class="m-widget3__user-img">
+                                                                                <img class="m-widget3__img" src="/assets/app/media/img/users/user1.jpg" alt="">
+                                                                            </div>
+                                                                            <div class="m-widget3__info">
+                                                                                <span class="m-widget3__username">
+                                                                                Melania Trump
+                                                                                </span>
+                                                                                <br>
+                                                                                <span class="m-widget3__time">
+                                                                                2 day ago
+                                                                                </span>
+                                                                            </div>
+                                                                            <span class="m-widget3__status m--font-info">
+                                                                                Pending
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="m-widget3__body">
+                                                                            <p class="m-widget3__text">
+                                                                                Lorem ipsum dolor sit amet,consectetuer edipiscing elit,sed diam nonummy nibh euismod tinciduntut laoreet doloremagna aliquam erat volutpat.
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="m-widget3__item">
+                                                                        <div class="m-widget3__header">
+                                                                            <div class="m-widget3__user-img">
+                                                                                <img class="m-widget3__img" src="/assets/app/media/img/users/user1.jpg" alt="">
+                                                                            </div>
+                                                                            <div class="m-widget3__info">
+                                                                                <span class="m-widget3__username">
+                                                                                Melania Trump
+                                                                                </span>
+                                                                                <br>
+                                                                                <span class="m-widget3__time">
+                                                                                2 day ago
+                                                                                </span>
+                                                                            </div>
+                                                                            <span class="m-widget3__status m--font-info">
+                                                                                Pending
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="m-widget3__body">
+                                                                            <p class="m-widget3__text">
+                                                                                Lorem ipsum dolor sit amet,consectetuer edipiscing elit,sed diam nonummy nibh euismod tinciduntut laoreet doloremagna aliquam erat volutpat.
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="m-portlet m-portlet--skin-dark m-portlet--bordered-semi m--bg-primary">
+                                                            <div class="m-portlet__head">
+                                                                <div class="m-portlet__head-caption">
+                                                                    <div class="m-portlet__head-title">
+                                                                        <span class="m-portlet__head-icon">
+                                                                            <i class="flaticon-statistics"></i>
+                                                                        </span>
+                                                                        <h3 class="m-portlet__head-text">
+                                                                            لیست تراکنش ها
+                                                                        </h3>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="m-portlet__body">
+                                                                <table class="table table-sm m-table m-table--head-bg-brand">
+                                                                    <thead class="thead-inverse">
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>First Name</th>
+                                                                        <th>Last Name</th>
+                                                                        <th>Username</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <th scope="row">1</th>
+                                                                        <td>Jhon</td>
+                                                                        <td>Stone</td>
+                                                                        <td>@jhon</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">2</th>
+                                                                        <td>Lisa</td>
+                                                                        <td>Nilson</td>
+                                                                        <td>@lisa</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">3</th>
+                                                                        <td>Larry</td>
+                                                                        <td>the Bird</td>
+                                                                        <td>@twitter</td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+
+
+
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn m-btn--pill m-btn--air btn-outline-metal m-btn m-btn--custom" data-dismiss="modal">
+                                                            بستن
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--end::Modal-->
+
+
+                                    </div>
                                 </div>
                             </div>
 
                         </div>
-                        <div class="tab-pane" id="m_portlet_base_demo_1_2_tab_content" role="tabpanel">
+                        <div class="tab-pane" id="paymentsList" role="tabpanel">
                             It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                        </div>
+                        <div class="tab-pane" id="instalmentsList" role="tabpanel">
+                            It hasafsgag f gds gds gds gdfs gds gdfs g survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
                         </div>
 
                     </div>
@@ -107,7 +866,6 @@
         <div class="col-md-12">
 
             <!-- BEGIN EXAMPLE TABLE PORTLET-->
-            @include("systemMessage.flash")
             @if(isset($debitCard))
                 <p class="list-group-item  bg-blue-soft bg-font-blue-soft" style="text-align: justify;"> شماره کارت برای
                     واریز کارت به کارت مبلغ: <span dir="ltr">{{$debitCard->cardNumber}}</span>
@@ -191,7 +949,7 @@
                                             {!! Form::hidden('order_id',null) !!}
                                             {!! Form::hidden('transaction_id',null , ["disabled"]) !!}
                                             {!! Form::hidden('paymentMethodName','ATM') !!}
-                                            {!! Form::hidden('paymentmethod_id', Config::get("constants.PAYMENT_METHOD_ATM")) !!}
+                                            {!! Form::hidden('paymentmethod_id', config("constants.PAYMENT_METHOD_ATM")) !!}
                                             <div class="modal-body">
                                                 <div class="row static-info margin-top-20">
                                                     <div class="form-group {{ $errors->has('cost') ? ' has-error' : '' }}">
@@ -293,27 +1051,27 @@
                                             <tr>
                                                 <th></th>
                                                 <td style="text-align: center;">
-                                                    @if(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_CLOSED"))
+                                                    @if(isset($order->orderstatus->id) && $order->orderstatus->id == config("constants.ORDER_STATUS_CLOSED"))
                                                         <span class="label label-success"> {{$order->orderstatus->displayName}}</span>
-                                                    @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_CANCELED"))
+                                                    @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == config("constants.ORDER_STATUS_CANCELED"))
                                                         <span class="label label-danger"> {{$order->orderstatus->displayName}}</span>
-                                                    @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_POSTED") )
+                                                    @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == config("constants.ORDER_STATUS_POSTED") )
                                                         <span class="label label-info"> {{$order->orderstatus->displayName}}</span>
-                                                    @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_REFUNDED") )
+                                                    @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == config("constants.ORDER_STATUS_REFUNDED") )
                                                         <span class="label bg-grey-salsa"> {{$order->orderstatus->displayName}}</span>
-                                                    @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_READY_TO_POST") )
+                                                    @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == config("constants.ORDER_STATUS_READY_TO_POST") )
                                                         <span class="label label-info"> {{$order->orderstatus->displayName}}</span>
-                                                    @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_PENDING") )
+                                                    @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == config("constants.ORDER_STATUS_PENDING") )
                                                         <span class="label bg-purple"> {{$order->orderstatus->displayName}}</span>
                                                     @endif
                                                 </td>
                                                 <td style="text-align: center;">
-                                                    @if(isset($order->paymentstatus->id) && $order->paymentstatus->id == Config::get("constants.PAYMENT_STATUS_PAID"))
+                                                    @if(isset($order->paymentstatus->id) && $order->paymentstatus->id == config("constants.PAYMENT_STATUS_PAID"))
                                                         <span class="label label-success"> {{$order->paymentstatus->displayName}}</span>
-                                                    @elseif(isset($order->paymentstatus->id) && $order->paymentstatus->id == Config::get("constants.PAYMENT_STATUS_UNPAID"))
+                                                    @elseif(isset($order->paymentstatus->id) && $order->paymentstatus->id == config("constants.PAYMENT_STATUS_UNPAID"))
                                                         <span class="label bg-yellow-gold"> {{$order->paymentstatus->displayName}}</span>
-                                                        @if(isset($order->orderstatus->id) && ($order->orderstatus->id == Config::get("constants.ORDER_STATUS_CLOSED") ||
-                                                            $order->orderstatus->id == Config::get("constants.ORDER_STATUS_POSTED")) )
+                                                        @if(isset($order->orderstatus->id) && ($order->orderstatus->id == config("constants.ORDER_STATUS_CLOSED") ||
+                                                            $order->orderstatus->id == config("constants.ORDER_STATUS_POSTED")) )
                                                             <div class="btn-group pull-right">
                                                                 <button class="btn btn-xs dark btn-outline onlinePayment"
                                                                         data-target="#onlinePaymentModal"
@@ -336,7 +1094,7 @@
                                                                 {{--</ul>--}}
                                                             </div>
                                                         @endif
-                                                    @elseif(isset($order->paymentstatus->id) && $order->paymentstatus->id == Config::get("constants.PAYMENT_STATUS_INDEBTED"))
+                                                    @elseif(isset($order->paymentstatus->id) && $order->paymentstatus->id == config("constants.PAYMENT_STATUS_INDEBTED"))
                                                         <span class="label label-warning"> {{$order->paymentstatus->displayName}}</span>
                                                         <div class="btn-group pull-right">
                                                             <button class="btn btn-xs dark btn-outline onlinePayment"
@@ -371,7 +1129,7 @@
                                                         <br>
                                                         @foreach($order->orderproducts as $orderproduct)
                                                             @if(isset($orderproduct->product->id))
-                                                                <span class="bold " style="font-style: italic; ">@if($orderproduct->orderproducttype_id == Config::get("constants.ORDER_PRODUCT_GIFT"))
+                                                                <span class="bold " style="font-style: italic; ">@if($orderproduct->orderproducttype_id == config("constants.ORDER_PRODUCT_GIFT"))
                                                                         <img src="/acm/extra/gift-box.png"
                                                                              width="25">@endif<a style="color:#607075"
                                                                                                  target="_blank" href = "@if($orderproduct->product->hasParents()){{action("Web\ProductController@show",$orderproduct->product->parents->first())}} @else  {{action("Web\ProductController@show",$orderproduct->product)}} @endif">
@@ -551,7 +1309,7 @@
                                                                         @endif
                                                                     </td>
                                                                     <td>@if(isset($transaction->transactionstatus))
-                                                                            @if($transaction->transactionstatus->id == Config::get("constants.TRANSACTION_STATUS_PENDING"))
+                                                                            @if($transaction->transactionstatus->id == config("constants.TRANSACTION_STATUS_PENDING"))
                                                                                 <span class="label label-sm label-info">{{$transaction->transactionstatus->displayName}}</span>
                                                                             @else {{$transaction->transactionstatus->displayName}}
                                                                             @endif
@@ -648,843 +1406,17 @@
         </div>
     </div>
 
-
-
-
-    <div class="m-portlet m-portlet--mobile">
-        <div class="m-portlet__head">
-            <div class="m-portlet__head-caption">
-                <div class="m-portlet__head-title">
-                    <h3 class="m-portlet__head-text">
-                        Basic Example
-                    </h3>
-                </div>
-            </div>
-            <div class="m-portlet__head-tools">
-                <ul class="m-portlet__nav">
-                    <li class="m-portlet__nav-item">
-                        <a href="#" class="btn btn-accent m-btn m-btn--custom m-btn--pill m-btn--icon m-btn--air">
-						<span>
-							<i class="la la-plus"></i>
-							<span>New record</span>
-						</span>
-                        </a>
-                    </li>
-                    <li class="m-portlet__nav-item"></li>
-                    <li class="m-portlet__nav-item">
-                        <div class="m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push"
-                             m-dropdown-toggle="hover" aria-expanded="true">
-                            <a href="#"
-                               class="m-portlet__nav-link btn btn-lg btn-secondary  m-btn m-btn--icon m-btn--icon-only m-btn--pill  m-dropdown__toggle">
-                                <i class="la la-ellipsis-h m--font-brand"></i>
-                            </a>
-                            <div class="m-dropdown__wrapper">
-                                <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
-                                <div class="m-dropdown__inner">
-                                    <div class="m-dropdown__body">
-                                        <div class="m-dropdown__content">
-                                            <ul class="m-nav">
-                                                <li class="m-nav__section m-nav__section--first">
-                                                    <span class="m-nav__section-text">Quick Actions</span>
-                                                </li>
-                                                <li class="m-nav__item">
-                                                    <a href="" class="m-nav__link">
-                                                        <i class="m-nav__link-icon flaticon-share"></i>
-                                                        <span class="m-nav__link-text">Create Post</span>
-                                                    </a>
-                                                </li>
-                                                <li class="m-nav__item">
-                                                    <a href="" class="m-nav__link">
-                                                        <i class="m-nav__link-icon flaticon-chat-1"></i>
-                                                        <span class="m-nav__link-text">Send Messages</span>
-                                                    </a>
-                                                </li>
-                                                <li class="m-nav__item">
-                                                    <a href="" class="m-nav__link">
-                                                        <i class="m-nav__link-icon flaticon-multimedia-2"></i>
-                                                        <span class="m-nav__link-text">Upload File</span>
-                                                    </a>
-                                                </li>
-                                                <li class="m-nav__section">
-                                                    <span class="m-nav__section-text">Useful Links</span>
-                                                </li>
-                                                <li class="m-nav__item">
-                                                    <a href="" class="m-nav__link">
-                                                        <i class="m-nav__link-icon flaticon-info"></i>
-                                                        <span class="m-nav__link-text">FAQ</span>
-                                                    </a>
-                                                </li>
-                                                <li class="m-nav__item">
-                                                    <a href="" class="m-nav__link">
-                                                        <i class="m-nav__link-icon flaticon-lifebuoy"></i>
-                                                        <span class="m-nav__link-text">Support</span>
-                                                    </a>
-                                                </li>
-                                                <li class="m-nav__separator m-nav__separator--fit m--hide">
-                                                </li>
-                                                <li class="m-nav__item m--hide">
-                                                    <a href="#"
-                                                       class="btn btn-outline-danger m-btn m-btn--pill m-btn--wide btn-sm">Submit</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="m-portlet__body">
-            <!--begin: Datatable -->
-            <table class="table table-striped- table-bordered table-hover table-checkable" id="m_table_1">
-                <thead>
-                <tr>
-                    <th>Record ID</th>
-                    <th>Order ID</th>
-                    <th>Country</th>
-                    <th>Ship City</th>
-                    <th>Ship Address</th>
-                    <th>Company Agent</th>
-                    <th>Company Name</th>
-                    <th>Ship Date</th>
-                    <th>Status</th>
-                    <th>Type</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>61715-075</td>
-                    <td>China</td>
-                    <td>Tieba</td>
-                    <td>746 Pine View Junction</td>
-                    <td>Nixie Sailor</td>
-                    <td>Gleichner, Ziemann and Gutkowski</td>
-                    <td>2/12/2018</td>
-                    <td>3</td>
-                    <td>2</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>63629-4697</td>
-                    <td>Indonesia</td>
-                    <td>Cihaur</td>
-                    <td>01652 Fulton Trail</td>
-                    <td>Emelita Giraldez</td>
-                    <td>Rosenbaum-Reichel</td>
-                    <td>8/6/2017</td>
-                    <td>6</td>
-                    <td>3</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>68084-123</td>
-                    <td>Argentina</td>
-                    <td>Puerto Iguazú</td>
-                    <td>2 Pine View Park</td>
-                    <td>Ula Luckin</td>
-                    <td>Kulas, Cassin and Batz</td>
-                    <td>5/26/2016</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>67457-428</td>
-                    <td>Indonesia</td>
-                    <td>Talok</td>
-                    <td>3050 Buell Terrace</td>
-                    <td>Evangeline Cure</td>
-                    <td>Pfannerstill-Treutel</td>
-                    <td>7/2/2016</td>
-                    <td>1</td>
-                    <td>3</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>31722-529</td>
-                    <td>Austria</td>
-                    <td>Sankt Andrä-Höch</td>
-                    <td>3038 Trailsway Junction</td>
-                    <td>Tierney St. Louis</td>
-                    <td>Dicki-Kling</td>
-                    <td>5/20/2017</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>64117-168</td>
-                    <td>China</td>
-                    <td>Rongkou</td>
-                    <td>023 South Way</td>
-                    <td>Gerhard Reinhard</td>
-                    <td>Gleason, Kub and Marquardt</td>
-                    <td>11/26/2016</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>43857-0331</td>
-                    <td>China</td>
-                    <td>Baiguo</td>
-                    <td>56482 Fairfield Terrace</td>
-                    <td>Englebert Shelley</td>
-                    <td>Jenkins Inc</td>
-                    <td>6/28/2016</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td>64980-196</td>
-                    <td>Croatia</td>
-                    <td>Vinica</td>
-                    <td>0 Elka Street</td>
-                    <td>Hazlett Kite</td>
-                    <td>Streich LLC</td>
-                    <td>8/5/2016</td>
-                    <td>6</td>
-                    <td>1</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>9</td>
-                    <td>0404-0360</td>
-                    <td>Colombia</td>
-                    <td>San Carlos</td>
-                    <td>38099 Ilene Hill</td>
-                    <td>Freida Morby</td>
-                    <td>Haley, Schamberger and Durgan</td>
-                    <td>3/31/2017</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>10</td>
-                    <td>52125-267</td>
-                    <td>Thailand</td>
-                    <td>Maha Sarakham</td>
-                    <td>8696 Barby Pass</td>
-                    <td>Obed Helian</td>
-                    <td>Labadie, Predovic and Hammes</td>
-                    <td>1/26/2017</td>
-                    <td>1</td>
-                    <td>3</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>11</td>
-                    <td>54092-515</td>
-                    <td>Brazil</td>
-                    <td>Canguaretama</td>
-                    <td>32461 Ridgeway Alley</td>
-                    <td>Sibyl Amy</td>
-                    <td>Treutel-Ratke</td>
-                    <td>3/8/2017</td>
-                    <td>4</td>
-                    <td>2</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>12</td>
-                    <td>0185-0130</td>
-                    <td>China</td>
-                    <td>Jiamachi</td>
-                    <td>23 Walton Pass</td>
-                    <td>Norri Foldes</td>
-                    <td>Strosin, Nitzsche and Wisozk</td>
-                    <td>4/2/2017</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>13</td>
-                    <td>21130-678</td>
-                    <td>China</td>
-                    <td>Qiaole</td>
-                    <td>328 Glendale Hill</td>
-                    <td>Myrna Orhtmann</td>
-                    <td>Miller-Schiller</td>
-                    <td>6/7/2016</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>14</td>
-                    <td>40076-953</td>
-                    <td>Portugal</td>
-                    <td>Burgau</td>
-                    <td>52550 Crownhardt Court</td>
-                    <td>Sioux Kneath</td>
-                    <td>Rice, Cole and Spinka</td>
-                    <td>10/11/2017</td>
-                    <td>4</td>
-                    <td>1</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>15</td>
-                    <td>36987-3005</td>
-                    <td>Portugal</td>
-                    <td>Bacelo</td>
-                    <td>548 Morrow Terrace</td>
-                    <td>Christa Jacmar</td>
-                    <td>Brakus-Hansen</td>
-                    <td>8/17/2017</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>16</td>
-                    <td>67510-0062</td>
-                    <td>South Africa</td>
-                    <td>Pongola</td>
-                    <td>02534 Hauk Trail</td>
-                    <td>Shandee Goracci</td>
-                    <td>Bergnaum, Thiel and Schuppe</td>
-                    <td>7/24/2016</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>17</td>
-                    <td>36987-2542</td>
-                    <td>Russia</td>
-                    <td>Novokizhinginsk</td>
-                    <td>19427 Sloan Road</td>
-                    <td>Jerrome Colvie</td>
-                    <td>Kreiger, Glover and Connelly</td>
-                    <td>3/4/2016</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>18</td>
-                    <td>11673-479</td>
-                    <td>Brazil</td>
-                    <td>Conceição das Alagoas</td>
-                    <td>191 Stone Corner Road</td>
-                    <td>Michaelina Plenderleith</td>
-                    <td>Legros-Gleichner</td>
-                    <td>2/21/2018</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>19</td>
-                    <td>47781-264</td>
-                    <td>Ukraine</td>
-                    <td>Yasinya</td>
-                    <td>1481 Sauthoff Place</td>
-                    <td>Lombard Luthwood</td>
-                    <td>Haag LLC</td>
-                    <td>1/21/2016</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>20</td>
-                    <td>42291-712</td>
-                    <td>Indonesia</td>
-                    <td>Kembang</td>
-                    <td>9029 Blackbird Point</td>
-                    <td>Leonora Chevin</td>
-                    <td>Mann LLC</td>
-                    <td>9/6/2017</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>21</td>
-                    <td>64679-154</td>
-                    <td>Mongolia</td>
-                    <td>Sharga</td>
-                    <td>102 Holmberg Park</td>
-                    <td>Tannie Seakes</td>
-                    <td>Blanda Group</td>
-                    <td>7/31/2016</td>
-                    <td>6</td>
-                    <td>3</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>22</td>
-                    <td>49348-055</td>
-                    <td>China</td>
-                    <td>Guxi</td>
-                    <td>45 Butterfield Street</td>
-                    <td>Yardley Wetherell</td>
-                    <td>Gerlach-Schultz</td>
-                    <td>4/3/2017</td>
-                    <td>2</td>
-                    <td>2</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>23</td>
-                    <td>47593-438</td>
-                    <td>Portugal</td>
-                    <td>Viso</td>
-                    <td>97 Larry Center</td>
-                    <td>Bryn Peascod</td>
-                    <td>Larkin and Sons</td>
-                    <td>5/22/2016</td>
-                    <td>6</td>
-                    <td>1</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>24</td>
-                    <td>54569-0175</td>
-                    <td>Japan</td>
-                    <td>Minato</td>
-                    <td>077 Hoffman Center</td>
-                    <td>Chrissie Jeromson</td>
-                    <td>Brakus-McCullough</td>
-                    <td>11/26/2017</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>25</td>
-                    <td>0093-1016</td>
-                    <td>Indonesia</td>
-                    <td>Merdeka</td>
-                    <td>3150 Cherokee Center</td>
-                    <td>Gusti Clamp</td>
-                    <td>Stokes Group</td>
-                    <td>4/12/2018</td>
-                    <td>6</td>
-                    <td>2</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>26</td>
-                    <td>0093-5142</td>
-                    <td>China</td>
-                    <td>Jianggao</td>
-                    <td>289 Badeau Alley</td>
-                    <td>Otis Jobbins</td>
-                    <td>Ruecker, Leffler and Abshire</td>
-                    <td>3/6/2018</td>
-                    <td>4</td>
-                    <td>2</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>27</td>
-                    <td>51523-026</td>
-                    <td>Germany</td>
-                    <td>Erfurt</td>
-                    <td>132 Chive Way</td>
-                    <td>Lonnie Haycox</td>
-                    <td>Feest Group</td>
-                    <td>4/24/2018</td>
-                    <td>1</td>
-                    <td>3</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>28</td>
-                    <td>49035-522</td>
-                    <td>Australia</td>
-                    <td>Eastern Suburbs Mc</td>
-                    <td>074 Algoma Drive</td>
-                    <td>Heddi Castelli</td>
-                    <td>Kessler and Sons</td>
-                    <td>1/12/2017</td>
-                    <td>5</td>
-                    <td>1</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>29</td>
-                    <td>58411-198</td>
-                    <td>Ethiopia</td>
-                    <td>Kombolcha</td>
-                    <td>91066 Amoth Court</td>
-                    <td>Tuck O'Dowgaine</td>
-                    <td>Simonis, Rowe and Davis</td>
-                    <td>5/6/2017</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>30</td>
-                    <td>27495-006</td>
-                    <td>Portugal</td>
-                    <td>Arrifes</td>
-                    <td>3 Fairfield Junction</td>
-                    <td>Vernon Cosham</td>
-                    <td>Kreiger-Nicolas</td>
-                    <td>2/8/2017</td>
-                    <td>4</td>
-                    <td>2</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>31</td>
-                    <td>55154-8284</td>
-                    <td>Philippines</td>
-                    <td>Talisay</td>
-                    <td>09 Sachtjen Junction</td>
-                    <td>Bryna MacCracken</td>
-                    <td>Hyatt-Witting</td>
-                    <td>7/22/2017</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>32</td>
-                    <td>62678-207</td>
-                    <td>Libya</td>
-                    <td>Zuwārah</td>
-                    <td>82 Thackeray Pass</td>
-                    <td>Freda Arnall</td>
-                    <td>Dicki, Morar and Stiedemann</td>
-                    <td>7/22/2016</td>
-                    <td>3</td>
-                    <td>3</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>33</td>
-                    <td>68428-725</td>
-                    <td>China</td>
-                    <td>Zhangcun</td>
-                    <td>3 Goodland Terrace</td>
-                    <td>Pavel Kringe</td>
-                    <td>Goldner-Lehner</td>
-                    <td>4/2/2017</td>
-                    <td>4</td>
-                    <td>1</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>34</td>
-                    <td>0363-0724</td>
-                    <td>Morocco</td>
-                    <td>Temara</td>
-                    <td>9550 Weeping Birch Crossing</td>
-                    <td>Felix Nazaret</td>
-                    <td>Waters, Quigley and Keeling</td>
-                    <td>6/4/2016</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>35</td>
-                    <td>37000-102</td>
-                    <td>Paraguay</td>
-                    <td>Los Cedrales</td>
-                    <td>1 Ridge Oak Way</td>
-                    <td>Penrod Allanby</td>
-                    <td>Rodriguez Group</td>
-                    <td>3/5/2018</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>36</td>
-                    <td>55289-002</td>
-                    <td>Philippines</td>
-                    <td>Dologon</td>
-                    <td>9 Vidon Terrace</td>
-                    <td>Hubey Passby</td>
-                    <td>Lemke-Hermiston</td>
-                    <td>6/29/2017</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>37</td>
-                    <td>15127-874</td>
-                    <td>Tanzania</td>
-                    <td>Nanganga</td>
-                    <td>33 Anniversary Parkway</td>
-                    <td>Magdaia Rotlauf</td>
-                    <td>Hettinger, Medhurst and Heaney</td>
-                    <td>2/18/2018</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>38</td>
-                    <td>49349-123</td>
-                    <td>Indonesia</td>
-                    <td>Pule</td>
-                    <td>77292 Bonner Plaza</td>
-                    <td>Alfonse Lawrance</td>
-                    <td>Schuppe-Harber</td>
-                    <td>4/14/2017</td>
-                    <td>1</td>
-                    <td>3</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>39</td>
-                    <td>17089-415</td>
-                    <td>Palestinian Territory</td>
-                    <td>Za‘tarah</td>
-                    <td>42806 Ridgeview Terrace</td>
-                    <td>Kessiah Chettoe</td>
-                    <td>Mraz LLC</td>
-                    <td>3/4/2017</td>
-                    <td>5</td>
-                    <td>2</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>40</td>
-                    <td>51327-510</td>
-                    <td>Philippines</td>
-                    <td>Esperanza</td>
-                    <td>4 Linden Court</td>
-                    <td>Natka Fairbanks</td>
-                    <td>Mueller-Greenholt</td>
-                    <td>6/21/2017</td>
-                    <td>3</td>
-                    <td>3</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>41</td>
-                    <td>0187-2201</td>
-                    <td>Brazil</td>
-                    <td>Rio das Ostras</td>
-                    <td>5722 Buhler Place</td>
-                    <td>Shaw Puvia</td>
-                    <td>Veum LLC</td>
-                    <td>6/10/2017</td>
-                    <td>3</td>
-                    <td>2</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>42</td>
-                    <td>16590-890</td>
-                    <td>Indonesia</td>
-                    <td>Krajan Gajahmati</td>
-                    <td>54 Corry Street</td>
-                    <td>Alden Dingate</td>
-                    <td>Heidenreich Inc</td>
-                    <td>10/27/2016</td>
-                    <td>5</td>
-                    <td>1</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>43</td>
-                    <td>75862-001</td>
-                    <td>Indonesia</td>
-                    <td>Pineleng</td>
-                    <td>4 Messerschmidt Point</td>
-                    <td>Cherish Peplay</td>
-                    <td>McCullough-Gibson</td>
-                    <td>11/23/2017</td>
-                    <td>2</td>
-                    <td>2</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>44</td>
-                    <td>24559-091</td>
-                    <td>Philippines</td>
-                    <td>Amuñgan</td>
-                    <td>5470 Forest Parkway</td>
-                    <td>Nedi Swetman</td>
-                    <td>Gerhold Inc</td>
-                    <td>3/23/2017</td>
-                    <td>5</td>
-                    <td>1</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>45</td>
-                    <td>0007-3230</td>
-                    <td>Russia</td>
-                    <td>Bilyarsk</td>
-                    <td>5899 Basil Place</td>
-                    <td>Ashley Blick</td>
-                    <td>Cummings-Goodwin</td>
-                    <td>10/1/2016</td>
-                    <td>4</td>
-                    <td>2</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>46</td>
-                    <td>50184-1029</td>
-                    <td>Peru</td>
-                    <td>Chocope</td>
-                    <td>65560 Daystar Center</td>
-                    <td>Saunders Harmant</td>
-                    <td>O'Kon-Wiegand</td>
-                    <td>11/7/2017</td>
-                    <td>3</td>
-                    <td>2</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>47</td>
-                    <td>10819-6003</td>
-                    <td>France</td>
-                    <td>Rivesaltes</td>
-                    <td>4981 Springs Center</td>
-                    <td>Mellisa Laurencot</td>
-                    <td>Jacobs Group</td>
-                    <td>10/30/2017</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>48</td>
-                    <td>62750-003</td>
-                    <td>Mongolia</td>
-                    <td>Jargalant</td>
-                    <td>94 Rutledge Way</td>
-                    <td>Orland Myderscough</td>
-                    <td>Gutkowski Inc</td>
-                    <td>11/2/2016</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>49</td>
-                    <td>68647-122</td>
-                    <td>Philippines</td>
-                    <td>Cardona</td>
-                    <td>4765 Service Hill</td>
-                    <td>Devi Iglesias</td>
-                    <td>Ullrich-Dibbert</td>
-                    <td>7/21/2016</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td nowrap></td>
-                </tr>
-                <tr>
-                    <td>50</td>
-                    <td>36987-3093</td>
-                    <td>China</td>
-                    <td>Jiantou</td>
-                    <td>373 Northwestern Plaza</td>
-                    <td>Bliss Tummasutti</td>
-                    <td>Legros-Cummings</td>
-                    <td>11/27/2017</td>
-                    <td>5</td>
-                    <td>1</td>
-                    <td nowrap></td>
-                </tr>
-                </tbody>
-
-            </table>
-        </div>
-    </div>
-    <!-- END EXAMPLE TABLE PORTLET-->
-
-
-
 @endsection
 
 @section('page-js')
-    {{--<script src="{{ mix('/js/user-profile.js') }}"></script>--}}
-    <script src="{{ asset('/assets/vendors/custom/datatables/datatables.bundle.js') }}"></script>
+    <script src="{{ mix('/js/user-orders.js') }}"></script>
     <script>
 
-        var DatatablesBasicBasic = {
-            init: function () {
-                var e;
-                (e = $("#m_table_1")).DataTable({
-                    responsive: !0,
-                    dom: "<'row'<'col-sm-12'tr>>\n\t\t\t<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>",
-                    lengthMenu: [5, 10, 25, 50],
-                    pageLength: 10,
-                    language: {lengthMenu: "Display _MENU_"},
-                    order: [[1, "desc"]],
-                    headerCallback: function (e, a, t, n, s) {
-                        e.getElementsByTagName("th")[0].innerHTML = '\n                    <label class="m-checkbox m-checkbox--single m-checkbox--solid m-checkbox--brand">\n                        <input type="checkbox" value="" class="m-group-checkable">\n                        <span></span>\n                    </label>'
-                    },
-                    columnDefs: [{
-                        targets: 0,
-                        width: "30px",
-                        className: "dt-right",
-                        orderable: !1,
-                        render: function (e, a, t, n) {
-                            return '\n                        <label class="m-checkbox m-checkbox--single m-checkbox--solid m-checkbox--brand">\n                            <input type="checkbox" value="" class="m-checkable">\n                            <span></span>\n                        </label>'
-                        }
-                    }, {
-                        targets: -1, title: "Actions", orderable: !1, render: function (e, a, t, n) {
-                            return '\n                        <span class="dropdown">\n                            <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">\n                              <i class="la la-ellipsis-h"></i>\n                            </a>\n                            <div class="dropdown-menu dropdown-menu-right">\n                                <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>\n                                <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>\n                                <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>\n                            </div>\n                        </span>\n                        <a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" title="View">\n                          <i class="la la-edit"></i>\n                        </a>'
-                        }
-                    }, {
-                        targets: 8, render: function (e, a, t, n) {
-                            var s = {
-                                1: {title: "Pending", class: "m-badge--brand"},
-                                2: {title: "Delivered", class: " m-badge--metal"},
-                                3: {title: "Canceled", class: " m-badge--primary"},
-                                4: {title: "Success", class: " m-badge--success"},
-                                5: {title: "Info", class: " m-badge--info"},
-                                6: {title: "Danger", class: " m-badge--danger"},
-                                7: {title: "Warning", class: " m-badge--warning"}
-                            };
-                            return void 0 === s[e] ? e : '<span class="m-badge ' + s[e].class + ' m-badge--wide">' + s[e].title + "</span>"
-                        }
-                    }, {
-                        targets: 9, render: function (e, a, t, n) {
-                            var s = {
-                                1: {title: "Online", state: "danger"},
-                                2: {title: "Retail", state: "primary"},
-                                3: {title: "Direct", state: "accent"}
-                            };
-                            return void 0 === s[e] ? e : '<span class="m-badge m-badge--' + s[e].state + ' m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-' + s[e].state + '">' + s[e].title + "</span>"
-                        }
-                    }]
-                }), e.on("change", ".m-group-checkable", function () {
-                    var e = $(this).closest("table").find("td:first-child .m-checkable"), a = $(this).is(":checked");
-                    $(e).each(function () {
-                        a ? ($(this).prop("checked", !0), $(this).closest("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).closest("tr").removeClass("active"))
-                    })
-                }), e.on("change", "tbody tr .m-checkbox", function () {
-                    $(this).parents("tr").toggleClass("active")
-                })
-            }
-        };
-        jQuery(document).ready(function () {
-            DatatablesBasicBasic.init()
-        });
+        var orders = {!! $orders !!};
+
 
     </script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-user-orders.js') }}"></script>
 @endsection
 
 
