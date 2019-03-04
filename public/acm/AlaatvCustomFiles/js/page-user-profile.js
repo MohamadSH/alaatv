@@ -1,4 +1,3 @@
-
 function getFormData($form) {
     var unindexed_array = $form.serializeArray();
     var indexed_array = {};
@@ -64,8 +63,8 @@ $(document).ready(function () {
         uploadUrl: $('#profilePhotoAjaxUploadActionUrl').val(), // your upload server url
         uploadExtraData: function() {
             return {
-                userid: $("#userid").val(),
-                username: $("#username").val()
+                updateType: 'photo',
+                // username: $("#username").val()
             };
         },
 
@@ -149,10 +148,9 @@ $(document).ready(function () {
 
     $(document).on('click', '#btnUpdateProfileInfoForm', function () {
 
-
         var $form = $("#profileForm-setting");
         var data = getFormData($form);
-        console.log(data);
+        console.log('fom data: '+data);
         mApp.block('#profileMenuPage-setting', {
             overlayColor: "#000000",
             type: "loader",
@@ -160,63 +158,63 @@ $(document).ready(function () {
             message: "کمی صبر کنید..."
         });
 
-        setTimeout(function () {
-
-            mApp.unblock('#profileMenuPage-setting');
-
-            Swal({
-                title: '',
-                text: 'اطلاعات شما ویرایش شد.',
-                type: 'success',
-                confirmButtonText: 'بستن'
-            });
-
-        }, 2e3);
-
+        // setTimeout(function () {
+        //
+        //     mApp.unblock('#profileMenuPage-setting');
+        //
+        //     Swal({
+        //         title: '',
+        //         text: 'اطلاعات شما ویرایش شد.',
+        //         type: 'success',
+        //         confirmButtonText: 'بستن'
+        //     });
+        //
+        // }, 2e3);
+        //
         // return false;
 
-        // $.ajax({
-        //     type: 'PUT',
-        //     url: $('#userUpdateProfileUrl').val(),
-        //     data: {},
-        //
-        //     success: function (data) {
-        //         if (data.error) {
-        //
-        //             // let message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
-        //             let message = data.error.message;
-        //
-        //             Swal({
-        //                 title: 'توجه!',
-        //                 text:  'خطای سیستمی رخ داده است.' + '<br>' + message,
-        //                 type: 'danger',
-        //                 confirmButtonText: 'بستن'
-        //             });
-        //
-        //         } else {
-        //             $('.inputVerificationWarper').fadeIn();
-        //
-        //             Swal({
-        //                 title: '',
-        //                 text: 'کد تایید برای شماره همراه شما پیامک شد.',
-        //                 type: 'success',
-        //                 confirmButtonText: 'بستن'
-        //             });
-        //         }
-        //         mApp.unblock('.SendMobileVerificationCodeWarper');
-        //     },
-        //     error: function (jqXHR, textStatus, errorThrown) {
-        //
-        //         Swal({
-        //             title: 'توجه!',
-        //             text: 'خطای سیستمی رخ داده است.',
-        //             type: 'danger',
-        //             confirmButtonText: 'بستن'
-        //         });
-        //         mApp.unblock('.SendMobileVerificationCodeWarper');
-        //     }
-        //
-        // });
+        $.ajax({
+            type: 'PUT',
+            url: $('#userUpdateProfileUrl').val(),
+            data: data,
+
+            success: function (data) {
+                if (data.error) {
+
+                    // let message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
+                    let message = data.error.message;
+
+                    Swal({
+                        title: 'توجه!',
+                        text:  'خطای سیستمی رخ داده است.' + '<br>' + message,
+                        type: 'danger',
+                        confirmButtonText: 'بستن'
+                    });
+
+                } else {
+                    $('.inputVerificationWarper').fadeIn();
+
+                    Swal({
+                        title: '',
+                        text: 'کد تایید برای شماره همراه شما پیامک شد.',
+                        type: 'success',
+                        confirmButtonText: 'بستن'
+                    });
+                }
+                mApp.unblock('.SendMobileVerificationCodeWarper');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+
+                Swal({
+                    title: 'توجه!',
+                    text: 'خطای سیستمی رخ داده است.',
+                    type: 'danger',
+                    confirmButtonText: 'بستن'
+                });
+                mApp.unblock('.SendMobileVerificationCodeWarper');
+            }
+
+        });
 
 
     });
@@ -230,26 +228,26 @@ $(document).ready(function () {
             message: "کمی صبر کنید..."
         });
 
-        setTimeout(function () {
-
-            $('#btnSendMobileVerificationCode').fadeOut();
-            $('.inputVerificationWarper').fadeIn();
-            mApp.unblock('.SendMobileVerificationCodeWarper');
-
-            Swal({
-                title: '',
-                text: 'کد تایید برای شماره همراه شما پیامک شد.',
-                type: 'info',
-                confirmButtonText: 'بستن'
-            });
-
-            $('.inputVerificationWarper').removeClass('d-none');
-
-            mUtil.scrollTo('.SendMobileVerificationCodeWarper', 300);
-
-        }, 2e3);
-
-        return false;
+        // setTimeout(function () {
+        //
+        //     $('#btnSendMobileVerificationCode').fadeOut();
+        //     $('.inputVerificationWarper').fadeIn();
+        //     mApp.unblock('.SendMobileVerificationCodeWarper');
+        //
+        //     Swal({
+        //         title: '',
+        //         text: 'کد تایید برای شماره همراه شما پیامک شد.',
+        //         type: 'info',
+        //         confirmButtonText: 'بستن'
+        //     });
+        //
+        //     $('.inputVerificationWarper').removeClass('d-none');
+        //
+        //     mUtil.scrollTo('.SendMobileVerificationCodeWarper', 300);
+        //
+        // }, 2e3);
+        //
+        // return false;
 
         $.ajax({
             type: 'POST',
@@ -308,29 +306,29 @@ $(document).ready(function () {
             message: "کمی صبر کنید..."
         });
 
-        setTimeout(function () {
-
-            $('.inputVerificationWarper').fadeOut();
-            $('.SendMobileVerificationCodeWarper').fadeOut();
-            $('.mobileUnVerifyMessage').removeClass('d-block');
-            $('.mobileUnVerifyMessage').addClass('d-none');
-            $('.mobileVerifyMessage').removeClass('d-none');
-            $('.mobileVerifyMessage').addClass('d-block');
-
-            mApp.unblock('.SendMobileVerificationCodeWarper');
-
-            Swal({
-                title: '',
-                text: 'شماره موبایل شما تایید شد.',
-                type: 'success',
-                confirmButtonText: 'بستن'
-            });
-
-            mUtil.scrollTo('.SendMobileVerificationCodeWarper', 300);
-
-        }, 2e3);
-
-        return false;
+        // setTimeout(function () {
+        //
+        //     $('.inputVerificationWarper').fadeOut();
+        //     $('.SendMobileVerificationCodeWarper').fadeOut();
+        //     $('.mobileUnVerifyMessage').removeClass('d-block');
+        //     $('.mobileUnVerifyMessage').addClass('d-none');
+        //     $('.mobileVerifyMessage').removeClass('d-none');
+        //     $('.mobileVerifyMessage').addClass('d-block');
+        //
+        //     mApp.unblock('.SendMobileVerificationCodeWarper');
+        //
+        //     Swal({
+        //         title: '',
+        //         text: 'شماره موبایل شما تایید شد.',
+        //         type: 'success',
+        //         confirmButtonText: 'بستن'
+        //     });
+        //
+        //     mUtil.scrollTo('.SendMobileVerificationCodeWarper', 300);
+        //
+        // }, 2e3);
+        //
+        // return false;
 
         $.ajax({
             type: 'POST',

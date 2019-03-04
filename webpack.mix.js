@@ -102,6 +102,13 @@ mix.scripts(
     'public/js/user-profile.js'
 ).version();
 
+mix.scripts(
+    [
+        'node_modules/persian-date/dist/persian-date.js',
+        // 'public/acm/AlaatvCustomFiles/js/page-user-orders.js'
+    ],
+    'public/js/user-orders.js'
+).version();
 
 mix.styles(
     [
