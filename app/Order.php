@@ -336,34 +336,39 @@ class Order extends BaseModel
      */
     public function obtainOrderCost($calculateOrderCost = false, $calculateOrderproductCost = true, $mode = "DEFAULT")
     {
-        if ($calculateOrderCost) {
-            $this->load('user', 'user.wallets', 'normalOrderproducts', 'normalOrderproducts.product', 'normalOrderproducts.product.parents', 'normalOrderproducts.userbons', 'normalOrderproducts.attributevalues', 'normalOrderproducts.product.attributevalues');
-            $orderproductsToCalculateFromBaseIds = [];
-            if($calculateOrderproductCost)
-            {
-                $orderproductsToCalculateFromBaseIds = $this->normalOrderproducts->pluck("id")->toArray();
-            }
+        $order = $this;
+        $key = "order:debt:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_60"), function () use ($order , $calculateOrderCost , $calculateOrderproductCost , $mode) {
+                if ($calculateOrderCost) {
+                    $this->load('user', 'user.wallets', 'normalOrderproducts', 'normalOrderproducts.product', 'normalOrderproducts.product.parents', 'normalOrderproducts.userbons', 'normalOrderproducts.attributevalues', 'normalOrderproducts.product.attributevalues');
+                    $orderproductsToCalculateFromBaseIds = [];
+                    if($calculateOrderproductCost)
+                    {
+                        $orderproductsToCalculateFromBaseIds = $this->normalOrderproducts->pluck("id")->toArray();
+                    }
 
-            $reCheckIncludedOrderproductsInCoupon = false;
-            if($this->hasCoupon())
-                $reCheckIncludedOrderproductsInCoupon = ($mode == 'REOBTAIN') ? false : true;
-            $alaaCashierFacade = new OrderCheckout($this , $orderproductsToCalculateFromBaseIds , $reCheckIncludedOrderproductsInCoupon );
-        }
-        else{
-            $this->load('normalOrderproducts', 'normalOrderproducts.product', 'normalOrderproducts.product.parents', 'normalOrderproducts.userbons', 'normalOrderproducts.attributevalues', 'normalOrderproducts.product.attributevalues');
-            $alaaCashierFacade = new ReObtainOrderFromRecords($this);
-        }
+                    $reCheckIncludedOrderproductsInCoupon = false;
+                    if($this->hasCoupon())
+                        $reCheckIncludedOrderproductsInCoupon = ($mode == 'REOBTAIN') ? false : true;
+                    $alaaCashierFacade = new OrderCheckout($this , $orderproductsToCalculateFromBaseIds , $reCheckIncludedOrderproductsInCoupon );
+                }
+                else{
+                    $this->load('normalOrderproducts', 'normalOrderproducts.product', 'normalOrderproducts.product.parents', 'normalOrderproducts.userbons', 'normalOrderproducts.attributevalues', 'normalOrderproducts.product.attributevalues');
+                    $alaaCashierFacade = new ReObtainOrderFromRecords($this);
+                }
 
-        $priceInfo = $alaaCashierFacade->checkout();
+                $priceInfo = $alaaCashierFacade->checkout();
 
-        return [
-            'sumOfOrderproductsRawCost' => $priceInfo['totalPriceInfo']['sumOfOrderproductsRawCost'],
-            'rawCostWithDiscount'       => $priceInfo['totalPriceInfo']['totalRawPriceWhichHasDiscount'],
-            'rawCostWithoutDiscount'    => $priceInfo['totalPriceInfo']['totalRawPriceWhichDoesntHaveDiscount'],
-            'totalCost'                 => $priceInfo['totalPriceInfo']['finalPrice'],
-            'payableAmountByWallet'     => $priceInfo['totalPriceInfo']['payableAmountByWallet'],
-            'calculatedOrderproducts'   => $priceInfo['orderproductsInfo']['calculatedOrderproducts'],
-        ];
+                return [
+                    'sumOfOrderproductsRawCost' => $priceInfo['totalPriceInfo']['sumOfOrderproductsRawCost'],
+                    'rawCostWithDiscount'       => $priceInfo['totalPriceInfo']['totalRawPriceWhichHasDiscount'],
+                    'rawCostWithoutDiscount'    => $priceInfo['totalPriceInfo']['totalRawPriceWhichDoesntHaveDiscount'],
+                    'totalCost'                 => $priceInfo['totalPriceInfo']['finalPrice'],
+                    'payableAmountByWallet'     => $priceInfo['totalPriceInfo']['payableAmountByWallet'],
+                    'calculatedOrderproducts'   => $priceInfo['orderproductsInfo']['calculatedOrderproducts'],
+                ];
+        });
     }
 
     /**
@@ -932,12 +937,9 @@ class Order extends BaseModel
                     });
     }
 
-    /**
-     * @return int
-     */
-    public function getPriceAttribute(): int
+    public function getPriceAttribute()
     {
-        return $this->cost + $this->costwithoutcoupon ;
+        return $this->totalCost() ;
     }
 
     /**
