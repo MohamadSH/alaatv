@@ -179,10 +179,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     protected $appends = [
         'url',
         'apiUrl',
-//        'nextUrl',
-//        'nextApiUrl',
-//        'previousUrl',
-//        'previousApiUrl',
+        'nextUrl',
+        'nextApiUrl',
+        'previousUrl',
+        'previousApiUrl',
         'author',
     ];
 
@@ -307,27 +307,29 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     |--------------------------------------------------------------------------
     */
 
-    public function getPreviousContentAttribute($value){
+    public function getPreviousContent(){
         $key = "Content:previousContent" . $this->cacheKey();
         return Cache::tags('content')
-            ->remember($key, config("constants.CACHE_600"), function () use ($value) {
-                $set                    =  $this->set ;
+            ->remember($key, config("constants.CACHE_600"), function () {
                 $previousContentOrder   =  $this->order - 1;
+                /**  The code below results a loop */
+//                $previousContent        =  $set->contents->where('order' , $previousContentOrder)->first();
                 /** @var Content $previousContent */
-                $previousContent        =  $set->contents->where('order' , $previousContentOrder)->first();
+                $previousContent        =  self::where('contentset_id' , $this->contentset_id)->where('order' , $previousContentOrder)->first();
 
                 return $previousContent??$previousContent;
             });
     }
 
-    public function getNextContentAttribute($value){
+    public function getNextContent(){
         $key = "Content:nextContent" . $this->cacheKey();
         return Cache::tags('content')
-            ->remember($key, config("constants.CACHE_600"), function () use ($value) {
-                $set                =  $this->set ;
+            ->remember($key, config("constants.CACHE_600"), function () {
                 $nextContentOrder   =  $this->order + 1;
+                /**  The code below results a loop */
+//                $nextContent        =  $set->contents->where('order' , $previousContentOrder)->first();
                 /** @var Content $nextContent */
-                $nextContent        =  $set->contents->where('order' , $nextContentOrder)->first();
+                $nextContent        =  self::where('contentset_id' , $this->contentset_id)->where('order' , $nextContentOrder)->first();
 
                 return $nextContent??$nextContent ;
         });
@@ -339,11 +341,11 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     }
 
     public function getPreviousUrlAttribute($value){
-        return optional($this->previous_content)->url ;
+        return optional($this->getPreviousContent())->url ;
     }
 
     public function getNextUrlAttribute($value){
-        return optional($this->next_content)->url ;
+        return optional($this->getNextContent())->url ;
     }
 
     public function getApiUrlAttribute($value): array{
@@ -353,11 +355,11 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     }
 
     public function getPreviousApiUrlAttribute($value){
-        return optional($this->previous_content)->api_url ;
+        return optional($this->getPreviousContent())->api_url ;
     }
 
     public function getNextApiUrlAttribute($value){
-        return optional($this->next_content)->api_url ;
+        return optional($this->getNextContent())->api_url ;
     }
 
     /**
