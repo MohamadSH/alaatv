@@ -179,10 +179,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     protected $appends = [
         'url',
         'apiUrl',
-        'nextUrl',
-        'nextApiUrl',
-        'previousUrl',
-        'previousApiUrl',
+//        'nextUrl',
+//        'nextApiUrl',
+//        'previousUrl',
+//        'previousApiUrl',
         'author',
     ];
 
