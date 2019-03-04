@@ -149,6 +149,7 @@ class Order extends BaseModel
         'paidPrice',
         'successfulTransactions',
         'orderPostingInfo',
+        'debt'
     ];
     const OPEN_ORDER_STATUSES = [
         1,
@@ -1024,5 +1025,14 @@ class Order extends BaseModel
                     ->remember($key, config("constants.CACHE_600"), function () use ($order) {
                         return $order->orderpostinginfos()->get();
                     });
+    }
+
+    public function getDebtAttribute(){
+        $order = $this;
+        $key = "order:Debt:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_60"), function () use ($order) {
+                 return $order->debt();
+            });
     }
 }
