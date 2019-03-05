@@ -163,7 +163,7 @@
                                                     @endif
                                                     {{ number_format($simpleOrderProductItem->price['customerPrice']+$simpleOrderProductItem->price['extraCost']) }} تومان
                                                     @if(($simpleOrderProductItem->price['bonDiscount']+$simpleOrderProductItem->price['productDiscount'])>0)
-                                                        <span class="m-badge m-badge--info a--productDiscount">{{ $simpleOrderProductItem->price['bonDiscount']+$simpleOrderProductItem->price['productDiscount'] }}%</span>
+                                                        <span class="m-badge m-badge--info a--productDiscount">{{ (1-($simpleOrderProductItem->price['customerPrice']/$simpleOrderProductItem->price['cost']))*100 }}%</span>
                                                     @endif
                                                 </span>
                                             </span>
