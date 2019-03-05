@@ -111,6 +111,8 @@ use Stevebauman\Purify\Facades\Purify;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed $api_url
+ * @property mixed next_content
+ * @property mixed previous_content
  */
 class Content extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
@@ -177,6 +179,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     protected $appends = [
         'url',
         'apiUrl',
+        'nextUrl',
+        'nextApiUrl',
+        'previousUrl',
+        'previousApiUrl',
         'author',
     ];
 
@@ -301,16 +307,59 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     |--------------------------------------------------------------------------
     */
 
+    public function getPreviousContent(){
+        $key = "Content:previousContent" . $this->cacheKey();
+        return Cache::tags('content')
+            ->remember($key, config("constants.CACHE_600"), function () {
+                $previousContentOrder   =  $this->order - 1;
+                /**  The code below results a loop */
+//                $previousContent        =  $set->contents->where('order' , $previousContentOrder)->first();
+                /** @var Content $previousContent */
+                $previousContent        =  self::where('contentset_id' , $this->contentset_id)->where('order' , $previousContentOrder)->first();
+
+                return $previousContent??$previousContent;
+            });
+    }
+
+    public function getNextContent(){
+        $key = "Content:nextContent" . $this->cacheKey();
+        return Cache::tags('content')
+            ->remember($key, config("constants.CACHE_600"), function () {
+                $nextContentOrder   =  $this->order + 1;
+                /**  The code below results a loop */
+//                $nextContent        =  $set->contents->where('order' , $previousContentOrder)->first();
+                /** @var Content $nextContent */
+                $nextContent        =  self::where('contentset_id' , $this->contentset_id)->where('order' , $nextContentOrder)->first();
+
+                return $nextContent??$nextContent ;
+        });
+    }
+
     public function getUrlAttribute($value): string
     {
         return action("Web\ContentController@show", $this);
     }
 
-    public function getApiUrlAttribute($value): array
-    {
+    public function getPreviousUrlAttribute($value){
+        return optional($this->getPreviousContent())->url ;
+    }
+
+    public function getNextUrlAttribute($value){
+        return optional($this->getNextContent())->url ;
+    }
+
+    public function getApiUrlAttribute($value): array{
         return [
             'v1' => action("Api\ContentController@show", $this),
         ];
+    }
+
+    public function getPreviousApiUrlAttribute($value){
+        return optional($this->getPreviousContent())->api_url ;
+    }
+
+    public function getNextApiUrlAttribute($value){
+        return optional($this->getNextContent())->api_url ;
     }
 
     /**
@@ -701,11 +750,13 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function grades()
     {
+        //ToDo : deprecated
         return $this->belongsToMany('App\Grade');
     }
 
     public function majors()
     {
+        //ToDo : deprecated
         return $this->belongsToMany('App\Major');
     }
 
@@ -727,6 +778,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function contentsets()
     {
+        //ToDo : deprecated
         return $this->belongsToMany("\App\Contentset", "contentset_educationalcontent", "edc_id", "contentset_id")
                     ->withPivot("order", "isDefault");
     }
