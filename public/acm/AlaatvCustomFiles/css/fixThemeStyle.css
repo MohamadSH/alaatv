@@ -32,3 +32,10 @@
 .alert[data-notify] .close {
     right: auto !important;
 }
+
+/*media query*/
+@media (max-width: 767.98px) {
+    .m-portlet__body {
+        padding: 5px !important;
+    }
+}

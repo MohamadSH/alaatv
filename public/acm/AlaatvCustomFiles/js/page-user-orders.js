@@ -41,7 +41,7 @@ $(document).ready(function () {
         $('.orderDetailes-completed_at').html(new persianDate(Date.parse(orders[index].completed_at)).format("dddd, DD MMMM YYYY"));
 
         $('.orderDetailes-orderPostingInfo').html((typeof orders[index].orderPostingInfo[0]!=='undefined')?orders[index].orderPostingInfo[0].postCode:'پست نشده');
-        // $('.orderDetailes-debt').html(orders[index].debt.toLocaleString('fa') + ' تومان ');
+        $('.orderDetailes-debt').html(orders[index].debt.toLocaleString('fa') + ' تومان ');
         let couponMessage = 'کپن ندارد';
         if (orders[index].couponInfo !== null) {
             couponMessage = orders[index].couponInfo.coupon.name + ' با ' + orders[index].couponInfo.discount.discount;
@@ -53,7 +53,8 @@ $(document).ready(function () {
             couponMessage += ' تخفیف ';
         }
         $('.orderDetailes-couponInfo').html(couponMessage);
-        $('.orderDetailes-addedBonSum').html(0);
+        $('.orderDetailes-usedBonSum').html(orders[index].usedBonSum);
+        $('.orderDetailes-addedBonSum').html(orders[index].addedBonSum);
 
         $('.orderDetailes-created_at').html(new persianDate(Date.parse(orders[index].created_at)).format("dddd, DD MMMM YYYY"));
 
@@ -191,4 +192,28 @@ $(document).ready(function () {
 
         $('#orderDetailesModal').modal('show');
     });
+
+
+    $(document).on('click', '.btnOnlinePayment', function () {
+        var orderId = $(this).data('order-id');
+        var transactionId = $(this).data('transaction-id');
+        var cost = $(this).data('cost');
+
+        $('#onlinePaymentModal input[type="hidden"][name="order_id"]').val(orderId);
+        $('#onlinePaymentModal input[type="hidden"][name="transaction_id"]').val(transactionId);
+        $('#onlinePaymentModal .orderCostReport').html(' مبلغ قابل پرداخت: ' + cost.toLocaleString('fa') + ' تومان ');
+
+        $('#onlinePaymentModal').modal('show');
+        // if ($(this).attr('data-role')) {
+        //     var transaction_id = $(this).data("role");
+        //     $("input[name=transaction_id]").val(transaction_id).prop("disabled", false);
+        //     $("#orderCost").text($("#instalmentCost_" + transaction_id).text()).number(true).prepend("مبلغ قابل پرداخت: ").append(" تومان");
+        // } else {
+        //     $("input[name=transaction_id]").prop("disabled", true);
+        //     $("#orderCost").text($("#cost_" + order_id).text()).number(true).prepend("مبلغ قابل پرداخت: ").append(" تومان");
+        // }
+        // $("input[name=order_id]").val(order_id);
+    });
+
+
 });
