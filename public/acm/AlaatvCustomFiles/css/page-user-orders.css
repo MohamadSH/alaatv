@@ -8,3 +8,6 @@
 .orderDetailes-orderprouctList .orderProductItemPrice {
     display: ruby;
 }
+#user-instalmentsList .onlinePayment {
+    width: 100px;
+}
