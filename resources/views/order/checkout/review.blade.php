@@ -163,7 +163,7 @@
                                                     @endif
                                                     {{ number_format($simpleOrderProductItem->price['customerPrice']+$simpleOrderProductItem->price['extraCost']) }} تومان
                                                     @if(($simpleOrderProductItem->price['bonDiscount']+$simpleOrderProductItem->price['productDiscount'])>0)
-                                                        <span class="m-badge m-badge--info a--productDiscount">{{ $simpleOrderProductItem->price['bonDiscount']+$simpleOrderProductItem->price['productDiscount'] }}%</span>
+                                                        <span class="m-badge m-badge--info a--productDiscount">{{ (1-($simpleOrderProductItem->price['customerPrice']/$simpleOrderProductItem->price['cost']))*100 }}%</span>
                                                     @endif
                                                 </span>
                                             </span>
@@ -406,13 +406,13 @@
                     </div>
                     <div class="m-alert__text text-center">
                         <strong>سبد خرید شما خالیست!</strong>
-
+                        <br>
                         <button onclick="window.location.href='{{action('Web\ProductController@search')}}';" type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
                             <i class="flaticon-bag"></i>
                             افزودن محصول به سبد
                         </button>
                     </div>
-                    <div class="m-alert__close">
+                    <div class="m-alert__close pull-left">
                         <button type="button" class="close" data-close="alert" aria-label="Hide">
                         </button>
                     </div>
