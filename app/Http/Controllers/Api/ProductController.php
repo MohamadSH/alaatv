@@ -46,6 +46,8 @@ class ProductController extends Controller
         $mainAttributeValues = $request->get("mainAttributeValues");
         $selectedSubProductIds = $request->get("products");
         $extraAttributeValues = $request->get("extraAttributeValues");
+
+        //TODO:// This is not true!
         $user = $request->user('api');
         if (!isset($user))
             $user = $request->user();

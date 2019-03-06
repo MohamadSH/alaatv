@@ -1072,7 +1072,7 @@ class OrderController extends Controller
      */
     public function submitCoupon(SubmitCouponRequest $request)
     {
-        $coupon = Coupon::code($request->coupon)->first();
+        $coupon = Coupon::code($request->get('code'))->first();
 
         if (isset($coupon)) {
             $order_id = $request->order_id;
@@ -1174,8 +1174,6 @@ class OrderController extends Controller
             $resultText = 'The code is wrong';
         }
 
-        $response = [];
-
         if ($resultCode == Response::HTTP_OK)
             $response = [
                 $coupon,
@@ -1215,7 +1213,7 @@ class OrderController extends Controller
                 }
             } else {
                 $resultCode = Response::HTTP_BAD_REQUEST;
-                $resultText = "No coupon found fot this order";
+                $resultText = "No coupon found for this order";
             }
         } else {
             $resultCode = Response::HTTP_BAD_REQUEST;
@@ -1243,43 +1241,69 @@ class OrderController extends Controller
         return redirect(action("Web\ProductController@search"));
     }
 
-    public function removeOrderproduct(Product $product, Request $request, OrderproductController $orderproductController)
+    public function removeOrderproduct(Request $request, Product $product , OrderproductController $orderproductController)
     {
-        $user = Auth::user();
+        $user = $request->user();
 
-        $openOrder = $user->openOrders()
-                          ->get()
-                          ->first();
-        //ToDo : if($openOrders->count()>1)
+        /** @var Order $openOrder */
+        $openOrder = $user->getOpenOrder();
 
         if (isset($openOrder)) {
-            $orderproduct = $openOrder->orderproducts->where("product_id", $product->id)
-                                                     ->first();
-            if (!isset($orderproduct))
-                return $this->response->setStatusCode(503)
-                                      ->setContent(["message" => "محصول مورد نظر در سبد وجود ندارد"]);
-            $orderproductController->destroy($orderproduct);
+            $orderproduct = $openOrder->orderproducts->where("product_id", $product->id)->first();
 
-            $newOpenOrder = $user->orders->where("id", $openOrder->id)
-                                         ->first();
+            if (isset($orderproduct))
+            {
+                try {
+                    $orderproductController->destroy($orderproduct);
+                } catch (\Exception $e) {
+                    return $this->response
+                                ->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)
+                                ->setContent([
+                                    "error"        => $e->getMessage(),
+                                    "line"         => $e->getLine(),
+                                    "file"         => $e->getFile(),
+                                ]);
+                }
 
-            $orderCost = $newOpenOrder->obtainOrderCost(true, false);
-            $newOpenOrder->cost = $orderCost["rawCostWithDiscount"];
-            $newOpenOrder->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
-            $updateFlag = $newOpenOrder->updateWithoutTimestamp();
-            $cost = $newOpenOrder->totalCost();
+                /** Has been commented for better performance in removing donate */
+//                $openOrder = $openOrder->fresh();
+//
+//                $orderCost                      = $openOrder->obtainOrderCost(true, false);
+//                $openOrder->cost                = $orderCost["rawCostWithDiscount"];
+//                $openOrder->costwithoutcoupon   = $orderCost["rawCostWithoutDiscount"];
+//                $updateFlag                     = $openOrder->updateWithoutTimestamp();
+//                $cost                           = $openOrder->totalCost();
 
-            if ($updateFlag) {
-                return $this->response->setStatusCode(200)
-                                      ->setContent(["cost" => $cost]);
-            } else {
-                return $this->response->setStatusCode(503)
-                                      ->setContent(["message" => "خطای پایگاه داده"]);
+                if (true) {
+                    $resultCode = Response::HTTP_OK;
+                    $resultText = 'Product removed successfully';
+                } else {
+                    $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
+                    $resultText = 'Database error on updating order';
+                }
+            }else{
+                $resultCode = Response::HTTP_BAD_REQUEST;
+                $resultText = 'No orderproducts found for passed product';
             }
+
+        }else{
+            $resultCode = Response::HTTP_BAD_REQUEST;
+            $resultText = 'No open order found';
         }
 
-        return $this->response->setStatusCode(503)
-                              ->setContent(["message" => "خطای غیر منتظره"]);
+        if ($resultCode == Response::HTTP_OK)
+            $response = [
+//                'cost'  => $cost ?? $cost,
+            ];
+        else
+            $response = [
+                'error' => [
+                    'code'    => $resultCode ?? $resultCode,
+                    'message' => $resultText ?? $resultText,
+                ],
+            ];
+
+        return response($response , Response::HTTP_OK);
 
     }
 
@@ -1554,13 +1578,14 @@ class OrderController extends Controller
     /**
      * Makes a donate request
      *
-     * @param Order                            $order
      * @param \App\Http\Requests\DonateRequest $request
+     * @param OrderproductController $orderproductController
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function donateOrder(DonateRequest $request)
+    public function donateOrder(DonateRequest $request , OrderproductController $orderproductController)
     {
         $amount = $request->get("amount");
-        $user = Auth::user();
+        $user = $request->user();
         $donateOrders = $user->orders->where("orderstatus_id", config("constants.ORDER_STATUS_OPEN_DONATE"));
         if ($donateOrders->isNotEmpty()) {
             $donateOrder = $donateOrders->first();
@@ -1576,10 +1601,18 @@ class OrderController extends Controller
         $request->offsetSet("mode", "donate");
         $request->offsetSet("cost", $amount);
         $product = Product::FindOrFail(Product::CUSTOM_DONATE_PRODUCT);
-        $response = $this->addOrderproduct($request, $product);
+        $response = $this->addOrderproduct($request, $product ,  $orderproductController);
         $responseStatus = $response->getStatusCode();
         $result = json_decode($response->getContent());
-        if ($responseStatus == 200) {
+
+        $donateOrder                    = $donateOrder->fresh();
+        $orderCost                      = $donateOrder->obtainOrderCost(true, false);
+        $donateOrder->cost              = $orderCost["rawCostWithDiscount"];
+        $donateOrder->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
+        $updateFlag                     = $donateOrder->updateWithoutTimestamp();
+        $cost                           = $donateOrder->totalCost();
+
+        if ($responseStatus == Response::HTTP_OK) {
             if (isset($result->cost))
                 $cost = $result->cost;
             if (isset($cost)) {
@@ -1598,15 +1631,18 @@ class OrderController extends Controller
 
     }
 
-    public function addOrderproduct(Request $request, Product $product)
+    /**
+     * Adds a product to intended order
+     *
+     * @param Request $request
+     * @param Product $product
+     * @param OrderproductController $orderproductController
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|Response
+     */
+    public function addOrderproduct(Request $request, Product $product , OrderproductController $orderproductController)
     {
         try {
-            if ($request->has("userId_bhrk")) {
-                $userId = $request->get("userId_bhrk");
-                $forceUser = true;
-            } else {
-                $user = Auth::user();
-            }
+            $user =$request->user();
             if ($request->has("cost"))
                 $cost = $request->get("cost");
 
@@ -1614,29 +1650,16 @@ class OrderController extends Controller
             if ($request->has("mode"))
                 $orderMode = $request->get("mode");
 
-            $forceStore = false;
             switch ($orderMode) {
                 case "normal":
-                    $openOrder = $user->openOrders()
-                                      ->get()
-                                      ->first();
+                    $openOrder = $user->getOpenOrder();
                     break;
                 case "donate":
                     $openOrder = Order::where("user_id", $user->id)
                                       ->where("orderstatus_id", config()->get("constants.ORDER_STATUS_OPEN_DONATE"))
                                       ->first();
-                    // chon order taze sakhte shode in code order ro peida nemikonad va user->fresh ham kar nemikone
-                    //                    $openOrder = $user->orders
-                    //                        ->where("orderstatus_id" , config()->get("constants.ORDER_STATUS_OPEN_DONATE"))
-                    //                        ->first();
                     break;
                 default:
-                    if ($request->has("orderId_bhrk")) {
-                        $orderId = $request->get("orderId_bhrk");
-                        $openOrder = Order::where("id", $orderId)
-                                          ->first();
-                        $forceStore = true;
-                    }
                     break;
             }
 
@@ -1654,211 +1677,55 @@ class OrderController extends Controller
                     if ($oldOrderproduct->isNotEmpty()) {
                         $deletedOrderproduct = $oldOrderproduct->first();
                         $deletedOrderproduct->restore();
+                        $resultCode = Response::HTTP_OK;
+                        $resultText = 'An old Orderproduct with the same data restored successfully';
                         $createFlag = false;
                     }
                 }
 
                 if ($createFlag) {
-                    $request = new Request();
-                    $request->offsetSet("product_id", $product->id);
-                    $request->offsetSet("order_id", $openOrder->id);
-                    if ($forceStore)
-                        $request->offsetSet("forceStore_bhrk", true);
-                    if (isset($cost))
-                        $request->offsetSet("cost_bhrk", $cost);
+                    $data = [];
+                    $data['product_id'] = $product->id;
+                    $data['order_id']   = $openOrder->id;
+                    if(isset($cost))
+                        $data['cost']  = $cost;
+                    $data['withoutBon'] = true;
+                    $result = $orderproductController->new($data);
 
-                    if (isset($forceUser))
-                        $request->offsetSet("userId_bhrk", $userId);
-                    $request->offsetSet("withoutBon", true);
-                    $orderproductController = new OrderproductController();
-                    $orderproductController->store($request);
+                    if($result['status'])
+                    {
+                        $resultCode = Response::HTTP_OK;
+                        $resultText = 'Orderproduct added successfully';
+                    }else{
+                        $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
+                        $resultText = $result['message'];
+                    }
                 }
 
-                $openOrder = $openOrder->fresh();
-                $orderCost = $openOrder->obtainOrderCost(true, false);
-                $openOrder->cost = $orderCost["rawCostWithDiscount"];
-                $openOrder->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
-                $updateFlag = $openOrder->updateWithoutTimestamp();
-                $cost = $openOrder->totalCost();
-
-                if ($updateFlag)
-                    return $this->response
-                        ->setStatusCode(200)
-                        ->setContent(["cost" => $cost]);
-                else
-                    return $this->response
-                        ->setStatusCode(503)
-                        ->setContent(["errorMessage" => "could not update order"]);
+            }else{
+                $resultCode = Response::HTTP_BAD_REQUEST;
+                $resultText = 'No open order found';
             }
-            return $this->response
-                ->setStatusCode(503)
-                ->setContent(["errorMessage" => "cound not find order"]);
+
+            if ($resultCode == Response::HTTP_OK)
+                $response = [];
+            else
+                $response = [
+                    'error' => [
+                        'code'    => $resultCode ?? $resultCode,
+                        'message' => $resultText ?? $resultText,
+                    ],
+                ];
+
+            return response($response , Response::HTTP_OK);
+
         } catch (\Exception    $e) {
-            $message = "unexpected error";
             return $this->response
-                ->setStatusCode(500)
+                ->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)
                 ->setContent([
-                    "errorMessage" => $message,
                     "error"        => $e->getMessage(),
                     "line"         => $e->getLine(),
                     "file"         => $e->getFile(),
-                ]);
-        }
-    }
-
-    public function addToArabiHozouri(Request $request)
-    { //Adding user to Hamayesh Houzori Arabi 27 Khordad
-        try {
-            $user = Auth::user();
-            $done = false;
-            $hamayeshHozouriProductId = 223;
-            $hamayeshTalaiProductId = [
-                210,
-                211,
-                212,
-                213,
-                214,
-                215,
-                216,
-                217,
-                218,
-                219,
-                220,
-                221,
-                222,
-            ];
-            $hamayeshTalai = $user->orders()
-                                  ->whereHas("orderproducts", function ($q) use ($hamayeshTalaiProductId) {
-                                      $q->whereIn("product_id", $hamayeshTalaiProductId);
-                                  })
-                                  ->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
-                                  ->where("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"))
-                                  ->first();
-
-            if (!isset($hamayeshTalai))
-                return $this->response
-                    ->setStatusCode(503)
-                    ->setContent([
-                        "message" => "شما همایش طلایی عربی ندارد",
-                    ]);
-
-            $hozouriOrders = $user->orders()
-                                  ->whereHas("orderproducts", function ($q) use ($hamayeshHozouriProductId) {
-                                      $q->where("product_id", $hamayeshHozouriProductId);
-                                  })
-                                  ->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
-                                  ->where("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"));
-            if ($hozouriOrders->get()
-                              ->isNotEmpty()) {
-                return $this->response
-                    ->setStatusCode(503)
-                    ->setContent(["message" => "شما قبلا در همایش حضوری ثبت نام کرده اید"]);
-            } else {
-                $withTrashedOrders = $hozouriOrders->withTrashed()
-                                                   ->get();
-                if ($withTrashedOrders->isNotEmpty()) {
-                    $deletedOrder = $withTrashedOrders->first();
-                    $restoreResult = $deletedOrder->restore();
-                    if ($restoreResult) {
-                        $done = true;
-                    } else {
-                        $done = false;
-                    }
-                } else {
-                    $hozouriOrder = new Order();
-                    $hozouriOrder->orderstatus_id = config("constants.ORDER_STATUS_CLOSED");
-                    $hozouriOrder->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID");
-                    $hozouriOrder->cost = 0;
-                    $hozouriOrder->costwithoutcoupon = 0;
-                    $hozouriOrder->user_id = $user->id;
-                    $hozouriOrder->completed_at = Carbon::now()
-                                                        ->setTimezone("Asia/Tehran");
-                    if ($hozouriOrder->save()) {
-                        $request->offsetSet("cost", 0);
-                        $request->offsetSet("orderId_bhrk", $hozouriOrder->id);
-                        $product = Product::where("id", $hamayeshHozouriProductId)
-                                          ->first();
-                        if (isset($product)) {
-                            $response = $this->addOrderproduct($request, $product);
-                            $responseStatus = $response->getStatusCode();
-                            $result = json_decode($response->getContent());
-                            if ($responseStatus == 200) {
-                                $done = true;
-                            } else {
-                                $done = false;
-                            }
-                        } else {
-                            $done = false;
-                        }
-                    } else {
-                        $done = false;
-                    }
-                }
-            }
-
-            if ($done) {
-                return $this->response->setStatusCode(200);
-            } else {
-                return $this->response->setStatusCode(503);
-            }
-        } catch (\Exception    $e) {
-            $message = "unexpected error";
-            return $this->response
-                ->setStatusCode(503)
-                ->setContent([
-                    "message" => $message,
-                    "error"   => $e->getMessage(),
-                    "line"    => $e->getLine(),
-                    "file"    => $e->getFile(),
-                ]);
-        }
-    }
-
-    public function removeArabiHozouri(Request $request)
-    { //Adding user to Hamayesh Houzori Arabi 27 Khordad
-        try {
-            $user = Auth::user();
-            $done = false;
-            $hamayeshHozouriProductId = 223;
-
-            $hozouriOrders = $user->orders()
-                                  ->whereHas("orderproducts", function ($q) use ($hamayeshHozouriProductId) {
-                                      $q->where("product_id", $hamayeshHozouriProductId);
-                                  })
-                                  ->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
-                                  ->where("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"))
-                                  ->get();
-            if ($hozouriOrders->isNotEmpty()) {
-                $done = true;
-                foreach ($hozouriOrders as $hozouriOrder) {
-                    $removeResult = $hozouriOrder->delete();
-                    if (!$removeResult) {
-                        $done = false;
-                        break;
-                    }
-                }
-
-            } else {
-                return $this->response
-                    ->setStatusCode(503)
-                    ->setContent(["message" => "شما در همایش ثبت نام نکرده اید"]);
-            }
-
-
-            if ($done) {
-                return $this->response->setStatusCode(200);
-            } else {
-                return $this->response->setStatusCode(503);
-            }
-        } catch (\Exception    $e) {
-            $message = "unexpected error";
-            return $this->response
-                ->setStatusCode(503)
-                ->setContent([
-                    "message" => $message,
-                    "error"   => $e->getMessage(),
-                    "line"    => $e->getLine(),
-                    "file"    => $e->getFile(),
                 ]);
         }
     }

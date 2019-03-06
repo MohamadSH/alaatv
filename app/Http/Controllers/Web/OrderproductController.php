@@ -181,7 +181,8 @@ class OrderproductController extends Controller
             }
         }
 
-        $orderproducts = $this->new($request->all());
+        $result = $this->new($request->all());
+        $orderproducts = $result['data']['storedOrderproducts'];
 
         return $this->response->setStatusCode(Response::HTTP_OK)->setContent([
             'orderproducts' => $orderproducts,
@@ -463,9 +464,9 @@ class OrderproductController extends Controller
      *
      * @param array $data
      *
-     * @return OrderproductCollection
+     * @return array
      */
-    public function new(array $data): OrderproductCollection
+    public function new(array $data): array
     {
         $report = [
             'status' => true,
@@ -498,7 +499,9 @@ class OrderproductController extends Controller
             $product = Product::FindorFail($productId);
         } catch (ModelNotFoundException $e) {
             report($e);
-            return new OrderproductCollection();
+            $report['status'] = false;
+            $report['message'][] = 'Unknown order or product';
+            return $report;
         }
         $user = $order->user;
 
@@ -510,11 +513,11 @@ class OrderproductController extends Controller
 
         if(count($simpleProducts)!=0 && count($notDuplicateProduct)==0) {
             $report['status'] = false;
-            $report['message'][] = 'کالای انتخاب شده پیش از این ثبت شده است.';
+            $report['message'][] = 'This product has been added to order before';
             $report['data']['products'] = $simpleProducts;
         } else if (count($simpleProducts)==0) {
             $report['status'] = false;
-            $report['message'][] = 'کالایی برای ثبت انتخاب نشده است.';
+            $report['message'][] = 'No products has been selected';
             $report['data']['products'] = $simpleProducts;
         }
 
@@ -527,6 +530,8 @@ class OrderproductController extends Controller
             $orderProduct->product_id = $productItem->id;
             $orderProduct->order_id = $order->id;
             $orderProduct->orderproducttype_id = config("constants.ORDER_PRODUCT_TYPE_DEFAULT");
+            if(isset($data['cost']))
+                $orderProduct->cost = $data['cost'];
             if ($orderProduct->save()) {
 
                 $productItem->decreaseProductAmountWithValue(1);
@@ -547,7 +552,7 @@ class OrderproductController extends Controller
 
         $report['data']['storedOrderproducts'] = $storedOrderproducts;
 
-        return $storedOrderproducts;
+        return $report;
     }
 
     /**

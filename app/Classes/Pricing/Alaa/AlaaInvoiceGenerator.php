@@ -41,13 +41,7 @@ class AlaaInvoiceGenerator
 
         $orderProductCount = $this->orderproductFormatter($calculatedOrderproducts);
 
-        return [
-          'items'                   => $calculatedOrderproducts,
-          'orderproductCount'       => $orderProductCount ,
-          'orderproductsRawCost'    => $orderproductsRawCost,
-          'totalCost'               => $totalCost,
-          'payableByWallet'         => $payableByWallet,
-        ];
+        return $this->invoiceFormatter($calculatedOrderproducts, $orderProductCount, $orderproductsRawCost, $totalCost, $payableByWallet);
     }
 
     /**
@@ -60,13 +54,7 @@ class AlaaInvoiceGenerator
 
         $orderProductCount = $this->orderproductFormatter($fakeOrderproducts);
 
-       return [
-            'items'          => $fakeOrderproducts,
-            'orderproductCount'      => $orderProductCount ,
-            'orderproductsRawCost'   => $groupPriceInfo['rawCost'],
-            'totalCost'              => $groupPriceInfo['customerCost'],
-            'payableByWallet'        => 0 ,
-        ];
+        return $this->invoiceFormatter($fakeOrderproducts, $orderProductCount, $groupPriceInfo['rawCost'], $groupPriceInfo['customerCost'], 0);
     }
 
     /**
@@ -109,6 +97,16 @@ class AlaaInvoiceGenerator
         $orderproducts = $orderproducts->setNewPrices($newPrices);
 
         return $orderProductCount;
+    }
+
+    private function invoiceFormatter($orderproducts , $orderproductCount , $orderproductsRawCost ,  $totalCost , $payableByWallet){
+            return [
+                'items'                   => $orderproducts,
+                'orderproductCount'       => $orderproductCount ,
+                'orderproductsRawCost'    => $orderproductsRawCost,
+                'totalCost'               => $totalCost,
+                'payableByWallet'         => $payableByWallet,
+            ];
     }
 
 }

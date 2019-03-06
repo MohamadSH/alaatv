@@ -1,0 +1,43 @@
+.a--owl-carousel-type-1 .owl-prev {
+    right: 0;
+    background: linear-gradient(270deg, rgba(47, 47, 47, 0.6) 0%, rgba(100, 94, 111, 0.5) 40%, rgba(216, 195, 255, 0) 100%) !important;
+}
+
+.a--owl-carousel-type-1 .owl-next {
+    left: 0;
+    background: linear-gradient(90deg, rgba(47, 47, 47, 0.6) 0%, rgba(100, 94, 111, 0.5) 40%, rgba(216, 195, 255, 0) 100%) !important;
+}
+
+.a--owl-carousel-type-1 .owl-prev.disabled,
+.a--owl-carousel-type-1 .owl-next.disabled {
+    display: none;
+}
+
+.a--owl-carousel-type-1 .owl-prev,
+.a--owl-carousel-type-1 .owl-next {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 40px;
+    margin: 0 !important;
+    color: white !important;
+    transition-property: width;
+    transition-duration: 0.5s;
+}
+
+.a--owl-carousel-type-1 .owl-prev:hover,
+.a--owl-carousel-type-1 .owl-next:hover {
+    width: 70px;
+}
+
+.a--owl-carousel-type-1 .a--owlCarouselLoading {
+    height: 100px;
+    width: 100px;
+    background: white;
+    border-radius: 50%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}

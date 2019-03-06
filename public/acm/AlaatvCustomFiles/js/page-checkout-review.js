@@ -1,4 +1,10 @@
 $(document).ready(function () {
+
+    if ($('#js-var-userId').val()) {
+        $('.Step-warper').fadeIn();
+    }
+
+
     $('.a--userCartList .m-portlet__head').sticky({
         topSpacing: $('#m_header').height(),
         zIndex: 99
@@ -21,7 +27,6 @@ $(document).ready(function () {
             $.ajax({
                 type: 'DELETE',
                 url: $(this).data('action'),
-                data: {_token: "{{ csrf_token() }}"},
                 statusCode: {
                     //The status for when action was successful
                     200: function (response) {
@@ -38,8 +43,8 @@ $(document).ready(function () {
                     },
                     //Method Not Allowed
                     405: function (response) {
-//                        console.log(response);
-//                        console.log(response.responseText);
+                       // console.log(response);
+                       // console.log(response.responseText);
                         location.reload();
                     },
                     404: function (response) {
@@ -66,19 +71,7 @@ $(document).ready(function () {
                 'simpleProductId': $(this).data('productid')
             };
             UesrCart.removeFromCartInCookie(data);
-            // location.reload();
-            let gg = [
-                {
-                "product_id": "240",
-                "attribute": ["49"],
-                "extraAttribute": [],
-                "products": ["220", "258"]
-            }, {
-                "product_id": "272",
-                    "attribute": ["49"],
-                    "extraAttribute": [],
-                    "products": ["273", "274"]}
-            ];
+            location.reload();
         }
     });
 });

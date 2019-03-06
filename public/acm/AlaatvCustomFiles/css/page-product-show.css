@@ -34,10 +34,6 @@
 
 /*media query*/
 @media (max-width: 767.98px) {
-    .m-portlet__body {
-        padding: 5px !important;
-    }
-
     .m-demo__preview {
         padding: 0px !important;
     }

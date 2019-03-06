@@ -8,6 +8,7 @@ use App\{Attribute,
     Bon,
     Classes\Search\ProductSearch,
     Classes\SEO\SeoDummyTags,
+    Collection\ProductCollection,
     Http\Requests\AddComplimentaryProductRequest,
     Http\Requests\EditProductRequest,
     Http\Requests\InsertProductRequest,
@@ -26,7 +27,7 @@ use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Foundation\Http\{FormRequest};
 use Illuminate\Http\{Request, Response};
-use Illuminate\Support\{Facades\File, Facades\Input, Facades\Storage};
+use Illuminate\Support\{Facades\Cache, Facades\File, Facades\Input, Facades\Storage};
 use SEO;
 
 class ProductController extends Controller
@@ -1302,5 +1303,4 @@ class ProductController extends Controller
                                   ->setContent(["message" => "خطا در کپی از اطلاعات پایه ای محصول . لطفا دوباره اقدام نمایید"]);
         }
     }
-
 }

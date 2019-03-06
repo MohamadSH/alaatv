@@ -2,6 +2,8 @@ var CheckoutPaymentUi = function () {
 
     let totalCost = $('#invoiceInfo-totalCost').val();
     let couponCode = $('#invoiceInfo-couponCode').val();
+    var lockDonateAjax = false;
+    var lockCouponAjax = false;
 
     function refreshUiBasedOnPaymentType() {
         let selectedObject = $('input[type="radio"][name="radioPaymentType"]:checked');
@@ -30,12 +32,14 @@ var CheckoutPaymentUi = function () {
     }
 
     function donate() {
+        $("#hasntDonate").bootstrapSwitch('state', false);
         $('.face-sad').fadeOut(0);
         $('.face-happy').fadeIn(0);
         $('.visibleInDonate').css({'visibility': 'visible'});
     }
 
     function dontdonate() {
+        $("#hasntDonate").bootstrapSwitch('state', true);
         $('.face-sad').fadeIn(0);
         $('.face-happy').fadeOut(0);
         $('.visibleInDonate').css({'visibility': 'hidden'});
@@ -53,61 +57,110 @@ var CheckoutPaymentUi = function () {
     function refreshUiBasedOnDonateStatus(donateValue) {
         if (getDonateStatus()) {
             donate();
+            if (lockDonateAjax) {
+                return false;
+            }
+            mApp.block('.addDonateWarper', {
+                type: 'loader',
+                state: 'info',
+            });
+            $.ajax({
+                type: 'POST',
+                url: $('#addDonateUrl').val(),
+                data: {
+                    mode: 'normal'
+                },
+                success: function (data) {
+                    lockDonateAjax = true;
+                    if (data.error) {
+                        if(data.error.code === 503) {
+                            donate();
+                        } else {
+                            dontdonate();
+                            donateValue = 0;
+                            $.notify('مشکلی رخ داده است. مجدد سعی کنید.', {
+                                type: 'warning',
+                                allow_dismiss: true,
+                                newest_on_top: false,
+                                mouse_over: false,
+                                showProgressbar: false,
+                                spacing: 10,
+                                timer: 2000,
+                                placement: {
+                                    from: 'top',
+                                    align: 'center'
+                                },
+                                offset: {
+                                    x: 30,
+                                    y: 30
+                                },
+                                delay: 1000,
+                                z_index: 10000,
+                                animate: {
+                                    enter: "animated flip",
+                                    exit: "animated hinge"
+                                }
+                            });
+                        }
+                    } else {
+                        donate();
+                    }
+                    mApp.unblock('.addDonateWarper');
+                    lockDonateAjax = false;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    lockDonateAjax = true;
+                    dontdonate();
+                    donateValue = 0;
+                    $.notify('مشکلی رخ داده است. مجدد سعی کنید.', {
+                        type: 'warning',
+                        allow_dismiss: true,
+                        newest_on_top: false,
+                        mouse_over: false,
+                        showProgressbar: false,
+                        spacing: 10,
+                        timer: 2000,
+                        placement: {
+                            from: 'top',
+                            align: 'center'
+                        },
+                        offset: {
+                            x: 30,
+                            y: 30
+                        },
+                        delay: 1000,
+                        z_index: 10000,
+                        animate: {
+                            enter: "animated flip",
+                            exit: "animated hinge"
+                        }
+                    });
+                    mApp.unblock('.addDonateWarper');
+                    lockDonateAjax = false;
+                }
+            });
         } else {
             dontdonate();
             donateValue = 0;
-        }
-        let calcTotalCost = parseInt(totalCost) + (parseInt(donateValue) * 1000);
-        $('.finalPriceValue').html(calcTotalCost.toLocaleString('fa'));
-    }
-    function setUiHasDiscountCode() {
-        // $('.discountCodeValueWarper').fadeIn();
-        $('.discountCodeValueWarperCover').fadeOut();
-        $('#discountCodeValue').prop('disabled', false);
-        $('#btnSaveDiscountCodeValue').prop('disabled', false);
-        $('#discountCodeValue').prop('readonly', false);
-        $('#btnSaveDiscountCodeValue').prop('readonly', false);
-    }
-    function setUiHasntDiscountCode() {
-        // $('.discountCodeValueWarper').fadeOut();
-        $('.discountCodeValueWarperCover').fadeIn();
-        $('#discountCodeValue').prop('disabled', true);
-        $('#btnSaveDiscountCodeValue').prop('disabled', true);
-        $('#discountCodeValue').prop('readonly', true);
-        $('#btnSaveDiscountCodeValue').prop('readonly', true);
-    }
-    function refreshUiBasedOnHasntDiscountCodeStatus() {
-        $('#discountCodeValue').val(couponCode);
-        if(!$('#hasntDiscountCode').prop('checked')) {
-            setUiHasDiscountCode();
-        } else {
-            setUiHasntDiscountCode();
-            detachCoupon(false);
-        }
-    }
-
-    function attachCoupon() {
-        mApp.block('.discountCodeValueWarper', {
-            type: 'loader',
-            state: 'info',
-        });
-        $.ajax({
-            type: 'POST',
-            url: $('#OrderController-submitCoupon').val(),
-            data: {
-                coupon: $('#discountCodeValue').val()
-            },
-            statusCode: {
-                //The status for when action was successful
-                200: function (response) {
-
-                    if (response.error) {
-
-                        $('#btnRemoveDiscountCodeValue').fadeOut(0);
-                        $('#btnSaveDiscountCodeValue').fadeIn();
-
-                        $.notify(response.message, {
-                            type: 'danger',
+            if (lockDonateAjax) {
+                return false;
+            }
+            mApp.block('.addDonateWarper', {
+                type: 'loader',
+                state: 'info',
+            });
+            $.ajax({
+                type: 'DELETE',
+                url: $('#removeDonateUrl').val(),
+                data: {
+                    mode: 'normal'
+                },
+                success: function (data) {
+                    lockDonateAjax = true;
+                    if (data.error) {
+                        donate();
+                        $.notify('مشکلی رخ داده است. مجدد سعی کنید.', {
+                            type: 'warning',
                             allow_dismiss: true,
                             newest_on_top: false,
                             mouse_over: false,
@@ -130,26 +183,294 @@ var CheckoutPaymentUi = function () {
                             }
                         });
                     } else {
-                        console.log('submitCoupon: ' + response[0].name);
-
-                        $('.couponReportWarper').fadeIn();
-                        let couponReport = ' کپن تخفیف ' +
-                            '<strong>' + response[0].name + '</strong>' +
-                            '(' + response[0].code + ')' +
-                            ' با ' +
-                            response[0].discount;
-
-                        if ( response[0].discountType.name === 'percentage') {
-                            couponReport += '% تخفیف برای سفارش شما ثبت شده است.';
-                        } else if ( response[0].discountType.name === 'cost') {
-                            couponReport += ' تومان تخفیف برای سفارش شما ثبت شد. ';
+                        dontdonate();
+                        donateValue = 0;
+                    }
+                    mApp.unblock('.addDonateWarper');
+                    lockDonateAjax = false;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    lockDonateAjax = true;
+                    donate();
+                    $.notify('مشکلی رخ داده است. مجدد سعی کنید.', {
+                        type: 'warning',
+                        allow_dismiss: true,
+                        newest_on_top: false,
+                        mouse_over: false,
+                        showProgressbar: false,
+                        spacing: 10,
+                        timer: 2000,
+                        placement: {
+                            from: 'top',
+                            align: 'center'
+                        },
+                        offset: {
+                            x: 30,
+                            y: 30
+                        },
+                        delay: 1000,
+                        z_index: 10000,
+                        animate: {
+                            enter: "animated flip",
+                            exit: "animated hinge"
                         }
-                        $('.couponReport').html(couponReport);
+                    });
+                    mApp.unblock('.addDonateWarper');
+                    lockDonateAjax = false;
+                }
+            });
+        }
+        let calcTotalCost = parseInt(totalCost) + (parseInt(donateValue) * 1000);
+        $('.finalPriceValue').html(calcTotalCost.toLocaleString('fa'));
+    }
+    function setUiHasDiscountCode() {
+        // $('.discountCodeValueWarper').fadeIn();
+        $('.discountCodeValueWarperCover').fadeOut();
+        let discountCodeValue = $('#discountCodeValue');
+        let btnSaveDiscountCodeValue = $('#btnSaveDiscountCodeValue');
+        discountCodeValue.prop('disabled', false);
+        btnSaveDiscountCodeValue.prop('disabled', false);
+        discountCodeValue.prop('readonly', false);
+        btnSaveDiscountCodeValue.prop('readonly', false);
+    }
+    function setUiHasntDiscountCode() {
+        // $('.discountCodeValueWarper').fadeOut();
+        $('.discountCodeValueWarperCover').fadeIn();
+        let discountCodeValue = $('#discountCodeValue');
+        let btnSaveDiscountCodeValue = $('#btnSaveDiscountCodeValue');
+        discountCodeValue.prop('disabled', true);
+        btnSaveDiscountCodeValue.prop('disabled', true);
+        discountCodeValue.prop('readonly', true);
+        btnSaveDiscountCodeValue.prop('readonly', true);
+    }
+    function refreshUiBasedOnHasntDiscountCodeStatus() {
+        $('#discountCodeValue').val(couponCode);
+        if(!$('#hasntDiscountCode').prop('checked')) {
+            setUiHasDiscountCode();
+        } else {
+            setUiHasntDiscountCode();
+            detachCoupon(false);
+        }
+    }
 
+    function attachCoupon() {
+
+        let discountCodeValue = $('#discountCodeValue').val();
+        if (discountCodeValue.trim().length === 0) {
+
+            $.notify('مقداری برای کد تخفیف وارد نشده است.', {
+                type: 'warning',
+                allow_dismiss: true,
+                newest_on_top: false,
+                mouse_over: false,
+                showProgressbar: false,
+                spacing: 10,
+                timer: 2000,
+                placement: {
+                    from: 'top',
+                    align: 'center'
+                },
+                offset: {
+                    x: 30,
+                    y: 30
+                },
+                delay: 1000,
+                z_index: 10000,
+                animate: {
+                    enter: "animated flip",
+                    exit: "animated hinge"
+                }
+            });
+            return false;
+        }
+
+        if (lockCouponAjax) {
+            return false;
+        }
+
+        mApp.block('.discountCodeValueWarper', {
+            type: 'loader',
+            state: 'info',
+        });
+        $.ajax({
+            type: 'POST',
+            url: $('#OrderController-submitCoupon').val(),
+            data: {
+                code: discountCodeValue
+            },
+            success: function (data) {
+                if (data.error) {
+
+                    $('#btnRemoveDiscountCodeValue').fadeOut(0);
+                    $('#btnSaveDiscountCodeValue').fadeIn();
+
+                    // let message = data.error.message;
+                    let message = 'کد وارد شده معتبر نیست.';
+                    $.notify(message, {
+                        type: 'danger',
+                        allow_dismiss: true,
+                        newest_on_top: false,
+                        mouse_over: false,
+                        showProgressbar: false,
+                        spacing: 10,
+                        timer: 2000,
+                        placement: {
+                            from: 'top',
+                            align: 'center'
+                        },
+                        offset: {
+                            x: 30,
+                            y: 30
+                        },
+                        delay: 1000,
+                        z_index: 10000,
+                        animate: {
+                            enter: "animated flip",
+                            exit: "animated hinge"
+                        }
+                    });
+                } else {
+
+                    $('.couponReportWarper').fadeIn();
+                    let couponReport = ' کپن تخفیف ' +
+                        ' <strong>' + data[0].name + '</strong> ' +
+                        ' (' + data[0].code + ') ' +
+                        ' با ' +
+                        data[0].discount;
+
+                    if ( data[0].discountType.name === 'percentage') {
+                        couponReport += '% تخفیف برای سفارش شما ثبت شده است.';
+                    } else if ( data[0].discountType.name === 'cost') {
+                        couponReport += ' تومان تخفیف برای سفارش شما ثبت شد. ';
+                    }
+                    $('.couponReport').html(couponReport);
+
+                    $('#btnSaveDiscountCodeValue').fadeOut(0);
+                    $('#btnRemoveDiscountCodeValue').fadeIn();
+
+                    $.notify('کد تخفیف شما ثبت شد.', {
+                        type: 'success',
+                        allow_dismiss: true,
+                        newest_on_top: false,
+                        mouse_over: false,
+                        showProgressbar: false,
+                        spacing: 10,
+                        timer: 2000,
+                        placement: {
+                            from: 'top',
+                            align: 'center'
+                        },
+                        offset: {
+                            x: 30,
+                            y: 30
+                        },
+                        delay: 1000,
+                        z_index: 10000,
+                        animate: {
+                            enter: "animated flip",
+                            exit: "animated hinge"
+                        }
+                    });
+                }
+                mApp.unblock('.discountCodeValueWarper');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                let statusCode = jqXHR.status;
+                // console.log('statusCode: ', statusCode);
+                // console.log('jqXHR: ', jqXHR);
+                // console.log('textStatus: ', textStatus);
+                // console.log('errorThrown: ', errorThrown);
+
+                let message = '';
+
+                if(statusCode==500) {
+                    message = 'خطایی رخ داده است.';
+                } else {
+                    message = 'کد وارد شده معتبر نیست';
+                }
+
+                $.notify(message, {
+                    type: 'warning',
+                    allow_dismiss: true,
+                    newest_on_top: false,
+                    mouse_over: false,
+                    showProgressbar: false,
+                    spacing: 10,
+                    timer: 2000,
+                    placement: {
+                        from: 'top',
+                        align: 'center'
+                    },
+                    offset: {
+                        x: 30,
+                        y: 30
+                    },
+                    delay: 1000,
+                    z_index: 10000,
+                    animate: {
+                        enter: "animated flip",
+                        exit: "animated hinge"
+                    }
+                });
+                mApp.unblock('.discountCodeValueWarper');
+
+            }
+        });
+    }
+
+    function detachCoupon(showMessage) {
+
+        if (lockCouponAjax) {
+            return false;
+        }
+
+        mApp.block('.discountCodeValueWarper', {
+            type: 'loader',
+            state: 'info',
+        });
+        $.ajax({
+            type: 'GET',
+            url: $('#OrderController-removeCoupon').val(),
+            data: {},
+            success: function (data) {
+                if (data.error) {
+                    if (showMessage === true) {
+                        // let message = response.error.message;
+                        let message = 'مشکلی در حذف کد تخفیف رخ داده است.';
+                        $.notify(message, {
+                            type: 'danger',
+                            allow_dismiss: true,
+                            newest_on_top: false,
+                            mouse_over: false,
+                            showProgressbar: false,
+                            spacing: 10,
+                            timer: 2000,
+                            placement: {
+                                from: 'top',
+                                align: 'center'
+                            },
+                            offset: {
+                                x: 30,
+                                y: 30
+                            },
+                            delay: 1000,
+                            z_index: 10000,
+                            animate: {
+                                enter: "animated flip",
+                                exit: "animated hinge"
+                            }
+                        });
                         $('#btnSaveDiscountCodeValue').fadeOut(0);
                         $('#btnRemoveDiscountCodeValue').fadeIn();
+                    }
+                } else {
+                    $('.couponReportWarper').fadeOut();
+                    $('#btnRemoveDiscountCodeValue').fadeOut(0);
+                    $('#btnSaveDiscountCodeValue').fadeIn();
+                    $('#discountCodeValue').val('');
 
-                        $.notify('کد تخفیف شما ثبت شد.', {
+                    if (showMessage === true) {
+                        $.notify('کد تخفیف شما حذف شد.', {
                             type: 'success',
                             allow_dismiss: true,
                             newest_on_top: false,
@@ -173,157 +494,24 @@ var CheckoutPaymentUi = function () {
                             }
                         });
                     }
-                    mApp.unblock('.discountCodeValueWarper');
-                },
-                //The status for when the user is not authorized for making the request
-                403: function (response) {
-                    window.location.replace("/403");
-                },
-                //The status for when the user is not authorized for making the request
-                401: function (response) {
-                    window.location.replace("/403");
-                },
-                //Method Not Allowed
-                405: function (response) {
-                    location.reload();
-                },
-                404: function (response) {
-                    window.location.replace("/404");
-                },
-                //The status for when form data is not valid
-                422: function (response) {
-                    // console.log(response);
-                },
-                //The status for when there is error php code
-                500: function (response) {
-                    // console.log(response.responseText);
-                },
-                //The status for when there is error php code
-                503: function (response) {
-                    // toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
                 }
-            }
-        });
-    }
-
-    function detachCoupon(showMessage) {
-        mApp.block('.discountCodeValueWarper', {
-            type: 'loader',
-            state: 'info',
-        });
-        $.ajax({
-            type: 'GET',
-            url: $('#OrderController-removeCoupon').val(),
-            data: {
-                coupon: $('#discountCodeValue').val()
+                mApp.unblock('.discountCodeValueWarper');
             },
-            statusCode: {
-                //The status for when action was successful
-                200: function (response) {
-                    if (response.error) {
-
-                        if (showMessage === true) {
-                            $.notify(response.error.message, {
-                                type: 'danger',
-                                allow_dismiss: true,
-                                newest_on_top: false,
-                                mouse_over: false,
-                                showProgressbar: false,
-                                spacing: 10,
-                                timer: 2000,
-                                placement: {
-                                    from: 'top',
-                                    align: 'center'
-                                },
-                                offset: {
-                                    x: 30,
-                                    y: 30
-                                },
-                                delay: 1000,
-                                z_index: 10000,
-                                animate: {
-                                    enter: "animated flip",
-                                    exit: "animated hinge"
-                                }
-                            });
-                            $('#btnSaveDiscountCodeValue').fadeOut(0);
-                            $('#btnRemoveDiscountCodeValue').fadeIn();
-                        }
-
-                    } else {
-
-                        $('.couponReportWarper').fadeOut();
-                        $('#btnRemoveDiscountCodeValue').fadeOut(0);
-                        $('#btnSaveDiscountCodeValue').fadeIn();
-                        $('#discountCodeValue').val('');
-
-                        if (showMessage === true) {
-                            $.notify('کد تخفیف شما حذف شد.', {
-                                type: 'success',
-                                allow_dismiss: true,
-                                newest_on_top: false,
-                                mouse_over: false,
-                                showProgressbar: false,
-                                spacing: 10,
-                                timer: 2000,
-                                placement: {
-                                    from: 'top',
-                                    align: 'center'
-                                },
-                                offset: {
-                                    x: 30,
-                                    y: 30
-                                },
-                                delay: 1000,
-                                z_index: 10000,
-                                animate: {
-                                    enter: "animated flip",
-                                    exit: "animated hinge"
-                                }
-                            });
-                        }
-                    }
-                    mApp.unblock('.discountCodeValueWarper');
-                },
-                //The status for when the user is not authorized for making the request
-                403: function (response) {
-                    window.location.replace("/403");
-                },
-                //The status for when the user is not authorized for making the request
-                401: function (response) {
-                    window.location.replace("/403");
-                },
-                //Method Not Allowed
-                405: function (response) {
-                    //                        console.log(response);
-                    //                        console.log(response.responseText);
-                    location.reload();
-                },
-                404: function (response) {
-                    window.location.replace("/404");
-                },
-                //The status for when form data is not valid
-                422: function (response) {
-                    // console.log(response);
-                },
-                //The status for when there is error php code
-                500: function (response) {
-                    // console.log(response.responseText);
-                    //                            toastr["error"]("خطای برنامه!", "پیام سیستم");
-                },
-                //The status for when there is error php code
-                503: function (response) {
-                    // toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
-                }
+            error: function (jqXHR, textStatus, errorThrown) {
+                mApp.unblock('.discountCodeValueWarper');
             }
         });
     }
 
     return {
         refreshUi:function () {
+            lockDonateAjax = true;
+            lockCouponAjax = true;
             refreshUiBasedOnPaymentType();
             refreshUiBasedOnDonateStatus();
             refreshUiBasedOnHasntDiscountCodeStatus();
+            lockDonateAjax = false;
+            lockCouponAjax = false;
         },
         refreshUiBasedOnHasntDiscountCodeStatus:function () {
             refreshUiBasedOnHasntDiscountCodeStatus();
@@ -343,7 +531,7 @@ var CheckoutPaymentUi = function () {
     };
 }();
 
-
+var lockDonateAjaxForSliderInit = true;
 jQuery(document).ready(function () {
     let n = document.getElementById('m_nouislider_1_input');
     let e = document.getElementById('m_nouislider_1');
@@ -366,7 +554,7 @@ jQuery(document).ready(function () {
         CheckoutPaymentUi.refreshUiBasedOnHasntDiscountCodeStatus();
     });
 
-    $(document).on('switchChange.bootstrapSwitch', '#hasntDonate', function () {
+    $(document).on('switchChange.bootstrapSwitch', '#hasntDonate', function (e) {
         CheckoutPaymentUi.refreshUiBasedOnDonateStatus($('#m_nouislider_1_input').val());
     });
 
@@ -380,7 +568,10 @@ jQuery(document).ready(function () {
 
     e.noUiSlider.on('update', function (e, t) {
         n.value = e[t];
-        CheckoutPaymentUi.refreshUiBasedOnDonateStatus(n.value);
+        if (!lockDonateAjaxForSliderInit) {
+            CheckoutPaymentUi.refreshUiBasedOnDonateStatus(n.value);
+        }
+        lockDonateAjaxForSliderInit = false;
     });
 
     n.addEventListener('change', function () {

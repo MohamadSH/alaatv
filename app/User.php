@@ -259,6 +259,15 @@ use Laravel\Passport\HasApiTokens;
  * @property-read mixed                                                               $info
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[]  $tokens
  * @property mixed                                                                    openOrders
+ * @property mixed nameSlug
+ * @property mixed nationalCode
+ * @property mixed userstatus_id
+ * @property mixed techCode
+ * @property string password
+ * @property int lockProfile
+ * @property string photo
+ * @property mixed roles
+ * @property static|null mobile_verified_at
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail
 {
@@ -302,41 +311,40 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'updated_at',
         'deleted_at',
         'birthdate',
-        'mobile_verified_code',
         'email_verified_at',
     ];
-    protected $lockProfile = [
-        "province",
-        "city",
-        "address",
-        "postalCode",
-        "school",
-        "gender_id",
-        "major_id",
-        "email",
+    protected $lockProfileColumns = [
+        'province',
+        'city',
+        'address',
+        'postalCode',
+        'school',
+        'gender_id',
+        'major_id',
+        'email',
     ];
     //columns being used for locking user's profile
-    protected $completeInfo = [
-        "photo",
-        "province",
-        "city",
-        "address",
-        "postalCode",
-        "school",
-        "gender_id",
-        "major_id",
-        "grade_id",
-        "phone",
-        "bloodtype_id",
-        "allergy",
-        "medicalCondition",
-        "diet",
+    protected $completeInfoColumns = [
+        'photo',
+        'province',
+        'city',
+        'address',
+        'postalCode',
+        'school',
+        'gender_id',
+        'major_id',
+        'grade_id',
+        'phone',
+        'bloodtype_id',
+        'allergy',
+        'medicalCondition',
+        'diet',
     ];
-    protected $medicalInfo = [
-        "bloodtype_id",
-        "allergy",
-        "medicalCondition",
-        "diet",
+    protected $medicalInfoColumns = [
+        'bloodtype_id',
+        'allergy',
+        'medicalCondition',
+        'diet',
     ];
     /**
      * The attributes that are mass assignable.
@@ -364,14 +372,37 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'allergy',
         'medicalCondition',
         'diet',
-        "firstName",
-        "lastName",
-        "password",
-        "nationalCode",
-        "nameSlug",
-        "mobile",
-        "userstatus_id",
-        "techCode",
+        'firstName',
+        'lastName',
+        'password',
+        'nationalCode',
+        'nameSlug',
+        'mobile',
+        'userstatus_id',
+        'techCode',
+        'mobile_verified_code',
+    ];
+
+    protected $fillableByPublic=[
+        'province',
+        'city',
+        'address',
+        'postalCode',
+        'school',
+        'major_id',
+        'grade_id',
+        'birthdate',
+        'gender_id',
+        'email',
+        'bio',
+        'introducedBy',
+        'phone',
+        'whatsapp',
+        'skype',
+        'bloodtype_id',
+        'allergy',
+        'medicalCondition',
+        'diet',
     ];
     /**
      * The attributes that should be hidden for arrays.

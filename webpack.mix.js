@@ -8,8 +8,10 @@ mix.styles(
         'public/acm/custom-css-app.css',
         // 'public/acm/cubeportfolio/css/cubeportfolio.min.css'
 
+        'public/acm/AlaatvCustomFiles/css/owl-carousel.css',
         'public/acm/AlaatvCustomFiles/css/customStyle.css',
-        'public/acm/AlaatvCustomFiles/css/fixThemeStyle.css'
+        'public/acm/AlaatvCustomFiles/css/fixThemeStyle.css',
+
 
 
     ],
@@ -91,18 +93,30 @@ mix.scripts(
 
 mix.scripts(
     [
+        'node_modules/bootstrap-fileinput/js/fileinput.js',
         'node_modules/persian-date/dist/persian-date.js',
-        'node_modules/persian-datepicker/dist/js/persian-datepicker.js'
+        'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
+
+        // 'public/acm/AlaatvCustomFiles/js/page-user-profile.js'
     ],
     'public/js/user-profile.js'
 ).version();
 
+mix.scripts(
+    [
+        'node_modules/persian-date/dist/persian-date.js',
+        // 'public/acm/AlaatvCustomFiles/js/page-user-orders.js'
+    ],
+    'public/js/user-orders.js'
+).version();
 
 mix.styles(
     [
         'node_modules/persian-datepicker/dist/css/persian-datepicker.css',
         'node_modules/bootstrap-fileinput/css/fileinput.css',
         'node_modules/bootstrap-fileinput/css/fileinput-rtl.css',
+
+        // 'public/acm/AlaatvCustomFiles/css/page-user-profile.css',
     ],
     'public/css/user-profile.css'
 ).version();
@@ -120,6 +134,8 @@ mix.styles(
 
 mix.styles(
     [
+        // 'public/acm/AlaatvCustomFiles/components/step/step.css',
+
         'public/acm/AlaatvCustomFiles/css/page-checkout-review.css',
     ],
     'public/css/checkout-review.css'
@@ -134,6 +150,7 @@ mix.styles(
 
 mix.styles(
     [
+        // 'public/acm/AlaatvCustomFiles/components/step/step.css',
         'public/acm/AlaatvCustomFiles/css/page-checkout-payment.css',
     ],
     'public/css/checkout-payment.css'
@@ -141,7 +158,7 @@ mix.styles(
 
 mix.scripts(
     [
-        'node_modules/slick-carousel/slick/slick.js',
+
     ],
     'public/js/user-dashboard.js'
 );

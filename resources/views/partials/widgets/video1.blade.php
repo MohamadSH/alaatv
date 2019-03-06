@@ -12,7 +12,7 @@
                 --}}
 <div class = "@if($widgetScroll) item @else col-lg-3 col-xl-4 col-md-4 col-xs-4 @endif">
     <!--begin:: Widgets/Blog-->
-    <div class = "m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force" style="min-height-: 286px">
+    <div class = "m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force">
         <div class = "m-portlet__head m-portlet__head--fit">
             <div class = "m-portlet__head-caption">
                 <div class = "m-portlet__head-action">
@@ -23,36 +23,63 @@
         <div class = "m-portlet__body">
             <div class = "m-widget19">
                 <div class = "m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" >
-                    <img src = "{{ $widgetPic }}" alt = " {{ $widgetTitle }}"/>
-                    <h4 class = "m-widget19__title m--font-light m--bg-brand m--padding-top-15 m--padding-right-25 a--opacity-7 a--full-width m--regular-font-size-lg2">
-                        <a href = "{{ $widgetLink }}" class = "m-link m--font-boldest m--font-light">
-                            {{ $widgetTitle }}
-                        </a>
-                    </h4>
+                    <img src = "{{ $widgetPic }}" alt = "{{ $widgetTitle }}"/>
+                    {{--<h4 class = "m-widget19__title m--font-light m--bg-brand m--padding-top-15 m--padding-right-25 a--opacity-7 a--full-width m--regular-font-size-lg2">--}}
+                        {{--<a href = "{{ $widgetLink }}" class = "m-link m--font-boldest m--font-light">--}}
+                            {{--{{ $widgetTitle }}--}}
+                        {{--</a>--}}
+                    {{--</h4>--}}
                     <div class = "m-widget19__shadow"></div>
                 </div>
                 <div class = "m-widget19__content">
-                    <div class = "m-widget19__header">
-                        <div class = "m-widget19__user-img">
-                            <img class = "m-widget19__img" src = "{{ $widgetAuthor->photo }}" alt = "{{ $widgetAuthor->full_name }}">
-                        </div>
+                    <div class="m--margin-top-10">
+                        <a href = "{{ $widgetLink }}" class = "m-link">
+                            <h6>
+                                <span class="m-badge m-badge--info m-badge--dot"></span> {{ $widgetTitle }}
+                            </h6>
+                        </a>
+                    </div>
+                    <div class = "m-widget19__header m--margin-top-10">
+                        @if($type!='product')
+                            <div class = "m-widget19__user-img">
+                                <img class = "m-widget19__img" src = "{{ $widgetAuthor->photo }}" alt = "{{ $widgetAuthor->full_name }}">
+                            </div>
+                        @endif
                         <div class = "m-widget19__info">
-                                            <span class = "m-widget19__username">
-                                            {{ $widgetAuthor->full_name }}
-                                            </span>
+                            @if($type!='product')
+                            <span class = "m-widget19__username">
+                                {{ $widgetAuthor->full_name }}
+                            </span>
                             <br>
                             <span class = "m-widget19__time">
-                                            موسسه غیرتجاری آلاء
-                                            </span>
+                                موسسه غیرتجاری آلاء
+                            </span>
+                            @else
+                                @if($price['base']!==$price['final'])
+                                    <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
+                                        <span class = "m-badge m-badge--warning a--productRealPrice">{{ number_format($price['base']) }}</span>
+                                            {{ number_format($price['final']) }} تومان
+                                        <span class = "m-badge m-badge--info a--productDiscount">{{ (1-($price['final']/$price['base']))*100 }}%</span>
+                                    </span>
+                                @else
+                                    <span class = "m-widget6__text m--align-right m--font-boldest m--font-primary">
+                                        {{ number_format($price['final']) }} تومان
+                                    </span>
+                                @endIf
+                            @endif
                         </div>
-                        <div class = "m-widget19__stats">
-                                            <span class = "m-widget19__number m--font-brand">
-                                            {{ $widgetCount }}
-                                            </span>
-                            <span class = "m-widget19__comment">
-                                            محتوا
-                                            </span>
-                        </div>
+                        @if($type=='set')
+                            <div class = "m-widget19__stats">
+                                <span class = "m-widget19__number m--font-brand">
+                                    {{ $widgetCount }}
+                                </span>
+                                <span class = "m-widget19__comment">
+                                    محتوا
+                                </span>
+                            </div>
+                        @endif
+
+
                     </div>
                 </div>
                 {{--<div class = "m-widget19__action">
