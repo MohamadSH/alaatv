@@ -311,7 +311,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'updated_at',
         'deleted_at',
         'birthdate',
-        'mobile_verified_code',
         'email_verified_at',
     ];
     protected $lockProfileColumns = [
@@ -381,6 +380,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'mobile',
         'userstatus_id',
         'techCode',
+        'mobile_verified_code',
     ];
 
     protected $fillableByPublic=[

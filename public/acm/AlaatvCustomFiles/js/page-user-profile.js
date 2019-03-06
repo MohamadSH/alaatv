@@ -250,7 +250,7 @@ $(document).ready(function () {
         // return false;
 
         $.ajax({
-            type: 'POST',
+            type: 'GET',
             url: $('#SendMobileVerificationCodeActionUrl').val(),
             data: {},
             success: function (data) {
