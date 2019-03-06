@@ -270,8 +270,8 @@ trait ProfileTrait
      */
     public function fillByPublic(array $data)
     {
-        foreach ($data as $key => $datum){
-            if( ( array_key_exists($key , $this->getAttributes())  && !isset($this->$key) ) || in_array($key , $this->fillableByPublic))
+        foreach ($data as $key => $datum) {
+            if ((array_key_exists($key, $this->getAttributes()) && !isset($this->$key)) || in_array($key, $this->fillableByPublic))
                 $this->$key = $datum;
         }
     }
@@ -281,7 +281,8 @@ trait ProfileTrait
      *
      * @return bool
      */
-    public function checkUserProfileForLocking():bool{
+    public function checkUserProfileForLocking(): bool
+    {
         return $this->completion('lockProfile') == 100;
     }
 

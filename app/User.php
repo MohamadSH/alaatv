@@ -259,15 +259,15 @@ use Laravel\Passport\HasApiTokens;
  * @property-read mixed                                                               $info
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[]  $tokens
  * @property mixed                                                                    openOrders
- * @property mixed nameSlug
- * @property mixed nationalCode
- * @property mixed userstatus_id
- * @property mixed techCode
- * @property string password
- * @property int lockProfile
- * @property string photo
- * @property mixed roles
- * @property static|null mobile_verified_at
+ * @property mixed                                                                    nameSlug
+ * @property mixed                                                                    nationalCode
+ * @property mixed                                                                    userstatus_id
+ * @property mixed                                                                    techCode
+ * @property string                                                                   password
+ * @property int                                                                      lockProfile
+ * @property string                                                                   photo
+ * @property mixed                                                                    roles
+ * @property static|null                                                              mobile_verified_at
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail
 {
@@ -383,7 +383,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'mobile_verified_code',
     ];
 
-    protected $fillableByPublic=[
+    protected $fillableByPublic = [
         'province',
         'city',
         'address',

@@ -99,14 +99,15 @@ class AlaaInvoiceGenerator
         return $orderProductCount;
     }
 
-    private function invoiceFormatter($orderproducts , $orderproductCount , $orderproductsRawCost ,  $totalCost , $payableByWallet){
-            return [
-                'items'                   => $orderproducts,
-                'orderproductCount'       => $orderproductCount ,
-                'orderproductsRawCost'    => $orderproductsRawCost,
-                'totalCost'               => $totalCost,
-                'payableByWallet'         => $payableByWallet,
-            ];
+    private function invoiceFormatter($orderproducts, $orderproductCount, $orderproductsRawCost, $totalCost, $payableByWallet)
+    {
+        return [
+            'items'                => $orderproducts,
+            'orderproductCount'    => $orderproductCount,
+            'orderproductsRawCost' => $orderproductsRawCost,
+            'totalCost'            => $totalCost,
+            'payableByWallet'      => $payableByWallet,
+        ];
     }
 
 }

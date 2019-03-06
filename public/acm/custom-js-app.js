@@ -5,7 +5,7 @@ jQuery(document).ready( function() {
             stagePadding: 40,
             loop: false,
             rtl:true,
-            nav:true,
+            nav: true,
             dots: false,
             margin:15,
             mouseDrag: true,

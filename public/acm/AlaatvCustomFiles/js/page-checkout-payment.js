@@ -73,7 +73,7 @@ var CheckoutPaymentUi = function () {
                 success: function (data) {
                     lockDonateAjax = true;
                     if (data.error) {
-                        if(data.error.code === 503) {
+                        if (data.error.code === 503) {
                             donate();
                         } else {
                             dontdonate();
@@ -338,9 +338,9 @@ var CheckoutPaymentUi = function () {
                         ' با ' +
                         data[0].discount;
 
-                    if ( data[0].discountType.name === 'percentage') {
+                    if (data[0].discountType.name === 'percentage') {
                         couponReport += '% تخفیف برای سفارش شما ثبت شده است.';
-                    } else if ( data[0].discountType.name === 'cost') {
+                    } else if (data[0].discountType.name === 'cost') {
                         couponReport += ' تومان تخفیف برای سفارش شما ثبت شد. ';
                     }
                     $('.couponReport').html(couponReport);
@@ -383,7 +383,7 @@ var CheckoutPaymentUi = function () {
 
                 let message = '';
 
-                if(statusCode==500) {
+                if (statusCode == 500) {
                     message = 'خطایی رخ داده است.';
                 } else {
                     message = 'کد وارد شده معتبر نیست';

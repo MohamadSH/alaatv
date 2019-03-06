@@ -37,19 +37,12 @@
     display: none;
 }
 
-
-
-
-
-
-
-
-
 .a--devider-with-title {
     position: relative;
     margin-bottom: 10px;
     margin-top: 15px;
 }
+
 .a--devider-with-title:before {
     content: " ";
     border-bottom: double 4px #c9c9c9;
@@ -60,6 +53,7 @@
     height: 100%;
     z-index: 1;
 }
+
 .a--devider-with-title .a--devider-title {
     display: initial;
     position: relative;

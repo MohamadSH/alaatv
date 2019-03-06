@@ -157,9 +157,7 @@ mix.styles(
 ).version();
 
 mix.scripts(
-    [
-
-    ],
+    [],
     'public/js/user-dashboard.js'
 );
 

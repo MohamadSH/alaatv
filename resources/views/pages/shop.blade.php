@@ -104,24 +104,24 @@
             <div class = "row {{ $block->class }}">
 
                 <div class = "col-12">
-                    <div class="a--devider-with-title">
-                        <div class="a--devider-title">
+                    <div class = "a--devider-with-title">
+                        <div class = "a--devider-title">
                             <a href = "{{ $block->url }}" class = "m-link m-link--primary">
                                 {{ $block->title }}
                             </a>
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class = "col-12">
                     <div class = "a--owl-carousel-type-1 owl-carousel owl-theme">
                         @foreach($block->products as $product)
-                                @include('partials.widgets.product2',[
-                            'widgetTitle'      => $product->name,
-                            'widgetPic'        => $product->photo,
-                            'widgetLink'       => $product->url,
-                            'widgetPrice'      => $product->priceText,
-                            'widgetPriceLabel' => ($product->isFree || $product->basePrice == 0 ? 0 : 1)
-                            ])
+                            @include('partials.widgets.product2',[
+                        'widgetTitle'      => $product->name,
+                        'widgetPic'        => $product->photo,
+                        'widgetLink'       => $product->url,
+                        'widgetPrice'      => $product->priceText,
+                        'widgetPriceLabel' => ($product->isFree || $product->basePrice == 0 ? 0 : 1)
+                        ])
                         @endforeach
                     </div>
                 </div>
