@@ -863,9 +863,8 @@ class OrderController extends Controller
             $responseStatus = Response::HTTP_OK;
         }
 
-        if ($request->expectsJson()) {
+        if ($request->expectsJson())
             return response($invoiceInfo, $responseStatus);
-        }
 
         $pageName = "review";
         return view("order.checkout.review", compact("invoiceInfo", 'orderProductCount', 'pageName'));
