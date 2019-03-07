@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\User;
 use Closure;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -34,8 +35,8 @@ class OrderCheckoutPayment
                     return response([] , Response::HTTP_FORBIDDEN);
             }else
             {
-                //ToDo $openOrder = $user->getOpenOrder();
-                $openOrder = $user->openOrders->first();
+                /** @var User $user */
+                $openOrder = $user->getOpenOrder();
                 $request->offsetSet("order_id" , $openOrder->id);
             }
         } else {

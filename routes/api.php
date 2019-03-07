@@ -34,11 +34,15 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('set/{set}', 'Api\SetController@show');
     Route::post('getPrice/{product}', 'Api\ProductController@refreshPrice');
 
-
     Route::group(['middleware' => 'auth:api'], function () {
         Route::group(['prefix' => 'user'], function () {
             Route::get('{user}/orders', 'Api\UserController@userOrders');
             Route::get('{user}/dashboard', 'Api\DashboardPageController')->name('api.user.dashboard');
+        });
+
+        Route::group(['prefix' => 'order'], function () {
+            Route::get('checkoutReview', 'Api\OrderController@checkoutReview');
+            Route::get('checkoutPayment', 'Api\OrderController@checkoutPayment');
         });
     });
 });

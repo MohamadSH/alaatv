@@ -47,7 +47,7 @@ class ProductController extends Controller
         $selectedSubProductIds = $request->get("products");
         $extraAttributeValues = $request->get("extraAttributeValues");
 
-        //TODO:// This is not true!
+        //TODO: Handle
         $user = $request->user('api');
         if (!isset($user))
             $user = $request->user();
