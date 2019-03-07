@@ -28,7 +28,7 @@ class ComposerServiceProvider extends ServiceProvider
             'pages.shop',
             'order.checkout.review',
             'order.checkout.payment',
-
+            'user.dashboard',
         ], function ($view) {
             $closedSideBar = true;
             $view->with(compact('closedSideBar'));

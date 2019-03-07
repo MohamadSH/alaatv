@@ -20,6 +20,7 @@
     text-align: right;
     padding-right: 30px;
 }
+
 #UserProfilePhoto,
 .file-input.theme-fas,
 .fileinput-btnBrowseUserImage,
@@ -43,6 +44,7 @@
     padding: 0px;
     border: none;
 }
+
 .profilePhotoUploadProgressBar,
 .fileinput-previewClass .fileinput-frameClass .file-thumbnail-footer .file-thumb-progress {
     display: none;

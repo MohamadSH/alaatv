@@ -89,8 +89,8 @@
         @if($section['lessons']->count() > 0)
             <div class = "row {{$section["class"]}}">
                 <div class = "col-12">
-                    <div class="a--devider-with-title">
-                        <div class="a--devider-title">
+                    <div class = "a--devider-with-title">
+                        <div class = "a--devider-title">
                             <a href = "{{urldecode(action("Web\ContentController@index" , ["tags" => $section["tags"]]))}}" class = "m-link m-link--primary">
                                 {{$section["descriptiveName"]}}
                             </a>

@@ -37,7 +37,7 @@
                                 @if($product->price['base']!==$product->price['final'])
                                     <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
                                         <span class = "m-badge m-badge--warning a--productRealPrice">{{ number_format($product->price['base']) }}</span>
-                                            {{ number_format($product->price['final']) }} تومان
+                                        {{ number_format($product->price['final']) }} تومان
                                         <span class = "m-badge m-badge--info a--productDiscount">{{ (1-($product->price['final']/$product->price['base']))*100 }}%</span>
                                     </span>
                                 @else

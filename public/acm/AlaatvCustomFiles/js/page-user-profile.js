@@ -32,20 +32,20 @@ $(document).ready(function () {
             processData: false,
 
             // Custom XMLHttpRequest
-            xhr: function() {
+            xhr: function () {
                 var myXhr = $.ajaxSettings.xhr();
                 if (myXhr.upload) {
                     // For handling the progress of the upload
-                    myXhr.upload.addEventListener('progress', function(e) {
+                    myXhr.upload.addEventListener('progress', function (e) {
                         if (e.lengthComputable) {
-                            let valuePercent = (e.loaded/e.total)*100;
-                            $('.profilePhotoUploadProgressBar .progress-bar').css('width', valuePercent+'%');
+                            let valuePercent = (e.loaded / e.total) * 100;
+                            $('.profilePhotoUploadProgressBar .progress-bar').css('width', valuePercent + '%');
                             // $('progress').attr({
                             //     value: e.loaded,
                             //     max: e.total,
                             // });
                         }
-                    } , false);
+                    }, false);
                 }
                 return myXhr;
             }
@@ -61,7 +61,7 @@ $(document).ready(function () {
 
         uploadAsync: false,
         uploadUrl: $('#profilePhotoAjaxUploadActionUrl').val(), // your upload server url
-        uploadExtraData: function() {
+        uploadExtraData: function () {
             return {
                 updateType: 'photo',
                 // username: $("#username").val()
@@ -150,7 +150,7 @@ $(document).ready(function () {
 
         var $form = $("#profileForm-setting");
         var data = getFormData($form);
-        console.log('fom data: '+data);
+        console.log('fom data: ' + data);
         mApp.block('#profileMenuPage-setting', {
             overlayColor: "#000000",
             type: "loader",
@@ -186,7 +186,7 @@ $(document).ready(function () {
 
                     Swal({
                         title: 'توجه!',
-                        text:  'خطای سیستمی رخ داده است.' + '<br>' + message,
+                        text: 'خطای سیستمی رخ داده است.' + '<br>' + message,
                         type: 'danger',
                         confirmButtonText: 'بستن'
                     });
@@ -261,7 +261,7 @@ $(document).ready(function () {
 
                     Swal({
                         title: 'توجه!',
-                        text:  'خطای سیستمی رخ داده است.' + '<br>' + message,
+                        text: 'خطای سیستمی رخ داده است.' + '<br>' + message,
                         type: 'danger',
                         confirmButtonText: 'بستن'
                     });
@@ -342,7 +342,7 @@ $(document).ready(function () {
 
                     Swal({
                         title: 'توجه!',
-                        text:  'خطای سیستمی رخ داده است.' + '<br>' + message,
+                        text: 'خطای سیستمی رخ داده است.' + '<br>' + message,
                         type: 'danger',
                         confirmButtonText: 'بستن'
                     });

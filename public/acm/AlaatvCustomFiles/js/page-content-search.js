@@ -10,11 +10,11 @@ var MultiLevelSearch = function () {
     }
 
     function getSelectorItem(selectorIndex) {
-        return $('#' + selectorId + ' .selectorItem[data-select-order="'  + selectorIndex +  '"]');
+        return $('#' + selectorId + ' .selectorItem[data-select-order="' + selectorIndex + '"]');
     }
 
     function getSelectorSubitems(selectorIndex) {
-        return $('#' + selectorId + ' .selectorItem[data-select-order="'  + selectorIndex +  '"] .subItem');
+        return $('#' + selectorId + ' .selectorItem[data-select-order="' + selectorIndex + '"] .subItem');
     }
 
     function showSelectorItem(selectorIndex) {
@@ -57,7 +57,7 @@ var MultiLevelSearch = function () {
             let selectorSubitems = getSelectorSubitems(selectorIndex);
             selectorSubitems.fadeOut(0);
             let select2Html = '';
-            let select2Id = 'MultiLevelSearch-select2-'+selectorId+'-'+selectorIndex;
+            let select2Id = 'MultiLevelSearch-select2-' + selectorId + '-' + selectorIndex;
 
             if (selectorItem.find('.selectorItemTitle').length > 0) {
                 selectorItem.find('.selectorItemTitle').html(title);
@@ -66,22 +66,22 @@ var MultiLevelSearch = function () {
             }
 
             for (let index in selectorSubitems) {
-                if(!isNaN(index)) {
+                if (!isNaN(index)) {
                     select2Html += '<option value="' + selectorSubitems + '">' + selectorSubitems[index].innerHTML + '</option>';
                 }
             }
             if (selectorItem.find('.form-control.select2').length > 0) {
                 let oldSelect2 = $('#' + select2Id);
-                if(!oldSelect2.data('select2')) {
+                if (!oldSelect2.data('select2')) {
                     oldSelect2.select2('destroy');
                 }
                 selectorItem.find('.select2warper').remove();
                 selectorItem.append('<div class="col-12 col-sm-9 col-md-5 col-lg-4 select2warper"><select class="form-control select2" id="' + select2Id + '">' + select2Html + '</select></div>');
-                $('#' + select2Id).select2({ width: 'resolve' });
+                $('#' + select2Id).select2({width: 'resolve'});
                 selectorItem.fadeIn();
             } else {
                 selectorItem.append('<div class="col-12 col-sm-9 col-md-5 col-lg-4 select2warper"><select class="form-control select2" id="' + select2Id + '">' + select2Html + '</select></div>');
-                $('#' + select2Id).select2({ width: 'resolve' });
+                $('#' + select2Id).select2({width: 'resolve'});
                 selectorItem.fadeIn();
             }
         }
@@ -110,7 +110,7 @@ var MultiLevelSearch = function () {
     function getMaxOrder() {
         let maxOrder = 0;
         for (let index in selectorItems) {
-            if(!isNaN(index)) {
+            if (!isNaN(index)) {
                 let order = parseInt($(selectorItems[index]).data('select-order'));
                 if (maxOrder < order) {
                     maxOrder = order;
@@ -126,7 +126,7 @@ var MultiLevelSearch = function () {
 
         selectorItems = $('#' + selectorId + ' .selectorItem');
         for (let index in selectorItems) {
-            if(!isNaN(index)) {
+            if (!isNaN(index)) {
 
                 let title = $(selectorItems[index]).data('select-title');
                 let order = $(selectorItems[index]).data('select-order');
@@ -148,7 +148,7 @@ var MultiLevelSearch = function () {
                 // filterNavigationWarper.append('<div class="col ' + activeString + ' filterNavigationStep" data-select-order="' + order + '"><div class="filterStepText">' + title + '</div><div class="filterStepSelectedText">'+selectedText+'</div></div>');
 
                 if (selectedText === null || selectedText.trim().length === 0) {
-                    selectedText = '('+ 'انتخاب ' + title +')';
+                    selectedText = '(' + 'انتخاب ' + title + ')';
                 }
                 filterNavigationWarper.append('<li class="filterNavigationStep ' + activeString + '" data-select-order="' + order + '">' + selectedText + '</li>');
             }
@@ -161,7 +161,7 @@ var MultiLevelSearch = function () {
 
         selectorItems = $('#' + selectorId + ' .selectorItem');
         for (let index in selectorItems) {
-            if(!isNaN(index)) {
+            if (!isNaN(index)) {
 
                 let title = $(selectorItems[index]).data('select-title');
                 let order = $(selectorItems[index]).data('select-order');
@@ -183,7 +183,7 @@ var MultiLevelSearch = function () {
                 // filterNavigationWarper.append('<div class="col ' + activeString + ' filterNavigationStep" data-select-order="' + order + '"><div class="filterStepText">' + title + '</div><div class="filterStepSelectedText">'+selectedText+'</div></div>');
 
                 if (selectedText === null || selectedText.trim().length === 0) {
-                    selectedText = '('+title+')';
+                    selectedText = '(' + title + ')';
                 }
                 filterNavigationWarper.append('<div class="col ' + activeString + ' filterNavigationStep" data-select-order="' + order + '"><div class="filterStepText">' + selectedText + '</div></div>');
             }
@@ -198,9 +198,9 @@ var MultiLevelSearch = function () {
             initOptions.selector[selectorOrder].ajax !== null) {
             // ajax load ...
         } else {
-            showSelectorItem(parseInt(selectorOrder)+1);
-            if(getMaxOrder()>=(parseInt(selectorOrder)+1)) {
-                setActiveStep(parseInt(selectorOrder)+1);
+            showSelectorItem(parseInt(selectorOrder) + 1);
+            if (getMaxOrder() >= (parseInt(selectorOrder) + 1)) {
+                setActiveStep(parseInt(selectorOrder) + 1);
             }
         }
     }
@@ -224,10 +224,10 @@ var MultiLevelSearch = function () {
         let data = [];
         selectorItems = $('#' + selectorId + ' .selectorItem');
         for (let index in selectorItems) {
-            if(!isNaN(index)) {
+            if (!isNaN(index)) {
                 let title = $(selectorItems[index]).data('select-title');
                 let order = $(selectorItems[index]).data('select-order');
-                let selectedText = (typeof ($(selectorItems[index]).attr('data-select-value'))!=='undefined') ? $(selectorItems[index]).attr('data-select-value') : null;
+                let selectedText = (typeof ($(selectorItems[index]).attr('data-select-value')) !== 'undefined') ? $(selectorItems[index]).attr('data-select-value') : null;
                 data.push({
                     title: title,
                     order: order,
@@ -266,14 +266,14 @@ var MultiLevelSearch = function () {
             });
             multiSelector.fadeIn();
         },
-        getSelectedData: function() {
+        getSelectedData: function () {
             return getSelectedData();
         }
     };
 }();
 
 
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
 
     // function insertParam(key, value)
     // {
@@ -301,7 +301,7 @@ jQuery(document).ready(function() {
 
     MultiLevelSearch.init({
         selectorId: 'contentSearchFilter'
-    }, function() {
+    }, function () {
         let searchFilterData = MultiLevelSearch.getSelectedData();
 
         let tagsValue = '';
@@ -318,7 +318,7 @@ jQuery(document).ready(function() {
 
         let url = document.location.href.split('?')[0];
 
-        url += '?'+tagsValue;
+        url += '?' + tagsValue;
 
         // if(document.location.href.indexOf("?") === -1) {
         //     url += '?'+tagsValue;

@@ -11,7 +11,7 @@ trait RequestCommon
     public function getRequestFile(array $data, $index)
     {
         $hasFile = true;
-        if (array_key_exists($index , $data)) {
+        if (array_key_exists($index, $data)) {
             $file = $data[$index];
             if (!is_file($file))
                 $hasFile = false;

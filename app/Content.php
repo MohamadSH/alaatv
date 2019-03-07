@@ -111,8 +111,8 @@ use Stevebauman\Purify\Facades\Purify;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed $api_url
- * @property mixed next_content
- * @property mixed previous_content
+ * @property mixed      next_content
+ * @property mixed      previous_content
  */
 class Content extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
@@ -184,7 +184,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'previousUrl',
         'previousApiUrl',
         'author',
-        'setMates'
+        'setMates',
     ];
 
     protected $hidden = [
@@ -308,28 +308,30 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     |--------------------------------------------------------------------------
     */
 
-    public function getPreviousContent(){
+    public function getPreviousContent()
+    {
         $key = "Content:previousContent" . $this->cacheKey();
         return Cache::tags('content')
-            ->remember($key, config("constants.CACHE_600"), function () {
-                $previousContentOrder   =  $this->order - 1;
-                $set                    =   $this->set;
-                $previousContent        =   $set->contents()->where('educationalcontents.order' , $previousContentOrder)->get()->first();
+                    ->remember($key, config("constants.CACHE_600"), function () {
+                        $previousContentOrder = $this->order - 1;
+                        $set = $this->set;
+                        $previousContent = $set->contents()->where('educationalcontents.order', $previousContentOrder)->get()->first();
 
-                return $previousContent??$previousContent;
-            });
+                        return $previousContent ?? $previousContent;
+                    });
     }
 
-    public function getNextContent(){
+    public function getNextContent()
+    {
         $key = "Content:nextContent" . $this->cacheKey();
         return Cache::tags('content')
-            ->remember($key, config("constants.CACHE_600"), function () {
-                $nextContentOrder   =  $this->order + 1;
-                $set                =   $this->set;
-                $nextContent       =   $set->contents()->where('educationalcontents.order' , $nextContentOrder)->get()->first();
+                    ->remember($key, config("constants.CACHE_600"), function () {
+                        $nextContentOrder = $this->order + 1;
+                        $set = $this->set;
+                        $nextContent = $set->contents()->where('educationalcontents.order', $nextContentOrder)->get()->first();
 
-                return $nextContent??$nextContent ;
-        });
+                        return $nextContent ?? $nextContent;
+                    });
     }
 
     public function getUrlAttribute($value): string
@@ -337,34 +339,39 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return action("Web\ContentController@show", $this);
     }
 
-    public function getPreviousUrlAttribute($value){
+    public function getPreviousUrlAttribute($value)
+    {
         return optional($this->getPreviousContent())->setVisible([
             'url',
-        ])->url ;
+        ])->url;
     }
 
-    public function getNextUrlAttribute($value){
+    public function getNextUrlAttribute($value)
+    {
         return optional($this->getNextContent())->setVisible([
             'url',
-        ])->url ;
+        ])->url;
     }
 
-    public function getApiUrlAttribute($value): array{
+    public function getApiUrlAttribute($value): array
+    {
         return [
             'v1' => action("Api\ContentController@show", $this),
         ];
     }
 
-    public function getPreviousApiUrlAttribute($value){
+    public function getPreviousApiUrlAttribute($value)
+    {
         return optional($this->getPreviousContent())->setVisible([
             'apiUrl',
-        ])->api_url ;
+        ])->api_url;
     }
 
-    public function getNextApiUrlAttribute($value){
+    public function getNextApiUrlAttribute($value)
+    {
         return optional($this->getNextContent())->setVisible([
             'apiUrl',
-        ])->api_url ;
+        ])->api_url;
     }
 
     /**
@@ -579,12 +586,13 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $setMates;
     }
 
-    public function getSetMatesAttribute(){
+    public function getSetMatesAttribute()
+    {
         $setMatesArray = $this->getSetMates();
-        $setMates      = $setMatesArray[0];
+        $setMates = $setMatesArray[0];
         $myContentType = $this->contenttype_id;
         /** @var ContentCollection $matesCollection */
-        $matesCollection = $setMates->where('contenttype_id' , '<>' , $myContentType)->values() ;
+        $matesCollection = $setMates->where('contenttype_id', '<>', $myContentType)->values();
         $matesCollection->setVisible([
             'url',
             'apiUrl',
@@ -592,7 +600,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             'thumbnail',
             'order',
             'created_at',
-            ]);
+        ]);
 
         return $matesCollection;
     }

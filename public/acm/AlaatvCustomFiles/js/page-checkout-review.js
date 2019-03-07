@@ -43,8 +43,8 @@ $(document).ready(function () {
                     },
                     //Method Not Allowed
                     405: function (response) {
-                       // console.log(response);
-                       // console.log(response.responseText);
+                        // console.log(response);
+                        // console.log(response.responseText);
                         location.reload();
                     },
                     404: function (response) {
