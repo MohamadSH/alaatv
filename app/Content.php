@@ -315,9 +315,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     ->remember($key, config("constants.CACHE_600"), function () {
                         $previousContentOrder = $this->order - 1;
                         $set = $this->set;
-                        $previousContent = $set->contents()->where('educationalcontents.order', $previousContentOrder)->get()->first();
+                        if (isset($set))
+                            $previousContent = $set->contents()->where('educationalcontents.order', $previousContentOrder)->get()->first();
 
-                        return $previousContent ?? $previousContent;
+                        return isset($previousContent) ? $previousContent : null;
                     });
     }
 
@@ -328,9 +329,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     ->remember($key, config("constants.CACHE_600"), function () {
                         $nextContentOrder = $this->order + 1;
                         $set = $this->set;
-                        $nextContent = $set->contents()->where('educationalcontents.order', $nextContentOrder)->get()->first();
+                        if (isset($set))
+                            $nextContent = $set->contents()->where('educationalcontents.order', $nextContentOrder)->get()->first();
 
-                        return $nextContent ?? $nextContent;
+                        return isset($nextContent) ? $nextContent : null;
                     });
     }
 
@@ -341,16 +343,16 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function getPreviousUrlAttribute($value)
     {
-        return optional($this->getPreviousContent())->setVisible([
+        return optional(optional($this->getPreviousContent())->setVisible([
             'url',
-        ])->url;
+        ]))->url;
     }
 
     public function getNextUrlAttribute($value)
     {
-        return optional($this->getNextContent())->setVisible([
+        return optional(optional($this->getNextContent())->setVisible([
             'url',
-        ])->url;
+        ]))->url;
     }
 
     public function getApiUrlAttribute($value): array
@@ -362,16 +364,16 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function getPreviousApiUrlAttribute($value)
     {
-        return optional($this->getPreviousContent())->setVisible([
+        return optional(optional($this->getPreviousContent())->setVisible([
             'apiUrl',
-        ])->api_url;
+        ]))->api_url;
     }
 
     public function getNextApiUrlAttribute($value)
     {
-        return optional($this->getNextContent())->setVisible([
+        return optional(optional($this->getNextContent())->setVisible([
             'apiUrl',
-        ])->api_url;
+        ]))->api_url;
     }
 
     /**
