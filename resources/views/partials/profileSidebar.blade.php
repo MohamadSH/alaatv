@@ -34,7 +34,7 @@
                     {!! Form::close() !!}
                 @endif
 
-                <img @if(!isset($user->photo))src = "{{ route('image', ['category'=>'1','w'=>'150' , 'h'=>'150' ,  'filename' => $user->photo ]) }}" @elsesrc = "/assets/app/media/img/users/user-avatar.png" @endifclass = "imgUserProfileImage" id = "profilePhoto" alt = "عکس پروفایل">
+                <img src = "{{$user->photo}}" class = "imgUserProfileImage" id = "profilePhoto" alt = "عکس پروفایل">
 
                 <h3 class = "m-widget19__title m--font-light userFullname">
                         @if(isset($withRegisterationDate) && $withRegisterationDate)
