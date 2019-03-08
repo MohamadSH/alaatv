@@ -3,6 +3,7 @@
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 trait APIRequestCommon
 {
@@ -17,7 +18,7 @@ trait APIRequestCommon
             $res = $client->request($method, $path, ['form_params' => $request->all()]);
         }
         catch (GuzzleException $e) {
-            dd($e);
+            Log::error($e->getMessage());
         }
         return [
             "statusCode" => $res->getStatusCode(),

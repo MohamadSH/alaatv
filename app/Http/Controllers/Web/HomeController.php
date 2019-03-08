@@ -29,7 +29,6 @@ use App\{Assignmentstatus,
     Notifications\GeneralNotice,
     Notifications\GiftGiven,
     Notifications\UserRegisterd,
-    Notifications\VerifyMobile,
     Order,
     Orderstatus,
     Paymentmethod,
@@ -69,7 +68,6 @@ use League\Flysystem\Sftp\SftpAdapter;
 use Maatwebsite\ExcelLight\Excel;
 use Maatwebsite\ExcelLight\Spout\{Reader, Row, Sheet, Writer};
 use SEO;
-use SoapClient;
 
 //use Jenssegers\Agent\Agent;
 
@@ -153,6 +151,11 @@ class HomeController extends Controller
     }
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
+        $p = Product::find(265);
+        foreach ($p->sets as $set) {
+            dump($set->productSet);
+        }
+        dd(".");
         try{
            /* $user  = User::find(1);
             $user->notify(new UserRegisterd());
