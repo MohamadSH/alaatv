@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Block;
 use App\Bon;
+use App\Classes\Format\webBlockCollectionFormatter;
+use App\Classes\Format\webSetCollectionFormatter;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -44,8 +47,8 @@ class ComposerServiceProvider extends ServiceProvider
 //            'pages.dashboard1',
 'partials.sidebar',
         ], function ($view) {
-//            $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getMainBlocks());
-            $sections = collect();
+            $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getMainBlocks());
+//            $sections = collect();
 //            dd($sections);
             $view->with(compact('sections'));
         });
