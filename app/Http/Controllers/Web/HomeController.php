@@ -151,7 +151,26 @@ class HomeController extends Controller
     }
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
+        $p = Product::find(265);
+        foreach ($p->sets as $set) {
+            dump($set->productSet);
+        }
+        dd(".");
         try{
+           /* $user  = User::find(1);
+            $user->notify(new UserRegisterd());
+            dd('done');
+
+            $client = new SoapClient("http://37.130.202.188/class/sms/wsdlservice/server.php?wsdl");
+            $user = "sanatisharif";
+            $pass = "mediana@lenovo";
+            $fromNum = "+98100020400";
+            $toNum = array("+989194251469");
+            $pattern_code = "801";
+            $input_data = array( "code" => "1234");
+            dump($client->sendPatternSms($fromNum,$toNum,$user,$pass,$pattern_code,$input_data));
+            dd('Done!');*/
+
 //            $orderproduct = \App\Orderproduct::findorfail(108221);
 //            return $orderproduct;
 

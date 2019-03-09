@@ -13,18 +13,19 @@ class EditUserRequest extends FormRequest
     use CharacterCommon;
     use RequestCommon ;
 
-    const USER_UPDATE_TYPE_TOTAL    = 'total' ;
-    const USER_UPDATE_TYPE_PROFILE  = 'profile' ;
-    const USER_UPDATE_TYPE_ATLOGIN  = 'atLogin' ;
-    const USER_UPDATE_TYPE_PASSWORD = 'password' ;
-    const USER_UPDATE_TYPE_PHOTO    = 'photo' ;
+    const USER_UPDATE_TYPE_TOTAL = 'total';
+    const USER_UPDATE_TYPE_PROFILE = 'profile';
+    const USER_UPDATE_TYPE_ATLOGIN = 'atLogin';
+    const USER_UPDATE_TYPE_PASSWORD = 'password';
+    const USER_UPDATE_TYPE_PHOTO = 'photo';
 
-    const PHOTO_RULE                = '|image|mimes:jpeg,jpg,png|max:512';
+    const PHOTO_RULE = '|image|mimes:jpeg,jpg,png|max:512';
 
     /**
      * Determine if the user is authorized to make this request.
      *
      * @param Request $request
+     *
      * @return bool
      */
     public function authorize(Request $request)
@@ -33,11 +34,11 @@ class EditUserRequest extends FormRequest
 
         $authenticatedUser = $request->user();
         $userId = $request->segment(2);
-        if($userId==null) {
+        if ($userId == null) {
             $user = $authenticatedUser;
-            if($user->isUserProfileLocked())
+            if ($user->isUserProfileLocked())
                 $authorized = false;
-        } elseif (!$authenticatedUser->can(config('constants.EDIT_USER_ACCESS'))) {
+        } else if (!$authenticatedUser->can(config('constants.EDIT_USER_ACCESS'))) {
             $authorized = false;
         }
 
@@ -53,9 +54,8 @@ class EditUserRequest extends FormRequest
     {
         $userId = $this->request->get('id');
 
-        $updateType = $this->request->get('updateType' , self::USER_UPDATE_TYPE_TOTAL);
-        switch ($updateType)
-        {
+        $updateType = $this->request->get('updateType', self::USER_UPDATE_TYPE_TOTAL);
+        switch ($updateType) {
             case self::USER_UPDATE_TYPE_TOTAL :
                 $rules = [
                     'firstName'     => 'required|max:255',
@@ -65,7 +65,7 @@ class EditUserRequest extends FormRequest
                         'digits:11',
                         Rule::phone()->mobile()->country('AUTO,IR'),
                         Rule::unique('users')
-                            ->where(function ($query) use ($userId){
+                            ->where(function ($query) use ($userId) {
                                 $query->where('nationalCode', $this->request->get('nationalCode'))
                                     ->where('id','<>',$userId)
                                     ->where('deleted_at', null);
@@ -84,7 +84,7 @@ class EditUserRequest extends FormRequest
                     ],
                     'password'      => 'required|confirmed|min:6',
                     'userstatus_id' => 'required|exists:userstatuses,id',
-                    'photo'         => 'sometimes|nullable'.self::PHOTO_RULE,
+                    'photo'         => 'sometimes|nullable' . self::PHOTO_RULE,
                     'postalCode'    => 'sometimes|nullable|numeric',
                     'email'         => 'sometimes|nullable|email',
                     'major_id'      => 'sometimes|nullable|exists:majors,id',
@@ -96,12 +96,12 @@ class EditUserRequest extends FormRequest
                 $rules = [
                     'postalCode' => 'sometimes|nullable|numeric',
                     'email'      => 'sometimes|nullable|email',
-                    'photo'      => 'sometimes|nullable'.self::PHOTO_RULE,
+                    'photo'      => 'sometimes|nullable' . self::PHOTO_RULE,
                 ];
                 break;
             case self::USER_UPDATE_TYPE_PHOTO :
                 $rules = [
-                    'photo'      => 'required'.self::PHOTO_RULE,
+                    'photo' => 'required' . self::PHOTO_RULE,
                 ];
                 break;
             case self::USER_UPDATE_TYPE_ATLOGIN :

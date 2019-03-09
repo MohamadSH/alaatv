@@ -2,8 +2,8 @@
 
 @section('page-css')
     <link href="{{ mix('/css/user-dashboard.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/css/page-user-dashboard.css') }}" rel="stylesheet" type="text/css"/>
+    <link href = "{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css') }}" rel = "stylesheet" type = "text/css"/>
+    <link href = "{{ asset('/acm/AlaatvCustomFiles/css/page-user-dashboard.css') }}" rel = "stylesheet" type = "text/css"/>
 @endsection
 
 @section('pageBar')
@@ -11,11 +11,11 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <i class="flaticon-home-2"></i>
-                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item">
                 <i class="flaticon-user"></i>
-                <a class="m-link" href="{{ action("Web\UserController@show",[$user]) }}">@lang('page.Profile')</a>
+                <a class = "m-link" href = "{{ action("Web\UserController@show",[$user]) }}">@lang('page.Profile')</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
                 داشبورد
@@ -38,8 +38,8 @@
 
     <div class="row">
         <div class="col">
-            <div class="m-portlet  m-portlet--bordered" id="owlCarouselMyProduct">
-                <div class="m-portlet__head">
+            <div class = "m-portlet  m-portlet--bordered" id = "owlCarouselMyProduct">
+                <div class = "m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
@@ -48,11 +48,11 @@
                         </div>
                     </div>
                     <div class="m-portlet__head-tools">
-                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
-                            <i class="fa flaticon-shapes"></i>
+                        <a href = "#" class = "btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
+                            <i class = "fa flaticon-shapes"></i>
                         </a>
-                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
-                            <i class="flaticon-more-v4"></i>
+                        <a href = "#" class = "btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
+                            <i class = "flaticon-more-v4"></i>
                         </a>
                     </div>
                 </div>
@@ -62,9 +62,9 @@
 
                         <div class="m-widget_head">
 
-                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">
+                            <div class = "m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">
                                 <div class="m-widget_head-owlcarousel-item carousel background-gradient" data-position="0">
-                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product7.jpg">
+                                    <img class = "a--owl-carousel-type-2-item-image" src = "/assets/app/media/img/products/product7.jpg">
                                     حسابان
                                     <hr>
                                     <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
@@ -80,17 +80,17 @@
                                     </div>
                                 </div>
                                 <div class="m-widget_head-owlcarousel-item carousel" data-position="1">
-                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product1.jpg">
+                                    <img class = "a--owl-carousel-type-2-item-image" src = "/assets/app/media/img/products/product1.jpg">
                                     فیزیک
                                     <hr>
 
-                                    <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-type-2-show-detailes">
+                                    <a class = "btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-type-2-show-detailes">
                                         <i class="flaticon-more-v6"></i>
                                     </a>
 
                                 </div>
                                 <div class="m-widget_head-owlcarousel-item carousel background-gradient" data-position="2">
-                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product2.jpg">
+                                    <img class = "a--owl-carousel-type-2-item-image" src = "/assets/app/media/img/products/product2.jpg">
                                     شیمی
                                     <hr>
                                     <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
@@ -106,7 +106,7 @@
                                     </div>
                                 </div>
                                 <div class="m-widget_head-owlcarousel-item carousel background-gradient" data-position="3">
-                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product3.jpg">
+                                    <img class = "a--owl-carousel-type-2-item-image" src = "/assets/app/media/img/products/product3.jpg">
                                     زیست
                                     <hr>
                                     <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
@@ -122,15 +122,15 @@
                                     </div>
                                 </div>
                                 <div class="m-widget_head-owlcarousel-item carousel" data-position="4">
-                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product4.jpg">
+                                    <img class = "a--owl-carousel-type-2-item-image" src = "/assets/app/media/img/products/product4.jpg">
                                     حسابان
                                     <hr>
-                                    <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-type-2-show-detailes">
+                                    <a class = "btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-type-2-show-detailes">
                                         <i class="flaticon-more-v6"></i>
                                     </a>
                                 </div>
                                 <div class="m-widget_head-owlcarousel-item carousel background-gradient" data-position="5">
-                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product5.jpg">
+                                    <img class = "a--owl-carousel-type-2-item-image" src = "/assets/app/media/img/products/product5.jpg">
                                     هندسه
                                     <hr>
                                     <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
@@ -146,7 +146,7 @@
                                     </div>
                                 </div>
                                 <div class="m-widget_head-owlcarousel-item carousel background-gradient" data-position="6">
-                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product6.jpg">
+                                    <img class = "a--owl-carousel-type-2-item-image" src = "/assets/app/media/img/products/product6.jpg">
                                     حسابان
                                     <hr>
                                     <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
@@ -164,7 +164,7 @@
                             </div>
 
                         </div>
-                        <div class="m-portlet a--owl-carousel-type-2-slide-detailes">
+                        <div class = "m-portlet a--owl-carousel-type-2-slide-detailes">
                             <div class="m-portlet__head">
                                 <div class="m-portlet__head-caption">
                                     <div class="m-portlet__head-title">
@@ -174,12 +174,12 @@
                                     </div>
                                 </div>
                                 <div class="m-portlet__head-tools">
-                                    <a class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-type-2-hide-detailes">
+                                    <a class = "btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-type-2-hide-detailes">
                                         <i class="la la-times"></i>
                                     </a>
                                 </div>
                             </div>
-                            <div class="m-portlet__body subCategoryWarper a--owl-carousel-type-2-slide-iteDetail-1">
+                            <div class = "m-portlet__body subCategoryWarper a--owl-carousel-type-2-slide-iteDetail-1">
                                 <div class="row justify-content-center">
                                     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                                         <div class="subCategoryItem">
@@ -268,7 +268,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="m-portlet__body subCategoryWarper a--owl-carousel-type-2-slide-iteDetail-4">
+                            <div class = "m-portlet__body subCategoryWarper a--owl-carousel-type-2-slide-iteDetail-4">
                                 <div class="row justify-content-center">
                                     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                                         <div class="subCategoryItem">
@@ -335,65 +335,65 @@
     <div class="row">
         <div class="col">
             <div class="m-portlet  m-portlet--bordered">
-                <div class="m-portlet__head">
+                <div class = "m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
-                                <i class="flaticon-confetti m--margin-right-10"></i>
-                                 علاقه مندی های من
+                                <i class = "flaticon-confetti m--margin-right-10"></i>
+                                علاقه مندی های من
                             </h3>
                         </div>
                     </div>
                 </div>
-                <div class="m-portlet__body m--padding-5">
+                <div class = "m-portlet__body m--padding-5">
 
-                    <div class="row">
-                        <div class="col">
-                            <div class="m-portlet  m-portlet--bordered" id="owlCarouselMyFavoritSet">
-                                <div class="m-portlet__head">
-                                    <div class="m-portlet__head-caption">
-                                        <div class="m-portlet__head-title">
-                                            <h3 class="m-portlet__head-text">
+                    <div class = "row">
+                        <div class = "col">
+                            <div class = "m-portlet  m-portlet--bordered" id = "owlCarouselMyFavoritSet">
+                                <div class = "m-portlet__head">
+                                    <div class = "m-portlet__head-caption">
+                                        <div class = "m-portlet__head-title">
+                                            <h3 class = "m-portlet__head-text">
                                                 دسته ها
                                             </h3>
                                         </div>
                                     </div>
-                                    <div class="m-portlet__head-tools">
-                                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
-                                            <i class="fa flaticon-shapes"></i>
+                                    <div class = "m-portlet__head-tools">
+                                        <a href = "#" class = "btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
+                                            <i class = "fa flaticon-shapes"></i>
                                         </a>
-                                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
-                                            <i class="flaticon-more-v4"></i>
+                                        <a href = "#" class = "btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
+                                            <i class = "flaticon-more-v4"></i>
                                         </a>
                                     </div>
                                 </div>
-                                <div class="m-portlet__body m-portlet__body--no-padding">
+                                <div class = "m-portlet__body m-portlet__body--no-padding">
                                     <!--begin::Widget 30-->
-                                    <div class="m-widget30">
+                                    <div class = "m-widget30">
 
-                                        <div class="m-widget_head">
+                                        <div class = "m-widget_head">
 
-                                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">
+                                            <div class = "m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">
 
-                                                <div data-position="0" class="m-widget_head-owlcarousel-item carousel">
+                                                <div data-position = "0" class = "m-widget_head-owlcarousel-item carousel">
                                                     فیزیک
                                                 </div>
-                                                <div data-position="1" class="m-widget_head-owlcarousel-item carousel">
+                                                <div data-position = "1" class = "m-widget_head-owlcarousel-item carousel">
                                                     فیزیک
                                                 </div>
-                                                <div data-position="2" class="m-widget_head-owlcarousel-item carousel">
+                                                <div data-position = "2" class = "m-widget_head-owlcarousel-item carousel">
                                                     فیزیک
                                                 </div>
-                                                <div data-position="3" class="m-widget_head-owlcarousel-item carousel">
+                                                <div data-position = "3" class = "m-widget_head-owlcarousel-item carousel">
                                                     فیزیک
                                                 </div>
-                                                <div data-position="4" class="m-widget_head-owlcarousel-item carousel">
+                                                <div data-position = "4" class = "m-widget_head-owlcarousel-item carousel">
                                                     فیزیک
                                                 </div>
-                                                <div data-position="5" class="m-widget_head-owlcarousel-item carousel">
+                                                <div data-position = "5" class = "m-widget_head-owlcarousel-item carousel">
                                                     فیزیک
                                                 </div>
-                                                <div data-position="6" class="m-widget_head-owlcarousel-item carousel">
+                                                <div data-position = "6" class = "m-widget_head-owlcarousel-item carousel">
                                                     فیزیک
                                                 </div>
 
@@ -401,18 +401,18 @@
 
                                         </div>
 
-                                        <div class="m-portlet a--owl-carousel-type-2-slide-detailes">
-                                            <div class="m-portlet__head">
-                                                <div class="m-portlet__head-caption">
-                                                    <div class="m-portlet__head-title">
-                                                        <h3 class="m-portlet__head-text">
+                                        <div class = "m-portlet a--owl-carousel-type-2-slide-detailes">
+                                            <div class = "m-portlet__head">
+                                                <div class = "m-portlet__head-caption">
+                                                    <div class = "m-portlet__head-title">
+                                                        <h3 class = "m-portlet__head-text">
                                                             مجموعه های محصول خریداری شده
                                                         </h3>
                                                     </div>
                                                 </div>
-                                                <div class="m-portlet__head-tools">
-                                                    <a class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-type-2-hide-detailes">
-                                                        <i class="la la-times"></i>
+                                                <div class = "m-portlet__head-tools">
+                                                    <a class = "btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-type-2-hide-detailes">
+                                                        <i class = "la la-times"></i>
                                                     </a>
                                                 </div>
                                             </div>
@@ -425,62 +425,62 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col">
-                            <div class="m-portlet  m-portlet--bordered" id="owlCarouselMyFavoritContent">
-                                <div class="m-portlet__head">
-                                    <div class="m-portlet__head-caption">
-                                        <div class="m-portlet__head-title">
-                                            <h3 class="m-portlet__head-text">
+                    <div class = "row">
+                        <div class = "col">
+                            <div class = "m-portlet  m-portlet--bordered" id = "owlCarouselMyFavoritContent">
+                                <div class = "m-portlet__head">
+                                    <div class = "m-portlet__head-caption">
+                                        <div class = "m-portlet__head-title">
+                                            <h3 class = "m-portlet__head-text">
                                                 محتوا
                                             </h3>
                                         </div>
                                     </div>
-                                    <div class="m-portlet__head-tools">
-                                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
-                                            <i class="fa flaticon-shapes"></i>
+                                    <div class = "m-portlet__head-tools">
+                                        <a href = "#" class = "btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
+                                            <i class = "fa flaticon-shapes"></i>
                                         </a>
-                                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
-                                            <i class="flaticon-more-v4"></i>
+                                        <a href = "#" class = "btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
+                                            <i class = "flaticon-more-v4"></i>
                                         </a>
                                     </div>
                                 </div>
-                                <div class="m-portlet__body m-portlet__body--no-padding">
+                                <div class = "m-portlet__body m-portlet__body--no-padding">
                                     <!--begin::Widget 30-->
-                                    <div class="m-widget30">
+                                    <div class = "m-widget30">
 
-                                        <div class="m-widget_head">
-                                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myFavoriteContent">
-                                                <div data-position="0" class="m-widget_head-owlcarousel-item carousel">
-                                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product11.jpg">
+                                        <div class = "m-widget_head">
+                                            <div class = "m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myFavoriteContent">
+                                                <div data-position = "0" class = "m-widget_head-owlcarousel-item carousel">
+                                                    <img class = "a--owl-carousel-type-2-item-image" src = "/assets/app/media/img/products/product11.jpg">
                                                     فیزیک
                                                 </div>
-                                                <div data-position="1" class="m-widget_head-owlcarousel-item carousel">
-                                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product10.jpg">
+                                                <div data-position = "1" class = "m-widget_head-owlcarousel-item carousel">
+                                                    <img class = "a--owl-carousel-type-2-item-image" src = "/assets/app/media/img/products/product10.jpg">
                                                     فیزیک
                                                 </div>
-                                                <div data-position="2" class="m-widget_head-owlcarousel-item carousel">
-                                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product9.jpg">
+                                                <div data-position = "2" class = "m-widget_head-owlcarousel-item carousel">
+                                                    <img class = "a--owl-carousel-type-2-item-image" src = "/assets/app/media/img/products/product9.jpg">
                                                     فیزیک
                                                 </div>
-                                                <div data-position="3" class="m-widget_head-owlcarousel-item carousel">
-                                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product8.jpg">
+                                                <div data-position = "3" class = "m-widget_head-owlcarousel-item carousel">
+                                                    <img class = "a--owl-carousel-type-2-item-image" src = "/assets/app/media/img/products/product8.jpg">
                                                     فیزیک
                                                 </div>
-                                                <div data-position="4" class="m-widget_head-owlcarousel-item carousel">
-                                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product7.jpg">
+                                                <div data-position = "4" class = "m-widget_head-owlcarousel-item carousel">
+                                                    <img class = "a--owl-carousel-type-2-item-image" src = "/assets/app/media/img/products/product7.jpg">
                                                     فیزیک
                                                 </div>
-                                                <div data-position="5" class="m-widget_head-owlcarousel-item carousel">
-                                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product6.jpg">
+                                                <div data-position = "5" class = "m-widget_head-owlcarousel-item carousel">
+                                                    <img class = "a--owl-carousel-type-2-item-image" src = "/assets/app/media/img/products/product6.jpg">
                                                     فیزیک
                                                 </div>
-                                                <div data-position="6" class="m-widget_head-owlcarousel-item carousel">
-                                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product9.jpg">
+                                                <div data-position = "6" class = "m-widget_head-owlcarousel-item carousel">
+                                                    <img class = "a--owl-carousel-type-2-item-image" src = "/assets/app/media/img/products/product9.jpg">
                                                     فیزیک
                                                 </div>
-                                                <div data-position="7" class="m-widget_head-owlcarousel-item carousel">
-                                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product8.jpg">
+                                                <div data-position = "7" class = "m-widget_head-owlcarousel-item carousel">
+                                                    <img class = "a--owl-carousel-type-2-item-image" src = "/assets/app/media/img/products/product8.jpg">
                                                     فیزیک
                                                 </div>
                                             </div>
@@ -493,42 +493,42 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col">
-                            <div class="m-portlet  m-portlet--bordered" id="owlCarouselMyFavoritProducts">
-                                <div class="m-portlet__head">
-                                    <div class="m-portlet__head-caption">
-                                        <div class="m-portlet__head-title">
-                                            <h3 class="m-portlet__head-text">
+                    <div class = "row">
+                        <div class = "col">
+                            <div class = "m-portlet  m-portlet--bordered" id = "owlCarouselMyFavoritProducts">
+                                <div class = "m-portlet__head">
+                                    <div class = "m-portlet__head-caption">
+                                        <div class = "m-portlet__head-title">
+                                            <h3 class = "m-portlet__head-text">
                                                 محصولات
                                             </h3>
                                         </div>
                                     </div>
-                                    <div class="m-portlet__head-tools">
-                                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
-                                            <i class="fa flaticon-shapes"></i>
+                                    <div class = "m-portlet__head-tools">
+                                        <a href = "#" class = "btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
+                                            <i class = "fa flaticon-shapes"></i>
                                         </a>
-                                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
-                                            <i class="flaticon-more-v4"></i>
+                                        <a href = "#" class = "btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
+                                            <i class = "flaticon-more-v4"></i>
                                         </a>
                                     </div>
                                 </div>
-                                <div class="m-portlet__body m-portlet__body--no-padding">
+                                <div class = "m-portlet__body m-portlet__body--no-padding">
                                     <!--begin::Widget 30-->
-                                    <div class="m-widget30">
+                                    <div class = "m-widget30">
 
-                                        <div class="m-widget_head">
-                                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myFavoriteProducts">
-                                                <div data-position="0" class="m-widget_head-owlcarousel-item carousel">
-                                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product11.jpg">
+                                        <div class = "m-widget_head">
+                                            <div class = "m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myFavoriteProducts">
+                                                <div data-position = "0" class = "m-widget_head-owlcarousel-item carousel">
+                                                    <img class = "a--owl-carousel-type-2-item-image" src = "/assets/app/media/img/products/product11.jpg">
                                                     فیزیک
                                                 </div>
-                                                <div data-position="1" class="m-widget_head-owlcarousel-item carousel">
-                                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product10.jpg">
+                                                <div data-position = "1" class = "m-widget_head-owlcarousel-item carousel">
+                                                    <img class = "a--owl-carousel-type-2-item-image" src = "/assets/app/media/img/products/product10.jpg">
                                                     فیزیک
                                                 </div>
-                                                <div data-position="2" class="m-widget_head-owlcarousel-item carousel">
-                                                    <img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product9.jpg">
+                                                <div data-position = "2" class = "m-widget_head-owlcarousel-item carousel">
+                                                    <img class = "a--owl-carousel-type-2-item-image" src = "/assets/app/media/img/products/product9.jpg">
                                                     فیزیک
                                                 </div>
                                             </div>
@@ -800,7 +800,7 @@
 @section('page-js')
 
     <script src="{{ mix('/js/user-dashboard.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-user-dashboard.js') }}"></script>
+    <script src = "{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js') }}"></script>
+    <script src = "{{ asset('/acm/AlaatvCustomFiles/js/page-user-dashboard.js') }}"></script>
 
 @endsection

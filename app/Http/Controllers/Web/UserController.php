@@ -340,30 +340,27 @@ class UserController extends Controller
         try {
             $result =  $this->new($request->all() , $request->user());
 
-            if($result['error'])
-            {
-                $resultMessage   = 'خطا در ذخیره کاربر';
-                $resultCode    =  Response::HTTP_INTERNAL_SERVER_ERROR;
-            }
-            else
-            {
-                $resultMessage  = 'درج کاربر با موفقیت انجام شد';
-                $resultCode     =  Response::HTTP_OK;
-                $savedUser      = $result['user'];
+            if ($result['error']) {
+                $resultMessage = 'خطا در ذخیره کاربر';
+                $resultCode = Response::HTTP_INTERNAL_SERVER_ERROR;
+            } else {
+                $resultMessage = 'درج کاربر با موفقیت انجام شد';
+                $resultCode = Response::HTTP_OK;
+                $savedUser = $result['user'];
             }
 
-            if($resultCode == Response::HTTP_OK)
+            if ($resultCode == Response::HTTP_OK)
                 $responseContent = [
-                        'user'    => $savedUser??$savedUser,
-                    ];
+                    'user' => $savedUser ?? $savedUser,
+                ];
             else
                 $responseContent = [
-                        'error' =>[
-                            'message'   =>  $resultMessage
-                        ]
-                    ];
+                    'error' => [
+                        'message' => $resultMessage,
+                    ],
+                ];
 
-            return response( $responseContent, Response::HTTP_OK);
+            return response($responseContent, Response::HTTP_OK);
 
         }
         catch (\Exception    $e) {
@@ -382,30 +379,31 @@ class UserController extends Controller
     }
 
     /**
-     * @param array $inputData
-     * @param User $authenticatedUser
+     * @param array  $inputData
+     * @param User   $authenticatedUser
      *
      * @param string $moderatorPermission
-     * @param User $user
+     * @param User   $user
+     *
      * @return void
      * @throws FileNotFoundException
      */
-    private function fillContentFromRequest(array $inputData, User $authenticatedUser , string $moderatorPermission, User &$user): void
+    private function fillContentFromRequest(array $inputData, User $authenticatedUser, string $moderatorPermission, User &$user): void
     {
         if ($authenticatedUser->can($moderatorPermission)) {
             $user->fill($inputData);
-            $hasMobileVerifiedAt = in_array('mobileNumberVerification' , $inputData);
-            $hasPassword         = in_array('password' , $inputData);
+            $hasMobileVerifiedAt = in_array('mobileNumberVerification', $inputData);
+            $hasPassword = in_array('password', $inputData);
 
             if ($hasMobileVerifiedAt)
                 $user->mobile_verified_at = ($inputData['mobileNumberVerification'] == '1') ? Carbon::now()->setTimezone('Asia/Tehran') : null;
 
             if ($hasPassword)
-                $user->password     = bcrypt($inputData['password']);
+                $user->password = bcrypt($inputData['password']);
 
-            $user->lockProfile      = array_get($inputData , 'lockProfile' , $user->lockProfile);
+            $user->lockProfile = array_get($inputData, 'lockProfile', $user->lockProfile);
 
-        }else{
+        } else {
             $user->fillByPublic($inputData);
         }
 
@@ -1526,25 +1524,26 @@ class UserController extends Controller
      * Note: Requests to this method must pass \App\Http\Middleware\trimUserRequest middle ware
      *
      * @param EditUserRequest $request
-     * @param User $user
+     * @param User            $user
+     *
      * @return array|Response
      */
-    public function update(EditUserRequest $request, User $user=null)
+    public function update(EditUserRequest $request, User $user = null)
     {
         $authenticatedUser = $request->user();
-        if($user===null)
+        if ($user === null)
             $user = $authenticatedUser;
 
         try {
-            $this->fillContentFromRequest($request->all() , $authenticatedUser , config('constants.EDIT_USER_ACCESS') , $user);
+            $this->fillContentFromRequest($request->all(), $authenticatedUser, config('constants.EDIT_USER_ACCESS'), $user);
         } catch (FileNotFoundException $e) {
             return response(
                 [
                     "error" => [
-                        "text"       => $e->getMessage(),
-                        "line"       => $e->getLine(),
-                        "file"       => $e->getFile()
-                    ]
+                        "text" => $e->getMessage(),
+                        "line" => $e->getLine(),
+                        "file" => $e->getFile(),
+                    ],
                 ],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
@@ -1556,7 +1555,7 @@ class UserController extends Controller
                 $user->lockProfile();
 
             //ToDo : place in UserObserver
-            if($request->has('roles'))
+            if ($request->has('roles'))
                 $this->attachRoles($request->get('roles'), $authenticatedUser , $user);
 
             $newPhotoSrc = route('image', [
@@ -1578,7 +1577,7 @@ class UserController extends Controller
         if ($request->expectsJson()) {
             return response(
                 [
-                    'userPhoto' => $newPhotoSrc??$newPhotoSrc,
+                    'userPhoto' => $newPhotoSrc ?? $newPhotoSrc,
                     'message'   => $message,
                 ],
                 $status
@@ -1857,7 +1856,7 @@ class UserController extends Controller
      * @param User|null $authenticatedUser
      * @return array
      */
-    public function new(array $data , User $authenticatedUser) : array
+    public function new(array $data, User $authenticatedUser): array
     {
         $softDeletedUsers = User::onlyTrashed()
             ->where("mobile", $data["mobile"])
@@ -1875,7 +1874,7 @@ class UserController extends Controller
 
         $user = new User();
         try {
-            $this->fillContentFromRequest($data , $authenticatedUser , config('constants.INSERT_USER_ACCESS') , $user);
+            $this->fillContentFromRequest($data, $authenticatedUser, config('constants.INSERT_USER_ACCESS'), $user);
         } catch (FileNotFoundException $e) {
             return [
                 "error" => true,
@@ -1895,26 +1894,25 @@ class UserController extends Controller
             if (in_array("roles" , $data))
                 $this->attachRoles($data["roles"], $authenticatedUser, $user);
 
-            $resultText =   'User save successfully';
-            $resultCode =    Response::HTTP_OK;
+            $resultText = 'User save successfully';
+            $resultCode = Response::HTTP_OK;
 
         } else {
-            $resultText =   'Datebase error';
-            $resultCode =   Response::HTTP_SERVICE_UNAVAILABLE;
+            $resultText = 'Datebase error';
+            $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
         }
 
-        if($resultCode == Response::HTTP_OK)
-        {
+        if ($resultCode == Response::HTTP_OK) {
             $response = [
-                'user'       => $user
+                'user' => $user,
             ];
-        }else{
+        } else {
             $response = [
-                'error'    => [
-                    'code'      =>  $resultCode,
-                    'message'   =>  $resultText
-                ]
-            ] ;
+                'error' => [
+                    'code'    => $resultCode,
+                    'message' => $resultText,
+                ],
+            ];
         }
 
         return $response;

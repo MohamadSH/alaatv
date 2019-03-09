@@ -1,15 +1,15 @@
-<div class="m-portlet m-portlet--bordered-semi m-portlet--rounded-force">
+<div class = "m-portlet m-portlet--bordered-semi m-portlet--rounded-force">
 
-        <div class="m-portlet__head m-portlet__head--fit">
-            <div class="m-portlet__head-caption">
-                <div class="m-portlet__head-action">
+    <div class = "m-portlet__head m-portlet__head--fit">
+        <div class = "m-portlet__head-caption">
+            <div class = "m-portlet__head-action">
 
                     @if(isset($withPhotoUpload) && $withPhotoUpload)
-                        <button type="button" id="btnEditUserPhoto" class="btn btn-sm m-btn--pill btn-info btnEditProfilePic" data-toggle="m-tooltip" {{--data-placement="left"--}}data-original-title="حجم عکس حداکثر 500 کیلوبایت و فرمت آن jpg یا png باشد">
+                    <button type = "button" id = "btnEditUserPhoto" class = "btn btn-sm m-btn--pill btn-info btnEditProfilePic" data-toggle = "m-tooltip" {{--data-placement="left"--}}data-original-title = "حجم عکس حداکثر 500 کیلوبایت و فرمت آن jpg یا png باشد">
                             ویرایش
                         </button>
 
-                        <button type="button" id="uploadProfilePhotoAjaxSubmit" class="btn btn-sm m-btn--pill m-btn--gradient-from-info m-btn--gradient-to-warning submitProfilePic" style="display: none;">
+                    <button type = "button" id = "uploadProfilePhotoAjaxSubmit" class = "btn btn-sm m-btn--pill m-btn--gradient-from-info m-btn--gradient-to-warning submitProfilePic" style = "display: none;">
                             ثبت
                         </button>
                     @endif
@@ -17,33 +17,26 @@
                 </div>
             </div>
         </div>
-        <div class="m-portlet__body">
-            <div class="m-widget19">
-                <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides">
+    <div class = "m-portlet__body">
+        <div class = "m-widget19">
+            <div class = "m-widget19__pic m-portlet-fit--top m-portlet-fit--sides">
 
-                    <div class="progress profilePhotoUploadProgressBar">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated  bg-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
+                <div class = "progress profilePhotoUploadProgressBar">
+                    <div class = "progress-bar progress-bar-striped progress-bar-animated  bg-warning" role = "progressbar" aria-valuenow = "0" aria-valuemin = "0" aria-valuemax = "100"></div>
+                </div>
 
-                    @if(isset($withPhotoUpload) && $withPhotoUpload)
-                        {!! Form::open(['action' => ['Web\UserController@update' , Auth::user()], 'method' => 'PUT', 'id'=>'profilePhotoAjaxForm' ]) !!}
-                            @csrf
-                            <input type="hidden" name="updateType" value="photo">
-                            <input type="hidden" id="profilePhotoAjaxUploadActionUrl" value="{{ action('Web\UserController@update' , Auth::user()) }}">
-                            <input type="file" name="photo" id="UserProfilePhoto" accept=".jpg,.gif,.png">
-                        {!! Form::close() !!}
-                    @endif
+                @if(isset($withPhotoUpload) && $withPhotoUpload)
+                    {!! Form::open(['action' => ['Web\UserController@update' , Auth::user()], 'method' => 'PUT', 'id'=>'profilePhotoAjaxForm' ]) !!}
+                    @csrf
+                    <input type = "hidden" name = "updateType" value = "photo">
+                    <input type = "hidden" id = "profilePhotoAjaxUploadActionUrl" value = "{{ action('Web\UserController@update' , Auth::user()) }}">
+                    <input type = "file" name = "photo" id = "UserProfilePhoto" accept = ".jpg,.gif,.png">
+                    {!! Form::close() !!}
+                @endif
 
-                    <img @if(!isset($user->photo))
-                            src="{{ route('image', ['category'=>'1','w'=>'150' , 'h'=>'150' ,  'filename' => $user->photo ]) }}"
-                         @else
-                            src="/assets/app/media/img/users/user-avatar.png"
-                         @endif
-                         class="imgUserProfileImage"
-                         id="profilePhoto"
-                         alt="عکس پروفایل">
+                <img src = "{{$user->photo}}" class = "imgUserProfileImage" id = "profilePhoto" alt = "عکس پروفایل">
 
-                    <h3 class="m-widget19__title m--font-light userFullname">
+                <h3 class = "m-widget19__title m--font-light userFullname">
                         @if(isset($withRegisterationDate) && $withRegisterationDate)
                             @if(!isset($user->firstName) && !isset($user->lastName))
                                 کاربر
@@ -58,76 +51,76 @@
                             @endif
                         @endif
                     </h3>
-                    <div class="m-widget19__shadow"></div>
+                <div class = "m-widget19__shadow"></div>
                 </div>
-                <div class="m-widget19__content">
-                    <div class="m-widget19__header">
+            <div class = "m-widget19__content">
+                <div class = "m-widget19__header">
 
                         @if(isset($withCompletionBox) && $withCompletionBox)
                             @if(isset($userCompletion))
                                 میزان تکمیل پروفایل ({{ $userCompletion }}%)
                                 <br>
                                 @if(!$user->hasVerifiedMobile())
-                                    <span class="label label-warning">توجه! یکی از موارد ، تایید شماره موبایل می باشد </span>
+                                <span class = "label label-warning">توجه! یکی از موارد ، تایید شماره موبایل می باشد </span>
                                     <br>
                                 @endif
-                                <div class="progress" style="height: 3px;" aria-valuenow="50">
-                                    <div class="progress-bar progress-bar-animated progress-bar-striped bg-info" role="progressbar" aria-valuenow="{{ $userCompletion }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class = "progress" style = "height: 3px;" aria-valuenow = "50">
+                                <div class = "progress-bar progress-bar-animated progress-bar-striped bg-info" role = "progressbar" aria-valuenow = "{{ $userCompletion }}" aria-valuemin = "0" aria-valuemax = "100"></div>
                                 </div>
                             @endif
 
                         @endif
 
-                        <i class="flaticon-user-ok"></i>
+                    <i class = "flaticon-user-ok"></i>
                                 تاریخ عضویت: {{$user->CreatedAt_Jalali()}}
                     </div>
-                    <div class="m-widget19__body">
+                <div class = "m-widget19__body">
                         @if(isset($withInfoBox) && $withInfoBox)
 
                             <hr>
 
                             <br>
-                            <i class="la la-barcode"></i>
+                        <i class = "la la-barcode"></i>
                             کد ملی:
                             @if(isset($user->nationalCode)) {{ $user->nationalCode }} @endif
                             <br>
-                            <i class="la la-mobile"></i>
+                        <i class = "la la-mobile"></i>
                             شماره موبایل:
                             @if(isset($user->mobile)){{ $user->mobile }} @endif
                             <br>
 
-                            <span class="m-badge m-badge--success mobileVerifyMessage @if(!$user->hasVerifiedMobile()) d-none @endif">شماره موبایل تایید شده است.</span>
-                            <span class="m-badge m-badge--danger mobileUnVerifyMessage @if($user->hasVerifiedMobile()) d-none @endif"> توجه! شماره موبایل تایید نشده است.</span>
+                        <span class = "m-badge m-badge--success mobileVerifyMessage @if(!$user->hasVerifiedMobile()) d-none @endif">شماره موبایل تایید شده است.</span>
+                        <span class = "m-badge m-badge--danger mobileUnVerifyMessage @if($user->hasVerifiedMobile()) d-none @endif"> توجه! شماره موبایل تایید نشده است.</span>
 
-                            <div class="margin-top-20 profile-desc-link">
+                        <div class = "margin-top-20 profile-desc-link">
                                 @if (Session::has('verificationSuccess'))
-                                    <div class="alert alert-success alert-dismissable">
-                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                                <div class = "alert alert-success alert-dismissable">
+                                    <button type = "button" class = "close" data-dismiss = "alert" aria-hidden = "true"></button>
                                         {{ Session::pull('verificationSuccess') }}
                                     </div>
                                 @endif
                             </div>
 
                             @if(!$user->hasVerifiedMobile() )
-                                <div class="row SendMobileVerificationCodeWarper">
-                                    <div class="col-12 text-center">
-                                        <input type="hidden" id="SendMobileVerificationCodeActionUrl" value="{{ action('Web\MobileVerificationController@resend') }}">
-                                        <button type="button" id="btnSendMobileVerificationCode" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent m--margin-top-10">تایید شماره موبایل</button>
+                            <div class = "row SendMobileVerificationCodeWarper">
+                                <div class = "col-12 text-center">
+                                    <input type = "hidden" id = "SendMobileVerificationCodeActionUrl" value = "{{ action('Web\MobileVerificationController@resend') }}">
+                                    <button type = "button" id = "btnSendMobileVerificationCode" class = "btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent m--margin-top-10">تایید شماره موبایل</button>
                                     </div>
-                                    <div class="col-12 text-center inputVerificationWarper d-none">
-                                        <div class="form-group m-form__group">
-                                            <label for="txtMobileVerificationCode">کد تاییدیه ارسال شده:</label>
-                                            <div class="m-input-icon m-input-icon--left">
-                                                <input type="text" name="postalCode" id="txtMobileVerificationCode" class="form-control m-input m-input--air" placeholder="کد تایید">
-                                                <span class="m-input-icon__icon m-input-icon__icon--left">
+                                <div class = "col-12 text-center inputVerificationWarper d-none">
+                                    <div class = "form-group m-form__group">
+                                        <label for = "txtMobileVerificationCode">کد تاییدیه ارسال شده:</label>
+                                        <div class = "m-input-icon m-input-icon--left">
+                                            <input type = "text" name = "postalCode" id = "txtMobileVerificationCode" class = "form-control m-input m-input--air" placeholder = "کد تایید">
+                                            <span class = "m-input-icon__icon m-input-icon__icon--left">
                                                     <span>
-                                                        <i class="la la-mobile"></i>
+                                                        <i class = "la la-mobile"></i>
                                                     </span>
                                                 </span>
                                             </div>
                                         </div>
-                                        <input type="hidden" id="VerifyMobileVerificationCodeActionUrl" value="{{ action('Web\MobileVerificationController@verify') }}">
-                                        <button type="button" id="btnVerifyMobileVerificationCode" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">تایید کد</button>
+                                    <input type = "hidden" id = "VerifyMobileVerificationCodeActionUrl" value = "{{ action('Web\MobileVerificationController@verify') }}">
+                                    <button type = "button" id = "btnVerifyMobileVerificationCode" class = "btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">تایید کد</button>
                                     </div>
                                 </div>
 
@@ -148,7 +141,7 @@
                                 {{--<button type="submit" class="btn green">تایید کد</button>--}}
                                 {{--</fieldset>--}}
                                 {{--<fieldset id="hasntRequestedVerificationCode" class="">--}}
-                                {{--<a href="{{action("Web\MobileVerificationController@resend")}}" class="btn blue"--}}
+                            {{--<a href="{{action("Web\MobileVerificationController@resend")}}" class="btn blue"--}}
                                 {{--id="sendVerificationCodeButton">@if(isset($mobileVerificationCode)) درخواست مجدد کد @else--}}
                                 {{--درخواست ارسال کد@endif</a>--}}
                                 {{--</fieldset>--}}
@@ -181,30 +174,30 @@
                         @endif
                     </div>
                 </div>
-                <div class="m-widget19__action">
+            <div class = "m-widget19__action">
                     @if(isset($withNavigation) && $withNavigation)
                         <hr>
-                        <div class="profile-usermenu">
+                    <div class = "profile-usermenu">
 
                             @if(isset($hasCompleteProfile) && $hasCompleteProfile)
-                                <li @if(strcmp(url()->current() , action("Web\UserController@information" , $user)) == 0) class="active" @endif >
-                                    <a href="{{action("Web\UserController@information" , $user)}}" class="font-red">
-                                        <i class="fa fa-pencil"></i>
+                            <li @if(strcmp(url()->current() , action("Web\UserController@information" , $user)) == 0) class = "active" @endif >
+                                <a href = "{{action("Web\UserController@information" , $user)}}" class = "font-red">
+                                    <i class = "fa fa-pencil"></i>
                                         تکمیل اطلاعات (مخصوص اردویی ها)
                                     </a>
                                 </li>
                             @endif
 
-                            <button type="button" class="btn m-btn--air btn-outline-warning btn-block" menu="profileMenuPage-setting">
-                                <i class="flaticon-cogwheel"></i>
+                        <button type = "button" class = "btn m-btn--air btn-outline-warning btn-block" menu = "profileMenuPage-setting">
+                            <i class = "flaticon-cogwheel"></i>
                                 تنظیمات حساب کاربری
                             </button>
-                            <button type="button" class="btn m-btn--air btn-outline-info btn-block" menu="profileMenuPage-filmVaJozve" onclick="window.location.href='{{ route('web.user.dashboard', Auth::user()) }}';">
-                                <i class="flaticon-multimedia-4"></i>
+                        <button type = "button" class = "btn m-btn--air btn-outline-info btn-block" menu = "profileMenuPage-filmVaJozve" onclick = "window.location.href='{{ route('web.user.dashboard', Auth::user()) }}';">
+                            <i class = "flaticon-multimedia-4"></i>
                                 فیلم ها و جزوات
                             </button>
-                            <button type="button" class="btn m-btn--air btn-outline-success btn-block" menu="profileMenuPage-sabteRotbe">
-                                <i class="la la-trophy"></i>
+                        <button type = "button" class = "btn m-btn--air btn-outline-success btn-block" menu = "profileMenuPage-sabteRotbe">
+                            <i class = "la la-trophy"></i>
                                 ثبت رتبه 97
                             </button>
                         </div>
@@ -217,9 +210,7 @@
 
 <!-- PORTLET MAIN -->
 {{--<div class="portlet light profile-sidebar-portlet ">--}}
-    {{--<!-- SIDEBAR USERPIC -->--}}
-    {{--<div class="profile-userpic">--}}
-        {{----}}{{----}}{{--<img @if(isset($user->photo))  src="{{ route('image', ['category'=>'1','w'=>'150' , 'h'=>'150' ,  'filename' => $user->photo ]) }}" @endif class="img-responsive" id="profilePhoto" alt="عکس پروفایل">--}}{{----}}{{----}}
+    {{--<!-- SIDEBAR USERPIC -->--}}{{--<div class="profile-userpic">--}}{{----}}{{----}}{{--<img @if(isset($user->photo))  src="{{ route('image', ['category'=>'1','w'=>'150' , 'h'=>'150' ,  'filename' => $user->photo ]) }}" @endif class="img-responsive" id="profilePhoto" alt="عکس پروفایل">--}}{{----}}{{----}}
         {{----}}{{----}}{{--@if(isset($withPhotoUpload) && $withPhotoUpload)--}}{{----}}{{----}}
             {{----}}{{----}}{{--<div class="row text-center margin-top-10">--}}{{----}}{{----}}
                 {{----}}{{----}}{{--{!! Form::open(['action' => ['Web\UserController@update' , Auth::user()]  , 'id'=>'profilePhotoAjaxForm' ]) !!}--}}{{----}}{{----}}
@@ -229,11 +220,7 @@
                             {{----}}{{----}}{{--<span class="fileinput-new"> انتخاب عکس </span>--}}{{----}}{{----}}
                             {{----}}{{----}}{{--<span class="fileinput-exists"> تغییر </span>--}}{{----}}{{----}}
                             {{----}}{{----}}{{--{!! Form::file('photo' , ['id'=>'profilePhotoFile' , 'data-action'=>action("Web\UserController@updateProfile")]) !!}--}}{{----}}{{----}}
-                        {{----}}{{----}}{{--</span>--}}{{----}}{{----}}
-                        {{----}}{{----}}{{--<span class="fileinput-filename"> </span> &nbsp;--}}{{----}}{{----}}
-                        {{----}}{{----}}{{--<a href="javascript:" class="close fileinput-exists" data-dismiss="fileinput" id="profilePhotoAjaxFileInputClose"></a>--}}{{----}}{{----}}
-                    {{----}}{{----}}{{--</div>--}}{{----}}{{----}}
-                    {{----}}{{----}}{{--<img src="/img/loading-spinner-default.gif" style="width: 15px; display: none" id="profilePhotoAjaxLoadingSpinner">--}}{{----}}{{----}}
+                        {{----}}{{----}}{{--</span>--}}{{----}}{{----}}{{----}}{{----}}{{--<span class="fileinput-filename"> </span> &nbsp;--}}{{----}}{{----}}{{----}}{{----}}{{--<a href="javascript:" class="close fileinput-exists" data-dismiss="fileinput" id="profilePhotoAjaxFileInputClose"></a>--}}{{----}}{{----}}{{----}}{{----}}{{--</div>--}}{{----}}{{----}}{{----}}{{----}}{{--<img src="/img/loading-spinner-default.gif" style="width: 15px; display: none" id="profilePhotoAjaxLoadingSpinner">--}}{{----}}{{----}}
                 {{----}}{{----}}{{--{!! Form::close() !!}--}}{{----}}{{----}}
             {{----}}{{----}}{{--</div>--}}{{----}}{{----}}
             {{----}}{{----}}{{--<progress></progress>--}}{{----}}{{----}}
@@ -245,14 +232,8 @@
     {{--<!-- END SIDEBAR USER TITLE -->--}}
     {{--<!-- SIDEBAR MENU -->--}}
 {{--@if(isset($withNavigation) && $withNavigation)--}}
-{{--<div class="profile-usermenu">--}}
-{{--<ul class="nav">--}}
-{{--<li @if(strcmp(url()->current() , action("Web\UserController@show",$user)) == 0) class="active" @endif >--}}
-{{--<a href="{{ action("Web\UserController@show",$user) }}">--}}
-{{--<i class="icon-settings"></i> تنظیمات حساب کاربری </a>--}}
-{{--</li>--}}
-{{--<li @if(strcmp(url()->current() , action("Web\UserController@userProductFiles")) == 0) class="active" @endif >--}}
-{{--<a href="{{action("Web\UserController@userProductFiles")}}" class="font-yellow">--}}
+{{--<div class="profile-usermenu">--}}{{--<ul class="nav">--}}{{--<li @if(strcmp(url()->current() , action("Web\UserController@show",$user)) == 0) class="active" @endif >--}}{{--<a href="{{ action("Web\UserController@show",$user) }}">--}}
+{{--<i class="icon-settings"></i> تنظیمات حساب کاربری </a>--}}{{--</li>--}}{{--<li @if(strcmp(url()->current() , action("Web\UserController@userProductFiles")) == 0) class="active" @endif >--}}{{--<a href="{{action("Web\UserController@userProductFiles")}}" class="font-yellow">--}}
 {{--<i class="fa fa-cloud-download "></i> فیلم ها و جزوه ها </a></li>--}}
 {{--<li class="@if(strcmp(url()->current() , action("Web\UserController@showBelongings")) == 0) active @endif">--}}
 {{--<a  href="{{action("Web\UserController@showBelongings")}}">--}}

@@ -4,7 +4,6 @@ namespace App\Http\ViewComposers;
 
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
 
 class HeaderComposer
@@ -24,7 +23,7 @@ class HeaderComposer
     public function __construct(Request $request)
     {
         $this->request = $request;
-        $this->defaultProfileImg = Config::get('constants.PROFILE_DEFAULT_IMAGE');
+        $this->defaultProfileImg = config('constants.PROFILE_DEFAULT_IMAGE');
     }
 
     /**

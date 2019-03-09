@@ -37,20 +37,23 @@ class ProductController extends Controller
      *
      *
      * @param \Illuminate\Http\Request $request
-     * @param Product $product
+     * @param Product                  $grandProduct
      *
      * @return \Illuminate\Http\Response
      */
-    public function refreshPrice(Request $request, Product $product)
+    public function refreshPrice(Request $request, Product $grandProduct)
     {
         $mainAttributeValues = $request->get("mainAttributeValues");
         $selectedSubProductIds = $request->get("products");
         $extraAttributeValues = $request->get("extraAttributeValues");
-        $user = $request->user();
-        //ToDo : Should have a route in web\ProductController
+
+        //TODO: Handle
+        $user = $request->user('api');
+        if (!isset($user))
+            $user = $request->user();
 
         $key = "product:refreshPrice:"
-            . $product->cacheKey()
+            . $grandProduct->cacheKey()
             . "-user\\"
             . (isset($user) && !is_null($user) ? $user->cacheKey() : "")
             . "-mainAttributeValues\\"
@@ -61,15 +64,15 @@ class ProductController extends Controller
             . (isset($extraAttributeValues) ? implode("", $extraAttributeValues) : "-");
 
         return Cache::tags('bon')
-            ->remember($key, config("constants.CACHE_60"), function () use ($product, $user, $mainAttributeValues, $selectedSubProductIds, $extraAttributeValues) {
-                $productType = optional($product->producttype)->id;
+                    ->remember($key, config("constants.CACHE_60"), function () use ($grandProduct, $user, $mainAttributeValues, $selectedSubProductIds, $extraAttributeValues) {
+                        $grandProductType = optional($grandProduct->producttype)->id;
                 $intendedProducts = collect();
-                switch ($productType) {
+                        switch ($grandProductType) {
                     case config("constants.PRODUCT_TYPE_SIMPLE"):
-                        $intendedProducts->push($product);
+                        $intendedProducts->push($grandProduct);
                         break;
                     case config("constants.PRODUCT_TYPE_CONFIGURABLE"):
-                        $simpleProduct = $this->findProductChildViaAttributes($product, $mainAttributeValues);
+                        $simpleProduct = $this->findProductChildViaAttributes($grandProduct, $mainAttributeValues);
                         if (isset($simpleProduct)) {
                             $intendedProducts->push($simpleProduct);
                         }
@@ -120,7 +123,7 @@ class ProductController extends Controller
 
                 $totalExtraCost = 0;
                 if (is_array($extraAttributeValues))
-                    $totalExtraCost = $this->productExtraCostFromAttributes($product, $extraAttributeValues);
+                    $totalExtraCost = $this->productExtraCostFromAttributes($grandProduct, $extraAttributeValues);
 
                 if($error)
                 {

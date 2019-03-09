@@ -11,38 +11,38 @@
 
     @include('systemMessage.flash')
 
-    <div class="row">
-        <div class="col">
-            <div class="row a--step-warper">
-                <div class="col a--step-item passed">
-                    <div class="a--step-item-icon">
-                        <i class="flaticon-lock"></i>
+    <div class = "row">
+        <div class = "col">
+            <div class = "row a--step-warper">
+                <div class = "col a--step-item passed">
+                    <div class = "a--step-item-icon">
+                        <i class = "flaticon-lock"></i>
                     </div>
-                    <div class="a--step-item-text">
+                    <div class = "a--step-item-text">
                         ورود
                     </div>
                 </div>
-                <div class="col a--step-item passed">
-                    <div class="a--step-item-icon">
-                        <i class="flaticon-information"></i>
+                <div class = "col a--step-item passed">
+                    <div class = "a--step-item-icon">
+                        <i class = "flaticon-information"></i>
                     </div>
-                    <div class="a--step-item-text">
+                    <div class = "a--step-item-text">
                         تکمیل اطلاعات
                     </div>
                 </div>
-                <div class="col a--step-item passed">
-                    <div class="a--step-item-icon">
-                        <i class="flaticon-list-3"></i>
+                <div class = "col a--step-item passed">
+                    <div class = "a--step-item-icon">
+                        <i class = "flaticon-list-3"></i>
                     </div>
-                    <div class="a--step-item-text">
+                    <div class = "a--step-item-text">
                         بازبینی
                     </div>
                 </div>
-                <div class="col a--step-item current">
-                    <div class="a--step-item-icon">
-                        <i class="la la-money"></i>
+                <div class = "col a--step-item current">
+                    <div class = "a--step-item-icon">
+                        <i class = "la la-money"></i>
                     </div>
-                    <div class="a--step-item-text">
+                    <div class = "a--step-item-text">
                         اطلاعات پرداخت
                     </div>
                 </div>
@@ -139,7 +139,7 @@
                                         <div class = "m-portlet__body">
                                             <div class = "row text-center">
                                                 <div class = "col-12 col-md-9">
-                                                    <div class="m--margin-top-20">
+                                                    <div class = "m--margin-top-20">
                                                         جهت تایید سفارش مبلغ
                                                         <b class = "finalPriceValue">{{ number_format($invoiceInfo['totalCost']) }}</b> تومان به شماره کارت:
                                                         <br>
@@ -149,7 +149,7 @@
                                                     </div>
                                                 </div>
                                                 <div class = "col-12 col-md-3">
-                                                    <img class="card2cardImage" src = "/acm/extra/payment/balance-transfer.png" alt = "کارت به کارت">
+                                                    <img class = "card2cardImage" src = "/acm/extra/payment/balance-transfer.png" alt = "کارت به کارت">
                                                 </div>
                                             </div>
                                         </div>
@@ -341,10 +341,9 @@
                                                             <img src = "/acm/extra/sad.png" class = "face-sad m--margin-top-20" alt = "">
                                                             <img src = "/acm/extra/happy.png" class = "face-happy m--margin-top-20" alt = "">
                                                         </span>
-                                                        <input type="hidden" id="addDonateUrl" value="{{ action('Web\OrderController@addOrderproduct' , 180) }}">
-                                                        <input type="hidden" id="removeDonateUrl" value="{{ action('Web\OrderController@removeOrderproduct' , 180) }}">
-                                                        <input type="hidden" id="orderHasDonate"
-                                                               value="@if(isset($orderHasDonate) && $orderHasDonate)1 @else 0 @endif">
+                                                        <input type = "hidden" id = "addDonateUrl" value = "{{ action('Web\OrderController@addOrderproduct' , 180) }}">
+                                                        <input type = "hidden" id = "removeDonateUrl" value = "{{ action('Web\OrderController@removeOrderproduct' , 180) }}">
+                                                        <input type = "hidden" id = "orderHasDonate" value = "@if(isset($orderHasDonate) && $orderHasDonate)1 @else 0 @endif">
                                                     </div>
                                                 </div>
                                             </div>

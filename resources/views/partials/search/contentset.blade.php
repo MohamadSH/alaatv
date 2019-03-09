@@ -1,11 +1,11 @@
 @if(optional($items)->isNotEmpty())
     <div class = "col-12 m--margin-bottom-5">
 
-        <div class="a--devider-with-title">
-            <div class="a--devider-title">
+        <div class = "a--devider-with-title">
+            <div class = "a--devider-title">
 
                 <a href = "#" class = "m-link m-link--primary">
-                    <i class="la la-list-ul"></i>
+                    <i class = "la la-list-ul"></i>
                     دوره های آموزشی
                 </a>
             </div>
@@ -31,7 +31,7 @@
             @endif
         </div>
 
-        <input id="owl--js-var-next-page-set-url" class = "m--hide" type = "hidden" value = '{{ $items->nextPageUrl() }}'>
+        <input id = "owl--js-var-next-page-set-url" class = "m--hide" type = "hidden" value = '{{ $items->nextPageUrl() }}'>
 
     </div>
 @endif

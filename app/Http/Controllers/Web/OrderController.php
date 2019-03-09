@@ -863,9 +863,8 @@ class OrderController extends Controller
             $responseStatus = Response::HTTP_OK;
         }
 
-        if ($request->expectsJson()) {
+        if ($request->expectsJson())
             return response($invoiceInfo, $responseStatus);
-        }
 
         $pageName = "review";
         return view("order.checkout.review", compact("invoiceInfo", 'orderProductCount', 'pageName'));
@@ -1241,7 +1240,7 @@ class OrderController extends Controller
         return redirect(action("Web\ProductController@search"));
     }
 
-    public function removeOrderproduct(Request $request, Product $product , OrderproductController $orderproductController)
+    public function removeOrderproduct(Request $request, Product $product, OrderproductController $orderproductController)
     {
         $user = $request->user();
 
@@ -1251,18 +1250,17 @@ class OrderController extends Controller
         if (isset($openOrder)) {
             $orderproduct = $openOrder->orderproducts->where("product_id", $product->id)->first();
 
-            if (isset($orderproduct))
-            {
+            if (isset($orderproduct)) {
                 try {
                     $orderproductController->destroy($orderproduct);
                 } catch (\Exception $e) {
                     return $this->response
-                                ->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)
-                                ->setContent([
-                                    "error"        => $e->getMessage(),
-                                    "line"         => $e->getLine(),
-                                    "file"         => $e->getFile(),
-                                ]);
+                        ->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)
+                        ->setContent([
+                            "error" => $e->getMessage(),
+                            "line"  => $e->getLine(),
+                            "file"  => $e->getFile(),
+                        ]);
                 }
 
                 /** Has been commented for better performance in removing donate */
@@ -1281,12 +1279,12 @@ class OrderController extends Controller
                     $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
                     $resultText = 'Database error on updating order';
                 }
-            }else{
+            } else {
                 $resultCode = Response::HTTP_BAD_REQUEST;
                 $resultText = 'No orderproducts found for passed product';
             }
 
-        }else{
+        } else {
             $resultCode = Response::HTTP_BAD_REQUEST;
             $resultText = 'No open order found';
         }
@@ -1303,7 +1301,7 @@ class OrderController extends Controller
                 ],
             ];
 
-        return response($response , Response::HTTP_OK);
+        return response($response, Response::HTTP_OK);
 
     }
 
@@ -1579,10 +1577,11 @@ class OrderController extends Controller
      * Makes a donate request
      *
      * @param \App\Http\Requests\DonateRequest $request
-     * @param OrderproductController $orderproductController
+     * @param OrderproductController           $orderproductController
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function donateOrder(DonateRequest $request , OrderproductController $orderproductController)
+    public function donateOrder(DonateRequest $request, OrderproductController $orderproductController)
     {
         $amount = $request->get("amount");
         $user = $request->user();
@@ -1601,16 +1600,16 @@ class OrderController extends Controller
         $request->offsetSet("mode", "donate");
         $request->offsetSet("cost", $amount);
         $product = Product::FindOrFail(Product::CUSTOM_DONATE_PRODUCT);
-        $response = $this->addOrderproduct($request, $product ,  $orderproductController);
+        $response = $this->addOrderproduct($request, $product, $orderproductController);
         $responseStatus = $response->getStatusCode();
         $result = json_decode($response->getContent());
 
-        $donateOrder                    = $donateOrder->fresh();
-        $orderCost                      = $donateOrder->obtainOrderCost(true, false);
-        $donateOrder->cost              = $orderCost["rawCostWithDiscount"];
+        $donateOrder = $donateOrder->fresh();
+        $orderCost = $donateOrder->obtainOrderCost(true, false);
+        $donateOrder->cost = $orderCost["rawCostWithDiscount"];
         $donateOrder->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
-        $updateFlag                     = $donateOrder->updateWithoutTimestamp();
-        $cost                           = $donateOrder->totalCost();
+        $updateFlag = $donateOrder->updateWithoutTimestamp();
+        $cost = $donateOrder->totalCost();
 
         if ($responseStatus == Response::HTTP_OK) {
             if (isset($result->cost))
@@ -1634,15 +1633,16 @@ class OrderController extends Controller
     /**
      * Adds a product to intended order
      *
-     * @param Request $request
-     * @param Product $product
+     * @param Request                $request
+     * @param Product                $product
      * @param OrderproductController $orderproductController
+     *
      * @return \Illuminate\Contracts\Routing\ResponseFactory|Response
      */
-    public function addOrderproduct(Request $request, Product $product , OrderproductController $orderproductController)
+    public function addOrderproduct(Request $request, Product $product, OrderproductController $orderproductController)
     {
         try {
-            $user =$request->user();
+            $user = $request->user();
             if ($request->has("cost"))
                 $cost = $request->get("cost");
 
@@ -1686,23 +1686,22 @@ class OrderController extends Controller
                 if ($createFlag) {
                     $data = [];
                     $data['product_id'] = $product->id;
-                    $data['order_id']   = $openOrder->id;
-                    if(isset($cost))
-                        $data['cost']  = $cost;
+                    $data['order_id'] = $openOrder->id;
+                    if (isset($cost))
+                        $data['cost'] = $cost;
                     $data['withoutBon'] = true;
                     $result = $orderproductController->new($data);
 
-                    if($result['status'])
-                    {
+                    if ($result['status']) {
                         $resultCode = Response::HTTP_OK;
                         $resultText = 'Orderproduct added successfully';
-                    }else{
+                    } else {
                         $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
                         $resultText = $result['message'];
                     }
                 }
 
-            }else{
+            } else {
                 $resultCode = Response::HTTP_BAD_REQUEST;
                 $resultText = 'No open order found';
             }
@@ -1717,15 +1716,15 @@ class OrderController extends Controller
                     ],
                 ];
 
-            return response($response , Response::HTTP_OK);
+            return response($response, Response::HTTP_OK);
 
         } catch (\Exception    $e) {
             return $this->response
                 ->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)
                 ->setContent([
-                    "error"        => $e->getMessage(),
-                    "line"         => $e->getLine(),
-                    "file"         => $e->getFile(),
+                    "error" => $e->getMessage(),
+                    "line"  => $e->getLine(),
+                    "file"  => $e->getFile(),
                 ]);
         }
     }

@@ -8,7 +8,7 @@ var UserOrder = function () {
 
 
     return {
-        refreshUi:function () {
+        refreshUi: function () {
 
         },
     };
@@ -40,7 +40,7 @@ $(document).ready(function () {
         $('.orderDetailes-paidPrice').html(orders[index].paidPrice.toLocaleString('fa') + ' تومان ');
         $('.orderDetailes-completed_at').html(new persianDate(Date.parse(orders[index].completed_at)).format("dddd, DD MMMM YYYY"));
 
-        $('.orderDetailes-orderPostingInfo').html((typeof orders[index].orderPostingInfo[0]!=='undefined')?orders[index].orderPostingInfo[0].postCode:'پست نشده');
+        $('.orderDetailes-orderPostingInfo').html((typeof orders[index].orderPostingInfo[0] !== 'undefined') ? orders[index].orderPostingInfo[0].postCode : 'پست نشده');
         $('.orderDetailes-debt').html(orders[index].debt.toLocaleString('fa') + ' تومان ');
         let couponMessage = 'کپن ندارد';
         if (orders[index].couponInfo !== null) {
@@ -65,7 +65,7 @@ $(document).ready(function () {
             let atvHtml = '';
             for (let atvIndex in opItem.attributevalues) {
                 let atvItem = opItem.attributevalues[atvIndex];
-                atvHtml += '<span class="m-badge m-badge--info m-badge--wide m-badge--rounded">'+atvItem.name+'</span>';
+                atvHtml += '<span class="m-badge m-badge--info m-badge--wide m-badge--rounded">' + atvItem.name + '</span>';
             }
 
             let price = '<span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">';
@@ -75,9 +75,9 @@ $(document).ready(function () {
             }
             let paidPride = opItem.price.customerPrice + opItem.price.extraCost;
             price += paidPride.toLocaleString('fa') + ' تومان ';
-            if ((opItem.price.bonDiscount+opItem.price.productDiscount) > 0) {
-                let percent = Math.round((1-(opItem.price.customerPrice/opItem.price.cost))*100);
-                price += '<span class="m-badge m-badge--info a--productDiscount">'+percent+'%</span>';
+            if ((opItem.price.bonDiscount + opItem.price.productDiscount) > 0) {
+                let percent = Math.round((1 - (opItem.price.customerPrice / opItem.price.cost)) * 100);
+                price += '<span class="m-badge m-badge--info a--productDiscount">' + percent + '%</span>';
             }
             price += '</span>';
 
@@ -114,7 +114,6 @@ $(document).ready(function () {
         }
 
 
-
         let successfulTransactionsHtml = '';
         for (let stIndex in orders[index].successfulTransactions) {
             let successfulTransactionItem = orders[index].successfulTransactions[stIndex];
@@ -123,10 +122,10 @@ $(document).ready(function () {
 
             successfulTransactionsHtml +=
                 '<tr>\n' +
-                '    <td>'+successfulTransactionItem.cost.toLocaleString('fa')+ ' تومان ' + '</td>\n' +
-                '    <td>'+successfulTransactionItem.paymentmethod.description+'</td>\n' +
-                '    <td>'+refCode+'</td>\n' +
-                '    <td>'+completed_at+'</td>\n' +
+                '    <td>' + successfulTransactionItem.cost.toLocaleString('fa') + ' تومان ' + '</td>\n' +
+                '    <td>' + successfulTransactionItem.paymentmethod.description + '</td>\n' +
+                '    <td>' + refCode + '</td>\n' +
+                '    <td>' + completed_at + '</td>\n' +
                 '</tr>';
         }
         if (successfulTransactionsHtml.trim().length > 0) {
@@ -145,10 +144,10 @@ $(document).ready(function () {
 
             pendingTransactionsHtml +=
                 '<tr>\n' +
-                '    <td>'+pendingTransactionItem.cost.toLocaleString('fa')+ ' تومان ' + '</td>\n' +
-                '    <td>'+pendingTransactionItem.paymentmethod.description+'</td>\n' +
-                '    <td>'+refCode+'</td>\n' +
-                '    <td>'+created_at+'</td>\n' +
+                '    <td>' + pendingTransactionItem.cost.toLocaleString('fa') + ' تومان ' + '</td>\n' +
+                '    <td>' + pendingTransactionItem.paymentmethod.description + '</td>\n' +
+                '    <td>' + refCode + '</td>\n' +
+                '    <td>' + created_at + '</td>\n' +
                 '</tr>';
         }
         if (pendingTransactionsHtml.trim().length > 0) {
@@ -167,9 +166,9 @@ $(document).ready(function () {
 
             unpaidTransactionsHtml +=
                 '<tr>\n' +
-                '    <td>'+unpaidTransactionItem.cost.toLocaleString('fa')+ ' تومان ' + '</td>\n' +
-                '    <td>'+created_at+'</td>\n' +
-                '    <td>'+deadline_at+'</td>\n' +
+                '    <td>' + unpaidTransactionItem.cost.toLocaleString('fa') + ' تومان ' + '</td>\n' +
+                '    <td>' + created_at + '</td>\n' +
+                '    <td>' + deadline_at + '</td>\n' +
                 '</tr>';
         }
         if (unpaidTransactionsHtml.trim().length > 0) {

@@ -10,12 +10,16 @@ namespace App\Collection;
 
 
 use App\Content;
+use App\Traits\JsonResponseFormat;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as BaseCollection;
 
 
 class ContentCollection extends Collection
 {
+
+    use JsonResponseFormat;
+
     public function videos()
     {
         return $this->where("contenttype_id", Content::CONTENT_TYPE_VIDEO);
