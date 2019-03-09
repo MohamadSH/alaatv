@@ -248,10 +248,13 @@ $(document).ready(function () {
         // }, 2e3);
         //
         // return false;
+        console.log('veri clicked!');
 
         $.ajax({
             type: 'GET',
             url: $('#SendMobileVerificationCodeActionUrl').val(),
+            // dataType: 'text',
+            dataType: 'json',
             data: {},
             success: function (data) {
                 if (data.error) {
@@ -285,11 +288,10 @@ $(document).ready(function () {
                 mApp.unblock('.SendMobileVerificationCodeWarper');
             },
             error: function (jqXHR, textStatus, errorThrown) {
-
                 Swal({
                     title: 'توجه!',
                     text: 'خطای سیستمی رخ داده است.',
-                    type: 'danger',
+                    type: 'warning',
                     confirmButtonText: 'بستن'
                 });
                 mApp.unblock('.SendMobileVerificationCodeWarper');
@@ -298,6 +300,17 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '#btnVerifyMobileVerificationCode', function () {
+
+        let verificationCode = $('#txtMobileVerificationCode').val();
+        if (verificationCode.trim().length === 0) {
+            Swal({
+                title: 'توجه!',
+                text: 'کد را وارد نکرده اید.',
+                type: 'danger',
+                confirmButtonText: 'بستن'
+            });
+            return false;
+        }
 
         mApp.block('.SendMobileVerificationCodeWarper', {
             overlayColor: "#000000",
@@ -333,7 +346,11 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: $('#VerifyMobileVerificationCodeActionUrl').val(),
-            data: {},
+            data: {
+                code: verificationCode
+            },
+            // dataType: 'text',
+            dataType: 'json',
             success: function (data) {
                 if (data.error) {
 
@@ -367,10 +384,18 @@ $(document).ready(function () {
                 mUtil.scrollTo('.SendMobileVerificationCodeWarper', 300);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-
+                console.log(jqXHR.status);
+                let message = '';
+                if (jqXHR.status === 403) {
+                    message = 'کد وارد شده اشتباه است.';
+                } else if (jqXHR.status === 422) {
+                    message = 'کد را وارد نکرده اید.';
+                } else {
+                    message = 'خطای سیستمی رخ داده است.';
+                }
                 Swal({
                     title: 'توجه!',
-                    text: 'خطای سیستمی رخ داده است.',
+                    text: message,
                     type: 'danger',
                     confirmButtonText: 'بستن'
                 });

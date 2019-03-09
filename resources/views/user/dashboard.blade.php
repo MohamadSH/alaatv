@@ -31,7 +31,7 @@
     {{--{{ $user }}--}}
 
 
-    {{--{{ $userAssetsCollection }}--}}
+    {{--{{ dd($userAssetsCollection) }}--}}
     {{--{{ dd($userAssetsCollection[0]->products[0]->name) }}--}}
 
 

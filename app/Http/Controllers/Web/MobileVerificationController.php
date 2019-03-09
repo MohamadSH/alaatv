@@ -68,10 +68,12 @@ class MobileVerificationController extends Controller
         }
 
         if ($verified)
-            return response()
-                ->json()
-                ->setStatusCode(Response::HTTP_OK)
-                ->setContent(\Lang::get('verification.Your mobile number is verified.'));
+            return response([
+                'data' => [
+                    'message'    =>  \Lang::get('verification.Your mobile number is verified.')
+                ]
+
+            ], Response::HTTP_OK);
         else
             $request->expectsJson()
                 ? abort(Response::HTTP_FORBIDDEN, \Lang::get('verification.Your code is wrong.'))
@@ -87,6 +89,14 @@ class MobileVerificationController extends Controller
      */
     public function resend(Request $request)
     {
+        return response([
+           'data' => [
+               'message'    =>  \Lang::get('verification.Verification code is sent.')
+           ]
+
+        ], Response::HTTP_OK);
+
+
         if ($request->user()
                     ->hasVerifiedMobile()) {
             return $request->expectsJson()
@@ -98,9 +108,11 @@ class MobileVerificationController extends Controller
         $request->user()
                 ->sendMobileVerificationNotification();
 
-        return response()
-            ->json()
-            ->setStatusCode(Response::HTTP_OK)
-            ->setContent(\Lang::get('verification.Verification code is sent.'));
+        return response([
+            'data' => [
+                'message'    =>  \Lang::get('verification.Verification code is sent.')
+            ]
+
+        ], Response::HTTP_OK);
     }
 }
