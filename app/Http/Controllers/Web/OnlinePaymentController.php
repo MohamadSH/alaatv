@@ -103,7 +103,7 @@ class OnlinePaymentController extends Controller
                 ], Response::HTTP_BAD_REQUEST);
             }
 
-            $callbackUrl = action('OnlinePaymentController@verifyPayment', ['paymentMethod' => $paymentMethod, 'device' => $device]);
+            $callbackUrl = action('Web\OnlinePaymentController@verifyPayment', ['paymentMethod' => $paymentMethod, 'device' => $device]);
 
             $gateWay = new ZarinpalComposer($transactiongateway->merchantNumber);
             $authority = $this->paymentRequest($gateWay , $callbackUrl , $cost , $description);
@@ -126,7 +126,7 @@ class OnlinePaymentController extends Controller
                 ], Response::HTTP_SERVICE_UNAVAILABLE);
             }
         } else {
-            return redirect(action('OfflinePaymentController@verifyPayment', ['device' => $device, 'paymentMethod' => 'wallet', 'coi' => (isset($order)?$order->id:null)]));
+            return redirect(action('Web\OfflinePaymentController@verifyPayment', ['device' => $device, 'paymentMethod' => 'wallet', 'coi' => (isset($order)?$order->id:null)]));
         }
     }
 
@@ -271,7 +271,7 @@ class OnlinePaymentController extends Controller
 
         $request->session()->flash('verifyResult', $verifyResult);
 
-        return redirect(action('OnlinePaymentController@showPaymentStatus', [
+        return redirect(action('Web\OnlinePaymentController@showPaymentStatus', [
             'status' => ($gateWayVerify['status'])?'successful':'failed',
             'paymentMethod' => $paymentMethod,
             'device' => $device
