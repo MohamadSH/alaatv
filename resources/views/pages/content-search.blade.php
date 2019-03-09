@@ -508,8 +508,8 @@
                             </div>
                         </div>
                         <div class = "m-portlet__body">
-                            <input type = "hidden" id = "vertical-widget--js-var-next-page-pamphlet-url" value = "{{ $result->get('pamphlet')->nextPageUrl() }}">
-                            <input type = "hidden" id = "vertical-widget--js-var-next-page-article-url" value = "{{ $result->get('article')->nextPageUrl() }}">
+                            <input type = "hidden" id = "vertical-widget--js-var-next-page-pamphlet-url" value = "{{ optional($result->get('pamphlet'))->nextPageUrl() }}">
+                            <input type = "hidden" id = "vertical-widget--js-var-next-page-article-url" value = "{{ optional($result->get('article'))->nextPageUrl() }}">
                             <div class = "tab-content">
                                 <div class = "tab-pane active" role = "tabpanel" id = "pamphlet-vertical-tabpanel">
                                     <div class = "m-scrollable" data-scrollable = "true" style = "height: 500px">
