@@ -80,24 +80,24 @@
                             <hr>
 
                             <br>
-                        <i class = "la la-barcode"></i>
+                            <i class = "la la-barcode"></i>
                             کد ملی:
                             @if(isset($user->nationalCode)) {{ $user->nationalCode }} @endif
                             <br>
-                        <i class = "la la-mobile"></i>
+                            <i class = "la la-mobile"></i>
                             شماره موبایل:
                             @if(isset($user->mobile)){{ $user->mobile }} @endif
                             <br>
 
-                        <span class = "m-badge m-badge--success mobileVerifyMessage @if(!$user->hasVerifiedMobile()) d-none @endif">شماره موبایل تایید شده است.</span>
-                        <span class = "m-badge m-badge--danger mobileUnVerifyMessage @if($user->hasVerifiedMobile()) d-none @endif"> توجه! شماره موبایل تایید نشده است.</span>
+                            <span class = "m-badge m-badge--success mobileVerifyMessage @if(!$user->hasVerifiedMobile()) d-none @endif">شماره موبایل تایید شده است.</span>
+                            <span class = "m-badge m-badge--danger mobileUnVerifyMessage @if($user->hasVerifiedMobile()) d-none @endif"> توجه! شماره موبایل تایید نشده است.</span>
 
-                        <div class = "margin-top-20 profile-desc-link">
+                            <div class = "margin-top-20 profile-desc-link">
                                 @if (Session::has('verificationSuccess'))
                                 <div class = "alert alert-success alert-dismissable">
                                     <button type = "button" class = "close" data-dismiss = "alert" aria-hidden = "true"></button>
-                                        {{ Session::pull('verificationSuccess') }}
-                                    </div>
+                                    {{ Session::pull('verificationSuccess') }}
+                                </div>
                                 @endif
                             </div>
 
@@ -170,7 +170,6 @@
                                 {{--</div>--}}
                             @endif
 
-                        <!-- END PORTLET MAIN -->
                         @endif
                     </div>
                 </div>
