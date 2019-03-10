@@ -70,6 +70,7 @@ class MobileVerificationController extends Controller
         if ($verified)
             return response([
                 'data' => [
+                    'user'       => $user ,
                     'message'    =>  \Lang::get('verification.Your mobile number is verified.')
                 ]
 
@@ -89,28 +90,19 @@ class MobileVerificationController extends Controller
      */
     public function resend(Request $request)
     {
-        return response([
-           'data' => [
-               'message'    =>  \Lang::get('verification.Verification code is sent.')
-           ]
-
-        ], Response::HTTP_OK);
-
-
-        if ($request->user()
-                    ->hasVerifiedMobile()) {
+        $user = $request->user();
+        if ($user->hasVerifiedMobile()) {
             return $request->expectsJson()
                 ? abort(Response::HTTP_FORBIDDEN, \Lang::get('verification.Your mobile number is verified.'))
                 : Redirect::route('verification.notice');
 
         }
 
-        $request->user()
-                ->sendMobileVerificationNotification();
+        $user->sendMobileVerificationNotification();
 
         return response([
             'data' => [
-                'message'    =>  \Lang::get('verification.Verification code is sent.')
+                'message'    =>  \Lang::get('verification.Verification code is sent.') ,
             ]
 
         ], Response::HTTP_OK);

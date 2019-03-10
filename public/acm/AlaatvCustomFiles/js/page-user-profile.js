@@ -17,7 +17,6 @@ $(document).ready(function () {
     $(document).on('click', '#uploadProfilePhotoAjaxSubmit', function () {
         // $('.fileinput-previewClass .kv-file-upload').trigger('click');
         $('.profilePhotoUploadProgressBar').fadeIn();
-
         mApp.block('.userProfilePicWraper', {
             type: "loader",
             state: "success",
@@ -207,8 +206,8 @@ $(document).ready(function () {
         // return false;
 
         $.ajax({
-            type: 'POST',
-            url: $form.attr('action'),
+            type: $form.attr('method'),
+            url : $form.attr('action'),
             data: data,
             dataType: 'json',
 
@@ -285,7 +284,7 @@ $(document).ready(function () {
         // return false;
 
         $.ajax({
-            type: 'POST',
+            type: $form.attr('method'),
             url: $form.attr('action'),
             data: data,
 

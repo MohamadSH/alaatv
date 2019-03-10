@@ -26,39 +26,9 @@ class InsertEventResultRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [];
-        if ($this->request->has("firstName"))
-            $rules["firstName"] = "required";
-        else $rules["firstName"] = "";
-
-        if ($this->request->has("lastName"))
-            $rules["lastName"] = "required";
-        else $rules["lastName"] = "";
-
-        if ($this->request->has("major_id"))
-            $rules["major_id"] = "required|exists:majors,id";
-        else $rules["major_id"] = "";
-
-        if ($this->request->has("enableReportPublish"))
-            $rules["participationCode"] = "required";
-        else {
-            $rules["participationCode"] = "";
-        }
-
-        //        if($this->request->has("participationCode")) {
-        //            if(strlen(preg_replace('/\s+/', '', $this->request->get("participationCode"))) != 0)
-        //                $rules["participationCode"] .= "unique:eventresults:".Hash::check();
-        //        }
-        //        else {
-        //            $rules["participationCode"] = "" ;
-        //        }
-
         return [
-            'firstName'         => $rules["firstName"],
-            'lastName'          => $rules["lastName"],
-            'major_id'          => $rules["major_id"],
             'rank'              => 'required',
-            'participationCode' => $rules["participationCode"],
+//            'participationCode' => 'unique:eventresults:'.Hash::check(),
             'event_id'          => 'required|exists:events,id',
             'reportFile'        => 'required|mimes:jpeg,jpg,png,pdf,rar,zip',
         ];
