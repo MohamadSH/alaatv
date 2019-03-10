@@ -1,4 +1,4 @@
-@permission((Config::get('constants.LIST_ORDER_ACCESS')))
+@permission((config('constants.LIST_ORDER_ACCESS')))
 @foreach($orders as $order)
     <tr>
         <th></th>
