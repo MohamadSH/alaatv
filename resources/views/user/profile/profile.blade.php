@@ -70,7 +70,7 @@
             @else
                 @include('user.profile.profileView')
             @endif
-            <div id="profileMenuPage-sabteRotbe" class="m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage">
+            <div class="m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage profileMenuPage-sabteRotbe">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
@@ -81,7 +81,7 @@
                                 فیلم ها و جزواتی که خریده اید:
                             </h3>
                             <h2 class="m-portlet__head-label m-portlet__head-label--success">
-                                <span style="white-space: nowrap;">
+                                <span>
                                     <i class="la la-trophy"></i>
                                     ثبت رتبه 97
                                 </span>
@@ -189,7 +189,7 @@
                     </form>
                 </div>
             </div>
-            <div id="profileMenuPage-filmVaJozve" class="m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage">
+            <div class="m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage profileMenuPage-filmVaJozve">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
@@ -200,7 +200,7 @@
                                 فیلم ها و جزواتی که خریده اید:
                             </h3>
                             <h2 class="m-portlet__head-label m-portlet__head-label--info">
-                                <span style="white-space: nowrap;">
+                                <span>
                                     <i class="flaticon-multimedia-4"></i>
                                     فیلم ها و جزوات
                                 </span>

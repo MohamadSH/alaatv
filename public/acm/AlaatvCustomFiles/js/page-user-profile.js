@@ -17,15 +17,21 @@ $(document).ready(function () {
     $(document).on('click', '#uploadProfilePhotoAjaxSubmit', function () {
         // $('.fileinput-previewClass .kv-file-upload').trigger('click');
         $('.profilePhotoUploadProgressBar').fadeIn();
-        var $form = $("#profilePhotoAjaxForm");
-        console.log(new FormData($('#profilePhotoAjaxForm')[0]));
+        mApp.block('.userProfilePicWraper', {
+            type: "loader",
+            state: "success",
+        });
+
+        let $form = $('#profilePhotoAjaxForm');
+        let formData = new FormData($form[0]);
+
         $.ajax({
             // Your server script to process the upload
             url: $form.attr('action'),
-            type: $form.attr('method'),
+            type: 'POST',
 
             // Form data
-            data: new FormData($('#profilePhotoAjaxForm')[0]),
+            data: formData,
 
             // Tell jQuery not to process data or worry about content-type
             // You *must* include these options!
@@ -59,22 +65,18 @@ $(document).ready(function () {
                         window.location.reload();
                     }
                 }
-                mApp.unblock('#profileMenuPage-setting');
+                mApp.unblock('.userProfilePicWraper');
             },
 
             // Custom XMLHttpRequest
             xhr: function () {
-                var myXhr = $.ajaxSettings.xhr();
+                let myXhr = $.ajaxSettings.xhr();
                 if (myXhr.upload) {
                     // For handling the progress of the upload
                     myXhr.upload.addEventListener('progress', function (e) {
                         if (e.lengthComputable) {
                             let valuePercent = (e.loaded / e.total) * 100;
                             $('.profilePhotoUploadProgressBar .progress-bar').css('width', valuePercent + '%');
-                            // $('progress').attr({
-                            //     value: e.loaded,
-                            //     max: e.total,
-                            // });
                         }
                     }, false);
                 }
@@ -84,13 +86,14 @@ $(document).ready(function () {
 
     });
 
+    let $form = $('#profilePhotoAjaxForm');
     $('#UserProfilePhoto').fileinput({
         theme: 'fas',
         showUpload: false,
         showCaption: false,
 
         uploadAsync: false,
-        uploadUrl: $('#profilePhotoAjaxUploadActionUrl').val(), // your upload server url
+        uploadUrl: $form.attr('action'), // your upload server url
         uploadExtraData: function () {
             return {
                 updateType: 'photo',
@@ -144,26 +147,26 @@ $(document).ready(function () {
     });
 
     function showSabteRotbe() {
-        $('#profileMenuPage-filmVaJozve').fadeOut(0);
-        $('#profileMenuPage-setting').fadeOut(0);
-        $('#profileMenuPage-sabteRotbe').fadeIn();
+        $('.profileMenuPage.profileMenuPage-filmVaJozve').fadeOut(0);
+        $('.profileMenuPage.profileMenuPage-setting').fadeOut(0);
+        $('.profileMenuPage.profileMenuPage-sabteRotbe').fadeIn();
         $([document.documentElement, document.body]).animate({
-            scrollTop: $('#profileMenuPage-sabteRotbe').offset().top - $('#m_header').height() - 30
+            scrollTop: $('.profileMenuPage.profileMenuPage-sabteRotbe').offset().top - $('#m_header').height() - 30
         }, 500);
     }
 
     function showFilmVaJozve() {
-        $('#profileMenuPage-filmVaJozve').slideDown();
-        $('#profileMenuPage-sabteRotbe').slideUp();
-        $('#profileMenuPage-setting').slideUp();
+        $('.profileMenuPage.profileMenuPage-filmVaJozve').slideDown();
+        $('.profileMenuPage.profileMenuPage-sabteRotbe').slideUp();
+        $('.profileMenuPage.profileMenuPage-setting').slideUp();
     }
 
     function showSetting() {
-        $('#profileMenuPage-filmVaJozve').fadeOut(0);
-        $('#profileMenuPage-sabteRotbe').fadeOut(0);
-        $('#profileMenuPage-setting').fadeIn();
+        $('.profileMenuPage.profileMenuPage-filmVaJozve').fadeOut(0);
+        $('.profileMenuPage.profileMenuPage-sabteRotbe').fadeOut(0);
+        $('.profileMenuPage.profileMenuPage-setting').fadeIn();
         $([document.documentElement, document.body]).animate({
-            scrollTop: $('#profileMenuPage-setting').offset().top - $('#m_header').height() - 30
+            scrollTop: $('.profileMenuPage.profileMenuPage-setting').offset().top - $('#m_header').height() - 30
         }, 500);
     }
 
@@ -180,7 +183,7 @@ $(document).ready(function () {
         var $form = $("#profileForm-setting");
         var data = getFormData($form);
 
-        mApp.block('#profileMenuPage-setting', {
+        mApp.block('.profileMenuPage.profileMenuPage-setting', {
             overlayColor: "#000000",
             type: "loader",
             state: "success",
@@ -189,7 +192,7 @@ $(document).ready(function () {
 
         // setTimeout(function () {
         //
-        //     mApp.unblock('#profileMenuPage-setting');
+        //     mApp.unblock('.profileMenuPage.profileMenuPage-setting');
         //
         //     Swal({
         //         title: '',
@@ -217,7 +220,7 @@ $(document).ready(function () {
                     Swal({
                         title: 'توجه!',
                         text: 'خطای سیستمی رخ داده است.' + '<br>' + message,
-                        type: 'danger',
+                        type: 'warning',
                         confirmButtonText: 'بستن'
                     });
 
@@ -235,17 +238,17 @@ $(document).ready(function () {
                         window.location.reload();
                     }
                 }
-                mApp.unblock('#profileMenuPage-setting');
+                mApp.unblock('.profileMenuPage.profileMenuPage-setting');
             },
             error: function (jqXHR, textStatus, errorThrown) {
 
                 Swal({
                     title: 'توجه!',
                     text: 'خطای سیستمی رخ داده است.',
-                    type: 'danger',
+                    type: 'warning',
                     confirmButtonText: 'بستن'
                 });
-                mApp.unblock('#profileMenuPage-setting');
+                mApp.unblock('.profileMenuPage.profileMenuPage-setting');
             }
 
         });
@@ -258,7 +261,7 @@ $(document).ready(function () {
         var $form = $("#frmSabteRotbe");
         var data = getFormData($form);
 
-        mApp.block('#profileMenuPage-sabteRotbe', {
+        mApp.block('.profileMenuPage.profileMenuPage-sabteRotbe', {
             overlayColor: "#000000",
             type: "loader",
             state: "success",
@@ -267,7 +270,7 @@ $(document).ready(function () {
 
         // setTimeout(function () {
         //
-        //     mApp.unblock('#profileMenuPage-setting');
+        //     mApp.unblock('.profileMenuPage.profileMenuPage-setting');
         //
         //     Swal({
         //         title: '',
@@ -308,7 +311,7 @@ $(document).ready(function () {
                         confirmButtonText: 'بستن'
                     });
                 }
-                mApp.unblock('#profileMenuPage-sabteRotbe');
+                mApp.unblock('.profileMenuPage.profileMenuPage-sabteRotbe');
             },
             error: function (jqXHR, textStatus, errorThrown) {
 
