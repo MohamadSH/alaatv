@@ -12,6 +12,7 @@ use App\{Afterloginformcontrol,
     Employeeschedule,
     Employeetimesheet,
     Event,
+    Eventresult,
     Gender,
     Grade,
     Http\Controllers\Auth\RegisterController,
@@ -518,9 +519,12 @@ class UserController extends Controller
             $lotteryName,
         ] = $user->getLottery();
 
+        $event = Event::name('konkur97')->first();
+        $userKonkurResult = $user->eventresults->where("event_id", $event->id)->first();
+
         return view("user.profile.profile", compact("user",
 
-            'genders', 'majors', 'sideBarMode', 'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName'));
+            'genders', 'majors', 'sideBarMode', 'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName' , 'userKonkurResult'));
     }
 
     /**
@@ -1570,13 +1574,24 @@ class UserController extends Controller
         }
 
         if ($request->expectsJson()) {
+            if($status == Response::HTTP_OK)
+               $response = [
+                   'userPhoto' => $user->photo,
+                   'user'      => $user,
+                   'message'   => $message,
+               ];
+            else
+                $response = [
+                    'error' =>  [
+                        'code'      =>  $status ,
+                        'message'   =>  $message ,
+                    ]
+                ];
+
             return response(
-                [
-                    'userPhoto' => $user->photo,
-                    'user'      => $user,
-                    'message'   => $message,
-                ],
-                $status
+                $response
+                ,
+                Response::HTTP_OK
             );
         }
         else {

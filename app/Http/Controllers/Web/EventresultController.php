@@ -74,28 +74,27 @@ class EventresultController extends Controller
      * @param  \App\Http\Requests\InsertEventResultRequest $request
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function store(InsertEventResultRequest $request)
     {
-
         $eventResult = new Eventresult();
         $eventResult->fill($request->all());
 
-        if ($request->has("participationCode")) {
+        if ($request->has("participationCode"))
             $eventResult->participationCode = encrypt($request->get("participationCode"));
-        }
 
-        if ($request->has("user_id")) {
-            $eventResult->user_id = $request->get("user_id");
-        } else if (Auth::check()) {
-            $user = Auth::user();
+        $user = $request->user();
+        if ( $request->has("user_id")) {
+            if($user->can(config('constants.INSET_EVENTRESULT_ACCESS')))
+                $eventResult->user_id = $request->get("user_id");
+            else
+                abort(403);
+        } else  {
             $eventResult->user_id = $user->id;
         }
 
-        if ($request->has("enableReportPublish"))
-            $eventResult->enableReportPublish = 1;
-        else
-            $eventResult->enableReportPublish = 0;
+        $eventResult->enableReportPublish = $request->get("enableReportPublish" , 0);
 
         $userUpdate = false;
         if ($request->has("major_id")) {
@@ -113,15 +112,15 @@ class EventresultController extends Controller
             $user->lastName = $request->get("lastName");
         }
 
-        //        if($request->has("participationCode"))
-        //        {
-        //            if(strlen(preg_replace('/\s+/', '', $request->get("participationCode"))) == 0)
-        //                $eventResult->participationCodeHash = null;
-        //            else
-        //                $eventResult->participationCodeHash = bcrypt($request->get("participationCode")) ;
-        //        }else{
-        //            $eventResult->participationCodeHash = null;
-        //        }
+        if($request->has("participationCode"))
+        {
+            if(strlen(preg_replace('/\s+/', '', $request->get("participationCode"))) == 0)
+                $eventResult->participationCodeHash = null;
+            else
+                $eventResult->participationCodeHash = bcrypt($request->get("participationCode")) ;
+        }else{
+            $eventResult->participationCodeHash = null;
+        }
 
         if ($request->hasFile("reportFile")) {
             $file = $request->reportFile;
@@ -142,26 +141,37 @@ class EventresultController extends Controller
                 $user->update();
             if ($request->expectsJson()) {
                 $participationCode = $eventResult->participationCode;
-                $message = "نتیجه با موفقیت درج شد";
-                $status = 200;
+                $resultStatus = Response::HTTP_OK;
             } else {
                 session()->put("success", "کارنامه با موفقیت درج شد");
             }
         } else {
             if ($request->expectsJson()) {
-                $message = "خطا در درج نتیجه";
-                $status = 503;
+                $message = "Database error";
+                $resultStatus = Response::HTTP_SERVICE_UNAVAILABLE;
             } else {
                 session()->put("error", \Lang::get("responseText.Database error."));
             }
         }
         if ($request->expectsJson())
-            return $this->response->setStatusCode($status)
-                                  ->setContent([
-                                                   "message"           => $message,
-                                                   "participationCode" => (isset($participationCode) ? $participationCode : null),
-                                               ]);
-        else
+        {
+            if($resultStatus == Response::HTTP_OK){
+                $responseContent = [
+                    'message'   =>  'Result inserted successfully' ,
+                    'participationCode' =>  $participationCode??$participationCode,
+                ] ;
+            }
+            else{
+                $responseContent = [
+                    'error' =>  [
+                        'message'   =>  $message ,
+                        'code'      =>  $resultStatus
+                    ]
+                ] ;
+            }
+
+            return response($responseContent, Response::HTTP_OK);
+        } else
             return redirect()->back();
     }
 

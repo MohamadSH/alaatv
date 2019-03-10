@@ -69,4 +69,8 @@ class Event extends BaseModel
     {
         return $this->hasMany('\App\Eventresult');
     }
+
+    public function scopeName($query , $value){
+        return $query->where('name' , $value);
+    }
 }
