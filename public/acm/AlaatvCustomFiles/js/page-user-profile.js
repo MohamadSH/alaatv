@@ -17,10 +17,12 @@ $(document).ready(function () {
     $(document).on('click', '#uploadProfilePhotoAjaxSubmit', function () {
         // $('.fileinput-previewClass .kv-file-upload').trigger('click');
         $('.profilePhotoUploadProgressBar').fadeIn();
+        var $form = $("#profilePhotoAjaxForm");
+        console.log(new FormData($('#profilePhotoAjaxForm')[0]));
         $.ajax({
             // Your server script to process the upload
-            url: $('#profilePhotoAjaxUploadActionUrl').val(),
-            type: 'PUT',
+            url: $form.attr('action'),
+            type: $form.attr('method'),
 
             // Form data
             data: new FormData($('#profilePhotoAjaxForm')[0]),
@@ -201,8 +203,8 @@ $(document).ready(function () {
         // return false;
 
         $.ajax({
-            type: 'POST',
-            url: $form.attr('action'),
+            type: $form.attr('method'),
+            url : $form.attr('action'),
             data: data,
             dataType: 'json',
 
@@ -279,7 +281,7 @@ $(document).ready(function () {
         // return false;
 
         $.ajax({
-            type: 'POST',
+            type: $form.attr('method'),
             url: $form.attr('action'),
             data: data,
 

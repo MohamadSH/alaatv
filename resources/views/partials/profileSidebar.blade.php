@@ -26,10 +26,9 @@
                 </div>
 
                 @if(isset($withPhotoUpload) && $withPhotoUpload)
-                    {!! Form::open(['action' => ['Web\UserController@update' , Auth::user()], 'method' => 'PUT', 'id'=>'profilePhotoAjaxForm' ]) !!}
+                    {!! Form::open(['route' => 'web.authenticatedUser.profile.update', 'method' => 'POST', 'id'=>'profilePhotoAjaxForm' ]) !!}
                     @csrf
                     <input type = "hidden" name = "updateType" value = "photo">
-                    <input type = "hidden" id = "profilePhotoAjaxUploadActionUrl" value = "{{ action('Web\UserController@update' , Auth::user()) }}">
                     <input type = "file" name = "photo" id = "UserProfilePhoto" accept = ".jpg,.gif,.png">
                     {!! Form::close() !!}
                 @endif
