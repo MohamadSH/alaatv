@@ -9,10 +9,12 @@
 namespace App\Collection;
 
 
+use App\Traits\JsonResponseFormat;
 use Illuminate\Database\Eloquent\Collection;
 
 
 class SetCollection extends Collection
 {
+    use JsonResponseFormat;
 
 }

@@ -9,6 +9,7 @@ use App\Classes\{Advertisable,
     SEO\SeoMetaTagsGenerator,
     Taggable};
 use App\Collection\ProductCollection;
+use App\Collection\SetCollection;
 use App\Traits\{APIRequestCommon,
     favorableTraits,
     ModelTrackerTrait,
@@ -200,6 +201,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'attributes',
         'samplePhotos',
         'price',
+        'sets',
     ];
 
     protected $hidden = [
@@ -1468,5 +1470,25 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     ])
                     ->withTimestamps()
                     ->orderBy('order');
+    }
+
+    public function getSetsAttribute(){
+        $key = "product:sets:" . $this->cacheKey();
+        return Cache::tags(["product"])->remember($key, config("constants.CACHE_600"), function () {
+            /** @var SetCollection $sets */
+            $sets = $this->sets()->get();
+//            $sets->setVisible([
+//                'name',
+//                'tags',
+//                'contents_count',
+//                'url',
+//                'apiUrl',
+//                'shortName',
+//                'author',
+//                'contentUrl',
+//                'product_set',
+//            ]);
+            return $sets;
+        });
     }
 }
