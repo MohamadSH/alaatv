@@ -41,3 +41,17 @@
     justify-content: center;
     margin: auto;
 }
+
+
+/*media query*/
+@media (max-width: 767.98px) {
+    .a--owl-carousel-type-1 .owl-prev,
+    .a--owl-carousel-type-1 .owl-next {
+        width: 20px;
+    }
+    .a--owl-carousel-type-1 .owl-prev:hover,
+    .a--owl-carousel-type-1 .owl-next:hover {
+        width: 30px;
+    }
+
+}

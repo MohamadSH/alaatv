@@ -126,7 +126,7 @@ class OnlinePaymentController extends Controller
                 ], Response::HTTP_SERVICE_UNAVAILABLE);
             }
         } else {
-            return redirect(action('OfflinePaymentController@verifyPayment', ['device' => $device, 'paymentMethod' => 'wallet', 'coi' => (isset($order)?$order->id:null)]));
+            return redirect(action('Web\OfflinePaymentController@verifyPayment', ['device' => $device, 'paymentMethod' => 'wallet', 'coi' => (isset($order)?$order->id:null)]));
         }
     }
 

@@ -31,6 +31,35 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
 
+            success: function (data) {
+                if (data.error) {
+
+                    // let message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
+                    let message = data.error.message;
+
+                    Swal({
+                        title: 'توجه!',
+                        text: 'خطای سیستمی رخ داده است.' + '<br>' + message,
+                        type: 'danger',
+                        confirmButtonText: 'بستن'
+                    });
+
+                } else {
+
+                    Swal({
+                        title: '',
+                        text: 'تصویر شما ویرایش شد.',
+                        type: 'success',
+                        confirmButtonText: 'بستن'
+                    });
+
+                    if (data.user.lockProfile === 1) {
+                        window.location.reload();
+                    }
+                }
+                mApp.unblock('#profileMenuPage-setting');
+            },
+
             // Custom XMLHttpRequest
             xhr: function () {
                 var myXhr = $.ajaxSettings.xhr();
@@ -52,7 +81,6 @@ $(document).ready(function () {
         });
 
     });
-
 
     $('#UserProfilePhoto').fileinput({
         theme: 'fas',
@@ -145,12 +173,11 @@ $(document).ready(function () {
         altField: '#birthdateAlt'
     });
 
-
     $(document).on('click', '#btnUpdateProfileInfoForm', function () {
 
         var $form = $("#profileForm-setting");
         var data = getFormData($form);
-        console.log('fom data: ' + data);
+
         mApp.block('#profileMenuPage-setting', {
             overlayColor: "#000000",
             type: "loader",
@@ -174,8 +201,86 @@ $(document).ready(function () {
         // return false;
 
         $.ajax({
-            type: 'PUT',
-            url: $('#userUpdateProfileUrl').val(),
+            type: 'POST',
+            url: $form.attr('action'),
+            data: data,
+            dataType: 'json',
+
+            success: function (data) {
+                if (data.error) {
+
+                    // let message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
+                    let message = data.error.message;
+
+                    Swal({
+                        title: 'توجه!',
+                        text: 'خطای سیستمی رخ داده است.' + '<br>' + message,
+                        type: 'danger',
+                        confirmButtonText: 'بستن'
+                    });
+
+                } else {
+
+
+                    Swal({
+                        title: '',
+                        text: 'اطلاعات شما ثبت شد.',
+                        type: 'success',
+                        confirmButtonText: 'بستن'
+                    });
+
+                    if (data.user.lockProfile === 1) {
+                        window.location.reload();
+                    }
+                }
+                mApp.unblock('#profileMenuPage-setting');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+
+                Swal({
+                    title: 'توجه!',
+                    text: 'خطای سیستمی رخ داده است.',
+                    type: 'danger',
+                    confirmButtonText: 'بستن'
+                });
+                mApp.unblock('#profileMenuPage-setting');
+            }
+
+        });
+
+
+    });
+
+    $(document).on('click', '#btnSabteRotbe1', function () {
+
+        var $form = $("#frmSabteRotbe");
+        var data = getFormData($form);
+
+        mApp.block('#profileMenuPage-sabteRotbe', {
+            overlayColor: "#000000",
+            type: "loader",
+            state: "success",
+            message: "کمی صبر کنید..."
+        });
+
+        // setTimeout(function () {
+        //
+        //     mApp.unblock('#profileMenuPage-setting');
+        //
+        //     Swal({
+        //         title: '',
+        //         text: 'اطلاعات شما ویرایش شد.',
+        //         type: 'success',
+        //         confirmButtonText: 'بستن'
+        //     });
+        //
+        // }, 2e3);
+        //
+        // return false;
+
+        $.ajax({
+            type: 'POST',
+            url: $form.attr('action'),
             data: data,
 
             success: function (data) {
@@ -192,16 +297,16 @@ $(document).ready(function () {
                     });
 
                 } else {
-                    $('.inputVerificationWarper').fadeIn();
+
 
                     Swal({
                         title: '',
-                        text: 'کد تایید برای شماره همراه شما پیامک شد.',
+                        text: 'اطلاعات شما ثبت شد.',
                         type: 'success',
                         confirmButtonText: 'بستن'
                     });
                 }
-                mApp.unblock('.SendMobileVerificationCodeWarper');
+                mApp.unblock('#profileMenuPage-sabteRotbe');
             },
             error: function (jqXHR, textStatus, errorThrown) {
 
@@ -378,6 +483,10 @@ $(document).ready(function () {
                         type: 'success',
                         confirmButtonText: 'بستن'
                     });
+
+                    if (data.user.lockProfile === 1) {
+                        window.location.reload();
+                    }
                 }
 
                 mApp.unblock('.SendMobileVerificationCodeWarper');
@@ -417,5 +526,4 @@ $(document).ready(function () {
         //
         // mUtil.scrollTop();
     });
-
 });

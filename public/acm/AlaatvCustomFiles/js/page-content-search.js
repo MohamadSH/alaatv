@@ -76,11 +76,11 @@ var MultiLevelSearch = function () {
                     oldSelect2.select2('destroy');
                 }
                 selectorItem.find('.select2warper').remove();
-                selectorItem.append('<div class="col-12 col-sm-9 col-md-5 col-lg-4 select2warper"><select class="form-control select2" id="' + select2Id + '">' + select2Html + '</select></div>');
+                selectorItem.append('<div class="col-12 col-sm-9 col-md-5 col-lg-4 select2warper"><div><select class="form-control select2" id="' + select2Id + '">' + select2Html + '</select></div></div>');
                 $('#' + select2Id).select2({width: 'resolve'});
                 selectorItem.fadeIn();
             } else {
-                selectorItem.append('<div class="col-12 col-sm-9 col-md-5 col-lg-4 select2warper"><select class="form-control select2" id="' + select2Id + '">' + select2Html + '</select></div>');
+                selectorItem.append('<div class="col-12 col-sm-9 col-md-5 col-lg-4 select2warper"><div><select class="form-control select2" id="' + select2Id + '">' + select2Html + '</select></div></div>');
                 $('#' + select2Id).select2({width: 'resolve'});
                 selectorItem.fadeIn();
             }
@@ -275,29 +275,6 @@ var MultiLevelSearch = function () {
 
 jQuery(document).ready(function () {
 
-    // function insertParam(key, value)
-    // {
-    //     key = encodeURI(key); value = encodeURI(value);
-    //
-    //     var kvp = document.location.search.substr(1).split('&');
-    //
-    //     var i=kvp.length; var x; while(i--)
-    //     {
-    //         x = kvp[i].split('=');
-    //
-    //         if (x[0]==key)
-    //         {
-    //             x[1] = value;
-    //             kvp[i] = x.join('=');
-    //             break;
-    //         }
-    //     }
-    //
-    //     if(i<0) {kvp[kvp.length] = [key,value].join('=');}
-    //
-    //     //this will reload the page, it's likely better to store this until finished
-    //     document.location.search = kvp.join('&');
-    // }
 
     MultiLevelSearch.init({
         selectorId: 'contentSearchFilter'
@@ -333,10 +310,6 @@ jQuery(document).ready(function () {
         // To change the URL in place without adding a new entry to history use
         // history.replaceState('data to be passed', 'Title of the page', '');
 
-
-        // console.log(MultiLevelSearch.getSelectedData());
-        // console.log(tagsValue);
-        // console.log(document.location.href);
-        // insertParam('tags[]', 'ali')
     });
+
 });
