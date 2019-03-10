@@ -33,6 +33,8 @@ $(document).ready(function () {
             // Form data
             data: formData,
 
+            mimeType:"multipart/form-data",
+
             // Tell jQuery not to process data or worry about content-type
             // You *must* include these options!
             cache: false,

@@ -32,14 +32,36 @@
 
     <div class = "row">
         <div class = "col">
+            <div class="alert alert-info" role="alert">
+                شماره کارت برای واریز کارت به کارت
+                <strong>
+                    6104-3375-6000-0026
+                </strong>
+                به نام مؤسسه توسعه علمی آموزشی عدالت محور آلاء بانک ملت
+            </div>
+
+            <div class="alert alert-info text-justify" role="alert">
+                شماره کارت برای
+                واریز کارت به کارت مبلغ: <span dir="ltr">{{$debitCard->cardNumber}}</span>
+                به نام @if(!isset($debitCard->user->firstName) && !isset($debitCard->user->lastName)) کاربر
+                ناشناس @else @if(isset($debitCard->user->firstName)) {{$debitCard->user->firstName}} @endif @if(isset($debitCard->user->lastName)) {{$debitCard->user->lastName}} @endif @endif
+                بانک {{$debitCard->bank->name}}
+            </div>
+
+        </div>
+    </div>
+
+    <div class = "row">
+        <div class = "col">
 
             @if(isset($debitCard))
-                <p class="list-group-item  bg-blue-soft bg-font-blue-soft" style="text-align: justify;"> شماره کارت برای
+                <div class="alert alert-info text-justify" role="alert">
+                    شماره کارت برای
                     واریز کارت به کارت مبلغ: <span dir="ltr">{{$debitCard->cardNumber}}</span>
                     به نام @if(!isset($debitCard->user->firstName) && !isset($debitCard->user->lastName)) کاربر
                     ناشناس @else @if(isset($debitCard->user->firstName)) {{$debitCard->user->firstName}} @endif @if(isset($debitCard->user->lastName)) {{$debitCard->user->lastName}} @endif @endif
                     بانک {{$debitCard->bank->name}}
-                </p>
+                </div>
             @endif
 
         </div>
