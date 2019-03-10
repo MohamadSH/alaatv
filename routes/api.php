@@ -36,8 +36,9 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::group(['prefix' => 'user'], function () {
-            Route::get('{user}/orders', 'Api\UserController@userOrders');
+            Route::get('{user}/orders', 'Api\UserController@userOrders')->name('api.user.orders');
             Route::get('{user}/dashboard', 'Api\DashboardPageController')->name('api.user.dashboard');
+            Route::get('{user}/profile', 'Api\UserController@show')->name('api.user.profile');
         });
 
         Route::group(['prefix' => 'order'], function () {

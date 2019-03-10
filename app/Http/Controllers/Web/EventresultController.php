@@ -78,7 +78,6 @@ class EventresultController extends Controller
      */
     public function store(InsertEventResultRequest $request)
     {
-        dd($request->all());
         $eventResult = new Eventresult();
         $eventResult->fill($request->all());
 

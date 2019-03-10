@@ -12,6 +12,30 @@ class UserController extends Controller
 {
 
     /**
+     * Display the specified resource.
+     *
+     *
+     * @param User $user
+     * @param Request $request
+     * @return Response
+     */
+    public function show(Request $request, User $user=null)
+    {
+        if($user===null) {
+            $user = $request->user('api');
+        } elseif (
+            ($user->id !== $request->user()->id) &&
+            !($user->can(config('constants.SHOW_USER_ACCESS')))
+        ) {
+            abort(403);
+        }
+
+        if ($request->expectsJson()) {
+            return response($user, Response::HTTP_OK);
+        }
+    }
+
+    /**
      * Gets a list of user orders
      *
      * @param Request $request
