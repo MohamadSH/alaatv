@@ -52,6 +52,7 @@ class EditUserRequest extends FormRequest
      */
     public function rules()
     {
+        dd($this->request->all());
         $userId = $this->request->get('id');
 
         $updateType = $this->request->get('updateType', self::USER_UPDATE_TYPE_TOTAL);

@@ -1530,6 +1530,7 @@ class UserController extends Controller
      */
     public function update(EditUserRequest $request, User $user = null)
     {
+
         $authenticatedUser = $request->user();
         if ($user === null)
             $user = $authenticatedUser;
@@ -1549,21 +1550,15 @@ class UserController extends Controller
             );
         }
 
+        //ToDo : place in UserObserver
+        if ($user->checkUserProfileForLocking())
+            $user->lockProfile();
+
         if ($user->update()) {
-            //ToDo : place in UserObserver
-            if ($user->checkUserProfileForLocking())
-                $user->lockProfile();
 
             //ToDo : place in UserObserver
             if ($request->has('roles'))
                 $this->attachRoles($request->get('roles'), $authenticatedUser , $user);
-
-            $newPhotoSrc = route('image', [
-                'category' => '1',
-                'w'        => '150',
-                'h'        => '150',
-                'filename' => $user->photo,
-            ]);
 
             $message = 'اطلاعات با موفقیت اصلاح شد';
             $status = Response::HTTP_OK;
@@ -1577,7 +1572,8 @@ class UserController extends Controller
         if ($request->expectsJson()) {
             return response(
                 [
-                    'userPhoto' => $newPhotoSrc ?? $newPhotoSrc,
+                    'userPhoto' => $user->photo,
+                    'user'      => $user,
                     'message'   => $message,
                 ],
                 $status
