@@ -69,11 +69,11 @@
                                     <hr>
                                     <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
                                          role="group" aria-label="Small button group">
-                                        <button type="button" class="btn btn-warning">
+                                        <button type="button" class="btn btn-warning btnViewPamphlet" data-content-type="pamphlet">
                                             <i class="flaticon-edit-1"></i>
                                             جزوات
                                         </button>
-                                        <button type="button" class="btn btn-success">
+                                        <button type="button" class="btn btn-success btnViewVideo" data-content-type="video">
                                             <i class="la la-film"></i>
                                             فیلم ها
                                         </button>
@@ -95,11 +95,11 @@
                                     <hr>
                                     <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
                                          role="group" aria-label="Small button group">
-                                        <button type="button" class="btn btn-warning">
+                                        <button type="button" class="btn btn-warning btnViewPamphlet" data-content-type="pamphlet">
                                             <i class="flaticon-edit-1"></i>
                                             جزوات
                                         </button>
-                                        <button type="button" class="btn btn-success">
+                                        <button type="button" class="btn btn-success btnViewVideo" data-content-type="video">
                                             <i class="la la-film"></i>
                                             فیلم ها
                                         </button>
@@ -111,11 +111,11 @@
                                     <hr>
                                     <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
                                          role="group" aria-label="Small button group">
-                                        <button type="button" class="btn btn-warning">
+                                        <button type="button" class="btn btn-warning btnViewPamphlet" data-content-type="pamphlet">
                                             <i class="flaticon-edit-1"></i>
                                             جزوات
                                         </button>
-                                        <button type="button" class="btn btn-success">
+                                        <button type="button" class="btn btn-success btnViewVideo" data-content-type="video">
                                             <i class="la la-film"></i>
                                             فیلم ها
                                         </button>
@@ -135,11 +135,11 @@
                                     <hr>
                                     <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
                                          role="group" aria-label="Small button group">
-                                        <button type="button" class="btn btn-warning">
+                                        <button type="button" class="btn btn-warning btnViewPamphlet" data-content-type="pamphlet">
                                             <i class="flaticon-edit-1"></i>
                                             جزوات
                                         </button>
-                                        <button type="button" class="btn btn-success">
+                                        <button type="button" class="btn btn-success btnViewVideo" data-content-type="video">
                                             <i class="la la-film"></i>
                                             فیلم ها
                                         </button>
@@ -151,11 +151,11 @@
                                     <hr>
                                     <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
                                          role="group" aria-label="Small button group">
-                                        <button type="button" class="btn btn-warning">
+                                        <button type="button" class="btn btn-warning btnViewPamphlet" data-content-type="pamphlet">
                                             <i class="flaticon-edit-1"></i>
                                             جزوات
                                         </button>
-                                        <button type="button" class="btn btn-success">
+                                        <button type="button" class="btn btn-success btnViewVideo" data-content-type="video">
                                             <i class="la la-film"></i>
                                             فیلم ها
                                         </button>
@@ -187,11 +187,11 @@
                                             <hr>
                                             <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
                                                  role="group" aria-label="Small button group">
-                                                <button type="button" class="btn btn-warning">
+                                                <button type="button" class="btn btn-warning btnViewPamphlet" data-content-type="pamphlet">
                                                     <i class="flaticon-edit-1"></i>
                                                     جزوات
                                                 </button>
-                                                <button type="button" class="btn btn-success">
+                                                <button type="button" class="btn btn-success btnViewVideo" data-content-type="video">
                                                     <i class="la la-film"></i>
                                                     فیلم ها
                                                 </button>
@@ -204,11 +204,11 @@
                                             <hr>
                                             <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
                                                  role="group" aria-label="Small button group">
-                                                <button type="button" class="btn btn-warning">
+                                                <button type="button" class="btn btn-warning btnViewPamphlet" data-content-type="pamphlet">
                                                     <i class="flaticon-edit-1"></i>
                                                     جزوات
                                                 </button>
-                                                <button type="button" class="btn btn-success">
+                                                <button type="button" class="btn btn-success btnViewVideo" data-content-type="video">
                                                     <i class="la la-film"></i>
                                                     فیلم ها
                                                 </button>
@@ -221,11 +221,11 @@
                                             <hr>
                                             <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
                                                  role="group" aria-label="Small button group">
-                                                <button type="button" class="btn btn-warning">
+                                                <button type="button" class="btn btn-warning btnViewPamphlet" data-content-type="pamphlet">
                                                     <i class="flaticon-edit-1"></i>
                                                     جزوات
                                                 </button>
-                                                <button type="button" class="btn btn-success">
+                                                <button type="button" class="btn btn-success btnViewVideo" data-content-type="video">
                                                     <i class="la la-film"></i>
                                                     فیلم ها
                                                 </button>
@@ -238,11 +238,11 @@
                                             <hr>
                                             <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
                                                  role="group" aria-label="Small button group">
-                                                <button type="button" class="btn btn-warning">
+                                                <button type="button" class="btn btn-warning btnViewPamphlet" data-content-type="pamphlet">
                                                     <i class="flaticon-edit-1"></i>
                                                     جزوات
                                                 </button>
-                                                <button type="button" class="btn btn-success">
+                                                <button type="button" class="btn btn-success btnViewVideo" data-content-type="video">
                                                     <i class="la la-film"></i>
                                                     فیلم ها
                                                 </button>
@@ -255,11 +255,11 @@
                                             <hr>
                                             <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
                                                  role="group" aria-label="Small button group">
-                                                <button type="button" class="btn btn-warning">
+                                                <button type="button" class="btn btn-warning btnViewPamphlet" data-content-type="pamphlet">
                                                     <i class="flaticon-edit-1"></i>
                                                     جزوات
                                                 </button>
-                                                <button type="button" class="btn btn-success">
+                                                <button type="button" class="btn btn-success btnViewVideo" data-content-type="video">
                                                     <i class="la la-film"></i>
                                                     فیلم ها
                                                 </button>
@@ -276,11 +276,11 @@
                                             <hr>
                                             <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
                                                  role="group" aria-label="Small button group">
-                                                <button type="button" class="btn btn-warning">
+                                                <button type="button" class="btn btn-warning btnViewPamphlet" data-content-type="pamphlet">
                                                     <i class="flaticon-edit-1"></i>
                                                     جزوات
                                                 </button>
-                                                <button type="button" class="btn btn-success">
+                                                <button type="button" class="btn btn-success btnViewVideo" data-content-type="video">
                                                     <i class="la la-film"></i>
                                                     فیلم ها
                                                 </button>
@@ -293,11 +293,11 @@
                                             <hr>
                                             <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
                                                  role="group" aria-label="Small button group">
-                                                <button type="button" class="btn btn-warning">
+                                                <button type="button" class="btn btn-warning btnViewPamphlet" data-content-type="pamphlet">
                                                     <i class="flaticon-edit-1"></i>
                                                     جزوات
                                                 </button>
-                                                <button type="button" class="btn btn-success">
+                                                <button type="button" class="btn btn-success btnViewVideo" data-content-type="video">
                                                     <i class="la la-film"></i>
                                                     فیلم ها
                                                 </button>
@@ -310,11 +310,11 @@
                                             <hr>
                                             <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
                                                  role="group" aria-label="Small button group">
-                                                <button type="button" class="btn btn-warning">
+                                                <button type="button" class="btn btn-warning btnViewPamphlet" data-content-type="pamphlet">
                                                     <i class="flaticon-edit-1"></i>
                                                     جزوات
                                                 </button>
-                                                <button type="button" class="btn btn-success">
+                                                <button type="button" class="btn btn-success btnViewVideo" data-content-type="video">
                                                     <i class="la la-film"></i>
                                                     فیلم ها
                                                 </button>
@@ -548,11 +548,11 @@
 
 
     <!--begin::Modal-->
-    <div class="modal fade" id="m_modal_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="pamphletModal" tabindex="-1" role="dialog" aria-labelledby="pamphletModalModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
+                    <h5 class="modal-title" id="pamphletModalModalLabel">
                         <i class="flaticon-edit-1"></i>
                         جزوات
                     </h5>
@@ -582,12 +582,12 @@
                                         </span>
                                         <span class="m-widget6__text">
                                             <div class="m-btn-group m-btn-group--pill btn-group" role="group" aria-label="First group">
-                                                <button type="button" class="m-btn btn btn-success">
+                                                <a href="#" class="m-btn btn btn-success">
                                                     <i class="la la-download"></i>
-                                                </button>
-                                                <button type="button" class="m-btn btn btn-info">
+                                                </a>
+                                                <a href="#" class="m-btn btn btn-info">
                                                     <i class="la la-eye"></i>
-                                                </button>
+                                                </a>
                                             </div>
                                         </span>
                                     </div>
@@ -633,11 +633,11 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="m_modal_2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
+                    <h5 class="modal-title" id="videoModalLabel">
                         <i class="la la-film"></i>
                         فیلم ها
                     </h5>
