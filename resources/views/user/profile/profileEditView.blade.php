@@ -35,7 +35,7 @@
     </div>
     <div class="m-portlet__body">
 
-        {!! Form::model($user,['method' => 'PUT','action' => [(isset($formAction))?$formAction:'Web\UserController@update' , Auth::user()] , 'role'=>'form' , 'id' => 'profileForm-setting']) !!}
+        {!! Form::model($user,['method' => 'PUT','url' => [(isset($formAction))?$formAction:url('user/profile/update')] , 'role'=>'form' , 'id' => 'profileForm-setting']) !!}
             {!! Form::hidden('updateType',"profile") !!}
             <div class="form-group m-form__group {{ $errors->has('province') ? ' has-error' : '' }}">
                 <label for="province">استان</label>
