@@ -1570,13 +1570,24 @@ class UserController extends Controller
         }
 
         if ($request->expectsJson()) {
+            if($status == Response::HTTP_OK)
+               $response = [
+                   'userPhoto' => $user->photo,
+                   'user'      => $user,
+                   'message'   => $message,
+               ];
+            else
+                $response = [
+                    'error' =>  [
+                        'code'      =>  $status ,
+                        'message'   =>  $message ,
+                    ]
+                ];
+
             return response(
-                [
-                    'userPhoto' => $user->photo,
-                    'user'      => $user,
-                    'message'   => $message,
-                ],
-                $status
+                $response
+                ,
+                Response::HTTP_OK
             );
         }
         else {

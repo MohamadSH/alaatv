@@ -69,11 +69,8 @@ class MobileVerificationController extends Controller
 
         if ($verified)
             return response([
-                'data' => [
-                    'user'       => $user ,
-                    'message'    =>  \Lang::get('verification.Your mobile number is verified.')
-                ]
-
+                'user'       => $user ,
+                'message'    =>  \Lang::get('verification.Your mobile number is verified.')
             ], Response::HTTP_OK);
         else
             $request->expectsJson()
@@ -101,10 +98,7 @@ class MobileVerificationController extends Controller
         $user->sendMobileVerificationNotification();
 
         return response([
-            'data' => [
-                'message'    =>  \Lang::get('verification.Verification code is sent.') ,
-            ]
-
+            'message'    =>  \Lang::get('verification.Verification code is sent.') ,
         ], Response::HTTP_OK);
     }
 }
