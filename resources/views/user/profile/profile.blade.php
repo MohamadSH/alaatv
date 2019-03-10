@@ -94,7 +94,7 @@
                 </div>
                 <div class="m-portlet__body">
                     @if ($errors->any())
-                        {{ implode('', $errors->all('<div>:message</div>')) }}
+                        {!!  implode('', $errors->all('<div>:message</div>'))  !!}
                     @endif
                     <form method="POST" id="frmSabteRotbe" action="{{ action('Web\EventresultController@store') }}" accept-charset="UTF-8" enctype="multipart/form-data">
                         @csrf
@@ -140,7 +140,7 @@
                                                 <label for="customFile">فایل کارنامه(الزامی)</label>
                                                 <div></div>
                                                 <div class="custom-file">
-                                                    <input type="file" class="custom-file-input m-input m-input--air" id="customFile">
+                                                    <input name="reportFile" type="file" class="custom-file-input m-input m-input--air" id="customFile">
                                                     <label class="custom-file-label" for="customFile">انتخاب فایل</label>
                                                 </div>
                                             </div>
@@ -161,7 +161,7 @@
                                         <div class="input-group">
                                             <div class="m-checkbox-list">
                                                 <label class="m-checkbox m-checkbox--state-primary font-red bold">
-                                                    <input name="enableReportPublish" type="checkbox">
+                                                    <input value="1" name="enableReportPublish" type="checkbox">
                                                     اجازه انتشار رتبه خود را در سایت می دهم
                                                     <span></span>
                                                 </label>

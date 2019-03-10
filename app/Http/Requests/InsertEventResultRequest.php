@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
+use Hash;
 use Illuminate\Foundation\Http\FormRequest;
 
 class InsertEventResultRequest extends FormRequest
@@ -26,9 +27,10 @@ class InsertEventResultRequest extends FormRequest
      */
     public function rules()
     {
+
         return [
             'rank'              => 'required',
-//            'participationCode' => 'unique:eventresults:'.Hash::check(),
+//            'participationCode' => 'unique:eventresults,'.Hash::make($this->request->get('participationCode')),
             'event_id'          => 'required|exists:events,id',
             'reportFile'        => 'required|mimes:jpeg,jpg,png,pdf,rar,zip',
         ];
@@ -51,8 +53,9 @@ class InsertEventResultRequest extends FormRequest
             $input["rank"] = preg_replace('/\s+/', '', $input["rank"]);
             $input["rank"] = $this->convertToEnglish($input["rank"]);
         }
-        if (strlen(preg_replace('/\s+/', '', $input['comment'])) == 0)
-            $input['comment'] = null;
+        if (isset($input["comment"])) {
+            $input["comment"] = preg_replace('/\s+/', '', $input["comment"]);
+        }
 
         $this->replace($input);
     }
