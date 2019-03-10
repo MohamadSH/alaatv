@@ -142,6 +142,7 @@ return [
     'REMOVE_SITE_CONFIG_ACCESS'                   => 'removeSiteSetting',
     'SHOW_SITE_CONFIG_ACCESS'                     => 'showSiteSetting',
     'LIST_EVENTRESULT_ACCESS'                     => 'listEventResult',
+    'INSET_EVENTRESULT_ACCESS'                    => 'insertEventResult',
     'LIST_SHARIF_REGISTER_ACCESS'                 => 'listSharifRegister',
     'LIST_BELONGING_ACCESS'                       => 'listBelonging',
     'INSERT_BELONGING_ACCESS'                     => 'insertBelonging',
