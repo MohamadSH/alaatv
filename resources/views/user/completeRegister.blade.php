@@ -1,4 +1,4 @@
-@extends("app")
+@extends('app')
 
 @section("headPageLevelStyle")
     <link href="/assets/pages/css/login-4-rtl.min.css" rel="stylesheet" type="text/css"/>
@@ -6,10 +6,6 @@
 
 @section("headThemeLayoutStyle")
 
-@endsection
-
-@section("bodyClass")
-    class=" login"
 @endsection
 
 @section("header")
@@ -20,21 +16,28 @@
 @endsection
 @section("pageBar")
 @endsection
-@section("content")
-    <!-- BEGIN LOGO -->
-    <div class="logo">
-        {{--<a href="{{action("Web\IndexPageController")}}">--}}
-        {{--<img src="/assets/pages/img/logo-big.png" alt="" /> </a>--}}
-        <h3 class="bg-font-dark bold">تکمیل ثبت نام</h3>
+@section('content')
+
+
+    <div class="m-portlet m-portlet--tab">
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+						<span class="m-portlet__head-icon m--hide">
+						<i class="la la-gear"></i>
+						</span>
+                    <h3 class="m-portlet__head-text">
+                        تکمیل ثبت نام
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+        @include("user.form", ["formID"=>1 , "noteFontColor"=>"m--font-brand" , "hasHomeButton"=>1])
+
     </div>
 
-    <!-- END LOGO -->
-    <div class="content">
-        @include("user.form", ["formID"=>1 , "noteFontColor"=>"bg-font-dark" , "hasHomeButton"=>1])
-    </div>
-    <!-- BEGIN COPYRIGHT -->
-    {{--<div class="copyright" style="direction: ltr;"> 2016 &copy; Alaa </div>--}}
-    <!-- END COPYRIGHT -->
+
 @endsection
 
 @section("footer")
