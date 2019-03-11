@@ -19,20 +19,19 @@ class UserController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function show(Request $request, User $user=null)
+    public function show(Request $request, User $user)
     {
-        if($user===null) {
-            $user = $request->user('api');
-        } elseif (
-            ($user->id !== $request->user()->id) &&
-            !($user->can(config('constants.SHOW_USER_ACCESS')))
-        ) {
-            abort(403);
-        }
+        $authenticatedUser = $request->user('api');
 
-        if ($request->expectsJson()) {
-            return response($user, Response::HTTP_OK);
-        }
+        if ($authenticatedUser->id != $user->id)
+            return response([
+                'error' => [
+                    'code'    => Response::HTTP_FORBIDDEN,
+                    'message' => 'UnAuthorized',
+                ],
+            ], 403);
+
+        return response($user, Response::HTTP_OK);
     }
 
     /**
