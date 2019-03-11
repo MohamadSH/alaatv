@@ -33,12 +33,17 @@ class EditUserRequest extends FormRequest
         $authorized = true;
 
         $authenticatedUser = $request->user();
+        // ToDo:
+        if(is_null($authenticatedUser))
+            $authenticatedUser = $request->user('api');
+
         $userId = $request->segment(2);
         if ($userId == null) {
             $user = $authenticatedUser;
             if ($user->isUserProfileLocked())
                 $authorized = false;
-        } else if (!$authenticatedUser->can(config('constants.EDIT_USER_ACCESS'))) {
+        } else if ( $userId !== $authenticatedUser->id &&
+                    !$authenticatedUser->can(config('constants.EDIT_USER_ACCESS'))) {
             $authorized = false;
         }
 
