@@ -184,7 +184,6 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'previousUrl',
         'previousApiUrl',
         'author',
-        'setMates',
     ];
 
     protected $hidden = [
@@ -586,25 +585,6 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                              ];
                          });
         return $setMates;
-    }
-
-    public function getSetMatesAttribute()
-    {
-        $setMatesArray = $this->getSetMates();
-        $setMates = $setMatesArray[0];
-        $myContentType = $this->contenttype_id;
-        /** @var ContentCollection $matesCollection */
-        $matesCollection = $setMates->where('contenttype_id', '<>', $myContentType)->values();
-        $matesCollection->setVisible([
-            'url',
-            'apiUrl',
-            'name',
-            'thumbnail',
-            'order',
-            'created_at',
-        ]);
-
-        return $matesCollection;
     }
 
     /**
