@@ -6,6 +6,7 @@ use App\Afterloginformcontrol;
 use App\Traits\CharacterCommon;
 use App\Traits\RequestCommon;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 
 class EditUserRequest extends FormRequest
@@ -33,10 +34,6 @@ class EditUserRequest extends FormRequest
         $authorized = true;
 
         $authenticatedUser = $request->user();
-        // ToDo:
-        if(is_null($authenticatedUser))
-            $authenticatedUser = $request->user('api');
-
         $userId = $request->segment(2);
         if ($userId == null) {
             $user = $authenticatedUser;
@@ -53,6 +50,7 @@ class EditUserRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
+     * @param Request $request
      * @return array
      */
     public function rules()
@@ -112,7 +110,6 @@ class EditUserRequest extends FormRequest
             case self::USER_UPDATE_TYPE_ATLOGIN :
                 $afterLoginFields = $this->getAfterLoginFields();
 
-                //ToDo : Could be refactored to be more dynamic
                 $rules = [];
                 foreach ($afterLoginFields as $afterLoginField) {
                     $rule = 'required';
@@ -136,7 +133,6 @@ class EditUserRequest extends FormRequest
                 $rules = [];
                 break;
         }
-
         return $rules;
     }
 
@@ -149,6 +145,15 @@ class EditUserRequest extends FormRequest
     private function replaceNumbers()
     {
         $input = $this->request->all();
+
+        $afterLoginFields = $this->getAfterLoginFields();
+
+        foreach ($input as $key  =>  $value){
+            if(!in_array($key , $afterLoginFields) && $value != self::USER_UPDATE_TYPE_ATLOGIN)
+                Arr::pull($input , $key);
+        }
+
+
         if (isset($input['mobile'])) {
             $input['mobile'] = preg_replace('/\s+/', '', $input['mobile']);
             $input['mobile'] = $this->convertToEnglish($input['mobile']);
@@ -179,4 +184,6 @@ class EditUserRequest extends FormRequest
         $afterLoginFields = Afterloginformcontrol::getFormFields()->pluck('name', 'id')->toArray();
         return $afterLoginFields;
     }
+
+
 }
