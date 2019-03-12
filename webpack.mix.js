@@ -2,7 +2,8 @@ let mix = require('laravel-mix');
 
 mix.styles(
     [
-        'public/acm/webFonts/css/fontiran.css',
+        /*'public/acm/webFonts/css/fontiran.css',*/
+        'public/acm/webFonts/IRANSans/css/fontiran.css',
         'public/assets/vendors/base/vendors.bundle.rtl.css',
         'public/assets/demo/demo12/base/style.bundle.rtl.css',
         'public/acm/custom-css-app.css',
@@ -174,6 +175,46 @@ mix.scripts(
             'public/acm/extra/landing5/js/main.js'
     ],
     'public/js/landing5-alljs.min.js'
+);
+
+
+mix.scripts(
+    [
+        'node_modules/persian-date/dist/persian-date.js',
+        'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
+
+        // 'node_modules/bootstrap-fileinput/js/fileinput.min.js',
+        // 'node_modules/dropzone/dist/dropzone.js',
+        // 'node_modules/dropzone/dist/dropzone-amd-module.js',
+        // 'node_modules/summernote/dist/summernote.min.js',
+        // 'node_modules/toastr/build/toastr.min.js',
+        'node_modules/icheck/icheck.min.js',
+        // 'node_modules/inputmask/dist/min/jquery.inputmask.bundle.min.js',
+        'node_modules/jquery-multiselect/jquery-MultiSelect.js',
+        'node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js',
+        'node_modules/bootstrap-multiselect/dist/js/bootstrap-multiselect.js',
+        // 'node_modules/toastr/build/toastr.min.js',
+        'node_modules/select2/dist/js/select2.js',
+    ],
+    'public/js/admin-content-create.js'
+);
+
+mix.styles(
+    [
+        'node_modules/persian-datepicker/dist/css/persian-datepicker.min.css',
+
+        'node_modules/bootstrap-fileinput/css/fileinput.css',
+        'node_modules/bootstrap-fileinput/css/fileinput-rtl.css',
+        // 'node_modules/dropzone/dist/dropzone.css',
+        // 'node_modules/dropzone/dist/basic.css',
+        // 'node_modules/summernote/dist/summernote.css',
+        // 'node_modules/toastr/build/toastr.min.css',
+        // 'node_modules/icheck/skins/all.css',
+        'node_modules/jquery-multiselect/jquery-MultiSelect.css',
+        'node_modules/bootstrap-multiselect/dist/css/bootstrap-multiselect.css',
+        'node_modules/bootstrap-tagsinput/src/bootstrap-tagsinput.css',
+    ],
+    'public/css/admin-content-create.css'
 );
 
 mix.styles(

@@ -114,7 +114,8 @@
                                                            class="form-control m-input m-input--air"
                                                            placeholder="رتبه شما"
                                                             @if($userKonkurResult!==null)
-                                                                {{ $userKonkurResult->rank }}
+                                                                value="{{ $userKonkurResult->rank }}"
+                                                                disabled="disabled"
                                                             @endif
                                                     >
                                                     <span class="m-input-icon__icon m-input-icon__icon--left">
@@ -161,7 +162,14 @@
                                         <div class="col">
                                             <div class="form-group m-form__group">
                                                 <div class="m-input-icon m-input-icon--left">
-                                                    <textarea rows="5" name="comment" placeholder="آلاء چه نقشی در نتیجه شما داشته و چطور به شما کمک کرده؟" class="form-control m-input m-input--air">@if($userKonkurResult!==null){{ $userKonkurResult->comment }}@endif</textarea>
+                                                    <textarea rows="5"
+                                                              name="comment"
+                                                              placeholder="آلاء چه نقشی در نتیجه شما داشته و چطور به شما کمک کرده؟"
+                                                              class="form-control m-input m-input--air"
+                                                              @if($userKonkurResult!==null)
+                                                                  disabled="disabled"
+                                                              @endif
+                                                    >@if($userKonkurResult!==null){{ $userKonkurResult->comment }}@endif</textarea>
                                                 </div>
                                             </div>
                                         </div>
