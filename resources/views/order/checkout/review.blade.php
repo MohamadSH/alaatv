@@ -12,46 +12,7 @@
 
     @include('systemMessage.flash')
 
-    <div class = "row">
-        <div class = "col">
-            <div class = "Step-warper">
-                <div class = "row a--step-warper">
-                    <div class = "col a--step-item passed">
-                        <div class = "a--step-item-icon">
-                            <i class = "flaticon-lock"></i>
-                        </div>
-                        <div class = "a--step-item-text">
-                            ورود
-                        </div>
-                    </div>
-                    <div class = "col a--step-item passed">
-                        <div class = "a--step-item-icon">
-                            <i class = "flaticon-information"></i>
-                        </div>
-                        <div class = "a--step-item-text">
-                            تکمیل اطلاعات
-                        </div>
-                    </div>
-                    <div class = "col a--step-item current">
-                        <div class = "a--step-item-icon">
-                            <i class = "flaticon-list-3"></i>
-                        </div>
-                        <div class = "a--step-item-text">
-                            بازبینی
-                        </div>
-                    </div>
-                    <div class = "col a--step-item notPassed">
-                        <div class = "a--step-item-icon">
-                            <i class = "la la-money"></i>
-                        </div>
-                        <div class = "a--step-item-text">
-                            اطلاعات پرداخت
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    @include("partials.checkoutSteps" , ["step"=>2])
 
     @if(isset($invoiceInfo['orderproductCount']) && $invoiceInfo['orderproductCount']>0)
         <div class = "row">

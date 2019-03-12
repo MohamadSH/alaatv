@@ -1,7 +1,7 @@
 @extends("app")
 
-@section("css")
-    <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
+@section('page-css')
+    <link href = "{{ asset('/acm/AlaatvCustomFiles/components/step/step.css') }}" rel = "stylesheet" type = "text/css"/>
 @endsection
 
 @section("pageBar")
@@ -9,6 +9,10 @@
 @endsection
 
 @section("content")
+
+
+    @include("partials.checkoutSteps" , ["step"=>1])
+
     <div class="row">
         <div class="col-md-12">
             <div class="portlet light bordered ">
@@ -20,7 +24,6 @@
                 {{--</div>--}}
                 <div class="portlet-body">
                     <div class="row">
-                        @include("partials.checkoutSteps" , ["step"=>1])
                     </div>
                     <div class="row">
                         <div class="col-md-4"></div>
@@ -48,11 +51,11 @@
 @endsection
 
 @section("footerPageLevelPlugin")
-    <script src="{{ mix('/js/footer_Page_Level_Plugin.js') }}" type="text/javascript"></script>
+{{--    <script src="{{ mix('/js/footer_Page_Level_Plugin.js') }}" type="text/javascript"></script>--}}
 @endsection
 
 @section("footerPageLevelScript")
-    <script src="{{ mix('/js/Page_Level_Script_all.js') }}" type="text/javascript"></script>
+{{--    <script src="{{ mix('/js/Page_Level_Script_all.js') }}" type="text/javascript"></script>--}}
 @endsection
 
 @section("extraJS")

@@ -7,12 +7,16 @@
     display: none;
 }
 
+.a--owl-carousel-type-2 .owl-stage .owl-item.active.center {
+    z-index: 1;
+}
 .a--owl-carousel-type-2 .owl-item.active.center .carousel {
-    -moz-transform: scale(1.2);
-    -webkit-transform: scale(1.2);
-    -o-transform: scale(1.2);
-    -ms-transform: scale(1.2);
-    transform: scale(1.2);
+    -moz-transform: scale(1.13);
+    -webkit-transform: scale(1.13);
+    -o-transform: scale(1.13);
+    -ms-transform: scale(1.13);
+    transform: scale(1.13);
+    color: white;
 }
 
 .a--owl-carousel-type-2 .owl-item.active.center .background-solid.carousel {
@@ -41,7 +45,6 @@
     margin-top: 45px !important;
     margin-bottom: 30px !important;
 }
-
 .a--owl-carousel-type-2 .owl-prev {
     right: 0;
     background: linear-gradient(270deg, rgba(47, 47, 47, 0.6) 0%, rgba(100, 94, 111, 0.5) 40%, rgba(216, 195, 255, 0) 100%) !important;
@@ -89,7 +92,7 @@
     border-right: 20px solid transparent;
     border-bottom: 20px solid white;
     position: absolute;
-    top: -20px;
+    top: -19px;
     right: calc(50% - 20px);
 }
 
@@ -115,6 +118,14 @@
     border: dotted 5px white;
 }
 
+.subCategoryWarper .subCategoryItem .subCategoryItem-title {
+    color: white;
+    background: #80808066;
+    padding: 10px;
+    line-height: 20px;
+    border-radius: 4px;
+}
+
 .m-widget30, .gridView-myProduct {
     position: relative;
 }
@@ -128,9 +139,9 @@
 }
 
 .a--owl-carousel-type-2-gridViewWarper .carousel:hover > img.a--owl-carousel-type-2-item-image {
-    -moz-transform: scale(1.2);
-    -webkit-transform: scale(1.2);
-    -o-transform: scale(1.2);
-    -ms-transform: scale(1.2);
-    transform: scale(1.2);
+    -moz-transform: scale(1.13);
+    -webkit-transform: scale(1.13);
+    -o-transform: scale(1.13);
+    -ms-transform: scale(1.13);
+    transform: scale(1.13);
 }

@@ -32,34 +32,27 @@
 
     <div class = "row">
         <div class = "col">
-            <div class="alert alert-info" role="alert">
-                شماره کارت برای واریز کارت به کارت
-                <strong>
-                    6104-3375-6000-0026
-                </strong>
-                به نام مؤسسه توسعه علمی آموزشی عدالت محور آلاء بانک ملت
-            </div>
-
-            <div class="alert alert-info text-justify" role="alert">
-                شماره کارت برای
-                واریز کارت به کارت مبلغ: <span dir="ltr">{{$debitCard->cardNumber}}</span>
-                به نام @if(!isset($debitCard->user->firstName) && !isset($debitCard->user->lastName)) کاربر
-                ناشناس @else @if(isset($debitCard->user->firstName)) {{$debitCard->user->firstName}} @endif @if(isset($debitCard->user->lastName)) {{$debitCard->user->lastName}} @endif @endif
-                بانک {{$debitCard->bank->name}}
-            </div>
-
-        </div>
-    </div>
-
-    <div class = "row">
-        <div class = "col">
 
             @if(isset($debitCard))
-                <div class="alert alert-info text-justify" role="alert">
+                <div class="alert alert-info text-center" role="alert">
                     شماره کارت برای
-                    واریز کارت به کارت مبلغ: <span dir="ltr">{{$debitCard->cardNumber}}</span>
-                    به نام @if(!isset($debitCard->user->firstName) && !isset($debitCard->user->lastName)) کاربر
-                    ناشناس @else @if(isset($debitCard->user->firstName)) {{$debitCard->user->firstName}} @endif @if(isset($debitCard->user->lastName)) {{$debitCard->user->lastName}} @endif @endif
+                    واریز کارت به کارت مبلغ:
+                    <br>
+                    <strong>{{$debitCard->cardNumber}}</strong>
+                    <br>
+                    به نام
+                    @if(!isset($debitCard->user->firstName) && !isset($debitCard->user->lastName))
+                        کاربر
+                    ناشناس
+                    @else
+                    @if(isset($debitCard->user->firstName))
+                            {{$debitCard->user->firstName}}
+                    @endif
+                    @if(isset($debitCard->user->lastName))
+                        {{$debitCard->user->lastName}}
+                    @endif
+                    @endif
+                    -
                     بانک {{$debitCard->bank->name}}
                 </div>
             @endif

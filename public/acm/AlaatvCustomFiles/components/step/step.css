@@ -61,6 +61,7 @@
 
 .a--step-warper .a--step-item:hover {
     background: #ccc;
+    z-index: 2;
 }
 
 .a--step-warper .a--step-item.passed:hover {
