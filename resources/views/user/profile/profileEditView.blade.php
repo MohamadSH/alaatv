@@ -35,6 +35,43 @@
     </div>
     <div class="m-portlet__body">
 
+        @if(isset($text3))
+            @if(!$user->hasVerifiedMobile() || !isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)
+                <div class="m-alert m-alert--icon alert alert-danger" role="alert">
+                    <div class="m-alert__icon">
+                        <i class="flaticon-danger"></i>
+                    </div>
+                    <div class="m-alert__text">
+                        <strong>
+                            @if(!$user->hasVerifiedMobile())لطفا شماره موبایل خود را تایید نمایید
+                            <br>@endif
+                            @if(!isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)
+                                <span id="profileEditViewText3-span2">لطفا عکس خود را آپلود نمایید</span>
+                            @endif
+                        </strong>
+                    </div>
+                    <div class="m-alert__close">
+                        <button type="button" class="close" data-close="alert" aria-label="Hide"></button>
+                    </div>
+                </div>
+            @endif
+        @endif
+        @if(isset($text2))
+            <div class="m-alert m-alert--icon alert alert-warning" role="alert">
+                <div class="m-alert__icon">
+                    <i class="flaticon-danger"></i>
+                </div>
+                <div class="m-alert__text">
+                    <strong>توجه!</strong>
+                    {!!  $text2 !!}
+                </div>
+                <div class="m-alert__close">
+                    <button type="button" class="close" data-close="alert" aria-label="Hide"></button>
+                </div>
+            </div>
+        @endif
+
+
         {!! Form::model($user,['method' => 'POST','url' => [(isset($formAction))?$formAction:route('web.authenticatedUser.profile.update')] , 'role'=>'form' , 'id' => 'profileForm-setting']) !!}
             {!! Form::hidden('updateType',"profile") !!}
             <div class="form-group m-form__group {{ $errors->has('province') ? ' has-error' : '' }}">
@@ -166,51 +203,15 @@
                 </div>
             @endif
 
-            @if(isset($text3))
-                @if(!$user->hasVerifiedMobile() || !isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)
-                    <div class="m-alert m-alert--icon alert alert-danger" role="alert">
-                        <div class="m-alert__icon">
-                            <i class="flaticon-danger"></i>
-                        </div>
-                        <div class="m-alert__text">
-                            <strong>
-                                @if(!$user->hasVerifiedMobile())لطفا شماره موبایل خود را تایید نمایید
-                                <br>@endif
-                                @if(!isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)
-                                    <span id="profileEditViewText3-span2">لطفا عکس خود را آپلود نمایید</span>
-                                @endif
-                            </strong>
-                        </div>
-                        <div class="m-alert__close">
-                            <button type="button" class="close" data-close="alert" aria-label="Hide"></button>
-                        </div>
-                    </div>
+            <button type="button" id="btnUpdateProfileInfoForm" class="btn m-btn--pill m-btn--air btn-primary">
+                @if(isset($submitCaption))
+                    {{$submitCaption}}
+                @else
+                    ثبت درخواست
                 @endif
-            @endif
-            @if(isset($text2))
-                <div class="m-alert m-alert--icon alert alert-warning" role="alert">
-                    <div class="m-alert__icon">
-                        <i class="flaticon-danger"></i>
-                    </div>
-                    <div class="m-alert__text">
-                        <strong>توجه!</strong>
-                        {!!  $text2 !!}
-                    </div>
-                    <div class="m-alert__close">
-                        <button type="button" class="close" data-close="alert" aria-label="Hide"></button>
-                    </div>
-                </div>
-            @endif
+            </button>
 
-        <button type="button" id="btnUpdateProfileInfoForm" class="btn m-btn--pill m-btn--air btn-primary">
-            @if(isset($submitCaption))
-                {{$submitCaption}}
-            @else
-                ثبت درخواست
-            @endif
-        </button>
-
-        <input type="hidden" id="userUpdateProfileUrl" value="{{ action((isset($formAction))?$formAction:'Web\UserController@update' , Auth::user()) }}">
+            <input type="hidden" id="userUpdateProfileUrl" value="{{ action((isset($formAction))?$formAction:'Web\UserController@update' , Auth::user()) }}">
 
         {!! Form::close() !!}
     </div>

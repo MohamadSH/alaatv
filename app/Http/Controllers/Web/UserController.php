@@ -479,7 +479,7 @@ class UserController extends Controller
         $event = Event::name('konkur97')->first();
         $userKonkurResult = $user->eventresults->where("event_id", $event->id)->first();
 
-        return view("user.profile.profile", compact("user",
+        return view("user.profile.profile", compact("user", 'event', 'userKonkurResult',
 
             'genders', 'majors', 'sideBarMode', 'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName' , 'userKonkurResult'));
     }
