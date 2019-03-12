@@ -3,13 +3,91 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EditUserRequest;
+use App\Traits\RequestCommon;
+use App\Traits\UserCommon;
 use App\User;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
 {
+
+    use RequestCommon;
+    use UserCommon;
+
+    /**
+     * Update the specified resource in storage.
+     * Note: Requests to this method must pass \App\Http\Middleware\trimUserRequest middle ware
+     *
+     * @param EditUserRequest $request
+     * @param User            $user
+     *
+     * @return array|Response
+     */
+    public function update(EditUserRequest $request, User $user = null)
+    {
+
+        $authenticatedUser = $request->user('api');
+        if ($user === null)
+            $user = $authenticatedUser;
+        try {
+            $user->fillByPublic($request->all());
+            $file = $this->getRequestFile($request->all(), 'photo');
+            if ($file !== false)
+                $this->storePhotoOfUser($user, $file);
+        } catch (FileNotFoundException $e) {
+            return response(
+                [
+                    "error" => [
+                        "text" => $e->getMessage(),
+                        "line" => $e->getLine(),
+                        "file" => $e->getFile(),
+                    ],
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        //ToDo : place in UserObserver
+        if ($user->checkUserProfileForLocking())
+            $user->lockProfile();
+
+        if ($user->update()) {
+
+            //ToDo : place in UserObserver
+            if ($request->has('roles'))
+                $this->attachRoles($request->get('roles'), $authenticatedUser , $user);
+
+            $message = 'User profile updated successfully';
+            $status = Response::HTTP_OK;
+        } else {
+            $message = 'Database error on updating user';
+            $status = Response::HTTP_SERVICE_UNAVAILABLE;
+        }
+
+        if($status == Response::HTTP_OK)
+            $response = [
+                'userPhoto' => $user->photo,
+                'user'      => $user,
+                'message'   => $message,
+            ];
+        else
+            $response = [
+                'error' =>  [
+                    'code'      =>  $status ,
+                    'message'   =>  $message ,
+                ]
+            ];
+
+        return response(
+            $response
+            ,
+            Response::HTTP_OK
+        );
+    }
 
     /**
      * Display the specified resource.
