@@ -78,7 +78,7 @@
 							<i class="flaticon-statistics"></i>
 						</span>
                             <h3 class="m-portlet__head-text">
-                                فیلم ها و جزواتی که خریده اید:
+                                ثبت کارنامه کنکور سراسری 97
                             </h3>
                             <h2 class="m-portlet__head-label m-portlet__head-label--success">
                                 <span>
@@ -104,11 +104,19 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col">
                                             <div class="form-group m-form__group">
                                                 <label for="rank">رتبه شما(الزامی)</label>
                                                 <div class="m-input-icon m-input-icon--left">
-                                                    <input type="text" name="rank" id="rank" class="form-control m-input m-input--air" placeholder="رتبه شما">
+                                                    <input type="text"
+                                                           name="rank"
+                                                           id="rank"
+                                                           class="form-control m-input m-input--air"
+                                                           placeholder="رتبه شما"
+                                                            @if($userKonkurResult!==null)
+                                                                {{ $userKonkurResult->rank }}
+                                                            @endif
+                                                    >
                                                     <span class="m-input-icon__icon m-input-icon__icon--left">
                                                         <span>
                                                             <i class="flaticon-placeholder"></i>
@@ -117,45 +125,51 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group m-form__group">
-                                                <label for="participationCode">شماره داوطلبی شما</label>
-                                                <div class="m-input-icon m-input-icon--left">
-                                                    <input type="text" name="participationCode" id="participationCode" class="form-control m-input m-input--air" placeholder="شماره داوطلبی شما">
-                                                    <span class="m-input-icon__icon m-input-icon__icon--left">
-                                                        <span>
-                                                            <i class="flaticon-placeholder"></i>
+
+                                        @if($userKonkurResult===null)
+                                            <div class="col">
+                                                <div class="form-group m-form__group">
+                                                    <label for="participationCode">شماره داوطلبی شما</label>
+                                                    <div class="m-input-icon m-input-icon--left">
+                                                        <input type="text" name="participationCode" id="participationCode" class="form-control m-input m-input--air" placeholder="شماره داوطلبی شما">
+                                                        <span class="m-input-icon__icon m-input-icon__icon--left">
+                                                            <span>
+                                                                <i class="flaticon-placeholder"></i>
+                                                            </span>
                                                         </span>
-                                                    </span>
+                                                    </div>
+                                                    <span class="m-form__help">شماره داوطلبی شما به صورت رمز شده ذخیره می شود و فقط مدیر سایت می تواند آن را مشاهده کند(حتی شما هم نمی بینید)</span>
                                                 </div>
-                                                <span class="m-form__help">شماره داوطلبی شما به صورت رمز شده ذخیره می شود و فقط مدیر سایت می تواند آن را مشاهده کند(حتی شما هم نمی بینید)</span>
                                             </div>
-                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group m-form__group">
-                                                <label for="customFile">فایل کارنامه(الزامی)</label>
-                                                <div></div>
-                                                <div class="custom-file">
-                                                    <input name="reportFile" type="file" class="custom-file-input m-input m-input--air" id="customFile">
-                                                    <label class="custom-file-label" for="customFile">انتخاب فایل</label>
+                                        @if($userKonkurResult===null)
+                                            <div class="col">
+                                                <div class="form-group m-form__group">
+                                                    <label for="customFile">فایل کارنامه(الزامی)</label>
+                                                    <div></div>
+                                                    <div class="custom-file">
+                                                        <input name="reportFile" type="file" class="custom-file-input m-input m-input--air" id="customFile">
+                                                        <label class="custom-file-label" for="customFile">انتخاب فایل</label>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6">
+                                        @endif
+                                        <div class="col">
                                             <div class="form-group m-form__group">
                                                 <div class="m-input-icon m-input-icon--left">
-                                                    <textarea rows="5" name="comment" placeholder="آلاء چه نقشی در نتیجه شما داشته و چطور به شما کمک کرده؟" class="form-control m-input m-input--air"></textarea>
+                                                    <textarea rows="5" name="comment" placeholder="آلاء چه نقشی در نتیجه شما داشته و چطور به شما کمک کرده؟" class="form-control m-input m-input--air">@if($userKonkurResult!==null){{ $userKonkurResult->comment }}@endif</textarea>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row margin-top-20">
+                            @if($userKonkurResult===null)
+                                <div class="row margin-top-20">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <div class="input-group">
@@ -178,14 +192,17 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                         </div>
-                        <div class="form-actions row">
-                            <div class="col-md-12 margiv-top-10">
-                                <button type="submit" id="btnSabteRotbe" class="btn m-btn--pill m-btn--air btn-primary">
-                                    ثبت کارنامه
-                                </button>
+                        @if($userKonkurResult===null)
+                            <div class="form-actions row">
+                                <div class="col-md-12 margiv-top-10">
+                                    <button type="submit" id="btnSabteRotbe" class="btn m-btn--pill m-btn--air btn-primary">
+                                        ثبت کارنامه
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </form>
                 </div>
             </div>
