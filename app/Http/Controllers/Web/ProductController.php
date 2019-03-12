@@ -854,7 +854,8 @@ class ProductController extends Controller
             'filename' => $this->setting->site->siteLogo,
         ]), '100', '100', null));
 
-        $productIds = config("constants.HAMAYESH_PRODUCT");
+//        $productIds = config("constants.HAMAYESH_PRODUCT");
+        $productIds = [276, 275, 272, 270, 269];
         $products = Product::whereIn("id", $productIds)
                            ->orderBy("order")
                            ->where("enable", 1)
@@ -879,7 +880,8 @@ class ProductController extends Controller
             ]);
         }
 
-        $costCollection = $this->makeCostCollection($products);
+//        $costCollection = $this->makeCostCollection($products);
+        $costCollection = null;
         return view("product.landing.landing1", compact("landingProducts", "costCollection", "withFilter"));
     }
 

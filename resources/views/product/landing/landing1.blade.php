@@ -8,6 +8,23 @@
     {{--<link href="/assets/pages/css/coming-soon-rtl.min.css" rel="stylesheet" type="text/css"/>--}}
 @endsection
 
+
+@section('page-css')
+    <link href="{{ asset('/acm/AlaatvCustomFiles/components/imageWithCaption/style.css') }}" rel="stylesheet" type="text/css"/>
+
+    <style>
+        .sideItems .m-widget24__title {
+            font-size: 30px !important;
+        }
+        .sideItems .m-widget24__desc {
+            font-size: 15px !important;
+        }
+        .sideItems .flaticon-pie-chart {
+            font-size: 30px !important;
+        }
+    </style>
+
+@endsection
 @section("pageBar")
 @show
 
@@ -17,219 +34,166 @@
 
 @section("content")
 
-    <div class="row">
-        <div class="col-md-12 col-xs-12">
-            <div class="blog-banner blog-container"
-                 style="background-image:url(https://sanatisharif.ir/image/9/1280/500/clock_20171203125805.jpg);">
-                <h2 class="blog-title blog-banner-title">
-                    <a href="javascript:">سبقت در پیچ اول رالی کنکور</a>
-                </h2>
-            </div>
-        </div>
-    </div>
 
     <div class="row">
+        <div class="col">
+            <div class="m-portlet m-portlet--head-overlay m-portlet--full-height  m-portlet--rounded-force">
+                <div class="m-portlet__head m-portlet__head--fit-">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text m--font-light">
+                                ...
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="m-portlet__head-tools"></div>
+                </div>
+                <div class="m-portlet__body">
+                    <div class="m-widget27 m-portlet-fit--sides">
+                        <div class="m-widget27__pic">
+                            <img src="/assets/app/media/img//bg/bg-4.jpg" alt="">
+                            <h3 class="m-widget27__title m--font-light">
+                                سبقت در پیچ اول رالی کنکور
+                            </h3>
+                            <div class="m-widget27__btn">
+                                <button type="button" class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--bolder">
+                                    ...
+                                </button>
+                            </div>
+                        </div>
+                        <div class="m-widget27__container">
 
-
-
-        <div class="col-md-9 col-md-push-3">
-            <div class="portfolio-content portfolio-3">
-                {{--<div class="clearfix">--}}
-                {{--@if(isset($withFilter) && $withFilter)--}}
-                {{--<div id="js-filters-lightbox-gallery2" class="cbp-l-filters-button cbp-l-filters-right">--}}
-                {{--<div data-filter="*"--}}
-                {{--class="cbp-filter-item-active cbp-filter-item btn blue btn-outline uppercase">همه--}}
-                {{--</div>--}}
-                {{--<div data-filter=".تجربی" class="cbp-filter-item btn blue btn-outline uppercase">تجربی</div>--}}
-                {{--<div data-filter=".ریاضی" class="cbp-filter-item btn blue btn-outline uppercase">ریاضی</div>--}}
-                {{--<div data-filter=".انسانی" class="cbp-filter-item btn blue btn-outline uppercase">انسانی--}}
-                {{--</div>--}}
-                {{--</div>--}}
-                {{--@endif--}}
-                {{--</div>--}}
-                <div id="js-grid-lightbox-gallery" class="cbp">
-                    @foreach( $landingProducts as $product)
-                        <div class="cbp-item @foreach ($product["majors"] as $major) {{ $major }} @endforeach">
-                            <a href = "{{action("Web\ProductController@show" , $product["product"]->id)}}" class = "cbp-caption"
-                               data-title="{{$product["product"]->name}}" rel="nofollow">
-                                <div class="cbp-caption-defaultWrap">
-                                    @if(isset($product["product"]->image[0]))
-                                        <img
-                                                src="{{ route('image', ['category'=>'4','w'=>'256' , 'h'=>'256' ,  'filename' =>  $product["product"]->image ]) }}"
-                                                alt="عکس محصول@if(isset($product["product"]->name[0])) {{$product["product"]->name}} @endif">
-                                    @endif
-                                </div>
-                                <div class="cbp-caption-activeWrap">
-                                    <div class="cbp-l-caption-alignLeft">
-                                        <div class="cbp-l-caption-body">
-                                            <div class="cbp-l-caption-title">ثبت نام در همایش</div>
-                                            @if($product["product"]->isFree)
-                                                <div class="cbp-l-caption-desc  bold font-red product-potfolio-free">رایگان
+                            <div class="container-fluid m--padding-right-40 m--padding-left-40">
+                                <div class="row">
+                                    <div class="col-md-3 order-2 order-sm-2 order-md-1 order-lg-1 sideItems">
+                                        <div class="m-portlet m-portlet--bordered m-portlet--unair">
+                                            <div class="m-portlet__body m--padding-10">
+                                                <div class="m-widget24">
+                                                    <div class="m-widget24__item">
+                                                        <h4 class="m-widget24__title m--font-info">
+                                                            ۵ + ۱
+                                                        </h4>
+                                                        <br>
+                                                        <span class="m-widget24__desc">
+                                                            هر درس
+                                                        </span>
+                                                        <span class="m-widget24__stats m--font-info">
+                                                            <img src="/assets/extra/landing1/img/like.png" style="height: 40px;">
+                                                        </span>
+                                                        <div class="m--space-10"></div>
+                                                        5 ساعت جمع بندی و نکته و تست داریم و 1 ساعت تست های پلاس مخصوص پزشکا و مهندسا
+                                                    </div>
                                                 </div>
-                                            @elseif($product["product"]->basePrice == 0)
-                                                <div class="cbp-l-caption-desc  bold font-blue product-potfolio-no-cost">قیمت: پس از انتخاب محصول
+                                            </div>
+                                        </div>
+                                        <div class="m-portlet m-portlet--bordered m-portlet--unair">
+                                            <div class="m-portlet__body m--padding-10">
+                                                <div class="m-widget24">
+                                                    <div class="m-widget24__item">
+                                                        <h4 class="m-widget24__title m--font-success">
+                                                            ۱/۳
+                                                        </h4>
+                                                        <br>
+                                                        <span class="m-widget24__desc">
+                                                            جمع بندی یک سوم کنکور
+                                                        </span>
+                                                        <span class="m-widget24__stats m--font-success">
+                                                            <i class="flaticon-pie-chart"></i>
+                                                        </span>
+                                                        <div class="m--space-10"></div>
+                                                        <div class="progress m-progress--sm">
+                                                            <div class="progress-bar m--bg-success" role="progressbar" style="width: 33.33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                        <span class="m-widget24__change">
+                                                            کنکور
+                                                        </span>
+                                                        <span class="m-widget24__number">
+                                                            ۳۳%
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            @elseif($costCollection[$product["product"]->id]["productDiscount"]+$costCollection[$product["product"]->id]["bonDiscount"]>0)
-                                                <div class="cbp-l-caption-desc  bold font-red product-potfolio-real-cost">@if(isset($costCollection[$product["product"]->id]["cost"])){{number_format($costCollection[$product["product"]->id]["cost"])}}تومان@endif</div>
-                                                <div class="cbp-l-caption-desc  bold font-green product-potfolio-discount-cost">فقط @if(Auth::check()) {{number_format((1 - ($costCollection[$product["product"]->id]["bonDiscount"] / 100)) * ((1 - ($costCollection[$product["product"]->id]["productDiscount"] / 100)) * $costCollection[$product["product"]->id]["cost"]))}} @else @if(isset($costCollection[$product["product"]->id]["cost"])){{number_format(((1-($costCollection[$product["product"]->id]["productDiscount"]/100))*$costCollection[$product["product"]->id]["cost"]))}}تومان@endif @endif</div>
-                                            @else
-                                                <div class="cbp-l-caption-desc bold font-green product-potfolio-no-discount">@if(isset($costCollection[$product["product"]->id]["cost"])){{number_format($costCollection[$product["product"]->id]["cost"])}}تومان@endif </div>
-                                            @endif
+                                            </div>
+                                        </div>
+                                        <div class="m-portlet m-portlet--bordered m-portlet--unair">
+                                            <div class="m-portlet__body m--padding-10">
+                                                <div class="m-widget24">
+                                                    <div class="m-widget24__item">
+                                                        <h4 class="m-widget24__title m--font-warning">
+                                                            اساتید آلاء
+                                                        </h4>
+                                                        <br>
+                                                        <span class="m-widget24__desc">
+                                                            اساتیدی که می شناسید
+                                                        </span>
+                                                        <span class="m-widget24__stats m--font-warning">
+                                                            <img src="/assets/extra/landing1/img/teacher-128.png" style="height: 40px;">
+                                                        </span>
+                                                        <div class="m--space-10"></div>
+                                                        <div class="progress m-progress--sm">
+                                                            <div class="progress-bar m--bg-warning" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                        <span class="m-widget24__change">
+                                                            همه اساتید
+                                                        </span>
+                                                        <span class="m-widget24__number">
+                                                            100%
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-9 order-1 order-sm-1 order-md-2 order-lg-2">
+
+                                        <div class="row justify-content-center">
+                                            @foreach( $landingProducts as $product)
+                                                <div class = "col-12 col-sm-6 col-md-4 col-lg-3 m--padding-left-5 m--padding-right-5 m--margin-top-5 a--imageWithCaption @foreach ($product["majors"] as $major) {{ $major }} @endforeach">
+                                                    @if(isset($product["product"]->image[0]))
+                                                        <img
+                                                                src="{{ route('image', ['category'=>'4','w'=>'256' , 'h'=>'256' ,  'filename' =>  $product["product"]->image ]) }}"
+                                                                alt="عکس محصول@if(isset($product["product"]->name[0])) {{$product["product"]->name}} @endif"
+                                                                class = "img-thumbnail">
+                                                    @endif
+                                                    <div class = "a--imageCaptionWarper">
+                                                        <div class = "a--imageCaptionContent">
+                                                            <div class = "a--imageCaptionTitle">{{$product["product"]->name ?? '--'}}</div>
+                                                            <div class = "a--imageCaptionDescription">
+                                                                ثبت نام در همایش
+                                                                <br>
+                                                                @if($product["product"]->isFree)
+                                                                    <div class="cbp-l-caption-desc  bold font-red product-potfolio-free">رایگان
+                                                                    </div>
+                                                                @elseif($product["product"]->basePrice == 0)
+                                                                    <div class="cbp-l-caption-desc  bold font-blue product-potfolio-no-cost">قیمت: پس از انتخاب محصول
+                                                                    </div>
+                                                                @elseif($costCollection[$product["product"]->id]["productDiscount"]+$costCollection[$product["product"]->id]["bonDiscount"]>0)
+                                                                    <div class="cbp-l-caption-desc  bold font-red product-potfolio-real-cost">@if(isset($costCollection[$product["product"]->id]["cost"])){{number_format($costCollection[$product["product"]->id]["cost"])}}تومان@endif</div>
+                                                                    <div class="cbp-l-caption-desc  bold font-green product-potfolio-discount-cost">فقط @if(Auth::check()) {{number_format((1 - ($costCollection[$product["product"]->id]["bonDiscount"] / 100)) * ((1 - ($costCollection[$product["product"]->id]["productDiscount"] / 100)) * $costCollection[$product["product"]->id]["cost"]))}} @else @if(isset($costCollection[$product["product"]->id]["cost"])){{number_format(((1-($costCollection[$product["product"]->id]["productDiscount"]/100))*$costCollection[$product["product"]->id]["cost"]))}}تومان@endif @endif</div>
+                                                                @else
+                                                                    <div class="cbp-l-caption-desc bold font-green product-potfolio-no-discount">@if(isset($costCollection[$product["product"]->id]["cost"])){{number_format($costCollection[$product["product"]->id]["cost"])}}تومان@endif </div>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+
+                                    </div>
                                 </div>
-                            </a>
+                            </div>
+
+
+
                         </div>
-                    @endforeach
+                    </div>
                 </div>
             </div>
+
         </div>
-
-
-        <div class="col-md-3 col-md-pull-9">
-            {{--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">--}}
-            {{--<img src="/assets/extra/landing1/img/hamayeshAD-256x56.jpg" style="width: 100%;">--}}
-            {{--</div>--}}
-            {{--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">--}}
-                {{--<div class="dashboard-stat2 " style="padding: 0px">--}}
-
-                    {{--<div class="progress-info" style="font-style:italic">--}}
-                        {{--<div class="status" style="font-size: medium">--}}
-                            {{--<img src="/assets/extra/landing1/img/hamayeshAD-1397.jpg" style="width: 100%;">--}}
-                        {{--</div>--}}
-
-                    {{--</div>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-            {{--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">--}}
-            {{--<div class="blog-page blog-content-1">--}}
-            {{--<div class="blog-quote bordered blog-container">--}}
-            {{--<div class="blog-quote-label bg-blue-madison" style="padding-top: 0px">--}}
-            {{--<img src="/img/extra/landing/specialOffer.png" style="height: 100px;"></div>--}}
-            {{--<div class="blog-quote-avatar">--}}
-            {{--<a href="javascript:;">--}}
-            {{--<img src="/img/extra/landing/5discount.jpg" />--}}
-            {{--</a>--}}
-            {{--</div>--}}
-            {{--<div class="blog-quote-author">--}}
-            {{--<h3 class="blog-title blog-quote-title bold" style="font-size: 15px;">--}}
-            {{--تخفیف ویژه--}}
-            {{--</h3>--}}
-            {{--<!--<p class="blog-quote-desc">تخفیف پیش فروش همایش ها</p>-->--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="dashboard-stat2 ">
-                    <div class="display">
-                        <div class="number">
-                            <h3 class="font-blue-sharp" style="direction: ltr">
-                                <span>۵ + ۱</span>
-                            </h3>
-                            <small>هر درس</small>
-                        </div>
-                        <div class="icon">
-                            <!--<i class="icon-like"></i>-->
-                            <img src="/assets/extra/landing1/img/like.png" style="height: 40px;">
-                        </div>
-                    </div>
-                    <div class="progress-info" style="font-style:italic">
-                        <div class="status" style="font-size: small">
-                            5 ساعت جمع بندی و نکته و تست داریم و 1 ساعت تست های پلاس مخصوص پزشکا و مهندسا
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="dashboard-stat2 ">
-                    <div class="display">
-                        <div class="number">
-                            <h3 class="font-green-sharp">
-                                <span>۱/۳</span>
-                                <!--<small class="font-green-sharp">$</small>-->
-                            </h3>
-                            <small>جمع بندی یک سوم کنکور</small>
-                        </div>
-                        <div class="icon">
-                            <i class="icon-pie-chart font-green-sharp"></i>
-                        </div>
-                    </div>
-                    <div class="progress-info" style="font-style:italic">
-                        <div class="progress">
-                                    <span style="width: 33%;" class="progress-bar progress-bar-success green-sharp">
-                                        <span class="sr-only">76% progress</span>
-                                    </span>
-                        </div>
-                        <div class="status">
-                            <div class="status-title"> کنکور</div>
-                            <div class="status-number font-green-sharp"> ۳۳%</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">--}}
-            {{--<div class="dashboard-stat2 ">--}}
-            {{--<div class="display">--}}
-            {{--<div class="number">--}}
-            {{--<h3 class="font-red-soft">--}}
-            {{--<span >ویژه دی ماه</span>--}}
-            {{--</h3>--}}
-            {{--<small>متناسب با تقویم کنکوری ها</small>--}}
-            {{--</div>--}}
-            {{--<div class="icon">--}}
-            {{--<!--<i class="fa fa-calendar-check-o"></i>-->--}}
-            {{--<img src="/img/extra/landing/calendar.png" style="height: 40px;">--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            {{--<div class="progress-info" style="font-style:italic">--}}
-            {{--<div class="progress">--}}
-            {{--<span style="width: 100%;" class="progress-bar progress-bar-success red-soft">--}}
-            {{--<span class="sr-only">45% grow</span>--}}
-            {{--</span>--}}
-            {{--</div>--}}
-            {{--<div class="status">--}}
-            {{--<div class="status-title">  </div>--}}
-            {{--<div class="status-number font-red-soft"> ۱۰۰% </div>--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="dashboard-stat2 ">
-                    <div class="display">
-                        <div class="number">
-                            <h3 style="color: #d97200">
-                                <span>اساتید آلاء</span>
-                            </h3>
-                            <small>اساتیدی که می شناسید</small>
-                        </div>
-                        <div class="icon">
-                            <!--<i class="icon-user"></i>-->
-                            <img src="/assets/extra/landing1/img/teacher-128.png" style="height: 40px;">
-                        </div>
-                    </div>
-                    <div class="progress-info" style="font-style:italic">
-                        <div class="progress">
-                                    <span style="width: 100%; background: #d97200" class="progress-bar">
-                                        <span class="sr-only">۱۰۰٪ اساتید</span>
-                                    </span>
-                        </div>
-                        <div class="status">
-                            <div class="status-title"> همه اساتید</div>
-                            <div class="status-number " style="color: #d97200"> ۱۰۰%</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-
-
     </div>
+
+
 @endsection
 
 @section("footerPageLevelPlugin")
