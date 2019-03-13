@@ -195,6 +195,26 @@ class Contentset extends BaseModel implements Taggable
         return json_decode($value);
     }
 
+    /**
+     * Set the set's tag.
+     *
+     * @param array $value
+     *
+     * @return void
+     */
+    public function setTagsAttribute(array $value)
+    {
+        $tags = null;
+        if (!empty($value))
+            $tags = json_encode([
+                "bucket" => "contentset",
+                "tags"   => $value,
+            ], JSON_UNESCAPED_UNICODE);
+
+        $this->attributes['tags'] = $tags;
+    }
+
+
     public function getUrlAttribute($value): string
     {
 //        return action("Web\ContentsetController@show",$this);

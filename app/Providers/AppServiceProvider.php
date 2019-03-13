@@ -5,8 +5,10 @@ namespace App\Providers;
 
 use App\{Adapter\AlaaSftpAdapter,
     Content,
+    Contentset,
     Observers\ContentObserver,
     Observers\ProductObserver,
+    Observers\SetObserver,
     Product,
     Traits\UserCommon};
 use Illuminate\Support\Collection;
@@ -28,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Content::observe(ContentObserver::class);
         Product::observe(ProductObserver::class);
+        Contentset::observe(SetObserver::class);
 
         Horizon::auth(function ($request) {
             if (Auth::check() && Auth::user()
