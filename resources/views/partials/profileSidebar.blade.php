@@ -60,10 +60,10 @@
                             @if(isset($userCompletion))
                                 میزان تکمیل پروفایل ({{ $userCompletion }}%)
                                 <br>
-                                @if(!$user->hasVerifiedMobile())
-                                <span class="label label-warning">توجه! یکی از موارد ، تایید شماره موبایل می باشد </span>
-                                    <br>
-                                @endif
+                                {{--@if(!$user->hasVerifiedMobile())--}}
+                                {{--<span class="label label-warning">توجه! یکی از موارد ، تایید شماره موبایل می باشد </span>--}}
+                                    {{--<br>--}}
+                                {{--@endif--}}
                             <div class="progress" style="height: 3px;" aria-valuenow="50">
                                 <div class="progress-bar progress-bar-animated progress-bar-striped bg-info" role="progressbar" aria-valuenow="{{ $userCompletion }}" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
@@ -189,7 +189,7 @@
 
                         <button type="button" class="btn m-btn--air btn-outline-warning btn-block" menu="profileMenuPage-setting">
                             <i class="flaticon-cogwheel"></i>
-                                تنظیمات حساب کاربری
+                            ویرایش اطلاعات شخصی
                             </button>
                         <button type="button" class="btn m-btn--air btn-outline-info btn-block" menu="profileMenuPage-filmVaJozve" onclick="window.location.href='{{ route('web.user.dashboard', Auth::user()) }}';">
                             <i class="flaticon-multimedia-4"></i>

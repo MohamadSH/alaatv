@@ -31,7 +31,6 @@
 @endsection
 
 @section('content')
-
     @include('systemMessage.flash')
 
     <div class="row">
@@ -39,14 +38,14 @@
             {{--            Using this notification for some text at the top of the profile page        --}}
             {{--            @include("user.profile.topNotification")--}}
 
-            @include("user.profile.lotteryNotification" , [                                                            "userPoints"=>$userPoints ,
-                                                            "lotteryName"=>$lotteryName ,
-                                                            "exchangeAmount" => $exchangeAmount ,
-                                                            "userLottery" => $userLottery ,
-                                                            "prizeCollection" => $prizeCollection,
-                                                            "lotteryMessage" => $lotteryMessage,
-                                                            "lotteryRank" => $lotteryRank,
-                                                            ])
+            {{--@include("user.profile.lotteryNotification" , [                                                            "userPoints"=>$userPoints ,--}}
+                                                            {{--"lotteryName"=>$lotteryName ,--}}
+                                                            {{--"exchangeAmount" => $exchangeAmount ,--}}
+                                                            {{--"userLottery" => $userLottery ,--}}
+                                                            {{--"prizeCollection" => $prizeCollection,--}}
+                                                            {{--"lotteryMessage" => $lotteryMessage,--}}
+                                                            {{--"lotteryRank" => $lotteryRank,--}}
+                                                            {{--])--}}
         </div>
     </div>
 
@@ -66,7 +65,12 @@
         </div>
         <div class="col-md-9">
             @if(!$user->lockProfile)
-                @include('user.profile.profileEditView' , ["withBio"=>true , "withBirthdate"=>false , "withIntroducer"=>false , "text2"=>"کاربر گرامی ، پس از تکمیل اطلاعات شخصی(فیلد های پایین) امکان اصلاح اطلاعات ثبت شده وجود نخواهد داشت. لذا خواهشمند هستیم این اطلاعات را در صحت و دقت کامل تکمیل نمایید . باتشکر"])
+                @include('user.profile.profileEditView' , [
+                "withBio"=>true ,
+                "withBirthdate"=>false ,
+                "withIntroducer"=>false ,
+                "text2"=>"کاربر گرامی ، پس از تکمیل تمام اطلاعا پروفایل شما قفل شده و امکان اصلاح اطلاعات وجود نخواهد داشت. لذا خواهشمند هستیم این اطلاعات را در صحت و دقت تکمیل کنید."
+                ])
             @else
                 @include('user.profile.profileView')
             @endif
