@@ -118,7 +118,8 @@
                                                            class="form-control m-input m-input--air"
                                                            placeholder="رتبه شما"
                                                             @if($userKonkurResult!==null)
-                                                                {{ $userKonkurResult->rank }}
+                                                                value="{{ $userKonkurResult->rank }}"
+                                                                disabled="disabled"
                                                             @endif
                                                     >
                                                     <span class="m-input-icon__icon m-input-icon__icon--left">
@@ -153,11 +154,11 @@
                                         @if($userKonkurResult===null)
                                             <div class="col">
                                                 <div class="form-group m-form__group">
-                                                    <label for="customFile">فایل کارنامه(الزامی)</label>
+                                                    <label for="reportFile">فایل کارنامه(الزامی)</label>
                                                     <div></div>
                                                     <div class="custom-file">
-                                                        <input name="reportFile" type="file" class="custom-file-input m-input m-input--air" id="customFile">
-                                                        <label class="custom-file-label" for="customFile">انتخاب فایل</label>
+                                                        <input name="reportFile" type="file" class="custom-file-input m-input m-input--air" id="reportFile">
+                                                        <label class="custom-file-label" for="reportFile">انتخاب فایل</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -165,7 +166,14 @@
                                         <div class="col">
                                             <div class="form-group m-form__group">
                                                 <div class="m-input-icon m-input-icon--left">
-                                                    <textarea rows="5" name="comment" placeholder="آلاء چه نقشی در نتیجه شما داشته و چطور به شما کمک کرده؟" class="form-control m-input m-input--air">@if($userKonkurResult!==null){{ $userKonkurResult->comment }}@endif</textarea>
+                                                    <textarea rows="5"
+                                                              name="comment"
+                                                              placeholder="آلاء چه نقشی در نتیجه شما داشته و چطور به شما کمک کرده؟"
+                                                              class="form-control m-input m-input--air"
+                                                              @if($userKonkurResult!==null)
+                                                                  disabled="disabled"
+                                                              @endif
+                                                    >@if($userKonkurResult!==null){{ $userKonkurResult->comment }}@endif</textarea>
                                                 </div>
                                             </div>
                                         </div>

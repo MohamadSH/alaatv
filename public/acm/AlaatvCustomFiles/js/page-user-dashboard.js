@@ -258,7 +258,6 @@ $(document).ready(function () {
         }
         UserAssets.loadContents(contentUrl, contentType, true);
     });
-
     $(document).on('click', '.btnLoadMoreInModal', function () {
         let $nextPageUrl = null;
         let contentType = $(this).data('content-type');

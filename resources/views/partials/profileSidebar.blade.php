@@ -68,7 +68,6 @@
                                 <div class="progress-bar progress-bar-animated progress-bar-striped bg-info" role="progressbar" aria-valuenow="{{ $userCompletion }}" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             @endif
-
                         @endif
 
                     <i class="flaticon-user-ok"></i>
