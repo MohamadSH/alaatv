@@ -1,10 +1,11 @@
 
 .a--imageWithCaption {
     cursor: pointer;
+    overflow: hidden;
 }
 
 .a--imageWithCaption img {
-
+    min-width: 100%;
 }
 
 .a--imageWithCaption .a--imageCaptionWarper {

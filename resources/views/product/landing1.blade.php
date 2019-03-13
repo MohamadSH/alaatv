@@ -35,6 +35,10 @@
     {{--<img src="/img/extra/landing/banner-1.jpg" style="width: 100%">--}}
     {{--</div>--}}
     {{--</div>--}}
+
+
+
+
     <div class="col-xs-12">
         <div class="blog-banner blog-container"
              style="background-image:url(https://takhtekhak.com/image/9/1280/500/clock_20171203125805.jpg);">

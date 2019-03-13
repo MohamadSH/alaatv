@@ -180,7 +180,93 @@ $(document).ready(function () {
         altField: '#birthdateAlt'
     });
 
+    function getErrorMessage(errors) {
+        let message = '';
+        for (let index in errors) {
+            for (let errorIndex in errors[index]) {
+                if(!isNaN(errorIndex)) {
+                    message += errors[index][errorIndex]+'<br>';
+                }
+            }
+        }
+        return message;
+    }
+
+    function settingFormValidation() {
+        let status = true;
+        let message = '';
+
+        let $postalCode = $('#profileForm-setting input[name="postalCode"]');
+        let $email = $('#profileForm-setting input[name="email"]');
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if(isNaN($postalCode.val())) {
+            status = false;
+            message += 'برای کد پستی عدد وارد کنید.'+'<br>';
+            $postalCode.parents('.form-group').addClass('has-danger');
+        } else if ($postalCode.val().trim().length !== 10) {
+            status = false;
+            message += 'کد پستی می بایست ده رقم باشد.'+'<br>';
+            $postalCode.parents('.form-group').addClass('has-danger');
+        } else {
+            $postalCode.parents('.form-group').removeClass('has-danger');
+        }
+        if (re.test($email.val()) || $email.val().trim().length===0) {
+            $email.parents('.form-group').removeClass('has-danger');
+        } else {
+            status = false;
+            message += 'ایمیل وارد شده نامعتبر است.'+'<br>';
+            $email.parents('.form-group').addClass('has-danger');
+        }
+        return {
+            status: status,
+            message: message
+        }
+    }
+
+    function sabteRotbeFormValidation() {
+        let status = true;
+        let message = '';
+
+        let $rank = $('#frmSabteRotbe input[name="rank"]');
+        let $reportFile = $('#frmSabteRotbe input[name="reportFile"]');
+
+        if ($rank.val().trim().length === 0) {
+            status = false;
+            message += 'ثبت رتبه الزامی است.'+'<br>';
+            $rank.parents('.form-group').addClass('has-danger');
+        } else if(isNaN(parseInt($rank.val().toLocaleString('en').replace(',', ''))) || isNaN($rank.val())) {
+            status = false;
+            message += 'برای رتبه عدد وارد کنید.'+'<br>';
+            $rank.parents('.form-group').addClass('has-danger');
+        } else {
+            $rank.parents('.form-group').removeClass('has-danger');
+        }
+        if (document.getElementById('reportFile').files.length === 0) {
+            status = false;
+            message += 'ارسال فایل کارنامه الزامی است.'+'<br>';
+            $reportFile.parents('.form-group').addClass('has-danger');
+        } else {
+            $reportFile.parents('.form-group').removeClass('has-danger');
+        }
+        return {
+            status: status,
+            message: message
+        }
+    }
+
     $(document).on('click', '#btnUpdateProfileInfoForm', function () {
+
+        let validation = settingFormValidation();
+
+        if (!validation.status) {
+            Swal({
+                title: 'توجه!',
+                html: validation.message,
+                type: 'warning',
+                confirmButtonText: 'بستن'
+            });
+            return false;
+        }
 
         var $form = $("#profileForm-setting");
         var data = getFormData($form);
@@ -221,7 +307,7 @@ $(document).ready(function () {
 
                     Swal({
                         title: 'توجه!',
-                        text: 'خطای سیستمی رخ داده است.' + '<br>' + message,
+                        html: 'خطای سیستمی رخ داده است.' + '<br>' + message,
                         type: 'warning',
                         confirmButtonText: 'بستن'
                     });
@@ -244,9 +330,15 @@ $(document).ready(function () {
             },
             error: function (jqXHR, textStatus, errorThrown) {
 
+                let message = '';
+                if (jqXHR.responseJSON.message === 'The given data was invalid.') {
+                    message = getErrorMessage(jqXHR.responseJSON.errors);
+                } else {
+                    message = 'خطای سیستمی رخ داده است.';
+                }
                 Swal({
                     title: 'توجه!',
-                    text: 'خطای سیستمی رخ داده است.',
+                    html: message,
                     type: 'warning',
                     confirmButtonText: 'بستن'
                 });
@@ -525,12 +617,27 @@ $(document).ready(function () {
         if (menu === 'profileMenuPage-sabteRotbe') {
             showSabteRotbe();
         } else if (menu === 'profileMenuPage-filmVaJozve') {
-            showFilmVaJozve();
+            // showFilmVaJozve();
         } else if (menu === 'profileMenuPage-setting') {
             showSetting();
         }
         // mUtil.getScroll(document.getElementById('profileMenuPage-sabteRotbe'), 'Top');
         //
         // mUtil.scrollTop();
+    });
+
+    $(document).on('submit', '#frmSabteRotbe', function(e){
+        // let validation = sabteRotbeFormValidation();
+        //
+        // if (!validation.status) {
+        //     Swal({
+        //         title: 'توجه!',
+        //         html: validation.message,
+        //         type: 'warning',
+        //         confirmButtonText: 'بستن'
+        //     });
+        //     e.preventDefault();
+        //     return false;
+        // }
     });
 });
