@@ -256,18 +256,19 @@ use Laravel\Passport\HasApiTokens;
  * @property-read mixed                                                               $major_info
  * @property-read mixed                                                               $wallet_info
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Client[] $clients
- * @property-read mixed                                                               $info
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[]  $tokens
- * @property mixed                                                                    openOrders
- * @property mixed                                                                    nameSlug
- * @property mixed                                                                    nationalCode
- * @property mixed                                                                    userstatus_id
- * @property mixed                                                                    techCode
- * @property string                                                                   password
- * @property int                                                                      lockProfile
- * @property string                                                                   photo
- * @property mixed                                                                    roles
- * @property static|null                                                              mobile_verified_at
+ * @property-read mixed                                                              $info
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[] $tokens
+ * @property mixed                                                                   openOrders
+ * @property mixed                                                                   nameSlug
+ * @property mixed                                                                   nationalCode
+ * @property mixed                                                                   userstatus_id
+ * @property mixed                                                                   techCode
+ * @property string                                                                  password
+ * @property int                                                                     lockProfile
+ * @property string                                                                  photo
+ * @property mixed                                                                   roles
+ * @property static|null                                                             mobile_verified_at
+ * @property mixed                                                                   closed_orders
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail
 {

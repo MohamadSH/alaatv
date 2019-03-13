@@ -170,6 +170,7 @@ class Order extends BaseModel
         'coupon_id',
         'cost',
         'costwithoutcoupon',
+        'normalOrderproducts',
         'user_id',
         'updated_at',
         'deleted_at',
