@@ -48,7 +48,7 @@ class OrderController extends Controller
         /** @var Order $order */
         $order = $user->getOpenOrder();
 
-        $credit = optional($order->user)->getTotalWalletBalance();
+        $wallets = optional($order->user)->getWallet();
         $orderHasDonate = $order->hasTheseProducts([
             Product::CUSTOM_DONATE_PRODUCT,
             Product::DONATE_PRODUCT_5_HEZAR,
@@ -76,8 +76,8 @@ class OrderController extends Controller
         $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
 
         return response([
-            "invoiceInfo"                 => $invoiceInfo,
-            "credit"                      => $credit,
+            "price"                       => $invoiceInfo['price'],
+            "wallet"                      => $wallets,
             "couponInfo"                  => $coupon,
             "notIncludedProductsInCoupon" => $notIncludedProductsInCoupon,
             "orderHasDonate"              => $orderHasDonate,
