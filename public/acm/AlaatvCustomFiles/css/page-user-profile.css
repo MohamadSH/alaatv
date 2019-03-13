@@ -1,4 +1,3 @@
-
 .datepicker-plot-area.datepicker-persian {
     font-family: IRANSans !important;
 }
@@ -52,4 +51,21 @@
     top: 0px;
     left: 0px;
     width: 100%;
+}
+
+.profileMenuPage-setting-view .form-group.m-form__group {
+    -webkit-box-shadow: 0 1px 15px 1px rgba(69,65,78,.08);
+    box-shadow: 0 1px 15px 1px rgba(69,65,78,.08);
+    padding: 10px;
+}
+.profileMenuPage-setting-view .form-group.m-form__group .m-input-icon {
+    min-height: 28px;
+}
+.profileMenuPage .m-portlet__head .m-portlet__head-caption .m-portlet__head-label span {
+    white-space: nowrap;
+}
+.form-group.m-form__group.has-danger .form-control.m-input.m-input--air,
+.form-group.m-form__group.has-danger .custom-file-label {
+    -webkit-box-shadow: 0 3px 20px 0 rgba(255, 0, 0, 0.66);
+    box-shadow: 0 3px 20px 0 rgba(255, 0, 0, 0.66);
 }

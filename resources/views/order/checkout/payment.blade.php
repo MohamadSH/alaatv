@@ -11,44 +11,7 @@
 
     @include('systemMessage.flash')
 
-    <div class = "row">
-        <div class = "col">
-            <div class = "row a--step-warper">
-                <div class = "col a--step-item passed">
-                    <div class = "a--step-item-icon">
-                        <i class = "flaticon-lock"></i>
-                    </div>
-                    <div class = "a--step-item-text">
-                        ورود
-                    </div>
-                </div>
-                <div class = "col a--step-item passed">
-                    <div class = "a--step-item-icon">
-                        <i class = "flaticon-information"></i>
-                    </div>
-                    <div class = "a--step-item-text">
-                        تکمیل اطلاعات
-                    </div>
-                </div>
-                <div class = "col a--step-item passed">
-                    <div class = "a--step-item-icon">
-                        <i class = "flaticon-list-3"></i>
-                    </div>
-                    <div class = "a--step-item-text">
-                        بازبینی
-                    </div>
-                </div>
-                <div class = "col a--step-item current">
-                    <div class = "a--step-item-icon">
-                        <i class = "la la-money"></i>
-                    </div>
-                    <div class = "a--step-item-text">
-                        اطلاعات پرداخت
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    @include("partials.checkoutSteps" , ["step"=>3])
 
     <div class = "row">
         {{--روش پرداخت--}}
@@ -81,7 +44,7 @@
                                         <div class = "m-radio-inline">
                                             <label class = "m-radio m-radio--solid m-radio--state-success">
                                                 <input type = "radio" name = "radioPaymentType" data-btntext = "پرداخت" value = "online" checked>
-                                                انترنتی
+                                                اینترنتی
                                                 <span></span>
                                             </label>
                                             {{--<label class="m-radio m-radio--solid m-radio--state-success">--}}
@@ -89,11 +52,11 @@
                                                 {{--حضوری--}}
                                                 {{--<span></span>--}}
                                             {{--</label>--}}
-                                            <label class = "m-radio m-radio--solid m-radio--state-success">
-                                                <input type = "radio" name = "radioPaymentType" data-btntext = "ثبت سفارش" value = "card2card">
-                                                کارت به کارت
-                                                <span></span>
-                                            </label>
+                                            {{--<label class = "m-radio m-radio--solid m-radio--state-success">--}}
+                                                {{--<input type = "radio" name = "radioPaymentType" data-btntext = "ثبت سفارش" value = "card2card">--}}
+                                                {{--کارت به کارت--}}
+                                                {{--<span></span>--}}
+                                            {{--</label>--}}
                                         </div>
                                     </div>
                                 </div>
@@ -115,16 +78,16 @@
                                                         <img src = "/acm/extra/payment/gateway/zarinpal-logo.png" class = "img-thumbnail bankLogo" alt = "bank-logo">
                                                         <span></span>
                                                     </label>
-                                                    <label class = "m-radio m-radio--solid m-radio--state-info">
-                                                        <input type = "radio" name = "radioBankType" value = "2">
-                                                        <img src = "/acm/extra/payment/gateway/mellat-logo.png" class = "img-thumbnail bankLogo" alt = "bank-logo">
-                                                        <span></span>
-                                                    </label>
-                                                    <label class = "m-radio m-radio--solid m-radio--state-info">
-                                                        <input type = "radio" name = "radioBankType" value = "3">
-                                                        <img src = "/acm/extra/payment/gateway/pasargad-logo.jpg" class = "img-thumbnail bankLogo" alt = "bank-logo">
-                                                        <span></span>
-                                                    </label>
+                                                    {{--<label class = "m-radio m-radio--solid m-radio--state-info">--}}
+                                                        {{--<input type = "radio" name = "radioBankType" value = "2">--}}
+                                                        {{--<img src = "/acm/extra/payment/gateway/mellat-logo.png" class = "img-thumbnail bankLogo" alt = "bank-logo">--}}
+                                                        {{--<span></span>--}}
+                                                    {{--</label>--}}
+                                                    {{--<label class = "m-radio m-radio--solid m-radio--state-info">--}}
+                                                        {{--<input type = "radio" name = "radioBankType" value = "3">--}}
+                                                        {{--<img src = "/acm/extra/payment/gateway/pasargad-logo.jpg" class = "img-thumbnail bankLogo" alt = "bank-logo">--}}
+                                                        {{--<span></span>--}}
+                                                    {{--</label>--}}
                                                 </div>
                                             </div>
                                         </div>
@@ -143,9 +106,10 @@
                                                         جهت تایید سفارش مبلغ
                                                         <b class = "finalPriceValue">{{ number_format($invoiceInfo['totalCost']) }}</b> تومان به شماره کارت:
                                                         <br>
-                                                        4444-4444-4444-4444
+                                                        6104-3375-6000-0026
                                                         <br>
-                                                        به نام فلان فلانی بانک فلان واریز نمایید.
+                                                        به نام مؤسسه توسعه علمی آموزشی عدالت محور آلاء بانک ملت
+                                                        واریز نمایید.
                                                     </div>
                                                 </div>
                                                 <div class = "col-12 col-md-3">
@@ -191,7 +155,7 @@
                                                class="form-control"
                                                placeholder="کد تخفیف ..."
                                                @if(isset($coupon))
-                                                value="{{ $coupon['coupon']->code }}"
+                                                value="{{ $coupon['code'] }}"
                                                @endif
                                                id="discountCodeValue">
                                         <div class="input-group-prepend DiscountCodeActionsWarper">
@@ -205,17 +169,17 @@
                                     <div class="alert alert-success alert-dismissible fade show couponReportWarper @if (!isset($coupon)) a--d-none @endif" role="alert">
                                         {{--<button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>--}}
                                         <div class="couponReport">
-                                            @if(isset($coupon) && $coupon['discount']['type'] == config('constants.DISCOUNT_TYPE_COST'))
+                                            @if(isset($coupon) && $coupon['type'] == config('constants.DISCOUNT_TYPE_COST'))
                                                 کپن تخفیف
-                                                <strong>{{$coupon['coupon']->name}}</strong>
+                                                <strong>{{$coupon['name']}}</strong>
                                                 با
-                                                {{number_format($coupon['discount']['discount'])}}
+                                                {{number_format($coupon['discount'])}}
                                                 تومان تخفیف برای سفارش شما ثبت شد.
                                             @elseif(isset($coupon))
                                                 کپن تخفیف
-                                                <strong>{{$coupon['coupon']->name}}</strong>
+                                                <strong>{{$coupon['name']}}</strong>
                                                 با
-                                                {{$coupon['discount']['discount']}}
+                                                {{$coupon['discount']}}
                                                 % تخفیف برای
                                                 سفارش شما ثبت شده است.
                                             @endif
@@ -559,7 +523,7 @@
     {{--</div>--}}
 
     <input type="hidden" id="invoiceInfo-totalCost" value="{{ $invoiceInfo['totalCost'] }}">
-    <input type="hidden" id="invoiceInfo-couponCode" value="@if (isset($coupon)){{ $coupon['coupon']->code }}@endif">
+    <input type="hidden" id="invoiceInfo-couponCode" value="@if (isset($coupon)){{ $coupon['code'] }}@endif">
     <input type="hidden" id="OrderController-submitCoupon" value="{{ action('Web\OrderController@submitCoupon') }}">
     <input type="hidden" id="OrderController-removeCoupon" value="{{ action('Web\OrderController@removeCoupon') }}">
 

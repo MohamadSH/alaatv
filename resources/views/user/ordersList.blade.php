@@ -34,12 +34,27 @@
         <div class = "col">
 
             @if(isset($debitCard))
-                <p class="list-group-item  bg-blue-soft bg-font-blue-soft" style="text-align: justify;"> شماره کارت برای
-                    واریز کارت به کارت مبلغ: <span dir="ltr">{{$debitCard->cardNumber}}</span>
-                    به نام @if(!isset($debitCard->user->firstName) && !isset($debitCard->user->lastName)) کاربر
-                    ناشناس @else @if(isset($debitCard->user->firstName)) {{$debitCard->user->firstName}} @endif @if(isset($debitCard->user->lastName)) {{$debitCard->user->lastName}} @endif @endif
+                <div class="alert alert-info text-center" role="alert">
+                    شماره کارت برای
+                    واریز کارت به کارت مبلغ:
+                    <br>
+                    <strong>{{$debitCard->cardNumber}}</strong>
+                    <br>
+                    به نام
+                    @if(!isset($debitCard->user->firstName) && !isset($debitCard->user->lastName))
+                        کاربر
+                    ناشناس
+                    @else
+                    @if(isset($debitCard->user->firstName))
+                            {{$debitCard->user->firstName}}
+                    @endif
+                    @if(isset($debitCard->user->lastName))
+                        {{$debitCard->user->lastName}}
+                    @endif
+                    @endif
+                    -
                     بانک {{$debitCard->bank->name}}
-                </p>
+                </div>
             @endif
 
         </div>

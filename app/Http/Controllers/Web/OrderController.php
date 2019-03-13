@@ -962,7 +962,7 @@ class OrderController extends Controller
             $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
 
             $response = response([
-                "invoiceInfo"                 => $invoiceInfo,
+                "price"                       => $invoiceInfo, // ToDo : retirn price like API
                 "credit"                      => $credit,
                 "couponInfo"                  => $coupon,
                 "notIncludedProductsInCoupon" => $notIncludedProductsInCoupon,

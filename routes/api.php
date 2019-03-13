@@ -35,14 +35,18 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('getPrice/{product}', 'Api\ProductController@refreshPrice');
 
     Route::group(['middleware' => 'auth:api'], function () {
+        Route::resource('user', 'Api\UserController');
+        Route::resource('orderproduct', 'Api\OrderproductController');
         Route::group(['prefix' => 'user'], function () {
-            Route::get('{user}/orders', 'Api\UserController@userOrders');
+            Route::get('{user}/orders', 'Api\UserController@userOrders')->name('api.user.orders');
             Route::get('{user}/dashboard', 'Api\DashboardPageController')->name('api.user.dashboard');
+            Route::get('{user}/assets', 'Api\UserController@userAssets')->name('api.user.assets');
+            Route::post('{user}/firebasetoken' , 'Api\FirebasetokenController@store');
         });
 
-        Route::group(['prefix' => 'order'], function () {
-            Route::get('checkoutReview', 'Api\OrderController@checkoutReview');
-            Route::get('checkoutPayment', 'Api\OrderController@checkoutPayment');
+        Route::group(['prefix' => 'checkout'], function () {
+            Route::get('review', 'Api\OrderController@checkoutReview');
+            Route::get('payment', 'Api\OrderController@checkoutPayment');
         });
     });
 });

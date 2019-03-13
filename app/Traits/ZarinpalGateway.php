@@ -9,8 +9,25 @@
 namespace App\Traits;
 
 
+use Carbon\Carbon;
+use Zarinpal\Zarinpal;
+
 trait ZarinpalGateway
 {
+
+    protected  $exceptions = array(
+        -1 => 'اطلاعات ارسال شده ناقص است.',
+        -2 => 'IP و یا مرچنت کد پذیرنده صحیح نیست',
+        -3 => 'رقم باید بالای 100 تومان باشد',
+        -4 => 'سطح پذیرنده پایین تر از سطح نقره ای است',
+        -11 => 'درخواست مورد نظر یافت نشد',
+        -21 => 'هیچ نوع عملیات مالی برای این تراکنش یافت نشد. کاربر قبل از ورود به درگاه بانک در همان صفحه زرین پال منصرف شده است.',
+        -22 => 'تراکنش ناموفق می باشد. کاربر بعد از ورود به درگاه بانک منصرف شده است.',
+        -33 => 'رقم تراکنش با رقم پرداخت شده مطابقت ندارد',
+        -54 => 'درخواست مورد نظر آرشیو شده',
+        100 => 'عملیات با موفقیت انجام شد',
+        101 => 'عملیات پرداخت با موفقیت انجام شده ولی قبلا عملیات PaymentVertification بر روی این تراکنش انجام شده است',
+    );
 
     /**
      * @param $gatewayComposer
@@ -19,7 +36,7 @@ trait ZarinpalGateway
      * @param string $description
      * @return string
      */
-    public function paymentRequest($gatewayComposer  , string $callbackUrl , int $amount , string $description): string {
+    public function paymentRequest(Zarinpal $gatewayComposer  , string $callbackUrl , int $amount , string $description): string {
         $zarinpalResponse = $gatewayComposer->request($callbackUrl, $amount, $description);
         $authority = $zarinpalResponse['Authority'];
         if (isset($authority[0]))
@@ -41,35 +58,66 @@ trait ZarinpalGateway
         return $redirectData;
     }
 
-    public function verify($gatewayComposer , int $amount , array $paymentData): array
+    /**
+     * @param Zarinpal $gatewayComposer
+     * @param int $amount
+     * @param array $paymentData
+     * @return array
+     */
+    public function verify(Zarinpal $gatewayComposer , int $amount , array $paymentData): array
     {
-        $result = $gatewayComposer->verify($paymentData["Status"], $amount, $paymentData["Authority"]);
-        $this->setResultData('zarinpalVerifyResult', $result);
+        $gatewayResult = $gatewayComposer->verify($paymentData["Status"], $amount, $paymentData["Authority"]);
+        $result['data']['zarinpalVerifyResult'] = $gatewayResult;
 
-        if (!isset($result)) {
-            $this->setResultStatus(false);
-            $this->addResultMessage('مشکل در برقراری ارتباط با زرین پال');
-            return $this->getResult();
+        if (!isset($gatewayResult)) {
+            $result['status'] = false;
+            $result['message'][] = 'مشکل در برقراری ارتباط با زرین پال';
+            return $result;
         }
 
-        if (isset($result['RefID']) && strcmp($result['Status'], 'success') == 0) {
-            $this->setResultStatus(true);
-            $this->setResultData('RefID', $result['RefID']);
-            $this->setResultData('cardPanMask', isset($result['ExtraDetail']['Transaction']['CardPanMask'])?$result['ExtraDetail']['Transaction']['CardPanMask']:null);
-            $this->addResultMessage('پرداخت کاربر تایید شد.');
+        if (isset($gatewayResult['RefID']) && strcmp($gatewayResult['Status'], 'success') == 0) {
+            $result['status'] = true;
+            $result['message'][] = 'پرداخت کاربر تایید شد.';
+            $result['data']['cardPanMask'] = isset($gatewayResult['ExtraDetail']['Transaction']['CardPanMask'])?$gatewayResult['ExtraDetail']['Transaction']['CardPanMask']:null;
+            if($this->isZarinpalSandboxOn())
+            {
+                $nowUnix = Carbon::now()->timestamp ;
+                $result['data']['RefID'] = 'sandbox'.$nowUnix;
+
+            }else
+            {
+                $result['data']['RefID'] = $gatewayResult['RefID'];
+            }
         } else {
-            $this->setResultStatus(false);
-            if (strcmp($result['Status'], 'canceled') == 0) {
-                $this->addResultMessage('کاربر از پرداخت انصراف داده است.');
-            } else if (strcmp($result['Status'], 'verified_before') ==0) {
-                $this->addResultMessage(self::EXCEPTION[101]);
+            $result['status'] = false;
+            if (strcmp($gatewayResult['Status'], 'canceled') == 0) {
+                $result['message'][] = 'کاربر از پرداخت انصراف داده است.';
+            } else if (strcmp($gatewayResult['Status'], 'verified_before') ==0) {
+                $result['message'][] = $this->exceptions[101];
             } else {
-                $this->addResultMessage('خطایی در پرداخت رخ داده است.');
-                if (isset($result['error'])) {
-                    $this->addResultMessage(self::EXCEPTION[$result['error']]);
+                $result['message'][] = 'خطایی در پرداخت رخ داده است.';
+                if (isset($gatewayResult['error'])) {
+                    $result['message'][] = $this->exceptions[$gatewayResult['error']];
                 }
             }
         }
-        return $this->getResult();
+        return $result;
+    }
+
+
+    /**
+     * @return bool
+     */
+    protected function isZarinpalSandboxOn(): bool
+    {
+        return config('app.env', 'deployment') != 'deployment' && config('Zarinpal.Sandbox', false);
+    }
+
+    /**
+     * @return \Illuminate\Config\Repository|mixed
+     */
+    protected function isZarinGateOn():bool
+    {
+        return config('Zarinpal.ZarinGate', false);
     }
 }

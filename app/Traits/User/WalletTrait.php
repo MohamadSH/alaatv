@@ -12,7 +12,7 @@ namespace App\Traits\User;
 trait WalletTrait
 {
 
-    protected function getWallet()
+    public function getWallet()
     {
         $wallets = $this->wallets()->with('walletType')->get();
         $walletsArrayForReturn = [];

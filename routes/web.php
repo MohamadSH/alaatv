@@ -101,7 +101,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('teleMarketingAdminPanel', 'Web\HomeController@adminTeleMarketing');
     Route::post('adminSendSMS', 'Web\HomeController@sendSMS');
     Route::get('asset', 'Web\UserController@userProductFiles');
-    Route::get('profile', 'Web\UserController@show');
     Route::get('complete-register', 'Web\UserController@completeRegister');
     Route::get('survey', 'Web\UserController@showSurvey');
     Route::get('97', 'Web\HomeController@submitKonkurResult');
@@ -136,7 +135,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('{user}/dashboard', 'Web\DashboardPageController')->name('web.user.dashboard');
         Route::get('profile', 'Web\UserController@show');
-        Route::post('profile/update', 'Web\UserController@update');
+        Route::post('profile/update', 'Web\UserController@update')->name('web.authenticatedUser.profile.update');
 
         Route::get('info', "Web\UserController@informationPublicUrl");
         Route::get('{user}/info', 'Web\UserController@information');

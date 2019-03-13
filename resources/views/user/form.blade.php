@@ -722,67 +722,79 @@
                 پروفایل شما قفل می باشد، لطفا با مسئولین سایت تماس بگیرید
             </div>
         @endif
-        {!! Form::open(['files' => 'true', 'method' => 'PUT', 'action' => ['UserController@update' , Auth::user()]]) !!}
-        {!! Form::hidden('updateType',"atLogin") !!}
-        <fieldset @if(Auth::user()->lockProfile) disabled @endif>
-            <p class="caption-subject @if(isset($noteFontColor)) {{$noteFontColor}} @endif bold uppercase"
-               style="text-align:justify">@if(isset($note)) {{$note}} @endif </p>
-            @foreach($formFields as $formField)
-                <div class="form-group {{ $errors->has($formField->name) ? ' has-error' : '' }}">
-                    <label for="{{$formField->name}}"
-                           class="control-label visible-ie8 visible-ie9">{{$formField->displayName}}</label>
-                    <div class="input-icon">
-                        <i class="fa fa-pencil"></i>
-                        @if(strpos($formField->name, "_id"))
-                            {!! Form::select($formField->name, $tables[$formField->name], Auth::user()[$formField->name] , ['class' => 'form-control placeholder-no-fix' , 'placeholder' => $formField->displayName]) !!}
-                        @elseif(strcmp($formField->name , "photo") == 0)
-                            <div class="fileinput fileinput-new" id="photo-div" data-provides="fileinput">
-                                <div class="input-group input-large">
-                                    <div class="form-control uneditable-input input-fixed input-medium"
-                                         data-trigger="fileinput">
-                                        <i class="fa fa-file fileinput-exists"></i>&nbsp;
-                                        <span class="fileinput-filename"> </span>
-                                    </div>
-                                    <span class="input-group-addon btn default btn-file">
-                                                                <span class="fileinput-new"> عکس </span>
-                                                                <span class="fileinput-exists"> تغییر </span>
-                                        {!! Form::file('photo' , ['id'=>'photo']) !!} </span>
-                                    <a href="javascript:" class="input-group-addon btn red fileinput-exists"
-                                       data-dismiss="fileinput"> حذف </a>
-                                </div>
-                                <div class="clearfix margin-top-10">
-                                    <span class="label label-danger">توجه</span><strong id="photoAlert">فرمت های مجاز:
-                                        jpg , png - حداکثر حجم مجاز: 500KB</strong>
-                                </div>
-                            </div>
-                        @else
-                            <input class="form-control placeholder-no-fix" type="text"
-                                   value="@if(isset(Auth::user()[$formField->name]) && strlen(preg_replace('/\s+/', '', Auth::user()[$formField->name]))>0) {{old($formField->name, Auth::user()[$formField->name])}} @else{{old($formField->name)}}@endif"
-                                   placeholder="{{$formField->displayName}}" name="{{$formField->name}}"/>
-                        @endif
-                        @if ($errors->has($formField->name))
-                            <span class="help-block">
-                                        <strong>{{ $errors->first($formField->name) }}</strong>
-                                    </span>
+
+
+        <!--begin::Form-->
+        {!! Form::open(['files' => 'true', 'method' => 'PUT', 'class' => 'm-form m-form--fit m-form--label-align-right', 'action' => ['Web\UserController@update' , Auth::user()]]) !!}
+
+
+            <div class="m-portlet__body">
+                {!! Form::hidden('updateType',"atLogin") !!}
+                <div class="form-group m-form__group m--margin-top-10">
+                    <div class="alert m-alert m-alert--default @if(isset($noteFontColor)) {{$noteFontColor}} @endif" role="alert">
+                        @if(isset($note))
+                            {{$note}}
                         @endif
                     </div>
                 </div>
-            @endforeach
-        </fieldset>
-        <div class="form-actions" style="text-align: center">
-            @if(isset($formByPass) && !$formByPass)
-                <button type="button" class="btn blue" onclick = "location.href = '@if(session()->has("redirectTo"))  {{session()->get("redirectTo")}}@else {{action("Web\IndexPageController")}} @endif' ">
-                    بعدا پر می کنم
-                </button>
-            @elseif(isset($hasHomeButton))
-                <a href = "{{action("Web\IndexPageController")}}" class = "btn red"> @lang('page.Home') </a>
-            @endif
-            @if(!Auth::user()->lockProfile)
-                <button type="submit" class="btn green"> ادامه</button>
-            @endif
-        </div>
+
+
+                @foreach($formFields as $formField)
+
+                    <div class="form-group m-form__group {{ $errors->has($formField->name) ? ' has-danger' : '' }}">
+                        <label for="{{$formField->name}}">{{$formField->displayName}}</label>
+                        <div class="m-input-icon m-input-icon--left">
+                            @if(strpos($formField->name, "_id"))
+                                {!! Form::select($formField->name, $tables[$formField->name], Auth::user()[$formField->name] , ['class' => 'form-control m-input m-input--air' , 'placeholder' => $formField->displayName]) !!}
+                            @elseif(strcmp($formField->name , "photo") == 0)
+                                <div></div>
+                                <div class="custom-file">
+                                    {!! Form::file('photo' , ['id'=>'photo', 'class' => 'custom-file-input']) !!}
+                                    <label class="custom-file-label" for="customFile">انتخاب فایل</label>
+                                </div>
+                                <span class="m-form__help">
+                                    <span class="m-badge m-badge--danger m-badge--wide">
+                                        فرمت های مجاز: jpg , png - حداکثر حجم مجاز: 500KB
+                                    </span>
+                                </span>
+                            @else
+                                <input class="form-control m-input m-input--air" type="text"
+                                       value="@if(isset(Auth::user()[$formField->name]) && strlen(preg_replace('/\s+/', '', Auth::user()[$formField->name]))>0) {{old($formField->name, Auth::user()[$formField->name])}} @else{{old($formField->name)}}@endif"
+                                       placeholder="{{$formField->displayName}}"
+                                       name="{{$formField->name}}"/>
+                            @endif
+                            @if ($errors->has($formField->name))
+                                <div class="form-control-feedback">{{ $errors->first($formField->name) }}</div>
+                            @endif
+                            @if(strcmp($formField->name , "photo") !== 0)
+                                <span class="m-input-icon__icon m-input-icon__icon--left">
+                                    <span><i class="flaticon-edit"></i></span>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+
+                @endforeach
+
+            </div>
+            <div class="m-portlet__foot m-portlet__foot--fit">
+                <div class="m-form__actions">
+                    @if(isset($formByPass) && !$formByPass)
+                        <button type="button" class="btn m-btn--pill m-btn--air btn-accent" onclick = "location.href = '@if(session()->has("redirectTo"))  {{session()->get("redirectTo")}}@else {{action("Web\IndexPageController")}} @endif' ">
+                            بعدا پر می کنم
+                        </button>
+                    @elseif(isset($hasHomeButton))
+                        <a href = "{{action("Web\IndexPageController")}}" class = "btn m-btn--pill m-btn--air btn-danger"> @lang('page.Home') </a>
+                    @endif
+                    @if(!Auth::user()->lockProfile)
+                        <button type="submit" class="btn m-btn--pill m-btn--air btn-success"> ادامه</button>
+                    @endif
+                </div>
+            </div>
+
 
         {!! Form::close() !!}
+        <!--end::Form-->
     @else
         <div class="col-md-12">
             <p class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر الزامی می باشد: </p>

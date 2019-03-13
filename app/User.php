@@ -415,6 +415,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'major_id',
         'grade',
         'grade_id',
+        'gender',
         'gender_id',
         'mobile_verified_code',
         'mobileNumberVerification',
@@ -533,6 +534,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     public function eventresults()
     {
         return $this->hasMany('\App\Eventresult');
+    }
+
+    public function firebasetokens(){
+        return $this->hasMany('App\Firebasetoken');
     }
 
     /**
