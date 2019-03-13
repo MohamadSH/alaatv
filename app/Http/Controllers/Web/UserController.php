@@ -12,7 +12,6 @@ use App\{Afterloginformcontrol,
     Employeeschedule,
     Employeetimesheet,
     Event,
-    Eventresult,
     Gender,
     Grade,
     Http\Controllers\Auth\RegisterController,
@@ -50,10 +49,8 @@ use Illuminate\{Contracts\Filesystem\FileNotFoundException,
     Support\Collection,
     Support\Facades\Cache,
     Support\Facades\DB,
-    Support\Facades\File,
     Support\Facades\Input,
     Support\Facades\Route,
-    Support\Facades\Storage,
     Support\Facades\View};
 use Jenssegers\Agent\Agent;
 use Kalnoy\Nestedset\QueryBuilder;
@@ -420,46 +417,6 @@ class UserController extends Controller
     */
 
     /**
-     * @param User $user
-     * @param      $file
-     *
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
-    private function storePhotoOfUser(User &$user, $file): void
-    {
-        $extension = $file->getClientOriginalExtension();
-        $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-        if (Storage::disk(config('constants.DISK1'))
-                   ->put($fileName, File::get($file))) {
-            $oldPhoto = $user->photo;
-            if (!$this->userHasDefaultAvatar($oldPhoto))
-                Storage::disk(config('constants.DISK1'))
-                       ->delete($oldPhoto);
-            $user->photo = $fileName;
-        }
-    }
-
-    /**
-     * @param array $newRoleIds
-     * @param User  $staffUser
-     * @param User  $user
-     */
-    private function attachRoles(array $newRoleIds, User $staffUser, User $user): void
-    {
-        if ($staffUser->can(config('constants.INSET_USER_ROLE'))) {
-            $oldRolesIds = $user->roles->pluck("id")->toArray();
-            $totalRoles = array_merge($oldRolesIds, $newRoleIds);
-            /** snippet for checking system roles idea */
-            /*$this->checkGivenRoles($totalRoles, $staffUser);
-            if (!empty($newRoleIds)) {
-                $user->roles()
-                     ->sync($newRoleIds);
-            }*/
-            $user->roles()->attach($totalRoles);
-        }
-    }
-
-    /**
      * Checks whether user can give these roles or not
      *
      * @param array $newRoleIds
@@ -507,24 +464,28 @@ class UserController extends Controller
             ->prepend("نامشخص");
         $sideBarMode = "closed";
 
-        /** LOTTERY */
-        [
-            $exchangeAmount,
-            $userPoints,
-            $userLottery,
-            $prizeCollection,
-            $lotteryRank,
-            $lottery,
-            $lotteryMessage,
-            $lotteryName,
-        ] = $user->getLottery();
+//        /** LOTTERY */
+//        [
+//            $exchangeAmount,
+//            $userPoints,
+//            $userLottery,
+//            $prizeCollection,
+//            $lotteryRank,
+//            $lottery,
+//            $lotteryMessage,
+//            $lotteryName,
+//        ] = $user->getLottery();
 
         $event = Event::name('konkur97')->first();
         $userKonkurResult = $user->eventresults->where("event_id", $event->id)->first();
 
+        $userCompletion = $user->info['completion'];
+
         return view("user.profile.profile", compact("user", 'event', 'userKonkurResult',
 
-            'genders', 'majors', 'sideBarMode', 'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName' , 'userKonkurResult'));
+            'genders', 'majors', 'sideBarMode',
+//            'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName' ,
+            'userKonkurResult' , 'userCompletion'));
     }
 
     /**
@@ -1576,7 +1537,6 @@ class UserController extends Controller
         if ($request->expectsJson()) {
             if($status == Response::HTTP_OK)
                $response = [
-                   'userPhoto' => $user->photo,
                    'user'      => $user,
                    'message'   => $message,
                ];

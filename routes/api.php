@@ -35,10 +35,11 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('getPrice/{product}', 'Api\ProductController@refreshPrice');
 
     Route::group(['middleware' => 'auth:api'], function () {
+        Route::resource('user', 'Api\UserController');
         Route::group(['prefix' => 'user'], function () {
             Route::get('{user}/orders', 'Api\UserController@userOrders')->name('api.user.orders');
             Route::get('{user}/dashboard', 'Api\DashboardPageController')->name('api.user.dashboard');
-            Route::get('{user}/profile', 'Api\UserController@show')->name('api.user.profile');
+            Route::post('{user}/firebasetoken' , 'Api\FirebasetokenController@store');
         });
 
         Route::group(['prefix' => 'order'], function () {
