@@ -84,6 +84,8 @@ class RegisterController extends Controller
             'userstatus_id' => 1,
             'photo'         => array_get($data, 'photo', config('constants.PROFILE_DEFAULT_IMAGE')),
             'password'      => bcrypt(array_get($data, 'password', array_get($data, 'nationalCode'))),
+            'major_id'      => array_get($data, 'major_id'),
+            'gender_id'     => array_get($data, 'gender_id'),
         ]);
     }
 
