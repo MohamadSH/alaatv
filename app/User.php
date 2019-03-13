@@ -535,6 +535,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         return $this->hasMany('\App\Eventresult');
     }
 
+    public function firebasetokens(){
+        return $this->hasMany('App\Firebasetoken');
+    }
+
     /**
      * Compares user's password with a new password
      *
