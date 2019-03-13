@@ -9,6 +9,7 @@
 namespace App\Traits;
 
 
+use Carbon\Carbon;
 use Zarinpal\Zarinpal;
 
 trait ZarinpalGateway
@@ -76,9 +77,17 @@ trait ZarinpalGateway
 
         if (isset($gatewayResult['RefID']) && strcmp($gatewayResult['Status'], 'success') == 0) {
             $result['status'] = true;
-            $result['data']['RefID'] = $gatewayResult['RefID'];
-            $result['data']['RefID'] = isset($gatewayResult['ExtraDetail']['Transaction']['CardPanMask'])?$gatewayResult['ExtraDetail']['Transaction']['CardPanMask']:null;
             $result['message'][] = 'پرداخت کاربر تایید شد.';
+            $result['data']['cardPanMask'] = isset($gatewayResult['ExtraDetail']['Transaction']['CardPanMask'])?$gatewayResult['ExtraDetail']['Transaction']['CardPanMask']:null;
+            if($this->isZarinpalSandboxOn())
+            {
+                $nowUnix = Carbon::now()->timestamp ;
+                $result['data']['RefID'] = 'sandbox'.$nowUnix;
+
+            }else
+            {
+                $result['data']['RefID'] = $gatewayResult['RefID'];
+            }
         } else {
             $result['status'] = false;
             if (strcmp($gatewayResult['Status'], 'canceled') == 0) {
@@ -94,6 +103,7 @@ trait ZarinpalGateway
         }
         return $result;
     }
+
 
     /**
      * @return bool
