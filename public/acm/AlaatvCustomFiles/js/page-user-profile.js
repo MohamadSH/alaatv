@@ -148,7 +148,20 @@ $(document).ready(function () {
         }
     });
 
+    function changeStatus(status) {
+
+        let url = document.location.href.split('#')[0];
+
+        url += '#' + status;
+
+        history.pushState('data to be passed', 'Title of the page', url);
+        // The above will add a new entry to the history so you can press Back button to go to the previous state.
+        // To change the URL in place without adding a new entry to history use
+        // history.replaceState('data to be passed', 'Title of the page', '');
+    }
+
     function showSabteRotbe() {
+        // changeStatus('ثبت رتبه');
         $('.profileMenuPage.profileMenuPage-filmVaJozve').fadeOut(0);
         $('.profileMenuPage.profileMenuPage-setting').fadeOut(0);
         $('.profileMenuPage.profileMenuPage-sabteRotbe').fadeIn();
@@ -164,6 +177,7 @@ $(document).ready(function () {
     }
 
     function showSetting() {
+        // changeStatus('اطلاعات شخصی');
         $('.profileMenuPage.profileMenuPage-filmVaJozve').fadeOut(0);
         $('.profileMenuPage.profileMenuPage-sabteRotbe').fadeOut(0);
         $('.profileMenuPage.profileMenuPage-setting').fadeIn();
@@ -627,17 +641,34 @@ $(document).ready(function () {
     });
 
     $(document).on('submit', '#frmSabteRotbe', function(e){
-        // let validation = sabteRotbeFormValidation();
-        //
-        // if (!validation.status) {
-        //     Swal({
-        //         title: 'توجه!',
-        //         html: validation.message,
-        //         type: 'warning',
-        //         confirmButtonText: 'بستن'
-        //     });
-        //     e.preventDefault();
-        //     return false;
-        // }
+        let validation = sabteRotbeFormValidation();
+
+        if (!validation.status) {
+            Swal({
+                title: 'توجه!',
+                html: validation.message,
+                type: 'warning',
+                confirmButtonText: 'بستن'
+            });
+            e.preventDefault();
+            return false;
+        }
     });
+
+    // if (window.location.hash === '#ثبت رتبه') {
+    //     showSabteRotbe();
+    // } else if (window.location.hash === '#اطلاعات شخصی') {
+    //     showSetting();
+    // } else {
+    //     // showSetting();
+    // }
+    //
+    // $(window).on('hashchange', function() {
+    //     if (window.location.hash === '#ثبت رتبه') {
+    //         showSabteRotbe();
+    //     } else if (window.location.hash === '#اطلاعات شخصی') {
+    //         showSetting();
+    //     }
+    // });
+
 });

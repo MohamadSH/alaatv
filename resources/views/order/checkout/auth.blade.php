@@ -1,36 +1,51 @@
-@extends("app")
+@extends('app')
 
-@section("content")
-    <div class="row">
-        <div class="col-md-12">
-            <div class="portlet light bordered ">
-                <div class="portlet-body">
-                    <div class="row">
-                        @include("partials.checkoutSteps" , ["step"=>0])
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-6">
-                            @include("partials.loginForm")
-                        </div>
-                    </div>
-                    <br/>
-                    <br/>
-                    <br/>
-                </div>
-            </div>
-        </div>
-    </div>
+@section('page-css')
+    {{--<link href = "{{ mix('/css/checkout-review.css') }}" rel = "stylesheet" type = "text/css"/>--}}
+    <link href = "{{ asset('/acm/AlaatvCustomFiles/components/step/step.css') }}" rel = "stylesheet" type = "text/css"/>
 @endsection
 
-@section("extraJS")
+@section('content')
+
+    @include("partials.checkoutSteps" , ["step"=>0])
+
+    @include('systemMessage.flash')
+
+    <div class="container">
+    <div class="row align-items-center">
+        <div class="col-12 col-sm-9 col-md-6 col-lg-5 mx-auto">
+
+            <div class="m-portlet m-portlet--bordered m-portlet--last">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                ورود
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-portlet__body">
+
+                    @include("partials.loginForm")
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+
+@endsection
+
+@section('page-js')
     @if(!empty($errors->getBags()))
         <script>
             jQuery(document).ready(function () {
                 @if(!$errors->login->isEmpty())
-                $("#signin-button").trigger("click");
+                    $("#signin-button").trigger("click");
                 @else
-                $("#signup-button").trigger("click");
+                    $("#signup-button").trigger("click");
                 @endif
             });
         </script>

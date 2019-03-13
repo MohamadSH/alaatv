@@ -741,7 +741,7 @@
 
                 @foreach($formFields as $formField)
 
-                    <div class="form-group m-form__group {{ $errors->has($formField->name) ? ' has-error' : '' }}">
+                    <div class="form-group m-form__group {{ $errors->has($formField->name) ? ' has-danger' : '' }}">
                         <label for="{{$formField->name}}">{{$formField->displayName}}</label>
                         <div class="m-input-icon m-input-icon--left">
                             @if(strpos($formField->name, "_id"))
@@ -753,7 +753,9 @@
                                     <label class="custom-file-label" for="customFile">انتخاب فایل</label>
                                 </div>
                                 <span class="m-form__help">
-                                    فرمت های مجاز: jpg , png - حداکثر حجم مجاز: 500KB
+                                    <span class="m-badge m-badge--danger m-badge--wide">
+                                        فرمت های مجاز: jpg , png - حداکثر حجم مجاز: 500KB
+                                    </span>
                                 </span>
                             @else
                                 <input class="form-control m-input m-input--air" type="text"
@@ -762,7 +764,7 @@
                                        name="{{$formField->name}}"/>
                             @endif
                             @if ($errors->has($formField->name))
-                                <div class="form-control-feedback"><strong>{{ $errors->first($formField->name) }}</strong></div>
+                                <div class="form-control-feedback">{{ $errors->first($formField->name) }}</div>
                             @endif
                             @if(strcmp($formField->name , "photo") !== 0)
                                 <span class="m-input-icon__icon m-input-icon__icon--left">

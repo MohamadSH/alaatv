@@ -54,7 +54,7 @@
                 <div class="m-widget19__shadow"></div>
                 </div>
             <div class="m-widget19__content">
-                <div class="m-widget19__header">
+                <div class="m-widget19__header a--full-width">
 
                         @if(isset($withCompletionBox) && $withCompletionBox)
                             @if(isset($userCompletion))
@@ -65,8 +65,15 @@
                                     {{--<br>--}}
                                 {{--@endif--}}
                             <div class="progress" style="height: 3px;" aria-valuenow="50">
-                                <div class="progress-bar progress-bar-animated progress-bar-striped bg-info" role="progressbar" aria-valuenow="{{ $userCompletion }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar progress-bar-animated progress-bar-striped bg-info"
+                                     role="progressbar"
+                                     style="width: {{ $userCompletion }}%;"
+                                     aria-valuenow="{{ $userCompletion }}"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">
+
                                 </div>
+                            </div>
                             @endif
                         @endif
 
