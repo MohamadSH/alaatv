@@ -29,7 +29,6 @@ class UserController extends Controller
      */
     public function update(EditUserRequest $request, User $user = null)
     {
-
         $authenticatedUser = $request->user('api');
         if ($user === null)
             $user = $authenticatedUser;
@@ -70,7 +69,6 @@ class UserController extends Controller
 
         if($status == Response::HTTP_OK)
             $response = [
-                'userPhoto' => $user->photo,
                 'user'      => $user,
                 'message'   => $message,
             ];

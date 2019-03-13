@@ -18,13 +18,10 @@
 						<span class="m-portlet__head-icon m--hide">
 							<i class="flaticon-statistics"></i>
 						</span>
-                <h3 class="m-portlet__head-text">
-                    ویرایش اطلاعات شخصی
-                </h3>
                 <h2 class="m-portlet__head-label m-portlet__head-label--warning">
                     <span>
                         <i class="flaticon-cogwheel"></i>
-                        تنظیمات حساب کاربری
+                        ویرایش اطلاعات شخصی
                     </span>
                 </h2>
             </div>

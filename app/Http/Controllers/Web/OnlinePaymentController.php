@@ -95,25 +95,29 @@ class OnlinePaymentController extends Controller
 
         if ($this->isRedirectable($cost)) {
 
-            $transactiongateway = $this->getGateway($paymentMethod);
+            $gatewayResult = $this->buildZarinpalGateway($paymentMethod);
 
-            if(!isset($transactiongateway)) {
+            if(isset($gatewayResult['error']))
+            {
                 return response()->json([
-                    'error' => 'اطلاعات درگاه مورد نظر یافت نشد.'
+                    'message' => 'درگاه مورد نظر یافت نشد'
                 ], Response::HTTP_BAD_REQUEST);
+            }else{
+                $transactiongateway = $gatewayResult['transactiongateway'];
+                $gateway = $gatewayResult['gatewayComposer'];
             }
+
 
             $callbackUrl = action('Web\OnlinePaymentController@verifyPayment', ['paymentMethod' => $paymentMethod, 'device' => $device]);
 
-            $gateWay = new ZarinpalComposer($transactiongateway->merchantNumber);
-            $authority = $this->paymentRequest($gateWay , $callbackUrl , $cost , $description);
+            $authority = $this->paymentRequest($gateway , $callbackUrl , $cost , $description);
 
             if (isset($authority)) {
 
                 $transactionModifyResult = $this->setAuthorityForTransaction($authority, $transactiongateway->id, $transaction);
 
                 if ($transactionModifyResult['statusCode'] == Response::HTTP_OK) {
-                    $redirectData = $this->getRedirectData($gateWay->redirectUrl());
+                    $redirectData = $this->getRedirectData($gateway->redirectUrl());
                     return view("order.checkout.gatewayRedirect", compact('redirectData'));
                 } else {
                     return response()->json([
@@ -223,12 +227,6 @@ class OnlinePaymentController extends Controller
     {
         $paymentData = $request->all();
 
-        $transactiongateway = $this->getGateway($paymentMethod);
-        if(!isset($transactiongateway)) {
-            return response()->json([
-                'error' => 'اطلاعات درگاه مورد نظر یافت نشد.'
-            ], Response::HTTP_BAD_REQUEST);
-        }
         $transaction = Transaction::authority($paymentData["Authority"])->first();
 
         if(!isset($transaction)) {
@@ -237,23 +235,33 @@ class OnlinePaymentController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
 
+        $gatewayResult = $this->buildZarinpalGateway($paymentMethod);
+        if(isset($gatewayResult['error']))
+        {
+            return response()->json([
+                'message' => 'درگاه مورد نظر یافت نشد'
+            ], Response::HTTP_BAD_REQUEST);
+        }else{
+            /** @var \Zarinpal $gateway */
+            $gateway = $gatewayResult['gatewayComposer'];
+        }
+
         $verifyResult = [];
 
         $amount = $this->setDataForGatewayVerify($paymentMethod, $transaction);
-        $gateWay = new ZarinpalComposer($transactiongateway->merchantNumber);
-        $gateWayVerify = $this->verify($gateWay ,$amount, $paymentData);
-        $verifyResult['gateWayVerify'] = $gateWayVerify;
+        $gatewayVerify = $this->verify($gateway ,$amount, $paymentData);
+        $verifyResult['zarinpalVerifyResult'] = $gatewayVerify;
 
         if (isset($transaction->order_id)) {
             $transaction->order->detachUnusedCoupon();
-            if ($gateWayVerify['status']) {
-                $verifyResult['OrderSuccessPaymentResult'] = $this->handleOrderSuccessPayment($gateWayVerify['data']['RefID'], $transaction, $gateWayVerify['data']['cardPanMask']);
+            if ($gatewayVerify['status']) {
+                $verifyResult['OrderSuccessPaymentResult'] = $this->handleOrderSuccessPayment($gatewayVerify['data']['RefID'], $transaction, $gatewayVerify['data']['cardPanMask']);
             } else {
                 $verifyResult['OrderCanceledPaymentResult'] = $this->handleOrderCanceledPayment($transaction);
             }
         } else if (isset($transaction->wallet_id)) {
-            if ($gateWayVerify['status']) {
-                $this->handleWalletChargingSuccessPayment($gateWayVerify['data']['RefID'], $transaction, $gateWayVerify['data']['cardPanMask']);
+            if ($gatewayVerify['status']) {
+                $this->handleWalletChargingSuccessPayment($gatewayVerify['data']['RefID'], $transaction, $gatewayVerify['data']['cardPanMask']);
             } else {
                 $this->handleWalletChargingCanceledPayment($transaction);
             }
@@ -272,7 +280,7 @@ class OnlinePaymentController extends Controller
         $request->session()->flash('verifyResult', $verifyResult);
 
         return redirect(action('Web\OnlinePaymentController@showPaymentStatus', [
-            'status' => ($gateWayVerify['status'])?'successful':'failed',
+            'status' => ($gatewayVerify['status'])?'successful':'failed',
             'paymentMethod' => $paymentMethod,
             'device' => $device
         ]));
@@ -464,13 +472,41 @@ class OnlinePaymentController extends Controller
      * @param string $paymentMethod
      * @return mixed
      */
+    private function buildZarinpalGateway(string $paymentMethod)
+    {
+        $transactiongateway =  $this->getGateway($paymentMethod);
+
+        if(isset($transactiongateway)) {
+            $gatewayComposer = new ZarinpalComposer($transactiongateway->merchantNumber);
+            if($this->isZarinpalSandboxOn())
+                $gatewayComposer->enableSandbox();
+
+            if($this->isZarinGateOn())
+                $gatewayComposer->isZarinGate();
+        }else{
+            return [
+                'error' => [
+                    'message'   => 'Could not find gate way',
+                    'code'      =>  Response::HTTP_BAD_REQUEST ,
+                ]
+            ];
+        }
+
+        return [
+               'transactiongateway'         => $transactiongateway,
+               'gatewayComposer'            => $gatewayComposer
+            ];
+    }
+
+    /**
+     * @param string $paymentMethod
+     * @return mixed
+     */
     private function getGateway(string $paymentMethod)
     {
         $key = 'onlineGateways:';
-        $transactiongateway = Cache::remember($key , config('constants.CACHE_600') , function () use ($paymentMethod){
+        return Cache::remember($key , config('constants.CACHE_600') , function () use ($paymentMethod){
             return Transactiongateway::where('name', $paymentMethod)->first();
         });
-
-        return $transactiongateway;
     }
 }

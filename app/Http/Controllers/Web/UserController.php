@@ -464,24 +464,28 @@ class UserController extends Controller
             ->prepend("نامشخص");
         $sideBarMode = "closed";
 
-        /** LOTTERY */
-        [
-            $exchangeAmount,
-            $userPoints,
-            $userLottery,
-            $prizeCollection,
-            $lotteryRank,
-            $lottery,
-            $lotteryMessage,
-            $lotteryName,
-        ] = $user->getLottery();
+//        /** LOTTERY */
+//        [
+//            $exchangeAmount,
+//            $userPoints,
+//            $userLottery,
+//            $prizeCollection,
+//            $lotteryRank,
+//            $lottery,
+//            $lotteryMessage,
+//            $lotteryName,
+//        ] = $user->getLottery();
 
         $event = Event::name('konkur97')->first();
         $userKonkurResult = $user->eventresults->where("event_id", $event->id)->first();
 
+        $userCompletion = $user->info['completion'];
+
         return view("user.profile.profile", compact("user", 'event', 'userKonkurResult',
 
-            'genders', 'majors', 'sideBarMode', 'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName' , 'userKonkurResult'));
+            'genders', 'majors', 'sideBarMode',
+//            'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName' ,
+            'userKonkurResult' , 'userCompletion'));
     }
 
     /**
@@ -1533,7 +1537,6 @@ class UserController extends Controller
         if ($request->expectsJson()) {
             if($status == Response::HTTP_OK)
                $response = [
-                   'userPhoto' => $user->photo,
                    'user'      => $user,
                    'message'   => $message,
                ];
