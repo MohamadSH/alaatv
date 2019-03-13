@@ -36,6 +36,7 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('user', 'Api\UserController');
+        Route::resource('orderproduct', 'Api\OrderproductController');
         Route::group(['prefix' => 'user'], function () {
             Route::get('{user}/orders', 'Api\UserController@userOrders')->name('api.user.orders');
             Route::get('{user}/dashboard', 'Api\DashboardPageController')->name('api.user.dashboard');
