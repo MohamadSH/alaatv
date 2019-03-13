@@ -37,11 +37,11 @@ class AlaaInvoiceGenerator
 
         $orderproductsRawCost   = $orderPriceArray['sumOfOrderproductsRawCost'];
         $totalCost              = $orderPriceArray['totalCost'];
-        $payableByWallet        = $orderPriceArray['payableAmountByWallet'];
+//        $payableByWallet        = $orderPriceArray['payableAmountByWallet'];
 
         $orderProductCount = $this->orderproductFormatter($calculatedOrderproducts);
 
-        return $this->invoiceFormatter($calculatedOrderproducts, $orderProductCount, $orderproductsRawCost, $totalCost, $payableByWallet);
+        return $this->invoiceFormatter($calculatedOrderproducts, $orderProductCount, $orderproductsRawCost, $totalCost);
     }
 
     /**
@@ -54,7 +54,7 @@ class AlaaInvoiceGenerator
 
         $orderProductCount = $this->orderproductFormatter($fakeOrderproducts);
 
-        return $this->invoiceFormatter($fakeOrderproducts, $orderProductCount, $groupPriceInfo['rawCost'], $groupPriceInfo['customerCost'], 0);
+        return $this->invoiceFormatter($fakeOrderproducts, $orderProductCount, $groupPriceInfo['rawCost'], $groupPriceInfo['customerCost']);
     }
 
     /**
@@ -99,14 +99,17 @@ class AlaaInvoiceGenerator
         return $orderProductCount;
     }
 
-    private function invoiceFormatter($orderproducts, $orderproductCount, $orderproductsRawCost, $totalCost, $payableByWallet)
+    private function invoiceFormatter($orderproducts, $orderproductCount, $orderproductsRawCost, $totalCost)
     {
+        $discount = $orderproductsRawCost - $totalCost;
         return [
             'items'                => $orderproducts,
             'orderproductCount'    => $orderproductCount,
-            'orderproductsRawCost' => $orderproductsRawCost,
-            'totalCost'            => $totalCost,
-            'payableByWallet'      => $payableByWallet,
+            'price'   =>  [
+                'base'                 => $orderproductsRawCost,
+                'discount'             => $discount,
+                'final'                => $totalCost,
+            ]
         ];
     }
 
