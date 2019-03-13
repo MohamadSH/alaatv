@@ -44,7 +44,6 @@ class CheckPermissionForSendOrderId
      */
     public function handle(Request $request, Closure $next, $guard = null)
     {
-
 //            $this->user = $request->user()->load('openOrders');
 //            $this->resetOrders();
 //
