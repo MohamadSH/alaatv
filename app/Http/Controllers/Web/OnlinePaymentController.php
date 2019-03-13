@@ -459,7 +459,7 @@ class OnlinePaymentController extends Controller
      * @return void
      */
     public function showPaymentStatus(string $status, string $paymentMethod, string $device, Request $request) {
-        $result = $request->session()->get('verifyResult');
+        $result = $request->session()->pull('verifyResult');
         dd([
             'status' => $status,
             'paymentMethod' => $paymentMethod,
