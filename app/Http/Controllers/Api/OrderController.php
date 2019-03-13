@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
 use App\Coupon;
+use App\Http\Controllers\Controller;
 use App\Order;
 use App\Product;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 
 class OrderController extends Controller
@@ -30,7 +30,7 @@ class OrderController extends Controller
         $invoiceGenerator = new AlaaInvoiceGenerator();
 
         $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
-
+        unset($invoiceInfo['price']['payableByWallet']);
         return response($invoiceInfo, Response::HTTP_OK);
     }
 

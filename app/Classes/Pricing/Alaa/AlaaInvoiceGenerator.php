@@ -37,11 +37,11 @@ class AlaaInvoiceGenerator
 
         $orderproductsRawCost   = $orderPriceArray['sumOfOrderproductsRawCost'];
         $totalCost              = $orderPriceArray['totalCost'];
-//        $payableByWallet        = $orderPriceArray['payableAmountByWallet'];
+        $payableByWallet = $orderPriceArray['payableAmountByWallet'];
 
         $orderProductCount = $this->orderproductFormatter($calculatedOrderproducts);
 
-        return $this->invoiceFormatter($calculatedOrderproducts, $orderProductCount, $orderproductsRawCost, $totalCost);
+        return $this->invoiceFormatter($calculatedOrderproducts, $orderProductCount, $orderproductsRawCost, $totalCost, $payableByWallet);
     }
 
     /**
@@ -54,7 +54,7 @@ class AlaaInvoiceGenerator
 
         $orderProductCount = $this->orderproductFormatter($fakeOrderproducts);
 
-        return $this->invoiceFormatter($fakeOrderproducts, $orderProductCount, $groupPriceInfo['rawCost'], $groupPriceInfo['customerCost']);
+        return $this->invoiceFormatter($fakeOrderproducts, $orderProductCount, $groupPriceInfo['rawCost'], $groupPriceInfo['customerCost'], 0);
     }
 
     /**
@@ -99,16 +99,17 @@ class AlaaInvoiceGenerator
         return $orderProductCount;
     }
 
-    private function invoiceFormatter($orderproducts, $orderproductCount, $orderproductsRawCost, $totalCost)
+    private function invoiceFormatter($orderproducts, $orderproductCount, $orderproductsRawCost, $totalCost, $payableByWallet)
     {
         $discount = $orderproductsRawCost - $totalCost;
         return [
             'items'                => $orderproducts,
             'orderproductCount'    => $orderproductCount,
             'price'   =>  [
-                'base'                 => $orderproductsRawCost,
-                'discount'             => $discount,
-                'final'                => $totalCost,
+                'base'            => $orderproductsRawCost,
+                'discount'        => $discount,
+                'final'           => $totalCost,
+                'payableByWallet' => $payableByWallet,
             ]
         ];
     }

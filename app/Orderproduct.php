@@ -239,13 +239,17 @@ class Orderproduct extends BaseModel
     {
         $priceInfo = $this->calculatePayableCost($calculateCost);
         return [
-            "cost"                  => $priceInfo["cost"],
-            "extraCost"             => $priceInfo["extraCost"],
-            "productDiscount"       => $priceInfo["productDiscount"],
-            'bonDiscount'           => $priceInfo["bonDiscount"],
-            "productDiscountAmount" => $priceInfo["productDiscountAmount"],
-            'customerPrice'         => $priceInfo["customerCost"],
-            'totalPrice'            => $priceInfo["totalCost"],
+            'discountDetail' => [
+                'productDiscount'       => $priceInfo['productDiscount'],
+                'bonDiscount'           => $priceInfo['bonDiscount'],
+                'productDiscountAmount' => $priceInfo['productDiscountAmount'],
+            ],
+            //////////////////////////
+            'extraCost'      => $priceInfo['extraCost'],
+            'base'           => $priceInfo['cost'],
+            'discount'       => $priceInfo['discount'],
+            'final'          => $priceInfo['customerCost'],
+            //            'totalPrice'            => $priceInfo['totalCost'],
         ];
     }
 

@@ -894,7 +894,7 @@ class OrderController extends Controller
         foreach ($orderproducts as $orderproduct) {
             $costArray = $orderproduct->obtainOrderproductCost(false);
             $costCollection->put($orderproduct->id, [
-                "cost"        => $costArray["cost"],
+                "cost"        => $costArray["base"],
                 'extraCost'   => $costArray["extraCost"],
                 'bonDiscount' => $costArray['bonDiscount'],
             ]);
