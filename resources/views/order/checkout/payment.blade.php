@@ -52,11 +52,11 @@
                                                 {{--حضوری--}}
                                                 {{--<span></span>--}}
                                             {{--</label>--}}
-                                            <label class = "m-radio m-radio--solid m-radio--state-success">
-                                                <input type = "radio" name = "radioPaymentType" data-btntext = "ثبت سفارش" value = "card2card">
-                                                کارت به کارت
-                                                <span></span>
-                                            </label>
+                                            {{--<label class = "m-radio m-radio--solid m-radio--state-success">--}}
+                                                {{--<input type = "radio" name = "radioPaymentType" data-btntext = "ثبت سفارش" value = "card2card">--}}
+                                                {{--کارت به کارت--}}
+                                                {{--<span></span>--}}
+                                            {{--</label>--}}
                                         </div>
                                     </div>
                                 </div>
@@ -78,16 +78,16 @@
                                                         <img src = "/acm/extra/payment/gateway/zarinpal-logo.png" class = "img-thumbnail bankLogo" alt = "bank-logo">
                                                         <span></span>
                                                     </label>
-                                                    <label class = "m-radio m-radio--solid m-radio--state-info">
-                                                        <input type = "radio" name = "radioBankType" value = "2">
-                                                        <img src = "/acm/extra/payment/gateway/mellat-logo.png" class = "img-thumbnail bankLogo" alt = "bank-logo">
-                                                        <span></span>
-                                                    </label>
-                                                    <label class = "m-radio m-radio--solid m-radio--state-info">
-                                                        <input type = "radio" name = "radioBankType" value = "3">
-                                                        <img src = "/acm/extra/payment/gateway/pasargad-logo.jpg" class = "img-thumbnail bankLogo" alt = "bank-logo">
-                                                        <span></span>
-                                                    </label>
+                                                    {{--<label class = "m-radio m-radio--solid m-radio--state-info">--}}
+                                                        {{--<input type = "radio" name = "radioBankType" value = "2">--}}
+                                                        {{--<img src = "/acm/extra/payment/gateway/mellat-logo.png" class = "img-thumbnail bankLogo" alt = "bank-logo">--}}
+                                                        {{--<span></span>--}}
+                                                    {{--</label>--}}
+                                                    {{--<label class = "m-radio m-radio--solid m-radio--state-info">--}}
+                                                        {{--<input type = "radio" name = "radioBankType" value = "3">--}}
+                                                        {{--<img src = "/acm/extra/payment/gateway/pasargad-logo.jpg" class = "img-thumbnail bankLogo" alt = "bank-logo">--}}
+                                                        {{--<span></span>--}}
+                                                    {{--</label>--}}
                                                 </div>
                                             </div>
                                         </div>

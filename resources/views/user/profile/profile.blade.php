@@ -31,6 +31,7 @@
 @endsection
 
 @section('content')
+
     @include('systemMessage.flash')
 
     <div class="row">
@@ -98,7 +99,12 @@
                 </div>
                 <div class="m-portlet__body">
                     @if ($errors->any())
-                        {!!  implode('', $errors->all('<div>:message</div>'))  !!}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            </button>
+                            <strong>خطا!</strong>
+                            {!!  implode('', $errors->all('<div>:message</div>'))  !!}
+                        </div>
                     @endif
                     <form method="POST" id="frmSabteRotbe" action="{{ action('Web\EventresultController@store') }}" accept-charset="UTF-8" enctype="multipart/form-data">
                         @csrf
