@@ -1,17 +1,7 @@
-@extends("app")
-@section("headPageLevelPlugin")
-    <link href="/acm/extra/landing1/css/blog-rtl.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/extra/landing1/plugins/cubeportfolio/css/cubeportfolio.css" rel="stylesheet" type="text/css"/>
-@endsection
-@section("headPageLevelStyle")
-    <link href="/acm/extra/landing1/css/portfolio-rtl.min.css" rel="stylesheet" type="text/css"/>
-    {{--<link href="/assets/pages/css/coming-soon-rtl.min.css" rel="stylesheet" type="text/css"/>--}}
-@endsection
-
+@extends('app')
 
 @section('page-css')
     <link href="{{ asset('/acm/AlaatvCustomFiles/components/imageWithCaption/style.css') }}" rel="stylesheet" type="text/css"/>
-
     <style>
         .sideItems .m-widget24__title {
             font-size: 30px !important;
@@ -23,18 +13,8 @@
             font-size: 30px !important;
         }
     </style>
-
 @endsection
-@section("pageBar")
-@show
-
-@section("contentClass")
-    class="page-content blog-page blog-content-1"
-@endsection
-
-@section("content")
-
-
+@section('content')
     <div class="row">
         <div class="col">
             <div class="m-portlet m-portlet--head-overlay m-portlet--full-height  m-portlet--rounded-force">
@@ -51,7 +31,7 @@
                 <div class="m-portlet__body">
                     <div class="m-widget27 m-portlet-fit--sides">
                         <div class="m-widget27__pic">
-                            <img src="/assets/app/media/img//bg/bg-4.jpg" alt="">
+                            <img src="/acm/extra/landing1/img/rally.jpg" alt="">
                             <h3 class="m-widget27__title m--font-light">
                                 سبقت در پیچ اول رالی کنکور
                             </h3>
@@ -154,27 +134,31 @@
                                                                 alt="عکس محصول@if(isset($product["product"]->name[0])) {{$product["product"]->name}} @endif"
                                                                 class = "img-thumbnail">
                                                     @endif
-                                                    <div class = "a--imageCaptionWarper">
-                                                        <div class = "a--imageCaptionContent">
-                                                            <div class = "a--imageCaptionTitle">{{$product["product"]->name ?? '--'}}</div>
-                                                            <div class = "a--imageCaptionDescription">
-                                                                ثبت نام در همایش
-                                                                <br>
-                                                                @if($product["product"]->isFree)
-                                                                    <div class="cbp-l-caption-desc  bold font-red product-potfolio-free">رایگان
-                                                                    </div>
-                                                                @elseif($product["product"]->basePrice == 0)
-                                                                    <div class="cbp-l-caption-desc  bold font-blue product-potfolio-no-cost">قیمت: پس از انتخاب محصول
-                                                                    </div>
-                                                                @elseif($costCollection[$product["product"]->id]["productDiscount"]+$costCollection[$product["product"]->id]["bonDiscount"]>0)
-                                                                    <div class="cbp-l-caption-desc  bold font-red product-potfolio-real-cost">@if(isset($costCollection[$product["product"]->id]["cost"])){{number_format($costCollection[$product["product"]->id]["cost"])}}تومان@endif</div>
-                                                                    <div class="cbp-l-caption-desc  bold font-green product-potfolio-discount-cost">فقط @if(Auth::check()) {{number_format((1 - ($costCollection[$product["product"]->id]["bonDiscount"] / 100)) * ((1 - ($costCollection[$product["product"]->id]["productDiscount"] / 100)) * $costCollection[$product["product"]->id]["cost"]))}} @else @if(isset($costCollection[$product["product"]->id]["cost"])){{number_format(((1-($costCollection[$product["product"]->id]["productDiscount"]/100))*$costCollection[$product["product"]->id]["cost"]))}}تومان@endif @endif</div>
-                                                                @else
-                                                                    <div class="cbp-l-caption-desc bold font-green product-potfolio-no-discount">@if(isset($costCollection[$product["product"]->id]["cost"])){{number_format($costCollection[$product["product"]->id]["cost"])}}تومان@endif </div>
-                                                                @endif
+                                                    <a href="{{$product["product"]->url ?? '#'}}">
+                                                        <div class = "a--imageCaptionWarper">
+                                                            <div class = "a--imageCaptionContent">
+                                                                <div class = "a--imageCaptionTitle">
+                                                                    {{$product["product"]->name ?? '--'}}
+                                                                </div>
+                                                                <div class = "a--imageCaptionDescription">
+                                                                    ثبت نام در همایش
+                                                                    <br>
+                                                                    @if($product["product"]->isFree)
+                                                                        <div class="cbp-l-caption-desc  bold font-red product-potfolio-free">رایگان
+                                                                        </div>
+                                                                    @elseif($product["product"]->basePrice == 0)
+                                                                        <div class="cbp-l-caption-desc  bold font-blue product-potfolio-no-cost">قیمت: پس از انتخاب محصول
+                                                                        </div>
+                                                                    @elseif($costCollection[$product["product"]->id]["productDiscount"]+$costCollection[$product["product"]->id]["bonDiscount"]>0)
+                                                                        <div class="cbp-l-caption-desc  bold font-red product-potfolio-real-cost">@if(isset($costCollection[$product["product"]->id]["cost"])){{number_format($costCollection[$product["product"]->id]["cost"])}}تومان@endif</div>
+                                                                        <div class="cbp-l-caption-desc  bold font-green product-potfolio-discount-cost">فقط @if(Auth::check()) {{number_format((1 - ($costCollection[$product["product"]->id]["bonDiscount"] / 100)) * ((1 - ($costCollection[$product["product"]->id]["productDiscount"] / 100)) * $costCollection[$product["product"]->id]["cost"]))}} @else @if(isset($costCollection[$product["product"]->id]["cost"])){{number_format(((1-($costCollection[$product["product"]->id]["productDiscount"]/100))*$costCollection[$product["product"]->id]["cost"]))}}تومان@endif @endif</div>
+                                                                    @else
+                                                                        <div class="cbp-l-caption-desc bold font-green product-potfolio-no-discount">@if(isset($costCollection[$product["product"]->id]["cost"])){{number_format($costCollection[$product["product"]->id]["cost"])}}تومان@endif </div>
+                                                                    @endif
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </a>
                                                 </div>
                                             @endforeach
                                         </div>
@@ -192,38 +176,4 @@
 
         </div>
     </div>
-
-
-@endsection
-
-@section("footerPageLevelPlugin")
-    <script src="/acm/extra/landing1/plugins/cubeportfolio/js/jquery.cubeportfolio.min.js" type="text/javascript"></script>
-    <script src="/acm/extra/landing1/plugins/horizontal-timeline/horizontal-timeline.js" type="text/javascript"></script>
-    {{--<script src="/assets/global/plugins/countdown/jquery.countdown.min.js" type="text/javascript"></script>--}}
-@endsection
-
-@section("footerPageLevelScript")
-    <script src="/acm/extra/landing1/scripts/portfolio-3.min.js" type="text/javascript"></script>
-    <script src="/acm/extra/landing1/plugins/backstretch/jquery.backstretch.min.js" type="text/javascript"></script>
-    {{--<script src="/assets/pages/scripts/coming-soon.min.js" type="text/javascript"></script>--}}
-    <script type="text/javascript">
-        // var ComingSoon = function () {
-        //
-        //     return {
-        //         //main function to initiate the module
-        //         init: function () {
-        //             var austDay = new Date();
-        //             austDay = new Date("2017-12-17");
-        //             $('#defaultCountdown').countdown({until: austDay});
-        //             $('#year').text(austDay.getFullYear());
-        //         }
-        //
-        //     };
-        //
-        // }();
-        //
-        // jQuery(document).ready(function () {
-        //     ComingSoon.init();
-        // });
-    </script>
 @endsection

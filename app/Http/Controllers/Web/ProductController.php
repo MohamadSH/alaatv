@@ -1003,7 +1003,7 @@ class ProductController extends Controller
                         210,
                         213];
         $products = Product::whereIn('id', $product_ids)->orderBy('order')->enable()->get();
-        $costCollection = $this->makeCostCollection($products);
+//        $costCollection = $this->makeCostCollection($products);
 
         $reshteIdArray = array(
 
@@ -1022,15 +1022,16 @@ class ProductController extends Controller
         $productsDataForView = array();
         foreach ($products as $key => $value) {
             $priceWithDiscount = 0;
-            $price = $costCollection[$value->id]["cost"];
-            if ($costCollection[$value->id]["costForCustomer"] > 0) {
-                $priceWithDiscount = $costCollection[$value->id]["costForCustomer"];
-            } elseif ($costCollection[$value->id]["productDiscount"] + $costCollection[$value->id]["bonDiscount"] > 0) {
-                if (Auth::check())
-                    $priceWithDiscount = (1 - ($costCollection[$value->id]["bonDiscount"] / 100)) * ((1 - ($costCollection[$value->id]["productDiscount"] / 100)) * $costCollection[$value->id]["cost"]);
-                elseif (isset($costCollection[$value->id]["cost"]))
-                    $priceWithDiscount = (1 - ($costCollection[$value->id]["productDiscount"] / 100)) * $costCollection[$value->id]["cost"];
-            }
+//            $price = $costCollection[$value->id]["cost"];
+            $price = null;
+//            if ($costCollection[$value->id]["costForCustomer"] > 0) {
+//                $priceWithDiscount = $costCollection[$value->id]["costForCustomer"];
+//            } elseif ($costCollection[$value->id]["productDiscount"] + $costCollection[$value->id]["bonDiscount"] > 0) {
+//                if (Auth::check())
+//                    $priceWithDiscount = (1 - ($costCollection[$value->id]["bonDiscount"] / 100)) * ((1 - ($costCollection[$value->id]["productDiscount"] / 100)) * $costCollection[$value->id]["cost"]);
+//                elseif (isset($costCollection[$value->id]["cost"]))
+//                    $priceWithDiscount = (1 - ($costCollection[$value->id]["productDiscount"] / 100)) * $costCollection[$value->id]["cost"];
+//            }
 
             $productsDataForView[] = array(
                 'type'              => $reshteIdArray[$value->id],
@@ -1041,7 +1042,8 @@ class ProductController extends Controller
                                                        'h'        => '256',
                                                        'filename' => $value->image]),
                 'name'              => $value->name,
-                'link'              => action('ProductController@show', $value->id)
+//                'link'              => action('Web\ProductController@show', $value->id)
+                'link'              => null
             );
         }
 
@@ -1052,70 +1054,70 @@ class ProductController extends Controller
                 'price' => '-',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p10_20181119064116.jpg',
                 'name'  => 'ریاضیات رشته ریاضی کنکور نظام قدیم',
-                'link'  => action('ProductController@show', 242)
+                'link'  => action('Web\ProductController@show', 242)
             ),
             array(
                 'type'  => 'riazi',
                 'price' => '-',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p6%20%282%29_20181119064128.jpg',
                 'name'  => 'ریاضی تجربی کنکور نظام قدیم',
-                'link'  => action('ProductController@show', 240),
+                'link'  => action('Web\ProductController@show', 240),
             ),
             array(
                 'type'  => 'riazi',
                 'price' => '-',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p8_20181119115159.jpg',
                 'name'  => 'دین و زندگی کنکور نظام قدیم',
-                'link'  => action('ProductController@show', 238),
+                'link'  => action('Web\ProductController@show', 238),
             ),
             array(
                 'type'  => 'riazi',
                 'price' => '-',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p7_20181119115215.jpg',
                 'name'  => 'عربی کنکور نظام قدیم',
-                'link'  => action('ProductController@show', 236),
+                'link'  => action('Web\ProductController@show', 236),
             ),
             array(
                 'type'  => 'tajrobi',
                 'price' => '-',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p2_20181118125322.jpg',
                 'name'  => 'شیمی کنکور نظام قدیم',
-                'link'  => action('ProductController@show', 230),
+                'link'  => action('Web\ProductController@show', 230),
             ),
             array(
                 'type'  => 'tajrobi',
                 'price' => '-',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p5_20181119115230.jpg',
                 'name'  => 'زیست کنکور نظام قدیم',
-                'link'  => action('ProductController@show', 234),
+                'link'  => action('Web\ProductController@show', 234),
             ),
             array(
                 'type'  => 'tajrobi',
                 'price' => '-',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p4_20181118125640.jpg',
                 'name'  => 'فیزیک کنکور نظام قدیم',
-                'link'  => action('ProductController@show', 232),
+                'link'  => action('Web\ProductController@show', 232),
             ),
             array(
                 'type'  => 'tajrobi',
                 'price' => '49,000',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p-14_20180506124007.jpg',
                 'name'  => 'همایش طلایی ریاضی انسانی کنکور',
-                'link'  => action('ProductController@show', 222),
+                'link'  => action('Web\ProductController@show', 222),
             ),
             array(
                 'type'  => 'tajrobi',
                 'price' => '49,000',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p-10_20180428111412.jpg',
                 'name'  => 'همایش طلایی ادبیات کنکور',
-                'link'  => action('ProductController@show', 210),
+                'link'  => action('Web\ProductController@show', 210),
             ),
             array(
                 'type'  => 'tajrobi',
                 'price' => '49,000',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p-12_20180428111303.jpg',
                 'name'  => 'همایش طلایی زمین شناسی کنکور',
-                'link'  => action('ProductController@show', 213),
+                'link'  => action('Web\ProductController@show', 213),
             )
 
         );

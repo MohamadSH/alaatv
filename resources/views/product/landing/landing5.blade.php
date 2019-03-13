@@ -1,197 +1,183 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    {!! SEO::generate(true) !!}
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+@extends('app')
 
-    <link rel="stylesheet" href="{{ asset('assets\extra\landing5') }}/css/allcss.min.css">
-
+@section('page-css')
+    <link href="{{ asset('/acm/AlaatvCustomFiles/components/imageWithCaption/style.css') }}" rel="stylesheet" type="text/css"/>
     <style>
-        .redText {
-            color: red;
+        .m-widget27.m-portlet-fit--sides .m-widget27__pic:before {
+            background: none;
+        }
+        .m-widget27.m-portlet-fit--sides .m-widget27__pic {
+            text-align: center;
+            background: -webkit-gradient(linear,right top,left top,color-stop(20%,#909),color-stop(120%,#4f30a2));
+            background: linear-gradient(to left,#909 20%,#4f30a2 120%);
+            height: 280px;
+            display: flex;
+        }
+        .m-widget27.m-portlet-fit--sides .m-widget27__pic img {
+            width: 300px;
+            height: auto;
+            margin: auto;
+        }
+        .a--imageCaptionDescription .m-badge {
+            font-size: 20px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .ftco-animate .icon i {
+            font-size: 90px;
+        }
+        .lastSection .lastSectionItem {
+            text-align: center;
+        }
+        .lastSection .lastSectionItem .icon {
+            height: 135px;
+        }
+        .lastSection .lastSectionItem .icon i{
+            font-size: 90px;
+            height: 135px;
+            line-height: 135px;
+        }
+        .lastSection .lastSectionItem .text {
         }
     </style>
-    {{--<link rel="stylesheet" href="{{ asset('assets\extra\landing5') }}/css/bootstrap4.min.css">--}}
-    {{--<link rel="stylesheet" href="{{ asset('assets\extra\landing5') }}/css/animate.css">--}}
-    {{--<link rel="stylesheet" href="{{ asset('assets\extra\landing5') }}/css/style.css">--}}
-    {{--<link rel="stylesheet" href="{{ asset('assets\extra\landing5') }}/css/fonts.css">--}}
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{Config('constants.google.analytics')}}"></script>
-</head>
-<body>
-
-    <div class="progress"></div>
-
-    <div class="container-fluid">
-
-        <div class="warperOfFirstAndSecondSection row">
-
-            <canvas class="particles-js"></canvas>
-
-            <div id="section1" class="hero-wrap js-fullheight col-md-12 ss-window">
-                {{--<div class="overlay"></div>--}}
-
-                <div class="container">
-                    <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
-                        <div class="col-md-6 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
-                            <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><img class="homePageHeaderHamaiesh" src="/assets/extra/landing5/images/gold-fest.png?v=1" alt="همایش طلایی آلاء" ></h1>
-                            <p><a href="#section2" class="btn btn-primary btn-outline-white px-5 py-3 btnGoToProductSection">مشاهده همایش ها</a></p>
+@endsection
+@section('content')
+    <div class="row">
+        <div class="col">
+            <div class="m-portlet m-portlet--head-overlay m-portlet--full-height  m-portlet--rounded-force">
+                <div class="m-portlet__head m-portlet__head--fit-">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text m--font-light">
+                                ...
+                            </h3>
                         </div>
                     </div>
+                    <div class="m-portlet__head-tools"></div>
                 </div>
+                <div class="m-portlet__body">
+                    <div class="m-widget27 m-portlet-fit--sides">
 
-            </div>
+                        <div class="m-widget27__pic">
+                            <img src="/assets/extra/landing5/images/gold-fest.png" alt="">
+                            <h3 class="m-widget27__title m--font-light">
 
-            <div id="section2" class="col-md-12 pt-5 ss-window">
+                            </h3>
+                        </div>
+                        <div class="m-widget27__container">
+                            <div class="container-fluid m--padding-right-40 m--padding-left-40">
 
-                <div class="col-md-12 ftco-section-featured ftco-animate">
-                    <div class="section2 row" data-scrollax-parent="true">
 
-                            <div class="col-md-12 align-items-center">
-                                <div class="row no-gutters">
-
-                                    <div class="col-md-12 text-center">
-                                        <div class="row">
-                                            <div class="col-md-4 col-12 text-center" ><button class="action-button shadow animate fullWidth green btnAllReshteShadow btnShowAllReshte">ریاضی و تجربی</button></div>
-                                            <div class="col-md-4 col-6 text-center" ><button class="action-button shadow animate fullWidth red btnShowRiazi">ریاضی</button></div>
-                                            <div class="col-md-4 col-6 text-center" ><button class="action-button shadow animate fullWidth blue btnShowTajrobi">تجربی</button></div>
+                                <div class="row">
+                                    <div class="col text-center m--margin-bottom-15">
+                                        <div class="m-btn-group m-btn-group--pill btn-group" role="group" aria-label="First group">
+                                            <button type="button" class="m-btn btn btn-danger btnShowRiazi">ریاضی</button>
+                                            <button type="button" class="m-btn btn btn-warning btnShowRiaziVaTajrobi">ریاضی و تجربی</button>
+                                            <button type="button" class="m-btn btn btn-info btnShowTajrobi">تجربی</button>
                                         </div>
-
-
-
                                     </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+
+                                        <div class="row justify-content-center">
 
 
-                                    <div class="col-md-12">
-                                        <div class="row align-items-center  justify-content-center">
                                             @foreach($products as $key=>$product)
-                                                <div class="col-md-2 productTile {{ $product['type']  }}">
-                                                    <a href="{{ $product['link']  }}" class="featured-img {{ $product['type']  }}">
-                                                        <div class="text-1 p-4 d-flex align-items-center">
-                                                            <h3>{{ $product['name']  }}<br>
-                                                                <span class="tag">
-                                                                    @if($product['type']=='tajrobi') تجربی
-                                                                    @else ریاضی
-                                                                    @endif
-                                                                </span>
-                                                            </h3>
-                                                        </div>
-                                                        <img src="{{ $product['image']  }}" class="img-fluid" alt="{{ $product['name']  }}">
-                                                        <div class="text p-4 d-flex align-items-center">
-                                                            <div class="user d-flex align-items-center">
-                                                                <h3>
-                                                                    @if($product['price']==0)
-                                                                        قیمت: پس از انتخاب محصول
+
+
+                                                <div class = "col-12 col-sm-6 col-md-4 col-lg-3 m--padding-left-5 m--padding-right-5 m--margin-top-5 a--imageWithCaption {{ $product['type']  }}">
+                                                    <img src="{{ $product['image']  }}"
+                                                         alt="{{ $product['name']  }}"
+                                                         class = "img-thumbnail">
+                                                    <a href="{{ $product['link']  }}">
+                                                        <div class = "a--imageCaptionWarper">
+                                                            <div class = "a--imageCaptionContent">
+                                                                <div class = "a--imageCaptionTitle">
+                                                                    {{ $product['name']  }}
+                                                                </div>
+                                                                <div class = "a--imageCaptionDescription">
+                                                                    @if($product['type']=='tajrobi')
+                                                                        <span class="m-badge m-badge--info m-badge--wide"><span class="m--font-light">تجربی</span></span>
                                                                     @else
-                                                                        @if($product['priceWithDiscount'] != 0)
-                                                                            <strike class="redText">
-                                                                                {{ number_format($product['price']) }} تومان
-                                                                            </strike>
-                                                                        <br>
-                                                                            {{ number_format($product['priceWithDiscount']) }} تومان
-                                                                        @else
-                                                                            {{ number_format($product['price']) }} تومان
-                                                                        @endif
+                                                                        <span class="m-badge m-badge--danger m-badge--wide"><span class="m--font-light">ریاضی</span></span>
                                                                     @endif
-                                                                </h3>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </a>
                                                 </div>
                                             @endforeach
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row mt-5 d-flex justify-content-center">
+                                    <div class="col-md-10 text-center heading-section ftco-animate">
+                                        <h2 class="h2">دانلود نمونه فیلم همایش</h2>
+                                        <p>
+                                            <a href = "{{action("Web\ContentController@show",7884)}}" class = "btn btn-primary mt-3 py-1 px-2">
+                                                <img src="{{ asset('assets\extra\landing5\images\دانلود-نمونه-فیلم-همایش.png') }}" class="downloadVideoImage"/>
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="row justify-content-center">
+                                    <div class="col-md-10 text-center heading-section heading-section-white ftco-animate">
+                                        <h3>با ماندگاری مطالب در ذهنتان، استرس را فراموش کنید!</h3>
+
+                                        <p>
+                                            چند ماه مانده به کنکور؛ دوران گیجی دانش‌آموزان است: آن‌هایی که زیاد خوانده‌اند دیوانه‌وار بیشتر و بیشتر
+                                            می‌خوانند و آن‌هایی که کمتر خوانده‌اند پناهشان می‌شود جزوات متعدد دم کنکور! اما چاره این سرگیجه چیست؟
+
+                                            با بررسی دلیل موفقیت برترین‌های کنکور در سال‌های متوالی یک نکته مهم در برطرف‌شدن این استرس نهفته است:
+                                            مرور در ماه‌های آخر!
+                                        </p>
+
+
+                                    </div>
+                                </div>
+
+                                <div class="row lastSection">
+                                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 lastSectionItem">
+                                        <div class="icon">
+                                            <i class="la la-lightbulb-o"></i>
+                                        </div>
+                                        <div class="text">
+                                            <h3>مفهومی</h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 lastSectionItem">
+                                        <div class="icon">
+                                            <i class="la la-road"></i>
+                                        </div>
+                                        <div class="text">
+                                            <h3>سبقت</h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 lastSectionItem">
+                                        <div class="icon">
+                                            <i class="flaticon-edit-1"></i>
+                                        </div>
+                                        <div class="text">
+                                            <h3>جزوه</h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 lastSectionItem">
+                                        <div class="icon">
+                                            <i class="flaticon-presentation-1"></i>
+                                        </div>
+                                        <div class="text">
+                                            <h3>تحلیل</h3>
                                         </div>
                                     </div>
 
                                 </div>
-                            </div>
 
-                    </div>
-                </div>
-            </div>
-
-            <div id="section3" class="Section3 col-md-12 ss-window">
-
-
-                <div id="particles-js2"></div>
-
-                <div class="row mt-5 d-flex justify-content-center">
-                    <div class="col-md-10 text-center heading-section ftco-animate">
-                        <h2 class="h2">دانلود نمونه فیلم همایش</h2>
-                        <p>
-                            <a href = "{{action("Web\ContentController@show",7884)}}" class = "btn btn-primary mt-3 py-1 px-2">
-                                <img src="{{ asset('assets\extra\landing5\images\دانلود-نمونه-فیلم-همایش.png') }}" class="downloadVideoImage"/>
-                            </a>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="row justify-content-center mb-3">
-                    <div class="col-md-10 text-center heading-section heading-section-white ftco-animate">
-                        <h3>با ماندگاری مطالب در ذهنتان، استرس را فراموش کنید!</h3>
-
-                        <p>
-                            چند ماه مانده به کنکور؛ دوران گیجی دانش‌آموزان است: آن‌هایی که زیاد خوانده‌اند دیوانه‌وار بیشتر و بیشتر
-                            می‌خوانند و آن‌هایی که کمتر خوانده‌اند پناهشان می‌شود جزوات متعدد دم کنکور! اما چاره این سرگیجه چیست؟
-
-                            با بررسی دلیل موفقیت برترین‌های کنکور در سال‌های متوالی یک نکته مهم در برطرف‌شدن این استرس نهفته است:
-                            مرور در ماه‌های آخر!
-                        </p>
-
-
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 col-lg-3 d-flex align-self-stretch ftco-animate text-center">
-                        <div class="media block-6 services d-block text-center" style="margin: auto;">
-                            <div class="d-flex justify-content-center">
-                                <div class="icon color-3 d-flex justify-content-center mb-3">
-                                    <i class="icon-brain-and-head" style="font-size: 40px;"></i>
-                                </div>
-                            </div>
-                            <div class="media-body p-2 mt-1 mb-5">
-                                <h3 class="heading">مفهومی</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3 d-flex align-self-stretch ftco-animate text-center">
-                        <div class="media block-6 services d-block text-center" style="margin: auto;">
-                            <div class="d-flex justify-content-center">
-                                <div class="icon color-1 d-flex justify-content-center mb-3">
-                                    <i class="icon-transport" style="font-size: 40px;"></i>
-                                </div>
-                            </div>
-                            <div class="media-body p-2 mt-1 mb-5">
-                                <h3 class="heading">سبقت</h3>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 col-lg-3 d-flex align-self-stretch ftco-animate text-center">
-                        <div class="media block-6 services d-block text-center" style="margin: auto;">
-                            <div class="d-flex justify-content-center">
-                                <div class="icon color-2 d-flex justify-content-center mb-3">
-                                    <i class="icon-document" style="font-size: 40px;"></i>
-                                </div>
-                            </div>
-                            <div class="media-body p-2 mt-1 mb-5">
-                                <h3 class="heading">جزوه</h3>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-6 col-lg-3 d-flex align-self-stretch ftco-animate text-center">
-                        <div class="media block-6 services d-block text-center" style="margin: auto;">
-                            <div class="d-flex justify-content-center">
-                                <div class="icon color-4 d-flex justify-content-center mb-3">
-                                    <i class="icon-light-bulb" style="font-size: 40px;"></i>
-                                </div>
-                            </div>
-                            <div class="media-body p-2 mt-1 mb-5">
-                                <h3 class="heading">تحلیل</h3>
                             </div>
                         </div>
                     </div>
@@ -199,29 +185,24 @@
             </div>
 
         </div>
-
     </div>
+@endsection
+@section('page-js')
 
-    <!-- loader -->
-    <div id="ftco-loader" class="show fullscreen">
-        <svg class="circular" width="48px" height="48px">
-            <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
-            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/>
-        </svg>
-    </div>
-
-    <script src="{{ asset('acm\extra\landing5') }}/js/alljs.min.js"></script>
-
-    {{--<script src="{{ asset('assets\extra\landing5') }}/js/jquery.min.js"></script>--}}
-    {{--<script src="{{ asset('assets\extra\landing5') }}/js/jquery-migrate-3.0.1.min.js"></script>--}}
-    {{--<script src="{{ asset('assets\extra\landing5') }}/js/jquery.easing.1.3.js"></script>--}}
-    {{--<script src="{{ asset('assets\extra\landing5') }}/js/jquery.waypoints.min.js"></script>--}}
-    {{--<script src="{{ asset('assets\extra\landing5') }}/js/particles.js-master/dist/particles.js"></script>--}}
-    {{--<script src="{{ asset('assets\extra\landing5') }}/js/modernizr-2.6.2.min.js"></script>--}}
-    {{--<script src="{{ asset('assets\extra\landing5') }}/js/ninjaScroll.js"></script>--}}
-    {{--<script src="{{ asset('assets\extra\landing5') }}/js/jquery.mousewheel.js"></script>--}}
-    {{--<script src="{{ asset('assets\extra\landing5') }}/js/main.js"></script>--}}
-
-
-</body>
-</html>
+    <script>
+        jQuery(document).ready(function () {
+            $(document).on('click', '.btnShowRiazi', function() {
+                $('.a--imageWithCaption.tajrobi').fadeOut();
+                $('.a--imageWithCaption.riazi').fadeIn();
+            });
+            $(document).on('click', '.btnShowRiaziVaTajrobi', function() {
+                $('.a--imageWithCaption.tajrobi').fadeIn();
+                $('.a--imageWithCaption.riazi').fadeIn();
+            });
+            $(document).on('click', '.btnShowTajrobi', function() {
+                $('.a--imageWithCaption.tajrobi').fadeIn();
+                $('.a--imageWithCaption.riazi').fadeOut();
+            });
+        });
+    </script>
+@endsection

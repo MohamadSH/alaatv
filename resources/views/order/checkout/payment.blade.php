@@ -44,7 +44,7 @@
                                         <div class = "m-radio-inline">
                                             <label class = "m-radio m-radio--solid m-radio--state-success">
                                                 <input type = "radio" name = "radioPaymentType" data-btntext = "پرداخت" value = "online" checked>
-                                                انترنتی
+                                                اینترنتی
                                                 <span></span>
                                             </label>
                                             {{--<label class="m-radio m-radio--solid m-radio--state-success">--}}

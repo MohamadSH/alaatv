@@ -150,11 +150,11 @@
                                         @if($userKonkurResult===null)
                                             <div class="col">
                                                 <div class="form-group m-form__group">
-                                                    <label for="customFile">فایل کارنامه(الزامی)</label>
+                                                    <label for="reportFile">فایل کارنامه(الزامی)</label>
                                                     <div></div>
                                                     <div class="custom-file">
-                                                        <input name="reportFile" type="file" class="custom-file-input m-input m-input--air" id="customFile">
-                                                        <label class="custom-file-label" for="customFile">انتخاب فایل</label>
+                                                        <input name="reportFile" type="file" class="custom-file-input m-input m-input--air" id="reportFile">
+                                                        <label class="custom-file-label" for="reportFile">انتخاب فایل</label>
                                                     </div>
                                                 </div>
                                             </div>

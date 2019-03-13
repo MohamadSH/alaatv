@@ -6,6 +6,7 @@
         return this.each(function () { //Loop over each element in the set and return them to keep the chain alive.
             let $this = $(this);
             $.fn.OwlCarouselType2.carouselElement = $this;
+            let countOfChild = $this.find('.carousel').length;
             $this.find('.a--owl-carousel-type-2').owlCarousel($.fn.OwlCarouselType2.owlCarouselOptions);
 
             $.fn.OwlCarouselType2.showAlaaOwlCarouselItemDetail();
@@ -137,6 +138,10 @@
                 });
             });
 
+            if (countOfChild < 5) {
+                $this.find('.btn-viewGrid').trigger('click');
+                $this.find('.btn-viewOwlCarousel').fadeOut();
+            }
         });
     };
 
