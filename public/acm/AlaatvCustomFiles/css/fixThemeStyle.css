@@ -37,6 +37,16 @@
     max-width: 100%;
 }
 
+.alert.m-alert--icon.m-alert--outline.m-alert--icon-solid .m-alert__icon span {
+    border: 0;
+    border-right: 6px solid #000;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+}
+.alert.m-alert--outline.alert-warning.m-alert--icon-solid .m-alert__icon span {
+    border-right-color: #ffb822;
+}
+
 /*media query*/
 @media (max-width: 767.98px) {
     .m-portlet__body {

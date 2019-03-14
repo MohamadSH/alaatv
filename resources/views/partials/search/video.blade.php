@@ -1,4 +1,4 @@
-@if(optional($items)->isNotEmpty())
+@if(optional($items)->isNotEmpty() || (!$loadChild ?? false))
     <div class = "col-12 m--margin-bottom-5">
         <div class = "a--devider-with-title">
             <div class = "a--devider-title">
@@ -15,7 +15,7 @@
     </div>
     <div class = "col">
         <div id = "{{ $widgetId ?? 'video-carousel' }}" class = "{{ $carouselType ?? 'a--owl-carousel-type-1' }} owl-carousel owl-theme" data-per-page = "7">
-            @if($loadChild ?? true)
+            @if($loadChild ?? true && optional($items)->isNotEmpty())
                 @foreach($items as $content)
                     {{ dd($content->photo) }}
                     @include('partials.widgets.video1',[
@@ -33,7 +33,13 @@
             @endif
         </div>
 
-        <input id = "{{ isset($widgetId) ? 'owl--js-var-next-page-'.$widgetId.'-url' : 'owl--js-var-next-page-video-url' }}" class = "m--hide" type = "hidden" value = '{{ $items->nextPageUrl() }}'>
+        <input id = "{{ isset($widgetId) ? 'owl--js-var-next-page-'.$widgetId.'-url' : 'owl--js-var-next-page-video-url' }}"
+               class = "m--hide" type = "hidden"
+               @if(optional($items)->isNotEmpty())
+                    value = "{{ $items->nextPageUrl() }}"
+                @else
+                    value = ""
+                @endif>
 
     </div>
 @endif
