@@ -490,15 +490,15 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     /**
      * Get the content's author .
      *
-     * @return User
+     * @return User|null
      */
-    public function getAuthorAttribute(): User
+    public function getAuthorAttribute(): ?User
     {
         $content = $this;
         $key = "content:author" . $content->cacheKey();
         return Cache::tags(["user"])
                     ->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
-                        return $this->user->setVisible([
+                        return optional($this->user)->setVisible([
                             'id',
                             'firstName',
                             'lastName',

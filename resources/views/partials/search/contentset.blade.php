@@ -1,4 +1,4 @@
-@if(optional($items)->isNotEmpty())
+@if(optional($items)->isNotEmpty() || (!$loadChild ?? false))
     <div class = "col-12 m--margin-bottom-5">
 
         <div class = "a--devider-with-title">
@@ -14,7 +14,7 @@
     </div>
     <div class = "col-12">
         <div id = "set-carousel" class = "a--owl-carousel-type-1 owl-carousel owl-theme" data-per-page = "7">
-            @if($loadChild ?? true)
+            @if($loadChild ?? true && optional($items)->isNotEmpty())
                 @foreach($items as $lesson)
 
                     @include('partials.widgets.set2',[
@@ -31,7 +31,14 @@
             @endif
         </div>
 
-        <input id = "owl--js-var-next-page-set-url" class = "m--hide" type = "hidden" value = '{{ $items->nextPageUrl() }}'>
+        <input id = "owl--js-var-next-page-set-url"
+               class = "m--hide"
+               type = "hidden"
+               @if(optional($items)->isNotEmpty())
+                    value = "{{ $items->nextPageUrl() }}"
+               @else
+                    value = ""
+               @endif>
 
     </div>
 @endif
