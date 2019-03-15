@@ -50,7 +50,7 @@ $(document).ready(function () {
                     Swal({
                         title: 'توجه!',
                         text: 'خطای سیستمی رخ داده است.' + '<br>' + message,
-                        type: 'danger',
+                        type: 'error',
                         confirmButtonText: 'بستن'
                     });
 
@@ -405,7 +405,7 @@ $(document).ready(function () {
                     Swal({
                         title: 'توجه!',
                         text: 'خطای سیستمی رخ داده است.' + '<br>' + message,
-                        type: 'danger',
+                        type: 'error',
                         confirmButtonText: 'بستن'
                     });
 
@@ -426,7 +426,7 @@ $(document).ready(function () {
                 Swal({
                     title: 'توجه!',
                     text: 'خطای سیستمی رخ داده است.',
-                    type: 'danger',
+                    type: 'error',
                     confirmButtonText: 'بستن'
                 });
                 mApp.unblock('.SendMobileVerificationCodeWarper');
@@ -483,7 +483,7 @@ $(document).ready(function () {
                     Swal({
                         title: 'توجه!',
                         text: 'خطای سیستمی رخ داده است.' + '<br>' + message,
-                        type: 'danger',
+                        type: 'error',
                         confirmButtonText: 'بستن'
                     });
 
@@ -524,7 +524,7 @@ $(document).ready(function () {
             Swal({
                 title: 'توجه!',
                 text: 'کد را وارد نکرده اید.',
-                type: 'danger',
+                type: 'error',
                 confirmButtonText: 'بستن'
             });
             return false;
@@ -577,8 +577,8 @@ $(document).ready(function () {
 
                     Swal({
                         title: 'توجه!',
-                        text: 'خطای سیستمی رخ داده است.' + '<br>' + message,
-                        type: 'danger',
+                        html: 'خطای سیستمی رخ داده است.' + '<br>' + message,
+                        type: 'error',
                         confirmButtonText: 'بستن'
                     });
 
@@ -618,7 +618,7 @@ $(document).ready(function () {
                 Swal({
                     title: 'توجه!',
                     text: message,
-                    type: 'danger',
+                    type: 'error',
                     confirmButtonText: 'بستن'
                 });
                 mApp.unblock('.SendMobileVerificationCodeWarper');

@@ -84,7 +84,7 @@
                                     <div class = "m-widget3__item">
                                         <div class = "m-widget3__header">
                                             <div class = "m-widget3__user-img">
-                                                <img class = "m-widget3__img" src = "/assets/app/media/img/users/user1.jpg" alt = "">
+                                                <img class = "m-widget3__img" src = "{{ $content->author->photo }}" alt = "">
                                             </div>
                                             <div class = "m-widget3__info">
                                                 <span class = "m-widget3__username">

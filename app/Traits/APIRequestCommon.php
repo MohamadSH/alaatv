@@ -4,6 +4,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use PHPUnit\Framework\Exception;
 
 trait APIRequestCommon
 {
@@ -19,6 +20,7 @@ trait APIRequestCommon
         }
         catch (GuzzleException $e) {
             Log::error($e->getMessage());
+            throw new Exception('Guzzle exception');
         }
         return [
             "statusCode" => $res->getStatusCode(),
