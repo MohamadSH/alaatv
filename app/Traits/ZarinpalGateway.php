@@ -130,9 +130,11 @@ trait ZarinpalGateway
     /**
      * @param string $paymentMethod
      *
+     * @param bool   $withSandBox
+     *
      * @return mixed
      */
-    protected function buildZarinpalGateway(string $paymentMethod)
+    protected function buildZarinpalGateway(string $paymentMethod, bool $withSandBox = true)
     {
         $key = 'transactiongateway:Zarinpal';
         $transactiongateway = Cache::remember($key, config('constants.CACHE_600'), function () use ($paymentMethod) {
@@ -141,7 +143,7 @@ trait ZarinpalGateway
 
         if (isset($transactiongateway)) {
             $gatewayComposer = new ZarinpalComposer($transactiongateway->merchantNumber);
-            if ($this->isZarinpalSandboxOn())
+            if ($this->isZarinpalSandboxOn() && $withSandBox)
                 $gatewayComposer->enableSandbox();
 
             if ($this->isZarinGateOn())

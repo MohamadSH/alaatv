@@ -44,30 +44,34 @@ class ZarinpalTransactionController extends Controller
         $amount = $request->get('cost');
         $orderId = $request->get('order_id');
         $refId = $request->get('refId');
+        $initialDescription = $request->get('description', '');
+        if (strlen($initialDescription) > 0)
+            $initialDescription .= ' - ';
 
         if ($request->has('openOrder'))
             $order = $request->get('openOrder');
         else
             $order = Order::findorfail($orderId);
 
-        $gatewayResult = $this->buildZarinpalGateway(self::GATE_WAY_NAME);
+        $gatewayResult = $this->buildZarinpalGateway(self::GATE_WAY_NAME, false);
         $gateway = $gatewayResult['gatewayComposer'];
         $transactionGateway = $gatewayResult['transactiongateway'];
 
-        //ToDo : Zarinpal response is not correct . It does not return verified_before
-//        $gatewayVerify = $this->verify($gateway ,$amount, $paymentData);
-//        dd($gatewayVerify);
+        $gatewayVerify = $this->verify($gateway, $amount, $paymentData);
 
-//        if (in_array($gatewayVerify['data']['zarinpalVerifyResult']['Status'] , ['verified_before' , 'success'])) {
-//            if($gatewayVerify['data']['RefID'] != $refId)
-//            {
-//                $refIdStatus = Response::HTTP_FORBIDDEN;
-//                $message    = 'Reference number is wrong';
-//            }else
-        $refIdStatus = Response::HTTP_OK;
+        if (in_array($gatewayVerify['data']['zarinpalVerifyResult']['Status'], [
+            'verified_before',
+            'success',
+        ])) {
+            if ($gatewayVerify['data']['RefID'] != $refId) {
+                $refIdStatus = Response::HTTP_FORBIDDEN;
+                $message = 'Reference number is wrong';
+            } else {
+                $refIdStatus = Response::HTTP_OK;
+            }
 
         if ($refIdStatus == Response::HTTP_OK) {
-            $description = 'اپ آلاء - ';
+            $description = 'اپ آلاء - ' . $initialDescription;
             $description = $this->setTransactionDescription($description, optional($order)->user, $order);
             $transaction = $this->getNewTransaction($amount, $orderId, $transactionGateway->id, $description, $paymentData['Authority'], $refId);
             if (isset($transaction)) {
@@ -78,11 +82,11 @@ class ZarinpalTransactionController extends Controller
                 $message = 'Database error on inserting transaction';
             }
         }
-//        } else {
-//            $resultCode = Response::HTTP_BAD_REQUEST;
-//            $message    = 'Unverified transaction';
+        } else {
+            $resultCode = Response::HTTP_BAD_REQUEST;
+            $message = 'Unverified transaction';
 //            $verifyResult['OrderCanceledPaymentResult'] = $this->handleOrderCanceledPayment($transaction);
-//        }
+        }
 
         if ($resultCode != Response::HTTP_OK)
             $responseContent = [
@@ -111,7 +115,7 @@ class ZarinpalTransactionController extends Controller
      *
      * @return \App\Transaction|null
      */
-    protected function getNewTransaction(int $cost, int $orderId, int $transactionGatewayId, string $description, string $authority, string $refId)
+    private function getNewTransaction(int $cost, int $orderId, int $transactionGatewayId, string $description, string $authority, string $refId)
     {
         $data['authority'] = $authority;
         $data['transactionID'] = $refId;
