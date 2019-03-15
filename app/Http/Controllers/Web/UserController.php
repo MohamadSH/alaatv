@@ -505,7 +505,7 @@ class UserController extends Controller
 
         $key = "user:orders:" . $user->cacheKey();
         $orders = Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
-            return $user->getClosedOrders()
+            return $user->closedOrders()
                         ->get()
                         ->sortByDesc("completed_at");
         });

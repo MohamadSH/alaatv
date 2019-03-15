@@ -170,6 +170,7 @@ class Order extends BaseModel
         'coupon_id',
         'cost',
         'costwithoutcoupon',
+        'normalOrderproducts',
         'user_id',
         'updated_at',
         'deleted_at',
@@ -417,7 +418,7 @@ class Order extends BaseModel
         $flag = true;
         $notIncludedProducts = $this->reviewCouponProducts();
         $orderproductCount = $this->orderproducts->whereType([config("constants.ORDER_PRODUCT_TYPE_DEFAULT")])->count();
-        if($orderproductCount == $notIncludedProducts->count())
+        if($orderproductCount == optional($notIncludedProducts)->count())
             $flag = false;
 
         return $flag;
@@ -578,9 +579,9 @@ class Order extends BaseModel
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection|null
      */
-    public function reviewCouponProducts(){
+    public function reviewCouponProducts():?Collection{
         $orderproducts = $this->orderproducts->whereType([config("constants.ORDER_PRODUCT_TYPE_DEFAULT")]);
 
         $coupon = $this->coupon;
@@ -592,7 +593,10 @@ class Order extends BaseModel
                     $notIncludedProducts->push($product);
             }
 
-        return $notIncludedProducts;
+        if($notIncludedProducts->isNotEmpty())
+            return $notIncludedProducts;
+        else
+            return null;
     }
 
     public function totalCost()
@@ -738,7 +742,7 @@ class Order extends BaseModel
             $bons = $simpleProduct->bons->where("name", $bonName);
             if ($bons->isEmpty()) {
                 $grandParent = $simpleProduct->grand_parent;
-                if ($grandParent !== false) {
+                if (isset($grandParent)) {
                     $simpleProduct = $grandParent;
                     $bons = $grandParent->bons->where("name", $bonName)
                                               ->where("isEnable", 1);
@@ -928,10 +932,7 @@ class Order extends BaseModel
 //                            'discountType',
                         ]);
 
-                        return [
-                            'coupon'   => $coupon,
-                            'discount' => $this->coupon_discount_type,
-                        ];
+                        return array_merge($coupon->toArray() ,  $this->coupon_discount_type);
                     });
     }
 

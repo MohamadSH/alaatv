@@ -10,7 +10,6 @@ use App\User;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
 {
@@ -130,14 +129,9 @@ class UserController extends Controller
                     'code'    => Response::HTTP_FORBIDDEN,
                     'message' => 'UnAuthorized',
                 ],
-            ], 403);
+            ], Response::HTTP_OK);
 
-        $key = "user:orders:" . $user->cacheKey();
-        $orders = Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
-            return $user->getClosedOrders()
-                        ->orderBy('completed_at', 'desc')
-                        ->paginate(10, ['*'], 'orders');
-        });
+        $orders = $user->closed_orders;
 
         return response()->json($orders);
     }

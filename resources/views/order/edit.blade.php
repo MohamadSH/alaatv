@@ -173,7 +173,7 @@
                                             @if($orderproduct->product->isFree)
                                                 رایگان
                                             @else
-                                                {{number_format($orderproduct->obtainOrderproductCost(true)["customerPrice"])}}
+                                                {{number_format($orderproduct->obtainOrderproductCost(true)["final"])}}
                                             @endif
                                         </td>
                                         <td class="text-center">
@@ -253,8 +253,7 @@
                                                         </div>
                                                         <div class="col-md-2">
                                                             پرداخت شده:
-                                                            <text class="form-control-static font-blue"
-                                                                  id="orderproductExchangeOriginalCost_{{$orderproduct->id}}">{{$orderproduct->obtainOrderproductCost(true)["totalPrice"]}}</text>
+                                                            <text class="form-control-static font-blue" id = "orderproductExchangeOriginalCost_{{$orderproduct->id}}">{{$orderproduct->obtainOrderproductCost(true)["final"]}}</text>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label class="col-md-4 control-label ">محصول جدید</label>

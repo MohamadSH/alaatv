@@ -170,6 +170,7 @@ class ContentController extends Controller
                 ]);
         }
 
+        //ToDo : put in composer
         $lessonTeacher = collect(
             [
                 "" => collect(

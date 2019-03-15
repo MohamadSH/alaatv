@@ -904,7 +904,7 @@ class OrderController extends Controller
         foreach ($orderproducts as $orderproduct) {
             $costArray = $orderproduct->obtainOrderproductCost(false);
             $costCollection->put($orderproduct->id, [
-                "cost"        => $costArray["cost"],
+                "cost"        => $costArray["base"],
                 'extraCost'   => $costArray["extraCost"],
                 'bonDiscount' => $costArray['bonDiscount'],
             ]);
@@ -972,7 +972,7 @@ class OrderController extends Controller
             $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
 
             $response = response([
-                "invoiceInfo"                 => $invoiceInfo,
+                "price"                       => $invoiceInfo, // ToDo : retirn price like API
                 "credit"                      => $credit,
                 "couponInfo"                  => $coupon,
                 "notIncludedProductsInCoupon" => $notIncludedProductsInCoupon,

@@ -28,8 +28,10 @@ class RemoveOrderCoupon
             }else {
                 /** @var User $user */
                 $openOrder = $user->getOpenOrder();
-                if(isset($openOrder))
+                if (isset($openOrder)) {
                     $request->offsetSet("order_id" , $openOrder->id);
+                    $request->offsetSet("openOrder", $openOrder);
+                }
             }
         }
 

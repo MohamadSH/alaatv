@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Web;
 
 use App\Bankaccount;
-use App\Bon;
 use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
 use App\Classes\Payment\RefinementRequest\Strategies\{ChargingWalletRefinement,
@@ -12,10 +11,10 @@ use App\Classes\Payment\RefinementRequest\Strategies\{ChargingWalletRefinement,
     TransactionRefinement};
 use App\Http\Controllers\Controller;
 use App\Order;
+use App\Traits\HandleOrderPayment;
 use App\Traits\OrderCommon;
 use App\Traits\ZarinpalGateway;
 use App\Transaction;
-use App\Transactiongateway;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\{Request, Response};
@@ -26,6 +25,7 @@ class OnlinePaymentController extends Controller
 {
     use OrderCommon;
     use ZarinpalGateway;
+    use HandleOrderPayment;
 
     /**
      * @var OrderController
@@ -87,6 +87,8 @@ class OnlinePaymentController extends Controller
             ], $data['statusCode']);
         }
 
+        $description .= 'سابت آلاء - ';
+
         $description = $this->setTransactionDescription($description, $user, $order);
 
         if(isset($order)) {
@@ -144,30 +146,6 @@ class OnlinePaymentController extends Controller
         } else {
             return false;
         }
-    }
-
-    /**
-     * @param string $description
-     * @param User $user
-     * @param Order|null $order
-     * @return string
-     */
-    private function setTransactionDescription(string $description, User $user, Order $order=null): string
-    {
-        $description .= 'آلاء - ' . $user->mobile . ' - محصولات: ';
-
-        if(isset($order)) {
-            $orderProducts = $order->orderproducts->load('product');
-
-            foreach ($orderProducts as $orderProduct) {
-                if (isset($orderProduct->product->id))
-                    $description .= $orderProduct->product->name . ' , ';
-                else
-                    $description .= 'یک محصول نامشخص , ';
-            }
-        }
-
-        return $description;
     }
 
     /**
@@ -242,7 +220,7 @@ class OnlinePaymentController extends Controller
                 'message' => 'درگاه مورد نظر یافت نشد'
             ], Response::HTTP_BAD_REQUEST);
         }else{
-            /** @var \Zarinpal $gateway */
+            /** @var ZarinpalComposer $gateway */
             $gateway = $gatewayResult['gatewayComposer'];
         }
 
@@ -255,9 +233,12 @@ class OnlinePaymentController extends Controller
         if (isset($transaction->order_id)) {
             $transaction->order->detachUnusedCoupon();
             if ($gatewayVerify['status']) {
-                $verifyResult['OrderSuccessPaymentResult'] = $this->handleOrderSuccessPayment($gatewayVerify['data']['RefID'], $transaction, $gatewayVerify['data']['cardPanMask']);
+                $verifyResult['OrderSuccessPaymentResult'] = $this->handleOrderSuccessPayment($transaction->order);
+                $this->handleTransactionStatus($transaction, $gatewayVerify['data']['RefID'], $gatewayVerify['data']['cardPanMask']);
             } else {
-                $verifyResult['OrderCanceledPaymentResult'] = $this->handleOrderCanceledPayment($transaction);
+                $verifyResult['OrderCanceledPaymentResult'] = $this->handleOrderCanceledPayment($transaction->order);
+                $transaction->transactionstatus_id = config('constants.TRANSACTION_STATUS_UNSUCCESSFUL');
+                $transaction->update();
             }
         } else if (isset($transaction->wallet_id)) {
             if ($gatewayVerify['status']) {
@@ -287,11 +268,32 @@ class OnlinePaymentController extends Controller
     }
 
     /**
+     * @param \App\Transaction $transaction
+     * @param string           $refId
+     * @param string|null      $cardPanMask
+     */
+    private function handleTransactionStatus(Transaction $transaction, string $refId, string $cardPanMask = null): void
+    {
+        $bankAccountId = null;
+
+        if(isset($cardPanMask)) {
+            $userId = optional($transaction->order)->user;
+            $bankAccount = Bankaccount::firstOrCreate([
+                'accountNumber' => $cardPanMask,
+                'user_id'       => $userId,
+            ]);
+            $bankAccountId = $bankAccount->id;
+        }
+
+        $this->changeTransactionStatusToSuccessful($refId, $transaction, $bankAccountId);
+    }
+
+    /**
      * @param string $refId
      * @param Transaction $transaction
      * @param string|null $cardPanMask
      */
-    private function handleWalletChargingSuccessPayment(string $refId, Transaction $transaction, string $cardPanMask=null): void
+    private function handleWalletChargingSuccessPayment(string $refId, Transaction $transaction, string $cardPanMask = null): void
     {
         $bankAccountId = null;
 
@@ -302,7 +304,7 @@ class OnlinePaymentController extends Controller
 
         $this->changeTransactionStatusToSuccessful($refId, $transaction, $bankAccountId);
 
-        $transaction->wallet->deposit($transaction->cost*(-1), true);
+        $transaction->wallet->deposit($transaction->cost * (-1), true);
     }
 
     /**
@@ -315,123 +317,17 @@ class OnlinePaymentController extends Controller
     }
 
     /**
-     * @param string $refId
-     * @param Transaction $transaction
-     * @param string|null $cardPanMask
-     * @return array
-     */
-    private function handleOrderSuccessPayment(string $refId, Transaction $transaction, string $cardPanMask=null): array
-    {
-        $bankAccountId = null;
-
-        if(isset($cardPanMask)) {
-            $bankAccount = Bankaccount::firstOrCreate(['accountNumber'=>$cardPanMask]);
-            $bankAccountId = $bankAccount->id;
-        }
-
-        $this->changeTransactionStatusToSuccessful($refId, $transaction, $bankAccountId);
-
-        $transaction->order->closeWalletPendingTransactions();
-
-        $updateOrderPaymentStatusResult = $this->updateOrderPaymentStatus($transaction);
-
-        /** Attaching user bons for this order */
-        $givesOrderBonsToUserResult = $this->givesOrderBonsToUser($transaction);
-
-        return array_merge($updateOrderPaymentStatusResult, $givesOrderBonsToUserResult);
-    }
-
-    /**
-     * @param Transaction $transaction
-     * @return array
-     */
-    private function handleOrderCanceledPayment(Transaction $transaction): array
-    {
-        $result = [];
-        $transaction->order->close(config('constants.PAYMENT_STATUS_UNPAID'), config('constants.ORDER_STATUS_CANCELED'));
-        $transaction->order->updateWithoutTimestamp();
-
-        $transaction->transactionstatus_id = config('constants.TRANSACTION_STATUS_UNSUCCESSFUL');
-        $transaction->update();
-
-        $totalWalletRefund = $transaction->order->refundWalletTransaction();
-
-        if ($totalWalletRefund > 0) {
-            $result['walletAmount'] = $totalWalletRefund;
-            $result['walletRefund'] = true;
-        } else {
-            $result['walletAmount'] = 0;
-            $result['walletRefund'] = false;
-        }
-
-        return $result;
-    }
-
-    /**
      * @param string $transactionID
      * @param Transaction $transaction
      * @param int|null $bankAccountId
      */
-    protected function changeTransactionStatusToSuccessful(string $transactionID, Transaction $transaction, int $bankAccountId = null): void
+    private function changeTransactionStatusToSuccessful(string $transactionID, Transaction $transaction, int $bankAccountId = null): void
     {
         $data['completed_at'] = Carbon::now();
         $data['transactionID'] = $transactionID;
         $data['destinationBankAccount_id'] = $bankAccountId;
         $data['transactionstatus_id'] = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
         $this->transactionController->modify($transaction, $data);
-    }
-
-    /**
-     * @param Transaction $transaction
-     * @return array
-     */
-    protected function givesOrderBonsToUser(Transaction $transaction): array
-    {
-        $result = [];
-        $bonName = config('constants.BON1');
-        $bon = Bon::ofName($bonName)->first();
-
-        if (isset($bon)) {
-            list($givenBonNumber, $failedBonNumber) = $transaction->order->giveUserBons($bonName);
-            if ($givenBonNumber == 0) {
-                if ($failedBonNumber > 0) {
-                    $result['saveBon'] = -1;
-                }
-                else {
-                    $result['saveBon'] = 0;
-                }
-            }
-            else {
-                $result['saveBon'] = $givenBonNumber;
-            }
-
-            $bonDisplayName = $bon->displayName;
-            $result['bonName'] = $bonDisplayName;
-        }
-        return $result;
-    }
-
-    /**
-     * @param Transaction $transaction
-     * @return array
-     */
-    protected function updateOrderPaymentStatus(Transaction $transaction): array
-    {
-        $result = [];
-        $paymentstatus_id = null;
-        if ((int)$transaction->order->totalPaidCost() < (int)$transaction->order->totalCost())
-            $paymentstatus_id = config('constants.PAYMENT_STATUS_INDEBTED');
-        else
-            $paymentstatus_id = config('constants.PAYMENT_STATUS_PAID');
-        $transaction->order->close($paymentstatus_id);
-        $orderUpdateStatus = $transaction->order->updateWithoutTimestamp();
-
-        if ($orderUpdateStatus) {
-            $result['saveOrder'] = 1;
-        } else {
-            $result['saveOrder'] = 0;
-        }
-        return $result;
     }
 
     /**
@@ -469,45 +365,37 @@ class OnlinePaymentController extends Controller
 
     }
 
-    /**
+/**
      * @param string $paymentMethod
+     *
      * @return mixed
      */
-    private function buildZarinpalGateway(string $paymentMethod)
+    protected function buildZarinpalGateway(string $paymentMethod)
     {
-        $transactiongateway =  $this->getGateway($paymentMethod);
+        $key = 'transactiongateway:Zarinpal';
+        $transactiongateway = Cache::remember($key, config('constants.CACHE_600'), function () use ($paymentMethod) {
+            return Transactiongateway::name('zarinpal', $paymentMethod)->first();
+        });
 
-        if(isset($transactiongateway)) {
+        if (isset($transactiongateway)) {
             $gatewayComposer = new ZarinpalComposer($transactiongateway->merchantNumber);
-            if($this->isZarinpalSandboxOn())
+            if ($this->isZarinpalSandboxOn())
                 $gatewayComposer->enableSandbox();
 
-            if($this->isZarinGateOn())
+            if ($this->isZarinGateOn())
                 $gatewayComposer->isZarinGate();
-        }else{
+        } else {
             return [
                 'error' => [
-                    'message'   => 'Could not find gate way',
-                    'code'      =>  Response::HTTP_BAD_REQUEST ,
-                ]
+                    'message' => 'Could not find gate way',
+                    'code'    => Response::HTTP_BAD_REQUEST,
+                ],
             ];
         }
 
         return [
-               'transactiongateway'         => $transactiongateway,
-               'gatewayComposer'            => $gatewayComposer
-            ];
-    }
-
-    /**
-     * @param string $paymentMethod
-     * @return mixed
-     */
-    private function getGateway(string $paymentMethod)
-    {
-        $key = 'onlineGateways:';
-        return Cache::remember($key , config('constants.CACHE_600') , function () use ($paymentMethod){
-            return Transactiongateway::where('name', $paymentMethod)->first();
-        });
+            'transactiongateway' => $transactiongateway,
+            'gatewayComposer'    => $gatewayComposer,
+        ];
     }
 }

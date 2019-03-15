@@ -155,7 +155,7 @@
                                                class="form-control"
                                                placeholder="کد تخفیف ..."
                                                @if(isset($coupon))
-                                                value="{{ $coupon['coupon']->code }}"
+                                                value="{{ $coupon['code'] }}"
                                                @endif
                                                id="discountCodeValue">
                                         <div class="input-group-prepend DiscountCodeActionsWarper">
@@ -169,17 +169,17 @@
                                     <div class="alert alert-success alert-dismissible fade show couponReportWarper @if (!isset($coupon)) a--d-none @endif" role="alert">
                                         {{--<button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>--}}
                                         <div class="couponReport">
-                                            @if(isset($coupon) && $coupon['discount']['type'] == config('constants.DISCOUNT_TYPE_COST'))
+                                            @if(isset($coupon) && $coupon['type'] == config('constants.DISCOUNT_TYPE_COST'))
                                                 کپن تخفیف
-                                                <strong>{{$coupon['coupon']->name}}</strong>
+                                                <strong>{{$coupon['name']}}</strong>
                                                 با
-                                                {{number_format($coupon['discount']['discount'])}}
+                                                {{number_format($coupon['discount'])}}
                                                 تومان تخفیف برای سفارش شما ثبت شد.
                                             @elseif(isset($coupon))
                                                 کپن تخفیف
-                                                <strong>{{$coupon['coupon']->name}}</strong>
+                                                <strong>{{$coupon['name']}}</strong>
                                                 با
-                                                {{$coupon['discount']['discount']}}
+                                                {{$coupon['discount']}}
                                                 % تخفیف برای
                                                 سفارش شما ثبت شده است.
                                             @endif
@@ -523,7 +523,7 @@
     {{--</div>--}}
 
     <input type="hidden" id="invoiceInfo-totalCost" value="{{ $invoiceInfo['totalCost'] }}">
-    <input type="hidden" id="invoiceInfo-couponCode" value="@if (isset($coupon)){{ $coupon['coupon']->code }}@endif">
+    <input type="hidden" id="invoiceInfo-couponCode" value="@if (isset($coupon)){{ $coupon['code'] }}@endif">
     <input type="hidden" id="OrderController-submitCoupon" value="{{ action('Web\OrderController@submitCoupon') }}">
     <input type="hidden" id="OrderController-removeCoupon" value="{{ action('Web\OrderController@removeCoupon') }}">
 
