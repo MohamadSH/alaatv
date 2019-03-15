@@ -53,7 +53,8 @@
                                             @if($status === 'successful')
                                                 کد پیگیری
                                                 <br>
-                                                @if($paymentMethod === 'zarinpal')
+{{--                                                @if($paymentMethod === 'zarinpal')--}}
+                                                @if(isset($result['zarinpalVerifyResult']['data']['RefID']))
                                                     <span class="m-badge m-badge--info m-badge--wide">
                                                         {{ $result['zarinpalVerifyResult']['data']['RefID'] }}
                                                     </span>

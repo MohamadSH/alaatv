@@ -22,6 +22,8 @@ class OrderCollections extends Collection
         $result = collect();
 
         foreach ($items as $order) {
+            if(!isset($order->coupon_id))
+                continue;
             $orderCoupon = $order->coupon_discount_type;
             if ($orderCoupon !== false) {
                 if ($orderCoupon["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE")) {

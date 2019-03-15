@@ -59,10 +59,7 @@ class ZarinpalTransactionController extends Controller
 
         $gatewayVerify = $this->verify($gateway, $amount, $paymentData);
 
-        if (in_array($gatewayVerify['data']['zarinpalVerifyResult']['Status'], [
-            'verified_before',
-            'success',
-        ])) {
+        if ($gatewayVerify['status']) {
             if ($gatewayVerify['data']['RefID'] != $refId) {
                 $refIdStatus = Response::HTTP_FORBIDDEN;
                 $message = 'Reference number is wrong';
