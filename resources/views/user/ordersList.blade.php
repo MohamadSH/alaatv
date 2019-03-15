@@ -607,7 +607,7 @@
                         <span aria-hidden = "true">&times;</span>
                     </button>
                 </div>
-                {!! Form::open(['method' => 'GET','action' => ['Web\OnlinePaymentController@paymentRedirect', 'paymentMethod'=>'web', 'device'=>'desktop-mobile']]) !!}
+                {!! Form::open(['method' => 'GET','action' => ['Web\OnlinePaymentController@paymentRedirect', 'paymentMethod'=>'zarinpal', 'device'=>'web']]) !!}
                 <div class = "modal-body">
 
                     {!! Form::hidden('order_id',null) !!}
