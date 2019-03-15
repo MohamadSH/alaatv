@@ -1,43 +1,19 @@
 @if(isset($withCheckbox) && $withCheckbox)
     <div class="col-md-1" style="padding-left: 0px">
         <label class="control-label" style="float: right;"><label class="mt-checkbox mt-checkbox-outline">
-                <input type="checkbox" id="{{isset($enableId) ? $enableId : "productEnable"}}" value="1"
-                       name="{{isset($enableName) ? $enableName : "productEnable"}}"
-                       @if(isset($defaultProductFilter)) checked @endif>
+                <input type="checkbox" id="{{isset($enableId) ? $enableId : "productEnable"}}" value="1" name="{{isset($enableName) ? $enableName : "productEnable"}}" @if(isset($defaultProductFilter)) checked @endif>
                 <span class="bg-grey-cararra"></span>
             </label>
         </label>
     </div>
 @endif
-<div class="col-md-1" style="padding-left: 0px">
-    <label class="control-label" style="float: right;">
-        بدون هیچ سفارشی
-        <label class="mt-checkbox mt-checkbox-outline">
-            <input type="checkbox" id="" value="1"
-                   name="doesntHaveOrder">
-            <span class="bg-grey-cararra"></span>
-        </label>
-    </label>
-</div>
-<div class="col-md-1" style="padding-left: 0px">
-    <label class="control-label" style="float: right;">
-        حداقل یک سفارش نهایی شده دارد
-        <label class="mt-checkbox mt-checkbox-outline">
-            <input type="checkbox" id="" value="1"
-                   name="hasClosedOrder">
-            <span class="bg-grey-cararra"></span>
-        </label>
-    </label>
-</div>
 @if(isset($withCheckbox))
-    <div class="col-md-11" @if(isset($withCheckbox) && $withCheckbox) style="padding-right: 0px" @endif>
+    <div class="col-md-11"  @if(isset($withCheckbox) && $withCheckbox) style="padding-right: 0px" @endif>
         @endif
         @if(isset($listType))
             @if(strcmp($listType , "configurables") == 0)
-                <select class="mt-multiselect btn btn-default" multiple="multiple" data-label="left" data-width="100%"
-                        data-filter="true" data-height="200"
-                        id="{{isset($id) ? $id : "products"}}" name="{{isset($name) ? $name : 'products[]'}}"
-                        @if(isset($withCheckbox) && $withCheckbox) disabled @endif
+                <select class="mt-multiselect btn btn-default" multiple="multiple" data-label="left" data-width="100%" data-filter="true" data-height="200"
+                        id="{{isset($id) ? $id : "products"}}" name="{{isset($name) ? $name : 'products[]'}}"  @if(isset($withCheckbox) && $withCheckbox) disabled @endif
                         title="{{isset($title) ? $title : 'انتخاب محصول دیده شده'}}">
                     @foreach($products as $product)
                         <option value="{{$product->id}}">{{$product->name}}</option>
@@ -46,75 +22,56 @@
             @elseif(strcmp($listType , "childSelect") == 0)
 
                 @if(isset($selectType) && strcmp($selectType , "searchable") == 0)
-                    @if(isset($label))<label for="{{(isset($id)?$id:'')}}"
-                                             class="control-label">@if(isset($label)){{$label["caption"]}}@endif</label>@endif
-                    <select name="{{isset($name) ? $name : ''}}" @if(isset($id))id="{{$id}}"
-                            @endif class="form-control select2 {{isset($class) ? $class : ''}}"
+                    @if(isset($label))<label for="{{(isset($id)?$id:'')}}" class="control-label">@if(isset($label)){{$label["caption"]}}@endif</label>@endif
+                    <select name="{{isset($name) ? $name : ''}}" @if(isset($id))id="{{$id}}"@endif class="form-control select2 {{isset($class) ? $class : ''}}"
                             {{isset($dataRole) ? 'data-role='.$dataRole : ''}}  {{isset($disabled) ? 'disabled' : ''}}>
                         <option></option>
                         @foreach($products as $product)
                             @if($product->producttype_id == Config::get("constants.PRODUCT_TYPE_SIMPLE"))
-                                <option class="bold" value="{{$product->id}}"
-                                        data-content="{{$product->calculatePayablePrice()["CustomerCost"]}}">{{$product->name}}</option>
+                                <option class="bold" value="{{$product->id}}" data-content="{{$product->calculatePayablePrice()["CustomerCost"]}}" >{{$product->name}}</option>
                             @else
                                 <optgroup class="bold" label="{{$product->name}}"></optgroup>
                             @endif
                             @foreach($product->children as $child)
-                                <option value="{{$child->id}}"
-                                        data-content="{{$child->calculatePayablePrice()["CustomerCost"]}}"
-                                        @if(isset($defaultProductFilter) && $product->id== $defaultProductFilter)selected="selected"@endif>{{$child->name}}</option>
+                                <option value="{{$child->id}}" data-content="{{$child->calculatePayablePrice()["CustomerCost"]}}" @if(isset($defaultProductFilter) && $product->id== $defaultProductFilter)selected="selected"@endif>{{$child->name}}</option>
                             @endforeach
                         @endforeach
                     </select>
                 @else
-                    <select name="{{isset($name) ? $name : ''}}" class="form-control {{isset($class) ? $class : ''}}"
-                            @if(isset($id))id="{{$id}}"@endif {{isset($dataRole) ? 'data-role='.$dataRole : ''}}  {{isset($disabled) ? 'disabled' : ''}} >
+                    <select name="{{isset($name) ? $name : ''}}" class="form-control {{isset($class) ? $class : ''}}" @if(isset($id))id="{{$id}}"@endif {{isset($dataRole) ? 'data-role='.$dataRole : ''}}  {{isset($disabled) ? 'disabled' : ''}} >
 
-                        @if(isset($defaultValue))
-                            <option selected="selected"
-                                    value="@if(isset($defaultValue["value"])){{$defaultValue["value"]}}@endif">@if(isset($defaultValue["caption"])){{$defaultValue["caption"]}}@endif</option>@endif
+                        @if(isset($defaultValue))<option selected="selected" value="@if(isset($defaultValue["value"])){{$defaultValue["value"]}}@endif">@if(isset($defaultValue["caption"])){{$defaultValue["caption"]}}@endif</option>@endif
                         @foreach($products as $product)
 
                             @if($product->producttype_id == Config::get("constants.PRODUCT_TYPE_SIMPLE"))
-                                <option value="{{$product->id}}"
-                                        data-content="{{$product->calculatePayablePrice()["CustomerCost"]}}">{{$product->name}}</option>
+                                <option value="{{$product->id}}" data-content="{{$product->calculatePayablePrice()["CustomerCost"]}}" >{{$product->name}}</option>
                             @else
                                 <optgroup label="{{$product->name}}"></optgroup>
                             @endif
                             @foreach($product->children as $child)
-                                <option value="{{$child->id}}"
-                                        data-content="{{$child->calculatePayablePrice()["CustomerCost"]}}"
-                                        @if(isset($defaultProductFilter) && $child->id== $defaultProductFilter) selected="selected" @endif>{{$child->name}}</option>
+                                <option value="{{$child->id}}" data-content="{{$child->calculatePayablePrice()["CustomerCost"]}}" @if(isset($defaultProductFilter) && $child->id== $defaultProductFilter) selected="selected" @endif>{{$child->name}}</option>
                             @endforeach
                         @endforeach
                     </select>
                 @endif
             @else
 
-                @if(isset($label))<label for="{{(isset($id)?$id:'')}}"
-                                         class="control-label">@if(isset($label)){{$label["caption"]}}@endif</label>@endif
-                <select name="{{isset($name) ? $name : ''}}" @if(isset($id))id="{{$id}}"
-                        @endif class="form-control select2 {{isset($class) ? $class : ''}}"
+                @if(isset($label))<label for="{{(isset($id)?$id:'')}}" class="control-label">@if(isset($label)){{$label["caption"]}}@endif</label>@endif
+                <select name="{{isset($name) ? $name : ''}}" @if(isset($id))id="{{$id}}"@endif class="form-control select2 {{isset($class) ? $class : ''}}"
                         {{isset($dataRole) ? 'data-role='.$dataRole : ''}}  {{isset($disabled) ? 'disabled' : ''}}>
                     <option></option>
                     @foreach($products as $product)
                         <optgroup label="{{$product->name}}"></optgroup>
-                        <option value="{{$product->id}}"
-                                data-content="{{$product->calculatePayablePrice()["CustomerCost"]}}"
-                                @if(isset($defaultProductFilter) && $product->id== $defaultProductFilter)selected="selected"@endif>{{$product->name}}</option>
+                        <option value="{{$product->id}}" data-content="{{$product->calculatePayablePrice()["CustomerCost"]}}" @if(isset($defaultProductFilter) && $product->id== $defaultProductFilter)selected="selected"@endif>{{$product->name}}</option>
                         @foreach($product->children as $child)
-                            <option value="{{$child->id}}"
-                                    data-content="{{$child->calculatePayablePrice()["CustomerCost"]}}"
-                                    @if(isset($defaultProductFilter) && $child->id== $defaultProductFilter) selected="selected" @endif>{{$child->name}}</option>
+                            <option value="{{$child->id}}" data-content="{{$child->calculatePayablePrice()["CustomerCost"]}}" @if(isset($defaultProductFilter) && $child->id== $defaultProductFilter) selected="selected" @endif>{{$child->name}}</option>
                         @endforeach
                     @endforeach
                 </select>
             @endif
         @else
-            <select class="mt-multiselect btn btn-default" multiple="multiple" data-label="left" data-width="100%"
-                    data-filter="true" data-height="200"
-                    id="{{isset($id) ? $id : "products"}}" name="{{isset($name) ? $name : 'products[]'}}"
-                    @if(isset($withCheckbox) && $withCheckbox) disabled @endif
+            <select class="mt-multiselect btn btn-default" multiple="multiple" data-label="left" data-width="100%" data-filter="true" data-height="200"
+                    id="{{isset($id) ? $id : "products"}}" name="{{isset($name) ? $name : 'products[]'}}" @if(isset($withCheckbox) && $withCheckbox) disabled @endif
                     title="{{isset($title) ? $title : 'انتخاب محصول سفارش داده شده'}}">
                 @if(isset($withoutOrder) && $withoutOrder)
                     <option value="-1" class="font-red">بدون سفارش ها</option>
@@ -125,23 +82,18 @@
                 @foreach($products as $product)
                     @if($product->producttype_id == Config::get("constants.PRODUCT_TYPE_SIMPLE") ||
                         $product->producttype_id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))
-                        <option value="{{$product->id}}" class="bold"
-                                @if(isset($defaultProductFilter) && in_array($product->id, $defaultProductFilter)) selected="selected" @endif>{{$product->name}}{{(!$product->enable)?"(غیرفعال)":""}}</option>
+                        <option value="{{$product->id}}" class="bold" @if(isset($defaultProductFilter) && in_array($product->id, $defaultProductFilter)) selected="selected" @endif>{{$product->name}}{{(!$product->enable)?"(غیرفعال)":""}}</option>
                     @else
-                        <optgroup label="{{$product->name}}{{(!$product->enable)?"(غیرفعال)":""}}"
-                                  class="bold"></optgroup>
+                        <optgroup label="{{$product->name}}{{(!$product->enable)?"(غیرفعال)":""}}" class="bold"></optgroup>
                     @endif
                     @foreach($product->children as $child)
-                        <option value="{{$child->id}}"
-                                @if(isset($defaultProductFilter) && in_array($child->id, $defaultProductFilter)) selected="selected" @endif>{{$child->name}}</option>
+                        <option value="{{$child->id}}" @if(isset($defaultProductFilter) && in_array($child->id, $defaultProductFilter)) selected="selected" @endif>{{$child->name}}</option>
                         @if($child->hasChildren())
                             @foreach($product->children as $grandChild)
-                                <option value="{{$grandChild->id}}"
-                                        @if(isset($defaultProductFilter) && in_array($grandChild->id, $defaultProductFilter)) selected="selected" @endif>{{$grandChild->name}}</option>
+                                <option value="{{$grandChild->id}}" @if(isset($defaultProductFilter) && in_array($grandChild->id, $defaultProductFilter)) selected="selected" @endif>{{$grandChild->name}}</option>
                                 @if($child->hasChildren())
                                     @foreach($grandChild->children as $grandgrandChild)
-                                        <option value="{{$grandgrandChild->id}}"
-                                                @if(isset($defaultProductFilter) && in_array($grandgrandChild->id, $defaultProductFilter)) selected="selected" @endif>{{$grandgrandChild->name}}</option>
+                                        <option value="{{$grandgrandChild->id}}" @if(isset($defaultProductFilter) && in_array($grandgrandChild->id, $defaultProductFilter)) selected="selected" @endif>{{$grandgrandChild->name}}</option>
                                     @endforeach
                                 @endif
                             @endforeach

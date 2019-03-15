@@ -562,7 +562,7 @@ $(document).ready(function () {
         // return false;
 
         $.ajax({
-            type: 'GET',
+            type: 'POST',
             url: $('#VerifyMobileVerificationCodeActionUrl').val(),
             data: {
                 code: verificationCode

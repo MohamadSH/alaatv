@@ -737,7 +737,7 @@ class Order extends BaseModel
             $simpleProduct = $orderproduct->product;
             $bons = $simpleProduct->bons->where("name", $bonName);
             if ($bons->isEmpty()) {
-                $grandParent = $simpleProduct->GrandParent();
+                $grandParent = $simpleProduct->grand_parent;
                 if ($grandParent !== false) {
                     $simpleProduct = $grandParent;
                     $bons = $grandParent->bons->where("name", $bonName)

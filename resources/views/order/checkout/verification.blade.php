@@ -28,93 +28,91 @@
 @endsection
 
 @section('content')
-    <div class="m-portlet">
+
+    @if($status === 'successful')
+        <div class="m-portlet">
         <div class="m-portlet__body m-portlet__body--no-padding">
             <div class="m-invoice-1">
                 <div class="m-invoice__wrapper">
-                    <div class="m-invoice__head" style="background-image: url(/assets/app/media/img//bg/bg-6.jpg);">
+                    <div class="m-invoice__head">
                         <div class="m-invoice__container m-invoice__container--centered">
                             <div class="m-invoice__logo">
                                 <a href="#">
-                                    <h1>INVOICE</h1>
+                                    <h1 class="m--font-primary">رسید پرداخت</h1>
+                                    <br>
+                                    <span class="m--font-primary">
+                                        @if($result!=null)
+                                            روش پرداخت
+                                            <br>
+                                            @if($paymentMethod === 'zarinpal')
+                                                <span class="m-badge m-badge--info m-badge--wide">
+                                                    درگاه زرین پال
+                                                </span>
+                                            @endif
+                                            <hr>
+                                            کد پیگیری
+                                            <br>
+                                            @if($paymentMethod === 'zarinpal')
+                                                <span class="m-badge m-badge--info m-badge--wide">
+                                                    {{ $result['zarinpalVerifyResult']['data']['RefID'] }}
+                                                </span>
+                                            @endif
+
+                                            @if($paymentMethod === 'zarinpal' && isset($result['zarinpalVerifyResult']['data']['cardPanMask']))
+                                                <hr>
+                                                شماره کارت
+                                                <span class="m-badge m-badge--info m-badge--wide">
+                                                    {{ $result['zarinpalVerifyResult']['data']['cardPanMask'] }}
+                                                </span>
+                                            @endif
+                                        @else
+
+                                        @endif
+                                    </span>
                                 </a>
                                 <a href="#">
-                                    <img src="/assets/app/media/img//logos/logo_client_white.png">
+                                    <img src="{{ asset('/acm/extra/Alaa-logo.gif') }}">
                                 </a>
                             </div>
                             <span class="m-invoice__desc">
-							<span>Cecilia Chapman, 711-2880 Nulla St, Mankato</span>
-							<span>Mississippi 96522</span>
-						</span>
-                            <div class="m-invoice__items">
-                                <div class="m-invoice__item">
-                                    <span class="m-invoice__subtitle">DATA</span>
-                                    <span class="m-invoice__text">Dec 12, 2017</span>
-                                </div>
-                                <div class="m-invoice__item">
-                                    <span class="m-invoice__subtitle">INVOICE NO.</span>
-                                    <span class="m-invoice__text">GS 000014</span>
-                                </div>
-                                <div class="m-invoice__item">
-                                    <span class="m-invoice__subtitle">INVOICE TO.</span>
-                                    <span class="m-invoice__text">Iris Watson, P.O. Box 283 8562 Fusce RD.<br>Fredrick Nebraska 20620</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="m-invoice__body m-invoice__body--centered">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>DESCRIPTION</th>
-                                    <th>HOURS</th>
-                                    <th>RATE</th>
-                                    <th>AMOUNT</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>Creative Design</td>
-                                    <td>80</td>
-                                    <td>$40.00</td>
-                                    <td>$3200.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Front-End Development</td>
-                                    <td>120</td>
-                                    <td>$40.00</td>
-                                    <td>$4800.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Back-End Development</td>
-                                    <td>210</td>
-                                    <td>$60.00</td>
-                                    <td>$12600.00</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="m-invoice__footer">
-                        <div class="m-invoice__container m-invoice__container--centered">
-                            <div class="m-invoice__content">
-                                <span>BANK TRANSFER</span>
-                                <span><span>Account Name:</span><span>Barclays UK</span></span>
-                                <span><span>Account Number:</span><span>1234567890934</span></span>
-                                <span><span>Code:</span><span>BARC0032UK</span></span>
-                            </div>
-                            <div class="m-invoice__content">
-                                <span>TOTAL AMOUNT</span>
-                                <span class="m-invoice__price">$20.600.00</span>
-                                <span>Taxes Included</span>
-                            </div>
+
+                                @if($paymentMethod === 'zarinpal' && isset($result['zarinpalVerifyResult']['message']))
+                                    <div class="alert
+                                    @if($status==='successful')
+                                        alert-success
+                                    @else
+                                        alert-warning
+                                    @endif
+                                    alert-dismissible fade show" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        </button>
+                                            {{ $result['zarinpalVerifyResult']['message'][0] }}
+                                    </div>
+                                        @endif
+                                        @if(isset($result['OrderSuccessPaymentResult']['saveOrder']) && $result['OrderSuccessPaymentResult']['saveOrder']!=1)
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        </button>
+                                        پرداخت شما با موفقیت انجام شده است، اما روند ثبت آن دچار مشکل شده است. لطفا با پشتیبانی سایت تماس بگیرید.
+                                    </div>
+                                        @endif
+                                        @if(isset($result['OrderSuccessPaymentResult']['saveBon']) && $result['OrderSuccessPaymentResult']['saveBon']>0)
+                                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        </button>
+                                        به شما تعداد {{ $result['OrderSuccessPaymentResult']['saveBon'] }} بن به نام {{{$result['OrderSuccessPaymentResult']['bonName']}}} تعلق گرفت.
+                                    </div>
+                                @endif
+
+						    </span>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    @endif
 @endsection
 
 

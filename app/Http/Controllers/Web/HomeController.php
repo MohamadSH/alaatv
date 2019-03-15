@@ -3158,11 +3158,12 @@ class HomeController extends Controller
         $checkoutStatuses[0] = "نامشخص";
         $checkoutStatuses = array_sort_recursive($checkoutStatuses);
 
+        $products = collect();
         if ($user->hasRole("onlineNoroozMarketing")) {
-            $products = [Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ROOT")];
-            $products = $this->makeProductCollection($products);
+//            $products = [Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ROOT")];
+//            $products = $this->makeProductCollection($products);
         } else {
-            $products = $this->makeProductCollection();
+//            $products = $this->makeProductCollection();
         }
 
 
@@ -3269,7 +3270,18 @@ class HomeController extends Controller
         ];
 
 
-        return view("admin.indexOrder", compact("pageName", "orderstatuses", "products", "paymentMethods", "majors", "paymentstatuses", "sortBy", "sortType", "transactionTypes", "orderTableDefaultColumns", "coupons", "transactionStatuses", "transactionTableDefaultColumns", "userBonTableDefaultColumns", "userBonStatuses", "attributevalueCollection", "addressSpecialFilter", "checkoutStatuses"));
+        return view("admin.indexOrder", compact(
+            "pageName"
+            , "orderstatuses"
+            , "products"
+            , "paymentMethods", "majors"
+            , "paymentstatuses", "sortBy", "sortType"
+            , "transactionTypes", "orderTableDefaultColumns"
+            , "coupons", "transactionStatuses", "transactionTableDefaultColumns"
+            , "userBonTableDefaultColumns"
+            , "userBonStatuses", "attributevalueCollection"
+            , "addressSpecialFilter", "checkoutStatuses"
+        ));
     }
 
     /**
