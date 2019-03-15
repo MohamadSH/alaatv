@@ -78,29 +78,7 @@ var CheckoutPaymentUi = function () {
                         } else {
                             dontdonate();
                             donateValue = 0;
-                            $.notify('مشکلی رخ داده است. مجدد سعی کنید.', {
-                                type: 'warning',
-                                allow_dismiss: true,
-                                newest_on_top: false,
-                                mouse_over: false,
-                                showProgressbar: false,
-                                spacing: 10,
-                                timer: 2000,
-                                placement: {
-                                    from: 'top',
-                                    align: 'center'
-                                },
-                                offset: {
-                                    x: 30,
-                                    y: 30
-                                },
-                                delay: 1000,
-                                z_index: 10000,
-                                animate: {
-                                    enter: "animated flip",
-                                    exit: "animated hinge"
-                                }
-                            });
+                            toastr.warning('مشکلی رخ داده است. مجدد سعی کنید.');
                         }
                     } else {
                         donate();
@@ -112,29 +90,7 @@ var CheckoutPaymentUi = function () {
                     lockDonateAjax = true;
                     dontdonate();
                     donateValue = 0;
-                    $.notify('مشکلی رخ داده است. مجدد سعی کنید.', {
-                        type: 'warning',
-                        allow_dismiss: true,
-                        newest_on_top: false,
-                        mouse_over: false,
-                        showProgressbar: false,
-                        spacing: 10,
-                        timer: 2000,
-                        placement: {
-                            from: 'top',
-                            align: 'center'
-                        },
-                        offset: {
-                            x: 30,
-                            y: 30
-                        },
-                        delay: 1000,
-                        z_index: 10000,
-                        animate: {
-                            enter: "animated flip",
-                            exit: "animated hinge"
-                        }
-                    });
+                    toastr.warning('مشکلی رخ داده است. مجدد سعی کنید.');
                     mApp.unblock('.addDonateWarper');
                     lockDonateAjax = false;
                 }
@@ -159,29 +115,7 @@ var CheckoutPaymentUi = function () {
                     lockDonateAjax = true;
                     if (data.error) {
                         donate();
-                        $.notify('مشکلی رخ داده است. مجدد سعی کنید.', {
-                            type: 'warning',
-                            allow_dismiss: true,
-                            newest_on_top: false,
-                            mouse_over: false,
-                            showProgressbar: false,
-                            spacing: 10,
-                            timer: 2000,
-                            placement: {
-                                from: 'top',
-                                align: 'center'
-                            },
-                            offset: {
-                                x: 30,
-                                y: 30
-                            },
-                            delay: 1000,
-                            z_index: 10000,
-                            animate: {
-                                enter: "animated flip",
-                                exit: "animated hinge"
-                            }
-                        });
+                        toastr.warning('مشکلی رخ داده است. مجدد سعی کنید.');
                     } else {
                         dontdonate();
                         donateValue = 0;
@@ -192,29 +126,7 @@ var CheckoutPaymentUi = function () {
                 error: function (jqXHR, textStatus, errorThrown) {
                     lockDonateAjax = true;
                     donate();
-                    $.notify('مشکلی رخ داده است. مجدد سعی کنید.', {
-                        type: 'warning',
-                        allow_dismiss: true,
-                        newest_on_top: false,
-                        mouse_over: false,
-                        showProgressbar: false,
-                        spacing: 10,
-                        timer: 2000,
-                        placement: {
-                            from: 'top',
-                            align: 'center'
-                        },
-                        offset: {
-                            x: 30,
-                            y: 30
-                        },
-                        delay: 1000,
-                        z_index: 10000,
-                        animate: {
-                            enter: "animated flip",
-                            exit: "animated hinge"
-                        }
-                    });
+                    toastr.warning('مشکلی رخ داده است. مجدد سعی کنید.');
                     mApp.unblock('.addDonateWarper');
                     lockDonateAjax = false;
                 }
@@ -257,30 +169,7 @@ var CheckoutPaymentUi = function () {
 
         let discountCodeValue = $('#discountCodeValue').val();
         if (discountCodeValue.trim().length === 0) {
-
-            $.notify('مقداری برای کد تخفیف وارد نشده است.', {
-                type: 'warning',
-                allow_dismiss: true,
-                newest_on_top: false,
-                mouse_over: false,
-                showProgressbar: false,
-                spacing: 10,
-                timer: 2000,
-                placement: {
-                    from: 'top',
-                    align: 'center'
-                },
-                offset: {
-                    x: 30,
-                    y: 30
-                },
-                delay: 1000,
-                z_index: 10000,
-                animate: {
-                    enter: "animated flip",
-                    exit: "animated hinge"
-                }
-            });
+            toastr.warning('مقداری برای کد تخفیف وارد نشده است.');
             return false;
         }
 
@@ -306,29 +195,7 @@ var CheckoutPaymentUi = function () {
 
                     // let message = data.error.message;
                     let message = 'کد وارد شده معتبر نیست.';
-                    $.notify(message, {
-                        type: 'danger',
-                        allow_dismiss: true,
-                        newest_on_top: false,
-                        mouse_over: false,
-                        showProgressbar: false,
-                        spacing: 10,
-                        timer: 2000,
-                        placement: {
-                            from: 'top',
-                            align: 'center'
-                        },
-                        offset: {
-                            x: 30,
-                            y: 30
-                        },
-                        delay: 1000,
-                        z_index: 10000,
-                        animate: {
-                            enter: "animated flip",
-                            exit: "animated hinge"
-                        }
-                    });
+                    toastr.warning(message);
                 } else {
 
                     $('.couponReportWarper').fadeIn();
@@ -348,29 +215,7 @@ var CheckoutPaymentUi = function () {
                     $('#btnSaveDiscountCodeValue').fadeOut(0);
                     $('#btnRemoveDiscountCodeValue').fadeIn();
 
-                    $.notify('کد تخفیف شما ثبت شد.', {
-                        type: 'success',
-                        allow_dismiss: true,
-                        newest_on_top: false,
-                        mouse_over: false,
-                        showProgressbar: false,
-                        spacing: 10,
-                        timer: 2000,
-                        placement: {
-                            from: 'top',
-                            align: 'center'
-                        },
-                        offset: {
-                            x: 30,
-                            y: 30
-                        },
-                        delay: 1000,
-                        z_index: 10000,
-                        animate: {
-                            enter: "animated flip",
-                            exit: "animated hinge"
-                        }
-                    });
+                    toastr.success('کد تخفیف شما ثبت شد.');
                 }
                 mApp.unblock('.discountCodeValueWarper');
             },
@@ -389,29 +234,8 @@ var CheckoutPaymentUi = function () {
                     message = 'کد وارد شده معتبر نیست';
                 }
 
-                $.notify(message, {
-                    type: 'warning',
-                    allow_dismiss: true,
-                    newest_on_top: false,
-                    mouse_over: false,
-                    showProgressbar: false,
-                    spacing: 10,
-                    timer: 2000,
-                    placement: {
-                        from: 'top',
-                        align: 'center'
-                    },
-                    offset: {
-                        x: 30,
-                        y: 30
-                    },
-                    delay: 1000,
-                    z_index: 10000,
-                    animate: {
-                        enter: "animated flip",
-                        exit: "animated hinge"
-                    }
-                });
+                toastr.warning(message);
+
                 mApp.unblock('.discountCodeValueWarper');
 
             }
@@ -424,7 +248,7 @@ var CheckoutPaymentUi = function () {
             return false;
         }
 
-        mApp.block('.discountCodeValueWarper', {
+        mApp.block('.discountCodeValueWarper, .hasntDiscountCodeWraper', {
             type: 'loader',
             state: 'info',
         });
@@ -437,29 +261,7 @@ var CheckoutPaymentUi = function () {
                     if (showMessage === true) {
                         // let message = response.error.message;
                         let message = 'مشکلی در حذف کد تخفیف رخ داده است.';
-                        $.notify(message, {
-                            type: 'danger',
-                            allow_dismiss: true,
-                            newest_on_top: false,
-                            mouse_over: false,
-                            showProgressbar: false,
-                            spacing: 10,
-                            timer: 2000,
-                            placement: {
-                                from: 'top',
-                                align: 'center'
-                            },
-                            offset: {
-                                x: 30,
-                                y: 30
-                            },
-                            delay: 1000,
-                            z_index: 10000,
-                            animate: {
-                                enter: "animated flip",
-                                exit: "animated hinge"
-                            }
-                        });
+                        toastr.error(message);
                         $('#btnSaveDiscountCodeValue').fadeOut(0);
                         $('#btnRemoveDiscountCodeValue').fadeIn();
                     }
@@ -470,35 +272,13 @@ var CheckoutPaymentUi = function () {
                     $('#discountCodeValue').val('');
 
                     if (showMessage === true) {
-                        $.notify('کد تخفیف شما حذف شد.', {
-                            type: 'success',
-                            allow_dismiss: true,
-                            newest_on_top: false,
-                            mouse_over: false,
-                            showProgressbar: false,
-                            spacing: 10,
-                            timer: 2000,
-                            placement: {
-                                from: 'top',
-                                align: 'center'
-                            },
-                            offset: {
-                                x: 30,
-                                y: 30
-                            },
-                            delay: 1000,
-                            z_index: 10000,
-                            animate: {
-                                enter: "animated flip",
-                                exit: "animated hinge"
-                            }
-                        });
+                        toastr.success('کد تخفیف شما حذف شد.');
                     }
                 }
-                mApp.unblock('.discountCodeValueWarper');
+                mApp.unblock('.discountCodeValueWarper, .hasntDiscountCodeWraper');
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                mApp.unblock('.discountCodeValueWarper');
+                mApp.unblock('.discountCodeValueWarper, .hasntDiscountCodeWraper');
             }
         });
     }

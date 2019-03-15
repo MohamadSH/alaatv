@@ -104,7 +104,7 @@
                                                 <div class = "col-12 col-md-9">
                                                     <div class = "m--margin-top-20">
                                                         جهت تایید سفارش مبلغ
-                                                        <b class = "finalPriceValue">{{ number_format($invoiceInfo['totalCost']) }}</b> تومان به شماره کارت:
+                                                        <b class = "finalPriceValue">{{ number_format($invoiceInfo['price']['final']) }}</b> تومان به شماره کارت:
                                                         <br>
                                                         6104-3375-6000-0026
                                                         <br>
@@ -127,7 +127,7 @@
                                 <div class = "col-12">
                                     <hr>
                                 </div>
-                                <div class = "col-12 col-sm-8 col-md-6 col-lg-6 m--margin-top-20 text-center">
+                                <div class = "col-12 col-sm-8 col-md-6 col-lg-6 m--margin-top-20 text-center hasntDiscountCodeWraper">
                                     <span>
                                         <label for = "hasntDiscountCode">
                                             کد تخفیف:
@@ -206,10 +206,14 @@
 
                             {{--btn submit order--}}
                             <div class = "row justify-content-center">
-                                <div class = "col text-center">
+                                <div class = "col text-center btnSubmitOrderWraper">
                                     <hr>
                                     <button type = "button"
-                                            onclick="window.location.href='{{action('Web\OnlinePaymentController@paymentRedirect', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}';"
+                                            onclick="window.location.href='{{action('Web\OnlinePaymentController@paymentRedirect', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}';
+                                                    mApp.block('.btnSubmitOrderWraper', {
+                                                    type: 'loader',
+                                                    state: 'info',
+                                                    });"
                                             class = "btn btn-lg m-btn--pill m-btn--air m-btn m-btn--gradient-from-info
                                             m-btn--gradient-to-accent m--padding-top-20 m--padding-bottom-20
                                              m--padding-right-50 m--padding-left-50 btnSubmitOrder"></button>
@@ -238,7 +242,7 @@
                                 <span>
                                     مبلغ قابل پرداخت:
                                     <br>
-                                    <b class = "finalPriceValue">{{ number_format($invoiceInfo['totalCost']) }}</b>
+                                    <b class = "finalPriceValue">{{ number_format($invoiceInfo['price']['final']) }}</b>
                                     تومان
                                     <hr>
                                     <small>
@@ -522,7 +526,7 @@
         {{--</div>--}}
     {{--</div>--}}
 
-    <input type="hidden" id="invoiceInfo-totalCost" value="{{ $invoiceInfo['totalCost'] }}">
+    <input type="hidden" id="invoiceInfo-totalCost" value="{{ $invoiceInfo['price']['final'] }}">
     <input type="hidden" id="invoiceInfo-couponCode" value="@if (isset($coupon)){{ $coupon['code'] }}@endif">
     <input type="hidden" id="OrderController-submitCoupon" value="{{ action('Web\OrderController@submitCoupon') }}">
     <input type="hidden" id="OrderController-removeCoupon" value="{{ action('Web\OrderController@removeCoupon') }}">

@@ -306,7 +306,6 @@ var Alaasearch = function () {
                     },
                     //The status for when there is error php code
                     500: function (response) {
-                        console.log(response);
                         removeLoadingItem(owl, type);
                     }
                 }
@@ -523,7 +522,6 @@ var Alaasearch = function () {
     }
 
     function loadAjaxContent(contentData) {
-        console.log(contentData);
         let hasPamphletOrArticle = false;
         let hasItem = false;
         if (typeof contentData.product !== 'undefined' && contentData.product !== null && contentData.product.total>0) {
