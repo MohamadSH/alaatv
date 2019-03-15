@@ -27,12 +27,20 @@
                                 </h3>
                             </div>
                         </div>
-                        <div class = "m-portlet__head-tools">
-                            <button onclick = "window.location.href='{{action('Web\ProductController@search')}}';" type = "button" class = "btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info btnAddMoreProductToCart-desktop">
+                        <div class = "m-portlet__head-tools btnAddMoreProductToCartWraper">
+                            <button onclick = "window.location.href='{{action('Web\ProductController@search')}}';
+                                    mApp.block('.btnAddMoreProductToCartWraper', {
+                                    type: 'loader',
+                                    state: 'info',
+                                    });" type = "button" class = "btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info btnAddMoreProductToCart-desktop">
                                 <i class = "flaticon-bag"></i>
                                 افزودن محصول جدید به سبد
                             </button>
-                            <button onclick = "window.location.href='{{action('Web\ProductController@search')}}';" type = "button" class = "btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info btnAddMoreProductToCart-mobile">
+                            <button onclick = "window.location.href='{{action('Web\ProductController@search')}}';
+                                    mApp.block('.btnAddMoreProductToCartWraper', {
+                                    type: 'loader',
+                                    state: 'info',
+                                    });" type = "button" class = "btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info btnAddMoreProductToCart-mobile">
                                 <i class = "flaticon-bag"></i>
                                 افزودن محصول جدید
                             </button>
@@ -116,12 +124,12 @@
                                                         <div class = "m-widget5__stats1">
                                             <span class = "m-nav__link-badge">
                                                 <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                                                    @if($simpleOrderProductItem->price['customerPrice']!=$simpleOrderProductItem->price['cost'])
-                                                        <span class = "m-badge m-badge--warning a--productRealPrice">{{ number_format($simpleOrderProductItem->price['cost']+$simpleOrderProductItem->price['extraCost']) }}</span>
+                                                    @if($simpleOrderProductItem['price']['final']!=$simpleOrderProductItem['price']['base'])
+                                                        <span class = "m-badge m-badge--warning a--productRealPrice">{{ number_format($simpleOrderProductItem['price']['base']+$simpleOrderProductItem['price']['extraCost']) }}</span>
                                                     @endif
-                                                    {{ number_format($simpleOrderProductItem->price['customerPrice']+$simpleOrderProductItem->price['extraCost']) }} تومان
-                                                    @if(($simpleOrderProductItem->price['bonDiscount']+$simpleOrderProductItem->price['productDiscount'])>0)
-                                                        <span class = "m-badge m-badge--info a--productDiscount">{{ (1-($simpleOrderProductItem->price['customerPrice']/$simpleOrderProductItem->price['cost']))*100 }}%</span>
+                                                    {{ number_format($simpleOrderProductItem['price']['final']+$simpleOrderProductItem['price']['extraCost']) }} تومان
+                                                    @if(($simpleOrderProductItem->discountDetail['bonDiscount']+$simpleOrderProductItem->discountDetail['productDiscount'])>0)
+                                                        <span class = "m-badge m-badge--info a--productDiscount">{{ (1-($simpleOrderProductItem['price']['final']/$simpleOrderProductItem['price']['base']))*100 }}%</span>
                                                     @endif
                                                 </span>
                                             </span>
@@ -245,12 +253,12 @@
                                                             </div>
                                                             <div class = "childPrice">
                                                         <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                                                            @if($orderProductItemChild->price['customerPrice']!=$orderProductItemChild->price['cost'])
-                                                                <span class = "m-badge m-badge--warning a--productRealPrice">{{ number_format($orderProductItemChild->price['cost']+$orderProductItemChild->price['extraCost']) }}</span>
+                                                            @if($orderProductItemChild['price']['final']!=$orderProductItemChild['price']['base'])
+                                                                <span class = "m-badge m-badge--warning a--productRealPrice">{{ number_format($orderProductItemChild['price']['base']+$orderProductItemChild['price']['extraCost']) }}</span>
                                                             @endif
-                                                            {{ number_format($orderProductItemChild->price['customerPrice']+$orderProductItemChild->price['extraCost']) }} تومان
-                                                            @if(($orderProductItemChild->price['bonDiscount']+$orderProductItemChild->price['productDiscount'])>0)
-                                                                <span class = "m-badge m-badge--info a--productDiscount">{{ $orderProductItemChild->price['bonDiscount']+$orderProductItemChild->price['productDiscount'] }}%</span>
+                                                            {{ number_format($orderProductItemChild['price']['final']+$orderProductItemChild['price']['extraCost']) }} تومان
+                                                            @if(($orderProductItemChild->discountDetail['price']['bonDiscount']+$orderProductItemChild['price']['discountDetail']['productDiscount'])>0)
+                                                                <span class = "m-badge m-badge--info a--productDiscount">{{ $orderProductItemChild->discountDetail['price']['bonDiscount']+$orderProductItemChild['price']['discountDetail']['productDiscount'] }}%</span>
                                                             @endif
                                                         </span>
                                                             </div>
@@ -289,15 +297,15 @@
                                         @endif
                                     </div>
                                     <div class = "col m--align-right">
-                                        @if(isset($invoiceInfo['orderproductsRawCost']))
+                                        @if(isset($invoiceInfo['price']['base']))
                                             <span class = "m-widget1__number m--font-danger">
-                                                {{ number_format($invoiceInfo['orderproductsRawCost']) }} تومان
+                                                {{ number_format($invoiceInfo['price']['base']) }} تومان
                                             </span>
                                         @endif
                                     </div>
                                 </div>
                             </div>
-                            @if(isset($invoiceInfo['orderproductsRawCost']) && isset($invoiceInfo['totalCost']) && $invoiceInfo['orderproductsRawCost']>$invoiceInfo['totalCost'])
+                            @if(isset($invoiceInfo['price']['base']) && isset($invoiceInfo['price']['final']) && $invoiceInfo['price']['base']>$invoiceInfo['price']['final'])
                                 <div class = "m-widget1__item">
                                     <div class = "row m-row--no-padding align-items-center">
                                         <div class = "col">
@@ -305,12 +313,12 @@
                                                 سود شما از خرید :
                                             </h3>
                                             <span class = "m-widget1__desc">
-                                            شما در مجموع {{ round((1-($invoiceInfo['totalCost']/$invoiceInfo['orderproductsRawCost']))*100) }}% تخفیف گرفته اید
+                                            شما در مجموع {{ round((1-($invoiceInfo['price']['final']/$invoiceInfo['price']['base']))*100) }}% تخفیف گرفته اید
                                         </span>
                                         </div>
                                         <div class = "col m--align-right">
                                         <span class = "m-widget1__number m--font-success">
-                                            {{ number_format($invoiceInfo['orderproductsRawCost']-$invoiceInfo['totalCost']) }} تومان
+                                            {{ number_format($invoiceInfo['price']['base']-$invoiceInfo['price']['final']) }} تومان
                                         </span>
                                         </div>
                                     </div>
@@ -326,16 +334,21 @@
                                         <span class = "m-widget1__desc"></span>
                                     </div>
                                     <div class = "col m--align-right">
-                                        @if(isset($invoiceInfo['totalCost']))
+                                        @if(isset($invoiceInfo['price']['final']))
                                             <span class = "m-widget1__number m--font-primary">
-                                                 {{ number_format($invoiceInfo['totalCost']) }} تومان
+                                                 {{ number_format($invoiceInfo['price']['final']) }} تومان
                                             </span>
                                         @endif
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <button type = "button" onclick = "window.location.href='{{action('Web\OrderController@checkoutPayment')}}';" class = "btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent btnGotoCheckoutPayment-desktop btnGotoCheckoutPayment">
+                        <button type = "button" onclick = "window.location.href='{{action('Web\OrderController@checkoutPayment')}}';
+                                mApp.block('.CheckoutReviewTotalPriceWarper', {
+                                type: 'loader',
+                                state: 'info',
+                                });"
+                                class = "btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent btnGotoCheckoutPayment-desktop btnGotoCheckoutPayment">
                             ادامه و ثبت سفارش
                         </button>
                     </div>
@@ -346,14 +359,18 @@
     @else
         <div class = "row">
             <div class = "col">
-                <div class = "m-alert m-alert--icon alert alert-warning" role = "alert">
+                <div class = "m-alert m-alert--icon alert alert-warning empteCartAlert" role = "alert">
                     <div class = "m-alert__icon">
                         <i class = "la la-warning"></i>
                     </div>
                     <div class = "m-alert__text text-center">
                         <strong>سبد خرید شما خالیست!</strong>
                         <br>
-                        <button onclick = "window.location.href='{{action('Web\ProductController@search')}}';" type = "button" class = "btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
+                        <button onclick = "window.location.href='{{action('Web\ProductController@search')}}';
+                                mApp.block('.empteCartAlert', {
+                                type: 'loader',
+                                state: 'info',
+                                });" type = "button" class = "btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
                             <i class = "flaticon-bag"></i>
                             افزودن محصول به سبد
                         </button>
@@ -371,7 +388,11 @@
             <div class="row">
                 <div class="col-6">
                     <button type="button"
-                            onclick="window.location.href='{{action('Web\OrderController@checkoutPayment')}}';"
+                            onclick="window.location.href='{{action('Web\OrderController@checkoutPayment')}}';
+                                    mApp.block('.btnGotoCheckoutPayment_mobile', {
+                                    type: 'loader',
+                                    state: 'info',
+                                    });"
                             class="btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent btnGotoCheckoutPayment">
                         ثبت سفارش
                     </button>

@@ -166,7 +166,6 @@ var ProductShowPage = function () {
                 },
                 //The status for when form data is not valid
                 422: function (response) {
-                    console.log(response);
                 },
                 //The status for when there is error php code
                 500: function (response) {
@@ -372,30 +371,6 @@ jQuery(document).ready(function() {
 
                         toastr.success(successMessage);
 
-                        // $.notify(successMessage, {
-                        //     type: 'success',
-                        //     allow_dismiss: true,
-                        //     newest_on_top: false,
-                        //     mouse_over: false,
-                        //     showProgressbar: false,
-                        //     spacing: 10,
-                        //     timer: 2000,
-                        //     placement: {
-                        //         from: 'top',
-                        //         align: 'center'
-                        //     },
-                        //     offset: {
-                        //         x: 30,
-                        //         y: 30
-                        //     },
-                        //     delay: 1000,
-                        //     z_index: 10000,
-                        //     animate: {
-                        //         enter: "animated flip",
-                        //         exit: "animated hinge"
-                        //     }
-                        // });
-
                         setTimeout(function () {
                             window.location.replace('/checkout/review');
                         }, 1000);
@@ -414,7 +389,6 @@ jQuery(document).ready(function() {
                     },
                     //The status for when form data is not valid
                     422: function (response) {
-                        console.log(response);
                     },
                     //The status for when there is error php code
                     500: function (response) {

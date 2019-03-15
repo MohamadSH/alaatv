@@ -132,7 +132,6 @@ $(document).on("click", "#order-portlet .reload", function (){
             },
             //The status for when there is error php code
             500: function (response) {
-                console.log(response.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
             },
             //The status for when there is error php code
@@ -204,7 +203,6 @@ $(document).on("click", "#sendSmsForm-submit", function (){
             422: function (response) {
                 $("#send-sms-loading").addClass("hidden");
                 var errors = $.parseJSON(response.responseText);
-                console.log(errors);
                 $.each(errors, function(index, value) {
                     switch (index) {
                         case "message":
