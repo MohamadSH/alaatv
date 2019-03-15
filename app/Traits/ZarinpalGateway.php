@@ -82,7 +82,7 @@ trait ZarinpalGateway
             return $result;
         }
 
-        if (isset($gatewayResult['RefID']) && strcmp($gatewayResult['Status'], 'success') == 0) {
+        if (isset($gatewayResult['RefID']) && in_array($gatewayResult['Status'], ['verified_before', 'success',])) {
             $result['status'] = true;
             $result['message'][] = 'پرداخت کاربر تایید شد.';
             $result['data']['cardPanMask'] = isset($gatewayResult['ExtraDetail']['Transaction']['CardPanMask'])? $gatewayResult['ExtraDetail']['Transaction']['CardPanMask']:null;

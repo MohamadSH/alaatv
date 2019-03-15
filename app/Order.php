@@ -889,7 +889,6 @@ class Order extends BaseModel
 
     public function getOrderstatusAttribute()
     {
-        //ToDo : every time it queries the database
         $order = $this;
         $key = "order:orderstatus:" . $order->cacheKey();
         return Cache::tags(["order"])

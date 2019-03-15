@@ -219,9 +219,7 @@ trait ProfileTrait
                     if (strcmp($tableColumn, "photo") == 0 && strcmp(Auth::user()->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0) {
                         $unsetColumns++;
                     }
-                    if (!isset($this->$tableColumn) || strlen(preg_replace('/\s+/', '', $this->$tableColumn)) == 0) {
-                        $unsetColumns++;
-                    } else if (strcmp($tableColumn, "mobile_verified_at") == 0 && !is_null($this->$tableColumn)) {
+                    elseif (!isset($this->$tableColumn) || strlen(preg_replace('/\s+/', '', $this->$tableColumn)) == 0) {
                         $unsetColumns++;
                     }
                 }

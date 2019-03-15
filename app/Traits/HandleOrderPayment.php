@@ -100,8 +100,11 @@ trait HandleOrderPayment
     protected function handleOrderCanceledPayment(Order $order): array
     {
         $result = [];
-        $order->close(config('constants.PAYMENT_STATUS_UNPAID'), config('constants.ORDER_STATUS_CANCELED'));
-        $order->updateWithoutTimestamp();
+        if($order->orderstatus_id == config("constants.ORDER_STATUS_OPEN"))
+        {
+            $order->close(config('constants.PAYMENT_STATUS_UNPAID'), config('constants.ORDER_STATUS_CANCELED'));
+            $order->updateWithoutTimestamp();
+        }
 
         $totalWalletRefund = $order->refundWalletTransaction();
 
