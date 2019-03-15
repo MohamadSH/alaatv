@@ -14,13 +14,12 @@
         {{--"title" => "رشته ها" , "disabled"]) !!}--}}
         @if(isset($dropdown) && $dropdown)
             @if(isset($dropdownClass))
-                {!! Form::select('major[]',$majors,null,['class' => 'form-control '.$dropdownClass ]) !!}
+                {!! Form::select('majors[]',$majors,null,['class' => 'form-control '.$dropdownClass ]) !!}
             @else
-                {!! Form::select('major[]',$majors,null,['class' => 'form-control']) !!}
+                {!! Form::select('majors[]',$majors,null,['class' => 'form-control']) !!}
             @endif
         @else
-            <select class="mt-multiselect btn btn-default" multiple="multiple" data-label="left" data-width="100%"
-                    data-filter="true" data-height="200"
+            <select class="mt-multiselect btn btn-default" multiple="multiple" data-label="left" data-width="100%" data-filter="true" data-height="200"
                     id="majors" name="majors[]" title="رشته ها" disabled>
                 <option value="0" class="bold font-red">بدون رشته ها</option>
                 @foreach($majors as $key=>$value)

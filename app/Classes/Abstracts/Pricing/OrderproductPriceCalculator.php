@@ -127,23 +127,27 @@ abstract class OrderproductPriceCalculator
 
         $orderProductExtraPrice = $orderproduct->getExtraCost();
         $totalBonDiscountPercentage = $orderproduct->getTotalBonDiscountPercentage();
+        $totalBonDiscountValue = $orderproduct->getTotalBonDiscountDecimalValue();
 
         $price = (int)$price;
 
         $customerPrice = (int)(($price * (1 - $productDiscountPercentage)) * (1 - $totalBonDiscountPercentage) - $productDiscountAmount);
+        $discount = $price - $customerPrice;
         $totalPrice = $orderproduct->quantity * $customerPrice;
 
         return [
             ///////////////Details///////////////////////
-            "cost"                            => $price,
-            "extraCost"                       => $orderProductExtraPrice,
-            "productDiscount"                 => $productDiscountValue,
-            "productDiscountPercentage"       => $productDiscountPercentage,
-            'bonDiscount'                     => $totalBonDiscountPercentage,
-            "productDiscountAmount"           => (int)$productDiscountAmount,
+            "cost"                      => $price,
+            "extraCost"                 => $orderProductExtraPrice,
+            "productDiscount"           => $productDiscountValue,
+            "productDiscountPercentage" => $productDiscountPercentage,
+            'bonDiscount'               => $totalBonDiscountValue,
+            'bonDiscountPercentage'     => $totalBonDiscountPercentage,
+            "productDiscountAmount"     => (int)$productDiscountAmount,
             ////////////////////Total///////////////////////
-            'customerCost'                    => $customerPrice,
-            'totalCost'                       => $totalPrice
+            'customerCost'              => $customerPrice,
+            'discount'                  => $discount,
+            'totalCost'                 => $totalPrice
         ];
     }
 }

@@ -22,7 +22,7 @@ use League\Flysystem\FileNotFoundException;
  */
 class LinkGenerator
 {
-    protected const DOWNLOAD_CONTROLLER_NAME = "HomeController@newDownload";
+    protected const DOWNLOAD_CONTROLLER_NAME = "Web\\HomeController@newDownload";
     protected $uuid;
     protected $disk;
     protected $url;

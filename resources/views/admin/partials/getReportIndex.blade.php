@@ -70,7 +70,7 @@
                                                 $q3->whereIn("id" , $products->pluck("id")->toArray());
                                             })->get()->sum(function ($orderproduct){
                                                     $costArray  = $orderproduct->obtainOrderproductCost(false);
-                                                    return ((1-($costArray["bonDiscount"]/100)) * $costArray["cost"])+$costArray["extraCost"];
+                                                    return ((1-($costArray['discountDetail']["bonDiscount"])) * $costArray["base"])+$costArray["extraCost"];
                                             }) ;
                                         })}}
                                     @else

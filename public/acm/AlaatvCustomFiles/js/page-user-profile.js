@@ -47,21 +47,12 @@ $(document).ready(function () {
                     // let message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
                     let message = data.error.message;
 
-                    Swal({
-                        title: 'توجه!',
-                        text: 'خطای سیستمی رخ داده است.' + '<br>' + message,
-                        type: 'danger',
-                        confirmButtonText: 'بستن'
-                    });
+                    toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
 
                 } else {
 
-                    Swal({
-                        title: '',
-                        text: 'تصویر شما ویرایش شد.',
-                        type: 'success',
-                        confirmButtonText: 'بستن'
-                    });
+
+                    toastr.success('تصویر شما ویرایش شد.');
 
                     if (data.user.lockProfile === 1) {
                         window.location.reload();
@@ -137,12 +128,8 @@ $(document).ready(function () {
             $('.file-input.theme-fas').fadeIn();
             $('.submitProfilePic').fadeIn();
         } else {
-            Swal({
-                title: '',
-                text: 'حجم عکس حداکثر 500 کیلوبایت باشد',
-                type: 'dabger',
-                confirmButtonText: 'بستن'
-            });
+
+            toastr.warning('حجم عکس حداکثر 500 کیلوبایت باشد');
 
             mUtil.scrollTop();
         }
@@ -273,12 +260,9 @@ $(document).ready(function () {
         let validation = settingFormValidation();
 
         if (!validation.status) {
-            Swal({
-                title: 'توجه!',
-                html: validation.message,
-                type: 'warning',
-                confirmButtonText: 'بستن'
-            });
+
+            toastr.warning(validation.message);
+
             return false;
         }
 
@@ -292,21 +276,6 @@ $(document).ready(function () {
             message: "کمی صبر کنید..."
         });
 
-        // setTimeout(function () {
-        //
-        //     mApp.unblock('.profileMenuPage.profileMenuPage-setting');
-        //
-        //     Swal({
-        //         title: '',
-        //         text: 'اطلاعات شما ویرایش شد.',
-        //         type: 'success',
-        //         confirmButtonText: 'بستن'
-        //     });
-        //
-        // }, 2e3);
-        //
-        // return false;
-
         $.ajax({
             type: $form.attr('method'),
             url : $form.attr('action'),
@@ -319,22 +288,11 @@ $(document).ready(function () {
                     // let message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
                     let message = data.error.message;
 
-                    Swal({
-                        title: 'توجه!',
-                        html: 'خطای سیستمی رخ داده است.' + '<br>' + message,
-                        type: 'warning',
-                        confirmButtonText: 'بستن'
-                    });
+                    toastr.warning('خطای سیستمی رخ داده است.' + '<br>' + message);
 
                 } else {
 
-
-                    Swal({
-                        title: '',
-                        text: 'اطلاعات شما ثبت شد.',
-                        type: 'success',
-                        confirmButtonText: 'بستن'
-                    });
+                    toastr.success('اطلاعات شما ثبت شد.');
 
                     if (data.user.lockProfile === 1) {
                         window.location.reload();
@@ -350,12 +308,9 @@ $(document).ready(function () {
                 } else {
                     message = 'خطای سیستمی رخ داده است.';
                 }
-                Swal({
-                    title: 'توجه!',
-                    html: message,
-                    type: 'warning',
-                    confirmButtonText: 'بستن'
-                });
+
+                toastr.warning(message);
+
                 mApp.unblock('.profileMenuPage.profileMenuPage-setting');
             }
 
@@ -376,21 +331,6 @@ $(document).ready(function () {
             message: "کمی صبر کنید..."
         });
 
-        // setTimeout(function () {
-        //
-        //     mApp.unblock('.profileMenuPage.profileMenuPage-setting');
-        //
-        //     Swal({
-        //         title: '',
-        //         text: 'اطلاعات شما ویرایش شد.',
-        //         type: 'success',
-        //         confirmButtonText: 'بستن'
-        //     });
-        //
-        // }, 2e3);
-        //
-        // return false;
-
         $.ajax({
             type: $form.attr('method'),
             url: $form.attr('action'),
@@ -402,33 +342,17 @@ $(document).ready(function () {
                     // let message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
                     let message = data.error.message;
 
-                    Swal({
-                        title: 'توجه!',
-                        text: 'خطای سیستمی رخ داده است.' + '<br>' + message,
-                        type: 'danger',
-                        confirmButtonText: 'بستن'
-                    });
+                    toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
 
                 } else {
-
-
-                    Swal({
-                        title: '',
-                        text: 'اطلاعات شما ثبت شد.',
-                        type: 'success',
-                        confirmButtonText: 'بستن'
-                    });
+                    toastr.success('اطلاعات شما ثبت شد.');
                 }
                 mApp.unblock('.profileMenuPage.profileMenuPage-sabteRotbe');
             },
             error: function (jqXHR, textStatus, errorThrown) {
 
-                Swal({
-                    title: 'توجه!',
-                    text: 'خطای سیستمی رخ داده است.',
-                    type: 'danger',
-                    confirmButtonText: 'بستن'
-                });
+                toastr.error('خطای سیستمی رخ داده است.');
+
                 mApp.unblock('.SendMobileVerificationCodeWarper');
             }
 
@@ -446,28 +370,6 @@ $(document).ready(function () {
             message: "کمی صبر کنید..."
         });
 
-        // setTimeout(function () {
-        //
-        //     $('#btnSendMobileVerificationCode').fadeOut();
-        //     $('.inputVerificationWarper').fadeIn();
-        //     mApp.unblock('.SendMobileVerificationCodeWarper');
-        //
-        //     Swal({
-        //         title: '',
-        //         text: 'کد تایید برای شماره همراه شما پیامک شد.',
-        //         type: 'info',
-        //         confirmButtonText: 'بستن'
-        //     });
-        //
-        //     $('.inputVerificationWarper').removeClass('d-none');
-        //
-        //     mUtil.scrollTo('.SendMobileVerificationCodeWarper', 300);
-        //
-        // }, 2e3);
-        //
-        // return false;
-        console.log('veri clicked!');
-
         $.ajax({
             type: 'GET',
             url: $('#SendMobileVerificationCodeActionUrl').val(),
@@ -480,24 +382,14 @@ $(document).ready(function () {
                     // let message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
                     let message = data.error.message;
 
-                    Swal({
-                        title: 'توجه!',
-                        text: 'خطای سیستمی رخ داده است.' + '<br>' + message,
-                        type: 'danger',
-                        confirmButtonText: 'بستن'
-                    });
+                    toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
 
                 } else {
 
                     $('#btnSendMobileVerificationCode').fadeOut();
                     $('.inputVerificationWarper').fadeIn();
 
-                    Swal({
-                        title: '',
-                        text: 'کد تایید برای شماره همراه شما پیامک شد.',
-                        type: 'info',
-                        confirmButtonText: 'بستن'
-                    });
+                    toastr.info('کد تایید برای شماره همراه شما پیامک شد.');
 
                     $('.inputVerificationWarper').removeClass('d-none');
 
@@ -506,12 +398,9 @@ $(document).ready(function () {
                 mApp.unblock('.SendMobileVerificationCodeWarper');
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                Swal({
-                    title: 'توجه!',
-                    text: 'خطای سیستمی رخ داده است.',
-                    type: 'warning',
-                    confirmButtonText: 'بستن'
-                });
+
+                toastr.warning('خطای سیستمی رخ داده است.');
+
                 mApp.unblock('.SendMobileVerificationCodeWarper');
             }
         });
@@ -521,12 +410,9 @@ $(document).ready(function () {
 
         let verificationCode = $('#txtMobileVerificationCode').val();
         if (verificationCode.trim().length === 0) {
-            Swal({
-                title: 'توجه!',
-                text: 'کد را وارد نکرده اید.',
-                type: 'danger',
-                confirmButtonText: 'بستن'
-            });
+
+            toastr.warning('کد را وارد نکرده اید.');
+
             return false;
         }
 
@@ -536,30 +422,6 @@ $(document).ready(function () {
             state: "success",
             message: "کمی صبر کنید..."
         });
-
-        // setTimeout(function () {
-        //
-        //     $('.inputVerificationWarper').fadeOut();
-        //     $('.SendMobileVerificationCodeWarper').fadeOut();
-        //     $('.mobileUnVerifyMessage').removeClass('d-block');
-        //     $('.mobileUnVerifyMessage').addClass('d-none');
-        //     $('.mobileVerifyMessage').removeClass('d-none');
-        //     $('.mobileVerifyMessage').addClass('d-block');
-        //
-        //     mApp.unblock('.SendMobileVerificationCodeWarper');
-        //
-        //     Swal({
-        //         title: '',
-        //         text: 'شماره موبایل شما تایید شد.',
-        //         type: 'success',
-        //         confirmButtonText: 'بستن'
-        //     });
-        //
-        //     mUtil.scrollTo('.SendMobileVerificationCodeWarper', 300);
-        //
-        // }, 2e3);
-        //
-        // return false;
 
         $.ajax({
             type: 'POST',
@@ -575,12 +437,8 @@ $(document).ready(function () {
                     // let message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
                     let message = data.error.message;
 
-                    Swal({
-                        title: 'توجه!',
-                        text: 'خطای سیستمی رخ داده است.' + '<br>' + message,
-                        type: 'danger',
-                        confirmButtonText: 'بستن'
-                    });
+                    toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
+
 
                 } else {
                     $('.inputVerificationWarper').fadeOut();
@@ -590,12 +448,7 @@ $(document).ready(function () {
                     $('.mobileVerifyMessage').removeClass('d-none');
                     $('.mobileVerifyMessage').addClass('d-block');
 
-                    Swal({
-                        title: '',
-                        text: 'شماره موبایل شما تایید شد.',
-                        type: 'success',
-                        confirmButtonText: 'بستن'
-                    });
+                    toastr.success('شماره موبایل شما تایید شد.');
 
                     if (data.user.lockProfile === 1) {
                         window.location.reload();
@@ -606,7 +459,6 @@ $(document).ready(function () {
                 mUtil.scrollTo('.SendMobileVerificationCodeWarper', 300);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.status);
                 let message = '';
                 if (jqXHR.status === 403) {
                     message = 'کد وارد شده اشتباه است.';
@@ -615,12 +467,9 @@ $(document).ready(function () {
                 } else {
                     message = 'خطای سیستمی رخ داده است.';
                 }
-                Swal({
-                    title: 'توجه!',
-                    text: message,
-                    type: 'danger',
-                    confirmButtonText: 'بستن'
-                });
+
+                toastr.error(message);
+
                 mApp.unblock('.SendMobileVerificationCodeWarper');
             }
         });
@@ -644,12 +493,9 @@ $(document).ready(function () {
         let validation = sabteRotbeFormValidation();
 
         if (!validation.status) {
-            Swal({
-                title: 'توجه!',
-                html: validation.message,
-                type: 'warning',
-                confirmButtonText: 'بستن'
-            });
+
+            toastr.warning(validation.message);
+
             e.preventDefault();
             return false;
         }

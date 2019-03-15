@@ -170,6 +170,7 @@ class Order extends BaseModel
         'coupon_id',
         'cost',
         'costwithoutcoupon',
+        'normalOrderproducts',
         'user_id',
         'updated_at',
         'deleted_at',
@@ -741,7 +742,7 @@ class Order extends BaseModel
             $bons = $simpleProduct->bons->where("name", $bonName);
             if ($bons->isEmpty()) {
                 $grandParent = $simpleProduct->grand_parent;
-                if ($grandParent !== false) {
+                if (isset($grandParent)) {
                     $simpleProduct = $grandParent;
                     $bons = $grandParent->bons->where("name", $bonName)
                                               ->where("isEnable", 1);

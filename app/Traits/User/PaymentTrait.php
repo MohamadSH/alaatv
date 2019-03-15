@@ -10,6 +10,7 @@ namespace App\Traits\User;
 
 
 use App\Order;
+use Cache;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Kalnoy\Nestedset\QueryBuilder;
@@ -54,7 +55,7 @@ trait PaymentTrait
      *
      * @return HasMany
      */
-    public function getClosedOrders(): HasMany
+    public function closedOrders(): HasMany
     {
         return $this->orders()
                     ->whereNotIn("orderstatus_id", Order::OPEN_ORDER_STATUSES);
@@ -134,4 +135,13 @@ trait PaymentTrait
         return $this->hasManyThrough("\App\Transaction", "\App\Wallet");
     }
 
+    public function getClosedOrdersAttribute()
+    {
+        $user = $this;
+        $key = "user:closeOrders:" . $user->cacheKey();
+        return Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
+            return $this->closedOrders()->orderBy('completed_at', 'desc')
+                        ->paginate(10, ['*'], 'orders');
+        });
+    }
 }

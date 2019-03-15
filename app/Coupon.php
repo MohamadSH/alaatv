@@ -96,10 +96,22 @@ class Coupon extends BaseModel
     ];
 
     protected $appends = [
+        'couponType',
         'discountType',
     ];
 
     protected $hidden = [
+        'id',
+        'enable',
+        'maxCost',
+        'usageLimit',
+        'usageNumber',
+        'validSince',
+        'validUntil',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'coupontype_id',
         'discounttype_id',
     ];
 
@@ -279,10 +291,11 @@ class Coupon extends BaseModel
 
     public function getCouponTypeAttribute()
     {
-        if(!isset($this->coupontype_id))
-            return config("constants.COUPON_TYPE_OVERALL");
-        else
-            return $this->coupontype_id;
+        return $this->coupontype()->first()->setVisible([
+            'name',
+            'displayName',
+            'description',
+        ]);
     }
 
     /**
@@ -294,7 +307,7 @@ class Coupon extends BaseModel
     public function hasProduct(Product $product):bool
     {
         $flag = true;
-        if ($this->coupon_type == config("constants.COUPON_TYPE_PARTIAL")) {
+        if ($this->coupontype->id == config("constants.COUPON_TYPE_PARTIAL")) {
             $couponProducts = $this->products;
             $flag = $couponProducts->contains($product);
         }

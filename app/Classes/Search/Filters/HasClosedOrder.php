@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 class HasClosedOrder extends FilterAbstract
 {
     protected $attribute = '';
-    protected $relation = 'getClosedOrders';
+    protected $relation = 'closedOrders';
 
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {

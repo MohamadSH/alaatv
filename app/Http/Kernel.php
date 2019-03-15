@@ -68,7 +68,6 @@ class Kernel extends HttpKernel
         'ability'       => \Laratrust\Middleware\LaratrustAbility::class,
         'convert'       => ModifyRequestInputMiddleware::class,
         'CheckPermissionForSendOrderId' => Middleware\CheckPermissionForSendOrderId::class,
-        'CheckHasOpenOrder' => Middleware\CheckHasOpenOrder::class,
         'CheckPermissionForSendExtraAttributesCost' => Middleware\CheckPermissionForSendExtraAttributesCost::class,
         'OrderCheckoutReview'    => Middleware\OrderCheckoutReview::class,
         'OrderCheckoutPayment'    => Middleware\OrderCheckoutPayment::class,

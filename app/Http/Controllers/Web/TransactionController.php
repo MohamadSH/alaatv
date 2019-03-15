@@ -284,7 +284,7 @@ class TransactionController extends Controller
                         foreach ($transactionOrderproducts as $orderproduct) {
                             if (in_array($orderproduct->id, $checkedOrderproducts))
                                 continue;
-                            $orderproductCost = (int)($orderproduct->obtainOrderproductCost(false)["totalPrice"]);
+                            $orderproductCost = (int)($orderproduct->obtainOrderproductCost(false)["final"]);
 
                             $orderproductCost = $orderproductCost - $orderDiscountPerItem;
                             $orderproductCost = $orderproductCost + $orderRefundPerItem;

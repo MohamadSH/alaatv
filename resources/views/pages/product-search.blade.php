@@ -18,7 +18,7 @@
 @endsection
 
 @section("content")
-    <div class = "row">
+    <div class = "row justify-content-center">
         @if($products->isEmpty())
             <div class="note " style="background-color: #00d4db;">
                 <h4 class="block bold" style="text-align: center">کاربر گرامی در حال حاضر موردی برای ثبت نام وجود ندارد.

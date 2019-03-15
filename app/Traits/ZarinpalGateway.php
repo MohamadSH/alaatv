@@ -9,17 +9,22 @@
 namespace App\Traits;
 
 
+use App\Order;
+use App\Transactiongateway;
+use App\User;
+use Cache;
 use Carbon\Carbon;
-use Zarinpal\Zarinpal;
+use Illuminate\Http\Response;
+use Zarinpal\Zarinpal as ZarinpalComposer;
 
 trait ZarinpalGateway
 {
 
     protected  $exceptions = array(
-        -1 => 'اطلاعات ارسال شده ناقص است.',
-        -2 => 'IP و یا مرچنت کد پذیرنده صحیح نیست',
-        -3 => 'رقم باید بالای 100 تومان باشد',
-        -4 => 'سطح پذیرنده پایین تر از سطح نقره ای است',
+        -1  => 'اطلاعات ارسال شده ناقص است.',
+        -2  => 'IP و یا مرچنت کد پذیرنده صحیح نیست',
+        -3  => 'رقم باید بالای 100 تومان باشد',
+        -4  => 'سطح پذیرنده پایین تر از سطح نقره ای است',
         -11 => 'درخواست مورد نظر یافت نشد',
         -21 => 'هیچ نوع عملیات مالی برای این تراکنش یافت نشد. کاربر قبل از ورود به درگاه بانک در همان صفحه زرین پال منصرف شده است.',
         -22 => 'تراکنش ناموفق می باشد. کاربر بعد از ورود به درگاه بانک منصرف شده است.',
@@ -36,7 +41,8 @@ trait ZarinpalGateway
      * @param string $description
      * @return string
      */
-    public function paymentRequest(Zarinpal $gatewayComposer  , string $callbackUrl , int $amount , string $description): string {
+    public function paymentRequest(ZarinpalComposer $gatewayComposer, string $callbackUrl, int $amount, string $description): string
+    {
         $zarinpalResponse = $gatewayComposer->request($callbackUrl, $amount, $description);
         $authority = $zarinpalResponse['Authority'];
         if (isset($authority[0]))
@@ -51,22 +57,23 @@ trait ZarinpalGateway
      */
     public function getRedirectData(string $redirectUrl): array {
         $redirectData = [
-            'url' => $redirectUrl,
-            'input' => [],
+            'url'    => $redirectUrl,
+            'input'  => [],
             'method' => 'GET'
         ];
         return $redirectData;
     }
 
     /**
-     * @param Zarinpal $gatewayComposer
-     * @param int $amount
-     * @param array $paymentData
+     * @param ZarinpalComposer $gatewayComposer
+     * @param int              $amount
+     * @param array            $paymentData
+     *
      * @return array
      */
-    public function verify(Zarinpal $gatewayComposer , int $amount , array $paymentData): array
+    public function verify(ZarinpalComposer $gatewayComposer, int $amount, array $paymentData): array
     {
-        $gatewayResult = $gatewayComposer->verify($paymentData["Status"], $amount, $paymentData["Authority"]);
+        $gatewayResult = $gatewayComposer->verify($amount, $paymentData["Authority"]);
         $result['data']['zarinpalVerifyResult'] = $gatewayResult;
 
         if (!isset($gatewayResult)) {
@@ -78,14 +85,12 @@ trait ZarinpalGateway
         if (isset($gatewayResult['RefID']) && strcmp($gatewayResult['Status'], 'success') == 0) {
             $result['status'] = true;
             $result['message'][] = 'پرداخت کاربر تایید شد.';
-            $result['data']['cardPanMask'] = isset($gatewayResult['ExtraDetail']['Transaction']['CardPanMask'])?$gatewayResult['ExtraDetail']['Transaction']['CardPanMask']:null;
-            if($this->isZarinpalSandboxOn())
-            {
+            $result['data']['cardPanMask'] = isset($gatewayResult['ExtraDetail']['Transaction']['CardPanMask'])? $gatewayResult['ExtraDetail']['Transaction']['CardPanMask']:null;
+            if ($this->isZarinpalSandboxOn()) {
                 $nowUnix = Carbon::now()->timestamp ;
                 $result['data']['RefID'] = 'sandbox'.$nowUnix;
 
-            }else
-            {
+            } else {
                 $result['data']['RefID'] = $gatewayResult['RefID'];
             }
         } else {
@@ -93,6 +98,7 @@ trait ZarinpalGateway
             if (strcmp($gatewayResult['Status'], 'canceled') == 0) {
                 $result['message'][] = 'کاربر از پرداخت انصراف داده است.';
             } else if (strcmp($gatewayResult['Status'], 'verified_before') ==0) {
+                $result['data']['RefID'] = $gatewayResult['RefID'];
                 $result['message'][] = $this->exceptions[101];
             } else {
                 $result['message'][] = 'خطایی در پرداخت رخ داده است.';
@@ -119,5 +125,66 @@ trait ZarinpalGateway
     protected function isZarinGateOn():bool
     {
         return config('Zarinpal.ZarinGate', false);
+    }
+
+    /**
+     * @param string $paymentMethod
+     *
+     * @param bool   $withSandBox
+     *
+     * @return mixed
+     */
+    protected function buildZarinpalGateway(string $paymentMethod, bool $withSandBox = true)
+    {
+        $key = 'transactiongateway:Zarinpal';
+        $transactiongateway = Cache::remember($key, config('constants.CACHE_600'), function () use ($paymentMethod) {
+            return Transactiongateway::name('zarinpal', $paymentMethod)->first();
+        });
+
+        if (isset($transactiongateway)) {
+            $gatewayComposer = new ZarinpalComposer($transactiongateway->merchantNumber);
+            if ($this->isZarinpalSandboxOn() && $withSandBox)
+                $gatewayComposer->enableSandbox();
+
+            if ($this->isZarinGateOn())
+                $gatewayComposer->isZarinGate();
+        } else {
+            return [
+                'error' => [
+                    'message' => 'Could not find gate way',
+                    'code'    => Response::HTTP_BAD_REQUEST,
+                ],
+            ];
+        }
+
+        return [
+            'transactiongateway' => $transactiongateway,
+            'gatewayComposer'    => $gatewayComposer,
+        ];
+    }
+
+    /**
+     * @param string     $description
+     * @param User       $user
+     * @param Order|null $order
+     *
+     * @return string
+     */
+    private function setTransactionDescription(string $description, User $user, Order $order = null): string
+    {
+        $description .= $user->mobile . ' - محصولات: ';
+
+        if (isset($order)) {
+            $orderProducts = $order->orderproducts->load('product');
+
+            foreach ($orderProducts as $orderProduct) {
+                if (isset($orderProduct->product->id))
+                    $description .= $orderProduct->product->name . ' , ';
+                else
+                    $description .= 'یک محصول نامشخص , ';
+            }
+        }
+
+        return $description;
     }
 }
