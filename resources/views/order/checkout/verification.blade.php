@@ -29,8 +29,7 @@
 
 @section('content')
 
-    @if($status === 'successful')
-        <div class="m-portlet">
+    <div class="m-portlet">
         <div class="m-portlet__body m-portlet__body--no-padding">
             <div class="m-invoice-1">
                 <div class="m-invoice__wrapper">
@@ -50,20 +49,23 @@
                                                 </span>
                                             @endif
                                             <hr>
-                                            کد پیگیری
-                                            <br>
-                                            @if($paymentMethod === 'zarinpal')
-                                                <span class="m-badge m-badge--info m-badge--wide">
-                                                    {{ $result['zarinpalVerifyResult']['data']['RefID'] }}
-                                                </span>
-                                            @endif
 
-                                            @if($paymentMethod === 'zarinpal' && isset($result['zarinpalVerifyResult']['data']['cardPanMask']))
-                                                <hr>
-                                                شماره کارت
-                                                <span class="m-badge m-badge--info m-badge--wide">
-                                                    {{ $result['zarinpalVerifyResult']['data']['cardPanMask'] }}
-                                                </span>
+                                            @if($status === 'successful')
+                                                کد پیگیری
+                                                <br>
+                                                @if($paymentMethod === 'zarinpal')
+                                                    <span class="m-badge m-badge--info m-badge--wide">
+                                                        {{ $result['zarinpalVerifyResult']['data']['RefID'] }}
+                                                    </span>
+                                                @endif
+
+                                                @if($paymentMethod === 'zarinpal' && isset($result['zarinpalVerifyResult']['data']['cardPanMask']))
+                                                    <hr>
+                                                    شماره کارت
+                                                    <span class="m-badge m-badge--info m-badge--wide">
+                                                        {{ $result['zarinpalVerifyResult']['data']['cardPanMask'] }}
+                                                    </span>
+                                                @endif
                                             @endif
                                         @else
 
@@ -78,33 +80,34 @@
 
                                 @if($paymentMethod === 'zarinpal' && isset($result['zarinpalVerifyResult']['message']))
                                     <div class="alert
-                                    @if($status==='successful')
-                                        alert-success
-                                    @else
-                                        alert-warning
-                                    @endif
-                                    alert-dismissible fade show" role="alert">
+                                        @if($status==='successful')
+                                            alert-success
+                                        @else
+                                            alert-warning
+                                        @endif
+                                        alert-dismissible fade show" role="alert">
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         </button>
                                             {{ $result['zarinpalVerifyResult']['message'][0] }}
                                     </div>
-                                        @endif
-                                        @if(isset($result['OrderSuccessPaymentResult']['saveOrder']) && $result['OrderSuccessPaymentResult']['saveOrder']!=1)
-                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                @endif
+                                @if(isset($result['OrderSuccessPaymentResult']['saveOrder']) && $result['OrderSuccessPaymentResult']['saveOrder']!=1)
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         </button>
                                         پرداخت شما با موفقیت انجام شده است، اما روند ثبت آن دچار مشکل شده است. لطفا با پشتیبانی سایت تماس بگیرید.
                                     </div>
-                                        @endif
-                                        @if(isset($result['OrderSuccessPaymentResult']['saveBon']) && $result['OrderSuccessPaymentResult']['saveBon']>0)
-                                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                @endif
+
+                                @if(isset($result['OrderSuccessPaymentResult']['saveBon']) && $result['OrderSuccessPaymentResult']['saveBon']>0)
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         </button>
                                         به شما تعداد {{ $result['OrderSuccessPaymentResult']['saveBon'] }} بن به نام {{{$result['OrderSuccessPaymentResult']['bonName']}}} تعلق گرفت.
                                     </div>
                                 @endif
 
-						    </span>
+                            </span>
 
                         </div>
                     </div>
@@ -112,7 +115,7 @@
             </div>
         </div>
     </div>
-    @endif
+
 @endsection
 
 

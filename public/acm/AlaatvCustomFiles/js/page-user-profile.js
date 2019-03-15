@@ -459,7 +459,6 @@ $(document).ready(function () {
                 mUtil.scrollTo('.SendMobileVerificationCodeWarper', 300);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.status);
                 let message = '';
                 if (jqXHR.status === 403) {
                     message = 'کد وارد شده اشتباه است.';
