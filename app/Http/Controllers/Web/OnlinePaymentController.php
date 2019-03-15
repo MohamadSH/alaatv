@@ -364,4 +364,38 @@ class OnlinePaymentController extends Controller
         }
 
     }
+
+/**
+     * @param string $paymentMethod
+     *
+     * @return mixed
+     */
+    protected function buildZarinpalGateway(string $paymentMethod)
+    {
+        $key = 'transactiongateway:Zarinpal';
+        $transactiongateway = Cache::remember($key, config('constants.CACHE_600'), function () use ($paymentMethod) {
+            return Transactiongateway::name('zarinpal', $paymentMethod)->first();
+        });
+
+        if (isset($transactiongateway)) {
+            $gatewayComposer = new ZarinpalComposer($transactiongateway->merchantNumber);
+            if ($this->isZarinpalSandboxOn())
+                $gatewayComposer->enableSandbox();
+
+            if ($this->isZarinGateOn())
+                $gatewayComposer->isZarinGate();
+        } else {
+            return [
+                'error' => [
+                    'message' => 'Could not find gate way',
+                    'code'    => Response::HTTP_BAD_REQUEST,
+                ],
+            ];
+        }
+
+        return [
+            'transactiongateway' => $transactiongateway,
+            'gatewayComposer'    => $gatewayComposer,
+        ];
+    }
 }
