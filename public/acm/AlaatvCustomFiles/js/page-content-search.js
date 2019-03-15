@@ -2473,12 +2473,8 @@ var GetAjaxData = function () {
                         let message = data.error.message;
                     }
 
-                    Swal({
-                        title: 'توجه!',
-                        html: 'خطای سیستمی رخ داده است.' + '<br>' + message,
-                        type: 'danger',
-                        confirmButtonText: 'بستن'
-                    });
+                    toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
+
 
                 } else {
                     Alaasearch.init(data.result);
@@ -2496,12 +2492,7 @@ var GetAjaxData = function () {
                 // }
 
                 message = 'خطای سیستمی رخ داده است.';
-                Swal({
-                    title: 'توجه!',
-                    text: message,
-                    type: 'error',
-                    confirmButtonText: 'بستن'
-                });
+                toastr.error(message);
                 stopWaiting();
             }
         });

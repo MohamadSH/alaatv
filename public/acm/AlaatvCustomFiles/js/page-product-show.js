@@ -118,23 +118,7 @@ var ProductShowPage = function () {
         if (mainAttributeState.length === 0 && productState.length === 0 && extraAttributeState.length === 0) {
 
             $('#a_product-price').html('قیمت محصول: ' + 'پس از انتخاب محصول');
-            toastr.options = {
-                "closeButton": false,
-                "debug": false,
-                "newestOnTop": false,
-                "progressBar": true,
-                "positionClass": "toast-bottom-right",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            };
+
             toastr.warning("شما هیچ محصولی را انتخاب نکرده اید.", "توجه!");
             return false;
         }
@@ -148,12 +132,9 @@ var ProductShowPage = function () {
                     response = $.parseJSON(response);
 
                     if (response.error != null) {
-                        Swal({
-                            title: 'توجه!',
-                            text: response.error.message + '(' + response.error.code + ')',
-                            type: 'warning',
-                            confirmButtonText: 'بستن'
-                        });
+
+                        toastr.warning(response.error.message + '(' + response.error.code + ')');
+
                         $('#a_product-price').html('قیمت محصول: ' + 'پس از انتخاب محصول');
                     }
                     if (response.cost != null) {
@@ -166,12 +147,9 @@ var ProductShowPage = function () {
                             $('#a_product-price').html('قیمت محصول: ' + response_costForCustomer + ' تومان ');
                         }
                     } else {
-                        Swal({
-                            title: 'توجه!',
-                            text: 'خطایی رخ داده است.',
-                            type: 'danger',
-                            confirmButtonText: 'بستن'
-                        });
+
+                        toastr.error('خطایی رخ داده است.');
+
                         $('#a_product-price').html('-');
                     }
                 },
@@ -192,12 +170,7 @@ var ProductShowPage = function () {
                 },
                 //The status for when there is error php code
                 500: function (response) {
-                    Swal({
-                        title: 'توجه!',
-                        text: 'خطایی رخ داده است.',
-                        type: 'danger',
-                        confirmButtonText: 'بستن'
-                    });
+                    toastr.error('خطایی رخ داده است.');
                     $('#a_product-price').html('-');
                 },
                 //The status for when there is error php code
@@ -397,12 +370,7 @@ jQuery(document).ready(function() {
 
                         let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
 
-                        Swal({
-                            title: '',
-                            text: successMessage,
-                            type: 'success',
-                            confirmButtonText: 'بستن'
-                        });
+                        toastr.success(successMessage);
 
                         // $.notify(successMessage, {
                         //     type: 'success',
@@ -450,22 +418,14 @@ jQuery(document).ready(function() {
                     },
                     //The status for when there is error php code
                     500: function (response) {
-                        Swal({
-                            title: 'توجه!',
-                            text: 'خطای سیستمی رخ داده است.',
-                            type: 'danger',
-                            confirmButtonText: 'بستن'
-                        });
+
+                        toastr.error('خطای سیستمی رخ داده است.');
+
                         ProductShowPage.enableBtnAddToCart();
                     },
                     //The status for when there is error php code
                     503: function (response) {
-                        Swal({
-                            title: 'توجه!',
-                            text: 'خطای پایگاه داده!',
-                            type: 'danger',
-                            confirmButtonText: 'بستن'
-                        });
+                        toastr.error('خطای پایگاه داده!');
                         ProductShowPage.enableBtnAddToCart();
                     }
                 }
@@ -484,12 +444,8 @@ jQuery(document).ready(function() {
 
             let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
 
-            Swal({
-                title: '',
-                text: successMessage,
-                type: 'success',
-                confirmButtonText: 'بستن'
-            });
+
+            toastr.success(successMessage);
 
             setTimeout(function () {
                 window.location.replace('/checkout/review');
