@@ -5,7 +5,6 @@ use App\Orderproduct;
 use App\Product;
 use App\User;
 use App\Wallet;
-use Illuminate\Support\Facades\Log;
 
 trait OrderCommon
 {
@@ -85,7 +84,7 @@ trait OrderCommon
      */
     public function firstOrCreateOpenOrder(User $user): Order {
 
-        $openOrder = $user->openOrders()->first();
+        $openOrder = $user->openOrders->first();
         if(!isset($openOrder)) {
             $openOrder = new Order();
             $openOrder->user_id = $user->id;

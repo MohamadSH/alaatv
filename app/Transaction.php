@@ -104,11 +104,20 @@ class Transaction extends BaseModel
         'transactiongateway_id',
         'transactionstatus_id',
         'completed_at',
+        'description',
     ];
 
     protected $appends = [
         'paymentmethod',
         'transactiongateway',
+    ];
+
+    protected $hidden = [
+        'order_id',
+        'destinationBankAccount_id',
+        'paymentmethod_id',
+        'transactiongateway_id',
+        'updated_at',
     ];
 
     /**

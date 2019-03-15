@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Collection\OrderproductCollection;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\OrderProduct\OrderProductStoreRequest;
+use App\Orderproduct;
 use App\Product;
 use App\Traits\OrderCommon;
 use App\Traits\ProductCommon;
+use Cache;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 
 class OrderproductController extends Controller
@@ -46,10 +49,11 @@ class OrderproductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \App\Http\Requests\OrderProduct\OrderProductStoreRequest $request
+     *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(OrderProductStoreRequest $request)
     {
         if ($request->has('extraAttribute')) {
             if (!$request->user()->can(config("constants.ATTACH_EXTRA_ATTRIBUTE_ACCESS"))) {
@@ -106,11 +110,41 @@ class OrderproductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Orderproduct        $orderproduct
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Request $request, Orderproduct $orderproduct)
     {
-        //
+        $authenticatedUser = $request->user('api');
+        $orderUser = optional(optional($orderproduct)->order)->user;
+
+        if ($authenticatedUser->id != $orderUser->id)
+            abort(Response::HTTP_FORBIDDEN, 'Orderproduct does not belong to this user.');
+
+        $orderproduct_userbons = $orderproduct->userbons;
+        foreach ($orderproduct_userbons as $orderproduct_userbon) {
+            $orderproduct_userbon->usedNumber = $orderproduct_userbon->usedNumber - $orderproduct_userbon->pivot->usageNumber;
+            $orderproduct_userbon->userbonstatus_id = config("constants.USERBON_STATUS_ACTIVE");
+            if ($orderproduct_userbon->usedNumber >= 0)
+                $orderproduct_userbon->update();
+        }
+
+        if ($orderproduct->delete()) {
+            foreach ($orderproduct->children as $child) {
+                $child->delete();
+            }
+            Cache::tags('bon')->flush();
+
+            return response([
+                'message' => 'Orderproduct removed successfully',
+            ], Response::HTTP_OK);
+        } else {
+            return response([
+                'message' => 'Database error on removing orderproduct',
+            ], Response::HTTP_SERVICE_UNAVAILABLE);
+        }
     }
 }

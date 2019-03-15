@@ -136,17 +136,6 @@ class UserController extends Controller
         return response()->json($orders);
     }
 
-    public function userAssets(Request $request, User $user){
-        $authenticaedUser = $request->user('api');
-        if ($authenticaedUser->id != $user->id)
-            abort(Response::HTTP_FORBIDDEN, 'you can\'nt get user ' . $user->id . ' dashboard!.');
-
-        $userAssetsCollection = $user->getDashboardBlocks();
-        return response()->json([
-                $userAssetsCollection,
-        ]);
-    }
-
     /**
      * Gets a list of transactions
      *

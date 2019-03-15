@@ -37,16 +37,18 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('user', 'Api\UserController');
         Route::resource('orderproduct', 'Api\OrderproductController');
+        Route::post('transaction', 'Api\ZarinpalTransactionController');
+        Route::post('orderCoupon', 'Api\OrderController@submitCoupon');
+        Route::delete('orderCoupon', 'Api\OrderController@removeCoupon');
         Route::group(['prefix' => 'user'], function () {
             Route::get('{user}/orders', 'Api\UserController@userOrders')->name('api.user.orders');
             Route::get('{user}/dashboard', 'Api\DashboardPageController')->name('api.user.dashboard');
-            Route::get('{user}/assets', 'Api\UserController@userAssets')->name('api.user.assets');
-            Route::post('{user}/firebasetoken' , 'Api\FirebasetokenController@store');
+            Route::post('{user}/firebasetoken', 'Api\FirebasetokenController@store')->name('api.user.firebasetoken');
         });
 
         Route::group(['prefix' => 'checkout'], function () {
-            Route::get('review', 'Api\OrderController@checkoutReview');
-            Route::get('payment', 'Api\OrderController@checkoutPayment');
+            Route::get('review', 'Api\OrderController@checkoutReview')->name('api.checkout.review');
+            Route::get('payment', 'Api\OrderController@checkoutPayment')->name('api.checkout.payment');
         });
     });
 });

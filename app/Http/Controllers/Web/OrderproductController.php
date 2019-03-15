@@ -45,7 +45,6 @@ class OrderproductController extends Controller
             ],
         ]);
         $this->middleware([
-            /*'CheckHasOpenOrder',*/
             'CheckPermissionForSendOrderId',
             /*'checkPermissionForSendExtraAttributesCost'*/
         ], [

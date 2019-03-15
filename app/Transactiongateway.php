@@ -90,8 +90,21 @@ class Transactiongateway extends BaseModel
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeEnable($query, $enable = 1)
+    public function scopeEnable($query, int $enable = 1)
     {
         return $query->where('enable', $enable);
+    }
+
+    /**
+     *  Scope a query to only include Gateways with specified name.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string                                $name
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeName($query, string $name)
+    {
+        return $query->where('name', $name);
     }
 }
