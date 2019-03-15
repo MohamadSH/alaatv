@@ -46,6 +46,9 @@
 .alert.m-alert--outline.alert-warning.m-alert--icon-solid .m-alert__icon span {
     border-right-color: #ffb822;
 }
+.m-invoice-1 .m-invoice__wrapper .m-invoice__head .m-invoice__container .m-invoice__desc {
+    text-align: right;
+}
 
 /*media query*/
 @media (max-width: 767.98px) {

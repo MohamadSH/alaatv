@@ -460,12 +460,13 @@ class OnlinePaymentController extends Controller
      */
     public function showPaymentStatus(string $status, string $paymentMethod, string $device, Request $request) {
         $result = $request->session()->pull('verifyResult');
-        dd([
-            'status' => $status,
-            'paymentMethod' => $paymentMethod,
-            'device' => $device,
-            'verifyResult' => $result
-        ]);
+
+        if ($result!=null) {
+            return view("order.checkout.verification", compact('status' , 'paymentMethod', 'device', 'result'));
+        } else {
+            return redirect(action('Web\UserController@userOrders'));
+        }
+
     }
 
     /**

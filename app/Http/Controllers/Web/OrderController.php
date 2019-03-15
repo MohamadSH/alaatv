@@ -90,6 +90,16 @@ class OrderController extends Controller
      */
     public function index()
     {
+        $orders = collect();
+        $result = [
+            'index'           => View::make("order.index", compact('orders', 'orderstatuses'))
+                ->render()
+            ,
+            'myOrderproducts' => collect(),
+        ];
+
+        return response(json_encode($result, JSON_UNESCAPED_UNICODE), 200)->header('Content-Type', 'application/json');
+
         $user = Auth::user();
         if ($user->can(config('constants.SHOW_OPENBYADMIN_ORDER')))
             $orders = Order::where("orderstatus_id", "<>", config("constants.ORDER_STATUS_OPEN"));
