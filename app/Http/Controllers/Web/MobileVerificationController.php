@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 use App\Events\MobileVerified;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubmitVerificationCode;
+use App\User;
 use Illuminate\Http\{Request, Response};
 use Illuminate\Support\Facades\Redirect;
 
@@ -87,6 +88,7 @@ class MobileVerificationController extends Controller
      */
     public function resend(Request $request)
     {
+        /** @var User $user */
         $user = $request->user();
         if ($user->hasVerifiedMobile()) {
             return $request->expectsJson()
