@@ -836,10 +836,11 @@ class OrderController extends Controller
      *
      * @param CheckoutReviewRequest $request
      *
+     * @param AlaaInvoiceGenerator $invoiceGenerator
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function checkoutReview(CheckoutReviewRequest $request)
+    public function checkoutReview(CheckoutReviewRequest $request , AlaaInvoiceGenerator $invoiceGenerator)
     {
         $this->generateCustomMeta([
             "title"       => "آلاء|بازبینی سفارش",
@@ -851,8 +852,6 @@ class OrderController extends Controller
 
         $invoiceInfo = [];
         $user = $request->user();
-
-        $invoiceGenerator = new AlaaInvoiceGenerator();
 
         if (isset($user)) {
             $order = Order::Find($request->order_id);
@@ -928,10 +927,11 @@ class OrderController extends Controller
      *
      * @param Request $request
      *
+     * @param AlaaInvoiceGenerator $invoiceGenerator
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function checkoutPayment(Request $request)
+    public function checkoutPayment(Request $request , AlaaInvoiceGenerator $invoiceGenerator)
     {
         $this->generateCustomMeta([
             "title"       => "آلاء|پرداخت",
@@ -968,11 +968,11 @@ class OrderController extends Controller
             $coupon = $order->coupon_info;
             $notIncludedProductsInCoupon = $order->reviewCouponProducts();
 
-            $invoiceGenerator = new AlaaInvoiceGenerator();
             $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
+            //ToDo : no need to orderproducts
 
             $response = response([
-                "price"                       => $invoiceInfo,
+                "price"                       => $invoiceInfo['price'],
                 "credit"                      => $credit,
                 "couponInfo"                  => $coupon,
                 "notIncludedProductsInCoupon" => $notIncludedProductsInCoupon,
@@ -1077,9 +1077,11 @@ class OrderController extends Controller
      *
      * @param \App\Http\Requests\SubmitCouponRequest $request
      *
+     * @param AlaaInvoiceGenerator $invoiceGenerator
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function submitCoupon(SubmitCouponRequest $request)
+    public function submitCoupon(SubmitCouponRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
         $coupon = Coupon::code($request->get('code'))->first();
 
@@ -1184,9 +1186,21 @@ class OrderController extends Controller
         }
 
         if ($resultCode == Response::HTTP_OK)
+        {
+            if(isset($order))
+            {
+                $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
+                $priceInfo  = $invoiceInfo['price'];
+                $notIncludedProductsInCoupon = $order->reviewCouponProducts();
+            }
+
             $response = [
-                $coupon,
+                'message' => $resultText ?? $resultText,
+                'coupon'    => $coupon,
+                'price'     => isset($priceInfo)?$priceInfo:null,
+                'notIncludedProductsInCoupon'     => isset($notIncludedProductsInCoupon)?$notIncludedProductsInCoupon:null,
             ];
+        }
         else
             $response = [
                 'error' => [
@@ -1202,9 +1216,11 @@ class OrderController extends Controller
      *
      * @param Request $request
      *
+     * @param AlaaInvoiceGenerator $invoiceGenerator
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function removeCoupon(Request $request)
+    public function removeCoupon(Request $request , AlaaInvoiceGenerator $invoiceGenerator)
     {
         $order = Order::Find($request->get("order_id"));
         if (isset($order)) {
@@ -1229,14 +1245,26 @@ class OrderController extends Controller
             $resultText = "No order found";
         }
 
-        $response = [];
-        if ($resultCode != Response::HTTP_OK)
+        if ($resultCode == Response::HTTP_OK)
+        {
+            if(isset($order))
+            {
+                $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
+                $priceInfo = $invoiceInfo['price'];
+            }
+
+            $response = [
+                'price'     => isset($priceInfo)?$priceInfo:null,
+                $resultText = "Coupon detached successfully"
+            ];
+        }else{
             $response = [
                 'error' => [
                     'code'    => $resultCode ?? $resultCode,
                     'message' => $resultText ?? $resultText,
                 ],
             ];
+        }
 
         return response($response, Response::HTTP_OK);
     }
