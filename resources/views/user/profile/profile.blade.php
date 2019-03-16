@@ -73,7 +73,7 @@
                 "text2"=>"کاربر گرامی ، پس از تکمیل تمام اطلاعا پروفایل شما قفل شده و امکان اصلاح اطلاعات وجود نخواهد داشت. لذا خواهشمند هستیم این اطلاعات را در صحت و دقت تکمیل کنید."
                 ])
             @else
-                @include('user.profile.profileView')
+                @include('user.profile.profileView', ['withBio'=>true])
             @endif
             <div class="m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage profileMenuPage-sabteRotbe">
                 <div class="m-portlet__head">
@@ -116,7 +116,12 @@
                                     <div class="row">
                                         <div class="col">
                                             <div class="form-group m-form__group">
-                                                <label for="rank">رتبه شما(الزامی)</label>
+                                                <label for="rank">
+                                                    @if($userKonkurResult!==null)
+                                                        رتبه شما
+                                                    @else
+                                                        رتبه شما(الزامی)
+                                                    @endif</label>
                                                 <div class="m-input-icon m-input-icon--left">
                                                     <input type="text"
                                                            name="rank"
