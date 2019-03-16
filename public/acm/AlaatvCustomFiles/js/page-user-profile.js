@@ -13,6 +13,21 @@ function updateUserCompletionProgress(percent) {
     $('.userCompletion-progress-bar').attr('aria-valuenow', percent);
     $('.userCompletion-progress-bar').css({'width': percent+'%'});
     $('.userCompletion-percent-text').html(percent);
+    $('.userCompletion-progress-bar').removeClass('bg-danger').removeClass('bg-warning').removeClass('bg-info').removeClass('bg-success');
+
+    percent = parseInt(percent);
+
+    if (percent <= 25) {
+        $('.userCompletion-progress-bar').addClass('bg-danger');
+    } else if (percent > 25 && percent <= 50) {
+        $('.userCompletion-progress-bar').addClass('bg-warning');
+    } else if (percent > 50 && percent <= 75) {
+
+    } else if (percent > 75 && percent < 100) {
+        $('.userCompletion-progress-bar').addClass('bg-info');
+    } else if (percent === 100) {
+        $('.userCompletion-progress-bar').addClass('bg-success');
+    }
 }
 
 $(document).ready(function () {

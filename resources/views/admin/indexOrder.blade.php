@@ -61,14 +61,16 @@
 
             @permission((config('constants.LIST_ORDER_ACCESS')))
                 <div class="m-accordion__item m-accordion__item--info">
-                    <div class="m-accordion__item-head" role="tab" id="m_accordion_5_item_2_head" data-toggle="collapse" href="#m_accordion_5_item_2_body" aria-expanded="true">
+                    <div class="m-accordion__item-head" role="tab" id="m_accordion_5_item_1_head" data-toggle="collapse" href="#m_accordion_5_item_1_body" aria-expanded="false">
                         <span class="m-accordion__item-icon"><i class="fa fa-cogs"></i></span>
                         <span class="m-accordion__item-title">مدیریت سفارش های بسته شده</span>
                         <span class="m-accordion__item-mode"></span>
                     </div>
 
-                    <div class="m-accordion__item-body collapse show" id="m_accordion_5_item_2_body" role="tabpanel" aria-labelledby="m_accordion_5_item_2_head" data-parent="#m_accordion_5" style="">
+                    <div class="m-accordion__item-body collapse" id="m_accordion_5_item_1_body" role="tabpanel" aria-labelledby="m_accordion_5_item_1_head" data-parent="#m_accordion_5" style="">
                         <div class="m-accordion__item-content m--padding-5">
+
+
                             <div class="portlet-body form" style="border-top: #3598dc solid 1px">
                                 {!! Form::open(['class'=>'form-horizontal form-row-seperated' , 'id' => 'filterOrderForm']) !!}
                                 <div class="form-body m--padding-15" style="background: #e7ecf1">
@@ -215,146 +217,324 @@
                                 </div>
                                 {!! Form::close() !!}
                             </div>
-                        </div>
-                    </div>
-                </div>
 
-            <!-- BEGIN ORDER TABLE PORTLET-->
-            <div class="portlet box green-soft" id="order-portlet">
-                <div class="portlet-body" style="display: block;">
-                    <div class="portlet box blue ">
 
-                    </div>
-                    <div class="table-toolbar">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="btn-group">
-                                    <button id="checkOutButton" class="btn btn-outline blue hidden" data-toggle="modal"
-                                            href="#responsive-checkout">
-                                        محصولات انتخابی من در فیلتر شده ها را تسویه کن
-                                    </button>
-                                    <!-- responsive modal -->
-                                    <div id="responsive-checkout" class="modal fade" tabindex="-1" data-width="760">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal"
-                                                    aria-hidden="true"></button>
-                                            <h4 class="modal-title">آیا مطمئن هستید؟</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="row">
-
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" data-dismiss="modal" class="btn btn-outline dark"
-                                                    id="checkoutModal-close">خیر
+                            <div class="table-toolbar">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="btn-group">
+                                            <button id="checkOutButton" class="btn btn-outline blue hidden" data-toggle="modal"
+                                                    href="#responsive-checkout">
+                                                محصولات انتخابی من در فیلتر شده ها را تسویه کن
                                             </button>
-                                            <button type="button" class="btn blue" id="checkout-submit">بله</button>
+                                            <!-- responsive modal -->
+                                            <div id="responsive-checkout" class="modal fade" tabindex="-1" data-width="760">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-hidden="true"></button>
+                                                    <h4 class="modal-title">آیا مطمئن هستید؟</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" data-dismiss="modal" class="btn btn-outline dark"
+                                                            id="checkoutModal-close">خیر
+                                                    </button>
+                                                    <button type="button" class="btn blue" id="checkout-submit">بله</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <table class="table table-striped table-bordered table-hover dt-responsive" width="100%"
+                                   id="order_table">
+                                delete order modal
+                                @permission((config('constants.REMOVE_ORDER_ACCESS')))
+                                <div id="deleteOrderConfirmationModal" class="modal fade" tabindex="-1" data-backdrop="static"
+                                     data-keyboard="false">
+                                    <div class="modal-header">حذف سفارش محصول <span id="deleteOrderTitle"></span></div>
+                                    <div class="modal-body">
+                                        <p> آیا مطمئن هستید؟ </p>
+                                        {!! Form::hidden('order_id', null) !!}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
+                                        <button type="button" data-dismiss="modal" class="btn green" onclick="removeOrder()">
+                                            بله
+                                        </button>
+                                    </div>
+                                </div>
+                                @endpermission
+                                sms panel modal
+                                @permission((config('constants.SEND_SMS_TO_USER_ACCESS')))
+                                <div id="sendSmsModal" class="modal fade" tabindex="-1" data-backdrop="static"
+                                     data-keyboard="false">
+                                    <div class="modal-header">ارسال پیامک به <span id="smsUserFullName"></span></div>
+                                    <div class="modal-body">
+                                        {!! Form::open(['method' => 'POST', 'action' => 'Web\HomeController@sendSMS' , 'class'=>'nobottommargin' , 'id'=>'sendSmsForm']) !!}
+                                        {!! Form::hidden('users', null, ['id' => 'users']) !!}
+                                        {!! Form::textarea('message', null, ['class' => 'form-control' , 'id' => 'smsMessage', 'placeholder' => 'متن پیامک']) !!}
+                                        <span class="help-block" id="smsMessageAlert">
+                                                        <strong></strong>
+                                                    </span>
+                                        {!! Form::close() !!}
+                                        <span class="">
+                                        طول پیام: (<span style="color: red;"><span id="smsNumber">1</span>
+                                                        پیامک</span> ) <span id="smsWords">70</span>    کارکتر باقی مانده تا پیام بعدی
+                                                    </span>
+                                        <br>
+                                        <label>هزینه پیامک(ریال): <span
+                                                    id="totalSmsCost">{{config('constants.COST_PER_SMS_2')}}</span></label>
+                                        <br>
+                                        <label>شماره فرستنده : {{config("constants.SMS_PROVIDER_DEFAULT_NUMBER")}}</label>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" data-dismiss="modal" class="btn btn-outline dark"
+                                                id="sendSmsForm-close">بستن
+                                        </button>
+                                        <button type="button" class="btn green" id="sendSmsForm-submit">ارسال</button>
+                                        <img class="hidden" id="send-sms-loading"
+                                             src="{{config('constants.FILTER_LOADING_GIF')}}" height="25px" width="25px">
+                                    </div>
+                                </div>
+                                @endpermission
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th class="all"> نام خانوادگی</th>
+                                    <th class="all"> نام کوچک</th>
+                                    <th class="none"> عملیات</th>
+                                    <th class="none"> محصولات</th>
+                                    <th class="none"> رشته</th>
+                                    <th class="none"> استان</th>
+                                    <th class="desktop"> شهر</th>
+                                    <th class="none"> آدرس</th>
+                                    <th class="none"> کد پستی</th>
+                                    @permission((config('constants.SHOW_USER_MOBILE')))
+                                    <th class="desktop"> موبایل</th>
+                                    <th class="all">کد ملی</th>
+                                    @endpermission
+                                    <th class="min-tablet">مبلغ(تومان)</th>
+                                    @permission((config('constants.SHOW_USER_EMAIL')))
+                                    <th class="none"> ایمیل</th>
+                                    @endpermission
+                                    <th class="desktop">پرداخت شده(تومان)</th>
+                                    <th class="none">مبلغ برگشتی(تومان)</th>
+                                    <th class="none">بدهکار/بستانکار(تومان):</th>
+                                    <th class="none">تراکنش های موفق:</th>
+                                    <th class="none">تراکنش های منتظر تایید:</th>
+                                    <th class="none">تراکنش های منتظر پرداخت:</th>
+                                    <th class="desktop">توضیحات مسئول</th>
+                                    <th class="none">کد مرسوله پستی</th>
+                                    <th class="none">توضیحات مشتری</th>
+                                    <th class="min-tablet">وضعیت سفارش</th>
+                                    <th class="min-tablet">وضعیت پرداخت</th>
+                                    <th class="none"> تاریخ اصلاح مدیریتی:</th>
+                                    <th class="none"> تاریخ ثبت نهایی:</th>
+                                    <th class="none">تعداد بن استفاده شده:</th>
+                                    <th class="none">تعداد بن اضافه شده به شما از این سفارش:</th>
+                                    <th class="none">کپن استفاده شده:</th>
+                                    <th class="none">وضعیت پرداخت:</th>
+                                    <th class="none">تاریخ ایجاد اولیه</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                Loading by ajax
+                                </tbody>
+                            </table>
+
                         </div>
                     </div>
-                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%"
-                           id="order_table">
-                        delete order modal
-                        @permission((config('constants.REMOVE_ORDER_ACCESS')))
-                        <div id="deleteOrderConfirmationModal" class="modal fade" tabindex="-1" data-backdrop="static"
-                             data-keyboard="false">
-                            <div class="modal-header">حذف سفارش محصول <span id="deleteOrderTitle"></span></div>
-                            <div class="modal-body">
-                                <p> آیا مطمئن هستید؟ </p>
-                                {!! Form::hidden('order_id', null) !!}
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                                <button type="button" data-dismiss="modal" class="btn green" onclick="removeOrder()">
-                                    بله
-                                </button>
-                            </div>
-                        </div>
-                        @endpermission
-                        sms panel modal
-                        @permission((config('constants.SEND_SMS_TO_USER_ACCESS')))
-                        <div id="sendSmsModal" class="modal fade" tabindex="-1" data-backdrop="static"
-                             data-keyboard="false">
-                            <div class="modal-header">ارسال پیامک به <span id="smsUserFullName"></span></div>
-                            <div class="modal-body">
-                                {!! Form::open(['method' => 'POST', 'action' => 'Web\HomeController@sendSMS' , 'class'=>'nobottommargin' , 'id'=>'sendSmsForm']) !!}
-                                {!! Form::hidden('users', null, ['id' => 'users']) !!}
-                                {!! Form::textarea('message', null, ['class' => 'form-control' , 'id' => 'smsMessage', 'placeholder' => 'متن پیامک']) !!}
-                                <span class="help-block" id="smsMessageAlert">
-                                                    <strong></strong>
-                                                </span>
-                                {!! Form::close() !!}
-                                <span class="">
-                                    طول پیام: (<span style="color: red;"><span id="smsNumber">1</span>
-                                                    پیامک</span> ) <span id="smsWords">70</span>    کارکتر باقی مانده تا پیام بعدی
-                                                </span>
-                                <br>
-                                <label>هزینه پیامک(ریال): <span
-                                            id="totalSmsCost">{{config('constants.COST_PER_SMS_2')}}</span></label>
-                                <br>
-                                <label>شماره فرستنده : {{config("constants.SMS_PROVIDER_DEFAULT_NUMBER")}}</label>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" data-dismiss="modal" class="btn btn-outline dark"
-                                        id="sendSmsForm-close">بستن
-                                </button>
-                                <button type="button" class="btn green" id="sendSmsForm-submit">ارسال</button>
-                                <img class="hidden" id="send-sms-loading"
-                                     src="{{config('constants.FILTER_LOADING_GIF')}}" height="25px" width="25px">
-                            </div>
-                        </div>
-                        @endpermission
-                        <thead>
-                        <tr>
-                            <th></th>
-                            <th class="all"> نام خانوادگی</th>
-                            <th class="all"> نام کوچک</th>
-                            <th class="none"> عملیات</th>
-                            <th class="none"> محصولات</th>
-                            <th class="none"> رشته</th>
-                            <th class="none"> استان</th>
-                            <th class="desktop"> شهر</th>
-                            <th class="none"> آدرس</th>
-                            <th class="none"> کد پستی</th>
-                            @permission((config('constants.SHOW_USER_MOBILE')))
-                            <th class="desktop"> موبایل</th>
-                            <th class="all">کد ملی</th>
-                            @endpermission
-                            <th class="min-tablet">مبلغ(تومان)</th>
-                            @permission((config('constants.SHOW_USER_EMAIL')))
-                            <th class="none"> ایمیل</th>
-                            @endpermission
-                            <th class="desktop">پرداخت شده(تومان)</th>
-                            <th class="none">مبلغ برگشتی(تومان)</th>
-                            <th class="none">بدهکار/بستانکار(تومان):</th>
-                            <th class="none">تراکنش های موفق:</th>
-                            <th class="none">تراکنش های منتظر تایید:</th>
-                            <th class="none">تراکنش های منتظر پرداخت:</th>
-                            <th class="desktop">توضیحات مسئول</th>
-                            <th class="none">کد مرسوله پستی</th>
-                            <th class="none">توضیحات مشتری</th>
-                            <th class="min-tablet">وضعیت سفارش</th>
-                            <th class="min-tablet">وضعیت پرداخت</th>
-                            <th class="none"> تاریخ اصلاح مدیریتی:</th>
-                            <th class="none"> تاریخ ثبت نهایی:</th>
-                            <th class="none">تعداد بن استفاده شده:</th>
-                            <th class="none">تعداد بن اضافه شده به شما از این سفارش:</th>
-                            <th class="none">کپن استفاده شده:</th>
-                            <th class="none">وضعیت پرداخت:</th>
-                            <th class="none">تاریخ ایجاد اولیه</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        Loading by ajax
-                        </tbody>
-                    </table>
                 </div>
-            </div>
-            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
+
+
+
+            @permission((config('constants.LIST_TRANSACTION_ACCESS')))
+
+
+                <div class="m-accordion__item m-accordion__item--info">
+                    <div class="m-accordion__item-head" role="tab" id="m_accordion_5_item_2_head" data-toggle="collapse" href="#m_accordion_5_item_2_body" aria-expanded="false">
+                        <span class="m-accordion__item-icon"><i class="fa fa-cogs"></i></span>
+                        <span class="m-accordion__item-title">مدیریت تراکنش ها</span>
+                        <span class="m-accordion__item-mode"></span>
+                    </div>
+
+                    <div class="m-accordion__item-body collapse show" id="m_accordion_5_item_2_body" role="tabpanel" aria-labelledby="m_accordion_5_item_2_head" data-parent="#m_accordion_5" style="">
+                        <div class="m-accordion__item-content m--padding-5">
+
+                            <div class="portlet-body form" style="border-top: #3598dc solid 1px">
+                                {!! Form::open(['class'=>'form-horizontal form-row-seperated' , 'id' => 'filterTransactionForm']) !!}
+                                    <div class="form-body m--padding-15" style="background: #e7ecf1">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    @include('admin.filters.productsFilter', ["id" => "transactionProduct" , "everyProduct"=>1])
+                                                </div>
+                                                <div class="col-md-4">
+                                                    @include("admin.filters.extraValueFilter" , ["id"=>"transactionExtraAttributes"])
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    @include('admin.filters.orderstatusFilter' , ["id"=>"transactionOrderStatuses"])
+                                                </div>
+                                                <div class="col-md-3">
+                                                    @include('admin.filters.paymentstatusFilter' , ["id"=>"transactionPaymentStatuses"])
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="row">
+                                                        @include("admin.filters.transactionStatusFilter" , ["selectType"=>"dropdown"])
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="row">
+                                                        @include("admin.filters.checkoutStatusFilter" , ["dropdownId"=>"transactionCheckoutStatus" , "checkboxId"=>"transactionCheckoutStatusEnable"])
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    @include('admin.filters.paymentMethodFilter')
+                                                </div>
+                                                <div class="col-md-3">
+                                                    @include("admin.filters.transactionType")
+                                                </div>
+                                                <div class="col-md-3">
+                                                    @include("admin.filters.transactionCodeFilter")
+                                                </div>
+                                                <div class="col-md-3">
+                                                    @include("admin.filters.transactionManagerComment")
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                @include('admin.filters.identityFilter')
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-md-2 bold control-label">تاریخ پرداخت : </label>
+                                                <div class="col-md-10">
+                                                    <div class="row">
+                                                        @include('admin.filters.timeFilter.createdAt' , ["id" => "transaction" , "default" => true])
+                                                    </div>
+                                                </div>
+                                                <label class="col-md-2 bold control-label">مهلت پرداخت : </label>
+                                                <div class="col-md-10">
+                                                    <div class="row">
+                                                        @include('admin.filters.timeFilter.generalFilter' , ["id"=>"transaction" , "enableId"=>"DeadlineTimeEnable" , "sinceDateId"=>"DeadlineSinceDate", "tillDateId"=>"DeadlineTillDate"])
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-3">
+                                                    @include("admin.filters.columnFilter" , ["id" => "transactionTableColumnFilter" , "tableDefaultColumns" => $transactionTableDefaultColumns])
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <a href="javascript:" class="btn btn-lg bg-font-dark reload" style="background: #489fff">فیلتر</a>
+                                                    <img class="hidden" id="transaction-portlet-loading" src="{{config('constants.FILTER_LOADING_GIF')}}" width="5%">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {!! Form::close() !!}
+                            </div>
+
+
+                            @permission((config('constants.SHOW_TRANSACTION_TOTAL_COST_ACCESS')))
+                                <span class="m-badge m-badge--success m-badge--wide m-badge--rounded">مجموع مبالغ تراکنشها : <span id="totalCost"></span>تومان</span>
+                            @endpermission
+                            @permission((config('constants.SHOW_TRANSACTION_TOTAL_FILTERED_COST_ACCESS')))
+                                <span class="m-badge m-badge--success m-badge--wide m-badge--rounded">مجموع مبالغ فیلتر شده ها : <span id="totalFilteredCost"></span> تومان</span>
+                                <span class="m-badge m-badge--success m-badge--wide m-badge--rounded">مجموع مبالغ آیتم های اضافه : <span id="totalFilteredExtraCost"></span> تومان</span><br>
+                            @endpermission
+                            <a target="_blank" href="{{action("Web\TransactionController@getUnverifiedTransactions")}}" class="btn btn-lg m-btn--pill m-btn--air btn-danger active m--margin-10">لیست تراکنشهای ثبت نشده</a>
+                            <div class="table-toolbar">
+                            </div>
+                            <div id="completeTransactionInfo" class="modal fade" tabindex="-1" data-backdrop="static"
+                             data-keyboard="false">
+                            <div class="modal-header">تکمیل اطلاعات تراکنش</div>
+                            {!! Form::open([  'method'=>'POST'  , 'class'=>'completeTransactionInfoForm form-horizontal' ]) !!}
+                            {!! Form::hidden('transaction_id' , null , ['id'=>'completeTransactionInfoForm_transactionId']) !!}
+                            <div class="modal-body">
+                                <div class="row static-info margin-top-20">
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label" for="traceNumber">شماره پیگیری:</label>
+                                        <div class="col-md-6">
+                                            {!! Form::text('traceNumber',old('traceNumber'),['class' => 'form-control' , 'id'=>'completeTransactionInfoTraceNumber', 'dir'=>'ltr' ]) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row static-info margin-top-20">
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label" for="managerComment">شماره کارت:</label>
+                                        <div class="col-md-6">
+                                            {!! Form::text('managerComment',old('managerComment'),['class' => 'form-control' , 'id'=>'completeTransactionInfoCardNumber' , 'dir'=>'ltr' ]) !!}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" data-dismiss="modal" class="btn btn-outline dark">بستن</button>
+                                <input type="submit" class="btn green" value="ذخیره">
+                                <img class="hidden" id="complete-transaction-info-loading"
+                                     src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px"
+                                     width="25px">
+                            </div>
+                            {!! Form::close() !!}
+                        </div>
+                            <table class="table table-striped table-bordered table-hover dt-responsive" width="100%"
+                               id="transaction_table">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th class="all"> نام مشتری</th>
+                                <th class="none"> تراکنش پدر</th>
+                                <th class="all"> موبایل</th>
+                                @permission((config('constants.SHOW_TRANSACTION_TOTAL_COST_ACCESS')))
+                                <th class="all"> مبلغ سفارش</th>
+                                <th class="all"> مبلغ تراکنش</th>
+                                @endpermission
+                                @permission((config('constants.SHOW_TRANSACTION_TOTAL_FILTERED_COST_ACCESS')))
+                                <th class="all"> مبلغ فیلتر شده</th>
+                                <th class="all"> مبلغ آیتم افزوده</th>
+                                @endpermission
+                                <th class="all"> کد تراکنش</th>
+                                <th class="all"> نحوه پرداخت</th>
+                                <th class="none"> تاریخ ثبت :</th>
+                                <th class="none"> مهلت پرداخت :</th>
+                                <th class="none"> تاریخ پرداخت :</th>
+                                <th class="none">عملیات</th>
+                                <th class="none"> توضیح مدیریتی :</th>
+                                <th class="all"> عملیات</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            Loading by ajax
+                            </tbody>
+                        </table>
+
+                        </div>
+                    </div>
+                </div>
+
             @endpermission
 
 
@@ -365,186 +545,7 @@
 
 
 
-
-
             </div>
-
-            {{--@permission((config('constants.LIST_TRANSACTION_ACCESS')))--}}
-            {{--<!-- BEGIN ORDER TABLE PORTLET-->--}}
-            {{--<div class="portlet box green-seagreen" id="transaction-portlet">--}}
-                {{--<div class="portlet-title">--}}
-                    {{--<div class="caption">--}}
-                        {{--<i class="fa fa-cogs"></i>مدیریت تراکنش ها--}}
-                    {{--</div>--}}
-                    {{--<div class="tools">--}}
-                        {{--<a href="javascript:" class="collapse" id="transaction-expand"> </a>--}}
-                        {{--<a href="#portlet-config" data-toggle="modal" class="config"> </a>--}}
-                        {{--<a href="javascript:" class="reload"> </a>--}}
-                        {{--<a href="javascript:" class="remove"> </a>--}}
-                    {{--</div>--}}
-                    {{--<div class="tools"> </div>--}}
-                {{--</div>--}}
-                {{--<div class="portlet-body" style="display: block;">--}}
-                    {{--<div class="portlet box blue" style="background: #e7ecf1">--}}
-                        {{--<div class="portlet-title">--}}
-                        {{--<div class="caption"><h3 class="bold">--}}
-                        {{--<i class="fa fa-filter"></i>فیلتر جدول</h3></div>--}}
-                        {{--</div>--}}
-                        {{--<style>--}}
-                            {{--.form .form-row-seperated .form-group {--}}
-                                {{--border-bottom-color: #bfbfbf !important;--}}
-                            {{--}--}}
-                        {{--</style>--}}
-                        {{--<div class="portlet-body form" style="border-top: #3598dc solid 1px">--}}
-                            {{--{!! Form::open(['class'=>'form-horizontal form-row-seperated' , 'id' => 'filterTransactionForm']) !!}--}}
-                            {{--<div class="form-body" style="background: #e7ecf1">--}}
-                                {{--<div class="form-group">--}}
-                                    {{--<div class="col-md-6">--}}
-                                        {{--@include('admin.filters.productsFilter', ["id" => "transactionProduct" , "everyProduct"=>1])--}}
-                                    {{--</div>--}}
-                                    {{--<div class="col-md-4">--}}
-                                        {{--@include("admin.filters.extraValueFilter" , ["id"=>"transactionExtraAttributes"])--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                                {{--<div class="form-group">--}}
-                                    {{--<div class="col-md-3">--}}
-                                        {{--@include('admin.filters.orderstatusFilter' , ["id"=>"transactionOrderStatuses"])--}}
-                                    {{--</div>--}}
-                                    {{--<div class="col-md-3">--}}
-                                        {{--@include('admin.filters.paymentstatusFilter' , ["id"=>"transactionPaymentStatuses"])--}}
-                                    {{--</div>--}}
-                                    {{--<div class="col-md-3">--}}
-                                        {{--@include("admin.filters.transactionStatusFilter" , ["selectType"=>"dropdown"])--}}
-                                    {{--</div>--}}
-                                    {{--<div class="col-md-3">--}}
-                                        {{--@include("admin.filters.checkoutStatusFilter" , ["dropdownId"=>"transactionCheckoutStatus" , "checkboxId"=>"transactionCheckoutStatusEnable"])--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                                {{--<div class="form-group">--}}
-                                    {{--<div class="col-md-3">--}}
-                                        {{--@include('admin.filters.paymentMethodFilter')--}}
-                                    {{--</div>--}}
-                                    {{--<div class="col-md-3">--}}
-                                        {{--@include("admin.filters.transactionType")--}}
-                                    {{--</div>--}}
-                                    {{--<div class="col-md-3">--}}
-                                        {{--@include("admin.filters.transactionCodeFilter")--}}
-                                    {{--</div>--}}
-                                    {{--<div class="col-md-3">--}}
-                                        {{--@include("admin.filters.transactionManagerComment")--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                                {{--<div class="form-group">--}}
-                                    {{--@include('admin.filters.identityFilter')--}}
-                                {{--</div>--}}
-                                {{--<div class="form-group">--}}
-                                    {{--<label class="col-md-2 bold control-label">تاریخ پرداخت : </label>--}}
-                                    {{--<div class="col-md-10">--}}
-                                        {{--@include('admin.filters.timeFilter.createdAt' , ["id" => "transaction" , "default" => true])--}}
-                                    {{--</div>--}}
-                                    {{--<label class="col-md-2 bold control-label">مهلت پرداخت : </label>--}}
-                                    {{--<div class="col-md-10">--}}
-                                        {{--@include('admin.filters.timeFilter.generalFilter' , ["id"=>"transaction" , "enableId"=>"DeadlineTimeEnable" , "sinceDateId"=>"DeadlineSinceDate", "tillDateId"=>"DeadlineTillDate"])--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                                {{--<div class="form-group">--}}
-                                    {{--<div class="col-lg-3 col-md-3">--}}
-                                        {{--@include("admin.filters.columnFilter" , ["id" => "transactionTableColumnFilter" , "tableDefaultColumns" => $transactionTableDefaultColumns])--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                                {{--<div class="form-group">--}}
-                                    {{--<div class="col-md-12">--}}
-                                        {{--<a href="javascript:" class="btn btn-lg bg-font-dark reload"--}}
-                                           {{--style="background: #489fff">فیلتر</a>--}}
-                                        {{--<img class="hidden" id="transaction-portlet-loading"--}}
-                                             {{--src="{{config('constants.FILTER_LOADING_GIF')}}" width="5%">--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                                {{--{!! Form::close() !!}--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                    {{--@permission((config('constants.SHOW_TRANSACTION_TOTAL_COST_ACCESS')))--}}
-                    {{--<label class="btn btn-outline sbold green-haze">مجموع مبالغ تراکنشها : <span id="totalCost"></span>--}}
-                        {{--تومان</label>--}}
-                    {{--@endpermission--}}
-                    {{--@permission((config('constants.SHOW_TRANSACTION_TOTAL_FILTERED_COST_ACCESS')))--}}
-                    {{--<label class="btn btn-outline sbold green-haze">مجموع مبالغ فیلتر شده ها : <span--}}
-                                {{--id="totalFilteredCost"></span> تومان</label>--}}
-                    {{--<label class="btn btn-outline sbold green-haze">مجموع مبالغ آیتم های اضافه : <span--}}
-                                {{--id="totalFilteredExtraCost"></span> تومان</label><br>--}}
-                    {{--@endpermission--}}
-                    {{--<a target = "_blank" href = "{{action("Web\TransactionController@getUnverifiedTransactions")}}"--}}
-                       {{--class="btn red btn-lg">لیست تراکنشهای ثبت نشده</a>--}}
-                    {{--<div class="table-toolbar">--}}
-                    {{--</div>--}}
-                    {{--<div id="completeTransactionInfo" class="modal fade" tabindex="-1" data-backdrop="static"--}}
-                         {{--data-keyboard="false">--}}
-                        {{--<div class="modal-header">تکمیل اطلاعات تراکنش</div>--}}
-                        {{--{!! Form::open([  'method'=>'POST'  , 'class'=>'completeTransactionInfoForm form-horizontal' ]) !!}--}}
-                        {{--{!! Form::hidden('transaction_id' , null , ['id'=>'completeTransactionInfoForm_transactionId']) !!}--}}
-                        {{--<div class="modal-body">--}}
-                            {{--<div class="row static-info margin-top-20">--}}
-                                {{--<div class="form-group">--}}
-                                    {{--<label class="col-md-3 control-label" for="traceNumber">شماره پیگیری:</label>--}}
-                                    {{--<div class="col-md-6">--}}
-                                        {{--{!! Form::text('traceNumber',old('traceNumber'),['class' => 'form-control' , 'id'=>'completeTransactionInfoTraceNumber', 'dir'=>'ltr' ]) !!}--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                            {{--<div class="row static-info margin-top-20">--}}
-                                {{--<div class="form-group">--}}
-                                    {{--<label class="col-md-3 control-label" for="managerComment">شماره کارت:</label>--}}
-                                    {{--<div class="col-md-6">--}}
-                                        {{--{!! Form::text('managerComment',old('managerComment'),['class' => 'form-control' , 'id'=>'completeTransactionInfoCardNumber' , 'dir'=>'ltr' ]) !!}--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-
-                        {{--</div>--}}
-                        {{--<div class="modal-footer">--}}
-                            {{--<button type="button" data-dismiss="modal" class="btn btn-outline dark">بستن</button>--}}
-                            {{--<input type="submit" class="btn green" value="ذخیره">--}}
-                            {{--<img class="hidden" id="complete-transaction-info-loading"--}}
-                                 {{--src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px"--}}
-                                 {{--width="25px">--}}
-                        {{--</div>--}}
-                        {{--{!! Form::close() !!}--}}
-                    {{--</div>--}}
-                    {{--<table class="table table-striped table-bordered table-hover dt-responsive" width="100%"--}}
-                           {{--id="transaction_table">--}}
-                        {{--<thead>--}}
-                        {{--<tr>--}}
-                            {{--<th></th>--}}
-                            {{--<th class="all"> نام مشتری</th>--}}
-                            {{--<th class="none"> تراکنش پدر</th>--}}
-                            {{--<th class="all"> موبایل</th>--}}
-                            {{--@permission((config('constants.SHOW_TRANSACTION_TOTAL_COST_ACCESS')))--}}
-                            {{--<th class="all"> مبلغ سفارش</th>--}}
-                            {{--<th class="all"> مبلغ تراکنش</th>--}}
-                            {{--@endpermission--}}
-                            {{--@permission((config('constants.SHOW_TRANSACTION_TOTAL_FILTERED_COST_ACCESS')))--}}
-                            {{--<th class="all"> مبلغ فیلتر شده</th>--}}
-                            {{--<th class="all"> مبلغ آیتم افزوده</th>--}}
-                            {{--@endpermission--}}
-                            {{--<th class="all"> کد تراکنش</th>--}}
-                            {{--<th class="all"> نحوه پرداخت</th>--}}
-                            {{--<th class="none"> تاریخ ثبت :</th>--}}
-                            {{--<th class="none"> مهلت پرداخت :</th>--}}
-                            {{--<th class="none"> تاریخ پرداخت :</th>--}}
-                            {{--<th class="none">عملیات</th>--}}
-                            {{--<th class="none"> توضیح مدیریتی :</th>--}}
-                            {{--<th class="all"> عملیات </th>--}}
-                        {{--</tr>--}}
-                        {{--</thead>--}}
-                        {{--<tbody>--}}
-                        {{--Loading by ajax--}}
-                        {{--</tbody>--}}
-                    {{--</table>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-            {{--<!-- END SAMPLE TABLE PORTLET-->--}}
-            {{--@endpermission--}}
 
 
             {{--@permission((config('constants.LIST_USER_BON_ACCESS')))--}}
