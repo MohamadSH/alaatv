@@ -108,7 +108,6 @@ trait ZarinpalGateway
                 }
             }
         }
-        dd($result);
         return $result;
     }
 
