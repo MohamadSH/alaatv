@@ -65,7 +65,18 @@
                                     {{--<br>--}}
                                 {{--@endif--}}
                             <div class="progress" style="height: 3px;" aria-valuenow="50">
-                                <div class="progress-bar progress-bar-animated progress-bar-striped bg-info userCompletion-progress-bar"
+                                <div class="progress-bar progress-bar-animated progress-bar-striped userCompletion-progress-bar
+                                        @if($userCompletion<=25)
+                                        bg-danger
+                                        @elseif($userCompletion>25 && $userCompletion<=50)
+                                        bg-warning
+                                        @elseif($userCompletion>50 && $userCompletion<=75)
+
+                                        @elseif($userCompletion>75 && $userCompletion<100)
+                                        bg-info
+                                        @elseif($userCompletion==100)
+                                        bg-success
+                                        @endif"
                                      role="progressbar"
                                      style="width: {{ $userCompletion }}%;"
                                      aria-valuenow="{{ $userCompletion }}"

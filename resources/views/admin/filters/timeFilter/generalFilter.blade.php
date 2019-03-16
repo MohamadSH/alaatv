@@ -12,7 +12,7 @@
            @if(!isset($default)) disabled="disabled" @endif>
     <input name="{{(isset($sinceDateId))?$sinceDateId:""}}"
            id="{{(isset($id))?$id:""}}{{(isset($sinceDateId))?$sinceDateId:""}}Alt" type="text"
-           class="form-control hidden">
+           class="form-control d-none">
 </div>
 <label class="control-label" style="float: right;">تا تاریخ
 </label>
@@ -21,5 +21,5 @@
            @if(!isset($default)) disabled="disabled" @endif>
     <input name="{{(isset($tillDateId))?$tillDateId:""}}"
            id="{{(isset($id))?$id:""}}{{(isset($tillDateId))?$tillDateId:""}}Alt" type="text"
-           class="form-control hidden">
+           class="form-control d-none">
 </div>
