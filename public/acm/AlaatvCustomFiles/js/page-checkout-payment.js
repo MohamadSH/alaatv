@@ -1,9 +1,15 @@
 var CheckoutPaymentUi = function () {
 
-    let totalCost = $('#invoiceInfo-totalCost').val();
-    let couponCode = $('#invoiceInfo-couponCode').val();
     var lockDonateAjax = false;
     var lockCouponAjax = false;
+
+    function getFinalCost() {
+        return parseInt($('#invoiceInfo-totalCost').val());
+    }
+
+    function getCouponCode() {
+        return $('#invoiceInfo-couponCode').val();
+    }
 
     function refreshUiBasedOnPaymentType() {
         let selectedObject = $('input[type="radio"][name="radioPaymentType"]:checked');
@@ -54,9 +60,15 @@ var CheckoutPaymentUi = function () {
         }
     }
 
-    function refreshUiBasedOnDonateStatus(donateValue) {
+    function setTotalCostWithDonate(donateValue) {
+        let calcTotalCost = getFinalCost() + (parseInt(donateValue) * 1000);
+        $('.finalPriceValue').html(calcTotalCost.toLocaleString('fa'));
+    }
+
+    function refreshUiBasedOnDonateStatus() {
         if (getDonateStatus()) {
             donate();
+            let donateValue = 5;
             if (lockDonateAjax) {
                 return false;
             }
@@ -82,6 +94,7 @@ var CheckoutPaymentUi = function () {
                         }
                     } else {
                         donate();
+                        setTotalCostWithDonate(donateValue);
                     }
                     mApp.unblock('.addDonateWarper');
                     lockDonateAjax = false;
@@ -97,7 +110,7 @@ var CheckoutPaymentUi = function () {
             });
         } else {
             dontdonate();
-            donateValue = 0;
+            let donateValue = -5;
             if (lockDonateAjax) {
                 return false;
             }
@@ -118,7 +131,7 @@ var CheckoutPaymentUi = function () {
                         toastr.warning('مشکلی رخ داده است. مجدد سعی کنید.');
                     } else {
                         dontdonate();
-                        donateValue = 0;
+                        setTotalCostWithDonate(donateValue);
                     }
                     mApp.unblock('.addDonateWarper');
                     lockDonateAjax = false;
@@ -132,8 +145,6 @@ var CheckoutPaymentUi = function () {
                 }
             });
         }
-        let calcTotalCost = parseInt(totalCost) + (parseInt(donateValue) * 1000);
-        $('.finalPriceValue').html(calcTotalCost.toLocaleString('fa'));
     }
     function setUiHasDiscountCode() {
         // $('.discountCodeValueWarper').fadeIn();
@@ -156,7 +167,7 @@ var CheckoutPaymentUi = function () {
         btnSaveDiscountCodeValue.prop('readonly', true);
     }
     function refreshUiBasedOnHasntDiscountCodeStatus() {
-        $('#discountCodeValue').val(couponCode);
+        $('#discountCodeValue').val(getCouponCode());
         if(!$('#hasntDiscountCode').prop('checked')) {
             setUiHasDiscountCode();
         } else {

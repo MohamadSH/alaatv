@@ -181,7 +181,7 @@
                                                                         @endforeach
                                                                     @endif
 
-                                                                    @if($orderProductItem['grand']->attributes->get('information'))
+                                                                    @if(isset($orderProductItem['grand']->attributes) && $orderProductItem['grand']->attributes->get('information'))
                                                                         @foreach($orderProductItem['grand']->attributes->get('information') as $attributeGroupKey=>$attributeItem)
                                                                                 {{--{{ dd($attributeItem) }}--}}
                                                                             <span class = "m-badge m-badge--info m-badge--wide m-badge--rounded m--margin-bottom-5">{{ $attributeItem->title }} : {{ $attributeItem->data[0]->name }}</span>
