@@ -9,6 +9,7 @@
 namespace App\Traits\Product;
 
 
+use App\Product;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
@@ -90,6 +91,7 @@ trait ProductBonTrait
                 if (!empty($parentsArray)) {
                     foreach ($parentsArray as $parent) {
                         // ToDo : It does not check parents in a hierarchy to the root
+
                         /** @var Product $parent */
                         $bons = $parent->getBons($bonName);
                         if ($bons->isNotEmpty()) {
@@ -158,6 +160,7 @@ trait ProductBonTrait
                 if (!empty($parentsArray)) {
                     foreach ($parentsArray as $parent) {
                         // ToDo : It does not check parents in a hierarchy to the root
+
                         /** @var Product $parent */
                         $bons = $parent->getBons($bonName);
                         if ($bons->isNotEmpty())

@@ -116,7 +116,7 @@ class OnlinePaymentController extends Controller
 
             if (isset($authority)) {
 
-                $transactionModifyResult = $this->setAuthorityForTransaction($authority, $transactiongateway->id, $transaction);
+                $transactionModifyResult = $this->setAuthorityForTransaction($authority, $transactiongateway->id, $transaction , $description);
 
                 if ($transactionModifyResult['statusCode'] == Response::HTTP_OK) {
                     $redirectData = $this->getRedirectData($gateway->redirectUrl());
@@ -161,14 +161,16 @@ class OnlinePaymentController extends Controller
      * @param string $authority
      * @param int $transactiongatewayId
      * @param Transaction $transaction
+     * @param string $description
      * @return array
      */
-    private function setAuthorityForTransaction(string $authority, int $transactiongatewayId, Transaction $transaction): array
+    private function setAuthorityForTransaction(string $authority, int $transactiongatewayId, Transaction $transaction , string $description): array
     {
         $data['destinationBankAccount_id'] = 1; // ToDo: Hard Code
         $data['authority'] = $authority;
         $data['transactiongateway_id'] = $transactiongatewayId;
         $data['paymentmethod_id'] = config('constants.PAYMENT_METHOD_ONLINE');
+        $data['description'] = $description;
         $transactionModifyResult = $this->transactionController->modify($transaction, $data);
         return $transactionModifyResult;
     }
@@ -233,8 +235,8 @@ class OnlinePaymentController extends Controller
         if (isset($transaction->order_id)) {
             $transaction->order->detachUnusedCoupon();
             if ($gatewayVerify['status']) {
-                $verifyResult['OrderSuccessPaymentResult'] = $this->handleOrderSuccessPayment($transaction->order);
                 $this->handleTransactionStatus($transaction, $gatewayVerify['data']['RefID'], $gatewayVerify['data']['cardPanMask']);
+                $verifyResult['OrderSuccessPaymentResult'] = $this->handleOrderSuccessPayment($transaction->order);
             } else {
                 $verifyResult['OrderCanceledPaymentResult'] = $this->handleOrderCanceledPayment($transaction->order);
                 $transaction->transactionstatus_id = config('constants.TRANSACTION_STATUS_UNSUCCESSFUL');
@@ -247,7 +249,6 @@ class OnlinePaymentController extends Controller
                 $this->handleWalletChargingCanceledPayment($transaction);
             }
         }
-
 
 
 //        if ($result['status'] && isset($result['data']['order'])) {
