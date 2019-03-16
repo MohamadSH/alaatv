@@ -1192,7 +1192,7 @@ class OrderController extends Controller
                 $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
                 $priceInfo  = $invoiceInfo['price'];
                 $order = $order->fresh(); //toDo
-                
+
                 $notIncludedProductsInCoupon = $order->reviewCouponProducts();
             }
 
@@ -1257,7 +1257,7 @@ class OrderController extends Controller
 
             $response = [
                 'price'     => isset($priceInfo)?$priceInfo:null,
-                $resultText = "Coupon detached successfully"
+                'message' => $resultText
             ];
         }else{
             $response = [
