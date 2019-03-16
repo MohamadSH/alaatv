@@ -26,7 +26,7 @@ trait ZarinpalGateway
         -3  => 'رقم باید بالای 100 تومان باشد',
         -4  => 'سطح پذیرنده پایین تر از سطح نقره ای است',
         -11 => 'درخواست مورد نظر یافت نشد',
-        -21 => 'هیچ نوع عملیات مالی برای این تراکنش یافت نشد. کاربر قبل از ورود به درگاه بانک در همان صفحه زرین پال منصرف شده است.',
+        -21 => 'کاربر قبل از ورود به درگاه بانک در همان صفحه زرین پال منصرف شده است.',
         -22 => 'تراکنش ناموفق می باشد. کاربر بعد از ورود به درگاه بانک منصرف شده است.',
         -33 => 'رقم تراکنش با رقم پرداخت شده مطابقت ندارد',
         -54 => 'درخواست مورد نظر آرشیو شده',
@@ -93,20 +93,22 @@ trait ZarinpalGateway
             } else {
                 $result['data']['RefID'] = $gatewayResult['RefID'];
             }
+
+            if (strcmp($gatewayResult['Status'], 'verified_before') ==0)
+                $result['message'][] = $this->exceptions[101];
+
         } else {
             $result['status'] = false;
             if (strcmp($gatewayResult['Status'], 'canceled') == 0) {
                 $result['message'][] = 'کاربر از پرداخت انصراف داده است.';
-            } else if (strcmp($gatewayResult['Status'], 'verified_before') ==0) {
-                $result['data']['RefID'] = $gatewayResult['RefID'];
-                $result['message'][] = $this->exceptions[101];
-            } else {
+            }else {
                 $result['message'][] = 'خطایی در پرداخت رخ داده است.';
                 if (isset($gatewayResult['error'])) {
                     $result['message'][] = $this->exceptions[$gatewayResult['error']];
                 }
             }
         }
+        dd($result);
         return $result;
     }
 
