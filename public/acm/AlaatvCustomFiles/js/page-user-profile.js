@@ -9,6 +9,12 @@ function getFormData($form) {
     return indexed_array;
 }
 
+function updateUserCompletionProgress(percent) {
+    $('.userCompletion-progress-bar').attr('aria-valuenow', percent);
+    $('.userCompletion-progress-bar').css({'width': percent+'%'});
+    $('.userCompletion-percent-text').html(percent);
+}
+
 $(document).ready(function () {
 
     $(document).on('click', '#btnEditUserPhoto', function () {
@@ -32,6 +38,7 @@ $(document).ready(function () {
 
             // Form data
             data: formData,
+            dataType: 'json',
 
             mimeType:"multipart/form-data",
 
@@ -50,10 +57,8 @@ $(document).ready(function () {
                     toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
 
                 } else {
-
-
+                    updateUserCompletionProgress(data.user.info.completion);
                     toastr.success('تصویر شما ویرایش شد.');
-
                     if (data.user.lockProfile === 1) {
                         window.location.reload();
                     }
@@ -291,9 +296,8 @@ $(document).ready(function () {
                     toastr.warning('خطای سیستمی رخ داده است.' + '<br>' + message);
 
                 } else {
-
+                    updateUserCompletionProgress(data.user.info.completion);
                     toastr.success('اطلاعات شما ثبت شد.');
-
                     if (data.user.lockProfile === 1) {
                         window.location.reload();
                     }
@@ -399,7 +403,14 @@ $(document).ready(function () {
             },
             error: function (jqXHR, textStatus, errorThrown) {
 
-                toastr.warning('خطای سیستمی رخ داده است.');
+                let message = '';
+                if (jqXHR.status === 429) {
+                    message = 'پیش از این کد فعال سازی برای شما ارسال شده است. یک دقیقه تا درخواست بعدی صبر کنید.';
+                } else {
+                    message = 'خطای سیستمی رخ داده است.';
+                }
+
+                toastr.warning(message);
 
                 mApp.unblock('.SendMobileVerificationCodeWarper');
             }
@@ -447,7 +458,7 @@ $(document).ready(function () {
                     $('.mobileUnVerifyMessage').addClass('d-none');
                     $('.mobileVerifyMessage').removeClass('d-none');
                     $('.mobileVerifyMessage').addClass('d-block');
-
+                    updateUserCompletionProgress(data.user.info.completion);
                     toastr.success('شماره موبایل شما تایید شد.');
 
                     if (data.user.lockProfile === 1) {

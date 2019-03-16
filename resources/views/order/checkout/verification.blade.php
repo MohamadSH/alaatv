@@ -89,7 +89,10 @@
                                         alert-dismissible fade show" role="alert">
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         </button>
-                                            {{ $result['zarinpalVerifyResult']['message'][0] }}
+                                            @foreach($result['zarinpalVerifyResult']['message'] as $message)
+                                                {{ $message }}
+                                                <br>
+                                            @endforeach
                                     </div>
                                 @endif
                                 @if(isset($result['OrderSuccessPaymentResult']['saveOrder']) && $result['OrderSuccessPaymentResult']['saveOrder']!=1)

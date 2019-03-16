@@ -6,12 +6,12 @@
 
                     @if(isset($withPhotoUpload) && $withPhotoUpload)
                     <button type="button" id="btnEditUserPhoto" class="btn btn-sm m-btn--pill btn-info btnEditProfilePic" data-toggle="m-tooltip" {{--data-placement="left"--}}data-original-title="حجم عکس حداکثر 500 کیلوبایت و فرمت آن jpg یا png باشد">
-                            ویرایش
-                        </button>
+                        ویرایش
+                    </button>
 
                     <button type="button" id="uploadProfilePhotoAjaxSubmit" class="btn btn-sm m-btn--pill m-btn--gradient-from-info m-btn--gradient-to-warning submitProfilePic" style="display: none;">
-                            ثبت
-                        </button>
+                        ثبت
+                    </button>
                     @endif
 
                 </div>
@@ -58,14 +58,14 @@
 
                         @if(isset($withCompletionBox) && $withCompletionBox)
                             @if(isset($userCompletion))
-                                میزان تکمیل پروفایل ({{ $userCompletion }}%)
+                            میزان تکمیل پروفایل (<span class="userCompletion-percent-text">{{ $userCompletion }}</span>%)
                                 <br>
                                 {{--@if(!$user->hasVerifiedMobile())--}}
                                 {{--<span class="label label-warning">توجه! یکی از موارد ، تایید شماره موبایل می باشد </span>--}}
                                     {{--<br>--}}
                                 {{--@endif--}}
                             <div class="progress" style="height: 3px;" aria-valuenow="50">
-                                <div class="progress-bar progress-bar-animated progress-bar-striped bg-info"
+                                <div class="progress-bar progress-bar-animated progress-bar-striped bg-info userCompletion-progress-bar"
                                      role="progressbar"
                                      style="width: {{ $userCompletion }}%;"
                                      aria-valuenow="{{ $userCompletion }}"
