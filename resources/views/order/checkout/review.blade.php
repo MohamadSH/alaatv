@@ -360,7 +360,7 @@
                     <div class = "m-alert__text text-center">
                         <strong>سبد خرید شما خالیست!</strong>
                         <br>
-                        <button onclick = "window.location.href='{{action('Web\ProductController@search')}}';
+                        <button onclick = "window.location.href='{{action('Web\ShopPageController')}}';
                                 mApp.block('.empteCartAlert', {
                                 type: 'loader',
                                 state: 'info',
