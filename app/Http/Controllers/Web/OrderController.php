@@ -1192,6 +1192,7 @@ class OrderController extends Controller
                 $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
                 $priceInfo  = $invoiceInfo['price'];
                 $order = $order->fresh(); //toDo
+                
                 $notIncludedProductsInCoupon = $order->reviewCouponProducts();
             }
 
