@@ -98,9 +98,11 @@ class OrderController extends Controller
      *
      * @param \App\Http\Requests\SubmitCouponRequest $request
      *
+     * @param AlaaInvoiceGenerator $invoiceGenerator
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function submitCoupon(SubmitCouponRequest $request)
+    public function submitCoupon(SubmitCouponRequest $request , AlaaInvoiceGenerator $invoiceGenerator)
     {
         $coupon = Coupon::code($request->get('code'))->first();
         if ($request->has('openOrder')) {
@@ -136,6 +138,7 @@ class OrderController extends Controller
                                 if ($order->updateWithoutTimestamp()) {
                                     $resultCode = Response::HTTP_OK;
                                     $resultText = 'Coupon attached successfully';
+                                    $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
                                 } else {
                                     $oldCoupon->usageNumber = $oldCoupon->usageNumber + 1;
                                     $oldCoupon->update();
