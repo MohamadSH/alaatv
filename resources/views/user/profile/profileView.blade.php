@@ -22,21 +22,21 @@
                 <div class="form-group m-form__group">
                     <label for="province">استان</label>
                     <div class="m-input-icon m-input-icon--left">
-                        <i class="flaticon-placeholder"></i>
+                        <i class="flaticon-placeholder float-left m--margin-right-10"></i>
                         <span>@if(isset($user->province)) {{ $user->province }} @else درج نشده @endif</span>
                     </div>
                 </div>
                 <div class="form-group m-form__group">
                     <label for="city">شهر</label>
                     <div class="m-input-icon m-input-icon--left">
-                        <i class="flaticon-placeholder"></i>
+                        <i class="flaticon-placeholder float-left m--margin-right-10"></i>
                         <span>@if(isset($user->city)) {{ $user->city }} @else درج نشده @endif</span>
                     </div>
                 </div>
                 <div class="form-group m-form__group">
                     <label for="postalCode">کد پستی</label>
                     <div class="m-input-icon m-input-icon--left">
-                        <i class="flaticon-mail-1"></i>
+                        <i class="flaticon-mail-1 float-left m--margin-right-10"></i>
                         <span>@if(isset($user->postalCode)) {{ $user->postalCode }} @else درج نشده @endif</span>
                     </div>
                 </div>
@@ -45,21 +45,21 @@
                 <div class="form-group m-form__group">
                     <label for="school">مدرسه</label>
                     <div class="m-input-icon m-input-icon--left">
-                        <i class="la la-university"></i>
+                        <i class="la la-university float-left m--margin-right-10"></i>
                         <span>@if(isset($user->school)) {{ $user->school }} @else درج نشده @endif</span>
                     </div>
                 </div>
                 <div class="form-group m-form__group">
                     <label for="major_id">رشته</label>
                     <div class="m-input-icon m-input-icon--left">
-                        <i class="la la-mortar-board"></i>
+                        <i class="la la-mortar-board float-left m--margin-right-10"></i>
                         <span>@if(isset($user->major)) {{ $user->major->name }} @else درج نشده @endif</span>
                     </div>
                 </div>
                 <div class="form-group m-form__group">
                     <label for="gender_id">جنسیت</label>
                     <div class="m-input-icon m-input-icon--left">
-                        <i class="la la-user"></i>
+                        <i class="la la-user float-left m--margin-right-10"></i>
                         <span>@if(isset($user->gender)) {{ $user->gender->name }} @else درج نشده @endif</span>
                     </div>
                 </div>
@@ -69,21 +69,21 @@
                     <div class="form-group m-form__group {{ $errors->has('birthdate') ? ' has-error' : '' }}">
                         <label for="birthdate">تاریخ تولد</label>
                         <div class="m-input-icon m-input-icon--left">
-                            <i class="flaticon-calendar-1"></i> {{ $user->Birthdate_Jalali() }}
+                            <i class="flaticon-calendar-1 float-left m--margin-right-10"></i> {{ $user->Birthdate_Jalali() }}
                         </div>
                     </div>
                 @endif
                 <div class="form-group m-form__group">
-                    <label for="email">ایمیل(اختیاری)</label>
+                    <label for="email">ایمیل</label>
                     <div class="m-input-icon m-input-icon--left">
-                        <i class="flaticon-mail"></i>
+                        <i class="flaticon-mail float-left m--margin-right-10"></i>
                         <span>@if(isset($user->email)) {{ $user->email }} @else درج نشده @endif</span>
                     </div>
                 </div>
                 <div class="form-group m-form__group">
                     <label for="address">آدرس محل سکونت</label>
                     <div class="m-input-icon m-input-icon--left">
-                        <i class="flaticon-map-location"></i>
+                        <i class="flaticon-map-location float-left m--margin-right-10"></i>
                         <span>@if(isset($user->address)) {{ $user->address }} @else درج نشده @endif</span>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                     <div class="form-group m-form__group">
                         <label for="introducedBy">چگونه با آلاء آشنا شدید: </label>
                         <div class="m-input-icon m-input-icon--left">
-                            <i class="flaticon-map-location"></i>
+                            <i class="flaticon-map-location float-left m--margin-right-10"></i>
                             <span>@if(isset($user->introducedBy)) {{ $user->introducedBy }} @else درج نشده @endif</span>
                         </div>
                     </div>
