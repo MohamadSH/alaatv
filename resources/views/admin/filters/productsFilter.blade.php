@@ -27,7 +27,7 @@
                             {{isset($dataRole) ? 'data-role='.$dataRole : ''}}  {{isset($disabled) ? 'disabled' : ''}}>
                         <option></option>
                         @foreach($products as $product)
-                            @if($product->producttype_id == Config::get("constants.PRODUCT_TYPE_SIMPLE"))
+                            @if($product->producttype_id == config("constants.PRODUCT_TYPE_SIMPLE"))
                                 <option class="bold" value="{{$product->id}}" data-content="{{$product->calculatePayablePrice()["CustomerCost"]}}" >{{$product->name}}</option>
                             @else
                                 <optgroup class="bold" label="{{$product->name}}"></optgroup>
@@ -43,7 +43,7 @@
                         @if(isset($defaultValue))<option selected="selected" value="@if(isset($defaultValue["value"])){{$defaultValue["value"]}}@endif">@if(isset($defaultValue["caption"])){{$defaultValue["caption"]}}@endif</option>@endif
                         @foreach($products as $product)
 
-                            @if($product->producttype_id == Config::get("constants.PRODUCT_TYPE_SIMPLE"))
+                            @if($product->producttype_id == config("constants.PRODUCT_TYPE_SIMPLE"))
                                 <option value="{{$product->id}}" data-content="{{$product->calculatePayablePrice()["CustomerCost"]}}" >{{$product->name}}</option>
                             @else
                                 <optgroup label="{{$product->name}}"></optgroup>
@@ -80,8 +80,8 @@
                     <option value="0" class="font-blue">هر محصولی</option>
                 @endif
                 @foreach($products as $product)
-                    @if($product->producttype_id == Config::get("constants.PRODUCT_TYPE_SIMPLE") ||
-                        $product->producttype_id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))
+                    @if($product->producttype_id == config("constants.PRODUCT_TYPE_SIMPLE") ||
+                        $product->producttype_id == config("constants.PRODUCT_TYPE_CONFIGURABLE"))
                         <option value="{{$product->id}}" class="bold" @if(isset($defaultProductFilter) && in_array($product->id, $defaultProductFilter)) selected="selected" @endif>{{$product->name}}{{(!$product->enable)?"(غیرفعال)":""}}</option>
                     @else
                         <optgroup label="{{$product->name}}{{(!$product->enable)?"(غیرفعال)":""}}" class="bold"></optgroup>

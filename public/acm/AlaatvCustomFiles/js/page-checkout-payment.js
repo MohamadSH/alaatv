@@ -4,7 +4,14 @@ var CheckoutPaymentUi = function () {
     var lockCouponAjax = false;
 
     function getFinalCost() {
-        return parseInt($('#invoiceInfo-totalCost').val());
+        return parseInt($('#invoiceInfo-totalCost').html());
+    }
+    function setFinalCost(finalCost) {
+        if (!isNaN(finalCost)) {
+            console.log('setFinalCost: ', finalCost);
+            $('.finalPriceValue').html(finalCost.toLocaleString('fa'));
+            $('#invoiceInfo-totalCost').html(parseInt(finalCost));
+        }
     }
 
     function getCouponCode() {
@@ -62,7 +69,7 @@ var CheckoutPaymentUi = function () {
 
     function setTotalCostWithDonate(donateValue) {
         let calcTotalCost = getFinalCost() + (parseInt(donateValue) * 1000);
-        $('.finalPriceValue').html(calcTotalCost.toLocaleString('fa'));
+        setFinalCost(calcTotalCost);
     }
 
     function refreshUiBasedOnDonateStatus() {
@@ -165,6 +172,7 @@ var CheckoutPaymentUi = function () {
         btnSaveDiscountCodeValue.prop('disabled', true);
         discountCodeValue.prop('readonly', true);
         btnSaveDiscountCodeValue.prop('readonly', true);
+        discountCodeValue.val('');
     }
     function refreshUiBasedOnHasntDiscountCodeStatus() {
         $('#discountCodeValue').val(getCouponCode());
@@ -188,7 +196,7 @@ var CheckoutPaymentUi = function () {
             return false;
         }
 
-        mApp.block('.discountCodeValueWarper', {
+        mApp.block('.discountCodeValueWarper, .hasntDiscountCodeWraper', {
             type: 'loader',
             state: 'info',
         });
@@ -211,14 +219,14 @@ var CheckoutPaymentUi = function () {
 
                     $('.couponReportWarper').fadeIn();
                     let couponReport = ' کپن تخفیف ' +
-                        ' <strong>' + data[0].name + '</strong> ' +
-                        ' (' + data[0].code + ') ' +
+                        ' <strong>' + data.coupon.name + '</strong> ' +
+                        ' (' + data.coupon.code + ') ' +
                         ' با ' +
-                        data[0].discount;
+                        data.coupon.discount;
 
-                    if (data[0].discountType.name === 'percentage') {
+                    if (data.coupon.discountType.name === 'percentage') {
                         couponReport += '% تخفیف برای سفارش شما ثبت شده است.';
-                    } else if (data[0].discountType.name === 'cost') {
+                    } else if (data.coupon.discountType.name === 'cost') {
                         couponReport += ' تومان تخفیف برای سفارش شما ثبت شد. ';
                     }
                     $('.couponReport').html(couponReport);
@@ -226,9 +234,12 @@ var CheckoutPaymentUi = function () {
                     $('#btnSaveDiscountCodeValue').fadeOut(0);
                     $('#btnRemoveDiscountCodeValue').fadeIn();
 
+                    setFinalCost(data.price.final);
+                    PrintnotIncludedProductsInCoupon(data.notIncludedProductsInCoupon);
+
                     toastr.success('کد تخفیف شما ثبت شد.');
                 }
-                mApp.unblock('.discountCodeValueWarper');
+                mApp.unblock('.discountCodeValueWarper, .hasntDiscountCodeWraper');
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 let statusCode = jqXHR.status;
@@ -247,7 +258,7 @@ var CheckoutPaymentUi = function () {
 
                 toastr.warning(message);
 
-                mApp.unblock('.discountCodeValueWarper');
+                mApp.unblock('.discountCodeValueWarper, .hasntDiscountCodeWraper');
 
             }
         });
@@ -282,6 +293,9 @@ var CheckoutPaymentUi = function () {
                     $('#btnSaveDiscountCodeValue').fadeIn();
                     $('#discountCodeValue').val('');
 
+                    setFinalCost(data.price.final);
+                    PrintnotIncludedProductsInCoupon([]);
+
                     if (showMessage === true) {
                         toastr.success('کد تخفیف شما حذف شد.');
                     }
@@ -292,6 +306,38 @@ var CheckoutPaymentUi = function () {
                 mApp.unblock('.discountCodeValueWarper, .hasntDiscountCodeWraper');
             }
         });
+    }
+
+    function PrintnotIncludedProductsInCoupon(notIncludedProductsInCoupon) {
+        let html = '';
+        if (typeof notIncludedProductsInCoupon !== 'undefined' && notIncludedProductsInCoupon !== null && notIncludedProductsInCoupon !== '' && notIncludedProductsInCoupon.length>0) {
+            html += '' +
+                '<div class="m-alert m-alert--icon m-alert--icon-solid m-alert--outline alert alert-warning alert-dismissible fade show" role="alert">\n' +
+                '  <div class="m-alert__icon">\n' +
+                '    <i class="flaticon-exclamation"></i>\n' +
+                '    <span></span>\n' +
+                '  </div>\n' +
+                '  <div class="m-alert__text">\n' +
+                '    <strong>توجه!</strong> کد تخفیف وارد شده شامل محصولات زیر نمی شود:\n' +
+                '  </div>\n' +
+                '  <div class="m-alert__close">\n' +
+                '  </div>\n' +
+                '</div>' +
+                '<div class="row">';
+            for (let index in notIncludedProductsInCoupon) {
+                let item = notIncludedProductsInCoupon[index];
+                html += '' +
+                    '<div class="col">' +
+                    '  <div class="alert alert-accent alert-dismissible fade show m-alert m-alert--square m-alert--air notIncludedProductsInCoupon" role="alert">\n' +
+                    '    <div>' +
+                    item.name +
+                    '    </div>' +
+                    '  </div>' +
+                    '</div>';
+            }
+            html += '</div>';
+        }
+        $('.notIncludedProductsInCouponReportArea').html(html);
     }
 
     return {
@@ -318,6 +364,9 @@ var CheckoutPaymentUi = function () {
         },
         detachCoupon:function (showMessage) {
             detachCoupon(showMessage);
+        },
+        PrintnotIncludedProductsInCoupon:function (notIncludedProductsInCoupon) {
+            PrintnotIncludedProductsInCoupon(notIncludedProductsInCoupon);
         },
     };
 }();
