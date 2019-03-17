@@ -74,6 +74,7 @@ $(document).ready(function () {
                 price += '<span class="m-badge m-badge--warning a--productRealPrice">' + sum.toLocaleString('fa') + '</span>';
             }
             let paidPride = opItem.price.final + opItem.price.extraCost;
+            console.log('paidPride', paidPride);
             price += paidPride.toLocaleString('fa') + ' تومان ';
             if ((opItem.price.discountDetail.bonDiscount + opItem.price.discountDetail.productDiscount) > 0) {
                 let percent = Math.round((1 - (opItem.price.final / opItem.price.base)) * 100);

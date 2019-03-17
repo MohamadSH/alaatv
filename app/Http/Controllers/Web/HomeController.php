@@ -358,8 +358,28 @@ class HomeController extends Controller
 
         $pageName = "admin";
 
-        return view("admin.index", compact("pageName", "majors", "userStatuses", "permissions", "roles", "limitStatus", "orderstatuses", "paymentstatuses", "enableStatus", "genders", "gendersWithUnknown", "hasOrder", "products",
-            "lockProfileStatus", "mobileNumberVerification", "tableDefaultColumns", "sortBy", "sortType", "coupons", "addressSpecialFilter", "checkoutStatuses"));
+        return view("admin.index", compact("pageName",
+            "majors",
+            "userStatuses",
+            "permissions",
+            "roles",
+            "limitStatus",
+            "orderstatuses",
+            "paymentstatuses",
+            "enableStatus",
+            "genders",
+            "gendersWithUnknown",
+            "hasOrder",
+            /*"products",*/
+            "lockProfileStatus",
+            "mobileNumberVerification",
+            "tableDefaultColumns",
+            "sortBy",
+            "sortType",
+            "coupons",
+            "addressSpecialFilter",
+            "checkoutStatuses"
+        ));
     }
 
     /**

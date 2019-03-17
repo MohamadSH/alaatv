@@ -606,7 +606,18 @@ class OrderController extends Controller
 
         $products = $this->makeProductCollection();
 
-        return view('order.edit', compact('order', 'orderstatuses', 'paymentstatuses', 'coupons', 'orderTransactions', 'transactionstatuses', 'productBon', 'transactionPaymentmethods', 'transactionStatuses', 'products', 'orderArchivedTransactions', 'products', 'offlineTransactionPaymentMethods'));
+        return view('order.edit', compact('order',
+            'orderstatuses',
+            'paymentstatuses',
+            'coupons',
+            'orderTransactions',
+            'transactionstatuses',
+            'productBon',
+            'transactionPaymentmethods',
+            'transactionStatuses',
+//            'products',
+            'orderArchivedTransactions',
+            'offlineTransactionPaymentMethods'));
     }
 
     /**
@@ -990,7 +1001,7 @@ class OrderController extends Controller
             compact(
                 "gateways",
                 "coupon",
-                "reviewCouponProductsWarning",
+                "notIncludedProductsInCoupon",
                 "orderHasDonate",
                 "credit",
                 "invoiceInfo",
