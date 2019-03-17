@@ -224,7 +224,7 @@ $(document).ready(function () {
             status = false;
             message += 'برای کد پستی عدد وارد کنید.'+'<br>';
             $postalCode.parents('.form-group').addClass('has-danger');
-        } else if ($postalCode.val().trim().length !== 10) {
+        } else if ($postalCode.val().trim().length > 0 && $postalCode.val().trim().length !== 10) {
             status = false;
             message += 'کد پستی می بایست ده رقم باشد.'+'<br>';
             $postalCode.parents('.form-group').addClass('has-danger');

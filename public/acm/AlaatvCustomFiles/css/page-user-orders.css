@@ -14,3 +14,7 @@
 #user-instalmentsList .onlinePayment {
     width: 100px;
 }
+
+.orderProductItemPrice .a--productPrice {
+    white-space: nowrap;
+}

@@ -738,6 +738,7 @@
 
 
     </script>
+{{--    <script src = "{{ asset('/assets/demo/demo12/custom/crud/metronic-datatable/base/html-table.js') }}"></script>--}}
     <script src = "{{ asset('/acm/AlaatvCustomFiles/js/page-user-orders.js') }}"></script>
 @endsection
 
@@ -816,7 +817,7 @@
 
         jQuery(document).ready(function () {
             @if(!$errors->isEmpty())
-            $("#ATMPayment-button").trigger("click");
+                $("#ATMPayment-button").trigger("click");
             @endif
         });
     </script>

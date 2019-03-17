@@ -619,9 +619,16 @@ class ContentController extends Controller
         $tags = optional($content->tags)->tags;
         $tags = implode(",", isset($tags) ? $tags : []);
         $contentset = $content->set;
-        $rootContentTypes = $this->getRootsContentTypes();
 
-        $result = compact("content", "rootContentTypes", "validSinceTime", "tags", "contentset", "rootContentTypes");
+//        $rootContentTypes = $this->getRootsContentTypes();
+
+        $result = compact("content",
+            "rootContentTypes",
+            "validSinceTime",
+            "tags",
+            "contentset"
+//            "rootContentTypes"
+        );
         return view("content.edit", $result);
     }
 
