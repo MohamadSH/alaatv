@@ -276,7 +276,7 @@
                                                                 <div class="col-md-4">
                                                                     <label class="col-md-4 control-label ">محصول جدید</label>
                                                                     <div class="col-md-8">
-                                                                        {{--                                                                @include("admin.filters.productsFilter" , [ "listType"=>"childSelect" , "selectType"=>"searchable", "name"=>"exchange-a[".$orderproduct->id."][orderproductExchangeNewProduct]" , "class"=>"orderproductExchangeNewProductSelect" , "dataRole"=>$orderproduct->id , "defaultValue"=>["value"=>0 , "caption"=>"انتخاب کنید"]])--}}
+                                                                        @include("admin.filters.productsFilter" , [ "listType"=>"childSelect" , "selectType"=>"searchable", "name"=>"exchange-a[".$orderproduct->id."][orderproductExchangeNewProduct]" , "class"=>"orderproductExchangeNewProductSelect" , "dataRole"=>$orderproduct->id , "defaultValue"=>["value"=>0 , "caption"=>"انتخاب کنید"]])
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-2">
@@ -312,7 +312,7 @@
                                                                         <div class="mt-repeater-cell">
                                                                             <div class="row">
                                                                                 <div class="col-md-9">
-                                                                                    {{--                                                                        @include("admin.filters.productsFilter" , ["listType"=>"childSelect", "name"=>"newOrderproductProduct" , "class"=>"orderproductExchange-newOrderproductProduct" , "defaultValue"=>["value"=>0 , "caption"=>"انتخاب کنید"]])--}}
+                                                                                    @include("admin.filters.productsFilter" , ["listType"=>"childSelect", "name"=>"newOrderproductProduct" , "class"=>"orderproductExchange-newOrderproductProduct" , "defaultValue"=>["value"=>0 , "caption"=>"انتخاب کنید"]])
                                                                                 </div>
                                                                                 <div class="col-md-3">
                                                                                     {!! Form::text('neworderproductCost',null,['class' => 'form-control neworderproductCost'  , 'dir'=>'ltr' ]) !!}

@@ -1,11 +1,11 @@
 <div class="form-group">
     <div class="row">
         <div class="col-lg-6 col-md-6">
-{{--            @include('admin.filters.productsFilter' , ["withCheckbox"   => 1  , "listType" => "configurables" ])--}}
+            @include('admin.filters.productsFilter' , ["withCheckbox"   => 1  , "listType" => "configurables" ])
         </div>
         <div class="col-lg-6 col-md-6">
-{{--            @include('admin.filters.productsFilter' , ["name" => "orderProducts[]" , "withCheckbox"   => 1 ,--}}
-{{--                    "enableName" => "orderProductEnable" , "enableId"=>"orderProductEnable" , "description" => 1 , "id" => "orderProducts" , "withoutOrder" => 1 , "everyProduct" => 1 ])--}}
+            @include('admin.filters.productsFilter' , ["name" => "orderProducts[]" , "withCheckbox"   => 1 ,
+                    "enableName" => "orderProductEnable" , "enableId"=>"orderProductEnable" , "description" => 1 , "id" => "orderProducts" , "withoutOrder" => 1 , "everyProduct" => 1 ])
         </div>
     </div>
     <div class="row" style="margin-top: 2%">
