@@ -18,11 +18,6 @@
           type="text/css"/>
 @endsection
 
-@section("metadata")
-    @parent()
-    <meta name="_token" content="{{ csrf_token() }}">
-@endsection
-
 @section("pageBar")
     <div class="page-bar">
         <ul class="page-breadcrumb">
