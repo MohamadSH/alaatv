@@ -5,7 +5,6 @@
 
 @section('page-css')
     <link href = "{{ mix('/css/checkout-review.css') }}" rel = "stylesheet" type = "text/css"/>
-    <link href = "{{ asset('/acm/AlaatvCustomFiles/components/step/step.css') }}" rel = "stylesheet" type = "text/css"/>
 @endsection
 
 @section('content')
@@ -122,17 +121,17 @@
                                                     </div>
                                                     <div class = "m-widget5__content">
                                                         <div class = "m-widget5__stats1">
-                                            <span class = "m-nav__link-badge">
-                                                <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                                                    @if($simpleOrderProductItem['price']['final']!=$simpleOrderProductItem['price']['base'])
-                                                        <span class = "m-badge m-badge--warning a--productRealPrice">{{ number_format($simpleOrderProductItem['price']['base']+$simpleOrderProductItem['price']['extraCost']) }}</span>
-                                                    @endif
-                                                    {{ number_format($simpleOrderProductItem['price']['final']+$simpleOrderProductItem['price']['extraCost']) }} تومان
-                                                    @if(($simpleOrderProductItem->discountDetail['bonDiscount']+$simpleOrderProductItem->discountDetail['productDiscount'])>0)
-                                                        <span class = "m-badge m-badge--info a--productDiscount">{{ (1-($simpleOrderProductItem['price']['final']/$simpleOrderProductItem['price']['base']))*100 }}%</span>
-                                                    @endif
-                                                </span>
-                                            </span>
+                                                            <span class = "m-nav__link-badge">
+                                                                <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
+                                                                    @if($simpleOrderProductItem['price']['final']!=$simpleOrderProductItem['price']['base'])
+                                                                        <span class = "m-badge m-badge--warning a--productRealPrice">{{ number_format($simpleOrderProductItem['price']['base']+$simpleOrderProductItem['price']['extraCost']) }}</span>
+                                                                    @endif
+                                                                    {{ number_format($simpleOrderProductItem['price']['final']+$simpleOrderProductItem['price']['extraCost']) }} تومان
+                                                                    @if($simpleOrderProductItem['price']['final']!==$simpleOrderProductItem['price']['base'])
+                                                                        <span class = "m-badge m-badge--info a--productDiscount">{{ (1-($simpleOrderProductItem['price']['final']/$simpleOrderProductItem['price']['base']))*100 }}%</span>
+                                                                    @endif
+                                                                </span>
+                                                            </span>
                                                         </div>
                                                         <div class = "m-widget5__stats2">
                                                             <a href = "#" data-action = "{{action("Web\OrderproductController@destroy",$simpleOrderProductItem->id)}}" data-productid = "{{ $simpleOrderProductItem->product->id }}" class = "btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill btnRemoveOrderproduct">
@@ -411,6 +410,4 @@
 
 @section('page-js')
     <script src = "{{ mix('/js/checkout-review.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/UserCart.js') }}"></script>
-    <script src = "{{ asset('/acm/AlaatvCustomFiles/js/page-checkout-review.js') }}"></script>
 @endsection

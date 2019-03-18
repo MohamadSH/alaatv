@@ -62,3 +62,16 @@
     padding-left: 10px;
     font-size: 20px;
 }
+
+.m-brand .m-brand__tools .m-brand__toggler span::after,
+.m-brand .m-brand__tools .m-brand__toggler span::before,
+.m-brand .m-brand__tools .m-brand__toggler span,
+.m-brand .m-brand__tools .m-brand__toggler:hover span::after,
+.m-brand .m-brand__tools .m-brand__toggler:hover span::before,
+.m-brand .m-brand__tools .m-brand__toggler:hover span,
+.m-brand .m-brand__tools .m-brand__toggler.m-brand__toggler--active span::after,
+.m-brand .m-brand__tools .m-brand__toggler.m-brand__toggler--active span::before,
+.m-brand .m-brand__tools .m-brand__toggler.m-brand__toggler--active span,
+.m-brand .m-brand__tools .m-brand__toggler.m-brand__toggler--active:hover span {
+    background-color: white;
+}

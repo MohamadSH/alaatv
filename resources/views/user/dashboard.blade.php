@@ -2,8 +2,6 @@
 
 @section('page-css')
     <link href="{{ mix('/css/user-dashboard.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/css/page-user-dashboard.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('pageBar')
@@ -679,9 +677,5 @@
 @endsection
 
 @section('page-js')
-
     <script src="{{ mix('/js/user-dashboard.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-user-dashboard.js') }}"></script>
-
 @endsection

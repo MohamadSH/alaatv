@@ -10,7 +10,7 @@
                 <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item">
-                <i class = "flaticon-photo-camera m--padding-right-5"></i>
+                <i class = "fa fa-chalkboard-teacher"></i>
                 <a class = "m-link" href = "{{ action("Web\ProductController@index") }}">محصولات آموزشی</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
@@ -462,6 +462,4 @@
 @endsection
 @section('page-js')
     <script src = "{{ mix('/js/product-show.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/UserCart.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-product-show.js') }}"></script>
 @endsection

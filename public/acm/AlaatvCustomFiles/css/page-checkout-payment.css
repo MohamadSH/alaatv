@@ -60,6 +60,19 @@
     min-width: 100px;
 }
 
+.notIncludedProductsInCoupon {
+    display: table;
+    width: 100%;
+}
+
+.notIncludedProductsInCoupon > div {
+    display: table-cell;
+    vertical-align: middle;
+    height: 100px;
+    text-align: center;
+    width: 100%;
+}
+
 @media (max-width: 1024px) {
     .m-portlet--creative.noHeadText > .m-portlet__body {
         padding-bottom: 2.2rem

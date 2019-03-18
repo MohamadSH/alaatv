@@ -1,9 +1,5 @@
 @extends("app")
 
-@section("css")
-    <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
-@endsection
-
 @section('page-css')
     {{--<link href="{{ mix('/css/user-profile.css') }}" rel="stylesheet" type="text/css"/>--}}
     <link href = "{{ asset('/acm/AlaatvCustomFiles/css/page-user-orders.css') }}" rel = "stylesheet" type = "text/css"/>
@@ -731,94 +727,8 @@
 @endsection
 
 @section('page-js')
-    <script src = "{{ mix('/js/user-orders.js') }}"></script>
     <script>
-
         var orders = {!! $orders !!};
-
-
     </script>
-{{--    <script src = "{{ asset('/assets/demo/demo12/custom/crud/metronic-datatable/base/html-table.js') }}"></script>--}}
-    <script src = "{{ asset('/acm/AlaatvCustomFiles/js/page-user-orders.js') }}"></script>
-@endsection
-
-
-@section("footerPageLevelPlugin")
-    <script src="/assets/global/scripts/datatable.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js"
-            type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
-@endsection
-
-@section("footerPageLevelScript")
-    <script src="/assets/pages/scripts/table-datatables-responsive.min.js" type="text/javascript"></script>
-    <script src="/assets/pages/scripts/ui-extended-modals.min.js" type="text/javascript"></script>
-    <script src="/js/extraJS/jQueryNumberFormat/jquery.number.min.js" type="text/javascript"></script>
-@endsection
-
-@section("extraJS")
-    <script src="/js/extraJS/scripts/admin-makeDataTable.js" type="text/javascript"></script>
-    <script type="text/javascript">
-
-        //    var newDataTable =$("#orders_table").DataTable();
-        //    newDataTable.destroy();
-        //    $('#orders_table > tbody').html(result);
-        makeDataTableWithoutButton("orders_table");
-
-        $(document).on("click", ".onlinePayment", function () {
-            var order_id = $(this).attr("rel");
-            if ($(this).attr('data-role')) {
-                var transaction_id = $(this).data("role");
-                $("input[name=transaction_id]").val(transaction_id).prop("disabled", false);
-                $("#orderCost").text($("#instalmentCost_" + transaction_id).text()).number(true).prepend("مبلغ قابل پرداخت: ").append(" تومان");
-            } else {
-                $("input[name=transaction_id]").prop("disabled", true);
-                $("#orderCost").text($("#cost_" + order_id).text()).number(true).prepend("مبلغ قابل پرداخت: ").append(" تومان");
-            }
-            $("input[name=order_id]").val(order_id);
-        });
-
-        $(document).on("click", ".ATMPayment", function () {
-            var order_id = $(this).attr("rel");
-            if ($(this).attr('data-role')) {
-                var transaction_id = $(this).data("role");
-                // Initializiing form attributes
-                $("#offlinePaymentForm").attr("action", $(this).data("action"));
-                $("#offlinePaymentForm").attr("method", $(this).data("control"));
-                // Initializing form elements
-                $("input[name=transaction_id]").val(transaction_id).prop("disabled", false);
-                $("#ATMTransactionCost").hide().prop("disabled", true);
-                $("#ATMTransactionCost-static").text($("#instalmentCost_" + transaction_id).text()).number(true).show()
-            } else {
-                // Initializing form attributes
-                $("#offlinePaymentForm").attr("action", "{{action("Web\TransactionController@store")}}");
-                $("#offlinePaymentForm").attr("method", "POST");
-                // Initializing form elements
-                $("input[name=transaction_id]").prop("disabled", true);
-                $("#ATMTransactionCost").show().prop("disabled", false);
-                $("#ATMTransactionCost-static").hide();
-            }
-            $("input[name=order_id]").val(order_id);
-
-        });
-
-        $(document).on("click", ".ATMRadio", function () {
-            var radioValue = $(this).val();
-            if (radioValue == "referenceNumber") {
-                $("input[name=referenceNumber]").prop('disabled', false);
-                $("input[name=traceNumber]").prop('disabled', true);
-            } else if (radioValue == "traceNumber") {
-                $("input[name=referenceNumber]").prop('disabled', true);
-                $("input[name=traceNumber]").prop('disabled', false);
-            }
-        });
-
-        jQuery(document).ready(function () {
-            @if(!$errors->isEmpty())
-                $("#ATMPayment-button").trigger("click");
-            @endif
-        });
-    </script>
+    <script src = "{{ mix('/js/user-orders.js') }}"></script>
 @endsection
