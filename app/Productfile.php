@@ -72,6 +72,16 @@ class Productfile extends BaseModel
         return $this->belongsTo('\App\Product');
     }
 
+    public function content()
+    {
+        return $this->belongsTo('\App\Content');
+    }
+
+    public function set()
+    {
+        return $this->belongsTo('\App\Contentset', 'contentset_id');
+    }
+
     public function productfiletype()
     {
         return $this->belongsTo('\App\Productfiletype');
