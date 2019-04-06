@@ -1,4 +1,4 @@
-@extends("app" , ["pageName" => "profile"])
+@extends('app' , ['pageName' => 'profile'])
 
 @section('pageBar')
     <nav aria-label="breadcrumb">

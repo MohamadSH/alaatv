@@ -147,7 +147,7 @@
                 <input id="couponValidSince" type="text" class="form-control"
                        value="@if(isset($validSinceDate)) {{$validSinceDate}} @endif" dir="ltr"
                        @if(!isset($validSinceDate)) disabled="disabled" @endif>
-                <input name="validSince" id="couponValidSinceAlt" type="text" class="form-control hidden">
+                <input name="validSince" id="couponValidSinceAlt" type="text" class="form-control d-none">
 
                 <input class="form-control" name="sinceTime" id="couponValidSinceTime" placeholder="00:00"
                        value="@if(isset($validSinceTime)) {{$validSinceTime}} @endif" dir="ltr"
@@ -173,7 +173,7 @@
                 <input id="couponValidUntil" type="text" class="form-control"
                        value="@if(isset($validUntilDate)) {{$validUntilDate}} @endif" dir="ltr"
                        @if(!isset($validUntilDate)) disabled="disabled" @endif>
-                <input name="validUntil" id="couponValidUntilAlt" type="text" class="form-control hidden">
+                <input name="validUntil" id="couponValidUntilAlt" type="text" class="form-control d-none">
 
                 <input class="form-control" name="untilTime" id="couponValidUntilTime" placeholder="00:00"
                        value="@if(isset($validUntilTime)) {{$validUntilTime}} @endif" dir="ltr"
@@ -190,7 +190,7 @@
         <div class="form-actions">
             <div class="row">
                 <div class="col-md-offset-3 col-md-9">
-                    {!! Form::submit('اصلاح', ['class' => 'btn blue-ebonyclay']) !!}
+                    {!! Form::submit('اصلاح', ['class' => 'btn btn-lg m-btn--air btn-warning']) !!}
                 </div>
             </div>
         </div>
@@ -288,7 +288,7 @@
             </label>
             <div class="col-md-12">
                 <input id="couponValidSince" type="text" class="form-control" dir="ltr" disabled="disabled">
-                <input name="validSince" id="couponValidSinceAlt" type="text" class="form-control hidden">
+                <input name="validSince" id="couponValidSinceAlt" type="text" class="form-control d-none">
                 <input class="form-control" name="sinceTime" id="couponValidSinceTime" placeholder="00:00" dir="ltr"
                        disabled="disabled">
                 <span class="help-block" id="couponValidSinceAltAlert">
@@ -306,7 +306,7 @@
             </label>
             <div class="col-md-12">
                 <input id="couponValidUntil" type="text" class="form-control" dir="ltr" disabled="disabled">
-                <input name="validUntil" id="couponValidUntilAlt" type="text" class="form-control hidden">
+                <input name="validUntil" id="couponValidUntilAlt" type="text" class="form-control d-none">
                 <input class="form-control" name="untilTime" id="couponValidUntilTime" placeholder="00:00" dir="ltr"
                        disabled="disabled">
                 <span class="help-block" id="couponValidUntilAltAlert">

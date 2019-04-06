@@ -509,18 +509,27 @@
             <label class="control-label col-md-3">عکس</label>
             <div class="col-md-9">
                 <div class="fileinput fileinput-new" data-provides="fileinput">
-                    <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;"><img
-                                src="{{ route('image', ['category'=>'1','w'=>'140' , 'h'=>'140' , 'filename' =>  $user->photo ]) }}"
-                                alt="عکس پروفایل"/></div>
+                    <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                        <img class="a--fullWidth" src="{{ $user->photo }}" alt="عکس پروفایل"/>
+                    </div>
+                    <style>
+                        .fileinput .thumbnail > img {
+                            width: 100%;
+                            height: auto;
+                        }
+                    </style>
                     <div class="fileinput-preview fileinput-exists thumbnail"
-                         style="max-width: 200px; max-height: 150px;"></div>
+                         style="max-width: 200px; max-height: 150px;">
+                    </div>
                     <div>
-                                                            <span class="btn default btn-file">
-                                                                <span class="fileinput-new"> تغییر عکس </span>
-                                                                <span class="fileinput-exists"> تغییر </span>
-                                                                <input type="file" name="photo"> </span>
-                        <a href="javascript:" class="btn red fileinput-exists" id="userPhoto-remove"
-                           data-dismiss="fileinput"> حذف </a>
+                        <span class="btn default btn-file">
+                            <span class="fileinput-new btn btn-sm m-btn--air btn-warning"> تغییر عکس </span>
+                            <span class="fileinput-exists btn btn-sm m-btn--air btn-warning"> تغییر </span>
+                            <input type="file" name="photo">
+                        </span>
+                        <a href="javascript:" class="fileinput-exists btn btn-sm m-btn--air btn-danger" id="userPhoto-remove" data-dismiss="fileinput">
+                            حذف
+                        </a>
                     </div>
                 </div>
                 <div class="clearfix margin-top-10">
@@ -707,7 +716,7 @@
         <div class="form-actions">
             <div class="row">
                 <div class="col-md-offset-3 col-md-9">
-                    {!! Form::submit('اصلاح', ['class' => 'btn red']) !!}
+                    {!! Form::submit('اصلاح', ['class' => 'btn btn-lg m-btn--air btn-warning']) !!}
                 </div>
             </div>
         </div>

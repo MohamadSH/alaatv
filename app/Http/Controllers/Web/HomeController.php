@@ -799,10 +799,30 @@ class HomeController extends Controller
         //        Meta::set('title', substr("آلاء|پنل پیامک", 0, Config::get("constants.META_TITLE_LIMIT")));
         //        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
-        return view("admin.indexSMS", compact("pageName", "majors", "userStatuses",
-            "roles", "relatives", "orderstatuses", "paymentstatuses", "genders", "gendersWithUnknown", "products", "allRootProducts", "lockProfileStatus",
-            "mobileNumberVerification", "sortBy", "sortType", "smsCredit", "smsProviderNumber",
-            "numberOfFatherPhones", "numberOfMotherPhones", "coupons", "addressSpecialFilter", "checkoutStatuses"));
+        return view("admin.indexSMS", compact(
+            "pageName",
+            "majors",
+            "userStatuses",
+            "roles",
+            "relatives",
+            "orderstatuses",
+            "paymentstatuses",
+            "genders",
+            "gendersWithUnknown",
+//            "products",
+            "allRootProducts",
+            "lockProfileStatus",
+            "mobileNumberVerification",
+            "sortBy",
+            "sortType",
+            "smsCredit",
+            "smsProviderNumber",
+            "numberOfFatherPhones",
+            "numberOfMotherPhones",
+            "coupons",
+            "addressSpecialFilter",
+            "heckoutStatuses")
+        );
     }
 
     /**
