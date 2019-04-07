@@ -1,90 +1,80 @@
 @permission((Config::get('constants.SHOW_SITE_CONFIG_ACCESS')))
-@extends("app" , ["pageName"=> "admin"])
+@extends('app' , ['pageName'=> 'admin'])
 
-@section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+@section('page-css')
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/css/profile-rtl.css" rel="stylesheet" type="text/css"/>
 @endsection
 
-@section("headPageLevelStyle")
-    <link href="/assets/pages/css/profile-rtl.min.css" rel="stylesheet" type="text/css"/>
-@endsection
-
-@section("bodyClass")
-    class="page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-sidebar-closed page-md"
-@endsection
-
-@section("title")
-    <title>آلاء|تنظیمات سایت</title>
-@endsection
-
-@section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
-            <li>
-                <i class="icon-home"></i>
-                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
-                <i class="fa fa-angle-left"></i>
+@section('pageBar')
+    <nav aria-label = "breadcrumb">
+        <ol class = "breadcrumb">
+            <li class = "breadcrumb-item">
+                <i class = "flaticon-home-2 m--padding-right-5"></i>
+                <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
-            <li>
-                <span>پیکربندی سایت</span>
+            <li class = "breadcrumb-item active" aria-current = "page">
+                <a class = "m-link" href = "#">پیکربندی سایت</a>
             </li>
-        </ul>
-    </div>
+        </ol>
+    </nav>
 @endsection
 
-@section("metadata")
-    <meta name="_token" content="{{ csrf_token() }}">
-@endsection
-
-
-@section("content")
+@section('content')
     <div class="row">
-        <div class="col-md-12">
-            <!-- BEGIN PROFILE SIDEBAR -->
-            <div class="profile-sidebar">
-                <!-- PORTLET MAIN -->
+        <div class="col">
+            <!-- PORTLET MAIN -->
             @include("partials.siteConfigurationSideBar" , ["section"=>"websiteSetting"])
             <!-- END PORTLET MAIN -->
-            </div>
-            <!-- END BEGIN PROFILE SIDEBAR -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
 
-            <!-- BEGIN PROFILE CONTENT -->
-            <div class="profile-content">
             @include("systemMessage.flash")
+
             <!-- BEGIN PORTLET -->
-                {!! Form::open(['files' => true , 'method' => 'PUT' , 'action' => ['WebsiteSettingController@update', $setting] , 'class'=>'form-horizontal']) !!}
-                <div class="portlet light ">
-                    <div class="portlet-title">
-                        <div class="row">
-                            <div class="tabbable-line col-md-11">
-                                <ul class="nav nav-tabs">
-                                    <li class="active">
-                                        <a href="#tab_1_1" data-toggle="tab">مشخصات سایت</a>
-                                    </li>
-                                    <li>
-                                        <a href="#tab_1_2" data-toggle="tab">SEO صفحه اصلی</a>
-                                    </li>
-                                    <li>
-                                        <a href="#tab_1_3" data-toggle="tab">مشخصات شعبه اصلی</a>
-                                    </li>
-                                    <li>
-                                        <a href="#tab_1_4" data-toggle="tab">شبکه های اجتماعی</a>
-                                    </li>
-                                    <li>
-                                        <a href="#tab_1_5" data-toggle="tab">لوگو</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-md-1">
-                                @permission((Config::get('constants.EDIT_SITE_CONFIG_ACCESS')))
-                                {!! Form::submit("اصلاح" , ['class' => 'btn btn-success']) !!}
-                                @endpermission
-                            </div>
+                {!! Form::open(['files' => true , 'method' => 'PUT' , 'action' => ['Web\WebsiteSettingController@update', $setting] , 'class'=>'form-horizontal']) !!}
+                <div class="m-portlet m-portlet--tabs">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-tools a--full-width">
+                            <ul class="nav nav-tabs m-tabs-line m-tabs-line--primary m-tabs-line--2x" role="tablist">
+                                <li class="nav-item m-tabs__item">
+                                    <a class="nav-link m-tabs__link active" data-toggle="tab" href="#m_tabs_6_1" role="tab">
+                                        <i class="la la-cog"></i> مشخصات سایت
+                                    </a>
+                                </li>
+                                <li class="nav-item m-tabs__item">
+                                    <a class="nav-link m-tabs__link" data-toggle="tab" href="#m_tabs_6_2" role="tab">
+                                        <i class="la la-briefcase"></i> SEO صفحه اصلی
+                                    </a>
+                                </li>
+                                <li class="nav-item m-tabs__item">
+                                    <a class="nav-link m-tabs__link" data-toggle="tab" href="#m_tabs_6_3" role="tab">
+                                        <i class="la la-bell-o"></i> مشخصات شعبه اصلی
+                                    </a>
+                                </li>
+                                <li class="nav-item m-tabs__item">
+                                    <a class="nav-link m-tabs__link" data-toggle="tab" href="#m_tabs_6_4" role="tab">
+                                        <i class="la la-bell-o"></i> شبکه های اجتماعی
+                                    </a>
+                                </li>
+                                <li class="nav-item m-tabs__item">
+                                    <a class="nav-link m-tabs__link" data-toggle="tab" href="#m_tabs_6_5" role="tab">
+                                        <i class="la la-bell-o"></i> لوگو
+                                    </a>
+                                </li>
+                            </ul>
+
+                            @permission((Config::get('constants.EDIT_SITE_CONFIG_ACCESS')))
+                            {!! Form::submit("اصلاح" , ['class' => 'btn m-btn--pill btn-success m--margin-left-15']) !!}
+                            @endpermission
+
                         </div>
                     </div>
-                    <div class="portlet-body">
+                    <div class="m-portlet__body">
                         <div class="tab-content">
-                            <div class="tab-pane active" id="tab_1_1">
+                            <div class="tab-pane active" id="m_tabs_6_1" role="tabpanel">
                                 <div class="row">
                                     @if(isset($wSetting->site->titleBar))
                                         <div class="form-group col-md-6">
@@ -130,7 +120,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="tab-pane" id="tab_1_2">
+                            <div class="tab-pane" id="m_tabs_6_2" role="tabpanel">
                                 <div class="row">
                                     <div class="form-group col-md-12">
                                         <label class="control-label col-md-2">تایتل</label>
@@ -174,7 +164,7 @@
                                 </div>
                                 <hr>
                             </div>
-                            <div class="tab-pane" id="tab_1_3">
+                            <div class="tab-pane" id="m_tabs_6_3" role="tabpanel">
                                 <div class="row">
                                     @if(isset($wSetting->branches->main->displayName))
                                         <div class="form-group col-md-6">
@@ -293,28 +283,34 @@
                                     @endforeach
                                 </div>
                             </div>
-                            <div class="tab-pane" id="tab_1_4">
+                            <div class="tab-pane" id="m_tabs_6_4" role="tabpanel">
                                 <div class="row">
-                                    <div class="form-group col-md-8">
-                                        <label class="control-label col-md-3">عنوان کانال تلگرام</label>
-                                        <div class="col-md-9">
-                                            {!! Form::text("telegramName", $wSetting->socialNetwork->telegram->channel->name, ['class' => 'form-control']) !!}
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">عنوان کانال تلگرام</label>
+                                            <div class="col-md-9">
+                                                {!! Form::text("telegramName", $wSetting->socialNetwork->telegram->channel->name, ['class' => 'form-control']) !!}
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         @if(isset($wSetting->socialNetwork->telegram->channel->link))
                                             <div class="form-group col-md-8">
-                                                <label class="control-label col-md-3">لینک</label>
-                                                <div class="col-md-9">
-                                                    {!! Form::text("telegramLink", $wSetting->socialNetwork->telegram->channel->link, ['class' => 'form-control', 'dir' => 'ltr']) !!}
+                                                <div class="row">
+                                                    <label class="control-label col-md-3">لینک</label>
+                                                    <div class="col-md-9">
+                                                        {!! Form::text("telegramLink", $wSetting->socialNetwork->telegram->channel->link, ['class' => 'form-control', 'dir' => 'ltr']) !!}
+                                                    </div>
                                                 </div>
                                             </div>
                                         @endif
                                         @if(isset($wSetting->socialNetwork->telegram->channel->admin))
                                             <div class="form-group col-md-8">
-                                                <label class="control-label col-md-3">ادمین</label>
-                                                <div class="col-md-9">
-                                                    {!! Form::text("telegramAdmin", $wSetting->socialNetwork->telegram->channel->admin, ['class' => 'form-control', 'dir' => 'ltr']) !!}
+                                                <div class="row">
+                                                    <label class="control-label col-md-3">ادمین</label>
+                                                    <div class="col-md-9">
+                                                        {!! Form::text("telegramAdmin", $wSetting->socialNetwork->telegram->channel->admin, ['class' => 'form-control', 'dir' => 'ltr']) !!}
+                                                    </div>
                                                 </div>
                                             </div>
                                         @endif
@@ -361,8 +357,7 @@
                                     {{--</div>--}}
                                 </div>
                             </div>
-
-                            <div class="tab-pane" id="tab_1_5">
+                            <div class="tab-pane" id="m_tabs_6_5" role="tabpanel">
                                 <div class="row">
                                     <div class="col-md-6 text-center">
                                         <label class="control-label bold">favicon</label>
@@ -376,11 +371,11 @@
                                                  style="max-width: 200px; max-height: 150px;"></div>
                                             <br>
                                             <div>
-                                                        <span class="btn-file">
-                                                            <span class="fileinput-new btn btn-success"><i
-                                                                        class="fa fa-plus"></i>انتخاب عکس</span>
-                                                            <span class="fileinput-exists btn"> تغییر </span>
-                                                            <input type="file" name="favicon"> </span>
+                                                                <span class="btn-file">
+                                                                    <span class="fileinput-new btn btn-success"><i
+                                                                                class="fa fa-plus"></i>انتخاب عکس</span>
+                                                                    <span class="fileinput-exists btn"> تغییر </span>
+                                                                    <input type="file" name="favicon"> </span>
                                                 <a href="javascript:" class="btn red fileinput-exists"
                                                    id="favicon-remove" data-dismiss="fileinput"> حذف </a>
                                             </div>
@@ -399,11 +394,11 @@
                                                  style="max-width: 200px; max-height: 150px;"></div>
                                             <br>
                                             <div>
-                                                        <span class="btn-file">
-                                                            <span class="fileinput-new btn btn-success"><i
-                                                                        class="fa fa-plus"></i>انتخاب عکس</span>
-                                                            <span class="fileinput-exists btn"> تغییر </span>
-                                                            <input type="file" name="siteLogo"> </span>
+                                                                <span class="btn-file">
+                                                                    <span class="fileinput-new btn btn-success"><i
+                                                                                class="fa fa-plus"></i>انتخاب عکس</span>
+                                                                    <span class="fileinput-exists btn"> تغییر </span>
+                                                                    <input type="file" name="siteLogo"> </span>
                                                 <a href="javascript:" class="btn red fileinput-exists"
                                                    id="siteLogo-remove" data-dismiss="fileinput"> حذف </a>
                                             </div>
@@ -415,24 +410,17 @@
                         </div>
                     </div>
                 </div>
-            {!! Form::close() !!}
+                {!! Form::close() !!}
             <!-- END PORTLET -->
-            </div>
-            <!-- END PROFILE CONTENT -->
+
         </div>
     </div>
 @endsection
 
-@section("footerPageLevelPlugin")
-    <script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
-@endsection
-
-@section("footerPageLevelScript")
-    <script src="/assets/global/scripts/app.min.js" type="text/javascript"></script>
-@endsection
-
-@section("extraJS")
+@section('page-js')
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/app.js" type="text/javascript"></script>
     <script>
         countChar(document.getElementById('metaTitle'), 50,{{Config::get("constants.UI_META_TITLE_LIMIT")}},{{Config::get("constants.UI_META_TITLE_LIMIT")}}, '#progressbar_metaTitle');
         countChar(document.getElementById('metaKeywords'),{{Config::get("constants.UI_META_KEYWORD_LIMIT")}},{{Config::get("constants.UI_META_KEYWORD_LIMIT")}},{{Config::get("constants.UI_META_KEYWORD_LIMIT")}}, '#progressbar_metaKeywords');
@@ -466,4 +454,5 @@
         }
     </script>
 @endsection
+
 @endpermission

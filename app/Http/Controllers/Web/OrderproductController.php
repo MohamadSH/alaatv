@@ -276,7 +276,16 @@ class OrderproductController extends Controller
         $checkoutStatuses = Checkoutstatus::pluck('displayName', 'id')
                                           ->toArray();
         $checkoutStatuses = array_sort_recursive($checkoutStatuses);
-        return view("order.orderproduct.edit", compact("orderproduct", "products", "extraSelectCollection", "extraCheckboxCollection", "orderproductCost", "defaultExtraAttributes", "checkoutStatuses"));
+
+        return view("order.orderproduct.edit",
+            compact("orderproduct",
+//                "products",
+                "extraSelectCollection",
+                "extraCheckboxCollection",
+                "orderproductCost",
+                "defaultExtraAttributes",
+                "checkoutStatuses")
+        );
     }
 
     /**

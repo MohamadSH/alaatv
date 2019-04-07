@@ -874,7 +874,7 @@ class HomeController extends Controller
                                        ->get()
                                        ->first();
 
-        return redirect(action('WebsiteSettingController@show', $this->setting));
+        return redirect(action('Web\WebsiteSettingController@show', $this->setting));
     }
 
     /**
