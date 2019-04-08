@@ -10,7 +10,7 @@
     </div>
     <div class="m-portlet__body">
 
-        {!! Form::open(["method" => "PUT" , 'action'=>['ProductController@addGift' , $product] ]) !!}
+        {!! Form::open(["method" => "PUT" , 'action'=>['Web\ProductController@addGift' , $product] ]) !!}
         <div class="form-inline {{ $errors->has('gift') ? ' has-error' : '' }}">
             @include("admin.filters.productsFilter" , [ "listType"=>"childSelect","name"=>"giftProducts" , "defaultValue"=>["value"=>0 , "caption"=>"انتخاب کنید"]])
             @if ($errors->has('gift'))

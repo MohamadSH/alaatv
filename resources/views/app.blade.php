@@ -28,6 +28,13 @@
 
         @yield('page-css')
 
+        <style>
+            /*fix persian date picker show bug in modal*/
+            .datepicker-plot-area {
+                z-index: 1061;
+            }
+        </style>
+
         <link rel = "shortcut icon" href = "@if(isset($wSetting->site->favicon)) {{route('image', ['category'=>'11','w'=>'150' , 'h'=>'150' ,  'filename' =>  $wSetting->site->favicon ])}} @endif"/>
         <!--begin: csrf token -->
         <script>

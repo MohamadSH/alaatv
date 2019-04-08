@@ -13,7 +13,7 @@
     <div class="m-portlet__body">
 
 
-        {!! Form::open(["method" => "PUT" , "action" => ["ProductController@addComplimentary" , $product]]) !!}
+        {!! Form::open(["method" => "PUT" , "action" => ["Web\ProductController@addComplimentary" , $product]]) !!}
         <div class="form-inline {{ $errors->has('complimentaryproducts') ? ' has-error' : '' }}">
             @include("admin.filters.productsFilter" , [ "listType"=>"childSelect","name"=>"complimentaryproducts" , "defaultValue"=>["value"=>0 , "caption"=>"انتخاب کنید"]])
             {!! Form::submit("افزودن", ['class' => 'btn red-mint']) !!}

@@ -358,6 +358,8 @@ class HomeController extends Controller
 
         $pageName = "admin";
 
+        $products = Product::where('id', 240)->get();
+
         return view("admin.index", compact("pageName",
             "majors",
             "userStatuses",
@@ -370,7 +372,7 @@ class HomeController extends Controller
             "genders",
             "gendersWithUnknown",
             "hasOrder",
-            /*"products",*/
+            "products",
             "lockProfileStatus",
             "mobileNumberVerification",
             "tableDefaultColumns",
@@ -5400,7 +5402,9 @@ class HomeController extends Controller
      */
     public function adminGenerateRandomCoupon(Request $request)
     {
-        $productCollection = $products = $this->makeProductCollection();
+//        $productCollection = $products = $this->makeProductCollection();
+        $productCollection = Product::where('id', 240);
+
         return view("admin.generateSpecialCoupon", compact("productCollection"));
     }
 }

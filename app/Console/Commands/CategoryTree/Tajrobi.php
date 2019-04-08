@@ -9,9 +9,9 @@
 namespace App\Console\Commands\CategoryTree;
 
 
-class Tajrobi implements GetTree
+class Tajrobi extends GetTree
 {
-    public static function getTree(): array {
+    public function getTree(): array {
 
         $tajrobi = [
             [
@@ -41874,5 +41874,12 @@ class Tajrobi implements GetTree
 
 
         ];
+
+        return $tajrobi;
+    }
+
+    public function getLernitoStyle()
+    {
+        return $this->treeToLernitoJson($this->getTree());
     }
 }

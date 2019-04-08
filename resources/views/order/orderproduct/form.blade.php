@@ -42,7 +42,7 @@
                         <span></span>
                     </label>تغییر قیمت(تومان)</label>
                 <div class="col-md-8 col-md-8 col-sm-8">
-                    {!! Form::text('cost', (isset($orderproduct)?$orderproduct->calculatePayableCost(true):null), ['class' => 'form-control', 'id' => 'cost' , 'dir'=>'ltr' , 'disabled']) !!}
+                    {!! Form::text('cost', (isset($orderproduct)?$orderproduct->obtainOrderproductCost(true)['final']:null), ['class' => 'form-control', 'id' => 'cost' , 'dir'=>'ltr' , 'disabled']) !!}
                     @if ($errors->has('cost'))
                         <span class="help-block">
                                 <strong>{{ $errors->first('cost') }}</strong>

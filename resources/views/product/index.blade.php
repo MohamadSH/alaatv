@@ -1,4 +1,4 @@
-@permission((Config::get('constants.LIST_PRODUCT_ACCESS')))
+@permission((config('constants.LIST_PRODUCT_ACCESS')))
 @foreach($items as $item)
     <tr>
         <th></th>
@@ -112,19 +112,19 @@
                     <i class="fa fa-angle-down"></i>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    @permission((Config::get('constants.SHOW_PRODUCT_ACCESS')))
+                    @permission((config('constants.SHOW_PRODUCT_ACCESS')))
                     <li>
                         <a target = "_blank" href = "{{action("Web\ProductController@edit" , $item)}}">
                             <i class="fa fa-pencil"></i> اصلاح </a>
                     </li>
                     @endpermission
-                    @permission((Config::get('constants.REMOVE_PRODUCT_ACCESS')))
+                    @permission((config('constants.REMOVE_PRODUCT_ACCESS')))
                     <li>
                         <a data-target="#static-{{$item->id}}" data-toggle="modal">
                             <i class="fa fa-remove"></i> حذف </a>
                     </li>
                     @endpermission
-                    @permission((Config::get('constants.COPY_PRODUCT_ACCESS')))
+                    @permission((config('constants.COPY_PRODUCT_ACCESS')))
                     <li>
                         <a class = "copyProduct" data-action = "{{action("Web\ProductController@copy" , $item)}}"
                            data-target="#copyProductModal" data-toggle="modal">
@@ -135,18 +135,25 @@
                 </ul>
                 <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
                 <!-- static -->
-                @permission((Config::get('constants.REMOVE_PRODUCT_ACCESS')))
-                <div id="static-{{$item->id}}" class="modal fade" tabindex="-1" data-backdrop="static"
-                     data-keyboard="false">
-                    <div class="modal-header">
-                        <h4 class="modal-title">آیا مطمئن هستید؟</h4>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                        <button type="button" data-dismiss="modal" class="btn green" onclick = "removeProduct('{{action("Web\ProductController@destroy" , $item)}}');">بله
-                        </button>
+                @permission((config('constants.REMOVE_PRODUCT_ACCESS')))
+
+
+                <!--begin::Modal-->
+                <div class="modal fade" id="static-{{$item->id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p> آیا مطمئن هستید؟ </p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="removeProduct('{{action("Web\ProductController@destroy" , $item)}}');">بله</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!--end::Modal-->
+
                 @endpermission
             </div>
         </td>

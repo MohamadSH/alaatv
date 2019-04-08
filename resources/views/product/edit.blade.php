@@ -1,12 +1,12 @@
 @permission((config('constants.SHOW_PRODUCT_ACCESS')))
-@extends("app",["pageName"=>"admin"])
+@extends('app',['pageName'=>'admin'])
 
 @section('page-css')
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
+    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>--}}
+    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>--}}
     <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
 @endsection
@@ -33,7 +33,7 @@
     </nav>
 @endsection
 
-@section("content")
+@section('content')
     @include("systemMessage.flash")
 
     <div class="row">
@@ -45,7 +45,7 @@
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
                                 اصلاح اطلاعات
-                                <a href = "{{action("Web\ProductController@show" , $product)}}">{{$product->name}}</a>
+                                <a class="m-link" href = "{{action("Web\ProductController@show" , $product)}}">{{$product->name}}</a>
                             </h3>
                         </div>
                     </div>
@@ -53,12 +53,13 @@
                 <div class="m-portlet__body">
                     <div class="m-portlet__body-progress">Loading</div>
                         {!! Form::model($product,['files'=>true,'method' => 'PUT','action' => ['Web\ProductController@update',$product], 'class'=>'form-horizontal']) !!}
-                            @include('product.form' )
+{{--                            @include('product.form' )--}}
                         {!! Form::close() !!}
                 </div>
             </div>
             <!-- END SAMPLE FORM PORTLET-->
         </div>
+
         {{--<div class="col-md-6">--}}
         {{--<div class="actions">--}}
         {{--<div class="btn-group">--}}
@@ -71,49 +72,55 @@
         @permission((config('constants.LIST_CONFIGURE_PRODUCT_ACCESS')))
             {{--@if($product->hasChildren())--}}
             <div class="col-md-6 ">
-                @include('product.partials.configureTableForm')
+{{--                @include('product.partials.configureTableForm')--}}
             </div>
             {{--@endif--}}
         @endpermission
 
         @permission((config('constants.LIST_PRODUCT_FILE_ACCESS')))
             <div class="col-md-6">
-                @include('product.productFile.index')
+{{--                @include('product.productFile.index')--}}
             </div>
         @endpermission
 
         @permission((config('constants.LIST_PRODUCT_SAMPLE_PHOTO_ACCESS')))
             <div class="col-md-6">
-                @include('product.samplePhoto.index')
+{{--                @include('product.samplePhoto.index')--}}
             </div>
         @endpermission
 
         <div class="col-md-6">
-            @include("product.complimentary")
+{{--            @include("product.complimentary")--}}
         </div>
 
         <div class="col-md-6">
-            @include("product.gift")
+            {{--@include("product.gift")--}}
         </div>
-        <div id="removeProductGiftModal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
-            {!! Form::open(['action' => ['Web\ProductController@removeGift' , $product] ,'class'=>'form-horizontal' , 'class' => 'removeProductGiftForm']) !!}
-                <div class="modal-header">
-                    <h4> آیا مطمئن هستید؟ </h4>
-                </div>
-                <div class="modal-body">
-                    {!! Form::hidden('giftId',null) !!}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                    <button type="submit" class="btn green">بله</button>
-                    <img class="hidden" id="remove-product-gift-loading-image"
-                         src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px" width="25px">
-                </div>
-            {!! Form::close() !!}
-        </div>
-    </div>
-@endsection
 
+        <!--begin::Modal-->
+        <div class="modal fade" id="removeProductGiftModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    {!! Form::open(['action' => ['Web\ProductController@removeGift' , $product] ,'class'=>'form-horizontal' , 'class' => 'removeProductGiftForm']) !!}
+                        <div class="modal-body">
+                            <p> آیا مطمئن هستید؟ </p>
+                            {!! Form::hidden('giftId',null) !!}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                            <button type="submit" class="btn btn-primary">بله</button>
+                            <img class="hidden" id="remove-product-gift-loading-image"
+                                 src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px" width="25px">
+                        </div>
+                    {!! Form::close() !!}
+                </div>
+            </div>
+        </div>
+        <!--end::Modal-->
+
+    </div>
+
+@endsection
 
 @section('page-js')
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>

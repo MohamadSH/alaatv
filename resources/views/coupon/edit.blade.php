@@ -31,8 +31,8 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-6 ">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
         @include("systemMessage.flash")
         <!-- BEGIN SAMPLE FORM PORTLET-->
 
@@ -62,6 +62,7 @@
             <!-- END SAMPLE FORM PORTLET-->
 
         </div>
+        <div class="col-md-2"></div>
     </div>
 
 @endsection

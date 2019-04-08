@@ -1,4 +1,4 @@
-@role((Config::get("constants.ROLE_ADMIN")))
+@role((config("constants.ROLE_ADMIN")))
 @foreach($roles as $role)
     <tr>
         <th></th>
@@ -30,7 +30,7 @@
                         <i class="fa fa-angle-down"></i>
                     </button>
                     <ul class="dropdown-menu" role="menu">
-                        @role((Config::get("constants.ROLE_ADMIN")))
+                        @role((config("constants.ROLE_ADMIN")))
                         <li>
                             <a href = "{{action("Web\RoleController@edit" , $role)}}">
                                 <i class="fa fa-pencil"></i> اصلاح </a>
@@ -45,17 +45,23 @@
                     </ul>
                     <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
                     <!-- static -->
-                    <div id="static-{{$role->id}}" class="modal fade" tabindex="-1" data-backdrop="static"
-                         data-keyboard="false">
-                        <div class="modal-body">
-                            <p> آیا مطمئن هستید؟ </p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                            <button type="button" data-dismiss="modal" class="btn green" onclick = "removeRole('{{action("Web\RoleController@destroy" , $role)}}');">بله
-                            </button>
+
+                    <!--begin::Modal-->
+                    <div class="modal fade" id="static-{{$role->id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <p> آیا مطمئن هستید؟ </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="removeRole('{{action("Web\RoleController@destroy" , $role)}}');">بله</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <!--end::Modal-->
+
                 </div>
             @else
                 ندارد

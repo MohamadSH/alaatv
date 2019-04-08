@@ -4,8 +4,8 @@
 @section('page-css')
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
+    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>--}}
+    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>--}}
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css"/>
@@ -16,14 +16,14 @@
 @endsection
 
 @section('pageBar')
-    <nav aria-label = "breadcrumb">
-        <ol class = "breadcrumb">
-            <li class = "breadcrumb-item">
-                <i class = "flaticon-home-2 m--padding-right-5"></i>
-                <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <i class="flaticon-home-2 m--padding-right-5"></i>
+                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
-            <li class = "breadcrumb-item active" aria-current = "page">
-                <a class = "m-link" href = "#">پنل مدیریت محصولات</a>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a class="m-link" href="#">پنل مدیریت محصولات</a>
             </li>
         </ol>
     </nav>
@@ -49,7 +49,7 @@
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
-                                <i class="fa fa-cogs"></i>مدیریت محصولات
+                                <i class="fa fa-cogs m--margin-right-10"></i>مدیریت محصولات
                             </h3>
                         </div>
                     </div>
@@ -78,55 +78,66 @@
                             <div class="col-md-6">
                                 <div class="btn-group">
                                     @permission((config('constants.INSERT_PRODUCT_ACCESS')))
-                                    <a id="sample_editable_4_new" class="btn btn-outline dark" data-toggle="modal"
-                                       href="#responsive-product">
-                                        <i class="fa fa-plus"></i> افزودن محصول </a>
-                                    <!-- responsive modal -->
-                                    <div id="responsive-product" class="modal fade" tabindex="-1" data-width="760">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal"
-                                                    aria-hidden="true"></button>
-                                            <h4 class="modal-title">افزودن محصول جدید</h4>
-                                        </div>
-                                        {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\ProductController@store'], 'class'=>'nobottommargin' , 'id'=>'productForm']) !!}
-                                            <div class="modal-body">
-                                            <div class="row">
-                                                @include('product.form')
+                                    <a id="sample_editable_4_new" class="btn btn-info m-btn m-btn--icon m-btn--wide" data-toggle="modal" href="#responsive-product" data-target="#responsive-product">
+                                        <i class="fa fa-plus"></i> افزودن محصول
+                                    </a>
+                                    <!--begin::Modal-->
+                                    <div class="modal fade" id="responsive-product" tabindex="-1" role="dialog" aria-labelledby="responsive-productModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="responsive-productModalLabel">افزودن محصول جدید</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\ProductController@store'], 'class'=>'nobottommargin' , 'id'=>'productForm']) !!}
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        @include('product.form')
+                                                    </div>
+                                                </div>
+                                                {!! Form::close() !!}
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                                                    <button type="button" class="btn btn-primary" id="productForm-submit">ذخیره</button>
+                                                </div>
                                             </div>
                                         </div>
-                                        {!! Form::close() !!}
-                                        <div class="modal-footer">
-                                            <button type="button" data-dismiss="modal" class="btn btn-outline dark"
-                                                    id="productForm-close">بستن
-                                            </button>
-                                            <button type="button" class="btn dark" id="productForm-submit">ذخیره
-                                            </button>
-                                        </div>
                                     </div>
+                                    <!--end::Modal-->
                                     @endpermission
                                 </div>
                             </div>
                         </div>
                     </div>
                     @permission((config('constants.REMOVE_PRODUCT_ACCESS')))
-                    <div id="copyProductModal" class="modal fade" tabindex="-1" data-backdrop="static"
-                         data-keyboard="false">
-                        {!! Form::open(['class'=>'form-horizontal copyProductForm']) !!}
-                        <div class="modal-header">
-                            <h4 class="modal-title">آیا مطمئن هستید؟</h4>
+                    <!--begin::Modal-->
+                    <div class="modal fade" id="copyProductModal" tabindex="-1" role="dialog" aria-labelledby="copyProductModalModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                {!! Form::open(['class'=>'form-horizontal copyProductForm']) !!}
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="copyProductModalModalLabel"></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <h4 class="modal-title">آیا مطمئن هستید؟</h4>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                                    <button type="submit" class="btn btn-primary" id="copy-product-loading-image">بله</button>
+                                    <img class="hidden" id="copy-product-loading-image"
+                                         src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px"
+                                         width="25px">
+                                </div>
+                                {!! Form::close() !!}
+                            </div>
                         </div>
-                        <div class="modal-body">
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                            <button type="submit" class="btn green">بله</button>
-                            <img class="hidden" id="copy-product-loading-image"
-                                 src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px"
-                                 width="25px">
-                        </div>
-                        {!! Form::close() !!}
                     </div>
+                    <!--end::Modal-->
                     @endpermission
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%"
                            id="product_table">
@@ -200,32 +211,35 @@
                             <div class="col-md-6">
                                 <div class="btn-group">
                                     @permission((config('constants.INSERT_COUPON_ACCESS')))
-                                    <a id="sample_editable_3_new" class="btn btn-outline blue-ebonyclay"
-                                       data-toggle="modal" href="#responsive-coupon">
-                                        <i class="fa fa-plus"></i> افزودن کپن </a>
-                                    <!-- responsive modal -->
-                                    <div id="responsive-coupon" class="modal fade" tabindex="-1" data-width="760">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal"
-                                                    aria-hidden="true"></button>
-                                            <h4 class="modal-title">افزودن کپن جدید</h4>
-                                        </div>
-                                        {!! Form::open(['method' => 'POST','action' => ['Web\CouponController@store'], 'class'=>'nobottommargin' , 'id'=>'couponForm']) !!}
-                                        <div class="modal-body">
-                                            <div class="row">
-                                                @include('coupon.form')
+                                    <a id="sample_editable_3_new" class="btn btn-info m-btn m-btn--icon m-btn--wide" data-toggle="modal" href="#responsive-coupon" data-target="#responsive-coupon">
+                                        <i class="fa fa-plus"></i> افزودن کپن
+                                    </a>
+
+                                    <!--begin::Modal-->
+                                    <div class="modal fade" id="responsive-coupon" tabindex="-1" role="dialog" aria-labelledby="responsive-couponModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="copyProductModalModalLabel">افزودن کپن جدید</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                {!! Form::open(['method' => 'POST','action' => ['Web\CouponController@store'], 'class'=>'nobottommargin' , 'id'=>'couponForm']) !!}
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        @include('coupon.form')
+                                                    </div>
+                                                </div>
+                                                {!! Form::close() !!}
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                                                    <button type="button" class="btn btn-primary" id="couponForm-submit">ذخیره</button>
+                                                </div>
                                             </div>
                                         </div>
-                                        {!! Form::close() !!}
-                                        <div class="modal-footer">
-                                            <button type="button" data-dismiss="modal" class="btn btn-outline dark"
-                                                    id="couponForm-close">بستن
-                                            </button>
-                                            <button type="button" class="btn blue-ebonyclay" id="couponForm-submit">
-                                                ذخیره
-                                            </button>
-                                        </div>
                                     </div>
+                                    <!--end::Modal-->
                                     @endpermission
                                 </div>
                             </div>
@@ -298,32 +312,37 @@
                             <div class="col-md-6">
                                 <div class="btn-group">
                                     @permission((config('constants.INSERT_ATTRIBUTE_ACCESS')))
-                                    <a id="sample_editable_1_new" class="btn btn-outline yellow-mint"
-                                       data-toggle="modal" href="#responsive-attribute"><i class="fa fa-plus"></i>
-                                        افزودن صفت </a>
-                                    <!-- responsive modal -->
-                                    <div id="responsive-attribute" class="modal fade" tabindex="-1" data-width="760">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal"
-                                                    aria-hidden="true"></button>
-                                            <h4 class="modal-title">افزودن صفت جدید</h4>
-                                        </div>
-                                        {!! Form::open(['method' => 'POST','action' => ['Web\AttributeController@store'], 'class'=>'nobottommargin' , 'id'=>'attributeForm']) !!}
-                                        <div class="modal-body">
-                                            <div class="row">
-                                                @include('attribute.form')
+                                    <a id="sample_editable_1_new" class="btn btn-info m-btn m-btn--icon m-btn--wide"
+                                       data-toggle="modal" href="#responsive-attribute" data-target="#responsive-attribute">
+                                        <i class="fa fa-plus"></i>
+                                        افزودن صفت
+                                    </a>
+
+                                    <!--begin::Modal-->
+                                    <div class="modal fade" id="responsive-attribute" tabindex="-1" role="dialog" aria-labelledby="responsive-attributeModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="responsive-attributeModalLabel">افزودن صفت جدید</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                {!! Form::open(['method' => 'POST','action' => ['Web\AttributeController@store'], 'class'=>'nobottommargin' , 'id'=>'attributeForm']) !!}
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        @include('attribute.form')
+                                                    </div>
+                                                </div>
+                                                {!! Form::close() !!}
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                                                    <button type="button" class="btn btn-primary" id="attributeForm-submit">ذخیره</button>
+                                                </div>
                                             </div>
                                         </div>
-                                        {!! Form::close() !!}
-                                        <div class="modal-footer">
-                                            <button type="button" data-dismiss="modal" class="btn btn-outline dark"
-                                                    id="attributeForm-close">بستن
-                                            </button>
-                                            <button type="button" class="btn yellow-mint" id="attributeForm-submit">
-                                                ذخیره
-                                            </button>
-                                        </div>
                                     </div>
+                                    <!--end::Modal-->
                                     @endpermission
                                 </div>
                             </div>
@@ -388,32 +407,36 @@
                             <div class="col-md-6">
                                 <div class="btn-group">
                                     @permission((config('constants.INSERT_ATTRIBUTESET_ACCESS')))
-                                    <a id="sample_editable_1_new" class="btn btn-outline yellow-haze"
-                                       data-toggle="modal" href="#responsive-attributeset"><i class="fa fa-plus"></i>
-                                        افزودن صفت </a>
-                                    <!-- responsive modal -->
-                                    <div id="responsive-attributeset" class="modal fade" tabindex="-1" data-width="760">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal"
-                                                    aria-hidden="true"></button>
-                                            <h4 class="modal-title">افزودن دسته صفت جدید</h4>
-                                        </div>
-                                        {!! Form::open(['method' => 'POST','action' => ['Web\AttributesetController@store'], 'class'=>'nobottommargin' , 'id'=>'attributesetForm']) !!}
-                                        <div class="modal-body">
-                                            <div class="row">
-                                                @include('attributeset.form')
+                                    <a id="sample_editable_1_new" class="btn btn-info m-btn m-btn--icon m-btn--wide"
+                                       data-toggle="modal" href="#responsive-attributeset" data-target="#responsive-attributeset"><i class="fa fa-plus"></i>
+                                        افزودن دسته صفت
+                                    </a>
+
+                                    <!--begin::Modal-->
+                                    <div class="modal fade" id="responsive-attributeset" tabindex="-1" role="dialog" aria-labelledby="responsive-attributesetModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="responsive-attributesetModalLabel">افزودن دسته صفت جدید</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                {!! Form::open(['method' => 'POST','action' => ['Web\AttributesetController@store'], 'class'=>'nobottommargin' , 'id'=>'attributesetForm']) !!}
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        @include('attributeset.form')
+                                                    </div>
+                                                </div>
+                                                {!! Form::close() !!}
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="attributesetForm-close">بستن</button>
+                                                    <button type="button" class="btn btn-primary" id="attributesetForm-submit">ذخیره</button>
+                                                </div>
                                             </div>
                                         </div>
-                                        {!! Form::close() !!}
-                                        <div class="modal-footer">
-                                            <button type="button" data-dismiss="modal" class="btn btn-outline dark"
-                                                    id="attributesetForm-close">بستن
-                                            </button>
-                                            <button type="button" class="btn yellow-haze" id="attributesetForm-submit">
-                                                ذخیره
-                                            </button>
-                                        </div>
                                     </div>
+                                    <!--end::Modal-->
                                     @endpermission
                                 </div>
                             </div>
@@ -448,7 +471,7 @@
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
+    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>--}}
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.min.js" type="text/javascript"></script>
@@ -456,7 +479,7 @@
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
     <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-extended-modals.min.js" type="text/javascript"></script>
+    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-extended-modals.min.js" type="text/javascript"></script>--}}
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js" type="text/javascript"></script>
