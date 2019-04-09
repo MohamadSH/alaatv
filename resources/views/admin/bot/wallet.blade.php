@@ -1,40 +1,32 @@
-@extends("app",["pageName"=>$pageName])
+@extends('app',['pageName'=>$pageName])
 
-@section("headPageLevelPlugin")
-
-@endsection
-
-@section("metadata")
-    @parent()
-    <meta name="_token" content="{{ csrf_token() }}">
-@endsection
-
-@section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
-            <li>
-                <i class="icon-home"></i>
-                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
-                <i class="fa fa-angle-left"></i>
+@section('pageBar')
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <i class="flaticon-home-2 m--padding-right-5"></i>
+                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
-            <li>
-                <span>بات</span>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a class="m-link" href="#">بات</a>
             </li>
-        </ul>
-    </div>
+        </ol>
+    </nav>
 @endsection
 
-@section("content")
+@section('content')
     {{--Ajax modal loaded after inserting content--}}
     <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
     {{--Ajax modal for panel startup --}}
+
+    @include("systemMessage.flash")
+
     <div class="row">
-        @include("systemMessage.flash")
-        <div class="col-md-12">
+        <div class="col">
             <!-- BEGIN Portlet PORTLET-->
-            <div class="portlet light">
-                <div class="portlet-body">
-                    {!! Form::open(['method'=>'POST' , 'action'=>'HomeController@walletBot' , 'target'=>'_blank' ]) !!}
+            <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
+                <div class="m-portlet__body">
+                    {!! Form::open(['method'=>'POST' , 'action'=>'Web\HomeController@walletBot' , 'target'=>'_blank' ]) !!}
                     <label for="userGroup" class="control-label">
                         گروه کاربران:
                     </label>
@@ -60,16 +52,4 @@
             <!-- END Portlet PORTLET-->
         </div>
     </div>
-@endsection
-
-@section("footerPageLevelPlugin")
-
-@endsection
-
-@section("footerPageLevelScript")
-
-@endsection
-
-@section("extraJS")
-
 @endsection

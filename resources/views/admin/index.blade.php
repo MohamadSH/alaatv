@@ -103,7 +103,7 @@
                                                     <div class="col-lg-12 col-md-12">
                                                         <a href="javascript:" class="btn btn-lg bg-font-dark reload" id="filter"
                                                            style="background: #489fff">فیلتر</a>
-                                                        <img class="hidden" id="user-portlet-loading"
+                                                        <img class="d-none" id="user-portlet-loading"
                                                              src="{{config("constants.FILTER_LOADING_GIF")}}" alt="loading"
                                                              width="5%">
                                                     </div>
@@ -189,7 +189,7 @@
                                                 id="sendSmsForm-close">بستن
                                         </button>
                                         <button type="button" class="btn green" id="sendSmsForm-submit">ارسال</button>
-                                        <img class="hidden" id="send-sms-loading"
+                                        <img class="d-none" id="send-sms-loading"
                                              src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px"
                                              width="25px">
                                     </div>
@@ -311,7 +311,7 @@
                 <div class="m-portlet__body">
 
 
-                    <img class="hidden" id="permission-portlet-loading"
+                    <img class="d-none" id="permission-portlet-loading"
                          src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" style="width: 50px;">
 
                     <div class="portlet box blue-hoki" id="permission-portlet">
@@ -418,7 +418,7 @@
                                 <i class="fa fa-cogs"></i>مدیریت نقش ها
                             </div>
                             <div class="tools">
-                                <img class="hidden" id="role-portlet-loading"
+                                <img class="d-none" id="role-portlet-loading"
                                      src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading"
                                      style="width: 50px;">
                                 <a href="javascript:" class="collapse" id="role-expand"> </a>

@@ -1,41 +1,34 @@
 @role((Config::get("constants.ROLE_ADMIN")))
-@extends("app",["pageName"=>$pageName])
+@extends('app',['pageName'=>$pageName])
 
-@section("headPageLevelPlugin")
-@endsection
-
-@section("metadata")
-    @parent()
-    <meta name="_token" content="{{ csrf_token() }}">
-@endsection
-
-@section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
-            <li>
-                <i class="icon-home"></i>
-                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
-                <i class="fa fa-angle-left"></i>
+@section('pageBar')
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <i class="flaticon-home-2 m--padding-right-5"></i>
+                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
-            <li>
-                <span>افزودن کاربر همراه سفارش</span>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a class="m-link" href="#">افزودن کاربر همراه سفارش</a>
             </li>
-        </ul>
-    </div>
+        </ol>
+    </nav>
 @endsection
 
-@section("content")
+@section('content')
     {{--Ajax modal loaded after inserting content--}}
     <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
     {{--Ajax modal for panel startup --}}
+
+    @include("systemMessage.flash")
+
     <div class="row">
-        @include("systemMessage.flash")
         <div class="col-md-12">
             <!-- BEGIN Portlet PORTLET-->
-            <div class="portlet light">
-                <div class="portlet-body">
+            <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
+                {!! Form::open(['method' => 'POST', 'action' => 'Web\HomeController@registerUserAndGiveOrderproduct']) !!}
+                <div class="m-portlet__body">
                     <div class="row">
-                        {!! Form::open(['method' => 'POST', 'action' => 'HomeController@registerUserAndGiveOrderproduct']) !!}
                         <div class="col-md-6">
                             <p>{!! Form::text('firstName', null, ['class' => 'form-control', 'id' => 'firstName' , 'placeholder'=>'نام']) !!}
                                 <span class="help-block">
@@ -74,9 +67,11 @@
                                 </span>
                             </p>
                         </div>
-                        <input type="submit" value="درج">
-                        {!! Form::close() !!}
+                        <div class="col-12 text-center">
+                            <input type="submit" value="درج">
+                        </div>
                     </div>
+                    {!! Form::close() !!}
                 </div>
             </div>
             <!-- END Portlet PORTLET-->
@@ -84,15 +79,4 @@
     </div>
 @endsection
 
-@section("footerPageLevelPlugin")
-
-@endsection
-
-@section("footerPageLevelScript")
-
-@endsection
-
-@section("extraJS")
-
-@endsection
 @endrole
