@@ -1,43 +1,45 @@
-@extends("app",["pageName"=>$pageName])
+@extends('app' , ['pageName'=> $pageName])
 
-@section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel="stylesheet"
-          type="text/css"/>
+@section('page-css')
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css" rel="stylesheet" type="text/css"/>
 @endsection
 
-@section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
-            <li>
-                <i class="icon-home"></i>
-                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
-                <i class="fa fa-angle-left"></i>
+@section('pageBar')
+    <nav aria-label = "breadcrumb">
+        <ol class = "breadcrumb">
+            <li class = "breadcrumb-item">
+                <i class = "flaticon-home-2 m--padding-right-5"></i>
+                <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
-            <li>
-                <i class="fa fa-cogs"></i>
-                <a href = "{{action("Web\HomeController@adminOrder")}}">مدیریت سفارش ها</a>
-                <i class="fa fa-angle-left"></i>
+            <li class = "breadcrumb-item" aria-current = "page">
+                <a class = "m-link" href = "#">مدیریت سفارش ها</a>
             </li>
-            <li>
-                <span>تراکنش های ثبت نشده</span>
+            <li class = "breadcrumb-item active" aria-current = "page">
+                <a class = "m-link" href = "#">تراکنش های ثبت نشده</a>
             </li>
-        </ul>
-    </div>
+        </ol>
+    </nav>
 @endsection
 
 @section("content")
     <div class="row">
-        <div class="col-md-12">
+        <div class="col">
 
-            <!-- BEGIN USER TABLE PORTLET-->
-            <div class="portlet box green">
-                <div class="portlet-title">
-                    <div class="caption">
-                        <i class="fa fa-cogs"></i>تراکنش های موفق ثبت نشده
+
+            <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                تراکنش های موفق ثبت نشده
+                            </h3>
+                        </div>
                     </div>
                 </div>
-                <div class="portlet-body" style="display: block;">
+                <div class="m-portlet__body">
+
                     <div class="table-toolbar">
                         <div class="btn-group"></div>
                     </div>
@@ -105,22 +107,20 @@
                         @endif
                         </tbody>
                     </table>
+
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->
+
         </div>
     </div>
 @endsection
 
-@section("footerPageLevelPlugin")
-    <script src="/assets/global/scripts/datatable.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js"
-            type="text/javascript"></script>
-@endsection
-
-@section("extraJS")
-    <script src="/js/extraJS/scripts/admin-makeDataTable.js" type="text/javascript"></script>
+@section('page-js')
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/app.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/js/admin-makeDataTable.js" type="text/javascript"></script>
     <script type="text/javascript">
         /**
          * Start up jquery

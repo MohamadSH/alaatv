@@ -1,17 +1,16 @@
 @permission((Config::get('constants.INSERT_PRODUCT_FILE_ACCESS')))
-@extends("app",["pageName"=>"admin"])
+@extends('app',['pageName'=>'admin'])
 
-@section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.css" rel="stylesheet"
-          type="text/css"/>
-    <link href="/assets/global/plugins/dropzone/dropzone.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/dropzone/basic.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/icheck/skins/all.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
+@section('page-css')
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/dropzone/dropzone.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/dropzone/basic.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/icheck/skins/all.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <style>
         .datepicker-header {
             direction: ltr;
@@ -19,32 +18,30 @@
     </style>
 @endsection
 
-
-@section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
-            <li>
-                <i class="icon-home"></i>
-                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
-                <i class="fa fa-angle-left"></i>
+@section('pageBar')
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <i class="flaticon-home-2 m--padding-right-5"></i>
+                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
-            <li>
-                <a href = "{{action("Web\HomeController@adminProduct")}}">مدیریت محصولات</a>
-                <i class="fa fa-angle-left"></i>
+            <li class="breadcrumb-item " aria-current="page">
+                <a class="m-link" href="{{action("Web\HomeController@adminProduct")}}">پنل مدیریتی محصولات</a>
             </li>
-            <li>
-                <a href = "{{action("Web\ProductController@edit" , $product)}}">اصلاح محصول {{$product->name}}</a>
-                <i class="fa fa-angle-left"></i>
+            <li class="breadcrumb-item" aria-current="page">
+                <a class="m-link" href="{{action("Web\ProductController@edit" , $product)}}">اصلاح محصول {{$product->name}} </a>
             </li>
-            <li>
-                <span>درج فایل محصول</span>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a class="m-link" href="#"> درج فایل محصول </a>
             </li>
-        </ul>
-    </div>
+        </ol>
+    </nav>
 @endsection
 
-@section("content")
+@section('content')
+
     @include("systemMessage.flash")
+
     <div class="row" style="margin-bottom: 10px">
         <div class="col-md-12">
             <form id="my-awesome-dropzone" class="dropzone dropzone-file-area needsclick dz-clickable">
@@ -73,35 +70,25 @@
             </form>
         </div>
     </div>
-    <div id="dropzone-elements" class="dropzone dropzone-previews" style="background: none; border:none">
-    </div>
+    <div id="dropzone-elements" class="dropzone dropzone-previews" style="background: none; border:none"></div>
 @endsection
 
-@section("footerPageLevelPlugin")
-    <script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-summernote/summernote.min.js" type="text/javascript"></script>
+@section('page-js')
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.min.js" type="text/javascript"></script>
     <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js"
-            type="text/javascript"></script>
-    <script src="/assets/global/plugins/jquery.input-ip-address-control-1.0.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/dropzone/dropzone.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/icheck/icheck.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
-@endsection
-
-@section("footerPageLevelScript")
-    <script src="/assets/pages/scripts/components-editors.min.js" type="text/javascript"></script>
-    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js"
-            type="text/javascript"></script>
-    <script src="/assets/pages/scripts/form-input-mask.min.js" type="text/javascript"></script>
-    <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
-    <script src="/assets/pages/scripts/form-icheck.min.js" type="text/javascript"></script>
-    <script src="/js/extraJS/scripts/makeSelect2Single.js" type="text/javascript"></script>
-@endsection
-
-
-@section("extraJS")
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.input-ip-address-control-1.0.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/dropzone/dropzone.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/icheck/icheck.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js" type="text/javascript"></script>
+    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-input-mask.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-icheck.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/makeSelect2Single.js" type="text/javascript"></script>
     <script>
 
 

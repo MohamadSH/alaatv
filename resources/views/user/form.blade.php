@@ -9,13 +9,11 @@
                 <label for="firstName" class="control-label visible-ie8 visible-ie9">نام</label>
                 <div class="input-icon">
                     <i class="fa fa-font"></i>
-                    <input id="firstName" class="form-control placeholder-no-fix" type="text"
-                           value="{{ old('firstName') }}" placeholder="نام" name="firstName"/>
-
+                    <input id="firstName" class="form-control placeholder-no-fix" type="text" value="{{ old('firstName') }}" placeholder="نام" name="firstName"/>
                     @if ($errors->has('firstName'))
                         <span class="help-block">
-                                <strong>{{ $errors->first('firstName') }}</strong>
-                            </span>
+                            <strong>{{ $errors->first('firstName') }}</strong>
+                        </span>
                     @endif
                 </div>
             </div>
@@ -23,12 +21,12 @@
                 <label class="control-label visible-ie8 visible-ie9">نام خانوادگی</label>
                 <div class="input-icon">
                     <i class="fa fa-font"></i>
-                    <input class="form-control placeholder-no-fix" type="text" value="{{ old('lastName') }}"
-                           placeholder="نام خانوادگی" name="lastName"/></div>
+                    <input class="form-control placeholder-no-fix" type="text" value="{{ old('lastName') }}" placeholder="نام خانوادگی" name="lastName"/>
+                </div>
                 @if ($errors->has('lastName'))
                     <span class="help-block">
-                                    <strong>{{ $errors->first('lastName') }}</strong>
-                                </span>
+                        <strong>{{ $errors->first('lastName') }}</strong>
+                    </span>
                 @endif
             </div>
             <span class="help-block small bg-font-dark">کد ملی ده رقمی بدون خط فاصله</span>
@@ -37,12 +35,12 @@
                 <label class="control-label visible-ie8 visible-ie9">کد ملی</label>
                 <div class="input-icon">
                     <i class="fa fa-user"></i>
-                    <input class="form-control placeholder-no-fix" type="text" value="{{ old('nationalCode') }}"
-                           placeholder="کد ملی(با اعداد انگلیسی)" name="nationalCode" maxlength="10"/></div>
+                    <input class="form-control placeholder-no-fix" type="text" value="{{ old('nationalCode') }}" placeholder="کد ملی(با اعداد انگلیسی)" name="nationalCode" maxlength="10"/>
+                </div>
                 @if ($errors->has('nationalCode'))
                     <span class="help-block">
-                                        <strong>{{ $errors->first('nationalCode') }}</strong>
-                                    </span>
+                        <strong>{{ $errors->first('nationalCode') }}</strong>
+                    </span>
                 @endif
             </div>
             <span class="help-block small bg-font-dark">مثال: 09191234567</span>
@@ -51,12 +49,12 @@
                 <label class="control-label visible-ie8 visible-ie9">شماره موبایل</label>
                 <div class="input-icon">
                     <i class="fa fa-mobile"></i>
-                    <input class="form-control placeholder-no-fix" type="text" value="{{ old('mobile') }}"
-                           placeholder="موبایل(با اعداد انگلیسی)" name="mobile" maxlength="11"/></div>
+                    <input class="form-control placeholder-no-fix" type="text" value="{{ old('mobile') }}" placeholder="موبایل(با اعداد انگلیسی)" name="mobile" maxlength="11"/>
+                </div>
                 @if ($errors->has('mobile'))
                     <span class="help-block">
-                                            <strong>{{ $errors->first('mobile') }}</strong>
-                                        </span>
+                        <strong>{{ $errors->first('mobile') }}</strong>
+                    </span>
                 @endif
                 <div class="clearfix">
                     <span class="label label-warning ">توجه</span>
@@ -142,24 +140,28 @@
                 </label>
             </div>
 
-            <div class="modal fade" id="rules" tabindex="-1" role="basic" aria-hidden="true">
-                <div class="modal-dialog">
+
+            <!--begin::Modal-->
+            <div class="modal fade" id="rules" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                            <h4 class="modal-title font-green-seagreen">قوانین استفاده از سایت</h4>
+                            <h5 class="modal-title" id="rulesModalLabel">قوانین استفاده از سایت</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                         <div class="modal-body">
                             تابعیت از قوانین جمهوری اسلامی ایران برای استفاده از سایت الزامی می باشد
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn dark btn-outline" data-dismiss="modal">بستن</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
                         </div>
                     </div>
-                    <!-- /.modal-content -->
                 </div>
-                <!-- /.modal-dialog -->
             </div>
+            <!--end::Modal-->
+
             <div class="form-actions">
                 <button id="register-back-btn" type="button" class="btn red btn-outline" onclick="location.href = '/'">
                     @lang('page.Home')
@@ -173,16 +175,15 @@
         <form action="{{ action("Auth\RegisterController@register") }}" enctype="multipart/form-data" method="post">
             {{ csrf_field() }}
             <h2>عضویت در سایت آلاء</h2>
-            <p class="caption-subject bold uppercase">بعد از ثبت نام می توانید خدمات مختلف را ببینید و هر کدام را که
-                خواستید سفارش بدید.</p>
-            <div class="form-group col-md-6 {{ $errors->has('firstName') ? ' has-error' : '' }}"
-                 style="border-bottom: none !important;">
+            <p class="caption-subject bold uppercase">
+                بعد از ثبت نام می توانید خدمات مختلف را ببینید و هر کدام را که
+                خواستید سفارش بدید.
+            </p>
+            <div class="form-group col-md-6 {{ $errors->has('firstName') ? ' has-error' : '' }}" style="border-bottom: none !important;">
                 <label for="firstName" class="control-label visible-ie8 visible-ie9">نام</label>
                 <div class="input-icon">
                     <i class="fa fa-font"></i>
-                    <input id="firstName" class="form-control placeholder-no-fix" type="text"
-                           value="{{ old('firstName') }}" placeholder="نام(فارسی)" name="firstName"/>
-
+                    <input id="firstName" class="form-control placeholder-no-fix" type="text" value="{{ old('firstName') }}" placeholder="نام(فارسی)" name="firstName"/>
                     {{--@if ($errors->has('firstName'))--}}
                     {{--<span class="help-block">--}}
                     {{--<strong>{{ $errors->first('firstName') }}</strong>--}}
@@ -190,14 +191,12 @@
                     {{--@endif--}}
                 </div>
             </div>
-
-            <div class="form-group col-md-6 {{ $errors->has('lastName') ? ' has-error' : '' }}"
-                 style="border-bottom: none !important;">
+            <div class="form-group col-md-6 {{ $errors->has('lastName') ? ' has-error' : '' }}" style="border-bottom: none !important;">
                 <label class="control-label visible-ie8 visible-ie9">نام خانوادگی</label>
                 <div class="input-icon">
                     <i class="fa fa-font"></i>
-                    <input class="form-control placeholder-no-fix" type="text" value="{{ old('lastName') }}"
-                           placeholder="نام خانوادگی(فارسی)" name="lastName"/></div>
+                    <input class="form-control placeholder-no-fix" type="text" value="{{ old('lastName') }}" placeholder="نام خانوادگی(فارسی)" name="lastName"/>
+                </div>
                 {{--@if ($errors->has('lastName'))--}}
                 {{--<span class="help-block">--}}
                 {{--<strong>{{ $errors->first('lastName') }}</strong>--}}
@@ -206,18 +205,17 @@
             </div>
             <div class="col-md-6">
                 <span class="help-block small">کد ملی ده رقمی بدون خط فاصله</span>
-                <div class="form-group {{ $errors->has('nationalCode') ? ' has-error' : '' }}"
-                     style="border-bottom: none !important;">
+                <div class="form-group {{ $errors->has('nationalCode') ? ' has-error' : '' }}" style="border-bottom: none !important;">
                     <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
                     <label class="control-label visible-ie8 visible-ie9">کد ملی</label>
                     <div class="input-icon">
                         <i class="fa fa-user"></i>
-                        <input class="form-control placeholder-no-fix" type="text" value="{{ old('nationalCode') }}"
-                               placeholder="کد ملی(با اعداد انگلیسی)" name="nationalCode" maxlength="10"/></div>
+                        <input class="form-control placeholder-no-fix" type="text" value="{{ old('nationalCode') }}" placeholder="کد ملی(با اعداد انگلیسی)" name="nationalCode" maxlength="10"/>
+                    </div>
                     @if ($errors->has('nationalCode'))
                         <span class="help-block">
-                                        <strong>{{ $errors->first('nationalCode') }}</strong>
-                                    </span>
+                            <strong>{{ $errors->first('nationalCode') }}</strong>
+                        </span>
                     @endif
                 </div>
             </div>
@@ -229,8 +227,8 @@
                     <label class="control-label visible-ie8 visible-ie9">شماره موبایل</label>
                     <div class="input-icon">
                         <i class="fa fa-mobile"></i>
-                        <input class="form-control placeholder-no-fix" type="text" value="{{ old('mobile') }}"
-                               placeholder="موبایل(با اعداد انگلیسی)" name="mobile" maxlength="11"/></div>
+                        <input class="form-control placeholder-no-fix" type="text" value="{{ old('mobile') }}" placeholder="موبایل(با اعداد انگلیسی)" name="mobile" maxlength="11"/>
+                    </div>
                     {{--@if ($errors->has('mobile'))--}}
                     {{--<span class="help-block">--}}
                     {{--<strong>{{ $errors->first('mobile') }}</strong>--}}
@@ -238,7 +236,7 @@
                     {{--@endif--}}
                     @if ($errors->has('mobile'))
                         <span class="help-block">
-                                        <strong>{{ $errors->first('mobile') }}</strong>
+                            <strong>{{ $errors->first('mobile') }}</strong>
                         </span>
                     @else
                         <div class="clearfix">
@@ -246,7 +244,6 @@
                             <span class="small">برای تایید حساب کاربری از این شماره استفاده می شود!</span>
                         </div>
                     @endif
-
                 </div>
             </div>
             {{--<div class="form-group col-md-12 {{ $errors->has('major_id') ? ' has-error' : '' }}">--}}
@@ -331,7 +328,6 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div class="panel-group accordion" id="accordion1">
-
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
@@ -346,8 +342,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             @else
@@ -383,24 +377,29 @@
                         </div>
                     </label>
                 </div>
-                <div class="modal fade" id="rules" tabindex="-1" role="basic" aria-hidden="true">
-                    <div class="modal-dialog">
+
+
+                <!--begin::Modal-->
+                <div class="modal fade" id="rules" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                <h4 class="modal-title font-green-seagreen">قوانین استفاده از سایت</h4>
+                                <h5 class="modal-title" id="rulesModalLabel">قوانین استفاده از سایت</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
                             <div class="modal-body">
                                 تابعیت از قوانین جمهوری اسلامی ایران برای استفاده از سایت الزامی می باشد
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn dark btn-outline" data-dismiss="modal">بستن</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
                             </div>
                         </div>
-                        <!-- /.modal-content -->
                     </div>
-                    <!-- /.modal-dialog -->
                 </div>
+                <!--end::Modal-->
+
                 <div class="form-actions col-md-4">
                     {{--<button id="register-back-btn" type="button" class="btn red btn-outline" onclick="location.href = '/'"> @lang('page.Home') </button>--}}
                     <button type="submit" id="register-submit-btn" class="btn green pull-right"> ثبت نام</button>
@@ -509,18 +508,27 @@
             <label class="control-label col-md-3">عکس</label>
             <div class="col-md-9">
                 <div class="fileinput fileinput-new" data-provides="fileinput">
-                    <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;"><img
-                                src="{{ route('image', ['category'=>'1','w'=>'140' , 'h'=>'140' , 'filename' =>  $user->photo ]) }}"
-                                alt="عکس پروفایل"/></div>
+                    <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                        <img class="a--fullWidth" src="{{ $user->photo }}" alt="عکس پروفایل"/>
+                    </div>
+                    <style>
+                        .fileinput .thumbnail > img {
+                            width: 100%;
+                            height: auto;
+                        }
+                    </style>
                     <div class="fileinput-preview fileinput-exists thumbnail"
-                         style="max-width: 200px; max-height: 150px;"></div>
+                         style="max-width: 200px; max-height: 150px;">
+                    </div>
                     <div>
-                                                            <span class="btn default btn-file">
-                                                                <span class="fileinput-new"> تغییر عکس </span>
-                                                                <span class="fileinput-exists"> تغییر </span>
-                                                                <input type="file" name="photo"> </span>
-                        <a href="javascript:" class="btn red fileinput-exists" id="userPhoto-remove"
-                           data-dismiss="fileinput"> حذف </a>
+                        <span class="btn default btn-file">
+                            <span class="fileinput-new btn btn-sm m-btn--air btn-warning"> تغییر عکس </span>
+                            <span class="fileinput-exists btn btn-sm m-btn--air btn-warning"> تغییر </span>
+                            <input type="file" name="photo">
+                        </span>
+                        <a href="javascript:" class="fileinput-exists btn btn-sm m-btn--air btn-danger" id="userPhoto-remove" data-dismiss="fileinput">
+                            حذف
+                        </a>
                     </div>
                 </div>
                 <div class="clearfix margin-top-10">
@@ -707,7 +715,7 @@
         <div class="form-actions">
             <div class="row">
                 <div class="col-md-offset-3 col-md-9">
-                    {!! Form::submit('اصلاح', ['class' => 'btn red']) !!}
+                    {!! Form::submit('اصلاح', ['class' => 'btn btn-lg m-btn--air btn-warning']) !!}
                 </div>
             </div>
         </div>

@@ -384,15 +384,31 @@ class ProductController extends Controller
 
         $productFileTypes = Productfiletype::makeSelectArray();
 
-        $products = $this->makeProductCollection();
-
+//        $products = $this->makeProductCollection();
+        $products = Product::where('id', '>',240);
         $producttype = $product->producttype->displayName;
 
         $productPhotos = $product->photos->sortByDesc("order");
         if ($productPhotos->isNotEmpty())
             $defaultProductPhotoOrder = $productPhotos->first()->order + 1;
 
-        return view("product.edit", compact("product", "amountLimit", "defaultAmountLimit", "enableStatus", "defaultEnableStatus", "attributesets", "bons", "productFiles", "productFileTypes", "defaultProductFileOrders", "products", "producttype", "productPhotos", "defaultProductPhotoOrder"));
+        return view("product.edit",
+            compact("product",
+            "amountLimit",
+                "defaultAmountLimit",
+                "enableStatus",
+                "defaultEnableStatus",
+                "attributesets",
+                "bons",
+                "productFiles",
+                "productFileTypes",
+                "defaultProductFileOrders",
+                "products",
+                "producttype",
+                "productPhotos",
+                "defaultProductPhotoOrder"
+            )
+        );
     }
 
     /**

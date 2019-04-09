@@ -1,4 +1,4 @@
-@permission((Config::get('constants.LIST_ATTRIBUTE_ACCESS')))
+@permission((config('constants.LIST_ATTRIBUTE_ACCESS')))
 @foreach( $attributes as $attribute)
     <tr>
         <th></th>
@@ -21,13 +21,13 @@
                     <i class="fa fa-angle-down"></i>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    @permission((Config::get('constants.SHOW_ATTRIBUTE_ACCESS')))
+                    @permission((config('constants.SHOW_ATTRIBUTE_ACCESS')))
                     <li>
                         <a href = "{{action("Web\AttributeController@edit" , $attribute->id)}}">
                             <i class="fa fa-pencil"></i> اصلاح </a>
                     </li>
                     @endpermission
-                    @permission((Config::get('constants.REMOVE_ATTRIBUTE_ACCESS')))
+                    @permission((config('constants.REMOVE_ATTRIBUTE_ACCESS')))
                     <li>
                         <a data-target="#static-{{$attribute->id}}" data-toggle="modal">
                             <i class="fa fa-remove"></i> حذف </a>
@@ -36,19 +36,23 @@
                 </ul>
                 <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
                 <!-- static -->
-                @permission((Config::get('constants.REMOVE_ATTRIBUTE_ACCESS')))
-                <div id="static-{{$attribute->id}}" class="modal fade" tabindex="-1" data-backdrop="static"
-                     data-keyboard="false">
-                    <div class="modal-body">
-                        <p> آیا مطمئن هستید؟ </p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                        <button type="button" data-dismiss="modal" class="btn green" onclick = "removeAttributes('{{action("Web\AttributeController@destroy" , $attribute)}}');">
-                            بله
-                        </button>
+                @permission((config('constants.REMOVE_ATTRIBUTE_ACCESS')))
+
+                <!--begin::Modal-->
+                <div class="modal fade" id="static-{{$attribute->id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p> آیا مطمئن هستید؟ </p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="removeAttributes('{{action("Web\AttributeController@destroy" , $attribute)}}');">بله</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!--end::Modal-->
                 @endpermission
             </div>
         </td>

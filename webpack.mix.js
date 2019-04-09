@@ -70,7 +70,8 @@ mix.babel(
         'public/acm/video-js/video.js',
         'public/acm/video-js/videojs-ie8.min.js',
         'public/acm/video-js/nuevo/nuevo.min.js',
-        // 'public/acm/AlaatvCustomFiles/js/page-product-show.js'
+        'public/acm/AlaatvCustomFiles/js/UserCart.js',
+        'public/acm/AlaatvCustomFiles/js/page-product-show.js',
     ],
     'public/js/product-show.js'
 ).version();
@@ -78,7 +79,8 @@ mix.babel(
 mix.scripts(
     [
         'node_modules/jquery-sticky/jquery.sticky.js',
-        // 'public/acm/AlaatvCustomFiles/js/page-checkout-review.js'
+        'public/acm/AlaatvCustomFiles/js/UserCart.js',
+        'public/acm/AlaatvCustomFiles/js/page-checkout-review.js'
     ],
     'public/js/checkout-review.js'
 ).version();
@@ -86,8 +88,8 @@ mix.scripts(
 mix.scripts(
     [
         'public/assets/demo/demo12/custom/crud/forms/widgets/bootstrap-switch.js',
-        // 'public/acm/AlaatvCustomFiles/js/page-checkout-payment.js',
         // 'public/assets/demo/demo12/custom/crud/forms/widgets/nouislider.js',
+        'public/acm/AlaatvCustomFiles/js/page-checkout-payment.js',
     ],
     'public/js/checkout-payment.js'
 ).version();
@@ -97,8 +99,7 @@ mix.scripts(
         'node_modules/bootstrap-fileinput/js/fileinput.js',
         'node_modules/persian-date/dist/persian-date.js',
         'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
-
-        // 'public/acm/AlaatvCustomFiles/js/page-user-profile.js'
+        'public/acm/AlaatvCustomFiles/js/page-user-profile.js'
     ],
     'public/js/user-profile.js'
 ).version();
@@ -106,18 +107,25 @@ mix.scripts(
 mix.scripts(
     [
         'node_modules/persian-date/dist/persian-date.js',
-        // 'public/acm/AlaatvCustomFiles/js/page-user-orders.js'
+        'public/acm/AlaatvCustomFiles/js/page-user-orders.js'
     ],
     'public/js/user-orders.js'
 ).version();
+
+mix.scripts(
+    [
+        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+        'public/acm/AlaatvCustomFiles/js/page-user-dashboard.js',
+    ],
+    'public/js/user-dashboard.js'
+);
 
 mix.styles(
     [
         'node_modules/persian-datepicker/dist/css/persian-datepicker.css',
         'node_modules/bootstrap-fileinput/css/fileinput.css',
         'node_modules/bootstrap-fileinput/css/fileinput-rtl.css',
-
-        // 'public/acm/AlaatvCustomFiles/css/page-user-profile.css',
+        'public/acm/AlaatvCustomFiles/css/page-user-profile.css',
     ],
     'public/css/user-profile.css'
 ).version();
@@ -135,8 +143,7 @@ mix.styles(
 
 mix.styles(
     [
-        // 'public/acm/AlaatvCustomFiles/components/step/step.css',
-
+        'public/acm/AlaatvCustomFiles/components/step/step.css',
         'public/acm/AlaatvCustomFiles/css/page-checkout-review.css',
     ],
     'public/css/checkout-review.css'
@@ -145,22 +152,19 @@ mix.styles(
     [
         'node_modules/slick-carousel/slick/slick.css',
         'node_modules/slick-carousel/slick/slick-theme.css',
+        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
+        'public/acm/AlaatvCustomFiles/css/page-user-dashboard.css',
     ],
     'public/css/user-dashboard.css'
 ).version();
 
 mix.styles(
     [
-        // 'public/acm/AlaatvCustomFiles/components/step/step.css',
+        'public/acm/AlaatvCustomFiles/components/step/step.css',
         'public/acm/AlaatvCustomFiles/css/page-checkout-payment.css',
     ],
     'public/css/checkout-payment.css'
 ).version();
-
-mix.scripts(
-    [],
-    'public/js/user-dashboard.js'
-);
 
 mix.scripts(
     [
@@ -225,4 +229,12 @@ mix.styles(
             'public/acm/extra/landing5/css/fonts.css'
     ],
     'public/css/landing5-allcss.min.css'
+);
+
+mix.styles(
+    [
+        'public/acm/video-js/video-js.min.css',
+        'public/acm/AlaatvCustomFiles/css/page-content-show.css'
+    ],
+    'public/css/content-show.css'
 );

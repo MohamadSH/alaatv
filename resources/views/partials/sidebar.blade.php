@@ -13,14 +13,14 @@
             <li class = "m-menu__item  @if(isset($pageName) && strcmp($pageName , "dashboard")==0) m-menu__item--active @endif" aria-haspopup = "true">
                 <a href = "{{ action("Web\IndexPageController") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
-                    <i class = "m-menu__link-icon flaticon-line-graph"></i>
+                    <i class = "m-menu__link-icon fa fa-home"></i>
                     <span class = "m-menu__link-text">صفحه اصلی</span>
                 </a>
             </li>
             <li class = "m-menu__item  @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0) m-menu__item--active @endif" aria-haspopup = "true">
                 <a href = "{{ action("Web\ShopPageController") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
-                    <i class = "m-menu__link-icon flaticon-shopping-basket"></i>
+                    <i class = "m-menu__link-icon fa fa-chalkboard-teacher"></i>
                     <span class = "m-menu__link-text">محصولات آموزشی</span>
                 </a>
             </li>
@@ -29,7 +29,7 @@
             <li class = "m-menu__item  m-menu__item--submenu @if(isset($pageName) && strcmp($pageName , "content")==0) m-menu__item--active @endif"  aria-haspopup = "true" m-menu-submenu-toggle = "hover">
                 <a href = "javascript:" class = "m-menu__link m-menu__toggle">
                     <span class = "m-menu__item-here"></span>
-                    <i class = "m-menu__link-icon fa fa-video"></i>
+                    <i class = "m-menu__link-icon fa fa-film"></i>
                     <span class = "m-menu__link-text">فیلم های آلاء</span>
                     <i class = "m-menu__ver-arrow la la-angle-right"></i>
                 </a>
@@ -59,15 +59,15 @@
             <li class = "m-menu__item @if(isset($pageName) && strcmp($pageName , "donate")==0) m-menu__item--active @endif" aria-haspopup = "true" m-menu-link-redirect = "1">
                 <a href = "{{ action("Web\DonateController") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
-                    <i class = "m-menu__link-icon flaticon-suitcase"></i>
+                    <i class = "m-menu__link-icon fa fa-donate"></i>
                     <span class = "m-menu__link-text">کمک مالی به آلاء</span>
                 </a>
             </li>
             @if(Auth::check())
             <li class = "m-menu__item @if(isset($pageName) && strcmp($pageName , "submitKonkurResult")==0) m-menu__item--active @endif" aria-haspopup = "true" m-menu-link-redirect = "1">
-                <a href = "{{ action("Web\HomeController@submitKonkurResult") }}" class = "m-menu__link ">
+                <a href = "{{ action("Web\UserController@show",Auth::user()) }}#ثبت_رتبه" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
-                    <i class = "m-menu__link-icon fa fa-graduation-cap"></i>
+                    <i class = "m-menu__link-icon fa fa-medal"></i>
                     <span class = "m-menu__link-text">ثبت رتبه 97</span>
                 </a>
             </li>
@@ -75,21 +75,21 @@
             <li class = "m-menu__item @if(isset($pageName) && strcmp($pageName , "rules")==0) m-menu__item--active @endif" aria-haspopup = "true" m-menu-link-redirect = "1">
                 <a href = "{{ action("Web\RulesPageController") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
-                    <i class = "m-menu__link-icon flaticon-warning-sign"></i>
+                    <i class = "m-menu__link-icon fa fa-gavel"></i>
                     <span class = "m-menu__link-text">قوانین</span>
                 </a>
             </li>
             <li class = "m-menu__item @if(isset($pageName) && strcmp($pageName , "contactUs")==0) m-menu__item--active @endif" aria-haspopup = "true" m-menu-link-redirect = "1">
                 <a href = "{{ action("Web\ContactUsController") }}" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
-                    <i class = "m-menu__link-icon flaticon-support"></i>
+                    <i class = "m-menu__link-icon fa fa-phone-volume"></i>
                     <span class = "m-menu__link-text">@lang('page.contact us')</span>
                 </a>
             </li>
             <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
                 <a  target="_blank" href = "https://forum.sanatisharif.ir" class = "m-menu__link ">
                     <span class = "m-menu__item-here"></span>
-                    <i class = "m-menu__link-icon flaticon-share"></i>
+                    <i class = "m-menu__link-icon fab fa-hornbill"></i>
                     <span class = "m-menu__link-text">انجمن آلاء</span>
                 </a>
             </li>

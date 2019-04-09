@@ -604,8 +604,8 @@ class OrderController extends Controller
                                                 ->pluck('displayName', 'id')
                                                 ->toArray();
 
-        $products = $this->makeProductCollection();
-
+//        $products = $this->makeProductCollection();
+        $products = Product::where('id', 240)->get();
         return view('order.edit', compact('order',
             'orderstatuses',
             'paymentstatuses',
@@ -615,7 +615,7 @@ class OrderController extends Controller
             'productBon',
             'transactionPaymentmethods',
             'transactionStatuses',
-//            'products',
+            'products',
             'orderArchivedTransactions',
             'offlineTransactionPaymentMethods'));
     }

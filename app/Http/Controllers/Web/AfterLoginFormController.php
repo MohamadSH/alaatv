@@ -27,7 +27,13 @@ class AfterLoginFormController extends Controller
                 'afterLoginFormFields' => $afterLoginFormFields,
             ], Response::HTTP_OK);
         } else {
-            return view("admin.siteConfiguration.afterLoginForm", compact("afterLoginFormFields", "availableFields", "sideBarMode", "section"));
+            $availableFields = [];
+            return view("admin.siteConfiguration.afterLoginForm",
+                compact("afterLoginFormFields",
+                "availableFields",
+                "sideBarMode",
+                "section")
+            );
         }
     }
 
