@@ -8,8 +8,8 @@
 
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
+    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>--}}
+    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>--}}
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
@@ -106,8 +106,6 @@
 
                         </div>
                         <div class="tab-pane" id="portlet_tab2" role="tabpanel">
-
-
                             <table class="table table-striped table-bordered table-hover table-checkable order-column"
                                    id="sample_1">
                                 <thead>
@@ -238,7 +236,7 @@
                             </table>
                             <div class="row">
                                 <div class="col-md-12 text-center">
-                                    <button class="btn yellow-gold mt-sweetalert" id="detachOrderproducts" disabled
+                                    <button class="btn btn-warning m-btn m-btn--icon m-btn--wide mt-sweetalert" id="detachOrderproducts" disabled
                                             data-title="آیا مطمئن هستید؟" data-type="warning"
                                             data-allow-outside-click="true" data-show-confirm-button="true"
                                             data-show-cancel-button="true" data-cancel-button-class="btn-danger"
@@ -246,25 +244,27 @@
                                             data-confirm-button-class="btn-info" style="background: yellow-gold">ساختن
                                         سفارش از انتخاب شده ها
                                     </button>
-                                    <button class="btn btn-outline dark" id="orderproductExchangeButton"
-                                            data-toggle="modal" data-target="#orderproductExchange" disabled=""> تعویض
+                                    <button class="btn btn-primary m-btn m-btn--icon m-btn--wide" id="orderproductExchangeButton"
+                                            data-toggle="modal" data-target="#orderproductExchange" disabled="">
+                                        تعویض
                                         آیتم های انتخاب شده
                                     </button>
-                                    <!-- responsive -->
-                                    <div id="orderproductExchange" class="modal container fade" tabindex="-1">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal"
-                                                    aria-hidden="true"></button>
-                                            <h4 class="modal-title">تعویض آیتم های انتخاب شده</h4>
-                                        </div>
-                                        {!! Form::open(['action' => ['Web\OrderController@exchangeOrderproduct' , $order] , 'method'=>'POST' ,'class'=>'form-horizontal form-row-seperated']) !!}
-                                            <div class="modal-body">
-                                                <div class="form-body">
-                                                    <div class="row">
+
+                                    <!--begin::Modal-->
+                                    <div class="modal fade" id="orderproductExchange" tabindex="-1" role="dialog" aria-labelledby="orderproductExchangeModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="orderproductExchangeModalLabel">تعویض آیتم های انتخاب شده</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                {!! Form::open(['action' => ['Web\OrderController@exchangeOrderproduct' , $order] , 'method'=>'POST' ,'class'=>'form-horizontal form-row-seperated']) !!}
+                                                <div class="modal-body">
+                                                    <div class="form-body">
                                                         @foreach($order->orderproducts as $orderproduct)
-                                                            <div class="orderproductDiv"
-                                                                 id="orderproductDiv_{{$orderproduct->id}}"
-                                                                 style="display: none">
+                                                            <div class="row orderproductDiv" id="orderproductDiv_{{$orderproduct->id}}" style="display: none">
                                                                 <div class="col-md-4">
                                                                     محصول فعلی:
                                                                     <text class="form-control-static font-blue">{{$orderproduct->product->name}}</text>
@@ -274,89 +274,93 @@
                                                                     <text class="form-control-static font-blue" id = "orderproductExchangeOriginalCost_{{$orderproduct->id}}">{{$orderproduct->obtainOrderproductCost(true)["final"]}}</text>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <label class="col-md-4 control-label ">محصول جدید</label>
-                                                                    <div class="col-md-8">
+                                                                    <div class="row">
+                                                                        <label class="col-md-4 control-label ">محصول جدید</label>
+                                                                        <div class="col-md-8">
                                                                         @include("admin.filters.productsFilter" , [ "listType"=>"childSelect" , "selectType"=>"searchable", "name"=>"exchange-a[".$orderproduct->id."][orderproductExchangeNewProduct]" , "class"=>"orderproductExchangeNewProductSelect" , "dataRole"=>$orderproduct->id , "defaultValue"=>["value"=>0 , "caption"=>"انتخاب کنید"]])
+                                                                    </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-2">
-                                                                    <div class="col-md-12">
+                                                                    <div>
                                                                         {!! Form::text('exchange-a['.$orderproduct->id.'][orderproductExchangeNewCost]',null,['class' => 'orderproductExchangeNewCost form-control' ,'id' =>'orderproductExchangeNewCost_'.$orderproduct->id  , 'disabled', 'dir'=>'ltr' , 'data-role'=>$orderproduct->id , 'placeholder'=>'قیمت جدید' ]) !!}
                                                                     </div>
-                                                                    <div class="col-md-12">
+                                                                    <div>
                                                                         {!! Form::text('exchange-a['.$orderproduct->id.'][orderproductExchangeNewDiscountAmount]',null,['class' => 'orderproductExchangeNewDiscountAmount form-control' ,'id' =>'orderproductExchangeNewDiscountAmount_'.$orderproduct->id  , 'disabled', 'dir'=>'ltr' , 'placeholder'=>'تخفیف جدید' ]) !!}
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-12">
+                                                                <div class="col-12">
                                                                     <hr>
                                                                 </div>
                                                             </div>
                                                         @endforeach
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <h4 class="bold text-center">
-                                                                بدهی به کاربر:
-                                                                <span id="orderproductExchangeDebt">0</span>تومان
-                                                            </h4>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <hr>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group mt-repeater">
-                                                                <div data-repeater-list="exchange-b">
-                                                                    <div data-repeater-item
-                                                                         class="mt-repeater-item mt-overflow">
-                                                                        {{--<label class="control-label"></label>--}}
-                                                                        <div class="mt-repeater-cell">
-                                                                            <div class="row">
-                                                                                <div class="col-md-9">
-                                                                                    @include("admin.filters.productsFilter" , ["listType"=>"childSelect", "name"=>"newOrderproductProduct" , "class"=>"orderproductExchange-newOrderproductProduct" , "defaultValue"=>["value"=>0 , "caption"=>"انتخاب کنید"]])
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <h4 class="bold text-center">
+                                                                    بدهی به کاربر:
+                                                                    <span id="orderproductExchangeDebt">0</span>تومان
+                                                                </h4>
+                                                            </div>
+                                                            <div class="col-12">
+                                                                <hr>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group mt-repeater">
+                                                                    <div data-repeater-list="exchange-b">
+                                                                        <div data-repeater-item
+                                                                             class="mt-repeater-item mt-overflow">
+                                                                            {{--<label class="control-label"></label>--}}
+                                                                            <div class="mt-repeater-cell">
+                                                                                <div class="row">
+                                                                                    <div class="col-md-7">
+                                                                                        @include("admin.filters.productsFilter" , ["listType"=>"childSelect", "name"=>"newOrderproductProduct" , "class"=>"orderproductExchange-newOrderproductProduct" , "defaultValue"=>["value"=>0 , "caption"=>"انتخاب کنید"]])
+                                                                                    </div>
+                                                                                    <div class="col-md-3">
+                                                                                        {!! Form::text('neworderproductCost',null,['class' => 'form-control neworderproductCost'  , 'dir'=>'ltr' ]) !!}
+                                                                                    </div>
+                                                                                    <div class="col-md-2">
+                                                                                        <a href="javascript:" data-repeater-delete
+                                                                                           class="m--padding-5 a--full-width btn btn-danger m-btn m-btn--icon mt-repeater-delete mt-repeater-del-right mt-repeater-btn-inline">
+                                                                                            <i class="flaticon-delete"></i>
+                                                                                        </a>
+                                                                                    </div>
                                                                                 </div>
-                                                                                <div class="col-md-3">
-                                                                                    {!! Form::text('neworderproductCost',null,['class' => 'form-control neworderproductCost'  , 'dir'=>'ltr' ]) !!}
-                                                                                </div>
-                                                                                <a href="javascript:" data-repeater-delete
-                                                                               class="btn btn-danger mt-repeater-delete mt-repeater-del-right mt-repeater-btn-inline">
-                                                                                <i class="fa fa-close"></i>
-                                                                            </a>
                                                                             </div>
                                                                         </div>
                                                                     </div>
+                                                                    <a href="javascript:" data-repeater-create
+                                                                       class="btn btn-success mt-repeater-add">
+                                                                        <i class="fa fa-plus"></i>
+                                                                    </a>
                                                                 </div>
-                                                                <a href="javascript:" data-repeater-create
-                                                                   class="btn btn-success mt-repeater-add">
-                                                                    <i class="fa fa-plus"></i>
-                                                                </a>
+                                                            </div>
+                                                            <div class="col-md-6" style="   border-right: #eeeeef solid 1px;">
+                                                                <div class="mt-checkbox-list">
+                                                                    <label class="mt-checkbox mt-checkbox-outline">
+                                                                        <input name="orderproductExchangeTransacctionCheckbox"
+                                                                               class="icheck" value="1" type="checkbox"
+                                                                               id="orderproductExchangeTransacctionCheckbox"> ثبت
+                                                                        تراکنش
+                                                                        <span></span>
+                                                                    </label>
+                                                                </div>
+                                                                <fieldset id="orderproductExchangeTransacction" disabled>
+                                                                    @include("transaction.form" , ["transactionPaymentmethods"=>$offlineTransactionPaymentMethods , "excluded"=>["authority" , "paycheckNumber" , "order_id" , "deadline_at" , "completed_at" ] , "defaultValues"=>["transactionstatus"=>config("constants.TRANSACTION_STATUS_SUCCESSFUL")] , "id"=>["cost"=>"orderproductExchangeTransactionCost"] ])
+                                                                </fieldset>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6" style="   border-right: #eeeeef solid 1px;">
-                                                        <div class="mt-checkbox-list">
-                                                            <label class="mt-checkbox mt-checkbox-outline">
-                                                                <input name="orderproductExchangeTransacctionCheckbox"
-                                                                       class="icheck" value="1" type="checkbox"
-                                                                       id="orderproductExchangeTransacctionCheckbox"> ثبت
-                                                                تراکنش
-                                                                <span></span>
-                                                            </label>
-                                                        </div>
-                                                        <fieldset id="orderproductExchangeTransacction" disabled>
-                                                            @include("transaction.form" , ["transactionPaymentmethods"=>$offlineTransactionPaymentMethods , "excluded"=>["authority" , "paycheckNumber" , "order_id" , "deadline_at" , "completed_at" ] , "defaultValues"=>["transactionstatus"=>config("constants.TRANSACTION_STATUS_SUCCESSFUL")] , "id"=>["cost"=>"orderproductExchangeTransactionCost"] ])
-                                                        </fieldset>
-                                                    </div>
                                                     </div>
                                                 </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                                                    <button type="submit" class="btn btn-primary">ذخیره</button>
+                                                </div>
+                                                {!! Form::close() !!}
                                             </div>
-                                            <hr>
-                                            <div class="modal-footer" style="text-align: center;">
-                                            <button type="button" data-dismiss="modal" class="btn btn-outline dark">
-                                                بستن
-                                            </button>
-                                            <button type="submit" class="btn green">ذخیره</button>
                                         </div>
-                                        {!! Form::close() !!}
                                     </div>
+                                    <!--end::Modal-->
+
                                 </div>
                             </div>
                             <hr>
@@ -373,11 +377,8 @@
                                     @endif
                                 @endforeach
                             </ul>
-
                         </div>
                         <div class="tab-pane" id="portlet_tab3" role="tabpanel">
-
-
                             <div class="alert alert-success alert-dismissible fade show" role="alert" id="removeTransactionSuccess">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 </button>
@@ -401,8 +402,7 @@
                                             <div id="responsive-transaction" class="modal fade" tabindex="-1"
                                                  data-width="760">
                                                 <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                            aria-hidden="true"></button>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                                                     <h4 class="modal-title">افزودن تراکنش جدید</h4>
                                                 </div>
                                                 {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\TransactionController@store'], 'class'=>'nobottommargin' ]) !!}
@@ -479,21 +479,20 @@
                                         <td style="text-align: center">@if(strlen($transaction->managerComment)>0){{$transaction->managerComment}} @else
                                                 <span class="label label-sm label-info "> ندارد </span> @endif</td>
                                         <td style="text-align: center">
-                                            <a class="edit" href="javascript:"><i
-                                                        class="fa fa-pencil-square fa-lg font-green"
-                                                        aria-hidden="true"></i></a>
+                                            <a class="edit" href="javascript:">
+                                                <i class="fa fa-pencil-square fa-lg font-green" aria-hidden="true"></i>
+                                            </a>
                                         </td>
                                         <td style="text-align: center">
-                                            <a class="deleteTransaction"
-                                               data-target="#deleteTransactionConfirmationModal" data-toggle="modal"><i
-                                                        class="fa fa-trash fa-lg font-red" aria-hidden="true"></i></a>
+                                            <a class="deleteTransaction" data-target="#deleteTransactionConfirmationModal" data-toggle="modal">
+                                                <i class="fa fa-trash fa-lg font-red" aria-hidden="true"></i>
+                                            </a>
                                             <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
                                         </td>
                                     </tr>
                                 @endforeach
                                 </tbody>
                             </table>
-
                         </div>
                         <div class="tab-pane" id="portlet_tab4" role="tabpanel">
 
@@ -556,9 +555,8 @@
                                                     <span class="label label-sm label-info "> ندارد </span> @endif</td>
                                             <td style="text-align: center">
                                                 <a target="_blank" class="edit" href = "{{action("Web\TransactionController@edit" , $transaction)}}">
-                                                    <i
-                                                            class="fa fa-pencil-square fa-lg font-green"
-                                                            aria-hidden="true"></i></a>
+                                                    <i class="fa fa-pencil-square fa-lg font-green"
+                                                       aria-hidden="true"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -583,7 +581,7 @@
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
+    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>--}}
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
@@ -592,7 +590,9 @@
     <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jQueryNumberFormat/jquery.number.min.js" type="text/javascript"></script>
 
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/app.js" type="text/javascript"></script>
+
+    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js" type="text/javascript"></script>--}}
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-sweetalert/sweetalert.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-repeater/jquery.repeater.min.js" type="text/javascript"></script>
 
@@ -992,11 +992,11 @@
                     managerComment: newData[9]
                 },
                 success: function (result) {
-                    $("#removeTransactionSuccess").removeClass("hidden");
+                    $("#removeTransactionSuccess").removeClass("d-none");
 //                    location.reload();
                 },
                 error: function (result) {
-                    $("#removeTransactionError").removeClass("hidden");
+                    $("#removeTransactionError").removeClass("d-none");
                     $("#removeTransactionError > span").html(result.responseText);
                     // console.log(result);
                     // console.log(result.responseText);

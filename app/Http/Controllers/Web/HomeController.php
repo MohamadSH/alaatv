@@ -358,6 +358,8 @@ class HomeController extends Controller
 
         $pageName = "admin";
 
+        $products = Product::where('id', 240)->get();
+
         return view("admin.index", compact("pageName",
             "majors",
             "userStatuses",
@@ -370,7 +372,7 @@ class HomeController extends Controller
             "genders",
             "gendersWithUnknown",
             "hasOrder",
-            /*"products",*/
+            "products",
             "lockProfileStatus",
             "mobileNumberVerification",
             "tableDefaultColumns",
@@ -799,10 +801,30 @@ class HomeController extends Controller
         //        Meta::set('title', substr("آلاء|پنل پیامک", 0, Config::get("constants.META_TITLE_LIMIT")));
         //        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
-        return view("admin.indexSMS", compact("pageName", "majors", "userStatuses",
-            "roles", "relatives", "orderstatuses", "paymentstatuses", "genders", "gendersWithUnknown", "products", "allRootProducts", "lockProfileStatus",
-            "mobileNumberVerification", "sortBy", "sortType", "smsCredit", "smsProviderNumber",
-            "numberOfFatherPhones", "numberOfMotherPhones", "coupons", "addressSpecialFilter", "checkoutStatuses"));
+        return view("admin.indexSMS", compact(
+            "pageName",
+            "majors",
+            "userStatuses",
+            "roles",
+            "relatives",
+            "orderstatuses",
+            "paymentstatuses",
+            "genders",
+            "gendersWithUnknown",
+//            "products",
+            "allRootProducts",
+            "lockProfileStatus",
+            "mobileNumberVerification",
+            "sortBy",
+            "sortType",
+            "smsCredit",
+            "smsProviderNumber",
+            "numberOfFatherPhones",
+            "numberOfMotherPhones",
+            "coupons",
+            "addressSpecialFilter",
+            "heckoutStatuses")
+        );
     }
 
     /**
@@ -854,7 +876,7 @@ class HomeController extends Controller
                                        ->get()
                                        ->first();
 
-        return redirect(action('WebsiteSettingController@show', $this->setting));
+        return redirect(action('Web\WebsiteSettingController@show', $this->setting));
     }
 
     /**
@@ -5380,7 +5402,9 @@ class HomeController extends Controller
      */
     public function adminGenerateRandomCoupon(Request $request)
     {
-        $productCollection = $products = $this->makeProductCollection();
+//        $productCollection = $products = $this->makeProductCollection();
+        $productCollection = Product::where('id', 240);
+
         return view("admin.generateSpecialCoupon", compact("productCollection"));
     }
 }

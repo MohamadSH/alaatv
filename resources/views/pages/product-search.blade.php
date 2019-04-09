@@ -8,10 +8,11 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <i class="flaticon-home-2"></i>
-                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
-                محصولات
+                <i class = "fa fa-chalkboard-teacher"></i>
+                محصولات آموزشی
             </li>
         </ol>
     </nav>

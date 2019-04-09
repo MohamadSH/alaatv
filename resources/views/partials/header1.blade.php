@@ -55,7 +55,7 @@
                     <ul class="m-menu__nav ">
                         <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
                             <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم و جزوه دهم آلاء">
-                                <i class="m-menu__link-icon flaticon-add"></i>
+                                <i class="m-menu__link-icon flaticon-layers"></i>
                                 <span class="m-menu__link-text">مقطع دهم</span>
                                 <i class="m-menu__hor-arrow la la-angle-down"></i>
                                 <i class="m-menu__ver-arrow la la-angle-right"></i>
@@ -106,7 +106,7 @@
                         </li>
                         <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
                             <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم و جزوه یازدهم آلاء">
-                                <i class="m-menu__link-icon flaticon-line-graph"></i>
+                                <i class="m-menu__link-icon flaticon-layers"></i>
                                 <span class="m-menu__link-text">یازدهم</span>
                                 <i class="m-menu__hor-arrow la la-angle-down"></i>
                                 <i class="m-menu__ver-arrow la la-angle-right"></i>
@@ -157,7 +157,7 @@
                         </li>
                         <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
                             <a href="javascript:" class="m-menu__link m-menu__toggle" title="Non functional dummy link">
-                                <i class="m-menu__link-icon flaticon-paper-plane"></i>
+                                <i class="m-menu__link-icon flaticon-medal"></i>
                                 <span class="m-menu__link-title">
                                     <span class="m-menu__link-wrap">
                                         <span class="m-menu__link-text">کنکور آلاء</span>

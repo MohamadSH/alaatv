@@ -9,9 +9,9 @@
 namespace App\Console\Commands\CategoryTree;
 
 
-class Riazi implements GetTree
+class Riazi extends GetTree
 {
-    public static function getTree(): array {
+    public function getTree(): array {
 
         $riazi = [
             [

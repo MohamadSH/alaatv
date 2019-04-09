@@ -9,9 +9,9 @@
 namespace App\Console\Commands\CategoryTree;
 
 
-class Ensani implements GetTree
+class Ensani extends GetTree
 {
-    public static function getTree(): array{
+    public function getTree(): array{
 
         $ensani = [
             [
@@ -34768,5 +34768,7 @@ class Ensani implements GetTree
             ]
 
         ];
+
+        return $ensani;
     }
 }

@@ -31,11 +31,11 @@ class TransactionController extends Controller
     function __construct()
     {
         $this->response = new Response();
-        $this->middleware('permission:' . Config::get('constants.LIST_TRANSACTION_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:' . Config::get('constants.SHOW_TRANSACTION_ACCESS'), ['only' => 'edit']);
-        $this->middleware('permission:' . Config::get('constants.EDIT_TRANSACTION_ACCESS'), ['only' => 'update']);
+        $this->middleware('permission:' . config('constants.LIST_TRANSACTION_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.SHOW_TRANSACTION_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:' . config('constants.EDIT_TRANSACTION_ACCESS'), ['only' => 'update']);
         $this->middleware('role:admin', ['only' => 'getUnverifiedTransactions']);
-        //        $this->middleware('permission:'.Config::get('constants.INSERT_TRANSACTION_ACCESS'),['only'=>'store']);
+        //        $this->middleware('permission:'.config('constants.INSERT_TRANSACTION_ACCESS'),['only'=>'store']);
     }
 
     /**
@@ -129,7 +129,7 @@ class TransactionController extends Controller
                 $products = Product::whereIn('id', $productsId)
                                    ->get();
                 foreach ($products as $product) {
-                    if ($product->producttype_id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))
+                    if ($product->producttype_id == config("constants.PRODUCT_TYPE_CONFIGURABLE"))
                         if ($product->hasChildren()) {
                             $productsId = array_merge($productsId, Product::whereHas('parents', function ($q) use ($productsId) {
                                 $q->whereIn("parent_id", $productsId);
@@ -210,7 +210,7 @@ class TransactionController extends Controller
                         $checkoutStatuses = Input::get("checkoutStatuses");
                         if (in_array(0, $checkoutStatuses)) {
                             $transactionOrderproducts = $transaction->order
-                                ->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                                ->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
                                 ->where(function ($q) use ($productsId) {
                                     $q->whereIn("product_id", $productsId)
                                       ->whereNull("checkoutstatus_id");
@@ -218,7 +218,7 @@ class TransactionController extends Controller
                                 ->get();
                         } else {
                             $transactionOrderproducts = $transaction->order
-                                ->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                                ->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
                                 ->where(function ($q) use ($productsId) {
                                     $q->whereIn("product_id", $productsId);
                                 })
@@ -240,7 +240,7 @@ class TransactionController extends Controller
                             Product::DONATE_PRODUCT_5_HEZAR,
                         ];
                         $numOfOrderproducts = $transaction->order
-                            ->orderproducts(Config::get("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                            ->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
                             ->whereNotIn("product_id", $donateProducts)
                             ->count();
                         $orderDiscountPerItem = $orderDiscount / $numOfOrderproducts;
@@ -562,7 +562,7 @@ class TransactionController extends Controller
         }
 
         if ($paymentImplied) {
-            $editRequest->offsetSet("transactionstatus_id", Config::get("constants.TRANSACTION_STATUS_PENDING"));
+            $editRequest->offsetSet("transactionstatus_id", config("constants.TRANSACTION_STATUS_PENDING"));
             $editRequest->offsetSet("completed_at", Carbon::now());
             $editRequest->offsetSet("apirequest", true);
             $response = $this->update($editRequest, $transaction);
@@ -700,7 +700,7 @@ class TransactionController extends Controller
     {
         if (!isset($transaction->traceNumber)) {
             $transaction->traceNumber = $request->get("traceNumber");
-            $transaction->paymentmethod_id = Config::get("constants.PAYMENT_METHOD_ATM");
+            $transaction->paymentmethod_id = config("constants.PAYMENT_METHOD_ATM");
             $transaction->managerComment = $transaction->managerComment . "شماره کارت مقصد: \n" . $request->get("managerComment");
             if ($transaction->update()) {
                 return $this->response->setStatusCode(200)

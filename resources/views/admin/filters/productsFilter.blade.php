@@ -28,12 +28,12 @@
                         <option></option>
                         @foreach($products as $product)
                             @if($product->producttype_id == config("constants.PRODUCT_TYPE_SIMPLE"))
-                                <option class="bold" value="{{$product->id}}" data-content="{{$product->calculatePayablePrice()["CustomerCost"]}}" >{{$product->name}}</option>
+                                <option class="bold" value="{{$product->id}}" data-content="{{$product->calculatePayablePrice()["customerPrice"]}}" >{{$product->name}}</option>
                             @else
                                 <optgroup class="bold" label="{{$product->name}}"></optgroup>
                             @endif
                             @foreach($product->children as $child)
-                                <option value="{{$child->id}}" data-content="{{$child->calculatePayablePrice()["CustomerCost"]}}" @if(isset($defaultProductFilter) && $product->id== $defaultProductFilter)selected="selected"@endif>{{$child->name}}</option>
+                                <option value="{{$child->id}}" data-content="{{$child->calculatePayablePrice()["customerPrice"]}}" @if(isset($defaultProductFilter) && $product->id== $defaultProductFilter)selected="selected"@endif>{{$child->name}}</option>
                             @endforeach
                         @endforeach
                     </select>
@@ -44,12 +44,12 @@
                         @foreach($products as $product)
 
                             @if($product->producttype_id == config("constants.PRODUCT_TYPE_SIMPLE"))
-                                <option value="{{$product->id}}" data-content="{{$product->calculatePayablePrice()["CustomerCost"]}}" >{{$product->name}}</option>
+                                <option value="{{$product->id}}" data-content="{{$product->calculatePayablePrice()["customerPrice"]}}" >{{$product->name}}</option>
                             @else
                                 <optgroup label="{{$product->name}}"></optgroup>
                             @endif
                             @foreach($product->children as $child)
-                                <option value="{{$child->id}}" data-content="{{$child->calculatePayablePrice()["CustomerCost"]}}" @if(isset($defaultProductFilter) && $child->id== $defaultProductFilter) selected="selected" @endif>{{$child->name}}</option>
+                                <option value="{{$child->id}}" data-content="{{$child->calculatePayablePrice()["customerPrice"]}}" @if(isset($defaultProductFilter) && $child->id== $defaultProductFilter) selected="selected" @endif>{{$child->name}}</option>
                             @endforeach
                         @endforeach
                     </select>
@@ -62,9 +62,9 @@
                     <option></option>
                     @foreach($products as $product)
                         <optgroup label="{{$product->name}}"></optgroup>
-                        <option value="{{$product->id}}" data-content="{{$product->calculatePayablePrice()["CustomerCost"]}}" @if(isset($defaultProductFilter) && $product->id== $defaultProductFilter)selected="selected"@endif>{{$product->name}}</option>
+                        <option value="{{$product->id}}" data-content="{{$product->calculatePayablePrice()["customerPrice"]}}" @if(isset($defaultProductFilter) && $product->id== $defaultProductFilter)selected="selected"@endif>{{$product->name}}</option>
                         @foreach($product->children as $child)
-                            <option value="{{$child->id}}" data-content="{{$child->calculatePayablePrice()["CustomerCost"]}}" @if(isset($defaultProductFilter) && $child->id== $defaultProductFilter) selected="selected" @endif>{{$child->name}}</option>
+                            <option value="{{$child->id}}" data-content="{{$child->calculatePayablePrice()["customerPrice"]}}" @if(isset($defaultProductFilter) && $child->id== $defaultProductFilter) selected="selected" @endif>{{$child->name}}</option>
                         @endforeach
                     @endforeach
                 </select>

@@ -1,13 +1,77 @@
-<div class="portlet light profile-sidebar-portlet ">
-    <!-- SIDEBAR USERPIC -->
-{{--<div class="profile-userpic"></div>--}}
-<!-- END SIDEBAR USERPIC -->
-    <!-- SIDEBAR USER TITLE -->
-    <div class="profile-usertitle">
-        <div class="profile-usertitle-name bold">منو پیکر بندی</div>
+<style>
+    .m-nav .m-nav__item.m-nav__item--active > .m-nav__link .m-nav__link-arrow, .m-nav .m-nav__item.m-nav__item--active > .m-nav__link .m-nav__link-icon, .m-nav .m-nav__item.m-nav__item--active > .m-nav__link .m-nav__link-text, .m-nav .m-nav__item:hover:not(.m-nav__item--disabled) > .m-nav__link .m-nav__link-arrow, .m-nav .m-nav__item:hover:not(.m-nav__item--disabled) > .m-nav__link .m-nav__link-icon, .m-nav .m-nav__item:hover:not(.m-nav__item--disabled) > .m-nav__link .m-nav__link-text {
+        color: #ff9a17;
+    }
+</style>
+<div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                    منو پیکر بندی
+                </h3>
+            </div>
+        </div>
     </div>
-    <!-- END SIDEBAR USER TITLE -->
-    <!-- SIDEBAR BUTTONS -->
+    <div class="m-portlet__body">
+
+        <ul class="m-nav m-nav--inline">
+            @permission((config('constants.SHOW_SITE_CONFIG_ACCESS')))
+            <li class="m-nav__item @if(strcmp($section , "websiteSetting") == 0) m-nav__item--active @endif">
+                <a href="{{action("Web\HomeController@adminSiteConfig")}}" class="m-nav__link">
+                    <i class="m-nav__link-icon flaticon-cogwheel"></i>
+                    <span class="m-nav__link-text">
+                        تنظیمات سایت
+                    </span>
+                </a>
+            </li>
+            @endpermission
+
+            @permission((config('constants.LIST_SLIDESHOW_ACCESS')))
+
+            <li class="m-nav__item
+                        {{--m-nav__item--disabled--}}
+                        @if(strcmp($section , "slideShow") == 0) m-nav__item--active @endif">
+                <a href="{{action("Web\HomeController@adminSlideShow")}}" class="m-nav__link">
+                    <i class="m-nav__link-icon la la-photo"></i>
+                    <span class="m-nav__link-text">
+                        اسلاید شو صفحه اصلی
+                    </span>
+                </a>
+            </li>
+            @endpermission
+
+            {{--@permission((config('constants.LIST_SLIDESHOW_ACCESS')))--}}
+            {{--<li @if(strcmp($section , "articleSlideShow") == 0) class="active" @endif >--}}
+            {{--<a href="{{action("Web\HomeController@adminArticleSlideShow")}}">--}}
+            {{--<i class="fa fa-picture-o" aria-hidden="true"></i> اسلاید شو صفحه مقالات </a>--}}
+            {{--</li>--}}
+            {{--@endpermission--}}
+
+            <li class="m-nav__item @if(strcmp($section , "afterLoginForm") == 0) m-nav__item--active @endif">
+                <a href="{{action("Web\AfterLoginFormController@index")}}" class="m-nav__link">
+                    <i class="m-nav__link-icon flaticon-browser"></i>
+                    <span class="m-nav__link-text">
+                        فرم تکمیل ثبت نام
+                    </span>
+                </a>
+            </li>
+        </ul>
+
+    </div>
+</div>
+
+
+{{--<div class="portlet light profile-sidebar-portlet ">--}}
+    {{--<!-- SIDEBAR USERPIC -->--}}
+{{--<div class="profile-userpic"></div>--}}
+{{--<!-- END SIDEBAR USERPIC -->--}}
+    {{--<!-- SIDEBAR USER TITLE -->--}}
+    {{--<div class="profile-usertitle">--}}
+        {{--<div class="profile-usertitle-name bold">منو پیکر بندی</div>--}}
+    {{--</div>--}}
+    {{--<!-- END SIDEBAR USER TITLE -->--}}
+    {{--<!-- SIDEBAR BUTTONS -->--}}
 {{--<div class="profile-userbuttons">--}}
 {{--{!! Form::open(['files'=>true,'method' => 'PUT' , 'action' => ['WebsiteSettingController@update', $setting]])  !!}--}}
 {{--<div class="list-group">--}}
@@ -35,33 +99,33 @@
 {{--</div>--}}
 {{--{!! Form::close() !!}--}}
 {{--</div>--}}
-<!-- END SIDEBAR BUTTONS -->
-    <!-- SIDEBAR MENU -->
-    <div class="profile-usermenu">
-        <ul class="nav">
-            @permission((Config::get('constants.SHOW_SITE_CONFIG_ACCESS')))
-            <li @if(strcmp($section , "websiteSetting") == 0) class="active" @endif >
-                <a href = "{{action("Web\HomeController@adminSiteConfig")}}">
-                    <i class="icon-settings"></i> تنظیمات سایت </a>
-            </li>
-            @endpermission
-            @permission((Config::get('constants.LIST_SLIDESHOW_ACCESS')))
-            <li @if(strcmp($section , "slideShow") == 0) class="active" @endif >
-                <a href = "{{action("Web\HomeController@adminSlideShow")}}">
-                    <i class="fa fa-picture-o" aria-hidden="true"></i> اسلاید شو صفحه اصلی </a>
-            </li>
-            @endpermission
-            {{--@permission((Config::get('constants.LIST_SLIDESHOW_ACCESS')))--}}
+{{--<!-- END SIDEBAR BUTTONS -->--}}
+    {{--<!-- SIDEBAR MENU -->--}}
+    {{--<div class="profile-usermenu">--}}
+        {{--<ul class="nav">--}}
+            {{--@permission((config('constants.SHOW_SITE_CONFIG_ACCESS')))--}}
+            {{--<li @if(strcmp($section , "websiteSetting") == 0) class="active" @endif >--}}
+                {{--<a href = "{{action("Web\HomeController@adminSiteConfig")}}">--}}
+                    {{--<i class="icon-settings"></i> تنظیمات سایت </a>--}}
+            {{--</li>--}}
+            {{--@endpermission--}}
+            {{--@permission((config('constants.LIST_SLIDESHOW_ACCESS')))--}}
+            {{--<li @if(strcmp($section , "slideShow") == 0) class="active" @endif >--}}
+                {{--<a href = "{{action("Web\HomeController@adminSlideShow")}}">--}}
+                    {{--<i class="fa fa-picture-o" aria-hidden="true"></i> اسلاید شو صفحه اصلی </a>--}}
+            {{--</li>--}}
+            {{--@endpermission--}}
+            {{--@permission((config('constants.LIST_SLIDESHOW_ACCESS')))--}}
             {{--<li @if(strcmp($section , "articleSlideShow") == 0) class="active" @endif >--}}
             {{--<a href="{{action("Web\HomeController@adminArticleSlideShow")}}">--}}
             {{--<i class="fa fa-picture-o" aria-hidden="true"></i> اسلاید شو صفحه مقالات </a>--}}
             {{--</li>--}}
             {{--@endpermission--}}
-            <li @if(strcmp($section , "afterLoginForm") == 0) class="active" @endif >
-                <a href = "{{action("Web\AfterLoginFormController@index")}}">
-                    <i class="icon-info"></i> فرم تکمیل ثبت نام </a>
-            </li>
-        </ul>
-    </div>
-    <!-- END MENU -->
-</div>
+            {{--<li @if(strcmp($section , "afterLoginForm") == 0) class="active" @endif >--}}
+                {{--<a href = "{{action("Web\AfterLoginFormController@index")}}">--}}
+                    {{--<i class="icon-info"></i> فرم تکمیل ثبت نام </a>--}}
+            {{--</li>--}}
+        {{--</ul>--}}
+    {{--</div>--}}
+    {{--<!-- END MENU -->--}}
+{{--</div>--}}

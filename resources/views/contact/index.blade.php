@@ -1,54 +1,58 @@
-@extends('app',["pageName"=>"admin"])
+@extends('app',['pageName'=>'admin'])
 
-@section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet"
-          type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
+@section('page-css')
+    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>--}}
+    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>--}}
 @endsection
 
-@section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
-            <li>
-                <i class="icon-home"></i>
-                <a href = "{{action("Web\HomeController@admin")}}">مدیریت کاربران</a>
-                <i class="fa fa-angle-left"></i>
+@section('pageBar')
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <i class="flaticon-home-2 m--padding-right-5"></i>
+                <a class="m-link" href="{{action("Web\HomeController@admin")}}">مدیریت کاربران</a>
             </li>
-            <li>
-                <span>دفترچه تلفن</span>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a class="m-link" href="#">دفترچه تلفن</a>
             </li>
-        </ul>
-    </div>
+        </ol>
+    </nav>
 @endsection
 
-@section("content")
+@section('content')
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6 ">
             <!-- BEGIN SAMPLE FORM PORTLET-->
             @include('systemMessage.flash')
-            <div class="portlet light ">
-                <div class="portlet-title">
-                    <div class="caption">
-                        <i class="fa fa-book font-dark"></i>
-                        <span class="caption-subject font-dark sbold uppercase">دفترچه تلفن</span>
-                    </div>
-                    <div class="actions">
-                        <div class="btn-group">
-                            <a class = "btn btn-sm dark dropdown-toggle" href = "{{action("Web\HomeController@admin")}}"> بازگشت
-                                <i class="fa fa-angle-left"></i>
-                            </a>
+            <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                دفترچه تلفن
+                            </h3>
                         </div>
                     </div>
-                </div>
-                @if(isset($userId))
-                    <div class="btn-group">
-                        <a id="" class="btn btn-outline blue" href="#addContact" data-toggle="modal">
-                            <i class="fa fa-plus"></i> افزودن مخاطب </a>
+                    <div class="m-portlet__head-tools">
+                        <a class = "btn m-btn--air btn-primary" href = "{{action("Web\HomeController@admin")}}"> بازگشت
+                            <i class="fa fa-angle-left"></i>
+                        </a>
                     </div>
-                @endif
-                <hr/>
-                <div class="portlet-body form">
+                </div>
+                <div class="m-portlet__body">
+
+                    @if(isset($userId))
+                        <a href="#addContact" data-toggle="modal" data-target="#addContact" class="btn btn-info m-btn m-btn--icon m-btn--wide">
+                            <span>
+                                <i class="fa fa-plus"></i>
+                                <span> افزودن مخاطب</span>
+                            </span>
+                        </a>
+                    @endif
+
+                    <hr/>
+
                     @if($contacts->isEmpty())
                         <div class="alert alert-info" style="text-align: center">
                             <h3 class="bold">شما تاکنون مخاطبی درج نکرده اید! </h3>
@@ -101,86 +105,83 @@
                             </table>
                         </div>
                     @endif
+
                 </div>
             </div>
-            <!-- END SAMPLE FORM PORTLET-->
         </div>
     </div>
     @if(isset($userId))
         {{--Adding Contact Modal--}}
-        <div id="addContact" class="modal fade" tabindex="-1" data-width="500" data-backdrop="static">
-            <div class="modal-header">
-                افزودن شماره
-            </div>
-            {!! Form::open(['method' => 'POST' , 'action' => 'ContactController@store']) !!}
-            <div class="modal-body">
-                {!! Form::hidden('user_id', $userId) !!}
-                <div class="row">
-                    <div class="col-md-6">
-                        <p class="{{ $errors->has('name') ? ' has-error' : '' }}">
-                            {!! Form::text('name', old('name'), ['class' => 'form-control', 'id' => 'phoneNumber'  , 'placeholder'=>'نام مخاطب']) !!}
-                            @if ($errors->has('name'))
-                                <span class="help-block">
-                                        <strong>{{ $errors->first('name')}}</strong>
-                                    </span>
-                            @endif
-                        </p>
+        <!--begin::Modal-->
+        <div class="modal fade" id="addContact" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addContactModalLabel">افزودن شماره</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="col-md-6">
-                        <p class="{{ $errors->has('contacttype_id') ? ' has-error' : '' }}">
-                            {!! Form::select('contacttype_id', array_prepend($contacttypes->toArray(), 'نوع مخاطب'), null, ['class' => 'form-control', 'id' => 'contacttype_id'  ]) !!}
-                            @if ($errors->has('contacttype_id'))
-                                <span class="help-block">
-                                        <strong>{{ $errors->first('contacttype_id')}}</strong>
-                                    </span>
-                            @endif
-                        </p>
+                    {!! Form::open(['method' => 'POST' , 'action' => 'ContactController@store']) !!}
+                    <div class="modal-body">
+                        {!! Form::hidden('user_id', $userId) !!}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="{{ $errors->has('name') ? ' has-error' : '' }}">
+                                    {!! Form::text('name', old('name'), ['class' => 'form-control', 'id' => 'phoneNumber'  , 'placeholder'=>'نام مخاطب']) !!}
+                                    @if ($errors->has('name'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('name')}}</strong>
+                                        </span>
+                                    @endif
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="{{ $errors->has('contacttype_id') ? ' has-error' : '' }}">
+                                    {!! Form::select('contacttype_id', array_prepend($contacttypes->toArray(), 'نوع مخاطب'), null, ['class' => 'form-control', 'id' => 'contacttype_id'  ]) !!}
+                                    @if ($errors->has('contacttype_id'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('contacttype_id')}}</strong>
+                                        </span>
+                                    @endif
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="{{ $errors->has('relative_id') ? ' has-error' : '' }}">
+                                    {!! Form::select('relative_id', array_prepend($relatives->toArray(),'نسبت مخاطب نامشخص'), null, ['class' => 'form-control', 'id' => 'relative_id' ]) !!}
+                                    @if ($errors->has('relative_id'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('relative_id')}}</strong>
+                                        </span>
+                                    @endif
+                                </p>
+                            </div>
+                        </div>
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                        {!! Form::submit('ذخیره' , ['class' => 'btn btn-primary']) !!}
+                    </div>
+                    {!! Form::close() !!}
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <p class="{{ $errors->has('relative_id') ? ' has-error' : '' }}">
-                            {!! Form::select('relative_id', array_prepend($relatives->toArray(),'نسبت مخاطب نامشخص'), null, ['class' => 'form-control', 'id' => 'relative_id' ]) !!}
-                            @if ($errors->has('relative_id'))
-                                <span class="help-block">
-                                    <strong>{{ $errors->first('relative_id')}}</strong>
-                                </span>
-                            @endif
-                        </p>
-                    </div>
-                </div>
             </div>
-
-            <div class="modal-footer">
-                <div class="form-group">
-                    <div class="col-md-8"></div>
-                    <div class="col-md-2">
-                        <button type="button" data-dismiss="modal" class="btn btn-outline dark">بستن</button>
-                    </div>
-                    <div class="col-md-2">
-                        {!! Form::submit('ذخیره' , ['class' => 'btn green']) !!}
-                    </div>
-                </div>
-            </div>
-            {!! Form::close() !!}
         </div>
+        <!--end::Modal-->
     @endif
 @endsection
 
-@section("footerPageLevelPlugin")
-    <script src="/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
-@endsection
+@section('page-js')
+    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>--}}
+    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>--}}
+    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-extended-modals.min.js" type="text/javascript"></script>--}}
 
-@section("footerPageLevelScript")
-    <script src="/assets/pages/scripts/ui-extended-modals.min.js" type="text/javascript"></script>
-@endsection
-
-@section("extraJS")
     <script type="text/javascript">
         @if(count($errors) > 0)
         $('#addContact').modal('show');
         @endif
     </script>
+
 @endsection
 {{--@endpermission--}}

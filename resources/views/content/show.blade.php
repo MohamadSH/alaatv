@@ -1,10 +1,10 @@
-@extends("app")
+@extends('app')
 
-@section("page-css")
-    <link href = "/acm/video-js/video-js.min.css" rel = "stylesheet">
+@section('page-css')
+    <link href = "{{ mix("/css/content-show.css") }}" rel = "stylesheet">
 @endsection
 
-@section("pageBar")
+@section('pageBar')
     <nav aria-label = "breadcrumb">
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
@@ -27,8 +27,7 @@
 @endsection
 
 
-@section("content")
-
+@section('content')
     <div class = "row">
         <div class = "col-xl-8 col-lg-8 col-md-8 col-sm-6">
             @if(isset($content->template))
@@ -328,28 +327,34 @@
                         </div>
                     </div>
                 </div>
-                <div class = "m-portlet__body">
+                <div class = "m-portlet__body m--padding-10">
                     <div id = "playListScroller" class = "m-scrollable" data-scrollable = "true" data-height = "{{ min($videosWithSameSet->count(),(optional($content->template)->name == "video1" ?  11 : 4)) * 103 }}" data-scrollbar-shown = "true">
                         <div class = "m-portlet__body-progress">Loading</div>
 
                             <!--begin::m-widget5-->
-                            <div class = "m-widget5">
+                            <div class = "a-widget5">
                                 @foreach($videosWithSameSet as $item)
-                                    <div class = "m-widget5__item" id = "playlistItem_{{ $item["content"]->id }}">
-                                        <div class = "m-widget5__content  {{ $item["content"]->id == $content->id ? 'm--bg-primary' : '' }}">
-                                            <div class = "m-widget5__pic">
-                                                <img class = "m-widget7__img" src = "{{ isset($item["thumbnail"]) ? $item["thumbnail"]."?w=210&h=118":'' }}" alt = "{{ $item["content"]->name }}">
+                                    <div class = "a-widget5__item" id = "playlistItem_{{ $item["content"]->id }}">
+                                        <div class = "a-widget5__content  {{ $item["content"]->id == $content->id ? 'm--bg-primary' : '' }}">
+                                            <div class = "a-widget5__pic">
+                                                <a class="m-link" href = "{{action("Web\ContentController@show" , $item["content"])}}">
+                                                    <img class = "m-widget7__img" src = "{{ isset($item["thumbnail"]) ? $item["thumbnail"]."?w=210&h=118":'' }}" alt = "{{ $item["content"]->name }}">
+                                                </a>
                                             </div>
-                                            <div class = "m-widget5__section">
-                                                <h4 class = "m-widget5__title">
-                                                    {{ $item["content"]->display_name }}
+                                            <div class = "a-widget5__section">
+                                                <h4 class = "a-widget5__title">
+                                                    <a class="m-link" href = "{{action("Web\ContentController@show" , $item["content"])}}">
+                                                        {{ $item["content"]->display_name }}
+                                                    </a>
                                                 </h4>
-                                                <div class = "m-widget5__info">
-                                                    <a href = "{{action("Web\ContentController@show" , $item["content"])}}"> link</a>
+                                                <div class = "a-widget5__info">
+                                                    <div class="content-description">
+                                                        {!! $item["content"]->description !!}
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div class="clearfix"></div>
                                         </div>
-                                        <div class = "m-widget5__content"></div>
                                     </div>
                                 @endforeach
 
@@ -370,7 +375,7 @@
     </div>
 @endsection
 
-@section("page-js")
+@section('page-js')
     <script>
         var related_videos = [
                 @if(!is_null(min(13,$videosWithSameSet->count())))

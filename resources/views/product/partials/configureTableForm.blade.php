@@ -1,59 +1,54 @@
 <!-- BEGIN SAMPLE FORM PORTLET-->
-<div class="portlet light ">
-    <div class="portlet-title">
-        <div class="caption">
-            <i class="icon-settings font-dark"></i>
-            <span class="caption-subject font-dark sbold uppercase">@if($product->producttype->id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))
-                    پیکربندی محصول ٬@endif<a href = "{{action("Web\ProductController@show" , $product)}}">{{$product->name}}</a></span>
+<div class="m-portlet m-portlet--mobile">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                    @if($product->producttype->id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))
+                        پیکربندی محصول ٬
+                    @endif
+                    <a href = "{{action("Web\ProductController@show" , $product)}}">{{$product->name}}</a>
+                </h3>
+            </div>
         </div>
-        @permission((Config::get('constants.EDIT_CONFIGURE_PRODUCT_ACCESS')))
-
-        @endpermission
-        {{--<div class="actions">--}}
-        {{--<div class="btn-group">--}}
-        {{--<a class="btn btn-sm btn-info dropdown-toggle" href="{{action("Web\ProductController@completeEachChild", $product)}}" >افزودن فرزند--}}
-        {{--<i class="fa fa-angle-left"></i>--}}
-        {{--</a>--}}
-        {{--</div>--}}
-        {{--</div>--}}
     </div>
-    <div class="portlet-body form">
-        <div class="table-scrollable">
-            <table class="table table-bordered table-hover">
-                <thead>
-                <tr>
-                    <th class="text-center"> نام محصول</th>
-                    <th class="text-center"> قیمت پایه</th>
-                    @permission((Config::get('constants.EDIT_CONFIGURE_PRODUCT_ACCESS')))
-                    <th class="text-center" colspan="2"> عملیات</th>
-                    @endpermission
-                </tr>
-                </thead>
-                <tbody>
-                @if($product->hasChildren())
-                    @foreach($product->children as $child)
-                        {!! Form::open(['method' => 'PUT','action' => ['ProductController@childProductEnable',$child]]) !!}
-                        <tr>
-                            <td class="col-md-8 text-center"> {{$child->name}} </td>
-                            <td class="col-md-8 text-center"> {{$child->basePrice}} </td>
-                            @permission((Config::get('constants.EDIT_CONFIGURE_PRODUCT_ACCESS')))
-                            @if($child->enable)
-                                <td class="col-md-2 text-center">{!! Form::submit('غیر فعال کردن' , ['class' => 'btn red']) !!} </td>
-                            @else
-                                <td class="col-md-2 text-center">{!! Form::submit('فعال کردن' , ['class' => 'btn green-meadow']) !!} </td>
-                            @endif
-                            <td class="col-md-2 text-center"><a class="btn btn-info" href = "{{action("Web\ProductController@edit" , $child)}}">اصلاح</a>
-                            </td>
-                            @endpermission
-                        </tr>
-                        {!! Form::close() !!}
-                    @endforeach
-                @endif
-                </tbody>
-            </table>
-        </div>
+    <div class="m-portlet__body">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th class="text-center"> نام محصول</th>
+                <th class="text-center"> قیمت پایه</th>
+                @permission((Config::get('constants.EDIT_CONFIGURE_PRODUCT_ACCESS')))
+                <th class="text-center" colspan="2"> عملیات</th>
+                @endpermission
+            </tr>
+            </thead>
+            <tbody>
+            @if($product->hasChildren())
+                @foreach($product->children as $child)
+                    {!! Form::open(['method' => 'PUT','action' => ['Web\ProductController@childProductEnable',$child]]) !!}
+                    <tr>
+                        <td class="col-md-8 text-center"> {{$child->name}} </td>
+                        <td class="col-md-8 text-center"> {{$child->basePrice}} </td>
+                        @permission((Config::get('constants.EDIT_CONFIGURE_PRODUCT_ACCESS')))
+                        @if($child->enable)
+                            <td class="col-md-2 text-center">{!! Form::submit('غیر فعال کردن' , ['class' => 'btn red']) !!} </td>
+                        @else
+                            <td class="col-md-2 text-center">{!! Form::submit('فعال کردن' , ['class' => 'btn green-meadow']) !!} </td>
+                        @endif
+                        <td class="col-md-2 text-center"><a class="btn btn-info" href = "{{action("Web\ProductController@edit" , $child)}}">اصلاح</a>
+                        </td>
+                        @endpermission
+                    </tr>
+                    {!! Form::close() !!}
+                @endforeach
+            @endif
+            </tbody>
+        </table>
     </div>
 </div>
+
+
 <!-- END SAMPLE FORM PORTLET-->
 {{--@if($product->producttype->id == Config::get("constants.PRODUCT_TYPE_CONFIGURABLE"))--}}
 {{--@permission((Config::get('constants.INSERT_CONFIGURE_PRODUCT_ACCESS')))--}}

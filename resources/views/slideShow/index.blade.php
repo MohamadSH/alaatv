@@ -1,4 +1,4 @@
-@permission((Config::get('constants.LIST_SLIDESHOW_ACCESS')))
+@permission((config('constants.LIST_SLIDESHOW_ACCESS')))
 @foreach($slides as $slide)
     <tr id="{{$slide->id}}">
         <td> {{$slide->order}} </td>
@@ -35,8 +35,10 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                <h4 class="modal-title">نمایش عکس اسلاید</h4>
+                                <h5 class="modal-title" id="exampleModalLabel">نمایش عکس اسلاید</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
                             </div>
                             <div class="modal-body">
                                 <div class="row" style="text-align: center;">
@@ -63,19 +65,30 @@
                 <span class="label label-sm label-warning"> ندارد </span>
             @endif
         </td>
-        <td> @if($slide->isEnable) <span class="label label-sm label-success"> فعال </span> @else <span
-                    class="label label-sm label-warning"> غیرفعال </span>  @endif</td>
+        <td>
+            @if($slide->isEnable)
+                <span class="label label-sm label-success"> فعال </span>
+            @else
+                <span class="label label-sm label-warning"> غیرفعال </span>
+            @endif
+        </td>
         <td>
             <span class="slide_id hidden" id="{{$slide->id}}"></span>
-            @permission((Config::get('constants.EDIT_SLIDESHOW_ACCESS')))
-            <a class="btn btn-outline btn-circle dark btn-sm blue deleteSlide" href = "{{action("Web\SlideShowController@edit" , $slide)}}">
-                <i class = "fa fa-pencil"></i>
-                اصلاح
+            @permission((config('constants.EDIT_SLIDESHOW_ACCESS')))
+            <a class="btn btn-sm btn-outline-warning m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air deleteSlide m--margin-right-20" href = "{{action("Web\SlideShowController@edit" , $slide)}}">
+                <span>
+                    <i class="flaticon-edit"></i>
+                    <span>اصلاح</span>
+                </span>
             </a>
             @endpermission
-            @permission((Config::get('constants.REMOVE_SLIDESHOW_ACCESS')))
-            <a class="btn btn-outline btn-circle dark btn-sm red deleteSlide" data-toggle="modal"
-               href="#removeSlideModal"><i class="fa fa-trash-o"></i> حذف</a>
+            @permission((config('constants.REMOVE_SLIDESHOW_ACCESS')))
+            <a class="btn btn-sm btn-outline-danger m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air deleteSlide" data-toggle="modal" href="#removeSlideModal">
+                <span>
+                    <i class="flaticon-delete"></i>
+                    <span>حذف</span>
+                </span>
+            </a>
             @endpermission
         </td>
     </tr>

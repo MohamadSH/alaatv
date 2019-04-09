@@ -168,7 +168,7 @@ $(document).ready(function () {
     }
 
     function showSabteRotbe() {
-        // changeStatus('ثبت رتبه');
+        changeStatus('ثبت_رتبه');
         $('.profileMenuPage.profileMenuPage-filmVaJozve').fadeOut(0);
         $('.profileMenuPage.profileMenuPage-setting').fadeOut(0);
         $('.profileMenuPage.profileMenuPage-sabteRotbe').fadeIn();
@@ -184,7 +184,7 @@ $(document).ready(function () {
     }
 
     function showSetting() {
-        // changeStatus('اطلاعات شخصی');
+        changeStatus('اطلاعات_شخصی');
         $('.profileMenuPage.profileMenuPage-filmVaJozve').fadeOut(0);
         $('.profileMenuPage.profileMenuPage-sabteRotbe').fadeOut(0);
         $('.profileMenuPage.profileMenuPage-setting').fadeIn();
@@ -192,8 +192,6 @@ $(document).ready(function () {
             scrollTop: $('.profileMenuPage.profileMenuPage-setting').offset().top - $('#m_header').height() - 30
         }, 500);
     }
-
-    showSetting();
 
     $('#birthdate').persianDatepicker({
         observer: true,
@@ -253,7 +251,7 @@ $(document).ready(function () {
 
         if ($rank.val().trim().length === 0) {
             status = false;
-            message += 'ثبت رتبه الزامی است.'+'<br>';
+            message += 'ثبت_رتبه الزامی است.'+'<br>';
             $rank.parents('.form-group').addClass('has-danger');
         } else if(isNaN(parseInt($rank.val().toLocaleString('en').replace(',', ''))) || isNaN($rank.val())) {
             status = false;
@@ -527,20 +525,24 @@ $(document).ready(function () {
         }
     });
 
-    // if (window.location.hash === '#ثبت رتبه') {
-    //     showSabteRotbe();
-    // } else if (window.location.hash === '#اطلاعات شخصی') {
-    //     showSetting();
-    // } else {
-    //     // showSetting();
-    // }
-    //
-    // $(window).on('hashchange', function() {
-    //     if (window.location.hash === '#ثبت رتبه') {
-    //         showSabteRotbe();
-    //     } else if (window.location.hash === '#اطلاعات شخصی') {
-    //         showSetting();
-    //     }
-    // });
+    let pageLoadState = decodeURIComponent(window.location.hash);
+    if (pageLoadState === '#ثبت_رتبه') {
+        console.log('sabte rotbe');
+        showSabteRotbe();
+    } else if (pageLoadState === '#اطلاعات_شخصی') {
+        console.log('etelaate shakhsi');
+        showSetting();
+    } else {
+        console.log('else');
+        showSetting();
+    }
+
+    $(window).on('hashchange', function() {
+        if (window.location.hash === '#ثبت_رتبه') {
+            showSabteRotbe();
+        } else if (window.location.hash === '#اطلاعات_شخصی') {
+            showSetting();
+        }
+    });
 
 });

@@ -4,20 +4,6 @@
 @endsection
 @section('page-css')
     <link href = "{{ mix('/css/checkout-payment.css') }}" rel = "stylesheet" type = "text/css"/>
-    <link href = "{{ asset('/acm/AlaatvCustomFiles/components/step/step.css') }}" rel = "stylesheet" type = "text/css"/>
-    <style>
-        .notIncludedProductsInCoupon {
-            display: table;
-            width: 100%;
-        }
-        .notIncludedProductsInCoupon > div {
-            display: table-cell;
-            vertical-align: middle;
-            height: 100px;
-            text-align: center;
-            width: 100%;
-        }
-    </style>
 @endsection
 
 @section('content')
@@ -368,10 +354,7 @@
 @endsection
 
 @section('page-js')
-
-
     <script src = "{{ mix('/js/checkout-payment.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-checkout-payment.js') }}"></script>
 
     <script>
         $(document).ready(function(){
@@ -379,126 +362,4 @@
             CheckoutPaymentUi.PrintnotIncludedProductsInCoupon(notIncludedProductsInCoupon);
         });
     </script>
-
-    {{--function setPaymentController() {--}}
-    {{--if ($("#paymentMethod").val() == "onlinePayment") {--}}
-    {{--$("#paymentForm").attr("action", "{{action('TransactionController@paymentRedirect')}}");--}}
-    {{--$("#gatewaySelect").prop('disabled', false);--}}
-    {{--$("#gatewayDiv").show();--}}
-    {{--} else if ($("#paymentMethod").val() == "inPersonPayment" || $("#paymentMethod").val() == "offlinePayment") {--}}
-    {{--$("#paymentForm").attr("action", "{{action('OrderController@verifyPayment')}}");--}}
-    {{--$("#gatewaySelect").prop('disabled', true);--}}
-    {{--$("#gatewayDiv").hide();--}}
-    {{--}--}}
-    {{--}--}}
-
-    {{--$(document).ready(function () {--}}
-    {{--setPaymentController();--}}
-    {{--});--}}
-
-    {{--$(document).on("change", "#paymentMethod", function () {--}}
-    {{--setPaymentController();--}}
-    {{--});--}}
-
-    {{--$(document).on("switchChange.bootstrapSwitch", "#couponSwitch", function () {--}}
-    {{--if ($(this).is(':checked')) {--}}
-    {{--$("#couponForm").fadeIn();--}}
-    {{--} else {--}}
-    {{--$("#couponForm").fadeOut(1000);--}}
-    {{--}--}}
-    {{--});--}}
-
-    {{--var submitDonateAjax;--}}
-    {{--var cancelDonateAjax;--}}
-    {{--$(document).on("switchChange.bootstrapSwitch", "#donateSwitch", function () {--}}
-    {{--if ($(this).is(':checked')) {--}}
-    {{--var formData = $("#donateForm").serialize();--}}
-    {{--if (submitDonateAjax) {--}}
-    {{--submitDonateAjax.abort();--}}
-    {{--}--}}
-    {{--submitDonateAjax = $.ajax({--}}
-    {{--type: "POST",--}}
-    {{--url: $("#donateForm").attr("action"),--}}
-    {{--data: formData,--}}
-    {{--// contentType: "application/json",--}}
-    {{--// dataType: "json",--}}
-    {{--statusCode: {--}}
-    {{--200: function (response) {--}}
-    {{--location.reload();--}}
-    {{--// $("#totalCost").text(response.cost).number(true) ;--}}
-    {{--},--}}
-    {{--//The status for when the user is not authorized for making the request--}}
-    {{--401: function (ressponse) {--}}
-    {{--location.reload();--}}
-    {{--},--}}
-    {{--403: function (response) {--}}
-    {{--window.location.replace("/403");--}}
-    {{--},--}}
-    {{--404: function (response) {--}}
-    {{--window.location.replace("/404");--}}
-    {{--},--}}
-    {{--//The status for when form data is not valid--}}
-    {{--422: function (response) {--}}
-    {{--//--}}
-    {{--},--}}
-    {{--//The status for when there is error php code--}}
-    {{--500: function (response) {--}}
-    {{--// console.log(response.responseText);--}}
-    {{--// toastr["error"]("خطای برنامه!", "پیام سیستم");--}}
-    {{--},--}}
-    {{--//The status for when there is error php code--}}
-    {{--503: function (response) {--}}
-    {{--console.log(response);--}}
-    {{--console.log(response.responseText);--}}
-    {{--// toastr["error"]("خطای پایگاه داده!", "پیام سیستم");--}}
-    {{--}--}}
-    {{--}--}}
-    {{--});--}}
-
-    {{--return false;--}}
-    {{--} else {--}}
-    {{--if (cancelDonateAjax) {--}}
-    {{--cancelDonateAjax.abort();--}}
-    {{--}--}}
-    {{--cancelDonateAjax = $.ajax({--}}
-    {{--type: "DELETE",--}}
-    {{--url: "{{action("Web\OrderController@removeOrderproduct" , 180)}}",--}}
-    {{--contentType: "application/json",--}}
-    {{--dataType: "json",--}}
-    {{--statusCode: {--}}
-    {{--200: function (response) {--}}
-    {{--location.reload();--}}
-    {{--// $("#totalCost").text(response.cost).number(true) ;--}}
-    {{--},--}}
-    {{--//The status for when the user is not authorized for making the request--}}
-    {{--401: function (ressponse) {--}}
-    {{--location.reload();--}}
-    {{--},--}}
-    {{--403: function (response) {--}}
-    {{--window.location.replace("/403");--}}
-    {{--},--}}
-    {{--404: function (response) {--}}
-    {{--window.location.replace("/404");--}}
-    {{--},--}}
-    {{--//The status for when form data is not valid--}}
-    {{--422: function (response) {--}}
-    {{--//--}}
-    {{--},--}}
-    {{--//The status for when there is error php code--}}
-    {{--500: function (response) {--}}
-    {{--// console.log(response.responseText);--}}
-    {{--// toastr["error"]("خطای برنامه!", "پیام سیستم");--}}
-    {{--},--}}
-    {{--//The status for when there is error php code--}}
-    {{--503: function (response) {--}}
-    {{--// toastr["error"]("خطای پایگاه داده!", "پیام سیستم");--}}
-    {{--}--}}
-    {{--}--}}
-    {{--});--}}
-
-    {{--return false;--}}
-    {{--}--}}
-
-    {{--});--}}
-    {{--</script>--}}
 @endsection
