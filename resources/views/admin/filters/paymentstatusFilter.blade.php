@@ -1,4 +1,4 @@
-{!! Form::select('paymentStatuses[]', $paymentstatuses, null, ['multiple' => 'multiple','class' => 'mt-multiselect btn btn-default',
+{!! Form::select('paymentStatuses[]', $paymentstatuses, null, ['multiple' => 'multiple','class' => 'mt-multiselect btn btn-default a--full-width',
                         'id' => (isset($id))?$id:'paymentStatuses' , "data-label" => "left" , "data-width" => "100%" , "data-filter" => "true" ,
                         "data-height" => "200" , "title" => "وضعیت پرداخت"]) !!}
 
