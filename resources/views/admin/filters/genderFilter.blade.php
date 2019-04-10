@@ -1,1 +1,1 @@
-{!! Form::select("gender" , $genders, null, ['class' => 'form-control', 'placeholder' => 'همه جنسیت ها']) !!}
+{!! Form::select("gender" , $genders, null, ['class' => 'form-control a--full-width', 'placeholder' => 'همه جنسیت ها']) !!}

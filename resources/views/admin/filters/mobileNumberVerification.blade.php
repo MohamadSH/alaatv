@@ -1,1 +1,1 @@
-{!! Form::select("mobileNumberVerification" , $mobileNumberVerification, null , ["class" => "form-control" , "placeholder" => "همه شماره ها"]) !!}
+{!! Form::select("mobileNumberVerification" , $mobileNumberVerification, null , ["class" => "form-control a--full-width" , "placeholder" => "همه شماره ها"]) !!}

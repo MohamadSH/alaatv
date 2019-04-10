@@ -44,30 +44,32 @@
             {{--</div>--}}
             @permission((config('constants.LIST_PRODUCT_ACCESS')))
             <!-- BEGIN PRODUCT TABLE PORTLET-->
-            <div class="m-portlet m-portlet--mobile m-portlet--body-progress-" id="product-portlet">
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="product-portlet">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-cogs"></i>
+                            </span>
                             <h3 class="m-portlet__head-text">
-                                <i class="fa fa-cogs m--margin-right-10"></i>مدیریت محصولات
+                                مدیریت محصولات
                             </h3>
                         </div>
                     </div>
                     <div class="m-portlet__head-tools">
+                        <img class="d-nonr" id="product-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <img class="hidden" id="product-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
-                                </a>
+                                <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload"><i class="la la-refresh"></i></a>
                             </li>
                             <li class="m-portlet__nav-item">
-                                <a href="javascript:" class="m-portlet__nav-link m-portlet__nav-link--icon collapse" id="product-expand"><i class="la la-refresh"></i></a>
+                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-angle-down"></i></a>
                             </li>
                             <li class="m-portlet__nav-item">
-                                <a href="javascript:" class="m-portlet__nav-link m-portlet__nav-link--icon reload"><i class="la la-refresh"></i></a>
+                                <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="product-expand"><i class="la la-expand"></i></a>
                             </li>
                             <li class="m-portlet__nav-item">
-                                <a href="javascript:" class="m-portlet__nav-link m-portlet__nav-link--icon remove"><i class="la la-angle-down"></i></a>
+                                <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-close"></i></a>
                             </li>
                         </ul>
                     </div>
@@ -129,7 +131,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
                                     <button type="submit" class="btn btn-primary" id="copy-product-loading-image">بله</button>
-                                    <img class="hidden" id="copy-product-loading-image"
+                                    <img class="d-nonr" id="copy-product-loading-image"
                                          src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px"
                                          width="25px">
                                 </div>
@@ -177,30 +179,32 @@
 
             @permission((config('constants.LIST_COUPON_ACCESS')))
             <!-- BEGIN COUPON TABLE PORTLET-->
-            <div class="m-portlet m-portlet--mobile m-portlet--body-progress-" id="coupon-portlet">
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--info m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="coupon-portlet">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-cogs"></i>
+                            </span>
                             <h3 class="m-portlet__head-text">
-                                <i class="fa fa-cogs"></i>مدیریت کپن ها
+                                مدیریت کپن ها
                             </h3>
                         </div>
                     </div>
                     <div class="m-portlet__head-tools">
+                        <img class="d-nonr" id="coupon-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <img class="hidden" id="coupon-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
-                                </a>
+                                <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload"><i class="la la-refresh"></i></a>
                             </li>
                             <li class="m-portlet__nav-item">
-                                <a href="javascript:" class="m-portlet__nav-link m-portlet__nav-link--icon collapse" id="coupon-expand"><i class="la la-refresh"></i></a>
+                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-angle-down"></i></a>
                             </li>
                             <li class="m-portlet__nav-item">
-                                <a href="javascript:" class="m-portlet__nav-link m-portlet__nav-link--icon reload"><i class="la la-refresh"></i></a>
+                                <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="coupon-expand"><i class="la la-expand"></i></a>
                             </li>
                             <li class="m-portlet__nav-item">
-                                <a href="javascript:" class="m-portlet__nav-link m-portlet__nav-link--icon remove"><i class="la la-angle-down"></i></a>
+                                <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-close"></i></a>
                             </li>
                         </ul>
                     </div>
@@ -278,30 +282,32 @@
 
             @permission((config('constants.LIST_ATTRIBUTE_ACCESS')))
             <!-- BEGIN ASSIGNMENT TABLE PORTLET-->
-            <div class="m-portlet m-portlet--mobile m-portlet--body-progress-" id="attribute-portlet">
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--primary m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="attribute-portlet">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-cogs"></i>
+                            </span>
                             <h3 class="m-portlet__head-text">
-                                <i class="fa fa-cogs"></i>مدیریت صفت ها
+                                مدیریت صفت ها
                             </h3>
                         </div>
                     </div>
                     <div class="m-portlet__head-tools">
+                        <img class="d-nonr" id="attribute-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <img class="hidden" id="attribute-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
-                                </a>
+                                <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload"><i class="la la-refresh"></i></a>
                             </li>
                             <li class="m-portlet__nav-item">
-                                <a href="javascript:" class="m-portlet__nav-link m-portlet__nav-link--icon collapse" id="attribute-expand"><i class="la la-refresh"></i></a>
+                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-angle-down"></i></a>
                             </li>
                             <li class="m-portlet__nav-item">
-                                <a href="javascript:" class="m-portlet__nav-link m-portlet__nav-link--icon reload"><i class="la la-refresh"></i></a>
+                                <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="attribute-expand"><i class="la la-expand"></i></a>
                             </li>
                             <li class="m-portlet__nav-item">
-                                <a href="javascript:" class="m-portlet__nav-link m-portlet__nav-link--icon remove"><i class="la la-angle-down"></i></a>
+                                <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-close"></i></a>
                             </li>
                         </ul>
                     </div>
@@ -373,30 +379,32 @@
 
             @permission((config('constants.LIST_ATTRIBUTESET_ACCESS')))
             <!-- BEGIN ASSIGNMENT TABLE PORTLET-->
-            <div class="m-portlet m-portlet--mobile m-portlet--body-progress-" id="attributeset-portlet">
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="attributeset-portlet">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-cogs"></i>
+                            </span>
                             <h3 class="m-portlet__head-text">
-                                <i class="fa fa-cogs"></i>مدیریت دسته صفت ها
+                                مدیریت دسته صفت ها
                             </h3>
                         </div>
                     </div>
                     <div class="m-portlet__head-tools">
+                        <img class="d-nonr" id="attributeset-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <img class="hidden" id="attributeset-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
-                                </a>
+                                <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload"><i class="la la-refresh"></i></a>
                             </li>
                             <li class="m-portlet__nav-item">
-                                <a href="javascript:" class="m-portlet__nav-link m-portlet__nav-link--icon collapse" id="attributeset-expand"><i class="la la-refresh"></i></a>
+                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-angle-down"></i></a>
                             </li>
                             <li class="m-portlet__nav-item">
-                                <a href="javascript:" class="m-portlet__nav-link m-portlet__nav-link--icon reload"><i class="la la-refresh"></i></a>
+                                <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="attributeset-expand"><i class="la la-expand"></i></a>
                             </li>
                             <li class="m-portlet__nav-item">
-                                <a href="javascript:" class="m-portlet__nav-link m-portlet__nav-link--icon remove"><i class="la la-angle-down"></i></a>
+                                <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-close"></i></a>
                             </li>
                         </ul>
                     </div>
