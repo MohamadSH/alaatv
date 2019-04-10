@@ -66,6 +66,11 @@ use League\Flysystem\Sftp\SftpAdapter;
 use Maatwebsite\ExcelLight\Excel;
 use Maatwebsite\ExcelLight\Spout\{Reader, Row, Sheet, Writer};
 use SEO;
+use App\Console\Commands\CategoryTree\Riazi;
+use App\Console\Commands\CategoryTree\Tajrobi;
+use App\Console\Commands\CategoryTree\Ensani;
+use App\Console\Commands\CategoryTree\lernitoTotalTree;
+use App\Console\Commands\CategoryTree\GetTree;
 
 //use Jenssegers\Agent\Agent;
 
@@ -801,6 +806,7 @@ class HomeController extends Controller
         //        Meta::set('title', substr("آلاء|پنل پیامک", 0, Config::get("constants.META_TITLE_LIMIT")));
         //        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
 
+        $products = Product::where('id', 240)->get();
         return view("admin.indexSMS", compact(
             "pageName",
             "majors",
@@ -811,7 +817,7 @@ class HomeController extends Controller
             "paymentstatuses",
             "genders",
             "gendersWithUnknown",
-//            "products",
+            "products",
             "allRootProducts",
             "lockProfileStatus",
             "mobileNumberVerification",
@@ -5407,4 +5413,42 @@ class HomeController extends Controller
 
         return view("admin.generateSpecialCoupon", compact("productCollection"));
     }
+
+    /**
+     * @param Request $request
+     * @return
+     */
+    public function lernitoTree(Request $request)
+    {
+        $lastUpdatedByLernito = [];
+        $maxId = 0;
+
+        $Riazi = new Riazi();
+        $Tajrobi = new Tajrobi();
+        $Ensani = new Ensani();
+
+        $totalTree = array_merge($Riazi->getTree(), $Tajrobi->getTree(), $Ensani->getTree());
+        $this->iterateThroughTotalTree($totalTree, $maxId);
+
+        $lastUpdatedByLernito = [
+            'riaziUpdate' => $Riazi->getLastUpdatedByLernito(),
+            'tajrobiUpdate' => $Tajrobi->getLastUpdatedByLernito(),
+            'ensaniUpdate' => $Ensani->getLastUpdatedByLernito(),
+            'lastId' => $maxId
+        ];
+        return $lastUpdatedByLernito;
+    }
+
+    private function iterateThroughTotalTree($tree, &$maxId)
+    {
+        foreach ($tree as $key => $value) {
+            if (isset($value['id']) && $value['id']>$maxId) {
+                $maxId = $value['id'];
+            }
+            if (isset($value['children'])) {
+                $this->iterateThroughTotalTree($value['children'], $maxId);
+            }
+        }
+    }
+
 }
