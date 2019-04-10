@@ -277,3 +277,5 @@ Route::post("cd3b472d9ba631a73cb7b66ba513df53", "Web\CouponController@generateRa
 Route::view('uiTest','pages.certificates');
 
 Route::view('testrtl', 'product.show_ali');
+
+Route::get("tree", "Web\HomeController@lernitoTree");

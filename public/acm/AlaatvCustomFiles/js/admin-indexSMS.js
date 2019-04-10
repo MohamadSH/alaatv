@@ -6,7 +6,7 @@ var $modal = $('#ajax-modal');
 
 var userAjax;
 $(document).on("click", "#filterButton", function (){
-    $("#sms-portlet-loading").removeClass("hidden");
+    $("#sms-portlet-loading").removeClass("d-none");
     $('#sms_table > tbody').html("");
 
     var formData = $("#filterUserForm").serialize();
@@ -41,7 +41,7 @@ $(document).on("click", "#filterButton", function (){
                     $('#sms_table > thead > tr').children('th:first').removeClass("none");
                 }
                 makeDataTable("user_table");
-                $("#sms-portlet-loading").addClass("hidden");
+                $("#sms-portlet-loading").addClass("d-none");
                 $(".filter").each(function () {
                     if($(this).val() !== "" && $(this).val() !== null) {
                         $(this).addClass("font-red");
@@ -110,7 +110,7 @@ $(document).on("click", ".sendSMS", function () {
 
 $(document).on("click", "#sendSmsForm-submit", function (){
     $('body').modalmanager('loading');
-    $("#send-sms-loading").removeClass("hidden");
+    $("#send-sms-loading").removeClass("d-none");
 
     //initializing form alerts
     $("#smsMessage").parent().removeClass("has-error");
@@ -133,7 +133,7 @@ $(document).on("click", "#sendSmsForm-submit", function (){
         statusCode: {
             //The status for when action was successful
             200: function (response) {
-                $("#send-sms-loading").addClass("hidden");
+                $("#send-sms-loading").addClass("d-none");
                 // console.log(response);
                 // console.log(response.responseText);
                 var smsCredit = JSON.parse(parseInt(response));
@@ -179,7 +179,7 @@ $(document).on("click", "#sendSmsForm-submit", function (){
             },
             //The status for when form data is not valid
             422: function (response) {
-                $("#send-sms-loading").addClass("hidden");
+                $("#send-sms-loading").addClass("d-none");
                 $("#sendSmsForm-close").trigger("click");
                 var errors = $.parseJSON(response.responseText);
                 // console.log(errors);
