@@ -90,15 +90,15 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = collect();
-        $result = [
-            'index'           => View::make("order.index", compact('orders', 'orderstatuses'))
-                ->render()
-            ,
-            'myOrderproducts' => collect(),
-        ];
-
-        return response(json_encode($result, JSON_UNESCAPED_UNICODE), 200)->header('Content-Type', 'application/json');
+//        $orders = collect();
+//        $result = [
+//            'index'           => View::make("order.index", compact('orders', 'orderstatuses'))
+//                ->render()
+//            ,
+//            'myOrderproducts' => collect(),
+//        ];
+//
+//        return response(json_encode($result, JSON_UNESCAPED_UNICODE), 200)->header('Content-Type', 'application/json');
 
         $user = Auth::user();
         if ($user->can(config('constants.SHOW_OPENBYADMIN_ORDER')))
@@ -497,7 +497,7 @@ class OrderController extends Controller
             ,
             'myOrderproducts' => $myOrderproducts,
         ];
-
+        dd($result);
         return response(json_encode($result, JSON_UNESCAPED_UNICODE), 200)->header('Content-Type', 'application/json');
     }
 
@@ -606,6 +606,7 @@ class OrderController extends Controller
 
 //        $products = $this->makeProductCollection();
         $products = Product::where('id', 240)->get();
+        dd($products);
         return view('order.edit', compact('order',
             'orderstatuses',
             'paymentstatuses',
