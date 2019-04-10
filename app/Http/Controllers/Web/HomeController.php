@@ -992,6 +992,8 @@ class HomeController extends Controller
         $checkoutStatuses[0] = "نامشخص";
         $checkoutStatuses = array_sort_recursive($checkoutStatuses);
 
+        $products = Product::where('id', 240);
+
         return view("admin.indexGetReport", compact("pageName", "majors", "userStatuses", "permissions", "roles", "limitStatus", "orderstatuses", "paymentstatuses", "enableStatus", "genders", "gendersWithUnknown", "hasOrder", "products",
             "bookProducts", "lockProfileStatus", "mobileNumberVerification", "sortBy", "sortType", "coupons", "addressSpecialFilter", "lotteries", "checkoutStatuses"));
     }
