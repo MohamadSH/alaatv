@@ -8,7 +8,6 @@
 
 namespace App\Console\Commands\CategoryTree;
 
-
 class Riazi extends GetTree
 {
     public function getTree(): array {
@@ -37696,6 +37695,14 @@ class Riazi extends GetTree
 
                                 ]
                             ],
+//                            [
+//                                'id' => '3835',
+//                                'name' => 'فصل چهارم: شیمی، راهی به‌سوی آیندۀ روشن‌تر',
+//                                'tags' => json_encode(['فصل_چهارم:_شیمی،_راهی_به‌سوی_آیندۀ_روشن‌تر'], JSON_UNESCAPED_UNICODE),
+//                                'children' => [
+//
+//                                ]
+//                            ],
 
                         ]
                     ],
@@ -37707,5 +37714,29 @@ class Riazi extends GetTree
         ];
 
         return $riazi;
+    }
+
+    public function getLernitoStyle()
+    {
+        return $this->treeToLernitoJson($this->getTree());
+    }
+
+    public function getLastUpdatedByLernito(): array {
+        $tree = $this->getTree();
+        $riaziLernitoStyle = [
+            $tree[1],
+            $tree[2],
+            $tree[3],
+            $tree[0]['children'][0],
+            $tree[0]['children'][1],
+            $tree[0]['children'][2],
+            $tree[0]['children'][3]
+        ];
+
+        $lernitoTotalTree = new lernitoTotalTree();
+        $lernitoTree = $lernitoTotalTree->getTree();
+        $lernitoTree = $lernitoTree[1]['children'][0]['children'];
+
+        return $this->compareWithLernito($lernitoTree, $riaziLernitoStyle);
     }
 }

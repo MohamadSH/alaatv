@@ -99,7 +99,7 @@ $(document).on("submit", ".removeProductGiftForm", function (e){
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
     };
-    $("#remove-product-gift-loading-image").removeClass("hidden");
+    $("#remove-product-gift-loading-image").removeClass("d-none");
     $.ajax({
         type: 'DELETE',
         url: url,
@@ -108,7 +108,7 @@ $(document).on("submit", ".removeProductGiftForm", function (e){
             //The status for when action was successful
             200: function (response) {
                 $('#removeProductGiftModal').modal('toggle');
-                $("#remove-product-gift-loading-image").addClass("hidden");
+                $("#remove-product-gift-loading-image").addClass("d-none");
                 // var rasponseJson = $.parseJSON(response.responseText);
                 toastr["success"](response.message, "پیام سیستم");
                 window.location.reload();
@@ -123,19 +123,19 @@ $(document).on("submit", ".removeProductGiftForm", function (e){
             //The status for when form data is not valid
             422: function (response) {
                 $('#removeProductGiftModal').modal('toggle');
-                $("#remove-product-gift-loading-image").addClass("hidden");
+                $("#remove-product-gift-loading-image").addClass("d-none");
                 toastr["error"]("خطای 422 . خطای ورودی ها", "پیام سیستم");
             },
             //The status for when there is error php code
             500: function (response) {
                 $('#removeProductGiftModal').modal('toggle');
-                $("#remove-product-gift-loading-image").addClass("hidden");
+                $("#remove-product-gift-loading-image").addClass("d-none");
                 toastr["error"]("خطای 500", "پیام سیستم");
             },
             //The status for when there is error php code
             503: function (response) {
                 $('#removeProductGiftModal').modal('toggle');
-                $("#remove-product-gift-loading-image").addClass("hidden");
+                $("#remove-product-gift-loading-image").addClass("d-none");
                 var rasponseJson = $.parseJSON(response.responseText);
                 toastr["error"](rasponseJson.message, "پیام سیستم");
             }

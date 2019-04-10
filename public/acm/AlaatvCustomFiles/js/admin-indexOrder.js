@@ -60,7 +60,7 @@ var myOrderproducts ;
 $(document).on("click", "#order-portlet .reload", function (){
     // var formData = new FormData($("#filterOrderForm")[0]);
     var formData = $("#filterOrderForm").serialize();
-    $("#order-portlet-loading").removeClass("hidden");
+    $("#order-portlet-loading").removeClass("d-none");
     $('#order_table > tbody').html("");
     // console.log(formData);
 
@@ -82,7 +82,7 @@ $(document).on("click", "#order-portlet .reload", function (){
         });
     }
 
-    $("#checkOutButton").addClass("hidden") ;
+    $("#checkOutButton").addClass("d-none") ;
     if(orderAjax) {
         orderAjax.abort();
     }
@@ -96,7 +96,7 @@ $(document).on("click", "#order-portlet .reload", function (){
             200:function (response) {
                 myOrderproducts = response.myOrderproducts;
                 if(myOrderproducts.length > 0 ) {
-                    $("#checkOutButton").removeClass("hidden") ;
+                    $("#checkOutButton").removeClass("d-none") ;
                 }
                 var newDataTable =$("#order_table").DataTable();
                 newDataTable.destroy();
@@ -108,7 +108,7 @@ $(document).on("click", "#order-portlet .reload", function (){
                     $('#order_table > thead > tr').children('th:first').removeClass("none");
                 }
                 makeDataTable("order_table");
-                $("#order-portlet-loading").addClass("hidden");
+                $("#order-portlet-loading").addClass("d-none");
                 $("#orderEmptyTableMessage").hide();
                 $(".filter").each(function () {
                     if($(this).val() !== "" && $(this).val() !== null) {
@@ -157,7 +157,7 @@ $(document).on("click", ".sendSms", function (){
 });
 $(document).on("click", "#sendSmsForm-submit", function (){
     $('body').modalmanager('loading');
-    $("#send-sms-loading").removeClass("hidden");
+    $("#send-sms-loading").removeClass("d-none");
 
     //initializing form alerts
     $("#smsMessage").parent().removeClass("has-error");
@@ -172,7 +172,7 @@ $(document).on("click", "#sendSmsForm-submit", function (){
         statusCode: {
             //The status for when action was successful
             200: function (response) {
-                $("#send-sms-loading").addClass("hidden");
+                $("#send-sms-loading").addClass("d-none");
                 $("#sendSmsForm-close").trigger("click");
                 toastr.options = {
                     "closeButton": true,
@@ -201,7 +201,7 @@ $(document).on("click", "#sendSmsForm-submit", function (){
             },
             //The status for when form data is not valid
             422: function (response) {
-                $("#send-sms-loading").addClass("hidden");
+                $("#send-sms-loading").addClass("d-none");
                 var errors = $.parseJSON(response.responseText);
                 $.each(errors, function(index, value) {
                     switch (index) {
@@ -252,7 +252,7 @@ var transactionAjax;
 $(document).on("click", "#transaction-portlet .reload", function (){
     var formData = $("#filterTransactionForm").serialize();
 
-    $("#transaction-portlet-loading").removeClass("hidden");
+    $("#transaction-portlet-loading").removeClass("d-none");
 
     $('#transaction_table > tbody').html("");
 
@@ -296,7 +296,7 @@ $(document).on("click", "#transaction-portlet .reload", function (){
                 $('#transaction_table > thead > tr').children('th:first').removeClass("none");
             }
             makeDataTable("transaction_table");
-            $("#transaction-portlet-loading").addClass("hidden");
+            $("#transaction-portlet-loading").addClass("d-none");
             $(".filter").each(function () {
                 if($(this).val() !== "" && $(this).val() !== null) {
                     $(this).addClass("font-red");
@@ -452,7 +452,7 @@ var userBonAjax;
 $(document).on("click", "#userBon-portlet .reload", function (){
     var formData = $("#filterUserBonForm").serialize();
 
-    $("#userBon-portlet-loading").removeClass("hidden");
+    $("#userBon-portlet-loading").removeClass("d-none");
 
     $('#userBon_table > tbody').html("");
 
@@ -492,7 +492,7 @@ $(document).on("click", "#userBon-portlet .reload", function (){
                 $('#userBon_table > thead > tr').children('th:first').removeClass("none");
             }
             makeDataTable("userBon_table");
-            $("#userBon-portlet-loading").addClass("hidden");
+            $("#userBon-portlet-loading").addClass("d-none");
         },
         error: function (result) {
             // console.log(result);
@@ -839,7 +839,7 @@ $(document).on('click', '.completeTransactionInfo', function(e){
 
 $(document).on('submit', '.completeTransactionInfoForm', function(e){
     e.preventDefault();
-    $("#complete-transaction-info-loading").removeClass("hidden");
+    $("#complete-transaction-info-loading").removeClass("d-none");
     var form = $(this);
     formData = form.serialize();
     var url = form.attr("action");
@@ -897,7 +897,7 @@ $(document).on('submit', '.completeTransactionInfoForm', function(e){
         processData: false
     });
     $('#completeTransactionInfo').modal('toggle');
-    $("#complete-transaction-info-loading").addClass("hidden");
+    $("#complete-transaction-info-loading").addClass("d-none");
     $("#completeTransactionInfoTraceNumber").val('');
     $("#completeTransactionInfoCardNumber").val('');
 });

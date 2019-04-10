@@ -202,8 +202,9 @@ $(document).on("click", "#userForm-submit", function (){
 
 var userAjax;
 $(document).on("click", "#user-portlet .reload", function (){
-    $("#user-portlet-loading").removeClass("hidden");
+    $("#user-portlet-loading").removeClass("d-none");
     $('#user_table > tbody').html("");
+
 
     var formData = $("#filterUserForm").serialize();
 
@@ -247,7 +248,8 @@ $(document).on("click", "#user-portlet .reload", function (){
                     $('#user_table > thead > tr').children('th:first').removeClass("none");
                 }
                 makeDataTable("user_table");
-                $("#user-portlet-loading").addClass("hidden");
+
+                $("#user-portlet-loading").addClass("d-none");
                 $(".filter").each(function () {
                     if($(this).val() !== "" && $(this).val() !== null) {
                         $(this).addClass("font-red");
@@ -389,7 +391,7 @@ $(document).on("click", ".sendSms", function (){
 });
 $(document).on("click", "#sendSmsForm-submit", function (){
     $('body').modalmanager('loading');
-    $("#send-sms-loading").removeClass("hidden");
+    $("#send-sms-loading").removeClass("d-none");
 
     //initializing form alerts
     $("#smsMessage").parent().removeClass("has-error");
@@ -404,7 +406,7 @@ $(document).on("click", "#sendSmsForm-submit", function (){
         statusCode: {
             //The status for when action was successful
             200: function (response) {
-                $("#send-sms-loading").addClass("hidden");
+                $("#send-sms-loading").addClass("d-none");
                 $("#sendSmsForm-close").trigger("click");
                 toastr.options = {
                     "closeButton": true,
@@ -433,7 +435,7 @@ $(document).on("click", "#sendSmsForm-submit", function (){
             },
             //The status for when form data is not valid
             422: function (response) {
-                $("#send-sms-loading").addClass("hidden");
+                $("#send-sms-loading").addClass("d-none");
                 var errors = $.parseJSON(response.responseText);
                 console.log(errors);
                 $.each(errors, function(index, value) {
@@ -607,7 +609,7 @@ $(document).on("click", "#permissionForm-submit", function (){
     $modal.modal('toggle');
 });
 $(document).on("click", "#permission-portlet .reload", function (){
-    $("#permission-portlet-loading").removeClass("hidden");
+    $("#permission-portlet-loading").removeClass("d-none");
     $('#permission_table > tbody').html("");
     $.ajax({
         type: "GET",
@@ -617,7 +619,7 @@ $(document).on("click", "#permission-portlet .reload", function (){
             newDataTable.destroy();
             $('#permission_table > tbody').html(result);
             makeDataTable("permission_table");
-            $("#permission-portlet-loading").addClass("hidden");
+            $("#permission-portlet-loading").addClass("d-none");
         },
         error: function (result) {
             console.log(result);
@@ -760,7 +762,7 @@ $(document).on("click", "#roleForm-submit", function (){
     $modal.modal('toggle');
 });
 $(document).on("click", "#role-portlet .reload", function (){
-    $("#role-portlet-loading").removeClass("hidden");
+    $("#role-portlet-loading").removeClass("d-none");
     $('#role_table > tbody').html("");
     $.ajax({
         type: "GET",
@@ -770,7 +772,7 @@ $(document).on("click", "#role-portlet .reload", function (){
             newDataTable.destroy();
             $('#role_table > tbody').html(result);
             makeDataTable("role_table");
-            $("#role-portlet-loading").addClass("hidden");
+            $("#role-portlet-loading").addClass("d-none");
         },
         error: function (result) {
             console.log(result);

@@ -60,7 +60,7 @@
             <div class="m-accordion m-accordion--default m-accordion--toggle-arrow" id="m_accordion_5" role="tablist">
 
             @permission((config('constants.LIST_ORDER_ACCESS')))
-                <div class="m-accordion__item m-accordion__item--info">
+                <div class="m-accordion__item m-accordion__item--info" id="order-portlet">
                     <div class="m-accordion__item-head" role="tab" id="m_accordion_5_item_1_head" data-toggle="collapse" href="#m_accordion_5_item_1_body" aria-expanded="false">
                         <span class="m-accordion__item-icon"><i class="fa fa-cogs"></i></span>
                         <span class="m-accordion__item-title">مدیریت سفارش های بسته شده</span>
@@ -209,7 +209,7 @@
                                             <div class="col-md-12">
                                                 <a href="javascript:" class="btn btn-lg bg-font-dark reload"
                                                    style="background: #489fff">فیلتر</a>
-                                                <img class="hidden" id="order-portlet-loading"
+                                                <img class="d-none" id="order-portlet-loading"
                                                      src="{{config('constants.FILTER_LOADING_GIF')}}" width="5%">
                                             </div>
                                         </div>
@@ -223,7 +223,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="btn-group">
-                                            <button id="checkOutButton" class="btn btn-outline blue hidden" data-toggle="modal"
+                                            <button id="checkOutButton" class="btn btn-outline blue d-none" data-toggle="modal"
                                                     href="#responsive-checkout">
                                                 محصولات انتخابی من در فیلتر شده ها را تسویه کن
                                             </button>
@@ -297,7 +297,7 @@
                                                 id="sendSmsForm-close">بستن
                                         </button>
                                         <button type="button" class="btn green" id="sendSmsForm-submit">ارسال</button>
-                                        <img class="hidden" id="send-sms-loading"
+                                        <img class="d-none" id="send-sms-loading"
                                              src="{{config('constants.FILTER_LOADING_GIF')}}" height="25px" width="25px">
                                     </div>
                                 </div>
@@ -355,9 +355,7 @@
 
 
             @permission((config('constants.LIST_TRANSACTION_ACCESS')))
-
-
-                <div class="m-accordion__item m-accordion__item--info">
+                <div class="m-accordion__item m-accordion__item--info" id="transaction-portlet">
                     <div class="m-accordion__item-head" role="tab" id="m_accordion_5_item_2_head" data-toggle="collapse" href="#m_accordion_5_item_2_body" aria-expanded="false">
                         <span class="m-accordion__item-icon"><i class="fa fa-cogs"></i></span>
                         <span class="m-accordion__item-title">مدیریت تراکنش ها</span>
@@ -448,7 +446,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <a href="javascript:" class="btn btn-lg bg-font-dark reload" style="background: #489fff">فیلتر</a>
-                                                    <img class="hidden" id="transaction-portlet-loading" src="{{config('constants.FILTER_LOADING_GIF')}}" width="5%">
+                                                    <img class="d-none" id="transaction-portlet-loading" src="{{config('constants.FILTER_LOADING_GIF')}}" width="5%">
                                                 </div>
                                             </div>
                                         </div>
@@ -494,7 +492,7 @@
                             <div class="modal-footer">
                                 <button type="button" data-dismiss="modal" class="btn btn-outline dark">بستن</button>
                                 <input type="submit" class="btn green" value="ذخیره">
-                                <img class="hidden" id="complete-transaction-info-loading"
+                                <img class="d-none" id="complete-transaction-info-loading"
                                      src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px"
                                      width="25px">
                             </div>
@@ -534,16 +532,7 @@
                         </div>
                     </div>
                 </div>
-
             @endpermission
-
-
-
-
-
-
-
-
 
             </div>
 
@@ -603,7 +592,7 @@
                                     {{--<div class="col-md-12">--}}
                                         {{--<a href="javascript:" class="btn btn-lg bg-font-dark reload"--}}
                                            {{--style="background: #489fff">فیلتر</a>--}}
-                                        {{--<img class="hidden" id="userBon-portlet-loading"--}}
+                                        {{--<img class="d-none" id="userBon-portlet-loading"--}}
                                              {{--src="{{config('constants.FILTER_LOADING_GIF')}}" width="5%">--}}
                                     {{--</div>--}}
                                 {{--</div>--}}

@@ -1,41 +1,44 @@
-@extends("app")
+@extends('app')
 
-@section("headPageLevelPlugin")
+@section('page-css')
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css" rel="stylesheet" type="text/css"/>
+    <style>
+        .mt-repeater-cell .d-table .d-table-cell{
+            vertical-align: top;
+        }
+    </style>
 @endsection
 
-@section("headPageLevelStyle")
-@endsection
-
-@section("pageBar")
-
-@endsection
-
-@section("content")
-    <div class="col-lg-4">
+@section('content')
+    <div class="col-md-4">
         <!-- BEGIN Portlet PORTLET-->
-        <div class="portlet light">
-            {{--<div class="portlet-title">--}}
-            {{----}}
-            {{--</div>--}}
-            <div class="portlet-body">
-                {!! Form::open(['method'=>'GET' , 'action'=>'HomeController@adminTeleMarketing']) !!}
+
+        <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
+            <div class="m-portlet__body">
+                {!! Form::open(['method'=>'GET' , 'action'=>'Web\HomeController@adminTeleMarketing']) !!}
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group mt-repeater">
                             <div data-repeater-list="group-mobile">
                                 <div data-repeater-item class="mt-repeater-item mt-overflow">
                                     <div class="mt-repeater-cell">
-                                        <input type="text" name="mobile" placeholder="شماره موبایل را وارد نمایید"
-                                               class="form-control mt-repeater-input-inline"/>
-                                        <a href="javascript:" data-repeater-delete
-                                           class="btn btn-danger mt-repeater-delete mt-repeater-del-right mt-repeater-btn-inline">
-                                            <i class="fa fa-close"></i>
-                                        </a>
+                                        <div class="d-table a--full-width">
+                                            <div class="d-table-cell">
+                                                <input type="text" name="mobile" placeholder="شماره موبایل را وارد نمایید" class="form-control mt-repeater-input-inline"/>
+                                            </div>
+                                            <div class="d-table-cell">
+                                                <a href="javascript:" data-repeater-delete
+                                                   class="btn btn-danger mt-repeater-delete mt-repeater-del-right mt-repeater-btn-inline">
+                                                    <i class="flaticon-delete"></i>
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <a href="javascript:" data-repeater-create class="btn btn-success mt-repeater-add">
-                                <i class="fa fa-plus"></i> افزودن شماره</a>
+                                <i class="fa fa-plus"></i> افزودن شماره
+                            </a>
                             <button class="btn red-flamingo  bold" type="submit">بگرد</button>
                         </div>
                     </div>
@@ -46,24 +49,19 @@
         <!-- END Portlet PORTLET-->
     </div>
 
-    <div class="col-lg-8">
-        <div class="portlet box blue-chambray" id="order-portlet">
-            <div class="portlet-title">
-                <div class="caption">
-                    <i class="fa fa-list"></i>لیست سفارش ها
+    <div class="col-md-8">
+        <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <h3 class="m-portlet__head-text">
+                            <i class="fa fa-list m--margin-right-10"></i>
+                            لیست سفارش ها
+                        </h3>
+                    </div>
                 </div>
-                <div class="tools">
-                    {{--I put width for the following img because when I tried to generate a picture with smaller width it effected the image
-                    quality in noticable way!--}}
-                    {{--<a href="javascript:;" class="collapse" id="order-expand"> </a>--}}
-                    {{--<a href="#portlet-config" data-toggle="modal" class="config"> </a>--}}
-                    {{--<a href="javascript:;" class="reload"> </a>--}}
-                    {{--<a href="javascript:;" class="remove"> </a>--}}
-                    {{--<a href="javascript:;" class="reload">فیلتر</a>--}}
-                </div>
-                <div class="tools"></div>
             </div>
-            <div class="portlet-body" style="display: block;">
+            <div class="m-portlet__body">
                 <div class="table-toolbar">
                     <div class="row">
                         <div class="col-md-6">
@@ -325,19 +323,14 @@
     </div>
 @endsection
 
-@section("footerPageLevelPlugin")
-    <script src="/assets/global/scripts/datatable.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js"
-            type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"
-            type="text/javascript"></script>
-    <script src="/assets/global/plugins/jquery-repeater/jquery.repeater.js" type="text/javascript"></script>
-@endsection
-
-@section("footerPageLevelScript")
-    <script src="/assets/pages/scripts/form-repeater.min.js" type="text/javascript"></script>
-    <script src="/js/extraJS/scripts/admin-makeDataTable.js" type="text/javascript"></script>
+@section('page-js')
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-repeater/jquery.repeater.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-repeater.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/js/admin-makeDataTable.js" type="text/javascript"></script>
     <script type="text/javascript">
         /**
          * Start up jquery

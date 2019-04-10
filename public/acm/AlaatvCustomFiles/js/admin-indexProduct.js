@@ -221,7 +221,7 @@ $(document).on("click", "#productForm-submit", function (){
 
 });
 $(document).on("click", "#product-portlet .reload", function (){
-    $("#product-portlet-loading").removeClass("hidden");
+    $("#product-portlet-loading").removeClass("d-none");
     $('#product_table > tbody').html("");
     $.ajax({
         type: "GET",
@@ -233,7 +233,7 @@ $(document).on("click", "#product-portlet .reload", function (){
             // newDataTable.destroy();
             // $('#product_table > tbody').html(result);
             // makeDataTable("product_table");
-            // $("#product-portlet-loading").addClass("hidden");
+            // $("#product-portlet-loading").addClass("d-none");
         // },
         // error: function (result) {
         //     console.log(result);
@@ -245,7 +245,7 @@ $(document).on("click", "#product-portlet .reload", function (){
                 newDataTable.destroy();
                 $('#product_table > tbody').html(response);
                 makeDataTable("product_table");
-                $("#product-portlet-loading").addClass("hidden");
+                $("#product-portlet-loading").addClass("d-none");
                 // console.log(response.statusCode);
             },
             //The status for when the user is not authorized for making the request
@@ -297,7 +297,7 @@ $(document).on("submit", ".copyProductForm", function (e){
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
     };
-    $("#copy-product-loading-image").removeClass("hidden");
+    $("#copy-product-loading-image").removeClass("d-none");
     $.ajax({
         type: 'POST',
         url: url,
@@ -305,7 +305,7 @@ $(document).on("submit", ".copyProductForm", function (e){
             //The status for when action was successful
             200: function (response) {
                 $('#copyProductModal').modal('toggle');
-                $("#copy-product-loading-image").addClass("hidden");
+                $("#copy-product-loading-image").addClass("d-none");
                 $("#product-portlet .reload").trigger("click");
                 // var rasponseJson = $.parseJSON(response.responseText);
                 toastr["success"](response.message, "پیام سیستم");
@@ -320,19 +320,19 @@ $(document).on("submit", ".copyProductForm", function (e){
             //The status for when form data is not valid
             422: function (response) {
                 $('#copyProductModal').modal('toggle');
-                $("#copy-product-loading-image").addClass("hidden");
+                $("#copy-product-loading-image").addClass("d-none");
                 toastr["error"]("خطای 422 . خطای ورودی ها", "پیام سیستم");
             },
             //The status for when there is error php code
             500: function (response) {
                 $('#copyProductModal').modal('toggle');
-                $("#copy-product-loading-image").addClass("hidden");
+                $("#copy-product-loading-image").addClass("d-none");
                 toastr["error"]("خطای 500", "پیام سیستم");
             },
             //The status for when there is error php code
             503: function (response) {
                 $('#copyProductModal').modal('toggle');
-                $("#copy-product-loading-image").addClass("hidden");
+                $("#copy-product-loading-image").addClass("d-none");
                 var rasponseJson = $.parseJSON(response.responseText);
                 toastr["error"](rasponseJson.message, "پیام سیستم");
             }
@@ -512,7 +512,7 @@ $(document).on("click", "#couponForm-submit", function (){
     $modal.modal('toggle');
 });
 $(document).on("click", "#coupon-portlet .reload", function (){
-    $("#coupon-portlet-loading").removeClass("hidden");
+    $("#coupon-portlet-loading").removeClass("d-none");
     $('#coupon_table > tbody').html("");
     $.ajax({
         type: "GET",
@@ -522,7 +522,7 @@ $(document).on("click", "#coupon-portlet .reload", function (){
             newDataTable.destroy();
             $('#coupon_table > tbody').html(result);
             makeDataTable("coupon_table");
-            $("#coupon-portlet-loading").addClass("hidden");
+            $("#coupon-portlet-loading").addClass("d-none");
         },
         error: function (result) {
             console.log(result);
@@ -664,7 +664,7 @@ $(document).on("click", "#attributeForm-submit", function (){
     $modal.modal('toggle');
 });
 $(document).on("click", "#attribute-portlet .reload", function (){
-    $("#attribute-portlet-loading").removeClass("hidden");
+    $("#attribute-portlet-loading").removeClass("d-none");
     $('#attribute_table > tbody').html("");
     $.ajax({
         type: "GET",
@@ -674,7 +674,7 @@ $(document).on("click", "#attribute-portlet .reload", function (){
             newDataTable.destroy();
             $('#attribute_table > tbody').html(result);
             makeDataTable("attribute_table");
-            $("#attribute-portlet-loading").addClass("hidden");
+            $("#attribute-portlet-loading").addClass("d-none");
         },
         error: function (result) {
             console.log(result);
@@ -802,7 +802,7 @@ $(document).on("click", "#attributesetForm-submit", function (){
     $modal.modal('toggle');
 });
 $(document).on("click", "#attributeset-portlet .reload", function (){
-    $("#attributeset-portlet-loading").removeClass("hidden");
+    $("#attributeset-portlet-loading").removeClass("d-none");
     $('#attributeset_table > tbody').html("");
     $.ajax({
         type: "GET",
@@ -812,7 +812,7 @@ $(document).on("click", "#attributeset-portlet .reload", function (){
             newDataTable.destroy();
             $('#attributeset_table > tbody').html(result);
             makeDataTable("attributeset_table");
-            $("#attributeset-portlet-loading").addClass("hidden");
+            $("#attributeset-portlet-loading").addClass("d-none");
         },
         error: function (result) {
             console.log(result);
