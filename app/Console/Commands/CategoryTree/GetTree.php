@@ -95,7 +95,8 @@ abstract class GetTree
                             }
                             $diff[] = [
                                 'diff' => $newDiff,
-                                'value' => $lernitoValue,
+                                'lernitoNode' => $lernitoValue,
+                                'alaaNode' => $targetValue,
                                 /*'keyChain' => $localKeyChain,*/
                             ];
                         }
@@ -103,7 +104,8 @@ abstract class GetTree
                         if (isset($lernitoValue['children'])) {
                             $diff[] = [
                                 'diff' => $lernitoValue['children'],
-                                'value' => $lernitoValue,
+                                'lernitoNode' => $lernitoValue,
+                                'alaaNode' => $targetValue,
                             ];
                         }
                     }
@@ -111,8 +113,8 @@ abstract class GetTree
             }
             if (!$hasVal) {
                 $diff[] = [
-                    'value' => $lernitoValue,
-                    /*'keyChain' => $localKeyChain*/
+                    'lernitoNode' => $lernitoValue,
+                    'keyChain' => 1
                 ];
             }
             $localKeyChain = [];

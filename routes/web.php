@@ -279,3 +279,4 @@ Route::view('uiTest','pages.certificates');
 Route::view('testrtl', 'product.show_ali');
 
 Route::get("tree", "Web\HomeController@lernitoTree");
+Route::get("tree/getArrayString/{lnid}", "Web\HomeController@getTreeInPHPArrayString");
