@@ -76,7 +76,7 @@ mix.babel(
     'public/js/product-show.js'
 ).version();
 
-mix.scripts(
+mix.babel(
     [
         'node_modules/jquery-sticky/jquery.sticky.js',
         'public/acm/AlaatvCustomFiles/js/UserCart.js',
@@ -85,7 +85,7 @@ mix.scripts(
     'public/js/checkout-review.js'
 ).version();
 
-mix.scripts(
+mix.babel(
     [
         'public/assets/demo/demo12/custom/crud/forms/widgets/bootstrap-switch.js',
         // 'public/assets/demo/demo12/custom/crud/forms/widgets/nouislider.js',
@@ -94,7 +94,7 @@ mix.scripts(
     'public/js/checkout-payment.js'
 ).version();
 
-mix.scripts(
+mix.babel(
     [
         'node_modules/bootstrap-fileinput/js/fileinput.js',
         'node_modules/persian-date/dist/persian-date.js',
@@ -104,7 +104,7 @@ mix.scripts(
     'public/js/user-profile.js'
 ).version();
 
-mix.scripts(
+mix.babel(
     [
         'node_modules/persian-date/dist/persian-date.js',
         'public/acm/AlaatvCustomFiles/js/page-user-orders.js'
@@ -112,7 +112,7 @@ mix.scripts(
     'public/js/user-orders.js'
 ).version();
 
-mix.scripts(
+mix.babel(
     [
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
         'public/acm/AlaatvCustomFiles/js/page-user-dashboard.js',
@@ -166,7 +166,7 @@ mix.styles(
     'public/css/checkout-payment.css'
 ).version();
 
-mix.scripts(
+mix.babel(
     [
             'public/acm/extra/landing5/js/jquery.min.js',
             'public/acm/extra/landing5/js/jquery-migrate-3.0.1.min.js',
@@ -182,7 +182,7 @@ mix.scripts(
 );
 
 
-mix.scripts(
+mix.babel(
     [
         'node_modules/persian-date/dist/persian-date.js',
         'node_modules/persian-datepicker/dist/js/persian-datepicker.js',

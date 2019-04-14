@@ -24,6 +24,7 @@ use App\{Afterloginformcontrol,
     Lottery,
     Major,
     Order,
+    Phone,
     Product,
     Province,
     Role,
@@ -165,6 +166,459 @@ class UserController extends Controller
      */
     public function index(UserIndexRequest $request)
     {
+        //======================================================================
+        //=============================OLD CODE=================================
+        //======================================================================
+
+        $createdTimeEnable = Input::get('createdTimeEnable');
+        $createdSinceDate = Input::get('createdSinceDate');
+        $createdTillDate = Input::get('createdTillDate');
+        if(strlen($createdSinceDate) > 0 && strlen($createdTillDate) > 0  && isset($createdTimeEnable))
+        {
+            $createdSinceDate = Carbon::parse($createdSinceDate)->format('Y-m-d') . " 00:00:00";
+            $createdTillDate = Carbon::parse($createdTillDate)->format('Y-m-d') . " 23:59:59";
+            $users = User::whereBetween('created_at', [$createdSinceDate, $createdTillDate])->orderBy('created_at', 'Desc');
+
+        }
+        else{
+            $users = User::orderBy('created_at', 'Desc');
+        }
+
+        $updatedSinceDate = Input::get('updatedSinceDate');
+        $updatedTillDate = Input::get('updatedTillDate');
+        $updatedTimeEnable = Input::get('updatedTimeEnable');
+        if(strlen($updatedSinceDate)>0 && strlen($updatedTillDate)>0 && isset($updatedTimeEnable))
+        {
+            $users = $this->timeFilterQuery($users, $updatedSinceDate, $updatedTillDate, 'updated_at');
+        }
+
+        //filter by firstName, lastName, nationalCode, mobile
+        $firstName = trim(Input::get('firstName'));
+        if(isset($firstName) && strlen($firstName)>0)
+        {
+            $users = $users->where('firstName', 'like', '%' . $firstName . '%');
+        }
+
+        $lastName = trim(Input::get('lastName'));
+        if(isset($lastName) && strlen($lastName)>0)
+        {
+            $users = $users->where('lastName', 'like', '%' . $lastName . '%');
+        }
+
+        $nationalCode = trim(Input::get('nationalCode'));
+        if(isset($nationalCode) && strlen($nationalCode)>0)
+        {
+            $users = $users->where('nationalCode', 'like', '%' . $nationalCode . '%');
+        }
+
+        $mobile = trim(Input::get('mobile'));
+        if(isset($mobile) && strlen($mobile)>0)
+        {
+            $users = $users->where('mobile', 'like', '%' . $mobile . '%');
+        }
+
+        //filter by role, major , coupon
+        $roleEnable = Input::get('roleEnable');
+        $rolesId = Input::get('roles');
+        if(isset($roleEnable) && isset($rolesId))
+        {
+            $users = User::roleFilter($users, $rolesId);
+        }
+
+        $majorEnable = Input::get('majorEnable');
+        $majorsId = Input::get('majors');
+        if(isset($majorEnable) && isset($majorsId))
+        {
+            $users = User::majorFilter($users, $majorsId);
+        }
+
+        $couponEnable = Input::get('couponEnable');
+        $couponsId = Input::get('coupons');
+        if(isset($couponEnable) && isset($couponsId))
+        {
+            if (in_array(0, $couponsId))
+                $users = $users->whereHas("orders" , function ($q) use($couponsId) {
+                    $q->whereDoesntHave("coupon")->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN"),config("constants.ORDER_STATUS_CANCELED"),config("constants.ORDER_STATUS_OPEN_BY_ADMIN")]);
+                });
+            else
+                $users = $users->whereHas("orders" , function ($q) use($couponsId) {
+                    $q->whereIn("coupon_id", $couponsId)->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN"),config("constants.ORDER_STATUS_CANCELED"),config("constants.ORDER_STATUS_OPEN_BY_ADMIN")]);
+                });
+        }
+
+        //filter by product
+        $seenProductEnable = Input::get('productEnable');
+        $productsId = Input::get('products');
+        if(isset($seenProductEnable) && isset($productsId))
+        {
+            $productUrls = [];
+            $baseUrl = url("/");
+            foreach ($productsId as $productId)
+            {
+                array_push($productUrls , str_replace($baseUrl , "" , action("ProductController@show" , $productId)));
+            }
+            $users = $users->whereHas('seensitepages', function($q) use ($productUrls)
+            {
+                $q->whereIn("url",  $productUrls);
+            });
+        }
+
+        $orderProductEnable = Input::get("orderProductEnable");
+        $productsId = Input::get('orderProducts');
+        if(isset($orderProductEnable) || isset($productsId))
+        {
+            if(in_array(-1, $productsId)) {
+                $users = $users->whereDoesntHave("orders" , function ($q){
+                    $q->whereNotIn('orderstatus_id', [
+                        config("constants.ORDER_STATUS_OPEN"),
+                        config("constants.ORDER_STATUS_CANCELED"),
+                        config("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
+                        config("constants.ORDER_STATUS_OPEN_DONATE"),
+                        config("constants.ORDER_STATUS_PENDING"),
+                    ]);
+                });
+            }
+            elseif(in_array(0, $productsId)) {
+                $users = $users->whereHas("orders" , function ($query){
+                    $query
+                        ->whereNotIn('orderstatus_id', [
+                            config("constants.ORDER_STATUS_OPEN"),
+                            config("constants.ORDER_STATUS_CANCELED"),
+                            config("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
+                            config("constants.ORDER_STATUS_OPEN_DONATE"),
+                            config("constants.ORDER_STATUS_PENDING"),
+                        ])
+                    ;
+                });
+            }
+            elseif(isset($productsId)){
+                $products = Product::whereIn('id', $productsId)->get();
+                foreach ($products as $product) {
+                    if($product->producttype_id == config("constants.PRODUCT_TYPE_CONFIGURABLE"))
+                        if ($product->hasChildren())
+                        {
+                            $productsId = array_merge($productsId, Product::whereHas('parents', function ($q) use ($productsId) {
+                                $q->whereIn("parent_id", $productsId);
+                            })->pluck("id")->toArray());
+                        }
+                }
+
+                if(Input::has("checkoutStatusEnable"))
+                {
+                    $checkoutStatuses = Input::get("checkoutStatuses");
+                    if(in_array(0 , $checkoutStatuses))
+                    {
+                        $orders = Order::whereHas("orderproducts", function ($q) use ($productsId) {
+                            $q->whereIn("product_id", $productsId)->whereNull("checkoutstatus_id");
+                        })->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
+                    }else{
+                        $orders = Order::whereHas("orderproducts", function ($q) use ($productsId , $checkoutStatuses) {
+                            $q->whereIn("product_id", $productsId)->whereIn("checkoutstatus_id" , $checkoutStatuses);
+                        })->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
+                    }
+                }else{
+                    $orders = Order::whereHas("orderproducts", function ($q) use ($productsId) {
+                        $q->whereIn("product_id", $productsId);
+                    })->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
+                }
+
+                $createdSinceDate = Input::get('completedSinceDate');
+                $createdTillDate = Input::get('completedTillDate');
+                $createdTimeEnable = Input::get('completedTimeEnable');
+                if(strlen($createdSinceDate)>0 && strlen($createdTillDate)>0 && isset($createdTimeEnable))
+                {
+                    $orders = $this->timeFilterQuery($orders, $createdSinceDate, $createdTillDate, 'created_at');
+                }
+                $orders = $orders->get();
+                $users = $users->whereIn("id" , $orders->pluck("user_id")->toArray());
+            }
+        }elseif(Input::has("checkoutStatusEnable"))
+        {
+            $checkoutStatuses = Input::get("checkoutStatuses");
+            if(in_array(0 , $checkoutStatuses))
+            {
+                $orders = Order::whereHas("orderproducts", function ($q) use ($productsId) {
+                    $q->whereNull("checkoutstatus_id");
+                })->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
+            }else{
+                $orders = Order::whereHas("orderproducts", function ($q) use ($productsId , $checkoutStatuses) {
+                    $q->whereIn("checkoutstatus_id" , $checkoutStatuses);
+                })->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
+            }
+            $orders = $orders->get();
+            $users = $users->whereIn("id" , $orders->pluck("user_id")->toArray());
+        }
+
+        $paymentStatusesId = Input::get('paymentStatuses');
+        if(isset($paymentStatusesId) )
+        {
+            //Muhammad Shahrokhi : kar nemikone!
+//            $users = $users->whereHas("orders" , function ($q) use ($paymentStatusesId) {
+//                $q->whereIn("paymentstatus_id", $paymentStatusesId)->whereNotIn('orderstatus_id', [1]);
+//            }
+
+            if(!isset($orders)) $orders = Order::all();
+            else $orders = Order::paymentStatusFilter($orders, $paymentStatusesId);
+            $users = $users->whereIn("id", $orders->pluck("user_id")->toArray());
+        }
+
+        $orderStatusesId = Input::get('orderStatuses');
+        if(isset($orderStatusesId) )
+        {
+            //Muhammad Shahrokhi : kar nemikone!
+//            $users = $users->whereHas("orders" , function ($q) use ($orderStatusesId) {
+//                $q->whereIn("orderstatus_id", $orderStatusesId)->whereNotIn('orderstatus_id', [1]);
+//            });
+            if(!isset($orders)) $orders = Order::all();
+            else $orders = Order::orderStatusFilter($orders, $orderStatusesId);
+            $users = $users->whereIn("id" , $orders->pluck("user_id")->toArray());
+        }
+        //filter by gender ,lockProfile , mobileVerification
+        $genderId = Input::get("gender_id");
+        if(isset($genderId) && strlen($genderId) > 0)
+        {
+            if($genderId == 0)
+                $users = $users->whereDoesntHave("gender");
+            else
+                $users = $users->where("gender_id" , $genderId);
+        }
+
+        $userstatusId = Input::get("userstatus_id");
+        if(isset($userstatusId) && strlen($userstatusId) > 0 && $userstatusId != 0){
+            $users = $users->where("userstatus_id" , $userstatusId);
+        }
+
+        $lockProfileStatus = Input::get("lockProfileStatus");
+        if(isset($lockProfileStatus) && strlen($lockProfileStatus) > 0){
+            $users = $users->where("lockProfile" , $lockProfileStatus);
+        }
+
+        $mobileNumberVerification = Input::get("mobileNumberVerification");
+        if(isset($mobileNumberVerification) && strlen($mobileNumberVerification) > 0){
+            $users = $users->where("mobileNumberVerification" , $mobileNumberVerification);
+        }
+
+        //filter by postalCode, province , city, address, school , email
+        $withoutPostalCode = Input::get("withoutPostalCode");
+        if(isset($withoutPostalCode)) {
+            $users = $users->where(function ($q){
+                $q->whereNull("postalCode")->orWhere("postalCode" , "");
+            });
+        }
+        else{
+            $postalCode = Input::get("postalCode");
+            if(isset($postalCode) && strlen($postalCode) > 0)
+                $users = $users->where('postalCode', 'like', '%' . $postalCode . '%');
+        }
+
+        $withoutProvince = Input::get("withoutProvince");
+        if(isset($withoutProvince)) {
+            $users = $users->where(function ($q){
+                $q->whereNull("province")->orWhere("province" , "");
+            });
+        }
+        else{
+            $province = Input::get("province");
+            if(isset($province) && strlen($province) > 0)
+                $users = $users->where('province', 'like', '%' . $province . '%');
+        }
+
+        $withoutCity = Input::get("withoutCity");
+        if(isset($withoutCity)) {
+            $users = $users->where(function ($q){
+                $q->whereNull("city")->orWhere("city" , "");
+            });
+        }
+        else{
+            $city = Input::get("city");
+            if(isset($city) && strlen($city) > 0)
+                $users = $users->where('city', 'like', '%' . $city . '%');
+        }
+
+//        $withoutAddress = Input::get("withoutAddress");
+//        if(isset($withoutAddress)) {
+//            $users = $users->where(function ($q){
+//                $q->whereNull("address")->orWhere("address" , "");
+//            });
+//        }
+//        else{
+//            $address = Input::get("address");
+//            if (isset($address) && strlen($address) > 0)
+//                $users = $users->where('address', 'like', '%' . $address . '%');
+//        }
+
+        $addressSpecialFilter = Input::get("addressSpecialFilter");
+        if(isset($addressSpecialFilter)) {
+            switch ($addressSpecialFilter){
+                case "0":
+                    $address = Input::get("address");
+                    if (isset($address) && strlen($address) > 0)
+                        $users = $users->where('address', 'like', '%' . $address . '%');
+                    break;
+                case "1":
+                    $users = $users->where(function ($q){
+                        $q->whereNull("address")->orWhere("address" , "");
+                    });
+                    break;
+                case  "2":
+                    $users = $users->where(function ($q){
+                        $q->whereNotNull("address")->Where("address" , "<>" , "");
+                    });
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        else{
+            $address = Input::get("address");
+            if (isset($address) && strlen($address) > 0)
+                $users = $users->where('address', 'like', '%' . $address . '%');
+        }
+
+        $withoutSchool = Input::get("withoutSchool");
+        if(isset($withoutSchool)) {
+            $users = $users->where(function ($q){
+                $q->whereNull("school")->orWhere("school" , "");
+            });
+        }
+        else{
+            $school = Input::get("school");
+            if (isset($school) && strlen($school) > 0)
+                $users = $users->where('school', 'like', '%' . $school . '%');
+        }
+
+        $withoutEmail = Input::get("withoutEmail");
+        if(isset($withoutEmail)) {
+            $users = $users->where(function ($q){
+                $q->whereNull("email")->orWhere("email" , "");
+            });
+        }
+        else{
+            $email = Input::get("email");
+            if (isset($email) && strlen($email) > 0)
+                $users = $users->where('email', 'like', '%' . $email . '%');
+        }
+
+        //sort by
+
+
+        $items = $users->get();
+        /**
+         * For selling books
+         */
+        $hasPishtaz= [];
+        if(isset($orders))
+            foreach ($items as $user)
+            {
+                if($user->orders()->whereIn("id" , $orders->pluck("id")->toArray())->whereHas("orderproducts" , function ($q){
+                    $q->whereHas("attributevalues" , function ($q2){
+                        $q2->where("id" , 48 );
+                    });
+                })->get()->isNotEmpty()) array_push($hasPishtaz , $user->id);
+            }
+
+        /**
+         * end
+         */
+
+        $sortBy = Input::get("sortBy");
+        $sortType = Input::get("sortType");
+        if(strlen($sortBy) > 0 && strlen($sortType) > 0){
+            if(strcmp($sortType , "desc") == 0)
+                $items = $items->sortByDesc($sortBy);
+            else
+                $items = $items->sortBy($sortBy);
+        }
+
+        $previousPath = url()->previous();
+        $itemsId = [];
+        $numberOfFatherPhones = 0;
+        $numberOfMotherPhones = 0;
+        $itemsIdCount=0;
+        $index = "";
+        $reportType = "";
+
+        if(strcmp($previousPath , action("Web\HomeController@adminSMS"))==0) {
+            $uniqueUsers = $items->groupBy("nationalCode") ;
+            $items = collect();
+            foreach ($uniqueUsers as $user)
+            {
+                if($user->where("mobileNumberVerification" , 1)->isNotEmpty())
+                {
+                    $items->push($user->where("mobileNumberVerification" , 1)->first());
+                }
+                else
+                {
+                    $items->push($user->first());
+                }
+
+            }
+            $index = "user.index2" ;
+            $itemsId = $items->pluck("id");
+            $itemsIdCount = $itemsId->count();
+            $numberOfFatherPhones = Phone::whereIn('contact_id', Contact::whereIn('user_id', $itemsId)->where('relative_id', 1)->pluck('id'))->where("phonetype_id", 1)->count();
+            $numberOfMotherPhones = Phone::whereIn('contact_id', Contact::whereIn('user_id', $itemsId)->where('relative_id', 2)->pluck('id'))->where("phonetype_id", 1)->count();
+        }
+        elseif(strcmp($previousPath , action("Web\HomeController@admin"))==0 || true)
+        {
+            $index = "user.index" ;
+        }elseif(strcmp($previousPath , action("Web\HomeController@adminReport"))==0)
+        {
+            $minCost = Input::get("minCost") ;
+            if(isset($minCost[0]))
+            {
+                foreach ($items as $key => $user)
+                {
+                    $userOrders = $user->orders;
+                    $transactionSum = 0 ;
+                    foreach ($userOrders as $order)
+                    {
+                        $successfullTransactions = $order->successfulTransactions()->where("created_at" , ">" , "2017-09-22" )->get();
+                        foreach ($successfullTransactions as $transaction )
+                        {
+                            $transactionSum += $transaction->cost ;
+                        }
+                    }
+                    if($transactionSum < (int)$minCost)
+                        $items->forget($key) ;
+                }
+            }
+            $index = "admin.partials.getReportIndex" ;
+
+            if(Input::has("lotteries"))
+            {
+                $lotteryId = Input::get("lotteries") ;
+                $lotteries = Lottery::where("id" , $lotteryId)->get();
+            }
+
+            if(Input::has("reportType"))
+                $reportType = Input::get("reportType") ;
+
+            if(Input::has("seePaidCost"))
+                $seePaidCost = true;
+        }else{
+            return response([
+                "data"  => [
+                    "users" => $items
+                ]
+            ] , Response::HTTP_OK);
+        }
+
+        $result =  array(
+            'index' => View::make($index, compact('items' , 'products' , 'paymentStatusesId' , 'reportType' , 'hasPishtaz' , 'orders'  , 'seePaidCost' , 'lotteries'))->render()
+        , 'products'=>(isset($products))? $products : [],
+            'lotteries'=>(isset($lotteries))? $lotteries : [],
+            "allUsers" => $itemsId , "allUsersNumber" => $itemsIdCount ,
+            "numberOfFatherPhones" => $numberOfFatherPhones , "numberOfMotherPhones" => $numberOfMotherPhones
+        );
+
+        return response(json_encode($result),200)->header('Content-Type','application/json') ;
+
+        //======================================================================
+        //=============================REFACTOR=================================
+        //======================================================================
+
         /*$tags = $request->get('tags');*/
         $filters = array_filter($request->all()); //Removes null fields
         $isApp = $this->isRequestFromApp($request);
@@ -218,102 +672,6 @@ class UserController extends Controller
         ]), '100', '100', null));
 
         return redirect()->back();
-
-        //======================================================================
-        //=============================OLD CODE=================================
-        //======================================================================
-
-        $users = $users->get();
-        /**
-         * For selling books
-         */
-        $hasPishtaz = [];
-        if (isset($orders))
-            foreach ($users as $user) {
-                if ($user->orders()
-                         ->whereIn("id", $orders->pluck("id")
-                                                ->toArray())
-                         ->whereHas("orderproducts", function ($q) {
-                             $q->whereHas("attributevalues", function ($q2) {
-                                 $q2->where("id", 48);
-                             });
-                         })
-                         ->get()
-                         ->isNotEmpty())
-                    array_push($hasPishtaz, $user->id);
-            }
-
-        /**
-         * end
-         */
-
-        $sortBy = Input::get("sortBy");
-        $sortType = Input::get("sortType");
-        if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
-            if (strcmp($sortType, "desc") == 0)
-                $users = $users->sortByDesc($sortBy);
-            else
-                $users = $users->sortBy($sortBy);
-        }
-
-        $previousPath = url()->previous();
-        $usersId = [];
-        $numberOfFatherPhones = 0;
-        $numberOfMotherPhones = 0;
-        $usersIdCount = 0;
-        $index = "";
-        $reportType = "";
-
-        if (strcmp($previousPath, action("Web\HomeController@adminSMS")) == 0) {
-            //Converted
-        } else if (strcmp($previousPath, action("Web\HomeController@admin")) == 0) {
-            //Converted
-        } else if (strcmp($previousPath, action("Web\HomeController@adminReport")) == 0) {
-            $index = "admin.partials.getReportIndex";
-
-            $minCost = Input::get("minCost");
-            if (isset($minCost[0])) {
-                foreach ($users as $key => $user) {
-                    $userOrders = $user->orders;
-                    $transactionSum = 0;
-                    foreach ($userOrders as $order) {
-                        $successfullTransactions = $order->successfulTransactions()
-                                                         ->where("created_at", ">", "2017-09-22")
-                                                         ->get();
-                        foreach ($successfullTransactions as $transaction) {
-                            $transactionSum += $transaction->cost;
-                        }
-                    }
-                    if ($transactionSum < (int)$minCost)
-                        $users->forget($key);
-                }
-            }
-
-            if (Input::has("lotteries")) {
-                $lotteryId = Input::get("lotteries");
-                $lotteries = Lottery::where("id", $lotteryId)
-                                    ->get();
-            }
-
-            if (Input::has("reportType"))
-                $reportType = Input::get("reportType");
-
-            if (Input::has("seePaidCost"))
-                $seePaidCost = true;
-        }
-
-        $result = [
-            'index'                => View::make($index, compact('users', 'products', 'paymentStatusesId', 'reportType', 'hasPishtaz', 'orders', 'seePaidCost', 'lotteries'))
-                                          ->render(),
-            'products'             => (isset($products)) ? $products : [],
-            'lotteries'            => (isset($lotteries)) ? $lotteries : [],
-            "allUsers"             => $usersId,
-            "allUsersNumber"       => $usersIdCount,
-            "numberOfFatherPhones" => $numberOfFatherPhones,
-            "numberOfMotherPhones" => $numberOfMotherPhones,
-        ];
-
-        return response(json_encode($result, JSON_UNESCAPED_UNICODE), 200)->header('Content-Type', 'application/json');
     }
 
     /**
