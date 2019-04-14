@@ -214,7 +214,9 @@
                                     <div class="col-md-3">
                                         @include("admin.filters.columnFilter" , ["id" => "orderTableColumnFilter" , "tableDefaultColumns" => $orderTableDefaultColumns])
                                     </div>
-                                    @include('admin.filters.sort')
+                                    <div class="col-md-9">
+                                        @include('admin.filters.sort')
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -313,44 +315,44 @@
                         </div>
                         @endpermission
                         <thead>
-                        <tr>
-                            <th></th>
-                            <th class="all"> نام خانوادگی</th>
-                            <th class="all"> نام کوچک</th>
-                            <th class="none"> عملیات</th>
-                            <th class="none"> محصولات</th>
-                            <th class="none"> رشته</th>
-                            <th class="none"> استان</th>
-                            <th class="desktop"> شهر</th>
-                            <th class="none"> آدرس</th>
-                            <th class="none"> کد پستی</th>
-                            @permission((config('constants.SHOW_USER_MOBILE')))
-                            <th class="desktop"> موبایل</th>
-                            <th class="all">کد ملی</th>
-                            @endpermission
-                            <th class="min-tablet">مبلغ(تومان)</th>
-                            @permission((config('constants.SHOW_USER_EMAIL')))
-                            <th class="none"> ایمیل</th>
-                            @endpermission
-                            <th class="desktop">پرداخت شده(تومان)</th>
-                            <th class="none">مبلغ برگشتی(تومان)</th>
-                            <th class="none">بدهکار/بستانکار(تومان):</th>
-                            <th class="none">تراکنش های موفق:</th>
-                            <th class="none">تراکنش های منتظر تایید:</th>
-                            <th class="none">تراکنش های منتظر پرداخت:</th>
-                            <th class="desktop">توضیحات مسئول</th>
-                            <th class="none">کد مرسوله پستی</th>
-                            <th class="none">توضیحات مشتری</th>
-                            <th class="min-tablet">وضعیت سفارش</th>
-                            <th class="min-tablet">وضعیت پرداخت</th>
-                            <th class="none"> تاریخ اصلاح مدیریتی:</th>
-                            <th class="none"> تاریخ ثبت نهایی:</th>
-                            <th class="none">تعداد بن استفاده شده:</th>
-                            <th class="none">تعداد بن اضافه شده به شما از این سفارش:</th>
-                            <th class="none">کپن استفاده شده:</th>
-                            <th class="none">وضعیت پرداخت:</th>
-                            <th class="none">تاریخ ایجاد اولیه</th>
-                        </tr>
+                            <tr>
+                                <th></th>
+                                <th class="all"> نام خانوادگی</th>
+                                <th class="all"> نام کوچک</th>
+                                <th class="none"> عملیات</th>
+                                <th class="none"> محصولات</th>
+                                <th class="none"> رشته</th>
+                                <th class="none"> استان</th>
+                                <th class="desktop"> شهر</th>
+                                <th class="none"> آدرس</th>
+                                <th class="none"> کد پستی</th>
+                                @permission((config('constants.SHOW_USER_MOBILE')))
+                                <th class="desktop"> موبایل</th>
+                                <th class="all">کد ملی</th>
+                                @endpermission
+                                <th class="min-tablet">مبلغ(تومان)</th>
+                                @permission((config('constants.SHOW_USER_EMAIL')))
+                                <th class="none"> ایمیل</th>
+                                @endpermission
+                                <th class="desktop">پرداخت شده(تومان)</th>
+                                <th class="none">مبلغ برگشتی(تومان)</th>
+                                <th class="none">بدهکار/بستانکار(تومان):</th>
+                                <th class="none">تراکنش های موفق:</th>
+                                <th class="none">تراکنش های منتظر تایید:</th>
+                                <th class="none">تراکنش های منتظر پرداخت:</th>
+                                <th class="desktop">توضیحات مسئول</th>
+                                <th class="none">کد مرسوله پستی</th>
+                                <th class="none">توضیحات مشتری</th>
+                                <th class="min-tablet">وضعیت سفارش</th>
+                                <th class="min-tablet">وضعیت پرداخت</th>
+                                <th class="none"> تاریخ اصلاح مدیریتی:</th>
+                                <th class="none"> تاریخ ثبت نهایی:</th>
+                                <th class="none">تعداد بن استفاده شده:</th>
+                                <th class="none">تعداد بن اضافه شده به شما از این سفارش:</th>
+                                <th class="none">کپن استفاده شده:</th>
+                                <th class="none">وضعیت پرداخت:</th>
+                                <th class="none">تاریخ ایجاد اولیه</th>
+                            </tr>
                         </thead>
                         <tbody>
                         {{--Loading by ajax--}}
