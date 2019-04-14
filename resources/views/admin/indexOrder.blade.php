@@ -261,9 +261,8 @@
                             </div>
                         </div>
                     </div>
-                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%"
-                           id="order_table">
-                        delete order modal
+                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="order_table">
+                        {{--delete order modal--}}
                         @permission((config('constants.REMOVE_ORDER_ACCESS')))
                         <div id="deleteOrderConfirmationModal" class="modal fade" tabindex="-1" data-backdrop="static"
                              data-keyboard="false">
@@ -280,7 +279,7 @@
                             </div>
                         </div>
                         @endpermission
-                        sms panel modal
+                        {{--sms panel modal--}}
                         @permission((config('constants.SEND_SMS_TO_USER_ACCESS')))
                         <div id="sendSmsModal" class="modal fade" tabindex="-1" data-backdrop="static"
                              data-keyboard="false">
@@ -354,7 +353,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        Loading by ajax
+                        {{--Loading by ajax--}}
                         </tbody>
                     </table>
                 </div>
