@@ -3,22 +3,19 @@
     <tr>
         <th></th>
         <td>@if(isset($permission->name) && strlen($permission->name)>0 ) {{ $permission->name }}  @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($permission->display_name) && strlen($permission->display_name)>0 ) {{ $permission->display_name }}  @else
-                <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($permission->description) && strlen($permission->description)>0 ) {{ $permission->description }}  @else
-                <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($permission->created_at) && strlen($permission->created_at)>0) {{ $permission->CreatedAt_Jalali() }} @else
-                <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($permission->updated_at) && strlen($permission->updated_at)>0) {{ $permission->UpdatedAt_Jalali() }} @else
-                <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
 
         <td>
             <div class="btn-group">
-                <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown"
-                        aria-expanded="false"> عملیات
-                    <i class="fa fa-angle-down"></i>
-                </button>
+                <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> عملیات</button>
                 <ul class="dropdown-menu" role="menu">
                     @permission((config('constants.SHOW_PERMISSION_ACCESS')))
                     <li>

@@ -104,12 +104,12 @@
                                 <th>+</th>
                                 <td>
                                     @if(isset($order->user->id)) @if(strlen($order->user->lastName) > 0) {{$order->user->lastName}} @else
-                                        <span class="label label-sm label-danger"> درج نشده </span> @endif @endif
+                                        <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif @endif
                                 </td>
                                 <td>
                                     @if(isset($order->user->id)) @if(strlen($order->user->firstName) > 0) {{$order->user->firstName}} @else
-                                        <span class="label label-sm label-danger"> درج نشده </span> @endif @else <span
-                                            class="label label-sm label-danger"> کاربر نامشخص است </span> @endif
+                                        <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif @else <span
+                                            class="m-badge m-badge--wide label-sm m-badge--danger"> کاربر نامشخص است </span> @endif
                                 </td>
                                 <td>
                                     @if($order->orderproducts)
@@ -141,28 +141,28 @@
                                             <br>
                                         @endforeach
                                     @else
-                                        <span class="label label-danger">ندارد</span>
+                                        <span class="m-badge m-badge--wide m-badge--danger">ندارد</span>
                                     @endif
                                 </td>
                                 <td>@if(isset($order->user->major->name) > 0){{$order->user->major->name}} @else <span
-                                            class="label label-sm label-warning"> درج نشده </span> @endif</td>
+                                            class="m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span> @endif</td>
                                 <td>
                                     @if(isset($order->user->id)){{$order->user->mobile}} @endif
                                 </td>
                                 <td>@if(isset($order->cost) || isset($order->costwithoutcoupon)){{number_format($order->totalCost())}} @else
-                                        <span class="label label-danger">بدون مبلغ</span> @endif</td>
+                                        <span class="m-badge m-badge--wide m-badge--danger">بدون مبلغ</span> @endif</td>
                                 <td>@if(isset($order->cost) || isset($order->costwithoutcoupon)){{number_format($order->totalPaidCost() + $order->totalRefund())}} @else
-                                        <span class="label label-danger">بدون مبلغ</span> @endif</td>
+                                        <span class="m-badge m-badge--wide m-badge--danger">بدون مبلغ</span> @endif</td>
                                 <td>@if(isset($order->cost) || isset($order->costwithoutcoupon)){{number_format(-$order->totalRefund())}} @else
-                                        <span class="label label-danger">بدون مبلغ</span> @endif</td>
+                                        <span class="m-badge m-badge--wide m-badge--danger">بدون مبلغ</span> @endif</td>
                                 <td>
                                     @if(isset($order->cost) || isset($order->costwithoutcoupon))
                                         {{number_format($order->debt())}}
-                                    @else <span class="label label-danger">بدون مبلغ</span> @endif
+                                    @else <span class="m-badge m-badge--wide m-badge--danger">بدون مبلغ</span> @endif
                                 </td>
                                 <td>
                                     @if($order->successfulTransactions->isEmpty())
-                                        <span class="label label-warning">ندارد</span>
+                                        <span class="m-badge m-badge--wide m-badge--warning">ندارد</span>
                                     @else
                                         <br>
                                         @foreach($order->successfulTransactions as $successfulTransaction)
@@ -172,7 +172,7 @@
                                                                                                       class="btn btn-xs blue-sharp btn-outline  sbold">رفتن
                                                 به تراکنش والد</a>@endif
                                             @if(isset($successfulTransaction->paymentmethod->displayName)) {{ $successfulTransaction->paymentmethod->displayName}} @else
-                                                <span class="label label-danger">- نحوه پرداخت نامشخص</span> @endif
+                                                <span class="m-badge m-badge--wide m-badge--danger">- نحوه پرداخت نامشخص</span> @endif
                                             @if($successfulTransaction->getCode() === false) - بدون کد @else
                                                 - {{$successfulTransaction->getCode()}} @endif
                                             - مبلغ: @if($successfulTransaction->cost >= 0)
@@ -185,14 +185,14 @@
                                                 <span class="bold font-red">نامشخص</span>  @endif
                                             ,توضیح مدیریتی: @if(strlen($successfulTransaction->managerComment)>0) <span
                                                     class="bold font-blue">{{$successfulTransaction->managerComment}}</span>  @else
-                                                <span class="label label-warning">ندارد</span>@endif
+                                                <span class="m-badge m-badge--wide m-badge--warning">ندارد</span>@endif
                                             <br>
                                         @endforeach
                                     @endif
                                 </td>
                                 <td>
                                     @if($order->pendingTransactions->isEmpty())
-                                        <span class="label label-success">ندارد</span>
+                                        <span class="m-badge m-badge--wide m-badge--success">ندارد</span>
                                     @else
                                         <br>
                                         @foreach($order->pendingTransactions as $pendingTransaction)
@@ -215,14 +215,14 @@
                                                 <span class="bold font-red">نامشخص</span>  @endif
                                             ,توضیح مدیریتی: @if(strlen($pendingTransaction->managerComment)>0) <span
                                                     class="bold font-blue">{{$pendingTransaction->managerComment}}</span>  @else
-                                                <span class="label label-warning">ندارد</span>@endif
+                                                <span class="m-badge m-badge--wide m-badge--warning">ندارد</span>@endif
                                             <br>
                                         @endforeach
                                     @endif
                                 </td>
                                 <td>
                                     @if($order->unpaidTransactions->isEmpty())
-                                        <span class="label label-success">ندارد</span>
+                                        <span class="m-badge m-badge--wide m-badge--success">ندارد</span>
                                     @else
                                         <br>
                                         @foreach($order->unpaidTransactions as $unpaid)
@@ -235,7 +235,7 @@
                                                 <span class="bold font-red">نامشخص</span>  @endif
                                             ,توضیح مدیریتی: @if(strlen($unpaid->managerComment)>0) <span
                                                     class="bold font-blue">{{$unpaid->managerComment}}</span>  @else
-                                                <span class="label label-warning">ندارد</span>@endif
+                                                <span class="m-badge m-badge--wide m-badge--warning">ندارد</span>@endif
                                             <br>
                                         @endforeach
                                     @endif
@@ -246,44 +246,44 @@
                                             <span class="font-red bold">{{$managerComment->comment}}</span><br>
                                         @endforeach
                                     @else
-                                        <span class="label label-warning">بدون توضیح</span>
+                                        <span class="m-badge m-badge--wide m-badge--warning">بدون توضیح</span>
                                     @endif
                                 </td>
                                 <td>
                                     @if(isset($order->customerDescription) && strlen($order->customerDescription)>0 )
                                         <span class="font-red bold">{{$order->customerDescription}}<br></span>
                                     @else
-                                        <span class="label label-warning">بدون توضیح</span>
+                                        <span class="m-badge m-badge--wide m-badge--warning">بدون توضیح</span>
                                     @endif
                                 </td>
                                 <td style="text-align: center;">
                                     @if(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_CLOSED"))
-                                        <span class="label label-success"> {{$order->orderstatus->displayName}}</span>
+                                        <span class="m-badge m-badge--wide m-badge--success"> {{$order->orderstatus->displayName}}</span>
                                     @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_CANCELED"))
-                                        <span class="label label-danger"> {{$order->orderstatus->displayName}}</span>
+                                        <span class="m-badge m-badge--wide m-badge--danger"> {{$order->orderstatus->displayName}}</span>
                                     @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_POSTED") )
-                                        <span class="label label-info"> {{$order->orderstatus->displayName}}</span>
+                                        <span class="m-badge m-badge--wide m-badge--info"> {{$order->orderstatus->displayName}}</span>
                                     @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_REFUNDED") )
-                                        <span class="label bg-grey-salsa"> {{$order->orderstatus->displayName}}</span>
+                                        <span class="m-badge m-badge--wide bg-grey-salsa"> {{$order->orderstatus->displayName}}</span>
                                     @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_OPEN"))
-                                        <span class="label label-danger"> {{$order->orderstatus->displayName}}</span>
+                                        <span class="m-badge m-badge--wide m-badge--danger"> {{$order->orderstatus->displayName}}</span>
                                     @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"))
-                                        <span class="label label-warning"> {{$order->orderstatus->displayName}}</span>
+                                        <span class="m-badge m-badge--wide m-badge--warning"> {{$order->orderstatus->displayName}}</span>
                                     @elseif(isset($order->orderstatus->id) && $order->orderstatus->id == Config::get("constants.ORDER_STATUS_READY_TO_POST"))
-                                        <span class="label label-info"> {{$order->orderstatus->displayName}}</span>
+                                        <span class="m-badge m-badge--wide m-badge--info"> {{$order->orderstatus->displayName}}</span>
                                     @endif
                                 </td>
                                 <td style="text-align: center;">
                                     @if(isset($order->paymentstatus->id) && $order->paymentstatus->id == Config::get("constants.PAYMENT_STATUS_PAID"))
-                                        <span class="label label-success">{{$order->paymentstatus->displayName}}</span>
+                                        <span class="m-badge m-badge--wide m-badge--success">{{$order->paymentstatus->displayName}}</span>
                                     @elseif(isset($order->paymentstatus->id) && $order->paymentstatus->id == Config::get("constants.PAYMENT_STATUS_UNPAID"))
-                                        <span class="label label-danger"> {{$order->paymentstatus->displayName}}</span>
+                                        <span class="m-badge m-badge--wide m-badge--danger"> {{$order->paymentstatus->displayName}}</span>
                                     @elseif(isset($order->paymentstatus->id) && $order->paymentstatus->id == Config::get("constants.PAYMENT_STATUS_INDEBTED"))
-                                        <span class="label label-warning"> {{$order->paymentstatus->displayName}}</span>
+                                        <span class="m-badge m-badge--wide m-badge--warning"> {{$order->paymentstatus->displayName}}</span>
                                     @endif
                                 </td>
                                 <td>@if(isset($order->completed_at) && strlen($order->completed_at)>0) {{ $order->CompletedAt_Jalali() }} @else
-                                        <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                                        <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
                                 <td>
                                     {{$order->usedBonSum()}}
                                 </td>
@@ -291,7 +291,7 @@
                                     @if($order->orderproducts->isNotEmpty())
                                         {{$order->addedBonSum($order->user)}}
                                     @else
-                                        <span class="label label-info">سفارش خالی است!</span>
+                                        <span class="m-badge m-badge--wide m-badge--info">سفارش خالی است!</span>
                                     @endif
                                 </td>
                                 <td>

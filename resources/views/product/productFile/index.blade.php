@@ -63,19 +63,19 @@
                 @if(!$productFiles->isEmpty())
                     @foreach($productFiles as $file)
                         <tr class="text-center">
-                            <td>@if(isset($file->order)){{$file->order}}@else <span class="label label-sm label-danger"> ندارد </span> @endif
+                            <td>@if(isset($file->order)){{$file->order}}@else <span class="m-badge m-badge--wide label-sm m-badge--danger"> ندارد </span> @endif
                             </td>
                             <td>@if(isset($file->name) && strlen($file->name) > 0){{$file->name}}@else <span
-                                        class="label label-sm label-danger"> نا مشخص </span> @endif</td>
+                                        class="m-badge m-badge--wide label-sm m-badge--danger"> نا مشخص </span> @endif</td>
                             <td>@if(isset($file->productfiletype->id)){{$file->productfiletype->displayName}}@else <span
-                                        class="label label-sm label-warning"> نا مشخص </span> @endif</td>
+                                        class="m-badge m-badge--wide label-sm m-badge--warning"> نا مشخص </span> @endif</td>
                             <td>
                                 <a class="btn yellow" href = "{{action("Web\HomeController@download" , ["content"=>"فایل محصول","fileName"=>$file->file , "pId"=>$file->product_id ])}}">
                                     <i class="fa fa-download"></i>
                                     دانلود </a>
                             </td>
-                            <td>@if($file->enable) <span class="label label-sm label-success"> فعال </span> @else <span
-                                        class="label label-sm label-danger"> غیر فعال </span>  @endif</td>
+                            <td>@if($file->enable) <span class="m-badge m-badge--wide label-sm m-badge--success"> فعال </span> @else <span
+                                        class="m-badge m-badge--wide label-sm m-badge--danger"> غیر فعال </span>  @endif</td>
                             <td>
                                 @permission((Config::get('constants.EDIT_PRODUCT_FILE_ACCESS')))
                                 <a class = "btn btn-info" href = "{{action("Web\ProductfileController@edit" , $file)}}">
@@ -83,7 +83,7 @@
                                 @endpermission
                             </td>
                             <td dir="ltr">@if($file->validSince) {{$file->validSince_Jalali()}} @else <span
-                                        class="label label-sm label-info"> نامشخص </span>  @endif</td>
+                                        class="m-badge m-badge--wide label-sm m-badge--info"> نامشخص </span>  @endif</td>
                         </tr>
                     @endforeach
                 @else

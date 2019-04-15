@@ -123,7 +123,7 @@
                     @endif
                 </div>
                 <div class="clearfix margin-top-10">
-                    <span class="label label-info">توجه</span>
+                    <span class="m-badge m-badge--wide m-badge--info">توجه</span>
                     <strong id="">ستون چپ محصولات شامل تخفیف می باشند</strong>
                 </div>
             </div>
@@ -274,7 +274,7 @@
         <br>
         <div>
             <div class="clearfix margin-bottom-10">
-                <span class="label label-success">توجه</span>
+                <span class="m-badge m-badge--wide m-badge--success">توجه</span>
                 <strong id="">محصولاتی که مشمول کپن می شوند</strong>
             </div>
             {!! Form::select('coupontype_id',$coupontype, null, ['class' => 'form-control', 'id' => 'coupontypeId']) !!}
@@ -288,7 +288,7 @@
                 <strong></strong>
             </span>
             <div class="clearfix margin-top-10">
-                <span class="label label-info">توجه</span>
+                <span class="m-badge m-badge--wide m-badge--info">توجه</span>
                 <strong id="">ستون چپ محصولات شامل تخفیف می باشند</strong>
             </div>
         </div>

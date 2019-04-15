@@ -2,7 +2,7 @@
     <tr>
         <td class="highlight">
             @if(!isset($usersurveyanswer->first()->user->firstName) && !isset($usersurveyanswer->first()->user->lastName))
-                <span class="label label-sm label-warning"> کاربر ناشناس </span>@else @if(isset($usersurveyanswer->first()->user->firstName)) {{$usersurveyanswer->first()->user->firstName}} @endif @if(isset($usersurveyanswer->first()->user->lastName)) {{$usersurveyanswer->first()->user->lastName}} @endif  @endif
+                <span class="m-badge m-badge--wide label-sm m-badge--warning"> کاربر ناشناس </span>@else @if(isset($usersurveyanswer->first()->user->firstName)) {{$usersurveyanswer->first()->user->firstName}} @endif @if(isset($usersurveyanswer->first()->user->lastName)) {{$usersurveyanswer->first()->user->lastName}} @endif  @endif
         </td>
         <td class="hidden-xs">@if(isset($usersurveyanswer->first()->user->major->id)) {{$usersurveyanswer->first()->user->major->name}} @endif</td>
         <td>

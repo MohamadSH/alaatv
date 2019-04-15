@@ -179,7 +179,7 @@
                             <a href="javascript:" class="btn red fileinput-exists" id="file-remove"
                                data-dismiss="fileinput"> حذف </a>
                             <div class="clearfix margin-top-10">
-                                <span class="label label-danger">توجه</span> فرمت مجاز: pdf
+                                <span class="m-badge m-badge--wide m-badge--danger">توجه</span> فرمت مجاز: pdf
                             </div>
                         </div>
                         @if ($errors->has('file'))
@@ -203,7 +203,7 @@
                             <a href="javascript:" class="btn red fileinput-exists" id="file-remove"
                                data-dismiss="fileinput"> حذف </a>
                             <div class="clearfix margin-top-10">
-                                <span class="label label-danger">توجه</span> فرمت مجاز: pdf
+                                <span class="m-badge m-badge--wide m-badge--danger">توجه</span> فرمت مجاز: pdf
                             </div>
                         </div>
                         @if ($errors->has('file2'))

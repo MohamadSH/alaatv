@@ -51,7 +51,7 @@
                     @endif
                 </div>
                 <div class="clearfix margin-top-10">
-                <span class="label label-info">توجه</span>
+                <span class="m-badge m-badge--wide m-badge--info">توجه</span>
                 <strong id="">ستون چپ صفت های انتخاب شده می باشند</strong>
             </div>
             </div>
@@ -93,7 +93,7 @@
                 <strong></strong>
             </span>
             <div class="clearfix margin-top-10">
-                <span class="label label-info">توجه</span>
+                <span class="m-badge m-badge--wide m-badge--info">توجه</span>
                 <strong id="">ستون چپ دسترسی های انتخاب شده می باشند</strong>
             </div>
         </div>

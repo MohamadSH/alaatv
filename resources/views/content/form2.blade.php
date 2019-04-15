@@ -94,7 +94,7 @@
                     فایل های خود را اینجا بیندازید و یا بر روی این قسمت کلیک کنید.پس از بارگذاری فایل ها بر روی ذخیره
                     اطلاعات کلیک کنید</h5>
                 <span class="needsclick">
-                    <span class="label label-info">توجه:</span>
+                    <span class="m-badge m-badge--wide m-badge--info">توجه:</span>
                     فرمت مجاز
                     <label style="color:red;">pdf</label>
                 </span>
