@@ -41,7 +41,10 @@ class LotteryWinner extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      *
-     * @param int $giftCost
+     * @param \App\Lottery $lottery
+     * @param $rank
+     * @param $prize
+     * @param $memorial
      */
     public function __construct(Lottery $lottery, $rank, $prize, $memorial)
     {
@@ -85,16 +88,7 @@ class LotteryWinner extends Notification implements ShouldQueue
         $rank = $this->rank;
         $prize = $this->prize;
         $memorial = $this->memorial;
-        if (isset($this->user->gender_id)) {
-            if ($this->user->gender->name == "خانم")
-                $gender = "خانم ";
-            else if ($this->user->gender->name == "آقا")
-                $gender = "آقای ";
-            else
-                $gender = "";
-        } else {
-            $gender = "";
-        }
+        $gender = $this->getGender();
 
         if (strlen($prize) > 0)
             $messageCore = "شما برنده " . $rank . " در قرعه کشی " . $lotteryName . " شده اید. جایزه شما " . $prize . " می باشد و در سریع ترین زمان به شما تقدیم خواهد شد.";
@@ -108,9 +102,25 @@ class LotteryWinner extends Notification implements ShouldQueue
             . "آلاء"
             . "\n"
             . "sanatisharif.ir";
-        $message = "سلام " . $gender . $this->user->full_name . "\n" . $messageCore;
 
-        return $message;
+        return "سلام " . $gender . $this->user->full_name . "\n" . $messageCore;
     }
 
+    /**
+     * @return string
+     */
+    private function getGender(): string
+    {
+        if (! isset($this->user->gender_id)) {
+            return "";
+        }
+        if ($this->user->gender->name == "خانم") {
+            return "خانم ";
+        }
+        if ($this->user->gender->name == "آقا") {
+            return "آقای ";
+        }
+
+        return "";
+    }
 }

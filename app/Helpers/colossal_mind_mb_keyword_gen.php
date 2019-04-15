@@ -501,32 +501,44 @@ class  colossal_mind_mb_keyword_gen
         }
         $kw_arr = array_unique($kw_arr);
         // remove duplicate ENGLISH plural words
-        if (substr($this->lang, 0, 2) == 'en') {
-            $cnt = count($kw_arr);
-            for ($i = 0; $i < $cnt; $i++) {
-                for ($j = $i + 1; $j < $cnt; $j++) {
-                    if (array_key_exists($i, $kw_arr) && array_key_exists($j, $kw_arr)) {
-                        if ($kw_arr[$i] . 's' == $kw_arr[$j])
-                            unset($kw_arr[$j]);
-                        else if ($kw_arr[$i] == $kw_arr[$j] . 's')
-                            unset($kw_arr[$i]);
-                        //--------------
-                        else if (preg_match('#ss$#', $kw_arr[$j])) {
-                            if ($kw_arr[$i] === $kw_arr[$j] . 'es')
-                                unset($kw_arr[$i]); // addresses VS address
-                        } else if (preg_match('#ss$#', $kw_arr[$i])) {
-                            if ($kw_arr[$i] . 'es' === $kw_arr[$j])
-                                unset($kw_arr[$j]); // address VS addresses
-                        }
-                        //---------------
-                    }
+        if (substr($this->lang, 0, 2) != 'en') {
+
+            return implode(',', $kw_arr);
+        }
+        $cnt = count($kw_arr);
+        for ($i = 0; $i < $cnt; $i++) {
+            for ($j = $i + 1; $j < $cnt; $j++) {
+                if (! array_key_exists($i, $kw_arr) || ! array_key_exists($j, $kw_arr)) {
                     $kw_arr = array_values($kw_arr);
+                    continue;
+                }
+                if ($kw_arr[$i].'s' == $kw_arr[$j]) {
+                    unset($kw_arr[$j]);
+                } else {
+                    if ($kw_arr[$i] == $kw_arr[$j].'s') {
+                        unset($kw_arr[$i]);
+                    } //--------------
+                    else {
+                        if (preg_match('#ss$#', $kw_arr[$j])) {
+                            if ($kw_arr[$i] === $kw_arr[$j].'es') {
+                                unset($kw_arr[$i]);
+                            } // addresses VS address
+                        } else {
+                            if (preg_match('#ss$#', $kw_arr[$i])) {
+                                if ($kw_arr[$i].'es' === $kw_arr[$j]) {
+                                    unset($kw_arr[$j]);
+                                } // address VS addresses
+                            }
+                        }
+                    }
                 }
                 $kw_arr = array_values($kw_arr);
             }
+            $kw_arr = array_values($kw_arr);
         }
-        // job is done!
+
         return implode(',', $kw_arr);
+
     }
 
     //------------------------------------------------------------------

@@ -66,16 +66,9 @@ class InvoicePaid extends Notification implements ShouldQueue
     private function msg(): string
     {
         $user = $this->getInvoiceUser();
-        if (isset($user->gender_id)) {
-            if ($user->gender->name == "خانم")
-                $gender = "خانم ";
-            else if ($user->gender->name == "آقا")
-                $gender = "آقای ";
-            else
-                $gender = "";
-        } else {
-            $gender = "";
-        }
+
+        return $this->getGender($user);
+
         $messageCore = "سفارش شما با موفقیت ثبت شد."
             . "\n"
             . "شماره سفارش:"
@@ -92,8 +85,7 @@ class InvoicePaid extends Notification implements ShouldQueue
 
     private function getInvoiceUser(): User
     {
-        $user = $this->invoice->user;
-        return $user;
+        return $this->invoice->user;
     }
 
     private function getInputData(): array
@@ -104,4 +96,22 @@ class InvoicePaid extends Notification implements ShouldQueue
         ];
     }
 
+    /**
+     * @param \App\User $user
+     * @return string
+     */
+    private function getGender(User $user): string
+    {
+        if (! isset($user->gender_id)) {
+            return "";
+        }
+        if ($user->gender->name == "خانم") {
+            return "خانم ";
+        }
+        if ($user->gender->name == "آقا") {
+            return "آقای ";
+        }
+
+        return "";
+    }
 }

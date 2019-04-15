@@ -55,8 +55,8 @@ class FreeInternetAccept extends Notification implements ShouldQueue
             . "\n"
             . 'دریافت فایل راهنما از'
             . 'https://sanatisharif.ir/v/asiatech';
-        $message = $messageCore;
-        return $message;
+
+        return $messageCore;
     }
 
     /**

@@ -19,20 +19,23 @@ class ContentController extends Controller
      */
     public function show(Request $request, Content $content)
     {
-        if ($content->isActive()) {
-            if ($this->userCanSeeContent($request, $content))
-                return response()->json($content, Response::HTTP_OK);
-
-
-            $productsThatHaveThisContent = $content->products();
+        if (! $content->isActive()) {
             return response()->json([
-                'message' => trans('content.Not Free'),
-                'product' => $productsThatHaveThisContent->isEmpty() ? null : $productsThatHaveThisContent,
-            ], Response::HTTP_FORBIDDEN);
+                'message' => "",
+            ], Response::HTTP_LOCKED);
         }
+
+        if ($this->userCanSeeContent($request, $content)) {
+            return response()->json($content, Response::HTTP_OK);
+        }
+
+        $productsThatHaveThisContent = $content->products();
+
         return response()->json([
-            'message' => "",
-        ], Response::HTTP_LOCKED);
+            'message' => trans('content.Not Free'),
+            'product' => $productsThatHaveThisContent->isEmpty() ? null : $productsThatHaveThisContent,
+        ], Response::HTTP_FORBIDDEN);
+
     }
 
     /**

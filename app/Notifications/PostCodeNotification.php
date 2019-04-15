@@ -75,8 +75,8 @@ class PostCodeNotification extends Notification implements ShouldQueue
             . $this->code
             . "\n"
             . "است.";
-        $message = $messageCore;
-        return $message;
+
+        return $messageCore;
     }
 
     private function getInputData(): array

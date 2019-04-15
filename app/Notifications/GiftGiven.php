@@ -73,16 +73,7 @@ class GiftGiven extends Notification implements ShouldQueue
         $partialMessage = "به عنوان هدیه به کیف پول شما افزوده شد.";
         if (isset($this->partialMessage))
             $partialMessage = $this->partialMessage;
-        if (isset($this->user->gender_id)) {
-            if ($this->user->gender->name == "خانم")
-                $gender = "خانم ";
-            else if ($this->user->gender->name == "آقا")
-                $gender = "آقای ";
-            else
-                $gender = "";
-        } else {
-            $gender = "";
-        }
+        $gender = $this->getGender();
         $messageCore = "مبلغ " . $this->giftCost . " تومان " . $partialMessage
             . "\n"
             . "آلاء"
@@ -95,4 +86,21 @@ class GiftGiven extends Notification implements ShouldQueue
         return $message;
     }
 
+    /**
+     * @return string
+     */
+    private function getGender(): string
+    {
+        if (! isset($this->user->gender_id)) {
+            return "";
+        }
+        if ($this->user->gender->name == "خانم") {
+            return "خانم ";
+        }
+        if ($this->user->gender->name == "آقا") {
+            return "آقای ";
+        }
+
+        return "";
+    }
 }

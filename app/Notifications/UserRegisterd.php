@@ -58,16 +58,7 @@ class UserRegisterd extends Notification implements ShouldQueue
 
     private function msg(): string
     {
-        if (isset($this->user->gender_id)) {
-            if ($this->user->gender->name == "خانم")
-                $gender = "خانم ";
-            else if ($this->user->gender->name == "آقا")
-                $gender = "آقای ";
-            else
-                $gender = "";
-        } else {
-            $gender = "";
-        }
+        $gender = $this->getGender();
         $messageCore = "به آلاء خوش آمدید، اطلاعات کاربری شما:"
             . "\n"
             . "نام کاربری:"
@@ -94,5 +85,24 @@ class UserRegisterd extends Notification implements ShouldQueue
             'password'              => $this->user->nationalCode,
             "https://goo.gl/jme5VU" => "https://goo.gl/jme5VU",
         ];
+    }
+
+    /**
+     * @return string
+     */
+    private function getGender(): string
+    {
+        if (! isset($this->user->gender_id)) {
+            return "";
+        }
+
+        if ($this->user->gender->name == "خانم") {
+            return "خانم ";
+        }
+
+        if ($this->user->gender->name == "آقا") {
+            return "آقای ";
+        }
+        return "";
     }
 }

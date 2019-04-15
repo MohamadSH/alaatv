@@ -66,8 +66,8 @@ class CounselingStatusChanged extends Notification implements ShouldQueue
             . " تغییر کرد."
             . "\n"
             . "sanatisharif.ir";
-        $message = $messageCore;
-        return $message;
+
+        return $messageCore;
     }
 
     private function getInputData(): array

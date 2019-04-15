@@ -114,17 +114,7 @@ trait UserCommon
      */
     public function userPasswordConfirmation(\App\User $user, $claimedOldPassword, $newPassword): array
     {
-        $confirmed = false;
-        if ($user->compareWithCurrentPassword($claimedOldPassword)) {
-            if (!$user->compareWithCurrentPassword($newPassword)) {
-                $confirmed = true;
-                $message = \Lang::get('confirmation.Confirmed.');
-            } else {
-                $message = \Lang::get('confirmation.Current password and new password are the same.');
-            }
-        } else {
-            $message = \Lang::get('confirmation.Claimed old password is not correct');
-        }
+        [$confirmed, $message] = $this->getMsg($user, $claimedOldPassword, $newPassword);
 
         return [
             "confirmed" => $confirmed,
@@ -225,5 +215,24 @@ trait UserCommon
             }*/
             $user->roles()->attach($totalRoles);
         }
+    }
+
+    /**
+     * @param \App\User $user
+     * @param $claimedOldPassword
+     * @param $newPassword
+     * @return array
+     */
+    private function getMsg(\App\User $user, $claimedOldPassword, $newPassword): array
+    {
+        if (! $user->compareWithCurrentPassword($claimedOldPassword)) {
+            return [false, \Lang::get('confirmation.Claimed old password is not correct')];
+        }
+
+        if (! $user->compareWithCurrentPassword($newPassword)) {
+            return [true, \Lang::get('confirmation.Confirmed.')];
+        }
+
+        return [false, \Lang::get('confirmation.Current password and new password are the same.')];
     }
 }

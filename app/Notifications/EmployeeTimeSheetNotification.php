@@ -90,8 +90,7 @@ class EmployeeTimeSheetNotification extends Notification implements ShouldQueue
             . "\n"
             . "اضافه" . " " . $this->eh;
 
-        $message = $messageCore;
-        return $message;
+        return $messageCore;
     }
 
     private function getInputData(): array

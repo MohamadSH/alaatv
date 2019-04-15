@@ -56,9 +56,7 @@ class MobileVerified extends Notification implements ShouldQueue
 
     private function msg(): string
     {
-        $messageCore = "آلایی عزیز، شماره موبایل شما در آلاء تایید شد.";
-        $message = $messageCore;
-        return $message;
+        return "آلایی عزیز، شماره موبایل شما در آلاء تایید شد.";
     }
 
     /**

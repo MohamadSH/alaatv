@@ -86,9 +86,7 @@ class ContentObserver
      */
     public function saving(Content $content)
     {
-
         $content->template_id = $this->findTemplateIdOfaContent($content);
-
     }
 
     /**
@@ -98,19 +96,11 @@ class ContentObserver
      */
     private function findTemplateIdOfaContent($content)
     {
-        switch ($content->contenttype_id) {
-            case Content::CONTENT_TYPE_PAMPHLET : // pamphlet
-                return Content::CONTENT_TEMPLATE_PAMPHLET;
-                break;
-            case Content::CONTENT_TYPE_EXAM : // exam
-                return Content::CONTENT_TEMPLATE_EXAM;
-                break;
-            case Content::CONTENT_TYPE_VIDEO : // video
-                return Content::CONTENT_TEMPLATE_VIDEO;
-                break;
-            default:
-                return null;
-        }
+        return [
+            Content::CONTENT_TYPE_PAMPHLET =>  Content::CONTENT_TEMPLATE_PAMPHLET,
+            Content::CONTENT_TYPE_EXAM =>  Content::CONTENT_TEMPLATE_EXAM,
+            Content::CONTENT_TYPE_VIDEO =>  Content::CONTENT_TEMPLATE_VIDEO,
+        ][$content->contenttype_id] ?? null;
     }
 
     public function saved(Content $content)
