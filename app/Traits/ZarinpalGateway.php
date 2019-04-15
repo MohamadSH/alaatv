@@ -138,30 +138,34 @@ trait ZarinpalGateway
     protected function buildZarinpalGateway(string $paymentMethod, bool $withSandBox = true)
     {
         $key = 'transactiongateway:Zarinpal';
-        $transactiongateway = Cache::remember($key, config('constants.CACHE_600'), function () use ($paymentMethod) {
-            return Transactiongateway::name('zarinpal', $paymentMethod)->first();
-        });
+        $transactiongateway = $this->getGateWayCredentials($paymentMethod, $key);
 
-        if (isset($transactiongateway)) {
-            $gatewayComposer = new ZarinpalComposer($transactiongateway->merchantNumber);
-            if ($this->isZarinpalSandboxOn() && $withSandBox)
-                $gatewayComposer->enableSandbox();
-
-            if ($this->isZarinGateOn())
-                $gatewayComposer->isZarinGate();
-        } else {
-            return [
-                'error' => [
-                    'message' => 'Could not find gate way',
-                    'code'    => Response::HTTP_BAD_REQUEST,
-                ],
-            ];
+        if (!isset($transactiongateway)) {
+            return ['error' => ['message' => 'Could not find gate way', 'code' => Response::HTTP_BAD_REQUEST,],];
         }
+
+        $gatewayComposer = new ZarinpalComposer($transactiongateway->merchantNumber);
+        if ($this->isZarinpalSandboxOn() && $withSandBox) $gatewayComposer->enableSandbox();
+
+        if ($this->isZarinGateOn()) $gatewayComposer->isZarinGate();
+
 
         return [
             'transactiongateway' => $transactiongateway,
             'gatewayComposer'    => $gatewayComposer,
         ];
+    }
+
+    /**
+     * @param string $paymentMethod
+     * @param string $key
+     * @return mixed
+     */
+    protected function getGateWayCredentials(string $paymentMethod, string $key): mixed
+    {
+        return Cache::remember($key, config('constants.CACHE_600'), function () use ($paymentMethod) {
+            return Transactiongateway::name('zarinpal', $paymentMethod)->first();
+        });
     }
 
     /**
@@ -171,7 +175,7 @@ trait ZarinpalGateway
      *
      * @return string
      */
-    private function setTransactionDescription(string $description, User $user, Order $order = null): string
+    private function getTransactionDescription(string $description, User $user, Order $order = null): string
     {
         $description .= $user->mobile . ' - محصولات: ';
 
