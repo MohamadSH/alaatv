@@ -4,8 +4,8 @@
 @section('page-css')
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
+    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>--}}
+    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>--}}
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
@@ -240,25 +240,31 @@
                                             href="#responsive-checkout">
                                         محصولات انتخابی من در فیلتر شده ها را تسویه کن
                                     </button>
-                                    <!-- responsive modal -->
-                                    <div id="responsive-checkout" class="modal fade" tabindex="-1" data-width="760">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal"
-                                                    aria-hidden="true"></button>
-                                            <h4 class="modal-title">آیا مطمئن هستید؟</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="row">
 
+                                    <!--begin::Modal-->
+                                    <div class="modal fade" id="responsive-checkout" tabindex="-1" role="dialog" aria-labelledby="responsive-checkoutModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="responsive-checkoutModalLabel">آیا مطمئن هستید؟</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="checkoutModal-close">خیر</button>
+                                                    <button type="button" class="btn btn-primary" id="checkout-submit">بله</button>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" data-dismiss="modal" class="btn btn-outline dark"
-                                                    id="checkoutModal-close">خیر
-                                            </button>
-                                            <button type="button" class="btn blue" id="checkout-submit">بله</button>
-                                        </div>
                                     </div>
+                                    <!--end::Modal-->
+
                                 </div>
                             </div>
                         </div>
@@ -266,53 +272,73 @@
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="order_table">
                         {{--delete order modal--}}
                         @permission((config('constants.REMOVE_ORDER_ACCESS')))
-                        <div id="deleteOrderConfirmationModal" class="modal fade" tabindex="-1" data-backdrop="static"
-                             data-keyboard="false">
-                            <div class="modal-header">حذف سفارش محصول <span id="deleteOrderTitle"></span></div>
-                            <div class="modal-body">
-                                <p> آیا مطمئن هستید؟ </p>
-                                {!! Form::hidden('order_id', null) !!}
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                                <button type="button" data-dismiss="modal" class="btn green" onclick="removeOrder()">
-                                    بله
-                                </button>
+                        <!--begin::Modal-->
+                        <div class="modal fade" id="deleteOrderConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteOrderConfirmationModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteOrderConfirmationModalLabel">
+                                            حذف سفارش محصول <span id="deleteOrderTitle"></span>
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p> آیا مطمئن هستید؟ </p>
+                                        {!! Form::hidden('order_id', null) !!}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                                        <button type="button" class="btn btn-primary" onclick="removeOrder()">بله</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <!--end::Modal-->
                         @endpermission
                         {{--sms panel modal--}}
                         @permission((config('constants.SEND_SMS_TO_USER_ACCESS')))
-                        <div id="sendSmsModal" class="modal fade" tabindex="-1" data-backdrop="static"
-                             data-keyboard="false">
-                            <div class="modal-header">ارسال پیامک به <span id="smsUserFullName"></span></div>
-                            <div class="modal-body">
-                                {!! Form::open(['method' => 'POST', 'action' => 'Web\HomeController@sendSMS' , 'class'=>'nobottommargin' , 'id'=>'sendSmsForm']) !!}
-                                {!! Form::hidden('users', null, ['id' => 'users']) !!}
-                                {!! Form::textarea('message', null, ['class' => 'form-control' , 'id' => 'smsMessage', 'placeholder' => 'متن پیامک']) !!}
-                                <span class="help-block" id="smsMessageAlert">
+
+                        <!--begin::Modal-->
+                        <div class="modal fade" id="sendSmsModal" tabindex="-1" role="dialog" aria-labelledby="sendSmsModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="sendSmsModalLabel">
+                                            ارسال پیامک به <span id="smsUserFullName"></span>
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {!! Form::open(['method' => 'POST', 'action' => 'Web\HomeController@sendSMS' , 'class'=>'nobottommargin' , 'id'=>'sendSmsForm']) !!}
+                                        {!! Form::hidden('users', null, ['id' => 'users']) !!}
+                                        {!! Form::textarea('message', null, ['class' => 'form-control' , 'id' => 'smsMessage', 'placeholder' => 'متن پیامک']) !!}
+                                        <span class="help-block" id="smsMessageAlert">
                                                         <strong></strong>
                                                     </span>
-                                {!! Form::close() !!}
-                                <span class="">
+                                        {!! Form::close() !!}
+                                        <span class="">
                                         طول پیام: (<span style="color: red;"><span id="smsNumber">1</span>
                                                         پیامک</span> ) <span id="smsWords">70</span>    کارکتر باقی مانده تا پیام بعدی
                                                     </span>
-                                <br>
-                                <label>هزینه پیامک(ریال): <span
-                                            id="totalSmsCost">{{config('constants.COST_PER_SMS_2')}}</span></label>
-                                <br>
-                                <label>شماره فرستنده : {{config("constants.SMS_PROVIDER_DEFAULT_NUMBER")}}</label>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" data-dismiss="modal" class="btn btn-outline dark"
-                                        id="sendSmsForm-close">بستن
-                                </button>
-                                <button type="button" class="btn green" id="sendSmsForm-submit">ارسال</button>
-                                <img class="d-none" id="send-sms-loading"
-                                     src="{{config('constants.FILTER_LOADING_GIF')}}" height="25px" width="25px">
+                                        <br>
+                                        <label>هزینه پیامک(ریال): <span
+                                                    id="totalSmsCost">{{config('constants.COST_PER_SMS_2')}}</span></label>
+                                        <br>
+                                        <label>شماره فرستنده : {{config("constants.SMS_PROVIDER_DEFAULT_NUMBER")}}</label>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="sendSmsForm-close">بستن</button>
+                                        <button type="button" class="btn btn-primary" id="sendSmsForm-submit">ارسال</button>
+                                        <img class="d-none" id="send-sms-loading" src="{{config('constants.FILTER_LOADING_GIF')}}" height="25px" width="25px">
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <!--end::Modal-->
                         @endpermission
                         <thead>
                             <tr>
@@ -491,39 +517,50 @@
                     <a target="_blank" href="{{action("Web\TransactionController@getUnverifiedTransactions")}}" class="btn btn-lg m-btn--pill m-btn--air btn-danger active m--margin-10">لیست تراکنشهای ثبت نشده</a>
                     <div class="table-toolbar">
                     </div>
-                    <div id="completeTransactionInfo" class="modal fade" tabindex="-1" data-backdrop="static"
-                         data-keyboard="false">
-                        <div class="modal-header">تکمیل اطلاعات تراکنش</div>
-                        {!! Form::open([  'method'=>'POST'  , 'class'=>'completeTransactionInfoForm form-horizontal' ]) !!}
-                        {!! Form::hidden('transaction_id' , null , ['id'=>'completeTransactionInfoForm_transactionId']) !!}
-                        <div class="modal-body">
-                            <div class="row static-info margin-top-20">
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label" for="traceNumber">شماره پیگیری:</label>
-                                    <div class="col-md-6">
-                                        {!! Form::text('traceNumber',old('traceNumber'),['class' => 'form-control' , 'id'=>'completeTransactionInfoTraceNumber', 'dir'=>'ltr' ]) !!}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row static-info margin-top-20">
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label" for="managerComment">شماره کارت:</label>
-                                    <div class="col-md-6">
-                                        {!! Form::text('managerComment',old('managerComment'),['class' => 'form-control' , 'id'=>'completeTransactionInfoCardNumber' , 'dir'=>'ltr' ]) !!}
-                                    </div>
-                                </div>
-                            </div>
 
+                    <!--begin::Modal-->
+                    <div class="modal fade" id="completeTransactionInfo" tabindex="-1" role="dialog" aria-labelledby="completeTransactionInfoLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="completeTransactionInfoLabel">
+                                        تکمیل اطلاعات تراکنش
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                {!! Form::open([  'method'=>'POST'  , 'class'=>'completeTransactionInfoForm form-horizontal' ]) !!}
+                                {!! Form::hidden('transaction_id' , null , ['id'=>'completeTransactionInfoForm_transactionId']) !!}
+                                <div class="modal-body">
+                                    <div class="row static-info margin-top-20">
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label" for="traceNumber">شماره پیگیری:</label>
+                                            <div class="col-md-6">
+                                                {!! Form::text('traceNumber',old('traceNumber'),['class' => 'form-control' , 'id'=>'completeTransactionInfoTraceNumber', 'dir'=>'ltr' ]) !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row static-info margin-top-20">
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label" for="managerComment">شماره کارت:</label>
+                                            <div class="col-md-6">
+                                                {!! Form::text('managerComment',old('managerComment'),['class' => 'form-control' , 'id'=>'completeTransactionInfoCardNumber' , 'dir'=>'ltr' ]) !!}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                                    <button type="submit" class="btn btn-primary">ذخیره</button>
+                                    <img class="d-none" id="complete-transaction-info-loading" src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px" width="25px">
+                                </div>
+                                {!! Form::close() !!}
+                            </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" data-dismiss="modal" class="btn btn-outline dark">بستن</button>
-                            <input type="submit" class="btn green" value="ذخیره">
-                            <img class="d-none" id="complete-transaction-info-loading"
-                                 src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px"
-                                 width="25px">
-                        </div>
-                        {!! Form::close() !!}
                     </div>
+                    <!--end::Modal-->
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%"
                            id="transaction_table">
                         <thead>
@@ -678,7 +715,7 @@
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
+    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>--}}
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
@@ -686,7 +723,7 @@
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
     <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
 
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-extended-modals.min.js" type="text/javascript"></script>
+    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-extended-modals.min.js" type="text/javascript"></script>--}}
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js" type="text/javascript"></script>
     <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript"></script>
