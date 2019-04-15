@@ -17,7 +17,7 @@ use App\Traits\ZarinpalGateway;
 use App\Transaction;
 use App\User;
 use Carbon\Carbon;
-use Illuminate\Http\{JsonResponse, Request, Response};
+use Illuminate\Http\{Exceptions\HttpResponseException, JsonResponse, Request, Response};
 use Illuminate\Support\Facades\Cache;
 use Zarinpal\Zarinpal as ZarinpalComposer;
 
@@ -82,56 +82,23 @@ class OnlinePaymentController extends Controller
         $description = $data['description'];
 
         if($data['statusCode']!=Response::HTTP_OK) {
-            return response()->json([
-                'error' => $data['message']
-            ], $data['statusCode']);
+            return $this->sendErrorResponse( $data['message'], Response::HTTP_OK);
         }
 
         $description .= 'سابت آلاء - ';
 
-        $description = $this->setTransactionDescription($description, $user, $order);
+        $description = $this->getTransactionDescription($description, $user, $order);
 
-        if(isset($order)) {
+        if($this->isPayingAnOrder($order)) {
             $this->setCustomerDescriptionForOrder($request, $order);
         }
 
-        if (!$this->isRedirectable($cost)) {
-            return redirect(action('Web\OfflinePaymentController@verifyPayment', ['device' => $device, 'paymentMethod' => 'wallet', 'coi' => (isset($order) ? $order->id : null)]));
+        if (!$this->canGoToGateWay($cost)) {
+            return $this->sendToOfflinePaymentProcess($device, $order);
         }
-
-        $gatewayResult = $this->buildZarinpalGateway($paymentMethod);
-
-        if (isset($gatewayResult['error'])) {
-            $str = 'درگاه مورد نظر یافت نشد';
-            $s1 = Response::HTTP_BAD_REQUEST;
-
-            return $this->sendResponse($str, $s1);
-        }
-        $transactiongateway = $gatewayResult['transactiongateway'];
-        $gateway = $gatewayResult['gatewayComposer'];
-
-
-
-        $callbackUrl = action('Web\OnlinePaymentController@verifyPayment', ['paymentMethod' => $paymentMethod, 'device' => $device]);
-
-        $authority = $this->paymentRequest($gateway, $callbackUrl, $cost, $description);
-
-        if (!isset($authority)) {
-            $str = 'پاسخی از بانک دریافت نشد';
-            $s1 = Response::HTTP_SERVICE_UNAVAILABLE;
-
-            return $this->sendResponse($str, $s1);
-        }
-
-        $transactionModifyResult = $this->setAuthorityForTransaction($authority, $transactiongateway->id, $transaction, $description);
-
-        if ($transactionModifyResult['statusCode'] != Response::HTTP_OK) {
-            $str = 'مشکلی در ویرایش تراکنش رخ داده است.';
-            $s1 = Response::HTTP_INTERNAL_SERVER_ERROR;
-            return $this->sendResponse($str, $s1);
-        }
-
-        $redirectData = $this->getRedirectData($gateway->redirectUrl());
+        //////////////zarin pal
+        $redirectData = $this->interactWithZarinPal($paymentMethod, $device, $cost, $description, $transaction);
+        //////////////zarin pal
         return view("order.checkout.gatewayRedirect", compact('redirectData'));
 
     }
@@ -140,12 +107,8 @@ class OnlinePaymentController extends Controller
      * @param int $cost
      * @return bool
      */
-    private function isRedirectable(int $cost) {
-        if ($cost > 0) {
-            return true;
-        } else {
-            return false;
-        }
+    private function canGoToGateWay(int $cost) {
+        return ($cost > 0);
     }
 
     /**
@@ -154,7 +117,7 @@ class OnlinePaymentController extends Controller
      */
     private function setCustomerDescriptionForOrder(Request $request, Order $order): void
     {
-        $order->customerDescription = optional($request->get('customerDescription'));
+        $order->customerDescription = $request->get('customerDescription');
     }
 
     /**
@@ -371,8 +334,64 @@ class OnlinePaymentController extends Controller
      * @param int $s1
      * @return JsonResponse
      */
-    private function sendResponse(string $str, int $s1): JsonResponse
+    private function sendErrorResponse(string $str, int $s1): JsonResponse
     {
         return response()->json(['message' => $str], $s1);
+    }
+
+    /**
+     * @param Order $order
+     * @return bool
+     */
+    private function isPayingAnOrder($order): bool
+    {
+        return isset($order);
+    }
+
+    /**
+     * @param string $device
+     * @param Order $order
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    private function sendToOfflinePaymentProcess(string $device, Order $order)
+    {
+        return redirect(action('Web\OfflinePaymentController@verifyPayment', ['device' => $device, 'paymentMethod' => 'wallet', 'coi' => (isset($order) ? $order->id : null)]));
+    }
+
+    /**
+     * @param string $paymentMethod
+     * @param string $device
+     * @param int $cost
+     * @param string $description
+     * @param Transaction $transaction
+     * @return array
+     */
+    private function interactWithZarinPal(string $paymentMethod, string $device, int $cost, string $description, Transaction $transaction): array
+    {
+        $gatewayResult = $this->buildZarinpalGateway($paymentMethod);
+
+        if (isset($gatewayResult['error'])) {
+            throw new HttpResponseException($this->sendErrorResponse('درگاه مورد نظر یافت نشد', Response::HTTP_BAD_REQUEST));
+        }
+        $transactiongateway = $gatewayResult['transactiongateway'];
+        $gateway = $gatewayResult['gatewayComposer'];
+
+
+        $callbackUrl = action('Web\OnlinePaymentController@verifyPayment', ['paymentMethod' => $paymentMethod, 'device' => $device]);
+
+        $authority = $this->paymentRequest($gateway, $callbackUrl, $cost, $description);
+
+        if (!isset($authority)) {
+            throw new HttpResponseException($this->sendErrorResponse('پاسخی از بانک دریافت نشد', Response::HTTP_SERVICE_UNAVAILABLE));
+        }
+
+        $transactionModifyResult = $this->setAuthorityForTransaction($authority, $transactiongateway->id, $transaction, $description);
+
+        if ($transactionModifyResult['statusCode'] != Response::HTTP_OK) {
+            throw new HttpResponseException($this->sendErrorResponse('مشکلی در ویرایش تراکنش رخ داده است.', Response::HTTP_INTERNAL_SERVER_ERROR));
+        }
+
+        $redirectData = $this->getRedirectData($gateway->redirectUrl());
+        return $redirectData;
     }
 }
