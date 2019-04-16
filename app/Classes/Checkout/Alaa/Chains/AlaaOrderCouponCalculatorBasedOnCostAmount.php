@@ -8,13 +8,12 @@
 
 namespace App\Classes\Checkout\Alaa\Chains;
 
-
 use App\Classes\Abstracts\Checkout\OrderCouponCalculatorBasedOnCostAmount;
 
 class AlaaOrderCouponCalculatorBasedOnCostAmount extends OrderCouponCalculatorBasedOnCostAmount
 {
-    protected function calculateDiscount($couponDiscountCostAmount , $totalRawPriceWhichHasDiscount):int
+    protected function calculateDiscount($couponDiscountCostAmount, $totalRawPriceWhichHasDiscount): int
     {
-            return (int)(max($totalRawPriceWhichHasDiscount - $couponDiscountCostAmount , 0));
+        return (int)(max($totalRawPriceWhichHasDiscount - $couponDiscountCostAmount, 0));
     }
 }

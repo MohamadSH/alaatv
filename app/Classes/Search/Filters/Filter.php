@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Filters;
 
-
 use Illuminate\Database\Eloquent\Builder;
 
 interface Filter
@@ -16,8 +15,8 @@ interface Filter
     /**
      * Apply a given search value to the builder instance.
      *
-     * @param Builder        $builder
-     * @param mixed          $value
+     * @param Builder $builder
+     * @param mixed $value
      * @param FilterCallback $callback
      *
      * @return Builder $builder

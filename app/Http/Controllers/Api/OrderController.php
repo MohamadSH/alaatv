@@ -40,6 +40,7 @@ class OrderController extends Controller
 
         $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
         unset($invoiceInfo['price']['payableByWallet']);
+
         return response($invoiceInfo, Response::HTTP_OK);
     }
 
@@ -85,11 +86,11 @@ class OrderController extends Controller
         $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
 
         return response([
-            "price"                       => $invoiceInfo['price'],
-            "wallet"                      => $wallets,
-            "couponInfo"                  => $coupon,
+            "price" => $invoiceInfo['price'],
+            "wallet" => $wallets,
+            "couponInfo" => $coupon,
             "notIncludedProductsInCoupon" => $notIncludedProductsInCoupon,
-            "orderHasDonate"              => $orderHasDonate,
+            "orderHasDonate" => $orderHasDonate,
         ], Response::HTTP_OK);
     }
 
@@ -102,7 +103,7 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function submitCoupon(SubmitCouponRequest $request , AlaaInvoiceGenerator $invoiceGenerator)
+    public function submitCoupon(SubmitCouponRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
         $coupon = Coupon::code($request->get('code'))->first();
         if ($request->has('openOrder')) {
@@ -114,18 +115,20 @@ class OrderController extends Controller
 
         list($resultCode, $resultText) = $this->processCoupon($invoiceGenerator, $coupon, $order);
 
-        if ($resultCode == Response::HTTP_OK)
+        if ($resultCode == Response::HTTP_OK) {
             $response = [
                 $coupon,
                 'message' => 'Coupon attached successfully',
             ];
-        else
+        } else {
             $response = [
                 'error' => [
-                    'code'    => $resultCode ?? $resultCode,
+                    'code' => $resultCode ?? $resultCode,
                     'message' => $resultText ?? $resultText,
                 ],
             ];
+        }
+
         return response($response, Response::HTTP_OK);
     }
 
@@ -172,7 +175,7 @@ class OrderController extends Controller
         } else {
             $response = [
                 'error' => [
-                    'code'    => $resultCode ?? $resultCode,
+                    'code' => $resultCode ?? $resultCode,
                     'message' => $resultText ?? $resultText,
                 ],
             ];
@@ -192,6 +195,7 @@ class OrderController extends Controller
     {
         if (! isset($coupon) || ! isset($order)) {
             $resultText = isset($coupon) ? 'Unknown order' : 'Coupon code is wrong';
+
             return [Response::HTTP_BAD_REQUEST, $resultText];
         }
 
@@ -224,7 +228,7 @@ class OrderController extends Controller
             $order->coupon_id = $coupon->id;
             if ($coupon->discounttype_id == config('constants.DISCOUNT_TYPE_COST')) {
                 $order->couponDiscount = 0;
-                $order->couponDiscountAmount = (int) $coupon->discount;
+                $order->couponDiscountAmount = (int)$coupon->discount;
             } else {
                 $order->couponDiscount = $coupon->discount;
                 $order->couponDiscountAmount = 0;
@@ -260,7 +264,7 @@ class OrderController extends Controller
         $order->coupon_id = $coupon->id;
         if ($coupon->discounttype_id == config('constants.DISCOUNT_TYPE_COST')) {
             $order->couponDiscount = 0;
-            $order->couponDiscountAmount = (int) $coupon->discount;
+            $order->couponDiscountAmount = (int)$coupon->discount;
         } else {
             $order->couponDiscount = $coupon->discount;
             $order->couponDiscountAmount = 0;
@@ -274,7 +278,7 @@ class OrderController extends Controller
             return $this->databaseError();
         }
         $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
-        
+
         return [Response::HTTP_OK, 'Coupon attached successfully'];
     }
 

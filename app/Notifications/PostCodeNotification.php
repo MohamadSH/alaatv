@@ -16,14 +16,15 @@ class PostCodeNotification extends Notification implements ShouldQueue
     use Queueable, SerializesModels;
 
     const MEDIANA_PATTERN_CODE_POST_CODE = 446;
+
     public $timeout = 120;
 
     /**
      * @var User
      */
     protected $user;
-    private   $code;
 
+    private $code;
 
     /**
      * PostCodeNotification constructor.
@@ -35,17 +36,17 @@ class PostCodeNotification extends Notification implements ShouldQueue
         $this->code = $code;
     }
 
-
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
     public function via($notifiable)
     {
         $this->user = $notifiable;
+
         return [
             MedianaPatternChannel::class,
 
@@ -59,22 +60,12 @@ class PostCodeNotification extends Notification implements ShouldQueue
      */
     public function toMediana($notifiable)
     {
-        return (new MedianaMessage())
-            ->content($this->msg())
-            ->setInputData($this->getInputData())
-            ->setPatternCode(self::MEDIANA_PATTERN_CODE_POST_CODE)
-            ->sendAt(Carbon::now());
+        return (new MedianaMessage())->content($this->msg())->setInputData($this->getInputData())->setPatternCode(self::MEDIANA_PATTERN_CODE_POST_CODE)->sendAt(Carbon::now());
     }
 
     private function msg(): string
     {
-        $messageCore = "آلایی عزیز سلام،"
-            . "\n"
-            . "کد رهگیری پست شما"
-            . "\n"
-            . $this->code
-            . "\n"
-            . "است.";
+        $messageCore = "آلایی عزیز سلام،"."\n"."کد رهگیری پست شما"."\n".$this->code."\n"."است.";
 
         return $messageCore;
     }

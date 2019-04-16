@@ -8,7 +8,6 @@
 
 namespace App\Classes\Format;
 
-
 use App\Block;
 use App\Collection\BlockCollection;
 
@@ -24,7 +23,6 @@ class webBlockCollectionFormatter implements BlockCollectionFormatter
         $this->setFormatter = $formatter;
     }
 
-
     /**
      * @param BlockCollection $blocks
      *
@@ -37,6 +35,7 @@ class webBlockCollectionFormatter implements BlockCollectionFormatter
             $section = $this->blockFormatter($block);
             $sections->push($section);
         }
+
         return $sections;
     }
 
@@ -48,17 +47,18 @@ class webBlockCollectionFormatter implements BlockCollectionFormatter
     private function blockFormatter(Block $block): array
     {
         $section = [
-            "name"            => $block->class,
-            "displayName"     => $block->title,
+            "name" => $block->class,
+            "displayName" => $block->title,
             "descriptiveName" => $block->title,
-            "lessons"         => $this->setFormatter->format($block->sets),
-            "tags"            => $block->tags,
-            'ads'             => [
+            "lessons" => $this->setFormatter->format($block->sets),
+            "tags" => $block->tags,
+            'ads' => [
 
             ],
-            'class'           => $block->class,
-            'url'             => $block->url,
+            'class' => $block->class,
+            'url' => $block->url,
         ];
+
         return $section;
     }
 }

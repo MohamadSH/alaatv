@@ -73,6 +73,7 @@ trait ZarinpalGateway
 
         $result = $this->prepareResponse($gatewayResult);
         $result['__zarinpalVerifyResult'] = $gatewayResult;
+
         return $result;
     }
 
@@ -149,7 +150,7 @@ trait ZarinpalGateway
         if (! isset($order)) {
             return $description;
         }
-        if (!$order->orderproducts->relationLoaded('product')) {
+        if (! $order->orderproducts->relationLoaded('product')) {
             $order->orderproducts->load('product');
         }
         foreach ($order->orderproducts as $orderProduct) {
@@ -159,8 +160,8 @@ trait ZarinpalGateway
                 $description .= 'یک محصول نامشخص , ';
             }
         }
-        return $description;
 
+        return $description;
     }
 
     /**
@@ -185,7 +186,7 @@ trait ZarinpalGateway
             $message[] = $this->exceptions[101];
         }
 
-        return $this->getResult($message, true, $refId, $cardPanMask );
+        return $this->getResult($message, true, $refId, $cardPanMask);
     }
 
     /**
@@ -254,7 +255,7 @@ trait ZarinpalGateway
         return [
             'status' => $status,
             'message' => $message,
-            'data' => $this->getData($refId, $cardPanMask)
+            'data' => $this->getData($refId, $cardPanMask),
         ];
     }
 

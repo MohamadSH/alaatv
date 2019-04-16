@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Auth;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CheckoutReviewRequest extends FormRequest
 {
@@ -30,15 +30,16 @@ class CheckoutReviewRequest extends FormRequest
     /**
      * @return array
      */
-    private function getRules():array
+    private function getRules(): array
     {
         $user = Auth::user();
-        if(isset($user))
+        if (isset($user)) {
             $rules = [
                 "order_id" => "required",
-            ] ;
-        else
+            ];
+        } else {
             $rules = [];
+        }
 
         return $rules;
     }

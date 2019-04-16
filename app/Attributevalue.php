@@ -5,18 +5,18 @@ namespace App;
 /**
  * App\Attributevalue
  *
- * @property int                                                               $id
- * @property int                                                               $attribute_id
- * @property string|null                                                       $name        نام مقدار نسبت داده شده
- * @property string|null                                                       $description توضیح درباره این مفدار
- * @property int|null                                                          $isDefault   مقدار پیش فرض - در صورت وجود
- * @property int                                                               $order       ترتیب مقدار
- * @property \Carbon\Carbon|null                                               $created_at
- * @property \Carbon\Carbon|null                                               $updated_at
- * @property \Carbon\Carbon|null                                               $deleted_at
- * @property-read \App\Attribute                                               $attribute
+ * @property int $id
+ * @property int $attribute_id
+ * @property string|null $name        نام مقدار نسبت داده شده
+ * @property string|null $description توضیح درباره این مفدار
+ * @property int|null $isDefault   مقدار پیش فرض - در صورت وجود
+ * @property int $order       ترتیب مقدار
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \App\Attribute $attribute
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[] $orderproducts
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[]      $products
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[] $products
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Attributevalue onlyTrashed()
  * @method static bool|null restore()
@@ -54,7 +54,6 @@ class Attributevalue extends BaseModel
     {
         return $this->belongsTo('App\Attribute');
     }
-
 
     public function products()
     {

@@ -13,7 +13,6 @@ use App\Order;
 
 trait HandleOrderPayment
 {
-
     /**
      * @param
      *
@@ -45,10 +44,11 @@ trait HandleOrderPayment
     {
         $result = [];
         $paymentstatus_id = null;
-        if ((int)$order->totalPaidCost() < (int)$order->totalCost())
+        if ((int)$order->totalPaidCost() < (int)$order->totalCost()) {
             $paymentstatus_id = config('constants.PAYMENT_STATUS_INDEBTED');
-        else
+        } else {
             $paymentstatus_id = config('constants.PAYMENT_STATUS_PAID');
+        }
 
         $result['paymentstatus_id'] = $paymentstatus_id;
 
@@ -60,6 +60,7 @@ trait HandleOrderPayment
         } else {
             $result['saveOrder'] = 0;
         }
+
         return $result;
     }
 
@@ -89,6 +90,7 @@ trait HandleOrderPayment
             $bonDisplayName = $bon->displayName;
             $result['bonName'] = $bonDisplayName;
         }
+
         return $result;
     }
 
@@ -100,8 +102,7 @@ trait HandleOrderPayment
     protected function handleOrderCanceledPayment(Order $order): array
     {
         $result = [];
-        if($order->orderstatus_id == config("constants.ORDER_STATUS_OPEN"))
-        {
+        if ($order->orderstatus_id == config("constants.ORDER_STATUS_OPEN")) {
             $order->close(config('constants.PAYMENT_STATUS_UNPAID'), config('constants.ORDER_STATUS_CANCELED'));
             $order->updateWithoutTimestamp();
         }

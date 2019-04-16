@@ -11,6 +11,7 @@ trait DateTrait
     public function CreatedAt_Jalali()
     {
         $explodedDateTime = explode(" ", $this->created_at);
+
         return $this->convertDate($this->created_at, "toJalali");
     }
 
@@ -22,6 +23,7 @@ trait DateTrait
     public function CompletedAt_Jalali()
     {
         $explodedDateTime = explode(" ", $this->completed_at);
+
 //        $explodedTime = $explodedDateTime[1] ;
         return $this->convertDate($this->completed_at, "toJalali");
     }
@@ -36,7 +38,8 @@ trait DateTrait
         $explodedDateTime = explode(" ", $this->validSince);
         $explodedTime = $explodedDateTime[1];
         $explodedDate = $this->convertDate($this->validSince, "toJalali");
-        return ($explodedDate . " " . $explodedTime);
+
+        return ($explodedDate." ".$explodedTime);
     }
 
     /**
@@ -49,7 +52,8 @@ trait DateTrait
         $explodedDateTime = explode(" ", $this->validUntil);
         $explodedTime = $explodedDateTime[1];
         $explodedDate = $this->convertDate($this->validUntil, "toJalali");
-        return ($explodedDate . " " . $explodedTime);
+
+        return ($explodedDate." ".$explodedTime);
     }
 
     public function convertDate($date, $convertType)
@@ -61,13 +65,17 @@ trait DateTrait
             $year = $explodedDate[0];
             $month = $explodedDate[1];
             $day = $explodedDate[2];
+
             return $this->gregorian_to_jalali($year, $month, $day, "/");
-        } else if (strcmp($convertType, 'toMiladi') == 0 && strlen($date) > 0) {
-            $explodedDate = explode("/", $date);
-            $year = $explodedDate[0];
-            $month = $explodedDate[1];
-            $day = $explodedDate[2];
-            return $this->jalali_to_gregorian($year, $month, $day, "-");
+        } else {
+            if (strcmp($convertType, 'toMiladi') == 0 && strlen($date) > 0) {
+                $explodedDate = explode("/", $date);
+                $year = $explodedDate[0];
+                $month = $explodedDate[1];
+                $day = $explodedDate[2];
+
+                return $this->jalali_to_gregorian($year, $month, $day, "-");
+            }
         }
     }
 
@@ -90,8 +98,9 @@ trait DateTrait
             334,
         ];
         $doy_g = $g_a[(int)$g_m] + $g_d;
-        if ($d_4 == 0 and $g_m > 2)
+        if ($d_4 == 0 and $g_m > 2) {
             $doy_g++;
+        }
         $d_33 = (int)((($g_y - 16) % 132) * .0305);
         $a = ($d_33 == 3 or $d_33 < ($d_4 - 1) or $d_4 == 0) ? 286 : 287;
         $b = (($d_33 == 1 or $d_33 == 2) and ($d_33 == $d_4 or $d_4 == 1)) ? 78 : (($d_33 == 3 and $d_4 == 0) ? 80 : 79);
@@ -114,11 +123,12 @@ trait DateTrait
             $jd = $doy_j - 186 - ($jm * 30);
             $jm += 7;
         }
+
         return ($mod == '') ? [
             $jy,
             $jm,
             $jd,
-        ] : $jy . $mod . $jm . $mod . $jd;
+        ] : $jy.$mod.$jm.$mod.$jd;
     }
 
     protected function jalali_to_gregorian($j_y, $j_m, $j_d, $mod = '')
@@ -154,15 +164,17 @@ trait DateTrait
                      30,
                      31,
                  ] as $gm => $v) {
-            if ($gd <= $v)
+            if ($gd <= $v) {
                 break;
+            }
             $gd -= $v;
         }
+
         return ($mod == '') ? [
             $gy,
             $gm,
             $gd,
-        ] : $gy . $mod . $gm . $mod . $gd;
+        ] : $gy.$mod.$gm.$mod.$gd;
     }
 
     /**
@@ -172,6 +184,7 @@ trait DateTrait
     public function UpdatedAt_Jalali()
     {
         $explodedDateTime = explode(" ", $this->updated_at);
+
         return $this->convertDate($this->updated_at, "toJalali");
     }
 
@@ -257,47 +270,49 @@ trait DateTrait
                 default:
                     break;
             }
-        } else if ($mode == "STRING_TO_NUMBER") {
-            $result = 0;
-            switch ($month) {
-                case "فروردین":
-                    $result = 1;
-                    break;
-                case "اردیبهشت":
-                    $result = 2;
-                    break;
-                case "خرداد":
-                    $result = 3;
-                    break;
-                case "تیر":
-                    $result = 4;
-                    break;
-                case "مرداد":
-                    $result = 5;
-                    break;
-                case "شهریور":
-                    $result = 6;
-                    break;
-                case "مهر":
-                    $result = 7;
-                    break;
-                case "آبان":
-                    $result = 8;
-                    break;
-                case "آذر":
-                    $result = 9;
-                    break;
-                case "دی":
-                    $result = 10;
-                    break;
-                case "بهمن":
-                    $result = 11;
-                    break;
-                case "اسفند":
-                    $result = 12;
-                    break;
-                default:
-                    break;
+        } else {
+            if ($mode == "STRING_TO_NUMBER") {
+                $result = 0;
+                switch ($month) {
+                    case "فروردین":
+                        $result = 1;
+                        break;
+                    case "اردیبهشت":
+                        $result = 2;
+                        break;
+                    case "خرداد":
+                        $result = 3;
+                        break;
+                    case "تیر":
+                        $result = 4;
+                        break;
+                    case "مرداد":
+                        $result = 5;
+                        break;
+                    case "شهریور":
+                        $result = 6;
+                        break;
+                    case "مهر":
+                        $result = 7;
+                        break;
+                    case "آبان":
+                        $result = 8;
+                        break;
+                    case "آذر":
+                        $result = 9;
+                        break;
+                    case "دی":
+                        $result = 10;
+                        break;
+                    case "بهمن":
+                        $result = 11;
+                        break;
+                    case "اسفند":
+                        $result = 12;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -348,6 +363,7 @@ trait DateTrait
 
                 break;
         }
+
         return $days;
     }
 
@@ -355,15 +371,17 @@ trait DateTrait
     {
         $pointedYear = 0;
         if ($currentMonth <= 6) {
-            if ($pointedMonth <= 6)
+            if ($pointedMonth <= 6) {
                 $pointedYear = $currentYear;
-            else
+            } else {
                 $pointedYear = $currentYear - 1;
+            }
         } else {
-            if ($pointedMonth <= 6)
+            if ($pointedMonth <= 6) {
                 $pointedYear = $currentYear - 1;
-            else
+            } else {
                 $pointedYear = $currentYear;
+            }
         }
 
         return $pointedYear;

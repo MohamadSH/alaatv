@@ -13,11 +13,11 @@ use Illuminate\Database\Eloquent\Builder;
 class HasClosedOrder extends FilterAbstract
 {
     protected $attribute = '';
+
     protected $relation = 'closedOrders';
 
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
-            return $builder->whereDoesntHave($this->relation);
+        return $builder->whereDoesntHave($this->relation);
     }
-
 }

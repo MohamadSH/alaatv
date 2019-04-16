@@ -56,7 +56,7 @@ class OrderproductController extends Controller
     public function store(OrderProductStoreRequest $request)
     {
         if ($request->has('extraAttribute')) {
-            if (!$request->user()->can(config("constants.ATTACH_EXTRA_ATTRIBUTE_ACCESS"))) {
+            if (! $request->user()->can(config("constants.ATTACH_EXTRA_ATTRIBUTE_ACCESS"))) {
                 $productId = $request->get('product_id');
                 $product = Product::findOrFail($productId);
                 $attributesValues = $this->orderproductController->getAttributesValuesFromProduct($request, $product);
@@ -67,16 +67,17 @@ class OrderproductController extends Controller
 
         $result = $this->orderproductController->new($request->all());
         $orderproducts = new OrderproductCollection();
-        if(isset($result['data']['storedOrderproducts']))
+        if (isset($result['data']['storedOrderproducts'])) {
             $orderproducts = $result['data']['storedOrderproducts'];
+        }
 
-        return response($orderproducts , Response::HTTP_OK);
+        return response($orderproducts, Response::HTTP_OK);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -87,7 +88,7 @@ class OrderproductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -98,8 +99,8 @@ class OrderproductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -111,7 +112,7 @@ class OrderproductController extends Controller
      * Remove the specified resource from storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Orderproduct        $orderproduct
+     * @param \App\Orderproduct $orderproduct
      *
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Exception
@@ -121,15 +122,17 @@ class OrderproductController extends Controller
         $authenticatedUser = $request->user('api');
         $orderUser = optional(optional($orderproduct)->order)->user;
 
-        if ($authenticatedUser->id != $orderUser->id)
+        if ($authenticatedUser->id != $orderUser->id) {
             abort(Response::HTTP_FORBIDDEN, 'Orderproduct does not belong to this user.');
+        }
 
         $orderproduct_userbons = $orderproduct->userbons;
         foreach ($orderproduct_userbons as $orderproduct_userbon) {
             $orderproduct_userbon->usedNumber = $orderproduct_userbon->usedNumber - $orderproduct_userbon->pivot->usageNumber;
             $orderproduct_userbon->userbonstatus_id = config("constants.USERBON_STATUS_ACTIVE");
-            if ($orderproduct_userbon->usedNumber >= 0)
+            if ($orderproduct_userbon->usedNumber >= 0) {
                 $orderproduct_userbon->update();
+            }
         }
 
         if ($orderproduct->delete()) {

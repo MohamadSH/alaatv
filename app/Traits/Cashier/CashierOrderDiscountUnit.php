@@ -8,7 +8,6 @@
 
 namespace App\Traits\Cashier;
 
-
 trait CashierOrderDiscountUnit
 {
     protected $orderDiscountCostAmount;
@@ -20,6 +19,7 @@ trait CashierOrderDiscountUnit
     public function setOrderDiscountCostAmount($orderDiscountCostAmount)
     {
         $this->orderDiscountCostAmount = $orderDiscountCostAmount;
+
         return $this;
     }
 

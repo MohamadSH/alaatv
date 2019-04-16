@@ -7,30 +7,30 @@ use Carbon\Carbon;
 /**
  * App\Coupon
  *
- * @property int                                                          $id
- * @property int|null                                                     $coupontype_id   آی دی مشخص کننده نوع کپن
- * @property int|null                                                     $discounttype_id نوع تخفیف
- * @property string|null                                                  $name            نام کپن
- * @property int                                                          $enable          فعال یا غیرفعال بودن کپن
+ * @property int $id
+ * @property int|null $coupontype_id   آی دی مشخص کننده نوع کپن
+ * @property int|null $discounttype_id نوع تخفیف
+ * @property string|null $name            نام کپن
+ * @property int $enable          فعال یا غیرفعال بودن کپن
  *           برای استفاده جدید
- * @property string|null                                                  $description     توضیحات کپن
- * @property string|null                                                  $code            کد کپن
- * @property float                                                        $discount        میزان تخفیف کپن به درصد
- * @property int|null                                                     $maxCost         بیشسینه قیمت مورد نیاز برای
+ * @property string|null $description     توضیحات کپن
+ * @property string|null $code            کد کپن
+ * @property float $discount        میزان تخفیف کپن به درصد
+ * @property int|null $maxCost         بیشسینه قیمت مورد نیاز برای
  *           استفاده از این کپن
- * @property int|null                                                     $usageLimit      حداکثر تعداد مجاز تعداد
+ * @property int|null $usageLimit      حداکثر تعداد مجاز تعداد
  *           استفاده از کپن - اگر نال باشد یعنی نامحدود
- * @property int                                                          $usageNumber     تعداد استفاده ها از کپن تا
+ * @property int $usageNumber     تعداد استفاده ها از کپن تا
  *           این لحظه
- * @property string|null                                                  $validSince      تاریخ شروع معتبر بودن کپن
- * @property string|null                                                  $validUntil      تاریخ پایان معتبر بودن کپن
- * @property \Carbon\Carbon|null                                          $created_at
- * @property \Carbon\Carbon|null                                          $updated_at
- * @property \Carbon\Carbon|null                                          $deleted_at
- * @property-read \App\Coupontype|null                                    $coupontype
- * @property-read \App\Discounttype|null                                  $discounttype
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[]    $marketers
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[]   $orders
+ * @property string|null $validSince      تاریخ شروع معتبر بودن کپن
+ * @property string|null $validUntil      تاریخ پایان معتبر بودن کپن
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \App\Coupontype|null $coupontype
+ * @property-read \App\Discounttype|null $discounttype
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $marketers
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[] $orders
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[] $products
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Coupon onlyTrashed()
@@ -65,7 +65,6 @@ use Carbon\Carbon;
  */
 class Coupon extends BaseModel
 {
-
     /*
     |--------------------------------------------------------------------------
     | Traits
@@ -116,9 +115,13 @@ class Coupon extends BaseModel
     ];
 
     const COUPON_VALIDATION_STATUS_OK = 0;
+
     const COUPON_VALIDATION_STATUS_DISABLED = 1;
+
     const COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN = 2;
+
     const COUPON_VALIDATION_STATUS_EXPIRED = 3;
+
     const COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED = 4;
 
     /*
@@ -185,17 +188,13 @@ class Coupon extends BaseModel
      */
     public function scopeValid($query)
     {
-        $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-        ->timezone('Asia/Tehran');
-        return $query
-            ->where(function ($q) use ($now) {
-                $q->where('validSince', '<', $now)
-                    ->orWhereNull('validSince');
-            })
-            ->where(function ($q) use ($now){
-                $q->where('validUntil', '>', $now)
-                    ->orWhereNull('validUntil');
-            });
+        $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
+
+        return $query->where(function ($q) use ($now) {
+            $q->where('validSince', '<', $now)->orWhereNull('validSince');
+        })->where(function ($q) use ($now) {
+            $q->where('validUntil', '>', $now)->orWhereNull('validUntil');
+        });
     }
 
     /**
@@ -205,8 +204,9 @@ class Coupon extends BaseModel
      * @param string $code
      * @return mixed
      */
-    public function scopeCode($query , string $code){
-        return $query->where('code' , $code);
+    public function scopeCode($query, string $code)
+    {
+        return $query->where('code', $code);
     }
 
     /*
@@ -224,14 +224,16 @@ class Coupon extends BaseModel
     {
 
         $validationStatus = Coupon::COUPON_VALIDATION_STATUS_OK;
-        if (!$this->isEnable()) {
+        if (! $this->isEnable()) {
             $validationStatus = Coupon::COUPON_VALIDATION_STATUS_DISABLED;
-        }elseif(!$this->hasPassedSinceTime()) {
+        } elseif (! $this->hasPassedSinceTime()) {
             $validationStatus = Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN;
-        }elseif(!$this->hasTimeToUntilTime()) {
+        } elseif (! $this->hasTimeToUntilTime()) {
             $validationStatus = Coupon::COUPON_VALIDATION_STATUS_EXPIRED;
-        } else if ($this->hasTotalNumberFinished()) {
-            $validationStatus = Coupon::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED;
+        } else {
+            if ($this->hasTotalNumberFinished()) {
+                $validationStatus = Coupon::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED;
+            }
         }
 
         return $validationStatus;
@@ -242,51 +244,55 @@ class Coupon extends BaseModel
      *
      * @return bool
      */
-    public function isEnable():bool
+    public function isEnable(): bool
     {
-        if($this->enable)
-            return true ;
-        else
+        if ($this->enable) {
+            return true;
+        } else {
             return false;
+        }
     }
 
     /**
      * Determines whether this coupon usage time has started or not
      *
-     *  @return bool
+     * @return bool
      */
-    public function hasPassedSinceTime():bool
+    public function hasPassedSinceTime(): bool
     {
-        if( !isset($this->validSince) || Carbon::now()->setTimezone("Asia/Tehran") >= $this->validSince)
+        if (! isset($this->validSince) || Carbon::now()->setTimezone("Asia/Tehran") >= $this->validSince) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     /**
      * Determines whether this coupon usage time has ended or not
      *
-     *  @return bool
+     * @return bool
      */
-    public function hasTimeToUntilTime():bool
+    public function hasTimeToUntilTime(): bool
     {
-        if( !isset($this->validUntil) || Carbon::now()->setTimezone("Asia/Tehran") <= $this->validUntil)
+        if (! isset($this->validUntil) || Carbon::now()->setTimezone("Asia/Tehran") <= $this->validUntil) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     /**
      * Determines whether this coupon total number has finished or not
      *
-     *  @return bool
+     * @return bool
      */
-    public function hasTotalNumberFinished():bool
+    public function hasTotalNumberFinished(): bool
     {
-        if(isset($this->usageLimit) && $this->usageNumber >= $this->usageLimit)
+        if (isset($this->usageLimit) && $this->usageNumber >= $this->usageLimit) {
             return true;
-        else
-            return false ;
+        } else {
+            return false;
+        }
     }
 
     public function getCouponTypeAttribute()
@@ -304,21 +310,24 @@ class Coupon extends BaseModel
      * @param Product $product
      * @return bool
      */
-    public function hasProduct(Product $product):bool
+    public function hasProduct(Product $product): bool
     {
         $flag = true;
         if ($this->coupontype->id == config("constants.COUPON_TYPE_PARTIAL")) {
             $couponProducts = $this->products;
             $flag = $couponProducts->contains($product);
         }
+
         return $flag;
     }
 
-    public function decreaseUseNumber(){
+    public function decreaseUseNumber()
+    {
         $this->usageNumber--;
     }
 
-    public function encreaseUserNumber(){
+    public function encreaseUserNumber()
+    {
         $this->usageNumber++;
     }
 

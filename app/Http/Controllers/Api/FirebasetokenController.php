@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Firebasetoken;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\InsertFireBaseTokenRequest;
 use App\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 
 class FirebasetokenController extends Controller
@@ -38,32 +38,33 @@ class FirebasetokenController extends Controller
      * @param User $user
      * @return \Illuminate\Contracts\Routing\ResponseFactory|Response
      */
-    public function store(InsertFireBaseTokenRequest $request , User $user = null)
+    public function store(InsertFireBaseTokenRequest $request, User $user = null)
     {
         $fireBaseToken = new Firebasetoken();
         $fireBaseToken->fill($request->all());
         $fireBaseToken->user_id = $user->id;
         $result = $fireBaseToken->save();
 
-        if($result)
+        if ($result) {
             $responseContent = [
-                'message'   =>  'Token saved successfully'
+                'message' => 'Token saved successfully',
             ];
-        else
+        } else {
             $responseContent = [
-                'error'  => [
-                    'code'   =>  Response::HTTP_SERVICE_UNAVAILABLE,
-                    'message'=>  'Database error'
-                ]
-            ] ;
+                'error' => [
+                    'code' => Response::HTTP_SERVICE_UNAVAILABLE,
+                    'message' => 'Database error',
+                ],
+            ];
+        }
 
-        return response($responseContent , Response::HTTP_OK);
+        return response($responseContent, Response::HTTP_OK);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -74,7 +75,7 @@ class FirebasetokenController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -85,8 +86,8 @@ class FirebasetokenController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -97,7 +98,7 @@ class FirebasetokenController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

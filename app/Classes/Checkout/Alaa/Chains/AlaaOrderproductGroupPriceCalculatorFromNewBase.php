@@ -19,19 +19,17 @@ class AlaaOrderproductGroupPriceCalculatorFromNewBase extends OrderproductGroupP
 {
     const MODE = OrderproductPriceCalculator::ORDERPRODUCT_CALCULATOR_MODE_CALCULATE_FROM_BASE;
 
-    protected function getOrderproductGroupPrice(Collection $orderproductsToCalculateFromBase):Collection
+    protected function getOrderproductGroupPrice(Collection $orderproductsToCalculateFromBase): Collection
     {
         /** @var OrderproductCollection $orderproductsToCalculateFromBase */
 
-        foreach ($orderproductsToCalculateFromBase as $orderproduct)
-        {
-            $priceInfo =  $this->getOrderproductPrice($orderproduct);
-            $orderproductsToCalculateFromBase->setNewPriceForItem($orderproduct , $priceInfo);
+        foreach ($orderproductsToCalculateFromBase as $orderproduct) {
+            $priceInfo = $this->getOrderproductPrice($orderproduct);
+            $orderproductsToCalculateFromBase->setNewPriceForItem($orderproduct, $priceInfo);
         }
 
-        return $orderproductsToCalculateFromBase ;
+        return $orderproductsToCalculateFromBase;
     }
-
 
     /**
      * Gets Orderproduct price
@@ -43,6 +41,7 @@ class AlaaOrderproductGroupPriceCalculatorFromNewBase extends OrderproductGroupP
     {
         $orderproductCalculator = new AlaaOrderproductPriceCalculator($orderproduct);
         $orderproductCalculator->setMode(self::MODE);
+
         return $orderproductCalculator->getPrice();
     }
 }

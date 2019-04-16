@@ -13,7 +13,7 @@ class ContentController extends Controller
      * Display the specified resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Content             $content
+     * @param \App\Content $content
      *
      * @return \Illuminate\Http\Response
      */
@@ -35,12 +35,11 @@ class ContentController extends Controller
             'message' => trans('content.Not Free'),
             'product' => $productsThatHaveThisContent->isEmpty() ? null : $productsThatHaveThisContent,
         ], Response::HTTP_FORBIDDEN);
-
     }
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param \App\Content             $content
+     * @param \App\Content $content
      *
      * @return bool
      */

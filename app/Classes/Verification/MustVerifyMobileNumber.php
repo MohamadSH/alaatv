@@ -8,7 +8,6 @@
 
 namespace App\Classes\Verification;
 
-
 interface MustVerifyMobileNumber
 {
     /**

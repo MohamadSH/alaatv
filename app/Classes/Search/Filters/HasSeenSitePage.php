@@ -8,12 +8,12 @@
 
 namespace App\Classes\Search\Filters;
 
-
 use Illuminate\Database\Eloquent\Builder;
 
 class HasSeenSitePage extends FilterAbstract
 {
     protected $attribute = 'hasseensitepage';
+
     protected $relation = "seensitepages";
 
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
@@ -22,5 +22,4 @@ class HasSeenSitePage extends FilterAbstract
             $q->whereIn("url", $value);
         });
     }
-
 }

@@ -14,18 +14,20 @@ use App\Order;
 
 class OrderCheckout extends CheckoutInvoker
 {
-    private $order ;
-    private $orderproductsToCalculateFromBaseIds;
-    private $recheckIncludedOrderproductsInCoupon;
+    private $order;
 
+    private $orderproductsToCalculateFromBaseIds;
+
+    private $recheckIncludedOrderproductsInCoupon;
 
     /**
      * OrderCheckout constructor.
+     *
      * @param Order $order
      * @param array $orderproductsToCalculateFromBaseIds
      * @param bool $recheckIncludedOrderproductsInCoupon
      */
-    public function __construct(Order $order , array $orderproductsToCalculateFromBaseIds = [] , $recheckIncludedOrderproductsInCoupon = false)
+    public function __construct(Order $order, array $orderproductsToCalculateFromBaseIds = [], $recheckIncludedOrderproductsInCoupon = false)
     {
         $this->order = $order;
         $this->orderproductsToCalculateFromBaseIds = $orderproductsToCalculateFromBaseIds;
@@ -35,7 +37,7 @@ class OrderCheckout extends CheckoutInvoker
     /**
      * @return array
      */
-    protected function fillChainArray():array
+    protected function fillChainArray(): array
     {
         $chainCells = [];
 
@@ -44,7 +46,7 @@ class OrderCheckout extends CheckoutInvoker
             $chainCells = ["AlaaOrderproductCouponChecker"];
         }
 
-        $chainCells = array_merge( $chainCells ,  [
+        $chainCells = array_merge($chainCells, [
             "AlaaOrderproductGroupPriceCalculatorFromNewBase",
             "AlaaOrderproductGroupPriceCalculatorFromRecord",
             "AlaaOrderproductSumCalculator",
@@ -54,39 +56,36 @@ class OrderCheckout extends CheckoutInvoker
             "AlaaOrderDiscountCostAmountCalculator",
             "AlaaOrderPayablePriceByWalletCalculator",
         ]);
+
         return $chainCells;
     }
 
-    protected function initiateCashier():Cashier
+    protected function initiateCashier(): Cashier
     {
         $orderproducts = $this->order->normalOrderproducts->sortByDesc("created_at");
         //Note: It is not cashier's duty to get orderproducts collection because
         //It will make a coupling between cashier and order. It is facade's duty to make cashier work
         //in the way it wants
-        $orderproductsToCalculateFromBase = $orderproducts->whereIn("id" , $this->orderproductsToCalculateFromBaseIds);
-        $orderproductsToCalculateFromRecord = $orderproducts->whereNotIn("id" , $this->orderproductsToCalculateFromBaseIds);
+        $orderproductsToCalculateFromBase = $orderproducts->whereIn("id", $this->orderproductsToCalculateFromBaseIds);
+        $orderproductsToCalculateFromRecord = $orderproducts->whereNotIn("id", $this->orderproductsToCalculateFromBaseIds);
 
-        $couponDiscountCostAmount = 0 ;
+        $couponDiscountCostAmount = 0;
         $couponDiscountPercentage = 0;
         $couponType = $this->order->coupon_discount_type;
-        if($couponType !== false)
-        {
-            if($couponType["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE"))
+        if ($couponType !== false) {
+            if ($couponType["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE")) {
                 $couponDiscountPercentage = $couponType["discount"] / 100;
-            elseif($couponType["type"] == config("constants.DISCOUNT_TYPE_COST"))
+            } elseif ($couponType["type"] == config("constants.DISCOUNT_TYPE_COST")) {
                 $couponDiscountCostAmount = $couponType["discount"];
+            }
         }
         $alaaCashier = new AlaaCashier();
-        $alaaCashier->setOrder($this->order)
-                    ->setOrderDiscountCostAmount($this->order->discount)
-                    ->setOrderCouponDiscountPercentage($couponDiscountPercentage)
-                    ->setOrderCouponDiscountCostAmount($couponDiscountCostAmount)
-                    ->setRawOrderproductsToCalculateFromBase($orderproductsToCalculateFromBase)
-                    ->setRawOrderproductsToCalculateFromRecord($orderproductsToCalculateFromRecord);
+        $alaaCashier->setOrder($this->order)->setOrderDiscountCostAmount($this->order->discount)->setOrderCouponDiscountPercentage($couponDiscountPercentage)->setOrderCouponDiscountCostAmount($couponDiscountCostAmount)->setRawOrderproductsToCalculateFromBase($orderproductsToCalculateFromBase)->setRawOrderproductsToCalculateFromRecord($orderproductsToCalculateFromRecord);
 
         //For the sake of reducing queries
-        if($this->order->coupon_id)
+        if ($this->order->coupon_id) {
             $alaaCashier->setOrderCoupon($this->order->coupon);
+        }
 
         return $alaaCashier;
     }

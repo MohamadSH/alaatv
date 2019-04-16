@@ -5,10 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Bankaccount;
 use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
-use App\Classes\Payment\RefinementRequest\Strategies\{ChargingWalletRefinement,
-    OpenOrderRefinement,
-    OrderIdRefinement,
-    TransactionRefinement};
+use App\Classes\Payment\RefinementRequest\Strategies\{ChargingWalletRefinement, OpenOrderRefinement, OrderIdRefinement, TransactionRefinement};
 use App\Http\Controllers\Controller;
 use App\Order;
 use App\Traits\HandleOrderPayment;
@@ -56,9 +53,7 @@ class OnlinePaymentController extends Controller
     public function paymentRedirect(string $paymentMethod, string $device, Request $request)
     {
         //ToDo: Should remove after adding unit test
-        /*$request->offsetSet('order_id', 137);*/
-        /*$request->offsetSet('transaction_id', 65);*/
-        /*$request->offsetSet('payByWallet', true);*/
+        /*$request->offsetSet('order_id', 137);*/ /*$request->offsetSet('transaction_id', 65);*/ /*$request->offsetSet('payByWallet', true);*/
 
         /*$request->offsetSet('walletId', 1);*/
         /*$request->offsetSet('walletChargingAmount', 50000);*/
@@ -81,33 +76,34 @@ class OnlinePaymentController extends Controller
         /** @var string $description */
         $description = $data['description'];
 
-        if($data['statusCode']!=Response::HTTP_OK) {
-            return $this->sendErrorResponse( $data['message'], Response::HTTP_OK);
+        if ($data['statusCode'] != Response::HTTP_OK) {
+            return $this->sendErrorResponse($data['message'], Response::HTTP_OK);
         }
 
         $description .= 'سابت آلاء - ';
 
         $description = $this->getTransactionDescription($description, $user, $order);
 
-        if($this->isPayingAnOrder($order)) {
+        if ($this->isPayingAnOrder($order)) {
             $this->setCustomerDescriptionForOrder($request, $order);
         }
 
-        if (!$this->canGoToGateWay($cost)) {
+        if (! $this->canGoToGateWay($cost)) {
             return $this->sendToOfflinePaymentProcess($device, $order);
         }
         //////////////zarin pal
         $redirectData = $this->interactWithZarinPal($paymentMethod, $device, $cost, $description, $transaction);
+
         //////////////zarin pal
         return view("order.checkout.gatewayRedirect", compact('redirectData'));
-
     }
 
     /**
      * @param int $cost
      * @return bool
      */
-    private function canGoToGateWay(int $cost) {
+    private function canGoToGateWay(int $cost)
+    {
         return ($cost > 0);
     }
 
@@ -127,7 +123,7 @@ class OnlinePaymentController extends Controller
      * @param string $description
      * @return array
      */
-    private function setAuthorityForTransaction(string $authority, int $transactiongatewayId, Transaction $transaction , string $description): array
+    private function setAuthorityForTransaction(string $authority, int $transactiongatewayId, Transaction $transaction, string $description): array
     {
         $data['destinationBankAccount_id'] = 1; // ToDo: Hard Code
         $data['authority'] = $authority;
@@ -135,6 +131,7 @@ class OnlinePaymentController extends Controller
         $data['paymentmethod_id'] = config('constants.PAYMENT_METHOD_ONLINE');
         $data['description'] = $description;
         $transactionModifyResult = $this->transactionController->modify($transaction, $data);
+
         return $transactionModifyResult;
     }
 
@@ -146,21 +143,26 @@ class OnlinePaymentController extends Controller
     {
         if (isset($inputData['transaction_id'])) { // closed order
             return new TransactionRefinement();
-        } else if (isset($inputData['order_id'])) { // closed order
-            return new OrderIdRefinement();
-        } else if (isset($inputData['walletId']) && isset($inputData['walletChargingAmount'])) { // Charging Wallet
-            return new ChargingWalletRefinement();
-        } else { // open order
-            return new OpenOrderRefinement();
+        } else {
+            if (isset($inputData['order_id'])) { // closed order
+                return new OrderIdRefinement();
+            } else {
+                if (isset($inputData['walletId']) && isset($inputData['walletChargingAmount'])) { // Charging Wallet
+                    return new ChargingWalletRefinement();
+                } else { // open order
+                    return new OpenOrderRefinement();
+                }
+            }
         }
     }
 
     /**********************************************************
      * VerifyPayment
-    ***********************************************************/
+     ***********************************************************/
 
     /**
      * Verify customer online payment after coming back from payment gateway
+     *
      * @param string $paymentMethod
      * @param string $device
      * @param Request $request
@@ -172,19 +174,18 @@ class OnlinePaymentController extends Controller
 
         $transaction = Transaction::authority($paymentData["Authority"])->first();
 
-        if(!isset($transaction)) {
+        if (! isset($transaction)) {
             return response()->json([
-                'error' => 'تراکنشی متناظر با شماره تراکنش ارسالی یافت نشد.'
+                'error' => 'تراکنشی متناظر با شماره تراکنش ارسالی یافت نشد.',
             ], Response::HTTP_BAD_REQUEST);
         }
 
         $gatewayResult = $this->buildZarinpalGateway($paymentMethod);
-        if(isset($gatewayResult['error']))
-        {
+        if (isset($gatewayResult['error'])) {
             return response()->json([
-                'message' => 'درگاه مورد نظر یافت نشد'
+                'message' => 'درگاه مورد نظر یافت نشد',
             ], Response::HTTP_BAD_REQUEST);
-        }else{
+        } else {
             /** @var ZarinpalComposer $gateway */
             $gateway = $gatewayResult['gatewayComposer'];
         }
@@ -192,7 +193,7 @@ class OnlinePaymentController extends Controller
         $verifyResult = [];
 
         $amount = $this->setDataForGatewayVerify($paymentMethod, $transaction);
-        $gatewayVerify = $this->verify($gateway ,$amount, $paymentData);
+        $gatewayVerify = $this->verify($gateway, $amount, $paymentData);
         $verifyResult['zarinpalVerifyResult'] = $gatewayVerify;
 
         if (isset($transaction->order_id)) {
@@ -205,14 +206,15 @@ class OnlinePaymentController extends Controller
                 $transaction->transactionstatus_id = config('constants.TRANSACTION_STATUS_UNSUCCESSFUL');
                 $transaction->update();
             }
-        } else if (isset($transaction->wallet_id)) {
-            if ($gatewayVerify['status']) {
-                $this->handleWalletChargingSuccessPayment($gatewayVerify['data']['RefID'], $transaction, $gatewayVerify['data']['cardPanMask']);
-            } else {
-                $this->handleWalletChargingCanceledPayment($transaction);
+        } else {
+            if (isset($transaction->wallet_id)) {
+                if ($gatewayVerify['status']) {
+                    $this->handleWalletChargingSuccessPayment($gatewayVerify['data']['RefID'], $transaction, $gatewayVerify['data']['cardPanMask']);
+                } else {
+                    $this->handleWalletChargingCanceledPayment($transaction);
+                }
             }
         }
-
 
 //        if ($result['status'] && isset($result['data']['order'])) {
 //            /** @var Order $order */
@@ -225,26 +227,26 @@ class OnlinePaymentController extends Controller
         $request->session()->flash('verifyResult', $verifyResult);
 
         return redirect(action('Web\OnlinePaymentController@showPaymentStatus', [
-            'status' => ($gatewayVerify['status'])?'successful':'failed',
+            'status' => ($gatewayVerify['status']) ? 'successful' : 'failed',
             'paymentMethod' => $paymentMethod,
-            'device' => $device
+            'device' => $device,
         ]));
     }
 
     /**
      * @param \App\Transaction $transaction
-     * @param string           $refId
-     * @param string|null      $cardPanMask
+     * @param string $refId
+     * @param string|null $cardPanMask
      */
     private function handleTransactionStatus(Transaction $transaction, string $refId, string $cardPanMask = null): void
     {
         $bankAccountId = null;
 
-        if(isset($cardPanMask)) {
+        if (isset($cardPanMask)) {
             $userId = optional($transaction->order)->user;
             $bankAccount = Bankaccount::firstOrCreate([
                 'accountNumber' => $cardPanMask,
-                'user_id'       => $userId,
+                'user_id' => $userId,
             ]);
             $bankAccountId = $bankAccount->id;
         }
@@ -261,8 +263,8 @@ class OnlinePaymentController extends Controller
     {
         $bankAccountId = null;
 
-        if(isset($cardPanMask)) {
-            $bankAccount = Bankaccount::firstOrCreate(['accountNumber'=>$cardPanMask]);
+        if (isset($cardPanMask)) {
+            $bankAccount = Bankaccount::firstOrCreate(['accountNumber' => $cardPanMask]);
             $bankAccountId = $bankAccount->id;
         }
 
@@ -299,15 +301,17 @@ class OnlinePaymentController extends Controller
      * @param Transaction $transaction
      * @return int
      */
-    private function setDataForGatewayVerify(string $paymentMethod, Transaction $transaction): int {
+    private function setDataForGatewayVerify(string $paymentMethod, Transaction $transaction): int
+    {
         switch ($paymentMethod) {
             case 'zarinpal':
-                $amount = isset($transaction->wallet_id)?($transaction->cost*-1):$transaction->cost;
+                $amount = isset($transaction->wallet_id) ? ($transaction->cost * -1) : $transaction->cost;
                 break;
             default:
                 // zarinpal
-                $amount = isset($transaction->wallet_id)?($transaction->cost*-1):$transaction->cost;
+                $amount = isset($transaction->wallet_id) ? ($transaction->cost * -1) : $transaction->cost;
         }
+
         return $amount;
     }
 
@@ -318,15 +322,15 @@ class OnlinePaymentController extends Controller
      * @param Request $request
      * @return void
      */
-    public function showPaymentStatus(string $status, string $paymentMethod, string $device, Request $request) {
+    public function showPaymentStatus(string $status, string $paymentMethod, string $device, Request $request)
+    {
         $result = $request->session()->pull('verifyResult');
 
-        if ($result!=null) {
-            return view("order.checkout.verification", compact('status' , 'paymentMethod', 'device', 'result'));
+        if ($result != null) {
+            return view("order.checkout.verification", compact('status', 'paymentMethod', 'device', 'result'));
         } else {
             return redirect(action('Web\UserController@userOrders'));
         }
-
     }
 
     /**
@@ -355,7 +359,11 @@ class OnlinePaymentController extends Controller
      */
     private function sendToOfflinePaymentProcess(string $device, Order $order)
     {
-        return redirect(action('Web\OfflinePaymentController@verifyPayment', ['device' => $device, 'paymentMethod' => 'wallet', 'coi' => (isset($order) ? $order->id : null)]));
+        return redirect(action('Web\OfflinePaymentController@verifyPayment', [
+            'device' => $device,
+            'paymentMethod' => 'wallet',
+            'coi' => (isset($order) ? $order->id : null),
+        ]));
     }
 
     /**
@@ -376,12 +384,11 @@ class OnlinePaymentController extends Controller
         $transactiongateway = $gatewayResult['transactiongateway'];
         $gateway = $gatewayResult['gatewayComposer'];
 
-
         $callbackUrl = action('Web\OnlinePaymentController@verifyPayment', ['paymentMethod' => $paymentMethod, 'device' => $device]);
 
         $authority = $this->paymentRequest($gateway, $callbackUrl, $cost, $description);
 
-        if (!isset($authority)) {
+        if (! isset($authority)) {
             throw new HttpResponseException($this->sendErrorResponse('پاسخی از بانک دریافت نشد', Response::HTTP_SERVICE_UNAVAILABLE));
         }
 
@@ -392,6 +399,7 @@ class OnlinePaymentController extends Controller
         }
 
         $redirectData = $this->getRedirectData($gateway->redirectUrl());
+
         return $redirectData;
     }
 }

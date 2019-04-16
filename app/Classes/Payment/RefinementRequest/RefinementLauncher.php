@@ -24,11 +24,8 @@ class RefinementLauncher
      * @param array $inputData
      * @return array: [statusCode, message, user, order, cost, donateCost, transaction]
      */
-    public function getData(array $inputData) {
-        return $this->refinement
-                ->setData($inputData)
-                ->validateData()
-                ->loadData()
-                ->getData();
+    public function getData(array $inputData)
+    {
+        return $this->refinement->setData($inputData)->validateData()->loadData()->getData();
     }
 }

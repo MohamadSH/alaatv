@@ -27,7 +27,7 @@ class SubmitCouponRequest extends FormRequest
     public function rules()
     {
         return [
-            'code'     => 'required|string',
+            'code' => 'required|string',
             'order_id' => 'required',
         ];
     }

@@ -12,7 +12,6 @@ use Illuminate\Support\ServiceProvider;
 
 class ComposerServiceProvider extends ServiceProvider
 {
-
     /**
      * Bootstrap services.
      *
@@ -37,7 +36,6 @@ class ComposerServiceProvider extends ServiceProvider
             $view->with(compact('closedSideBar'));
         });
 
-
         View::composer('partials.header1', 'App\Http\ViewComposers\HeaderComposer');
 
         /**
@@ -45,7 +43,7 @@ class ComposerServiceProvider extends ServiceProvider
          */
         View::composer([
 //            'pages.dashboard1',
-'partials.sidebar',
+            'partials.sidebar',
         ], function ($view) {
             $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getMainBlocks());
 //            $sections = collect();

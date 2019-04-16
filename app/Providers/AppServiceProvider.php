@@ -2,15 +2,7 @@
 
 namespace App\Providers;
 
-
-use App\{Adapter\AlaaSftpAdapter,
-    Content,
-    Contentset,
-    Observers\ContentObserver,
-    Observers\ProductObserver,
-    Observers\SetObserver,
-    Product,
-    Traits\UserCommon};
+use App\{Adapter\AlaaSftpAdapter, Content, Contentset, Observers\ContentObserver, Observers\ProductObserver, Observers\SetObserver, Product, Traits\UserCommon};
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\{Auth, Schema, Storage, Validator};
 use Illuminate\Support\ServiceProvider;
@@ -58,7 +50,6 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
         }
-
     }
 
     private function defineValidationRules(): void

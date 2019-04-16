@@ -5,13 +5,13 @@ namespace App;
 /**
  * App\Productfiletype
  *
- * @property int                                                              $id
- * @property string|null                                                      $name        نام نوع
- * @property string|null                                                      $displayName نام قابل نمایش نوع
- * @property string|null                                                      $description نام قابل نمایش نوع
- * @property \Carbon\Carbon|null                                              $created_at
- * @property \Carbon\Carbon|null                                              $updated_at
- * @property \Carbon\Carbon|null                                              $deleted_at
+ * @property int $id
+ * @property string|null $name        نام نوع
+ * @property string|null $displayName نام قابل نمایش نوع
+ * @property string|null $description نام قابل نمایش نوع
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Productfile[] $productfiles
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Productfiletype onlyTrashed()
@@ -48,10 +48,10 @@ class Productfiletype extends BaseModel
      */
     public static function makeSelectArray(): array
     {
-        $productFileTypes = Productfiletype::pluck('displayName', 'id')
-                                           ->toArray();
+        $productFileTypes = Productfiletype::pluck('displayName', 'id')->toArray();
         $productFileTypes = array_add($productFileTypes, 0, "انتخاب کنید");
         $productFileTypes = array_sort_recursive($productFileTypes);
+
         return $productFileTypes;
     }
 
@@ -68,6 +68,7 @@ class Productfiletype extends BaseModel
     {
         $explodedDateTime = explode(" ", $this->validSince);
         $explodedTime = $explodedDateTime[1];
-        return $this->convertDate($this->validSince, "toJalali") . " " . $explodedTime;
+
+        return $this->convertDate($this->validSince, "toJalali")." ".$explodedTime;
     }
 }

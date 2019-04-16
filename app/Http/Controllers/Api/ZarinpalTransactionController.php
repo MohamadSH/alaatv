@@ -45,13 +45,15 @@ class ZarinpalTransactionController extends Controller
         $orderId = $request->get('order_id');
         $refId = $request->get('refId');
         $initialDescription = $request->get('description', '');
-        if (strlen($initialDescription) > 0)
+        if (strlen($initialDescription) > 0) {
             $initialDescription .= ' - ';
+        }
 
-        if ($request->has('openOrder'))
+        if ($request->has('openOrder')) {
             $order = $request->get('openOrder');
-        else
+        } else {
             $order = Order::findorfail($orderId);
+        }
 
         $gatewayResult = $this->buildZarinpalGateway(self::GATE_WAY_NAME, false);
         $gateway = $gatewayResult['gatewayComposer'];
@@ -67,44 +69,44 @@ class ZarinpalTransactionController extends Controller
                 $refIdStatus = Response::HTTP_OK;
             }
 
-        if ($refIdStatus == Response::HTTP_OK) {
-            $description = 'اپ آلاء - ' . $initialDescription;
-            $description = $this->setTransactionDescription($description, optional($order)->user, $order);
-            $transaction = $this->getNewTransaction($amount, $orderId, $transactionGateway->id, $description, $paymentData['Authority'], $refId);
-            if (isset($transaction)) {
-                $verifyResult['OrderSuccessPaymentResult'] = $this->handleOrderSuccessPayment($transaction->order);
-                $resultCode = Response::HTTP_OK;
-            } else {
-                $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
-                $message = 'Database error on inserting transaction';
+            if ($refIdStatus == Response::HTTP_OK) {
+                $description = 'اپ آلاء - '.$initialDescription;
+                $description = $this->setTransactionDescription($description, optional($order)->user, $order);
+                $transaction = $this->getNewTransaction($amount, $orderId, $transactionGateway->id, $description, $paymentData['Authority'], $refId);
+                if (isset($transaction)) {
+                    $verifyResult['OrderSuccessPaymentResult'] = $this->handleOrderSuccessPayment($transaction->order);
+                    $resultCode = Response::HTTP_OK;
+                } else {
+                    $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
+                    $message = 'Database error on inserting transaction';
+                }
             }
-        }
         } else {
             $resultCode = Response::HTTP_BAD_REQUEST;
             $message = 'Unverified transaction';
 //            $verifyResult['OrderCanceledPaymentResult'] = $this->handleOrderCanceledPayment($transaction);
         }
 
-        if ($resultCode != Response::HTTP_OK)
+        if ($resultCode != Response::HTTP_OK) {
             $responseContent = [
                 'error' => [
-                    'code'    => $resultCode,
+                    'code' => $resultCode,
                     'message' => $message ?? $message,
                 ],
             ];
-        else
+        } else {
             $responseContent = [
                 'message' => 'Transaction saved successfully',
             ];
+        }
 
         return response($responseContent, Response::HTTP_OK);
     }
 
-
     /**
-     * @param int    $cost
-     * @param int    $orderId
-     * @param int    $transactionGatewayId
+     * @param int $cost
+     * @param int $orderId
+     * @param int $transactionGatewayId
      * @param string $description
      * @param string $authority
      *
@@ -125,9 +127,10 @@ class ZarinpalTransactionController extends Controller
         $data['transactiongateway_id'] = $transactionGatewayId;
         $data['completed_at'] = Carbon::now()->setTimezone('Asia/Tehran');
         $result = $this->transactionController->new($data);
-        if ($result['statusCode'] == Response::HTTP_OK)
+        if ($result['statusCode'] == Response::HTTP_OK) {
             return $result['transaction'];
-        else
+        } else {
             return null;
+        }
     }
 }

@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Tag;
 
-
 use App\Classes\Search\RedisTagManagerViaApi;
 
 class ContentsetTagManagerViaApi extends RedisTagManagerViaApi

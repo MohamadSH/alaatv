@@ -17,22 +17,27 @@ class LotteryWinner extends Notification implements ShouldQueue
     use Queueable, SerializesModels;
 
     public $timeout = 120;
+
     /**
      * @var int
      */
     protected $rank;
+
     /**
      * @var string
      */
     protected $prize;
+
     /**
      * @var string
      */
     protected $memorial;
+
     /**
      * @var Lottery
      */
     protected $lottery;
+
     /**
      * @var User
      */
@@ -57,13 +62,14 @@ class LotteryWinner extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
     public function via($notifiable)
     {
         $this->user = $notifiable;
+
         return [
             MedianaChannel::class,
         ];
@@ -76,10 +82,7 @@ class LotteryWinner extends Notification implements ShouldQueue
      */
     public function toMediana($notifiable)
     {
-
-        return (new MedianaMessage())
-            ->content($this->msg())
-            ->sendAt(Carbon::now());
+        return (new MedianaMessage())->content($this->msg())->sendAt(Carbon::now());
     }
 
     private function msg(): string
@@ -90,20 +93,19 @@ class LotteryWinner extends Notification implements ShouldQueue
         $memorial = $this->memorial;
         $gender = $this->getGender();
 
-        if (strlen($prize) > 0)
-            $messageCore = "شما برنده " . $rank . " در قرعه کشی " . $lotteryName . " شده اید. جایزه شما " . $prize . " می باشد و در سریع ترین زمان به شما تقدیم خواهد شد.";
-        else if (strlen($memorial) > 0)
-            $messageCore = "شما در قرعه کشی " . $lotteryName . " شرکت داده شدید و متاسفانه چیزی برنده نشدید. به رسم یادبود " . $memorial . " تقدیمتان شده است.";
-        else
-            $messageCore = "شما در قرعه کشی " . $lotteryName . " شرکت داده شدید و متاسفانه برنده نشدید.";
+        if (strlen($prize) > 0) {
+            $messageCore = "شما برنده ".$rank." در قرعه کشی ".$lotteryName." شده اید. جایزه شما ".$prize." می باشد و در سریع ترین زمان به شما تقدیم خواهد شد.";
+        } else {
+            if (strlen($memorial) > 0) {
+                $messageCore = "شما در قرعه کشی ".$lotteryName." شرکت داده شدید و متاسفانه چیزی برنده نشدید. به رسم یادبود ".$memorial." تقدیمتان شده است.";
+            } else {
+                $messageCore = "شما در قرعه کشی ".$lotteryName." شرکت داده شدید و متاسفانه برنده نشدید.";
+            }
+        }
 
-        $messageCore = $messageCore
-            . "\n"
-            . "آلاء"
-            . "\n"
-            . "sanatisharif.ir";
+        $messageCore = $messageCore."\n"."آلاء"."\n"."sanatisharif.ir";
 
-        return "سلام " . $gender . $this->user->full_name . "\n" . $messageCore;
+        return "سلام ".$gender.$this->user->full_name."\n".$messageCore;
     }
 
     /**

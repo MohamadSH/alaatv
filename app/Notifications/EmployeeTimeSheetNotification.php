@@ -16,18 +16,23 @@ class EmployeeTimeSheetNotification extends Notification implements ShouldQueue
     use Queueable, SerializesModels;
 
     const MEDIANA_PATTERN_CODE_EMPLOYEE_TIME_SHEET = 0;
+
     public $timeout = 120;
 
     /**
      * @var User
      */
     protected $user;
-    private   $date;
-    private   $in;
-    private   $out;
-    private   $mh;
-    private   $eh;
 
+    private $date;
+
+    private $in;
+
+    private $out;
+
+    private $mh;
+
+    private $eh;
 
     /**
      * EmployeeTimeSheetNotification constructor.
@@ -47,17 +52,17 @@ class EmployeeTimeSheetNotification extends Notification implements ShouldQueue
         $this->eh = $eh;
     }
 
-
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
     public function via($notifiable)
     {
         $this->user = $notifiable;
+
         return [
             MedianaPatternChannel::class,
 
@@ -71,24 +76,12 @@ class EmployeeTimeSheetNotification extends Notification implements ShouldQueue
      */
     public function toMediana($notifiable)
     {
-        return (new MedianaMessage())
-            ->content($this->msg())
-            ->setInputData($this->getInputData())
-            ->setPatternCode(self::MEDIANA_PATTERN_CODE_EMPLOYEE_TIME_SHEET)
-            ->sendAt(Carbon::now());
+        return (new MedianaMessage())->content($this->msg())->setInputData($this->getInputData())->setPatternCode(self::MEDIANA_PATTERN_CODE_EMPLOYEE_TIME_SHEET)->sendAt(Carbon::now());
     }
 
     private function msg(): string
     {
-        $messageCore = "سلام " . $this->user->firstName . " جان"
-            . "\n"
-            . $this->date
-            . "\n"
-            . "از" . " " . $this->in . " " . "تا" . $this->out
-            . "\n"
-            . "موظفی" . " " . $this->mh
-            . "\n"
-            . "اضافه" . " " . $this->eh;
+        $messageCore = "سلام ".$this->user->firstName." جان"."\n".$this->date."\n"."از"." ".$this->in." "."تا".$this->out."\n"."موظفی"." ".$this->mh."\n"."اضافه"." ".$this->eh;
 
         return $messageCore;
     }
@@ -97,10 +90,10 @@ class EmployeeTimeSheetNotification extends Notification implements ShouldQueue
     {
         return [
             'user' => $this->user->firstName,
-            'in'   => $this->in,
-            'out'  => $this->out,
-            'mh'   => $this->mh,
-            'eh'   => $this->eh,
+            'in' => $this->in,
+            'out' => $this->out,
+            'mh' => $this->mh,
+            'eh' => $this->eh,
             'date' => $this->date,
         ];
     }

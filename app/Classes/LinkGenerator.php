@@ -8,7 +8,6 @@
 
 namespace App\Classes;
 
-
 use App\Adapter\AlaaSftpAdapter;
 use App\File;
 use Illuminate\Support\Facades\Log;
@@ -23,9 +22,13 @@ use League\Flysystem\FileNotFoundException;
 class LinkGenerator
 {
     protected const DOWNLOAD_CONTROLLER_NAME = "Web\\HomeController@newDownload";
+
     protected $uuid;
+
     protected $disk;
+
     protected $url;
+
     protected $fileName;
 
     /**
@@ -35,10 +38,7 @@ class LinkGenerator
      */
     public function __construct(\stdClass $file)
     {
-        $this->setDisk($file->disk)
-             ->setUuid($file->uuid)
-             ->setUrl($file->url)
-             ->setFileName($file->fileName);
+        $this->setDisk($file->disk)->setUuid($file->uuid)->setUrl($file->url)->setFileName($file->fileName);
     }
 
     /**
@@ -49,6 +49,7 @@ class LinkGenerator
     public function setFileName($fileName)
     {
         $this->fileName = $fileName;
+
         return $this;
     }
 
@@ -60,6 +61,7 @@ class LinkGenerator
     public function setUrl($url)
     {
         $this->url = $url;
+
         return $this;
     }
 
@@ -71,6 +73,7 @@ class LinkGenerator
     public function setUuid($uuid)
     {
         $this->uuid = $uuid;
+
         return $this;
     }
 
@@ -82,6 +85,7 @@ class LinkGenerator
     public function setDisk($disk)
     {
         $this->disk = $disk;
+
         return $this;
     }
 
@@ -101,15 +105,18 @@ class LinkGenerator
         //        dd("0");
         $input->disk = null;
         //        dd("1");
-        if (isset($disk))
+        if (isset($disk)) {
             $input->disk = $disk;
-        else if (isset($uuid)) {
-            $input->disk = self::findDiskNameFromUUID($uuid);
+        } else {
+            if (isset($uuid)) {
+                $input->disk = self::findDiskNameFromUUID($uuid);
+            }
         }
         //        dd("2");
         $input->uuid = $uuid;
         $input->url = $url;
         $input->fileName = $fileName;
+
         //        dd($input);
         return new LinkGenerator($input);
     }
@@ -121,14 +128,14 @@ class LinkGenerator
      */
     private static function findDiskNameFromUUID($uuid)
     {
-        $file = File::where("uuid", $uuid)
-                    ->get();
+        $file = File::where("uuid", $uuid)->get();
         if ($file->isNotEmpty() && $file->count() == 1) {
             $file = $file->first();
             if ($file->disks->isNotEmpty()) {
                 return $file->disks->first()->name;
             }
         }
+
         return null;
     }
 
@@ -140,27 +147,27 @@ class LinkGenerator
      */
     public function getLinks(array $paid = null)
     {
-        if (isset($this->url))
+        if (isset($this->url)) {
             return $this->url;
+        }
         if (isset($this->disk) && isset($this->fileName)) {
 
             //            dd("here");
-            $diskAdapter = Storage::disk($this->disk)
-                                  ->getAdapter();
+            $diskAdapter = Storage::disk($this->disk)->getAdapter();
             //            dd($diskAdapter);
             $url = $this->fetchUrl($diskAdapter, $this->fileName);
             if (isset($paid)) {
                 $data = encrypt([
-                    "url"  => $url,
+                    "url" => $url,
                     "data" => $paid,
                 ]);
-                return action(self::DOWNLOAD_CONTROLLER_NAME, $data);
 
+                return action(self::DOWNLOAD_CONTROLLER_NAME, $data);
             } else {
                 return $url;
             }
         } else {
-            throw new \Exception("DiskName and FileName should be set \n File uuid=" . $this->uuid);
+            throw new \Exception("DiskName and FileName should be set \n File uuid=".$this->uuid);
         }
     }
 
@@ -170,12 +177,13 @@ class LinkGenerator
             return $diskAdapter->getUrl($fileName);
         } catch (\Exception $exception) {
             Log::error(json_encode([
-                "message"  => "fetchUrl failed!",
-                "error"    => $exception->getMessage(),
-                "line"     => $exception->getLine(),
-                "file"     => $exception->getFile(),
+                "message" => "fetchUrl failed!",
+                "error" => $exception->getMessage(),
+                "line" => $exception->getLine(),
+                "file" => $exception->getFile(),
                 'fileName' => $fileName,
             ], JSON_UNESCAPED_UNICODE));
+
             return null;
         }
     }
@@ -186,8 +194,7 @@ class LinkGenerator
     private function stream()
     {
         $f = $this;
-        $fs = Storage::disk($f->disk)
-                     ->getDriver();
+        $fs = Storage::disk($f->disk)->getDriver();
         try {
             $stream = $fs->readStream($f->fileName);
             $result = [
@@ -196,11 +203,10 @@ class LinkGenerator
         } catch (FileNotFoundException $e) {
             $result = [
                 "read-stream" => null,
-                "exception"   => $e,
+                "exception" => $e,
             ];
         }
 
         return $result;
     }
-
 }

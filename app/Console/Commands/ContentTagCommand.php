@@ -16,14 +16,17 @@ class ContentTagCommand extends Command
      * @var string
      */
     protected $signature = 'alaaTv:seed:tag:content {content : The ID of the content}';
+
     use TaggableTrait;
+
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'add Tags for a Content';
-    private   $tagging;
+
+    private $tagging;
 
     /**
      * ContentTagCommand constructor.
@@ -47,12 +50,12 @@ class ContentTagCommand extends Command
         if ($contentId > 0) {
             try {
                 $content = Content::findOrFail($contentId);
-            }
-            catch (ModelNotFoundException $exception) {
+            } catch (ModelNotFoundException $exception) {
                 $this->error($exception->getMessage());
+
                 return;
             }
-            if ($this->confirm('You have chosen\n\r ' . $content->display_name . '. \n\rDo you wish to continue?', true)) {
+            if ($this->confirm('You have chosen\n\r '.$content->display_name.'. \n\rDo you wish to continue?', true)) {
                 $this->performTaggingTaskForAContent($content);
             }
         } else {

@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Validator;
 
-
 class RegisterController extends Controller
 {
     /*
@@ -57,7 +56,7 @@ class RegisterController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array $data
+     * @param array $data
      *
      * @return \Illuminate\Contracts\Validation\Validator
      */
@@ -65,7 +64,7 @@ class RegisterController extends Controller
     {
         $totalUserrules = $this->getInsertUserValidationRules($data);
         $rules = [
-            "mobile"       => $totalUserrules["mobile"],
+            "mobile" => $totalUserrules["mobile"],
             "nationalCode" => $totalUserrules["nationalCode"],
         ];
 
@@ -76,24 +75,24 @@ class RegisterController extends Controller
     {
 //        dd(array_get($data,'password'));
         return User::create([
-            'firstName'     => array_get($data, 'firstName'),
-            'lastName'      => array_get($data, 'lastName'),
-            'mobile'        => array_get($data, 'mobile'),
-            'email'         => array_get($data, 'email'),
-            'nationalCode'  => array_get($data, 'nationalCode'),
+            'firstName' => array_get($data, 'firstName'),
+            'lastName' => array_get($data, 'lastName'),
+            'mobile' => array_get($data, 'mobile'),
+            'email' => array_get($data, 'email'),
+            'nationalCode' => array_get($data, 'nationalCode'),
             'userstatus_id' => 1,
-            'photo'         => array_get($data, 'photo', config('constants.PROFILE_DEFAULT_IMAGE')),
-            'password'      => bcrypt(array_get($data, 'password', array_get($data, 'nationalCode'))),
-            'major_id'      => array_get($data, 'major_id'),
-            'gender_id'     => array_get($data, 'gender_id'),
+            'photo' => array_get($data, 'photo', config('constants.PROFILE_DEFAULT_IMAGE')),
+            'password' => bcrypt(array_get($data, 'password', array_get($data, 'nationalCode'))),
+            'major_id' => array_get($data, 'major_id'),
+            'gender_id' => array_get($data, 'gender_id'),
         ]);
     }
 
     /**
      * The user has been registered.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  mixed                    $user
+     * @param \Illuminate\Http\Request $request
+     * @param mixed $user
      *
      * @return mixed
      */
@@ -104,11 +103,12 @@ class RegisterController extends Controller
             $data = array_merge([
                 'user' => $user,
             ], $token);
+
             return response()->json([
-                'status'     => 1,
-                'msg'        => 'user registered',
+                'status' => 1,
+                'msg' => 'user registered',
                 'redirectTo' => $this->redirectTo($request),
-                'data'       => $data,
+                'data' => $data,
             ], Response::HTTP_OK);
         }
     }

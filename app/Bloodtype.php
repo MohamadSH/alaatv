@@ -5,9 +5,9 @@ namespace App;
 /**
  * App\Bloodtype
  *
- * @property int                 $id
- * @property string              $name        نام
- * @property string|null         $displayName نام قابل نمایش
+ * @property int $id
+ * @property string $name        نام
+ * @property string|null $displayName نام قابل نمایش
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
@@ -31,10 +31,8 @@ namespace App;
  */
 class Bloodtype extends BaseModel
 {
-
     protected $fillable = [
         'name',
         'displayName',
     ];
-
 }
