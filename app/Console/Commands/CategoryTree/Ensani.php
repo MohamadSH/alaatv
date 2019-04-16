@@ -34774,10 +34774,7 @@ class Ensani extends GetTree
 
     public function getLernitoStyle()
     {
-        return $this->treeToLernitoJson($this->getTree());
-    }
-
-    public function getLastUpdatedByLernito(): array {
+        /*return $this->treeToLernitoJson($this->getTree());*/
         $tree = $this->getTree();
         $ensaniLernitoStyle = [
             $tree[1],
@@ -34787,12 +34784,14 @@ class Ensani extends GetTree
             $tree[0]['children'][1],
             $tree[0]['children'][2]
         ];
+        return $ensaniLernitoStyle;
+    }
 
+    public function getLastUpdatedByLernito(): array {
+        $ensaniLernitoStyle = $this->getLernitoStyle();
         $lernitoTotalTree = new lernitoTotalTree();
         $lernitoTree = $lernitoTotalTree->getTree();
         $lernitoTree = $lernitoTree[1]['children'][2]['children'];
-
-//        return $lernitoTree;
         return $this->compareWithLernito($lernitoTree, $ensaniLernitoStyle);
     }
 }
