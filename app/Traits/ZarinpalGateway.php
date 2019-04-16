@@ -33,34 +33,6 @@ trait ZarinpalGateway
     ];
 
     /**
-     * @param $gatewayComposer
-     * @param string $callbackUrl
-     * @param int $amount
-     * @param string $description
-     * @return string
-     */
-    public function paymentRequest(ZarinpalComposer $gatewayComposer, string $callbackUrl, int $amount, string $description): string
-    {
-        $zarinpalResponse = $gatewayComposer->request($callbackUrl, $amount, $description);
-        $authority = $zarinpalResponse['Authority'];
-
-        return isset($authority[0]) ? $authority : null;
-    }
-
-    /**
-     * @param string $redirectUrl
-     * @return array
-     */
-    public function getRedirectData(string $redirectUrl): array
-    {
-        return [
-            'url' => $redirectUrl,
-            'input' => [],
-            'method' => 'GET',
-        ];
-    }
-
-    /**
      * @param ZarinpalComposer $gatewayComposer
      * @param int $amount
      * @param array $paymentData
@@ -75,65 +47,6 @@ trait ZarinpalGateway
         $result['__zarinpalVerifyResult'] = $gatewayResult;
 
         return $result;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function isZarinpalSandboxOn(): bool
-    {
-        return config('app.env', 'deployment') != 'deployment' && config('Zarinpal.Sandbox', false);
-    }
-
-    /**
-     * @return \Illuminate\Config\Repository|mixed
-     */
-    protected function isZarinGateOn(): bool
-    {
-        return config('Zarinpal.ZarinGate', false);
-    }
-
-    /**
-     * @param string $paymentMethod
-     *
-     * @param bool $withSandBox
-     *
-     * @return mixed
-     */
-    protected function buildZarinpalGateway(string $paymentMethod, bool $withSandBox = true)
-    {
-        $key = 'transactiongateway:Zarinpal';
-        $transactiongateway = $this->getGateWayCredentials($paymentMethod, $key);
-
-        if (! isset($transactiongateway)) {
-            return ['error' => ['message' => 'Could not find gate way', 'code' => Response::HTTP_BAD_REQUEST,],];
-        }
-
-        $gatewayComposer = new ZarinpalComposer($transactiongateway->merchantNumber);
-        if ($this->isZarinpalSandboxOn() && $withSandBox) {
-            $gatewayComposer->enableSandbox();
-        }
-
-        if ($this->isZarinGateOn()) {
-            $gatewayComposer->isZarinGate();
-        }
-
-        return [
-            'transactiongateway' => $transactiongateway,
-            'gatewayComposer' => $gatewayComposer,
-        ];
-    }
-
-    /**
-     * @param string $paymentMethod
-     * @param string $key
-     * @return mixed
-     */
-    protected function getGateWayCredentials(string $paymentMethod, string $key): mixed
-    {
-        return Cache::remember($key, config('constants.CACHE_600'), function () use ($paymentMethod) {
-            return Transactiongateway::name('zarinpal', $paymentMethod)->first();
-        });
     }
 
     /**
