@@ -2,7 +2,6 @@
 
 namespace App\Notifications;
 
-
 use App\Broadcasting\MedianaPatternChannel;
 use App\Classes\sms\MedianaMessage;
 use App\Order;
@@ -18,7 +17,9 @@ class InvoicePaid extends Notification implements ShouldQueue
     use Queueable, SerializesModels;
 
     protected const MEDIANA_PATTERN_CODE_INVOICE_PAID = 800;
+
     public $timeout = 120;
+
     /**
      * @var Order
      */
@@ -37,7 +38,7 @@ class InvoicePaid extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
@@ -56,52 +57,50 @@ class InvoicePaid extends Notification implements ShouldQueue
     public function toMediana($notifiable)
     {
 
-        return (new MedianaMessage())
-            ->content($this->msg())
-            ->setInputData($this->getInputData())
-            ->setPatternCode(self::MEDIANA_PATTERN_CODE_INVOICE_PAID)
-            ->sendAt(Carbon::now());
+        return (new MedianaMessage())->content($this->msg())->setInputData($this->getInputData())->setPatternCode(self::MEDIANA_PATTERN_CODE_INVOICE_PAID)->sendAt(Carbon::now());
     }
 
     private function msg(): string
     {
         $user = $this->getInvoiceUser();
-        if (isset($user->gender_id)) {
-            if ($user->gender->name == "خانم")
-                $gender = "خانم ";
-            else if ($user->gender->name == "آقا")
-                $gender = "آقای ";
-            else
-                $gender = "";
-        } else {
-            $gender = "";
-        }
-        $messageCore = "سفارش شما با موفقیت ثبت شد."
-            . "\n"
-            . "شماره سفارش:"
-            . "\n"
-            . $this->invoice->id
-            . "\n"
-            . "پشتیبانی:"
-            . "\n"
-            . "https://goo.gl/jme5VU";
-        $message = "سلام " . $gender . $user->full_name . "\n" . $messageCore;
+
+        return $this->getGender($user);
+
+        $messageCore = "سفارش شما با موفقیت ثبت شد."."\n"."شماره سفارش:"."\n".$this->invoice->id."\n"."پشتیبانی:"."\n"."https://goo.gl/jme5VU";
+        $message = "سلام ".$gender.$user->full_name."\n".$messageCore;
 
         return $message;
     }
 
     private function getInvoiceUser(): User
     {
-        $user = $this->invoice->user;
-        return $user;
+        return $this->invoice->user;
     }
 
     private function getInputData(): array
     {
         return [
-            'code'                   => $this->invoice->id,
+            'code' => $this->invoice->id,
             "https://goo.gl/jme5VU " => "https://goo.gl/jme5VU",
         ];
     }
 
+    /**
+     * @param \App\User $user
+     * @return string
+     */
+    private function getGender(User $user): string
+    {
+        if (! isset($user->gender_id)) {
+            return "";
+        }
+        if ($user->gender->name == "خانم") {
+            return "خانم ";
+        }
+        if ($user->gender->name == "آقا") {
+            return "آقای ";
+        }
+
+        return "";
+    }
 }

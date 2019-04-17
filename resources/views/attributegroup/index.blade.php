@@ -1,4 +1,4 @@
-@permission((Config::get('constants.LIST_ATTRIBUTEGROUP_ACCESS')))
+@permission((config('constants.LIST_ATTRIBUTEGROUP_ACCESS')))
 @foreach($attributegroups as $attributegroup)
     <tr>
         <th></th>
@@ -29,13 +29,13 @@
                     <i class="fa fa-angle-down"></i>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    @permission((Config::get('constants.SHOW_ATTRIBUTEGROUP_ACCESS')))
+                    @permission((config('constants.SHOW_ATTRIBUTEGROUP_ACCESS')))
                     <li>
                         <a href = "{{action("Web\AttributegroupController@edit" , $attributegroup)}}">
                             <i class="fa fa-pencil"></i> اصلاح </a>
                     </li>
                     @endpermission
-                    @permission((Config::get('constants.REMOVE_ATTRIBUTEGROUP_ACCESS')))
+                    @permission((config('constants.REMOVE_ATTRIBUTEGROUP_ACCESS')))
                     <li>
                         <a data-target="#static-{{$attributegroup->id}}" data-toggle="modal">
                             <i class="fa fa-remove"></i> حذف </a>
@@ -45,19 +45,24 @@
                 </ul>
                 <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
                 <!-- static -->
-                @permission((Config::get('constants.REMOVE_ATTRIBUTEGROUP_ACCESS')))
-                <div id="static-{{$attributegroup->id}}" class="modal fade" tabindex="-1" data-backdrop="static"
-                     data-keyboard="false">
-                    <div class="modal-body">
-                        <p> آیا مطمئن هستید؟ </p>
+                @permission((config('constants.REMOVE_ATTRIBUTEGROUP_ACCESS')))
+
+                    <!--begin::Modal-->
+                    <div class="modal fade" id="static-{{$attributegroup->id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <p> آیا مطمئن هستید؟ </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="removeAttributegroup('{{action("Web\AttributegroupController@destroy" , $attributegroup)}}');">بله</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                        <button type="button" data-dismiss="modal" class="btn green" onclick = "removeAttributegroup('{{action("Web\AttributegroupController@destroy" , $attributegroup)}}');">
-                            بله
-                        </button>
-                    </div>
-                </div>
+                    <!--end::Modal-->
+
                 @endpermission
             </div>
         </td>

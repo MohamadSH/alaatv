@@ -17,7 +17,9 @@ class MobileVerified extends Notification implements ShouldQueue
     use Queueable, SerializesModels;
 
     const MEDIANA_PATTERN_CODE_USER_MOBILE_VERIFIED = 817;
+
     public $timeout = 120;
+
     /**
      * @var User
      */
@@ -26,39 +28,35 @@ class MobileVerified extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
     public function via($notifiable)
     {
         $this->user = $notifiable;
+
         return [
             MedianaPatternChannel::class,
             'mail',
         ];
-
     }
 
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed $notifiable
+     * @param mixed $notifiable
      *
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-            ->line($this->msg())
-            ->action('برو به سایت آلاء', url('/'));
+        return (new MailMessage)->line($this->msg())->action('برو به سایت آلاء', url('/'));
     }
 
     private function msg(): string
     {
-        $messageCore = "آلایی عزیز، شماره موبایل شما در آلاء تایید شد.";
-        $message = $messageCore;
-        return $message;
+        return "آلایی عزیز، شماره موبایل شما در آلاء تایید شد.";
     }
 
     /**
@@ -68,11 +66,7 @@ class MobileVerified extends Notification implements ShouldQueue
      */
     public function toMediana($notifiable)
     {
-        return (new MedianaMessage())
-            ->content($this->msg())
-            ->setInputData($this->getInputData())
-            ->setPatternCode(self::MEDIANA_PATTERN_CODE_USER_MOBILE_VERIFIED)
-            ->sendAt(Carbon::now());
+        return (new MedianaMessage())->content($this->msg())->setInputData($this->getInputData())->setPatternCode(self::MEDIANA_PATTERN_CODE_USER_MOBILE_VERIFIED)->sendAt(Carbon::now());
     }
 
     private function getInputData(): array

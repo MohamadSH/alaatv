@@ -1,13 +1,6 @@
-@extends("app" , ["pageName" => "profile"])
-
-@section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-sweetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
-@endsection
+@extends('app' , ['pageName' => 'profile'])
 
 @section('pageBar')
-
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
@@ -19,15 +12,10 @@
             </li>
         </ol>
     </nav>
-
 @endsection
 
 @section('page-css')
     <link href="{{ mix('/css/user-profile.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/css/page-user-profile.css') }}" rel="stylesheet" type="text/css"/>
-
-
-
 @endsection
 
 @section('content')
@@ -73,7 +61,7 @@
                 "text2"=>"کاربر گرامی ، پس از تکمیل تمام اطلاعا پروفایل شما قفل شده و امکان اصلاح اطلاعات وجود نخواهد داشت. لذا خواهشمند هستیم این اطلاعات را در صحت و دقت تکمیل کنید."
                 ])
             @else
-                @include('user.profile.profileView')
+                @include('user.profile.profileView', ['withBio'=>true])
             @endif
             <div class="m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage profileMenuPage-sabteRotbe">
                 <div class="m-portlet__head">
@@ -116,7 +104,12 @@
                                     <div class="row">
                                         <div class="col">
                                             <div class="form-group m-form__group">
-                                                <label for="rank">رتبه شما(الزامی)</label>
+                                                <label for="rank">
+                                                    @if($userKonkurResult!==null)
+                                                        رتبه شما
+                                                    @else
+                                                        رتبه شما(الزامی)
+                                                    @endif</label>
                                                 <div class="m-input-icon m-input-icon--left">
                                                     <input type="text"
                                                            name="rank"
@@ -269,246 +262,6 @@
     </div>
 @endsection
 
-
-
 @section('page-js')
-    <!-- the main fileinput plugin file -->
-    {{--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/js/fileinput.min.js"></script>--}}
     <script src="{{ mix('/js/user-profile.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-user-profile.js') }}"></script>
-@endsection
-
-@section("footerPageLevelPlugin")
-    <script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/counterup/jquery.waypoints.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/counterup/jquery.counterup.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/jquery-easypiechart/jquery.easypiechart.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/morris/morris.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-sweetalert/sweetalert.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
-@endsection
-
-@section("footerPageLevelScript")
-    <script src="/assets/pages/scripts/profile.min.js" type="text/javascript"></script>
-    <script src="/assets/pages/scripts/dashboard.min.js" type="text/javascript"></script>
-    <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
-    <script src="/js/extraJS/scripts/profileUploadPhoto4.js" type="text/javascript"></script>
-    <script src="/js/extraJS/scripts/verificationCode.js" type="text/javascript"></script>
-    <script>
-
-        var userAjax;
-        var SweetAlert = function () {
-
-            return {
-                //main function to initiate the module
-                init: function () {
-                    $('.mt-sweetalert').each(function () {
-                        var sa_title = $(this).data('title');
-                        var sa_message = $(this).data('message');
-                        var sa_type = $(this).data('type');
-                        var sa_allowOutsideClick = $(this).data('allow-outside-click');
-                        var sa_showConfirmButton = $(this).data('show-confirm-button');
-                        var sa_showCancelButton = $(this).data('show-cancel-button');
-                        var sa_closeOnConfirm = $(this).data('close-on-confirm');
-                        var sa_closeOnCancel = $(this).data('close-on-cancel');
-                        var sa_confirmButtonText = $(this).data('confirm-button-text');
-                        var sa_cancelButtonText = $(this).data('cancel-button-text');
-                        var sa_popupTitleSuccess = $(this).data('popup-title-success');
-                        var sa_popupMessageSuccess = $(this).data('popup-message-success');
-                        var sa_popupTitleCancel = $(this).data('popup-title-cancel');
-                        var sa_popupMessageCancel = $(this).data('popup-message-cancel');
-                        var sa_confirmButtonClass = $(this).data('confirm-button-class');
-                        var sa_cancelButtonClass = $(this).data('cancel-button-class');
-
-                        $(this).click(function () {
-                            //console.log(sa_btnClass);
-                            swal({
-                                    title: sa_title,
-                                    text: sa_message,
-                                    type: sa_type,
-                                    allowOutsideClick: sa_allowOutsideClick,
-                                    showConfirmButton: sa_showConfirmButton,
-                                    showCancelButton: sa_showCancelButton,
-                                    confirmButtonClass: sa_confirmButtonClass,
-                                    cancelButtonClass: sa_cancelButtonClass,
-                                    closeOnConfirm: sa_closeOnConfirm,
-                                    closeOnCancel: sa_closeOnCancel,
-                                    confirmButtonText: sa_confirmButtonText,
-                                    cancelButtonText: sa_cancelButtonText,
-                                },
-                                function (isConfirm) {
-                                    if (isConfirm) {
-                                        toastr.options = {
-                                            "closeButton": true,
-                                            "debug": false,
-                                            "positionClass": "toast-top-center",
-                                            "onclick": null,
-                                            "showDuration": "1000",
-                                            "hideDuration": "1000",
-                                            "timeOut": "5000",
-                                            "extendedTimeOut": "1000",
-                                            "showEasing": "swing",
-                                            "hideEasing": "linear",
-                                            "showMethod": "fadeIn",
-                                            "hideMethod": "fadeOut"
-                                        };
-
-                                        if (userAjax) {
-                                            userAjax.abort();
-                                        }
-                                        userAjax = $.ajax({
-                                            type: "POST",
-                                            url: "{{action("Web\UserController@removeFromLottery")}}",
-                                            contentType: "application/json",
-                                            dataType: "json",
-                                            statusCode: {
-                                                200: function (response) {
-                                                    // console.log(response.responseText);
-                                                    location.reload();
-                                                },
-                                                //The status for when the user is not authorized for making the request
-                                                401: function (ressponse) {
-                                                },
-                                                403: function (response) {
-                                                },
-                                                404: function (response) {
-                                                },
-                                                //The status for when form data is not valid
-                                                422: function (response) {
-                                                    //
-                                                },
-                                                //The status for when there is error php code
-                                                500: function (response) {
-                                                    console.log(response);
-                                                },
-                                                //The status for when there is error php code
-                                                503: function (response) {
-                                                    // console.log("503 Error");
-                                                    toastr["error"]($.parseJSON(response.responseText).message, "پیام سیستم");
-                                                }
-                                            }
-                                        });
-                                        // swal(sa_popupTitleSuccess, sa_popupMessageSuccess, "success");
-                                    } else {
-                                        // swal(sa_popupTitleCancel, sa_popupMessageCancel, "error");
-                                    }
-                                });
-                        });
-                    });
-                }
-            }
-
-        }();
-
-        jQuery(document).ready(function () {
-            SweetAlert.init();
-        });
-
-        {{--$(document).on("click", "#bt-register-hamayesh-arabi", function (){--}}
-        {{--toastr.options = {--}}
-        {{--"closeButton": true,--}}
-        {{--"debug": false,--}}
-        {{--"positionClass": "toast-top-center",--}}
-        {{--"onclick": null,--}}
-        {{--"showDuration": "1000",--}}
-        {{--"hideDuration": "1000",--}}
-        {{--"timeOut": "5000",--}}
-        {{--"extendedTimeOut": "1000",--}}
-        {{--"showEasing": "swing",--}}
-        {{--"hideEasing": "linear",--}}
-        {{--"showMethod": "fadeIn",--}}
-        {{--"hideMethod": "fadeOut"--}}
-        {{--};--}}
-
-        {{--if(userAjax) {--}}
-        {{--userAjax.abort();--}}
-        {{--}--}}
-        {{--userAjax = $.ajax({--}}
-        {{--type: "POST",--}}
-        {{--url: "{{action("Web\OrderController@addToArabiHozouri")}}",--}}
-        {{--contentType: "application/json",--}}
-        {{--dataType: "json",--}}
-        {{--statusCode: {--}}
-        {{--200:function (response) {--}}
-        {{--location.reload();--}}
-        {{--},--}}
-        {{--//The status for when the user is not authorized for making the request--}}
-        {{--401:function (ressponse) {--}}
-        {{--},--}}
-        {{--403: function (response) {--}}
-        {{--},--}}
-        {{--404: function (response) {--}}
-        {{--},--}}
-        {{--//The status for when form data is not valid--}}
-        {{--422: function (response) {--}}
-        {{--//--}}
-        {{--},--}}
-        {{--//The status for when there is error php code--}}
-        {{--500: function (response) {--}}
-        {{--console.log(response);--}}
-        {{--},--}}
-        {{--//The status for when there is error php code--}}
-        {{--503: function (response) {--}}
-        {{--// console.log("503 Error");--}}
-        {{--console.log(response);--}}
-        {{--toastr["error"]("خطا", "پیام سیستم");--}}
-        {{--}--}}
-        {{--}--}}
-        {{--});--}}
-        {{--});--}}
-
-        {{--$(document).on("click", "#bt-cancel-hamayesh-arabi", function (){--}}
-        {{--toastr.options = {--}}
-        {{--"closeButton": true,--}}
-        {{--"debug": false,--}}
-        {{--"positionClass": "toast-top-center",--}}
-        {{--"onclick": null,--}}
-        {{--"showDuration": "1000",--}}
-        {{--"hideDuration": "1000",--}}
-        {{--"timeOut": "5000",--}}
-        {{--"extendedTimeOut": "1000",--}}
-        {{--"showEasing": "swing",--}}
-        {{--"hideEasing": "linear",--}}
-        {{--"showMethod": "fadeIn",--}}
-        {{--"hideMethod": "fadeOut"--}}
-        {{--};--}}
-
-        {{--if(userAjax) {--}}
-        {{--userAjax.abort();--}}
-        {{--}--}}
-        {{--userAjax = $.ajax({--}}
-        {{--type: "POST",--}}
-        {{--url: "{{action("Web\OrderController@removeArabiHozouri")}}",--}}
-        {{--contentType: "application/json",--}}
-        {{--dataType: "json",--}}
-        {{--statusCode: {--}}
-        {{--200:function (response) {--}}
-        {{--location.reload();--}}
-        {{--},--}}
-        {{--//The status for when the user is not authorized for making the request--}}
-        {{--401:function (ressponse) {--}}
-        {{--},--}}
-        {{--403: function (response) {--}}
-        {{--},--}}
-        {{--404: function (response) {--}}
-        {{--},--}}
-        {{--//The status for when form data is not valid--}}
-        {{--422: function (response) {--}}
-        {{--//--}}
-        {{--},--}}
-        {{--//The status for when there is error php code--}}
-        {{--500: function (response) {--}}
-        {{--console.log(response);--}}
-        {{--},--}}
-        {{--//The status for when there is error php code--}}
-        {{--503: function (response) {--}}
-        {{--// console.log("503 Error");--}}
-        {{--console.log(response);--}}
-        {{--toastr["error"]("خطا", "پیام سیستم");--}}
-        {{--}--}}
-        {{--}--}}
-        {{--});--}}
-        {{--});--}}
-    </script>
 @endsection

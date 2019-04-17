@@ -2,15 +2,7 @@
 
 namespace App\Providers;
 
-
-use App\{Adapter\AlaaSftpAdapter,
-    Content,
-    Contentset,
-    Observers\ContentObserver,
-    Observers\ProductObserver,
-    Observers\SetObserver,
-    Product,
-    Traits\UserCommon};
+use App\{Adapter\AlaaSftpAdapter, Content, Contentset, Observers\ContentObserver, Observers\ProductObserver, Observers\SetObserver, Product, Traits\UserCommon};
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\{Auth, Schema, Storage, Validator};
 use Illuminate\Support\ServiceProvider;
@@ -33,12 +25,7 @@ class AppServiceProvider extends ServiceProvider
         Contentset::observe(SetObserver::class);
 
         Horizon::auth(function ($request) {
-            if (Auth::check() && Auth::user()
-                                     ->hasRole("admin")) {
-                return true;
-            } else {
-                return false;
-            }
+            return (Auth::check() && Auth::user()->hasRole("admin"));
         });
         Schema::defaultStringLength(191);
 
@@ -46,26 +33,10 @@ class AppServiceProvider extends ServiceProvider
             return new Filesystem(new AlaaSftpAdapter($config));
         });
 
-        /**
-         *  National code validation for registration form
-         */
-        Validator::extend('validate', function ($attribute, $value, $parameters, $validator) {
-            if (strcmp($parameters[0], "nationalCode") == 0) {
-                $flag = $this->validateNationalCode($value);
-                return $flag;
-            }
-            return true;
-
-        });
-
         Collection::macro('pushAt', function ($key, $item) {
             return $this->put($key, collect($this->get($key))->push($item));
         });
-
-        Validator::extend('activeProduct', function ($attribute, $value, $parameters, $validator) {
-            return Product::findOrFail($value)->active;
-        });
-
+        $this->defineValidationRules();
     }
 
     /**
@@ -79,6 +50,23 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
         }
+    }
 
+    private function defineValidationRules(): void
+    {
+        /**
+         *  National code validation for registration form
+         */
+        Validator::extend('validate', function ($attribute, $value, $parameters, $validator) {
+            if (strcmp($parameters[0], "nationalCode") == 0) {
+                return $this->validateNationalCode($value);
+            }
+
+            return true;
+        });
+
+        Validator::extend('activeProduct', function ($attribute, $value, $parameters, $validator) {
+            return Product::findOrFail($value)->active;
+        });
     }
 }

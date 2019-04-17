@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\Artisan;
 class SetObserver
 {
     private $tagging;
+
     use TaggableTrait;
 
     public function __construct(TaggingInterface $tagging)
     {
         $this->tagging = $tagging;
     }
-
 
     /**
      * Handle the product "created" event.
@@ -76,7 +76,6 @@ class SetObserver
     {
         //
     }
-
 
     /**
      * When issuing a mass update via Eloquent,

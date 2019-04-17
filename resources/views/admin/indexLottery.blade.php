@@ -1,53 +1,44 @@
 @role((Config::get("constants.ROLE_ADMIN")))
-@extends("app",["pageName"=>$pageName])
+@extends('app',['pageName'=>$pageName])
 
-@section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel="stylesheet"
-          type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet"
-          type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.css" rel="stylesheet"
-          type="text/css"/>
-
-    <link href="/assets/global/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css" rel="stylesheet"
-          type="text/css"/>
+@section('page-css')
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel="stylesheet" type="text/css"/>
+    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>--}}
+    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>--}}
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css" rel="stylesheet" type="text/css"/>
 @endsection
 
-@section("metadata")
-    @parent()
-    <meta name="_token" content="{{ csrf_token() }}">
-@endsection
-
-@section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
-            <li>
-                <i class="icon-home"></i>
-                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
-                <i class="fa fa-angle-left"></i>
+@section('pageBar')
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <i class="flaticon-home-2 m--padding-right-5"></i>
+                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
-            <li>
-                <span>پنل مدیریت قرعه کشی</span>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a class="m-link" href="#">پنل مدیریت قرعه کشی</a>
             </li>
-        </ul>
-    </div>
+        </ol>
+    </nav>
 @endsection
 
-@section("content")
+@section('content')
     {{--Ajax modal loaded after inserting content--}}
     <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
     {{--Ajax modal for panel startup --}}
+
+    @include("systemMessage.flash")
+
     <div class="row">
-        @include("systemMessage.flash")
         <div class="col-md-12">
             <!-- BEGIN Portlet PORTLET-->
-            <div class="portlet light">
-                <div class="portlet-body">
+            <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
+                <div class="m-portlet__body">
                     <span class="bold" style="font-size: larger"></span>&nbsp;&nbsp;
                     <a class = "btn btn-default" href = "{{action("Web\HomeController@pointBot")}}"
                        {{($pointsGiven)?"disabled":""}} target="_blank">
@@ -65,21 +56,42 @@
 
             @role((Config::get("constants.ROLE_ADMIN")))
             <!-- BEGIN ROLE TABLE PORTLET-->
-            <div class="portlet box blue-dark" id="lottery-portlet">
-                <div class="portlet-title">
-                    <div class="caption">
-                        <i class="fa fa-cogs"></i>برندگان قرعه کشی {{$lotteryDisplayName}}</div>
-                    <div class="tools">
+
+            <div class="m-portlet m-portlet--mobile m-portlet--body-progress-" id="lottery-portlet">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                <i class="fa fa-cogs m--margin-right-10"></i>
+                                برندگان قرعه کشی {{$lotteryDisplayName}}
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="m-portlet__head-tools">
+                        <ul class="m-portlet__nav">
+                            <li class="m-portlet__nav-item">
+                                <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <img class="hidden" id="product-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
+                                </a>
+                            </li>
+                            <li class="m-portlet__nav-item">
+                                <a href="javascript:" class="m-portlet__nav-link m-portlet__nav-link--icon collapse" id="lottery-expand"><i class="la la-refresh"></i></a>
+                            </li>
+                            <li class="m-portlet__nav-item">
+                                <a href="javascript:" class="m-portlet__nav-link m-portlet__nav-link--icon reload"><i class="la la-refresh"></i></a>
+                            </li>
+                            <li class="m-portlet__nav-item">
+                                <a href="javascript:" class="m-portlet__nav-link m-portlet__nav-link--icon remove"><i class="la la-angle-down"></i></a>
+                            </li>
+                        </ul>
+
                         <img class="hidden" id="lottery-portlet-loading"
                              src="{{Config::get('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading"
                              style="width: 50px;">
-                        <a href="javascript:" class="collapse" id="lottery-expand"> </a>
-                        <a href="javascript:" class="reload"> </a>
-                        <a href="javascript:" class="remove"> </a>
                     </div>
-                    <div class="tools"></div>
                 </div>
-                <div class="portlet-body" style="display: block;">
+                <div class="m-portlet__body">
+
                     <div class="table-toolbar">
                         <div class="row">
                             <div class="col-md-6">
@@ -136,6 +148,7 @@
                         @endforeach
                         </tbody>
                     </table>
+
                 </div>
             </div>
             <!-- END SAMPLE TABLE PORTLET-->
@@ -144,34 +157,24 @@
     </div>
 @endsection
 
-@section("footerPageLevelPlugin")
-    <script src="/assets/global/scripts/datatable.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js"
-            type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
+@section('page-js')
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
+    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>--}}
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
     <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
-@endsection
-
-@section("footerPageLevelScript")
-    <script src="/assets/pages/scripts/ui-extended-modals.min.js" type="text/javascript"></script>
-    <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
-    <script src="/assets/pages/scripts/components-multi-select.min.js" type="text/javascript"></script>
-    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js"
-            type="text/javascript"></script>
-
-    <script src="/assets/pages/scripts/components-bootstrap-multiselect.min.js" type="text/javascript"></script>
-@endsection
-
-@section("extraJS")
-    <script src="/js/extraJS/scripts/admin-makeDataTable.js" type="text/javascript"></script>
-
+    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-extended-modals.min.js" type="text/javascript"></script>--}}
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js" type="text/javascript"></script>
+    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-bootstrap-multiselect.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/js/admin-makeDataTable.js" type="text/javascript"></script>
     <script type="text/javascript">
         /**
          * Start up jquery
@@ -182,7 +185,7 @@
             newDataTable.destroy();
             makeDataTable("lottery_table");
             $("#lottery-expand").trigger("click");
-            @endrole
+        @endrole
         });
     </script>
 @endsection

@@ -16,20 +16,22 @@ abstract class OrderproductGroupPriceCalculatorFromNewBase extends CheckoutProce
     public function process(Cashier $cashier)
     {
         $orderproductsToCalculateFromNewBase = $cashier->getRawOrderproductsToCalculateFromBase();
-        if(!isset($orderproductsToCalculateFromNewBase))
+        if (! isset($orderproductsToCalculateFromNewBase)) {
             throw new Exception('Orderproducts to recalculate have not been set');
+        }
 
         $calculatedOrderproductsFromNewBase = $this->getOrderproductGroupPrice($orderproductsToCalculateFromNewBase);
 
         $calculatedOrderproducts = $cashier->getCalculatedOrderproducts();
-        if(isset($calculatedOrderproducts))
-            $calculatedOrderproducts = $calculatedOrderproducts->merge($calculatedOrderproductsFromNewBase) ;
-        else
+        if (isset($calculatedOrderproducts)) {
+            $calculatedOrderproducts = $calculatedOrderproducts->merge($calculatedOrderproductsFromNewBase);
+        } else {
             $calculatedOrderproducts = $calculatedOrderproductsFromNewBase;
+        }
 
         $cashier->setCalculatedOrderproducts($calculatedOrderproducts);
 
-        return $this->next($cashier) ;
+        return $this->next($cashier);
     }
 
     /**
@@ -38,6 +40,5 @@ abstract class OrderproductGroupPriceCalculatorFromNewBase extends CheckoutProce
      * @param Collection $orderproductsToCalculateFromNewBase
      * @return mixed
      */
-    abstract protected function getOrderproductGroupPrice(Collection $orderproductsToCalculateFromNewBase):Collection;
-
+    abstract protected function getOrderproductGroupPrice(Collection $orderproductsToCalculateFromNewBase): Collection;
 }

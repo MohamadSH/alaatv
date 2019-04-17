@@ -5,13 +5,13 @@ namespace App;
 /**
  * App\Paymentstatus
  *
- * @property int                                                        $id
- * @property string|null                                                $name        نام این وضعیت
- * @property string|null                                                $displayName نام قابل نمایش این وضعیت
- * @property string|null                                                $description توضیح این وضعیت
- * @property \Carbon\Carbon|null                                        $created_at
- * @property \Carbon\Carbon|null                                        $updated_at
- * @property \Carbon\Carbon|null                                        $deleted_at
+ * @property int $id
+ * @property string|null $name        نام این وضعیت
+ * @property string|null $displayName نام قابل نمایش این وضعیت
+ * @property string|null $description توضیح این وضعیت
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[] $orders
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Paymentstatus onlyTrashed()

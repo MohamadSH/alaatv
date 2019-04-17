@@ -1,68 +1,63 @@
 @role(('admin'))
-@extends("app",["pageName"=>"admin"])
+@extends('app',['pageName'=>'admin'])
 
-@section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css" rel="stylesheet"
-          type="text/css"/>
+@section('page-css')
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css"/>
 @endsection
 
-@section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
-            <li>
-                <i class="icon-home"></i>
-                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
-                <i class="fa fa-angle-left"></i>
+@section('pageBar')
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <i class="flaticon-home-2 m--padding-right-5"></i>
+                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
-            <li>
-                <a href = "{{action("Web\HomeController@admin")}}">پنل مدیریتی</a>
-                <i class="fa fa-angle-left"></i>
+            <li class="breadcrumb-item" aria-current="page">
+                <a class="m-link" href="{{action("Web\HomeController@admin")}}">پنل مدیریتی</a>
             </li>
-            <li>
-                <span>اصلاح نقش</span>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a class="m-link" href="#">اصلاح نقش</a>
             </li>
-        </ul>
-    </div>
+        </ol>
+    </nav>
 @endsection
 
 @section("content")
     <div class="row">
-        <div class="col-md-2">
-        </div>
+        <div class="col-md-2"></div>
         <div class="col-md-8">
-        @include("systemMessage.flash")
-        <!-- BEGIN SAMPLE FORM PORTLET-->
-            <div class="portlet light ">
-                <div class="portlet-title">
-                    <div class="caption">
-                        <i class="icon-settings font-dark"></i>
-                        <span class="caption-subject font-dark sbold uppercase">اصلاح {{$role->display_name}}</span>
-                    </div>
-                    <div class="actions">
-                        <div class="btn-group">
-                            <a class = "btn btn-sm dark dropdown-toggle" href = "{{action("Web\HomeController@admin")}}"> بازگشت
-                                <i class="fa fa-angle-left"></i>
-                            </a>
+            @include("systemMessage.flash")
+            <!-- BEGIN SAMPLE FORM PORTLET-->
+            <div class="m-portlet m-portlet--mobile m-portlet--body-progress-" id="product-portlet">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                <i class="fa fa-cogs"></i>
+                                اصلاح {{$role->display_name}}
+                            </h3>
                         </div>
                     </div>
+                    <div class="m-portlet__head-tools">
+                        <a class="btn m-btn--air btn-primary" href="{{action("Web\HomeController@admin")}}"> بازگشت
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="portlet-body form">
-                    {!! Form::model($role,['files'=>true,'method' => 'PUT','action' => ['RoleController@update',$role], 'class'=>'form-horizontal']) !!}
-                    @include('role.form')
+                <div class="m-portlet__body">
+                    {!! Form::model($role,['files'=>true,'method' => 'PUT','action' => ['Web\RoleController@update',$role], 'class'=>'form-horizontal']) !!}
+                        @include('role.form')
                     {!! Form::close() !!}
                 </div>
             </div>
             <!-- END SAMPLE FORM PORTLET-->
-
         </div>
+        <div class="col-md-2"></div>
     </div>
 @endsection
 
-@section("footerPageLevelScript")
-    <script src="/assets/pages/scripts/components-bootstrap-multiselect.min.js" type="text/javascript"></script>
-@endsection
-
-@section("extraJS")
-    <script src="/js/extraJS/scripts/admin-makeMultiSelect.js" type="text/javascript"></script>
+@section('page-js')
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-bootstrap-multiselect.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type="text/javascript"></script>
 @endsection
 @endrole

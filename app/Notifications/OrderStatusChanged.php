@@ -16,13 +16,15 @@ class OrderStatusChanged extends Notification implements ShouldQueue
     use Queueable, SerializesModels;
 
     const MEDIANA_PATTERN_CODE_ORDER_STATUS_CHANGED = 802;
+
     public $timeout = 120;
 
     /**
      * @var User
      */
     protected $user;
-    private   $orderStatus;
+
+    private $orderStatus;
 
     public function __construct($orderStatus)
     {
@@ -32,13 +34,14 @@ class OrderStatusChanged extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
     public function via($notifiable)
     {
         $this->user = $notifiable;
+
         return [
             MedianaPatternChannel::class,
 
@@ -52,22 +55,14 @@ class OrderStatusChanged extends Notification implements ShouldQueue
      */
     public function toMediana($notifiable)
     {
-        return (new MedianaMessage())
-            ->content($this->msg())
-            ->setInputData($this->getInputData())
-            ->setPatternCode(self::MEDIANA_PATTERN_CODE_ORDER_STATUS_CHANGED)
-            ->sendAt(Carbon::now());
+        return (new MedianaMessage())->content($this->msg())->setInputData($this->getInputData())->setPatternCode(self::MEDIANA_PATTERN_CODE_ORDER_STATUS_CHANGED)->sendAt(Carbon::now());
     }
 
     private function msg(): string
     {
-        $messageCore = " آلایی عزیز وضعیت سفارش شما به"
-            . $this->orderStatus
-            . " تغییر کرد."
-            . "\n"
-            . "sanatisharif.ir";
-        $message = $messageCore;
-        return $message;
+        $messageCore = " آلایی عزیز وضعیت سفارش شما به".$this->orderStatus." تغییر کرد."."\n"."sanatisharif.ir";
+
+        return $messageCore;
     }
 
     private function getInputData(): array

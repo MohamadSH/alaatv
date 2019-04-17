@@ -125,7 +125,7 @@
                                 <button type="button" class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--bolder">دفتر مرکزی</button>
                             </div>
                         </div>
-                        <div class="m-widget27__container">
+                        <div class="m-widget27__container m--padding-left-15 m--padding-right-15">
                             <h5>نشانی</h5>
                             <p>
                                 @if(isset($wSetting->branches->main->address->city)){{$wSetting->branches->main->address->city}}

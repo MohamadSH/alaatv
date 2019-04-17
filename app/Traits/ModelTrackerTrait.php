@@ -8,7 +8,6 @@
 
 namespace App\Traits;
 
-
 trait ModelTrackerTrait
 {
     /**
@@ -16,16 +15,19 @@ trait ModelTrackerTrait
      *
      * @param $input
      */
-    public function setPageViewAttribute($input){
+    public function setPageViewAttribute($input)
+    {
         $this->attributes['page_view'] = json_encode($input, JSON_UNESCAPED_UNICODE);
     }
+
     /**
      *
      * @param $value
      *
      * @return mixed
      */
-    public function getPageViewAttribute($value){
+    public function getPageViewAttribute($value)
+    {
         return optional(json_decode($value))->page_views;
     }
 }

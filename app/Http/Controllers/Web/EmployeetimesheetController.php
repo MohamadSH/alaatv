@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Web;
+
 use App\Employeeschedule;
 use App\Employeetimesheet;
 use App\Http\Controllers\Controller;
@@ -27,11 +28,12 @@ class EmployeetimesheetController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('ability:' . config("constants.EMPLOYEE_ROLE") . ',' . config("constants.LIST_EMPLOPYEE_WORK_SHEET"), ['only' => 'index']);
-        $this->middleware('ability:' . config("constants.EMPLOYEE_ROLE") . '|,' . config("constants.INSERT_EMPLOPYEE_WORK_SHEET") . '|' . config("constants.LIST_EMPLOPYEE_WORK_SHEET"), ['only' => ['create']]);
-        $this->middleware('permission:' . config('constants.INSERT_EMPLOPYEE_WORK_SHEET'), ['only' => 'store']);
-        $this->middleware('permission:' . config('constants.REMOVE_EMPLOPYEE_WORK_SHEET'), ['only' => 'destroy']);
-        $this->middleware('permission:' . config('constants.EDIT_EMPLOPYEE_WORK_SHEET'), [
+        $this->middleware('ability:'.config("constants.EMPLOYEE_ROLE").','.config("constants.LIST_EMPLOPYEE_WORK_SHEET"), ['only' => 'index']);
+        $this->middleware('ability:'.config("constants.EMPLOYEE_ROLE").'|,'.config("constants.INSERT_EMPLOPYEE_WORK_SHEET").'|'.config("constants.LIST_EMPLOPYEE_WORK_SHEET"),
+            ['only' => ['create']]);
+        $this->middleware('permission:'.config('constants.INSERT_EMPLOPYEE_WORK_SHEET'), ['only' => 'store']);
+        $this->middleware('permission:'.config('constants.REMOVE_EMPLOPYEE_WORK_SHEET'), ['only' => 'destroy']);
+        $this->middleware('permission:'.config('constants.EDIT_EMPLOPYEE_WORK_SHEET'), [
             'only' => [
                 'edit',
                 'update',
@@ -80,8 +82,7 @@ class EmployeetimesheetController extends Controller
         $employeeWorkSheetSum = $this->sumWorkAndShiftDiff($employeeTimeSheets);
         $employeeSumRealWorkTime = $this->sumRealWorkTime($employeeTimeSheets);
         $result = [
-            'index'                => View::make("employeeTimeSheet.index", compact('employeeTimeSheets', 'employeeWorkSheetSum'))
-                                          ->render(),
+            'index' => View::make("employeeTimeSheet.index", compact('employeeTimeSheets', 'employeeWorkSheetSum'))->render(),
             "employeeWorkSheetSum" => $employeeWorkSheetSum,
             "employeeRealWorkTime" => $employeeSumRealWorkTime,
         ];
@@ -100,35 +101,29 @@ class EmployeetimesheetController extends Controller
         $user = Auth::user();
         $userId = $user->id;
         /** @var Employeetimesheet $userTodayTimeSheets */
-        $userTodayTimeSheets = Employeetimesheet::where("date", Carbon::today('Asia/Tehran'))
-                                                ->where("user_id", $user->id)
-                                                ->get();
+        $userTodayTimeSheets = Employeetimesheet::where("date", Carbon::today('Asia/Tehran'))->where("user_id", $user->id)->get();
         if ($userTodayTimeSheets->count() > 1) {
             session()->flash("warning", "شما برای امروز بیش از یک ساعت کاری وارد نموده اید!");
             $formVisible = false;
         } else {
-            $toDayJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')
-                                                           ->format('l'));
+            $toDayJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')->format('l'));
             /** @var Employeeschedule $employeeSchedule */
-            $employeeSchedule = Employeeschedule::where("user_id", $userId)
-                                                ->where("day", $toDayJalali)
-                                                ->get()
-                                                ->first();
+            $employeeSchedule = Employeeschedule::where("user_id", $userId)->where("day", $toDayJalali)->get()->first();
             if ($userTodayTimeSheets->isNotEmpty()) {
                 $employeetimesheet = $userTodayTimeSheets->first();
-                if ($employeetimesheet->workdaytype_id == config("constants.WORKDAY_ID_EXTRA"))
+                if ($employeetimesheet->workdaytype_id == config("constants.WORKDAY_ID_EXTRA")) {
                     $isTimeSheetExtra = true;
-                else
+                } else {
                     $isTimeSheetExtra = false;
+                }
             }
             $formVisible = true;
         }
-        $employees = User::select()
-                         ->role([config("constants.ROLE_EMPLOYEE")])
-                         ->pluck("lastName", "id");
-        $workdayTypes = Workdaytype::all()
-                                   ->pluck("displayName", "id");
-        return view("employeeTimeSheet.create", compact("employeetimesheet", "employeeSchedule", "isTimeSheetExtra", "toDay", "employees", "formVisible", "workdayTypes"));
+        $employees = User::select()->role([config("constants.ROLE_EMPLOYEE")])->pluck("lastName", "id");
+        $workdayTypes = Workdaytype::all()->pluck("displayName", "id");
+
+        return view("employeeTimeSheet.create",
+            compact("employeetimesheet", "employeeSchedule", "isTimeSheetExtra", "toDay", "employees", "formVisible", "workdayTypes"));
     }
 
     /**
@@ -141,7 +136,7 @@ class EmployeetimesheetController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        if (!$request->has("modifier_id")) {
+        if (! $request->has("modifier_id")) {
             $request->offsetSet("modifier_id", $user->id);
         }
 
@@ -160,52 +155,54 @@ class EmployeetimesheetController extends Controller
             $employeeTimeSheet->timeSheetLock = 1;
         }
 
-        $toDayJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')
-                                                       ->format('l'));
+        $toDayJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')->format('l'));
         /** @var Employeeschedule $employeeSchedule */
-        $employeeSchedule = Employeeschedule::where("user_id", $employeeTimeSheet->user_id)
-                                            ->where("day", $toDayJalali)
-                                            ->get()
-                                            ->first();
+        $employeeSchedule = Employeeschedule::where("user_id", $employeeTimeSheet->user_id)->where("day", $toDayJalali)->get()->first();
 
         $allowedLunchBreak = $employeeTimeSheet->getOriginal("allowedLunchBreakInSec");
-        if (!isset($allowedLunchBreak)) {
-            if (isset($employeeSchedule))
+        if (! isset($allowedLunchBreak)) {
+            if (isset($employeeSchedule)) {
                 $employeeTimeSheet->allowedLunchBreakInSec = $employeeSchedule->getOriginal("lunchBreakInSeconds");
+            }
         }
 
         $beginTime = $employeeTimeSheet->getOriginal("userBeginTime");
-        if (!isset($beginTime)) {
-            if (isset($employeeSchedule))
+        if (! isset($beginTime)) {
+            if (isset($employeeSchedule)) {
                 $employeeTimeSheet->userBeginTime = $employeeSchedule->getOriginal("beginTime");
+            }
         }
 
         $finishTime = $employeeTimeSheet->getOriginal("userFinishTime");
-        if (!isset($finishTime)) {
-            if (isset($employeeSchedule))
+        if (! isset($finishTime)) {
+            if (isset($employeeSchedule)) {
                 $employeeTimeSheet->userFinishTime = $employeeSchedule->getOriginal("finishTime");
+            }
         }
         $done = $employeeTimeSheet->save();
-        if ($done)
+        if ($done) {
             if ($request->has("serverSide")) {
                 return true;
             } else {
                 session()->flash("success", "ساعت کاری با موفقیت درج شد");
+
                 return redirect()->back();
             }
-        else
+        } else {
             if ($request->has("serverSide")) {
                 return false;
             } else {
                 session()->flash("error", Lang::get("responseText.Database error."));
+
                 return redirect()->back();
             }
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Employeetimesheet $employeetimesheet
+     * @param \App\Employeetimesheet $employeetimesheet
      */
     public function show(Employeetimesheet $employeetimesheet)
     {
@@ -215,7 +212,7 @@ class EmployeetimesheetController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Employeetimesheet $employeetimesheet
+     * @param \App\Employeetimesheet $employeetimesheet
      *
      * @return \Illuminate\Http\Response
      */
@@ -223,87 +220,92 @@ class EmployeetimesheetController extends Controller
     {
         if ($employeetimesheet->workdaytype_id == config("constants.WORKDAY_ID_EXTRA")) {
             $isExtra = true;
-        } else if ($employeetimesheet->workdaytype_id == config("constants.WORKDAY_ID_USUAL")) {
-            $isExtra = false;
+        } else {
+            if ($employeetimesheet->workdaytype_id == config("constants.WORKDAY_ID_USUAL")) {
+                $isExtra = false;
+            }
         }
+
         return view("employeeTimeSheet.edit", compact("employeetimesheet", "isExtra"));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Employeetimesheet $employeeTimeSheet
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Employeetimesheet $employeeTimeSheet
      * @return bool|\Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Employeetimesheet $employeeTimeSheet)
     {
         /** @var User $user */
         $user = Auth::user();
-        if (!$request->has("modifier_id")) {
+        if (! $request->has("modifier_id")) {
             $request->offsetSet("modifier_id", $user->id);
         }
 
         $employeeTimeSheet->fill($request->all());
         if ($request->has('isExtraDay')) {
-            $employeeTimeSheet->workdaytype_id = config('constants.WORKDAY_ID_EXTRA') ;
-            $employeeTimeSheet->isPaid = 0 ;
+            $employeeTimeSheet->workdaytype_id = config('constants.WORKDAY_ID_EXTRA');
+            $employeeTimeSheet->isPaid = 0;
         } else {
-            $employeeTimeSheet->workdaytype_id = config('constants.WORKDAY_ID_USUAL') ;
-            $employeeTimeSheet->isPaid = 1 ;
+            $employeeTimeSheet->workdaytype_id = config('constants.WORKDAY_ID_USUAL');
+            $employeeTimeSheet->isPaid = 1;
         }
 
-        if ($request->has('timeSheetLock'))
-        {
-            $employeeTimeSheet->timeSheetLock = 1 ;
-        }else{
-            $employeeTimeSheet->timeSheetLock = 0 ;
+        if ($request->has('timeSheetLock')) {
+            $employeeTimeSheet->timeSheetLock = 1;
+        } else {
+            $employeeTimeSheet->timeSheetLock = 0;
         }
 
-        if ($request->has('isPaid'))
-        {
-            $employeeTimeSheet->isPaid = 1 ;
-        }else{
-            $employeeTimeSheet->isPaid = 0 ;
+        if ($request->has('isPaid')) {
+            $employeeTimeSheet->isPaid = 1;
+        } else {
+            $employeeTimeSheet->isPaid = 0;
         }
 
         /** @var User $user */
-        if($user->can(config('constants.EDIT_EMPLOPYEE_WORK_SHEET'))) {
+        if ($user->can(config('constants.EDIT_EMPLOPYEE_WORK_SHEET'))) {
             $employeeTimeSheet->overtime_confirmation = true;
         } else {
             $employeeTimeSheet->overtime_confirmation = false;
         }
 
         $done = $employeeTimeSheet->update();
-        if ($done)
+        if ($done) {
             if ($request->has("serverSide")) {
                 return true;
             } else {
                 session()->flash("success", "ساعت کاری با موفقیت اصلاح شد");
+
                 return redirect()->back();
             }
-        else
+        } else {
             if ($request->has("serverSide")) {
                 return false;
             } else {
                 session()->flash("error", Lang::get("responseText.Database error."));
+
                 return redirect()->back();
             }
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Employeetimesheet $employeetimesheet
+     * @param \App\Employeetimesheet $employeetimesheet
      * @param Response $response
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
     public function destroy(Employeetimesheet $employeetimesheet, Response $response)
     {
-        if ($employeetimesheet->delete())
+        if ($employeetimesheet->delete()) {
             return $response->setStatusCode(200);
-        else
+        } else {
             return $response->setStatusCode(503);
+        }
     }
 }

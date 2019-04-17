@@ -13,12 +13,13 @@ use Illuminate\Database\Eloquent\Builder;
 class HasOrderCompletedSince extends FilterAbstract
 {
     protected $attribute = 'completed_at';
+
     protected $relation = 'closedOrders';
 
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
-            return $builder->whereHas($this->relation, function ($q) use ($value) {
-                return $q->where($this->attribute, ">=", $value);
-            });
+        return $builder->whereHas($this->relation, function ($q) use ($value) {
+            return $q->where($this->attribute, ">=", $value);
+        });
     }
 }

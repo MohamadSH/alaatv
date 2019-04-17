@@ -9,15 +9,15 @@ use Illuminate\Support\Facades\DB;
 /**
  * App\Attributeset
  *
- * @property int                                                                 $id
- * @property string|null                                                         $name        نام دسته
- * @property string|null                                                         $description توضیح دسته
- * @property int                                                                 $order       ترتیب دسته صفت
- * @property \Carbon\Carbon|null                                                 $created_at
- * @property \Carbon\Carbon|null                                                 $updated_at
- * @property \Carbon\Carbon|null                                                 $deleted_at
+ * @property int $id
+ * @property string|null $name        نام دسته
+ * @property string|null $description توضیح دسته
+ * @property int $order       ترتیب دسته صفت
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Attributegroup[] $attributegroups
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[]        $products
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[] $products
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Attributeset onlyTrashed()
  * @method static bool|null restore()
@@ -53,30 +53,21 @@ class Attributeset extends BaseModel
 
     public function attributes()
     {
-        $key = "Attributeset:" . $this->cacheKey();
+        $key = "Attributeset:".$this->cacheKey();
+
         return Cache::remember($key, Config::get("constants.CACHE_60"), function () {
-            $result = DB::table('attributesets')
-                        ->join(
-                            'attributegroups', function ($join) {
-                            $join->on('attributesets.id', '=', 'attributegroups.attributeset_id')
-                                 ->whereNull('attributegroups.deleted_at');
-                        })
-                        ->join('attribute_attributegroup', function ($join) {
-                            $join->on('attribute_attributegroup.attributegroup_id', '=', 'attributegroups.id');
-                        })
-                        ->join('attributes', function ($join) {
-                            $join->on('attributes.id', '=', 'attribute_attributegroup.attribute_id')
-                                 ->whereNull('attributes.deleted_at');
-                        })
-                        ->select([
-                                     "attributes.*",
-                                     'attribute_attributegroup.attributegroup_id as pivot_attributegroup_id',
-                                     'attribute_attributegroup.order as pivot_order',
-                                     'attribute_attributegroup.description as pivot_description',
-                                 ])
-                        ->where('attributesets.id', '=', $this->id)
-                        ->whereNull('attributesets.deleted_at')
-                        ->get();
+            $result = DB::table('attributesets')->join('attributegroups', function ($join) {
+                $join->on('attributesets.id', '=', 'attributegroups.attributeset_id')->whereNull('attributegroups.deleted_at');
+            })->join('attribute_attributegroup', function ($join) {
+                $join->on('attribute_attributegroup.attributegroup_id', '=', 'attributegroups.id');
+            })->join('attributes', function ($join) {
+                $join->on('attributes.id', '=', 'attribute_attributegroup.attribute_id')->whereNull('attributes.deleted_at');
+            })->select([
+                "attributes.*",
+                'attribute_attributegroup.attributegroup_id as pivot_attributegroup_id',
+                'attribute_attributegroup.order as pivot_order',
+                'attribute_attributegroup.description as pivot_description',
+            ])->where('attributesets.id', '=', $this->id)->whereNull('attributesets.deleted_at')->get();
 
             $result = Attribute::hydrate($result->toArray());
 
@@ -84,8 +75,8 @@ class Attributeset extends BaseModel
 
                 $p = [
                     "attributegroup_id" => $item->pivot_attributegroup_id,
-                    "order"             => $item->pivot_order,
-                    "description"       => $item->pivot_description,
+                    "order" => $item->pivot_order,
+                    "description" => $item->pivot_description,
                 ];
                 $p = $item->newPivot($item, $p, 'attribute_attributegroup', true);
 
@@ -93,30 +84,23 @@ class Attributeset extends BaseModel
 
                     "pivot" => $p,
                 ];
-                unset(
-                    $item->pivot_attributegroup_id,
-                    $item->pivot_order,
-                    $item->pivot_description
-                );
+                unset($item->pivot_attributegroup_id, $item->pivot_order, $item->pivot_description);
+
                 return $item;
             });
+
             //            dd($result);
             return $result;
-
         });
-
     }
 
     public function cacheKey()
     {
         $key = $this->getKey();
         $time = isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-        return sprintf(
-            "%s-%s",
-            //$this->getTable(),
-            $key,
-            $time
-        );
+
+        return sprintf("%s-%s", //$this->getTable(),
+            $key, $time);
     }
 
     public function products()
@@ -126,7 +110,6 @@ class Attributeset extends BaseModel
 
     public function attributegroups()
     {
-        return $this->hasMany('App\Attributegroup')
-                    ->orderBy('order');
+        return $this->hasMany('App\Attributegroup')->orderBy('order');
     }
 }

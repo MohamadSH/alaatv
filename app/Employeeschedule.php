@@ -2,30 +2,29 @@
 
 namespace App;
 
-
 use Carbon\Carbon;
 
 /**
  * App\Employeeschedule
  *
- * @property int                                                                    $id
- * @property int                                                                    $user_id             آیدی مشخص
+ * @property int $id
+ * @property int $user_id             آیدی مشخص
  *           کننده کارمند
- * @property string|null                                                            $day                 روز شیفت
- * @property string                                                                 $beginTime           زمان شروع ساعت
+ * @property string|null $day                 روز شیفت
+ * @property string $beginTime           زمان شروع ساعت
  *           کاری
- * @property string|null                                                            $finishTime          زمان پایان
+ * @property string|null $finishTime          زمان پایان
  *           ساعت کاری
- * @property int                                                                    $lunchBreakInSeconds مدت زمان مجاز
+ * @property int $lunchBreakInSeconds مدت زمان مجاز
  *           برای استراحت ناهار
- * @property \Carbon\Carbon|null                                                    $created_at
- * @property \Carbon\Carbon|null                                                    $updated_at
- * @property \Carbon\Carbon|null                                                    $deleted_at
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Employeetimesheet[] $employeetimesheets
- * @property-read string                                                            $begintime
- * @property-read string                                                            $finishtime
- * @property-read string                                                            $lunchbreakinseconds
- * @property-read \App\User                                                         $user
+ * @property-read string $begintime
+ * @property-read string $finishtime
+ * @property-read string $lunchbreakinseconds
+ * @property-read \App\User $user
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Employeeschedule onlyTrashed()
  * @method static bool|null restore()
@@ -71,7 +70,7 @@ class Employeeschedule extends BaseModel
     /**
      * Get the Employeeschedule's beginTime.
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -79,13 +78,14 @@ class Employeeschedule extends BaseModel
     {
         $time = new Carbon($value);
         $time = $time->format("H:i");
-        return $time . " " . $this->day;
+
+        return $time." ".$this->day;
     }
 
     /**
      * Get the Employeeschedule's finishTime.
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -93,13 +93,14 @@ class Employeeschedule extends BaseModel
     {
         $time = new Carbon($value);
         $time = $time->format("H:i");
-        return $time . " " . $this->day;
+
+        return $time." ".$this->day;
     }
 
     /**
      * Get the Employeeschedule's lunchBreakInSeconds.
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -107,5 +108,4 @@ class Employeeschedule extends BaseModel
     {
         return gmdate("H:i:s", $value);
     }
-
 }

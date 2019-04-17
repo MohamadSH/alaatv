@@ -22,18 +22,21 @@ class OrderCollections extends Collection
         $result = collect();
 
         foreach ($items as $order) {
-            if(!isset($order->coupon_id))
+            if (! isset($order->coupon_id)) {
                 continue;
+            }
             $orderCoupon = $order->coupon_discount_type;
             if ($orderCoupon !== false) {
                 if ($orderCoupon["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE")) {
                     $result->put($order->id, [
-                        "caption" => "کپن " . $order->coupon->name . " با " . $orderCoupon["discount"] . " % تخفیف",
+                        "caption" => "کپن ".$order->coupon->name." با ".$orderCoupon["discount"]." % تخفیف",
                     ]);
-                } else if ($orderCoupon["type"] == config("constants.DISCOUNT_TYPE_COST")) {
-                    $result->put($order->id, [
-                        "caption" => "کپن " . $order->coupon->name . " با " . number_format($orderCoupon["discount"]) . " تومان تخفیف",
-                    ]);
+                } else {
+                    if ($orderCoupon["type"] == config("constants.DISCOUNT_TYPE_COST")) {
+                        $result->put($order->id, [
+                            "caption" => "کپن ".$order->coupon->name." با ".number_format($orderCoupon["discount"])." تومان تخفیف",
+                        ]);
+                    }
                 }
             }
         }
@@ -44,12 +47,13 @@ class OrderCollections extends Collection
     /**
      * @return int
      */
-    public function getNumberOfProductsInThisOrderCollection() :int
+    public function getNumberOfProductsInThisOrderCollection(): int
     {
         $sum = 0;
-        foreach ($this as $order){
+        foreach ($this as $order) {
             $sum += $order->numberOfProducts;
         }
+
         return $sum;
     }
 }

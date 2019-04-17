@@ -36,7 +36,6 @@ class InitializeCategoryTreeCommand extends Command
         Category::create($this->makeAlaaArray());
 
         $this->info("Finish!");
-
     }
 
     /**
@@ -72,8 +71,7 @@ class InitializeCategoryTreeCommand extends Command
             ],
         ];
 
-        $dahomR =
-            $omoomi + [
+        $dahomR = $omoomi + [
                 [
                     'name' => 'ریاضی پایه',
                     'tags' => json_encode(["ریاضی_پایه"], JSON_UNESCAPED_UNICODE),
@@ -101,8 +99,7 @@ class InitializeCategoryTreeCommand extends Command
                     'children' => [],
                 ],
             ];
-        $dahomT =
-            $omoomi + [
+        $dahomT = $omoomi + [
                 [
                     'name' => 'ریاضی 1',
                     'tags' => json_encode([
@@ -117,8 +114,7 @@ class InitializeCategoryTreeCommand extends Command
                     'name' => 'زیست شناسی',
                     'tags' => json_encode(["زیست_شناسی"], JSON_UNESCAPED_UNICODE),
                     'children' => [],
-                ]
-                ,
+                ],
                 [
                     'name' => 'فیزیک',
                     'tags' => json_encode(["فیزیک"], JSON_UNESCAPED_UNICODE),
@@ -136,8 +132,7 @@ class InitializeCategoryTreeCommand extends Command
                     'children' => [],
                 ],
             ];
-        $dahomE =
-            $omoomi + [
+        $dahomE = $omoomi + [
                 [
                     'name' => 'اقتصاد',
                     'tags' => json_encode(["اقتصاد"], JSON_UNESCAPED_UNICODE),
@@ -181,8 +176,7 @@ class InitializeCategoryTreeCommand extends Command
                 ],
             ];
 
-        $yazdahomR =
-            $omoomi + [
+        $yazdahomR = $omoomi + [
                 [
                     'name' => 'حسابان',
                     'tags' => json_encode(["حسابان"], JSON_UNESCAPED_UNICODE),
@@ -221,8 +215,7 @@ class InitializeCategoryTreeCommand extends Command
                     'children' => [],
                 ],
             ];
-        $yazdahomT =
-            $omoomi + [
+        $yazdahomT = $omoomi + [
                 [
                     'name' => 'ریاضی پایه',
                     'tags' => json_encode(["ریاضی_پایه"], JSON_UNESCAPED_UNICODE),
@@ -232,8 +225,7 @@ class InitializeCategoryTreeCommand extends Command
                     'name' => 'زیست شناسی',
                     'tags' => json_encode(["زیست_شناسی"], JSON_UNESCAPED_UNICODE),
                     'children' => [],
-                ]
-                ,
+                ],
                 [
                     'name' => 'فیزیک',
                     'tags' => json_encode(["فیزیک"], JSON_UNESCAPED_UNICODE),
@@ -257,8 +249,7 @@ class InitializeCategoryTreeCommand extends Command
                     'children' => [],
                 ],
             ];
-        $yazdahomE =
-            $omoomi + [
+        $yazdahomE = $omoomi + [
                 [
                     'name' => 'تاریخ',
                     'tags' => json_encode(["تاریخ"], JSON_UNESCAPED_UNICODE),
@@ -298,8 +289,7 @@ class InitializeCategoryTreeCommand extends Command
                     'name' => 'فلسفه',
                     'tags' => json_encode(["فلسفه   "], JSON_UNESCAPED_UNICODE),
                     'children' => [],
-                ]
-                ,
+                ],
                 [
                     'name' => 'نگارش',
                     'tags' => json_encode(["نگارش"], JSON_UNESCAPED_UNICODE),
@@ -308,8 +298,7 @@ class InitializeCategoryTreeCommand extends Command
                 ],
             ];
 
-        $davazdahomR =
-            $omoomi + [
+        $davazdahomR = $omoomi + [
                 [
                     'name' => 'حسابان',
                     'tags' => json_encode(["حسابان"], JSON_UNESCAPED_UNICODE),
@@ -352,8 +341,7 @@ class InitializeCategoryTreeCommand extends Command
                     'name' => 'زیست شناسی',
                     'tags' => json_encode(["زیست_شناسی"], JSON_UNESCAPED_UNICODE),
                     'children' => [],
-                ]
-                ,
+                ],
                 [
                     'name' => 'فیزیک',
                     'tags' => json_encode(["فیزیک"], JSON_UNESCAPED_UNICODE),
@@ -405,8 +393,7 @@ class InitializeCategoryTreeCommand extends Command
                     'name' => 'فلسفه',
                     'tags' => json_encode(["فلسفه   "], JSON_UNESCAPED_UNICODE),
                     'children' => [],
-                ]
-                ,
+                ],
                 [
                     'name' => 'نگارش',
                     'tags' => json_encode(["نگارش"], JSON_UNESCAPED_UNICODE),
@@ -563,7 +550,6 @@ class InitializeCategoryTreeCommand extends Command
                 ],
             ];
 
-
         $riazi = Riazi::getTree();
         $tajrobi = Tajrobi::getTree();
         $ensani = Ensani::getTree();
@@ -615,7 +601,7 @@ class InitializeCategoryTreeCommand extends Command
                                         'tags' => json_encode(['فصل_1:_راهبرد‌های_حل_مسئله'], JSON_UNESCAPED_UNICODE),
                                         'children' => [
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '5',
@@ -628,7 +614,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معرفی_عددهای_علامت‌دار'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '2',
@@ -636,7 +622,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['جمع_و_تفریق_عددهای_صحیح_(1)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '3',
@@ -644,7 +630,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['جمع_و_تفریق_عددهای_صحیح_(2)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '4',
@@ -652,10 +638,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ضرب_و_تقسیم_عددهای_صحیح'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '10',
@@ -668,7 +654,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['الگوهای_عددی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '7',
@@ -676,7 +662,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['عبارت‌های_جبری'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '8',
@@ -684,7 +670,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مقدار_عددی_یک_عبارت_جبری'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '9',
@@ -692,10 +678,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معادله'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '15',
@@ -708,7 +694,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['روابط_بین_پاره‌خط‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '12',
@@ -716,7 +702,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['روابط_بین_زاویه‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '13',
@@ -724,7 +710,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تبدیلات_هندسی_(انتقال،_تقارن،_دوران)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '14',
@@ -732,10 +718,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['شکل‌های_مساوی_(همنهشت)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '20',
@@ -748,7 +734,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['عدد_اول'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '17',
@@ -756,7 +742,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['شمارندۀ_اول'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '18',
@@ -764,7 +750,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['بزرگ‌ترین_شمارندۀ_مشترک'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '19',
@@ -772,10 +758,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کوچک‌ترین_مضرب_مشترک'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '25',
@@ -788,7 +774,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حجم‌های_هندسی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '22',
@@ -796,7 +782,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['محاسبۀ_حجم‌های_منشوری'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '23',
@@ -804,7 +790,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مساحت_جانبی_و_کل'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '24',
@@ -812,10 +798,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حجم_و_سطح'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '30',
@@ -828,7 +814,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تعریف_توان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '27',
@@ -836,7 +822,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['محاسبۀ_عبارت_توان‌دار'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '28',
@@ -844,7 +830,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ساده‌کردن_عبارت‌های_توان‌دار'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '29',
@@ -852,10 +838,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['جذر_و_ریشه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '35',
@@ -868,7 +854,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['پاره‌خط_جهت‌دار'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '32',
@@ -876,7 +862,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['بردارهای_مساوی_و_قرینه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '33',
@@ -884,7 +870,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مختصات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '34',
@@ -892,10 +878,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['بردار_انتقال'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '40',
@@ -908,7 +894,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['جمع‌آوری_و_نمایش_داده‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '37',
@@ -916,7 +902,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['نمودارها_و_تفسیر_نتیجه‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '38',
@@ -924,7 +910,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['احتمال_یا_اندازه‌گیری_شانس'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '39',
@@ -932,13 +918,13 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['احتمال_و_تجربه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
                             [
                                 'id' => '113',
@@ -956,7 +942,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Sounds_&_Letters'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '43',
@@ -964,7 +950,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '44',
@@ -972,7 +958,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '45',
@@ -980,7 +966,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Listening'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '46',
@@ -988,7 +974,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '47',
@@ -996,7 +982,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '48',
@@ -1004,10 +990,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '57',
@@ -1020,7 +1006,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Sounds_&_Letters'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '51',
@@ -1028,7 +1014,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '52',
@@ -1036,7 +1022,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '53',
@@ -1044,7 +1030,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '54',
@@ -1052,7 +1038,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '55',
@@ -1060,7 +1046,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '56',
@@ -1068,10 +1054,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '65',
@@ -1084,7 +1070,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Sounds_&_Letters'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '59',
@@ -1092,7 +1078,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '60',
@@ -1100,7 +1086,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '61',
@@ -1108,7 +1094,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '62',
@@ -1116,7 +1102,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '63',
@@ -1124,7 +1110,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '64',
@@ -1132,10 +1118,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '73',
@@ -1148,7 +1134,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Sounds_&_Letters'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '67',
@@ -1156,7 +1142,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '68',
@@ -1164,7 +1150,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '69',
@@ -1172,7 +1158,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '70',
@@ -1180,7 +1166,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '71',
@@ -1188,7 +1174,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '72',
@@ -1196,10 +1182,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '81',
@@ -1212,7 +1198,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Sounds_&_Letters'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '75',
@@ -1220,7 +1206,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '76',
@@ -1228,7 +1214,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '77',
@@ -1236,7 +1222,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '78',
@@ -1244,7 +1230,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '79',
@@ -1252,7 +1238,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '80',
@@ -1260,10 +1246,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '89',
@@ -1276,7 +1262,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Sounds_&_Letters'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '83',
@@ -1284,7 +1270,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '84',
@@ -1292,7 +1278,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '85',
@@ -1300,7 +1286,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '86',
@@ -1308,7 +1294,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '87',
@@ -1316,7 +1302,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '88',
@@ -1324,10 +1310,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '97',
@@ -1340,7 +1326,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Sounds_&_Letters'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '91',
@@ -1348,7 +1334,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '92',
@@ -1356,7 +1342,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '93',
@@ -1364,7 +1350,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '94',
@@ -1372,7 +1358,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '95',
@@ -1380,7 +1366,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '96',
@@ -1388,10 +1374,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '105',
@@ -1404,7 +1390,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Sounds_&_Letters'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '99',
@@ -1412,7 +1398,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '100',
@@ -1420,7 +1406,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '101',
@@ -1428,7 +1414,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '102',
@@ -1436,7 +1422,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '103',
@@ -1444,7 +1430,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '104',
@@ -1452,10 +1438,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '112',
@@ -1468,7 +1454,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '107',
@@ -1476,7 +1462,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '108',
@@ -1484,7 +1470,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Sounds_&_Letters'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '109',
@@ -1492,7 +1478,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '110',
@@ -1500,7 +1486,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '111',
@@ -1508,13 +1494,13 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
                             [
                                 'id' => '166',
@@ -1532,7 +1518,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '115',
@@ -1540,7 +1526,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '116',
@@ -1548,10 +1534,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '121',
@@ -1564,7 +1550,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '119',
@@ -1572,7 +1558,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '120',
@@ -1580,10 +1566,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '125',
@@ -1596,7 +1582,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '123',
@@ -1604,7 +1590,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '124',
@@ -1612,10 +1598,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '129',
@@ -1628,7 +1614,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '127',
@@ -1636,7 +1622,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '128',
@@ -1644,10 +1630,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '133',
@@ -1660,7 +1646,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '131',
@@ -1668,7 +1654,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '132',
@@ -1676,10 +1662,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '137',
@@ -1692,7 +1678,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '135',
@@ -1700,7 +1686,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '136',
@@ -1708,10 +1694,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '141',
@@ -1724,7 +1710,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '139',
@@ -1732,7 +1718,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '140',
@@ -1740,10 +1726,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '145',
@@ -1756,7 +1742,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '143',
@@ -1764,7 +1750,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '144',
@@ -1772,10 +1758,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '149',
@@ -1788,7 +1774,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '147',
@@ -1796,7 +1782,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '148',
@@ -1804,10 +1790,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '153',
@@ -1820,7 +1806,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '151',
@@ -1828,7 +1814,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '152',
@@ -1836,10 +1822,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '157',
@@ -1852,7 +1838,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '155',
@@ -1860,7 +1846,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '156',
@@ -1868,10 +1854,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '161',
@@ -1884,7 +1870,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '159',
@@ -1892,7 +1878,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '160',
@@ -1900,10 +1886,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '165',
@@ -1916,7 +1902,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '163',
@@ -1924,7 +1910,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '164',
@@ -1932,13 +1918,13 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
                             [
                                 'id' => '256',
@@ -1951,7 +1937,7 @@ class InitializeCategoryTreeCommand extends Command
                                         'tags' => json_encode(['فصل_1:_تجربه_و_تفکر'], JSON_UNESCAPED_UNICODE),
                                         'children' => [
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '174',
@@ -1964,7 +1950,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اندازه‌گیری_و_واحد‌های_استاندارد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '169',
@@ -1972,7 +1958,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['جرم_و_وزن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '170',
@@ -1980,7 +1966,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['طول،_مساحت_و_حجم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '171',
@@ -1988,7 +1974,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['چگالی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '172',
@@ -1996,7 +1982,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['زمان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '173',
@@ -2004,10 +1990,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دقت_در_اندازه‌گیری'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '181',
@@ -2020,7 +2006,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مواد_در_زندگی_ما'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '176',
@@ -2028,7 +2014,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['عنصر‌ها_و_ترکیب‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '177',
@@ -2036,7 +2022,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ویژگی‌های_فلزات_و_نافلزات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '178',
@@ -2044,7 +2030,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ذرات_تشکیل‌دهندۀ_اتم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '179',
@@ -2052,7 +2038,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تراکم‌پذیری_و_انبساط_مواد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '180',
@@ -2060,10 +2046,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['گرما_و_تغییر_حالت_ماده'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '187',
@@ -2076,7 +2062,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مواد_طبیعی_و_مصنوعی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '183',
@@ -2084,7 +2070,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ویژگی‌های_مواد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '184',
@@ -2092,7 +2078,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کاربرد_مواد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '185',
@@ -2100,7 +2086,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آلیاژها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '186',
@@ -2108,10 +2094,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مواد_هوشمند'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '193',
@@ -2124,7 +2110,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اندوخته‌های_زمین'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '189',
@@ -2132,7 +2118,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['چگونه_می‌توان_به_آهن_دست_یافت؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '190',
@@ -2140,7 +2126,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['به_دنبال_سرپناهی_ایمن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '191',
@@ -2148,7 +2134,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اندوخته‌های_طبیعی_و_ظروف_آشپزخانه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '192',
@@ -2156,10 +2142,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سرعت_مصرف_منابع_و_راه‌های_محافظت_از_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '200',
@@ -2172,7 +2158,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آب،_فراوان_اما_کمیاب'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '195',
@@ -2180,7 +2166,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آب‌های_جاری'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '196',
@@ -2188,7 +2174,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دریاچه‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '197',
@@ -2196,7 +2182,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دریاها_و_اقیانوس‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '198',
@@ -2204,7 +2190,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['باران_چگونه_تشکیل_و_به_کجا_می‌رود؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '199',
@@ -2212,10 +2198,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['یخچال‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '204',
@@ -2228,7 +2214,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آب‌های_زیر‌زمینی_و_عوامل_مؤثر_در_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '202',
@@ -2236,7 +2222,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سفره‌های_آب_زیرزمینی_(آبخوان)_و_ویژگی‌های_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '203',
@@ -2244,10 +2230,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قنات_-_چرخۀ_آب'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '210',
@@ -2260,7 +2246,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کار'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '206',
@@ -2268,7 +2254,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['انرژی_جنبشی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '207',
@@ -2276,7 +2262,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['انرژی_پتانسیل'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '208',
@@ -2284,7 +2270,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اصل_پایستگی_انرژی_و_تبدیلات_انرژی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '209',
@@ -2292,10 +2278,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['انرژی_شیمیایی_مواد_غذایی_و_آهنگ_مصرف_انرژی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '213',
@@ -2308,7 +2294,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['منابع_تجدید_ناپذیر'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '212',
@@ -2316,10 +2302,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['منابع_تجدید_پذیر'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '219',
@@ -2332,7 +2318,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دما_و_دماسنجی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '215',
@@ -2340,7 +2326,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['انواع_دماسنج‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '216',
@@ -2348,7 +2334,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تعریف_گرما_-_دمای_تعادل'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '217',
@@ -2356,7 +2342,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['روش‌های_انتقال_گرما'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '218',
@@ -2364,10 +2350,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کاربرد‌های_مربوط_به_گرما'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '224',
@@ -2380,7 +2366,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['یاخته،_کوچک‌ترین_واحد_زنده'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '221',
@@ -2388,7 +2374,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['نگاهی_به_درون_یاخته_و_شباهت‌های_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '222',
@@ -2396,7 +2382,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مقایسۀ_یاخته‌های_گیاهی_و_جانوری'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '223',
@@ -2404,10 +2390,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سازمان‌بندی_یاخته‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '233',
@@ -2420,7 +2406,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['موادی_که_غذاها_دارند'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '226',
@@ -2428,7 +2414,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کربوهیدرات‌ها_(قندها)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '227',
@@ -2436,7 +2422,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['لیپید‌ها_(چربی‌ها)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '228',
@@ -2444,7 +2430,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['پروتئین‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '229',
@@ -2452,7 +2438,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ویتامین‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '230',
@@ -2460,7 +2446,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مواد_معدنی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '231',
@@ -2468,7 +2454,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آب'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '232',
@@ -2476,10 +2462,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تغذیۀ_سالم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '240',
@@ -2492,7 +2478,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['گوارش_غذا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '235',
@@ -2500,7 +2486,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['لولۀ_گوارش_و_غدد_گوارشی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '236',
@@ -2508,7 +2494,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['از_دهان_تا_معده'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '237',
@@ -2516,7 +2502,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['رودۀ_باریک'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '238',
@@ -2524,7 +2510,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['رودۀ_بزرگ'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '239',
@@ -2532,10 +2518,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کبد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '247',
@@ -2548,7 +2534,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['رابطه_بین_همه_دستگاه‌های_بدن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '242',
@@ -2556,7 +2542,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قلب'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '243',
@@ -2564,7 +2550,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['رگ‌های_قلب_-_رگ‌های_بدن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '244',
@@ -2572,7 +2558,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['گردش_کوچک_و_بزرگ_خون'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '245',
@@ -2580,7 +2566,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['فشار_خون_و_نبض'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '246',
@@ -2588,10 +2574,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['خون'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '255',
@@ -2609,7 +2595,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['ساختار_دستگاه_تنفس'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '249',
@@ -2617,7 +2603,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['تبادل_هوا_-_تولید_صدا'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '250',
@@ -2625,10 +2611,10 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['انتقال_گازها'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '254',
@@ -2641,7 +2627,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['چگونگی_کار_کلیه'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '253',
@@ -2649,16 +2635,16 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['تنظیم_محیط_داخلی'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
                             [
                                 'id' => '394',
@@ -2676,7 +2662,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '258',
@@ -2684,7 +2670,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '259',
@@ -2692,7 +2678,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '260',
@@ -2700,7 +2686,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '261',
@@ -2708,7 +2694,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '262',
@@ -2716,10 +2702,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '270',
@@ -2732,7 +2718,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '265',
@@ -2740,7 +2726,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '266',
@@ -2748,7 +2734,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '267',
@@ -2756,7 +2742,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '268',
@@ -2764,7 +2750,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '269',
@@ -2772,10 +2758,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '278',
@@ -2788,7 +2774,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '272',
@@ -2796,7 +2782,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '273',
@@ -2804,7 +2790,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '274',
@@ -2812,7 +2798,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '275',
@@ -2820,7 +2806,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '276',
@@ -2828,7 +2814,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '277',
@@ -2836,10 +2822,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حفظ_شعر'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '285',
@@ -2852,7 +2838,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '280',
@@ -2860,7 +2846,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '281',
@@ -2868,7 +2854,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '282',
@@ -2876,7 +2862,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '283',
@@ -2884,7 +2870,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '284',
@@ -2892,10 +2878,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '292',
@@ -2908,7 +2894,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '287',
@@ -2916,7 +2902,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '288',
@@ -2924,7 +2910,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '289',
@@ -2932,7 +2918,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '290',
@@ -2940,7 +2926,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '291',
@@ -2948,10 +2934,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '299',
@@ -2964,7 +2950,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '294',
@@ -2972,7 +2958,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '295',
@@ -2980,7 +2966,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '296',
@@ -2988,7 +2974,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '297',
@@ -2996,7 +2982,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '298',
@@ -3004,10 +2990,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '306',
@@ -3020,7 +3006,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '301',
@@ -3028,7 +3014,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '302',
@@ -3036,7 +3022,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '303',
@@ -3044,7 +3030,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '304',
@@ -3052,7 +3038,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '305',
@@ -3060,10 +3046,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '313',
@@ -3076,7 +3062,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '308',
@@ -3084,7 +3070,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '309',
@@ -3092,7 +3078,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '310',
@@ -3100,7 +3086,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '311',
@@ -3108,7 +3094,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '312',
@@ -3116,10 +3102,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '321',
@@ -3132,7 +3118,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '315',
@@ -3140,7 +3126,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '316',
@@ -3148,7 +3134,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '317',
@@ -3156,7 +3142,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '318',
@@ -3164,7 +3150,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '319',
@@ -3172,7 +3158,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '320',
@@ -3180,10 +3166,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حفظ_شعر'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '328',
@@ -3196,7 +3182,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '323',
@@ -3204,7 +3190,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '324',
@@ -3212,7 +3198,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '325',
@@ -3220,7 +3206,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '326',
@@ -3228,7 +3214,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '327',
@@ -3236,10 +3222,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '336',
@@ -3252,7 +3238,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '330',
@@ -3260,7 +3246,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '331',
@@ -3268,7 +3254,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '332',
@@ -3276,7 +3262,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '333',
@@ -3284,7 +3270,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '334',
@@ -3292,7 +3278,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '335',
@@ -3300,10 +3286,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حفظ_شعر'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '343',
@@ -3316,7 +3302,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '338',
@@ -3324,7 +3310,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '339',
@@ -3332,7 +3318,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '340',
@@ -3340,7 +3326,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '341',
@@ -3348,7 +3334,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '342',
@@ -3356,10 +3342,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '350',
@@ -3372,7 +3358,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '345',
@@ -3380,7 +3366,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '346',
@@ -3388,7 +3374,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '347',
@@ -3396,7 +3382,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '348',
@@ -3404,7 +3390,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '349',
@@ -3412,10 +3398,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '357',
@@ -3428,7 +3414,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '352',
@@ -3436,7 +3422,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '353',
@@ -3444,7 +3430,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '354',
@@ -3452,7 +3438,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '355',
@@ -3460,7 +3446,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '356',
@@ -3468,10 +3454,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '364',
@@ -3484,7 +3470,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '359',
@@ -3492,7 +3478,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '360',
@@ -3500,7 +3486,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '361',
@@ -3508,7 +3494,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '362',
@@ -3516,7 +3502,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '363',
@@ -3524,10 +3510,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '371',
@@ -3540,7 +3526,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '366',
@@ -3548,7 +3534,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '367',
@@ -3556,7 +3542,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '368',
@@ -3564,7 +3550,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '369',
@@ -3572,7 +3558,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '370',
@@ -3580,10 +3566,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '378',
@@ -3596,7 +3582,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '373',
@@ -3604,7 +3590,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '374',
@@ -3612,7 +3598,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '375',
@@ -3620,7 +3606,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '376',
@@ -3628,7 +3614,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '377',
@@ -3636,10 +3622,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '385',
@@ -3652,7 +3638,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '380',
@@ -3660,7 +3646,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '381',
@@ -3668,7 +3654,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '382',
@@ -3676,7 +3662,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '383',
@@ -3684,7 +3670,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '384',
@@ -3692,10 +3678,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '393',
@@ -3708,7 +3694,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '387',
@@ -3716,7 +3702,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '388',
@@ -3724,7 +3710,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '389',
@@ -3732,7 +3718,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '390',
@@ -3740,7 +3726,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '391',
@@ -3748,7 +3734,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '392',
@@ -3756,13 +3742,13 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حفظ_شعر'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
                             [
                                 'id' => '493',
@@ -3780,7 +3766,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تعریف_حق'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '396',
@@ -3788,10 +3774,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حقوق_افراد_در_محیط‌های_گوناگون'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '398',
@@ -3799,7 +3785,7 @@ class InitializeCategoryTreeCommand extends Command
                                         'tags' => json_encode(['درس_3:_چرا_به_مقررات_و_قوانین_نیاز_داریم؟'], JSON_UNESCAPED_UNICODE),
                                         'children' => [
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '404',
@@ -3812,7 +3798,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تعریف_قانون_و_انواع_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '400',
@@ -3820,7 +3806,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قانون_اساسی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '403',
@@ -3833,7 +3819,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['مجلس_شورای_اسلامی'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '402',
@@ -3841,13 +3827,13 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['شورای_نگهبان'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '407',
@@ -3860,7 +3846,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تعریف_همدلی_و_همیاری'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '406',
@@ -3868,10 +3854,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کدام_مؤسسات_اجتماعی_در_حوادث_به‌_ما_کمک_می‌کنند؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '410',
@@ -3884,7 +3870,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['بیمه_چیست_و_چرا_به_وجود_آمده_است؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '409',
@@ -3892,10 +3878,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['انواع_بیمه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '413',
@@ -3908,7 +3894,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تولید_و_انواع_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '412',
@@ -3916,10 +3902,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['توزیع_کالا_و_خدمات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '416',
@@ -3932,7 +3918,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مصرف‌کننده_و_حقوق_او'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '415',
@@ -3940,10 +3926,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مسئولیت‌های_مصرف‌کننده'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '420',
@@ -3956,7 +3942,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ویژگی‌های_طبیعی_و_انسانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '418',
@@ -3964,7 +3950,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ویژگی‌های_جغرافیایی_هر_مکان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '419',
@@ -3972,10 +3958,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['چه_وسایلی_به_شناخت_محیط_زندگی_کمک_می‌کنند'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '425',
@@ -3988,7 +3974,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تقسیمات_کشوری_ایران'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '424',
@@ -4001,7 +3987,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['نواحی_مرتفع_و_بلند'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '423',
@@ -4009,13 +3995,13 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['نواحی_پست_و_هموار'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '428',
@@ -4028,7 +4014,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['محیط_طبیعی_ایران_متنوع_است'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '427',
@@ -4036,10 +4022,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آب‌و‌هوای_ایران'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '434',
@@ -4052,7 +4038,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['گونه‌های_گیاهی_و_جانوری_ایران'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '430',
@@ -4060,7 +4046,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['چرا_زیستگاه‌ها_تخریب_می‌شوند؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '431',
@@ -4068,7 +4054,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['چرا_از_زیستگاه‌ها_حفاظت_می‌کنیم؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '432',
@@ -4076,7 +4062,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['چگونه_از_زیستگاه‌ها_حفاظت_می‌کنیم؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '433',
@@ -4084,10 +4070,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مناطق_حفاظت‌شده'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '438',
@@ -4100,7 +4086,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سرشماری_جمعیت_ایران'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '436',
@@ -4108,7 +4094,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['جمعیت_چگونه_افزایش_می‌یابد؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '437',
@@ -4116,10 +4102,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تراکم_جمعیت_و_پراکندگی_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '445',
@@ -4137,7 +4123,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['منابع_آب_در_ایران'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '440',
@@ -4145,10 +4131,10 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['مصرف_آب'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '444',
@@ -4161,7 +4147,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['خاک_چگونه_تشکیل_می‌شود؟'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '443',
@@ -4169,13 +4155,13 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['عوامل_ازبین‌رفتن_خاک'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '448',
@@ -4188,7 +4174,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['گردشگری_و_انواع_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '447',
@@ -4196,10 +4182,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['گردشگری_و_نقشه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '452',
@@ -4212,7 +4198,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سفرهای_زیارتی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '450',
@@ -4220,7 +4206,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['گردشگری_تاریخی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '451',
@@ -4228,10 +4214,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['طبیعت‌گردی_و_حفاظت_از_طبیعت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '456',
@@ -4244,7 +4230,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['میراث_فرهنگی_و_حفاظت_از_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '454',
@@ -4252,7 +4238,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['چه_کسانی_گذشته_را_مطالعه_می‌کنند؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '455',
@@ -4260,10 +4246,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['موزه‌ها_و_زمان_میراث_فرهنگی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '457',
@@ -4271,7 +4257,7 @@ class InitializeCategoryTreeCommand extends Command
                                         'tags' => json_encode(['درس_18:_قدیمی‌ترین_سکونتگاه‌های_ایران'], JSON_UNESCAPED_UNICODE),
                                         'children' => [
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '464',
@@ -4284,7 +4270,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آریایی‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '459',
@@ -4292,7 +4278,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مادها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '460',
@@ -4300,7 +4286,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['هخامنشیان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '461',
@@ -4308,7 +4294,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سلوکیان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '462',
@@ -4316,7 +4302,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اشکانیان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '463',
@@ -4324,10 +4310,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ساسانیان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '469',
@@ -4340,7 +4326,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['نوع_حکومت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '466',
@@ -4348,7 +4334,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مقام‌های_حکومتی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '467',
@@ -4356,7 +4342,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تقسیمات_کشوری_و_پایتخت‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '468',
@@ -4364,10 +4350,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سپاه_و_قدرت_نظامی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '473',
@@ -4380,7 +4366,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['خانواده'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '471',
@@ -4388,7 +4374,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['زندگی_شهری_و_روستایی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '472',
@@ -4396,10 +4382,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['نابرابری_اجتماعی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '478',
@@ -4412,7 +4398,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کشاورزی_و_دامپروری'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '475',
@@ -4420,7 +4406,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['صنعت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '476',
@@ -4428,7 +4414,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تجارت_و_ضرب_سکه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '477',
@@ -4436,10 +4422,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درآمد‌ها_و_مخارج_حکومت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '484',
@@ -4452,7 +4438,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دین'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '480',
@@ -4460,7 +4446,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تغذیه_و_آداب_غذا_خوردن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '481',
@@ -4468,7 +4454,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['پوشاک'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '482',
@@ -4476,7 +4462,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ورزش'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '483',
@@ -4484,10 +4470,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['جشن‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '489',
@@ -4500,7 +4486,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['زبان_فارسی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '486',
@@ -4508,7 +4494,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['خط'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '487',
@@ -4516,7 +4502,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '488',
@@ -4524,10 +4510,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['هنر_و_معماری'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '492',
@@ -4540,7 +4526,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حقوق_متقابل_و_مسئولیت‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '491',
@@ -4548,13 +4534,13 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مسئولیت‌های_گوناگون'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
                             [
                                 'id' => '542',
@@ -4572,7 +4558,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '495',
@@ -4580,10 +4566,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '499',
@@ -4596,7 +4582,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '498',
@@ -4604,10 +4590,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '502',
@@ -4620,7 +4606,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '501',
@@ -4628,10 +4614,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '505',
@@ -4644,7 +4630,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '504',
@@ -4652,10 +4638,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '508',
@@ -4668,7 +4654,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '507',
@@ -4676,10 +4662,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '511',
@@ -4692,7 +4678,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '510',
@@ -4700,10 +4686,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '514',
@@ -4716,7 +4702,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '513',
@@ -4724,10 +4710,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '517',
@@ -4740,7 +4726,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '516',
@@ -4748,10 +4734,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '520',
@@ -4764,7 +4750,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '519',
@@ -4772,10 +4758,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '523',
@@ -4788,7 +4774,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '522',
@@ -4796,10 +4782,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '526',
@@ -4812,7 +4798,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '525',
@@ -4820,10 +4806,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '529',
@@ -4836,7 +4822,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '528',
@@ -4844,10 +4830,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '532',
@@ -4860,7 +4846,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '531',
@@ -4868,10 +4854,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '535',
@@ -4884,7 +4870,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '534',
@@ -4892,10 +4878,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '538',
@@ -4908,7 +4894,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '537',
@@ -4916,10 +4902,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '541',
@@ -4932,7 +4918,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '540',
@@ -4940,16 +4926,16 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
 
-                        ]
+                        ],
                     ],
                     [
                         'id' => '1079',
@@ -4972,7 +4958,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_اول:_یادآوری_عددهای_صحیح'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '545',
@@ -4980,7 +4966,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_دوم:_معرفی_عددهای_گویا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '546',
@@ -4988,7 +4974,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_سوم:_جمع_و_تفریق_عددهای_گویا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '547',
@@ -4996,10 +4982,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_چهارم:_ضرب_و_تقسیم_عددهای_گویا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '551',
@@ -5012,7 +4998,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_اول:_یادآوری_عددهای_اول'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '550',
@@ -5020,10 +5006,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_دوم:_تعیین_عددهای_اول'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '557',
@@ -5036,7 +5022,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_اول:_چندضلعی‌ها_و_تقارن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '553',
@@ -5044,7 +5030,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_دوم:_توازی_و_تعامد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '554',
@@ -5052,7 +5038,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_سوم:_چهار_ضلعی‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '555',
@@ -5060,7 +5046,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_چهارم:_زاویه‌های_داخلی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '556',
@@ -5068,10 +5054,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_پنجم:_زاویه‌های_خارجی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '562',
@@ -5084,7 +5070,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_اول:_ساده‌کردن_عبارت‌های_جبری'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '559',
@@ -5092,7 +5078,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_دوم:_پیدا_کردن_مقدار_یک_عبارت_جبری'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '560',
@@ -5100,7 +5086,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_سوم:_تجزیۀ_عبارت‌های_جبری'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '561',
@@ -5108,10 +5094,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_چهارم:_معادله'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '566',
@@ -5124,7 +5110,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_اول:_جمع_بردارها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '564',
@@ -5132,7 +5118,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_دوم:_ضرب_عدد_در_بردار'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '565',
@@ -5140,10 +5126,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_سوم:_بردارهای_واحد_مختصات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '571',
@@ -5156,7 +5142,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_اول:_رابطۀ_فیثاغورس'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '568',
@@ -5164,7 +5150,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_دوم:_شکل‌های_همنهشت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '569',
@@ -5172,7 +5158,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_سوم:_مثلث‌های_همنهشت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '570',
@@ -5180,10 +5166,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_چهارم:_همنهشتی_مثلث‌های_قائم‌الزاویه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '577',
@@ -5196,7 +5182,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_اول:_توان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '573',
@@ -5204,7 +5190,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_دوم:_تقسیم_اعداد_توان‌دار'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '574',
@@ -5212,7 +5198,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_سوم:_جذر_تقریبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '575',
@@ -5220,7 +5206,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_چهارم:_نمایش_اعداد_رادیکالی_روی_محور_اعداد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '576',
@@ -5228,10 +5214,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_پنجم:_خواص_ضرب_و_تقسیم_رادیکال‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '582',
@@ -5244,7 +5230,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_اول:_دسته‌بندی_داده‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '579',
@@ -5252,7 +5238,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_دوم:_میانگین_داده‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '580',
@@ -5260,7 +5246,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_سوم:_احتمال_یا_اندازه‌گیری_شانس'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '581',
@@ -5268,10 +5254,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_چهارم:_بررسی_حالت‌های_ممکن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '586',
@@ -5284,7 +5270,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_اول:_خط_و_دایره'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '584',
@@ -5292,7 +5278,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_دوم:_زاویه‌های_مرکزی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '585',
@@ -5300,13 +5286,13 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_سوم:_زاویه‌های_محاطی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
                             [
                                 'id' => '643',
@@ -5324,7 +5310,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling_and_Pronunciation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '589',
@@ -5332,7 +5318,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '590',
@@ -5340,7 +5326,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '591',
@@ -5348,7 +5334,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '592',
@@ -5356,7 +5342,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '593',
@@ -5364,10 +5350,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '601',
@@ -5380,7 +5366,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling_and_Pronunciation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '596',
@@ -5388,7 +5374,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '597',
@@ -5396,7 +5382,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '598',
@@ -5404,7 +5390,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '599',
@@ -5412,7 +5398,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '600',
@@ -5420,10 +5406,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '608',
@@ -5436,7 +5422,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling_and_Pronunciation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '603',
@@ -5444,7 +5430,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '604',
@@ -5452,7 +5438,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '605',
@@ -5460,7 +5446,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '606',
@@ -5468,7 +5454,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '607',
@@ -5476,10 +5462,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '615',
@@ -5492,7 +5478,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling_and_Pronunciation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '610',
@@ -5500,7 +5486,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '611',
@@ -5508,7 +5494,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '612',
@@ -5516,7 +5502,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '613',
@@ -5524,7 +5510,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '614',
@@ -5532,10 +5518,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '622',
@@ -5548,7 +5534,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling_and_Pronunciation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '617',
@@ -5556,7 +5542,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '618',
@@ -5564,7 +5550,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '619',
@@ -5572,7 +5558,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '620',
@@ -5580,7 +5566,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '621',
@@ -5588,10 +5574,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '629',
@@ -5604,7 +5590,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling_and_Pronunciation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '624',
@@ -5612,7 +5598,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '625',
@@ -5620,7 +5606,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '626',
@@ -5628,7 +5614,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '627',
@@ -5636,7 +5622,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '628',
@@ -5644,10 +5630,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '636',
@@ -5660,7 +5646,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling_and_Pronunciation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '631',
@@ -5668,7 +5654,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '632',
@@ -5676,7 +5662,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '633',
@@ -5684,7 +5670,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '634',
@@ -5692,7 +5678,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '635',
@@ -5700,10 +5686,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '642',
@@ -5716,7 +5702,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '638',
@@ -5724,7 +5710,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Cloze_'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '639',
@@ -5732,7 +5718,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '640',
@@ -5740,7 +5726,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '641',
@@ -5748,13 +5734,13 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
                             [
                                 'id' => '688',
@@ -5772,7 +5758,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '645',
@@ -5780,7 +5766,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '646',
@@ -5788,10 +5774,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '651',
@@ -5804,7 +5790,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '649',
@@ -5812,7 +5798,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '650',
@@ -5820,10 +5806,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '655',
@@ -5836,7 +5822,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '653',
@@ -5844,7 +5830,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '654',
@@ -5852,10 +5838,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '659',
@@ -5868,7 +5854,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '657',
@@ -5876,7 +5862,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '658',
@@ -5884,10 +5870,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '663',
@@ -5900,7 +5886,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '661',
@@ -5908,7 +5894,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '662',
@@ -5916,10 +5902,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '667',
@@ -5932,7 +5918,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '665',
@@ -5940,7 +5926,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '666',
@@ -5948,10 +5934,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '671',
@@ -5964,7 +5950,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '669',
@@ -5972,7 +5958,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '670',
@@ -5980,10 +5966,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '675',
@@ -5996,7 +5982,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '673',
@@ -6004,7 +5990,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '674',
@@ -6012,10 +5998,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '679',
@@ -6028,7 +6014,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '677',
@@ -6036,7 +6022,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '678',
@@ -6044,10 +6030,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '683',
@@ -6060,7 +6046,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '681',
@@ -6068,7 +6054,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '682',
@@ -6076,10 +6062,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '687',
@@ -6092,7 +6078,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '685',
@@ -6100,7 +6086,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '686',
@@ -6108,13 +6094,13 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
                             [
                                 'id' => '794',
@@ -6132,7 +6118,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مواد_خالص_و_مخلوط'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '690',
@@ -6140,7 +6126,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['انواع_مخلوط‌ها_(همگن_و_ناهمگن)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '691',
@@ -6148,7 +6134,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اجزای_تشکیل‌دهنده_و_حالت_فیزیکی_محلول‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '692',
@@ -6156,7 +6142,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['انحلال‌پذیری_و_عوامل_مؤثر_بر_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '693',
@@ -6164,7 +6150,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اسیدها_و_بازها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '694',
@@ -6172,10 +6158,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['جداسازی_مخلوط‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '700',
@@ -6188,7 +6174,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تغییرهای_فیزیکی_و_شیمیایی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '697',
@@ -6196,7 +6182,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سوختن_و_فرآورده‌های_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '698',
@@ -6204,7 +6190,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تغییر_شیمیایی_در_بدن_جانداران_و_عوامل_مؤثر_بر_سرعت_تغییرها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '699',
@@ -6212,10 +6198,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['استفاده_از_انرژی_شیمیایی_مواد_-_پیل‌های_شیمیایی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '706',
@@ -6228,7 +6214,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ذره‌های_سازنده_اتم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '702',
@@ -6236,7 +6222,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['عنصرها_و_نشانه_شیمیایی_آن‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '703',
@@ -6244,7 +6230,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مدلی_برای_ساختار_اتم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '704',
@@ -6252,7 +6238,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ایزوتوپ‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '705',
@@ -6260,10 +6246,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['یون‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '713',
@@ -6276,7 +6262,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دستگاه_عصبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '708',
@@ -6284,7 +6270,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['فعالیت‌های_ارادی_و_غیرارادی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '709',
@@ -6292,7 +6278,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مراکز_عصبی_(مغز_و_نخاع)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '710',
@@ -6300,7 +6286,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اعصاب_محیطی_(حسی_و_حرکتی)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '711',
@@ -6308,7 +6294,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سلول‌های_بافت_عصبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '712',
@@ -6316,10 +6302,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['پیام_عصبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '723',
@@ -6337,7 +6323,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['چشم'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '715',
@@ -6345,7 +6331,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['گوش'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '716',
@@ -6353,7 +6339,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['بینی'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '717',
@@ -6361,7 +6347,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['زبان'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '718',
@@ -6369,10 +6355,10 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['پوست'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '722',
@@ -6385,7 +6371,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['اسکلت'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '721',
@@ -6393,13 +6379,13 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['ماهیچه‌ها'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '732',
@@ -6412,7 +6398,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دستگاه_هورمونی_و_اعمال_هورمون‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '725',
@@ -6420,7 +6406,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['هیپوفیز'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '726',
@@ -6428,7 +6414,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تیروئید'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '727',
@@ -6436,7 +6422,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['پانکراس'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '728',
@@ -6444,7 +6430,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['فوق_کلیوی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '729',
@@ -6452,7 +6438,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['پاراتیروئید'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '730',
@@ -6460,7 +6446,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['غدد_جنسی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '731',
@@ -6468,10 +6454,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تنظیم_ترشح_هورمون‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '739',
@@ -6484,7 +6470,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['صفات_ارثی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '734',
@@ -6492,7 +6478,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['نگاهی_دقیق_به_هستۀ_سلول'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '735',
@@ -6500,7 +6486,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['صفات_محیطی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '736',
@@ -6508,7 +6494,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ایجاد_صفات_جدید_در_جانداران'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '737',
@@ -6516,7 +6502,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تقسیم_میتوز'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '738',
@@ -6524,10 +6510,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تقسیم_مشکل‌ساز_(سرطان)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '746',
@@ -6540,7 +6526,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تولید_مثل_غیرجنسی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '741',
@@ -6548,7 +6534,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تولید_مثل‌جنسی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '742',
@@ -6556,7 +6542,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تقسیم_میوز'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '743',
@@ -6564,7 +6550,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تولید‌مثل_جنسی_در_جانوران'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '744',
@@ -6572,7 +6558,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تولید_مثل_در_انسان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '745',
@@ -6580,10 +6566,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تولید_مثل_جنسی_در_گیاهان_گلدار'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '755',
@@ -6596,7 +6582,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['بارهای_الکتریکی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '748',
@@ -6604,7 +6590,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['رسانا_و_نارسانا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '749',
@@ -6612,7 +6598,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['روش‌های_باردارکردن_اجسام'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '750',
@@ -6620,7 +6606,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آذرخش_و_تخلیۀ_بار_الکتریکی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '751',
@@ -6628,7 +6614,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['برق‌نما'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '752',
@@ -6636,7 +6622,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اختلاف‌پتانسیل_الکتریکی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '753',
@@ -6644,7 +6630,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مدار_الکتریکی_و_جریان_الکتریکی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '754',
@@ -6652,10 +6638,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مقاومت_الکتریکی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '760',
@@ -6668,7 +6654,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قطب‌های_آهنربا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '757',
@@ -6676,7 +6662,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['روش‌های_ساخت_آهنربا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '758',
@@ -6684,7 +6670,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آهنربای_الکتریکی_-_موتور_الکتریکی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '759',
@@ -6692,10 +6678,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تولید_برق'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '768',
@@ -6708,7 +6694,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کانی_چیست؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '762',
@@ -6716,7 +6702,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کاربرد_کانی‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '763',
@@ -6724,7 +6710,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تشکیل_کانی‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '764',
@@ -6732,7 +6718,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['شناسایی_کانی‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '765',
@@ -6740,7 +6726,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کانی‌های_نامهربان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '766',
@@ -6748,7 +6734,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['نام‌گذاری_کانی‌ها_و_کانی‌های_ملی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '767',
@@ -6756,10 +6742,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['طبقه‌بندی_کانی‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '773',
@@ -6772,7 +6758,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سنگ‌ها،_منابع_ارزشمند'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '770',
@@ -6780,7 +6766,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سنگ‌های_آذرین'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '771',
@@ -6788,7 +6774,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سنگ‌های_رسوبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '772',
@@ -6796,10 +6782,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سنگ‌های_دگرگونی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '779',
@@ -6817,7 +6803,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['فیزیکی'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '775',
@@ -6825,10 +6811,10 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['شیمیایی'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '777',
@@ -6836,7 +6822,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['فرسایش'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '778',
@@ -6844,10 +6830,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['چرخۀ_سنگ'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '787',
@@ -6860,7 +6846,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['چشمه‌های_نور_-_چگونگی_انتشار_نور'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '781',
@@ -6868,7 +6854,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سایه_و_نیم‌سایه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '782',
@@ -6876,7 +6862,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['بازتاب_نور'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '783',
@@ -6884,7 +6870,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تصویر_در_آینۀ_تخت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '786',
@@ -6897,7 +6883,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['آینه‌های_کاو'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '785',
@@ -6905,13 +6891,13 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['آینه‌های_کوژ'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '793',
@@ -6924,7 +6910,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['شکست_نور'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '789',
@@ -6932,7 +6918,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['منشور'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '792',
@@ -6945,7 +6931,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['عدسی‌های_همگرا'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '791',
@@ -6953,16 +6939,16 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['عدسی‌های_واگرا'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
                             [
                                 'id' => '924',
@@ -6980,7 +6966,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '796',
@@ -6988,7 +6974,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '797',
@@ -6996,7 +6982,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '798',
@@ -7004,7 +6990,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '799',
@@ -7012,7 +6998,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '800',
@@ -7020,10 +7006,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '808',
@@ -7036,7 +7022,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '803',
@@ -7044,7 +7030,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '804',
@@ -7052,7 +7038,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '805',
@@ -7060,7 +7046,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '806',
@@ -7068,7 +7054,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '807',
@@ -7076,10 +7062,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '815',
@@ -7092,7 +7078,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '810',
@@ -7100,7 +7086,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '811',
@@ -7108,7 +7094,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '812',
@@ -7116,7 +7102,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '813',
@@ -7124,7 +7110,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '814',
@@ -7132,10 +7118,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '823',
@@ -7148,7 +7134,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '817',
@@ -7156,7 +7142,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '818',
@@ -7164,7 +7150,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '819',
@@ -7172,7 +7158,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '820',
@@ -7180,7 +7166,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '821',
@@ -7188,7 +7174,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '822',
@@ -7196,10 +7182,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حفظ_شعر'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '830',
@@ -7212,7 +7198,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '825',
@@ -7220,7 +7206,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '826',
@@ -7228,7 +7214,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '827',
@@ -7236,7 +7222,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '828',
@@ -7244,7 +7230,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '829',
@@ -7252,10 +7238,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '837',
@@ -7268,7 +7254,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '832',
@@ -7276,7 +7262,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '833',
@@ -7284,7 +7270,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '834',
@@ -7292,7 +7278,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '835',
@@ -7300,7 +7286,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '836',
@@ -7308,10 +7294,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '844',
@@ -7324,7 +7310,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '839',
@@ -7332,7 +7318,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '840',
@@ -7340,7 +7326,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '841',
@@ -7348,7 +7334,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '842',
@@ -7356,7 +7342,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '843',
@@ -7364,10 +7350,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '851',
@@ -7380,7 +7366,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '846',
@@ -7388,7 +7374,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '847',
@@ -7396,7 +7382,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '848',
@@ -7404,7 +7390,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '849',
@@ -7412,7 +7398,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '850',
@@ -7420,10 +7406,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '858',
@@ -7436,7 +7422,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '853',
@@ -7444,7 +7430,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '854',
@@ -7452,7 +7438,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '855',
@@ -7460,7 +7446,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '856',
@@ -7468,7 +7454,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '857',
@@ -7476,10 +7462,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '866',
@@ -7492,7 +7478,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '860',
@@ -7500,7 +7486,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '861',
@@ -7508,7 +7494,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '862',
@@ -7516,7 +7502,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '863',
@@ -7524,7 +7510,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '864',
@@ -7532,7 +7518,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '865',
@@ -7540,10 +7526,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حفظ_شعر'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '873',
@@ -7556,7 +7542,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '868',
@@ -7564,7 +7550,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '869',
@@ -7572,7 +7558,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '870',
@@ -7580,7 +7566,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '871',
@@ -7588,7 +7574,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '872',
@@ -7596,10 +7582,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '880',
@@ -7612,7 +7598,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '875',
@@ -7620,7 +7606,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '876',
@@ -7628,7 +7614,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '877',
@@ -7636,7 +7622,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '878',
@@ -7644,7 +7630,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '879',
@@ -7652,10 +7638,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '887',
@@ -7668,7 +7654,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '882',
@@ -7676,7 +7662,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '883',
@@ -7684,7 +7670,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '884',
@@ -7692,7 +7678,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '885',
@@ -7700,7 +7686,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '886',
@@ -7708,10 +7694,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '894',
@@ -7724,7 +7710,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '889',
@@ -7732,7 +7718,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '890',
@@ -7740,7 +7726,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '891',
@@ -7748,7 +7734,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '892',
@@ -7756,7 +7742,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '893',
@@ -7764,10 +7750,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '901',
@@ -7780,7 +7766,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '896',
@@ -7788,7 +7774,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '897',
@@ -7796,7 +7782,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '898',
@@ -7804,7 +7790,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '899',
@@ -7812,7 +7798,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '900',
@@ -7820,10 +7806,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '908',
@@ -7836,7 +7822,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '903',
@@ -7844,7 +7830,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '904',
@@ -7852,7 +7838,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '905',
@@ -7860,7 +7846,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '906',
@@ -7868,7 +7854,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '907',
@@ -7876,10 +7862,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '915',
@@ -7892,7 +7878,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '910',
@@ -7900,7 +7886,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '911',
@@ -7908,7 +7894,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '912',
@@ -7916,7 +7902,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '913',
@@ -7924,7 +7910,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '914',
@@ -7932,10 +7918,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '923',
@@ -7948,7 +7934,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '917',
@@ -7956,7 +7942,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '918',
@@ -7964,7 +7950,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '919',
@@ -7972,7 +7958,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '920',
@@ -7980,7 +7966,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '921',
@@ -7988,7 +7974,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '922',
@@ -7996,13 +7982,13 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حفظ_شعر'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
                             [
                                 'id' => '1032',
@@ -8020,7 +8006,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تعاون_و_شکل‌های_مختلف_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '926',
@@ -8028,10 +8014,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تعاون_در_خانه،_مدرسه_و_محله'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '931',
@@ -8044,7 +8030,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['انفاق'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '929',
@@ -8052,7 +8038,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['وقف'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '930',
@@ -8060,10 +8046,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['شرکت‌های_تعاونی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '936',
@@ -8076,7 +8062,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قوۀ_مجریه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '933',
@@ -8084,7 +8070,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['انتخاب_رئیس‌جمهور'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '934',
@@ -8092,7 +8078,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تنفیذ_و_تحلیف'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '935',
@@ -8100,10 +8086,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کابینه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '941',
@@ -8116,7 +8102,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دولت_و_شهروندان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '938',
@@ -8124,7 +8110,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مهم‌ترین_وظایف_دولت_و_رئیس‌جمهور'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '939',
@@ -8132,7 +8118,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دولت_و_مجلس'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '940',
@@ -8140,10 +8126,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درآمد_و_هزینه‌های_دولت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '944',
@@ -8156,7 +8142,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دورۀ_نوجوانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '943',
@@ -8164,10 +8150,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آسیب‌های_اجتماعی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '948',
@@ -8177,10 +8163,11 @@ class InitializeCategoryTreeCommand extends Command
                                             [
                                                 'id' => '945',
                                                 'name' => 'افرادی که از نوجوان در برابر آسیب‌ها و تهدیدات محافظت می‌کنند',
-                                                'tags' => json_encode(['افرادی_که_از_نوجوان_در_برابر_آسیب‌ها_و_تهدیدات_محافظت_می‌کنند'], JSON_UNESCAPED_UNICODE),
+                                                'tags' => json_encode(['افرادی_که_از_نوجوان_در_برابر_آسیب‌ها_و_تهدیدات_محافظت_می‌کنند'],
+                                                    JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '946',
@@ -8188,7 +8175,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قوۀ_قضائیه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '947',
@@ -8196,10 +8183,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['رسیدگی_به_شکایت‌های_مردم_و_حل_اختلاف'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '953',
@@ -8212,7 +8199,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['نیاز_به_ارتباط'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '950',
@@ -8220,7 +8207,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['عناصر_ارتباط'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '951',
@@ -8228,7 +8215,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['رسانه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '952',
@@ -8236,10 +8223,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['وزارت_ارتباطات_و_فناوری_اطلاعات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '956',
@@ -8252,7 +8239,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کاربرد‌های_رسانه‌ها_در_زندگی_ما'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '955',
@@ -8260,10 +8247,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تأثیر_وسایل_ارتباط_جمعی_بر_فرهنگ_عمومی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '960',
@@ -8276,7 +8263,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['محیط_پیدایش_اسلام'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '958',
@@ -8284,7 +8271,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['طلوع_آفتاب_اسلام_در_مکه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '959',
@@ -8292,10 +8279,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تشکیل_امت_و_حکومت_اسلامی_به_رهبری_پیامبر_(ص)_در_مدینه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '965',
@@ -8308,7 +8295,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['وفات_پیامبر_(ص)_و_ماجرای_سقیفه_و_جانشینی_پیامبر_(ص)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '962',
@@ -8316,7 +8303,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حکومت_امام_علی_(ع)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '963',
@@ -8324,7 +8311,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['صلح_امام_حسن_(ع)_با_معاویه_و_روی_کار_آمدن_امویان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '964',
@@ -8332,10 +8319,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قیام_امام_حسین_(ع)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '969',
@@ -8348,7 +8335,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حملۀ_اعراب_مسلمان_به_ایران_و_سقوط_ساسانیان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '967',
@@ -8356,7 +8343,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ایران_در_زمان_امویان_و_عباسیان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '968',
@@ -8364,10 +8351,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ایرانیان_مسلمان_می‌شوند'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '973',
@@ -8380,7 +8367,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تأسیس_سلسله‌های_ایرانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '971',
@@ -8388,7 +8375,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ایرانیان،_پرچمدار_علم_و_دانش'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '972',
@@ -8396,10 +8383,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['زبان_و_ادبیات_و_معماری'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '977',
@@ -8412,7 +8399,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['غزنویان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '975',
@@ -8420,7 +8407,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سلجوقیان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '976',
@@ -8428,10 +8415,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['خوارزمشاهیان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '981',
@@ -8444,7 +8431,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تشکیلات_حکومتی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '979',
@@ -8452,7 +8439,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['میراث_فرهنگی_و_تمدنی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '980',
@@ -8460,10 +8447,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['توسعۀ_شهرها،_معماری_و_هنر'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '985',
@@ -8476,7 +8463,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مغولان_و_هجوم_آن‌ها_به_ایران'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '983',
@@ -8484,7 +8471,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حکومت_مغولان_(ایلخانان)_بر_ایران_و_قیام_سربداران'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '984',
@@ -8492,10 +8479,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['هجوم_تیمور_به_ایران'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '989',
@@ -8508,7 +8495,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تأثیر_فرهنگ_ایرانی_بر_مغولان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '987',
@@ -8516,7 +8503,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['توجه_ایلخانان_به_معماری_و_هنر'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '988',
@@ -8524,10 +8511,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['علاقه‌مندی_جانشینان_تیمور_به_معماری_و_هنر'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '993',
@@ -8540,7 +8527,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['موقعیت_و_وسعت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '991',
@@ -8548,7 +8535,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ناهمواری‌ها_(اشکال_زمین)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '992',
@@ -8556,10 +8543,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آب‌و‌هوا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '999',
@@ -8572,7 +8559,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['جمعیت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '995',
@@ -8580,7 +8567,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['نژاد_و_زبان_و_دین'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '996',
@@ -8588,7 +8575,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اقتصاد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '997',
@@ -8596,7 +8583,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['جاذبه‌های_گردشگری'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '998',
@@ -8604,10 +8591,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['استفاده_از_اطلس'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1002',
@@ -8620,7 +8607,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['موقعیت_و_ویژگی‌های_طبیعی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1001',
@@ -8628,10 +8615,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ویژگی‌های_انسانی_و_اقتصادی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1007',
@@ -8644,7 +8631,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['جنوب_غربی_آسیا،_منطقه‌ای_استراتژیک_و_پرتنش'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1004',
@@ -8652,7 +8639,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['جایگاه_ایران_در_منطقه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1005',
@@ -8660,7 +8647,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['فلسطین،_موضوع_مهم_جهان_اسلام'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1006',
@@ -8668,10 +8655,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مقیاس_نقشه_و_محاسبۀ_مسافت‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1014',
@@ -8689,7 +8676,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['موقعیت،_وسعت_و_ناهمواری‌ها'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '1009',
@@ -8697,10 +8684,10 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['آب‌و‌هوا_و_رودها'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1013',
@@ -8713,7 +8700,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['جمعیت،_نژاد،_زبان_و_دین'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '1012',
@@ -8721,13 +8708,13 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['اقتصاد'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1021',
@@ -8745,7 +8732,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['موقعیت،_وسعت_و_ناهمواری‌ها'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '1016',
@@ -8753,10 +8740,10 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['آب‌و‌هوا_و_رودها'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1020',
@@ -8769,7 +8756,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['جمعیت،_نژاد،_زبان_و_دین'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '1019',
@@ -8777,13 +8764,13 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['اقتصاد'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1028',
@@ -8801,7 +8788,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['موقعیت،_وسعت_و_ناهمواری‌ها'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '1023',
@@ -8809,10 +8796,10 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['آب‌و‌هوا_و_رودها'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1027',
@@ -8825,7 +8812,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['جمعیت،_نژاد،_زبان_و_دین'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '1026',
@@ -8833,13 +8820,13 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['اقتصاد'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1031',
@@ -8852,7 +8839,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['موقعیت_و_وسعت_و_ویژگی‌های_طبیعی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1030',
@@ -8860,13 +8847,13 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ویژگی‌های_انسانی_و_اقتصادی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
                             [
                                 'id' => '1078',
@@ -8884,7 +8871,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1034',
@@ -8892,10 +8879,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1038',
@@ -8908,7 +8895,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1037',
@@ -8916,10 +8903,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1041',
@@ -8932,7 +8919,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1040',
@@ -8940,10 +8927,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1044',
@@ -8956,7 +8943,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1043',
@@ -8964,10 +8951,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1047',
@@ -8980,7 +8967,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1046',
@@ -8988,10 +8975,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1050',
@@ -9004,7 +8991,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1049',
@@ -9012,10 +8999,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1053',
@@ -9028,7 +9015,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1052',
@@ -9036,10 +9023,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1056',
@@ -9052,7 +9039,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1055',
@@ -9060,10 +9047,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1059',
@@ -9076,7 +9063,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1058',
@@ -9084,10 +9071,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1062',
@@ -9100,7 +9087,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1061',
@@ -9108,10 +9095,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1065',
@@ -9124,7 +9111,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1064',
@@ -9132,10 +9119,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1068',
@@ -9148,7 +9135,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1067',
@@ -9156,10 +9143,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1071',
@@ -9172,7 +9159,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1070',
@@ -9180,10 +9167,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1074',
@@ -9196,7 +9183,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1073',
@@ -9204,10 +9191,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1077',
@@ -9220,7 +9207,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1076',
@@ -9228,16 +9215,16 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
 
-                        ]
+                        ],
                     ],
                     [
                         'id' => '1612',
@@ -9260,7 +9247,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_اول:_معرفی_مجموعه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1081',
@@ -9268,7 +9255,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_دوم:_مجموعه‌های_برابر_و_نمایش_مجموعه‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1082',
@@ -9276,7 +9263,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_سوم:_اجتماع،_اشتراک_و_تفاضلِ_مجموعه‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1083',
@@ -9284,10 +9271,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_چهارم:_مجموعه‌ها_و_احتمال'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1088',
@@ -9300,7 +9287,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_اول:_عددهای_گویا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1086',
@@ -9308,7 +9295,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_دوم:_عددهای_حقیقی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1087',
@@ -9316,10 +9303,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_سوم:_قدر_مطلق_و_محاسبۀ_تقریبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1094',
@@ -9332,7 +9319,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_اول:_استدلال'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1090',
@@ -9340,7 +9327,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_دوم:_آشنایی_با_اثبات_در_هندسه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1091',
@@ -9348,7 +9335,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_سوم:_همنهشتی_مثلث‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1092',
@@ -9356,7 +9343,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_چهارم:_حل_مسئله_در_هندسه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1093',
@@ -9364,10 +9351,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_پنجم:_شکل‌های_متشابه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1099',
@@ -9380,7 +9367,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_اول:_توان_صحیح'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1096',
@@ -9388,7 +9375,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_دوم:_نماد_علمی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1097',
@@ -9396,7 +9383,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_سوم:_ریشه‌گیری'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1098',
@@ -9404,10 +9391,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_چهارم:_جمع_و_تفریق_رادیکال‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1103',
@@ -9420,7 +9407,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_اول:_عبارت‌های_جبری_و_مفهوم_اتحاد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1101',
@@ -9428,7 +9415,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_دوم:_چند_اتحاد_دیگر،_تجزیه_و_کاربرد‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1102',
@@ -9436,10 +9423,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_سوم:_نابرابری‌ها_و_نامعادله‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1107',
@@ -9452,7 +9439,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_اول:_معادلۀ_خط'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1105',
@@ -9460,7 +9447,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_دوم:_شیب_خط_و_عرض_از_مبدأ'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1106',
@@ -9468,10 +9455,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_سوم:_دستگاه_معادله‌های_خطی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1111',
@@ -9484,7 +9471,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_اول:_معرفی_و_ساده‌_کردن_عبارت‌های_گویا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1109',
@@ -9492,7 +9479,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_دوم:_محاسبات_عبارت‌های_گویا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1110',
@@ -9500,10 +9487,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_سوم:_تقسیم_چند‌جمله‌ای‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1115',
@@ -9516,7 +9503,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_اول:_حجم_و_مساحت_کره'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1113',
@@ -9524,7 +9511,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_دوم:_حجم_هرم_و_مخروط'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1114',
@@ -9532,13 +9519,13 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['درس_سوم:_سطح_و_حجم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
                             [
                                 'id' => '1180',
@@ -9556,7 +9543,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1118',
@@ -9564,7 +9551,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['(Language_Melody_(Intonation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1119',
@@ -9572,7 +9559,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1120',
@@ -9580,7 +9567,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1121',
@@ -9588,7 +9575,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1122',
@@ -9596,7 +9583,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1123',
@@ -9604,7 +9591,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['cloze'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1124',
@@ -9612,10 +9599,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1134',
@@ -9628,7 +9615,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1127',
@@ -9636,7 +9623,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['(Language_Melody_(Intonation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1128',
@@ -9644,7 +9631,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1129',
@@ -9652,7 +9639,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1130',
@@ -9660,7 +9647,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1131',
@@ -9668,7 +9655,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1132',
@@ -9676,7 +9663,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['cloze'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1133',
@@ -9684,10 +9671,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1143',
@@ -9700,7 +9687,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1136',
@@ -9708,7 +9695,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['(Language_Melody_(Intonation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1137',
@@ -9716,7 +9703,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1138',
@@ -9724,7 +9711,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1139',
@@ -9732,7 +9719,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1140',
@@ -9740,7 +9727,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1141',
@@ -9748,7 +9735,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['cloze'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1142',
@@ -9756,10 +9743,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1152',
@@ -9772,7 +9759,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['(Language_Melody_(Intonation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1145',
@@ -9780,7 +9767,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Cloze'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1146',
@@ -9788,7 +9775,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1147',
@@ -9796,7 +9783,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1148',
@@ -9804,7 +9791,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1149',
@@ -9812,7 +9799,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1150',
@@ -9820,7 +9807,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1151',
@@ -9828,10 +9815,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1161',
@@ -9844,7 +9831,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1154',
@@ -9852,7 +9839,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['(Language_Melody_(Intonation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1155',
@@ -9860,7 +9847,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1156',
@@ -9868,7 +9855,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1157',
@@ -9876,7 +9863,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1158',
@@ -9884,7 +9871,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1159',
@@ -9892,7 +9879,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['cloze'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1160',
@@ -9900,10 +9887,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1170',
@@ -9916,7 +9903,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1163',
@@ -9924,7 +9911,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['(Language_Melody_(Intonation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1164',
@@ -9932,7 +9919,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1165',
@@ -9940,7 +9927,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1166',
@@ -9948,7 +9935,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1167',
@@ -9956,7 +9943,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1168',
@@ -9964,7 +9951,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['cloze'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1169',
@@ -9972,10 +9959,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1179',
@@ -9988,7 +9975,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Reading'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1172',
@@ -9996,7 +9983,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Writing'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1173',
@@ -10004,7 +9991,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['(Language_Melody_(Intonation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1174',
@@ -10012,7 +9999,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Conversation'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1175',
@@ -10020,7 +10007,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['cloze'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1176',
@@ -10028,7 +10015,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['vocabulary'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1177',
@@ -10036,7 +10023,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Grammar'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1178',
@@ -10044,13 +10031,13 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['Spelling'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
                             [
                                 'id' => '1225',
@@ -10068,7 +10055,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1182',
@@ -10076,7 +10063,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1183',
@@ -10084,10 +10071,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1188',
@@ -10100,7 +10087,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1186',
@@ -10108,7 +10095,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1187',
@@ -10116,10 +10103,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1192',
@@ -10132,7 +10119,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1190',
@@ -10140,7 +10127,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1191',
@@ -10148,10 +10135,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1196',
@@ -10164,7 +10151,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1194',
@@ -10172,7 +10159,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1195',
@@ -10180,10 +10167,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1200',
@@ -10196,7 +10183,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1198',
@@ -10204,7 +10191,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1199',
@@ -10212,10 +10199,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1204',
@@ -10228,7 +10215,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1202',
@@ -10236,7 +10223,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1203',
@@ -10244,10 +10231,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1208',
@@ -10260,7 +10247,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1206',
@@ -10268,7 +10255,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1207',
@@ -10276,10 +10263,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1212',
@@ -10292,7 +10279,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1210',
@@ -10300,7 +10287,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1211',
@@ -10308,10 +10295,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1216',
@@ -10324,7 +10311,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1214',
@@ -10332,7 +10319,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1215',
@@ -10340,10 +10327,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1220',
@@ -10356,7 +10343,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1218',
@@ -10364,7 +10351,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1219',
@@ -10372,10 +10359,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1224',
@@ -10388,7 +10375,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1222',
@@ -10396,7 +10383,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ترجمۀ_عبارات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1223',
@@ -10404,13 +10391,13 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قواعد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
                             [
                                 'id' => '1333',
@@ -10428,7 +10415,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ویژگی‌ها_و_کاربرد_فلزات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1227',
@@ -10436,7 +10423,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ویژگی‌ها_و_کاربرد_نافلزات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1228',
@@ -10444,7 +10431,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['طبقه‌بندی_عناصر_بر‌اساس_آرایش_الکترونی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1229',
@@ -10452,10 +10439,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['بسپارهای_طبیعی_و_مصنوعی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1234',
@@ -10468,7 +10455,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ذره‌های_سازندۀ_مواد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1232',
@@ -10476,7 +10463,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مبادلۀ_الکترونی_-_پیوند_یونی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1233',
@@ -10484,10 +10471,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اشتراک_الکترون_ها_-_پیوند_کووالانسی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1241',
@@ -10500,7 +10487,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['چرخه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1236',
@@ -10508,7 +10495,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['نفت_خام_و_کاربردها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1237',
@@ -10516,7 +10503,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['هیدروکربن_ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1238',
@@ -10524,7 +10511,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اتن_و_واکنش_پلیمری_شدن_(بسپارشی)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1239',
@@ -10532,7 +10519,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واکنش_سوختن_و_تولید_کربن_دی_اکسید'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1240',
@@ -10540,10 +10527,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['پلاستیک_ها؛_معایب_و_مزایا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1249',
@@ -10556,7 +10543,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حرکت_در_همه‌چیز_و_همه‌جا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1243',
@@ -10564,7 +10551,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مسافت_و_جا‌به‌جایی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1244',
@@ -10572,7 +10559,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تندی_و_سرعت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1245',
@@ -10580,7 +10567,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حرکت_یکنواخت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1246',
@@ -10588,7 +10575,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['شتاب_متوسط'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1247',
@@ -10596,7 +10583,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حرکت_شتابدار_با_شتاب_ثابت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1248',
@@ -10604,10 +10591,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['نمودارهای_حرکت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1260',
@@ -10620,7 +10607,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تعریف_نیرو_و_اثرات_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1251',
@@ -10628,7 +10615,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ریاضیات_حاکم_بر_نیروها_(نیروی_خالص)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1252',
@@ -10636,7 +10623,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قانون_اول_نیوتون_(نیروهای_متوازن)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1253',
@@ -10644,7 +10631,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قانون_دوم_نیوتون_(نیروهای_خالص_عامل_شتاب)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1254',
@@ -10652,7 +10639,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قانون_سوم_نیوتون_(نیروی_کنش_و_واکنش)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1259',
@@ -10665,7 +10652,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['نیروی_گرانش_(قانون_جهانی_گرانش)'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '1256',
@@ -10673,7 +10660,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['وزن'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '1257',
@@ -10681,7 +10668,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['عمودی_تکیه‌گاه_(سطح)'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '1258',
@@ -10689,13 +10676,13 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['نیروی_اصطکاک'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1266',
@@ -10708,7 +10695,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قاره‌های_متحرک'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1262',
@@ -10716,7 +10703,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['زمین_ساخت_ورقه‌ای'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1263',
@@ -10724,7 +10711,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['فرضیۀ_گسترش_بستر_اقیانوس‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1264',
@@ -10732,7 +10719,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حرکت_ورقه‌های_سنگ‌کره'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1265',
@@ -10740,10 +10727,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['پیامدهای_حرکت_ورقه‌های_سنگ‌کره'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1270',
@@ -10756,7 +10743,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['فسیل_و_شرایط_لازم_برای_تشکیل_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1268',
@@ -10764,7 +10751,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['راه‌های_تشکیل_فسیل'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1269',
@@ -10772,10 +10759,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کاربرد_فسیل‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1276',
@@ -10788,7 +10775,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تعریف_فشار_و_واحدهای_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1272',
@@ -10796,7 +10783,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['فشار_در_جامدات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1273',
@@ -10804,7 +10791,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['فشار_در_مایعات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1274',
@@ -10812,7 +10799,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اصل_پاسکال'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1275',
@@ -10820,10 +10807,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['فشار_در_گازها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1287',
@@ -10836,7 +10823,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کار_و_عوامل_مؤثر_بر_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1278',
@@ -10844,7 +10831,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تعریف_ماشین_و_روش‌های_کمک_کردن_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1279',
@@ -10852,7 +10839,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['گشتاور_نیرو'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1280',
@@ -10860,7 +10847,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حالت_تعادل'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1281',
@@ -10868,7 +10855,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مزیت_مکانیکی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1282',
@@ -10876,7 +10863,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اهرم‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1283',
@@ -10884,7 +10871,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قرقره‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1284',
@@ -10892,7 +10879,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['چرخ‌دنده‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1285',
@@ -10900,7 +10887,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سطح_شیبدار'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1286',
@@ -10908,10 +10895,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ماشین‌های_مرکب'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1297',
@@ -10924,7 +10911,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['علم_نجوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1289',
@@ -10932,7 +10919,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کهکشان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1290',
@@ -10940,7 +10927,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ستارگان_و_خورشید'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1291',
@@ -10948,7 +10935,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['صورت‌های_فلکی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1296',
@@ -10961,7 +10948,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['سیارات'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '1293',
@@ -10969,7 +10956,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['قمر'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '1294',
@@ -10977,7 +10964,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['سیارک'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '1295',
@@ -10985,13 +10972,13 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['شهاب_و_شهاب_سنگ'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1303',
@@ -11004,7 +10991,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['طبقه‌بندی_جانداران'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1299',
@@ -11012,7 +10999,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['باکتری‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1300',
@@ -11020,7 +11007,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آغازیان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1301',
@@ -11028,7 +11015,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قارچ‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1302',
@@ -11036,10 +11023,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ویروس‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1312',
@@ -11052,7 +11039,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آوندها_در_گیاهان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1305',
@@ -11060,7 +11047,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ریشه_و_تارهای_کشنده'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1306',
@@ -11068,7 +11055,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ساقه_و_برگ'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1307',
@@ -11076,7 +11063,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سرخس‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1308',
@@ -11084,7 +11071,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['بازدانگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1309',
@@ -11092,7 +11079,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['نهان‌دانگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1310',
@@ -11100,7 +11087,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['خزه‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1311',
@@ -11108,10 +11095,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['گیاهان_در_زندگی_ما'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1320',
@@ -11124,7 +11111,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['گوناگونی_جانوران'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1314',
@@ -11132,7 +11119,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اسفنج‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1315',
@@ -11140,7 +11127,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کیسه‌تنان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1316',
@@ -11148,7 +11135,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کرم‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1317',
@@ -11156,7 +11143,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['نرم_تنان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1318',
@@ -11164,7 +11151,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['بند‌پایان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1319',
@@ -11172,10 +11159,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['خارپوستان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1327',
@@ -11188,7 +11175,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['جانورانی_با_ستون_مهره'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1322',
@@ -11196,7 +11183,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ماهی‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1323',
@@ -11204,7 +11191,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دوزیستان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1324',
@@ -11212,7 +11199,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['خزندگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1325',
@@ -11220,7 +11207,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['پرندگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1326',
@@ -11228,10 +11215,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['پستانداران'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1332',
@@ -11244,7 +11231,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['بوم_سازگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1329',
@@ -11252,7 +11239,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['هرم_ماده_و_انرژی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1330',
@@ -11260,7 +11247,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['روابط_بین_جانداران'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1331',
@@ -11268,13 +11255,13 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تنوع_زیستی_و_اهمیت_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
                             [
                                 'id' => '1463',
@@ -11292,7 +11279,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1335',
@@ -11300,7 +11287,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1336',
@@ -11308,7 +11295,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1337',
@@ -11316,7 +11303,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1338',
@@ -11324,7 +11311,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1339',
@@ -11332,10 +11319,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1348',
@@ -11348,7 +11335,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1342',
@@ -11356,7 +11343,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1343',
@@ -11364,7 +11351,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1344',
@@ -11372,7 +11359,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1345',
@@ -11380,7 +11367,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1346',
@@ -11388,7 +11375,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1347',
@@ -11396,10 +11383,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حفظ_شعر'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1355',
@@ -11412,7 +11399,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1350',
@@ -11420,7 +11407,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1351',
@@ -11428,7 +11415,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1352',
@@ -11436,7 +11423,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1353',
@@ -11444,7 +11431,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1354',
@@ -11452,10 +11439,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1362',
@@ -11468,7 +11455,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1357',
@@ -11476,7 +11463,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1358',
@@ -11484,7 +11471,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1359',
@@ -11492,7 +11479,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1360',
@@ -11500,7 +11487,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1361',
@@ -11508,10 +11495,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1369',
@@ -11524,7 +11511,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1364',
@@ -11532,7 +11519,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1365',
@@ -11540,7 +11527,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1366',
@@ -11548,7 +11535,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1367',
@@ -11556,7 +11543,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1368',
@@ -11564,10 +11551,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1376',
@@ -11580,7 +11567,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1371',
@@ -11588,7 +11575,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1372',
@@ -11596,7 +11583,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1373',
@@ -11604,7 +11591,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1374',
@@ -11612,7 +11599,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1375',
@@ -11620,10 +11607,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1384',
@@ -11636,7 +11623,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1378',
@@ -11644,7 +11631,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1379',
@@ -11652,7 +11639,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1380',
@@ -11660,7 +11647,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1381',
@@ -11668,7 +11655,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1382',
@@ -11676,7 +11663,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1383',
@@ -11684,10 +11671,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حفظ_شعر'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1391',
@@ -11700,7 +11687,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1386',
@@ -11708,7 +11695,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1387',
@@ -11716,7 +11703,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1388',
@@ -11724,7 +11711,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1389',
@@ -11732,7 +11719,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1390',
@@ -11740,10 +11727,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1398',
@@ -11756,7 +11743,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1393',
@@ -11764,7 +11751,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1394',
@@ -11772,7 +11759,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1395',
@@ -11780,7 +11767,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1396',
@@ -11788,7 +11775,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1397',
@@ -11796,10 +11783,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1405',
@@ -11812,7 +11799,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1400',
@@ -11820,7 +11807,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1401',
@@ -11828,7 +11815,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1402',
@@ -11836,7 +11823,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1403',
@@ -11844,7 +11831,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1404',
@@ -11852,10 +11839,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1412',
@@ -11868,7 +11855,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1407',
@@ -11876,7 +11863,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1408',
@@ -11884,7 +11871,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1409',
@@ -11892,7 +11879,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1410',
@@ -11900,7 +11887,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1411',
@@ -11908,10 +11895,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1419',
@@ -11924,7 +11911,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1414',
@@ -11932,7 +11919,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1415',
@@ -11940,7 +11927,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1416',
@@ -11948,7 +11935,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1417',
@@ -11956,7 +11943,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1418',
@@ -11964,10 +11951,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1427',
@@ -11980,7 +11967,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1421',
@@ -11988,7 +11975,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1422',
@@ -11996,7 +11983,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1423',
@@ -12004,7 +11991,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1424',
@@ -12012,7 +11999,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1425',
@@ -12020,7 +12007,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1426',
@@ -12028,10 +12015,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حفظ_شعر'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1434',
@@ -12044,7 +12031,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1429',
@@ -12052,7 +12039,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1430',
@@ -12060,7 +12047,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1431',
@@ -12068,7 +12055,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1432',
@@ -12076,7 +12063,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1433',
@@ -12084,10 +12071,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1441',
@@ -12100,7 +12087,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1436',
@@ -12108,7 +12095,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1437',
@@ -12116,7 +12103,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1438',
@@ -12124,7 +12111,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1439',
@@ -12132,7 +12119,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1440',
@@ -12140,10 +12127,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1448',
@@ -12156,7 +12143,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1443',
@@ -12164,7 +12151,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1444',
@@ -12172,7 +12159,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1445',
@@ -12180,7 +12167,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1446',
@@ -12188,7 +12175,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1447',
@@ -12196,10 +12183,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1455',
@@ -12212,7 +12199,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1450',
@@ -12220,7 +12207,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1451',
@@ -12228,7 +12215,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1452',
@@ -12236,7 +12223,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1453',
@@ -12244,7 +12231,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1454',
@@ -12252,10 +12239,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1462',
@@ -12268,7 +12255,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['واژگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1457',
@@ -12276,7 +12263,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['املا'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1458',
@@ -12284,7 +12271,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تاریخ_ادبیات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1459',
@@ -12292,7 +12279,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_ادبی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1460',
@@ -12300,7 +12287,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['دانش_زبانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1461',
@@ -12308,13 +12295,13 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['معنی_و_مفهوم'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
                             [
                                 'id' => '1574',
@@ -12332,7 +12319,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['جایگاه_زمین_در_کیهان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1465',
@@ -12340,7 +12327,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['موقعیت_مکانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1466',
@@ -12348,10 +12335,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['طول_و_عرض_جغرافیایی_(مختصات_جغرافیایی)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1470',
@@ -12364,7 +12351,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حرکت_وضعی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1469',
@@ -12372,10 +12359,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حرکت_انتقالی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1476',
@@ -12388,7 +12375,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['محیط‌های_زمین'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1472',
@@ -12396,7 +12383,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['خشکی‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1475',
@@ -12409,7 +12396,7 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['عوامل_درونی'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
                                                     [
                                                         'id' => '1474',
@@ -12417,13 +12404,13 @@ class InitializeCategoryTreeCommand extends Command
                                                         'tags' => json_encode(['عوامل_بیرونی'], JSON_UNESCAPED_UNICODE),
                                                         'children' => [
 
-                                                        ]
+                                                        ],
                                                     ],
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1483',
@@ -12436,7 +12423,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['پنج_مجموعۀ_آبی_بزرگ'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1478',
@@ -12444,7 +12431,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ناهمواری‌های_کف_اقیانوس‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1479',
@@ -12452,7 +12439,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['انسان_و_اقیانوس‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1480',
@@ -12460,7 +12447,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['هواکره_(اتمسفر)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1481',
@@ -12468,7 +12455,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تنوع_آب‌و‌هوا_در_جهان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1482',
@@ -12476,10 +12463,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['عوامل_مؤثر_بر_آب‌وهوای_جهان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1487',
@@ -12492,7 +12479,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['زیست‌بوم_(بیوم)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1485',
@@ -12500,7 +12487,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تنوع_زیست‌بوم‌ها_به_چه_عواملی_بستگی_دارد؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1486',
@@ -12508,10 +12495,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['پراکندگی_زیست‌بوم‌های_جهان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1491',
@@ -12524,7 +12511,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['انقراض_گونه‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1489',
@@ -12532,7 +12519,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['زیست‌گاه‌ها_چرا_و_چگونه_تخریب_می‌شوند؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1490',
@@ -12540,10 +12527,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['چه_باید_کرد؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1497',
@@ -12556,7 +12543,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تغییر_رشد_جمعیت_در_جهان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1493',
@@ -12564,7 +12551,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['رشد_جمعیت_در_کشورهای_جهان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1494',
@@ -12572,7 +12559,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['پراکندگی_جمعیت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1495',
@@ -12580,7 +12567,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['جا‌به‌جایی_جمعیت_(مهاجرت)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1496',
@@ -12588,10 +12575,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['افزایش_شهر‌نشینی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1501',
@@ -12604,7 +12591,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['نابرابری_جهانی_یا_بین‌المللی_و_معیارهای_آن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1499',
@@ -12612,7 +12599,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['شاخص_توسعۀ_انسانی_چیست؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1500',
@@ -12620,10 +12607,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['علل_و_عوامل_نابرابری'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1507',
@@ -12636,7 +12623,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اوضاع_سیاسی_ایران_هنگام_تأسیس_صفوی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1503',
@@ -12644,7 +12631,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['شکل‌گیری_حکومت_صفویه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1504',
@@ -12652,7 +12639,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قدرت_و_سقوط_صفویان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1505',
@@ -12660,7 +12647,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['صفویان_چگونه_کشور_را_اداره_می‌کردند؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1506',
@@ -12668,10 +12655,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اروپاییان_در_راه_ایران'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1512',
@@ -12684,7 +12671,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['زندگی_اجتماعی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1509',
@@ -12692,7 +12679,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['شکوفایی_صنعت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1510',
@@ -12700,7 +12687,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['رونق_تجارت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1511',
@@ -12708,10 +12695,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['شکوفایی_علمی_و_فرهنگی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1516',
@@ -12724,7 +12711,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['افشاریه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1514',
@@ -12732,7 +12719,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['زندیه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1515',
@@ -12740,10 +12727,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['قاجاریه:_گسترش_نفوذ_و_دخالت_کشورهای_استعمارگر'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1519',
@@ -12756,7 +12743,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تلاش_برای_نوسازی_و_اصلاح_امور_کشور'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1518',
@@ -12764,10 +12751,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مبارزه_با_نفوذ_و_سلطۀ_اقتصادی_بیگانگان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1524',
@@ -12780,7 +12767,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مشروطه_چیست؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1521',
@@ -12788,7 +12775,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['زمینه‌های_انقلاب_مشروطه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1522',
@@ -12796,7 +12783,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['انقلاب_مشروطه_چگونه_رخ_داد؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1523',
@@ -12804,10 +12791,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['موانع_و_مشکلات_حکومت_مشروطه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1530',
@@ -12820,7 +12807,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['زمینه‌های_تغییر_حکومت_از_قاجاریه_به_پهلوی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1526',
@@ -12828,7 +12815,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['شیوۀ_حکومت_و_اقدامات_رضاشاه'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1527',
@@ -12836,7 +12823,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آثار_جنگ‌_جهانی_دوم_بر_ایران'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1528',
@@ -12844,7 +12831,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['نهضت_ملی_شدن_نفت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1529',
@@ -12852,10 +12839,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['کودتای_28_مرداد_1332'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1534',
@@ -12868,7 +12855,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['نهضت_اسلامی_به_رهبری_امام_خمینی_(ره)'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1532',
@@ -12876,7 +12863,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اوضاع_ایران_در_آستانۀ_انقلاب_اسلامی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1533',
@@ -12884,10 +12871,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['انقلاب_اسلامی_از_آغاز_تا_پیروزی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1538',
@@ -12900,7 +12887,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['برپایی_نظام_جمهوری_اسلامی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1536',
@@ -12908,18 +12895,19 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['توطئه‌ها_و_دسیسه‌های_دشمنان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1537',
                                                 'name' => 'رحلت امام‌خمینی (ره) و انتخاب حضرت آیت‌الله خامنه‌ای به رهبری',
-                                                'tags' => json_encode(['رحلت_امام‌خمینی_(ره)_و_انتخاب_حضرت_آیت‌الله_خامنه‌ای_به_رهبری'], JSON_UNESCAPED_UNICODE),
+                                                'tags' => json_encode(['رحلت_امام‌خمینی_(ره)_و_انتخاب_حضرت_آیت‌الله_خامنه‌ای_به_رهبری'],
+                                                    JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1542',
@@ -12932,7 +12920,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['فرهنگ،_شیوۀ_زندگی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1540',
@@ -12940,7 +12928,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['فرهنگ_آموختنی_است'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1541',
@@ -12948,10 +12936,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['لایه‌های_فرهنگ'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1547',
@@ -12964,7 +12952,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['منظور_از_هویت_چیست؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1544',
@@ -12972,7 +12960,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ابعاد_فردی_و_اجتماعی_هویت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1545',
@@ -12980,7 +12968,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['ویژگی‌های_هویتی_ما_(انتسابی_و_اکتسابی)_و_تغییر_آن‌ها'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1546',
@@ -12988,10 +12976,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['هویت_ملی_و_هویت_ایرانی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1548',
@@ -12999,7 +12987,7 @@ class InitializeCategoryTreeCommand extends Command
                                         'tags' => json_encode(['درس_19:_کارکرد‌های_خانواده'], JSON_UNESCAPED_UNICODE),
                                         'children' => [
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1553',
@@ -13012,7 +13000,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['همسر_گزینی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1550',
@@ -13020,7 +13008,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سازگاری_زن_و_شوهر_در_خانواده'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1551',
@@ -13028,7 +13016,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['سازگاری_والدین_و_فرزندان'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1552',
@@ -13036,10 +13024,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['مدیریت_مشکلات_و_حوادث_در_خانواده'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1558',
@@ -13052,7 +13040,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['نیاز_به_حکومت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1555',
@@ -13060,7 +13048,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['وظایف_حکومت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1556',
@@ -13068,7 +13056,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اسلام_و_حکومت'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1557',
@@ -13076,10 +13064,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حکومت_در_کشور_ما'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1562',
@@ -13092,7 +13080,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['شهروندی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1560',
@@ -13100,7 +13088,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['حقوق_شهروندی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1561',
@@ -13108,10 +13096,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['تکالیف_شهروندی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1567',
@@ -13124,7 +13112,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['بررسی_موقعیت‌هایی_درباره_بهره‌وری'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1564',
@@ -13132,7 +13120,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['بهره‌وری_چیست؟'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1565',
@@ -13140,7 +13128,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['فرهنگ_بهره‌وری'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1566',
@@ -13148,10 +13136,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['بهره‌وری_در_زندگی_فردی_و_خانوادگی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1573',
@@ -13164,7 +13152,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['نهاد_اقتصاد'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1569',
@@ -13172,7 +13160,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['بهره‌وری_در_تولید،_توزیع_و_مصرف'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1570',
@@ -13180,7 +13168,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['بهره‌وری_سبز'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1571',
@@ -13188,7 +13176,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['بهره‌وری_در_کشور_ما'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1572',
@@ -13196,13 +13184,13 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['اقتصاد_مقاومتی'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
                             [
                                 'id' => '1611',
@@ -13220,7 +13208,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1576',
@@ -13228,10 +13216,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1580',
@@ -13244,7 +13232,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1579',
@@ -13252,10 +13240,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1583',
@@ -13268,7 +13256,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1582',
@@ -13276,10 +13264,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1586',
@@ -13292,7 +13280,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1585',
@@ -13300,10 +13288,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1589',
@@ -13316,7 +13304,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1588',
@@ -13324,10 +13312,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1592',
@@ -13340,7 +13328,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1591',
@@ -13348,10 +13336,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1595',
@@ -13364,7 +13352,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1594',
@@ -13372,10 +13360,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1598',
@@ -13388,7 +13376,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1597',
@@ -13396,10 +13384,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1601',
@@ -13412,7 +13400,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1600',
@@ -13420,10 +13408,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1604',
@@ -13436,7 +13424,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1603',
@@ -13444,10 +13432,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1607',
@@ -13460,7 +13448,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1606',
@@ -13468,10 +13456,10 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
                                     [
                                         'id' => '1610',
@@ -13484,7 +13472,7 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['آیات_و_روایات'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
                                             [
                                                 'id' => '1609',
@@ -13492,16 +13480,16 @@ class InitializeCategoryTreeCommand extends Command
                                                 'tags' => json_encode(['متن'], JSON_UNESCAPED_UNICODE),
                                                 'children' => [
 
-                                                ]
+                                                ],
                                             ],
 
-                                        ]
+                                        ],
                                     ],
 
-                                ]
+                                ],
                             ],
 
-                        ]
+                        ],
                     ],
                 ],
             ],
@@ -13522,6 +13510,7 @@ class InitializeCategoryTreeCommand extends Command
             'name' => 'آلاء',
             'children' => $paye,
         ];
+
         return $alaa;
     }
 }

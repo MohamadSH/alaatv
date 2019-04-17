@@ -1,37 +1,40 @@
 
-<div class = "row">
-    <div class = "col">
-        <div class = "Step-warper">
-            <div class = "row a--step-warper">
-                <div class = "col a--step-item @if($step == 0) current @elseif($step < 0) notPassed @elseif($step > 0) passed @endif">
-                    <div class = "a--step-item-icon">
-                        <i class = "flaticon-lock"></i>
+<div class="row">
+    <div class="col">
+        <div class="Step-warper">
+            <div class="row a--step-warper">
+                <div class="col a--step-item @if($step == 0) current @elseif($step < 0) notPassed @elseif($step > 0) passed @endif">
+                    <div class="a--step-item-icon">
+                        <i class="flaticon-lock"></i>
                     </div>
-                    <div class = "a--step-item-text">
+                    <div class="a--step-item-text">
                         ورود
                     </div>
                 </div>
-                <div class = "col a--step-item @if($step == 1) current @elseif($step < 1) notPassed @elseif($step > 1) passed @endif">
-                    <div class = "a--step-item-icon">
-                        <i class = "flaticon-information"></i>
+                <div class="col a--step-item @if($step == 1) current @elseif($step < 1) notPassed @elseif($step > 1) passed @endif">
+                    <div class="a--step-item-icon">
+                        <i class="flaticon-information"></i>
                     </div>
-                    <div class = "a--step-item-text">
+                    <div class="a--step-item-text">
                         تکمیل اطلاعات
                     </div>
                 </div>
-                <div class = "col a--step-item @if($step == 2) current @elseif($step < 2) notPassed @elseif($step > 2) passed @endif">
-                    <div class = "a--step-item-icon">
-                        <i class = "flaticon-list-3"></i>
+                <div class="col a--step-item @if($step == 2) current @elseif($step < 2) notPassed @elseif($step > 2) passed @endif"
+                        @if($step !== 2)
+                            onclick="window.location.href = '{{ action("Web\OrderController@checkoutReview") }}';"
+                        @endif>
+                    <div class="a--step-item-icon">
+                        <i class="flaticon-list-3"></i>
                     </div>
-                    <div class = "a--step-item-text">
+                    <div class="a--step-item-text">
                         بازبینی
                     </div>
                 </div>
-                <div class = "col a--step-item @if($step == 3) current @elseif($step < 3) notPassed @elseif($step > 3) passed @endif">
-                    <div class = "a--step-item-icon">
-                        <i class = "la la-money"></i>
+                <div class="col a--step-item @if($step == 3) current @elseif($step < 3) notPassed @elseif($step > 3) passed @endif">
+                    <div class="a--step-item-icon">
+                        <i class="la la-money"></i>
                     </div>
-                    <div class = "a--step-item-text">
+                    <div class="a--step-item-text">
                         اطلاعات پرداخت
                     </div>
                 </div>

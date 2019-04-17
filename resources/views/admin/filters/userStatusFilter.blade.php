@@ -1,1 +1,1 @@
-{!! Form::select("userStatus" , $userStatuses, null, ['class' => 'form-control' , 'placeholder'=>'انتخاب وضعیت']) !!}
+{!! Form::select("userStatus" , $userStatuses, null, ['class' => 'form-control a--full-width' , 'placeholder'=>'انتخاب وضعیت']) !!}

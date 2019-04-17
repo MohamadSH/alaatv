@@ -17,8 +17,9 @@ class InsertFireBaseTokenRequest extends FormRequest
         $authorized = true;
         $authenticatedUser = $request->user('api');
         $userId = $request->segment(4);
-        if($userId != $authenticatedUser->id)
+        if ($userId != $authenticatedUser->id) {
             $authorized = false;
+        }
 
         return $authorized;
     }
@@ -31,7 +32,7 @@ class InsertFireBaseTokenRequest extends FormRequest
     public function rules()
     {
         return [
-            'token' =>  'required'
+            'token' => 'required',
         ];
     }
 }

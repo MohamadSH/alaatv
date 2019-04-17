@@ -32,11 +32,11 @@ function makeDataTable(id) {
 
         // setup buttons extentension: http://datatables.net/extensions/buttons/
         buttons:[
-            {extend: 'print', className: 'btn dark btn-outline', exportOptions: {columns: ':visible'}},
-            {extend: 'copy', className: 'btn red btn-outline', exportOptions: {columns: ':visible'}},
-            {extend: 'pdf', className: 'btn green btn-outline', exportOptions: {columns: ':visible'}},
-            {extend: 'excel', className: 'btn yellow btn-outline ', exportOptions: {columns: ':visible'}},
-            {extend: 'csv', className: 'btn purple btn-outline ', exportOptions: {columns: ':visible'}},
+            {extend: 'print', className: 'btn m-btn--pill m-btn--air btn-outline-brand', exportOptions: {columns: ':visible'}},
+            {extend: 'copy', className: 'btn m-btn--pill m-btn--air btn-outline-danger', exportOptions: {columns: ':visible'}},
+            {extend: 'pdf', className: 'btn m-btn--pill m-btn--air btn-outline-success', exportOptions: {columns: ':visible'}},
+            {extend: 'excel', className: 'btn m-btn--pill m-btn--air btn-outline-warning', exportOptions: {columns: ':visible'}},
+            {extend: 'csv', className: 'btn m-btn--pill m-btn--air btn-outline-info', exportOptions: {columns: ':visible'}},
             // {extend: 'colvis', className: 'btn dark btn-outline', text: 'ستون ها'}
         ],
 

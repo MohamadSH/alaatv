@@ -17,10 +17,10 @@ class InsertAssignmentRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()
-            ->user()
-            ->can(Config::get('constants.INSERT_ASSIGNMENT_ACCESS')))
+        if (Auth()->user()->can(Config::get('constants.INSERT_ASSIGNMENT_ACCESS'))) {
             return true;
+        }
+
         return false;
     }
 
@@ -32,11 +32,11 @@ class InsertAssignmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'questionFile'        => 'file|mimes:pdf,rar,zip',
-            'solutionFile'        => 'file|mimes:pdf,rar,zip',
-            'majors'              => 'required|exists:majors,id',
+            'questionFile' => 'file|mimes:pdf,rar,zip',
+            'solutionFile' => 'file|mimes:pdf,rar,zip',
+            'majors' => 'required|exists:majors,id',
             'assignmentstatus_id' => 'required|exists:assignmentstatuses,id',
-            'numberOfQuestions'   => 'integer|min:1',
+            'numberOfQuestions' => 'integer|min:1',
         ];
     }
 

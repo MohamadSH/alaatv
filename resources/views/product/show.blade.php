@@ -10,7 +10,7 @@
                 <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item">
-                <i class = "flaticon-photo-camera m--padding-right-5"></i>
+                <i class = "fa fa-chalkboard-teacher"></i>
                 <a class = "m-link" href = "{{ action("Web\ProductController@index") }}">محصولات آموزشی</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
@@ -40,6 +40,25 @@
                                 <div class = "col-lg-3">
                                     <div class = "m--margin-bottom-45">
                                         <img src = "{{ route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]) }}" alt = "عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class = "img-fluid m--marginless"/>
+                                        @if(isset($product->bons->first()->pivot->bonPlus))
+                                            <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-success alert-dismissible fade show" role="alert">
+                                                <div class="m-alert__icon">
+                                                    <i class="flaticon-interface-9"></i>
+                                                </div>
+                                                <div class="m-alert__text">
+                                                    <strong>تعداد بن {{ $product->bons->first()->pivot->bonPlus }}+</strong>
+                                                </div>
+                                            </div>
+                                        @else
+                                            <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-warning alert-dismissible fade show" role="alert">
+                                                <div class="m-alert__icon">
+                                                    <i class="flaticon-interface-9"></i>
+                                                </div>
+                                                <div class="m-alert__text">
+                                                    این محصول بن ندارد
+                                                </div>
+                                            </div>
+                                        @endif
                                     </div>
 
                                     {{--نمونه جزوه--}}
@@ -443,6 +462,4 @@
 @endsection
 @section('page-js')
     <script src = "{{ mix('/js/product-show.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/UserCart.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-product-show.js') }}"></script>
 @endsection

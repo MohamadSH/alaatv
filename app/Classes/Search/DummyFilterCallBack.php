@@ -8,13 +8,11 @@
 
 namespace App\Classes\Search;
 
-
 use App\Classes\Search\Filters\FilterCallback;
 use Illuminate\Database\Eloquent\Builder;
 
 class DummyFilterCallBack implements FilterCallback
 {
-
     /**
      * @param array $err [ "status" => integer, "message" => string , "data" => mix]
      *

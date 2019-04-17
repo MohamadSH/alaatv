@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Filters;
 
-
 class NationalCode extends FilterAbstract
 {
     protected $attribute = 'nationalCode';

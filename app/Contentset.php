@@ -2,7 +2,6 @@
 
 namespace App;
 
-
 use App\Classes\Taggable;
 use App\Collection\ContentCollection;
 use App\Collection\SetCollection;
@@ -13,16 +12,16 @@ use Illuminate\Support\Facades\Config;
 /**
  * App\Contentset
  *
- * @property int                                             $id
- * @property string|null                                     $name        نام
- * @property string|null                                     $description توضیح
- * @property string|null                                     $photo       عکس پوستر
- * @property string|null                                           $tags        تگ ها
- * @property int                                                   $enable      فعال/غیرفعال
- * @property int                                                   $display     نمایش/عدم نمایش
- * @property \Carbon\Carbon|null                                   $created_at
- * @property \Carbon\Carbon|null                                   $updated_at
- * @property \Carbon\Carbon|null                                   $deleted_at
+ * @property int $id
+ * @property string|null $name        نام
+ * @property string|null $description توضیح
+ * @property string|null $photo       عکس پوستر
+ * @property string|null $tags        تگ ها
+ * @property int $enable      فعال/غیرفعال
+ * @property int $display     نمایش/عدم نمایش
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
  * @property-read \App\Collection\ContentCollection|\App\Content[] $contents
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Contentset onlyTrashed()
@@ -42,8 +41,8 @@ use Illuminate\Support\Facades\Config;
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset active()
  * @property-read \App\Collection\UserCollection|\App\User[] $favoriteBy
- * @property string|null                                     $small_name
- * @property-read mixed                                      $short_name
+ * @property string|null $small_name
+ * @property-read mixed $short_name
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereSmallName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset newQuery()
@@ -58,6 +57,7 @@ use Illuminate\Support\Facades\Config;
 class Contentset extends BaseModel implements Taggable
 {
     use favorableTraits;
+
     /**
      * @var array
      */
@@ -92,7 +92,7 @@ class Contentset extends BaseModel implements Taggable
     /**
      * Create a new Eloquent Collection instance.
      *
-     * @param  array $models
+     * @param array $models
      *
      * @return SetCollection
      */
@@ -127,32 +127,29 @@ class Contentset extends BaseModel implements Taggable
 
     public function getLastContent(): ?Content
     {
-        $key = "ContentSet:getLastContent" . $this->cacheKey();
-        return Cache::tags('set')
-                    ->remember($key, Config::get("constants.CACHE_300"), function () {
+        $key = "ContentSet:getLastContent".$this->cacheKey();
 
-                        $contentCollection = optional($this->getContents())
-                            ->sortByDesc("order");
-                        return optional($contentCollection)
-                            ->first();
-                    });
+        return Cache::tags('set')->remember($key, Config::get("constants.CACHE_300"), function () {
+
+            $contentCollection = optional($this->getContents())->sortByDesc("order");
+
+            return optional($contentCollection)->first();
+        });
     }
 
     public function getContents(): ?ContentCollection
     {
-        $key = "ContentSet:getContents" . $this->cacheKey();
-        return Cache::tags('set')
-                    ->remember($key, Config::get("constants.CACHE_300"), function () {
-                        return $this->contents()
-                                    ->active()
-                                    ->get();
-                    });
+        $key = "ContentSet:getContents".$this->cacheKey();
+
+        return Cache::tags('set')->remember($key, Config::get("constants.CACHE_300"), function () {
+            return $this->contents()->active()->get();
+        });
     }
 
     public function getContentUrlAttribute($value)
     {
         return action('Web\ContentController@index', [
-            'set'         => $this->id,
+            'set' => $this->id,
             'contentOnly' => true,
         ]);
     }
@@ -167,22 +164,14 @@ class Contentset extends BaseModel implements Taggable
     {
         $key = $this->getKey();
         $time = isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-        return sprintf(
-            "%s-%s",
-            //$this->getTable(),
-            $key,
-            $time
-        );
+
+        return sprintf("%s-%s", //$this->getTable(),
+            $key, $time);
     }
 
     public function contents()
     {
-        return $this->belongsToMany(
-            "\App\Content",
-            "contentset_educationalcontent",
-            "contentset_id",
-            "edc_id")
-                    ->withPivot("order", "isDefault");
+        return $this->belongsToMany("\App\Content", "contentset_educationalcontent", "contentset_id", "edc_id")->withPivot("order", "isDefault");
     }
 
     public function getShortNameAttribute($value)
@@ -205,20 +194,21 @@ class Contentset extends BaseModel implements Taggable
     public function setTagsAttribute(array $value)
     {
         $tags = null;
-        if (!empty($value))
+        if (! empty($value)) {
             $tags = json_encode([
                 "bucket" => "contentset",
-                "tags"   => $value,
+                "tags" => $value,
             ], JSON_UNESCAPED_UNICODE);
+        }
 
         $this->attributes['tags'] = $tags;
     }
-
 
     public function getUrlAttribute($value): string
     {
 //        return action("Web\ContentsetController@show",$this);
         $contentId = optional($this->getLastContent())->id;
+
         return isset($contentId) ? action("Web\ContentController@show", $contentId) : "";
     }
 
@@ -237,26 +227,21 @@ class Contentset extends BaseModel implements Taggable
     public function getAuthorAttribute($value): ?User
     {
 //        return action("Web\ContentsetController@show",$this);
-        return optional(optional($this->getLastContent())->author)
-            ->setVisible([
-                'id',
-                'firstName',
-                'lastName',
-                'photo',
-                'full_name',
-            ]);
+        return optional(optional($this->getLastContent())->author)->setVisible([
+            'id',
+            'firstName',
+            'lastName',
+            'photo',
+            'full_name',
+        ]);
     }
-
 
     public function retrievingTags()
     {
         /**
          *      Retrieving Tags
          */
-        $response = $this->sendRequest(
-            config("constants.TAG_API_URL") . "id/contentset/" . $this->id,
-            "GET"
-        );
+        $response = $this->sendRequest(config("constants.TAG_API_URL")."id/contentset/".$this->id, "GET");
 
         if ($response["statusCode"] == 200) {
             $result = json_decode($response["result"]);
@@ -285,11 +270,10 @@ class Contentset extends BaseModel implements Taggable
 
     public function isTaggableActive(): bool
     {
-        if ($this->isActive() &&
-            isset($this->tags) &&
-            !empty($this->tags->tags)) {
+        if ($this->isActive() && isset($this->tags) && ! empty($this->tags->tags)) {
             return true;
         }
+
         return false;
     }
 
@@ -300,8 +284,10 @@ class Contentset extends BaseModel implements Taggable
 
     public function isEnable(): bool
     {
-        if ($this->enable)
+        if ($this->enable) {
             return true;
+        }
+
         return false;
     }
 }

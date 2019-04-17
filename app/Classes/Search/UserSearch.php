@@ -13,8 +13,10 @@ use Illuminate\{Contracts\Pagination\LengthAwarePaginator, Database\Eloquent\Bui
 
 class UserSearch extends SearchAbstract
 {
-    protected $model        = "App\User";
-    protected $pageName     = 'userPage';
+    protected $model = "App\User";
+
+    protected $pageName = 'userPage';
+
     protected $validFilters = [
         'firstName',
         'lastName',
@@ -41,7 +43,7 @@ class UserSearch extends SearchAbstract
         'postalCode',
         'withoutPostalCode',
         'school',
-        'withoutSchool' ,
+        'withoutSchool',
         'major',
         'grade_id',
         'gender',
@@ -68,7 +70,7 @@ class UserSearch extends SearchAbstract
         'hasProduct',
         'doesntHaveOrder',
         'hasClosedOrder',
-        'hasSeenSitePages'
+        'hasSeenSitePages',
     ];
 
     protected function apply(array $filters): LengthAwarePaginator
@@ -79,27 +81,20 @@ class UserSearch extends SearchAbstract
         return Cache::tags([
             'user',
             'search',
-        ])
-            ->remember($key, $this->cacheTime, function () use ($filters) {
-                //            dump("in cache");
-                $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
+        ])->remember($key, $this->cacheTime, function () use ($filters) {
+            //            dump("in cache");
+            $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
 
-                return $this->getResults($query);
-            });
+            return $this->getResults($query);
+        });
     }
 
     protected function getResults(Builder $query)
     {
-        $result = $query
-            ->orderBy("created_at", "desc")
-            ->paginate($this->numberOfItemInEachPage,
-                ['*'],
-                $this->pageName,
-                $this->pageNum
-            );
+        $result = $query->orderBy("created_at", "desc")->paginate($this->numberOfItemInEachPage, ['*'], $this->pageName, $this->pageNum);
+
         return $result;
     }
-
 
     /**
      * @param $decorator
@@ -109,8 +104,10 @@ class UserSearch extends SearchAbstract
     protected function setupDecorator($decorator)
     {
         $decorator = (new $decorator);
-        if ($decorator instanceof Tags)
+        if ($decorator instanceof Tags) {
             $decorator->setTagManager(new UserTagManagerViaApi());
+        }
+
         return $decorator;
     }
 }

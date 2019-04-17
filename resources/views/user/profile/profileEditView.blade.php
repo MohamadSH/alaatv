@@ -107,7 +107,7 @@
             <div class="form-group m-form__group {{ $errors->has('postalCode') ? ' has-error' : '' }}">
                 <label for="postalCode">کد پستی</label>
                 <div class="m-input-icon m-input-icon--left">
-                    <input type="text" name="postalCode" id="postalCode" class="form-control m-input m-input--air" placeholder="کد پستی" @if(isset($user->postalCode))value="{{ $user->postalCode }}"@endif>
+                    <input type="text" dir="ltr" name="postalCode" id="postalCode" class="form-control m-input m-input--air" placeholder="کد پستی" @if(isset($user->postalCode))value="{{ $user->postalCode }}"@endif>
                     <span class="m-input-icon__icon m-input-icon__icon--left">
                         <span>
                             <i class="flaticon-mail-1"></i>
@@ -180,9 +180,9 @@
             @endif
 
             <div class="form-group m-form__group {{ $errors->has('email') ? ' has-error' : '' }}">
-                <label for="email">ایمیل(اختیاری)</label>
+                <label for="email">ایمیل</label>
                 <div class="m-input-icon m-input-icon--left">
-                    <input type="text" name="email" id="email" class="form-control m-input m-input--air" placeholder="ایمیل" @if(isset($user->email))value="{{ $user->email }}"@endif>
+                    <input type="text" dir="ltr" name="email" id="email" class="form-control m-input m-input--air" placeholder="ایمیل" @if(isset($user->email))value="{{ $user->email }}"@endif>
                     <span class="m-input-icon__icon m-input-icon__icon--left">
                         <span>
                             <i class="flaticon-mail"></i>
@@ -195,7 +195,7 @@
                 <div class="form-group m-form__group {{ $errors->has('bio') ? ' has-error' : '' }}">
                     <label for="bio">درباره ی شما</label>
                     <div class="m-input-icon m-input-icon--left">
-                        <textarea id="bio" class="form-control m-input m-input--air" placeholder="درباره ی شما" rows="13" name="bio" cols="50">@if(isset($user->bio))value="{{ $user->bio }}"@endif</textarea>
+                        <textarea id="bio" class="form-control m-input m-input--air" placeholder="درباره ی شما" rows="13" name="bio" cols="50">@if(isset($user->bio)){{ $user->bio }}@endif</textarea>
                     </div>
                 </div>
             @endif

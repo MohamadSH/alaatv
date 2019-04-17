@@ -8,7 +8,6 @@
 
 namespace App\Traits\Cashier;
 
-
 trait CashierWalletUnit
 {
     protected $payableAmountByWallet;
@@ -21,6 +20,7 @@ trait CashierWalletUnit
     public function setPayableAmountByWallet($payableAmountByWallet)
     {
         $this->payableAmountByWallet = $payableAmountByWallet;
+
         return $this;
     }
 
@@ -31,5 +31,4 @@ trait CashierWalletUnit
     {
         return $this->payableAmountByWallet;
     }
-
 }

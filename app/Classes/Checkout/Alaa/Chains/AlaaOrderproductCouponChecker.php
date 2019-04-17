@@ -8,7 +8,6 @@
 
 namespace App\Classes\Checkout\Alaa\Chains;
 
-
 use App\Classes\Abstracts\Checkout\OrderproductCouponChecker;
 use App\Coupon;
 use App\Traits\ProductCommon;
@@ -18,17 +17,18 @@ class AlaaOrderproductCouponChecker extends OrderproductCouponChecker
 {
     use ProductCommon;
 
-    protected function IsIncludedInCoupon(Collection $orderproducts , Coupon $coupon) :Collection
+    protected function IsIncludedInCoupon(Collection $orderproducts, Coupon $coupon): Collection
     {
-        foreach ($orderproducts as $orderproduct)
-        {
+        foreach ($orderproducts as $orderproduct) {
             $couponHasProduct = $coupon->hasProduct($orderproduct->product);
 
-            if($couponHasProduct)
+            if ($couponHasProduct) {
                 $orderproduct->includeInCoupon();
-            else
+            } else {
                 $orderproduct->excludeFromCoupon();
+            }
         }
-        return $orderproducts ;
+
+        return $orderproducts;
     }
 }

@@ -8,19 +8,20 @@
 
 namespace App\Classes\Report;
 
-
 use Google_Service_AnalyticsReporting_GetReportsResponse;
 
 class GaReportGetUsersFromPageView extends GaReportGetPathPageViews
 {
-
     protected function setDimension(): void
     {
         // Init the Dimension object.
         $this->dimension->setName('ga:dimension2');
     }
-    protected function format(Google_Service_AnalyticsReporting_GetReportsResponse $reports){
+
+    protected function format(Google_Service_AnalyticsReporting_GetReportsResponse $reports)
+    {
         $out = $this->baseFormat($reports);
+
         return $out;
     }
 }

@@ -50,6 +50,15 @@
     text-align: right;
 }
 
+.m-topbar .m-topbar__nav.m-nav > .m-nav__item > .m-nav__link .m-topbar__userpic img {
+    width: 41px;
+    height: 41px;
+}
+
+.m-list-badge .m-list-badge__label {
+    white-space: nowrap;
+}
+
 /*media query*/
 @media (max-width: 767.98px) {
     .m-portlet__body {

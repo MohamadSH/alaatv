@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Web;
+
 use App\Events\MobileVerified;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubmitVerificationCode;
+use App\User;
 use Illuminate\Http\{Request, Response};
 use Illuminate\Support\Facades\Redirect;
 
@@ -28,25 +30,20 @@ class MobileVerificationController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('throttle:1,1')
-             ->only('resend');
-        $this->middleware('throttle:10,1')
-             ->only('verify');
+        $this->middleware('throttle:1,1')->only('resend');
+        $this->middleware('throttle:10,1')->only('verify');
     }
 
     /**
      * Show the mobile verification notice.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
     {
-        return $request->user()
-                       ->hasVerifiedMobile()
-            ? back()
-            : view('auth.verify');
+        return $request->user()->hasVerifiedMobile() ? back() : view('auth.verify');
     }
 
     /**
@@ -61,44 +58,41 @@ class MobileVerificationController extends Controller
     {
         $user = $request->user();
         $verified = false;
-        if ($request->code == $user->getMobileVerificationCode() &&
-            $user->markMobileAsVerified()) {
+        if ($request->code == $user->getMobileVerificationCode() && $user->markMobileAsVerified()) {
             event(new MobileVerified($user));
             $verified = true;
         }
 
-        if ($verified)
+        if ($verified) {
             return response([
-                'user'       => $user ,
-                'message'    =>  \Lang::get('verification.Your mobile number is verified.')
+                'user' => $user,
+                'message' => \Lang::get('verification.Your mobile number is verified.'),
             ], Response::HTTP_OK);
-        else
-            $request->expectsJson()
-                ? abort(Response::HTTP_FORBIDDEN, \Lang::get('verification.Your code is wrong.'))
-                : Redirect::route('verification.notice');
+        } else {
+            $request->expectsJson() ? abort(Response::HTTP_FORBIDDEN, \Lang::get('verification.Your code is wrong.')) : Redirect::route('verification.notice');
+        }
     }
 
     /**
      * Resend the mobile verification notification.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
      */
     public function resend(Request $request)
     {
+        /** @var User $user */
         $user = $request->user();
         if ($user->hasVerifiedMobile()) {
-            return $request->expectsJson()
-                ? abort(Response::HTTP_FORBIDDEN, \Lang::get('verification.Your mobile number is verified.'))
-                : Redirect::route('verification.notice');
-
+            return $request->expectsJson() ? abort(Response::HTTP_FORBIDDEN,
+                \Lang::get('verification.Your mobile number is verified.')) : Redirect::route('verification.notice');
         }
 
         $user->sendMobileVerificationNotification();
 
         return response([
-            'message'    =>  \Lang::get('verification.Verification code is sent.') ,
+            'message' => \Lang::get('verification.Verification code is sent.'),
         ], Response::HTTP_OK);
     }
 }

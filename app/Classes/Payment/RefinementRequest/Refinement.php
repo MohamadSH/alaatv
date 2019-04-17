@@ -8,13 +8,13 @@
 
 namespace App\Classes\Payment\RefinementRequest;
 
-use App\User;
-use App\Order;
 use App\Coupon;
-use App\Transaction;
-use App\Traits\OrderCommon;
-use Illuminate\Http\Response;
 use App\Http\Controllers\TransactionController;
+use App\Order;
+use App\Traits\OrderCommon;
+use App\Transaction;
+use App\User;
+use Illuminate\Http\Response;
 
 abstract class Refinement
 {
@@ -97,27 +97,31 @@ abstract class Refinement
      * @param array $inputData
      * @return Refinement
      */
-    public function setData(array $inputData): Refinement {
+    public function setData(array $inputData): Refinement
+    {
         $this->inputData = $inputData;
-        $this->transactionController = $this->inputData['transactionController']??null;
-        $this->user = $this->inputData['user']??null;
-        $this->walletId = $this->inputData['walletId']??null;
-        $this->walletChargingAmount = $this->inputData['walletChargingAmount']??null;
+        $this->transactionController = $this->inputData['transactionController'] ?? null;
+        $this->user = $this->inputData['user'] ?? null;
+        $this->walletId = $this->inputData['walletId'] ?? null;
+        $this->walletChargingAmount = $this->inputData['walletChargingAmount'] ?? null;
+
         return $this;
     }
 
     /**
      * @return Refinement
      */
-    public function validateData(): Refinement {
-        if(!isset($this->user)) {
+    public function validateData(): Refinement
+    {
+        if (! isset($this->user)) {
             $this->message = 'user not set';
             $this->statusCode = Response::HTTP_BAD_REQUEST;
         }
-        if(!isset($this->transactionController)) {
+        if (! isset($this->transactionController)) {
             $this->message = 'transactionController not set';
             $this->statusCode = Response::HTTP_BAD_REQUEST;
         }
+
         return $this;
     }
 
@@ -156,7 +160,7 @@ abstract class Refinement
         $couponValidationStatus = optional($coupon)->validateCoupon();
         if ($couponValidationStatus != Coupon::COUPON_VALIDATION_STATUS_OK && $couponValidationStatus != Coupon::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED) {
             $this->order->detachCoupon();
-            if($this->order->updateWithoutTimestamp()) {
+            if ($this->order->updateWithoutTimestamp()) {
                 $coupon->decreaseUseNumber();
                 $coupon->update();
             }
@@ -171,21 +175,22 @@ abstract class Refinement
     protected function getNewTransaction($deposit = true)
     {
         $result = null;
-        if($this->cost>0) {
-            if($deposit) {
+        if ($this->cost > 0) {
+            if ($deposit) {
                 $data['cost'] = $this->cost;
             } else {
-                $data['cost'] = ($this->cost*(-1));
+                $data['cost'] = ($this->cost * (-1));
             }
 
             $data['description'] = $this->description;
-            $data['order_id'] = (isset($this->order))?$this->order->id:null;
-            $data['wallet_id'] = (isset($this->walletId))?$this->walletId:null;
+            $data['order_id'] = (isset($this->order)) ? $this->order->id : null;
+            $data['wallet_id'] = (isset($this->walletId)) ? $this->walletId : null;
             $data['destinationBankAccount_id'] = 1; // ToDo: Hard Code
             $data['paymentmethod_id'] = config('constants.PAYMENT_METHOD_ONLINE');
             $data['transactionstatus_id'] = config('constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY');
             $result = $this->transactionController->new($data);
         }
+
         return $result;
     }
 
@@ -194,7 +199,7 @@ abstract class Refinement
      */
     protected function canDeductFromWallet()
     {
-        if (isset($this->inputData['payByWallet']) && $this->inputData['payByWallet']==true) {
+        if (isset($this->inputData['payByWallet']) && $this->inputData['payByWallet'] == true) {
             return true;
         } else {
             return false;

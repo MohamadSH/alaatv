@@ -44,10 +44,10 @@ $(document).ready(function () {
         $('.orderDetailes-debt').html(orders[index].debt.toLocaleString('fa') + ' تومان ');
         let couponMessage = 'کپن ندارد';
         if (orders[index].couponInfo !== null) {
-            couponMessage = orders[index].couponInfo.coupon.name + ' با ' + orders[index].couponInfo.discount.discount;
-            if (orders[index].couponInfo.discount.typeHint === 'percentage') {
+            couponMessage = orders[index].couponInfo.name + ' با ' + orders[index].couponInfo.discount;
+            if (orders[index].couponInfo.typeHint === 'percentage') {
                 couponMessage += '%';
-            } else /*if (orders[index].couponInfo.discount.typeHint === 'percentage')*/ {
+            } else /*if (orders[index].couponInfo.typeHint === 'percentage')*/ {
                 couponMessage += ' تومان ';
             }
             couponMessage += ' تخفیف ';
@@ -69,14 +69,15 @@ $(document).ready(function () {
             }
 
             let price = '<span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">';
-            if (opItem.price.customerPrice !== opItem.price.cost) {
-                let sum = opItem.price.cost + opItem.price.extraCost;
+            if (opItem.price.final !== opItem.price.base) {
+                let sum = opItem.price.final + opItem.price.extraCost;
                 price += '<span class="m-badge m-badge--warning a--productRealPrice">' + sum.toLocaleString('fa') + '</span>';
             }
-            let paidPride = opItem.price.customerPrice + opItem.price.extraCost;
+            let paidPride = opItem.price.final + opItem.price.extraCost;
+            console.log('paidPride', paidPride);
             price += paidPride.toLocaleString('fa') + ' تومان ';
-            if ((opItem.price.bonDiscount + opItem.price.productDiscount) > 0) {
-                let percent = Math.round((1 - (opItem.price.customerPrice / opItem.price.cost)) * 100);
+            if ((opItem.price.discountDetail.bonDiscount + opItem.price.discountDetail.productDiscount) > 0) {
+                let percent = Math.round((1 - (opItem.price.final / opItem.price.base)) * 100);
                 price += '<span class="m-badge m-badge--info a--productDiscount">' + percent + '%</span>';
             }
             price += '</span>';

@@ -1,9 +1,7 @@
 <?php namespace App\Traits;
 
-
 trait FileCommon
 {
-
     /** Obtains file size based on it's url
      *
      * @param string $url
@@ -19,13 +17,14 @@ trait FileCommon
         curl_setopt($curl, CURLOPT_HEADER, true);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-        if (isset($_SERVER["HTTP_USER_AGENT"]))
+        if (isset($_SERVER["HTTP_USER_AGENT"])) {
             curl_setopt($curl, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"]);
+        }
         curl_setopt($curl, CURLOPT_MAXREDIRS, 3);
 
         curl_exec($curl);
         $fileSizeString = "";
-        if (!curl_errno($curl)) {
+        if (! curl_errno($curl)) {
             switch ($http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE)) {
                 case 200:
                     $fileSize = curl_getinfo($curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
@@ -36,6 +35,7 @@ trait FileCommon
             }
         }
         curl_close($curl);
+
         return $fileSizeString;
     }
 
@@ -51,23 +51,23 @@ trait FileCommon
         $bytes = floatval($bytes);
         $arBytes = [
             0 => [
-                "UNIT"  => "ترابایت",
+                "UNIT" => "ترابایت",
                 "VALUE" => pow(1024, 4),
             ],
             1 => [
-                "UNIT"  => "گیگابایت",
+                "UNIT" => "گیگابایت",
                 "VALUE" => pow(1024, 3),
             ],
             2 => [
-                "UNIT"  => "مگابایت",
+                "UNIT" => "مگابایت",
                 "VALUE" => pow(1024, 2),
             ],
             3 => [
-                "UNIT"  => "کیلوبایت",
+                "UNIT" => "کیلوبایت",
                 "VALUE" => 1024,
             ],
             4 => [
-                "UNIT"  => "بایت",
+                "UNIT" => "بایت",
                 "VALUE" => 1,
             ],
         ];
@@ -75,11 +75,11 @@ trait FileCommon
         foreach ($arBytes as $arItem) {
             if ($bytes >= $arItem["VALUE"]) {
                 $result = $bytes / $arItem["VALUE"];
-                $result = str_replace(".", ".", strval(round($result, 2))) . " " . $arItem["UNIT"];
+                $result = str_replace(".", ".", strval(round($result, 2)))." ".$arItem["UNIT"];
                 break;
             }
         }
+
         return $result;
     }
-
 }

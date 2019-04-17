@@ -18,5 +18,4 @@ class LockProfile extends FilterAbstract
     {
         return $builder->where($this->attribute, $value);
     }
-
 }

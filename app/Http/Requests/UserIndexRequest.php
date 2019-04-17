@@ -7,7 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 
-
 class UserIndexRequest extends FormRequest
 {
     /**
@@ -34,8 +33,6 @@ class UserIndexRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(
-            response()->json($validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY)
-        );
+        throw new HttpResponseException(response()->json($validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY));
     }
 }

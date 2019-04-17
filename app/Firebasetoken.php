@@ -17,10 +17,11 @@ class Firebasetoken extends Model
     ];
 
     protected $fillable = [
-        'token'
+        'token',
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo('App\User');
     }
 }

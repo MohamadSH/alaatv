@@ -5,10 +5,10 @@ namespace App\Http\Middleware;
 use App\Http\Controllers\OrderController;
 use App\Product;
 use Closure;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Collection;
 
 class CheckPermissionForSendExtraAttributesCost
 {
@@ -16,10 +16,12 @@ class CheckPermissionForSendExtraAttributesCost
      * @var OrderController
      */
     private $orderController;
+
     private $user;
 
     /**
      * OrderCheck constructor.
+     *
      * @param Request $request
      * @param OrderController $controller
      */
@@ -41,7 +43,7 @@ class CheckPermissionForSendExtraAttributesCost
     {
         if (Auth::guard($guard)->check()) {
             if ($request->has('extraAttribute')) {
-                if (!$this->user->can(config("constants.ATTACH_EXTRA_ATTRIBUTE_ACCESS"))) {
+                if (! $this->user->can(config("constants.ATTACH_EXTRA_ATTRIBUTE_ACCESS"))) {
                     $productId = $request->get('product_id');
                     $product = Product::findOrFail($productId);
                     $attributesValues = $this->getAttributesValuesFromProduct($request, $product);
@@ -51,9 +53,10 @@ class CheckPermissionForSendExtraAttributesCost
             }
         } else {
             return response()->json([
-                'error' => 'Unauthenticated'
+                'error' => 'Unauthenticated',
             ], Response::HTTP_UNAUTHORIZED);
         }
+
         return $next($request);
     }
 
@@ -85,6 +88,7 @@ class CheckPermissionForSendExtraAttributesCost
         $extraAttributes = $request->get('extraAttribute');
         $extraAttributesId = array_column($extraAttributes, 'id');
         $attributesValues = $product->getAttributesValueByIds($extraAttributesId);
+
         return $attributesValues;
     }
 }

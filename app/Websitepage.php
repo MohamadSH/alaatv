@@ -5,15 +5,15 @@ namespace App;
 /**
  * App\Websitepage
  *
- * @property int                                                            $id
- * @property string                                                         $url         آدرس مختص این صفحه
- * @property string|null                                                    $displayName نام قابل نمایش این صفحه
- * @property string|null                                                    $description توضیح درباره صفحه
- * @property \Carbon\Carbon|null                                            $created_at
- * @property \Carbon\Carbon|null                                            $updated_at
- * @property \Carbon\Carbon|null                                            $deleted_at
+ * @property int $id
+ * @property string $url         آدرس مختص این صفحه
+ * @property string|null $displayName نام قابل نمایش این صفحه
+ * @property string|null $description توضیح درباره صفحه
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Slideshow[] $slides
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[]      $userschecked
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $userschecked
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Websitepage onlyTrashed()
  * @method static bool|null restore()
@@ -53,5 +53,4 @@ class Websitepage extends BaseModel
     {
         return $this->hasMany('\App\Slideshow');
     }
-
 }

@@ -1,82 +1,81 @@
 @permission((Config::get('constants.SHOW_COUPON_ACCESS')))
-@extends("app",["pageName"=>"admin"])
 
-@section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.css" rel="stylesheet"
-          type="text/css"/>
-@endsection
-@section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
-            <li>
-                <i class="icon-home"></i>
-                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
-                <i class="fa fa-angle-left"></i>
-            </li>
-            <li>
-                <a href = "{{action("Web\HomeController@adminProduct")}}">پنل مدیریتی محصولات</a>
-                <i class="fa fa-angle-left"></i>
-            </li>
-            <li>
-                <span>اصلاح اطلاعات کپن</span>
-            </li>
-        </ul>
-    </div>
+@extends('app',['pageName'=>'admin'])
+
+@section('page-css')
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel="stylesheet" type="text/css"/>
 @endsection
 
-@section("content")
+@section('pageBar')
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <i class="flaticon-home-2 m--padding-right-5"></i>
+                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="m-link" href="{{action("Web\HomeController@adminProduct")}}">
+                    پنل مدیریتی محصولات
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a class="m-link" href="#">
+                    اصلاح اطلاعات کپن
+                </a>
+            </li>
+        </ol>
+    </nav>
+@endsection
+
+@section('content')
     <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-6 ">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
         @include("systemMessage.flash")
         <!-- BEGIN SAMPLE FORM PORTLET-->
-            <div class="portlet light ">
-                <div class="portlet-title">
-                    <div class="caption">
-                        <i class="icon-settings font-dark"></i>
-                        <span class="caption-subject font-dark sbold uppercase">اصلاح اطلاعات کپن {{$coupon->name}}</span>
-                    </div>
-                    <div class="actions">
-                        <div class="btn-group">
-                            <a class = "btn btn-sm dark dropdown-toggle" href = "{{action("Web\HomeController@adminProduct")}}">
-                                بازگشت
-                                <i class="fa fa-angle-left"></i>
-                            </a>
+
+            <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                <i class="fa fa-cogs m--margin-right-5"></i>
+                                اصلاح اطلاعات کپن {{$coupon->name}}
+                            </h3>
                         </div>
                     </div>
+                    <div class="m-portlet__head-tools">
+                        <a class="btn btn-sm btn-primary m-btn--air" href="{{action("Web\HomeController@adminProduct")}}">
+                            بازگشت
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="portlet-body form">
-                    {!! Form::model($coupon,['method' => 'PUT','action' => ['CouponController@update',$coupon], 'class'=>'form-horizontal']) !!}
-                    @include('coupon.form')
+                <div class="m-portlet__body">
+                    {!! Form::model($coupon,['method' => 'PUT','action' => ['Web\CouponController@update',$coupon], 'class'=>'form-horizontal']) !!}
+                        @include('coupon.form')
                     {!! Form::close() !!}
                 </div>
             </div>
             <!-- END SAMPLE FORM PORTLET-->
 
         </div>
+        <div class="col-md-2"></div>
     </div>
 
 @endsection
 
-@section("footerPageLevelPlugin")
-    <script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
+@section('page-js')
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
     <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
-
-@endsection
-
-@section("footerPageLevelScript")
-    <script src="/assets/pages/scripts/components-multi-select.min.js" type="text/javascript"></script>
-    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js"
-            type="text/javascript"></script>
-@endsection
-@section("extraJS")
-    <script src="/js/extraJS/admin-coupon.js" type="text/javascript"></script>
-
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js" type="text/javascript"></script>
+    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/js/admin-coupon.js" type="text/javascript"></script>
     <script type="text/javascript">
         /**
          * Start up jquery
@@ -134,6 +133,6 @@
         });
 
     </script>
-
 @endsection
+
 @endpermission

@@ -4,13 +4,13 @@ namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
 use App\Traits\UserCommon;
-use Illuminate\Foundation\Http\FormRequest;
 use Auth;
+use Illuminate\Foundation\Http\FormRequest;
 
 class InsertUserRequest extends FormRequest
 {
     use CharacterCommon;
-    use UserCommon ;
+    use UserCommon;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -19,9 +19,11 @@ class InsertUserRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth::check())
-            if( Auth::user()->can(config('constants.INSERT_USER_ACCESS')))
+        if (Auth::check()) {
+            if (Auth::user()->can(config('constants.INSERT_USER_ACCESS'))) {
                 return true;
+            }
+        }
 
         return false;
     }
@@ -33,8 +35,7 @@ class InsertUserRequest extends FormRequest
      */
     public function rules()
     {
-        return $this->getInsertUserValidationRules( $this->request->all());
-
+        return $this->getInsertUserValidationRules($this->request->all());
     }
 
     public function prepareForValidation()

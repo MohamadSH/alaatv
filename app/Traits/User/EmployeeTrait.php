@@ -8,7 +8,6 @@
 
 namespace App\Traits\User;
 
-
 use App\Collection\UserCollection;
 use App\User;
 
@@ -20,14 +19,12 @@ trait EmployeeTrait
     public static function getEmployee(): UserCollection
     {
         $key = "getEmployee";
-        return Cache::tags(["employee"])
-                    ->remember($key, config("constants.CACHE_600"), function () {
-                        $employees = User::select()
-                                         ->role([config('constants.ROLE_EMPLOYEE')])
-                                         ->orderBy('lastName')
-                                         ->get();
-                        return $employees;
-                    });
+
+        return Cache::tags(["employee"])->remember($key, config("constants.CACHE_600"), function () {
+            $employees = User::select()->role([config('constants.ROLE_EMPLOYEE')])->orderBy('lastName')->get();
+
+            return $employees;
+        });
     }
 
     public function employeeschedules()
@@ -45,5 +42,4 @@ trait EmployeeTrait
     {
         return $this->hasMany("\App\Employeetimesheet");
     }
-
 }

@@ -20,7 +20,6 @@ class GenerateViewComposerCommand extends Command
      */
     protected $description = 'Generate a new view composer Class stub.';
 
-
     /**
      * Execute the console command.
      *
@@ -32,7 +31,7 @@ class GenerateViewComposerCommand extends Command
         $stub = $this->compileTemplate($composerName);
 
         $path = $this->makeFilterClass($composerName, $stub);
-        $this->info($path . "  created.");
+        $this->info($path."  created.");
     }
 
     /**
@@ -44,6 +43,7 @@ class GenerateViewComposerCommand extends Command
     {
         $stub = file_get_contents(app_path('Console/viewComposer.stub'));
         $stub = str_replace("{{CLASS}}", $composerName, $stub);
+
         return $stub;
     }
 
@@ -55,8 +55,9 @@ class GenerateViewComposerCommand extends Command
      */
     protected function makeFilterClass($composerName, $stub): string
     {
-        $path = app_path('Http/ViewComposers/') . $composerName . "Composer.php";
+        $path = app_path('Http/ViewComposers/').$composerName."Composer.php";
         file_put_contents($path, $stub);
+
         return $path;
     }
 }

@@ -1,57 +1,55 @@
 @permission((Config::get('constants.SHOW_ATTRIBUTEGROUP_ACCESS')))
-@extends("app",["pageName"=>"admin"])
+@extends('app',['pageName'=>'admin'])
 
-@section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
+@section('page-css')
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
 @endsection
 
-@section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
-            <li>
-                <i class="icon-home"></i>
-                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
-                <i class="fa fa-angle-left"></i>
+@section('pageBar')
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <i class="flaticon-home-2 m--padding-right-5"></i>
+                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
-            <li>
-                <a href = "{{action("Web\HomeController@adminProduct")}}">پنل مدیریتی محصولات</a>
-                <i class="fa fa-angle-left"></i>
+            <li class="breadcrumb-item" aria-current="page">
+                <a class="m-link" href="{{action("Web\HomeController@adminProduct")}}">پنل مدیریت محصولات</a>
             </li>
-            <li>
-                <span>اصلاح اطلاعات گروه صفت</span>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a class="m-link" href="#">اصلاح اطلاعات گروه صفت</a>
             </li>
-        </ul>
-    </div>
+        </ol>
+    </nav>
 @endsection
 
-@section("content")
+@section('content')
     <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-6 ">
-        @include("systemMessage.flash")
-        <!-- BEGIN SAMPLE FORM PORTLET-->
-            <div class="portlet light ">
-                <div class="portlet-title">
-                    <div class="caption">
-                        <i class="icon-settings font-dark"></i>
-                        <span class="caption-subject font-dark sbold uppercase">اصلاح اطلاعات گروه صفت {{$attributegroup->name}} </span>
-                    </div>
-                    <div class="actions">
-                        <div class="btn-group">
-                            <a class="btn btn-sm dark dropdown-toggle" href = "{{action("Web\AttributesetController@edit" , $attributeset)}}"> بازگشت
-                                <i class="fa fa-angle-left"></i>
-                            </a>
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            @include("systemMessage.flash")
+
+            <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                <i class="fa fa-cogs m--margin-right-10"></i>
+                                اصلاح اطلاعات گروه صفت {{$attributegroup->name}}
+                            </h3>
                         </div>
                     </div>
+                    <div class="m-portlet__head-tools">
+                        <a class="btn btn-primary m-btn m-btn--icon m-btn--wide" href = "{{action("Web\AttributesetController@edit" , $attributeset)}}"> بازگشت
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="portlet-body form">
-                    {!! Form::model($attributegroup,['method' => 'PUT','action' => ['AttributegroupController@update',$attributegroup], 'class'=>'form-horizontal']) !!}
+                <div class="m-portlet__body">
+                    {!! Form::model($attributegroup,['method' => 'PUT','action' => ['Web\AttributegroupController@update',$attributegroup], 'class'=>'form-horizontal']) !!}
                     @include('attributegroup.form')
                     {!! Form::close() !!}
-
                 </div>
             </div>
-            <!-- END SAMPLE FORM PORTLET-->
         </div>
     </div>
 @endsection

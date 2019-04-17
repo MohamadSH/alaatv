@@ -8,7 +8,6 @@
 
 namespace App\Traits\User;
 
-
 use App\Collection\ContentCollection;
 
 trait TagTrait
@@ -29,12 +28,14 @@ trait TagTrait
         if (count($userContents) == 0) {
             return false;
         }
+
         return true;
     }
 
     public function getTaggableTags()
     {
         $userContents = $this->contents;
+
         return $this->mergeContentTags($userContents);
     }
 
@@ -50,6 +51,7 @@ trait TagTrait
             $tags = array_merge($tags, $content->tags->tags);
         }
         $tags = array_values(array_unique($tags));
+
         return $tags;
     }
 
@@ -58,10 +60,7 @@ trait TagTrait
         /**
          *      Retrieving Tags
          */
-        $response = $this->sendRequest(
-            config("constants.TAG_API_URL") . "id/author/" . $this->id,
-            "GET"
-        );
+        $response = $this->sendRequest(config("constants.TAG_API_URL")."id/author/".$this->id, "GET");
 
         if ($response["statusCode"] == 200) {
             $result = json_decode($response["result"]);
@@ -72,6 +71,4 @@ trait TagTrait
 
         return $tags;
     }
-
-
 }

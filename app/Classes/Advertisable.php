@@ -8,11 +8,9 @@
 
 namespace App\Classes;
 
-
 use Illuminate\Support\Collection;
 
 interface Advertisable
 {
-
     public function getAddItems(): Collection;
 }

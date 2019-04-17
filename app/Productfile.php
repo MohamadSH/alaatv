@@ -8,20 +8,20 @@ use Kalnoy\Nestedset\QueryBuilder;
 /**
  * App\Productfile
  *
- * @property int                            $id
- * @property int                            $product_id         آی دی مشخص کننده محصول این فایل
- * @property int|null                       $productfiletype_id توضیج درباره نوع رشته
- * @property string|null                    $file               اسم فایل
- * @property string|null                    $cloudFile          فایل آپلود شده در سرور خارجی
- * @property string|null                    $name               عنوان فایل
- * @property string|null                    $description        توضیح درباره فایل
- * @property int                            $order              ترتیب فایل
- * @property int                            $enable             فعال بودن یا غیرفعال بودن فایل
- * @property string|null                    $validSince         تاریخ شروع استفاده از فایل
- * @property \Carbon\Carbon|null            $created_at
- * @property \Carbon\Carbon|null            $updated_at
- * @property \Carbon\Carbon|null            $deleted_at
- * @property-read \App\Product              $product
+ * @property int $id
+ * @property int $product_id         آی دی مشخص کننده محصول این فایل
+ * @property int|null $productfiletype_id توضیج درباره نوع رشته
+ * @property string|null $file               اسم فایل
+ * @property string|null $cloudFile          فایل آپلود شده در سرور خارجی
+ * @property string|null $name               عنوان فایل
+ * @property string|null $description        توضیح درباره فایل
+ * @property int $order              ترتیب فایل
+ * @property int $enable             فعال بودن یا غیرفعال بودن فایل
+ * @property string|null $validSince         تاریخ شروع استفاده از فایل
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \App\Product $product
  * @property-read \App\Productfiletype|null $productfiletype
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|Productfile onlyTrashed()
@@ -95,7 +95,8 @@ class Productfile extends BaseModel
     {
         $explodedDateTime = explode(" ", $this->validSince);
         $explodedTime = $explodedDateTime[1];
-        return $this->convertDate($this->validSince, "toJalali") . " " . $explodedTime;
+
+        return $this->convertDate($this->validSince, "toJalali")." ".$explodedTime;
     }
 
     /**
@@ -115,9 +116,7 @@ class Productfile extends BaseModel
         /** @var QueryBuilder $query */
         return $query->where(function ($q) {
             /** @var QueryBuilder $q */
-            $q->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                                               ->timezone('Asia/Tehran'))
-              ->orwhereNull('validSince');
+            $q->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->orwhereNull('validSince');
         });
     }
 }

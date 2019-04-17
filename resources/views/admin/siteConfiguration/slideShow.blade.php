@@ -1,193 +1,181 @@
 @permission((Config::get('constants.LIST_SLIDESHOW_ACCESS')))
-@extends("app" , ["pageName"=> "admin"])
+@extends('app' , ['pageName'=> 'admin'])
 
-@section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+@section('page-css')
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/css/profile-rtl.css" rel="stylesheet" type="text/css"/>
 @endsection
 
-@section("headPageLevelStyle")
-    <link href="/assets/pages/css/profile-rtl.min.css" rel="stylesheet" type="text/css"/>
-@endsection
-
-@section("title")
-    <title>آلاء|پیکربندی اسلاید شو</title>
-@endsection
-
-@section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
-            <li>
-                <i class="icon-home"></i>
-                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
-                <i class="fa fa-angle-left"></i>
+@section('pageBar')
+    <nav aria-label = "breadcrumb">
+        <ol class = "breadcrumb">
+            <li class = "breadcrumb-item">
+                <i class = "flaticon-home-2 m--padding-right-5"></i>
+                <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
-            <li>
-                <i class="fa fa-cogs"></i>
-                <span>پیکربندی سایت</span>
-                <i class="fa fa-angle-left"></i>
+            <li class = "breadcrumb-item" aria-current = "page">
+                <a class = "m-link" href = "#">پیکربندی سایت</a>
             </li>
-            <li>
-                <span>مدیریت اسلاید شو صفحه اصلی</span>
+            <li class = "breadcrumb-item active" aria-current = "page">
+                <a class = "m-link" href = "#">مدیریت اسلاید شو صفحه اصلی</a>
             </li>
-        </ul>
-    </div>
+        </ol>
+    </nav>
 @endsection
 
-@section("metadata")
-    <meta name="_token" content="{{ csrf_token() }}">
-@endsection
-
-@section("bodyClass")
-    class="page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-sidebar-closed page-md"
-@endsection
-
-@section("content")
+@section('content')
     <div class="row">
-        <div class="col-md-12">
-            <!-- BEGIN PROFILE SIDEBAR -->
-            <div class="profile-sidebar">
-                <!-- PORTLET MAIN -->
-            @include("partials.siteConfigurationSideBar" )
-            <!-- END PORTLET MAIN -->
-            </div>
-            <!-- END BEGIN PROFILE SIDEBAR -->
-            <!-- BEGIN PROFILE CONTENT -->
-            <div class="profile-content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <!-- BEGIN PORTLET -->
-                        <div class="portlet light ">
-                            <div class="portlet-title">
-                                <div class="caption caption-md">
-                                    <i class="icon-bar-chart theme-font hide"></i>
-                                    <span class="caption-subject font-blue-madison bold uppercase">جدول اسلایدهای صفحه اصلی</span>
-                                    <span class="caption-helper"><a target="_blank" href = "{{action("Web\IndexPageController")}}">رفتن به صفحه ی اصلی</a></span>
-                                </div>
-                                <div class="actions">
-                                    @permission((Config::get('constants.INSERT_SLIDESHOW_ACCESS')))
-                                    <div class="btn-group btn-group-devided" data-toggle="buttons">
-                                        <label class="btn btn-transparent grey-salsa btn-circle btn-sm active">
-                                            <a class="bg-font-dark" data-toggle="modal" href="#addSlideModal"><i
-                                                        class="fa fa-plus" aria-hidden="true"></i> افزودن</a></label>
-                                    </div>
-                                    @endpermission
-                                </div>
-                                <div class="modal fade" id="addSlideModal" tabindex="-1" role="basic"
-                                     aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                        aria-hidden="true"></button>
-                                                <h4 class="modal-title">افزودن اسلاید</h4>
-                                            </div>
-                                            <!-- BEGIN FORM-->
-                                            {!! Form::open(['files'=>true,'method' => 'POST' , 'action'=>"SlideShowController@store" ,  'class'=>'form-horizontal']) !!}
-                                            <div class="modal-body">
-                                                @permission((Config::get('constants.INSERT_SLIDESHOW_ACCESS')))
-                                                @include("slideShow.form")
-                                                @endpermission
-                                                <div class="modal-footer">
-                                                    <div class="form-actions">
-                                                        <div class="row">
-                                                            <div class="col-md-offset-3 col-md-9">
-                                                                <button type="submit" class="btn green">افزودن</button>
-                                                                <button type="button" class="dark btn btn-outline"
-                                                                        data-dismiss="modal">بستن
-                                                                </button>
-                                                            </div>
+        <div class="col">
+            <!-- PORTLET MAIN -->
+        @include("partials.siteConfigurationSideBar" )
+        <!-- END PORTLET MAIN -->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+            @include("systemMessage.flash")
+            <div class="m-portlet m-portlet--head-sm" m-portlet="true" id="m_portlet_tools_3">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="la la-photo"></i>
+                            </span>
+                            <h3 class="m-portlet__head-text">
+                                جدول اسلایدهای صفحه اصلی
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="m-portlet__head-tools">
+                        <ul class="m-portlet__nav">
+                            <li class="m-portlet__nav-item">
+                                <a href="{{action("Web\IndexPageController")}}" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="flaticon-home-2"></i>
+                                    رفتن به صفحه ی اصلی
+                                </a>
+                            </li>
+                            @permission((config('constants.INSERT_SLIDESHOW_ACCESS')))
+                            <li class="m-portlet__nav-item">
+                                <a href="#addSlideModal" data-toggle="modal" data-target="#addSlideModal" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="flaticon-plus"></i>
+                                    افزودن
+                                </a>
+                            </li>
+
+                            <div class="modal fade" id="addSlideModal" tabindex="-1" role="basic">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">افزودن اسلاید</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <!-- BEGIN FORM-->
+                                        {!! Form::open(['files'=>true,'method' => 'POST' , 'action'=>"Web\SlideShowController@store" ,  'class'=>'form-horizontal']) !!}
+                                        <div class="modal-body">
+                                            @permission((config('constants.INSERT_SLIDESHOW_ACCESS')))
+                                            @include("slideShow.form")
+                                            @endpermission
+                                            <div class="modal-footer">
+                                                <div class="form-actions">
+                                                    <div class="row">
+                                                        <div class="col text-center">
+                                                            <button type="submit" class="btn m-btn--air btn-success m--margin-right-25">افزودن</button>
+                                                            <button type="button" class="btn m-btn--air btn-brand" data-dismiss="modal">بستن</button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            {!! Form::close() !!}
-                                            <!-- END FORM-->
                                             </div>
-                                            <!-- /.modal-content -->
+                                        {!! Form::close() !!}
+                                        <!-- END FORM-->
                                         </div>
-                                        <!-- /.modal-dialog -->
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
+                            </div>
+
+                            @endpermission
+                        </ul>
+                    </div>
+                </div>
+                <div class="m-portlet__body">
+
+                    <div class="custom-alerts alert alert-success fade in display-hide" id="successMessage">
+                        <button type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true"></button>
+                        <i class="fa fa-check-circle"></i>
+                        <span></span>
+                    </div>
+                    <div class="table-scrollable">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th> ترتیب</th>
+                                <th>عنوان</th>
+                                <th> متن</th>
+                                <th> لینک</th>
+                                <th> عکس</th>
+                                <th> فعال/غیرفعال</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @if($slides->isEmpty())
+                                <tr style="text-align: center">
+                                    <td colspan="7">
+                                        اطلاعاتی برای نمایش وجود ندارد
+                                    </td>
+                                </tr>
+                            @else
+                                @include("slideShow.index")
+                            @endif
+                            </tbody>
+                            <div class="modal fade" id="removeSlideModal" tabindex="-1" role="basic"
+                                 aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">حذف اسلاید</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p> آیا مطمئن هستید؟ </p>
+                                            {!! Form::hidden('slide_id', null) !!}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" data-dismiss="modal"
+                                                    class="btn m-btn--air btn-outline-brand">لغو
+                                            </button>
+                                            <button type="button" data-dismiss="modal" class="btn m-btn--air btn-success"
+                                                    onclick="removeSlide()">بله
+                                            </button>
+                                        </div>
+                                        <!-- /.modal-content -->
                                     </div>
                                 </div>
                             </div>
-                            <div class="portlet-body">
-                                <div class="custom-alerts alert alert-success fade in display-hide" id="successMessage">
-                                    <button type="button" class="close" data-dismiss="alert"
-                                            aria-hidden="true"></button>
-                                    <i class="fa fa-check-circle"></i>
-                                    <span></span>
-                                </div>
-                                <div class="table-scrollable">
-                                    <table class="table table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th> ترتیب</th>
-                                            <th>عنوان</th>
-                                            <th> متن</th>
-                                            <th> لینک</th>
-                                            <th> عکس</th>
-                                            <th> فعال/غیرفعال</th>
-                                            <th></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @if($slides->isEmpty())
-                                            <tr style="text-align: center">
-                                                <td colspan="7">
-                                                    اطلاعاتی برای نمایش وجود ندارد
-                                                </td>
-                                            </tr>
-                                        @else
-                                            @include("slideShow.index")
-                                        @endif
-                                        </tbody>
-                                        <div class="modal fade" id="removeSlideModal" tabindex="-1" role="basic"
-                                             aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                                aria-hidden="true"></button>
-                                                        <h4 class="modal-title">حذف اسلاید <span
-                                                                    id="deleteSlideTitle"></span></h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p> آیا مطمئن هستید؟ </p>
-                                                        {!! Form::hidden('slide_id', null) !!}
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" data-dismiss="modal"
-                                                                class="btn btn-outline dark">لغو
-                                                        </button>
-                                                        <button type="button" data-dismiss="modal" class="btn green"
-                                                                onclick="removeSlide()">بله
-                                                        </button>
-                                                    </div>
-                                                    <!-- /.modal-content -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- END PORTLET -->
+                        </table>
                     </div>
+
                 </div>
             </div>
-            <!-- END PROFILE CONTENT -->
+
+
+
         </div>
     </div>
 @endsection
 
-@section("footerPageLevelPlugin")
-    <script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
-@endsection
-
-@section("footerPageLevelScript")
-    <script src="/assets/global/scripts/app.min.js" type="text/javascript"></script>
-@endsection
-
-@section("extraJS")
+@section('page-js')
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/app.js" type="text/javascript"></script>
     <script type="application/javascript">
         $(document).ready(function () {
             @if(session()->has("success"))

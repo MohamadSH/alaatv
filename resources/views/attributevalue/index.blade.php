@@ -3,29 +3,36 @@
     <div class="col-md-9">
         <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
         <div class="btn-group">
-            @permission((Config::get('constants.INSERT_ATTRIBUTEVALUE_ACCESS')))
-            <a class="btn btn-outline yellow-mint" data-toggle="modal" href="#responsive-attributevalue"><i
-                        class="fa fa-plus"></i> افزودن مقدار صفت </a>
-            <!-- responsive modal -->
-            <div id="responsive-attributevalue" class="modal fade" tabindex="-1" data-width="760">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">افزودن مقدار صفت جدید</h4>
-                </div>
-                {!! Form::open(['method' => 'POST','action' => 'AttributevalueController@store', 'class'=>'nobottommargin' , 'id' => 'attributevalueForm']) !!}
-                <div class="modal-body">
-                    <div class="row">
-                        @include('attributevalue.form')
+            @permission((config('constants.INSERT_ATTRIBUTEVALUE_ACCESS')))
+            <a class="btn btn-info m-btn m-btn--icon m-btn--wide" data-toggle="modal" href="#responsive-attributevalue" data-target="#responsive-attributevalue">
+                <i class="fa fa-plus"></i> افزودن مقدار صفت
+            </a>
+
+            <!--begin::Modal-->
+            <div class="modal fade" id="responsive-attributevalue" tabindex="-1" role="dialog" aria-labelledby="responsive-attributevalueModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="responsive-attributevalueModalLabel">افزودن مقدار صفت جدید</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        {!! Form::open(['method' => 'POST','action' => 'Web\AttributevalueController@store', 'class'=>'nobottommargin' , 'id' => 'attributevalueForm']) !!}
+                        <div class="modal-body">
+                            <div class="row">
+                                @include('attributevalue.form')
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="attributegroupForm-close">بستن</button>
+                            <button type="button" class="btn btn-primary" id="attributevalueForm-submit">ذخیره</button>
+                        </div>
+                        {!! Form::close() !!}
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-outline dark"
-                            id="attributegroupForm-close">بستن
-                    </button>
-                    <button type="button" class="btn yellow-mint" id="attributevalueForm-submit">ذخیره</button>
-                </div>
-                {!! Form::close() !!}
             </div>
+            <!--end::Modal-->
             @endpermission
         </div>
     </div>
@@ -58,14 +65,14 @@
                                     <i class="fa fa-angle-down"></i>
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
-                                    @permission((Config::get('constants.EDIT_ATTRIBUTEVALUE_ACCESS')))
+                                    @permission((config('constants.EDIT_ATTRIBUTEVALUE_ACCESS')))
                                     <li>
                                         <a href = "{{action("Web\AttributevalueController@edit" , $attributevalue)}}">
                                             <i
                                                     class="fa fa-pencil"></i> اصلاح </a>
                                     </li>
                                     @endpermission
-                                    @permission((Config::get('constants.REMOVE_ATTRIBUTEVALUE_ACCESS')))
+                                    @permission((config('constants.REMOVE_ATTRIBUTEVALUE_ACCESS')))
                                     <li>
                                         <a data-target="#static-{{$attributevalue->id}}" data-toggle="modal">
                                             <i class="fa fa-remove"></i> حذف </a>
@@ -74,20 +81,24 @@
                                 </ul>
 
                                 <!-- static -->
-                                @permission((Config::get('constants.REMOVE_ATTRIBUTEVALUE_ACCESS')))
-                                <div id="static-{{$attributevalue->id}}" class="modal fade" tabindex="-1"
-                                     data-backdrop="static" data-keyboard="false">
-                                    <div class="modal-body">
-                                        <p> آیا مطمئن هستید؟ </p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر
-                                        </button>
-                                        <button type="button" data-dismiss="modal" class="btn green" onclick = "removeattributevalues('{{action("Web\AttributevalueController@destroy" , $attributevalue)}}');">
-                                            بله
-                                        </button>
+                                @permission((config('constants.REMOVE_ATTRIBUTEVALUE_ACCESS')))
+
+                                <!--begin::Modal-->
+                                <div class="modal fade" id="static-{{$attributevalue->id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <p> آیا مطمئن هستید؟ </p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="removeattributevalues('{{action("Web\AttributevalueController@destroy" , $attributevalue)}}');">بله</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                                <!--end::Modal-->
+
                                 @endpermission
                             </div>
                     </tr>

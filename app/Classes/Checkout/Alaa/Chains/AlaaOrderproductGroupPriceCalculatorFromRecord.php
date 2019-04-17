@@ -8,7 +8,6 @@
 
 namespace App\Classes\Checkout\Alaa\Chains;
 
-
 use App\Classes\Abstracts\Checkout\OrderproductGroupPriceCalculatorFromRecord;
 use App\Classes\Abstracts\Pricing\OrderproductPriceCalculator;
 use App\Classes\Pricing\Alaa\AlaaOrderproductPriceCalculator;
@@ -21,10 +20,9 @@ class AlaaOrderproductGroupPriceCalculatorFromRecord extends OrderproductGroupPr
 
     protected function getOrderproductGroupPrice(Collection $orderproductsToCalculateFromRecord)
     {
-        foreach ($orderproductsToCalculateFromRecord as $orderproduct)
-        {
-            $priceInfo =  $this->getOrderproductPrice($orderproduct);
-            $orderproductsToCalculateFromRecord->setNewPriceForItem($orderproduct , $priceInfo);
+        foreach ($orderproductsToCalculateFromRecord as $orderproduct) {
+            $priceInfo = $this->getOrderproductPrice($orderproduct);
+            $orderproductsToCalculateFromRecord->setNewPriceForItem($orderproduct, $priceInfo);
         }
 
         return $orderproductsToCalculateFromRecord;
@@ -40,7 +38,7 @@ class AlaaOrderproductGroupPriceCalculatorFromRecord extends OrderproductGroupPr
     {
         $orderproductCalculator = new AlaaOrderproductPriceCalculator($orderproduct);
         $orderproductCalculator->setMode(self::MODE);
+
         return $orderproductCalculator->getPrice();
     }
-
 }

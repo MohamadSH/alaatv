@@ -5,15 +5,15 @@ namespace App;
 /**
  * App\Assignmentstatus
  *
- * @property int                                                             $id
- * @property string|null                                                     $name        نام وضعیت
- * @property string|null                                                     $displayName نام قابل نمایش این وضعیت
- * @property string|null                                                     $description توضیح درباره وضعیت
- * @property int                                                             $order       ترتیب نمایش وضعیت - در صورت
+ * @property int $id
+ * @property string|null $name        نام وضعیت
+ * @property string|null $displayName نام قابل نمایش این وضعیت
+ * @property string|null $description توضیح درباره وضعیت
+ * @property int $order       ترتیب نمایش وضعیت - در صورت
  *           نیاز به استفاده
- * @property \Carbon\Carbon|null                                             $created_at
- * @property \Carbon\Carbon|null                                             $updated_at
- * @property \Carbon\Carbon|null                                             $deleted_at
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Assignment[] $assignments
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Assignmentstatus onlyTrashed()
