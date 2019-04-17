@@ -2,6 +2,7 @@
 
 namespace App\Classes\Payment;
 
+use App\Http\Controllers\Web\TransactionController;
 use App\Transaction;
 use App\Transactiongateway;
 use Cache;
@@ -12,12 +13,12 @@ class ZarinPal
 {
     public function interactWithZarinPal(string $paymentMethod, string $device, int $cost, string $description, Transaction $transaction): array
     {
-        $gatewayResult = $this->buildZarinpalGateway($paymentMethod);
+        $gatewayResult = $this->buildZarinPalGateway();
 
         $transactiongateway = $gatewayResult['transactiongateway'];
         $gateway = $gatewayResult['gatewayComposer'];
 
-        $callbackUrl = action('Web\OnlinePaymentController@verifyPayment', ['paymentMethod' => $paymentMethod, 'device' => $device]);
+        $callbackUrl = $this->getCallbackUrl($paymentMethod, $device);
 
         $authority = $this->paymentRequest($gateway, $callbackUrl, $cost, $description);
 
@@ -37,15 +38,15 @@ class ZarinPal
      *
      * @return mixed
      */
-    private function buildZarinpalGateway(string $paymentMethod, bool $withSandBox = true)
+    private function buildZarinPalGateway(bool $withSandBox = true)
     {
-        $transactiongateway = $this->getGateWayCredentials($paymentMethod, 'transactiongateway:Zarinpal');
+        $transactiongateWay = $this->getGateWayCredentials();
 
-        if (! isset($transactiongateway)) {
+        if (is_null($transactiongateWay)) {
             throw new HttpResponseException($this->sendErrorResponse('درگاه مورد نظر یافت نشد', Response::HTTP_BAD_REQUEST));
         }
 
-        $gatewayComposer = new ZarinpalComposer($transactiongateway->merchantNumber);
+        $gatewayComposer = new ZarinpalComposer($transactiongateWay->merchantNumber);
         if ($this->isZarinpalSandboxOn() && $withSandBox) {
             $gatewayComposer->enableSandbox();
         }
@@ -55,7 +56,7 @@ class ZarinPal
         }
 
         return [
-            'transactiongateway' => $transactiongateway,
+            'transactiongateway' => $transactiongateWay,
             'gatewayComposer' => $gatewayComposer,
         ];
     }
@@ -77,25 +78,24 @@ class ZarinPal
     }
 
     /**
-     * @param string $paymentMethod
      * @param string $key
      * @return mixed
      */
-    protected function getGateWayCredentials(string $paymentMethod, string $key): mixed
+    protected function getGateWayCredentials(): mixed
     {
-        return Cache::remember($key, config('constants.CACHE_600'), function () use ($paymentMethod) {
-            return Transactiongateway::name('zarinpal', $paymentMethod)->first();
+        return Cache::remember('transactiongateway:Zarinpal', config('constants.CACHE_600'), function () {
+            return Transactiongateway::where('name', 'zarinpal')->first();
         });
     }
 
     /**
-     * @param string $str
-     * @param int $s1
+     * @param string $msg
+     * @param int $statusCode
      * @return JsonResponse
      */
-    private function sendErrorResponse(string $str, int $s1): JsonResponse
+    private function sendErrorResponse(string $msg, int $statusCode): JsonResponse
     {
-        return response()->json(['message' => $str], $s1);
+        return response()->json(['message' => $msg], $statusCode);
     }
 
     /**
@@ -126,14 +126,15 @@ class ZarinPal
      */
     private function setAuthorityForTransaction(string $authority, int $transactiongatewayId, Transaction $transaction, string $description): array
     {
-        $data['destinationBankAccount_id'] = 1; // ToDo: Hard Code
-        $data['authority'] = $authority;
-        $data['transactiongateway_id'] = $transactiongatewayId;
-        $data['paymentmethod_id'] = config('constants.PAYMENT_METHOD_ONLINE');
-        $data['description'] = $description;
-        $transactionModifyResult = $this->transactionController->modify($transaction, $data);
+        $data = [
+            'destinationBankAccount_id' => 1,
+            'authority' => $authority,
+            'transactiongateway_id' => $transactiongatewayId,
+            'paymentmethod_id' => config('constants.PAYMENT_METHOD_ONLINE'),
+            'description' => $description,
+        ];
 
-        return $transactionModifyResult;
+        return TransactionController::modify($transaction, $data);
     }
 
     /**
@@ -147,5 +148,15 @@ class ZarinPal
             'input' => [],
             'method' => 'GET',
         ];
+    }
+
+    /**
+     * @param string $paymentMethod
+     * @param string $device
+     * @return string
+     */
+    public function getCallbackUrl(string $paymentMethod, string $device): string
+    {
+        return action('Web\OnlinePaymentController@verifyPayment', ['paymentMethod' => $paymentMethod, 'device' => $device]);
     }
 }

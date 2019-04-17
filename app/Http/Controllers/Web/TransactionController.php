@@ -341,15 +341,14 @@ class TransactionController extends Controller
      */
     public function update(EditTransactionRequest $request, Transaction $transaction)
     {
-        $result = $this->modify($transaction, $request->all());
+        $result = self::modify($transaction, $request->all());
 
         if ($request->expectsJson()) {
             return $this->response->setStatusCode($result['statusCode']);
-        } else {
-            session()->put("success", $result['message']);
-
-            return redirect()->back();
         }
+        session()->put("success", $result['message']);
+
+        return redirect()->back();
     }
 
     /**
@@ -357,7 +356,7 @@ class TransactionController extends Controller
      * @param array $data
      * @return array
      */
-    public function modify(Transaction $transaction, array $data)
+    public static function modify(Transaction $transaction, array $data)
     {
         $result = [
             'statusCode' => Response::HTTP_OK,
@@ -366,51 +365,41 @@ class TransactionController extends Controller
         ];
 
         $transaction->fill($data);
-        if (strlen($transaction->referenceNumber) == 0) {
-            $transaction->referenceNumber = null;
-        }
-        if (strlen($transaction->traceNumber) == 0) {
-            $transaction->traceNumber = null;
-        }
-        if (strlen($transaction->transactionID) == 0) {
-            $transaction->transactionID = null;
-        }
-        if (strlen($transaction->authority) == 0) {
-            $transaction->authority = null;
-        }
-        if (strlen($transaction->paycheckNumber) == 0) {
-            $transaction->paycheckNumber = null;
-        }
-        if (strlen($transaction->managerComment) == 0) {
-            $transaction->managerComment = null;
-        }
-        if (strlen($transaction->paymentmethod_id) == 0) {
-            $transaction->paymentmethod_id = null;
+        $props = [
+            'referenceNumber',
+            'traceNumber',
+            'transactionID',
+            'authority',
+            'paycheckNumber',
+            'managerComment',
+            'paymentmethod_id',
+        ];
+
+        foreach ($props as $prop) {
+            if (strlen($transaction->$prop) == 0) {
+                $transaction->$prop = null;
+            }
         }
 
         if (isset($data["deadline_at"]) && strlen($data["deadline_at"]) > 0) {
-            $deadline_at = Carbon::parse($data["deadline_at"])->addDay()->format('Y-m-d');
-            $transaction->deadline_at = $deadline_at;
+            $transaction->deadline_at = Carbon::parse($data["deadline_at"])->addDay()->format('Y-m-d');
         }
 
         if (isset($data["completed_at"]) && strlen($data["completed_at"]) > 0) {
-            $completed_at = Carbon::parse($data["completed_at"])->addDay()->format('Y-m-d');
-            $transaction->completed_at = $completed_at;
+            $transaction->completed_at = Carbon::parse($data["completed_at"])->addDay()->format('Y-m-d');
         }
 
         if ($transaction->update()) {
             $result['statusCode'] = Response::HTTP_OK;
             $result['message'] = 'تراکنش با موفقیت اصلاح شد';
-            $result['transaction'] = $transaction;
-
-            return $result;
         } else {
             $result['statusCode'] = Response::HTTP_SERVICE_UNAVAILABLE;
             $result['message'] = 'خطای پایگاه داده';
-            $result['transaction'] = $transaction;
-
-            return $result;
         }
+
+        $result['transaction'] = $transaction;
+
+        return $result;
     }
 
     /**

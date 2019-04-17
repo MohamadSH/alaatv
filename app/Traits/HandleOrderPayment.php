@@ -55,11 +55,7 @@ trait HandleOrderPayment
         $order->close($paymentstatus_id);
         $orderUpdateStatus = $order->updateWithoutTimestamp();
 
-        if ($orderUpdateStatus) {
-            $result['saveOrder'] = 1;
-        } else {
-            $result['saveOrder'] = 0;
-        }
+        $result['saveOrder'] = $orderUpdateStatus ? 1 : 0;
 
         return $result;
     }
@@ -69,53 +65,25 @@ trait HandleOrderPayment
      *
      * @return array
      */
-    protected function givesOrderBonsToUser(Order $order): array
+    private function givesOrderBonsToUser(Order $order): array
     {
         $result = [];
         $bonName = config('constants.BON1');
         $bon = Bon::ofName($bonName)->first();
 
-        if (isset($bon)) {
-            list($givenBonNumber, $failedBonNumber) = $order->giveUserBons($bonName);
-            if ($givenBonNumber == 0) {
-                if ($failedBonNumber > 0) {
-                    $result['saveBon'] = -1;
-                } else {
-                    $result['saveBon'] = 0;
-                }
-            } else {
-                $result['saveBon'] = $givenBonNumber;
-            }
-
-            $bonDisplayName = $bon->displayName;
-            $result['bonName'] = $bonDisplayName;
+        if (! isset($bon)) {
+            return $result;
         }
 
-        return $result;
-    }
+        list($givenBonNumber, $failedBonNumber) = $order->giveUserBons($bonName);
 
-    /**
-     * @param \App\Order $order
-     *
-     * @return array
-     */
-    protected function handleOrderCanceledPayment(Order $order): array
-    {
-        $result = [];
-        if ($order->orderstatus_id == config("constants.ORDER_STATUS_OPEN")) {
-            $order->close(config('constants.PAYMENT_STATUS_UNPAID'), config('constants.ORDER_STATUS_CANCELED'));
-            $order->updateWithoutTimestamp();
+        $result['saveBon'] = $givenBonNumber;
+
+        if ($givenBonNumber == 0) {
+            $result['saveBon'] = $failedBonNumber > 0 ? -1 : 0;
         }
 
-        $totalWalletRefund = $order->refundWalletTransaction();
-
-        if ($totalWalletRefund > 0) {
-            $result['walletAmount'] = $totalWalletRefund;
-            $result['walletRefund'] = true;
-        } else {
-            $result['walletAmount'] = 0;
-            $result['walletRefund'] = false;
-        }
+        $result['bonName'] = $bon->displayName;
 
         return $result;
     }

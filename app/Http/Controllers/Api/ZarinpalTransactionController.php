@@ -59,7 +59,7 @@ class ZarinpalTransactionController extends Controller
         $gateway = $gatewayResult['gatewayComposer'];
         $transactionGateway = $gatewayResult['transactiongateway'];
 
-        $gatewayVerify = $this->verify($gateway, $amount, $paymentData);
+        $gatewayVerify = $this->verify($gateway, $amount, $paymentData["Authority"]);
 
         if ($gatewayVerify['status']) {
             if ($gatewayVerify['data']['RefID'] != $refId) {

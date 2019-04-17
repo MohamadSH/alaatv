@@ -35,13 +35,13 @@ trait ZarinpalGateway
     /**
      * @param ZarinpalComposer $gatewayComposer
      * @param int $amount
-     * @param array $paymentData
+     * @param array $authority
      *
      * @return array
      */
-    public function verify(ZarinpalComposer $gatewayComposer, int $amount, array $paymentData): array
+    public function verify(ZarinpalComposer $gatewayComposer, int $amount, array $authority): array
     {
-        $gatewayResult = $gatewayComposer->verify($amount, $paymentData["Authority"]);
+        $gatewayResult = $gatewayComposer->verify($amount, $authority);
 
         $result = $this->prepareResponse($gatewayResult);
         $result['__zarinpalVerifyResult'] = $gatewayResult;
@@ -63,9 +63,11 @@ trait ZarinpalGateway
         if (! isset($order)) {
             return $description;
         }
+
         if (! $order->orderproducts->relationLoaded('product')) {
             $order->orderproducts->load('product');
         }
+
         foreach ($order->orderproducts as $orderProduct) {
             if (isset($orderProduct->product->id)) {
                 $description .= $orderProduct->product->name.' , ';
