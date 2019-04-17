@@ -8,7 +8,7 @@ use App\Transactiongateway;
 use Cache;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
-
+use Zarinpal\Zarinpal as ZarinpalComposer;
 class ZarinPal
 {
     public function interactWithZarinPal(string $paymentMethod, string $device, int $cost, string $description, Transaction $transaction): array
@@ -79,9 +79,9 @@ class ZarinPal
 
     /**
      * @param string $key
-     * @return mixed
+     * @return Transactiongateway
      */
-    protected function getGateWayCredentials(): mixed
+    protected function getGateWayCredentials(): Transactiongateway
     {
         return Cache::remember('transactiongateway:Zarinpal', config('constants.CACHE_600'), function () {
             return Transactiongateway::where('name', 'zarinpal')->first();
