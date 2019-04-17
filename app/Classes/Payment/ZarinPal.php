@@ -9,6 +9,7 @@ use Cache;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 use Zarinpal\Zarinpal as ZarinpalComposer;
+
 class ZarinPal
 {
     public function interactWithZarinPal(string $paymentMethod, string $device, int $cost, string $description, Transaction $transaction): array
@@ -38,7 +39,7 @@ class ZarinPal
      *
      * @return mixed
      */
-    private function buildZarinPalGateway(bool $withSandBox = true)
+    public function buildZarinPalGateway(bool $withSandBox = true)
     {
         $transactiongateWay = $this->getGateWayCredentials();
 
