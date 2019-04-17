@@ -39,7 +39,7 @@ class WalletController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -49,33 +49,29 @@ class WalletController extends Controller
         $wallet->fill($request->all());
 
         $done = false;
-        if ($wallet->save())
+        if ($wallet->save()) {
             $done = true;
+        }
 
         if ($done) {
             if ($request->expectsJson()) {
-                return $this->response
-                    ->setStatusCode(200)
-                    ->setContent(["wallet" => $wallet]);
+                return $this->response->setStatusCode(200)->setContent(["wallet" => $wallet]);
             } else {
 
             }
         } else {
             if ($request->expectsJson()) {
-                return $this->response
-                    ->setStatusCode(503);
+                return $this->response->setStatusCode(503);
             } else {
 
             }
         }
-
-
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -87,7 +83,7 @@ class WalletController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Wallet $wallet
+     * @param \App\Wallet $wallet
      *
      * @return \Illuminate\Http\Response
      */
@@ -99,8 +95,8 @@ class WalletController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Wallet              $wallet
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Wallet $wallet
      *
      * @return \Illuminate\Http\Response
      */
@@ -108,20 +104,19 @@ class WalletController extends Controller
     {
         $wallet->fill($request->all());
         $done = false;
-        if ($wallet->update())
+        if ($wallet->update()) {
             $done = true;
+        }
 
         if ($done) {
             if ($request->expectsJson()) {
-                return $this->response
-                    ->setStatusCode(200);
+                return $this->response->setStatusCode(200);
             } else {
 
             }
         } else {
             if ($request->expectsJson()) {
-                return $this->response
-                    ->setStatusCode(503);
+                return $this->response->setStatusCode(503);
             } else {
 
             }
@@ -131,7 +126,7 @@ class WalletController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Wallet $wallet
+     * @param \App\Wallet $wallet
      *
      * @return \Illuminate\Http\Response
      */

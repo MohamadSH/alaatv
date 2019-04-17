@@ -5,13 +5,13 @@ namespace App;
 /**
  * App\Grade
  *
- * @property int                                                          $id
- * @property string|null                                                  $name        نام
- * @property string|null                                                  $displayName نام قابل نمایش
- * @property string|null                                                  $description توضیح
- * @property \Carbon\Carbon|null                                          $created_at
- * @property \Carbon\Carbon|null                                          $updated_at
- * @property \Carbon\Carbon|null                                          $deleted_at
+ * @property int $id
+ * @property string|null $name        نام
+ * @property string|null $displayName نام قابل نمایش
+ * @property string|null $description توضیح
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Content[] $contents
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Grade onlyTrashed()

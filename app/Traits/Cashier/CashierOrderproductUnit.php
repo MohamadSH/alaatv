@@ -8,13 +8,14 @@
 
 namespace App\Traits\Cashier;
 
-
 use Illuminate\Support\Collection;
 
 trait CashierOrderproductUnit
 {
     protected $rawOrderproductsToCalculateFromBase; //orderproducts that should be recalculated based on new conditions
+
     protected $rawOrderproductsToCalculateFromRecord; //orderproducts that should be calculated based recorded data
+
     protected $calculatedOrderproducts;
 
     /**
@@ -24,6 +25,7 @@ trait CashierOrderproductUnit
     public function setRawOrderproductsToCalculateFromBase($rawOrderproductsToCalculateFromBase)
     {
         $this->rawOrderproductsToCalculateFromBase = $rawOrderproductsToCalculateFromBase;
+
         return $this;
     }
 
@@ -34,6 +36,7 @@ trait CashierOrderproductUnit
     public function setRawOrderproductsToCalculateFromRecord($rawOrderproductsToCalculateFromRecord)
     {
         $this->rawOrderproductsToCalculateFromRecord = $rawOrderproductsToCalculateFromRecord;
+
         return $this;
     }
 
@@ -44,6 +47,7 @@ trait CashierOrderproductUnit
     public function setCalculatedOrderproducts(Collection $calculatedOrderproducts)
     {
         $this->calculatedOrderproducts = $calculatedOrderproducts;
+
         return $this;
     }
 
@@ -66,7 +70,7 @@ trait CashierOrderproductUnit
     /**
      * @return Collection
      */
-    public function getCalculatedOrderproducts():?Collection
+    public function getCalculatedOrderproducts(): ?Collection
     {
         return $this->calculatedOrderproducts;
     }

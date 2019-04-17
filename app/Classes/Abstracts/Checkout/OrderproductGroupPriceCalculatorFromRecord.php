@@ -16,20 +16,22 @@ abstract class OrderproductGroupPriceCalculatorFromRecord extends CheckoutProces
     public function process(Cashier $cashier)
     {
         $orderproductsToCalculateFromRecord = $cashier->getRawOrderproductsToCalculateFromRecord();
-        if(!isset($orderproductsToCalculateFromRecord))
+        if (! isset($orderproductsToCalculateFromRecord)) {
             throw new Exception('Orderproducts to calculate from records have not been set');
+        }
 
         $calculatedOrderproductsFromRecord = $this->getOrderproductGroupPrice($orderproductsToCalculateFromRecord);
 
         $calculatedOrderproducts = $cashier->getCalculatedOrderproducts();
-        if(isset($calculatedOrderproducts))
-            $calculatedOrderproducts = $calculatedOrderproducts->merge($calculatedOrderproductsFromRecord) ;
-        else
+        if (isset($calculatedOrderproducts)) {
+            $calculatedOrderproducts = $calculatedOrderproducts->merge($calculatedOrderproductsFromRecord);
+        } else {
             $calculatedOrderproducts = $calculatedOrderproductsFromRecord;
+        }
 
         $cashier->setCalculatedOrderproducts($calculatedOrderproducts);
 
-        return $this->next($cashier) ;
+        return $this->next($cashier);
     }
 
     /**
@@ -39,5 +41,4 @@ abstract class OrderproductGroupPriceCalculatorFromRecord extends CheckoutProces
      * @return mixed
      */
     abstract protected function getOrderproductGroupPrice(Collection $orderproductsToCalculateFromRecord);
-
 }

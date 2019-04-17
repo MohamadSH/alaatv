@@ -26,14 +26,13 @@ class ContactUsFormRequest extends FormRequest
      */
     public function rules()
     {
-        $rules =
-            [
-                'email'                => 'sometimes|nullable|email',
-                'fullName'             => 'required|max:255',
-                'phone'                => 'sometimes|nullable|numeric',
-                'message'              => 'required',
-                'g-recaptcha-response' => 'required|recaptcha',
-            ];
+        $rules = [
+            'email' => 'sometimes|nullable|email',
+            'fullName' => 'required|max:255',
+            'phone' => 'sometimes|nullable|numeric',
+            'message' => 'required',
+            'g-recaptcha-response' => 'required|recaptcha',
+        ];
 
         //        if($this->request->has("securityQuestion"))
         //        {
@@ -55,7 +54,6 @@ class ContactUsFormRequest extends FormRequest
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-
 
     protected function replaceNumbers()
     {

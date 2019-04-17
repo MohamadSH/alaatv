@@ -17,16 +17,16 @@ class PermissionController extends Controller
     {
         $this->response = new Response();
 
-        $this->middleware('permission:' . Config::get('constants.LIST_PERMISSION_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:' . Config::get('constants.INSERT_PERMISSION_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:' . Config::get('constants.REMOVE_PERMISSION_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:' . Config::get('constants.SHOW_PERMISSION_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:'.Config::get('constants.LIST_PERMISSION_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.Config::get('constants.INSERT_PERMISSION_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:'.Config::get('constants.REMOVE_PERMISSION_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:'.Config::get('constants.SHOW_PERMISSION_ACCESS'), ['only' => 'edit']);
     }
 
     public function index()
     {
-        $permissions = Permission::all()
-                                 ->sortByDesc('created_at');
+        $permissions = Permission::all()->sortByDesc('created_at');
+
         return view("permission.index", compact('permissions'));
     }
 
@@ -67,14 +67,18 @@ class PermissionController extends Controller
         } else {
             session()->put("error", "خطای پایگاه داده.");
         }
+
         return redirect()->back();
     }
 
     public function destroy($permission)
     {
-        if ($permission->delete())
+        if ($permission->delete()) {
             session()->put('success', 'دسترسی با موفقیت حذف شد');
-        else session()->put('error', 'خطای پایگاه داده');
+        } else {
+            session()->put('error', 'خطای پایگاه داده');
+        }
+
         return redirect()->back();
     }
 }

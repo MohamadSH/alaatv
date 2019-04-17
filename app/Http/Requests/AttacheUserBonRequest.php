@@ -17,10 +17,10 @@ class AttacheUserBonRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()
-            ->user()
-            ->can(Config::get('constants.ATTACHE_USER_BON_ACCESS')))
+        if (Auth()->user()->can(Config::get('constants.ATTACHE_USER_BON_ACCESS'))) {
             return true;
+        }
+
         return false;
     }
 
@@ -41,7 +41,6 @@ class AttacheUserBonRequest extends FormRequest
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-
 
     protected function replaceNumbers()
     {

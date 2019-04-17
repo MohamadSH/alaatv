@@ -18,5 +18,4 @@ class CreatedAtSince extends FilterAbstract
     {
         return $builder->where($this->attribute, ">=", $value);
     }
-
 }

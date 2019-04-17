@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Web;
+
 use App\Event;
 use App\Eventresult;
 use App\Eventresultstatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InsertEventResultRequest;
-use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Storage;
 
 class EventresultController extends Controller
 {
-
     protected $response;
 
     function __construct()
@@ -24,10 +23,10 @@ class EventresultController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:' . Config::get('constants.LIST_EVENTRESULT_ACCESS') . "|" . Config::get('constants.LIST_SHARIF_REGISTER_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.Config::get('constants.LIST_EVENTRESULT_ACCESS')."|".Config::get('constants.LIST_SHARIF_REGISTER_ACCESS'),
+            ['only' => 'index']);
 
         $this->response = new Response();
-
     }
 
     /**
@@ -46,15 +45,15 @@ class EventresultController extends Controller
             $eventIds = [];
         }
         $eventresults = $eventresults->get();
-        $sharifRegisterEvent = Event::where("name", "sabtename_sharif_97")
-                                    ->get()
-                                    ->first();
-        if (isset($sharifRegisterEvent) && in_array($sharifRegisterEvent->id, $eventIds))
+        $sharifRegisterEvent = Event::where("name", "sabtename_sharif_97")->get()->first();
+        if (isset($sharifRegisterEvent) && in_array($sharifRegisterEvent->id, $eventIds)) {
             $isSharifRegisterEvent = true;
-        else
+        } else {
             $isSharifRegisterEvent = false;
+        }
 
         $eventResultStatuses = Eventresultstatus::pluck('displayName', 'id');
+
         return view("event.result.index", compact("eventresults", "eventIds", "isSharifRegisterEvent", "eventResultStatuses"));
     }
 
@@ -71,7 +70,7 @@ class EventresultController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\InsertEventResultRequest $request
+     * @param \App\Http\Requests\InsertEventResultRequest $request
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
@@ -81,20 +80,22 @@ class EventresultController extends Controller
         $eventResult = new Eventresult();
         $eventResult->fill($request->all());
 
-        if ($request->has("participationCode"))
+        if ($request->has("participationCode")) {
             $eventResult->participationCode = encrypt($request->get("participationCode"));
+        }
 
         $user = $request->user();
-        if ( $request->has("user_id")) {
-            if($user->can(config('constants.INSET_EVENTRESULT_ACCESS')))
+        if ($request->has("user_id")) {
+            if ($user->can(config('constants.INSET_EVENTRESULT_ACCESS'))) {
                 $eventResult->user_id = $request->get("user_id");
-            else
+            } else {
                 abort(403);
-        } else  {
+            }
+        } else {
             $eventResult->user_id = $user->id;
         }
 
-        $eventResult->enableReportPublish = $request->get("enableReportPublish" , 0);
+        $eventResult->enableReportPublish = $request->get("enableReportPublish", 0);
 
         $userUpdate = false;
         if ($request->has("major_id")) {
@@ -112,33 +113,33 @@ class EventresultController extends Controller
             $user->lastName = $request->get("lastName");
         }
 
-        if($request->has("participationCode"))
-        {
-            if(strlen(preg_replace('/\s+/', '', $request->get("participationCode"))) == 0)
+        if ($request->has("participationCode")) {
+            if (strlen(preg_replace('/\s+/', '', $request->get("participationCode"))) == 0) {
                 $eventResult->participationCodeHash = null;
-            else
-                $eventResult->participationCodeHash = bcrypt($request->get("participationCode")) ;
-        }else{
+            } else {
+                $eventResult->participationCodeHash = bcrypt($request->get("participationCode"));
+            }
+        } else {
             $eventResult->participationCodeHash = null;
         }
 
         if ($request->hasFile("reportFile")) {
             $file = $request->reportFile;
             $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
+            $fileName = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
 
             //            $oldReportFile = $eventResult->reportFile;
 
-            if (Storage::disk(Config::get('constants.DISK14'))
-                       ->put($fileName, File::get($file))) {
+            if (Storage::disk(Config::get('constants.DISK14'))->put($fileName, File::get($file))) {
                 //                if (isset($oldReportFile)) Storage::disk(Config::get('constants.DISK14'))->delete($oldReportFile);
                 $eventResult->reportFile = $fileName;
             }
         }
 
         if ($eventResult->save()) {
-            if ($userUpdate)
+            if ($userUpdate) {
                 $user->update();
+            }
             if ($request->expectsJson()) {
                 $participationCode = $eventResult->participationCode;
                 $resultStatus = Response::HTTP_OK;
@@ -153,32 +154,31 @@ class EventresultController extends Controller
                 session()->put("error", \Lang::get("responseText.Database error."));
             }
         }
-        if ($request->expectsJson())
-        {
-            if($resultStatus == Response::HTTP_OK){
+        if ($request->expectsJson()) {
+            if ($resultStatus == Response::HTTP_OK) {
                 $responseContent = [
-                    'message'   =>  'Result inserted successfully' ,
-                    'participationCode' =>  $participationCode??$participationCode,
-                ] ;
-            }
-            else{
+                    'message' => 'Result inserted successfully',
+                    'participationCode' => $participationCode ?? $participationCode,
+                ];
+            } else {
                 $responseContent = [
-                    'error' =>  [
-                        'message'   =>  $message ,
-                        'code'      =>  $resultStatus
-                    ]
-                ] ;
+                    'error' => [
+                        'message' => $message,
+                        'code' => $resultStatus,
+                    ],
+                ];
             }
 
             return response($responseContent, Response::HTTP_OK);
-        } else
+        } else {
             return redirect()->back();
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -190,7 +190,7 @@ class EventresultController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -202,8 +202,8 @@ class EventresultController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  Eventresult              $eventResult
+     * @param \Illuminate\Http\Request $request
+     * @param Eventresult $eventResult
      *
      * @return \Illuminate\Http\Response
      */
@@ -217,15 +217,15 @@ class EventresultController extends Controller
             if ($updateResult) {
                 session()->put("success", "تغییرات با موفقیت ثبت شد");
             }
+
             return redirect()->back();
         }
-
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */

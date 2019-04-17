@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Web;
+
 use App\Classes\Search\ContentsetSearch;
 use App\Classes\SEO\SeoDummyTags;
 use App\Contentset;
@@ -24,12 +25,14 @@ class SetController extends Controller
 
     use RequestCommon;
     use MetaCommon;
+
     /*
     |--------------------------------------------------------------------------
     | Properties
     |--------------------------------------------------------------------------
     */
     protected $response;
+
     protected $setting;
 
     public function __construct(Response $response, Websitesetting $setting)
@@ -54,26 +57,25 @@ class SetController extends Controller
         $filters = $request->all();
         $pageName = 'setPage';
 
-        $sets = $setSearch->setPageName($pageName)
-                          ->get($filters);
+        $sets = $setSearch->setPageName($pageName)->get($filters);
 
         $url = $request->url();
-        $this->generateSeoMetaTags(new SeoDummyTags("دوره های آموزشی " . $this->setting->site->name, 'دوره های آموزشی دهم، یازدهم و دوازدهم - کنکور و پایه آلاء با همکاری دبیرستان دانشگاه صنعتی شریف', $url, $url, route('image', [
-            'category' => '11',
-            'w'        => '100',
-            'h'        => '100',
-            'filename' => $this->setting->site->siteLogo,
-        ]), '100', '100', null));
+        $this->generateSeoMetaTags(new SeoDummyTags("دوره های آموزشی ".$this->setting->site->name,
+            'دوره های آموزشی دهم، یازدهم و دوازدهم - کنکور و پایه آلاء با همکاری دبیرستان دانشگاه صنعتی شریف', $url, $url, route('image', [
+                'category' => '11',
+                'w' => '100',
+                'h' => '100',
+                'filename' => $this->setting->site->siteLogo,
+            ]), '100', '100', null));
 
         if (request()->expectsJson() || true) {
-            return $this->response
-                ->setStatusCode(Response::HTTP_OK)
-                ->setContent([
-                    'result' => $sets,
-                    'tags'   => $tags
-                ]);
+            return $this->response->setStatusCode(Response::HTTP_OK)->setContent([
+                'result' => $sets,
+                'tags' => $tags,
+            ]);
         }
-        return view("set.index", compact("sets",'tags'));
+
+        return view("set.index", compact("sets", 'tags'));
     }
 
     /**
@@ -98,34 +100,36 @@ class SetController extends Controller
         $contentSet = new Contentset();
         $this->fillContentFromRequest($request, $contentSet);
 
-        if ($contentSet->save())
+        if ($contentSet->save()) {
             return $this->response->setStatusCode(Response::HTTP_OK);
-        else
+        } else {
             return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
+        }
     }
 
     /**
      * Display the specified resource.
      *
      * @param \Illuminate\Http\Request $request
-     * @param  Contentset              $set
+     * @param Contentset $set
      *
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, Contentset $set)
     {
-        if ($request->expectsJson())
+        if ($request->expectsJson()) {
             return response()->json($set);
+        }
 
-        $contents = $set->contents()
-                        ->get();
+        $contents = $set->contents()->get();
+
         return view('listTest', compact('set', 'contents'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -136,8 +140,8 @@ class SetController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -148,7 +152,7 @@ class SetController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -171,6 +175,7 @@ class SetController extends Controller
             "index",
             "show",
         ];
+
         return $authException;
     }
 
@@ -184,7 +189,7 @@ class SetController extends Controller
 
     /**
      * @param FormRequest $request
-     * @param Contentset  $contentset
+     * @param Contentset $contentset
      *
      * @return void
      */
@@ -195,8 +200,9 @@ class SetController extends Controller
         $display = $request->has("display");
 
         $contentset->fill($inputData);
-        if ($request->has("id"))
+        if ($request->has("id")) {
             $contentset->id = $request->id;
+        }
 
         $contentset->enable = $enabled ? 1 : 0;
         $contentset->display = $display ? 1 : 0;

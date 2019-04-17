@@ -12,9 +12,8 @@ use App\Classes\Abstracts\Checkout\OrderCouponCalculatorBasedOnPercentage;
 
 class AlaaOrderCouponCalculatorBasedOnPercentage extends OrderCouponCalculatorBasedOnPercentage
 {
-    protected function calculateDiscount($couponDiscountPercentage, $totalRawPriceWhichHasDiscount):int
+    protected function calculateDiscount($couponDiscountPercentage, $totalRawPriceWhichHasDiscount): int
     {
         return (int)((1 - $couponDiscountPercentage) * $totalRawPriceWhichHasDiscount);
     }
-
 }

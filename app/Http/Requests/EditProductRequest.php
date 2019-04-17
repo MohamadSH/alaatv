@@ -17,10 +17,10 @@ class EditProductRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()
-            ->user()
-            ->can(Config::get('constants.EDIT_PRODUCT_ACCESS')))
+        if (Auth()->user()->can(Config::get('constants.EDIT_PRODUCT_ACCESS'))) {
             return true;
+        }
+
         return false;
     }
 
@@ -32,16 +32,16 @@ class EditProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'            => 'required',
-            'basePrice'       => 'required|numeric',
-            'order'           => 'numeric',
-            'discount'        => 'numeric',
-            'amount'          => 'required_if:amountLimit,1|numeric',
-            'image'           => 'image|mimes:jpeg,jpg,png',
-            'file'            => 'file',
+            'name' => 'required',
+            'basePrice' => 'required|numeric',
+            'order' => 'numeric',
+            'discount' => 'numeric',
+            'amount' => 'required_if:amountLimit,1|numeric',
+            'image' => 'image|mimes:jpeg,jpg,png',
+            'file' => 'file',
             'attributeset_id' => 'required|exists:attributesets,id',
-            'bonPlus'         => 'nullable|numeric',
-            'bonDiscount'     => 'nullable|numeric',
+            'bonPlus' => 'nullable|numeric',
+            'bonDiscount' => 'nullable|numeric',
         ];
     }
 

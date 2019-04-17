@@ -5,14 +5,14 @@ namespace App;
 /**
  * App\Phonetype
  *
- * @property int                                                        $id
- * @property string|null                                                $displayName نام قابل نمایش این نوع
- * @property string|null                                                $name        نام این نوع در سیستم
- * @property string|null                                                $description توضیحات این نوع
- * @property int                                                        $isEnable    نوع شماره تلفن فعال است یا خیر
- * @property \Carbon\Carbon|null                                        $created_at
- * @property \Carbon\Carbon|null                                        $updated_at
- * @property \Carbon\Carbon|null                                        $deleted_at
+ * @property int $id
+ * @property string|null $displayName نام قابل نمایش این نوع
+ * @property string|null $name        نام این نوع در سیستم
+ * @property string|null $description توضیحات این نوع
+ * @property int $isEnable    نوع شماره تلفن فعال است یا خیر
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Phone[] $phones
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Phonetype onlyTrashed()
@@ -36,7 +36,6 @@ namespace App;
  */
 class Phonetype extends BaseModel
 {
-
     /**
      * @var array
      */

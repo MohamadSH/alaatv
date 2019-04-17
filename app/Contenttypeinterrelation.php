@@ -5,10 +5,10 @@ namespace App;
 /**
  * App\Contenttypeinterrelation
  *
- * @property int                 $id
- * @property string|null         $name        نام
- * @property string|null         $displayName نام قابل نمایش
- * @property string|null         $description توضیح
+ * @property int $id
+ * @property string|null $name        نام
+ * @property string|null $displayName نام قابل نمایش
+ * @property string|null $description توضیح
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
@@ -38,5 +38,4 @@ class Contenttypeinterrelation extends BaseModel
         "displayName",
         "description",
     ];
-
 }

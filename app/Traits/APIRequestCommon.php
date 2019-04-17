@@ -17,16 +17,14 @@ trait APIRequestCommon
         }
         try {
             $res = $client->request($method, $path, ['form_params' => $request->all()]);
-        }
-        catch (GuzzleException $e) {
+        } catch (GuzzleException $e) {
             Log::error($e->getMessage());
             throw new Exception('Guzzle exception');
         }
+
         return [
             "statusCode" => $res->getStatusCode(),
-            "result"     => $res->getBody()
-                                ->getContents(),
+            "result" => $res->getBody()->getContents(),
         ];
     }
-
 }

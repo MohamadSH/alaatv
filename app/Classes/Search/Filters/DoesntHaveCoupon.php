@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 class DoesntHaveCoupon extends FilterAbstract
 {
     protected $attribute = 'coupon_id';
+
     protected $relation = 'openOrders';
 
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
@@ -21,5 +22,4 @@ class DoesntHaveCoupon extends FilterAbstract
             $q->whereNull($this->attribute);
         });
     }
-
 }

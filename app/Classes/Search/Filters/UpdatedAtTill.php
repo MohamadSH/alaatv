@@ -18,6 +18,4 @@ class UpdatedAtTill extends FilterAbstract
     {
         return $builder->where($this->attribute, "<=", $value);
     }
-
-
 }

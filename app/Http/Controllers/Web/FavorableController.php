@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Web;
+
 use App\Classes\FavorableInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -33,6 +34,7 @@ class FavorableController extends Controller
     private function getAuthExceptionArray(): array
     {
         $authException = ['getUsersThatFavoredThisFavorable'];
+
         return $authException;
     }
 
@@ -50,11 +52,9 @@ class FavorableController extends Controller
     public function getUsersThatFavoredThisFavorable(Request $request, FavorableInterface $favorable)
     {
         $key = md5($request->url());
-        return Cache::remember($key, config('constants.CACHE_1'), function () use ($favorable) {
-            return $favorable->favoriteBy()
-                             ->get()
-                             ->count();
-        });
 
+        return Cache::remember($key, config('constants.CACHE_1'), function () use ($favorable) {
+            return $favorable->favoriteBy()->get()->count();
+        });
     }
 }

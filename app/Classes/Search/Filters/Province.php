@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Filters;
 
-
 class Province extends FilterAbstract
 {
     protected $attribute = 'province';

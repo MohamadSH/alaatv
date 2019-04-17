@@ -27,8 +27,8 @@ class InsertProductfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'file'               => 'required_without_all:cloudFile',
-            'cloudFile'          => 'required_without_all:file',
+            'file' => 'required_without_all:cloudFile',
+            'cloudFile' => 'required_without_all:file',
             'productfiletype_id' => 'required|exists:productfiletypes,id',
         ];
     }

@@ -19,8 +19,8 @@ trait SearchCommon
      */
     private function getPartialSearchFromIds($query, $layout)
     {
-        $partialSearch = \Illuminate\Support\Facades\View::make($layout, ['items' => $query])
-            ->render();
+        $partialSearch = \Illuminate\Support\Facades\View::make($layout, ['items' => $query])->render();
+
         return $partialSearch;
     }
 }

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class SendEmployeeTimeSheetCommand extends Command
 {
     use DateTrait;
+
     /**
      * The name and signature of the console command.
      *
@@ -49,12 +50,12 @@ class SendEmployeeTimeSheetCommand extends Command
         if ($employeeId > 0) {
             try {
                 $user = User::findOrFail($employeeId);
-            }
-            catch (ModelNotFoundException $exception) {
+            } catch (ModelNotFoundException $exception) {
                 $this->error($exception->getMessage());
+
                 return;
             }
-            if ($this->confirm('You have chosen ' . $user->full_name . '. Do you wish to continue?', true)) {
+            if ($this->confirm('You have chosen '.$user->full_name.'. Do you wish to continue?', true)) {
                 $this->performTimeSheetTaskForAnEmployee($user);
             }
         } else {
@@ -64,22 +65,16 @@ class SendEmployeeTimeSheetCommand extends Command
 
     private function performTimeSheetTaskForAnEmployee(User $user)
     {
-        $this->info("send TimeSheet to" . $user->full_name);
-        $dayOfWeekJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')
-                                                           ->format('l'));
-        $toDayDate = Carbon::today('Asia/Tehran')
-                           ->format("Y-m-d");
+        $this->info("send TimeSheet to".$user->full_name);
+        $dayOfWeekJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')->format('l'));
+        $toDayDate = Carbon::today('Asia/Tehran')->format("Y-m-d");
         $this->calculate($user, $dayOfWeekJalali, $toDayDate);
     }
 
     private function calculate(User $employee, $dayOfWeekJalali, $toDayDate)
     {
-        $employeeSchedule = Employeeschedule::where("user_id", $employee->id)
-                                            ->where("day", $dayOfWeekJalali)
-                                            ->first();
-        $employeeTimeSheet = Employeetimesheet::where("user_id", $employee->id)
-                                              ->where("date", $toDayDate)
-                                              ->first();
+        $employeeSchedule = Employeeschedule::where("user_id", $employee->id)->where("day", $dayOfWeekJalali)->first();
+        $employeeTimeSheet = Employeetimesheet::where("user_id", $employee->id)->where("date", $toDayDate)->first();
         $done = false;
         if (isset($employeeTimeSheet)) {
             $newEmplployeeTimeSheet = new Employeetimesheet();
@@ -102,64 +97,71 @@ class SendEmployeeTimeSheetCommand extends Command
             $newEmplployeeTimeSheet->isPaid = 1;
             $newEmplployeeTimeSheet->workdaytype_id = 1;
 
-            if ($newEmplployeeTimeSheet->save())
-            {
+            if ($newEmplployeeTimeSheet->save()) {
                 $realWorkTime = $newEmplployeeTimeSheet->obtainRealWorkTime('IN_SECONDS');
                 $done = $newEmplployeeTimeSheet->id;
-            }
-            else
-            {
+            } else {
                 $done = false;
             }
-        } else if (!$employeeTimeSheet->getOriginal("timeSheetLock")) {
-            if (strcmp($employeeTimeSheet->clockIn, "00:00:00") == 0) {
-                if (strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") != 0)
-                    $employeeTimeSheet->clockIn = $employeeTimeSheet->beginLunchBreak;
-                else if (strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") != 0)
-                    $employeeTimeSheet->clockIn = $employeeTimeSheet->finishLunchBreak;
-                else if (strcmp($employeeTimeSheet->clockOut, "00:00:00") != 0)
-                    $employeeTimeSheet->clockIn = $employeeTimeSheet->clockOut;
-            }
-            if (strcmp($employeeTimeSheet->clockOut, "00:00:00") == 0) {
-                if (strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") != 0)
-                    $employeeTimeSheet->clockOut = $employeeTimeSheet->finishLunchBreak;
-                else if (strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") != 0)
-                    $employeeTimeSheet->clockOut = $employeeTimeSheet->beginLunchBreak;
-                else if (strcmp($employeeTimeSheet->clockIn, "00:00:00") != 0)
-                    $employeeTimeSheet->clockOut = $employeeTimeSheet->clockIn;
-            }
+        } else {
+            if (! $employeeTimeSheet->getOriginal("timeSheetLock")) {
+                if (strcmp($employeeTimeSheet->clockIn, "00:00:00") == 0) {
+                    if (strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") != 0) {
+                        $employeeTimeSheet->clockIn = $employeeTimeSheet->beginLunchBreak;
+                    } else {
+                        if (strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") != 0) {
+                            $employeeTimeSheet->clockIn = $employeeTimeSheet->finishLunchBreak;
+                        } else {
+                            if (strcmp($employeeTimeSheet->clockOut, "00:00:00") != 0) {
+                                $employeeTimeSheet->clockIn = $employeeTimeSheet->clockOut;
+                            }
+                        }
+                    }
+                }
+                if (strcmp($employeeTimeSheet->clockOut, "00:00:00") == 0) {
+                    if (strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") != 0) {
+                        $employeeTimeSheet->clockOut = $employeeTimeSheet->finishLunchBreak;
+                    } else {
+                        if (strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") != 0) {
+                            $employeeTimeSheet->clockOut = $employeeTimeSheet->beginLunchBreak;
+                        } else {
+                            if (strcmp($employeeTimeSheet->clockIn, "00:00:00") != 0) {
+                                $employeeTimeSheet->clockOut = $employeeTimeSheet->clockIn;
+                            }
+                        }
+                    }
+                }
 
-            if (strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") == 0 &&
-                strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") != 0) {
-                if (strcmp($employeeTimeSheet->clockIn, "00:00:00") != 0)
-                    $employeeTimeSheet->beginLunchBreak = $employeeTimeSheet->clockIn;
-            }
+                if (strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") == 0 && strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") != 0) {
+                    if (strcmp($employeeTimeSheet->clockIn, "00:00:00") != 0) {
+                        $employeeTimeSheet->beginLunchBreak = $employeeTimeSheet->clockIn;
+                    }
+                }
 
-            if (strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") == 0 &&
-                strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") != 0) {
-                if (strcmp($employeeTimeSheet->clockOut, "00:00:00") != 0)
-                    $employeeTimeSheet->finishLunchBreak = $employeeTimeSheet->clockOut;
-            }
+                if (strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") == 0 && strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") != 0) {
+                    if (strcmp($employeeTimeSheet->clockOut, "00:00:00") != 0) {
+                        $employeeTimeSheet->finishLunchBreak = $employeeTimeSheet->clockOut;
+                    }
+                }
 
 //            $employeeTimeSheet->managerComment = $employeeTimeSheet->managerComment . " ثبت توسط سیستم : مرخصی یا تعطیلی غیر رسمی";
-            $employeeTimeSheet->timeSheetLock = 1;
+                $employeeTimeSheet->timeSheetLock = 1;
 
-            $realWorkTime = $employeeTimeSheet->obtainRealWorkTime('IN_SECONDS');
-            if($realWorkTime<=0) {
-                $employeeTimeSheet->overtime_confirmation = true;
+                $realWorkTime = $employeeTimeSheet->obtainRealWorkTime('IN_SECONDS');
+                if ($realWorkTime <= 0) {
+                    $employeeTimeSheet->overtime_confirmation = true;
+                }
+
+                if ($employeeTimeSheet->update()) {
+                    $done = $employeeTimeSheet->id;
+                } else {
+                    $done = false;
+                }
             }
-
-            if ($employeeTimeSheet->update())
-                $done = $employeeTimeSheet->id;
-            else
-                $done = false;
-
         }
 
         if ($done) {
-            $employeeTimeSheet = Employeetimesheet::all()
-                                                  ->where("id", $done)
-                                                  ->first();
+            $employeeTimeSheet = Employeetimesheet::all()->where("id", $done)->first();
             /**
              * Sending auto generated password through SMS
              */
@@ -170,7 +172,7 @@ class SendEmployeeTimeSheetCommand extends Command
             $jalaliMonth = $this->convertToJalaliMonth($todayJalaliDate[1]);
             $jalaliDay = $todayJalaliDate[2];
             $jalaliYear = substr($jalaliYear, -2);
-            $todayJalaliDateCaption = $jalaliDay . " " . $jalaliMonth . " " . $jalaliYear;
+            $todayJalaliDateCaption = $jalaliDay." ".$jalaliMonth." ".$jalaliYear;
             $persianShiftTime = $employeeTimeSheet->obtainShiftTime("PERSIAN_FORMAT");
 
             if ($persianShiftTime !== 0) {

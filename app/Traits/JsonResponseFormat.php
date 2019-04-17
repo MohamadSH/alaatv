@@ -8,12 +8,10 @@
 
 namespace App\Traits;
 
-
 use App\Orderproduct;
 
 trait JsonResponseFormat
 {
-
     /**
      *  call setVisible for every item
      *

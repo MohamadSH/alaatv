@@ -30,7 +30,6 @@ abstract class CheckoutProcessor
      */
     abstract public function process(Cashier $cashier);
 
-
     /**
      * Calls the next process on cashier
      *
@@ -39,11 +38,9 @@ abstract class CheckoutProcessor
      */
     protected function next(Cashier $cashier)
     {
-        if(isset($this->successor))
-        {
+        if (isset($this->successor)) {
             return $this->successor->process($cashier);
-        }else
-        {
+        } else {
             return $cashier->getPrice();
         }
     }

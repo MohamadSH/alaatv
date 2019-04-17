@@ -8,7 +8,6 @@
 
 namespace App\Traits\User;
 
-
 use App\Order;
 use Cache;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -20,6 +19,7 @@ trait PaymentTrait
     public function getOpenOrder(): Order
     {
         $openOrder = $this->firstOrCreateOpenOrder($this);
+
         return $openOrder;
     }
 
@@ -33,7 +33,6 @@ trait PaymentTrait
         return $this->hasMany('App\Ordermanagercomment');
     }
 
-
     /*
     |--------------------------------------------------------------------------
     | relations
@@ -46,8 +45,7 @@ trait PaymentTrait
 
     public function openOrders()
     {
-        return $this->hasMany('App\Order')
-                    ->where("orderstatus_id", config("constants.ORDER_STATUS_OPEN"));
+        return $this->hasMany('App\Order')->where("orderstatus_id", config("constants.ORDER_STATUS_OPEN"));
     }
 
     /**
@@ -57,8 +55,7 @@ trait PaymentTrait
      */
     public function closedOrders(): HasMany
     {
-        return $this->orders()
-                    ->whereNotIn("orderstatus_id", Order::OPEN_ORDER_STATUSES);
+        return $this->orders()->whereNotIn("orderstatus_id", Order::OPEN_ORDER_STATUSES);
     }
 
     public function orders()
@@ -78,12 +75,11 @@ trait PaymentTrait
             config("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL"),
             config("constants.TRANSACTION_STATUS_PENDING"),
         ];
-        $transactions = $this->orderTransactions()
-                             ->whereDoesntHave("parents")
-                             ->where(function ($q) use ($showableTransactionStatuses) {
-                                 /** @var QueryBuilder $q */
-                                 $q->whereIn("transactionstatus_id", $showableTransactionStatuses);
-                             });
+        $transactions = $this->orderTransactions()->whereDoesntHave("parents")->where(function ($q) use ($showableTransactionStatuses) {
+            /** @var QueryBuilder $q */
+            $q->whereIn("transactionstatus_id", $showableTransactionStatuses);
+        });
+
         return $transactions;
     }
 
@@ -103,9 +99,7 @@ trait PaymentTrait
     public function getInstalments(): HasManyThrough
     {
         //ToDo : to be tested
-        return $this->orderTransactions()
-                    ->whereDoesntHave("parents")
-                    ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_UNPAID"));
+        return $this->orderTransactions()->whereDoesntHave("parents")->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_UNPAID"));
     }
 
     public function orderproducts()
@@ -115,8 +109,7 @@ trait PaymentTrait
 
     public function closedorderproducts()
     {
-        return $this->hasManyThrough("\App\Orderproduct", "\App\Order")
-                    ->whereNotIn("orders.orderstatus_id", Order::OPEN_ORDER_STATUSES);
+        return $this->hasManyThrough("\App\Orderproduct", "\App\Order")->whereNotIn("orders.orderstatus_id", Order::OPEN_ORDER_STATUSES);
     }
 
     /**
@@ -138,10 +131,10 @@ trait PaymentTrait
     public function getClosedOrdersAttribute()
     {
         $user = $this;
-        $key = "user:closeOrders:" . $user->cacheKey();
+        $key = "user:closeOrders:".$user->cacheKey();
+
         return Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
-            return $this->closedOrders()->orderBy('completed_at', 'desc')
-                        ->paginate(10, ['*'], 'orders');
+            return $this->closedOrders()->orderBy('completed_at', 'desc')->paginate(10, ['*'], 'orders');
         });
     }
 }

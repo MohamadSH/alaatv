@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use Hash;
 use Illuminate\Foundation\Http\FormRequest;
 
 class InsertEventResultRequest extends FormRequest
@@ -29,10 +28,10 @@ class InsertEventResultRequest extends FormRequest
     {
 
         return [
-            'rank'              => 'required',
+            'rank' => 'required',
 //            'participationCode' => 'unique:eventresults,'.Hash::make($this->request->get('participationCode')),
-            'event_id'          => 'required|exists:events,id',
-            'reportFile'        => 'required|mimes:jpeg,jpg,png,pdf,rar,zip',
+            'event_id' => 'required|exists:events,id',
+            'reportFile' => 'required|mimes:jpeg,jpg,png,pdf,rar,zip',
         ];
     }
 

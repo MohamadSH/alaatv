@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Filters;
 
-
 class Diet extends FilterAbstract
 {
     protected $attribute = 'diet';

@@ -12,24 +12,25 @@ class RemoveOrderCoupon
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure                 $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
      *
      * @return mixed
      */
-    public function handle($request, Closure $next , $guard=null)
+    public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
             $user = Auth::guard($guard)->user();
 
             if ($request->has("order_id")) {
-                if(!$user->can("constants.REMOVE_COUPON_ACCESS"))
-                    return response([] , Response::HTTP_FORBIDDEN);
-            }else {
+                if (! $user->can("constants.REMOVE_COUPON_ACCESS")) {
+                    return response([], Response::HTTP_FORBIDDEN);
+                }
+            } else {
                 /** @var User $user */
                 $openOrder = $user->getOpenOrder();
                 if (isset($openOrder)) {
-                    $request->offsetSet("order_id" , $openOrder->id);
+                    $request->offsetSet("order_id", $openOrder->id);
                     $request->offsetSet("openOrder", $openOrder);
                 }
             }

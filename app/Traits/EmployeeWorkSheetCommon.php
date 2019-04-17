@@ -8,6 +8,7 @@ trait EmployeeWorkSheetCommon
 
     /**
      * Sum the employeeTimeSheet workAndShiftDiff
+     *
      * @param $workTimeSheets
      * @return string
      */
@@ -18,11 +19,13 @@ trait EmployeeWorkSheetCommon
         foreach ($workTimeSheets as $workTimeSheet) {
             $totalRealWorkTime += $workTimeSheet->obtainRealWorkTime("IN_SECONDS");
         }
+
         return $this->convertSecToHour(abs($totalRealWorkTime));
     }
 
     /**
      * Sum the employeeTimeSheet realWorkTime
+     *
      * @param $workTimeSheets
      * @return string
      */
@@ -39,10 +42,9 @@ trait EmployeeWorkSheetCommon
             }
         }
         if ($totalConfirmedWorkAndShiftDiff < 0) {
-            return "- " . $this->convertSecToHour(abs($totalConfirmedWorkAndShiftDiff));
+            return "- ".$this->convertSecToHour(abs($totalConfirmedWorkAndShiftDiff));
         } else {
-            return "+ " . $this->convertSecToHour(abs($totalConfirmedWorkAndShiftDiff));
+            return "+ ".$this->convertSecToHour(abs($totalConfirmedWorkAndShiftDiff));
         }
     }
-
 }

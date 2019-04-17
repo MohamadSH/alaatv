@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Filters;
 
-
 class Bio extends FilterAbstract
 {
     protected $attribute = 'bio';

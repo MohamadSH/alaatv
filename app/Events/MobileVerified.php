@@ -19,7 +19,7 @@ class MobileVerified
     /**
      * Create a new event instance.
      *
-     * @param  MustVerifyMobileNumber $user
+     * @param MustVerifyMobileNumber $user
      *
      * @return void
      */
@@ -27,5 +27,4 @@ class MobileVerified
     {
         $this->user = $user;
     }
-
 }

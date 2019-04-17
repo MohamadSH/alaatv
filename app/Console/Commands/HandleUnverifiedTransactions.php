@@ -40,8 +40,6 @@ class HandleUnverifiedTransactions extends Command
     {
         parent::__construct();
         $this->request = $request;
-
-        
     }
 
     /**
@@ -58,13 +56,13 @@ class HandleUnverifiedTransactions extends Command
         $data['merchantID'] = $transactiongateway->merchantNumber;
 
         $gateWay = (new GatewayFactory())->setGateway($paymentMethod, $data);
-        
+
         $notExistTransactions = [];
         $unverifiedTransactionsDueToError = [];
 
         $this->info('getting data from zarinpal ...');
         $result = $this->getUnverifiedTransactions();
-        if($result['Status'] == 'success') {
+        if ($result['Status'] == 'success') {
             $this->info('Untrusted transactions received.');
             $transactions = $result['Authorities'];
             foreach ($transactions as $transaction) {
@@ -83,20 +81,20 @@ class HandleUnverifiedTransactions extends Command
 
                 $transaction = Transaction::authority($transaction['Authority'])->first();
 
-                if(!isset($transaction)) {
+                if (! isset($transaction)) {
                     array_push($notExistTransactions, $transaction);
                 } else {
                     $transaction['Status'] = 'OK';
                     array_push($unverifiedTransactionsDueToError, $transaction);
                     $gateWayVerify = $gateWay->verify($transaction->cost, $transaction);
 
-                    if($gateWayVerify['Status'] == 'error') {
+                    if ($gateWayVerify['Status'] == 'error') {
                         array_push($unverifiedTransactionsDueToError, $transaction);
                     }
                 }
             }
 
-            if(count($unverifiedTransactionsDueToError)>0) {
+            if (count($unverifiedTransactionsDueToError) > 0) {
                 $this->info('Unverified Transactions Due To Error:');
                 foreach ($unverifiedTransactionsDueToError as $item) {
                     $authority = $item['Authority'];
@@ -111,7 +109,7 @@ class HandleUnverifiedTransactions extends Command
                 }
             }
 
-            if(count($notExistTransactions)>0) {
+            if (count($notExistTransactions) > 0) {
                 foreach ($notExistTransactions as $item) {
                     $authority = $item['Authority'];
                     $amount = $item['Amount'];
@@ -133,13 +131,16 @@ class HandleUnverifiedTransactions extends Command
         } else {
             $this->info('There is a problem with receiving unverified transactions with Status: '.$result['Status']);
         }
+
         return null;
     }
 
-    private function getUnverifiedTransactions() {
+    private function getUnverifiedTransactions()
+    {
         $data['merchantID'] = $this->merchantNumber;
         $zarinpal = new Zarinpal($data);
         $result = $zarinpal->getUnverifiedTransactions();
+
         return $result;
     }
 }

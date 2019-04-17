@@ -13,8 +13,8 @@ class ENPayment
 
         $err = $client->getError();
         if ($err) {
-            echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-            echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
+            echo '<h2>Constructor error</h2><pre>'.$err.'</pre>';
+            echo '<h2>Debug</h2><pre>'.htmlspecialchars($client->getDebug(), ENT_QUOTES).'</pre>';
             exit();
         }
 
@@ -31,7 +31,7 @@ class ENPayment
         } else {
             $err = $client->getError();
             if ($err) {
-                echo '<h2>Error</h2><pre>' . $err . '</pre>';
+                echo '<h2>Error</h2><pre>'.$err.'</pre>';
             } else {
                 //                echo '<h2>Result</h2><pre>'; print_r($result); echo '</pre>';
             }
@@ -54,16 +54,16 @@ class ENPayment
 
         $err = $client->getError();
         if ($err) {
-            echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-            echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
+            echo '<h2>Constructor error</h2><pre>'.$err.'</pre>';
+            echo '<h2>Debug</h2><pre>'.htmlspecialchars($client->getDebug(), ENT_QUOTES).'</pre>';
             exit();
         }
 
         $params = [
-            'context'       => [
+            'context' => [
                 'data' => [
                     'entry' => [
-                        'key'   => 'SESSION_ID',
+                        'key' => 'SESSION_ID',
                         'value' => $login,
                     ],
                 ],
@@ -79,7 +79,7 @@ class ENPayment
         } else {
             $err = $client->getError();
             if ($err) {
-                echo '<h2>Error</h2><pre>' . $err . '</pre>';
+                echo '<h2>Error</h2><pre>'.$err.'</pre>';
             } else {
                 //                echo '<h2>Result</h2><pre>'; print_r($result); echo '</pre>';
             }
@@ -87,7 +87,6 @@ class ENPayment
 
         //print_r($result);
         return $result;
-
     }
 
     ///////////////////////////////////////////tokenVerify//////////////////////////////////////////////////////////////
@@ -103,17 +102,16 @@ class ENPayment
 
         $err = $client->getError();
         if ($err) {
-            echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-            echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
+            echo '<h2>Constructor error</h2><pre>'.$err.'</pre>';
+            echo '<h2>Debug</h2><pre>'.htmlspecialchars($client->getDebug(), ENT_QUOTES).'</pre>';
             exit();
         }
-
 
         $params = [
             'param' => [
                 'WSContext' => $wsContext,
-                'Token'     => $token,
-                'RefNum'    => $referenceNumber,
+                'Token' => $token,
+                'RefNum' => $referenceNumber,
             ],
         ];
         $result = $client->call('VerifyMerchantTrans', $params);
@@ -124,7 +122,7 @@ class ENPayment
         } else {
             $err = $client->getError();
             if ($err) {
-                echo '<h2>Error</h2><pre>' . $err . '</pre>';
+                echo '<h2>Error</h2><pre>'.$err.'</pre>';
             } else {
                 //echo '<h2>Result</h2><pre>'; print_r($result); echo '</pre>';
             }
@@ -132,7 +130,6 @@ class ENPayment
 
         //print_r($result);
         return $result;
-
     }
 
     ////////////////////////////////////////////////////getPurchaseParamsToSign/////////////////////////////////////////////////////
@@ -151,19 +148,19 @@ class ENPayment
 
         $err = $client->getError();
         if ($err) {
-            echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-            echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
+            echo '<h2>Constructor error</h2><pre>'.$err.'</pre>';
+            echo '<h2>Debug</h2><pre>'.htmlspecialchars($client->getDebug(), ENT_QUOTES).'</pre>';
             exit();
         }
 
         $params = [
             'param' => [
-                'WSContext'       => $wsContext,
-                'ReserveNum'      => $resNum,
-                'Amount'          => $amount,
+                'WSContext' => $wsContext,
+                'ReserveNum' => $resNum,
+                'Amount' => $amount,
                 'AmountSpecified' => true,
-                'RedirectUrl'     => $redirectUrl,
-                'TransType'       => $transType,
+                'RedirectUrl' => $redirectUrl,
+                'TransType' => $transType,
             ],
         ];
         $result = $client->call('GenerateTransactionDataToSign', $params);
@@ -174,7 +171,7 @@ class ENPayment
         } else {
             $err = $client->getError();
             if ($err) {
-                echo '<h2>Error</h2><pre>' . $err . '</pre>';
+                echo '<h2>Error</h2><pre>'.$err.'</pre>';
             } else {
                 //echo '<h2>Result</h2><pre>'; print_r($result); echo '</pre>';
             }
@@ -185,12 +182,11 @@ class ENPayment
         if (strcmp($result["Result"], "erSucceed") == 0) {
             return [
                 "dataToSign" => $result["DataToSign"],
-                "uniqueId"   => $result["UniqueId"],
+                "uniqueId" => $result["UniqueId"],
             ];
         } else {
             return ["error" => "خطا"];
         }
-
     }
 
     //////////////////////////////////////////////////generateSignedPurchaseToken/////////////////////////////////////////////////////////////
@@ -205,16 +201,15 @@ class ENPayment
 
         $err = $client->getError();
         if ($err) {
-            echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-            echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
+            echo '<h2>Constructor error</h2><pre>'.$err.'</pre>';
+            echo '<h2>Debug</h2><pre>'.htmlspecialchars($client->getDebug(), ENT_QUOTES).'</pre>';
             exit();
         }
-
 
         $params = [
             'param' => [
                 'WSContext' => $wsContext,
-                'UniqueId'  => $uniqueId,
+                'UniqueId' => $uniqueId,
                 'Signature' => $signature,
             ],
         ];
@@ -226,7 +221,7 @@ class ENPayment
         } else {
             $err = $client->getError();
             if ($err) {
-                echo '<h2>Error</h2><pre>' . $err . '</pre>';
+                echo '<h2>Error</h2><pre>'.$err.'</pre>';
             } else {
                 //echo '<h2>Result</h2><pre>'; print_r($result); echo '</pre>';
             }
@@ -236,15 +231,14 @@ class ENPayment
         $result = $result["return"];
         if (strcmp($result["Result"], "erSucceed") == 0) {
             return [
-                "token"          => $result["Token"],
-                "userId"         => $result["UserId"],
-                "channelId"      => $result["ChannelId"],
+                "token" => $result["Token"],
+                "userId" => $result["UserId"],
+                "channelId" => $result["ChannelId"],
                 "expirationDate" => $result["ExpirationDate"],
             ];
         } else {
             return ["error" => "خطا"];
         }
-
     }
 
     //////////////////////////////////////////////////logout//////////////////////////////////////////////////
@@ -255,8 +249,8 @@ class ENPayment
 
         $err = $client->getError();
         if ($err) {
-            echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-            echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
+            echo '<h2>Constructor error</h2><pre>'.$err.'</pre>';
+            echo '<h2>Debug</h2><pre>'.htmlspecialchars($client->getDebug(), ENT_QUOTES).'</pre>';
             exit();
         }
 
@@ -264,13 +258,12 @@ class ENPayment
             'context' => [
                 'data' => [
                     'entry' => [
-                        'key'   => 'SESSION_ID',
+                        'key' => 'SESSION_ID',
                         'value' => $login,
                     ],
                 ],
             ],
         ];
-
 
         $result = $client->call('MerchantLogout', $params); //print_r($params);
 
@@ -279,7 +272,7 @@ class ENPayment
         } else {
             $err = $client->getError();
             if ($err) {
-                echo '<h2>Error</h2><pre>' . $err . '</pre>';
+                echo '<h2>Error</h2><pre>'.$err.'</pre>';
             } else {
                 //echo '<h2>Result</h2><pre>'; print_r($result); echo '</pre>';
             }
@@ -287,9 +280,7 @@ class ENPayment
 
         //print_r($result);
         return $result;
-
     }
-
 
     /////////////////////////////////////////////////ReverseMerchantTrans////////////////////////////////////////////////////////
     public function ReverseMerchantTrans($params)
@@ -300,21 +291,20 @@ class ENPayment
         $Token = $params['Token'];
         $Amount = $params['Amount'];
 
-
         $client = new nusoap_client('https://pna.shaparak.ir/ref-payment2/jax/merchantService?wsdl', true);
 
         $err = $client->getError();
         if ($err) {
-            echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-            echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
+            echo '<h2>Constructor error</h2><pre>'.$err.'</pre>';
+            echo '<h2>Debug</h2><pre>'.htmlspecialchars($client->getDebug(), ENT_QUOTES).'</pre>';
             exit();
         }
 
         $params = [
-            'context'        => [
+            'context' => [
                 'data' => [
                     'entry' => [
-                        'key'   => 'SESSION_ID',
+                        'key' => 'SESSION_ID',
                         'value' => $MerchantLogin,
                     ],
                 ],
@@ -325,7 +315,6 @@ class ENPayment
             ],
         ];
 
-
         $result = $client->call('ReverseMerchantTrans', $params);
 
         if ($client->fault) {
@@ -335,14 +324,13 @@ class ENPayment
         } else {
             $err = $client->getError();
             if ($err) {
-                echo '<h2>Error</h2><pre>' . $err . '</pre>';
+                echo '<h2>Error</h2><pre>'.$err.'</pre>';
             } else {
                 //echo '<h2>Result</h2><pre>'; print_r($result); echo '</pre>';
             }
         }
 
         return $result;
-
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////reportTransaction//////////////////////////////////////////////////////

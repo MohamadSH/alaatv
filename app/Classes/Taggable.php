@@ -8,7 +8,6 @@
 
 namespace App\Classes;
 
-
 interface Taggable
 {
     public function retrievingTags();

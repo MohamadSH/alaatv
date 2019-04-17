@@ -14,48 +14,45 @@ class OrderCheckoutReview
 
     /**
      * StoreOrderproductCookieInOpenOrder constructor.
+     *
      * @param OrderproductController $orderproductController
      */
     public function __construct(OrderproductController $orderproductController)
     {
-        $this->orderproductController = $orderproductController ;
+        $this->orderproductController = $orderproductController;
     }
 
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
      * @return mixed
      */
-    public function handle($request, Closure $next , $guard=null)
+    public function handle($request, Closure $next, $guard = null)
     {
-        if (Auth::guard($guard)->check())
-        {
+        if (Auth::guard($guard)->check()) {
             /** @var User $user */
             $user = Auth::guard($guard)->user();
 
-            if($request->has("order_id"))
-            {
-                if(!$user->can("constants.SHOW_ORDER_INVOICE_ACCESS"))
-                    return response([] , Response::HTTP_FORBIDDEN);
-            }else
-            {
+            if ($request->has("order_id")) {
+                if (! $user->can("constants.SHOW_ORDER_INVOICE_ACCESS")) {
+                    return response([], Response::HTTP_FORBIDDEN);
+                }
+            } else {
                 $openOrder = $user->getOpenOrder();
-                $request->offsetSet("order_id" , $openOrder->id);
+                $request->offsetSet("order_id", $openOrder->id);
 
-                if(isset($_COOKIE["cartItems"]))
-                {
+                if (isset($_COOKIE["cartItems"])) {
                     $cookieOrderproducts = json_decode($_COOKIE["cartItems"]);
-                    if($this->validateCookieOrderproducts($cookieOrderproducts))
-                    {
+                    if ($this->validateCookieOrderproducts($cookieOrderproducts)) {
                         foreach ($cookieOrderproducts as $cookieOrderproduct) {
-                            $data = [ "order_id" => $openOrder->id ];
+                            $data = ["order_id" => $openOrder->id];
                             $this->orderproductController->storeOrderproductJsonObject($cookieOrderproduct, $data);
                         }
                     }
 
-                    setcookie('cartItems', $_COOKIE["cartItems"], time() - 3600 , '/' );
+                    setcookie('cartItems', $_COOKIE["cartItems"], time() - 3600, '/');
                 }
             }
         }
@@ -67,8 +64,8 @@ class OrderCheckoutReview
      * @param $cookieOrderproducts
      * @return bool
      */
-    private function validateCookieOrderproducts($cookieOrderproducts):bool
+    private function validateCookieOrderproducts($cookieOrderproducts): bool
     {
-        return is_array($cookieOrderproducts) && !empty($cookieOrderproducts);
+        return is_array($cookieOrderproducts) && ! empty($cookieOrderproducts);
     }
 }
