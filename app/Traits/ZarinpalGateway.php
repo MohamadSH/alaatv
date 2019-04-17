@@ -64,9 +64,7 @@ trait ZarinpalGateway
             return $description;
         }
 
-        if (! $order->orderproducts->relationLoaded('product')) {
-            $order->orderproducts->load('product');
-        }
+        $order->orderproducts->load('product');
 
         foreach ($order->orderproducts as $orderProduct) {
             if (isset($orderProduct->product->id)) {
