@@ -9,7 +9,7 @@
 namespace App\Console\Commands\CategoryTree;
 
 
-class Ensani extends GetTree
+class Ensani extends CategoryTree
 {
     public function getTree(): array{
 

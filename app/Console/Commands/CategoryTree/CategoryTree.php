@@ -9,7 +9,7 @@
 namespace App\Console\Commands\CategoryTree;
 
 
-abstract class GetTree
+abstract class CategoryTree
 {
     abstract function getTree(): array;
 

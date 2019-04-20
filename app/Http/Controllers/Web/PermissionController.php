@@ -25,8 +25,8 @@ class PermissionController extends Controller
 
     public function index()
     {
-        $permissions = Permission::all()
-                                 ->sortByDesc('created_at');
+        $permissions = Permission::all()->sortByDesc('created_at');
+
         return view("permission.index", compact('permissions'));
     }
 
@@ -48,9 +48,9 @@ class PermissionController extends Controller
 
         if ($permission->save()) {
             return $this->response->setStatusCode(200);
-        } else {
-            return $this->response->setStatusCode(503);
         }
+
+        return $this->response->setStatusCode(503);
     }
 
     public function edit($permission)
@@ -72,9 +72,12 @@ class PermissionController extends Controller
 
     public function destroy($permission)
     {
-        if ($permission->delete())
+        if ($permission->delete()) {
             session()->put('success', 'دسترسی با موفقیت حذف شد');
-        else session()->put('error', 'خطای پایگاه داده');
+        } else {
+            session()->put('error', 'خطای پایگاه داده');
+        }
+
         return redirect()->back();
     }
 }
