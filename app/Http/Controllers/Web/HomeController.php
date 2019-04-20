@@ -209,7 +209,7 @@ class HomeController extends Controller
                             'author_id'       => null,
                             'contenttype_id'  => $productTypeContentTypeLookupTable[$productFile->productfiletype_id],
                             'template_id'     => $productTypeContentTemplateLookupTable[$productFile->productfiletype_id],
-                            'contentset_id'   => $set->id,
+                            'contentset_id'   => $productFile->contentset_id,
                             'isFree'          => false,
                             'enable'          => $productFile->enable,
                         ]);
