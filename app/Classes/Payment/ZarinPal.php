@@ -8,6 +8,7 @@ use App\Transactiongateway;
 use Cache;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
+use Zarinpal\Zarinpal as ZarinpalComposer;
 
 class ZarinPal
 {
@@ -38,7 +39,7 @@ class ZarinPal
      *
      * @return mixed
      */
-    private function buildZarinPalGateway(bool $withSandBox = true)
+    public function buildZarinPalGateway(bool $withSandBox = true)
     {
         $transactiongateWay = $this->getGateWayCredentials();
 
@@ -79,9 +80,9 @@ class ZarinPal
 
     /**
      * @param string $key
-     * @return mixed
+     * @return Transactiongateway
      */
-    protected function getGateWayCredentials(): mixed
+    protected function getGateWayCredentials(): Transactiongateway
     {
         return Cache::remember('transactiongateway:Zarinpal', config('constants.CACHE_600'), function () {
             return Transactiongateway::where('name', 'zarinpal')->first();

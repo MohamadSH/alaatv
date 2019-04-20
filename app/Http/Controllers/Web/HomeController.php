@@ -164,19 +164,23 @@ class HomeController extends Controller
             $productFiles->load('product');
             $productFiles->load('productfiletype');
             foreach ($productFiles->groupBy('product_id') as $productId => $files) {
-
                 //get Product
                 $product = $files->first()->product;
 
-                //make a set from Product
-                $set = Contentset::create([
-                    'name' => $product->name,
-                    'photo' => $product->photo,
-                    'tags' => $product->tags->tags,
-                ]);
-                $set->enable = 1;
-                $set->display = 1;
-                $set->save();
+                if ($files->first()->contentset_id == null) {
+
+                    //make a set from Product
+                    $set = Contentset::create([
+                        'name'  => $product->name,
+                        'photo' => $product->photo,
+                        'tags'  => $product->tags->tags,
+                    ]);
+                    $set->enable = 1;
+                    $set->display = 1;
+                    $set->save();
+
+                    Productfile::whereIn('id', $files->modelKeys())->update(['contentset_id' => $set->id]);
+                }
 
                 //make content for each productFiles
                 $productTypeContentTypeLookupTable = [
@@ -189,31 +193,33 @@ class HomeController extends Controller
                 ];
                 /** @var Productfile $productFile */
                 foreach ($files as $productFile) {
-                    //TODO://Fill file!
-                    $content = Content::create([
-                        'name' => $productFile->name,
-                        'description' => (isset($productFile) && strlen($productFile->description) > 1 ? $productFile->description : null),
-                        'context' => null,
-                        'file' => '',
-                        'order' => $productFile->order,
-                        'validSince' => $productFile->validSince,
-                        'metaTitle' => null,
-                        'metaDescription' => null,
-                        'metaKeywords' => null,
-                        'tags' => $product->tags->tags,
-                        'author_id' => null,
-                        'contenttype_id' => $productTypeContentTypeLookupTable[$productFile->productfiletype_id],
-                        'template_id' => $productTypeContentTemplateLookupTable[$productFile->productfiletype_id],
-                        'contentset_id' => $set->id,
-                        'isFree' => false,
-                        'enable' => $productFile->enable,
-                    ]);
-                    $content->timestamps = false;
-                    $content->forceFill([
-                        'created_at' => $productFile->created_at,
-                        'updated_at' => $productFile->updated_at,
-                    ])->save();
-                    $content->timestamps = true;
+                    if ($productFile->content_id == null) {
+                        //TODO://Fill file!
+                        $content = Content::create([
+                            'name'            => $productFile->name,
+                            'description'     => (isset($productFile) && strlen($productFile->description) > 1 ? $productFile->description : null),
+                            'context'         => null,
+                            'file'            => '',
+                            'order'           => $productFile->order,
+                            'validSince'      => $productFile->validSince,
+                            'metaTitle'       => null,
+                            'metaDescription' => null,
+                            'metaKeywords'    => null,
+                            'tags'            => $product->tags->tags,
+                            'author_id'       => null,
+                            'contenttype_id'  => $productTypeContentTypeLookupTable[$productFile->productfiletype_id],
+                            'template_id'     => $productTypeContentTemplateLookupTable[$productFile->productfiletype_id],
+                            'contentset_id'   => $set->id,
+                            'isFree'          => false,
+                            'enable'          => $productFile->enable,
+                        ]);
+                        $content->timestamps = false;
+                        $content->forceFill([
+                            'created_at' => $productFile->created_at,
+                            'updated_at' => $productFile->updated_at,
+                        ])->save();
+                        $content->timestamps = true;
+                    }
                     break;
                 }
                 break;

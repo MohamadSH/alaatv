@@ -72,6 +72,19 @@ class OrderproductController extends Controller
         }
 
         return response($orderproducts, Response::HTTP_OK);
+        if ($orderproducts->isEmpty())
+            $responseContent = [
+                'error' => [
+                    'code'    => Response::HTTP_NOT_MODIFIED,
+                    'message' => 'No orderproducts added to the order',
+                ],
+            ];
+        else
+            $responseContent = [
+                'orderproducts' => $orderproducts,
+            ];
+
+        return response($responseContent, Response::HTTP_OK);
     }
 
     /**
