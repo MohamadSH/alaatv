@@ -497,7 +497,7 @@ class UserController extends Controller
 
         //sort by
 
-        $items = $users->get();
+        $items = $users->paginate(10, ['*'], 'orders');
         /**
          * For selling books
          */
@@ -533,9 +533,7 @@ class UserController extends Controller
         $numberOfFatherPhones = 0;
         $numberOfMotherPhones = 0;
         $itemsIdCount = 0;
-        $index = "";
         $reportType = "";
-
         if (strcmp($previousPath, action("Web\HomeController@adminSMS")) == 0) {
             $uniqueUsers = $items->groupBy("nationalCode");
             $items = collect();
@@ -553,8 +551,8 @@ class UserController extends Controller
                 Contact::whereIn('user_id', $itemsId)->where('relative_id', 1)->pluck('id'))->where("phonetype_id", 1)->count();
             $numberOfMotherPhones = Phone::whereIn('contact_id',
                 Contact::whereIn('user_id', $itemsId)->where('relative_id', 2)->pluck('id'))->where("phonetype_id", 1)->count();
-        } elseif (strcmp($previousPath, action("Web\HomeController@admin")) == 0 || true) {
-            $index = "user.index";
+        } elseif (strcmp($previousPath, action("Web\HomeController@admin")) == 0) {
+            return $items;
         } elseif (strcmp($previousPath, action("Web\HomeController@adminReport")) == 0) {
             $minCost = Input::get("minCost");
             if (isset($minCost[0])) {
@@ -822,7 +820,7 @@ class UserController extends Controller
         $userKonkurResult = $user->eventresults->where("event_id", $event->id)->first();
 
         $userCompletion = $user->info['completion'];
-
+        return $user;
         return view("user.profile.profile", compact("user", 'event', 'userKonkurResult',
 
             'genders', 'majors', 'sideBarMode',
