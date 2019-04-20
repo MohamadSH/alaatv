@@ -22,6 +22,7 @@ use App\Traits\User\{BonTrait,
     TeacherTrait,
     TrackTrait,
     VouchersTrait};
+use Cache;
 use Carbon\Carbon;
 use Hash;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
@@ -295,6 +296,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     protected $appends = [
         'info',
         'full_name',
+        'userstatus',
     ];
 
     protected $cascadeDeletes = [
@@ -571,5 +573,19 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     {
         $openOrder = $this->firstOrCreateOpenOrder($this);
         return $openOrder;
+    }
+
+    public function getUserStatusAttribute()
+    {
+        $user = $this;
+        $key = "user:userstatus" . $user->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($user) {
+                return $this->userstatus()->first()->setVisible([
+                    'name',
+                    'displayName',
+                    'description'
+                ]);
+            });
     }
 }

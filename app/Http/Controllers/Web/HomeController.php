@@ -156,8 +156,13 @@ class HomeController extends Controller
     }
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
+
     {
         try {
+
+            $order = Order::find(203189);
+            dd($order->user);
+
             $productFiles = \App\Productfile::all();
             $productFiles->load('product');
             $productFiles->load('productfiletype');
