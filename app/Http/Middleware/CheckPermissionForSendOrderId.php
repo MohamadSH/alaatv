@@ -19,12 +19,13 @@ class CheckPermissionForSendOrderId
      * @var OrderController
      */
     private $orderController;
+
     private $user;
 
     /**
      * OrderCheck constructor.
      *
-     * @param Request         $request
+     * @param Request $request
      * @param OrderController $controller
      */
     public function __construct(Request $request, OrderController $controller, $guard = null)
@@ -36,9 +37,9 @@ class CheckPermissionForSendOrderId
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure                 $next
-     * @param null                      $guard
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
+     * @param null $guard
      *
      * @return mixed
      */
@@ -62,9 +63,9 @@ class CheckPermissionForSendOrderId
 //            $request->offsetSet('withoutBon', false);
 
         if ($request->has('order_id')) {
-            if (!$this->user->can(config('constants.INSERT_ORDERPRODUCT_ACCESS'))) {
+            if (! $this->user->can(config('constants.INSERT_ORDERPRODUCT_ACCESS'))) {
                 return response()->json([
-                    'error' => 'You are not allowed to submit order_id: ' . $request->get('order_id'),
+                    'error' => 'You are not allowed to submit order_id: '.$request->get('order_id'),
                 ], Response::HTTP_FORBIDDEN);
             }
         } else {
@@ -72,18 +73,20 @@ class CheckPermissionForSendOrderId
             $request->offsetSet('order_id', $openOrder->id);
             $request->offsetSet('openOrder', $openOrder);
         }
+
         return $next($request);
     }
 
-
     /**
      * generate sample data for test store orderProduct
+     *
      * @param $case
      * @param User $user
      * @param Request $request
      * @return array
      */
-    private function getSampleData($case, User $user, Request &$request) {
+    private function getSampleData($case, User $user, Request &$request)
+    {
 
         $openOrder = $user->getOpenOrder();
 
@@ -95,114 +98,115 @@ class CheckPermissionForSendOrderId
                  * simple product
                  * without bon
                  * don't have extraAttribute
-                 */
-                return [
-                    'orderId'   => $orderId,
-                    'productId' => 259,
-                    'data'      => [
-                        'products'       => [
-                            241,
-                            247,
+                 */ return [
+                'orderId' => $orderId,
+                'productId' => 259,
+                'data' => [
+                    'products' => [
+                        241,
+                        247,
+                    ],
+                    'attribute' => [
+                        1,
+                        3,
+                        9,
+                        49,
+                        53,
+                    ],
+                    'extraAttribute' => [
+                        [
+                            'id' => 60,
+                            'cost' => 600,
                         ],
-                        'attribute'      => [
-                            1,
-                            3,
-                            9, 49, 53],
-                        'extraAttribute' => [
-                            [
-                                'id'   => 60,
-                                'cost' =>600,
-                            ],
-                            [
-                                'id'   => 21,
-                                'cost' =>700,
-                            ]
-                        ]
-                    ]
-                ];
+                        [
+                            'id' => 21,
+                            'cost' => 700,
+                        ],
+                    ],
+                ],
+            ];
             case 'simple2':
                 /**
                  * simple product
                  * has bon
                  * 270 is gift of 155
                  * don't have extraAttribute
-                 */
-                return [
-                    'orderId'   => $orderId,
-                    'productId' => 270,
-                    'data'      => [
-                        'products'       => [],
-                        'attribute'      => [],
-                        'extraAttribute' => [
-                            [
-                                'id'   => 60,
-                                'cost' =>600,
-                            ],
-                            [
-                                'id'   => 21,
-                                'cost' =>700,
-                            ]
-                        ]
-                    ]
-                ];
+                 */ return [
+                'orderId' => $orderId,
+                'productId' => 270,
+                'data' => [
+                    'products' => [],
+                    'attribute' => [],
+                    'extraAttribute' => [
+                        [
+                            'id' => 60,
+                            'cost' => 600,
+                        ],
+                        [
+                            'id' => 21,
+                            'cost' => 700,
+                        ],
+                    ],
+                ],
+            ];
             case 'simple3':
                 /**
                  * simple product
                  * 157 is child of 155 and gift of 155 is 270
                  * with bon from father
-                 */
-                return [
-                    'orderId'   => $orderId,
-                    'productId' => 157,
-                    'data'      => [
-                        'products'       => [
-                            241,
-                            247,
+                 */ return [
+                'orderId' => $orderId,
+                'productId' => 157,
+                'data' => [
+                    'products' => [
+                        241,
+                        247,
+                    ],
+                    'attribute' => [
+                        1,
+                        3,
+                        9,
+                        49,
+                        53,
+                    ],
+                    'extraAttribute' => [
+                        [
+                            'id' => 60,
+                            'cost' => 600,
                         ],
-                        'attribute'      => [
-                            1,
-                            3,
-                            9, 49, 53],
-                        'extraAttribute' => [
-                            [
-                                'id'   => 60,
-                                'cost' =>600,
-                            ],
-                            [
-                                'id'   => 21,
-                                'cost' =>700,
-                            ]
-                        ]
-                    ]
-                ];
+                        [
+                            'id' => 21,
+                            'cost' => 700,
+                        ],
+                    ],
+                ],
+            ];
             case 'donate1':
                 /**
                  * donate product
                  * 5000
-                 */
-                return [
-                    'orderId'   => $orderId,
-                    'productId' => 180,
-                    'data'      => [
-                        'products'       => [],
-                        'attribute'      => [],
-                        'extraAttribute' => []
-                    ]
-                ];
+                 */ return [
+                'orderId' => $orderId,
+                'productId' => 180,
+                'data' => [
+                    'products' => [],
+                    'attribute' => [],
+                    'extraAttribute' => [],
+                ],
+            ];
             case 'donate2':
                 /**
                  * donate product
                  * custom
-                 */
-                return [
-                    'orderId'   => $orderId,
-                    'productId' => 181,
-                    'data'      => [
-                        'products'       => [],
-                        'attribute'      => [],
-                        'extraAttribute' => []
-                    ]
-                ];
+                 */ return [
+                'orderId' => $orderId,
+                'productId' => 181,
+                'data' => [
+                    'products' => [],
+                    'attribute' => [],
+                    'extraAttribute' => [],
+                ],
+            ];
             case 'selectable':
                 /**
                  * selectable product
@@ -210,12 +214,11 @@ class CheckPermissionForSendOrderId
                  * 247 children: 219, 220, 258
                  * 248 children: 259, 260
                  * don't have extraAttribute
-                 */
-                return [
-                    'orderId'   => $orderId,
-                    'productId' => 240,
-                    'data'      => [
-                        'products'       => [
+                 */ return [
+                'orderId' => $orderId,
+                'productId' => 240,
+                'data' => [
+                    'products' => [
 //                            241,
 //
 //                                247,
@@ -224,89 +227,91 @@ class CheckPermissionForSendOrderId
 //                                    258,
 
 //                                248,
-259,
-260,
+                        259,
+                        260,
+                    ],
+                    'attribute' => [
+                        1,
+                        3,
+                        9,
+                        49,
+                        53,
+                    ],
+                    'extraAttribute' => [
+                        [
+                            'id' => 60,
+                            'cost' => 600,
                         ],
-                        'attribute'      => [
-                            1,
-                            3,
-                            9, 49, 53],
-                        'extraAttribute' => [
-                            [
-                                'id'   => 60,
-                                'cost' =>600,
-                            ],
-                            [
-                                'id'   => 21,
-                                'cost' =>700,
-                            ]
-                        ]
-                    ]
-                ];
+                        [
+                            'id' => 21,
+                            'cost' => 700,
+                        ],
+                    ],
+                ],
+            ];
             case 'configurable':
                 /**
                  * configurable product
                  * gift of 155 is 270
                  * has bon
                  * configure product with child (156, 157)
-                 */
-                return [
-                    'orderId'   => $orderId,
-                    'productId' => 155,
-                    'data'      => [
-                        'products'       => [
-                            241,
-                            247,
+                 */ return [
+                'orderId' => $orderId,
+                'productId' => 155,
+                'data' => [
+                    'products' => [
+                        241,
+                        247,
+                    ],
+                    'attribute' => [
+                        1,
+                        3,
+                        9,
+                        49,
+                        53,
+                    ],
+                    // => 156
+                    'extraAttribute' => [
+                        [
+                            'id' => 60,
+                            'cost' => 600,
                         ],
-                        'attribute'      => [
-                            1,
-                            3,
-                            9,
-                            49,
-                            53,
+                        [
+                            'id' => 21,
+                            'cost' => 700,
                         ],
-                        // => 156
-                        'extraAttribute' => [
-                            [
-                                'id'   => 60,
-                                'cost' =>600,
-                            ],
-                            [
-                                'id'   => 21,
-                                'cost' =>700,
-                            ]
-                        ]
-                    ]
-                ];
+                    ],
+                ],
+            ];
             default:
                 /**
                  * simple product
                  * without bon
                  * don't have extraAttribute
-                 */
-                return [
-                    'orderId'   => $orderId,
-                    'productId' => 501,
-                    'data'      => [
-                        'products'       => [
-                            508,
-                            509,
-                            510,
-                            514,
-                            506,
-                            507
-                        ],
-                        'attribute'      => [],
-                        'extraAttribute' => []
-                    ]
-                ];
+                 */ return [
+                'orderId' => $orderId,
+                'productId' => 501,
+                'data' => [
+                    'products' => [
+                        508,
+                        509,
+                        510,
+                        514,
+                        506,
+                        507,
+                    ],
+                    'attribute' => [],
+                    'extraAttribute' => [],
+                ],
+            ];
         }
     }
 
     /**
      *reset order and orderProduct and user bons for test store orderProduct
      */
-    private function resetOrders() {
+    private function resetOrders()
+    {
         $Userbon = Userbon::findOrFail(6);
         $Userbon->usedNumber = 0;
         $Userbon->userbonstatus_id = 1;
@@ -314,8 +319,6 @@ class CheckPermissionForSendOrderId
         DB::table('orders')->delete();
         /*DB::table('orderproducts')->delete();
         DB::table('attributevalue_orderproduct')->delete();*/
-
         /*dd('OrdersReset Done!');*/
     }
-
 }

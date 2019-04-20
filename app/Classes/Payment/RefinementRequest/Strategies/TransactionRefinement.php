@@ -8,11 +8,10 @@
 
 namespace App\Classes\Payment\RefinementRequest\Strategies;
 
-
+use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Order;
 use App\Transaction;
 use Illuminate\Http\Response;
-use App\Classes\Payment\RefinementRequest\Refinement;
 
 class TransactionRefinement extends Refinement
 {
@@ -21,24 +20,23 @@ class TransactionRefinement extends Refinement
      */
     function loadData(): Refinement
     {
-        if($this->statusCode!=Response::HTTP_OK) {
+        if ($this->statusCode != Response::HTTP_OK) {
             return $this;
         }
         $transaction = $this->getTransaction();
-        if($transaction !== false) {
+        if ($transaction !== false) {
             $this->transaction = $transaction;
             $order = $this->getOrder();
-            if($order !== false)
-            {
+            if ($order !== false) {
                 $this->order = $order;
                 $this->user = $this->order->user;
                 $this->cost = $this->transaction->cost;
-                if($this->canDeductFromWallet()) {
+                if ($this->canDeductFromWallet()) {
                     $this->payByWallet();
                 }
                 $this->statusCode = Response::HTTP_OK;
                 $this->description .= $this->getDescription();
-            }else{
+            } else {
                 $this->statusCode = Response::HTTP_NOT_FOUND;
                 $this->message = 'سفارش یافت نشد.';
             }
@@ -46,6 +44,7 @@ class TransactionRefinement extends Refinement
             $this->statusCode = Response::HTTP_NOT_FOUND;
             $this->message = 'تراکنشی یافت نشد.';
         }
+
         return $this;
     }
 
@@ -60,17 +59,15 @@ class TransactionRefinement extends Refinement
     private function getOrder()
     {
         $transaction = $this->transaction;
-        if(isset($transaction))
-        {
-            $order =  $transaction->order->load(['transactions', 'coupon']);
-            if(isset($order))
+        if (isset($transaction)) {
+            $order = $transaction->order->load(['transactions', 'coupon']);
+            if (isset($order)) {
                 return $order;
-            else
+            } else {
                 return false;
-        }
-        else
-        {
-            return  false;
+            }
+        } else {
+            return false;
         }
     }
 
@@ -80,8 +77,9 @@ class TransactionRefinement extends Refinement
     private function getDescription(): string
     {
         $description = '';
-        if (isset($this->inputData['transaction_id']))
+        if (isset($this->inputData['transaction_id'])) {
             $description = 'پرداخت قسط -';
+        }
 
         return $description;
     }

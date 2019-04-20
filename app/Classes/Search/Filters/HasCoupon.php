@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 class HasCoupon extends FilterAbstract
 {
     protected $attribute = 'coupon_id';
+
     protected $relation = 'openOrders';
 
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder

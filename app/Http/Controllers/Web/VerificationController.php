@@ -18,6 +18,7 @@ class VerificationController extends Controller
     |
     */
     use VerifiesEmails;
+
     /**
      * Where to redirect users after verification.
      *
@@ -33,9 +34,7 @@ class VerificationController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('signed')
-             ->only('verify');
-        $this->middleware('throttle:6,1')
-             ->only('verify', 'resend');
+        $this->middleware('signed')->only('verify');
+        $this->middleware('throttle:6,1')->only('verify', 'resend');
     }
 }

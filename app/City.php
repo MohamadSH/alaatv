@@ -5,12 +5,12 @@ namespace App;
 /**
  * App\City
  *
- * @property int                     $id
- * @property int|null                $province_id آی دی مشخص کننده استان این شهر
- * @property string|null             $name        نام شهر
- * @property \Carbon\Carbon|null     $created_at
- * @property \Carbon\Carbon|null     $updated_at
- * @property \Carbon\Carbon|null     $deleted_at
+ * @property int $id
+ * @property int|null $province_id آی دی مشخص کننده استان این شهر
+ * @property string|null $name        نام شهر
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
  * @property-read \App\Province|null $province
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\City onlyTrashed()

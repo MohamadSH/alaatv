@@ -2,7 +2,6 @@
 
 namespace App\Console;
 
-
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -13,31 +12,24 @@ class Kernel extends ConsoleKernel
      *
      * @var array
      */
-    protected $commands = [
-        //
+    protected $commands = [//
     ];
 
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule
      *
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('telescope:prune --hours=48')
-            ->daily();
-        $schedule->command('horizon:snapshot')
-            ->everyFiveMinutes();
+        $schedule->command('telescope:prune --hours=48')->daily();
+        $schedule->command('horizon:snapshot')->everyFiveMinutes();
 
-        $schedule->command('backup:mysql-dump')
-            ->timezone('Asia/Tehran')
-            ->dailyAt('04:30');
+        $schedule->command('backup:mysql-dump')->timezone('Asia/Tehran')->dailyAt('04:30');
 
-        $schedule->command('alaaTv:employee:send:timeSheet 0')
-            ->dailyAt('22:30')
-            ->timezone('Asia/Tehran');
+        $schedule->command('alaaTv:employee:send:timeSheet 0')->dailyAt('22:30')->timezone('Asia/Tehran');
     }
 
     /**
@@ -47,7 +39,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__ . '/Commands');
+        $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
     }

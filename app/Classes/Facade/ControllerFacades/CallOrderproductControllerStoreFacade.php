@@ -8,7 +8,6 @@
 
 namespace App\Classes\Facade\ControllerFacades;
 
-
 use App\Classes\Abstracts\Facade\CallControllerStoreFacade;
 
 class CallOrderproductControllerStoreFacade extends CallControllerStoreFacade
@@ -19,6 +18,4 @@ class CallOrderproductControllerStoreFacade extends CallControllerStoreFacade
     {
         return self::CLASS_NAME;
     }
-
-
 }

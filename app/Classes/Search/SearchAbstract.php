@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search;
 
-
 use App\Classes\Search\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Config;
@@ -16,30 +15,39 @@ use LogicException;
 
 abstract class SearchAbstract
 {
-
     protected const DEFAULT_PAGE_NUMBER = 1;
+
     protected $cacheKey;
+
     protected $cacheTime;
+
     protected $validFilters;
+
     protected $model;
+
     protected $dummyFilterCallBack;
-    protected $pageName               = 'page';
+
+    protected $pageName = 'page';
+
     protected $pageNum;
+
     protected $numberOfItemInEachPage = 10;
 
     public function __construct()
     {
-        if (!isset($this->model))
-            throw new LogicException(get_class($this) . ' must have a $model');
+        if (! isset($this->model)) {
+            throw new LogicException(get_class($this).' must have a $model');
+        }
 
         $this->dummyFilterCallBack = new DummyFilterCallBack();
-        $this->cacheKey = get_class($this) . ':';
+        $this->cacheKey = get_class($this).':';
         $this->cacheTime = Config::get("constants.CACHE_60");
         $this->pageNum = self::DEFAULT_PAGE_NUMBER;
         $this->model = (new $this->model);
     }
 
-    public function get(array ...$params){
+    public function get(array ...$params)
+    {
 //        dd($params[0]);
         return $this->apply($params[0]);
     }
@@ -54,6 +62,7 @@ abstract class SearchAbstract
     public function setNumberOfItemInEachPage(int $numberOfItemInEachPage): SearchAbstract
     {
         $this->numberOfItemInEachPage = $numberOfItemInEachPage;
+
         return $this;
     }
 
@@ -65,6 +74,7 @@ abstract class SearchAbstract
     public function setPageName(string $pageName): SearchAbstract
     {
         $this->pageName = $pageName;
+
         return $this;
     }
 
@@ -75,16 +85,18 @@ abstract class SearchAbstract
             if ($this->isValidFilter($filterName) && $this->isValidDecorator($decorator)) {
                 $decorator = $this->setupDecorator($decorator);
 
-                if ($this->isFilterDecorator($decorator))
+                if ($this->isFilterDecorator($decorator)) {
                     $query = $decorator->apply($query, $value, $this->dummyFilterCallBack);
+                }
             }
         }
+
         return $query;
     }
 
     protected function createFilterDecorator($name)
     {
-        return __NAMESPACE__ . '\\Filters\\' . studly_case($name);
+        return __NAMESPACE__.'\\Filters\\'.studly_case($name);
     }
 
     protected function isValidFilter($filterName)
@@ -113,7 +125,8 @@ abstract class SearchAbstract
      */
     protected function makeCacheKey(array $array): string
     {
-        $key = $this->cacheKey . $this->pageName . '-' . $this->pageNum . ':' . md5(serialize($this->validFilters) . serialize($array));
+        $key = $this->cacheKey.$this->pageName.'-'.$this->pageNum.':'.md5(serialize($this->validFilters).serialize($array));
+
         return $key;
     }
 
@@ -125,7 +138,6 @@ abstract class SearchAbstract
     protected function setPageNum(array $filters)
     {
         return isset($filters[$this->pageName]) ? $filters[$this->pageName] : SearchAbstract::DEFAULT_PAGE_NUMBER;
-
     }
 
     /**

@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Filters;
 
-
 class Allergy extends FilterAbstract
 {
     protected $attribute = 'allergy';

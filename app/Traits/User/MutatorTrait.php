@@ -8,7 +8,6 @@
 
 namespace App\Traits\User;
 
-
 trait mutatorTrait
 {
     /** Setter mutator for major_id
@@ -17,11 +16,11 @@ trait mutatorTrait
      */
     public function setFirstNameAttribute($value): void
     {
-        if ($this->strIsEmpty($value))
+        if ($this->strIsEmpty($value)) {
             $this->attributes["firstName"] = null;
-        else
+        } else {
             $this->attributes["firstName"] = $value;
-
+        }
     }
 
     /** Setter mutator for major_id
@@ -30,10 +29,11 @@ trait mutatorTrait
      */
     public function setLastNameAttribute($value): void
     {
-        if ($this->strIsEmpty($value))
+        if ($this->strIsEmpty($value)) {
             $this->attributes["lastName"] = null;
-        else
+        } else {
             $this->attributes["lastName"] = $value;
+        }
     }
 
     /** Setter mutator for major_id
@@ -42,10 +42,11 @@ trait mutatorTrait
      */
     public function setMajorIdAttribute($value): void
     {
-        if ($value == 0)
+        if ($value == 0) {
             $this->attributes["major_id"] = null;
-        else
+        } else {
             $this->attributes["major_id"] = $value;
+        }
     }
 
     /** Setter mutator for bloodtype_id
@@ -54,10 +55,11 @@ trait mutatorTrait
      */
     public function setBloodtypeIdAttribute($value): void
     {
-        if ($value == 0)
+        if ($value == 0) {
             $this->attributes["bloodtype_id"] = null;
-        else
+        } else {
             $this->attributes["bloodtype_id"] = $value;
+        }
     }
 
     /** Setter mutator for grade_id
@@ -66,10 +68,11 @@ trait mutatorTrait
      */
     public function setGenderIdAttribute($value): void
     {
-        if ($value == 0)
+        if ($value == 0) {
             $this->attributes["gender_id"] = null;
-        else
+        } else {
             $this->attributes["gender_id"] = $value;
+        }
     }
 
     /** Setter mutator for grade_id
@@ -78,10 +81,11 @@ trait mutatorTrait
      */
     public function setGradeIdAttribute($value): void
     {
-        if ($value == 0)
+        if ($value == 0) {
             $this->attributes["grade_id"] = null;
-        else
+        } else {
             $this->attributes["grade_id"] = $value;
+        }
     }
 
     /** Setter mutator for email
@@ -90,10 +94,11 @@ trait mutatorTrait
      */
     public function setEmailAttribute($value): void
     {
-        if ($this->strIsEmpty($value))
+        if ($this->strIsEmpty($value)) {
             $this->attributes["email"] = null;
-        else
+        } else {
             $this->attributes["email"] = $value;
+        }
     }
 
     /** Setter mutator for phone
@@ -102,10 +107,11 @@ trait mutatorTrait
      */
     public function setPhoneAttribute($value): void
     {
-        if ($this->strIsEmpty($value))
+        if ($this->strIsEmpty($value)) {
             $this->attributes["phone"] = null;
-        else
+        } else {
             $this->attributes["phone"] = $value;
+        }
     }
 
     /** Setter mutator for city
@@ -114,10 +120,11 @@ trait mutatorTrait
      */
     public function setCityAttribute($value): void
     {
-        if ($this->strIsEmpty($value))
+        if ($this->strIsEmpty($value)) {
             $this->attributes["city"] = null;
-        else
+        } else {
             $this->attributes["city"] = $value;
+        }
     }
 
     /** Setter mutator for province
@@ -126,10 +133,11 @@ trait mutatorTrait
      */
     public function setProvinceAttribute($value): void
     {
-        if ($this->strIsEmpty($value))
+        if ($this->strIsEmpty($value)) {
             $this->attributes["province"] = null;
-        else
+        } else {
             $this->attributes["province"] = $value;
+        }
     }
 
     /** Setter mutator for address
@@ -138,10 +146,11 @@ trait mutatorTrait
      */
     public function setAddressAttribute($value): void
     {
-        if ($this->strIsEmpty($value))
+        if ($this->strIsEmpty($value)) {
             $this->attributes["address"] = null;
-        else
+        } else {
             $this->attributes["address"] = $value;
+        }
     }
 
     /** Setter mutator for postalCode
@@ -150,10 +159,11 @@ trait mutatorTrait
      */
     public function setPostalCodeAttribute($value): void
     {
-        if ($this->strIsEmpty($value))
+        if ($this->strIsEmpty($value)) {
             $this->attributes["postalCode"] = null;
-        else
+        } else {
             $this->attributes["postalCode"] = $value;
+        }
     }
 
     /** Setter mutator for school
@@ -162,10 +172,11 @@ trait mutatorTrait
      */
     public function setSchoolAttribute($value): void
     {
-        if ($this->strIsEmpty($value))
+        if ($this->strIsEmpty($value)) {
             $this->attributes["school"] = null;
-        else
+        } else {
             $this->attributes["school"] = $value;
+        }
     }
 
     /** Setter mutator for allergy
@@ -174,10 +185,11 @@ trait mutatorTrait
      */
     public function setAllergyAttribute($value): void
     {
-        if ($this->strIsEmpty($value))
+        if ($this->strIsEmpty($value)) {
             $this->attributes["allergy"] = null;
-        else
+        } else {
             $this->attributes["allergy"] = $value;
+        }
     }
 
     /** Setter mutator for medicalCondition
@@ -186,10 +198,11 @@ trait mutatorTrait
      */
     public function setMedicalConditionAttribute($value): void
     {
-        if ($this->strIsEmpty($value))
+        if ($this->strIsEmpty($value)) {
             $this->attributes["medicalCondition"] = null;
-        else
+        } else {
             $this->attributes["medicalCondition"] = $value;
+        }
     }
 
     /** Setter mutator for discount
@@ -198,10 +211,11 @@ trait mutatorTrait
      */
     public function setDietAttribute($value): void
     {
-        if ($this->strIsEmpty($value))
+        if ($this->strIsEmpty($value)) {
             $this->attributes["diet"] = null;
-        else
+        } else {
             $this->attributes["diet"] = $value;
+        }
     }
 
     /**
@@ -209,7 +223,7 @@ trait mutatorTrait
      */
     public function getReverseFullNameAttribute()
     {
-        return ucfirst($this->lastName) . ' ' . ucfirst($this->firstName);
+        return ucfirst($this->lastName).' '.ucfirst($this->firstName);
     }
 
     public function getPhotoAttribute($value)
@@ -217,8 +231,8 @@ trait mutatorTrait
         $profileImage = ($value != null ? $value : config('constants.PROFILE_DEFAULT_IMAGE'));
         $profileImage = route('image', [
             'category' => '1',
-            'w'        => '39',
-            'h'        => '39',
+            'w' => '39',
+            'h' => '39',
             'filename' => $profileImage,
         ]);
 
@@ -227,15 +241,18 @@ trait mutatorTrait
 
     public function getShortNameAttribute()
     {
-        if (isset($this->firstName))
+        if (isset($this->firstName)) {
             return ucfirst($this->firstName);
-        if (isset($this->lastName))
+        }
+        if (isset($this->lastName)) {
             return ucfirst($this->lastName);
+        }
+
         return 'کاربر آلایی';
     }
 
     public function getFullNameAttribute($value)
     {
-        return ucfirst($this->firstName) . ' ' . ucfirst($this->lastName);
+        return ucfirst($this->firstName).' '.ucfirst($this->lastName);
     }
 }

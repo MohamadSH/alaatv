@@ -21,17 +21,23 @@ abstract class ProductPriceCalculator
     */
 
     protected $bonName;
+
     protected $rawCost;
+
     protected $discountValue;
+
     protected $discountPercentage;
+
     protected $bonDiscountPercentage;
+
     protected $totalBonNumber;
+
     protected $discountCashAmount;
 
     /**
      * CostCentre constructor.
      *
-     * @param User    $user
+     * @param User $user
      * @param Product $product
      */
     public function __construct(Product $product, User $user = null)
@@ -44,8 +50,10 @@ abstract class ProductPriceCalculator
         $bonName = config("constants.BON1");
         $this->bonName = $bonName;
         $this->totalBonNumber = (int)optional($user)->userHasBon($bonName);
-        if(isset($user)) //Note: With out this if we query the database every time even when there is nothing to do with bon discount like calculating order's cost
+        if (isset($user)) //Note: With out this if we query the database every time even when there is nothing to do with bon discount like calculating order's cost
+        {
             $this->bonDiscountPercentage = $product->obtainBonDiscount($bonName);
+        }
     }
 
     /*
@@ -53,7 +61,6 @@ abstract class ProductPriceCalculator
     | Abstract Methods
     |--------------------------------------------------------------------------
     */
-
 
     /**
      * Returns price info array
@@ -76,6 +83,7 @@ abstract class ProductPriceCalculator
     public function setRawCost($rawCost): ProductPriceCalculator
     {
         $this->rawCost = $rawCost;
+
         return $this;
     }
 
@@ -87,6 +95,7 @@ abstract class ProductPriceCalculator
     public function setDiscountPercentage($discountPercentage): ProductPriceCalculator
     {
         $this->discountPercentage = $discountPercentage;
+
         return $this;
     }
 
@@ -98,6 +107,7 @@ abstract class ProductPriceCalculator
     public function setBonDiscountPercentage($bonDiscountPercentage): ProductPriceCalculator
     {
         $this->bonDiscountPercentage = $bonDiscountPercentage;
+
         return $this;
     }
 
@@ -109,6 +119,7 @@ abstract class ProductPriceCalculator
     public function setTotalBonNumber(int $totalBonNumber): ProductPriceCalculator
     {
         $this->totalBonNumber = $totalBonNumber;
+
         return $this;
     }
 
@@ -120,6 +131,7 @@ abstract class ProductPriceCalculator
     public function setDiscountCashAmount($discountCashAmount): ProductPriceCalculator
     {
         $this->discountCashAmount = $discountCashAmount;
+
         return $this;
     }
 
@@ -178,5 +190,4 @@ abstract class ProductPriceCalculator
     {
         return max($this->discountPercentage * $this->rawCost, $this->discountCashAmount);
     }
-
 }

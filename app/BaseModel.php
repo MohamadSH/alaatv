@@ -28,15 +28,12 @@ abstract class BaseModel extends Model
         'updated_at',
         'deleted_at',
     ];
+
     public function cacheKey()
     {
         $key = $this->getKey();
         $time = isset($this->updated_at) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-        return sprintf(
-            "%s:%s-%s",
-            $this->getTable(),
-            $key,
-            $time
-        );
+
+        return sprintf("%s:%s-%s", $this->getTable(), $key, $time);
     }
 }

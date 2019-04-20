@@ -8,7 +8,6 @@
 
 namespace App\Classes\Pricing\Alaa;
 
-
 use App\Classes\Abstracts\Pricing\OrderproductPriceCalculator;
 
 class AlaaOrderproductPriceCalculator extends OrderproductPriceCalculator
@@ -28,7 +27,7 @@ class AlaaOrderproductPriceCalculator extends OrderproductPriceCalculator
 //            'totalCost'                       => $totalPrice
 //        ];
 
-        $priceInfo = $this->getOrderproductPrice() ;
+        $priceInfo = $this->getOrderproductPrice();
 
         return $priceInfo;
     }

@@ -8,7 +8,6 @@
 
 namespace App\Classes\Checkout\Alaa;
 
-
 use App\Classes\Abstracts\checkout\ProductPriceCalculator;
 
 class AlaaProductPriceCalculator extends ProductPriceCalculator
@@ -17,29 +16,29 @@ class AlaaProductPriceCalculator extends ProductPriceCalculator
     {
         $priceInfo = [
             'price' => $this->calculatePrice(),
-            'info'  => [
+            'info' => [
                 'productCost' => $this->rawCost,
-                'discount'    => [
+                'discount' => [
                     'totalAmount' => $this->calculateTotalDiscountAmount(),
-                    'info'        => [
-                        'bon'     => [
+                    'info' => [
+                        'bon' => [
                             'totalAmount' => $this->getBonDiscount(),
-                            'info'        => [
+                            'info' => [
                                 $this->bonName => [
-                                    'number'            => $this->totalBonNumber,
+                                    'number' => $this->totalBonNumber,
                                     'perUnitPercentage' => $this->bonDiscountPercentage,
-                                    'totalPercentage'   => $this->getBonTotalPercentage(),
+                                    'totalPercentage' => $this->getBonTotalPercentage(),
                                 ],
                             ],
                         ],
                         'product' => [
                             'totalAmount' => $this->getProductDiscount(),
-                            'info'        => [
-                                'amount'     => $this->discountCashAmount,
+                            'info' => [
+                                'amount' => $this->discountCashAmount,
                                 'percentageBase' => [
                                     'percentage' => $this->discountPercentage,
                                     'decimalValue' => $this->discountValue,
-                                ]
+                                ],
                             ],
                         ],
                     ],
@@ -49,5 +48,4 @@ class AlaaProductPriceCalculator extends ProductPriceCalculator
 
         return json_encode($priceInfo);
     }
-
 }

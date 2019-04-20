@@ -15,8 +15,10 @@ use Illuminate\Support\Facades\Cache;
 
 class ContentSearch extends SearchAbstract
 {
-    protected $model        = "App\Content";
-    protected $pageName     = 'contentPage';
+    protected $model = "App\Content";
+
+    protected $pageName = 'contentPage';
+
 //    protected $numberOfItemInEachPage = 2;
     protected $validFilters = [
         'name',
@@ -27,14 +29,16 @@ class ContentSearch extends SearchAbstract
         'createdAtTill',
     ];
 
-    public function get(array ...$params) {
-        $filters = $this->getFromParams($params,"filters");
-        $contentTypes = $this->getFromParams($params,"contentTypes");
+    public function get(array ...$params)
+    {
+        $filters = $this->getFromParams($params, "filters");
+        $contentTypes = $this->getFromParams($params, "contentTypes");
         $items = collect();
         foreach ($contentTypes as $contentType) {
-            ${$contentType . 'Result'} = $this->getFiltered($filters,['contentType' => (array) $contentType]);
-            $items->offsetSet($contentType, $this->normalizeResult(${$contentType . 'Result'}));
+            ${$contentType.'Result'} = $this->getFiltered($filters, ['contentType' => (array)$contentType]);
+            $items->offsetSet($contentType, $this->normalizeResult(${$contentType.'Result'}));
         }
+
         return $items;
     }
 
@@ -42,18 +46,20 @@ class ContentSearch extends SearchAbstract
     {
         return $resutl->count() > 0 ? $resutl : null;
     }
+
     /**
      * @param array ...$filters
      * @return LengthAwarePaginator|null
      */
-    private function getFiltered(array ...$filters) :?LengthAwarePaginator
+    private function getFiltered(array ...$filters): ?LengthAwarePaginator
     {
         $filters = array_merge(...$filters);
-        $contentType = array_get($filters,"contentType");
-        if(is_null($contentType))
+        $contentType = array_get($filters, "contentType");
+        if (is_null($contentType)) {
             throw new \InvalidArgumentException("filters[contentType] should be set.");
-        return $this->setPageName($contentType[0] . 'Page')
-            ->apply($filters);
+        }
+
+        return $this->setPageName($contentType[0].'Page')->apply($filters);
     }
 
     /**
@@ -67,30 +73,23 @@ class ContentSearch extends SearchAbstract
         $key = $this->makeCacheKey($filters);
 
         return Cache::tags([
-                               'content',
-                               'search',
-                           ])
-                    ->remember($key, $this->cacheTime, function () use ($filters) {
-                        //            dump("in cache");
-                        $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
+            'content',
+            'search',
+        ])->remember($key, $this->cacheTime, function () use ($filters) {
+            //            dump("in cache");
+            $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
 
-                        return $this->getResults($query)->appends($filters);
-                    });
+            return $this->getResults($query)->appends($filters);
+        });
     }
 
     protected function getResults(Builder $query)
     {
         //ToDo: Active condition has conflict with admin
-        $result = $query->active()
-                        ->orderBy("created_at", "desc")
-                        ->paginate($this->numberOfItemInEachPage,
-                                   ['*'],
-                                   $this->pageName,
-                                   $this->pageNum
-                        );
+        $result = $query->active()->orderBy("created_at", "desc")->paginate($this->numberOfItemInEachPage, ['*'], $this->pageName, $this->pageNum);
+
         return $result;
     }
-
 
     /**
      * @param $decorator
@@ -100,8 +99,10 @@ class ContentSearch extends SearchAbstract
     protected function setupDecorator($decorator)
     {
         $decorator = (new $decorator);
-        if ($decorator instanceof Tags)
+        if ($decorator instanceof Tags) {
             $decorator->setTagManager(new ContentTagManagerViaApi());
+        }
+
         return $decorator;
     }
 }

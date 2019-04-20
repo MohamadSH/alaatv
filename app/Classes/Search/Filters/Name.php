@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Filters;
 
-
 class Name extends FilterAbstract
 {
     protected $attribute = 'name';

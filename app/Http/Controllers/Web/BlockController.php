@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Web;
+
 use App\Block;
 use App\Classes\Format\BlockCollectionFormatter;
 use App\Http\Controllers\Controller;
@@ -28,8 +29,8 @@ class BlockController extends Controller
     public function index(Request $request)
     {
         $blocks = Block::getMainBlocks();
-        return ($request->expectsJson() ? response()->json($blocks) : $blocks);
 
+        return ($request->expectsJson() ? response()->json($blocks) : $blocks);
     }
 
     /**
@@ -45,7 +46,7 @@ class BlockController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -57,8 +58,8 @@ class BlockController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Request     $request
-     * @param  \App\Block $block
+     * @param Request $request
+     * @param \App\Block $block
      *
      * @return Block|\Illuminate\Http\JsonResponse
      */
@@ -70,7 +71,7 @@ class BlockController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Block $block
+     * @param \App\Block $block
      *
      * @return \Illuminate\Http\Response
      */
@@ -82,8 +83,8 @@ class BlockController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Block               $block
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Block $block
      *
      * @return \Illuminate\Http\Response
      */
@@ -95,7 +96,7 @@ class BlockController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Block $block
+     * @param \App\Block $block
      *
      * @return \Illuminate\Http\Response
      */

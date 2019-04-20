@@ -5,17 +5,17 @@ namespace App;
 /**
  * App\Attributegroup
  *
- * @property int                                                            $id
- * @property string|null                                                    $name            نام گروه
- * @property string|null                                                    $description     توضیح گروه
- * @property int|null                                                       $attributeset_id آی دی مشخص کننده دسته صفت
+ * @property int $id
+ * @property string|null $name            نام گروه
+ * @property string|null $description     توضیح گروه
+ * @property int|null $attributeset_id آی دی مشخص کننده دسته صفت
  *           مربوطه
- * @property int                                                            $order           ترتیب گروه صفت
- * @property \Carbon\Carbon|null                                            $created_at
- * @property \Carbon\Carbon|null                                            $updated_at
- * @property \Carbon\Carbon|null                                            $deleted_at
+ * @property int $order           ترتیب گروه صفت
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Attribute[] $attributes
- * @property-read \App\Attributeset|null                                    $attributeset
+ * @property-read \App\Attributeset|null $attributeset
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Attributegroup onlyTrashed()
  * @method static bool|null restore()
@@ -38,7 +38,6 @@ namespace App;
  */
 class Attributegroup extends BaseModel
 {
-
     protected $fillable = [
         'name',
         'description',
@@ -47,10 +46,7 @@ class Attributegroup extends BaseModel
 
     public function attributes()
     {
-        return $this->belongsToMany('App\Attribute')
-                    ->withPivot('order', 'description')
-                    ->withTimestamps()
-                    ->orderBy('order');
+        return $this->belongsToMany('App\Attribute')->withPivot('order', 'description')->withTimestamps()->orderBy('order');
     }
 
     public function attributeset()

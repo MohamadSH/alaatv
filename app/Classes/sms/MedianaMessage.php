@@ -32,7 +32,6 @@ class MedianaMessage
     public function __construct($content = '')
     {
         $this->content = $content;
-
     }
 
     /**
@@ -55,26 +54,29 @@ class MedianaMessage
     public function content($content)
     {
         $this->content = $content;
+
         return $this;
     }
 
     public function setInputData(array $input_data)
     {
         $this->input_data = $input_data;
+
         return $this;
     }
 
     public function setFrom($from)
     {
         $this->from = $from;
+
         return $this;
     }
 
     public function setOp($op)
     {
         $this->op = $op;
-        return $this;
 
+        return $this;
     }
 
     /**
@@ -87,12 +89,14 @@ class MedianaMessage
     public function sendAt($sendAt)
     {
         $this->sendAt = $sendAt;
+
         return $this;
     }
 
     public function setPatternCode($pattern_code)
     {
         $this->pattern_code = $pattern_code;
+
         return $this;
     }
 }

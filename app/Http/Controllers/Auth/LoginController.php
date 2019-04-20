@@ -11,9 +11,9 @@ use Illuminate\Http\Response;
 
 class LoginController extends Controller
 {
-
     use CharacterCommon;
     use RedirectTrait;
+
     /**
      * @var RegisterController
      */
@@ -57,7 +57,7 @@ class LoginController extends Controller
     /**
      * Log the user out of the application.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -68,17 +68,17 @@ class LoginController extends Controller
         if ($request->expectsJson()) {
             //TODO:// revoke all apps!!!
             $request->user()->token()->revoke();
-        } else
+        } else {
             $request->session()->invalidate();
+        }
 
-
-        return $this->loggedOut($request) ? : redirect('/');
+        return $this->loggedOut($request) ?: redirect('/');
     }
 
     /**
      * Handle a login request to the application.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      *
@@ -103,6 +103,7 @@ class LoginController extends Controller
         // the IP address of the client making these requests into this application.
         if ($this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
+
             return $this->sendLockoutResponse($request);
         }
 
@@ -110,12 +111,9 @@ class LoginController extends Controller
             if (auth()->user()->userstatus_id == 1) {
                 return $this->sendLoginResponse($request);
             } else {
-                return redirect()
-                    ->back()
-                    ->withInput($request->only('mobile', 'remember'))
-                    ->withErrors([
-                        'inActive' => 'حساب کاربری شما غیر فعال شده است!',
-                    ], "login");
+                return redirect()->back()->withInput($request->only('mobile', 'remember'))->withErrors([
+                    'inActive' => 'حساب کاربری شما غیر فعال شده است!',
+                ], "login");
             }
         }
 
@@ -130,17 +128,18 @@ class LoginController extends Controller
     /**
      * Send the response after the user was authenticated.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
      */
     protected function sendLoginResponse(Request $request)
     {
-        if (!$request->expectsJson())
+        if (! $request->expectsJson()) {
             $request->session()->regenerate();
+        }
         $this->clearLoginAttempts($request);
-        return $this->authenticated($request, $this->guard()->user())
-            ? : redirect()->intended($this->redirectPath());
+
+        return $this->authenticated($request, $this->guard()->user()) ?: redirect()->intended($this->redirectPath());
     }
 
     /**
@@ -156,7 +155,7 @@ class LoginController extends Controller
     /**
      * Get the needed authorization credentials from the request.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return array
      */
@@ -168,8 +167,8 @@ class LoginController extends Controller
     /**
      * The user has been authenticated.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  mixed                    $user
+     * @param \Illuminate\Http\Request $request
+     * @param mixed $user
      *
      * @return mixed
      */
@@ -180,11 +179,12 @@ class LoginController extends Controller
             $data = array_merge([
                 'user' => $user,
             ], $token);
+
             return response()->json([
-                'status'     => 1,
-                'msg'        => 'user sign in.',
+                'status' => 1,
+                'msg' => 'user sign in.',
                 'redirectTo' => $this->redirectTo($request),
-                'data'       => $data,
+                'data' => $data,
             ], Response::HTTP_OK);
         }
     }
@@ -192,17 +192,18 @@ class LoginController extends Controller
     /**
      * The user has logged out of the application.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return mixed
      */
     protected function loggedOut(Request $request)
     {
-        if ($request->expectsJson())
+        if ($request->expectsJson()) {
             return response()->json([
-                'status'     => 1,
-                'msg'        => 'user sign out.',
+                'status' => 1,
+                'msg' => 'user sign out.',
                 'redirectTo' => action("Web\IndexPageController"),
             ], Response::HTTP_OK);
+        }
     }
 }

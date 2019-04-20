@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Web;
+
 use App\City;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -18,18 +19,21 @@ class CityController extends Controller
         $cities = City::orderBy("name");
 
         $cityIds = Input::get("ids");
-        if (strcmp(gettype($cityIds), "string") == 0)
+        if (strcmp(gettype($cityIds), "string") == 0) {
             $cityIds = json_decode($cityIds);
+        }
         if (isset($cityIds)) {
             $cities = $cities->whereIn("id", $cityIds);
         }
 
         $provinceIds = Input::get("provinces");
-        if (strcmp(gettype($provinceIds), "string") == 0)
+        if (strcmp(gettype($provinceIds), "string") == 0) {
             $provinceIds = json_decode($provinceIds);
+        }
         if (isset($provinceIds)) {
             $cities = $cities->whereIn("province_id", $provinceIds);
         }
+
         return $cities->get();
     }
 
@@ -46,7 +50,7 @@ class CityController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -58,7 +62,7 @@ class CityController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -70,7 +74,7 @@ class CityController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -82,8 +86,8 @@ class CityController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -95,7 +99,7 @@ class CityController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */

@@ -16,17 +16,20 @@ abstract class OrderDiscountCostAmountCalculator extends CheckoutProcessor
     {
         $discount = $cashier->getOrderDiscountCostAmount();
         $temporaryFinalPrice = $cashier->getTemporaryFinalPrice();
-        if(!isset($discount))
+        if (! isset($discount)) {
             throw new Exception('Order discount has not been set');
+        }
 
-        if(!isset($temporaryFinalPrice))
+        if (! isset($temporaryFinalPrice)) {
             throw new Exception('Order temporary final price has not been set');
+        }
 
-        $orderFinalPrice = $this->calculateOrderDiscount($temporaryFinalPrice , $discount);
+        $orderFinalPrice = $this->calculateOrderDiscount($temporaryFinalPrice, $discount);
 
         $cashier->setFinalPrice($orderFinalPrice);
+
         return $this->next($cashier);
     }
 
-    abstract protected function calculateOrderDiscount( $totalPrice , $discount);
+    abstract protected function calculateOrderDiscount($totalPrice, $discount);
 }
