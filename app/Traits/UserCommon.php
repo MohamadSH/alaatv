@@ -1,6 +1,7 @@
 <?php namespace App\Traits;
 
 use App\User;
+use Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -216,7 +217,14 @@ trait UserCommon
         }
     }
 
-    /**
+/**
+     * @param string $permission
+     * @return bool
+     */
+    protected function isAuthenticatedUserHasPermission(string $permission):bool{
+        return (Auth::check() && Auth::user()->can($permission));
+    }
+  
      * @param \App\User $user
      * @param $claimedOldPassword
      * @param $newPassword
