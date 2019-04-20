@@ -217,14 +217,15 @@ trait UserCommon
         }
     }
 
-/**
+    /**
      * @param string $permission
      * @return bool
      */
     protected function isAuthenticatedUserHasPermission(string $permission):bool{
         return (Auth::check() && Auth::user()->can($permission));
     }
-  
+
+    /**
      * @param \App\User $user
      * @param $claimedOldPassword
      * @param $newPassword

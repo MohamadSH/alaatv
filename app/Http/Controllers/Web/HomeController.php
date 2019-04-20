@@ -103,7 +103,7 @@ class HomeController extends Controller
         //            $authException = ['index' , 'getImage' , 'error404' , 'error403' , 'error500' , 'errorPage' , 'siteMapXML', 'download' ];
         //        }else{
         $authException = [
-            'debug',
+//            'debug',
 'download',
 'telgramAgent',
 'index',
