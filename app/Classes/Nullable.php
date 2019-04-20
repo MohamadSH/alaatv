@@ -19,15 +19,21 @@ class Nullable
     }
 
     /**
-     * @param $cb
+     * @param $default
      * @return mixed
      */
-    public function getValue($cb)
+    public function getValue($default)
     {
-        if (is_null($this->result)) {
-            return $cb();
-        } else {
+        if (! is_null($this->result)) {
             return $this->result;
+        }
+
+        if (is_null($cb)) {
+            return optional();
+        } elseif (is_callable($default)) {
+            return $default();
+        } else {
+            return $default;
         }
     }
 
