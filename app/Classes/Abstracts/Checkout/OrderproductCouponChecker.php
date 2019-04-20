@@ -18,17 +18,19 @@ abstract class OrderproductCouponChecker extends CheckoutProcessor
     {
         $orderproductsToCalculateFromNewBase = $cashier->getRawOrderproductsToCalculateFromBase();
         $coupon = $cashier->getOrderCoupon();
-        if(!isset($orderproductsToCalculateFromNewBase))
+        if (! isset($orderproductsToCalculateFromNewBase)) {
             throw new Exception('Orderproducts to recalculate have not been set');
+        }
 
-        if(!isset($coupon))
+        if (! isset($coupon)) {
             throw new Exception('Order coupon has not been set');
+        }
 
-        $checkedOrderproducts =  $this->IsIncludedInCoupon($orderproductsToCalculateFromNewBase , $coupon);
+        $checkedOrderproducts = $this->IsIncludedInCoupon($orderproductsToCalculateFromNewBase, $coupon);
 
         $cashier->setRawOrderproductsToCalculateFromBase($checkedOrderproducts);
 
-        return $this->next($cashier) ;
+        return $this->next($cashier);
     }
 
     /**
@@ -38,5 +40,5 @@ abstract class OrderproductCouponChecker extends CheckoutProcessor
      * @param Coupon $coupon
      * @return mixed
      */
-    abstract protected function IsIncludedInCoupon(Collection $orderproducts , Coupon $coupon):Collection;
+    abstract protected function IsIncludedInCoupon(Collection $orderproducts, Coupon $coupon): Collection;
 }

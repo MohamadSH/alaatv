@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Input;
 class UserbonController extends Controller
 {
     use Helper;
+
     protected $response;
 
     function __construct()
@@ -23,9 +24,9 @@ class UserbonController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:' . Config::get('constants.INSERT_USER_BON_ACCESS'), ['only' => 'store']);
-        $this->middleware('permission:' . Config::get('constants.LIST_USER_BON_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:' . Config::get('constants.REMOVE_USER_BON_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:'.Config::get('constants.INSERT_USER_BON_ACCESS'), ['only' => 'store']);
+        $this->middleware('permission:'.Config::get('constants.LIST_USER_BON_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.Config::get('constants.REMOVE_USER_BON_ACCESS'), ['only' => 'destroy']);
 
         $this->response = new Response();
     }
@@ -48,16 +49,13 @@ class UserbonController extends Controller
 
         $productsId = Input::get("products");
         if (isset($productsId)) {
-            if (!in_array(0, $productsId)) {
-                $products = Product::whereIn('id', $productsId)
-                                   ->get();
+            if (! in_array(0, $productsId)) {
+                $products = Product::whereIn('id', $productsId)->get();
                 foreach ($products as $product) {
                     if ($product->hasChildren()) {
                         $productsId = array_merge($productsId, Product::whereHas('parents', function ($q) use ($productsId) {
                             $q->whereIn("parent_id", $productsId);
-                        })
-                                                                      ->pluck("id")
-                                                                      ->toArray());
+                        })->pluck("id")->toArray());
                     }
                 }
                 $userbons = $userbons->whereHas("orderproduct", function ($q) use ($productsId) {
@@ -71,28 +69,28 @@ class UserbonController extends Controller
         $firstName = trim(Input::get('firstName'));
         if (isset($firstName) && strlen($firstName) > 0) {
             $userbons = $userbons->whereHas('user', function ($q) use ($firstName) {
-                $q->where('firstName', 'like', '%' . $firstName . '%');
+                $q->where('firstName', 'like', '%'.$firstName.'%');
             });
         }
 
         $lastName = trim(Input::get('lastName'));
         if (isset($lastName) && strlen($lastName) > 0) {
             $userbons = $userbons->whereHas('user', function ($q) use ($lastName) {
-                $q->where('lastName', 'like', '%' . $lastName . '%');
+                $q->where('lastName', 'like', '%'.$lastName.'%');
             });
         }
 
         $nationalCode = trim(Input::get('nationalCode'));
         if (isset($nationalCode) && strlen($nationalCode) > 0) {
             $userbons = $userbons->whereHas('user', function ($q) use ($nationalCode) {
-                $q->where('nationalCode', 'like', '%' . $nationalCode . '%');
+                $q->where('nationalCode', 'like', '%'.$nationalCode.'%');
             });
         }
 
         $mobile = trim(Input::get('mobile'));
         if (isset($mobile) && strlen($mobile) > 0) {
             $userbons = $userbons->whereHas('user', function ($q) use ($mobile) {
-                $q->where('mobile', 'like', '%' . $mobile . '%');
+                $q->where('mobile', 'like', '%'.$mobile.'%');
             });
         }
 
@@ -102,6 +100,7 @@ class UserbonController extends Controller
         }
 
         $userbons = $userbons->get();
+
         return view('userBon.index', compact('userbons'));
     }
 
@@ -118,7 +117,7 @@ class UserbonController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \app\Http\Requests\InsertUserBonRequest $request
+     * @param \app\Http\Requests\InsertUserBonRequest $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -136,7 +135,7 @@ class UserbonController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -148,7 +147,7 @@ class UserbonController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -160,8 +159,8 @@ class UserbonController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -173,13 +172,14 @@ class UserbonController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
     public function destroy($userbon)
     {
         $userbon->delete();
+
         return redirect()->back();
     }
 }

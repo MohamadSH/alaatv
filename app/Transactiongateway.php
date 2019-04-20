@@ -5,30 +5,30 @@ namespace App;
 /**
  * App\Transactiongateway
  *
- * @property int                                                              $id
- * @property string|null                                                      $name                          نام سیستمی
+ * @property int $id
+ * @property string|null $name                          نام سیستمی
  *           درگاه
- * @property string|null                                                      $displayName                   نام قابل
+ * @property string|null $displayName                   نام قابل
  *           نمایش درگاه
- * @property string|null                                                      $description                   توضیح
+ * @property string|null $description                   توضیح
  *           درباره درگاه
- * @property string|null                                                      $merchantNumber                شماره
+ * @property string|null $merchantNumber                شماره
  *           مرچنت درگاه
- * @property string|null                                                      $certificatePrivateKeyFile     فایل گواهی
+ * @property string|null $certificatePrivateKeyFile     فایل گواهی
  *           اس اس ال برای کلید خصوصی امضا دیجیتال
- * @property string|null                                                      $certificatePrivateKeyPassword رمز عبور
+ * @property string|null $certificatePrivateKeyPassword رمز عبور
  *           برای کلید خصوصی امضا دیجیتال
- * @property string|null                                                      $merchantPassword              رمز
+ * @property string|null $merchantPassword              رمز
  *           فروشنده
- * @property int                                                              $enable                        فعال بودن
+ * @property int $enable                        فعال بودن
  *           یا نبودن درگاه
- * @property int                                                              $order                         ترتیب - در
+ * @property int $order                         ترتیب - در
  *           صورت نیاز به استفاده
- * @property int|null                                                         $bank_id                       آیدی مشخص
+ * @property int|null $bank_id                       آیدی مشخص
  *           کننده بانک درگاه
- * @property \Carbon\Carbon|null                                              $created_at
- * @property \Carbon\Carbon|null                                              $updated_at
- * @property \Carbon\Carbon|null                                              $deleted_at
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $transactions
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Transactiongateway onlyTrashed()
@@ -86,7 +86,7 @@ class Transactiongateway extends BaseModel
      * Scope a query to only include enable(or disable) Gateways.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int                                   $enable
+     * @param int $enable
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -99,7 +99,7 @@ class Transactiongateway extends BaseModel
      *  Scope a query to only include Gateways with specified name.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string                                $name
+     * @param string $name
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */

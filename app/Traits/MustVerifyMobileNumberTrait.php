@@ -8,7 +8,6 @@
 
 namespace App\Traits;
 
-
 use App\Notifications\MobileVerified;
 use App\Notifications\VerifyMobile;
 use Illuminate\Support\Facades\Cache;
@@ -22,7 +21,7 @@ trait MustVerifyMobileNumberTrait
      */
     public function hasVerifiedMobile()
     {
-        return !is_null($this->mobile_verified_at);
+        return ! is_null($this->mobile_verified_at);
     }
 
     /**
@@ -33,9 +32,8 @@ trait MustVerifyMobileNumberTrait
     public function markMobileAsVerified()
     {
         return $this->forceFill([
-                                    'mobile_verified_at' => $this->freshTimestamp(),
-                                ])
-                    ->save();
+            'mobile_verified_at' => $this->freshTimestamp(),
+        ])->save();
     }
 
     /**
@@ -47,8 +45,7 @@ trait MustVerifyMobileNumberTrait
     {
         if ($this->setMobileVerificationCode()) {
             $this->notify(new VerifyMobile());
-            Cache::tags('User:' . $this->id)
-                 ->flush();
+            Cache::tags('User:'.$this->id)->flush();
         }
     }
 
@@ -60,10 +57,10 @@ trait MustVerifyMobileNumberTrait
     public function setMobileVerificationCode(): bool
     {
         $verificationCode = rand(1000, 99999);
+
         return $this->forceFill([
-                                    'mobile_verified_code' => $verificationCode,
-                                ])
-                    ->save();
+            'mobile_verified_code' => $verificationCode,
+        ])->save();
     }
 
     /**

@@ -5,13 +5,13 @@ namespace App;
 /**
  * App\Wallettype
  *
- * @property int                                                         $id
- * @property string                                                      $name        نام
- * @property string|null                                                 $displayName نام قابل نمایش
- * @property string|null                                                 $description توضیح کوتاه
- * @property \Carbon\Carbon|null                                         $created_at
- * @property \Carbon\Carbon|null                                         $updated_at
- * @property \Carbon\Carbon|null                                         $deleted_at
+ * @property int $id
+ * @property string $name        نام
+ * @property string|null $displayName نام قابل نمایش
+ * @property string|null $description توضیح کوتاه
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Wallet[] $wallets
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Wallettype onlyTrashed()

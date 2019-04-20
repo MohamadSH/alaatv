@@ -5,10 +5,10 @@ namespace App;
 /**
  * App\Majorinterrelationtypes
  *
- * @property int                 $id
- * @property string|null         $name        نام نوع
- * @property string|null         $displayName نام قابل نمایش نوع
- * @property string|null         $description توضیح درباره این نوع رابطه
+ * @property int $id
+ * @property string|null $name        نام نوع
+ * @property string|null $displayName نام قابل نمایش نوع
+ * @property string|null $description توضیح درباره این نوع رابطه
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at

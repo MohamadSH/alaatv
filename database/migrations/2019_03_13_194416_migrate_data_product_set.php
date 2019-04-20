@@ -5,8 +5,6 @@ use App\Contentset;
 use App\Productfile;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Output\ConsoleOutput;
 
 class MigrateDataProductSet extends Migration
 {
@@ -23,12 +21,22 @@ class MigrateDataProductSet extends Migration
         Schema::table('productfiles', function (Blueprint $table) {
             $table->unsignedInteger('content_id')
                   ->nullable();
+            $table->unsignedInteger('contentset_id')
+                  ->nullable();
             $table->foreign('content_id')
                   ->references('id')
                   ->on('educationalcontents')
                   ->onDelete('cascade')
                   ->onupdate('cascade');
+
+            $table->foreign('contentset_id')
+                  ->references('id')
+                  ->on('contentsets')
+                  ->onDelete('cascade')
+                  ->onupdate('cascade');
         });
+        /*
+         *
         $productFiles = \App\Productfile::all();
         $output = new ConsoleOutput();
         $output->writeln('update product files....');
@@ -38,20 +46,22 @@ class MigrateDataProductSet extends Migration
         $productFiles->load('productfiletype');
 
         foreach ($productFiles as $productFile) {
-            /*$productFile->timestamps = false;
-
-            $contentId = $this->makeContentFromProductFile($productFile);
-
-            $productFile->forceFill([
-                'content_id' => $contentId,
-            ])->save();
-
-            $productFile->timestamps = true;*/
+//            $productFile->timestamps = false;
+//
+//            $contentId = $this->makeContentFromProductFile($productFile);
+//
+//            $productFile->forceFill([
+//                'content_id' => $contentId,
+//            ])->save();
+//
+//            $productFile->timestamps = true;
 
             $progress->advance();
         }
         $progress->finish();
         $output->writeln('Done!');
+
+        */
 
         DB::commit();
     }

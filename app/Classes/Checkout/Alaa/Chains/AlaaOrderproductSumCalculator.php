@@ -18,14 +18,14 @@ class AlaaOrderproductSumCalculator extends OrderproductSumCalculator
      * @param Collection $calculatedOrderproducts
      * @return array
      */
-    protected function calculateSum(Collection $calculatedOrderproducts) :array
+    protected function calculateSum(Collection $calculatedOrderproducts): array
     {
         /** @var OrderproductCollection $calculatedOrderproducts */
 
         $sumOfOrderproductsRawPrice = 0;
         $sumOfOrderproductsCustomerPrice = 0;
-        $totalRawPriceWhichHasDiscount = 0 ;
-        $totalRawPriceWhichDoesntHaveDiscount = 0 ;//totalRawPriceWhichDoesntHaveDiscount
+        $totalRawPriceWhichHasDiscount = 0;
+        $totalRawPriceWhichDoesntHaveDiscount = 0;//totalRawPriceWhichDoesntHaveDiscount
 
         foreach ($calculatedOrderproducts as $orderproduct) {
             $orderproductPriceInfo = $calculatedOrderproducts->getNewPriceForItem($orderproduct);
@@ -46,10 +46,10 @@ class AlaaOrderproductSumCalculator extends OrderproductSumCalculator
         }
 
         return [
-            'totalRawPriceWhichHasDiscount'        => $totalRawPriceWhichHasDiscount,
+            'totalRawPriceWhichHasDiscount' => $totalRawPriceWhichHasDiscount,
             'totalRawPriceWhichDoesntHaveDiscount' => $totalRawPriceWhichDoesntHaveDiscount,
-            'sumOfOrderproductsRawCost'            => $sumOfOrderproductsRawPrice,
-            'sumOfOrderproductsCustomerCost'       => $sumOfOrderproductsCustomerPrice,
+            'sumOfOrderproductsRawCost' => $sumOfOrderproductsRawPrice,
+            'sumOfOrderproductsCustomerCost' => $sumOfOrderproductsCustomerPrice,
         ];
     }
 }

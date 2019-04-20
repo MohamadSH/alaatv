@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
-
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -17,10 +16,10 @@ class EventServiceProvider extends ServiceProvider
             //            SendMobileVerificationNotification::class,
             //            SendEmailVerificationNotification::class,
         ],
-        'App\Events\MobileVerified'         => [
+        'App\Events\MobileVerified' => [
             'App\Listeners\MobileVerifiedListener',
         ],
-        'App\Events\FreeInternetAccept'     => [
+        'App\Events\FreeInternetAccept' => [
             'App\Listeners\FreeInternetAcceptListener',
         ],
     ];
@@ -33,7 +32,6 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
         //
     }
 }

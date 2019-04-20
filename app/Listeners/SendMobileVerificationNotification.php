@@ -10,13 +10,13 @@ class SendMobileVerificationNotification
     /**
      * Handle the event.
      *
-     * @param  \Illuminate\Auth\Events\Registered $event
+     * @param \Illuminate\Auth\Events\Registered $event
      *
      * @return void
      */
     public function handle(Registered $event)
     {
-        if ($event->user instanceof MustVerifyMobileNumber && !$event->user->hasVerifiedMobile()) {
+        if ($event->user instanceof MustVerifyMobileNumber && ! $event->user->hasVerifiedMobile()) {
             $event->user->sendMobileVerificationNotification();
         }
     }

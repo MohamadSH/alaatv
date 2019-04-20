@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 class HasOrderproductCheckoutStatus extends FilterAbstract
 {
     protected $attribute = 'checkoutstatus_id';
+
     protected $relation = 'closedorderproducts';
 
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder

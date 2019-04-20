@@ -16,7 +16,6 @@ class DoesntHaveMajor extends FilterAbstract
 
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
-            return $builder->whereNull($this->attribute);
+        return $builder->whereNull($this->attribute);
     }
-
 }

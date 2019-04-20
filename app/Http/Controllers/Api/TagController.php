@@ -45,13 +45,14 @@ class TagController extends Controller
         $tags = json_decode($request->tags);
         $score = $request->score;
 
-        if (is_null($score))
+        if (is_null($score)) {
             $score = 0;
+        }
 
         if (is_null($tags)) {
             return response()->json([
-                                        'error' => "tag is not set!",
-                                    ], 410);
+                'error' => "tag is not set!",
+            ], 410);
         }
 
         $response = null;
@@ -66,16 +67,16 @@ class TagController extends Controller
     {
         if (isset($err)) {
             $response = response()->json([
-                                             'error' => "msg",
-                                         ], 410);
+                'error' => "msg",
+            ], 410);
         }
         $header = [
             'Content-Type' => 'application/json; charset=UTF-8',
-            'charset'      => 'utf-8',
+            'charset' => 'utf-8',
         ];
         $response = response()->json([
-                                         'data' => $result,
-                                     ], 200, $header, JSON_UNESCAPED_UNICODE);
+            'data' => $result,
+        ], 200, $header, JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -95,16 +96,16 @@ class TagController extends Controller
         $this->redis->get($bucket, $id, function ($err, $result) use (& $response) {
             if (isset($err)) {
                 $response = response()->json([
-                                                 'error' => "msg",
-                                             ], 410);
+                    'error' => "msg",
+                ], 410);
             }
             $header = [
                 'Content-Type' => 'application/json; charset=UTF-8',
-                'charset'      => 'utf-8',
+                'charset' => 'utf-8',
             ];
             $response = response()->json([
-                                             'data' => $result,
-                                         ], 200, $header, JSON_UNESCAPED_UNICODE);
+                'data' => $result,
+            ], 200, $header, JSON_UNESCAPED_UNICODE);
         });
 
         return $response;
@@ -173,28 +174,28 @@ class TagController extends Controller
         $tags = str_replace("\"", "", $tags);
         $tags = explode(",", substr($tags, 1, -1));
 
-        $type = !is_null($request->type) ? $request->type : "inter";
-        $limit = !is_null($request->limit) ? $request->limit : 100;
-        $offset = !is_null($request->offset) ? $request->offset : 0;
-        $withscores = !is_null($request->withscores) ? $request->withscores : 0;
-        $order = !is_null($request->order) ? $request->order : "desc";
+        $type = ! is_null($request->type) ? $request->type : "inter";
+        $limit = ! is_null($request->limit) ? $request->limit : 100;
+        $offset = ! is_null($request->offset) ? $request->offset : 0;
+        $withscores = ! is_null($request->withscores) ? $request->withscores : 0;
+        $order = ! is_null($request->order) ? $request->order : "desc";
 
         $response = null;
         $this->redis->tags($bucket, $tags, $limit, $offset, $withscores, $order, $type, function ($err, $result) use (& $response) {
             if (isset($err)) {
                 $response = response()->json([
-                                                 'error' => "msg",
-                                             ], 410);
+                    'error' => "msg",
+                ], 410);
             }
 
             $header = [
                 'Content-Type' => 'application/json; charset=UTF-8',
-                'charset'      => 'utf-8',
+                'charset' => 'utf-8',
             ];
 
             $response = response()->json([
-                                             'data' => $result,
-                                         ], 200, $header, JSON_UNESCAPED_UNICODE);
+                'data' => $result,
+            ], 200, $header, JSON_UNESCAPED_UNICODE);
         });
 
         //dd($response);

@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Filters;
 
-
 class Whatsapp extends FilterAbstract
 {
     protected $attribute = 'whatsapp';

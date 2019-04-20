@@ -8,18 +8,15 @@
 
 namespace App\Traits\User;
 
-
 trait TrackTrait
 {
     public function seensitepages()
     {
-        return $this->belongsToMany('\App\Websitepage', 'userseensitepages', 'user_id', 'websitepage_id')
-                    ->withPivot("created_at", "numberOfVisit");
+        return $this->belongsToMany('\App\Websitepage', 'userseensitepages', 'user_id', 'websitepage_id')->withPivot("created_at", "numberOfVisit");
     }
 
     public function CanSeeCounter(): bool
     {
         return $this->hasRole("admin") ? true : false;
     }
-
 }

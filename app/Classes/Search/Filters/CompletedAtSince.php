@@ -18,5 +18,4 @@ class CompletedAtSince extends FilterAbstract
     {
         return $builder->where($this->attribute, ">=", $value);
     }
-
 }

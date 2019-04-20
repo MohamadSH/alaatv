@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth:api');
@@ -16,7 +15,7 @@ class HomeController extends Controller
     public function debug(Request $request)
     {
         return response()->json([
-            'user'  => $request->user(),
+            'user' => $request->user(),
             'debug' => 2,
         ]);
     }

@@ -16,7 +16,6 @@ class Major extends FilterAbstract
 
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
-            return $builder->whereIn($this->attribute, $value);
+        return $builder->whereIn($this->attribute, $value);
     }
-
 }

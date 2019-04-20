@@ -10,19 +10,18 @@ class IsOrderEmpty
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-        if($request->has("order_id"))
-        {
+        if ($request->has("order_id")) {
             $order = Order::Find($request->order_id);
-            if(isset($order))
-            {
-                if($order->orderproducts->isEmpty())
+            if (isset($order)) {
+                if ($order->orderproducts->isEmpty()) {
                     return redirect(action("Web\OrderController@checkoutReview"));
+                }
             }
         }
 

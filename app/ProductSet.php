@@ -2,7 +2,6 @@
 
 namespace App;
 
-
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -20,6 +19,7 @@ class ProductSet extends Pivot
         'updated_at',
         'deleted_at',
     ];
+
     protected $table = "contentset_product";
     //$p->sets()->updateExistingPivot($s,['order'=>4])
 }

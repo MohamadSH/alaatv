@@ -5,18 +5,18 @@ namespace App;
 /**
  * App\Event
  *
- * @property int                                                                   $id
- * @property string|null                                                           $name        نام رخداد
- * @property string|null                                                           $displayName نام قابل نمایش
- * @property string|null                                                           $description توضیح درباره رخداد
- * @property string|null                                                           $startTime   زمان شروع
- * @property string|null                                                           $endTime     زمان پایان
- * @property int                                                                   $enable      فعال یا غیر فعال بودن
- * @property \Carbon\Carbon|null                                                   $created_at
- * @property \Carbon\Carbon|null                                                   $updated_at
- * @property \Carbon\Carbon|null                                                   $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Eventresult[]      $eventresults
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Survey[]           $surveys
+ * @property int $id
+ * @property string|null $name        نام رخداد
+ * @property string|null $displayName نام قابل نمایش
+ * @property string|null $description توضیح درباره رخداد
+ * @property string|null $startTime   زمان شروع
+ * @property string|null $endTime     زمان پایان
+ * @property int $enable      فعال یا غیر فعال بودن
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Eventresult[] $eventresults
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Survey[] $surveys
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Usersurveyanswer[] $usersurveyanswers
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Event onlyTrashed()
@@ -56,8 +56,7 @@ class Event extends BaseModel
 
     public function surveys()
     {
-        return $this->belongsToMany('\App\Survey')
-                    ->withPivot("order", "enable", "description");
+        return $this->belongsToMany('\App\Survey')->withPivot("order", "enable", "description");
     }
 
     public function usersurveyanswers()
@@ -70,7 +69,8 @@ class Event extends BaseModel
         return $this->hasMany('\App\Eventresult');
     }
 
-    public function scopeName($query , $value){
-        return $query->where('name' , $value);
+    public function scopeName($query, $value)
+    {
+        return $query->where('name', $value);
     }
 }

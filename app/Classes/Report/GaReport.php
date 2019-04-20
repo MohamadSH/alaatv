@@ -8,7 +8,6 @@
 
 namespace App\Classes\Report;
 
-
 use Google_Service_AnalyticsReporting;
 use Google_Service_AnalyticsReporting_DateRange;
 use Google_Service_AnalyticsReporting_Dimension;
@@ -33,40 +32,47 @@ abstract class GaReport implements ReportInterface
      * @var Google_Service_AnalyticsReporting_Metric[]
      */
     protected $metrics;
+
     /**
      * @var Google_Service_AnalyticsReporting_Dimension
      */
     protected $dimension;
+
     /**
      * @var Google_Service_AnalyticsReporting_OrderBy
      */
     protected $orderBy;
+
     /**
      * @var Google_Service_AnalyticsReporting_DimensionFilterClause
      */
     protected $filter;
+
     /**
      * @var Google_Service_AnalyticsReporting_ReportRequest
      */
     protected $request;
+
     /**
      * @var Google_Service_AnalyticsReporting_GetReportsRequest
      */
     protected $body;
+
     /**
      * @var Google_Service_AnalyticsReporting
      */
     protected $analytics;
 
-    public function __construct(Google_Service_AnalyticsReporting $analytics,
-                                Google_Service_AnalyticsReporting_GetReportsRequest $body,
-                                Google_Service_AnalyticsReporting_ReportRequest $request,
-                                Google_Service_AnalyticsReporting_DateRange $dateRange,
-                                $metrics,
-                                Google_Service_AnalyticsReporting_Dimension $dimension,
-                                Google_Service_AnalyticsReporting_OrderBy $orderBy,
-                                Google_Service_AnalyticsReporting_DimensionFilterClause $filter)
-    {
+    public function __construct(
+        Google_Service_AnalyticsReporting $analytics,
+        Google_Service_AnalyticsReporting_GetReportsRequest $body,
+        Google_Service_AnalyticsReporting_ReportRequest $request,
+        Google_Service_AnalyticsReporting_DateRange $dateRange,
+        $metrics,
+        Google_Service_AnalyticsReporting_Dimension $dimension,
+        Google_Service_AnalyticsReporting_OrderBy $orderBy,
+        Google_Service_AnalyticsReporting_DimensionFilterClause $filter
+    ) {
         $this->dateRange = $dateRange;
         $this->metrics = $metrics;
         $this->dimension = $dimension;
@@ -84,13 +90,15 @@ abstract class GaReport implements ReportInterface
     protected function get()
     {
         $this->body->setReportRequests([$this->request]);
+
         return $this->analytics->reports->batchGet($this->body);
     }
-    protected function baseFormat(Google_Service_AnalyticsReporting_GetReportsResponse $reports) :Collection
+
+    protected function baseFormat(Google_Service_AnalyticsReporting_GetReportsResponse $reports): Collection
     {
-        $darray = array();
-        $marray = array();
-        $mkey = array();
+        $darray = [];
+        $marray = [];
+        $mkey = [];
 
         for ($reportIndex = 0; $reportIndex < count($reports); $reportIndex++) {
             $report = $reports[$reportIndex];
@@ -116,17 +124,17 @@ abstract class GaReport implements ReportInterface
                     $marray[] = array_combine($mkey, $values);
                 }
             }
-
         }
 
         $i = 0;
-        $mdarray = array();
-        foreach($darray as $value) {
+        $mdarray = [];
+        foreach ($darray as $value) {
             $mdarray[] = array_merge($value, $marray[$i]);
             $i++;
         }
 
         $out = collect($mdarray);
+
         return $out;
     }
 

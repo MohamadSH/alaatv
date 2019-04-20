@@ -2,18 +2,17 @@
 
 namespace App;
 
-
 /**
  * App\Articlecategory
  *
- * @property int                                                          $id
- * @property string|null                                                  $name        نام دسته بندی
- * @property string|null                                                  $description توضیح دسته بندی مقالات
- * @property int                                                          $enable      فعال بودن یا نبودن دسته
- * @property int                                                          $order       ترتیب دسته
- * @property \Carbon\Carbon|null                                          $created_at
- * @property \Carbon\Carbon|null                                          $updated_at
- * @property \Carbon\Carbon|null                                          $deleted_at
+ * @property int $id
+ * @property string|null $name        نام دسته بندی
+ * @property string|null $description توضیح دسته بندی مقالات
+ * @property int $enable      فعال بودن یا نبودن دسته
+ * @property int $order       ترتیب دسته
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Article[] $articles
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Articlecategory onlyTrashed()
@@ -37,7 +36,6 @@ namespace App;
  */
 class Articlecategory extends BaseModel
 {
-
     protected $fillable = [
         'name',
         'description',

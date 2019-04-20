@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Filters;
 
-
 use Illuminate\Database\Eloquent\Builder;
 
 class IsFree extends FilterAbstract
@@ -19,5 +18,4 @@ class IsFree extends FilterAbstract
     {
         return $builder->where($this->attribute, $value);
     }
-
 }

@@ -8,18 +8,17 @@
 
 namespace App\Classes\Payment\RefinementRequest\Strategies;
 
-use Illuminate\Http\Response;
 use App\Classes\Payment\RefinementRequest\Refinement;
+use Illuminate\Http\Response;
 
 class ChargingWalletRefinement extends Refinement
 {
-
     /**
      * @return Refinement
      */
     function loadData(): Refinement
     {
-        if($this->statusCode!=Response::HTTP_OK) {
+        if ($this->statusCode != Response::HTTP_OK) {
             return $this;
         }
 

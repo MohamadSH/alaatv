@@ -18,6 +18,4 @@ class CompletedAtTill extends FilterAbstract
     {
         return $builder->where($this->attribute, "<=", $value);
     }
-
-
 }

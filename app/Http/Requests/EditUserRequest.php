@@ -12,12 +12,16 @@ use Illuminate\Validation\Rule;
 class EditUserRequest extends FormRequest
 {
     use CharacterCommon;
-    use RequestCommon ;
+    use RequestCommon;
 
     const USER_UPDATE_TYPE_TOTAL = 'total';
+
     const USER_UPDATE_TYPE_PROFILE = 'profile';
+
     const USER_UPDATE_TYPE_ATLOGIN = 'atLogin';
+
     const USER_UPDATE_TYPE_PASSWORD = 'password';
+
     const USER_UPDATE_TYPE_PHOTO = 'photo';
 
     const PHOTO_RULE = '|image|mimes:jpeg,jpg,png|max:512';
@@ -37,11 +41,13 @@ class EditUserRequest extends FormRequest
         $userId = $request->segment(2);
         if ($userId == null) {
             $user = $authenticatedUser;
-            if ($user->isUserProfileLocked())
+            if ($user->isUserProfileLocked()) {
                 $authorized = false;
-        } else if ( $userId !== $authenticatedUser->id &&
-                    !$authenticatedUser->can(config('constants.EDIT_USER_ACCESS'))) {
-            $authorized = false;
+            }
+        } else {
+            if ($userId !== $authenticatedUser->id && ! $authenticatedUser->can(config('constants.EDIT_USER_ACCESS'))) {
+                $authorized = false;
+            }
         }
 
         return $authorized;
@@ -60,50 +66,44 @@ class EditUserRequest extends FormRequest
         switch ($updateType) {
             case self::USER_UPDATE_TYPE_TOTAL :
                 $rules = [
-                    'firstName'     => 'required|max:255',
-                    'lastName'      => 'required|max:255',
-                    'mobile'        => [
+                    'firstName' => 'required|max:255',
+                    'lastName' => 'required|max:255',
+                    'mobile' => [
                         'required',
                         'digits:11',
                         Rule::phone()->mobile()->country('AUTO,IR'),
-                        Rule::unique('users')
-                            ->where(function ($query) use ($userId) {
-                                $query->where('nationalCode', $this->request->get('nationalCode'))
-                                    ->where('id','<>',$userId)
-                                    ->where('deleted_at', null);
-                            }),
+                        Rule::unique('users')->where(function ($query) use ($userId) {
+                            $query->where('nationalCode', $this->request->get('nationalCode'))->where('id', '<>', $userId)->where('deleted_at', null);
+                        }),
                     ],
-                    'nationalCode'  => [
+                    'nationalCode' => [
                         'required',
                         'digits:10',
                         'validate:nationalCode',
-                        Rule::unique('users')
-                            ->where(function ($query) use($userId) {
-                                $query->where('mobile', $this->request->get('mobile'))
-                                    ->where('id','<>',$userId)
-                                    ->where('deleted_at', null);
-                            }),
+                        Rule::unique('users')->where(function ($query) use ($userId) {
+                            $query->where('mobile', $this->request->get('mobile'))->where('id', '<>', $userId)->where('deleted_at', null);
+                        }),
                     ],
-                    'password'      => 'required|confirmed|min:6',
+                    'password' => 'required|confirmed|min:6',
                     'userstatus_id' => 'required|exists:userstatuses,id',
-                    'photo'         => 'sometimes|nullable' . self::PHOTO_RULE,
-                    'postalCode'    => 'sometimes|nullable|numeric',
-                    'email'         => 'sometimes|nullable|email',
-                    'major_id'      => 'sometimes|nullable|exists:majors,id',
-                    'gender_id'     => 'sometimes|nullable|exists:genders,id',
-                    'techCode'      => 'sometimes|nullable|alpha_num|max:5|min:5|unique:users,techCode,' . $userId . ',id',
+                    'photo' => 'sometimes|nullable'.self::PHOTO_RULE,
+                    'postalCode' => 'sometimes|nullable|numeric',
+                    'email' => 'sometimes|nullable|email',
+                    'major_id' => 'sometimes|nullable|exists:majors,id',
+                    'gender_id' => 'sometimes|nullable|exists:genders,id',
+                    'techCode' => 'sometimes|nullable|alpha_num|max:5|min:5|unique:users,techCode,'.$userId.',id',
                 ];
                 break;
             case self::USER_UPDATE_TYPE_PROFILE :
                 $rules = [
                     'postalCode' => 'sometimes|nullable|numeric',
-                    'email'      => 'sometimes|nullable|email',
-                    'photo'      => 'sometimes|nullable' . self::PHOTO_RULE,
+                    'email' => 'sometimes|nullable|email',
+                    'photo' => 'sometimes|nullable'.self::PHOTO_RULE,
                 ];
                 break;
             case self::USER_UPDATE_TYPE_PHOTO :
                 $rules = [
-                    'photo' => 'required' . self::PHOTO_RULE,
+                    'photo' => 'required'.self::PHOTO_RULE,
                 ];
                 break;
             case self::USER_UPDATE_TYPE_ATLOGIN :
@@ -114,19 +114,22 @@ class EditUserRequest extends FormRequest
                 $rules = [];
                 foreach ($afterLoginFields as $afterLoginField) {
                     $rule = 'required';
-                    if (strcmp($afterLoginField, 'email') == 0)
+                    if (strcmp($afterLoginField, 'email') == 0) {
                         $rule .= '|email';
-                    else if (strcmp($afterLoginField, 'photo') == 0)
-                        $rule .= self::PHOTO_RULE;
-                    else
-                        $rule .= '|max:255';
+                    } else {
+                        if (strcmp($afterLoginField, 'photo') == 0) {
+                            $rule .= self::PHOTO_RULE;
+                        } else {
+                            $rule .= '|max:255';
+                        }
+                    }
 
                     $rules[$afterLoginField] = $rule;
                 }
                 break;
             case self::USER_UPDATE_TYPE_PASSWORD :
-                $rules =  [
-                    'password'    => 'required|confirmed|min:6',
+                $rules = [
+                    'password' => 'required|confirmed|min:6',
                     'oldPassword' => 'required',
                 ];
                 break;
@@ -170,13 +173,15 @@ class EditUserRequest extends FormRequest
         $this->replace($input);
     }
 
-    private function refineAfterLoginRequest(array $baseFields){
+    private function refineAfterLoginRequest(array $baseFields)
+    {
 
         $input = $this->request->all();
 
-        foreach ($input as $key  =>  $value){
-            if(!in_array($key , $baseFields) && $value != self::USER_UPDATE_TYPE_ATLOGIN)
-                Arr::pull($input , $key);
+        foreach ($input as $key => $value) {
+            if (! in_array($key, $baseFields) && $value != self::USER_UPDATE_TYPE_ATLOGIN) {
+                Arr::pull($input, $key);
+            }
         }
 
         $this->replace($input);
@@ -188,8 +193,7 @@ class EditUserRequest extends FormRequest
     private function getAfterLoginFields(): array
     {
         $afterLoginFields = Afterloginformcontrol::getFormFields()->pluck('name', 'id')->toArray();
+
         return $afterLoginFields;
     }
-
-
 }

@@ -16,10 +16,10 @@ class Gender extends FilterAbstract
 
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
-        if($value == 0)
+        if ($value == 0) {
             return $builder->whereNull($this->attribute);
-        else
+        } else {
             return $builder->where($this->attribute, $value);
+        }
     }
-
 }

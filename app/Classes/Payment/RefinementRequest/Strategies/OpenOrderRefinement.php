@@ -8,9 +8,9 @@
 
 namespace App\Classes\Payment\RefinementRequest\Strategies;
 
+use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Order;
 use Illuminate\Http\Response;
-use App\Classes\Payment\RefinementRequest\Refinement;
 
 class OpenOrderRefinement extends Refinement
 {
@@ -19,15 +19,16 @@ class OpenOrderRefinement extends Refinement
      */
     function loadData(): Refinement
     {
-        if($this->statusCode!=Response::HTTP_OK) {
+        if ($this->statusCode != Response::HTTP_OK) {
             return $this;
         }
         $openOrder = $this->getOpenOrder();
         $openOrder->load('orderproducts');
 
-        if (!$openOrder->orderproducts->isNotEmpty()) {
+        if (! $openOrder->orderproducts->isNotEmpty()) {
             $this->message = 'سبد خرید شما خالیست';
             $this->statusCode = Response::HTTP_BAD_REQUEST;
+
             return $this;
         }
 

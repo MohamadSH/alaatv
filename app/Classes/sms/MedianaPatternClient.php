@@ -11,10 +11,8 @@ namespace App\Classes\sms;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\GuzzleException;
 
-
 class MedianaPatternClient implements SmsSenderClient
 {
-
     /**
      * The SMS Number to send the message from.
      *
@@ -38,7 +36,6 @@ class MedianaPatternClient implements SmsSenderClient
 
     protected $url;
 
-
     /**
      * The HTTP Client instance.
      *
@@ -53,8 +50,6 @@ class MedianaPatternClient implements SmsSenderClient
         $this->http = $http;
         $this->password = $password;
         $this->url = $url;
-
-
     }
 
     /**
@@ -67,26 +62,27 @@ class MedianaPatternClient implements SmsSenderClient
     {
         $url = $this->url;
         $base = [
-            'user'    => $this->userName,
-            'pass'    => $this->password,
+            'user' => $this->userName,
+            'pass' => $this->password,
             'fromNum' => $this->number,
         ];
-        if (isset($params['from']))
+        if (isset($params['from'])) {
             unset($base["from"]);
+        }
 
         $params = array_merge($base, $params);
         try {
             $response = $this->http->post($url, [
                 'headers' => [
-                    'Accept'     => 'application/json',
+                    'Accept' => 'application/json',
                     'User-Agent' => 'GuzzleHttp/6.3.3 curl/7.52.1',
                 ],
-                'json'    => $params,
+                'json' => $params,
             ]);
-        }
-        catch (GuzzleException $e) {
+        } catch (GuzzleException $e) {
             throw $e;
         }
+
         return json_decode((string)$response->getBody(), true);
     }
 }

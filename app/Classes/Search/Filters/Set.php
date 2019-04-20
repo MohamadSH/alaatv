@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Filters;
 
-
 use Illuminate\Database\Eloquent\Builder;
 
 class Set extends FilterAbstract
@@ -18,6 +17,7 @@ class Set extends FilterAbstract
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         $value = $this->getSearchValue($value);
+
         return $builder->where($this->attribute, $value);
     }
 }

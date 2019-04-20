@@ -16,6 +16,7 @@ class VerifyMobile extends Notification implements ShouldQueue
     use Queueable, SerializesModels;
 
     const MEDIANA_PATTERN_CODE_USER_SEND_VERIFICATION_CODE = 801;
+
     public $timeout = 120;
 
     /**
@@ -26,13 +27,14 @@ class VerifyMobile extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
     public function via($notifiable)
     {
         $this->user = $notifiable;
+
         return [
             MedianaPatternChannel::class,
 
@@ -46,21 +48,14 @@ class VerifyMobile extends Notification implements ShouldQueue
      */
     public function toMediana($notifiable)
     {
-        return (new MedianaMessage())
-            ->content($this->msg())
-            ->setInputData($this->getInputData())
-            ->setPatternCode(self::MEDIANA_PATTERN_CODE_USER_SEND_VERIFICATION_CODE)
-            ->sendAt(Carbon::now());
+        return (new MedianaMessage())->content($this->msg())->setInputData($this->getInputData())->setPatternCode(self::MEDIANA_PATTERN_CODE_USER_SEND_VERIFICATION_CODE)->sendAt(Carbon::now());
     }
 
     private function msg(): string
     {
-        $messageCore = "کد تایید شماره موبایل شما در آلاء:"
-            . "\n"
-            . $this->user->getMobileVerificationCode()
-            . "\n"
-            . "sanatisharif.ir";
+        $messageCore = "کد تایید شماره موبایل شما در آلاء:"."\n".$this->user->getMobileVerificationCode()."\n"."sanatisharif.ir";
         $message = $messageCore;
+
         return $message;
     }
 
