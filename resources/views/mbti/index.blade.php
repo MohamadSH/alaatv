@@ -3,16 +3,16 @@
     <tr>
         <th></th>
         <td>@if(isset($mbtiAnswer->user->id)) @if(isset($mbtiAnswer->user->firstName) && strlen($mbtiAnswer->user->firstName)>0 || isset($mbtiAnswer->user->lastName) && strlen($mbtiAnswer->user->lastName)>0) @if(isset($mbtiAnswer->user->firstName) && strlen($mbtiAnswer->user->firstName)>0) {{ $mbtiAnswer->user->firstName}} @endif @if(isset($mbtiAnswer->user->lastName) && strlen($mbtiAnswer->user->lastName)>0) {{$mbtiAnswer->user->lastName}} @endif @else
-                <span class="label label-sm label-danger"> کاربر ناشناس </span> @endif @endif</td>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> کاربر ناشناس </span> @endif @endif</td>
         <td>@if(isset($mbtiAnswer->user->mobile))  {{$mbtiAnswer->user->mobile}} @else <span
-                    class="label label-sm label-danger">درج نشده </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--danger">درج نشده </span> @endif</td>
         <td>@if(isset($mbtiAnswer->user->city) && strlen($mbtiAnswer->user->city)>0) {{$mbtiAnswer->user->city}} @else
-                <span class="label label-sm label-warning"> درج نشده </span> @endif </td>
+                <span class="m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span> @endif </td>
         <td>@if(strlen($mbtiAnswer->getUserOrderInfo("productName"))>0) {{$mbtiAnswer->getUserOrderInfo("productName")}} @else
-                <span class="label label-sm label-danger">درج نشده </span> @endif</td>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger">درج نشده </span> @endif</td>
         <td>@if(strlen($mbtiAnswer->getUserOrderInfo("orderStatus"))>0)  <span
-                    class="label label-sm label-success"> {{$mbtiAnswer->getUserOrderInfo("orderStatus")}} </span> @else
-                <span class="label label-sm label-danger">درج نشده </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--success"> {{$mbtiAnswer->getUserOrderInfo("orderStatus")}} </span> @else
+                <span class="m-badge m-badge--wide label-sm m-badge--danger">درج نشده </span> @endif</td>
         <td>
             <div class="btn-group">
                 <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown"

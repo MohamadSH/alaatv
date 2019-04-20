@@ -58,11 +58,11 @@
                     @foreach($productPhotos as $photo)
                         <tr class="text-center">
                             <td>@if(isset($photo->order)){{$photo->order}}@else <span
-                                        class="label label-sm label-danger"> ندارد </span> @endif</td>
+                                        class="m-badge m-badge--wide label-sm m-badge--danger"> ندارد </span> @endif</td>
                             <td>@if(isset($photo->title[0])){{$photo->title}}@else <span
-                                        class="label label-sm label-danger"> نا مشخص </span> @endif</td>
+                                        class="m-badge m-badge--wide label-sm m-badge--danger"> نا مشخص </span> @endif</td>
                             <td>@if(isset($photo->description[0])){{$photo->description}}@else <span
-                                        class="label label-sm label-danger"> نا مشخص </span> @endif</td>
+                                        class="m-badge m-badge--wide label-sm m-badge--danger"> نا مشخص </span> @endif</td>
                             <td>
                                 <div class="mt-element-overlay">
                                     <div class="mt-overlay-1">
@@ -106,8 +106,8 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>@if($photo->enable) <span class="label label-sm label-success"> فعال </span> @else <span
-                                        class="label label-sm label-danger"> غیر فعال </span>  @endif</td>
+                            <td>@if($photo->enable) <span class="m-badge m-badge--wide label-sm m-badge--success"> فعال </span> @else <span
+                                        class="m-badge m-badge--wide label-sm m-badge--danger"> غیر فعال </span>  @endif</td>
                             <td>
                                 @permission((config('constants.EDIT_PRODUCT_SAMPLE_PHOTO_ACCESS')))
                                 <a class = "btn btn-info" href = "{{action("Web\ProductphotoController@edit" , $photo)}}">

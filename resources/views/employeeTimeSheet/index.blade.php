@@ -51,9 +51,9 @@
                         isset($employeeTimeSheet->overtime_confirmation) &&
                         $employeeTimeSheet->overtime_confirmation==1
                     )
-                            {{ $employeeTimeSheet->obtain_work_and_shift_diff_in_hour }} <span class="label label-sm label-success"> اضافه کاری تایید شده </span>
+                            {{ $employeeTimeSheet->obtain_work_and_shift_diff_in_hour }} <span class="m-badge m-badge--wide label-sm m-badge--success"> اضافه کاری تایید شده </span>
                     @else
-                            {{ $employeeTimeSheet->obtain_work_and_shift_diff_in_hour }} <span class="label label-sm label-danger"> اضافه کاری تایید نشده </span>
+                            {{ $employeeTimeSheet->obtain_work_and_shift_diff_in_hour }} <span class="m-badge m-badge--wide label-sm m-badge--danger"> اضافه کاری تایید نشده </span>
                     @endif
                 @endif
             @else
@@ -68,24 +68,24 @@
         <td>{{ $employeeTimeSheet->clockOut }}</td>
         <td>{{ $employeeTimeSheet->breakDurationInSeconds }} </td>
         <td>@if(isset($employeeTimeSheet->timeSheetLock)) {{ $employeeTimeSheet->timeSheetLock }} @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         @permission((Config::get('constants.LIST_EMPLOPYEE_WORK_SHEET')))
         <td>@if(isset($employeeTimeSheet->isPaid)) {{ $employeeTimeSheet->isPaid }} @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         @endpermission
         <td>@if(isset($employeeTimeSheet->workdaytype_id)) {{ $employeeTimeSheet->workdaytype->displayName }} @else
-                <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($employeeTimeSheet->employeeComment[0])) {!!   $employeeTimeSheet->employeeComment !!} @else <span
-                    class="label label-sm label-info"> ندارد </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--info"> ندارد </span> @endif</td>
         <td>@if(isset($employeeTimeSheet->managerComment[0])) {!! $employeeTimeSheet->managerComment !!} @else <span
-                    class="label label-sm label-info"> ندارد </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--info"> ندارد </span> @endif</td>
         @permission((Config::get('constants.LIST_EMPLOPYEE_WORK_SHEET')))
         <td>@if(isset($employeeTimeSheet->updated_at)) {{ $employeeTimeSheet->updated_at }} @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($employeeTimeSheet->modifier_id)) {{ $employeeTimeSheet->getModifierFullName() }} @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($employeeTimeSheet->created_at)) {{ $employeeTimeSheet->created_at }} @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         @endpermission
     </tr>
 @endforeach

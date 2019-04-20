@@ -9,7 +9,7 @@
                          alt="عکس پروفایل" @endif>
                     <a href = "{{action("Web\UseruploadController@show" , $question)}}"
                        class="item-name primary-link">@if(isset($question->user->id)) @if(isset($question->user->firstName) && strlen($question->user->firstName)>0 || isset($question->user->lastName) && strlen($question->user->lastName)>0) @if(isset($question->user->firstName) && strlen($question->user->firstName)>0) {{ $question->user->firstName}} @endif @if(isset($question->user->lastName) && strlen($question->user->lastName)>0) {{$question->user->lastName}} @endif @else
-                            <span class="label label-sm label-danger"> کاربر ناشناس </span> @endif @endif</a>
+                            <span class="m-badge m-badge--wide label-sm m-badge--danger"> کاربر ناشناس </span> @endif @endif</a>
                     <span class="item-label">پرسیده شده در {{$question->CreatedAt_Jalali()}}</span>
                 </div>
                 @if(strcmp($question->useruploadstatus->name , "pending") == 0)
@@ -33,8 +33,8 @@
             <th></th>
             <td>@if(isset($question->user->id)) @if(strlen($question->user->reverse_full_name) > 0) <a
                         target="_blank" href = "{{action("Web\UserController@edit" , $question->user)}}">{{$question->user->reverse_full_name}}</a> @else
-                    <span class="label label-sm label-danger"> درج نشده </span> @endif @endif</td>
-            <td>@if(strlen($question->title) > 0)  {{$question->title}} @else <span class="label label-sm label-danger">بدون عنوان </span> @endif
+                    <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif @endif</td>
+            <td>@if(strlen($question->title) > 0)  {{$question->title}} @else <span class="m-badge m-badge--wide label-sm m-badge--danger">بدون عنوان </span> @endif
             </td>
             <td style="direction: ltr">
                 <div id="jquery_jplayer_{{$counter}}" class="jp-jplayer"></div>
@@ -68,7 +68,7 @@
                                                                                 id="link_{{$counter}}"
                                                                                 class="btn btn-icon-only blue"><i
                             class="fa fa-download"></i></a>@else <span
-                        class="label label-sm label-danger"> بدون فایل </span> @endif </td>
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> بدون فایل </span> @endif </td>
             <td style="width: 20%">
                 {!! Form::model($question, ['method' => 'PUT', 'action' => ['UseruploadController@update', $question] , 'id' => 'useruploadForm_'.$question->id]) !!}
                 <div class="input-group">

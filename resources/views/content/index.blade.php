@@ -7,7 +7,7 @@
                     <div class="col1">
                         <div class="cont">
                             <div class="cont-col1">
-                                <div class="label label-sm label-danger">
+                                <div class="m-badge m-badge--wide label-sm m-badge--danger">
                                     <i class="fa fa-file-pdf-o"></i>
                                 </div>
                             </div>
@@ -34,25 +34,25 @@
             <th></th>
             {{--        @if(isset($columns) && in_array("name",$columns))--}}
             <td>@if(isset($item->name[0])) <a target="_blank" href = "{{action("Web\ContentController@show" , $item)}}"> {{ $item->name }} </a> @else
-                    <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
+                    <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
             {{--@endif--}}
             {{--        @if(isset($columns) && in_array("order",$columns))--}}
-            {{--            <td>@if(isset($item->order)) {{ $item->order }} @else <span class="label label-sm label-danger"> درج نشده </span> @endif </td>--}}
+            {{--            <td>@if(isset($item->order)) {{ $item->order }} @else <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>--}}
             {{--@endif--}}
             {{--        @if(isset($columns) && in_array("enable",$columns))--}}
             <td>@if(isset($item->enable) && $item->enable) <span
-                        class="label label-sm label-success">  فعال </span> @else <span
-                        class="label label-sm label-danger"> غیر فعال </span> @endif</td>
+                        class="m-badge m-badge--wide label-sm m-badge--success">  فعال </span> @else <span
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> غیر فعال </span> @endif</td>
             {{--@endif--}}
             {{--@if(isset($columns) && in_array("grade",$columns))--}}
-            {{--<td>@if($item->grades->isNotEmpty()) @foreach($item->grades as $grade){{$grade->displayName}} @endforeach @else<span class="label label-sm label-danger">  درج نشده </span>@endif</td>--}}
+            {{--<td>@if($item->grades->isNotEmpty()) @foreach($item->grades as $grade){{$grade->displayName}} @endforeach @else<span class="m-badge m-badge--wide label-sm m-badge--danger">  درج نشده </span>@endif</td>--}}
             {{--@endif--}}
             {{--@if(isset($columns) && in_array("major",$columns))--}}
-            {{--<td>@if($item->majors->isNotEmpty()) {{$item->major->name}} @else<span class="label label-sm label-danger">  درج نشده </span>@endif</td>--}}
+            {{--<td>@if($item->majors->isNotEmpty()) {{$item->major->name}} @else<span class="m-badge m-badge--wide label-sm m-badge--danger">  درج نشده </span>@endif</td>--}}
             {{--@endif--}}
             {{--@if(isset($columns) && in_array("contentType",$columns))--}}
             <td>@if(isset($item->contenttype->id)) {{$item->contenttype->displayName}} @else<span
-                        class="label label-sm label-danger">  نامشخص </span>@endif</td>
+                        class="m-badge m-badge--wide label-sm m-badge--danger">  نامشخص </span>@endif</td>
             {{--@endif--}}
             {{--@if(isset($columns) && in_array("file",$columns))--}}
             <td>
@@ -95,21 +95,21 @@
                             <button type="button" data-dismiss="modal" class="btn btn-outline dark">بستن</button>
                         </div>
                     </div>
-                @else <span class="label label-sm label-danger"> درج نشده </span>
+                @else <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span>
                 @endif
             </td>
             {{--@endif--}}
             {{--@if(isset($columns) && in_array("validSince",$columns))--}}
             <td class="center">@if(isset($item->validSince)) {{ $item->validSince_Jalali() }} @else <span
-                        class="label label-sm label-danger"> درج نشده </span> @endif </td>
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
             {{--@endif--}}
             {{--@if(isset($columns) && in_array("created_at",$columns))--}}
             <td class="center">@if(isset($item->created_at)) {{ $item->CreatedAt_Jalali() }}  @else <span
-                        class="label label-sm label-danger"> درج نشده </span> @endif </td>
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
             {{--@endif--}}
             {{--@if(isset($columns) && in_array("updated_at",$columns))--}}
             <td class="center">@if(isset($item->updated_at)) {{ $item->UpdatedAt_Jalali() }}  @else <span
-                        class="label label-sm label-danger"> درج نشده </span> @endif </td>
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
             {{--@endif--}}
             {{--@if(isset($columns) && in_array("action",$columns))--}}
             <td>

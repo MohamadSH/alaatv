@@ -66,7 +66,7 @@
                     </span>
                 @endif
                 <span class="help-block bold">
-                    <span class="label label-sm label-info"><strong>توجه!</strong></span>بهترین اندازه 500*1280 است
+                    <span class="m-badge m-badge--wide label-sm m-badge--info"><strong>توجه!</strong></span>بهترین اندازه 500*1280 است
                 </span>
             </div>
         </div>

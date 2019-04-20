@@ -108,7 +108,9 @@
                                                 <div class="col-lg-3 col-md-3" id="columnFilter">
                                                     @include("admin.filters.columnFilter" , ["id" => "userTableColumnFilter"])
                                                 </div>
-                                                @include('admin.filters.sort')
+                                                <div class="col-lg-9 col-md-9">
+                                                    @include('admin.filters.sort')
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -135,7 +137,6 @@
                                                 <i class="fa fa-plus"></i>
                                                 افزودن کاربر
                                             </a>
-
                                             <!--begin::Modal-->
                                             <div class="modal fade" id="responsive-user" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">

@@ -51,7 +51,7 @@
                         {!! Form::text('clockIn', null, ['class' => 'form-control text-center', 'id' => 'clockIn' , 'placeholder'=>'00:00' , 'dir'=>'ltr' ]) !!}
                     </div>
                     <div class="col-md-5 col-sm-5 col-xs-12 text-stat text-center">
-                        <span class="label label-sm label-info"> شروع شیفت: @if(isset($employeeSchedule)){{$employeeSchedule->beginTime}}@endif </span>
+                        <span class="m-badge m-badge--wide label-sm m-badge--info"> شروع شیفت: @if(isset($employeeSchedule)){{$employeeSchedule->beginTime}}@endif </span>
                     </div>
                 </div>
             </div>
@@ -78,7 +78,7 @@
                         {!! Form::text('clockOut', null, ['class' => 'form-control text-center', 'id' => 'clockOut' , 'placeholder'=>'00:00' , 'dir'=>'ltr' ]) !!}
                     </div>
                     <div class="col-md-5 col-sm-5 col-xs-12 text-stat">
-                    <span class="label label-sm label-info text-center"> پایان شیفت: @if(isset($employeeSchedule)){{$employeeSchedule->finishTime}}@endif </span>
+                    <span class="m-badge m-badge--wide label-sm m-badge--info text-center"> پایان شیفت: @if(isset($employeeSchedule)){{$employeeSchedule->finishTime}}@endif </span>
                 </div>
                 </div>
             </div>

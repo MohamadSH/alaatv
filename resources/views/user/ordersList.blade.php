@@ -167,21 +167,21 @@
                                                             @if(isset($order->cost) || isset($order->costwithoutcoupon))
                                                                 {{number_format($order->price )}}
                                                             @else
-                                                                <span class = "label label-info">بدون مبلغ</span>
+                                                                <span class = "label m-badge--info">بدون مبلغ</span>
                                                             @endif
                                                         </td>
                                                         <td class = "d-none d-md-table-cell d-lg-table-cell">
                                                             @if(isset($order->cost) || isset($order->costwithoutcoupon))
                                                                 {{number_format($order->totalPaidCost() + $order->totalRefund())}}
                                                             @else
-                                                                <span class = "label label-info">بدون مبلغ</span>
+                                                                <span class = "label m-badge--info">بدون مبلغ</span>
                                                             @endif
                                                         </td>
                                                         <td>
                                                             @if(isset($order->completed_at))
                                                                 {{$order->CompletedAt_Jalali()}}
                                                             @else
-                                                                <span class = "label label-info">درج نشده</span>
+                                                                <span class = "label m-badge--info">درج نشده</span>
                                                             @endif
                                                         </td>
                                                         <td class = "text-center">
@@ -669,7 +669,7 @@
             </div>
             <div class = "row static-info margin-top-20">
                 <div class = "col-md-12">
-                    <span class = "label label-info ">کاربر گرامی</span>
+                    <span class = "label m-badge--info ">کاربر گرامی</span>
                     <span class = "bold bold font-blue-dark">یکی از دو شماره ی زیر را از رسید عابر بانک با دقت وارد نموده و ثبت اطلاعات را بزنید .</span>
                 </div>
             </div>

@@ -3,11 +3,11 @@
     <tr>
         <th></th>
         <td>@if(isset($item->name) && strlen($item->name)>0) <a target="_blank" href = "{{action("Web\ProductController@show" , $item)}}"> {{ $item->name }} </a> @else
-                <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
         <td>@if(isset($item->basePrice) && strlen($item->basePrice)>0) {{ $item->basePrice }} @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif </td>
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
         <td>@if(isset($item->discount) ) {{$item->discount}} @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif
         </td>
         <td>
             <div class="mt-element-overlay">
@@ -52,7 +52,7 @@
         <td style="text-align: center">@if(isset($item->shortDescription) && strlen($item->shortDescription)>0)
                 <button class="btn blue" data-target="#static-shortDescription-{{$item->id}}" data-toggle="modal">
                     نمایش
-                </button> @else <span class="label label-sm label-danger"> درج نشده </span> @endif
+                </button> @else <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif
             <div id="static-shortDescription-{{$item->id}}" class="modal fade" tabindex="-1" data-backdrop="static"
                  data-keyboard="false">
                 <div class="modal-body" style="text-align: right">
@@ -66,7 +66,7 @@
         <td style="text-align: center">@if(isset($item->longDescription) && strlen($item->longDescription)>0)
                 <button class="btn blue" data-target="#static-longDescription-{{$item->id}}" data-toggle="modal">
                     نمایش
-                </button> @else <span class="label label-sm label-danger"> درج نشده </span> @endif
+                </button> @else <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif
             <div id="static-longDescription-{{$item->id}}" class="modal fade" tabindex="-1" data-backdrop="static"
                  data-keyboard="false">
                 <div class="modal-body" style="text-align: right">
@@ -78,39 +78,36 @@
             </div>
         </td>
         <td>@if(isset($item->producttype->id)) @if(strlen($item->producttype->name)>0) {{ $item->producttype->displayName }} @else {{ $item->producttype->id }} @endif @else
-                <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($item->enable) && $item->enable) <span
-                    class="label label-sm label-success">  فعال </span> @else <span
-                    class="label label-sm label-danger"> غیر فعال </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--success">  فعال </span> @else <span
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> غیر فعال </span> @endif</td>
         <td>@if(isset($item->amount) ) {{$item->amount}} @else  بدون محدودیت  @endif</td>
         <td>@if(isset($item->file) && strlen($item->file)>0)
                 <a target="_blank" href = "{{action("Web\HomeController@download" , ["content"=>"کاتالوگ محصول","fileName"=>$item->file ])}}"
                    class="btn btn-icon-only blue"><i class="fa fa-download"></i></a>@else <span
-                        class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($item->slogan) && strlen($item->slogan)>0) {!!   $item->slogan !!} @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($item->order) && strlen($item->order)>0) {!!   $item->order !!} @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($item->attributeset->id)) @if(strlen($item->attributeset->name)>0) {{ $item->attributeset->name }} @else {{ $item->producttype->id }} @endif @else
-                <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td class="center">@if(isset($item->validSince) && strlen($item->validSince)>0) {{ $item->validSince_Jalali() }} @else
-                <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
         <td class="center">@if(isset($item->validUntil) && strlen($item->validUntil)>0) {{ $item->validUntil_Jalali() }} @else
-                <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
         <td class="center">@if(isset($item->created_at) && strlen($item->created_at)>0) {{ $item->CreatedAt_Jalali() }}  @else
-                <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
         <td class="center">@if(isset($item->updated_at) && strlen($item->updated_at)>0) {{ $item->UpdatedAt_Jalali() }}  @else
-                <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
         <td class="center">@if(!$item->bons->isEmpty()) {{$item->bons->first()->pivot->bonPlus}} @else <span
-                    class="label label-sm label-warning"> بدون بن </span> @endif </td>
+                    class="m-badge m-badge--wide label-sm m-badge--warning"> بدون بن </span> @endif </td>
         <td class="center">@if(!$item->bons->isEmpty()) {{$item->bons->first()->pivot->discount}} @else <span
-                    class="label label-sm label-warning"> بدون بن </span> @endif </td>
+                    class="m-badge m-badge--wide label-sm m-badge--warning"> بدون بن </span> @endif </td>
         <td>
             <div class="btn-group">
-                <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown"
-                        aria-expanded="false"> عملیات
-                    <i class="fa fa-angle-down"></i>
-                </button>
+                <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> عملیات</button>
                 <ul class="dropdown-menu" role="menu">
                     @permission((config('constants.SHOW_PRODUCT_ACCESS')))
                     <li>

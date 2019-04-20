@@ -33,7 +33,7 @@
                                 <div class="col-md-9">
                                     {{--{!! Form::select('relative_id', $relatives , null, ['class' => 'form-control', 'id' => 'relative_id', 'placeholder' => 'سایر']) !!}--}}
                                     <text class="form-control-static">@if(isset($contact->relative->id)) {{$contact->relative->displayName}} @else
-                                            <span class="label label-sm label-info">نام مشخص</span> @endif</text>
+                                            <span class="m-badge m-badge--wide label-sm m-badge--info">نام مشخص</span> @endif</text>
                                 </div>
                                 @if ($errors->has('relative'))
                                     <span class="help-block">

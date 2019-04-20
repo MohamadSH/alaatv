@@ -3,11 +3,11 @@
     <tr id="{{$slide->id}}">
         <td> {{$slide->order}} </td>
         <td id="slideName_{{$slide->id}}">@if(isset($slide->title) && strlen($slide->title)>0) {{$slide->title}} @else
-                <span class="label label-sm label-info">ندارد</span> @endif</td>
+                <span class="m-badge m-badge--wide label-sm m-badge--info">ندارد</span> @endif</td>
         <td>@if(isset($slide->shortDescription) && strlen($slide->shortDescription)>0) {{$slide->shortDescription}} @else
-                <span class="label label-sm label-info">ندارد</span> @endif</td>
+                <span class="m-badge m-badge--wide label-sm m-badge--info">ندارد</span> @endif</td>
         <td>@if(isset($slide->link)) <a target="_blank" href="{{$slide->link}}"></a> {{$slide->link}} @else <span
-                    class="label label-sm label-info">ندارد</span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--info">ندارد</span> @endif</td>
         <td>
             @if(isset($slide->photo) && strlen($slide->photo)>0)
                 <div class="mt-element-overlay">
@@ -62,14 +62,14 @@
                     </div>
                 </div>
             @else
-                <span class="label label-sm label-warning"> ندارد </span>
+                <span class="m-badge m-badge--wide label-sm m-badge--warning"> ندارد </span>
             @endif
         </td>
         <td>
             @if($slide->isEnable)
-                <span class="label label-sm label-success"> فعال </span>
+                <span class="m-badge m-badge--wide label-sm m-badge--success"> فعال </span>
             @else
-                <span class="label label-sm label-warning"> غیرفعال </span>
+                <span class="m-badge m-badge--wide label-sm m-badge--warning"> غیرفعال </span>
             @endif
         </td>
         <td>

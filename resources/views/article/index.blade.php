@@ -26,7 +26,7 @@
                     <div class="col1">
                         <div class="cont">
                             <div class="cont-col1">
-                                <div class="label label-sm label-danger">
+                                <div class="m-badge m-badge--wide label-sm m-badge--danger">
                                     <i class="fa fa-file-pdf-o"></i>
                                 </div>
                             </div>
@@ -52,7 +52,7 @@
             <th></th>
             <td>@if(isset($article->title) && strlen($article->title)>0) <a href = "{{action("Web\ArticleController@show", $article->id)}}">{{ $article->title}}</a> @else
                     <span
-                        class="label label-sm label-danger"> درج نشده </span> @endif </td>
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
             <td>
                 <div class="mt-element-overlay">
                     <div class="mt-overlay-1">
@@ -93,13 +93,13 @@
                 </div>
             </td>
             <td>@if(isset($article->articlecategory_id) && strlen($article->articlecategory_id)>0) {{ $article->articlecategory->name}} @else
-                    <span class="label label-sm label-warning"> بدون دسته </span> @endif </td>
-            <td>@if(isset($article->order)) {{ $article->order}} @else <span class="label label-sm label-danger"> بدون ترتیب </span> @endif
+                    <span class="m-badge m-badge--wide label-sm m-badge--warning"> بدون دسته </span> @endif </td>
+            <td>@if(isset($article->order)) {{ $article->order}} @else <span class="m-badge m-badge--wide label-sm m-badge--danger"> بدون ترتیب </span> @endif
             </td>
             <td>@if(isset($article->brief) && strlen($article->brief)>0) {{ $article->brief}} @else <span
-                        class="label label-sm label-danger"> درج نشده </span> @endif </td>
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
             <td>@if(isset($article->updated_at) && strlen($article->updated_at)>0) {{ $article->UpdatedAt_Jalali()}} @else
-                    <span class="label label-sm label-danger"> درج نشده </span> @endif </td>
+                    <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
             <td>
                 <div class="btn-group">
                     <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown"

@@ -63,12 +63,12 @@
                                     <tr>
                                         <td> {{$counter}} </td>
                                         <td>@if(strlen($question->title) > 0)  {{$question->title}} @else <span
-                                                    class="label label-sm label-danger">بدون عنوان </span> @endif</td>
+                                                    class="m-badge m-badge--wide label-sm m-badge--danger">بدون عنوان </span> @endif</td>
                                         <td> @if(strlen($question->file) > 0)  <a target="_blank" href = "{{action("Web\HomeController@download" , ["content"=>"سؤال مشاوره ای","fileName"=>$question->file ])}}"
                                                                                   id="link_{{$counter}}"
                                                                                   class="btn btn-icon-only blue"><i
                                                         class="fa fa-download"></i></a>@else <span
-                                                    class="label label-sm label-danger"> بدون فایل </span> @endif </td>
+                                                    class="m-badge m-badge--wide label-sm m-badge--danger"> بدون فایل </span> @endif </td>
                                         <td style="direction: ltr">
                                             <div id="jquery_jplayer_{{$counter}}" class="jp-jplayer"></div>
                                             <div id="jp_container_{{$counter++}}" class="jp-audio-stream"
@@ -104,10 +104,10 @@
                                             </div>
                                         </td>
                                         <td>@if(isset($question->useruploadstatus->id)) @if(strcmp($question->useruploadstatus->name , "done")==0)
-                                                <span class="label label-sm label-success">پاسخ داده شده </span> @elseif(strcmp($question->useruploadstatus->name , "processing")==0)
-                                                <span class="label label-sm label-warning">در حال بررسی مشاور </span> @elseif(strcmp($question->useruploadstatus->name , "pending")==0)
-                                                <span class="label label-sm label label-default">مشاور ندیده</span> @endif
-                                            @else <span class="label label-sm label-warning">نامشخص </span> @endif</td>
+                                                <span class="m-badge m-badge--wide label-sm m-badge--success">پاسخ داده شده </span> @elseif(strcmp($question->useruploadstatus->name , "processing")==0)
+                                                <span class="m-badge m-badge--wide label-sm m-badge--warning">در حال بررسی مشاور </span> @elseif(strcmp($question->useruploadstatus->name , "pending")==0)
+                                                <span class="m-badge m-badge--wide label-sm label m-badge--metal">مشاور ندیده</span> @endif
+                                            @else <span class="m-badge m-badge--wide label-sm m-badge--warning">نامشخص </span> @endif</td>
                                         <td>
                                             {{$question->CreatedAt_Jalali()}}
                                         </td>
