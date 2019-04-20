@@ -12,46 +12,25 @@ use Zarinpal\Zarinpal as ZarinpalClient;
 
 class ZarinPal
 {
-    public function interactWithZarinPal(string $paymentMethod, string $device, int $cost, string $description, Transaction $transaction): array
+    public function getRedirectionData(string $paymentMethod, string $device, int $cost, string $description, Transaction $transaction)
     {
-        [$transactionGateway, $gateway] = $this->buildZarinPalGateway();
+        $GatewayCredentials = $this->getGateWayCredentials()->orFailWith(Responses::gateWayNotFoundError());
+        $gatewayComposer = $this->initializeZarinPalClient($GatewayCredentials);
 
         /**
          * @var $gateway
          */
         $callbackUrl = $this->getCallbackUrl($paymentMethod, $device);
 
-        $authority = $this->paymentRequest($gateway, $callbackUrl, $cost, $description);
+        $authority = $this->paymentRequest($gatewayComposer, $callbackUrl, $cost, $description);
 
-        $transactionModifyResult = $this->setAuthorityForTransaction($authority, $transactionGateway->id, $transaction, $description);
+        $transactionModifyResult = $this->setAuthorityForTransaction($authority, $GatewayCredentials->id, $transaction, $description);
 
         if ($transactionModifyResult['statusCode'] != Response::HTTP_OK) {
             Responses::editTransactionError();
         }
 
-        return $this->getRedirectData($gateway->redirectUrl());
-    }
-
-    /**
-     * @param bool $withSandBox
-     *
-     * @return mixed
-     */
-    public function buildZarinPalGateway(bool $withSandBox = true)
-    {
-        $transactionGateWay = $this->getGateWayCredentials()->getValue(function () {
-            Responses::gateWayNotFoundError();
-        });
-      /*
-        if (is_null($transactionGateWay)) {
-            Responses::gateWayNotFoundError();
-        }
-      */
-
-        return [
-          $transactionGateWay,
-          $this->initializeZarinPalClient($withSandBox, $transactionGateWay),
-        ];
+        return $this->getRedirectData($gatewayComposer->redirectUrl());
     }
 
     /**
@@ -90,7 +69,7 @@ class ZarinPal
      * @param string $description
      * @return string
      */
-    public function paymentRequest(ZarinpalClient $gatewayComposer, string $callbackUrl, int $amount, string $description): string
+    private function paymentRequest(ZarinpalClient $gatewayComposer, string $callbackUrl, int $amount, string $description)
     {
         $zarinpalResponse = $gatewayComposer->request($callbackUrl, $amount, $description);
         $authority = $zarinpalResponse['Authority'];
@@ -126,7 +105,7 @@ class ZarinPal
      * @param string $redirectUrl
      * @return array
      */
-    public function getRedirectData(string $redirectUrl): array
+    private function getRedirectData(string $redirectUrl): array
     {
         return [
             'url' => $redirectUrl,
@@ -140,7 +119,7 @@ class ZarinPal
      * @param string $device
      * @return string
      */
-    public function getCallbackUrl(string $paymentMethod, string $device): string
+    public function getCallbackUrl(string $paymentMethod, string $device)
     {
         return action('Web\OnlinePaymentController@verifyPayment', ['paymentMethod' => $paymentMethod, 'device' => $device]);
     }
@@ -150,10 +129,10 @@ class ZarinPal
      * @param \App\Transactiongateway $transactionGateWay
      * @return \Zarinpal\Zarinpal
      */
-    private function initializeZarinPalClient(bool $withSandBox, Transactiongateway $transactionGateWay): \Zarinpal\Zarinpal
+    private function initializeZarinPalClient(Transactiongateway $transactionGateWay): \Zarinpal\Zarinpal
     {
         $gatewayComposer = new ZarinpalClient($transactionGateWay->merchantNumber);
-        if ($this->isZarinpalSandboxOn() && $withSandBox) {
+        if ($this->isZarinpalSandboxOn()) {
             $gatewayComposer->enableSandbox();
         }
 

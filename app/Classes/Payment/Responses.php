@@ -2,7 +2,6 @@
 
 namespace App\Classes\Payment;
 
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 
 class Responses
@@ -19,7 +18,7 @@ class Responses
 
     public static function noResponseFromBackError()
     {
-        return self::sendErrorResponse('پاسخی از بانک دریافت نشد', Response::HTTP_SERVICE_UNAVAILABLE);
+        return self::sendErrorResponse('پاسخی از بانک دریافت نشد.', Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
     public static function editTransactionError()

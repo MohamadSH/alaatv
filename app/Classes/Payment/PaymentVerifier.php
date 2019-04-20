@@ -30,7 +30,7 @@ class PaymentVerifier
                 ->getTransaction($paymentData['Authority'])
                 ->orFailWith(Responses::transactionNotFoundError());
             $gatewayResult = \Facades\App\Classes\Payment\ZarinPal::buildZarinpalGateway($paymentMethod);
-            /** @var ZarinpalComposer $gateway */
+
             $gateway = $gatewayResult['gatewayComposer'];
 
             $amount = isset($transaction->wallet_id) ? ($transaction->cost * -1) : $transaction->cost;
