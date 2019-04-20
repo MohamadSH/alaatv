@@ -3,18 +3,18 @@
     <tr>
         <th></th>
         <td>@if(isset($role->name) && strlen($role->name)>0 ) {{ $role->name }}  @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($role->display_name) && strlen($role->display_name)>0 ) {{ $role->display_name }}  @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($role->description) && strlen($role->description)>0 ) {{ $role->description }}  @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($role->created_at) && strlen($role->created_at)>0) {{ $role->CreatedAt_Jalali() }} @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($role->updated_at) && strlen($role->updated_at)>0) {{ $role->UpdatedAt_Jalali() }} @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>
             @if(sizeof($role->permissions) == 0)
-                <span class="label label-sm label-danger"> درج نشده </span>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span>
             @else
                 @foreach($role->permissions as $permission)
                     <br>
@@ -25,10 +25,7 @@
         <td>
             @if(!$role->isDefault)
                 <div class="btn-group">
-                    <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown"
-                            aria-expanded="false"> عملیات
-                        <i class="fa fa-angle-down"></i>
-                    </button>
+                    <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> عملیات</button>
                     <ul class="dropdown-menu" role="menu">
                         @role((config("constants.ROLE_ADMIN")))
                         <li>

@@ -68,32 +68,32 @@
         <tr>
             <th></th>
             <td>@if(isset($assignment->name) && strlen($assignment->name)>0) {{ $assignment->name }} @else <span
-                        class="label label-sm label-danger"> درج نشده </span> @endif </td>
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
             <td>@if(isset($assignment->description) && strlen($assignment->description)>0) {!!   $assignment->description !!} @else
-                    <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
             <td>@if(isset($assignment->major->id)) @if(strlen($assignment->major->name)>0) {{ $assignment->major->name }} @else {{ $assignment->major->id }} @endif @else
-                    <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
             <td>@if(isset($assignment->numberOfQuestions) && strlen($assignment->numberOfQuestions)>0) {{ $assignment->numberOfQuestions }} @else
-                    <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
             <td>@if(isset($assignment->questionFile) && strlen($assignment->questionFile)>0) <a href = "{{action("Web\HomeController@download" , ["content"=>"تمرین","fileName"=>$assignment->questionFile ])}}">
-                    دانلود </a> @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    دانلود </a> @else <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
             <td>@if(isset($assignment->solutionFile) && strlen($assignment->solutionFile)>0) <a href = "{{action("Web\HomeController@download" , ["content"=>"پاسخ تمرین","fileName"=>$assignment->solutionFile ])}}">
-                    دانلود </a> @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    دانلود </a> @else <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
             <td>@if(isset($assignment->analysisVideoLink) && strlen($assignment->analysisVideoLink)>0) <a
                         href="{{ $assignment->analysisVideoLink }}"> دانلود </a> @else <span
-                        class="label label-sm label-danger"> درج نشده </span> @endif </td>
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
             <td>
                 @if(isset($assignment->assignmentstatus->id))
-                    <span class="label label-sm  @if($assignment->assignmentstatus->id == 1) label-success @elseif($assignment->assignmentstatus->id == 2) label-warning @endif">@if(strlen($assignment->assignmentstatus->name)>0)  {{ $assignment->assignmentstatus->name }} @else {{ $assignment->assignmentstatus->id }} @endif </span>
+                    <span class="m-badge m-badge--wide label-sm  @if($assignment->assignmentstatus->id == 1) m-badge--success @elseif($assignment->assignmentstatus->id == 2) m-badge--warning @endif">@if(strlen($assignment->assignmentstatus->name)>0)  {{ $assignment->assignmentstatus->name }} @else {{ $assignment->assignmentstatus->id }} @endif </span>
                 @else
-                    <span class="label label-sm label-danger"> درج نشده </span>
+                    <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span>
                 @endif
             </td>
             <td class="center">@if(isset($assignment->created_at) && strlen($assignment->created_at)>0) @else <span
-                        class="label label-sm label-danger"> درج نشده </span> @endif {{ $assignment->CreatedAt_Jalali() }}
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif {{ $assignment->CreatedAt_Jalali() }}
             </td>
             <td class="center">@if(isset($assignment->updated_at) && strlen($assignment->updated_at)>0) @else <span
-                        class="label label-sm label-danger"> درج نشده </span> @endif {{ $assignment->UpdatedAt_Jalali() }}
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif {{ $assignment->UpdatedAt_Jalali() }}
             </td>
             <td>
                 <div class="btn-group">

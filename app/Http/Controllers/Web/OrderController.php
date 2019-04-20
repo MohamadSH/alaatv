@@ -473,7 +473,6 @@ class OrderController extends Controller
             'index' => View::make("order.index", compact('orders', 'orderstatuses'))->render(),
             'myOrderproducts' => $myOrderproducts,
         ];
-
         return response(json_encode($result, JSON_UNESCAPED_UNICODE), 200)->header('Content-Type', 'application/json');
     }
 

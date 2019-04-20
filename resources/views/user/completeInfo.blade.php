@@ -301,7 +301,7 @@
                                                 @endif
                                             </div>
                                             <div class="clearfix margin-top-10">
-                                                <span class="label label-danger">توجه! </span>&nbsp;
+                                                <span class="m-badge m-badge--wide m-badge--danger">توجه! </span>&nbsp;
                                                 <span> دقت نمایید که حجم عکس مورد نظر باید حداکثر ۲۰۰ کیلوبایت و فرمت آن jpg و یا png باشد. </span>
                                             </div>
                                             @if ($errors->has('photo'))

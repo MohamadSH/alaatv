@@ -62,7 +62,7 @@
                         <div class="dropzone-previews"></div>
                         <div class="dz-message needsclick"><h4 class="sbold ">
                                 فایل خود را اینجا بیندازید و یا بر روی این قسمت کلیک کنید</h4>
-                            <span class="needsclick"><span class="label label-info">توجه:</span> فرمت های مجاز <label
+                            <span class="needsclick"><span class="m-badge m-badge--wide m-badge--info">توجه:</span> فرمت های مجاز <label
                                         style="color:red;">pdf , mp4</label> </span>
                         </div>
                     </div>

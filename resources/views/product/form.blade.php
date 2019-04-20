@@ -92,7 +92,7 @@
                             </span>
                         @endif
                         {{--<div class="clearfix margin-top-10">--}}
-                        {{--<span class="label label-danger">توجه</span> فرمت های مجاز: jpg , png - حداکثر حجم مجاز: ۲۰۰KB </div>--}}
+                        {{--<span class="m-badge m-badge--wide m-badge--danger">توجه</span> فرمت های مجاز: jpg , png - حداکثر حجم مجاز: ۲۰۰KB </div>--}}
                     </div>
                 </div>
             </div>
@@ -354,7 +354,7 @@
                         </span>
                     @endif
                     {{--<div class="clearfix margin-top-10">--}}
-                    {{--<span class="label label-danger">توجه</span> فرمت های مجاز: jpg , png - حداکثر حجم مجاز: ۲۰۰KB </div>--}}
+                    {{--<span class="m-badge m-badge--wide m-badge--danger">توجه</span> فرمت های مجاز: jpg , png - حداکثر حجم مجاز: ۲۰۰KB </div>--}}
                 </div>
             </div>
         </div>
@@ -559,7 +559,7 @@
                            data-dismiss="fileinput"> حذف </a>
                     </div>
                     <div class="clearfix margin-top-10">
-                        <span class="label label-danger">توجه</span>
+                        <span class="m-badge m-badge--wide m-badge--danger">توجه</span>
                         <strong id="productImageAlert">فرمت های مجاز: jpg , png
                             - حداکثر حجم مجاز: ۲۰۰KB</strong>
                     </div>

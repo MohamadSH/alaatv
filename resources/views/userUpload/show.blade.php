@@ -49,7 +49,7 @@
                     <li style="text-align: center">
                         <a class="font-green sbold uppercase"
                            href="javascript:">@if(isset($user->id)) @if(isset($user->firstName) && strlen($user->firstName)>0 || isset($user->lastName) && strlen($user->lastName)>0) @if(isset($user->firstName) && strlen($user->firstName)>0) {{ $user->firstName}} @endif @if(isset($user->lastName) && strlen($user->lastName)>0) {{$user->lastName}} @endif @else
-                                <span class="label label-sm label-danger"> کاربر ناشناس </span> @endif @endif
+                                <span class="m-badge m-badge--wide label-sm m-badge--danger"> کاربر ناشناس </span> @endif @endif
                         </a>
                     </li>
                     <li>
@@ -93,7 +93,7 @@
                                                 <td>{{++$counter}}</td>
                                                 <td>
                                                     @if(isset($consultation->title)) {{$consultation->title}} @else
-                                                        <span class="label label-danger label-sm"> بدون عنوان </span> @endif
+                                                        <span class="m-badge m-badge--wide m-badge--danger label-sm"> بدون عنوان </span> @endif
                                                 </td>
                                                 <td class="hidden-xs"> {{$consultation->CreatedAt_Jalali()}} </td>
                                                 <td style="direction: ltr; width: 25%;">

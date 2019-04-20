@@ -66,35 +66,35 @@
                                             {{$transaction["firstName"]}} {{$transaction["lastName"]}}
                                         </a>
                                     @else
-                                        <span class="label label-sm label-danger"> ناشناس </span>
+                                        <span class="m-badge m-badge--wide label-sm m-badge--danger"> ناشناس </span>
                                     @endif
                                 </td>
                                 <td>
                                     @if(strlen($transaction["mobile"])>0)
                                         {{$transaction["mobile"]}}
                                     @else
-                                        <span class="label label-sm label-danger"> نامشخص </span>
+                                        <span class="m-badge m-badge--wide label-sm m-badge--danger"> نامشخص </span>
                                     @endif
                                 </td>
                                 <td>
                                     @if(strlen($transaction["authority"])>0)
                                         {{$transaction["authority"]}}
                                     @else
-                                        <span class="label label-sm label-danger"> نامشخص </span>
+                                        <span class="m-badge m-badge--wide label-sm m-badge--danger"> نامشخص </span>
                                     @endif
                                 </td>
                                 <td>
                                     @if(strlen($transaction["amount"])>0)
                                         {{$transaction["amount"]}}
                                     @else
-                                        <span class="label label-sm label-danger"> نامشخص </span>
+                                        <span class="m-badge m-badge--wide label-sm m-badge--danger"> نامشخص </span>
                                     @endif
                                 </td>
                                 <td dir="ltr">
                                     @if(strlen($transaction["created_at"])>0)
                                         {{$transaction["created_at"]}}
                                     @else
-                                        <span class="label label-sm label-danger"> نامشخص </span>
+                                        <span class="m-badge m-badge--wide label-sm m-badge--danger"> نامشخص </span>
                                     @endif
                                 </td>
                             </tr>

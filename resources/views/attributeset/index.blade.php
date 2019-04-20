@@ -3,13 +3,13 @@
     <tr>
         <th></th>
         <td>@if(isset($attributeset->name) && strlen($attributeset->name)>0 ) {{ $attributeset->name }}  @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($attributeset->description) && strlen($attributeset->description)>0 ) {{ $attributeset->description }}  @else
-                <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($attributeset->created_at) && strlen($attributeset->created_at)>0) {{ $attributeset->CreatedAt_Jalali() }} @else
-                <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($attributeset->updated_at) && strlen($attributeset->updated_at)>0) {{ $attributeset->UpdatedAt_Jalali() }} @else
-                <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>
             <div class="btn-group">
                 <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown"

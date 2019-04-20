@@ -26,7 +26,7 @@
                                         @endif
                                     @endforeach
                                 @else
-                                    <span class="label label-sm label-warning"> سفارشی یافت نشد </span>
+                                    <span class="m-badge m-badge--wide label-sm m-badge--warning"> سفارشی یافت نشد </span>
                                 @endif
                             </li>
                             @if(isset($hasPishtaz))
@@ -99,30 +99,30 @@
             <td>{{$user->firstName}}</td>
             <td>@if(isset($user->major->id)) {{ $user->major->name }} @else  @endif</td>
             <td>@if(isset($user->nationalCode) && strlen($user->nationalCode)>0) {{ $user->nationalCode }} @else <span
-                        class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
             <td>@if(isset($user->mobile) && strlen($user->mobile)>0) {{ ltrim($user->mobile, '0')}} @else <span
-                        class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
             <td>@if(isset($user->email) && strlen($user->email)>0) {{ $user->email }} @else <span
-                        class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
             <td>@if(isset($user->city) && strlen($user->city)>0) {{ $user->city }} @else <span
-                        class="label label-sm label-warning"> درج نشده </span>  @endif</td>
+                        class="m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span>  @endif</td>
             <td>@if(isset($user->province) && strlen($user->province)>0) {{ $user->province }} @else <span
-                        class="label label-sm label-warning"> درج نشده </span> @endif</td>
-            <td>@if($user->hasVerifiedMobile()) <span class="label label-sm label-success">احراز هویت کرده</span> @else
-                    <span class="label label-sm label-danger"> نامعتبر </span> @endif</td>
+                        class="m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span> @endif</td>
+            <td>@if($user->hasVerifiedMobile()) <span class="m-badge m-badge--wide label-sm m-badge--success">احراز هویت کرده</span> @else
+                    <span class="m-badge m-badge--wide label-sm m-badge--danger"> نامعتبر </span> @endif</td>
             <td>@if(isset($user->postalCode) && strlen($user->postalCode)>0) {{ $user->postalCode }} @else <span
-                        class="label label-sm label-warning"> درج نشده </span> @endif</td>
+                        class="m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span> @endif</td>
             <td>@if(isset($user->address) && strlen($user->address)>0) {{ $user->address }} @else <span
-                        class="label label-sm label-warning"> درج نشده </span> @endif</td>
+                        class="m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span> @endif</td>
             <td>@if(isset($user->school) && strlen($user->school)>0) {{ $user->school }} @else <span
-                        class="label label-sm label-warning"> درج نشده </span> @endif</td>
+                        class="m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span> @endif</td>
             <td>
-                <span class="label label-sm @if(strcmp($user->userstatus->name , "active")==0) label-success @elseif(strcmp($user->userstatus->name , "inactive")==0) label-warning @endif"> {{ $user->userstatus->displayName }} </span>
+                <span class="m-badge m-badge--wide label-sm @if(strcmp($user->userstatus->name , "active")==0) m-badge--success @elseif(strcmp($user->userstatus->name , "inactive")==0) m-badge--warning @endif"> {{ $user->userstatus->displayName }} </span>
             </td>
             <td>@if(isset($user->created_at) && strlen($user->created_at)>0) {{ $user->CreatedAt_Jalali() }} @else <span
-                        class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
             <td>@if(isset($user->updated_at) && strlen($user->updated_at)>0) {{ $user->UpdatedAt_Jalali() }} @else <span
-                        class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
             <td>{{$user->userHasBon(Config::get("constants.BON1"))}}</td>
             @if(isset($products))
                 @foreach($products as $product)

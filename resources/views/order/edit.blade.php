@@ -182,7 +182,7 @@
                                                     <br>
                                                 @endif
                                             @else
-                                                <span class="label label-danger">ندارد</span>
+                                                <span class="m-badge m-badge--wide m-badge--danger">ندارد</span>
                                             @endif
                                         </td>
                                         <td class="text-center">
@@ -197,7 +197,7 @@
                                         </td>
                                         <td class="text-center">
                                             {{$orderproduct->userbons->sum("pivot.usageNumber")}} بن <span
-                                                    class="label label-sm label-info label-mini"> {{$orderproduct->getTotalBonDiscountPercentage()}}
+                                                    class="m-badge m-badge--wide label-sm m-badge--info label-mini"> {{$orderproduct->getTotalBonDiscountPercentage()}}
                                                 % </span>
                                         </td>
                                         <td class="text-center">
@@ -459,25 +459,25 @@
                                 @foreach($orderTransactions as $transaction)
                                     <tr id="{{$transaction->id}}">
                                         <td>@if(isset($transaction->paymentmethod->displayName[0])){{$transaction->paymentmethod->displayName}} @else
-                                                <span class="label label-sm label-danger"> ندارد </span> @endif</td>
+                                                <span class="m-badge m-badge--wide label-sm m-badge--danger"> ندارد </span> @endif</td>
                                         <td>@if(isset($transaction->transactionstatus->id)){{$transaction->transactionstatus->displayName}} @else
-                                                <span class="label label-sm label-warning"> ندارد </span> @endif</td>
+                                                <span class="m-badge m-badge--wide label-sm m-badge--warning"> ندارد </span> @endif</td>
                                         <td>@if($transaction->hasParents())<a target="_blank"
                                                                               href="{{action('Web\TransactionController@edit' , $transaction->getGrandParent())}}">رفتن
                                                 به تراکنش</a> @else ندارد @endif</td>
                                         <td id="transactionFullName_{{$transaction->id}}"
                                             dir="ltr">@if(isset($transaction->cost)){{number_format($transaction->cost)}} @else
-                                                <span class="label label-sm label-danger"> ندارد </span> @endif</td>
+                                                <span class="m-badge m-badge--wide label-sm m-badge--danger"> ندارد </span> @endif</td>
                                         <td style="text-align: center">@if(strlen($transaction->transactionID)>0){{$transaction->transactionID}} @else
-                                                <span class="label label-sm label-info"> ندارد </span> @endif</td>
+                                                <span class="m-badge m-badge--wide label-sm m-badge--info"> ندارد </span> @endif</td>
                                         <td style="text-align: center">@if(strlen($transaction->referenceNumber)>0){{$transaction->referenceNumber}} @else
-                                                <span class="label label-sm label-info"> ندارد </span> @endif</td>
+                                                <span class="m-badge m-badge--wide label-sm m-badge--info"> ندارد </span> @endif</td>
                                         <td style="text-align: center">@if(strlen($transaction->traceNumber)>0){{$transaction->traceNumber}} @else
-                                                <span class="label label-sm label-info "> ندارد </span> @endif</td>
+                                                <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span> @endif</td>
                                         <td style="text-align: center">@if(strlen($transaction->paycheckNumber)>0){{$transaction->paycheckNumber}} @else
-                                                <span class="label label-sm label-info "> ندارد </span> @endif</td>
+                                                <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span> @endif</td>
                                         <td style="text-align: center">@if(strlen($transaction->managerComment)>0){{$transaction->managerComment}} @else
-                                                <span class="label label-sm label-info "> ندارد </span> @endif</td>
+                                                <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span> @endif</td>
                                         <td style="text-align: center">
                                             <a class="edit" href="javascript:">
                                                 <i class="fa fa-pencil-square fa-lg font-green" aria-hidden="true"></i>
@@ -533,26 +533,26 @@
                                     @foreach($orderArchivedTransactions as $transaction)
                                         <tr id="{{$transaction->id}}">
                                             <td>@if(strlen($transaction->paymentmethod->displayName)>0){{$transaction->paymentmethod->displayName}} @else
-                                                    <span class="label label-sm label-danger"> ندارد </span> @endif</td>
+                                                    <span class="m-badge m-badge--wide label-sm m-badge--danger"> ندارد </span> @endif</td>
                                             <td>@if(isset($transaction->transactionstatus->id)){{$transaction->transactionstatus->displayName}} @else
-                                                    <span class="label label-sm label-warning"> ندارد </span> @endif
+                                                    <span class="m-badge m-badge--wide label-sm m-badge--warning"> ندارد </span> @endif
                                             </td>
                                             <td>@if($transaction->hasParents())<a target="_blank"
                                                                                   href="{{action('Web\TransactionController@edit' , $transaction->getGrandParent())}}">رفتن
                                                     به تراکنش</a> @else ندارد @endif</td>
                                             <td id="transactionFullName_{{$transaction->id}}"
                                                 dir="ltr">@if(isset($transaction->cost)){{number_format($transaction->cost)}} @else
-                                                    <span class="label label-sm label-danger"> ندارد </span> @endif</td>
+                                                    <span class="m-badge m-badge--wide label-sm m-badge--danger"> ندارد </span> @endif</td>
                                             <td style="text-align: center">@if(strlen($transaction->transactionID)>0){{$transaction->transactionID}} @else
-                                                    <span class="label label-sm label-info"> ندارد </span> @endif</td>
+                                                    <span class="m-badge m-badge--wide label-sm m-badge--info"> ندارد </span> @endif</td>
                                             <td style="text-align: center">@if(strlen($transaction->referenceNumber)>0){{$transaction->referenceNumber}} @else
-                                                    <span class="label label-sm label-info"> ندارد </span> @endif</td>
+                                                    <span class="m-badge m-badge--wide label-sm m-badge--info"> ندارد </span> @endif</td>
                                             <td style="text-align: center">@if(strlen($transaction->traceNumber)>0){{$transaction->traceNumber}} @else
-                                                    <span class="label label-sm label-info "> ندارد </span> @endif</td>
+                                                    <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span> @endif</td>
                                             <td style="text-align: center">@if(strlen($transaction->paycheckNumber)>0){{$transaction->paycheckNumber}} @else
-                                                    <span class="label label-sm label-info "> ندارد </span> @endif</td>
+                                                    <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span> @endif</td>
                                             <td style="text-align: center">@if(strlen($transaction->managerComment)>0){{$transaction->managerComment}} @else
-                                                    <span class="label label-sm label-info "> ندارد </span> @endif</td>
+                                                    <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span> @endif</td>
                                             <td style="text-align: center">
                                                 <a target="_blank" class="edit" href = "{{action("Web\TransactionController@edit" , $transaction)}}">
                                                     <i class="fa fa-pencil-square fa-lg font-green"
