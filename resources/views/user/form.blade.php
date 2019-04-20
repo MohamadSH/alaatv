@@ -57,7 +57,7 @@
                     </span>
                 @endif
                 <div class="clearfix">
-                    <span class="label label-warning ">توجه</span>
+                    <span class="m-badge m-badge--wide m-badge--warning ">توجه</span>
                     <span class="small bg-font-dark">برای تایید حساب کاربری از این شماره استفاده می شود!</span>
                 </div>
             </div>
@@ -240,7 +240,7 @@
                         </span>
                     @else
                         <div class="clearfix">
-                            <span class="label label-warning">توجه</span>
+                            <span class="m-badge m-badge--wide m-badge--warning">توجه</span>
                             <span class="small">برای تایید حساب کاربری از این شماره استفاده می شود!</span>
                         </div>
                     @endif
@@ -532,7 +532,7 @@
                     </div>
                 </div>
                 <div class="clearfix margin-top-10">
-                    <span class="label label-danger">توجه</span> فرمت های مجاز: jpg , png - حداکثر حجم مجاز: 500KB
+                    <span class="m-badge m-badge--wide m-badge--danger">توجه</span> فرمت های مجاز: jpg , png - حداکثر حجم مجاز: 500KB
                 </div>
             </div>
         </div>
@@ -707,7 +707,7 @@
                 @endif
             </div>
             <div class="clearfix margin-top-10">
-                <span class="label label-info">توجه</span>
+                <span class="m-badge m-badge--wide m-badge--info">توجه</span>
                 <strong id="">ستون چپ نقش های اختصاص داده شده می باشند</strong>
             </div>
         </div>
@@ -931,7 +931,7 @@
                         حذف </a>
                 </div>
                 <div class="clearfix margin-top-10">
-                    <span class="label label-danger">توجه</span><strong id="photoAlert">فرمت های مجاز: jpg , png -
+                    <span class="m-badge m-badge--wide m-badge--danger">توجه</span><strong id="photoAlert">فرمت های مجاز: jpg , png -
                         حداکثر حجم مجاز: 500KB</strong>
                 </div>
             </div>
@@ -945,7 +945,7 @@
                         <strong></strong>
                 </span>
             <div class="clearfix margin-top-10">
-                <span class="label label-info">توجه</span>
+                <span class="m-badge m-badge--wide m-badge--info">توجه</span>
                 <strong id="">ستون چپ نقش های انتخاب شده می باشند</strong>
             </div>
             </p>

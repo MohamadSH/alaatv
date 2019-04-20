@@ -49,7 +49,7 @@
         <tr>
             <th></th>
             <td>@if(isset($consultation->name) && strlen($consultation->name)>0) {{ $consultation->name }} @else <span
-                        class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
             <td>
                 <div class="mt-element-overlay">
                     <div class="mt-overlay-1">
@@ -90,22 +90,22 @@
                 </div>
             </td>
             <td>@if(isset($consultation->description) && strlen($consultation->description)>0) {!!  $consultation->description !!}  @else
-                    <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
             <td>@if(isset($consultation->major->id)) @if(strlen($consultation->major->name)>0) {{ $consultation->major->name }} @else {{ $consultation->major->id }} @endif @else
-                    <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
             <td>@if(isset($consultation->videoPageLink) && strlen($consultation->videoPageLink)>0) <a
                         href="{{ $consultation->videoPageLink }}">دانلود</a> @else <span
-                        class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
             <td>@if(isset($consultation->textScriptLink) && strlen($consultation->textScriptLink)>0) <a
                         href="{{ $consultation->textScriptLink }}">دانلود</a> @else <span
-                        class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
             <td>
-                <span class="label label-sm @if($consultation->consultationstatus->id == 1) label-success @elseif($consultation->consultationstatus->id == 2) label-warning @endif"> {{ $consultation->consultationstatus->name }} </span>
+                <span class="m-badge m-badge--wide label-sm @if($consultation->consultationstatus->id == 1) m-badge--success @elseif($consultation->consultationstatus->id == 2) m-badge--warning @endif"> {{ $consultation->consultationstatus->name }} </span>
             </td>
             <td>@if(isset($consultation->created_at) && strlen($consultation->created_at)>0) {{ $consultation->CreatedAt_Jalali() }} @else
-                    <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
             <td>@if(isset($consultation->updated_at) && strlen($consultation->updated_at)>0) {{ $consultation->UpdatedAt_Jalali() }} @else
-                    <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                    <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
             <td>
                 <div class="btn-group">
                     <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown"

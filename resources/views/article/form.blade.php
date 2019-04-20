@@ -142,7 +142,7 @@
                                    data-dismiss="fileinput"> حذف </a>
                             </div>
                             <div class="clearfix margin-top-10">
-                                <span class="label label-danger">توجه</span> فرمت های مجاز: jpg , png - حداکثر حجم مجاز:
+                                <span class="m-badge m-badge--wide m-badge--danger">توجه</span> فرمت های مجاز: jpg , png - حداکثر حجم مجاز:
                                 ۲۰۰KB
                             </div>
                         </div>

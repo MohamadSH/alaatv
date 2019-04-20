@@ -148,17 +148,17 @@
                                     {{--<th class="text-center">{{$counter++}}</th>--}}
                                     @if(!isset($user))
                                         <td>@if(!$belonging->users->isEmpty()) @if(isset($belonging->users->first()->firstName) || $belonging->users->first()->lastName){{$belonging->users->first()->firstName}} {{$belonging->users->first()->lastName}} @else
-                                                <span class="label label-sm label-warning">کاربر ناشناس</span> @endif @else
-                                                <span class="label label-sm label-danger">بدون مالک</span> @endif
+                                                <span class="m-badge m-badge--wide label-sm m-badge--warning">کاربر ناشناس</span> @endif @else
+                                                <span class="m-badge m-badge--wide label-sm m-badge--danger">بدون مالک</span> @endif
                                         </td> @endif
                                     <td id="belongingFullName_{{$belonging->id}}">@if(isset($belonging->name) && strlen($belonging->name)>0 ) {{ $belonging->name}} @else
-                                            <span class="label label-sm label-danger">بدون توضیح</span> @endif</td>
-                                    {{--                                    <td >@if(isset($belonging->description) && strlen($belonging->description)>0 ) {{ $belonging->description}} @else <span class="label label-sm label-warning">بدون توضیح</span> @endif</td>--}}
+                                            <span class="m-badge m-badge--wide label-sm m-badge--danger">بدون توضیح</span> @endif</td>
+                                    {{--                                    <td >@if(isset($belonging->description) && strlen($belonging->description)>0 ) {{ $belonging->description}} @else <span class="m-badge m-badge--wide label-sm m-badge--warning">بدون توضیح</span> @endif</td>--}}
                                     <td>@if(isset($belonging->file) && strlen($belonging->file)>0 ) <a href = "{{action("Web\HomeController@download" , ["content"=>"سند فنی دارایی","fileName"=>$belonging->file ])}}"
                                                                                                        class="btn btn-xs red">دانلود فایل</a> @else <span
-                                                class="label label-sm label-danger">درج نشده</span> @endif</td>
+                                                class="m-badge m-badge--wide label-sm m-badge--danger">درج نشده</span> @endif</td>
                                     <td>@if(isset($belonging->created_at) ) {{ $belonging->CreatedAt_Jalali()}} @else
-                                            <span class="label label-sm label-danger">درج نشده</span> @endif</td>
+                                            <span class="m-badge m-badge--wide label-sm m-badge--danger">درج نشده</span> @endif</td>
                                     <td>@permission((Config::get('constants.REMOVE_BELONGING_ACCESS')))
                                         <a class="deleteBelonging" data-target="#deleteBelongingConfirmationModal"
                                            data-toggle="modal">

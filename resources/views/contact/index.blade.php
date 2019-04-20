@@ -82,7 +82,7 @@
                                             @endif
                                         </td>
                                         <td>@if(isset($contact->relative->id)){{$contact->relative->displayName}} @else
-                                                <span class="label label-sm label-info"> نا مشخص </span> @endif</td>
+                                                <span class="m-badge m-badge--wide label-sm m-badge--info"> نا مشخص </span> @endif</td>
                                         <td>
                                             <div class="form-group">
                                                 <div class="col-md-4">

@@ -104,24 +104,24 @@ class HomeController extends Controller
         //        }else{
         $authException = [
 //            'debug',
-            'download',
-            'telgramAgent',
-            'index',
-            'getImage',
-            'error404',
-            'error403',
-            'error500',
-            'errorPage',
-            'aboutUs',
-            'contactUs',
-            'sendMail',
-            'rules',
-            'siteMapXML',
-            'uploadFile',
-            'search',
-            'schoolRegisterLanding',
-            'lernitoTree',
-            'getTreeInPHPArrayString',
+'download',
+'telgramAgent',
+'index',
+'getImage',
+'error404',
+'error403',
+'error500',
+'errorPage',
+'aboutUs',
+'contactUs',
+'sendMail',
+'rules',
+'siteMapXML',
+'uploadFile',
+'search',
+'schoolRegisterLanding',
+'lernitoTree',
+'getTreeInPHPArrayString',
         ];
         //        }
         $this->middleware('auth', ['except' => $authException]);
@@ -158,8 +158,13 @@ class HomeController extends Controller
     }
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
+
     {
         try {
+
+            $order = Order::find(203189);
+            dd($order->user);
+
             $productFiles = \App\Productfile::all();
             $productFiles->load('product');
             $productFiles->load('productfiletype');

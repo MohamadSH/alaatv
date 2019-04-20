@@ -3,12 +3,12 @@
     <tr>
         <th></th>
         <td>@if(isset($attributegroup->name) && strlen($attributegroup->name)>0) {{ $attributegroup->name }} @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif </td>
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
         <td>@if(isset($attributegroup->description) && strlen($attributegroup->description)>0) {!!   $attributegroup->description !!} @else
-                <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>
             @if($attributegroup->attributes()->get()->isEmpty())
-                <span class="label label-sm label-danger"> درج نشده </span>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span>
             @else
                 @foreach($attributegroup->attributes()->pluck('displayName') as $attribute)
                     {{$attribute}}
@@ -17,10 +17,10 @@
             @endif
         </td>
         <td class="center">@if(isset($attributegroup->created_at) && strlen($attributegroup->created_at)>0) @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif {{ $attributegroup->CreatedAt_Jalali() }}
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif {{ $attributegroup->CreatedAt_Jalali() }}
         </td>
         <td class="center">@if(isset($attributegroup->updated_at) && strlen($attributegroup->updated_at)>0) @else <span
-                    class="label label-sm label-danger"> درج نشده </span> @endif {{ $attributegroup->UpdatedAt_Jalali() }}
+                    class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif {{ $attributegroup->UpdatedAt_Jalali() }}
         </td>
         <td>
             <div class="btn-group">

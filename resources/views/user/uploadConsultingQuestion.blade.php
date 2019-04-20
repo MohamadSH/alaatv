@@ -62,7 +62,7 @@
                             <div class="dropzone-previews"></div>
                             <div class="dz-message needsclick"><h4 class="sbold ">
                                     فایل خود را اینجا بیندازید و یا بر روی این قسمت کلیک کنید</h4>
-                                <span class="needsclick"><span class="label label-info">توجه:</span>فرمت مجاز <label
+                                <span class="needsclick"><span class="m-badge m-badge--wide m-badge--info">توجه:</span>فرمت مجاز <label
                                             style="color:red;">mp3</label> است و حداکثر حجم مجاز <label
                                             style="color:red;">۲</label> مگابایت می باشد. همچنین وارد نمودن عنوان سؤال الزامی است. <label
                                             style="color:red;"></span>

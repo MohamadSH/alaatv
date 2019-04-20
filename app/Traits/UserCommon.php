@@ -1,6 +1,7 @@
 <?php namespace App\Traits;
 
 use App\User;
+use Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 

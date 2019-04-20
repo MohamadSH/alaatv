@@ -91,16 +91,6 @@ class OrderController extends Controller
      */
     public function index()
     {
-//        $orders = collect();
-//        $result = [
-//            'index'           => View::make("order.index", compact('orders', 'orderstatuses'))
-//                ->render()
-//            ,
-//            'myOrderproducts' => collect(),
-//        ];
-//
-//        return response(json_encode($result, JSON_UNESCAPED_UNICODE), 200)->header('Content-Type', 'application/json');
-
         $user = Auth::user();
         if ($user->can(config('constants.SHOW_OPENBYADMIN_ORDER'))) {
             $orders = Order::where("orderstatus_id", "<>", config("constants.ORDER_STATUS_OPEN"));
@@ -451,8 +441,8 @@ class OrderController extends Controller
             $orders = $orders->orderBy("updated_at", "desc");
         }
 
-        $orders = $orders->get();
-
+        $orders = $orders->paginate(10, ['*'], 'orders');
+        return $orders;
         /**
          *  obtaining orderproducts for checkout
          */
@@ -473,8 +463,6 @@ class OrderController extends Controller
             'index' => View::make("order.index", compact('orders', 'orderstatuses'))->render(),
             'myOrderproducts' => $myOrderproducts,
         ];
-        dd($result);
-
         return response(json_encode($result, JSON_UNESCAPED_UNICODE), 200)->header('Content-Type', 'application/json');
     }
 
@@ -536,15 +524,16 @@ class OrderController extends Controller
     }
 
     /**
-     * Display the specified resource.
      *
+     * Display the specified resource.
      * @param int $id
      *
+     * @param $order
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($order)
     {
-        //
+        return $order;
     }
 
     /**

@@ -3,16 +3,16 @@
     <tr>
 
         <th></th>
-        <td>@if(isset($coupon->name[0])){{$coupon->name}} @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
-        <td>@if(isset($coupon->description[0])){{$coupon->description}} @else <span class="label label-sm label-warning"> بدون توضیح </span> @endif</td>
-        <td>@if(isset($coupon->code[0])){{$coupon->code}} @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+        <td>@if(isset($coupon->name[0])){{$coupon->name}} @else <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
+        <td>@if(isset($coupon->description[0])){{$coupon->description}} @else <span class="m-badge m-badge--wide label-sm m-badge--warning"> بدون توضیح </span> @endif</td>
+        <td>@if(isset($coupon->code[0])){{$coupon->code}} @else <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
 
-        <td>@if(isset($coupon->discount)){{$coupon->discount}} @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
-        {{--        <td>@if(isset($coupon->maxCost[0])){{$coupon->maxCost}} @else <span class="label label-sm label-warning"> ندارد </span> @endif</td>--}}
+        <td>@if(isset($coupon->discount)){{$coupon->discount}} @else <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
+        {{--        <td>@if(isset($coupon->maxCost[0])){{$coupon->maxCost}} @else <span class="m-badge m-badge--wide label-sm m-badge--warning"> ندارد </span> @endif</td>--}}
 
-        <td>@if(isset($coupon->usageLimit)){{$coupon->usageLimit}} @else <span class="label label-sm label-info"> نامحدود </span> @endif</td>
+        <td>@if(isset($coupon->usageLimit)){{$coupon->usageLimit}} @else <span class="m-badge m-badge--wide label-sm m-badge--info"> نامحدود </span> @endif</td>
 
-        <td>@if(isset($coupon->usageNumber)){{$coupon->usageNumber}} @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td>
+        <td>@if(isset($coupon->usageNumber)){{$coupon->usageNumber}} @else <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
 
         <td>
             @if(isset($coupon->coupontype))
@@ -30,13 +30,13 @@
                     {{--@endif--}}
                 @endif
             @else
-                <span class="label label-sm label-danger"> درج نشده </span>
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span>
             @endif
         </td>
 
-        <td>@if(isset($coupon->created_at) && strlen($coupon->created_at) > 0){{$coupon->CreatedAt_Jalali()}} @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td></td>
-        <td>@if(isset($coupon->validSince) && strlen($coupon->validSince) > 0){{$coupon->ValidSince_Jalali()}} @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td></td>
-        <td>@if(isset($coupon->validUntil) && strlen($coupon->validUntil) > 0){{$coupon->ValidUntil_Jalali()}} @else <span class="label label-sm label-danger"> درج نشده </span> @endif</td></td>
+        <td>@if(isset($coupon->created_at) && strlen($coupon->created_at) > 0){{$coupon->CreatedAt_Jalali()}} @else <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td></td>
+        <td>@if(isset($coupon->validSince) && strlen($coupon->validSince) > 0){{$coupon->ValidSince_Jalali()}} @else <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td></td>
+        <td>@if(isset($coupon->validUntil) && strlen($coupon->validUntil) > 0){{$coupon->ValidUntil_Jalali()}} @else <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td></td>
         @permission('config("constants.SHOW_COUPON_ACCESS") , config("constants.REMOVE_COUPON_ACCESS")')
         <td>
             <div class="btn-group">
