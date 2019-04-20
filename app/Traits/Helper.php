@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
@@ -103,5 +104,13 @@ trait Helper
         $this->timestamps = true;
 
         return $flag;
+    }
+
+    /**
+     * @param string $permission
+     * @return bool
+     */
+    protected function isAuthenticatedUserHasPermission(string $permission):bool{
+        return (Auth::check() && Auth::user()->can($permission));
     }
 }

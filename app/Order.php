@@ -8,6 +8,7 @@ use App\Collection\OrderCollections;
 use App\Collection\OrderproductCollection;
 use App\Collection\ProductCollection;
 use App\Collection\TransactionCollection;
+use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use App\Traits\UserCommon;
 use Auth;
@@ -111,7 +112,7 @@ class Order extends BaseModel
     |--------------------------------------------------------------------------
     */
     use ProductCommon;
-    use UserCommon;
+    use Helper;
 
     /*
     |--------------------------------------------------------------------------
@@ -1032,7 +1033,6 @@ class Order extends BaseModel
     }
 
     public function getSuccessfulTransactionsAttribute()
-
     {
         $order = $this;
         $key = "order:transactions:".$order->cacheKey();
@@ -1134,6 +1134,7 @@ class Order extends BaseModel
     }
 
     public function getUserAttribute(){
+
         $order = $this;
         $key = "order:user:" . $order->cacheKey();
         return Cache::tags(["order"])
@@ -1160,7 +1161,7 @@ class Order extends BaseModel
 
                 return $order->user()->first()->setVisible($visibleColumns);
             });
-    }
+     }
 
     public function getJalaliCreatedAtAttribute(){
         $order = $this;
