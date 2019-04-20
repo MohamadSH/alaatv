@@ -10,7 +10,6 @@ trait DateTrait
      */
     public function CreatedAt_Jalali()
     {
-        $explodedDateTime = explode(" ", $this->created_at);
         return $this->convertDate($this->created_at, "toJalali");
     }
 
@@ -171,7 +170,6 @@ trait DateTrait
      */
     public function UpdatedAt_Jalali()
     {
-        $explodedDateTime = explode(" ", $this->updated_at);
         return $this->convertDate($this->updated_at, "toJalali");
     }
 

@@ -9,6 +9,7 @@ use App\Collection\OrderproductCollection;
 use App\Collection\ProductCollection;
 use App\Collection\TransactionCollection;
 use App\Traits\ProductCommon;
+use App\Traits\UserCommon;
 use Auth;
 use Carbon\Carbon;
 use DB;
@@ -110,6 +111,7 @@ class Order extends BaseModel
     |--------------------------------------------------------------------------
     */
     use ProductCommon;
+    use UserCommon;
 
     /*
     |--------------------------------------------------------------------------
@@ -147,11 +149,19 @@ class Order extends BaseModel
         'orderproducts',
         'couponInfo',
         'paidPrice',
+        'refundPrice',
         'successfulTransactions',
+        'pendingTransactions',
+        'unpaidTransactions',
         'orderPostingInfo',
         'debt',
         'usedBonSum',
         'addedBonSum',
+        'user',
+        'jalaliCreatedAt',
+        'jalaliUpdatedAt',
+        'postingInfo',
+        'managerComment'
     ];
     const OPEN_ORDER_STATUSES = [
         1,
@@ -318,11 +328,11 @@ class Order extends BaseModel
         $key = "order:debt:" . $order->cacheKey();
         return Cache::tags(["order"])
                     ->remember($key, config("constants.CACHE_60"), function () use ($order) {
-                        $cost = $this->obtainOrderCost()["totalCost"];
                         if ($this->orderstatus_id == config("constants.ORDER_STATUS_REFUNDED"))
                             return -($this->totalPaidCost() + $this->totalRefund());
-                        else
-                            return $cost - ($this->totalPaidCost() + $this->totalRefund());
+
+                        $cost = $this->obtainOrderCost()["totalCost"];
+                        return $cost - ($this->totalPaidCost() + $this->totalRefund());
                     });
     }
 
@@ -980,6 +990,14 @@ class Order extends BaseModel
     }
 
     /**
+     * @return int
+     */
+    public function getRefundPriceAttribute(): int
+    {
+        return $this->totalRefund();
+    }
+
+    /**
      * @return Collection
      */
     public function getDonatesAttribute(): Collection
@@ -1011,9 +1029,10 @@ class Order extends BaseModel
     }
 
     public function getSuccessfulTransactionsAttribute()
+
     {
         $order = $this;
-        $key = "order:transactions:" . $order->cacheKey();
+        $key = "order:successfultransactions:" . $order->cacheKey();
         return Cache::tags(["order"])
                     ->remember($key, config("constants.CACHE_60"), function () use ($order) {
                         /** @var TransactionCollection $successfulTransactions */
@@ -1034,6 +1053,56 @@ class Order extends BaseModel
                     });
     }
 
+    public function getPendingTransactionsAttribute()
+
+    {
+        $order = $this;
+        $key = "order:pendingtransactions:" . $order->cacheKey();
+        return Cache::tags(["order"])
+                    ->remember($key, config("constants.CACHE_60"), function () use ($order) {
+                        /** @var TransactionCollection $pendingTransaction */
+                        $pendingTransaction = $order->pendingTransactions()->get();
+                        $pendingTransaction->setVisible([
+                            'cost',
+                            'transactionID',
+                            'traceNumber',
+                            'referenceNumber',
+                            'paycheckNumber',
+                            'description',
+                            'completed_at',
+                            'paymentmethod',
+                            'transactiongateway',
+                        ]);
+
+                        return $pendingTransaction;
+                    });
+    }
+
+    public function getUnpaidTransactionsAttribute()
+
+    {
+        $order = $this;
+        $key = "order:unpaidtransactions:" . $order->cacheKey();
+        return Cache::tags(["order"])
+                    ->remember($key, config("constants.CACHE_60"), function () use ($order) {
+                        /** @var TransactionCollection $unpaidTransaction */
+                        $unpaidTransaction = $order->unpaidTransactions()->get();
+                        $unpaidTransaction->setVisible([
+                            'cost',
+                            'transactionID',
+                            'traceNumber',
+                            'referenceNumber',
+                            'paycheckNumber',
+                            'description',
+                            'completed_at',
+                            'paymentmethod',
+                            'transactiongateway',
+                        ]);
+
+                        return $unpaidTransaction;
+                    });
+    }
+
     public function getOrderPostingInfoAttribute()
     {
         $order = $this;
@@ -1045,6 +1114,7 @@ class Order extends BaseModel
     }
 
     public function getDebtAttribute()
+
     {
         return $this->debt();
     }
@@ -1055,7 +1125,88 @@ class Order extends BaseModel
     }
 
     public function getAddedBonSumAttribute()
+
     {
         return $this->addedBonSum();
     }
+
+    public function getUserAttribute(){
+        $order = $this;
+        $key = "order:user:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($order) {
+                $visibleColumns = [
+                    'firstName',
+                    'lastName',
+                    'nationalCode',
+                    'province',
+                    'city',
+                    'address',
+                    'postalCode',
+                    'school',
+                    'info',
+                    'userstatus'
+                ];
+
+
+                if($this->isAuthenticatedUserHasPermission('constants.SHOW_USER_MOBILE'))
+                    $visibleColumns = array_merge($visibleColumns , ['mobile']);
+
+                if($this->isAuthenticatedUserHasPermission('constants.SHOW_USER_EMAIL'))
+                    $visibleColumns = array_merge($visibleColumns , ['email']);
+
+                return $order->user()->first()->setVisible($visibleColumns);
+            });
+    }
+
+    public function getJalaliCreatedAtAttribute(){
+        $order = $this;
+        $key = "order:created_at:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($order) {
+                if($this->isAuthenticatedUserHasPermission('constants.SHOW_ORDER_ACCESS'))
+                    return $this->convertDate($order->created_at, "toJalali");
+
+                return null;
+            });
+
+    }
+
+    public function getJalaliUpdatedAtAttribute(){
+        $order = $this;
+        $key = "order:updated_at:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($order) {
+                if($this->isAuthenticatedUserHasPermission('constants.SHOW_ORDER_ACCESS'))
+                    return $this->convertDate($order->updated_at, "toJalali");
+
+                return null;
+            });
+
+    }
+
+    public function getPostingInfoAttribute(){
+
+        $order = $this;
+        $key   = "order:postingInfo:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_60"), function () use ($order) {
+                return $order->orderpostinginfos()->get();
+            });
+
+    }
+
+    public function getManagerCommentAttribute(){
+        $order = $this;
+        $key   = "order:managerComment:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($order) {
+                if($this->isAuthenticatedUserHasPermission('constants.SHOW_ORDER_ACCESS'))
+                    return $order->ordermanagercomments()->get();
+
+                return null;
+            });
+
+    }
+
 }
