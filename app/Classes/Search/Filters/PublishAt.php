@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Filters;
 
-
 use Illuminate\Database\Eloquent\Builder;
 
 class PublishAt extends FilterAbstract
@@ -19,5 +18,4 @@ class PublishAt extends FilterAbstract
     {
         throw new \LogicException("implements publishAt");
     }
-
 }

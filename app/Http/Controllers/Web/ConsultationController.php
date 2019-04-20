@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Web;
+
 use App\Assignmentstatus;
 use App\Consultation;
 use App\Http\Controllers\Controller;
@@ -22,10 +23,10 @@ class ConsultationController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:' . Config::get('constants.LIST_CONSULTATION_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:' . Config::get('constants.INSERT_CONSULTATION_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:' . Config::get('constants.REMOVE_CONSULTATION_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:' . Config::get('constants.SHOW_CONSULTATION_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:'.Config::get('constants.LIST_CONSULTATION_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.Config::get('constants.INSERT_CONSULTATION_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:'.Config::get('constants.REMOVE_CONSULTATION_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:'.Config::get('constants.SHOW_CONSULTATION_ACCESS'), ['only' => 'edit']);
 
         $this->response = new Response();
     }
@@ -37,9 +38,9 @@ class ConsultationController extends Controller
      */
     public function index()
     {
-        $consultations = Consultation::all()
-                                     ->sortByDesc('created_at');
+        $consultations = Consultation::all()->sortByDesc('created_at');
         $pageName = "admin";
+
         return view("consultation.index", compact("consultations", "pageName"));
     }
 
@@ -56,7 +57,7 @@ class ConsultationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \app\Http\Requests\InsertConsultationRequest $request
+     * @param \app\Http\Requests\InsertConsultationRequest $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -65,20 +66,23 @@ class ConsultationController extends Controller
         $consultation = new Consultation();
         $consultation->fill($request->all());
 
-        if (strlen($request->get("videoPageLink")) > 0)
-            if (!preg_match("/^http:\/\//", $consultation->videoPageLink) && !preg_match("/^https:\/\//", $consultation->videoPageLink))
-                $consultation->videoPageLink = "https://" . $consultation->videoPageLink;
+        if (strlen($request->get("videoPageLink")) > 0) {
+            if (! preg_match("/^http:\/\//", $consultation->videoPageLink) && ! preg_match("/^https:\/\//", $consultation->videoPageLink)) {
+                $consultation->videoPageLink = "https://".$consultation->videoPageLink;
+            }
+        }
 
-        if (strlen($request->get("textScriptLink")) > 0)
-            if (!preg_match("/^http:\/\//", $consultation->textScriptLink) && !preg_match("/^https:\/\//", $consultation->textScriptLink))
-                $consultation->textScriptLink = "https://" . $consultation->textScriptLink;
+        if (strlen($request->get("textScriptLink")) > 0) {
+            if (! preg_match("/^http:\/\//", $consultation->textScriptLink) && ! preg_match("/^https:\/\//", $consultation->textScriptLink)) {
+                $consultation->textScriptLink = "https://".$consultation->textScriptLink;
+            }
+        }
 
         if ($request->hasFile("thumbnail")) {
             $file = $request->file('thumbnail');
             $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-            if (Storage::disk(Config::get('constants.DISK7'))
-                       ->put($fileName, File::get($file))) {
+            $fileName = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            if (Storage::disk(Config::get('constants.DISK7'))->put($fileName, File::get($file))) {
                 $consultation->thumbnail = $fileName;
             }
         } else {
@@ -86,8 +90,8 @@ class ConsultationController extends Controller
         }
 
         if ($consultation->save()) {
-            $consultation->majors()
-                         ->sync($request->get('majors', []));
+            $consultation->majors()->sync($request->get('majors', []));
+
             return $this->response->setStatusCode(200);
         } else {
             return $this->response->setStatusCode(503);
@@ -97,7 +101,7 @@ class ConsultationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  Consultation $consultation
+     * @param Consultation $consultation
      *
      * @return \Illuminate\Http\Response
      */
@@ -109,25 +113,24 @@ class ConsultationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Consultation $consultation
+     * @param Consultation $consultation
      *
      * @return \Illuminate\Http\Response
      */
     public function edit($consultation)
     {
-        $majors = Major::pluck('name', 'id')
-                       ->toArray();
-        $consultationMajors = $consultation->majors->pluck('id')
-                                                   ->toArray();
+        $majors = Major::pluck('name', 'id')->toArray();
+        $consultationMajors = $consultation->majors->pluck('id')->toArray();
         $consultationStatuses = Assignmentstatus::pluck('name', 'id');
+
         return view("consultation.edit", compact("consultation", "majors", "consultationStatuses", "consultationMajors"));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \app\Http\Requests\ConsultationRequest $request
-     * @param  Consultation                           $consultation
+     * @param \app\Http\Requests\ConsultationRequest $request
+     * @param Consultation $consultation
      *
      * @return \Illuminate\Http\Response
      */
@@ -139,43 +142,49 @@ class ConsultationController extends Controller
         if ($request->hasFile("thumbnail")) {
             $file = $request->file('thumbnail');
             $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-            if (Storage::disk(Config::get('constants.DISK7'))
-                       ->put($fileName, File::get($file))) {
-                Storage::disk(Config::get('constants.DISK7'))
-                       ->delete($thumbnail);
+            $fileName = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            if (Storage::disk(Config::get('constants.DISK7'))->put($fileName, File::get($file))) {
+                Storage::disk(Config::get('constants.DISK7'))->delete($thumbnail);
                 $consultation->thumbnail = $fileName;
             }
         }
 
-        if (strlen($request->get("videoPageLink")) > 0)
-            if (!preg_match("/^http:\/\//", $consultation->videoPageLink) && !preg_match("/^https:\/\//", $consultation->videoPageLink))
-                $consultation->videoPageLink = "https://" . $consultation->videoPageLink;
+        if (strlen($request->get("videoPageLink")) > 0) {
+            if (! preg_match("/^http:\/\//", $consultation->videoPageLink) && ! preg_match("/^https:\/\//", $consultation->videoPageLink)) {
+                $consultation->videoPageLink = "https://".$consultation->videoPageLink;
+            }
+        }
 
-        if (strlen($request->get("textScriptLink")) > 0)
-            if (!preg_match("/^http:\/\//", $consultation->textScriptLink) && !preg_match("/^https:\/\//", $consultation->textScriptLink))
-                $consultation->textScriptLink = "https://" . $consultation->textScriptLink;
+        if (strlen($request->get("textScriptLink")) > 0) {
+            if (! preg_match("/^http:\/\//", $consultation->textScriptLink) && ! preg_match("/^https:\/\//", $consultation->textScriptLink)) {
+                $consultation->textScriptLink = "https://".$consultation->textScriptLink;
+            }
+        }
 
         if ($consultation->update()) {
             session()->put("success", "اطلاعات مشاوره با موفقیت اصلاح شد");
         } else {
             session()->put("error", \Lang::get("responseText.Database error."));
         }
+
         return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Consultation $consultation
+     * @param Consultation $consultation
      *
      * @return \Illuminate\Http\Response
      */
     public function destroy($consultation)
     {
-        if ($consultation->delete())
+        if ($consultation->delete()) {
             session()->put('success', 'مشاوره با موفقیت اصلاح شد');
-        else session()->put('error', 'خطای پایگاه داده');
+        } else {
+            session()->put('error', 'خطای پایگاه داده');
+        }
+
         return redirect()->back();
     }
 }

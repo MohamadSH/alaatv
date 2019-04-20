@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Web;
+
 use App\Block;
 use App\Classes\SEO\SeoDummyTags;
 use App\Http\Controllers\Controller;
@@ -13,6 +14,7 @@ use Illuminate\Http\Response;
 class ShopPageController extends Controller
 {
     use MetaCommon;
+
     protected $response;
 
     /**
@@ -24,6 +26,7 @@ class ShopPageController extends Controller
      * In order to run a parent constructor, a call to parent::__construct() within the child constructor is required.
      *
      * param [ mixed $args [, $... ]]
+     *
      * @link https://php.net/manual/en/language.oop5.decon.php
      * @param Response $response
      * @param Websitesetting $setting
@@ -37,50 +40,45 @@ class ShopPageController extends Controller
     /**
      * Handle the incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return Response
      */
     public function __invoke(Request $request)
     {
         $blocks = Block::getShopBlocks();
         $url = $request->url();
-        $this->generateSeoMetaTags(new SeoDummyTags($this->setting->site->seo->homepage->metaTitle, $this->setting->site->seo->homepage->metaDescription, $url, $url, route('image', [
-            'category' => '11',
-            'w'        => '100',
-            'h'        => '100',
-            'filename' => $this->setting->site->siteLogo,
-        ]), '100', '100', null));
+        $this->generateSeoMetaTags(new SeoDummyTags($this->setting->site->seo->homepage->metaTitle, $this->setting->site->seo->homepage->metaDescription, $url,
+            $url, route('image', [
+                'category' => '11',
+                'w' => '100',
+                'h' => '100',
+                'filename' => $this->setting->site->siteLogo,
+            ]), '100', '100', null));
 
         //$slides = collect();
         $slides = Slideshow::getShopBanner();
         if (request()->expectsJson()) {
-            return $this->response
-                ->setStatusCode(Response::HTTP_OK)
-                ->setContent([
-                    'mainBanner' => $slides ,
-                    'block'   => [
-                        'current_page'   => 1,
-                        'data'           => $blocks,
-                        'first_page_url' => null,
-                        'from'           => 1,
-                        'last_page'      => 1,
-                        'last_page_url'  => null,
-                        'next_page_url'  => null,
-                        'path'           => $url,
-                        'per_page'       => $blocks->count() + 1,
-                        'prev_page_url'  => null,
-                        'to'             => $blocks->count(),
-                        'total'          => $blocks->count(),
-                    ]
-                ]);
+            return $this->response->setStatusCode(Response::HTTP_OK)->setContent([
+                'mainBanner' => $slides,
+                'block' => [
+                    'current_page' => 1,
+                    'data' => $blocks,
+                    'first_page_url' => null,
+                    'from' => 1,
+                    'last_page' => 1,
+                    'last_page_url' => null,
+                    'next_page_url' => null,
+                    'path' => $url,
+                    'per_page' => $blocks->count() + 1,
+                    'prev_page_url' => null,
+                    'to' => $blocks->count(),
+                    'total' => $blocks->count(),
+                ],
+            ]);
         }
         $pageName = "shop";
 //        dd($blocks,$slides);
 //        dd($blocks->first()->products);
-        return view('pages.shop', compact(
-            'pageName',
-            'blocks',
-            'slides'
-        ));
+        return view('pages.shop', compact('pageName', 'blocks', 'slides'));
     }
 }

@@ -18,5 +18,4 @@ class UserStatus extends FilterAbstract
     {
         return $builder->whereIn($this->attribute, $value);
     }
-
 }

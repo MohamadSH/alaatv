@@ -20,8 +20,9 @@ class WebsiteSettingProvider extends ServiceProvider
         view()->share('wSetting', optional($setting)->setting);
         view()->share('setting', $setting);
 
-        if (isset(optional(optional($setting)->site)->name))
+        if (isset(optional(optional($setting)->site)->name)) {
             Config::set("constants.SITE_NAME", $setting->setting->site->name);
+        }
 
         $this->app->singleton('App\Websitesetting', function ($app) use ($setting) {
             return $setting;
@@ -46,11 +47,10 @@ class WebsiteSettingProvider extends ServiceProvider
         $key = "AppServiceProvider:websitesettings";
         if (Schema::hasTable('websitesettings')) {
             return Cache::remember($key, Config::get("constants.CACHE_600"), function () {
-                return Websitesetting::where("version", 1)
-                    ->get()
-                    ->first();
+                return Websitesetting::where("version", 1)->get()->first();
             });
         }
+
         return new Websitesetting();
     }
 }

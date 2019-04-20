@@ -9,12 +9,12 @@ trait QueryCommon
             $query = $query->where(function ($q) use ($words, $columns) {
                 foreach ($columns as $column) {
                     foreach ($words as $word) {
-                        $q->orWhere($column, 'like', '%' . $word . '%');
+                        $q->orWhere($column, 'like', '%'.$word.'%');
                     }
                 }
-
             });
         }
+
         return $query;
     }
 }

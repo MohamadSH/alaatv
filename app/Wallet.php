@@ -7,17 +7,17 @@ use Carbon\Carbon;
 /**
  * App\Wallet
  *
- * @property int                                                              $id
- * @property int|null                                                         $user_id       آیدی مشخص کننده کاربر صاحب
+ * @property int $id
+ * @property int|null $user_id       آیدی مشخص کننده کاربر صاحب
  *           کیف پول
- * @property int|null                                                         $wallettype_id آیدی مشخص کننده نوع کیف
+ * @property int|null $wallettype_id آیدی مشخص کننده نوع کیف
  *           پول
- * @property int                                                              $balance       اعتبار کیف پول
- * @property \Carbon\Carbon|null                                              $created_at
- * @property \Carbon\Carbon|null                                              $updated_at
- * @property \Carbon\Carbon|null                                              $deleted_at
+ * @property int $balance       اعتبار کیف پول
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $transactions
- * @property-read \App\User|null                                              $user
+ * @property-read \App\User|null $user
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Wallet onlyTrashed()
  * @method static bool|null restore()
@@ -60,7 +60,7 @@ class Wallet extends BaseModel
     /**
      * Force to move credits from this account
      *
-     * @param  integer $amount
+     * @param integer $amount
      * @return array
      */
     public function forceWithdraw($amount)
@@ -71,9 +71,9 @@ class Wallet extends BaseModel
     /**
      * Attempt to add credits to this wallet
      *
-     * @param  integer $amount
+     * @param integer $amount
      * @param null $orderId
-     * @param  boolean $shouldAccept
+     * @param boolean $shouldAccept
      *
      * @return array
      */
@@ -81,8 +81,7 @@ class Wallet extends BaseModel
     {
         /**
          * unused variable
-         */
-        /*$failed = true;*/
+         */ /*$failed = true;*/
         /*$responseText = "";*/
 
         $accepted = $shouldAccept ? $this->canWithdraw($amount) : true;
@@ -94,20 +93,20 @@ class Wallet extends BaseModel
             if ($result) {
                 if ($amount > 0) {
                     $completed_at = Carbon::now();
-                    if (isset($orderId))
+                    if (isset($orderId)) {
                         $transactionStatus = config("constants.TRANSACTION_STATUS_SUSPENDED");
-                    else
+                    } else {
                         $transactionStatus = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
+                    }
                     $paymentMethod = config("constants.PAYMENT_METHOD_WALLET");
-                    $this->transactions()
-                         ->create([
-                                      'order_id'             => $orderId,
-                                      'wallet_id'            => $this->id,
-                                      'cost'                 => $amount,
-                                      'transactionstatus_id' => $transactionStatus,
-                                      'paymentmethod_id'     => $paymentMethod,
-                                      'completed_at'         => $completed_at,
-                                  ]);
+                    $this->transactions()->create([
+                        'order_id' => $orderId,
+                        'wallet_id' => $this->id,
+                        'cost' => $amount,
+                        'transactionstatus_id' => $transactionStatus,
+                        'paymentmethod_id' => $paymentMethod,
+                        'completed_at' => $completed_at,
+                    ]);
                 }
                 $responseText = "SUCCESSFUL";
                 $failed = false;
@@ -121,7 +120,7 @@ class Wallet extends BaseModel
         }
 
         return [
-            "result"       => !$failed,
+            "result" => ! $failed,
             "responseText" => $responseText,
         ];
     }
@@ -129,7 +128,7 @@ class Wallet extends BaseModel
     /**
      * Determine if the user can withdraw from this wallet
      *
-     * @param  integer $amount
+     * @param integer $amount
      *
      * @return boolean
      */
@@ -153,26 +152,25 @@ class Wallet extends BaseModel
      * @param bool $withoutTransaction
      * @return array
      */
-    public function deposit(int $amount, bool $withoutTransaction=false): array
+    public function deposit(int $amount, bool $withoutTransaction = false): array
     {
         /**
          * unused variable
-        */
+         */
 
         $newBalance = $this->balance + $amount;
         $this->balance = $newBalance;
         $result = $this->update();
         if ($result) {
-            if ($amount > 0 && !$withoutTransaction) {
+            if ($amount > 0 && ! $withoutTransaction) {
                 $completed_at = Carbon::now();
                 $transactionStatus = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
-                $this->transactions()
-                     ->create([
-                                  'wallet_id'            => $this->id,
-                                  'cost'                 => -$amount,
-                                  'transactionstatus_id' => $transactionStatus,
-                                  'completed_at'         => $completed_at,
-                              ]);
+                $this->transactions()->create([
+                    'wallet_id' => $this->id,
+                    'cost' => -$amount,
+                    'transactionstatus_id' => $transactionStatus,
+                    'completed_at' => $completed_at,
+                ]);
             }
             $responseText = "SUCCESSFUL";
             $failed = false;
@@ -182,7 +180,7 @@ class Wallet extends BaseModel
         }
 
         return [
-            "result"       => !$failed,
+            "result" => ! $failed,
             "responseText" => $responseText,
         ];
     }

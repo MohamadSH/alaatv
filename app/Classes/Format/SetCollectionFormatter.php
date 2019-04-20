@@ -8,7 +8,6 @@
 
 namespace App\Classes\Format;
 
-
 use App\Collection\SetCollection;
 
 interface SetCollectionFormatter

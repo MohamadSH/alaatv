@@ -39,7 +39,7 @@ class OrderFileController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -47,16 +47,17 @@ class OrderFileController extends Controller
     {
         $orderFile = new Orderfile();
         $orderFile->fill($request->all());
-        if ($orderFile->save())
+        if ($orderFile->save()) {
             return $this->response->setStatusCode(200);
-        else return $this->response->setStatusCode(503);
-
+        } else {
+            return $this->response->setStatusCode(503);
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -68,7 +69,7 @@ class OrderFileController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -80,8 +81,8 @@ class OrderFileController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -93,7 +94,7 @@ class OrderFileController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */

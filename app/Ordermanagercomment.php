@@ -5,14 +5,14 @@ namespace App;
 /**
  * App\Ordermanagercomment
  *
- * @property int                 $id
- * @property int|null            $user_id  آیدی مشخص کننده کاربر مسئول
- * @property int                 $order_id آیدی مشخص کننده سفارش
- * @property string|null         $comment  توضیح مسئول
+ * @property int $id
+ * @property int|null $user_id  آیدی مشخص کننده کاربر مسئول
+ * @property int $order_id آیدی مشخص کننده سفارش
+ * @property string|null $comment  توضیح مسئول
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Order     $order
+ * @property-read \App\Order $order
  * @property-read \App\User|null $user
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Ordermanagercomment onlyTrashed()

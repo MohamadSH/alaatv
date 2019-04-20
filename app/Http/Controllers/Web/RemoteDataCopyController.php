@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 class RemoteDataCopyController extends Controller
 {
     protected $connection;
+
     protected $response;
 
     public function __construct()
@@ -37,8 +38,8 @@ class RemoteDataCopyController extends Controller
             $sanatisharifDataRequest->offsetSet("pageOldAddress", "/Sanati-Sharif-Lesson/$lessonid");
             $response = $sanatisharifSyncController->store($sanatisharifDataRequest);
         }
-        return $this->response->setStatusCode(200)
-                              ->setContent(["message" => "همسان سازی با موفقیت انجام شد"]);
+
+        return $this->response->setStatusCode(200)->setContent(["message" => "همسان سازی با موفقیت انجام شد"]);
     }
 
     public function copyDepartment(SanatisharifmergeController $sanatisharifSyncController)
@@ -51,24 +52,23 @@ class RemoteDataCopyController extends Controller
             $sanatisharifDataRequest->offsetSet("depyear", $department->year);
             $response = $sanatisharifSyncController->store($sanatisharifDataRequest);
         }
-        return $this->response->setStatusCode(200)
-                              ->setContent(["message" => "همسان سازی با موفقیت انجام شد"]);
+
+        return $this->response->setStatusCode(200)->setContent(["message" => "همسان سازی با موفقیت انجام شد"]);
     }
 
     public function copyDepartmentlesson(SanatisharifmergeController $sanatisharifSyncController)
     {
         //        $lastDeplesson = Sanatisharifmerge::groupBy('departmentlessonid')->get()->max('departmentlessonid');
         // Bug: yek video vared shode va deplesson be vaseteie an vared shode ama khode deplesson be tanhai vared nashode ast
-        $lastDeplesson = Sanatisharifmerge::whereNull("videoid")
-                                          ->whereNull("pamphletid")
-                                          ->max('departmentlessonid');
-        if (!isset($lastDeplesson))
+        $lastDeplesson = Sanatisharifmerge::whereNull("videoid")->whereNull("pamphletid")->max('departmentlessonid');
+        if (! isset($lastDeplesson)) {
             $lastDeplesson = 0;
-        $departmentlessons = $this->connection->select("CALL `getalldepartmentlessondetail`(" . $lastDeplesson . ")");
+        }
+        $departmentlessons = $this->connection->select("CALL `getalldepartmentlessondetail`(".$lastDeplesson.")");
         //        dd($departmentlessons);
         $successCounter = 0;
         $failedCounter = 0;
-        dump("number of available deplessons : " . count($departmentlessons));
+        dump("number of available deplessons : ".count($departmentlessons));
         foreach ($departmentlessons as $departmentlesson) {
             $depid = $departmentlesson->depid;
             $lessonid = $departmentlesson->lessonid;
@@ -90,28 +90,29 @@ class RemoteDataCopyController extends Controller
             $response = $sanatisharifSyncController->store($sanatisharifDataRequest);
             if ($response->getStatusCode() == 200) {
                 $successCounter++;
-            } else if ($response->getStatusCode() == 503) {
-                $failedCounter++;
-                dump("departmentlesson wasn't copied. id: " . $departmentlessonid);
+            } else {
+                if ($response->getStatusCode() == 503) {
+                    $failedCounter++;
+                    dump("departmentlesson wasn't copied. id: ".$departmentlessonid);
+                }
             }
         }
-        dump("number of failed videos : " . $failedCounter);
-        dump("number of copied videos : " . $successCounter);
-        return $this->response->setStatusCode(200)
-                              ->setContent(["message" => "Data sync done successfully"]);
+        dump("number of failed videos : ".$failedCounter);
+        dump("number of copied videos : ".$successCounter);
+
+        return $this->response->setStatusCode(200)->setContent(["message" => "Data sync done successfully"]);
     }
 
     public function copyVideo(SanatisharifmergeController $sanatisharifSyncController)
     {
-        $lastVideo = Sanatisharifmerge::groupBy('videoid')
-                                      ->get()
-                                      ->max('videoid');
-        if (!isset($lastVideo))
+        $lastVideo = Sanatisharifmerge::groupBy('videoid')->get()->max('videoid');
+        if (! isset($lastVideo)) {
             $lastVideo = 0;
-        $videos = $this->connection->select("CALL `getallvideocompleteinfo`(" . $lastVideo . ")");
+        }
+        $videos = $this->connection->select("CALL `getallvideocompleteinfo`(".$lastVideo.")");
         $successCounter = 0;
         $failedCounter = 0;
-        dump("number of available videos : " . count($videos));
+        dump("number of available videos : ".count($videos));
         foreach ($videos as $video) {
             $depid = $video->depid;
             $lessonid = $video->lessonid;
@@ -143,28 +144,29 @@ class RemoteDataCopyController extends Controller
             $response = $sanatisharifSyncController->store($sanatisharifDataRequest);
             if ($response->getStatusCode() == 200) {
                 $successCounter++;
-            } else if ($response->getStatusCode() == 503) {
-                $failedCounter++;
-                dump("video wasn't copied. id: " . $videoid);
+            } else {
+                if ($response->getStatusCode() == 503) {
+                    $failedCounter++;
+                    dump("video wasn't copied. id: ".$videoid);
+                }
             }
         }
-        dump("number of failed videos : " . $failedCounter);
-        dump("number of copied videos : " . $successCounter);
-        return $this->response->setStatusCode(200)
-                              ->setContent(["message" => "Data sync done successfully"]);
+        dump("number of failed videos : ".$failedCounter);
+        dump("number of copied videos : ".$successCounter);
+
+        return $this->response->setStatusCode(200)->setContent(["message" => "Data sync done successfully"]);
     }
 
     public function copyPamphlet(SanatisharifmergeController $sanatisharifSyncController)
     {
-        $lastPamphlet = Sanatisharifmerge::groupBy('pamphletid')
-                                         ->get()
-                                         ->max('pamphletid');
-        if (!isset($lastPamphlet))
+        $lastPamphlet = Sanatisharifmerge::groupBy('pamphletid')->get()->max('pamphletid');
+        if (! isset($lastPamphlet)) {
             $lastPamphlet = 0;
-        $pamphlets = $this->connection->select("CALL `getallpamphletcompleteinfo`(" . $lastPamphlet . ")");
+        }
+        $pamphlets = $this->connection->select("CALL `getallpamphletcompleteinfo`(".$lastPamphlet.")");
         $successCounter = 0;
         $failedCounter = 0;
-        dump("number of available pamphlets : " . count($pamphlets));
+        dump("number of available pamphlets : ".count($pamphlets));
         foreach ($pamphlets as $pamphlet) {
             $depid = $pamphlet->depid;
             $lessonid = $pamphlet->lessonid;
@@ -193,16 +195,16 @@ class RemoteDataCopyController extends Controller
             $response = $sanatisharifSyncController->store($sanatisharifDataRequest);
             if ($response->getStatusCode() == 200) {
                 $successCounter++;
-            } else if ($response->getStatusCode() == 503) {
-                $failedCounter++;
-                dump("pamphlet wasn't copied. id: " . $pamphletid);
+            } else {
+                if ($response->getStatusCode() == 503) {
+                    $failedCounter++;
+                    dump("pamphlet wasn't copied. id: ".$pamphletid);
+                }
             }
         }
-        dump("number of failed pamphlets : " . $failedCounter);
-        dump("number of copied pamphlets : " . $successCounter);
-        return $this->response->setStatusCode(200)
-                              ->setContent(["message" => "Data sync done successfully"]);
+        dump("number of failed pamphlets : ".$failedCounter);
+        dump("number of copied pamphlets : ".$successCounter);
+
+        return $this->response->setStatusCode(200)->setContent(["message" => "Data sync done successfully"]);
     }
-
-
 }

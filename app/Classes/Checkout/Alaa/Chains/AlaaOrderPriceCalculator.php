@@ -8,12 +8,11 @@
 
 namespace App\Classes\Checkout\Alaa\Chains;
 
-
 use App\Classes\Abstracts\Checkout\OrderPriceCalculator;
 
 class AlaaOrderPriceCalculator extends OrderPriceCalculator
 {
-    protected function calculateOrderPrice($totalRawPriceWhichDoesntHaveDiscount , $totalPriceWithDiscount):int
+    protected function calculateOrderPrice($totalRawPriceWhichDoesntHaveDiscount, $totalPriceWithDiscount): int
     {
         return $totalRawPriceWhichDoesntHaveDiscount + intval(round($totalPriceWithDiscount), 0);
     }

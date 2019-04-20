@@ -19,7 +19,9 @@ class MergeProductCommand extends Command
 {
     use ProductCommon;
     use APIRequestCommon;
+
 //    use TaggableTrait;  //Has not been merged in to project yet
+
     /**
      * The name and signature of the console command.
      *
@@ -35,7 +37,8 @@ class MergeProductCommand extends Command
     protected $description = 'Merging old products';
 
     private $productArray;
-    private $tagging ;
+
+    private $tagging;
 
     /**
      * @return array
@@ -359,8 +362,7 @@ class MergeProductCommand extends Command
     public function handle(ProductController $productController)
     {
         $productCount = count($this->productArray);
-        if ($this->confirm('Products will be merged into ' . $productCount . '. Do you wish to continue?', true))
-        {
+        if ($this->confirm('Products will be merged into '.$productCount.'. Do you wish to continue?', true)) {
             $this->performMergingForAllProducts($productController, $productCount);
 
             if ($this->confirm('Do you want to clear cache ', true)) {
@@ -368,13 +370,9 @@ class MergeProductCommand extends Command
             }
 
             $this->info("Merging Successfully Done!");
-        }
-        else
-        {
+        } else {
             $this->info("Action Aborted");
         }
-
-
     }
 
     /**
@@ -391,108 +389,99 @@ class MergeProductCommand extends Command
             $totalGrandChildrenCost = 0;
             $totalGrandChildrenDiscount = 25;
 
-            if($allCategoryProduct->hasParents())
-            {
-                $grandParent =  $allCategoryProduct->grandParent;
-            }
-            else
-            {
+            if ($allCategoryProduct->hasParents()) {
+                $grandParent = $allCategoryProduct->grandParent;
+            } else {
                 //This should not happen
                 $this->info("Warning! Could not find grandparent for #".$allCategoryProduct->id);
                 continue;
             }
 
             $children = $productElement["children"];
-             foreach ($children as $child) {
-                 $grandChildren = $this->extractChildren($child , $allCategoryProduct );
+            foreach ($children as $child) {
+                $grandChildren = $this->extractChildren($child, $allCategoryProduct);
 
-                 $newParent = $this->getParent($child);
-                 $parent = $allCategoryProduct;
-                 if(isset($newParent))
-                 {
-                     $parent = $newParent;
-                     $allCategoryProduct->children()
-                         ->updateExistingPivot($parent->id, ["description" => $child["description"]]);
-                 }
+                $newParent = $this->getParent($child);
+                $parent = $allCategoryProduct;
+                if (isset($newParent)) {
+                    $parent = $newParent;
+                    $allCategoryProduct->children()->updateExistingPivot($parent->id, ["description" => $child["description"]]);
+                }
 
-                 $grandChildrenCount = count($grandChildren);
-                 $this->info("\n Found ".$grandChildrenCount." items for ".$productElement["title"]);
-                 $subBar = $this->output->createProgressBar($grandChildrenCount);
-                 foreach ($grandChildren as $grandChild)
-                 {
-                     $newProductId = $grandChild["id"];
+                $grandChildrenCount = count($grandChildren);
+                $this->info("\n Found ".$grandChildrenCount." items for ".$productElement["title"]);
+                $subBar = $this->output->createProgressBar($grandChildrenCount);
+                foreach ($grandChildren as $grandChild) {
+                    $newProductId = $grandChild["id"];
 
-                     $hasConfigurableParent = false;
-                     if ($grandChild["type"] == config("constants.PRODUCT_TYPE_CONFIGURABLE"))
-                         $hasConfigurableParent = true;
+                    $hasConfigurableParent = false;
+                    if ($grandChild["type"] == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
+                        $hasConfigurableParent = true;
+                    }
 
-                     if ($hasConfigurableParent)
-                     {
-                         $originalProduct = Product::Find($grandChild["id"]);
-                         if(!isset($originalProduct))
-                         {
-                             $this->info("\n Could not find original product #:".$grandChild["id"]);
-                             continue;
-                         }
+                    if ($hasConfigurableParent) {
+                        $originalProduct = Product::Find($grandChild["id"]);
+                        if (! isset($originalProduct)) {
+                            $this->info("\n Could not find original product #:".$grandChild["id"]);
+                            continue;
+                        }
 
-                         if (isset($originalProduct)) {
-                             $newProductId = $this->copyOriginalProduct($productController, $originalProduct);
-                         }
-                     }
+                        if (isset($originalProduct)) {
+                            $newProductId = $this->copyOriginalProduct($productController, $originalProduct);
+                        }
+                    }
 
-                     $newProduct = Product::Find($newProductId);
-                     if(!isset($newProduct))
-                     {
-                         $this->info("\n Could not find new product of original product #:".$grandChild["id"]);
-                         continue;
-                     }
-                     $totalGrandChildrenCost += $newProduct->basePrice;
+                    $newProduct = Product::Find($newProductId);
+                    if (! isset($newProduct)) {
+                        $this->info("\n Could not find new product of original product #:".$grandChild["id"]);
+                        continue;
+                    }
+                    $totalGrandChildrenCost += $newProduct->basePrice;
 
-                     $newCost = $newProduct->basePrice;
-                     $newDiscount = $newProduct->discount;
-                     if($hasConfigurableParent)
-                     {
-                         $newCost = $originalProduct->basePrice;
-                         $newDiscount = $originalProduct->discount;
+                    $newCost = $newProduct->basePrice;
+                    $newDiscount = $newProduct->discount;
+                    if ($hasConfigurableParent) {
+                        $newCost = $originalProduct->basePrice;
+                        $newDiscount = $originalProduct->discount;
 
-                         $this->copyProductBelongings($originalProduct, $newProduct, $grandChild["title"]);
+                        $this->copyProductBelongings($originalProduct, $newProduct, $grandChild["title"]);
 
-                         $originalProduct->setDisable();
-                         $originalProduct->update();
+                        $originalProduct->setDisable();
+                        $originalProduct->update();
 
-                         if ($originalProduct->hasParents()) {
-                             $originalProductParent = $originalProduct->parents->first();
-                             $this->copyProductBelongings($originalProductParent, $newProduct, $grandChild["title"]);
+                        if ($originalProduct->hasParents()) {
+                            $originalProductParent = $originalProduct->parents->first();
+                            $this->copyProductBelongings($originalProductParent, $newProduct, $grandChild["title"]);
 
-                             $originalProductParent->setDisable();
-                             $originalProductParent->update();
-                         }
+                            $originalProductParent->setDisable();
+                            $originalProductParent->update();
+                        }
 
-                         $this->info("Deleting orderproducts");
-                         Orderproduct::deleteOpenedTransactions([$originalProduct->id], [config("constants.ORDER_STATUS_OPEN")]);
-                     }
+                        $this->info("Deleting orderproducts");
+                        Orderproduct::deleteOpenedTransactions([$originalProduct->id], [config("constants.ORDER_STATUS_OPEN")]);
+                    }
 
+                    ///////////////////////////
+                    //Update new product //////
+                    ///////////////////////////
+                    $this->setNewProductAttributes($newProduct, $grandChild["title"], $newCost, $newDiscount, $grandParent);
+                    $newProduct->update();
+                    ////////////////////////////
+                    /////////////End ///////////
+                    ////////////////////////////
 
-                     ///////////////////////////
-                     //Update new product //////
-                     ///////////////////////////
-                     $this->setNewProductAttributes($newProduct,$grandChild["title"], $newCost, $newDiscount, $grandParent);
-                     $newProduct->update();
-                     ////////////////////////////
-                     /////////////End ///////////
-                     ////////////////////////////
+                    ///////////////////////////
+                    //Attaching children //////
+                    ///////////////////////////
+                    $parent->children()->attach($newProductId,
+                        ["control_id" => 2, "description" => $grandChild["description"], "created_at" => Carbon::now(), "updated_at" => Carbon::now(),]);
+                    ///////////////////////////
+                    ////////////End////////////
+                    ///////////////////////////
 
-                     ///////////////////////////
-                     //Attaching children //////
-                     ///////////////////////////
-                     $parent->children()->attach($newProductId, ["control_id" => 2, "description" => $grandChild["description"], "created_at" => Carbon::now(), "updated_at" => Carbon::now(),]);
-                     ///////////////////////////
-                     ////////////End////////////
-                     ///////////////////////////
-
-                     $subBar->advance();
-                 }
-                 $subBar->finish();
+                    $subBar->advance();
+                }
+                $subBar->finish();
             }
 
             ///////////////////////////////////////
@@ -527,14 +516,15 @@ class MergeProductCommand extends Command
      * @param Product $currentParent
      * @return array
      */
-    private function extractChildren($child , Product $currentParent) :array
+    private function extractChildren($child, Product $currentParent): array
     {
-        if (isset($child["children"]))
+        if (isset($child["children"])) {
             $grandChildren = $child["children"];
-        else
+        } else {
             $grandChildren = [$child];
+        }
 
-        return $grandChildren ;
+        return $grandChildren;
     }
 
     /**
@@ -543,9 +533,11 @@ class MergeProductCommand extends Command
      */
     private function getParent($productElement)
     {
-        $parent = null ;
-        if(isset($productElement["parent"]))
+        $parent = null;
+        if (isset($productElement["parent"])) {
             $parent = $productElement["parent"];
+        }
+
         return $parent;
     }
 
@@ -556,28 +548,21 @@ class MergeProductCommand extends Command
     private function setTags(Product $product): void
     {
 //       $this->sendTagsOfTaggableToApi($product ,$this->tagging );
-        if(isset($product->tags) && isset($product->tags->tags))
-        {
-            $itemTagsArray = $product->tags->tags ;
+        if (isset($product->tags) && isset($product->tags->tags)) {
+            $itemTagsArray = $product->tags->tags;
             $params = [
-                "tags"=> json_encode($itemTagsArray) ,
+                "tags" => json_encode($itemTagsArray),
             ];
 
-            if(isset($product->created_at) && strlen($product->created_at) > 0 )
-                $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $product->created_at )->timestamp;
-
-            $response =  $this->sendRequest(
-                config("constants.TAG_API_URL")."id/product/".$product->id ,
-                "PUT",
-                $params
-            );
-
-            if($response["statusCode"] == 200)
-            {
-                //
+            if (isset($product->created_at) && strlen($product->created_at) > 0) {
+                $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $product->created_at)->timestamp;
             }
-            else
-            {
+
+            $response = $this->sendRequest(config("constants.TAG_API_URL")."id/product/".$product->id, "PUT", $params);
+
+            if ($response["statusCode"] == 200) {
+                //
+            } else {
             }
         }
     }
@@ -608,7 +593,7 @@ class MergeProductCommand extends Command
 
         $this->copyProductFiles($originalProduct, $newProduct);
 
-        $newProductPhotoInfo = ["title" => "نمونه جزوه " . $title, "description" => ""];
+        $newProductPhotoInfo = ["title" => "نمونه جزوه ".$title, "description" => ""];
         $this->copyProductPhotos($originalProduct, $newProduct, $newProductPhotoInfo);
     }
 
@@ -621,10 +606,12 @@ class MergeProductCommand extends Command
     {
         $response = $productController->copy($originalProduct);
         $responseContent = json_decode($response->getContent());
-        if ($response->getStatusCode() == Response::HTTP_OK)
+        if ($response->getStatusCode() == Response::HTTP_OK) {
             $newProductId = $responseContent->newProductId;
-        else
+        } else {
             $newProductId = 0;
+        }
+
         return $newProductId;
     }
 }

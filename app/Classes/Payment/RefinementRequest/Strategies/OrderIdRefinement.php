@@ -8,10 +8,9 @@
 
 namespace App\Classes\Payment\RefinementRequest\Strategies;
 
-
+use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Order;
 use Illuminate\Http\Response;
-use App\Classes\Payment\RefinementRequest\Refinement;
 
 class OrderIdRefinement extends Refinement
 {
@@ -20,18 +19,18 @@ class OrderIdRefinement extends Refinement
      */
     function loadData(): Refinement
     {
-        if($this->statusCode!=Response::HTTP_OK) {
+        if ($this->statusCode != Response::HTTP_OK) {
             return $this;
         }
         $orderId = $this->inputData['order_id'];
         $order = $this->getOrder($orderId);
-        if($order !== false) {
+        if ($order !== false) {
             $this->order = $order;
             $this->user = $this->order->user;
             $this->getOrderCost();
             // ToDo: if sent open order_id user can't use wallet
             $this->donateCost = $this->order->getDonateCost();
-            if($this->canDeductFromWallet()) {
+            if ($this->canDeductFromWallet()) {
                 $this->payByWallet();
             }
             $result = $this->getNewTransaction();
@@ -43,6 +42,7 @@ class OrderIdRefinement extends Refinement
             $this->statusCode = Response::HTTP_NOT_FOUND;
             $this->message = 'سفارشی یافت نشد.';
         }
+
         return $this;
     }
 
@@ -52,10 +52,11 @@ class OrderIdRefinement extends Refinement
      */
     private function getOrder(int $orderId)
     {
-        $order =  Order::with(['transactions', 'coupon'])->find($orderId);
-        if(isset($order))
+        $order = Order::with(['transactions', 'coupon'])->find($orderId);
+        if (isset($order)) {
             return $order;
-        else
+        } else {
             return false;
+        }
     }
 }

@@ -78,6 +78,7 @@ trait CharacterCommon
         $string = str_replace($persianDecimal, $newNumbers, $string);
         $string = str_replace($arabicDecimal, $newNumbers, $string);
         $string = str_replace($arabic, $newNumbers, $string);
+
         return str_replace($persian, $newNumbers, $string);
     }
 
@@ -115,8 +116,9 @@ trait CharacterCommon
      */
     public function makeValidUrl($string, $protocol = "https"): string
     {
-        if (!preg_match("/^http:\/\//", $string) && !preg_match("/^https:\/\//", $string))
-            $string = $protocol . "://" . $string;
+        if (! preg_match("/^http:\/\//", $string) && ! preg_match("/^https:\/\//", $string)) {
+            $string = $protocol."://".$string;
+        }
 
         return $string;
     }

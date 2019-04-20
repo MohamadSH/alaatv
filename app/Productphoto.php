@@ -42,7 +42,6 @@ namespace App;
  */
 class Productphoto extends BaseModel
 {
-
     /**
      * @var array
      */
@@ -61,11 +60,11 @@ class Productphoto extends BaseModel
         'created_at',
         'enable',
         'updated_at',
-        'product_id'
+        'product_id',
     ];
 
     protected $appends = [
-        'url'
+        'url',
     ];
 
     public function product()
@@ -85,17 +84,18 @@ class Productphoto extends BaseModel
         return $query->where('enable', '=', 1);
     }
 
-    public function url($w, $h){
+    public function url($w, $h)
+    {
         return route('image', [
             'category' => '4',
-            'w'        => $w,
-            'h'        => $h,
-            'filename' => $this->file
+            'w' => $w,
+            'h' => $h,
+            'filename' => $this->file,
         ]);
     }
 
     public function getUrlAttribute($value): string
     {
-        return $this->url('1400','2000');
+        return $this->url('1400', '2000');
     }
 }

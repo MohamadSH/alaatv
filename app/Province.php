@@ -5,11 +5,11 @@ namespace App;
 /**
  * App\Province
  *
- * @property int                                                       $id
- * @property string|null                                               $name نام استان
- * @property \Carbon\Carbon|null                                       $created_at
- * @property \Carbon\Carbon|null                                       $updated_at
- * @property \Carbon\Carbon|null                                       $deleted_at
+ * @property int $id
+ * @property string|null $name نام استان
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\City[] $cities
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Province onlyTrashed()

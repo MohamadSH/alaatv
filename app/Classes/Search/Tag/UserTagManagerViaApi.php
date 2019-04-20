@@ -2,7 +2,6 @@
 
 namespace App\Classes\Search\Tag;
 
-
 use App\Classes\Search\RedisTagManagerViaApi;
 
 class UserTagManagerViaApi extends RedisTagManagerViaApi

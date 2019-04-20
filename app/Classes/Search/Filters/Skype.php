@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Filters;
 
-
 class Skype extends FilterAbstract
 {
     protected $attribute = 'skype';

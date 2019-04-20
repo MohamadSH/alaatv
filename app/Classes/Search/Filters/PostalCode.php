@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Filters;
 
-
 class PostalCode extends FilterAbstract
 {
     protected $attribute = 'postalCode';

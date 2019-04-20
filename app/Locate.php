@@ -14,7 +14,6 @@ namespace App;
  */
 class Locate extends BaseModel
 {
-
     /**
      * @var array
      */

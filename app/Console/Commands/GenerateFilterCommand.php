@@ -20,7 +20,6 @@ class GenerateFilterCommand extends Command
      */
     protected $description = 'Generate a new Filter Class stub.';
 
-
     /**
      * Execute the console command.
      *
@@ -33,7 +32,7 @@ class GenerateFilterCommand extends Command
         $stub = $this->compileTemplate($filterName);
 
         $path = $this->makeFilterClass($filterName, $stub);
-        $this->info($path . "  created.");
+        $this->info($path."  created.");
     }
 
     /**
@@ -46,6 +45,7 @@ class GenerateFilterCommand extends Command
         $stub = file_get_contents(app_path('Console/filter.stub'));
         $stub = str_replace("{{CLASS}}", $filterName, $stub);
         $stub = str_replace("{{ATTRIBUTE_NAME}}", str_slug($filterName, "_"), $stub);
+
         return $stub;
     }
 
@@ -57,8 +57,9 @@ class GenerateFilterCommand extends Command
      */
     protected function makeFilterClass($filterName, $stub): string
     {
-        $path = app_path('Classes/Search/Filters/') . $filterName . ".php";
+        $path = app_path('Classes/Search/Filters/').$filterName.".php";
         file_put_contents($path, $stub);
+
         return $path;
     }
 }

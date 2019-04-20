@@ -8,13 +8,13 @@ use Webpatser\Uuid\Uuid;
 /**
  * App\File
  *
- * @property int                                                          $id
- * @property string|null                                                  $uuid شناسه منحصر به فرد سراسری
- * @property string                                                       $name نام فایل
- * @property \Carbon\Carbon|null                                          $created_at
- * @property \Carbon\Carbon|null                                          $updated_at
- * @property \Carbon\Carbon|null                                          $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Disk[]    $disks
+ * @property int $id
+ * @property string|null $uuid شناسه منحصر به فرد سراسری
+ * @property string $name نام فایل
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Disk[] $disks
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Content[] $contents
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\File onlyTrashed()
@@ -54,15 +54,12 @@ class File extends BaseModel
 
     public function contents()
     {
-        return $this->belongsToMany('App\Content', 'educationalcontent_file', 'file_id', 'content_id')
-                    ->withPivot("caption");
+        return $this->belongsToMany('App\Content', 'educationalcontent_file', 'file_id', 'content_id')->withPivot("caption");
     }
 
     public function disks()
     {
-        return $this->belongsToMany("\App\Disk")
-                    ->orderBy("priority")
-                    ->withPivot("priority");
+        return $this->belongsToMany("\App\Disk")->orderBy("priority")->withPivot("priority");
     }
 
     public function getUrl()
@@ -70,8 +67,7 @@ class File extends BaseModel
         $fileRemotePath = "";
         $disk = $this->disks->first();
         if (isset($disk)) {
-            $diskAdapter = Storage::disk($disk->name)
-                                  ->getAdapter();
+            $diskAdapter = Storage::disk($disk->name)->getAdapter();
             $diskType = class_basename($diskAdapter);
             $sftpRoot = config("constants.SFTP_ROOT");
             $dProtocol = config("constants.DOWNLOAD_HOST_PROTOCOL");
@@ -81,20 +77,21 @@ class File extends BaseModel
                 case "SftpAdapter" :
                     //                $fileHost = $diskAdapter->getHost();
                     $fileRoot = $diskAdapter->getRoot();
-                    $fileRemotePath = str_replace($sftpRoot, $dProtocol . $dName, $fileRoot);
+                    $fileRemotePath = str_replace($sftpRoot, $dProtocol.$dName, $fileRoot);
                     $fileRemotePath .= $this->name;
                     break;
             }
+
             return $fileRemotePath;
         } else {
             return action("Web\HomeController@error404");
         }
-
     }
 
     public function getExtention()
     {
         $ext = pathinfo($this->name, PATHINFO_EXTENSION);
+
         return $ext;
     }
 }

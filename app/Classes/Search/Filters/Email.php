@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Filters;
 
-
 class Email extends FilterAbstract
 {
     protected $attribute = 'email';

@@ -13,16 +13,18 @@ trait RequestCommon
         $hasFile = true;
         if (array_key_exists($index, $data)) {
             $file = $data[$index];
-            if (!is_file($file))
+            if (! is_file($file)) {
                 $hasFile = false;
+            }
         } else {
             $hasFile = false;
         }
 
-        if ($hasFile)
+        if ($hasFile) {
             return $file;
-        else
+        } else {
             return $hasFile;
+        }
     }
 
     /**
@@ -33,6 +35,7 @@ trait RequestCommon
     public function isRequestFromApp(\Illuminate\Foundation\Http\FormRequest $request): bool
     {
         $isApp = (strlen(strstr($request->header('User-Agent'), "Alaa")) > 0) ? true : false;
+
         return $isApp;
     }
 
@@ -43,14 +46,15 @@ trait RequestCommon
      * @param \Illuminate\Foundation\Http\FormRequest $newRequest
      * @return void
      */
-    public function copyRequest(\Illuminate\Foundation\Http\FormRequest $sourceRequest , \Illuminate\Foundation\Http\FormRequest &$newRequest):void
+    public function copyRequest(\Illuminate\Foundation\Http\FormRequest $sourceRequest, \Illuminate\Foundation\Http\FormRequest &$newRequest): void
     {
         $newRequest->merge($sourceRequest->all());
-        $user = $sourceRequest->user() ;
-        if(isset($user))
+        $user = $sourceRequest->user();
+        if (isset($user)) {
             $newRequest->setUserResolver(function () use ($user) {
                 return $user;
             });
+        }
     }
 
     /**
@@ -59,7 +63,7 @@ trait RequestCommon
      * @param \Illuminate\Foundation\Http\FormRequest $request
      * @return void
      */
-    static public function convertRequestToAjax(\Illuminate\Foundation\Http\FormRequest &$request):void
+    static public function convertRequestToAjax(\Illuminate\Foundation\Http\FormRequest &$request): void
     {
         $request->headers->add(["X-Requested-With" => "XMLHttpRequest"]);
     }

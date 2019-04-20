@@ -8,7 +8,6 @@
 
 namespace App\Collection;
 
-
 use Illuminate\Database\Eloquent\Collection;
 
 class UserCollection extends Collection
@@ -18,15 +17,17 @@ class UserCollection extends Collection
         $users = $this->whereHas('roles', function ($q) use ($rolesId) {
             $q->whereIn("id", $rolesId);
         });
+
         return $users;
     }
 
     public function majorFilter($majorsId): UserCollection
     {
-        if (in_array(0, $majorsId))
+        if (in_array(0, $majorsId)) {
             $users = $this->whereDoesntHave("major");
-        else
+        } else {
             $users = $this->whereIn("major_id", $majorsId);
+        }
 
         return $users;
     }
@@ -54,6 +55,6 @@ class UserCollection extends Collection
 
     public function getUsersWithVerifiedMobiles()
     {
-        return $this->where("mobile_verified_at" , "<>" , null);
+        return $this->where("mobile_verified_at", "<>", null);
     }
 }

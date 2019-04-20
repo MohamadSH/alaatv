@@ -8,11 +8,8 @@
 
 namespace App\Classes\sms;
 
-
 interface SmsSenderClient
 {
-
-
     /**
      * @param array $params
      *

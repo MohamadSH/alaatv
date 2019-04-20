@@ -8,7 +8,6 @@
 
 namespace App\Traits\User;
 
-
 use App\Collection\UserCollection;
 use App\User;
 use Illuminate\Support\Facades\Cache;
@@ -21,14 +20,12 @@ trait TeacherTrait
     public static function getTeachers(): UserCollection
     {
         $key = "getTeachers";
-        return Cache::tags(["teachers"])
-                    ->remember($key, config("constants.CACHE_600"), function () {
-                        $authors = User::select()
-                                       ->role([config('constants.ROLE_TEACHER')])
-                                       ->orderBy('lastName')
-                                       ->get();
-                        return $authors;
-                    });
+
+        return Cache::tags(["teachers"])->remember($key, config("constants.CACHE_600"), function () {
+            $authors = User::select()->role([config('constants.ROLE_TEACHER')])->orderBy('lastName')->get();
+
+            return $authors;
+        });
     }
 
     /*
@@ -41,5 +38,4 @@ trait TeacherTrait
     {
         return $this->hasMany("\App\Content", "author_id", "id");
     }
-
 }

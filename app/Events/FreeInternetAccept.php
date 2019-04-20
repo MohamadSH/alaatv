@@ -8,6 +8,7 @@ use Illuminate\Queue\SerializesModels;
 class FreeInternetAccept
 {
     use SerializesModels;
+
     /**
      * The verified user.
      *
@@ -18,7 +19,7 @@ class FreeInternetAccept
     /**
      * Create a new event instance.
      *
-     * @param  User $user
+     * @param User $user
      *
      * @return void
      */
@@ -26,5 +27,4 @@ class FreeInternetAccept
     {
         $this->user = $user;
     }
-
 }

@@ -8,10 +8,8 @@
 
 namespace App\Classes\Abstracts\Facade;
 
-
 use App\Classes\Factory\ControllerFactory;
 use App\Http\Controllers\Controller;
-use App\Traits\RequestCommon;
 use Illuminate\Foundation\Http\FormRequest;
 
 abstract class CallControllerStoreFacade
@@ -22,16 +20,18 @@ abstract class CallControllerStoreFacade
      * @param array $data
      * @return mixed
      */
-    public function callStore(array $data){
+    public function callStore(array $data)
+    {
         $controllerObject = $this->getControllerObject();
         $orderproducts = $controllerObject->new($data);
+
         return $orderproducts;
     }
 
     /**
      * @return Controller
      */
-    protected function getControllerObject():Controller
+    protected function getControllerObject(): Controller
     {
         return ControllerFactory::getControllerObject($this->getControllerName());
     }
@@ -39,5 +39,5 @@ abstract class CallControllerStoreFacade
     /**
      * @return string
      */
-    abstract protected function getControllerName():string ;
+    abstract protected function getControllerName(): string;
 }

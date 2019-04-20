@@ -9,6 +9,7 @@ use Illuminate\Queue\SerializesModels;
 class FavoriteEvent
 {
     use SerializesModels;
+
     /**
      *
      * @var User
@@ -24,7 +25,7 @@ class FavoriteEvent
     /**
      * Create a new event instance.
      *
-     * @param  User              $user
+     * @param User $user
      * @param FavorableInterface $favorable
      */
 

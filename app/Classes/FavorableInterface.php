@@ -8,7 +8,6 @@
 
 namespace App\Classes;
 
-
 use App\User;
 
 interface FavorableInterface

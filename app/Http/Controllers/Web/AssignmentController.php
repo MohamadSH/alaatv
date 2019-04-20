@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Web;
+
 use App\Assignment;
 use App\Assignmentstatus;
 use App\Http\Controllers\Controller;
@@ -21,10 +22,10 @@ class AssignmentController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:' . Config::get('constants.LIST_ASSIGNMENT_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:' . Config::get('constants.INSERT_ASSIGNMENT_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:' . Config::get('constants.REMOVE_ASSIGNMENT_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:' . Config::get('constants.SHOW_ASSIGNMENT_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:'.Config::get('constants.LIST_ASSIGNMENT_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.Config::get('constants.INSERT_ASSIGNMENT_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:'.Config::get('constants.REMOVE_ASSIGNMENT_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:'.Config::get('constants.SHOW_ASSIGNMENT_ACCESS'), ['only' => 'edit']);
 
         $this->response = new Response();
     }
@@ -36,9 +37,9 @@ class AssignmentController extends Controller
      */
     public function index()
     {
-        $assignments = Assignment::all()
-                                 ->sortByDesc('created_at');
+        $assignments = Assignment::all()->sortByDesc('created_at');
         $pageName = "admin";
+
         return view("assignment.index", compact("assignments", "pageName"));
     }
 
@@ -55,7 +56,7 @@ class AssignmentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \app\Http\Requests\AssignmentRequest $request
+     * @param \app\Http\Requests\AssignmentRequest $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -66,9 +67,8 @@ class AssignmentController extends Controller
         if ($request->hasFile("questionFile")) {
             $file = $request->file('questionFile');
             $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-            if (Storage::disk(Config::get('constants.DISK2'))
-                       ->put($fileName, File::get($file))) {
+            $fileName = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            if (Storage::disk(Config::get('constants.DISK2'))->put($fileName, File::get($file))) {
                 $assignment->questionFile = $fileName;
             }
         }
@@ -76,21 +76,22 @@ class AssignmentController extends Controller
         if ($request->hasFile("solutionFile")) {
             $file = $request->file('solutionFile');
             $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
+            $fileName = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
 
-            if (Storage::disk('assignmentSolutionFile')
-                       ->put($fileName, File::get($file))) {
+            if (Storage::disk('assignmentSolutionFile')->put($fileName, File::get($file))) {
                 $assignment->solutionFile = $fileName;
             }
         }
 
-        if (strlen($request->get("analysisVideoLink")) > 0)
-            if (!preg_match("/^http:\/\//", $assignment->analysisVideoLink) && !preg_match("/^https:\/\//", $assignment->analysisVideoLink))
-                $assignment->analysisVideoLink = "https://" . $assignment->analysisVideoLink;
+        if (strlen($request->get("analysisVideoLink")) > 0) {
+            if (! preg_match("/^http:\/\//", $assignment->analysisVideoLink) && ! preg_match("/^https:\/\//", $assignment->analysisVideoLink)) {
+                $assignment->analysisVideoLink = "https://".$assignment->analysisVideoLink;
+            }
+        }
 
         if ($assignment->save()) {
-            $assignment->majors()
-                       ->sync($request->get('majors', []));
+            $assignment->majors()->sync($request->get('majors', []));
+
             return $this->response->setStatusCode(200);
         } else {
             return $this->response->setStatusCode(503);
@@ -100,7 +101,7 @@ class AssignmentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  Assignment $assignment
+     * @param Assignment $assignment
      *
      * @return \Illuminate\Http\Response
      */
@@ -112,26 +113,24 @@ class AssignmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Assignment $assignment
+     * @param Assignment $assignment
      *
      * @return \Illuminate\Http\Response
      */
     public function edit($assignment)
     {
-        $majors = Major::pluck('name', 'id')
-                       ->toArray();
-        $assignmentMajors = $assignment->majors->pluck('id')
-                                               ->toArray();
-        $assignmentStatuses = Assignmentstatus::pluck('name', 'id')
-                                              ->toArray();
+        $majors = Major::pluck('name', 'id')->toArray();
+        $assignmentMajors = $assignment->majors->pluck('id')->toArray();
+        $assignmentStatuses = Assignmentstatus::pluck('name', 'id')->toArray();
+
         return view("assignment.edit", compact("assignment", "majors", "assignmentStatuses", "assignmentMajors"));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \app\Http\Requests\AssignmentRequest $request
-     * @param  Assignment                           $assignment
+     * @param \app\Http\Requests\AssignmentRequest $request
+     * @param Assignment $assignment
      *
      * @return \Illuminate\Http\Response
      */
@@ -144,11 +143,9 @@ class AssignmentController extends Controller
         if ($request->hasFile("questionFile")) {
             $file = $request->file('questionFile');
             $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
-            if (Storage::disk(Config::get('constants.DISK2'))
-                       ->put($fileName, File::get($file))) {
-                Storage::disk(Config::get('constants.DISK2'))
-                       ->delete($questionFile);
+            $fileName = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            if (Storage::disk(Config::get('constants.DISK2'))->put($fileName, File::get($file))) {
+                Storage::disk(Config::get('constants.DISK2'))->delete($questionFile);
                 $assignment->questionFile = $fileName;
             }
         }
@@ -156,41 +153,44 @@ class AssignmentController extends Controller
         if ($request->hasFile("solutionFile")) {
             $file = $request->file('solutionFile');
             $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
+            $fileName = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
 
-            if (Storage::disk('assignmentSolutionFile')
-                       ->put($fileName, File::get($file))) {
-                Storage::disk('assignmentSolutionFile')
-                       ->delete($solutionFile);
+            if (Storage::disk('assignmentSolutionFile')->put($fileName, File::get($file))) {
+                Storage::disk('assignmentSolutionFile')->delete($solutionFile);
                 $assignment->solutionFile = $fileName;
             }
         }
 
-        if (strlen($request->get("analysisVideoLink")) > 0)
-            if (!preg_match("/^http:\/\//", $assignment->analysisVideoLink) && !preg_match("/^https:\/\//", $assignment->analysisVideoLink))
-                $assignment->analysisVideoLink = "https://" . $assignment->analysisVideoLink;
+        if (strlen($request->get("analysisVideoLink")) > 0) {
+            if (! preg_match("/^http:\/\//", $assignment->analysisVideoLink) && ! preg_match("/^https:\/\//", $assignment->analysisVideoLink)) {
+                $assignment->analysisVideoLink = "https://".$assignment->analysisVideoLink;
+            }
+        }
 
         if ($assignment->update()) {
             session()->put('success', 'اصلاح تمرین با موفقیت انجام شد');
         } else {
             session()->put('error', 'خطای پایگاه داده');
         }
-        return redirect()->back();
 
+        return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Assignment $assignment
+     * @param Assignment $assignment
      *
      * @return \Illuminate\Http\Response
      */
     public function destroy($assignment)
     {
-        if ($assignment->delete())
+        if ($assignment->delete()) {
             session()->put('success', 'تمرین با موفقیت حذف شد');
-        else session()->put('error', 'خطای پایگاه داده');
+        } else {
+            session()->put('error', 'خطای پایگاه داده');
+        }
+
         return redirect()->back();
     }
 }
