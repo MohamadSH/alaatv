@@ -14,12 +14,14 @@ trait OrderCommon
         $wallets = $user->wallets->sortByDesc("wallettype_id"); //Chon mikhastim aval az kife poole hedie kam shavad!
         /** @var Wallet $wallet */
         foreach ($wallets as $wallet) {
-            if ($cost < 0)
+            if ($cost < 0) {
                 break;
+            }
             $amount = $wallet->balance;
             if ($amount > 0) {
-                if ($cost < $amount)
+                if ($cost < $amount) {
                     $amount = $cost;
+                }
 
                 $result = $wallet->withdraw($amount, $order->id);
                 if ($result["result"]) {
@@ -31,21 +33,21 @@ trait OrderCommon
 
         return [
             "result" => $walletPaidFlag,
-            "cost"   => $cost,
+            "cost" => $cost,
         ];
     }
-
 
     /**
      * @param Order $order
      * @param Orderproduct $orderProduct
      * @param Product $product
      */
-    private function applyOrderGifts(Order &$order, Orderproduct $orderProduct, Product $product) {
+    private function applyOrderGifts(Order &$order, Orderproduct $orderProduct, Product $product)
+    {
         $giftsOfProduct = $product->getGifts();
         $orderGifts = $order->giftOrderproducts;
         foreach ($giftsOfProduct as $giftItem) {
-            if (!$orderGifts->contains($giftItem)) {
+            if (! $orderGifts->contains($giftItem)) {
                 $this->attachGift($order, $giftItem, $orderProduct);
                 $order->giftOrderproducts->push($giftItem);
             }
@@ -69,8 +71,8 @@ trait OrderCommon
         $giftOrderproduct->discountPercentage = 100;
         $giftOrderproduct->save();
 
-        $giftOrderproduct->parents()
-            ->attach($orderproduct, ["relationtype_id" => config("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
+        $giftOrderproduct->parents()->attach($orderproduct, ["relationtype_id" => config("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
+
         return $giftOrderproduct;
     }
 
@@ -82,16 +84,18 @@ trait OrderCommon
      * @param User $user
      * @return Order
      */
-    public function firstOrCreateOpenOrder(User $user): Order {
+    public function firstOrCreateOpenOrder(User $user): Order
+    {
 
         $openOrder = $user->openOrders->first();
-        if(!isset($openOrder)) {
+        if (! isset($openOrder)) {
             $openOrder = new Order();
             $openOrder->user_id = $user->id;
             $openOrder->orderstatus_id = config('constants.ORDER_STATUS_OPEN');
             $openOrder->paymentstatus_id = config('constants.PAYMENT_STATUS_UNPAID');
             $openOrder->save();
         }
+
         return $openOrder;
     }
 }

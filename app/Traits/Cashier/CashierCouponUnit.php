@@ -8,15 +8,20 @@
 
 namespace App\Traits\Cashier;
 
-
 trait CashierCouponUnit
 {
     protected $orderCoupon;
+
     protected $orderCouponDiscountCostAmount;
+
     protected $orderCouponDiscountPercentage;
+
     protected $totalRawPriceWhichDoesntHaveDiscount;
+
     protected $totalRawPriceWhichHasDiscount;
+
     protected $totalPriceWithDiscount; //It is totalRawPriceWhichHasDiscount after calculating it's discount
+
     protected $temporaryTotalPriceWithDiscount;
 
     /**
@@ -26,6 +31,7 @@ trait CashierCouponUnit
     public function setOrderCoupon($orderCoupon)
     {
         $this->orderCoupon = $orderCoupon;
+
         return $this;
     }
 
@@ -36,6 +42,7 @@ trait CashierCouponUnit
     public function setOrderCouponDiscountCostAmount($orderCouponDiscountCostAmount)
     {
         $this->orderCouponDiscountCostAmount = $orderCouponDiscountCostAmount;
+
         return $this;
     }
 
@@ -46,6 +53,7 @@ trait CashierCouponUnit
     public function setOrderCouponDiscountPercentage($orderCouponDiscountPercentage)
     {
         $this->orderCouponDiscountPercentage = $orderCouponDiscountPercentage;
+
         return $this;
     }
 
@@ -56,6 +64,7 @@ trait CashierCouponUnit
     public function setTotalRawPriceWhichDoesntHaveDiscount($totalRawPriceWhichDoesntHaveDiscount)
     {
         $this->totalRawPriceWhichDoesntHaveDiscount = $totalRawPriceWhichDoesntHaveDiscount;
+
         return $this;
     }
 
@@ -67,6 +76,7 @@ trait CashierCouponUnit
     {
         $this->totalRawPriceWhichHasDiscount = $totalRawPriceWhichHasDiscount;
         $this->temporaryTotalPriceWithDiscount = $totalRawPriceWhichHasDiscount;
+
         return $this;
     }
 
@@ -78,6 +88,7 @@ trait CashierCouponUnit
     {
         $this->totalPriceWithDiscount = $totalPriceWithDiscount;
         $this->temporaryTotalPriceWithDiscount = $totalPriceWithDiscount;
+
         return $this;
     }
 
@@ -88,6 +99,7 @@ trait CashierCouponUnit
     public function setTemporaryTotalPriceWithDiscount($temporaryTotalPriceWithDiscount)
     {
         $this->temporaryTotalPriceWithDiscount = $temporaryTotalPriceWithDiscount;
+
         return $this;
     }
 
@@ -98,7 +110,6 @@ trait CashierCouponUnit
     {
         return $this->orderCoupon;
     }
-
 
     /**
      * @return mixed

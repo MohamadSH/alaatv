@@ -19,7 +19,7 @@ class AlaaInvoiceGenerator
      * @return array
      * @throws \Exception
      */
-    public function generateOrderInvoice(Order $order):array
+    public function generateOrderInvoice(Order $order): array
     {
         $orderproductsInfo = $this->getOrderproductsInfo($order);
         /** @var OrderproductCollection $orderproducts */
@@ -35,8 +35,8 @@ class AlaaInvoiceGenerator
         $calculatedOrderproducts = $orderPriceArray['calculatedOrderproducts'];
         $calculatedOrderproducts->updateCostValues();
 
-        $orderproductsRawCost   = $orderPriceArray['sumOfOrderproductsRawCost'];
-        $totalCost              = $orderPriceArray['totalCost'];
+        $orderproductsRawCost = $orderPriceArray['sumOfOrderproductsRawCost'];
+        $totalCost = $orderPriceArray['totalCost'];
         $payableByWallet = $orderPriceArray['payableAmountByWallet'];
 
         $orderProductCount = $this->orderproductFormatter($calculatedOrderproducts);
@@ -48,9 +48,10 @@ class AlaaInvoiceGenerator
      * @param Collection $fakeOrderproducts
      * @return array
      */
-    public function generateFakeOrderproductsInvoice(Collection $fakeOrderproducts){
+    public function generateFakeOrderproductsInvoice(Collection $fakeOrderproducts)
+    {
         /** @var OrderproductCollection $fakeOrderproducts */
-        $groupPriceInfo =  $fakeOrderproducts->calculateGroupPrice();
+        $groupPriceInfo = $fakeOrderproducts->calculateGroupPrice();
 
         $orderProductCount = $this->orderproductFormatter($fakeOrderproducts);
 
@@ -71,7 +72,7 @@ class AlaaInvoiceGenerator
 
         return [
             'purchasedOrderproducts' => $purchasedOrderproducts,
-            'giftOrderproducts'      => $giftOrderproducts,
+            'giftOrderproducts' => $giftOrderproducts,
         ];
     }
 
@@ -81,16 +82,17 @@ class AlaaInvoiceGenerator
      * @param OrderproductCollection $orderproducts
      * @return int
      */
-    private function orderproductFormatter(OrderproductCollection &$orderproducts):int
+    private function orderproductFormatter(OrderproductCollection &$orderproducts): int
     {
         $newPrices = $orderproducts->getNewPrices();
 
         $orderProductCount = 0;
-        $orderproducts = new OrderproductCollection($orderproducts->groupBy('grandId')->map(function ($orderproducts) use (&$orderProductCount){
-            $orderProductCount += $orderproducts->count() ;
+        $orderproducts = new OrderproductCollection($orderproducts->groupBy('grandId')->map(function ($orderproducts) use (&$orderProductCount) {
+            $orderProductCount += $orderproducts->count();
+
             return [
-              'grand' => $orderproducts->first()->grandProduct ?? null,
-               'orderproducts' =>  $orderproducts
+                'grand' => $orderproducts->first()->grandProduct ?? null,
+                'orderproducts' => $orderproducts,
             ];
         })->values()->all());
 
@@ -102,16 +104,16 @@ class AlaaInvoiceGenerator
     private function invoiceFormatter($orderproducts, $orderproductCount, $orderproductsRawCost, $totalCost, $payableByWallet)
     {
         $discount = $orderproductsRawCost - $totalCost;
+
         return [
-            'items'                => $orderproducts,
-            'orderproductCount'    => $orderproductCount,
-            'price'   =>  [
-                'base'            => $orderproductsRawCost,
-                'discount'        => $discount,
-                'final'           => $totalCost,
+            'items' => $orderproducts,
+            'orderproductCount' => $orderproductCount,
+            'price' => [
+                'base' => $orderproductsRawCost,
+                'discount' => $discount,
+                'final' => $totalCost,
                 'payableByWallet' => $payableByWallet,
-            ]
+            ],
         ];
     }
-
 }

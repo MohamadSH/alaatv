@@ -5,13 +5,13 @@ namespace App;
 /**
  * App\Majortype
  *
- * @property int                                                        $id
- * @property string|null                                                $name        نام رشته
- * @property string|null                                                $displayName نام قابل نمایش رشته
- * @property string|null                                                $description توضیج درباره نوع رشته
- * @property \Carbon\Carbon|null                                        $created_at
- * @property \Carbon\Carbon|null                                        $updated_at
- * @property \Carbon\Carbon|null                                        $deleted_at
+ * @property int $id
+ * @property string|null $name        نام رشته
+ * @property string|null $displayName نام قابل نمایش رشته
+ * @property string|null $description توضیج درباره نوع رشته
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Major[] $majors
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Majortype onlyTrashed()

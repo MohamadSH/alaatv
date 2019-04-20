@@ -15,24 +15,26 @@ use App\Orderproduct;
 
 class OrderproductCheckout extends CheckoutInvoker
 {
-    private $orderproduct ;
+    private $orderproduct;
+
     private $recalculate;
 
     /**
      * OrderCheckout constructor.
+     *
      * @param Orderproduct $orderproduct
      * @param bool $recalculate
      */
-    public function __construct(Orderproduct $orderproduct , bool $recalculate)
+    public function __construct(Orderproduct $orderproduct, bool $recalculate)
     {
-        $this->orderproduct = $orderproduct ;
+        $this->orderproduct = $orderproduct;
         $this->recalculate = $recalculate;
     }
 
     /**
      * @return array
      */
-    protected function fillChainArray():array
+    protected function fillChainArray(): array
     {
         return [
             "AlaaOrderproductGroupPriceCalculatorFromNewBase",
@@ -40,18 +42,15 @@ class OrderproductCheckout extends CheckoutInvoker
         ];
     }
 
-    protected function initiateCashier():Cashier
+    protected function initiateCashier(): Cashier
     {
         $orderproductsToCalculateFromBase = new OrderproductCollection();
         $orderproductsToCalculateFromRecord = new OrderproductCollection();
-        if($this->recalculate)
-        {
-            $this->orderproduct->load('product' , 'product.parents' , 'userbons' , 'attributevalues' , 'product.attributevalues' );
+        if ($this->recalculate) {
+            $this->orderproduct->load('product', 'product.parents', 'userbons', 'attributevalues', 'product.attributevalues');
             $orderproductsToCalculateFromBase = new OrderproductCollection([$this->orderproduct]);
-        }
-        else
-        {
-            $this->orderproduct->load( 'userbons' , 'attributevalues'  );
+        } else {
+            $this->orderproduct->load('userbons', 'attributevalues');
             $orderproductsToCalculateFromRecord = new OrderproductCollection([$this->orderproduct]);
         }
 

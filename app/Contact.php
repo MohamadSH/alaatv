@@ -5,21 +5,21 @@ namespace App;
 /**
  * App\Contact
  *
- * @property int                                                        $id
- * @property int|null                                                   $user_id        آی دی مشخص کننده کاربر صاحب این
+ * @property int $id
+ * @property int|null $user_id        آی دی مشخص کننده کاربر صاحب این
  *           رکورد دفترچه تلفن
- * @property int|null                                                   $contacttype_id آی دی مشخص کننده نوع این رکورد
+ * @property int|null $contacttype_id آی دی مشخص کننده نوع این رکورد
  *           دفترچه تلفن
- * @property int|null                                                   $relative_id    آی دی مشخص کننده نسبت صاحب
+ * @property int|null $relative_id    آی دی مشخص کننده نسبت صاحب
  *           اطالاعات تماس با کاربر
- * @property string|null                                                $name           نام صاحب اطالاعات تماس
- * @property \Carbon\Carbon|null                                        $created_at
- * @property \Carbon\Carbon|null                                        $updated_at
- * @property \Carbon\Carbon|null                                        $deleted_at
- * @property-read \App\Contacttype|null                                 $contacttype
+ * @property string|null $name           نام صاحب اطالاعات تماس
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \App\Contacttype|null $contacttype
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Phone[] $phones
- * @property-read \App\Relative|null                                    $relative
- * @property-read \App\User|null                                        $user
+ * @property-read \App\Relative|null $relative
+ * @property-read \App\User|null $user
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|Contact onlyTrashed()
  * @method static bool|null restore()

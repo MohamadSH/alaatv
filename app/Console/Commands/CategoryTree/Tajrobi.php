@@ -8,7 +8,7 @@
 
 namespace App\Console\Commands\CategoryTree;
 
-class Tajrobi extends CategoryTree
+class Tajrobi extends GetTree
 {
     public function getTree(): array
     {

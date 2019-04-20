@@ -14,24 +14,26 @@ use App\Collection\OrderproductCollection;
 
 class GroupOrderproductCheckout extends CheckoutInvoker
 {
-    private $orderproducts ;
+    private $orderproducts;
+
     private $orderproductsToCalculateFromBaseIds;
 
     /**
      * OrderCheckout constructor.
+     *
      * @param OrderproductCollection $orderproducts
      * @param array $orderproductsToCalculateFromBaseIds
      */
-    public function __construct(OrderproductCollection $orderproducts , array $orderproductsToCalculateFromBaseIds = [])
+    public function __construct(OrderproductCollection $orderproducts, array $orderproductsToCalculateFromBaseIds = [])
     {
-        $this->orderproducts = $orderproducts ;
+        $this->orderproducts = $orderproducts;
         $this->orderproductsToCalculateFromBaseIds = $orderproductsToCalculateFromBaseIds;
     }
 
     /**
      * @return array
      */
-    protected function fillChainArray():array
+    protected function fillChainArray(): array
     {
         return [
             "AlaaOrderproductGroupPriceCalculatorFromNewBase",
@@ -40,12 +42,12 @@ class GroupOrderproductCheckout extends CheckoutInvoker
         ];
     }
 
-    protected function initiateCashier():Cashier
+    protected function initiateCashier(): Cashier
     {
         $orderproducts = $this->orderproducts;
 
-        $orderproductsToCalculateFromBase = $orderproducts->whereIn("id" , $this->orderproductsToCalculateFromBaseIds);
-        $orderproductsToCalculateFromRecord = $orderproducts->whereNotIn("id" , $this->orderproductsToCalculateFromBaseIds);
+        $orderproductsToCalculateFromBase = $orderproducts->whereIn("id", $this->orderproductsToCalculateFromBaseIds);
+        $orderproductsToCalculateFromRecord = $orderproducts->whereNotIn("id", $this->orderproductsToCalculateFromBaseIds);
 
         $alaaCashier = new AlaaCashier();
         $alaaCashier->setRawOrderproductsToCalculateFromBase($orderproductsToCalculateFromBase);

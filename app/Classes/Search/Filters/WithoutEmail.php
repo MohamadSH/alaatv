@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Filters;
 
-
 use Illuminate\Database\Eloquent\Builder;
 
 class WithoutEmail extends FilterAbstract
@@ -18,8 +17,7 @@ class WithoutEmail extends FilterAbstract
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         return $builder->where(function ($q) {
-            $q->whereNull($this->attribute)
-                ->orWhere($this->attribute, "");
+            $q->whereNull($this->attribute)->orWhere($this->attribute, "");
         });
     }
 }

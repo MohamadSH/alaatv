@@ -7,13 +7,13 @@ use Illuminate\Support\Facades\Config;
 /**
  * App\Mbtianswer
  *
- * @property int                 $id
- * @property int                 $user_id آی دی مشخص کننده کاربری که آزمون داده است
- * @property string|null         $answers آرایه ی مشخص کننده گزینه های انتخاب شده
+ * @property int $id
+ * @property int $user_id آی دی مشخص کننده کاربری که آزمون داده است
+ * @property string|null $answers آرایه ی مشخص کننده گزینه های انتخاب شده
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\User      $user
+ * @property-read \App\User $user
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Mbtianswer onlyTrashed()
  * @method static bool|null restore()
@@ -51,33 +51,32 @@ class Mbtianswer extends BaseModel
 
     public function getUserOrderInfo($output)
     {
-        $ordooOrder = $this->user->orders()
-                                 ->whereHas('orderproducts', function ($q) {
-                                     $q->whereIn("product_id", Product::whereHas('parents', function ($q) {
-                                         $q->whereIn("parent_id", [
-                                             1,
-                                             13,
-                                         ]);
-                                     })
-                                                                      ->pluck("id"));
-                                 })
-                                 ->whereIn("orderstatus_id", [Config::get("constants.ORDER_STATUS_CLOSED")])
-                                 ->get();
+        $ordooOrder = $this->user->orders()->whereHas('orderproducts', function ($q) {
+            $q->whereIn("product_id", Product::whereHas('parents', function ($q) {
+                $q->whereIn("parent_id", [
+                    1,
+                    13,
+                ]);
+            })->pluck("id"));
+        })->whereIn("orderstatus_id", [Config::get("constants.ORDER_STATUS_CLOSED")])->get();
 
         switch ($output) {
             case "productName":
-                if ($ordooOrder->isEmpty())
+                if ($ordooOrder->isEmpty()) {
                     return "";
-                else return $ordooOrder->first()->orderproducts->first()->product->name;
+                } else {
+                    return $ordooOrder->first()->orderproducts->first()->product->name;
+                }
                 break;
             case "orderStatus":
-                if ($ordooOrder->isEmpty())
+                if ($ordooOrder->isEmpty()) {
                     return "";
-                else return $ordooOrder->first()->orderstatus->displayName;
+                } else {
+                    return $ordooOrder->first()->orderstatus->displayName;
+                }
                 break;
             default:
                 break;
         }
-
     }
 }

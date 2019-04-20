@@ -5,9 +5,9 @@ namespace App;
 /**
  * App\Websitesetting
  *
- * @property int                 $id
- * @property string              $setting ستون شامل تنظیمات سایت
- * @property int|null            $version ستون مشخص ککنده ورژن تنظیمات
+ * @property int $id
+ * @property string $setting ستون شامل تنظیمات سایت
+ * @property int|null $version ستون مشخص ککنده ورژن تنظیمات
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at

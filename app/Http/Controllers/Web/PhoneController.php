@@ -9,7 +9,6 @@ use App\Phone;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 
-
 class PhoneController extends Controller
 {
     protected $response;
@@ -19,7 +18,7 @@ class PhoneController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:' . Config::get('constants.EDIT_CONTACT_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:'.Config::get('constants.EDIT_CONTACT_ACCESS'), ['only' => 'edit']);
 
         $this->response = new Response();
     }
@@ -47,7 +46,7 @@ class PhoneController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -56,8 +55,9 @@ class PhoneController extends Controller
         $phone = new Phone();
         $phone->fill($request->all());
         $phone->priority = preg_replace('/\s+/', '', $phone->priority);
-        if (strlen($phone->priority == 0))
+        if (strlen($phone->priority == 0)) {
             $phone->priority = 0;
+        }
         if ($phone->save()) {
             return $this->response->setStatusCode(200);
         } else {
@@ -68,7 +68,7 @@ class PhoneController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -80,7 +80,7 @@ class PhoneController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -92,8 +92,8 @@ class PhoneController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -102,18 +102,21 @@ class PhoneController extends Controller
         $phone->fill($request->all());
         if ($phone->update()) {
             session()->put("success", "شماره تماس با موفقیت اصلاح شد");
+
             return true;
         } else {
             session()->put("error", "خطای پایگاه داده.");
+
             return false;
         }
+
         return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */

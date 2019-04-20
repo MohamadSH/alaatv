@@ -16,12 +16,13 @@ class FreeInternetAccept extends Notification implements ShouldQueue
     use Queueable, SerializesModels;
 
     const MEDIANA_PATTERN_CODE_FREE_INTERNET_ACCEPT = 812;
+
     public $timeout = 120;
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
@@ -32,31 +33,25 @@ class FreeInternetAccept extends Notification implements ShouldQueue
             MedianaPatternChannel::class,
             'mail',
         ];
-
     }
 
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed $notifiable
+     * @param mixed $notifiable
      *
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-            ->line($this->msg())
-            ->action('دریافت فایل راهنما', url('https://sanatisharif.ir/v/asiatech'));
+        return (new MailMessage)->line($this->msg())->action('دریافت فایل راهنما', url('https://sanatisharif.ir/v/asiatech'));
     }
 
     private function msg(): string
     {
-        $messageCore = "آلایی عزیز با درخواست اینترنت رایگان شما موافقت شد"
-            . "\n"
-            . 'دریافت فایل راهنما از'
-            . 'https://sanatisharif.ir/v/asiatech';
-        $message = $messageCore;
-        return $message;
+        $messageCore = "آلایی عزیز با درخواست اینترنت رایگان شما موافقت شد"."\n".'دریافت فایل راهنما از'.'https://sanatisharif.ir/v/asiatech';
+
+        return $messageCore;
     }
 
     /**
@@ -66,11 +61,7 @@ class FreeInternetAccept extends Notification implements ShouldQueue
      */
     public function toMediana($notifiable)
     {
-        return (new MedianaMessage())
-            ->content($this->msg())
-            ->setInputData($this->getInputData())
-            ->setPatternCode(self::MEDIANA_PATTERN_CODE_FREE_INTERNET_ACCEPT)
-            ->sendAt(Carbon::now());
+        return (new MedianaMessage())->content($this->msg())->setInputData($this->getInputData())->setPatternCode(self::MEDIANA_PATTERN_CODE_FREE_INTERNET_ACCEPT)->sendAt(Carbon::now());
     }
 
     private function getInputData(): array

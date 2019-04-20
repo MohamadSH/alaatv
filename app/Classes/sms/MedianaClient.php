@@ -36,7 +36,6 @@ class MedianaClient implements SmsSenderClient
 
     protected $url;
 
-
     /**
      * The HTTP Client instance.
      *
@@ -51,7 +50,6 @@ class MedianaClient implements SmsSenderClient
         $this->http = $http;
         $this->password = $password;
         $this->url = $url;
-
     }
 
     /**
@@ -65,11 +63,12 @@ class MedianaClient implements SmsSenderClient
         $url = $this->url;
         $base = [
             'uname' => $this->userName,
-            'pass'  => $this->password,
-            'from'  => $this->number,
+            'pass' => $this->password,
+            'from' => $this->number,
         ];
-        if (isset($params['from']))
+        if (isset($params['from'])) {
             unset($base["from"]);
+        }
 
         $params = array_merge($base, $params);
         //        dd($params);
@@ -78,8 +77,7 @@ class MedianaClient implements SmsSenderClient
             $response = $this->http->request('POST', $url, [
                 'form_params' => $params,
             ]);
-        }
-        catch (GuzzleException $e) {
+        } catch (GuzzleException $e) {
             throw $e;
         }
 

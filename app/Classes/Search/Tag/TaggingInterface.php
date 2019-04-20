@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search;
 
-
 use App\Classes\Taggable;
 
 interface TaggingInterface

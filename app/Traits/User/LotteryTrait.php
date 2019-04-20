@@ -8,7 +8,6 @@
 
 namespace App\Traits\User;
 
-
 use App\Bon;
 use App\Lottery;
 use Carbon\Carbon;
@@ -31,31 +30,25 @@ trait LotteryTrait
         $endTime2 = Carbon::create(2018, 06, 15, 23, 59, 30, 'Asia/Tehran');
         $flag2 = ($now->between($startTime2, $endTime2));
         if ($flag2) {
-            $bon = Bon::where("name", config("constants.BON2"))
-                      ->first();
+            $bon = Bon::where("name", config("constants.BON2"))->first();
             $userPoints = 0;
             if (isset($bon)) {
                 $userPoints = $this->userHasBon($bon->name);
                 $exchangeAmount = $userPoints * config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT");
             }
             if ($userPoints <= 0) {
-                $lottery = Lottery::where("name", config("constants.LOTTERY_NAME"))
-                                  ->get()
-                                  ->first();
+                $lottery = Lottery::where("name", config("constants.LOTTERY_NAME"))->get()->first();
                 if (isset($lottery)) {
-                    $userLottery = $this->lotteries()
-                                        ->where("lottery_id", $lottery->id)
-                                        ->get()
-                                        ->first();
+                    $userLottery = $this->lotteries()->where("lottery_id", $lottery->id)->get()->first();
                     if (isset($userLottery)) {
                         $lotteryName = $lottery->displayName;
-                        $lotteryMessage = "شما در قرعه کشی " . $lotteryName . " شرکت داده شدید و متاسفانه برنده نشدید.";
+                        $lotteryMessage = "شما در قرعه کشی ".$lotteryName." شرکت داده شدید و متاسفانه برنده نشدید.";
                         if (isset($userLottery->pivot->prizes)) {
                             $lotteryRank = $userLottery->pivot->rank;
                             if ($lotteryRank == 0) {
-                                $lotteryMessage = "شما از قرعه کشی " . $lotteryName . " انصراف دادید.";
+                                $lotteryMessage = "شما از قرعه کشی ".$lotteryName." انصراف دادید.";
                             } else {
-                                $lotteryMessage = "شما در قرعه کشی " . $lotteryName . " برنده " . $lotteryRank . " شدید.";
+                                $lotteryMessage = "شما در قرعه کشی ".$lotteryName." برنده ".$lotteryRank." شدید.";
                             }
 
                             $prizes = json_decode($userLottery->pivot->prizes)->items;
@@ -73,7 +66,6 @@ trait LotteryTrait
                                 }
                             }
                         }
-
                     }
                 }
             }
@@ -93,7 +85,6 @@ trait LotteryTrait
 
     public function lotteries()
     {
-        return $this->belongsToMany("\App\Lottery")
-                    ->withPivot("rank", "prizes");
+        return $this->belongsToMany("\App\Lottery")->withPivot("rank", "prizes");
     }
 }

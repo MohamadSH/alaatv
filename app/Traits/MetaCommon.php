@@ -18,36 +18,36 @@ trait MetaCommon
      * @param        $text
      * @param string $article_kw
      * @param string $global_kw
-     * @param int    $min_word_length
-     * @param int    $min_word_occur
-     * @param int    $min_2words_length
-     * @param int    $min_2words_phrase_length
-     * @param int    $min_2words_phrase_occur
-     * @param int    $min_3words_length
-     * @param int    $min_3words_phrase_length
-     * @param int    $min_3words_phrase_occur
+     * @param int $min_word_length
+     * @param int $min_word_occur
+     * @param int $min_2words_length
+     * @param int $min_2words_phrase_length
+     * @param int $min_2words_phrase_occur
+     * @param int $min_3words_length
+     * @param int $min_3words_phrase_length
+     * @param int $min_3words_phrase_occur
      * @param string $encoding
      * @param string $lang
      *
      * @return string
      */
 
-
-    private function generateKeywordsMeta($text /* the text */,
-                                  $article_kw = '' /*  if some keywords are written by hand (by the author) ,
+    private function generateKeywordsMeta(
+        $text /* the text */,
+        $article_kw = '' /*  if some keywords are written by hand (by the author) ,
  												$article_kw = 'Obama, Washington, economy, jobs, USA , jobless,  politics , politic ,,, houses '; */,
-                                  $global_kw = ''/*if we have a default keyword for the whole site*/,
-                                  $min_word_length = 3 /*  min length of single words */,
-                                  $min_word_occur = 1 /*  min occur of single words */,
-                                  $min_2words_length = 3 /*  min length of words for 2 word phrases; value 0 will DISABLE !!! */,
-                                  $min_2words_phrase_length = 10 /* min length of 2 word phrases */,
-                                  $min_2words_phrase_occur = 2 /* min occur of 2 words phrase */,
-                                  $min_3words_length = 4,
-                                  $min_3words_phrase_length = 12,
-                                  $min_3words_phrase_occur = 2,
-                                  $encoding = 'utf-8' /* // OPTIONAL, but VERY IMPORTANT
+        $global_kw = ''/*if we have a default keyword for the whole site*/,
+        $min_word_length = 3 /*  min length of single words */,
+        $min_word_occur = 1 /*  min occur of single words */,
+        $min_2words_length = 3 /*  min length of words for 2 word phrases; value 0 will DISABLE !!! */,
+        $min_2words_phrase_length = 10 /* min length of 2 word phrases */,
+        $min_2words_phrase_occur = 2 /* min occur of 2 words phrase */,
+        $min_3words_length = 4,
+        $min_3words_phrase_length = 12,
+        $min_3words_phrase_occur = 2,
+        $encoding = 'utf-8' /* // OPTIONAL, but VERY IMPORTANT
 													   // if not defined, will default to UTF-8 */,
-                                  $lang = 'fa_IR' /* // OPTIONAL
+        $lang = 'fa_IR' /* // OPTIONAL
 												// define the language of the text
 												// if not defined, will default to English (en_GB) */
     )
@@ -87,7 +87,7 @@ trait MetaCommon
         // REQUIRED
         $autoKeywords = $keyword->get_keywords();
 
-        $keywords = $global_kw . ',' . $autoKeywords . ',' . $article_kw;
+        $keywords = $global_kw.','.$autoKeywords.','.$article_kw;
         // BONUS FUNCTION
         // clean up keywords; remove ONLY duplicate words; remove identical PLURAL words (English)
         $keywords = $keyword->removeDuplicateKw($keywords);
@@ -99,39 +99,39 @@ trait MetaCommon
     {
         try {
             $seo = new SeoMetaTagsGenerator($item);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
         }
     }
 
-    public function generateCustomMeta($metaData){
-        if(isset($metaData["title"]))
+    public function generateCustomMeta($metaData)
+    {
+        if (isset($metaData["title"])) {
             SEO::setTitle($metaData["title"]);
+        }
 
-        if(isset($metaData["url"]))
-        {
-            SEO::opengraph()
-                ->setUrl($metaData["url"]);
+        if (isset($metaData["url"])) {
+            SEO::opengraph()->setUrl($metaData["url"]);
             SEO::setCanonical($metaData["url"]);
         }
 
-        if(isset($metaData["siteName"]))
-            SEO::twitter()
-                ->setSite(isset($metaData["siteName"]));
+        if (isset($metaData["siteName"])) {
+            SEO::twitter()->setSite(isset($metaData["siteName"]));
+        }
 
-        if(isset($metaData["description"]))
+        if (isset($metaData["description"])) {
             SEO::setDescription($metaData["description"]);
+        }
 
-        if(isset($metaData["image"]))
-            SEO::opengraph()
-                ->addImage(route('image', [
-                    'category' => '11',
-                    'w'        => '100',
-                    'h'        => '100',
-                    'filename' => $metaData["image"],
-                ]), [
-                    'height' => 100,
-                    'width'  => 100,
-                ]);
+        if (isset($metaData["image"])) {
+            SEO::opengraph()->addImage(route('image', [
+                'category' => '11',
+                'w' => '100',
+                'h' => '100',
+                'filename' => $metaData["image"],
+            ]), [
+                'height' => 100,
+                'width' => 100,
+            ]);
+        }
     }
 }

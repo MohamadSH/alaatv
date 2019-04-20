@@ -8,7 +8,6 @@
 
 namespace App\Classes\Search\Filters;
 
-
 use Illuminate\Database\Eloquent\Builder;
 
 class Enable extends FilterAbstract
@@ -19,5 +18,4 @@ class Enable extends FilterAbstract
     {
         return $builder->where($this->attribute, $value);
     }
-
 }

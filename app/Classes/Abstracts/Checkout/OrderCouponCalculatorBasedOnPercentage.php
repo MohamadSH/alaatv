@@ -17,13 +17,15 @@ abstract class OrderCouponCalculatorBasedOnPercentage extends CheckoutProcessor
         $couponDiscountPercentage = $cashier->getOrderCouponDiscountPercentage();
         $temporaryTotalRawPriceWhichHasDiscount = $cashier->getTemporaryTotalPriceWithDiscount();
 
-        if(!isset($temporaryTotalRawPriceWhichHasDiscount))
+        if (! isset($temporaryTotalRawPriceWhichHasDiscount)) {
             throw new Exception('Temporary total price with discount has not been set');
+        }
 
-        if(!isset($couponDiscountPercentage))
+        if (! isset($couponDiscountPercentage)) {
             throw new Exception('Coupon discount percentage has not been set');
+        }
 
-        $totalPriceWithDiscount = $this->calculateDiscount($couponDiscountPercentage , $temporaryTotalRawPriceWhichHasDiscount);
+        $totalPriceWithDiscount = $this->calculateDiscount($couponDiscountPercentage, $temporaryTotalRawPriceWhichHasDiscount);
 
         $cashier->setTotalPriceWithDiscount($totalPriceWithDiscount);
 
@@ -37,6 +39,5 @@ abstract class OrderCouponCalculatorBasedOnPercentage extends CheckoutProcessor
      * @param $totalRawPriceWhichHasDiscount
      * @return int
      */
-    abstract protected function calculateDiscount($couponDiscountPercentage , $totalRawPriceWhichHasDiscount):int;
-
+    abstract protected function calculateDiscount($couponDiscountPercentage, $totalRawPriceWhichHasDiscount): int;
 }

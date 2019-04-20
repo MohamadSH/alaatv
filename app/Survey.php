@@ -5,14 +5,14 @@ namespace App;
 /**
  * App\Survey
  *
- * @property int                                                                   $id
- * @property string|null                                                           $name        نام مصاحبه
- * @property string|null                                                           $description توضیح درباره مصاحبه
- * @property \Carbon\Carbon|null                                                   $created_at
- * @property \Carbon\Carbon|null                                                   $updated_at
- * @property \Carbon\Carbon|null                                                   $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Event[]            $events
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Question[]         $questions
+ * @property int $id
+ * @property string|null $name        نام مصاحبه
+ * @property string|null $description توضیح درباره مصاحبه
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Event[] $events
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Question[] $questions
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Usersurveyanswer[] $usersurveyanswer
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Survey onlyTrashed()
@@ -44,14 +44,12 @@ class Survey extends BaseModel
 
     public function questions()
     {
-        return $this->belongsToMany('\App\Question')
-                    ->withPivot("order", "enable", "description");;
+        return $this->belongsToMany('\App\Question')->withPivot("order", "enable", "description");;
     }
 
     public function events()
     {
-        return $this->belongsToMany('\App\Event')
-                    ->withPivot("order", "enable", "description");;
+        return $this->belongsToMany('\App\Event')->withPivot("order", "enable", "description");;
     }
 
     public function usersurveyanswer()

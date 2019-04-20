@@ -11,6 +11,7 @@ namespace App\Traits\Cashier;
 trait CashierOrderproductSumUnit
 {
     protected $sumOfOrderproductsRawCost;
+
     protected $sumOfOrderproductsCustomerCost;
 
     /**
@@ -20,6 +21,7 @@ trait CashierOrderproductSumUnit
     public function setSumOfOrderproductsRawCost($sumOfOrderproductsRawCost)
     {
         $this->sumOfOrderproductsRawCost = $sumOfOrderproductsRawCost;
+
         return $this;
     }
 
@@ -30,6 +32,7 @@ trait CashierOrderproductSumUnit
     public function setSumOfOrderproductsCustomerCost($sumOfOrderproductsCustomerCost)
     {
         $this->sumOfOrderproductsCustomerCost = $sumOfOrderproductsCustomerCost;
+
         return $this;
     }
 

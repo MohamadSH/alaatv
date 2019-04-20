@@ -8,7 +8,6 @@
 
 namespace App\Traits\User;
 
-
 use App\Afterloginformcontrol;
 use App\User;
 use Auth;
@@ -77,11 +76,11 @@ trait ProfileTrait
             'wallet',
         ])->remember($this->cacheKey(), config("constants.CACHE_600"), function () {
             return [
-                'major'      => $this->getMajor(),
-                'grade'      => $this->getGrade(),
-                'gender'     => $this->getGender(),
+                'major' => $this->getMajor(),
+                'grade' => $this->getGrade(),
+                'gender' => $this->getGender(),
                 'completion' => (int)$this->completion(),
-                'wallet'     => $this->getWallet(),
+                'wallet' => $this->getWallet(),
             ];
         });
     }
@@ -97,15 +96,15 @@ trait ProfileTrait
         $major = $this->major;
         if (isset($major)) {
             $majorReturn = [
-                'id'          => $major->id,
-                'name'        => $major->name,
+                'id' => $major->id,
+                'name' => $major->name,
                 'description' => $major->description,
             ];
         } else {
             $majorReturn = null;
         }
-        return $majorReturn;
 
+        return $majorReturn;
     }
 
     /**
@@ -120,14 +119,15 @@ trait ProfileTrait
         $grade = $this->grade;
         if (isset($grade)) {
             $gradeReturn = [
-                'id'          => $grade->id,
-                'name'        => $grade->name,
-                'hint'        => $grade->displayName,
+                'id' => $grade->id,
+                'name' => $grade->name,
+                'hint' => $grade->displayName,
                 'description' => $grade->description,
             ];
         } else {
             $gradeReturn = null;
         }
+
         return $gradeReturn;
     }
 
@@ -142,13 +142,14 @@ trait ProfileTrait
         $gender = $this->gender;
         if (isset($gender)) {
             $genderReturn = [
-                'id'          => $gender->id,
-                'name'        => $gender->name,
+                'id' => $gender->id,
+                'name' => $gender->name,
                 'description' => $gender->description,
             ];
         } else {
             $genderReturn = null;
         }
+
         return $genderReturn;
     }
 
@@ -156,7 +157,7 @@ trait ProfileTrait
      * Calculates user profile completion percentage based on passed mode
      *
      * @param string $type
-     * @param array  $columns
+     * @param array $columns
      *
      * @return float|int
      */
@@ -191,14 +192,10 @@ trait ProfileTrait
                 break;
             case "lockProfile":
                 $customColumns = $this->lockProfileColumns;
-                $importantColumns = array_unique(array_merge($customColumns, Afterloginformcontrol::getFormFields()
-                                                                                                  ->pluck('name', 'id')
-                                                                                                  ->toArray()));
+                $importantColumns = array_unique(array_merge($customColumns, Afterloginformcontrol::getFormFields()->pluck('name', 'id')->toArray()));
                 break;
             case "afterLoginForm" :
-                $importantColumns = Afterloginformcontrol::getFormFields()
-                                                         ->pluck('name', 'id')
-                                                         ->toArray();
+                $importantColumns = Afterloginformcontrol::getFormFields()->pluck('name', 'id')->toArray();
                 break;
             case "completeInfo":
                 $importantColumns = $this->completeInfoColumns;
@@ -218,17 +215,16 @@ trait ProfileTrait
                 if (in_array($tableColumn, $importantColumns)) {
                     if (strcmp($tableColumn, "photo") == 0 && strcmp(Auth::user()->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0) {
                         $unsetColumns++;
-                    }
-                    elseif (!isset($this->$tableColumn) || strlen(preg_replace('/\s+/', '', $this->$tableColumn)) == 0) {
+                    } elseif (! isset($this->$tableColumn) || strlen(preg_replace('/\s+/', '', $this->$tableColumn)) == 0) {
                         $unsetColumns++;
                     }
                 }
-
             }
 
             return (1 - ($unsetColumns / $numberOfColumns)) * 100;
-        } else return 100;
-
+        } else {
+            return 100;
+        }
     }
 
     /**
@@ -239,6 +235,7 @@ trait ProfileTrait
     {
         $explodedDateTime = explode(" ", $this->birthdate);
         $explodedDate = $explodedDateTime[0];
+
         //        $explodedTime = $explodedDateTime[1] ;
         return $this->convertDate($explodedDate, "toJalali");
     }
@@ -269,8 +266,9 @@ trait ProfileTrait
     public function fillByPublic(array $data)
     {
         foreach ($data as $key => $datum) {
-            if ((array_key_exists($key, $this->getAttributes()) && !isset($this->$key)) || in_array($key, $this->fillableByPublic))
+            if ((array_key_exists($key, $this->getAttributes()) && ! isset($this->$key)) || in_array($key, $this->fillableByPublic)) {
                 $this->$key = $datum;
+            }
         }
     }
 
@@ -283,5 +281,4 @@ trait ProfileTrait
     {
         return $this->completion('lockProfile') == 100;
     }
-
 }

@@ -14,10 +14,11 @@ class InsertUserUploadRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth::user()
-                ->completion() == 100)
+        if (Auth::user()->completion() == 100) {
             return true;
-        else return false;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -28,7 +29,7 @@ class InsertUserUploadRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'                    => 'required|max:255',
+            'title' => 'required|max:255',
             'consultingAudioQuestions' => 'required|file|mimes:mp3,mpga|max:20480',
         ];
     }

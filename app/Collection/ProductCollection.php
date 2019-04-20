@@ -60,16 +60,16 @@ class ProductCollection extends Collection
 
         foreach ($children as $child) {
 //          $ck = $this->search($child);  didn't work!!
-            $findChildInCollection = $this->where('id' , $child->id);
-            foreach ($findChildInCollection as $key => $grandChild)
-            {
-                $ck = $key ;
+            $findChildInCollection = $this->where('id', $child->id);
+            foreach ($findChildInCollection as $key => $grandChild) {
+                $ck = $key;
             }
             if (isset($ck)) {
                 $this->forget($ck);
                 $grandChildren = $child->children;
-                if ($grandChildren->isNotEmpty())
+                if ($grandChildren->isNotEmpty()) {
                     $grandChildren->removeProductDescendants($child);
+                }
             }
         }
     }

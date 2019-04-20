@@ -30,5 +30,4 @@ abstract class Cashier
      * @return mixed
      */
     abstract public function getPrice();
-
 }

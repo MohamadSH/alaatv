@@ -5,9 +5,9 @@ namespace App;
 /**
  * App\Attributetype
  *
- * @property int                 $id
- * @property string|null         $name        نام این نوع
- * @property string|null         $description توضیح درباره این نوع
+ * @property int $id
+ * @property string|null $name        نام این نوع
+ * @property string|null $description توضیح درباره این نوع
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
@@ -31,7 +31,6 @@ namespace App;
  */
 class Attributetype extends BaseModel
 {
-
     /**
      * @var array
      */
@@ -39,5 +38,4 @@ class Attributetype extends BaseModel
         'name',
         'description',
     ];
-
 }

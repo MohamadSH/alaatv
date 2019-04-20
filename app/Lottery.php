@@ -5,16 +5,16 @@ namespace App;
 /**
  * App\Lottery
  *
- * @property int                                                       $id
- * @property string|null                                               $name            نام قرعه کشی
- * @property string|null                                               $displayName     نام قابل نمایش قرعه کشی
- * @property string|null                                               $holdingDate     تاریخ برگزاری
- * @property int                                                       $essentialPoints تعداد امتیاز لازم برای شرکت در
+ * @property int $id
+ * @property string|null $name            نام قرعه کشی
+ * @property string|null $displayName     نام قابل نمایش قرعه کشی
+ * @property string|null $holdingDate     تاریخ برگزاری
+ * @property int $essentialPoints تعداد امتیاز لازم برای شرکت در
  *           قرعه کشی
- * @property string|null                                               $prizes          جوایز قرعه کشی
- * @property \Carbon\Carbon|null                                       $created_at
- * @property \Carbon\Carbon|null                                       $updated_at
- * @property \Carbon\Carbon|null                                       $deleted_at
+ * @property string|null $prizes          جوایز قرعه کشی
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $users
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Lottery onlyTrashed()
@@ -49,8 +49,7 @@ class Lottery extends BaseModel
 
     public function users()
     {
-        return $this->belongsToMany("\App\User")
-                    ->withPivot("rank", "prizes");
+        return $this->belongsToMany("\App\User")->withPivot("rank", "prizes");
     }
 
     public function prizes($rank)
@@ -73,6 +72,7 @@ class Lottery extends BaseModel
             //                $prizeName = "مبلغ ".number_format($amount). " تومان اعتبار هدیه";
             //            }
         }
+
         return [
             $prizeName,
             $amount,

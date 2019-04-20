@@ -8,16 +8,13 @@
 
 namespace App\Collection;
 
-
 use App\Content;
 use App\Traits\JsonResponseFormat;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as BaseCollection;
 
-
 class ContentCollection extends Collection
 {
-
     use JsonResponseFormat;
 
     public function videos()
@@ -44,9 +41,10 @@ class ContentCollection extends Collection
     {
         $result = new ContentCollection();
         foreach ($itemTypes as $itemType) {
-            $filter = $itemType . "s";
+            $filter = $itemType."s";
             $result = $result->merge($this->$filter());
         }
+
         return $result;
     }
 
@@ -59,12 +57,13 @@ class ContentCollection extends Collection
 
             $myContentType = optional($content->contenttype)->name;
             $result->push([
-                              "content"   => $content,
-                              "type"      => $myContentType,
-                              "thumbnail" => $content->thumbnail,
-                              "session"   => $content->session,
-                          ]);
+                "content" => $content,
+                "type" => $myContentType,
+                "thumbnail" => $content->thumbnail,
+                "session" => $content->session,
+            ]);
         }
+
         return $result;
     }
 }

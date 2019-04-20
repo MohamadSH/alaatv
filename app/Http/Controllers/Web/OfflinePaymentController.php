@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Web;
+
 use App\Bon;
 use App\Http\Controllers\Controller;
 use App\Notifications\InvoicePaid;
@@ -11,12 +12,11 @@ use Illuminate\Support\Facades\Cache;
 
 class OfflinePaymentController extends Controller
 {
-
-
     private $user;
 
     /**
      * OfflinePaymentController constructor.
+     *
      * @param Request $request
      */
     public function __construct(Request $request)
@@ -24,7 +24,6 @@ class OfflinePaymentController extends Controller
 //        $this->middleware('OfflineVerifyPayment', ['only' => ['verifyPayment'],]);
 
         $this->user = $request->user();
-
     }
 
     /**
@@ -33,40 +32,45 @@ class OfflinePaymentController extends Controller
      * @param string $device
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function verifyPayment(Request $request , string $paymentMethod , string $device){
+    public function verifyPayment(Request $request, string $paymentMethod, string $device)
+    {
         $result = [];
 
         // We had middleware called OfflineVerifyPayment for this,
         //but after reconsidering about queries in middleware I put the code in here
         $getOrder = $this->getOrder($request);
-        if($getOrder["error"])
+        if ($getOrder["error"]) {
             return response()->setStatusCode($getOrder["httpStatusCode"])->setContent($getOrder["text"]);
+        }
 
         $order = $getOrder["data"]["order"];
 
-        $check =  $this->checkOrder($order);
-        if($check["error"])
+        $check = $this->checkOrder($order);
+        if ($check["error"]) {
             return response()->setStatusCode($check["httpStatusCode"])->setContent($check["text"]);
+        }
 
-
-        if(!$this->processVerification( $order , $paymentMethod))
-            return response()->setStatusCode(Response::HTTP_BAD_REQUEST)->setContent(["message"=>"Invalid inputs"]);
+        if (! $this->processVerification($order, $paymentMethod)) {
+            return response()->setStatusCode(Response::HTTP_BAD_REQUEST)->setContent(["message" => "Invalid inputs"]);
+        }
 
         $customerDescription = optional($request)->customerDescription;
         $order->customerDescription = $customerDescription;
 
-        if($order->updateWithoutTimestamp())
+        if ($order->updateWithoutTimestamp()) {
             $result = array_add($result, "saveOrder", 1);
-        else
+        } else {
             $result = array_add($result, "saveOrder", 0);
+        }
 
         $this->user->notify(new InvoicePaid($order));
         Cache::tags('bon')->flush();
 
-        if (strcmp($result["Status"], 'freeProduct') == 0)
+        if (strcmp($result["Status"], 'freeProduct') == 0) {
             $actionMethod = "OrderController@successfulPayment";
-        else
+        } else {
             $actionMethod = "OrderController@otherPayment";
+        }
 
         return redirect(action($actionMethod, [
             "result" => $result,
@@ -78,7 +82,7 @@ class OfflinePaymentController extends Controller
      * @param string $paymentMethod
      * @return bool
      */
-    private function processVerification( Order $order , string $paymentMethod):bool
+    private function processVerification(Order $order, string $paymentMethod): bool
     {
         $done = true;
 
@@ -88,13 +92,12 @@ class OfflinePaymentController extends Controller
                 $result["Status"] = $paymentMethod;
 
                 $usedCoupon = $order->hasProductsThatUseItsCoupon();
-                if (!$usedCoupon) {
+                if (! $usedCoupon) {
                     /** if order has not used coupon reverse it    */
                     $coupon = $order->coupon;
-                    if(isset($coupon))
-                    {
+                    if (isset($coupon)) {
                         $order->detachCoupon();
-                        if($this->updateWithoutTimestamp()) {
+                        if ($this->updateWithoutTimestamp()) {
                             $coupon->decreaseUseNumber();
                             $coupon->update();
                         }
@@ -114,8 +117,7 @@ class OfflinePaymentController extends Controller
                 $order->closeWalletPendingTransactions();
                 /** End */
 
-                if($order->hasCost())
-                {
+                if ($order->hasCost()) {
                     $cost = $order->totalCost() - $order->totalPaidCost();
                     if ($cost == 0) {
 
@@ -130,21 +132,23 @@ class OfflinePaymentController extends Controller
                                 $failedBonNumber,
                             ] = $order->giveUserBons($bonName);
 
-                            if ($givenBonNumber == 0)
-                                if ($failedBonNumber > 0)
+                            if ($givenBonNumber == 0) {
+                                if ($failedBonNumber > 0) {
                                     $result = array_add($result, "saveBon", -1);
-                                else
+                                } else {
                                     $result = array_add($result, "saveBon", 0);
-                            else
+                                }
+                            } else {
                                 $result = array_add($result, "saveBon", $givenBonNumber);
+                            }
 
                             $bonDisplayName = $bon->displayName;
-                            /*$result = */array_add($result, "bonName", $bonDisplayName);
+                            /*$result = */
+                            array_add($result, "bonName", $bonDisplayName);
                         }
                         /** End */
 
                         $order->close($orderPaymentStatus);
-
                     }
                 }
                 break;
@@ -160,28 +164,29 @@ class OfflinePaymentController extends Controller
      * @param Request $request
      * @return array
      */
-    private function getOrder(Request $request):array
+    private function getOrder(Request $request): array
     {
-        if($request->has("coi"))
+        if ($request->has("coi")) {
             $order = Order::Find($request->coi);
-        elseif(isset($user))
+        } elseif (isset($user)) {
             $order = $this->user->openOrders->first();
+        }
 
         $error = false;
         $response = Response::HTTP_OK;
-        if(!isset($order)){
+        if (! isset($order)) {
             $error = true;
             $response = Response::HTTP_BAD_REQUEST;
             $text = 'No order found';
         }
 
         $result = [
-            'error'           => $error,
-            'httpStatusCode'  => $response,
-            'text'            => isset($text)?$text:"",
-            'data'            => [
-                    'order' => isset($order)?$order:null
-            ]
+            'error' => $error,
+            'httpStatusCode' => $response,
+            'text' => isset($text) ? $text : "",
+            'data' => [
+                'order' => isset($order) ? $order : null,
+            ],
         ];
 
         return $result;
@@ -191,26 +196,24 @@ class OfflinePaymentController extends Controller
      * @param Order $order
      * @return array
      */
-    private function checkOrder(Order $order):array
+    private function checkOrder(Order $order): array
     {
         $result = [
             "error" => false,
         ];
-        if(isset($order))
-        {
-            if (!$order->doesBelongToThisUser($this->user))
+        if (isset($order)) {
+            if (! $order->doesBelongToThisUser($this->user)) {
                 $result = [
                     "error" => true,
-                    "httpStatusCode"  => Response::HTTP_UNAUTHORIZED,
-                    "text"  => "Order not found"
+                    "httpStatusCode" => Response::HTTP_UNAUTHORIZED,
+                    "text" => "Order not found",
                 ];
-        }
-        else
-        {
+            }
+        } else {
             $result = [
                 "error" => true,
-                "httpStatusCode"  => Response::HTTP_NOT_FOUND,
-                "text"  => "User does not own this order"
+                "httpStatusCode" => Response::HTTP_NOT_FOUND,
+                "text" => "User does not own this order",
             ];
         }
 

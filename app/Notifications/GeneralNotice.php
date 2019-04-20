@@ -16,10 +16,12 @@ class GeneralNotice extends Notification implements ShouldQueue
     use Queueable, SerializesModels;
 
     public $timeout = 120;
+
     /**
      * @var string
      */
     protected $message;
+
     /**
      * @var User
      */
@@ -38,13 +40,14 @@ class GeneralNotice extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
     public function via($notifiable)
     {
         $this->user = $notifiable;
+
         return [
             MedianaChannel::class,
         ];
@@ -58,30 +61,14 @@ class GeneralNotice extends Notification implements ShouldQueue
     public function toMediana($notifiable)
     {
 
-        return (new MedianaMessage())
-            ->content($this->msg())
-            ->sendAt(Carbon::now());
+        return (new MedianaMessage())->content($this->msg())->sendAt(Carbon::now());
     }
 
     private function msg(): string
     {
-        //        if(isset($this->user->gender_id))
-        //        {
-        //            if($this->user->gender->name=="خانم")
-        //                $gender = "خانم ";
-        //            elseif($this->user->gender->name=="آقا")
-        //                $gender = "آقای ";
-        //            else
-        //                $gender = "";
-        //        }else{
-        //            $gender = "";
-        //        }
-
         $messageCore = $this->message;
-        //        $message = "سلام ".$gender.$this->user->full_name."\n".$messageCore;
         $message = $messageCore;
 
         return $message;
     }
-
 }

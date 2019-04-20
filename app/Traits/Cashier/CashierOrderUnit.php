@@ -13,8 +13,11 @@ use App\Order;
 trait CashierOrderUnit
 {
     protected $order;
+
     protected $totalPrice; // Total price before calculating Order's discount
+
     protected $temporaryFinalPrice;
+
     protected $finalPrice;
 
     /**
@@ -24,6 +27,7 @@ trait CashierOrderUnit
     public function setOrder($order)
     {
         $this->order = $order;
+
         return $this;
     }
 
@@ -35,6 +39,7 @@ trait CashierOrderUnit
     {
         $this->totalPrice = $totalPrice;
         $this->temporaryFinalPrice = $totalPrice;
+
         return $this;
     }
 
@@ -45,6 +50,7 @@ trait CashierOrderUnit
     public function setTemporaryFinalPrice($temporaryFinalPrice)
     {
         $this->temporaryFinalPrice = $temporaryFinalPrice;
+
         return $this;
     }
 
@@ -56,13 +62,14 @@ trait CashierOrderUnit
     {
         $this->finalPrice = $finalPrice;
         $this->temporaryFinalPrice = $finalPrice;
+
         return $this;
     }
 
     /**
      * @return Order
      */
-    public function getOrder() :Order
+    public function getOrder(): Order
     {
         return $this->order;
     }

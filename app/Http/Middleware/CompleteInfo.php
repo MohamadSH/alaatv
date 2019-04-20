@@ -10,9 +10,9 @@ class CompleteInfo
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure                 $next
-     * @param null                      $guard
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
+     * @param null $guard
      *
      * @return mixed
      */
@@ -26,10 +26,12 @@ class CompleteInfo
                     break;
                 default :
                     session()->put("redirectTo", $request->fullUrl());
+
                     return redirect(action("Web\UserController@completeRegister"));
                     break;
             }
         }
+
         return $next($request);
     }
 }
