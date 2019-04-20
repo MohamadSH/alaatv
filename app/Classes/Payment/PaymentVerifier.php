@@ -6,10 +6,8 @@ use App\Bankaccount;
 use App\Order;
 use App\Transaction;
 use Carbon\Carbon;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 use Zarinpal\Zarinpal as ZarinpalComposer;
 
@@ -26,12 +24,11 @@ class PaymentVerifier
     {
         $paymentData = $request->all();
 
-        $transaction = Transaction::authority($paymentData["Authority"])->first();
-        if (! isset($transaction)) {
-            $this->sendErrorResponse('تراکنشی متناظر با شماره تراکنش ارسالی یافت نشد.', Response::HTTP_BAD_REQUEST);
-        }
-
         if ($paymentMethod == 'zarinpal') {
+
+            $transaction = $this
+                ->getTransaction($paymentData['Authority'])
+                ->orFailWith(Responses::transactionNotFoundError());
             $gatewayResult = \Facades\App\Classes\Payment\ZarinPal::buildZarinpalGateway($paymentMethod);
             /** @var ZarinpalComposer $gateway */
             $gateway = $gatewayResult['gatewayComposer'];
@@ -40,8 +37,7 @@ class PaymentVerifier
             $verifyResult = [];
             $gatewayVerify = $this->verify($gateway, $amount, $paymentData["Authority"]);
             $verifyResult['zarinpalVerifyResult'] = $gatewayVerify;
-        } else
-            {
+        } else {
             // behpardakht
         }
 
@@ -81,7 +77,7 @@ class PaymentVerifier
     /**
      * @param Transaction $transaction
      */
-    private function handleWalletChargingCanceledPayment(Transaction $transaction): void
+    private function handleWalletChargingCanceledPayment(Transaction $transaction)
     {
         $transaction->transactionstatus_id = config('constants.TRANSACTION_STATUS_UNSUCCESSFUL');
         $transaction->update();
@@ -92,7 +88,7 @@ class PaymentVerifier
      * @param Transaction $transaction
      * @param string|null $cardPanMask
      */
-    private function handleWalletChargingSuccessPayment(string $refId, Transaction $transaction, string $cardPanMask = null): void
+    private function handleWalletChargingSuccessPayment(string $refId, Transaction $transaction, string $cardPanMask = null)
     {
         $bankAccountId = null;
 
@@ -111,7 +107,7 @@ class PaymentVerifier
      *
      * @return array
      */
-    private function handleOrderCanceledPayment(Order $order): array
+    private function handleOrderCanceledPayment(Order $order)
     {
         $result = [];
         if ($order->orderstatus_id == config("constants.ORDER_STATUS_OPEN")) {
@@ -137,7 +133,7 @@ class PaymentVerifier
      * @param string $refId
      * @param string|null $cardPanMask
      */
-    private function handleTransactionStatus(Transaction $transaction, string $refId, string $cardPanMask = null): void
+    private function handleTransactionStatus(Transaction $transaction, string $refId, string $cardPanMask = null)
     {
         $bankAccountId = null;
 
@@ -158,7 +154,7 @@ class PaymentVerifier
      * @param Transaction $transaction
      * @param int|null $bankAccountId
      */
-    private function changeTransactionStatusToSuccessful(string $transactionID, Transaction $transaction, int $bankAccountId = null): void
+    private function changeTransactionStatusToSuccessful(string $transactionID, Transaction $transaction, int $bankAccountId = null)
     {
         $data['completed_at'] = Carbon::now();
         $data['transactionID'] = $transactionID;
@@ -171,10 +167,19 @@ class PaymentVerifier
      * @param string $msg
      * @param int $statusCode
      * @return JsonResponse
-     */
     private function sendErrorResponse(string $msg, int $statusCode): JsonResponse
     {
         $resp = response()->json(['message' => $msg], $statusCode);
         throw new HttpResponseException($resp);
+    }
+     */
+
+    /**
+     * @param $authority
+     * @return \App\Classes\Nullable
+     */
+    private function getTransaction($authority)
+    {
+        return nullable(Transaction::authority($authority)->first());
     }
 }
