@@ -534,7 +534,7 @@ class UserController extends Controller
         $numberOfMotherPhones = 0;
         $itemsIdCount = 0;
         $reportType = "";
-        if (strcmp($previousPath, action("Web\HomeController@adminSMS")) == 0) {
+        if (strcmp($previousPath, action("Web\HomeController@adminSMS")) == 0 || $request->has('smsAdmin')) {
             $uniqueUsers = $items->groupBy("nationalCode");
             $items = collect();
             foreach ($uniqueUsers as $user) {
@@ -553,7 +553,7 @@ class UserController extends Controller
                 Contact::whereIn('user_id', $itemsId)->where('relative_id', 2)->pluck('id'))->where("phonetype_id", 1)->count();
         } elseif (strcmp($previousPath, action("Web\HomeController@admin")) == 0 || $request->has('userAdmin')) {
             return $items;
-        } elseif (strcmp($previousPath, action("Web\HomeController@adminReport")) == 0) {
+        } elseif (strcmp($previousPath, action("Web\HomeController@adminReport")) == 0 || $request->has('reportAdmin')) {
             $minCost = Input::get("minCost");
             if (isset($minCost[0])) {
                 foreach ($items as $key => $user) {
