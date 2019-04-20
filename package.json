@@ -18,5 +18,18 @@
     "lodash": "^4.17.11",
     "popper.js": "^1.14.6",
     "vue": "^2.5.21"
+  },
+  "dependencies": {
+    "bootstrap-fileinput": "^5.0.2",
+    "bootstrap-multiselect": "^0.9.13-1",
+    "bootstrap-tagsinput": "^0.7.1",
+    "icheck": "^1.0.2",
+    "jquery-multiselect": "^1.0.0",
+    "jquery-sticky": "^1.0.4",
+    "lightgallery": "^1.6.12",
+    "persian-date": "^1.0.5",
+    "persian-datepicker": "^1.1.5",
+    "select2": "^4.0.6-rc.1",
+    "slick-carousel": "^1.8.1"
   }
 }
