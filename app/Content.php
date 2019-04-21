@@ -465,9 +465,14 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 $item->link = $this->isFree ? $l->getLinks() : $l->getLinks([
                     "content_id" => $this->id,
                 ]);
-
+                unset($item->url);
+                unset($item->disk);
+                unset($item->fileName);
+                if ($item->type === 'pamphlet')
+                    unset($item->res);
                 return $item;
             });
+
 
             return $fileCollection->count() > 0 ? $fileCollection->groupBy('type') : null;
         });
