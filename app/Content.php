@@ -49,7 +49,7 @@ use Stevebauman\Purify\Facades\Purify;
  * @property-read \App\Contenttype|null $contenttype
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contenttype[] $contenttypes
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\File[] $files
- * @property-read mixed $file
+ * @property mixed $file
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Grade[] $grades
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Major[] $majors
  * @property-read \App\Template|null $template

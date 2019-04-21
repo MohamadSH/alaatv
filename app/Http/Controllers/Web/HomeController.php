@@ -195,6 +195,19 @@ class HomeController extends Controller
                 /** @var Productfile $productFile */
                 foreach ($files as $productFile) {
                     if ($productFile->content_id == null) {
+                        $files = collect();
+                        $url = $productFile->cloudFile ?? $productFile->file;
+                        $files->push([
+                            "uuid" => null,
+                            "disk" => "productFileSFTP",
+                            "url" => null,
+                            "fileName" => parse_url($url)['path'],
+                            "size" => null,
+                            "caption" => null,
+                            "res" => "720p",
+                            "type" => "video",
+                            "ext" => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
+                        ]);
                         //TODO://Fill file!
                         $content = Content::create([
                             'name'            => $productFile->name,
@@ -219,6 +232,8 @@ class HomeController extends Controller
                             'created_at' => $productFile->created_at,
                             'updated_at' => $productFile->updated_at,
                         ])->save();
+
+                        $content->file = $files;
                         $content->timestamps = true;
                     }
                     break;
