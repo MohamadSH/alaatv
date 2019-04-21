@@ -161,11 +161,7 @@ class HomeController extends Controller
 
     {
         try {
-
-            $order = Order::find(203189);
-            dd($order->user);
-
-            $productFiles = \App\Productfile::all();
+            $productFiles = Productfile::all();
             $productFiles->load('product');
             $productFiles->load('productfiletype');
             foreach ($productFiles->groupBy('product_id') as $productId => $files) {
@@ -1039,83 +1035,27 @@ class HomeController extends Controller
                 break;
             case "فایل محصول" :
                 $productId = Input::get("pId");
+                $diskName = Config::get('constants.DISK13');
+
                 if (! $user->can(Config::get("constants.DOWNLOAD_PRODUCT_FILE"))) {
-                    $products = Product::whereIn('id', Product::whereHas('validProductfiles', function ($q) use ($fileName) {
-                        $q->where("file", $fileName);
-                    })->pluck("id"))->OrwhereIn('id', Product::whereHas('parents', function ($q) use ($fileName) {
-                        $q->whereHas('validProductfiles', function ($q) use ($fileName) {
-                            $q->where("file", $fileName);
-                        });
-                    })->pluck("id"))->OrwhereIn('id', Product::whereHas('complimentaryproducts', function ($q) use ($fileName) {
-                        $q->whereHas('validProductfiles', function ($q) use ($fileName) {
-                            $q->where("file", $fileName);
-                        });
-                    })->pluck("id"))->OrwhereIn('id', Product::whereHas('gifts', function ($q) use ($fileName) {
-                        $q->whereHas('validProductfiles', function ($q) use ($fileName) {
-                            $q->where("file", $fileName);
-                        });
-                    })->pluck("id"))->OrwhereIn('id', Product::whereHas('parents', function ($q) use ($fileName) {
-                        $q->whereHas('complimentaryproducts', function ($q) use ($fileName) {
-                            $q->whereHas('validProductfiles', function ($q) use ($fileName) {
-                                $q->where("file", $fileName);
-                            });
-                        });
-                    })->pluck("id"))->get();
-                    $validOrders = $user->orders()->whereHas('orderproducts', function ($q) use ($products) {
-                        $q->whereIn("product_id", $products->pluck("id"));
-                    })->whereIn("orderstatus_id", [
-                        Config::get("constants.ORDER_STATUS_CLOSED"),
-                        Config::get("constants.ORDER_STATUS_POSTED"),
-                        Config::get("constants.ORDER_STATUS_READY_TO_POST"),
-                    ])->whereIn("paymentstatus_id", [Config::get("constants.PAYMENT_STATUS_PAID")])->get();
+                    $products = Product::getProductsThatHaveValidProductFileByFileNameRecursively($fileName);
+                    $validOrders = $user->getOrdersThatHaveSpecificProduct($products);
 
-                    if ($products->isEmpty()) {
-                        $message = "چنین فایلی وجود ندارد ویا غیر فعال شده است";
-                    } else {
-                        if ($validOrders->isEmpty()) {
-
-                            $message = "شما ابتدا باید یکی از این محصولات را سفارش دهید و یا اگر سفارش داده اید مبلغ را تسویه نمایید: "."<br>";
-                            $productIds = [];
-                            foreach ($products as $product) {
-                                $myParents = $this->makeParentArray($product);
-                                if (! empty($myParents)) {
-                                    $rootParent = end($myParents);
-                                    if (! in_array($rootParent->id, $productIds)) {
-                                        $message .= "<a href='".action('ProductController@show', $rootParent->id)."'>".$rootParent->name."</a><br>";
-                                        array_push($productIds, $rootParent->id);
-                                    }
-                                } else {
-                                    if (! in_array($product->id, $productIds)) {
-                                        $message .= "<a  href='".action('ProductController@show', $product->id)."'>".$product->name."</a><br>";
-                                        array_push($productIds, $product->id);
-                                    }
-                                }
+                    if (!$products->isEmpty()) {
+                        if (!$validOrders->isEmpty()) {
+                            $productId = (array)$productId;
+                            if (isset($products)) {
+                                $productId = array_merge($productId, $products->pluck("id")->toArray());
                             }
+                            $externalLink = (new Productfile)->getExternalLinkForProductFileByFileName($fileName,$productId);
+                            break;
                         }
-                    }
-                    //
-                    if (isset($message) && strlen($message) > 0) {
+                        $message = $this->getMessageThatShouldByWhichProducts($products);
                         return $this->errorPage($message);
                     }
+                    $message = "چنین فایلی وجود ندارد ویا غیر فعال شده است";
+                    return $this->errorPage($message);
                 }
-                $productId = [$productId];
-                if (isset($products)) {
-                    $productId = array_merge($productId, $products->pluck("id")->toArray());
-                }
-                $diskName = Config::get('constants.DISK13');
-                $cloudFile = Productfile::where("file", $fileName)->whereIn("product_id", $productId)->get()->first()->cloudFile;
-                //TODO: verify "$productFileLink = "http://".env("SFTP_HOST" , "").":8090/". $cloudFile;"
-                $productFileLink = config("constants.DOWNLOAD_HOST_PROTOCOL", "https://").config('constants.DOWNLOAD_HOST_NAME').$cloudFile;
-                $unixTime = Carbon::today()->addDays(2)->timestamp;
-                $userIP = request()->ip();
-                //TODO: fix diffrent Ip
-                $ipArray = explode(".", $userIP);
-                $ipArray[3] = 0;
-                $userIP = implode(".", $ipArray);
-
-                $linkHash = $this->generateSecurePathHash($unixTime, $userIP, "TakhteKhak", $cloudFile);
-                $externalLink = $productFileLink."?md5=".$linkHash."&expires=".$unixTime;
-                //                dd($temp."+".$userIP);
                 break;
             case "فایل کارنامه" :
                 $diskName = Config::get('constants.DISK14');
@@ -1160,19 +1100,6 @@ class HomeController extends Controller
                 return redirect($externalLink);
             } else {
                 if (Storage::disk($diskName)->exists($fileName)) {
-                    //            Other download method :  problem => it changes the file name to download
-                    //            $file = Storage::disk($diskName)->get($fileName);
-                    //            return (new Response($file, 200))
-                    //                ->header('Content-Type', $contentMime)
-                    //                ->header('Content-Disposition'  , 'attachment')
-                    //                ->header('filename',$fileName);
-
-                    //                $filePrefixPath =Storage::drive($diskName)->getAdapter()->getPathPrefix() ;
-                    //                if(isset($filePrefixPath))
-                    //                    return response()->download(Storage::drive($diskName)->path($fileName));
-                    //                else
-                    //                    return response()->download(Storage::drive($diskName)->getAdapter()->getRoot() . $fileName);
-
                     $filePrefixPath = Storage::drive($diskName)->getAdapter()->getPathPrefix();
                     if (isset($filePrefixPath)) {
                         $fs = Storage::disk($diskName)->getDriver();
@@ -5018,4 +4945,32 @@ class HomeController extends Controller
 
         return $nodeArrayString;
     }
+
+    /**
+     * @param $products
+     *
+     * @return string
+     */
+    private function getMessageThatShouldByWhichProducts($products): string
+    {
+        $message = "شما ابتدا باید یکی از این محصولات را سفارش دهید و یا اگر سفارش داده اید مبلغ را تسویه نمایید: " . "<br>";
+        $productIds = [];
+        foreach ($products as $product) {
+            $myParents = $this->makeParentArray($product);
+            if (!empty($myParents)) {
+                $rootParent = end($myParents);
+                if (!in_array($rootParent->id, $productIds)) {
+                    $message .= "<a href="" . action('ProductController@show', $rootParent->id) . "'>" . $rootParent->name . "</a><br>";
+                    array_push($productIds, $rootParent->id);
+                }
+            } else {
+                if (!in_array($product->id, $productIds)) {
+                    $message .= "<a  href='" . action('ProductController@show', $product->id) . "'>" . $product->name . "</a><br>";
+                    array_push($productIds, $product->id);
+                }
+            }
+        }
+        return $message;
+    }
+
 }

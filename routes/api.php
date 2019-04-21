@@ -19,6 +19,8 @@ Route::group(['prefix' => 'v1'], function () {
 
     });
 
+    Route::get('lastVersion', 'Api\AppVersionController@show');
+
     Route::get('debug', 'Api\HomeController@debug');
     Route::get('authTest', 'Api\HomeController@authTest');
 
