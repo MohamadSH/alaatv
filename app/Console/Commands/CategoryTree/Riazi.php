@@ -8,7 +8,7 @@
 
 namespace App\Console\Commands\CategoryTree;
 
-class Riazi extends CategoryTree
+class Riazi extends GetTree
 {
     public function getTree(): array
     {
