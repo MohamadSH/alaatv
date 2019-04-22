@@ -1160,14 +1160,14 @@ class UserController extends Controller
         foreach ($parents as $parent) {
             /** @var Collection|Contact $parentContacts */
             $parentContacts = $user->contacts->where("relative_id", $parent->id)->where("contacttype_id", $simpleContact->id);
-            if ($parentContacts->isEmpty()) {
-                continue();
-            }
+            if ($parentContacts->isEmpty())
+                continue;
+
             $parentContact = $parentContacts->first();
             $parentMobiles = $parentContact->phones->where("phonetype_id", $mobilePhoneType->id)->sortBy("priority");
-            if ($parentMobiles->isEmpty()) {
-                continue();
-            }
+            if ($parentMobiles->isEmpty())
+                continue;
+            
             $parentMobile = $parentMobiles->first()->phoneNumber;
             $parentsNumber->put($parent->name, $parentMobile);
         }
