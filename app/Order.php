@@ -1117,7 +1117,6 @@ class Order extends BaseModel
     }
 
     public function getDebtAttribute()
-
     {
         return $this->debt();
     }
