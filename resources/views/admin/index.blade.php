@@ -2,8 +2,11 @@
 @extends("app",["pageName"=>$pageName])
 
 @section('page-css')
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/dataTables.bootstrap4.css" rel="stylesheet" type="text/css"/>
+    {{--<link href="public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>--}}
+
+
+    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel="stylesheet" type="text/css"/>--}}
     {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>--}}
     {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>--}}
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
@@ -74,7 +77,7 @@
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload"><i class="la la-refresh"></i></a>
                             </li>
                             <li class="m-portlet__nav-item">
-                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-angle-down"></i></a>
+                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon" id="user-expand"><i class="la la-angle-down"></i></a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-expand"></i></a>
@@ -170,18 +173,26 @@
                             <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="user_table">
                                 {{--sms panel modal--}}
                                 @permission((config('constants.SEND_SMS_TO_USER_ACCESS')))
-                                <div id="smsModal" class="modal fade" tabindex="-1" data-backdrop="static"
-                                     data-keyboard="false">
-                                    <div class="modal-header">ارسال پیامک به <span id="smsUserFullName"></span></div>
-                                    <div class="modal-body">
-                                        {!! Form::open(['method' => 'POST', 'action' => 'Web\HomeController@sendSMS' , 'class'=>'nobottommargin' , 'id'=>'sendSmsForm']) !!}
-                                        {!! Form::hidden('users', null, ['id' => 'users']) !!}
-                                        {!! Form::textarea('message', null, ['class' => 'form-control' , 'id' => 'smsMessage', 'placeholder' => 'متن پیامک']) !!}
-                                        <span class="help-block" id="smsMessageAlert">
+
+                                <!--begin::Modal-->
+                                <div class="modal fade" id="smsModal" tabindex="-1" role="dialog" aria-labelledby="smsModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="smsModalLabel">ارسال پیامک به <span id="smsUserFullName"></span></h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                {!! Form::open(['method' => 'POST', 'action' => 'Web\HomeController@sendSMS' , 'class'=>'nobottommargin' , 'id'=>'sendSmsForm']) !!}
+                                                {!! Form::hidden('users', null, ['id' => 'users']) !!}
+                                                {!! Form::textarea('message', null, ['class' => 'form-control' , 'id' => 'smsMessage', 'placeholder' => 'متن پیامک']) !!}
+                                                <span class="help-block" id="smsMessageAlert">
                                                         <strong></strong>
                                                 </span>
-                                        {!! Form::close() !!}
-                                        <span class="">
+                                                {!! Form::close() !!}
+                                                <span class="">
                                             طول پیام: (
                                             <span style="color: red;">
                                                 <span id="smsNumber">1</span>
@@ -191,93 +202,113 @@
                                             <span id="smsWords">70</span>
                                             کارکتر باقی مانده تا پیام بعدی
                                         </span>
-                                        <br>
-                                        <label>هزینه پیامک(ریال):
-                                            <span id="totalSmsCost">{{config('constants.COST_PER_SMS_2')}}</span>
-                                        </label>
-                                        <br>
-                                        <label>شماره فرستنده : {{config("constants.SMS_PROVIDER_DEFAULT_NUMBER")}}</label>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" data-dismiss="modal" class="btn btn-outline dark"
-                                                id="sendSmsForm-close">بستن
-                                        </button>
-                                        <button type="button" class="btn green" id="sendSmsForm-submit">ارسال</button>
-                                        <img class="d-none" id="send-sms-loading"
-                                             src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px"
-                                             width="25px">
+                                                <br>
+                                                <label>هزینه پیامک(ریال):
+                                                    <span id="totalSmsCost">{{config('constants.COST_PER_SMS_2')}}</span>
+                                                </label>
+                                                <br>
+                                                <label>شماره فرستنده : {{config("constants.SMS_PROVIDER_DEFAULT_NUMBER")}}</label>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="sendSmsForm-close">بستن</button>
+                                                <button type="button" class="btn btn-primary" id="sendSmsForm-submit">ارسال</button>
+                                                <img class="d-none" id="send-sms-loading"
+                                                     src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px"
+                                                     width="25px">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                                <!--end::Modal-->
                                 @endpermission
                                 {{--delete user confirmation modal--}}
                                 @permission((config('constants.REMOVE_USER_ACCESS')))
-                                <div id="deleteUserConfirmationModal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
-                                    <div class="modal-header">حذف کاربر <span id="deleteUserFullName"></span></div>
-                                    <div class="modal-body">
-                                        <p> آیا مطمئن هستید؟ </p>
-                                        {!! Form::hidden('user_id', null) !!}
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                                        <button type="button" data-dismiss="modal" class="btn green" onclick="removeUser()">
-                                            بله
-                                        </button>
+
+                                <!--begin::Modal-->
+                                <div class="modal fade" id="deleteUserConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserConfirmationModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteUserConfirmationModalLabel">حذف کاربر <span id="deleteUserFullName"></span></h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p> آیا مطمئن هستید؟ </p>
+                                                {!! Form::hidden('user_id', null) !!}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                                                <button type="button" class="btn btn-primary" onclick="removeUser()">بله</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                                <!--end::Modal-->
                                 @endpermission
                                 @permission((config('constants.INSERT_USER_BON_ACCESS')))
-                                <div id="addBonModal" class="modal fade" tabindex="-1">
-                                    <div class="modal-header">تخصیص بن به کابر <span id="bonUserFullName"></span></div>
-                                    <div class="modal-body">
-                                        {!! Form::open(['method' => 'POST', 'action' => 'Web\UserbonController@store' , 'class'=>'nobottommargin' , 'id'=>'userAttachBonForm']) !!}
-                                        {!! Form::text('totalNumber', null,['class' => 'form-control' , 'id' => 'userBonNumber', 'placeholder' => 'تعداد بن']) !!}
-                                        <span class="help-block" id="userBonNumberAlert">
-                                                <strong></strong>
-                                            </span>
-                                        {!! Form::hidden('user_id', null) !!}
-                                        {!! Form::hidden('bon_id', 1) !!}
-                                        {!! Form::hidden('userbonstatus_id', config("constants.USERBON_STATUS_ACTIVE")) !!}
-                                        {!! Form::close() !!}
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" data-dismiss="modal" class="btn btn-outline dark"
-                                                id="userAttachBonForm-close">بستن
-                                        </button>
-                                        <button type="button" class="btn green" id="userAttachBonForm-submit">ثبت</button>
+                                <!--begin::Modal-->
+                                <div class="modal fade" id="addBonModal" tabindex="-1" role="dialog" aria-labelledby="addBonModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="addBonModalLabel">تخصیص بن به کابر <span id="bonUserFullName"></span></h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                {!! Form::open(['method' => 'POST', 'action' => 'Web\UserbonController@store' , 'class'=>'nobottommargin' , 'id'=>'userAttachBonForm']) !!}
+                                                {!! Form::text('totalNumber', null,['class' => 'form-control' , 'id' => 'userBonNumber', 'placeholder' => 'تعداد بن']) !!}
+                                                <span class="help-block" id="userBonNumberAlert">
+                                                        <strong></strong>
+                                                    </span>
+                                                {!! Form::hidden('user_id', null) !!}
+                                                {!! Form::hidden('bon_id', 1) !!}
+                                                {!! Form::hidden('userbonstatus_id', config("constants.USERBON_STATUS_ACTIVE")) !!}
+                                                {!! Form::close() !!}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="userAttachBonForm-close">بستن</button>
+                                                <button type="button" class="btn btn-primary" id="userAttachBonForm-submit">ثبت</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                                <!--end::Modal-->
                                 @endpermission
                                 <thead>
                                 <tr>
                                     <th></th>
-                                    <th class="all"> نام خانوادگی</th>
-                                    <th class="all"> نام کوچک</th>
-                                    <th class="none"> رشته</th>
+                                    <th class="all">نام خانوادگی</th>
+                                    <th class="all">نام کوچک</th>
+                                    <th class="none">رشته</th>
                                     {{--<th class="desktop"> عکس </th>--}}
-                                    <th class="none"> کد ملی</th>
+                                    <th class="none">کد ملی</th>
                                     @permission((config('constants.SHOW_USER_MOBILE')))
-                                    <th class="desktop"> موبایل</th>
+                                    <th class="desktop">موبایل</th>
                                     @endpermission
                                     {{--<th class="all">همایش فیزیک</th>--}}
                                     {{--<th class="all">همایش دیفرانسیل</th>--}}
                                     {{--<th class="all">همایش ریاضی تجربی</th>--}}
                                     {{--<th class="all">همایش زیست</th>--}}
                                     @permission((config('constants.SHOW_USER_EMAIL')))
-                                    <th class="none"> ایمیل</th>
+                                    <th class="none">ایمیل</th>
                                     @endpermission
-                                    <th class="desktop"> شهر</th>
-                                    <th class="desktop"> استان</th>
+                                    <th class="desktop">شهر</th>
+                                    <th class="desktop">استان</th>
                                     <th class="none">وضعیت شماره موبایل</th>
-                                    <th class="all"> کد پستی</th>
-                                    <th class="all"> آدرس</th>
+                                    <th class="all">کد پستی</th>
+                                    <th class="all">آدرس</th>
                                     {{--<th class="none"> رشته </th>--}}
-                                    <th class="none"> مدرسه</th>
-                                    <th class="none"> وضعیت</th>
-                                    <th class="none"> زمان ثبت نام</th>
-                                    <th class="all"> زمان اصلاح</th>
-                                    <th class="none"> نقش های کاربر</th>
-                                    <th class="none"> تعداد بن</th>
-                                    <th class="all"> عملیات</th>
+                                    <th class="none">مدرسه</th>
+                                    <th class="none">وضعیت</th>
+                                    <th class="none">زمان ثبت نام</th>
+                                    <th class="all">زمان اصلاح</th>
+                                    <th class="none">نقش های کاربر</th>
+                                    <th class="none">تعداد بن</th>
+                                    <th class="all">عملیات</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -517,7 +548,7 @@
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
 
-    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>--}}
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
     {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>--}}
 
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
@@ -561,7 +592,90 @@
             @permission((config('constants.LIST_USER_ACCESS')));
                 var newDataTable = $("#user_table").DataTable();
                 newDataTable.destroy();
-                makeDataTable("user_table");
+                // makeDataTable("user_table");
+            let columns = [
+                {
+                    "data": "row_child",
+                    "defaultContent": ""
+                },
+                { "data": "full_name" , "title": "نام خانوادگی"},
+                { "data": "firstName" , "title": "نام کوچک" },
+                { "data": "info.major" , "title": "رشته" },
+                { "data": "nationalCode" , "title": "کد ملی" },
+                { "data": "mobile" , "title": "موبایل" },
+                { "data": "email" , "title": "ایمیل" },
+                { "data": "city" , "title": "شهر" },
+                { "data": "province" , "title": "استان" },
+                { "data": "mobile_verified_at" , "title": "وضعیت شماره موبایل" },
+                { "data": "postalCode" , "title": "کد پستی" },
+                { "data": "address" , "title": "آدرس" },
+                { "data": "school" , "title": "مدرسه" },
+                { "data": "full_name" , "title": "وضعیت" },
+                { "data": "created_at" , "title": "زمان ثبت نام" },
+                { "data": "updated_at" , "title": "زمان اصلاح" },
+                { "data": "full_name" , "title": "نقش های کاربر" },
+                { "data": "full_name" , "title": "تعداد بن" },
+                {
+                    "data": null,
+                    "name": "functions",
+                    "title": "عملیات",
+                    defaultContent: '',
+                    "render": function ( data, type, row ) {
+                        return '\n' +
+                            '            <div class="btn-group">\n' +
+                            '                <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> عملیات</button>\n' +
+                            '                <ul class="dropdown-menu" role="menu" id="'+row.id+'">\n' +
+                            '                    <li>\n' +
+                            '                        <a class="deleteUser" data-target="#deleteUserConfirmationModal" data-toggle="modal">\n' +
+                            '                            <i class="fa fa-remove" aria-hidden="true"></i> حذف\n' +
+                            '                        </a>\n' +
+                            '                    </li>\n' +
+                            '                    <li>\n' +
+                            '                        <a class="addBon" data-target="#addBonModal" data-toggle="modal">\n' +
+                            '                            <i class="fa fa-plus" aria-hidden="true"></i> تخصیص بن\n' +
+                            '                        </a>\n' +
+                            '                    </li>\n' +
+                            '                    <li>\n' +
+                            '                        <a class="sendSms" data-target="#smsModal" data-toggle="modal">\n' +
+                            '                            <i class="fa fa-envelope" aria-hidden="true"></i> ارسال پیامک\n' +
+                            '                        </a>\n' +
+                            '                    </li>\n' +
+                            '                </ul>\n' +
+                            '                <div id="ajax-modal" class="modal fade" tabindex="-1"></div>\n' +
+                            '            </div>';
+                    },
+                    // function ( api, rowIdx, columns ) {
+                    //     return 'hi';
+                    //     // var data = $.map( columns, function ( col, i ) {
+                    //     //     return col.hidden ?
+                    //     //         '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+                    //     //         '<td>'+col.title+':'+'</td> '+
+                    //     //         '<td>'+col.data+'</td>'+
+                    //     //         '</tr>' :
+                    //     //         '';
+                    //     // } ).join('');
+                    //     //
+                    //     // return data ?
+                    //     //     $('<table/>').append( data ) :
+                    //     //     false;
+                    // }
+
+                },
+            ];
+            let dataFilter = function(data){
+                var json = jQuery.parseJSON( data );
+                console.log(json.data);
+                json.recordsTotal = json.total;
+                json.recordsFiltered = json.total;
+                // for (let index in json.data) {
+                //     if(!isNaN(index)) {
+                //         json.data[index]['full_name'] =
+                //     }
+                // }
+                //
+                return JSON.stringify( json ); // return JSON string
+            };
+            makeDataTable_loadWithAjax("user_table", $("#filterUserForm").attr("action"), columns, dataFilter);
                 $("#user-expand").trigger("click");
                 $("#user_table > tbody .dataTables_empty").text("برای نمایش اطلاعات ابتدا فیلتر کنید").addClass("font-red bold");
                 $('#user_role').multiSelect();
