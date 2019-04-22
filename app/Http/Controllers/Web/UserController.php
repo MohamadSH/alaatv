@@ -595,6 +595,7 @@ class UserController extends Controller
             'lotteries' => (isset($lotteries)) ? $lotteries : [],
             "allUsers" => $itemsId,
             "allUsersNumber" => $itemsIdCount,
+            "allUsersNumber" => $itemsIdCount,
             "numberOfFatherPhones" => $numberOfFatherPhones,
             "numberOfMotherPhones" => $numberOfMotherPhones,
         ];
