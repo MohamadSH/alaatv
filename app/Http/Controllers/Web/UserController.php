@@ -528,7 +528,7 @@ class UserController extends Controller
         $numberOfMotherPhones = 0;
         $itemsIdCount = 0;
         $reportType = "";
-        if (strcmp($previousPath, action("Web\HomeController@adminSMS")) == 0) {
+        if (strcmp($previousPath, action("Web\HomeController@adminSMS")) == 0 || $request->has('smsAdmin')) {
             $uniqueUsers = $items->groupBy("nationalCode");
             $items = collect();
             foreach ($uniqueUsers as $user) {
@@ -545,9 +545,9 @@ class UserController extends Controller
                 Contact::whereIn('user_id', $itemsId)->where('relative_id', 1)->pluck('id'))->where("phonetype_id", 1)->count();
             $numberOfMotherPhones = Phone::whereIn('contact_id',
                 Contact::whereIn('user_id', $itemsId)->where('relative_id', 2)->pluck('id'))->where("phonetype_id", 1)->count();
-        } elseif (strcmp($previousPath, action("Web\HomeController@admin")) == 0) {
+        } elseif (strcmp($previousPath, action("Web\HomeController@admin")) == 0 || $request->has('userAdmin')) {
             return $items;
-        } elseif (strcmp($previousPath, action("Web\HomeController@adminReport")) == 0) {
+        } elseif (strcmp($previousPath, action("Web\HomeController@adminReport")) == 0 || $request->has('reportAdmin')) {
             $minCost = Input::get("minCost");
             if (isset($minCost[0])) {
                 foreach ($items as $key => $user) {
@@ -783,12 +783,15 @@ class UserController extends Controller
      */
     public function show(Request $request, User $user = null)
     {
-        if ($this->userCantSeenUsers($request, $user)) {
-            abort(403);
-        }
-
         if ($user === null) {
             $user = $request->user();
+        }
+
+
+        /** @var User $autheiticatedUser */
+        $autheiticatedUser = $request->user();
+        if ($this->authenticatedUserCantSeeThisUser($autheiticatedUser , $user)) {
+            abort(Response::HTTP_FORBIDDEN);
         }
 
         if ($request->expectsJson()) {
@@ -1126,7 +1129,7 @@ class UserController extends Controller
 
         $order = $unPaidOrders->first();
 
-        if ($paidOrder->isNotEmpty()) {
+        if (is_null($order)) {
             $order = $paidOrder->first();
         }
 
@@ -1157,13 +1160,13 @@ class UserController extends Controller
         foreach ($parents as $parent) {
             /** @var Collection|Contact $parentContacts */
             $parentContacts = $user->contacts->where("relative_id", $parent->id)->where("contacttype_id", $simpleContact->id);
-            if (! $parentContacts->isNotEmpty()) {
-                contains();
+            if ($parentContacts->isEmpty()) {
+                continue();
             }
             $parentContact = $parentContacts->first();
             $parentMobiles = $parentContact->phones->where("phonetype_id", $mobilePhoneType->id)->sortBy("priority");
-            if (! $parentMobiles->isNotEmpty()) {
-                contains();
+            if ($parentMobiles->isEmpty()) {
+                continue();
             }
             $parentMobile = $parentMobiles->first()->phoneNumber;
             $parentsNumber->put($parent->name, $parentMobile);
@@ -1925,7 +1928,7 @@ class UserController extends Controller
             "mobile_verified_at",
             "photo",
         ];
-        if ($response->getStatusCode() != 200) {
+        if ($response->getStatusCode() != Response::HTTP_OK) {
             return $this->sessionPutAndRedirectBack("مشکل غیر منتظره ای در ذخیره اطلاعات شما پیش آمد . لطفا مجددا اقدام نمایید");
         }
         if ($user->completion("custom", $completionColumns) < 100) {
@@ -2034,13 +2037,13 @@ class UserController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\User $user
+     * @param User $authenticaedUser
+     * @param User $user
      * @return bool
      */
-    private function userCantSeenUsers(Request $request, User $user): bool
+    private function authenticatedUserCantSeeThisUser(User $authenticaedUser, User $user): bool
     {
-        return $user !== null && ($user->id !== $request->user()->id) && ! ($user->can(config('constants.SHOW_USER_ACCESS')));
+        return ($user->id !== $authenticaedUser->id) && !($authenticaedUser->can(config('constants.SHOW_USER_ACCESS')));
     }
 
     /**
