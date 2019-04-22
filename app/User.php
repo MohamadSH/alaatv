@@ -22,6 +22,7 @@ use App\Traits\User\{BonTrait,
     TeacherTrait,
     TrackTrait,
     VouchersTrait};
+use App\Traits\UserCommon;
 use Cache;
 use Carbon\Carbon;
 use Hash;
@@ -270,6 +271,7 @@ use Laravel\Passport\HasApiTokens;
  * @property mixed roles
  * @property static|null mobile_verified_at
  * @property mixed closed_orders
+ * @property mixed email
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail
 {
@@ -592,5 +594,19 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
                     'description'
                 ]);
             });
+    }
+
+    public function getEmailAttribute($value){
+        if(!$this->isAuthenticatedUserHasPermission('constants.SHOW_USER_EMAIL'))
+            return $value;
+
+        return null;
+    }
+
+    public function getMobileAttribute($value){
+        if(!$this->isAuthenticatedUserHasPermission('constants.SHOW_USER_MOBILE'))
+            return $value;
+
+        return null;
     }
 }

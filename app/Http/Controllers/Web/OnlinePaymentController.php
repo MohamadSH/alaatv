@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Classes\Payment\OnlineGateWay;
 use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
 use App\Classes\Payment\RefinementRequest\Strategies\{ChargingWalletRefinement, OpenOrderRefinement, OrderIdRefinement, TransactionRefinement};
@@ -43,6 +44,7 @@ class OnlinePaymentController extends Controller
      ***********************************************************/
 
     /**
+     * redirect the user to online payment page
      * @param Request $request
      * @param string $paymentMethod
      * @param string $device
@@ -50,15 +52,6 @@ class OnlinePaymentController extends Controller
      */
     public function paymentRedirect(string $paymentMethod, string $device, Request $request)
     {
-        //ToDo: Should remove after adding unit test
-        /*
-        $request->offsetSet('order_id', 137);
-        $request->offsetSet('transaction_id', 65);
-        $request->offsetSet('payByWallet', true);
-        $request->offsetSet('walletId', 1);
-        $request->offsetSet('walletChargingAmount', 50000);
-        */
-
         $inputData = $request->all();
         $inputData['transactionController'] = $this->transactionController;
         $inputData['user'] = $request->user();
@@ -93,7 +86,7 @@ class OnlinePaymentController extends Controller
             return $this->sendToOfflinePaymentProcess($device, $order);
         }
 
-        $redirectData = ZarinPal::interactWithZarinPal($paymentMethod, $device, $cost, $description, $transaction);
+        $redirectData = OnlineGateWay::getRedirectionData($paymentMethod, $device, $cost, $description, $transaction);
 
         return view("order.checkout.gatewayRedirect", compact('redirectData'));
     }
