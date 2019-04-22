@@ -73,6 +73,98 @@ function makeDataTable(id) {
     });
 }
 
+/**
+ * Initializing tables
+ * @param id : table id
+ */
+
+function makeDataTable_loadWithAjax(id, url, columns, dataFilter) {
+    var table = $('#'+id);
+
+    var oTable = table.dataTable({
+        // Internationalisation. For more info refer to http://datatables.net/manual/i18n
+        "language": {
+            "aria": {
+                "sortAscending": "مرتب کردن صعودی ستون :",
+                "sortDescending": "مرتب کردن نزولی ستون :"
+            },
+            "emptyTable": "اطلاعاتی برای نمایش وجود ندارد",
+            "info": "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+            "infoEmpty": "رکوردی در جدول یافت نشد",
+            "infoFiltered": "(فیلترشده1 از _MAX_ رکورد)",
+            "lengthMenu": "_MENU_ رکورد",
+            "search": "جستجو:",
+            "zeroRecords": "نتیجه ای برای جستجو یافت نشد"
+        },
+
+        // Or you can use remote translation file
+        //"language": {
+        //   url: '//cdn.datatables.net/plug-ins/3cfcc339e89/i18n/Portuguese.json'
+        //},
+
+        // setup buttons extentension: http://datatables.net/extensions/buttons/
+        buttons:[
+            {extend: 'print', className: 'btn m-btn--pill m-btn--air btn-outline-brand', exportOptions: {columns: ':visible'}},
+            {extend: 'copy', className: 'btn m-btn--pill m-btn--air btn-outline-danger', exportOptions: {columns: ':visible'}},
+            {extend: 'pdf', className: 'btn m-btn--pill m-btn--air btn-outline-success', exportOptions: {columns: ':visible'}},
+            {extend: 'excel', className: 'btn m-btn--pill m-btn--air btn-outline-warning', exportOptions: {columns: ':visible'}},
+            {extend: 'csv', className: 'btn m-btn--pill m-btn--air btn-outline-info', exportOptions: {columns: ':visible'}},
+            // {extend: 'colvis', className: 'btn dark btn-outline', text: 'ستون ها'}
+        ],
+
+        // setup responsive extension: http://datatables.net/extensions/responsive/
+        responsive: {
+            details: {
+                type: 'column',
+                target: 'tr'
+            }
+        },
+        columnDefs: [
+            {
+                className: 'control',
+                orderable: false,
+                targets: 0
+            }
+        ],
+
+        order: [],
+
+        // pagination control
+        "lengthMenu": [
+            [5, 10, 15, 20, -1],
+            [5, 10, 15, 20, "All"] // change per page values here
+        ],
+        // set the initial value
+        "pageLength": 10,
+        "pagingType": 'bootstrap_extended', // pagination type
+
+        "dom": "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", // horizobtal scrollable datatable
+
+        // Uncomment below line("dom" parameter) to fix the dropdown overflow issue in the datatable cells. The default datatable layout
+        // setup uses scrollable div(table-scrollable) with overflow:auto to enable vertical scroll(see: assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js).
+        // So when dropdowns used the scrollable div should be removed.
+        //"dom": "<'row' <'col-md-12'T>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
+
+
+        "processing": true,
+        "serverSide": true,
+        "ajax": {
+            "url": url,
+            "data": function (data) {
+                data.page = getNextPageParam(data.start, data.length);
+                return data;
+            },
+            'dataFilter': dataFilter
+        },
+
+        "columns": columns
+    });
+}
+
+function getNextPageParam(start, length) {
+    let page = (start / length) + 1;
+    return page;
+}
 
 //dataTable without button
 /**

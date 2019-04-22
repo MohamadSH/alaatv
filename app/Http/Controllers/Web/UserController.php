@@ -233,19 +233,13 @@ class UserController extends Controller
         if (isset($couponEnable) && isset($couponsId)) {
             if (in_array(0, $couponsId)) {
                 $users = $users->whereHas("orders", function ($q) use ($couponsId) {
-                    $q->whereDoesntHave("coupon")->whereNotIn('orderstatus_id', [
-                        config("constants.ORDER_STATUS_OPEN"),
-                        config("constants.ORDER_STATUS_CANCELED"),
-                        config("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
-                    ]);
+                    $q->whereDoesntHave("coupon")->whereNotIn('orderstatus_id',
+                        [config("constants.ORDER_STATUS_OPEN"), config("constants.ORDER_STATUS_CANCELED"), config("constants.ORDER_STATUS_OPEN_BY_ADMIN")]);
                 });
             } else {
                 $users = $users->whereHas("orders", function ($q) use ($couponsId) {
-                    $q->whereIn("coupon_id", $couponsId)->whereNotIn('orderstatus_id', [
-                        config("constants.ORDER_STATUS_OPEN"),
-                        config("constants.ORDER_STATUS_CANCELED"),
-                        config("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
-                    ]);
+                    $q->whereIn("coupon_id", $couponsId)->whereNotIn('orderstatus_id',
+                        [config("constants.ORDER_STATUS_OPEN"), config("constants.ORDER_STATUS_CANCELED"), config("constants.ORDER_STATUS_OPEN_BY_ADMIN")]);
                 });
             }
         }
@@ -280,12 +274,12 @@ class UserController extends Controller
             } elseif (in_array(0, $productsId)) {
                 $users = $users->whereHas("orders", function ($query) {
                     $query->whereNotIn('orderstatus_id', [
-                        config("constants.ORDER_STATUS_OPEN"),
-                        config("constants.ORDER_STATUS_CANCELED"),
-                        config("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
-                        config("constants.ORDER_STATUS_OPEN_DONATE"),
-                        config("constants.ORDER_STATUS_PENDING"),
-                    ]);
+                            config("constants.ORDER_STATUS_OPEN"),
+                            config("constants.ORDER_STATUS_CANCELED"),
+                            config("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
+                            config("constants.ORDER_STATUS_OPEN_DONATE"),
+                            config("constants.ORDER_STATUS_PENDING"),
+                        ]);
                 });
             } elseif (isset($productsId)) {
                 $products = Product::whereIn('id', $productsId)->get();
@@ -592,6 +586,8 @@ class UserController extends Controller
             ], Response::HTTP_OK);
         }
 
+        return response($users->paginate(10), Response::HTTP_OK);
+
         $result = [
             'index' => View::make($index,
                 compact('items', 'products', 'paymentStatusesId', 'reportType', 'hasPishtaz', 'orders', 'seePaidCost', 'lotteries'))->render(),
@@ -647,8 +643,8 @@ class UserController extends Controller
         }
         if (request()->expectsJson()) {
             return response([
-                "items" => $items,
-            ], Response::HTTP_OK);
+                    "items" => $items,
+                ], Response::HTTP_OK);
         }
 
         $url = $request->url();
@@ -675,7 +671,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \app\Http\Requests\InsertUserRequest $request
+     * @param  \app\Http\Requests\InsertUserRequest $request
      *
      * @return Response
      */
@@ -770,12 +766,8 @@ class UserController extends Controller
     {
         foreach ($newRoleIds as $key => $newRoleId) {
             $newRole = Role::Find($newRoleId);
-            if (isset($newRole)) {
-                if ($newRole->isDefault) {
-                    if (! $user->can(config('constants.GIVE_SYSTEM_ROLE'))) {
-                        unset($newRoleIds[$key]);
-                    }
-                }
+            if ($this->userCantGetRole($user, $newRole)) {
+                unset($newRoleIds[$key]);
             }
         }
     }
@@ -790,10 +782,12 @@ class UserController extends Controller
      */
     public function show(Request $request, User $user = null)
     {
+        if ($this->userCantSeenUsers($request, $user)) {
+            abort(403);
+        }
+
         if ($user === null) {
             $user = $request->user();
-        } elseif (($user->id !== $request->user()->id) && ! ($user->can(config('constants.SHOW_USER_ACCESS')))) {
-            abort(403);
         }
 
         if ($request->expectsJson()) {
@@ -820,12 +814,10 @@ class UserController extends Controller
         $userKonkurResult = $user->eventresults->where("event_id", $event->id)->first();
 
         $userCompletion = $user->info['completion'];
-        return $user;
-        return view("user.profile.profile", compact("user", 'event', 'userKonkurResult',
 
-            'genders', 'majors', 'sideBarMode',
-            //            'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName' ,
-            'userKonkurResult', 'userCompletion'));
+        return view("user.profile.profile", compact("user", 'event', 'userKonkurResult', 'genders', 'majors', 'sideBarMode',
+                /*'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName' , */
+                'userKonkurResult', 'userCompletion'));
     }
 
     /**
@@ -965,61 +957,61 @@ class UserController extends Controller
      */
     private function addVideoPamphlet($productArray, Collection &$pamphlets, Collection &$videos, $mode = "default")
     {
-        if (! empty($productArray)) {
-            $videoArray = [];
-            $pamphletArray = [];
-            foreach ($productArray as $product) {
-                if (! in_array($product->id, $pamphletArray) && ! in_array($product->id, $videoArray)) {
+        if (empty($productArray)) {
+            return false;
+        }
 
-                    if (isset($pamphlets[$product->id])) {
-                        $pamphletArray = $pamphlets[$product->id];
-                    } else {
-                        $pamphletArray = [];
-                    }
-                    if (isset($videos[$product->id])) {
-                        $videoArray = $videos[$product->id];
-                    } else {
-                        $videoArray = [];
-                    }
+        $videoArray = [];
+        $pamphletArray = [];
+        foreach ($productArray as $product) {
+            if ($this->productIsNeitherInArticlesNorInFilms($product, $pamphletArray, $videoArray)) {
 
-                    foreach ($product->validProductfiles as $productfile) {
-                        if ($productfile->productfiletype_id == config("constants.PRODUCT_FILE_TYPE_PAMPHLET")) {
-                            array_push($pamphletArray, [
-                                "file" => $productfile->file,
-                                "name" => $productfile->name,
-                                "product_id" => $productfile->product_id,
-                            ]);
-                        } else {
+                $pamphletArray = [];
+                if (isset($pamphlets[$product->id])) {
+                    $pamphletArray = $pamphlets[$product->id];
+                }
 
-                            array_push($videoArray, [
-                                "file" => $productfile->file,
-                                "name" => $productfile->name,
-                                "product_id" => $productfile->product_id,
-                            ]);
-                        }
-                    }
+                $videoArray = [];
+                if (isset($videos[$product->id])) {
+                    $videoArray = $videos[$product->id];
+                }
 
-                    if (! empty($pamphletArray)) {
-                        $pamphlets->put($product->id, [
-                            "productName" => $product->name,
-                            "pamphlets" => $pamphletArray,
+                foreach ($product->validProductfiles as $productfile) {
+                    if ($productfile->productfiletype_id == config("constants.PRODUCT_FILE_TYPE_PAMPHLET")) {
+                        array_push($pamphletArray, [
+                            "file" => $productfile->file,
+                            "name" => $productfile->name,
+                            "product_id" => $productfile->product_id,
                         ]);
-                    }
-
-                    if (! empty($videoArray)) {
-                        $videos->put($product->id, [
-                            "productName" => $product->name,
-                            "videos" => $videoArray,
+                    } else {
+                        array_push($videoArray, [
+                            "file" => $productfile->file,
+                            "name" => $productfile->name,
+                            "product_id" => $productfile->product_id,
                         ]);
                     }
                 }
 
-                if ($mode == "digChildren") {
-                    $this->addVideoPamphlet($product->children, $pamphlets, $videos);
+                if (! empty($pamphletArray)) {
+                    $pamphlets->put($product->id, [
+                        "productName" => $product->name,
+                        "pamphlets" => $pamphletArray,
+                    ]);
                 }
 
-                $this->addVideoPamphlet($product->complimentaryproducts, $pamphlets, $videos);
+                if (! empty($videoArray)) {
+                    $videos->put($product->id, [
+                        "productName" => $product->name,
+                        "videos" => $videoArray,
+                    ]);
+                }
             }
+
+            if ($mode == "digChildren") {
+                $this->addVideoPamphlet($product->children, $pamphlets, $videos);
+            }
+
+            $this->addVideoPamphlet($product->complimentaryproducts, $pamphlets, $videos);
         }
     }
 
@@ -1045,95 +1037,14 @@ class UserController extends Controller
      */
     public function showSurvey()
     {
-        //        return redirect(action("Web\HomeController@error404"));
+        // return redirect(action("Web\HomeController@error404"));
         $event = Event::FindOrFail(1);
         $surveys = $event->surveys;
         foreach ($surveys as $survey) {
             $questions = $survey->questions->sortBy("pivot.order");
             $questionsData = collect();
             $answersData = collect();
-            foreach ($questions as $question) {
-                $requestBaseUrl = $question->dataSourceUrl;
-                /**
-                 * Getting raw answer
-                 */
-                $requestUrl = action("Web\UserSurveyAnswerController@index");
-                $requestUrl .= "?event_id[]=".$event->id."&survey_id[]=".$survey->id."&question_id[]=".$question->id;
-                $originalInput = \Illuminate\Support\Facades\Request::input();
-                $request = \Illuminate\Support\Facades\Request::create($requestUrl, 'GET');
-                \Illuminate\Support\Facades\Request::replace($request->input());
-                $response = Route::dispatch($request);
-                $answersCollection = json_decode($response->content());
-                \Illuminate\Support\Facades\Request::replace($originalInput);
-                $questionAnswerArray = [];
-                foreach ($answersCollection as $answerCollection) {
-                    /** Making answers */
-                    $answerArray = $answerCollection->userAnswer->answer;
-                    $requestUrl = url("/").$requestBaseUrl."?ids=$answerArray";
-                    $originalInput = \Illuminate\Support\Facades\Request::input();
-                    $request = \Illuminate\Support\Facades\Request::create($requestUrl, 'GET');
-                    \Illuminate\Support\Facades\Request::replace($request->input());
-                    $response = Route::dispatch($request);
-                    $dataJson = json_decode($response->content());
-                    \Illuminate\Support\Facades\Request::replace($originalInput);
-                    foreach ($dataJson as $data) {
-                        $questionAnswerArray = array_add($questionAnswerArray, $data->id, $data->name);
-                    }
-                }
-                $answersData->put($question->id, $questionAnswerArray);
-                /**
-                 *  Making questions
-                 */
-                if (strpos($question->dataSourceUrl, "major") !== false) {
-                    $userMajor = Auth()->user()->major;
-                    $userMajors = collect();
-                    $userMajors->push($userMajor);
-                    foreach ($userMajors as $major) {
-                        $accessibleMajors = $major->accessibles;
-                        foreach ($accessibleMajors as $accessibleMajor) {
-                            $userMajors->push($accessibleMajor);
-                        }
-                    }
-                    $userMajors = $userMajors->pluck('id')->toArray();
-                    $requestUrl = url("/").$requestBaseUrl."?";
-                    foreach ($userMajors as $major) {
-                        $requestUrl .= "&parents[]=$major";
-                    }
-                    $originalInput = \Illuminate\Support\Facades\Request::input();
-                    $request = \Illuminate\Support\Facades\Request::create($requestUrl, 'GET');
-                    \Illuminate\Support\Facades\Request::replace($request->input());
-                    $response = Route::dispatch($request);
-                    $dataJson = json_decode($response->content());
-                    \Illuminate\Support\Facades\Request::replace($originalInput);
-                    $rootMajorArray = [];
-                    $majorsArray = [];
-                    foreach ($dataJson as $item) {
-                        $majorsArray = array_add($majorsArray, $item->id, $item->name);
-                    }
-                    $rootMajorArray = array_add($rootMajorArray, $userMajor->name, $majorsArray);
-                    $questionsData->put($question->id, $rootMajorArray);
-                } else {
-                    if (strpos($question->dataSourceUrl, "city") !== false) {
-                        $provinces = Province::orderBy("name")->get();
-                        $provinceCityArray = [];
-                        foreach ($provinces as $province) {
-                            $requestUrl = url("/").$requestBaseUrl."?provinces[]=$province->id";
-                            $originalInput = \Illuminate\Support\Facades\Request::input();
-                            $request = \Illuminate\Support\Facades\Request::create($requestUrl, 'GET');
-                            \Illuminate\Support\Facades\Request::replace($request->input());
-                            $response = Route::dispatch($request);
-                            $dataJson = json_decode($response->content());
-                            \Illuminate\Support\Facades\Request::replace($originalInput);
-                            $citiesArray = [];
-                            foreach ($dataJson as $item) {
-                                $citiesArray = array_add($citiesArray, $item->id, $item->name);
-                            }
-                            $provinceCityArray = array_add($provinceCityArray, $province->name, $citiesArray);
-                            $questionsData->put($question->id, $provinceCityArray);
-                        }
-                    }
-                }
-            }
+            $this->getQuestionsAndAnswerData($questions, $event, $survey, $answersData, $questionsData);
         }
         $pageName = "showSurvey";
 
@@ -1143,7 +1054,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param User $user
+     * @param  User $user
      *
      * @return Response
      */
@@ -1161,7 +1072,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param User $user
+     * @param  User $user
      *
      * @return Response
      * @throws \Exception
@@ -1211,10 +1122,11 @@ class UserController extends Controller
             config("constants.PAYMENT_STATUS_PAID"),
             config("constants.PAYMENT_STATUS_INDEBTED"),
         ])->get();
+
+        $order = $unPaidOrders->first();
+
         if ($paidOrder->isNotEmpty()) {
             $order = $paidOrder->first();
-        } else {
-            $order = $unPaidOrders->first();
         }
 
         if (! isset($order)) {
@@ -1224,16 +1136,14 @@ class UserController extends Controller
         $orderproduct = $order->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get()->first();
         /** @var Product $product */
         $product = $orderproduct->product;
+        $userHasMedicalQuestions = false;
         if (in_array($product->id, config("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"))) {
             $userHasMedicalQuestions = true;
-        } else {
-            $userHasMedicalQuestions = false;
         }
+        $userProduct = $product->name;
         $grandParent = $product->grandParent;
         if (isset($grandParent)) {
             $userProduct = $grandParent->name;
-        } else {
-            $userProduct = $product->name;
         }
 
         $simpleContact = \App\Contacttype::where("name", "simple")->get()->first();
@@ -1246,14 +1156,16 @@ class UserController extends Controller
         foreach ($parents as $parent) {
             /** @var Collection|Contact $parentContacts */
             $parentContacts = $user->contacts->where("relative_id", $parent->id)->where("contacttype_id", $simpleContact->id);
-            if ($parentContacts->isNotEmpty()) {
-                $parentContact = $parentContacts->first();
-                $parentMobiles = $parentContact->phones->where("phonetype_id", $mobilePhoneType->id)->sortBy("priority");
-                if ($parentMobiles->isNotEmpty()) {
-                    $parentMobile = $parentMobiles->first()->phoneNumber;
-                    $parentsNumber->put($parent->name, $parentMobile);
-                }
+            if (! $parentContacts->isNotEmpty()) {
+                contains();
             }
+            $parentContact = $parentContacts->first();
+            $parentMobiles = $parentContact->phones->where("phonetype_id", $mobilePhoneType->id)->sortBy("priority");
+            if (! $parentMobiles->isNotEmpty()) {
+                contains();
+            }
+            $parentMobile = $parentMobiles->first()->phoneNumber;
+            $parentsNumber->put($parent->name, $parentMobile);
         }
         $majors = Major::pluck('name', 'id')->toArray();
         $majors[0] = "نامشخص";
@@ -1314,11 +1226,10 @@ class UserController extends Controller
         $completionFieldsCount++;
 
         $completionPercentage = (int)(($completedFieldsCount / $completionFieldsCount) * 100);
-        if ($completionPercentage == 100) {
-            if ($user->completion("lockProfile") == 100) {
-                $user->lockProfile();
-                $user->updateWithoutTimestamp();
-            }
+
+        if ($completionPercentage == 100 && $user->completion("lockProfile") == 100) {
+            $user->lockProfile();
+            $user->updateWithoutTimestamp();
         }
 
         return view("user.completeInfo",
@@ -1333,7 +1244,6 @@ class UserController extends Controller
      */
     public function uploadConsultingQuestion()
     {
-
         return view("user.uploadConsultingQuestion");
     }
 
@@ -1346,7 +1256,6 @@ class UserController extends Controller
      */
     public function uploads(Request $request)
     {
-
         $questions = $request->user()->useruploads->where("isEnable", "1");
         $counter = 1;
 
@@ -1370,24 +1279,23 @@ class UserController extends Controller
                 session()->put("error", "شماره موبایل وارد شده اشتباه می باشد!");
 
                 return redirect()->back();
-            } else {
-                $user = $users->first();
             }
+            $user = $users->first();
         }
 
         if (! isset($user)) {
-            if (Auth::check()) {
-                $user = $request->user();
-            } else {
+            if (! Auth::check()) {
                 return redirect(action("Web\HomeController@error403"));
             }
+            $user = $request->user();
         }
 
         $now = Carbon::now();
-        if (isset($user->passwordRegenerated_at) && $now->diffInMinutes(Carbon::parse($user->passwordRegenerated_at)) < config('constants.GENERATE_PASSWORD_WAIT_TIME')) {
-            if ($now->diffInMinutes(Carbon::parse($user->passwordRegenerated_at)) > 0) {
+        $tooManyAttempt = $this->checkTooManyAttemptsMadeForRegeneratePassword($user, $now);
+        if ($tooManyAttempt == 'min' || $tooManyAttempt == 'sec') {
+            if ($tooManyAttempt == 'min') {
                 $timeInterval = $now->diffInMinutes(Carbon::parse($user->passwordRegenerated_at))." دقیقه ";
-            } else {
+            } elseif ($tooManyAttempt == 'sec') {
                 $timeInterval = $now->diffInSeconds(Carbon::parse($user->passwordRegenerated_at))." ثانیه ";
             }
             session()->put("warning",
@@ -1451,11 +1359,12 @@ class UserController extends Controller
         $formFields = Afterloginformcontrol::getFormFields();
         $tables = [];
         foreach ($formFields as $formField) {
-            if (strpos($formField->name, "_id")) {
-                $tableName = $formField->name;
-                $tableName = str_replace("_id", "s", $tableName);
-                $tables[$formField->name] = DB::table($tableName)->pluck('name', 'id');
+            if (! strpos($formField->name, "_id")) {
+                continue;
             }
+            $tableName = $formField->name;
+            $tableName = str_replace("_id", "s", $tableName);
+            $tables[$formField->name] = DB::table($tableName)->pluck('name', 'id');
         }
 
         return view("user.completeRegister", compact("formFields", "note", "formByPass", "tables"));
@@ -1472,24 +1381,15 @@ class UserController extends Controller
      */
     public function submitWorkTime(Request $request, EmployeetimesheetController $employeetimesheetController, HomeController $homeController)
     {
-        if ($request->has('action')) {
+        $actionMap = [
+            'action-clockIn' => 'clockIn',
+            'action-beginLunchBreak' => 'beginLunchBreak',
+            'action-finishLunchBreak' => 'finishLunchBreak',
+            'action-clockOut' => 'clockOut',
+        ];
+        if ($request->has('action') && isset($actionMap[$request->get('action')])) {
             $presentTime = Carbon::now('Asia/Tehran')->format('H:i:s');
-            $action = $request->get('action');
-            if ($action == 'action-clockIn') {
-                $request->offsetSet('clockIn', $presentTime);
-            } else {
-                if ($action == 'action-beginLunchBreak') {
-                    $request->offsetSet('beginLunchBreak', $presentTime);
-                } else {
-                    if ($action == 'action-finishLunchBreak') {
-                        $request->offsetSet('finishLunchBreak', $presentTime);
-                    } else {
-                        if ($action == 'action-clockOut') {
-                            $request->offsetSet('clockOut', $presentTime);
-                        }
-                    }
-                }
-            }
+            $request->offsetSet($actionMap[$request->get('action')], $presentTime);
         }
 
         $userId = Auth::user()->id;
@@ -1542,106 +1442,42 @@ class UserController extends Controller
         $bon = Bon::where("name", $bonName)->first();
         if (isset($bon)) {
             $userbons = $user->userValidBons($bon);
-            if ($userbons->isNotEmpty()) {
-                $usedUserBon = collect();
-                $sumBonNumber = 0;
-                foreach ($userbons as $userbon) {
-                    $totalBonNumber = $userbon->totalNumber - $userbon->usedNumber;
-                    $usedUserBon->put($userbon->id, ["used" => $totalBonNumber]);
-                    $sumBonNumber += $totalBonNumber;
-                    $userbon->usedNumber = $userbon->usedNumber + $totalBonNumber;
-                    $userbon->userbonstatus_id = config("constants.USERBON_STATUS_USED");
-                    $userbon->update();
-                }
-                $userBonTaken = true;
-
-                [
-                    $result,
-                    $responseText,
-                    $prizeName,
-                    $walletId,
-                ] = $this->exchangeLottery($user, $sumBonNumber);
-
-                if ($result) {
-                    $lottery = Lottery::where("name", config("constants.LOTTERY_NAME"))->first();
-                    if (isset($lottery)) {
-                        $prizes = '{
-                          "items": [
-                            {
-                              "name": "'.$prizeName.'",
-                              "objectType": "App\\\\Wallet",
-                              "objectId": "'.$walletId.'"
-                            }
-                          ]
-                        }';
-                        if ($user->lotteries()->where("lottery_id", $lottery->id)->get()->isEmpty()) {
-                            $attachResult = $user->lotteries()->attach($lottery->id, [
-                                "rank" => 0,
-                                "prizes" => $prizes,
-                            ]);
-
-                            /**  clearing cache */
-                            Cache::tags('bon')->flush();
-                            $done = true;
-                        } else {
-                            $done = false;
-                            $message = "شما قبلا از قرعه کشی انصراف داده اید";
-                        }
-                    } else {
-                        $done = false;
-                        $message = "خطای غیر منتظره. لطفا بعدا دوباره اقدام نمایید";
-                    }
-                } else {
-                    $message = $responseText;
-                    $done = false;
-                }
-            } else {
-                $done = false;
-                $message = "شما در قرعه کشی نیستید";
-            }
+            list($usedUserBon, $userBonTaken, $done) = $this->checkUserBonsForLottery($user, $message, $userbons);
         } else {
             $done = false;
             $message = "خطای غیر منتظره . لطفا بعدا اقدام فرمایید";
         }
 
-        if (isset($done)) {
-            if ($done) {
-                return response([
-                    "message" => "OK",
-                ], Response::HTTP_OK);
-            } else {
-                if (isset($userBonTaken) && $userBonTaken) {
-                    foreach ($userbons as $userbon) {
-                        if (isset($usedUserBon[$userbon->id])) {
-                            $usedNumber = $usedUserBon[$userbon->id]["used"];
-                            $userbon->usedNumber = max($userbon->usedNumber - $usedNumber, 0);
-                            $userbon->userbonstatus_id = config("constants.USERBON_STATUS_ACTIVE");
-                        } else {
-                            $userbon->usedNumber = 0;
-                            $userbon->userbonstatus_id = config("constants.USERBON_STATUS_ACTIVE");
-                        }
-
-                        $userbon->update();
-                    }
-                }
-
-                return response([
-                    ["message" => $message],
-                ], Response::HTTP_SERVICE_UNAVAILABLE);
-            }
-        } else {
-            return response([
-                ["message" => "عملیاتی انجام نشد"],
-            ], Response::HTTP_SERVICE_UNAVAILABLE);
+        if ($done) {
+            return $this->makeResponseForRemoveFromLotteryMethod(Response::HTTP_OK, "OK");
         }
+
+        if (! isset($userBonTaken) || ! $userBonTaken) {
+            return $this->makeResponseForRemoveFromLotteryMethod(Response::HTTP_SERVICE_UNAVAILABLE, $message);
+        }
+
+        foreach ($userbons as $userbon) {
+            if (isset($usedUserBon[$userbon->id])) {
+                $usedNumber = $usedUserBon[$userbon->id]["used"];
+                $userbon->usedNumber = max($userbon->usedNumber - $usedNumber, 0);
+                $userbon->userbonstatus_id = config("constants.USERBON_STATUS_ACTIVE");
+            } else {
+                $userbon->usedNumber = 0;
+                $userbon->userbonstatus_id = config("constants.USERBON_STATUS_ACTIVE");
+            }
+
+            $userbon->update();
+        }
+
+        return $this->makeResponseForRemoveFromLotteryMethod(Response::HTTP_SERVICE_UNAVAILABLE, $message);
     }
 
     /**
      * Store the complentary information of specified resource in storage.
      *
-     * @param User $user
+     * @param  User $user
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request $request
      * @param UserController $userController
      * @param PhoneController $phoneController
      * @param ContactController $contactController
@@ -1658,33 +1494,26 @@ class UserController extends Controller
         ContactController $contactController,
         OrderController $orderController
     ) {
-        if (strlen($request->get("phone")) > 0) {
-            $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("phone")));
+
+        $request->offsetSet("phone", $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("phone"))));
+        $request->offsetSet("postalCode", $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("postalCode"))));
+        $parentMobiles = [
+            'father' => $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("parentMobiles")["father"])),
+            'mother' => $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("parentMobiles")["mother"])),
+        ];
+        $request->offsetSet("parentMobiles", $parentMobiles);
+
+        $mapConvertToEnglish = [
+            'school',
+            'allergy',
+            'medicalCondition',
+            'diet',
+            'introducer'
+        ];
+        foreach ($mapConvertToEnglish as $item) {
+            $request->offsetSet($item, $this->convertToEnglish($request->get($item)));
         }
-        if (strlen($request->get("postalCode")) > 0) {
-            $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("postalCode")));
-        }
-        if (strlen($request->get("parentMobiles")["father"]) > 0) {
-            $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("parentMobiles")["father"]));
-        }
-        if (strlen($request->get("parentMobiles")["mother"]) > 0) {
-            $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("parentMobiles")["mother"]));
-        }
-        if (strlen($request->get("school")) > 0) {
-            $this->convertToEnglish($request->get("school"));
-        }
-        if (strlen($request->get("allergy")) > 0) {
-            $this->convertToEnglish($request->get("allergy"));
-        }
-        if (strlen($request->get("medicalCondition")) > 0) {
-            $this->convertToEnglish($request->get("medicalCondition"));
-        }
-        if (strlen($request->get("diet")) > 0) {
-            $this->convertToEnglish($request->get("diet"));
-        }
-        if (strlen($request->get("introducer")) > 0) {
-            $this->convertToEnglish($request->get("introducer"));
-        }
+
         $this->validate($request, [
             'photo' => 'image|mimes:jpeg,jpg,png|max:200',
             'file' => 'mimes:jpeg,jpg,png,zip,pdf,rar',
@@ -1708,27 +1537,26 @@ class UserController extends Controller
         if ($request->hasFile("photo")) {
             $editUserRequest->offsetSet("photo", $request->file("photo"));
         }
-        $editUserRequest->offsetSet("province", $request->get("province"));
-        $editUserRequest->offsetSet("address", $request->get("address"));
-        $editUserRequest->offsetSet("postalCode", $request->get("postalCode"));
-        $editUserRequest->offsetSet("city", $request->get("city"));
-        $editUserRequest->offsetSet("school", $request->get("school"));
-        if ($request->get("major_id") != 0) {
-            $editUserRequest->offsetSet("major_id", $request->get("major_id"));
+        $editUserRequestMap = [
+            'province',
+            'address',
+            'postalCode',
+            'city',
+            'school',
+            'major_id',
+            'grade_id',
+            'gender_id',
+            'bloodtype_id',
+            'phone',
+            'allergy',
+            'medicalCondition',
+            'diet',
+        ];
+        foreach ($editUserRequestMap as $item) {
+            if ($request->get($item) != 0) {
+                $editUserRequest->offsetSet($item, $request->get($item));
+            }
         }
-        if ($request->get("grade_id") != 0) {
-            $editUserRequest->offsetSet("grade_id", $request->get("grade_id"));
-        }
-        if ($request->get("gender_id") != 0) {
-            $editUserRequest->offsetSet("gender_id", $request->get("gender_id"));
-        }
-        if ($request->get("bloodtype_id") != 0) {
-            $editUserRequest->offsetSet("bloodtype_id", $request->get("bloodtype_id"));
-        }
-        $editUserRequest->offsetSet("phone", $request->get("phone"));
-        $editUserRequest->offsetSet("allergy", $request->get("allergy"));
-        $editUserRequest->offsetSet("medicalCondition", $request->get("medicalCondition"));
-        $editUserRequest->offsetSet("diet", $request->get("diet"));
         $userController->update($editUserRequest, $user);
 
         /**
@@ -1758,44 +1586,28 @@ class UserController extends Controller
                 if ($response->getStatusCode() == 200) {
                     $responseContent = json_decode($response->getContent("contact"));
                     $parentContact = $responseContent->contact;
-                } else {
-                    if ($response->getStatusCode() == 503) {
-
-                    }
                 }
             } else {
                 $parentContact = $parentContacts->first();
             }
-            if (isset($parentContact)) {
-                $parentContact = Contact::where("id", $parentContact->id)->get()->first();
-                $parentMobiles = $parentContact->phones->where("phonetype_id", $mobilePhoneType->id)->sortBy("priority");
-                if ($parentMobiles->isEmpty()) {
-                    $storePhoneRequest = new \App\Http\Requests\InsertPhoneRequest();
-                    $storePhoneRequest->offsetSet("phoneNumber", $mobile);
-                    $storePhoneRequest->offsetSet("contact_id", $parentContact->id);
-                    $storePhoneRequest->offsetSet("phonetype_id", $mobilePhoneType->id);
-                    $response = $phoneController->store($storePhoneRequest);
-                    if ($response->getStatusCode() == 200) {
-
-                    } else {
-                        if ($response->getStatusCode() == 503) {
-
-                        }
-                    }
-                } else {
-                    $parentMobile = $parentMobiles->first();
-                    $parentMobile->phoneNumber = $mobile;
-                    if ($parentMobile->update()) {
-
-                    } else {
-
-                    }
-                }
+            if (! isset($parentContact)) {
+                continue;
+            }
+            $parentContact = Contact::where("id", $parentContact->id)->get()->first();
+            $parentMobiles = $parentContact->phones->where("phonetype_id", $mobilePhoneType->id)->sortBy("priority");
+            if ($parentMobiles->isEmpty()) {
+                $storePhoneRequest = new \App\Http\Requests\InsertPhoneRequest();
+                $storePhoneRequest->offsetSet("phoneNumber", $mobile);
+                $storePhoneRequest->offsetSet("contact_id", $parentContact->id);
+                $storePhoneRequest->offsetSet("phonetype_id", $mobilePhoneType->id);
+                $response = $phoneController->store($storePhoneRequest);
+                $response->getStatusCode();
+            } else {
+                $parentMobile = $parentMobiles->first();
+                $parentMobile->phoneNumber = $mobile;
+                $parentMobile->update();
             }
         }
-        /**
-         *
-         */
 
         $updateOrderRequest = new \App\Http\Requests\EditOrderRequest();
         if ($request->hasFile("file")) {
@@ -1810,10 +1622,9 @@ class UserController extends Controller
         foreach ($extraInfoQuestions as $key => $question) {
             $obj = new stdClass();
             $obj->title = $question;
+            $obj->info = null;
             if (strlen(preg_replace('/\s+/', '', $customerExtraInfoAnswers[$key])) > 0) {
                 $obj->info = $customerExtraInfoAnswers[$key];
-            } else {
-                $obj->info = null;
             }
             if (strlen($jsonConcats) > 0) {
                 $jsonConcats = $jsonConcats.','.json_encode($obj, JSON_UNESCAPED_UNICODE);
@@ -1904,7 +1715,7 @@ class UserController extends Controller
     /**
      * Register student for sanati sharif highschool
      *
-     * @param \App\Http\Requests\RegisterForSanatiSharifHighSchoolRequest $request
+     * @param  \App\Http\Requests\RegisterForSanatiSharifHighSchoolRequest $request
      * @param EventresultController $eventResultController
      *
      * @return Response
@@ -2001,7 +1812,7 @@ class UserController extends Controller
     /**
      * Submit user request for voucher request
      *
-     * @param Request $request
+     * @param  Request $request
      *
      * @return Response
      */
@@ -2062,7 +1873,7 @@ class UserController extends Controller
     /**
      * Submit user request for voucher request
      *
-     * @param \App\Http\Requests\InsertVoucherRequest InsertVoucherRequest
+     * @param  \App\Http\Requests\InsertVoucherRequest InsertVoucherRequest
      *
      * @return Response
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
@@ -2113,43 +1924,40 @@ class UserController extends Controller
             "mobile_verified_at",
             "photo",
         ];
-        if ($response->getStatusCode() == 200) {
-            if ($user->completion("custom", $completionColumns) < 100) {
-                session()->put("error", "اطلاعات شما ذخیره شد اما برای ثبت درخواست اینترنت رایگان آسیاتک کامل نمی باشند . لطفا اطلاعات خود را تکمیل نمایید.");
-            } else {
-                $asiatechOrder = new Order();
-                $asiatechOrder->orderstatus_id = config("constants.ORDER_STATUS_PENDING");
-                $asiatechOrder->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID");
-                $asiatechOrder->cost = 0;
-                $asiatechOrder->costwithoutcoupon = 0;
-                $asiatechOrder->user_id = $user->id;
-                $asiatechOrder->completed_at = Carbon::now()->setTimezone("Asia/Tehran");
-                if ($asiatechOrder->save()) {
-                    $request->offsetSet("cost", 0);
-                    $request->offsetSet("orderId_bhrk", $asiatechOrder->id);
-                    $product = Product::where("id", $asiatechProduct)->first();
-                    if (isset($product)) {
-                        $orderController = new OrderController();
-                        $response = $orderController->addOrderproduct($request, $product);
-                        $responseStatus = $response->getStatusCode();
-                        $result = json_decode($response->getContent());
-                        if ($responseStatus == 200) {
-                            $user->lockProfile();
-
-                            $user->update();
-                        } else {
-                            session()->put("error", "خطا در ثبت محصول اینرنت رایگان آسیاتک");
-                        }
-                    } else {
-                        session()->put("error", "محصول اینترنت آسیاتک یافت نشد");
-                    }
-                } else {
-                    session()->put("error", "خطا در ثبت سفارش اینترنت رایگان. لطفا بعدا اقدام نمایید");
-                }
-            }
-        } else {
-            session()->put("error", "مشکل غیر منتظره ای در ذخیره اطلاعات شما پیش آمد . لطفا مجددا اقدام نمایید");
+        if ($response->getStatusCode() != 200) {
+            return $this->sessionPutAndRedirectBack("مشکل غیر منتظره ای در ذخیره اطلاعات شما پیش آمد . لطفا مجددا اقدام نمایید");
         }
+        if ($user->completion("custom", $completionColumns) < 100) {
+            return $this->sessionPutAndRedirectBack("اطلاعات شما ذخیره شد اما برای ثبت درخواست اینترنت رایگان آسیاتک کامل نمی باشند . لطفا اطلاعات خود را تکمیل نمایید.");
+        }
+        $asiatechOrder = new Order();
+        $asiatechOrder->orderstatus_id = config("constants.ORDER_STATUS_PENDING");
+        $asiatechOrder->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID");
+        $asiatechOrder->cost = 0;
+        $asiatechOrder->costwithoutcoupon = 0;
+        $asiatechOrder->user_id = $user->id;
+        $asiatechOrder->completed_at = Carbon::now()->setTimezone("Asia/Tehran");
+
+        if (! $asiatechOrder->save()) {
+            return $this->sessionPutAndRedirectBack("خطا در ثبت سفارش اینترنت رایگان. لطفا بعدا اقدام نمایید");
+        }
+
+        $request->offsetSet("cost", 0);
+        $request->offsetSet("orderId_bhrk", $asiatechOrder->id);
+        $product = Product::where("id", $asiatechProduct)->first();
+        if (! isset($product)) {
+            return $this->sessionPutAndRedirectBack("محصول اینترنت آسیاتک یافت نشد");
+        }
+
+        $orderController = new OrderController();
+        $response = $orderController->addOrderproduct($request, $product);
+        $responseStatus = $response->getStatusCode();
+        $result = json_decode($response->getContent());
+        if ($responseStatus != 200) {
+            return $this->sessionPutAndRedirectBack("خطا در ثبت محصول اینرنت رایگان آسیاتک");
+        }
+        $user->lockProfile();
+        $user->update();
 
         return redirect()->back();
     }
@@ -2184,35 +1992,320 @@ class UserController extends Controller
             ];
         }
 
-        if ($user->save()) {
-            if ($user->checkUserProfileForLocking()) {
-                $user->lockProfile();
-            }
-
-            if (in_array("roles", $data)) {
-                $this->attachRoles($data["roles"], $authenticatedUser, $user);
-            }
-
-            $resultText = 'User save successfully';
-            $resultCode = Response::HTTP_OK;
-        } else {
+        if (! $user->save()) {
             $resultText = 'Datebase error';
             $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
-        }
-
-        if ($resultCode == Response::HTTP_OK) {
-            $response = [
-                'user' => $user,
-            ];
-        } else {
             $response = [
                 'error' => [
                     'code' => $resultCode,
                     'message' => $resultText,
                 ],
             ];
+
+            return $response;
         }
 
+        if ($user->checkUserProfileForLocking()) {
+            $user->lockProfile();
+        }
+
+        if (in_array("roles", $data)) {
+            $this->attachRoles($data["roles"], $authenticatedUser, $user);
+        }
+
+        $resultText = 'User save successfully';
+        $resultCode = Response::HTTP_OK;
+        $response = [
+            'user' => $user,
+        ];
+
         return $response;
+    }
+
+    /**
+     * @param \App\User $user
+     * @param $newRole
+     * @return bool
+     */
+    private function userCantGetRole(User $user, $newRole): bool
+    {
+        return isset($newRole) && $newRole->isDefault && ! $user->can(config('constants.GIVE_SYSTEM_ROLE'));
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\User $user
+     * @return bool
+     */
+    private function userCantSeenUsers(Request $request, User $user): bool
+    {
+        return $user !== null && ($user->id !== $request->user()->id) && ! ($user->can(config('constants.SHOW_USER_ACCESS')));
+    }
+
+    /**
+     * @param $product
+     * @param array $pamphletArray
+     * @param array $videoArray
+     * @return bool
+     */
+    private function productIsNeitherInArticlesNorInFilms($product, array $pamphletArray, array $videoArray): bool
+    {
+        return ! in_array($product->id, $pamphletArray) && ! in_array($product->id, $videoArray);
+    }
+
+    /**
+     * @param $userMajor
+     * @return array|\Illuminate\Support\Collection
+     */
+    private function getUserMajors($userMajor)
+    {
+        $userMajors = collect();
+        $userMajors->push($userMajor);
+        foreach ($userMajors as $major) {
+            $accessibleMajors = $major->accessibles;
+            foreach ($accessibleMajors as $accessibleMajor) {
+                $userMajors->push($accessibleMajor);
+            }
+        }
+        $userMajors = $userMajors->pluck('id')->toArray();
+
+        return $userMajors;
+    }
+
+    /**
+     * @param $questions
+     * @param $event
+     * @param \App\Survey $survey
+     * @param \Illuminate\Support\Collection $answersData
+     * @param \Illuminate\Support\Collection $questionsData
+     */
+    private function getQuestionsAndAnswerData($questions, $event, \App\Survey $survey, Collection &$answersData, Collection &$questionsData): void
+    {
+        foreach ($questions as $question) {
+            $requestBaseUrl = $question->dataSourceUrl;
+            /**
+             * Getting raw answer
+             */
+            $this->getRawAnswer($event, $survey, $answersData, $question, $requestBaseUrl);
+            /**
+             *  Making questions
+             */
+            $this->makeQuestions($questionsData, $question, $requestBaseUrl);
+        }
+    }
+
+    /**
+     * @param $event
+     * @param \App\Survey $survey
+     * @param \Illuminate\Support\Collection $answersData
+     * @param $question
+     * @param $requestBaseUrl
+     */
+    private function getRawAnswer($event, \App\Survey $survey, Collection &$answersData, $question, $requestBaseUrl): void
+    {
+        $requestUrl = action("Web\UserSurveyAnswerController@index");
+        $requestUrl .= "?event_id[]=".$event->id."&survey_id[]=".$survey->id."&question_id[]=".$question->id;
+        $originalInput = \Illuminate\Support\Facades\Request::input();
+        $request = \Illuminate\Support\Facades\Request::create($requestUrl, 'GET');
+        \Illuminate\Support\Facades\Request::replace($request->input());
+        $response = Route::dispatch($request);
+        $answersCollection = json_decode($response->content());
+        \Illuminate\Support\Facades\Request::replace($originalInput);
+        $questionAnswerArray = [];
+        foreach ($answersCollection as $answerCollection) {
+            /** Making answers */
+            $answerArray = $answerCollection->userAnswer->answer;
+            $requestUrl = url("/").$requestBaseUrl."?ids=$answerArray";
+            $originalInput = \Illuminate\Support\Facades\Request::input();
+            $request = \Illuminate\Support\Facades\Request::create($requestUrl, 'GET');
+            \Illuminate\Support\Facades\Request::replace($request->input());
+            $response = Route::dispatch($request);
+            $dataJson = json_decode($response->content());
+            \Illuminate\Support\Facades\Request::replace($originalInput);
+            foreach ($dataJson as $data) {
+                $questionAnswerArray = array_add($questionAnswerArray, $data->id, $data->name);
+            }
+        }
+        $answersData->put($question->id, $questionAnswerArray);
+    }
+
+    /**
+     * @param \Illuminate\Support\Collection $questionsData
+     * @param $question
+     * @param $requestBaseUrl
+     */
+    private function makeQuestions(Collection &$questionsData, $question, $requestBaseUrl): void
+    {
+        if (strpos($question->dataSourceUrl, "major") !== false) {
+            $this->getQusetionDataInMajorStatus($questionsData, $question, $requestBaseUrl);
+        } elseif (strpos($question->dataSourceUrl, "city") !== false) {
+            $this->getQuestionDataInCityStatus($questionsData, $question, $requestBaseUrl);
+        }
+    }
+
+    /**
+     * @param \Illuminate\Support\Collection $questionsData
+     * @param $question
+     * @param $requestBaseUrl
+     */
+    private function getQusetionDataInMajorStatus(Collection &$questionsData, $question, $requestBaseUrl): void
+    {
+        $userMajor = Auth()->user()->major;
+        $userMajors = $this->getUserMajors($userMajor);
+        $requestUrl = url("/").$requestBaseUrl."?";
+        foreach ($userMajors as $major) {
+            $requestUrl .= "&parents[]=$major";
+        }
+        $originalInput = \Illuminate\Support\Facades\Request::input();
+        $request = \Illuminate\Support\Facades\Request::create($requestUrl, 'GET');
+        \Illuminate\Support\Facades\Request::replace($request->input());
+        $response = Route::dispatch($request);
+        $dataJson = json_decode($response->content());
+        \Illuminate\Support\Facades\Request::replace($originalInput);
+        $rootMajorArray = [];
+        $majorsArray = [];
+        foreach ($dataJson as $item) {
+            $majorsArray = array_add($majorsArray, $item->id, $item->name);
+        }
+        $rootMajorArray = array_add($rootMajorArray, $userMajor->name, $majorsArray);
+        $questionsData->put($question->id, $rootMajorArray);
+    }
+
+    /**
+     * @param \Illuminate\Support\Collection $questionsData
+     * @param $question
+     * @param $requestBaseUrl
+     */
+    private function getQuestionDataInCityStatus(Collection &$questionsData, $question, $requestBaseUrl): void
+    {
+        $provinces = Province::orderBy("name")->get();
+        $provinceCityArray = [];
+        foreach ($provinces as $province) {
+            $requestUrl = url("/").$requestBaseUrl."?provinces[]=$province->id";
+            $originalInput = \Illuminate\Support\Facades\Request::input();
+            $request = \Illuminate\Support\Facades\Request::create($requestUrl, 'GET');
+            \Illuminate\Support\Facades\Request::replace($request->input());
+            $response = Route::dispatch($request);
+            $dataJson = json_decode($response->content());
+            \Illuminate\Support\Facades\Request::replace($originalInput);
+            $citiesArray = [];
+            foreach ($dataJson as $item) {
+                $citiesArray = array_add($citiesArray, $item->id, $item->name);
+            }
+            $provinceCityArray = array_add($provinceCityArray, $province->name, $citiesArray);
+            $questionsData->put($question->id, $provinceCityArray);
+        }
+    }
+
+    /**
+     * @param $user
+     * @param $now
+     * @return bool|string
+     */
+    private function checkTooManyAttemptsMadeForRegeneratePassword($user, $now)
+    {
+        if (isset($user->passwordRegenerated_at) && $now->diffInMinutes(Carbon::parse($user->passwordRegenerated_at)) < config('constants.GENERATE_PASSWORD_WAIT_TIME')) {
+            if ($now->diffInMinutes(Carbon::parse($user->passwordRegenerated_at)) > 0) {
+                return 'min';
+            }
+
+            return 'sec';
+        }
+
+        return false;
+    }
+
+    private function checkUserBonsForLottery($user, string &$message, $userbons): array
+    {
+        $done = false;
+        if (! $userbons->isNotEmpty()) {
+            $message = "شما در قرعه کشی نیستید";
+            return [null, null, $done];
+        }
+
+        list($usedUserBon, $sumBonNumber) = $this->getUsedUserBon($userbons);
+        $userBonTaken = true;
+        [
+            $result,
+            $responseText,
+            $prizeName,
+            $walletId,
+        ] = $this->exchangeLottery($user, $sumBonNumber);
+
+        if (! $result) {
+            $message = $responseText;
+            return [$usedUserBon, $userBonTaken, $done];
+        }
+        $lottery = Lottery::where("name", config("constants.LOTTERY_NAME"))->first();
+
+        if (! isset($lottery)) {
+            $message = "خطای غیر منتظره. لطفا بعدا دوباره اقدام نمایید";
+            return [$usedUserBon, $userBonTaken, $done];
+        }
+        $prizes = '{
+                      "items": [
+                        {
+                          "name": "'.$prizeName.'",
+                          "objectType": "App\\\\Wallet",
+                          "objectId": "'.$walletId.'"
+                        }
+                      ]
+                    }';
+        if ($user->lotteries()->where("lottery_id", $lottery->id)->get()->isEmpty()) {
+            $attachResult = $user->lotteries()->attach($lottery->id, [
+                "rank" => 0,
+                "prizes" => $prizes,
+            ]);
+
+            /**  clearing cache */
+            Cache::tags('bon')->flush();
+            $done = true;
+        } else {
+            $message = "شما قبلا از قرعه کشی انصراف داده اید";
+        }
+
+        return [$usedUserBon, $userBonTaken, $done];
+    }
+
+    /**
+     * @param $userbons
+     * @return array
+     */
+    private function getUsedUserBon($userbons): array
+    {
+        $usedUserBon = collect();
+        $sumBonNumber = 0;
+        foreach ($userbons as $userbon) {
+            $totalBonNumber = $userbon->totalNumber - $userbon->usedNumber;
+            $usedUserBon->put($userbon->id, ["used" => $totalBonNumber]);
+            $sumBonNumber += $totalBonNumber;
+            $userbon->usedNumber = $userbon->usedNumber + $totalBonNumber;
+            $userbon->userbonstatus_id = config("constants.USERBON_STATUS_USED");
+            $userbon->update();
+        }
+
+        return [$usedUserBon, $sumBonNumber];
+    }
+
+    /**
+     * @param int $httpStatus
+     * @param string $message
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    private function makeResponseForRemoveFromLotteryMethod(int $httpStatus, string $message)
+    {
+        return response([
+            ["message" => $message],
+        ], $httpStatus);
+    }
+
+    /**
+     * @param $message
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function sessionPutAndRedirectBack($message)
+    {
+        session()->put("error", $message);
+        return redirect()->back();
     }
 }

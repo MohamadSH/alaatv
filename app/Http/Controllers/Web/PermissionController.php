@@ -48,9 +48,9 @@ class PermissionController extends Controller
 
         if ($permission->save()) {
             return $this->response->setStatusCode(200);
-        } else {
-            return $this->response->setStatusCode(503);
         }
+
+        return $this->response->setStatusCode(503);
     }
 
     public function edit($permission)
