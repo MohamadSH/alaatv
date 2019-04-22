@@ -786,7 +786,157 @@
 //            $("#order-portlet .reload").trigger("click");
             var newDataTable = $("#order_table").DataTable();
             newDataTable.destroy();
-            makeDataTable("order_table");
+            // makeDataTable("order_table");
+            let columns = [
+                {
+                    "data": "row_child",
+                    "defaultContent": ""
+                },
+                { "data": "user.lastName" , "title": "نام خانوادگی"},
+                { "data": "user.firstName" , "title": "نام کوچک" },
+                {
+                    "data": null,
+                    "name": "functions",
+                    "title": "عملیات",
+                    defaultContent: '',
+                    "render": function ( data, type, row ) {
+                        return '\n' +
+                            '            <div class="btn-group">\n' +
+                            '                <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> عملیات</button>\n' +
+                            '                <ul class="dropdown-menu" role="menu" id="'+row.id+'">\n' +
+                            '                    <li>\n' +
+                            '                        <a class="deleteUser" data-target="#deleteUserConfirmationModal" data-toggle="modal">\n' +
+                            '                            <i class="fa fa-remove" aria-hidden="true"></i> حذف\n' +
+                            '                        </a>\n' +
+                            '                    </li>\n' +
+                            '                    <li>\n' +
+                            '                        <a class="addBon" data-target="#addBonModal" data-toggle="modal">\n' +
+                            '                            <i class="fa fa-plus" aria-hidden="true"></i> تخصیص بن\n' +
+                            '                        </a>\n' +
+                            '                    </li>\n' +
+                            '                    <li>\n' +
+                            '                        <a class="sendSms" data-target="#smsModal" data-toggle="modal">\n' +
+                            '                            <i class="fa fa-envelope" aria-hidden="true"></i> ارسال پیامک\n' +
+                            '                        </a>\n' +
+                            '                    </li>\n' +
+                            '                </ul>\n' +
+                            '                <div id="ajax-modal" class="modal fade" tabindex="-1"></div>\n' +
+                            '            </div>';
+                    },
+                    // function ( api, rowIdx, columns ) {
+                    //     return 'hi';
+                    //     // var data = $.map( columns, function ( col, i ) {
+                    //     //     return col.hidden ?
+                    //     //         '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+                    //     //         '<td>'+col.title+':'+'</td> '+
+                    //     //         '<td>'+col.data+'</td>'+
+                    //     //         '</tr>' :
+                    //     //         '';
+                    //     // } ).join('');
+                    //     //
+                    //     // return data ?
+                    //     //     $('<table/>').append( data ) :
+                    //     //     false;
+                    // }
+
+                },
+                {
+                    "data": null,
+                    "name": "products",
+                    "title": "محصولات",
+                    defaultContent: '',
+                    "render": function ( data, type, row ) {
+                        let produtsNames = '';
+                        for (let index in row.orderproducts) {
+                            if(isNaN(index)) {
+                                continue;
+                            }
+                            produtsNames += row.orderproducts[index].product.name + '-';
+                        }
+                        return produtsNames;
+                    },
+                },
+                { "data": "user.info.major.name" , "title": "رشته" },
+                { "data": "user.province" , "title": "استان" },
+                { "data": "user.city" , "title": "شهر" },
+                { "data": "user.address" , "title": "آدرس" },
+                { "data": "user.postalCode" , "title": "کد پستی" },
+                { "data": "user.mobile" , "title": "موبایل", "defaultContent": "......"},
+                { "data": "user.nationalCode" , "title": "کد ملی", "defaultContent": "......" },
+                { "data": "user.price" , "title": "مبلغ(تومان)" },
+                { "data": "user.email" , "title": "ایمیل", "defaultContent": "......" },
+                { "data": "user.paidPrice" , "title": "پرداخت شده(تومان)" },
+                { "data": "user.refundPrice" , "title": "مبلغ برگشتی(تومان)" },
+                { "data": "debt" , "title": "بدهکار/بستانکار(تومان):" },
+                {
+                    "data": null,
+                    "name": "successfulTransactions",
+                    "title": "تراکنش های موفق:",
+                    defaultContent: '',
+                    "render": function ( data, type, row ) {
+                        let successfulTransactions = '';
+                        for (let index in row.successfulTransactions) {
+                            if(isNaN(index)) {
+                                continue;
+                            }
+                            produtsNames += '' +
+                                '<a target="_blank" href="#" class="btn btn-xs blue-sharp btn-outline sbold">اصلاح</a>\n' +
+                                '                    @if($successfulTransaction->getGrandParent() !== false)\n' +
+                                '                        <a target="_blank" href="#" class="btn btn-xs blue-sharp btn-outline  sbold">رفتن به تراکنش والد</a>\n' +
+                                '                    @endif\n' +
+                                '                    @if(isset($successfulTransaction->paymentmethod->displayName))\n' +
+                                '                        {{ $successfulTransaction->paymentmethod->displayName}}\n' +
+                                '                    @else\n' +
+                                '                        <span class="m-badge m-badge--wide m-badge--danger">- نحوه پرداخت نامشخص</span>\n' +
+                                '                    @endif\n' +
+                                '                    @if($successfulTransaction->getCode() === false)\n' +
+                                '                        - بدون کد@else - {{$successfulTransaction->getCode()}}\n' +
+                                '                    @endif\n' +
+                                '                    - مبلغ: \n' +
+                                '                    @if($successfulTransaction->cost >= 0)\n' +
+                                '                        {{ number_format($successfulTransaction->cost) }} <br>\n' +
+                                '                    @else\n' +
+                                '                        {{ number_format(-$successfulTransaction->cost) }}(دریافت) <br>\n' +
+                                '                    @endif\n' +
+                                '                    ,تاریخ پرداخت:\n' +
+                                '                    @if(isset($successfulTransaction->completed_at))\n' +
+                                '                        {{$successfulTransaction->CompletedAt_Jalali()}}\n' +
+                                '                    @else\n' +
+                                '                        <span class="bold font-red">نامشخص</span>\n' +
+                                '                    @endif\n' +
+                                '                    ,توضیح مدیریتی: \n' +
+                                '                    @if(strlen($successfulTransaction->managerComment)>0)\n' +
+                                '                        <span class="bold font-blue">{{$successfulTransaction->managerComment}}</span>\n' +
+                                '                    @else\n' +
+                                '                        <span class="m-badge m-badge--wide m-badge--warning">ندارد</span>\n' +
+                                '                    @endif\n' +
+                                '                    <br>';
+                        }
+                        return produtsNames;
+                    },
+                },
+                { "data": "mobile_verified_at" , "title": "وضعیت شماره موبایل" },
+                { "data": "school" , "title": "مدرسه" },
+                { "data": "full_name" , "title": "وضعیت" },
+                { "data": "created_at" , "title": "زمان ثبت نام" },
+                { "data": "updated_at" , "title": "زمان اصلاح" },
+                { "data": "full_name" , "title": "نقش های کاربر" },
+                { "data": "full_name" , "title": "تعداد بن" },
+            ];
+            let dataFilter = function(data){
+                var json = jQuery.parseJSON( data );
+                console.log(json.data);
+                json.recordsTotal = json.total;
+                json.recordsFiltered = json.total;
+                // for (let index in json.data) {
+                //     if(!isNaN(index)) {
+                //         json.data[index]['full_name'] =
+                //     }
+                // }
+                //
+                return JSON.stringify( json ); // return JSON string
+            };
+            makeDataTable_loadWithAjax("order_table", "/order", columns, dataFilter);
             $("#order-expand").trigger("click");
             $("#order_table > tbody .dataTables_empty").text("برای نمایش اطلاعات ابتدا فیلتر کنید").addClass("font-red bold");
             @endpermission;
