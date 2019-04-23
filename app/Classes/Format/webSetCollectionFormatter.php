@@ -9,6 +9,7 @@
 namespace App\Classes\Format;
 
 use App\Collection\SetCollection;
+use App\Contentset;
 
 class webSetCollectionFormatter implements SetCollectionFormatter
 {
@@ -21,6 +22,7 @@ class webSetCollectionFormatter implements SetCollectionFormatter
     {
         $lessons = collect();
         foreach ($sets as $set) {
+            /** @var Contentset $set */
             $content = $set->getLastContent();
             $lesson = [
                 "displayName" => $set->shortName,
@@ -30,7 +32,6 @@ class webSetCollectionFormatter implements SetCollectionFormatter
                 "content_count" => $set->contents_count,
             ];
             $lessons->push($lesson);
-//            dump(memory_get_peak_usage(true)/(1024*1024) - $t);
         }
         return $lessons;
     }

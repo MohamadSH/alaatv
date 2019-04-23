@@ -129,20 +129,15 @@ class Contentset extends BaseModel implements Taggable
     {
         $key = "ContentSet:getLastContent".$this->cacheKey();
 
-        return Cache::tags('set')->remember($key, Config::get("constants.CACHE_300"), function () {
+        return Cache::tags('set')->remember($key, config("constants.CACHE_300"), function () {
 
             $r = $this->getContents();
 
-            if (is_null($r)) {
+            if (isset($r)) {
                 return null;
             }
 
-            $contentCollection = $r->sortByDesc("order");
-            if (is_null($contentCollection)) {
-                return null;
-            }
-
-            return ($contentCollection)->first();
+            return $r->sortByDesc("order")->first();
         });
     }
 
@@ -150,7 +145,7 @@ class Contentset extends BaseModel implements Taggable
     {
         $key = "ContentSet:getContents".$this->cacheKey();
 
-        return Cache::tags('set')->remember($key, Config::get("constants.CACHE_300"), function () {
+        return Cache::tags('set')->remember($key, config("constants.CACHE_300"), function () {
             return $this->contents()->active()->get();
         });
     }

@@ -518,7 +518,8 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function getAuthorNameAttribute(): string
     {
-        return $this->author->full_name;
+        $author = $this->author;
+        return isset($author) ? $author->full_name : '';
     }
 
     /**
