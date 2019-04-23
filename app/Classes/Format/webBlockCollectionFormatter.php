@@ -36,14 +36,16 @@ class webBlockCollectionFormatter implements BlockCollectionFormatter
         //TODO:: fix some bugs!!
         //FastCGI sent in stderr: "PHP message: PHP Fatal error:  Allowed memory size of
         $user = auth()->user();
-        auth()->logout();
+        if(isset($user))
+            auth()->logout();
 
         foreach ($blocks as $block) {
             $section = $this->blockFormatter($block);
             $sections->push($section);
         }
 
-        auth()->login($user);
+        if(isset($user))
+            auth()->login($user);
         return $sections;
     }
 
