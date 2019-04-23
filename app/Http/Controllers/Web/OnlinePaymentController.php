@@ -6,8 +6,11 @@ use App\Classes\Payment\OnlineGateWay;
 use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
 use App\Classes\Payment\RefinementRequest\Strategies\{ChargingWalletRefinement, OpenOrderRefinement, OrderIdRefinement, TransactionRefinement};
+use App\Classes\Payment\Responses;
+use App\Classes\Util\Boolean;
 use App\Http\Controllers\Controller;
 use App\Order;
+use App\Repositories\TransactionRepo;
 use App\Traits\HandleOrderPayment;
 use App\Traits\OrderCommon;
 use App\Traits\ZarinpalGateway;
@@ -52,12 +55,7 @@ class OnlinePaymentController extends Controller
      */
     public function paymentRedirect(string $paymentMethod, string $device, Request $request)
     {
-        $inputData = $request->all();
-        $inputData['transactionController'] = $this->transactionController;
-        $inputData['user'] = $request->user();
-
-        $refinementLauncher = new RefinementLauncher($this->gteRefinementRequestStrategy($inputData));
-        $data = $refinementLauncher->getData($inputData);
+        $data = $this->getRefinementData($request);
 
         /** @var User $user */
         $user = $data['user'];
@@ -67,37 +65,69 @@ class OnlinePaymentController extends Controller
         $cost = (int) $data['cost'];
         /** @var Transaction $transaction */
         $transaction = $data['transaction'];
-        /** @var string $description */
-        $description = $data['description'];
 
         if ($data['statusCode'] != Response::HTTP_OK) {
             $this->sendErrorResponse($data['message'], $data['statusCode']);
         }
 
-        $description .= 'سابت آلاء - ';
-
-        $description = $this->getTransactionDescription($description, $user, $order);
+        /** @var string $description */
+        $description = $this->getTransactionDescription($data['description'], $user->mobile, $order);
 
         if ($this->isPayingAnOrder($order)) {
             $order->customerDescription = $request->get('customerDescription');
         }
 
-        if (! $this->canGoToGateWay($cost)) {
-            return $this->sendToOfflinePaymentProcess($device, $order);
-        }
+        $this->canNotGoToGateWay($cost)
+            ->thenRespondWith([Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order->id]);
 
-        $redirectData = OnlineGateWay::getRedirectionData($paymentMethod, $device, $cost, $description, $transaction);
+        $url = $this->comeBackFromGateWay($paymentMethod, $device);
+        $authorityCode = OnlineGateWay::getAuthorityFromGate($url, $cost, $description)
+            ->orFailWith([Responses::class, 'noResponseFromBackError']);
+
+        TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id, $description)
+            ->orRespondWith([Responses::class, 'editTransactionError']);
+
+        $redirectData = OnlineGateWay::getGatewayUrl();
 
         return view("order.checkout.gatewayRedirect", compact('redirectData'));
     }
 
     /**
-     * @param int $cost
-     * @return bool
+     * @param string $description
+     * @param $mobile
+     * @param Order|null $order
+     *
+     * @return string
      */
-    private function canGoToGateWay(int $cost)
+    private function getTransactionDescription(string $description, $mobile, Order $order = null): string
     {
-        return ($cost > 0);
+        $description .= 'سابت آلاء - ';
+        $description .= $mobile.' - محصولات: ';
+
+        if (is_null($order)) {
+            return $description;
+        }
+
+        $order->orderproducts->load('product');
+
+        foreach ($order->orderproducts as $orderProduct) {
+            if (isset($orderProduct->product->id)) {
+                $description .= $orderProduct->product->name.' , ';
+            } else {
+                $description .= 'یک محصول نامشخص , ';
+            }
+        }
+
+        return $description;
+    }
+
+    /**
+     * @param int $cost
+     * @return Boolean
+     */
+    private function canNotGoToGateWay(int $cost)
+    {
+        return boolean(!($cost > 0));
     }
 
     /**
@@ -168,16 +198,27 @@ class OnlinePaymentController extends Controller
     }
 
     /**
-     * @param string $device
-     * @param Order $order
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param \Illuminate\Http\Request $request
+     * @return array
      */
-    private function sendToOfflinePaymentProcess(string $device, Order $order)
+    private function getRefinementData(Request $request): array
     {
-        return redirect(action('Web\OfflinePaymentController@verifyPayment', [
-            'device' => $device,
-            'paymentMethod' => 'wallet',
-            'coi' => (isset($order) ? $order->id : null),
-        ]));
+        $inputData = $request->all();
+        $inputData['transactionController'] = $this->transactionController;
+        $inputData['user'] = $request->user();
+
+        $refinementLauncher = new RefinementLauncher($this->gteRefinementRequestStrategy($inputData));
+
+        return $refinementLauncher->getData($inputData);
+    }
+
+    /**
+     * @param string $paymentMethod
+     * @param string $device
+     * @return string
+     */
+    private function comeBackFromGateWay(string $paymentMethod, string $device): string
+    {
+        return action('Web\OnlinePaymentController@verifyPayment', ['paymentMethod' => $paymentMethod, 'device' => $device]);
     }
 }

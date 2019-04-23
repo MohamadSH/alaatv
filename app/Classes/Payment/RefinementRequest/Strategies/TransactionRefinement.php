@@ -23,27 +23,33 @@ class TransactionRefinement extends Refinement
         if ($this->statusCode != Response::HTTP_OK) {
             return $this;
         }
+
         $transaction = $this->getTransaction();
-        if ($transaction !== false) {
-            $this->transaction = $transaction;
-            $order = $this->getOrder();
-            if ($order !== false) {
-                $this->order = $order;
-                $this->user = $this->order->user;
-                $this->cost = $this->transaction->cost;
-                if ($this->canDeductFromWallet()) {
-                    $this->payByWallet();
-                }
-                $this->statusCode = Response::HTTP_OK;
-                $this->description .= $this->getDescription();
-            } else {
-                $this->statusCode = Response::HTTP_NOT_FOUND;
-                $this->message = 'سفارش یافت نشد.';
-            }
-        } else {
+        if ($transaction === false) {
             $this->statusCode = Response::HTTP_NOT_FOUND;
             $this->message = 'تراکنشی یافت نشد.';
+
+            return $this;
         }
+
+        $this->transaction = $transaction;
+        $order = $this->getOrder();
+
+        if ($order === false) {
+            $this->statusCode = Response::HTTP_NOT_FOUND;
+            $this->message = 'سفارش یافت نشد.';
+
+            return $this;
+        }
+
+        $this->order = $order;
+        $this->user = $this->order->user;
+        $this->cost = $this->transaction->cost;
+        if ($this->canDeductFromWallet()) {
+            $this->payByWallet();
+        }
+        $this->statusCode = Response::HTTP_OK;
+        $this->description .= $this->getDescription();
 
         return $this;
     }
@@ -59,16 +65,16 @@ class TransactionRefinement extends Refinement
     private function getOrder()
     {
         $transaction = $this->transaction;
-        if (isset($transaction)) {
-            $order = $transaction->order->load(['transactions', 'coupon']);
-            if (isset($order)) {
-                return $order;
-            } else {
-                return false;
-            }
-        } else {
+        if (! isset($transaction)) {
             return false;
         }
+
+        $order = $transaction->order->load(['transactions', 'coupon']);
+        if (! isset($order)) {
+            return false;
+        }
+
+        return $order;
     }
 
     /**

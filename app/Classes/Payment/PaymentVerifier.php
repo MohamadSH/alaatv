@@ -24,10 +24,11 @@ class PaymentVerifier
     {
         $paymentData = $request->all();
 
+        $authority = $request->get('Authority');
         if ($paymentMethod == 'zarinpal') {
 
             $transaction = $this
-                ->getTransaction($paymentData['Authority'])
+                ->getTransaction($authority)
                 ->orFailWith(Responses::transactionNotFoundError());
             $gatewayResult = \Facades\App\Classes\Payment\ZarinPal::buildZarinpalGateway($paymentMethod);
 

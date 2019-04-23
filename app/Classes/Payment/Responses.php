@@ -2,6 +2,7 @@
 
 namespace App\Classes\Payment;
 
+use App\Order;
 use Illuminate\Http\Response;
 
 class Responses
@@ -34,5 +35,20 @@ class Responses
     public static function transactionNotFoundError()
     {
         return self::sendErrorResponse('تراکنشی متناظر با شماره تراکنش ارسالی یافت نشد.', Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @param string $device
+     * @param Order $order
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public static function sendToOfflinePaymentProcess(string $device, Order $order)
+    {
+        return redirect()->action('Web\OfflinePaymentController@verifyPayment', [
+            'device' => $device,
+            'paymentMethod' => 'wallet',
+            'coi' => isset($order) ? $order->id : null,
+        ]);
+
     }
 }

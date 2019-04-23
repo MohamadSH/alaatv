@@ -216,8 +216,8 @@
         </div>
     </div>
 
-    {!! Form::open(['method' => $redirectData['method'],'url' => $redirectData['url']]) !!}
-    @foreach($redirectData['input'] as $input)
+    {!! Form::open(['method' => $redirectData->getMethod(), 'url' => $redirectData->getRedirectUrl()]) !!}
+    @foreach($redirectData->getInput() as $input)
         {!! Form::hidden($input['name'],$input['value']) !!}
     @endforeach
     {!! Form::close() !!}
