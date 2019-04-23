@@ -2,8 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Classes\Nullable;
-use App\Classes\Util\Boolean;
 use App\Transaction;
 use Carbon\Carbon;
 

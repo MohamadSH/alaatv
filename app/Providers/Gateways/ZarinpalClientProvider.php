@@ -3,23 +3,24 @@
 namespace App\Providers\Gateways;
 
 use Illuminate\Support\ServiceProvider;
-use Zarinpal\Zarinpal as ZarinpalClient;
+use Zarinpal\Zarinpal;
 
 class ZarinpalClientProvider extends ServiceProvider
 {
-    function register()
+    public function register()
     {
-        $this->app->singleton('zarinpal.client', $this->initialize());
+        $this->app->singleton('zarinpal.client', function () {
+            return $this->initialize();
+        });
+        $this->app['zarinpal.isSandBox'] = $this->isZarinpalSandboxOn();
     }
 
     /**
-     * @param bool $withSandBox
-     * @param \App\Transactiongateway $transactionGateWay
      * @return \Zarinpal\Zarinpal
      */
-    private function initialize(): ZarinpalClient
+    private function initialize()
     {
-        $gatewayComposer = new ZarinpalClient($this->getMerchantNumber());
+        $gatewayComposer = new Zarinpal($this->getMerchantNumber());
 
         if ($this->isZarinpalSandboxOn()) {
             $gatewayComposer->enableSandbox();
@@ -35,7 +36,7 @@ class ZarinpalClientProvider extends ServiceProvider
     /**
      * @return bool
      */
-    private function isZarinpalSandboxOn(): bool
+    private function isZarinpalSandboxOn()
     {
         return config('app.env', 'deployment') != 'deployment' && config('Zarinpal.Sandbox', false);
     }
@@ -43,7 +44,7 @@ class ZarinpalClientProvider extends ServiceProvider
     /**
      * @return \Illuminate\Config\Repository|mixed
      */
-    private function isZarinGateOn(): bool
+    private function isZarinGateOn()
     {
         return config('Zarinpal.ZarinGate', false);
     }
@@ -53,6 +54,6 @@ class ZarinpalClientProvider extends ServiceProvider
      */
     private function getMerchantNumber()
     {
-        return config('Zarinpal.merchantNumber');
+        return config('Zarinpal.merchantID');
     }
 }

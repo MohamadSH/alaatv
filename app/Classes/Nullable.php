@@ -31,7 +31,7 @@ class Nullable
         if (is_null($default)) {
             return optional();
         } elseif (is_callable($default)) {
-            return $default();
+            return call_user_func($default);
         } else {
             return $default;
         }
@@ -44,6 +44,10 @@ class Nullable
     public function orFailWith($response)
     {
         return $this->getValue(function () use ($response) {
+            if (is_callable($response)) {
+                $response = call_user_func($response);
+            }
+
             throw new HttpResponseException($response);
         });
     }
