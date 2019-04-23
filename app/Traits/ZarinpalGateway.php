@@ -50,34 +50,6 @@ trait ZarinpalGateway
     }
 
     /**
-     * @param string $description
-     * @param User $user
-     * @param Order|null $order
-     *
-     * @return string
-     */
-    private function getTransactionDescription(string $description, User $user, Order $order = null): string
-    {
-        $description .= $user->mobile.' - محصولات: ';
-
-        if (! isset($order)) {
-            return $description;
-        }
-
-        $order->orderproducts->load('product');
-
-        foreach ($order->orderproducts as $orderProduct) {
-            if (isset($orderProduct->product->id)) {
-                $description .= $orderProduct->product->name.' , ';
-            } else {
-                $description .= 'یک محصول نامشخص , ';
-            }
-        }
-
-        return $description;
-    }
-
-    /**
      * @param $gatewayResult
      * @return bool
      */
