@@ -1,5 +1,7 @@
 <?php
 
+use App\Providers\Gateways\ZarinpalClientProvider;
+
 return [
 
     /*
@@ -176,6 +178,7 @@ return [
         App\Providers\ComposerServiceProvider::class,
         App\Providers\TagManagerProvider::class,
         App\Providers\InterfaceBindingProvider::class,
+        ZarinpalClientProvider::class,
 
     ],
     /*

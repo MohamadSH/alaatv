@@ -99,9 +99,9 @@ class OnlinePaymentController extends Controller
      *
      * @return string
      */
-    private function getTransactionDescription(string $description, $mobile, Order $order = null): string
+    private function getTransactionDescription(string $description, $mobile, Order $order = null)
     {
-        $description .= 'سابت آلاء - ';
+        $description .= 'سایت آلاء - ';
         $description .= $mobile.' - محصولات: ';
 
         if (is_null($order)) {
@@ -217,7 +217,7 @@ class OnlinePaymentController extends Controller
      * @param string $device
      * @return string
      */
-    private function comeBackFromGateWay(string $paymentMethod, string $device): string
+    private function comeBackFromGateWay(string $paymentMethod, string $device)
     {
         return action('Web\OnlinePaymentController@verifyPayment', ['paymentMethod' => $paymentMethod, 'device' => $device]);
     }
