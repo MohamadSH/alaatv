@@ -8,6 +8,7 @@ use App\Traits\RedirectTrait;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -42,7 +43,7 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
         $this->middleware('convert:mobile|passport|nationalCode');
         $this->registerController = $registerController;
-    }
+}
 
     /**
      * Get the login username to be used by the controller.
@@ -93,7 +94,6 @@ class LoginController extends Controller
          * Validating mobile and password strings
          */
         $this->validateLogin($request);
-
         /**
          * Login or register this new user
          */
@@ -108,20 +108,25 @@ class LoginController extends Controller
         }
 
         if ($this->attemptLogin($request)) {
+            Log::error('LoginController login 5-1');
             if (auth()->user()->userstatus_id == 1) {
+                Log::error('LoginController login 5-2');
                 return $this->sendLoginResponse($request);
             } else {
+                Log::error('LoginController login 5-3');
                 return redirect()->back()->withInput($request->only('mobile', 'remember'))->withErrors([
                     'inActive' => 'حساب کاربری شما غیر فعال شده است!',
                 ], "login");
             }
         }
 
+        Log::error('LoginController login 6');
         // If the login attempt was unsuccessful we will increment the number of attempts
         // to login and redirect the user back to the login form. Of course, when this
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
 
+        Log::error('LoginController login 7');
         return $this->registerController->register($request);
     }
 
@@ -138,7 +143,6 @@ class LoginController extends Controller
             $request->session()->regenerate();
         }
         $this->clearLoginAttempts($request);
-
         return $this->authenticated($request, $this->guard()->user()) ?: redirect()->intended($this->redirectPath());
     }
 
@@ -179,7 +183,6 @@ class LoginController extends Controller
             $data = array_merge([
                 'user' => $user,
             ], $token);
-
             return response()->json([
                 'status' => 1,
                 'msg' => 'user sign in.',
@@ -187,6 +190,7 @@ class LoginController extends Controller
                 'data' => $data,
             ], Response::HTTP_OK);
         }
+        return null;
     }
 
     /**

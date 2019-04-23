@@ -19,17 +19,20 @@ class webSetCollectionFormatter implements SetCollectionFormatter
      */
     public function format(SetCollection $sets)
     {
+
         $lessons = collect();
         foreach ($sets as $set) {
             $content = $set->getLastContent();
+
             $lesson = [
                 "displayName" => $set->shortName,
                 "author" => $set->author,
                 "pic" => $set->photo,
-                "content_id" => ! is_null(optional($content)->id) ? optional($content)->id : 0,
+                "content_id" => !is_null($content) ? $content->id : 0,
                 "content_count" => $set->contents_count,
             ];
             $lessons->push($lesson);
+//            dump(memory_get_peak_usage(true)/(1024*1024) - $t);
         }
 
         return $lessons;

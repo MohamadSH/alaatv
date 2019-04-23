@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\URL;
 
 trait RedirectTrait
 {
-    protected function redirectTo(Request $request = null)
+    protected function redirectTo(Request $request)
     {
         $baseUrl = url("/");
         $targetUrl = redirect()->intended()->getTargetUrl();
