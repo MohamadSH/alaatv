@@ -19,11 +19,9 @@ class webSetCollectionFormatter implements SetCollectionFormatter
      */
     public function format(SetCollection $sets)
     {
-
         $lessons = collect();
         foreach ($sets as $set) {
             $content = $set->getLastContent();
-
             $lesson = [
                 "displayName" => $set->shortName,
                 "author" => $set->author,
@@ -34,7 +32,6 @@ class webSetCollectionFormatter implements SetCollectionFormatter
             $lessons->push($lesson);
 //            dump(memory_get_peak_usage(true)/(1024*1024) - $t);
         }
-
         return $lessons;
     }
 }

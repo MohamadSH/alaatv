@@ -108,25 +108,25 @@ class LoginController extends Controller
         }
 
         if ($this->attemptLogin($request)) {
-            Log::error('LoginController login 5-1');
+//            Log::error('LoginController login 5-1');
             if (auth()->user()->userstatus_id == 1) {
-                Log::error('LoginController login 5-2');
+//                Log::error('LoginController login 5-2');
                 return $this->sendLoginResponse($request);
             } else {
-                Log::error('LoginController login 5-3');
+//                Log::error('LoginController login 5-3');
                 return redirect()->back()->withInput($request->only('mobile', 'remember'))->withErrors([
                     'inActive' => 'حساب کاربری شما غیر فعال شده است!',
                 ], "login");
             }
         }
 
-        Log::error('LoginController login 6');
+//        Log::error('LoginController login 6');
         // If the login attempt was unsuccessful we will increment the number of attempts
         // to login and redirect the user back to the login form. Of course, when this
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
 
-        Log::error('LoginController login 7');
+//        Log::error('LoginController login 7');
         return $this->registerController->register($request);
     }
 

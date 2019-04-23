@@ -36,17 +36,10 @@ class IndexPageController extends Controller
      */
     public function __invoke(Request $request)
     {
-//        $t = (memory_get_usage(true)/(1024*1024));
 
-
-//        dump(memory_get_usage(true)/(1024*1024) - $t);
-//        dd('sss');
-
-
-
-
+//        $t = memory_get_usage(true)/(1024*1024);
         $blocks = Block::getMainBlocks();
-//        dd(memory_get_peak_usage(true)/(1024*1024) - $t);
+//        dump(memory_get_usage(true)/(1024*1024) - $t);
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags($this->setting->site->seo->homepage->metaTitle, $this->setting->site->seo->homepage->metaDescription, $url,
             $url, route('image', [
@@ -78,6 +71,8 @@ class IndexPageController extends Controller
             ]);
         }
         $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format($blocks);
+//        dump(memory_get_usage(true)/(1024*1024) - $t);
+//        dd("invok!");
         $pageName = "dashboard";
         return view('pages.dashboard1', compact('pageName', 'sections', 'slides'));
     }

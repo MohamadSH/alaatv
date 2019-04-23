@@ -31,17 +31,17 @@ class webBlockCollectionFormatter implements BlockCollectionFormatter
      */
     public function format(BlockCollection $blocks)
     {
-        Log::error('webBlockCollectionFormatter format 1');
+//        Log::error('webBlockCollectionFormatter format 1');
         $sections = collect();
         foreach ($blocks as $block) {
-            Log::error('begin format block id :'.$block->id);
+//            Log::error('begin format block id :'.$block->id);
             $section = $this->blockFormatter($block);
-            Log::error('end format block id: '.$block->id);
+//            Log::error('end format block id: '.$block->id);
             $sections->push($section);
-            Log::error('insert block id:'.$block->id);
+//            Log::error('insert block id:'.$block->id);
         }
 
-        Log::error('webBlockCollectionFormatter format 2');
+//        Log::error('webBlockCollectionFormatter format 2');
         return $sections;
     }
 
