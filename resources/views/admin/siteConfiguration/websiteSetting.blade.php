@@ -380,7 +380,7 @@
                                                    id="favicon-remove" data-dismiss="fileinput"> حذف </a>
                                             </div>
                                         </div>
-                                        <span class="help-block font-red">سایز ۳۰×۳۰ پیکسل</span>
+                                        <span class="help-block m--font-danger">سایز ۳۰×۳۰ پیکسل</span>
                                     </div>
                                     <div class="col-md-6 text-center">
                                         <label class="control-label bold">لوگو سایت</label>
@@ -403,7 +403,7 @@
                                                    id="siteLogo-remove" data-dismiss="fileinput"> حذف </a>
                                             </div>
                                         </div>
-                                        <span class="help-block font-red">سایز ۱۴×۹۴ پیکسل</span>
+                                        <span class="help-block m--font-danger">سایز ۱۴×۹۴ پیکسل</span>
                                     </div>
                                 </div>
                             </div>

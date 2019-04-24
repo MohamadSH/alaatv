@@ -53,7 +53,7 @@
             {{--<div class="note note-info">--}}
             {{--<h4 class="block"><strong>توجه!</strong></h4>--}}
             {{--  @role((config("constants.ROLE_ADMIN")))<p>ادمین محترم‌، مستحضر باشید که لیست سفارشات جدا شده است. همچنین تعداد بن افزوده و درصد تخفیف بن برای هر محصول به جدول محصولات افزوده شده است و در اصلاح محصول امکان ویرایش این دو وجود دارد.</p>@endrole--}}
-            {{--<strong class="font-red">لطفا کش مرورگر خود را خالی کنید!</strong>--}}
+            {{--<strong class="m--font-danger">لطفا کش مرورگر خود را خالی کنید!</strong>--}}
             {{--</div>--}}
 
 
@@ -104,6 +104,7 @@
                                 </style>
                                 <div class="portlet-body form " style="border-top: #3598dc solid 1px">
                                     {!! Form::open(['action' => 'Web\UserController@index' ,'class'=>'form-horizontal form-row-seperated' , 'id' => 'filterUserForm']) !!}
+                                    <input type="hidden" name="userAdmin" value="userAdmin">
                                     <div class="form-body m--padding-15" style="background: #e7ecf1">
                                         @include("admin.filters.userFilterPack")
                                         <div class="form-group">
@@ -588,11 +589,10 @@
          * Start up jquery
          */
 
-        jQuery(document).ready(function () {
-            @permission((config('constants.LIST_USER_ACCESS')));
-                var newDataTable = $("#user_table").DataTable();
-                newDataTable.destroy();
-                // makeDataTable("user_table");
+
+        function makeDataTable_loadWithAjax_users() {
+            $("#user-portlet-loading").removeClass("d-none");
+            $('#user_table > tbody').html("");
             let columns = [
                 {
                     "data": "row_child",
@@ -664,7 +664,7 @@
             ];
             let dataFilter = function(data){
                 var json = jQuery.parseJSON( data );
-                console.log(json.data);
+                console.log('dataFilter: ', json.data);
                 json.recordsTotal = json.total;
                 json.recordsFiltered = json.total;
                 // for (let index in json.data) {
@@ -675,9 +675,31 @@
                 //
                 return JSON.stringify( json ); // return JSON string
             };
-            makeDataTable_loadWithAjax("user_table", $("#filterUserForm").attr("action"), columns, dataFilter);
+            let ajaxData = function (data) {
+                data.page = getNextPageParam(data.start, data.length);
+                // let $form = $("#filterOrderForm");
+                // let formData = getFormData($form);
+                /* Merge data and formData, without modifying data */
+                // data = $.extend({}, data, formData);
+                // console.log('settings: ', data);
+                return data;
+            };
+            let dataSrc = function (json) {
+                // $("#order-portlet-loading").addClass("d-none");
+                console.log('data received!');
+                return json.data;
+            };
+            makeDataTable_loadWithAjax("user_table", $("#filterUserForm").attr("action"), columns, dataFilter, ajaxData, dataSrc);
+        }
+
+
+        jQuery(document).ready(function () {
+            @permission((config('constants.LIST_USER_ACCESS')));
+                var newDataTable = $("#user_table").DataTable();
+                newDataTable.destroy();
+                makeDataTable_loadWithAjax_users();
                 $("#user-expand").trigger("click");
-                $("#user_table > tbody .dataTables_empty").text("برای نمایش اطلاعات ابتدا فیلتر کنید").addClass("font-red bold");
+                $("#user_table > tbody .dataTables_empty").text("برای نمایش اطلاعات ابتدا فیلتر کنید").addClass("m--font-danger bold");
                 $('#user_role').multiSelect();
             @endpermission;
             @permission((config('constants.LIST_PERMISSION_ACCESS')));

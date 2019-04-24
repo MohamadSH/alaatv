@@ -182,9 +182,9 @@
                                             @endif
                                             ,تاریخ
                                             پرداخت:@if(isset($successfulTransaction->completed_at)){{$successfulTransaction->CompletedAt_Jalali()}}@else
-                                                <span class="bold font-red">نامشخص</span>  @endif
+                                                <span class="bold m--font-danger">نامشخص</span>  @endif
                                             ,توضیح مدیریتی: @if(strlen($successfulTransaction->managerComment)>0) <span
-                                                    class="bold font-blue">{{$successfulTransaction->managerComment}}</span>  @else
+                                                    class="bold m--font-info">{{$successfulTransaction->managerComment}}</span>  @else
                                                 <span class="m-badge m-badge--wide m-badge--warning">ندارد</span>@endif
                                             <br>
                                         @endforeach
@@ -209,12 +209,12 @@
                                             چک:{{$pendingTransaction->paycheckNumber}}@endif
                                             @if(isset($pendingTransaction->cost))
                                                 ,مبلغ: {{ number_format($pendingTransaction->cost) }} @else <span
-                                                    class="bold font-red">بدون مبلغ</span>  @endif
+                                                    class="bold m--font-danger">بدون مبلغ</span>  @endif
                                             ,تاریخ
                                             پرداخت:@if(isset($pendingTransaction->completed_at)){{$pendingTransaction->CompletedAt_Jalali()}}@else
-                                                <span class="bold font-red">نامشخص</span>  @endif
+                                                <span class="bold m--font-danger">نامشخص</span>  @endif
                                             ,توضیح مدیریتی: @if(strlen($pendingTransaction->managerComment)>0) <span
-                                                    class="bold font-blue">{{$pendingTransaction->managerComment}}</span>  @else
+                                                    class="bold m--font-info">{{$pendingTransaction->managerComment}}</span>  @else
                                                 <span class="m-badge m-badge--wide m-badge--warning">ندارد</span>@endif
                                             <br>
                                         @endforeach
@@ -229,12 +229,12 @@
                                             <a target = "_blank" href = "{{action("Web\TransactionController@edit" ,$unpaid )}}"
                                                class="btn btn-xs blue-sharp btn-outline  sbold">اصلاح</a>
                                             @if(isset($unpaid->cost))  ,مبلغ: {{ number_format($unpaid->cost) }} @else
-                                                <span class="bold font-red">بدون مبلغ</span>  @endif
+                                                <span class="bold m--font-danger">بدون مبلغ</span>  @endif
                                             ,مهلت
                                             پرداخت:@if(isset($unpaid->deadline_at)){{$unpaid->DeadlineAt_Jalali()}}@else
-                                                <span class="bold font-red">نامشخص</span>  @endif
+                                                <span class="bold m--font-danger">نامشخص</span>  @endif
                                             ,توضیح مدیریتی: @if(strlen($unpaid->managerComment)>0) <span
-                                                    class="bold font-blue">{{$unpaid->managerComment}}</span>  @else
+                                                    class="bold m--font-info">{{$unpaid->managerComment}}</span>  @else
                                                 <span class="m-badge m-badge--wide m-badge--warning">ندارد</span>@endif
                                             <br>
                                         @endforeach
@@ -243,7 +243,7 @@
                                 <td>
                                     @if(!$order->ordermanagercomments->isEmpty())
                                         @foreach($order->ordermanagercomments as $managerComment)
-                                            <span class="font-red bold">{{$managerComment->comment}}</span><br>
+                                            <span class="m--font-danger bold">{{$managerComment->comment}}</span><br>
                                         @endforeach
                                     @else
                                         <span class="m-badge m-badge--wide m-badge--warning">بدون توضیح</span>
@@ -251,7 +251,7 @@
                                 </td>
                                 <td>
                                     @if(isset($order->customerDescription) && strlen($order->customerDescription)>0 )
-                                        <span class="font-red bold">{{$order->customerDescription}}<br></span>
+                                        <span class="m--font-danger bold">{{$order->customerDescription}}<br></span>
                                     @else
                                         <span class="m-badge m-badge--wide m-badge--warning">بدون توضیح</span>
                                     @endif

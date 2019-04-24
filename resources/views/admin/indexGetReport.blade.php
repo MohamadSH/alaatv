@@ -40,7 +40,7 @@
             {{--<div class="note note-info">--}}
             {{--<h4 class="block"><strong>توجه!</strong></h4>--}}
             {{--  @role((config("constants.ROLE_ADMIN")))<p>ادمین محترم‌، مستحضر باشید که لیست سفارشات جدا شده است. همچنین تعداد بن افزوده و درصد تخفیف بن برای هر محصول به جدول محصولات افزوده شده است و در اصلاح محصول امکان ویرایش این دو وجود دارد.</p>@endrole--}}
-            {{--<strong class="font-red">لطفا کش مرورگر خود را خالی کنید!</strong>--}}
+            {{--<strong class="m--font-danger">لطفا کش مرورگر خود را خالی کنید!</strong>--}}
             {{--</div>--}}
 
             @permission((config('constants.GET_USER_REPORT')))
@@ -278,7 +278,7 @@
             newDataTable.destroy();
             makeDataTable("report_table");
             $("#report-expand").trigger("click");
-            $("#report_table > tbody .dataTables_empty").text("برای نمایش اطلاعات ابتدا فیلتر کنید").addClass("font-red bold");
+            $("#report_table > tbody .dataTables_empty").text("برای نمایش اطلاعات ابتدا فیلتر کنید").addClass("m--font-danger bold");
             $('#report_role').multiSelect();
         @endpermission;
 

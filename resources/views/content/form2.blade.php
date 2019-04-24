@@ -63,7 +63,7 @@
                     </li>
                 @endforeach
             @else
-                <li class="list-group-item text-center font-red " style="font-size: small">فایلی درج نشده است
+                <li class="list-group-item text-center m--font-danger " style="font-size: small">فایلی درج نشده است
                 </li>
             @endif
         </ul>

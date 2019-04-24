@@ -59,7 +59,7 @@
 @else
     <div class="col-md-8 col-md-offset-2">
         <p>
-            <span class="required font-red" aria-required="true"> * </span>
+            <span class="required m--font-danger" aria-required="true"> * </span>
             {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'articlecategoryName' , 'placeholder'=>'نام دسته']) !!}
             <span class="help-block" id="articlecategoryNameAlert">
                 <strong></strong>

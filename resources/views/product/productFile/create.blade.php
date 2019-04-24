@@ -311,7 +311,7 @@
                         var cloudFileHidden = Dropzone.createElement("<input type='hidden' name='cloudFile' value='/paid/{{$product->id}}/" + response.prefix + response.fileName + "'>");
                         files.previewElement.querySelector('.form-horizontal').appendChild(cloudFileHidden);
                     } else {
-                        $("#my-awesome-dropzone").append("<span class='font-red'>" + "خطا در آپلود فایل " + files.name + "</span></br>");
+                        $("#my-awesome-dropzone").append("<span class='m--font-danger'>" + "خطا در آپلود فایل " + files.name + "</span></br>");
                     }
 
 //                    if (typeof(response.sessionData) != "undefined" && response.sessionData != null)
@@ -327,7 +327,7 @@
 //                        });
                 });
                 this.on("error", function (files, response) {
-                    $("#my-awesome-dropzone").append("<span class='font-red' >" + response.message + " " + files.name + "</span></br>");
+                    $("#my-awesome-dropzone").append("<span class='m--font-danger' >" + response.message + " " + files.name + "</span></br>");
                     // Gets triggered when there was an error sending the files.
                     // Maybe show form again, and notify user of error
                 });

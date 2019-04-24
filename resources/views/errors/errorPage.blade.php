@@ -30,9 +30,9 @@
     <div class="row">
         <div class="col-md-12 page-404">
             <div class="number"><img src="/acm/extra/stop.png" style=""></div>
-            {{--<div class="number font-red"> 404 </div>--}}
+            {{--<div class="number m--font-danger"> 404 </div>--}}
             <div class="details">
-                {{--<h1 class="font-red">خطا!</h1>--}}
+                {{--<h1 class="m--font-danger">خطا!</h1>--}}
                 <p class="bold "> {!!    $message !!}
                     <br/>
                     <a class = "btn green" href = "{{action("Web\IndexPageController")}}"> صفحه اصلی</a>

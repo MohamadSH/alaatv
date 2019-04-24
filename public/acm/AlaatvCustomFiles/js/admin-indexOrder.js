@@ -59,8 +59,8 @@ var orderAjax;
 var myOrderproducts ;
 $(document).on("click", "#order-portlet .reload", function (){
     // var formData = new FormData($("#filterOrderForm")[0]);
-    var formData = $("#filterOrderForm").serialize();
-    $("#order-portlet-loading").removeClass("d-none");
+    // var formData = $("#filterOrderForm").serialize();
+    // $("#order-portlet-loading").removeClass("d-none");
     $('#order_table > tbody').html("");
     // console.log(formData);
 
@@ -86,60 +86,65 @@ $(document).on("click", "#order-portlet .reload", function (){
     if(orderAjax) {
         orderAjax.abort();
     }
-    orderAjax = $.ajax({
-        type: "GET",
-        url: "/order",
-        data: formData,
-        contentType: "application/json",
-        dataType: "json",
-        statusCode: {
-            200:function (response) {
-                myOrderproducts = response.myOrderproducts;
-                if(myOrderproducts.length > 0 ) {
-                    $("#checkOutButton").removeClass("d-none") ;
-                }
-                var newDataTable =$("#order_table").DataTable();
-                newDataTable.destroy();
-                $('#order_table > tbody').html(response.index);
-                if(response === null || response === "" ) {
-                    $('#order_table > thead > tr').children('th:first').removeClass().addClass("none");
-                }
-                else{
-                    $('#order_table > thead > tr').children('th:first').removeClass("none");
-                }
-                makeDataTable("order_table");
-                $("#order-portlet-loading").addClass("d-none");
-                $("#orderEmptyTableMessage").hide();
-                $(".filter").each(function () {
-                    if($(this).val() !== "" && $(this).val() !== null) {
-                        $(this).addClass("font-red");
-                    }
-                });
-            },
-            //The status for when the user is not authorized for making the request
-            401:function (ressponse) {
-                location.reload();
-            },
-            403: function (response) {
-                window.location.replace("/403");
-            },
-            404: function (response) {
-                window.location.replace("/404");
-            },
-            //The status for when form data is not valid
-            422: function (response) {
-                //
-            },
-            //The status for when there is error php code
-            500: function (response) {
-                toastr["error"]("خطای برنامه!", "پیام سیستم");
-            },
-            //The status for when there is error php code
-            503: function (response) {
-                toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
-            }
-        }
-    });
+
+    var newDataTable =$("#order_table").DataTable();
+    newDataTable.destroy();
+    makeDataTable_loadWithAjax_orders();
+    //
+    // orderAjax = $.ajax({
+    //     type: "GET",
+    //     url: "/order",
+    //     data: formData,
+    //     contentType: "application/json",
+    //     dataType: "json",
+    //     statusCode: {
+    //         200:function (response) {
+    //             myOrderproducts = response.myOrderproducts;
+    //             if(myOrderproducts.length > 0 ) {
+    //                 $("#checkOutButton").removeClass("d-none") ;
+    //             }
+    //             var newDataTable =$("#order_table").DataTable();
+    //             newDataTable.destroy();
+    //             $('#order_table > tbody').html(response.index);
+    //             if(response === null || response === "" ) {
+    //                 $('#order_table > thead > tr').children('th:first').removeClass().addClass("none");
+    //             }
+    //             else{
+    //                 $('#order_table > thead > tr').children('th:first').removeClass("none");
+    //             }
+    //             makeDataTable("order_table");
+    //             $("#order-portlet-loading").addClass("d-none");
+    //             $("#orderEmptyTableMessage").hide();
+    //             $(".filter").each(function () {
+    //                 if($(this).val() !== "" && $(this).val() !== null) {
+    //                     $(this).addClass("font-red");
+    //                 }
+    //             });
+    //         },
+    //         //The status for when the user is not authorized for making the request
+    //         401:function (ressponse) {
+    //             location.reload();
+    //         },
+    //         403: function (response) {
+    //             window.location.replace("/403");
+    //         },
+    //         404: function (response) {
+    //             window.location.replace("/404");
+    //         },
+    //         //The status for when form data is not valid
+    //         422: function (response) {
+    //             //
+    //         },
+    //         //The status for when there is error php code
+    //         500: function (response) {
+    //             toastr["error"]("خطای برنامه!", "پیام سیستم");
+    //         },
+    //         //The status for when there is error php code
+    //         503: function (response) {
+    //             toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+    //         }
+    //     }
+    // });
 
     return false;
 });

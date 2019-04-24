@@ -34,7 +34,7 @@
                     <div class="blog-single-head">
                         <h1 class="blog-single-head-title">{{$article->title}}</h1>
                         <div class="blog-single-head-date">
-                            <i class="icon-calendar font-blue"></i>
+                            <i class="icon-calendar m--font-info"></i>
                             <a href="javascript:">{{$article->CreatedAt_Jalali()}}</a>
                         </div>
                     </div>

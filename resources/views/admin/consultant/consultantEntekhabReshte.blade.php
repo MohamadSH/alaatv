@@ -58,7 +58,7 @@
                                  src="{{ route('image', ['category'=>'1','w'=>'100' , 'h'=>'100' ,  'filename' =>  $user->photo ]) }}">
                         </div>
                         <div class="col-md-8 profile-info">
-                            <h3 class="font-blue sbold uppercase">@if(isset($user->firstName) || isset($user->lastName)) @if(isset($user->firstName)) {{$user->firstName}} @endif @if(isset($user->lastName)) {{$user->lastName}} @endif @else
+                            <h3 class="m--font-info sbold uppercase">@if(isset($user->firstName) || isset($user->lastName)) @if(isset($user->firstName)) {{$user->firstName}} @endif @if(isset($user->lastName)) {{$user->lastName}} @endif @else
                                     کاربر ناشناس @endif</h3>
                             {{--<p> Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt laoreet dolore magna aliquam tincidunt erat volutpat laoreet dolore magna aliquam tincidunt erat volutpat.--}}
                             {{--</p>--}}
