@@ -4,15 +4,14 @@ namespace App\Classes\Payment;
 
 use App\Bankaccount;
 use App\Order;
-use App\PaymentModule\Gateways\Zarinpal\VerificationResponse;
+use App\Repositories\TransactionRepo;
 use App\Traits\HandleOrderPayment;
 use App\Transaction;
 use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
-class PaymentVerifier
+class PaymentVerifierController
 {
     use HandleOrderPayment;
 
@@ -20,16 +19,19 @@ class PaymentVerifier
      * @param string $paymentMethod
      * @param string $device
      * @param \Illuminate\Http\Request $request
+     * 
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function verify(string $paymentMethod, string $device, Request $request): \Illuminate\Http\RedirectResponse
+    public function verify(string $paymentMethod, string $device, Request $request)
     {
         $authority = $request->get(OnlineGateWay::getAuthorityKey());
 
         $transaction = $this->getTransaction($authority)->orFailWith([Responses::class, 'transactionNotFoundError']);
-        $amount = abs($transaction->cost);
 
-        $result = OnlineGateWay::verifyPayment($amount, $authority);
+        /**
+         * @var
+         */
+        $result = OnlineGateWay::verifyPayment(abs($transaction->cost), $authority);
 
         $verifyResult = [];
         $transaction->order->detachUnusedCoupon();
@@ -41,16 +43,17 @@ class PaymentVerifier
             $transaction->transactionstatus_id = config('constants.TRANSACTION_STATUS_UNSUCCESSFUL');
             $transaction->update();
         }
-//        if (isset($transaction->order_id)) {} else {
-           /* if (isset($transaction->wallet_id))
-            {
+       /*
+        if (isset($transaction->order_id)) {} else {
+             if (isset($transaction->wallet_id)) {
                 if ($result['status']) {
                     $this->handleWalletChargingSuccessPayment($gatewayVerify['RefID'], $transaction, $gatewayVerify['cardPanMask']);
                 } else {
                     $this->handleWalletChargingCanceledPayment($transaction);
                 }
-            }*/
-//        }
+            }
+        }
+           */
 
         Cache::tags('bon')->flush();
 
@@ -145,24 +148,9 @@ class PaymentVerifier
         $data['transactionID'] = $transactionID;
         $data['destinationBankAccount_id'] = $bankAccountId;
         $data['transactionstatus_id'] = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
-        $this->transactionController->modify($transaction, $data);
+        TransactionRepo::modify($transaction, $data);
     }
 
-    /**
-     * @param string $msg
-     * @param int $statusCode
-     * @return JsonResponse
-    private function sendErrorResponse(string $msg, int $statusCode): JsonResponse
-    {
-        $resp = response()->json(['message' => $msg], $statusCode);
-        throw new HttpResponseException($resp);
-    }
-     */
-
-    /**
-     * @param $authority
-     * @return \App\Classes\Nullable
-     */
     private function getTransaction($authority)
     {
         return nullable(Transaction::authority($authority)->first());

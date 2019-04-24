@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Classes\Payment;
+namespace App\PaymentModule\Gateways\Zarinpal;
 
 use App\Classes\Nullable;
-use App\PaymentModule\Gateways\Zarinpal\VerificationResponse;
-use App\Transactiongateway;
+use App\Classes\Payment\RedirectData;
 
-class ZarinPal
+class ZarinpalGateWay implements OnlineGatewayInterface
 {
     public function getAuthorityFromGate(string $callbackUrl, int $cost, string $description) : Nullable
     {
         $zarinpalResponse = resolve('zarinpal.client')->request($callbackUrl, $cost, $description);
 
-        return nullable($zarinpalResponse['Authority']);
+        return nullable($zarinpalResponse['Authority'] ?? null);
     }
 
     public function getAuthorityKey()
@@ -23,6 +22,7 @@ class ZarinPal
     public function getGatewayUrl()
     {
         $url = app('zarinpal.client')->redirectUrl();
+
         return RedirectData::instance($url);
     }
 
@@ -32,16 +32,4 @@ class ZarinPal
 
         return new VerificationResponse($result);
     }
-    /**
-     * @param string $key
-     * @return Transactiongateway
-
-     protected function getGateWayCredentials(): Nullable
-     {
-         $result = Cache::remember('transactiongateway:Zarinpal', config('constants.CACHE_600'), function () {
-             return Transactiongateway::where('name', 'zarinpal')->first();
-         });
-
-         return nullable($result);
-     }*/
 }

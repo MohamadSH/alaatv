@@ -13,7 +13,6 @@ class RedirectData
         return new static($redirectUrl, $input, $method);
     }
     /**
-     *
      * @param string $redirectUrl
      * @param array $input
      * @param $method

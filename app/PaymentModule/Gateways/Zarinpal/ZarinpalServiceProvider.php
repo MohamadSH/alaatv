@@ -5,7 +5,7 @@ namespace App\Providers\Gateways;
 use Illuminate\Support\ServiceProvider;
 use Zarinpal\Zarinpal;
 
-class ZarinpalClientProvider extends ServiceProvider
+class ZarinpalServiceProvider extends ServiceProvider
 {
     public function register()
     {

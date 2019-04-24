@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Classes\Payment\OnlineGateWay;
+use App\Classes\Payment\PaymentVerifierController;
 use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
 use App\Classes\Payment\RefinementRequest\Strategies\{ChargingWalletRefinement, OpenOrderRefinement, OrderIdRefinement, TransactionRefinement};
@@ -157,7 +158,7 @@ class OnlinePaymentController extends Controller
      */
     public function verifyPayment(string $paymentMethod, string $device, Request $request)
     {
-        return PaymentVerifier::verify($paymentMethod, $device, $request);
+        return PaymentVerifierController::verify($paymentMethod, $device, $request);
     }
     /**
      * @param string $status

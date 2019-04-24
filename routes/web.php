@@ -59,7 +59,7 @@ Route::group(['prefix' => 'checkout'], function () {
     Route::get('completeInfo', 'Web\OrderController@checkoutCompleteInfo');
     Route::get('review', "Web\OrderController@checkoutReview");
     Route::get('payment', "Web\OrderController@checkoutPayment");
-    Route::any('verifyPayment/online/{paymentMethod}/{device}', "Web\OnlinePaymentController@verifyPayment");
+    Route::any('verifyPayment/online/{paymentMethod}/{device}', [\App\Classes\Payment\PaymentVerifierController::class, 'verify']);
     Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', "Web\OnlinePaymentController@showPaymentStatus");
     Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'Web\OfflinePaymentController@verifyPayment');
 });

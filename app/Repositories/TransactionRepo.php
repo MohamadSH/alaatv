@@ -24,7 +24,7 @@ class TransactionRepo
             'description' => $description,
         ];
 
-        return boolean(TransactionRepo::modify($data, $transactionId));
+        return boolean(static::modify($data, $transactionId));
     }
 
     public static function modify($data, $transactionId)
