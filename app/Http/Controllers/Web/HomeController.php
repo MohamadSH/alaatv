@@ -125,17 +125,17 @@ class HomeController extends Controller
         ];
         //        }
         $this->middleware('auth', ['except' => $authException]);
-        $this->middleware('ability:'.Config::get("constants.ROLE_ADMIN").','.Config::get("constants.USER_ADMIN_PANEL_ACCESS"), ['only' => 'admin']);
-        $this->middleware('permission:'.Config::get('constants.CONSULTANT_PANEL_ACCESS'), ['only' => 'consultantAdmin']);
-        $this->middleware('permission:'.Config::get("constants.PRODUCT_ADMIN_PANEL_ACCESS"), ['only' => 'adminProduct']);
-        $this->middleware('permission:'.Config::get("constants.CONTENT_ADMIN_PANEL_ACCESS"), ['only' => 'adminContent']);
-        $this->middleware('permission:'.Config::get("constants.LIST_ORDER_ACCESS"), ['only' => 'adminOrder']);
-        $this->middleware('permission:'.Config::get("constants.SMS_ADMIN_PANEL_ACCESS"), ['only' => 'adminSMS']);
-        $this->middleware('permission:'.Config::get("constants.REPORT_ADMIN_PANEL_ACCESS"), ['only' => 'adminReport']);
-        $this->middleware('permission:'.Config::get("constants.LIST_EDUCATIONAL_CONTENT_ACCESS"), ['only' => 'contentSetListTest']);
-        $this->middleware('ability:'.Config::get("constants.ROLE_ADMIN").','.Config::get("constants.TELEMARKETING_PANEL_ACCESS"),
+        $this->middleware('ability:' . Config::get("constants.ROLE_ADMIN") . ',' . Config::get("constants.USER_ADMIN_PANEL_ACCESS"), ['only' => 'admin']);
+        $this->middleware('permission:' . Config::get('constants.CONSULTANT_PANEL_ACCESS'), ['only' => 'consultantAdmin']);
+        $this->middleware('permission:' . Config::get("constants.PRODUCT_ADMIN_PANEL_ACCESS"), ['only' => 'adminProduct']);
+        $this->middleware('permission:' . Config::get("constants.CONTENT_ADMIN_PANEL_ACCESS"), ['only' => 'adminContent']);
+        $this->middleware('permission:' . Config::get("constants.LIST_ORDER_ACCESS"), ['only' => 'adminOrder']);
+        $this->middleware('permission:' . Config::get("constants.SMS_ADMIN_PANEL_ACCESS"), ['only' => 'adminSMS']);
+        $this->middleware('permission:' . Config::get("constants.REPORT_ADMIN_PANEL_ACCESS"), ['only' => 'adminReport']);
+        $this->middleware('permission:' . Config::get("constants.LIST_EDUCATIONAL_CONTENT_ACCESS"), ['only' => 'contentSetListTest']);
+        $this->middleware('ability:' . Config::get("constants.ROLE_ADMIN") . ',' . Config::get("constants.TELEMARKETING_PANEL_ACCESS"),
             ['only' => 'adminTeleMarketing']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_COUPON_ACCESS'), ['only' => 'adminGenerateRandomCoupon']);
+        $this->middleware('permission:' . Config::get('constants.INSERT_COUPON_ACCESS'), ['only' => 'adminGenerateRandomCoupon']);
         $this->middleware('role:admin', [
             'only' => [
                 'bot',
@@ -161,11 +161,7 @@ class HomeController extends Controller
 
     {
         try {
-
-            $order = Order::find(203189);
-            dd($order->user);
-
-            $productFiles = \App\Productfile::all();
+            $productFiles = Productfile::all();
             $productFiles->load('product');
             $productFiles->load('productfiletype');
             foreach ($productFiles->groupBy('product_id') as $productId => $files) {
@@ -199,6 +195,19 @@ class HomeController extends Controller
                 /** @var Productfile $productFile */
                 foreach ($files as $productFile) {
                     if ($productFile->content_id == null) {
+                        $files = collect();
+                        $url = $productFile->cloudFile ?? $productFile->file;
+                        $files->push([
+                            "uuid" => null,
+                            "disk" => "productFileSFTP",
+                            "url" => null,
+                            "fileName" => parse_url($url)['path'],
+                            "size" => null,
+                            "caption" => null,
+                            "res" => "720p",
+                            "type" => "video",
+                            "ext" => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
+                        ]);
                         //TODO://Fill file!
                         $content = Content::create([
                             'name'            => $productFile->name,
@@ -214,7 +223,7 @@ class HomeController extends Controller
                             'author_id'       => null,
                             'contenttype_id'  => $productTypeContentTypeLookupTable[$productFile->productfiletype_id],
                             'template_id'     => $productTypeContentTemplateLookupTable[$productFile->productfiletype_id],
-                            'contentset_id'   => $set->id,
+                            'contentset_id'   => $productFile->contentset_id,
                             'isFree'          => false,
                             'enable'          => $productFile->enable,
                         ]);
@@ -223,6 +232,8 @@ class HomeController extends Controller
                             'created_at' => $productFile->created_at,
                             'updated_at' => $productFile->updated_at,
                         ])->save();
+
+                        $content->file = $files;
                         $content->timestamps = true;
                     }
                     break;
@@ -235,9 +246,9 @@ class HomeController extends Controller
 
             return $this->response->setStatusCode(503)->setContent([
                 "message" => $message,
-                "error" => $e->getMessage(),
-                "line" => $e->getLine(),
-                "file" => $e->getFile(),
+                "error"   => $e->getMessage(),
+                "line"    => $e->getLine(),
+                "file"    => $e->getFile(),
             ]);
         }
     }
@@ -352,12 +363,12 @@ class HomeController extends Controller
         $sortBy = [
             "updated_at" => "تاریخ اصلاح",
             "created_at" => "تاریخ ثبت نام",
-            "firstName" => "نام",
-            "lastName" => "نام خانوادگی",
+            "firstName"  => "نام",
+            "lastName"   => "نام خانوادگی",
         ];
         $sortType = [
             "desc" => "نزولی",
-            "asc" => "صعودی",
+            "asc"  => "صعودی",
         ];
         $addressSpecialFilter = [
             "بدون فیلتر خاص",
@@ -462,22 +473,22 @@ class HomeController extends Controller
         foreach ($extraAttributes as $attribute) {
             $values = [];
             $values = array_merge($values, $attribute->attributevalues->pluck("id", "name")->toArray());
-            if (! empty($values)) {
+            if (!empty($values)) {
                 $attributevalueCollection->put($attribute->displayName, $values);
             }
         }
 
         $sortBy = [
-            "updated_at" => "تاریخ اصلاح مدیریتی",
-            "completed_at" => "تاریخ ثبت نهایی",
-            "created_at" => "تاریخ ثبت اولیه",
+            "updated_at"    => "تاریخ اصلاح مدیریتی",
+            "completed_at"  => "تاریخ ثبت نهایی",
+            "created_at"    => "تاریخ ثبت اولیه",
             "userFirstName" => "نام مشتری",
-            "userLastName" => "نام خانوادگی مشتری"
+            "userLastName"  => "نام خانوادگی مشتری"
             /* , "productName" => "نام محصول"*/
         ];
         $sortType = [
             "desc" => "نزولی",
-            "asc" => "صعودی",
+            "asc"  => "صعودی",
         ];
 
         $transactionTypes = [
@@ -602,8 +613,8 @@ class HomeController extends Controller
     public function consultantEntekhabReshte()
     {
         $user = User::FindOrFail(Input::get("user"));
-        if (Storage::disk('entekhabReshte')->exists($user->id."-".$user->major->id.".txt")) {
-            $storedMajors = json_decode(Storage::disk('entekhabReshte')->get($user->id."-".$user->major->id.".txt"));
+        if (Storage::disk('entekhabReshte')->exists($user->id . "-" . $user->major->id . ".txt")) {
+            $storedMajors = json_decode(Storage::disk('entekhabReshte')->get($user->id . "-" . $user->major->id . ".txt"));
             $parentMajorId = $user->major->id;
             $storedMajorsInfo = Major::whereHas("parents", function ($q) use ($storedMajors, $parentMajorId) {
                 $q->where("major1_id", $parentMajorId)->whereIn("majorCode", $storedMajors);
@@ -620,7 +631,7 @@ class HomeController extends Controller
         $eventId = 1;
         $surveyId = 1;
         $requestUrl = action("Web\UserSurveyAnswerController@index");
-        $requestUrl .= "?event_id[]=".$eventId."&survey_id[]=".$surveyId."&user_id[]=".$user->id;
+        $requestUrl .= "?event_id[]=" . $eventId . "&survey_id[]=" . $surveyId . "&user_id[]=" . $user->id;
         $originalInput = \Illuminate\Support\Facades\Request::input();
         $request = \Illuminate\Support\Facades\Request::create($requestUrl, 'GET');
         \Illuminate\Support\Facades\Request::replace($request->input());
@@ -632,7 +643,7 @@ class HomeController extends Controller
             $answerArray = $answerCollection->userAnswer->answer;
             $question = Question::FindOrFail($answerCollection->userAnswer->question_id);
             $requestBaseUrl = $question->dataSourceUrl;
-            $requestUrl = url("/").$requestBaseUrl."?ids=$answerArray";
+            $requestUrl = url("/") . $requestBaseUrl . "?ids=$answerArray";
             $originalInput = \Illuminate\Support\Facades\Request::input();
             $request = \Illuminate\Support\Facades\Request::create($requestUrl, 'GET');
             \Illuminate\Support\Facades\Request::replace($request->input());
@@ -641,7 +652,7 @@ class HomeController extends Controller
             \Illuminate\Support\Facades\Request::replace($originalInput);
             $userSurveyAnswers->push([
                 "questionStatement" => $question->statement,
-                "questionAnswer" => $dataJson,
+                "questionAnswer"    => $dataJson,
             ]);
         }
 
@@ -680,8 +691,8 @@ class HomeController extends Controller
         $parentMajor = $request->get("parentMajor");
         $majorCodes = json_encode($request->get("majorCodes"), JSON_UNESCAPED_UNICODE);
 
-        Storage::disk('entekhabReshte')->delete($userId.'-'.$parentMajor.'.txt');
-        Storage::disk('entekhabReshte')->put($userId."-".$parentMajor.".txt", $majorCodes);
+        Storage::disk('entekhabReshte')->delete($userId . '-' . $parentMajor . '.txt');
+        Storage::disk('entekhabReshte')->put($userId . "-" . $parentMajor . ".txt", $majorCodes);
         session()->put("success", "رشته های انتخاب شده با موفقیت درج شدند");
 
         return redirect(action("Web\HomeController@consultantEntekhabReshte", ["user" => $user]));
@@ -725,12 +736,12 @@ class HomeController extends Controller
         $sortBy = [
             "updated_at" => "تاریخ اصلاح",
             "created_at" => "تاریخ ثبت نام",
-            "firstName" => "نام",
-            "lastName" => "نام خانوادگی",
+            "firstName"  => "نام",
+            "lastName"   => "نام خانوادگی",
         ];
         $sortType = [
             "desc" => "نزولی",
-            "asc" => "صعودی",
+            "asc"  => "صعودی",
         ];
         $addressSpecialFilter = [
             "بدون فیلتر خاص",
@@ -877,12 +888,12 @@ class HomeController extends Controller
         $sortBy = [
             "updated_at" => "تاریخ اصلاح",
             "created_at" => "تاریخ ثبت نام",
-            "firstName" => "نام",
-            "lastName" => "نام خانوادگی",
+            "firstName"  => "نام",
+            "lastName"   => "نام خانوادگی",
         ];
         $sortType = [
             "desc" => "نزولی",
-            "asc" => "صعودی",
+            "asc"  => "صعودی",
         ];
         $addressSpecialFilter = [
             "بدون فیلتر خاص",
@@ -1039,83 +1050,27 @@ class HomeController extends Controller
                 break;
             case "فایل محصول" :
                 $productId = Input::get("pId");
-                if (! $user->can(Config::get("constants.DOWNLOAD_PRODUCT_FILE"))) {
-                    $products = Product::whereIn('id', Product::whereHas('validProductfiles', function ($q) use ($fileName) {
-                        $q->where("file", $fileName);
-                    })->pluck("id"))->OrwhereIn('id', Product::whereHas('parents', function ($q) use ($fileName) {
-                        $q->whereHas('validProductfiles', function ($q) use ($fileName) {
-                            $q->where("file", $fileName);
-                        });
-                    })->pluck("id"))->OrwhereIn('id', Product::whereHas('complimentaryproducts', function ($q) use ($fileName) {
-                        $q->whereHas('validProductfiles', function ($q) use ($fileName) {
-                            $q->where("file", $fileName);
-                        });
-                    })->pluck("id"))->OrwhereIn('id', Product::whereHas('gifts', function ($q) use ($fileName) {
-                        $q->whereHas('validProductfiles', function ($q) use ($fileName) {
-                            $q->where("file", $fileName);
-                        });
-                    })->pluck("id"))->OrwhereIn('id', Product::whereHas('parents', function ($q) use ($fileName) {
-                        $q->whereHas('complimentaryproducts', function ($q) use ($fileName) {
-                            $q->whereHas('validProductfiles', function ($q) use ($fileName) {
-                                $q->where("file", $fileName);
-                            });
-                        });
-                    })->pluck("id"))->get();
-                    $validOrders = $user->orders()->whereHas('orderproducts', function ($q) use ($products) {
-                        $q->whereIn("product_id", $products->pluck("id"));
-                    })->whereIn("orderstatus_id", [
-                        Config::get("constants.ORDER_STATUS_CLOSED"),
-                        Config::get("constants.ORDER_STATUS_POSTED"),
-                        Config::get("constants.ORDER_STATUS_READY_TO_POST"),
-                    ])->whereIn("paymentstatus_id", [Config::get("constants.PAYMENT_STATUS_PAID")])->get();
+                $diskName = Config::get('constants.DISK13');
 
-                    if ($products->isEmpty()) {
-                        $message = "چنین فایلی وجود ندارد ویا غیر فعال شده است";
-                    } else {
-                        if ($validOrders->isEmpty()) {
+                if (!$user->can(Config::get("constants.DOWNLOAD_PRODUCT_FILE"))) {
+                    $products = Product::getProductsThatHaveValidProductFileByFileNameRecursively($fileName);
+                    $validOrders = $user->getOrdersThatHaveSpecificProduct($products);
 
-                            $message = "شما ابتدا باید یکی از این محصولات را سفارش دهید و یا اگر سفارش داده اید مبلغ را تسویه نمایید: "."<br>";
-                            $productIds = [];
-                            foreach ($products as $product) {
-                                $myParents = $this->makeParentArray($product);
-                                if (! empty($myParents)) {
-                                    $rootParent = end($myParents);
-                                    if (! in_array($rootParent->id, $productIds)) {
-                                        $message .= "<a href='".action('ProductController@show', $rootParent->id)."'>".$rootParent->name."</a><br>";
-                                        array_push($productIds, $rootParent->id);
-                                    }
-                                } else {
-                                    if (! in_array($product->id, $productIds)) {
-                                        $message .= "<a  href='".action('ProductController@show', $product->id)."'>".$product->name."</a><br>";
-                                        array_push($productIds, $product->id);
-                                    }
-                                }
+                    if (!$products->isEmpty()) {
+                        if (!$validOrders->isEmpty()) {
+                            $productId = (array)$productId;
+                            if (isset($products)) {
+                                $productId = array_merge($productId, $products->pluck("id")->toArray());
                             }
+                            $externalLink = (new Productfile)->getExternalLinkForProductFileByFileName($fileName, $productId);
+                            break;
                         }
-                    }
-                    //
-                    if (isset($message) && strlen($message) > 0) {
+                        $message = $this->getMessageThatShouldByWhichProducts($products);
                         return $this->errorPage($message);
                     }
+                    $message = "چنین فایلی وجود ندارد ویا غیر فعال شده است";
+                    return $this->errorPage($message);
                 }
-                $productId = [$productId];
-                if (isset($products)) {
-                    $productId = array_merge($productId, $products->pluck("id")->toArray());
-                }
-                $diskName = Config::get('constants.DISK13');
-                $cloudFile = Productfile::where("file", $fileName)->whereIn("product_id", $productId)->get()->first()->cloudFile;
-                //TODO: verify "$productFileLink = "http://".env("SFTP_HOST" , "").":8090/". $cloudFile;"
-                $productFileLink = config("constants.DOWNLOAD_HOST_PROTOCOL", "https://").config('constants.DOWNLOAD_HOST_NAME').$cloudFile;
-                $unixTime = Carbon::today()->addDays(2)->timestamp;
-                $userIP = request()->ip();
-                //TODO: fix diffrent Ip
-                $ipArray = explode(".", $userIP);
-                $ipArray[3] = 0;
-                $userIP = implode(".", $ipArray);
-
-                $linkHash = $this->generateSecurePathHash($unixTime, $userIP, "TakhteKhak", $cloudFile);
-                $externalLink = $productFileLink."?md5=".$linkHash."&expires=".$unixTime;
-                //                dd($temp."+".$userIP);
                 break;
             case "فایل کارنامه" :
                 $diskName = Config::get('constants.DISK14');
@@ -1160,19 +1115,6 @@ class HomeController extends Controller
                 return redirect($externalLink);
             } else {
                 if (Storage::disk($diskName)->exists($fileName)) {
-                    //            Other download method :  problem => it changes the file name to download
-                    //            $file = Storage::disk($diskName)->get($fileName);
-                    //            return (new Response($file, 200))
-                    //                ->header('Content-Type', $contentMime)
-                    //                ->header('Content-Disposition'  , 'attachment')
-                    //                ->header('filename',$fileName);
-
-                    //                $filePrefixPath =Storage::drive($diskName)->getAdapter()->getPathPrefix() ;
-                    //                if(isset($filePrefixPath))
-                    //                    return response()->download(Storage::drive($diskName)->path($fileName));
-                    //                else
-                    //                    return response()->download(Storage::drive($diskName)->getAdapter()->getRoot() . $fileName);
-
                     $filePrefixPath = Storage::drive($diskName)->getAdapter()->getPathPrefix();
                     if (isset($filePrefixPath)) {
                         $fs = Storage::disk($diskName)->getDriver();
@@ -1181,9 +1123,9 @@ class HomeController extends Controller
                         return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
                             fpassthru($stream);
                         }, 200, [
-                            "Content-Type" => $fs->getMimetype($fileName),
-                            "Content-Length" => $fs->getSize($fileName),
-                            "Content-disposition" => "attachment; filename=\"".basename($fileName)."\"",
+                            "Content-Type"        => $fs->getMimetype($fileName),
+                            "Content-Length"      => $fs->getSize($fileName),
+                            "Content-disposition" => "attachment; filename=\"" . basename($fileName) . "\"",
                         ]);
                     } else {
                         $fileHost = Storage::drive($diskName)->getAdapter()->getHost();
@@ -1191,10 +1133,10 @@ class HomeController extends Controller
                             $fileRoot = Storage::drive($diskName)->getAdapter()->getRoot();
                             //TODO: verify "$fileRemotePath = "http://" . $fileHost . ":8090" . "/public" . explode("public", $fileRoot)[1];"
 
-                            $fileRemotePath = config("constants.DOWNLOAD_HOST_PROTOCOL").config("constants.DOWNLOAD_HOST_NAME")."/public".explode("public",
+                            $fileRemotePath = config("constants.DOWNLOAD_HOST_PROTOCOL") . config("constants.DOWNLOAD_HOST_NAME") . "/public" . explode("public",
                                     $fileRoot)[1];
 
-                            return response()->redirectTo($fileRemotePath.$fileName);
+                            return response()->redirectTo($fileRemotePath . $fileName);
                         } else {
                             $fs = Storage::disk($diskName)->getDriver();
                             $stream = $fs->readStream($fileName);
@@ -1202,9 +1144,9 @@ class HomeController extends Controller
                             return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
                                 fpassthru($stream);
                             }, 200, [
-                                "Content-Type" => $fs->getMimetype($fileName),
-                                "Content-Length" => $fs->getSize($fileName),
-                                "Content-disposition" => "attachment; filename=\"".basename($fileName)."\"",
+                                "Content-Type"        => $fs->getMimetype($fileName),
+                                "Content-Length"      => $fs->getSize($fileName),
+                                "Content-disposition" => "attachment; filename=\"" . basename($fileName) . "\"",
                             ]);
                         }
                     }
@@ -1228,9 +1170,9 @@ class HomeController extends Controller
                                 return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
                                     fpassthru($stream);
                                 }, 200, [
-                                    "Content-Type" => $fs->getMimetype($fileName),
-                                    "Content-Length" => $fs->getSize($fileName),
-                                    "Content-disposition" => "attachment; filename=\"".basename($fileName)."\"",
+                                    "Content-Type"        => $fs->getMimetype($fileName),
+                                    "Content-Length"      => $fs->getSize($fileName),
+                                    "Content-disposition" => "attachment; filename=\"" . basename($fileName) . "\"",
                                 ]);
                             }
                         }
@@ -1243,9 +1185,9 @@ class HomeController extends Controller
                         return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
                             fpassthru($stream);
                         }, 200, [
-                            "Content-Type" => $fs->getMimetype($fileName),
-                            "Content-Length" => $fs->getSize($fileName),
-                            "Content-disposition" => "attachment; filename=\"".basename($fileName)."\"",
+                            "Content-Type"        => $fs->getMimetype($fileName),
+                            "Content-Length"      => $fs->getSize($fileName),
+                            "Content-disposition" => "attachment; filename=\"" . basename($fileName) . "\"",
                         ]);
                         break;
                     default:
@@ -1383,32 +1325,32 @@ class HomeController extends Controller
             $to = "";
         }
         // To send HTML mail, the Content-type header must be set
-        $headers = "MIME-Version: 1.0"."\r\n";
-        $headers .= "Content-Type: multipart/alternative; boundary=\"".$boundary."\"\r\n";//';charset=UTF-8' .
-        $headers .= "From: ".strip_tags(config('constants.MAIL_USERNAME'))."\r\n"."Reply-To: ".strip_tags($email)."\r\n"."X-Mailer: PHP/".phpversion();
+        $headers = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-Type: multipart/alternative; boundary=\"" . $boundary . "\"\r\n";//';charset=UTF-8' .
+        $headers .= "From: " . strip_tags(config('constants.MAIL_USERNAME')) . "\r\n" . "Reply-To: " . strip_tags($email) . "\r\n" . "X-Mailer: PHP/" . phpversion();
 
         $orginaltext = $request->get('message');
 
         $orginaltext = str_replace('\"', '"', $orginaltext);
         $orginaltext = str_replace('\\\\', '\\', $orginaltext);
 
-        $sender = '<p dir="rtl"> نام فرستنده: '.$name.'</p>';
+        $sender = '<p dir="rtl"> نام فرستنده: ' . $name . '</p>';
         if (strlen($email) > 0) {
-            $sender .= '<p dir="rtl"> ایمیل فرستنده: '.$email.'</p>';
+            $sender .= '<p dir="rtl"> ایمیل فرستنده: ' . $email . '</p>';
         }
         if (strlen($phone) > 0) {
-            $sender .= '<p dir="rtl">  شماره تماس فرستنده: '.$phone.'</p>';
+            $sender .= '<p dir="rtl">  شماره تماس فرستنده: ' . $phone . '</p>';
         }
 
         //plainText version
-        $text = "\r\n\r\n--".$boundary."\r\n"; //header
+        $text = "\r\n\r\n--" . $boundary . "\r\n"; //header
         $text .= "Content-type: text/plain; charset=utf-8 \r\n\r\n"; //header
 
-        $text .= strip_tags($orginaltext)."\r\n".strip_tags($sender);
+        $text .= strip_tags($orginaltext) . "\r\n" . strip_tags($sender);
 
         //htmlText version
 
-        $text .= "\r\n\r\n--".$boundary."\r\n"; //header
+        $text .= "\r\n\r\n--" . $boundary . "\r\n"; //header
         $text .= "Content-type: text/html; charset=utf-8 \r\n\r\n"; //header
 
         //            $text .= $sender.str_replace('\"','\'','<p dir="rtl" style="text-align: right">'.$orginaltext.'</p>') ;
@@ -1426,7 +1368,7 @@ class HomeController extends Controller
         </html>
             ';*/
 
-        $text .= "\r\n\r\n--".$boundary."--";
+        $text .= "\r\n\r\n--" . $boundary . "--";
 
         $subject = "آلاء - تماس با ما";
 
@@ -1470,7 +1412,7 @@ class HomeController extends Controller
             return $this->response->setStatusCode(451);
         }
 
-        if (! isset($from) || strlen($from) == 0) {
+        if (!isset($from) || strlen($from) == 0) {
             $from = $smsNumber;
         }
 
@@ -1481,9 +1423,9 @@ class HomeController extends Controller
                 array_push($mobiles, ltrim($user->mobile, '0'));
             }
             if (in_array(1, $relatives)) {
-                if (! $user->contacts->isEmpty()) {
+                if (!$user->contacts->isEmpty()) {
                     $fatherMobiles = $user->contacts->where("relative_id", 1)->first()->phones->where("phonetype_id", 1)->sortBy("priority");
-                    if (! $fatherMobiles->isEmpty()) {
+                    if (!$fatherMobiles->isEmpty()) {
                         foreach ($fatherMobiles as $fatherMobile) {
                             array_push($mobiles, ltrim($fatherMobile->phoneNumber, '0'));
                         }
@@ -1491,9 +1433,9 @@ class HomeController extends Controller
                 }
             }
             if (in_array(2, $relatives)) {
-                if (! $user->contacts->isEmpty()) {
+                if (!$user->contacts->isEmpty()) {
                     $motherMobiles = $user->contacts->where("relative_id", 2)->first()->phones->where("phonetype_id", 1)->sortBy("priority");
-                    if (! $motherMobiles->isEmpty()) {
+                    if (!$motherMobiles->isEmpty()) {
                         foreach ($motherMobiles as $motherMobile) {
                             array_push($mobiles, ltrim($motherMobile->phoneNumber, '0'));
                         }
@@ -1508,7 +1450,7 @@ class HomeController extends Controller
         $response = $this->medianaSendSMS($smsInfo);
         //Sending notification to user collection
 //        Notification::send($users, new GeneralNotice($message));
-        if (! $response["error"]) {
+        if (!$response["error"]) {
             $smsCredit = $this->medianaGetCredit();
 
             return $this->response->setContent($smsCredit)->setStatusCode(200);
@@ -1538,9 +1480,9 @@ class HomeController extends Controller
         try {
             $dirname = pathinfo($filePath, PATHINFO_DIRNAME);
             $ext = pathinfo($originalFileName, PATHINFO_EXTENSION);
-            $fileName = basename($originalFileName, ".".$ext)."_".date("YmdHis").'.'.$ext;
+            $fileName = basename($originalFileName, "." . $ext) . "_" . date("YmdHis") . '.' . $ext;
 
-            $newFileNameDir = $dirname.'/'.$fileName;
+            $newFileNameDir = $dirname . '/' . $fileName;
 
             //            dd([
             //                "filePath"=>$filePath,
@@ -1561,25 +1503,25 @@ class HomeController extends Controller
                 }
 
                 $adapter = new SftpAdapter([
-                    'host' => config('constants.SFTP_HOST'),
-                    'port' => config('constants.SFTP_PORT'),
-                    'username' => config('constants.SFTP_USERNAME'),
-                    'password' => config('constants.SFTP_PASSSWORD'),
-                    'privateKey' => config('constants.SFTP_PRIVATE_KEY_PATH'),
-                    'root' => config('constants.SFTP_ROOT').'/private/'.$contentSetId.'/',
-                    'timeout' => config('constants.SFTP_TIMEOUT'),
+                    'host'          => config('constants.SFTP_HOST'),
+                    'port'          => config('constants.SFTP_PORT'),
+                    'username'      => config('constants.SFTP_USERNAME'),
+                    'password'      => config('constants.SFTP_PASSSWORD'),
+                    'privateKey'    => config('constants.SFTP_PRIVATE_KEY_PATH'),
+                    'root'          => config('constants.SFTP_ROOT') . '/private/' . $contentSetId . '/',
+                    'timeout'       => config('constants.SFTP_TIMEOUT'),
                     'directoryPerm' => 0755,
                 ]);
                 $filesystem = new Filesystem($adapter);
                 if (isset($directory)) {
-                    if (! $filesystem->has($directory)) {
+                    if (!$filesystem->has($directory)) {
                         $filesystem->createDir($directory);
                     }
 
-                    $filePrefix = $directory."/";
+                    $filePrefix = $directory . "/";
                     $filesystem = $filesystem->get($directory);
                     $path = $filesystem->getPath();
-                    $filesystem->setPath($path."/".$fileName);
+                    $filesystem->setPath($path . "/" . $fileName);
                     if ($filesystem->put(fopen($newFileNameDir, 'r+'))) {
                         $done = true;
                     }
@@ -1591,24 +1533,24 @@ class HomeController extends Controller
             } else {
                 if (strcmp($disk, "video") == 0) {
                     $adapter = new SftpAdapter([
-                        'host' => config('constants.SFTP_HOST'),
-                        'port' => config('constants.SFTP_PORT'),
-                        'username' => config('constants.SFTP_USERNAME'),
-                        'password' => config('constants.SFTP_PASSSWORD'),
-                        'privateKey' => config('constants.SFTP_PRIVATE_KEY_PATH'),
+                        'host'          => config('constants.SFTP_HOST'),
+                        'port'          => config('constants.SFTP_PORT'),
+                        'username'      => config('constants.SFTP_USERNAME'),
+                        'password'      => config('constants.SFTP_PASSSWORD'),
+                        'privateKey'    => config('constants.SFTP_PRIVATE_KEY_PATH'),
                         // example:  /alaa_media/cdn/media/203/HD_720p , /alaa_media/cdn/media/thumbnails/203/
-                        'root' => config("constants.DOWNLOAD_SERVER_ROOT").config("constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH").$contentSetId,
-                        'timeout' => config('constants.SFTP_TIMEOUT'),
+                        'root'          => config("constants.DOWNLOAD_SERVER_ROOT") . config("constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH") . $contentSetId,
+                        'timeout'       => config('constants.SFTP_TIMEOUT'),
                         'directoryPerm' => 0755,
                     ]);
                     $filesystem = new Filesystem($adapter);
                     if ($filesystem->put($originalFileName, fopen($newFileNameDir, 'r+'))) {
                         $done = true;
                         // example:  https://cdn.sanatisharif.ir/media/203/hq/203001dtgr.mp4
-                        $fileName = config("constants.DOWNLOAD_SERVER_PROTOCOL").config("constants.DOWNLOAD_SERVER_NAME").config("constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH").$contentSetId.$originalFileName;
+                        $fileName = config("constants.DOWNLOAD_SERVER_PROTOCOL") . config("constants.DOWNLOAD_SERVER_NAME") . config("constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH") . $contentSetId . $originalFileName;
                     }
                 } else {
-                    $filesystem = Storage::disk($disk."Sftp");
+                    $filesystem = Storage::disk($disk . "Sftp");
                     //                Storage::putFileAs('photos', new File('/path/to/photo'), 'photo.jpg');
                     if ($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
                         $done = true;
@@ -1618,7 +1560,7 @@ class HomeController extends Controller
             if ($done) {
                 return $this->response->setStatusCode(Response::HTTP_OK)->setContent([
                     "fileName" => $fileName,
-                    "prefix" => $filePrefix,
+                    "prefix"   => $filePrefix,
                 ]);
             } else {
                 return $this->response->setStatusCode(503);
@@ -1629,16 +1571,16 @@ class HomeController extends Controller
 
             return $this->response->setStatusCode(503)->setContent([
                 "message" => $message,
-                "error" => $e->getMessage(),
-                "line" => $e->getLine(),
-                "file" => $e->getFile(),
+                "error"   => $e->getMessage(),
+                "line"    => $e->getLine(),
+                "file"    => $e->getFile(),
             ]);
         }
     }
 
     public function adminBot()
     {
-        if (! Input::has("bot")) {
+        if (!Input::has("bot")) {
             dd("Please pass bot as input");
         }
 
@@ -1768,13 +1710,13 @@ class HomeController extends Controller
                     })->where("product_id", 223);
                 })->get();
 
-                echo "Number of users:".$users->count();
+                echo "Number of users:" . $users->count();
                 dd("stop");
 
                 foreach ($users as $user) {
                     $message = "آلایی عزیز تا جمعه ظهر فرصت دارید تا حضور خود در همایش  حضوری عربی را اعلام کنید";
                     $message .= "\n";
-                    $message .= "sanatisharif.ir/user/".$user->id;
+                    $message .= "sanatisharif.ir/user/" . $user->id;
                     $user->notify(new GeneralNotice($message));
                 }
 
@@ -2348,7 +2290,7 @@ class HomeController extends Controller
                     })->where("product_id", 210);
                 })->whereNotIn("id", $notIncludedUsers_Shimi)->whereNotIn("id", $notIncludedUsers_Vafadaran)->get();
 
-                echo "number of users:".$users->count();
+                echo "number of users:" . $users->count();
                 echo "<br>";
                 dd("stop");
                 $couponController = new CouponController();
@@ -2362,8 +2304,8 @@ class HomeController extends Controller
                     } while (\App\Coupon::where("code", $couponCode)->get()->isNotEmpty());
 
                     /** Coupon Settings */
-                    $couponName = "قرعه کشی وفاداران آلاء برای ".$user->getFullName();
-                    $couponDescription = "قرعه کشی وفاداران آلاء برای ".$user->getFullName();
+                    $couponName = "قرعه کشی وفاداران آلاء برای " . $user->getFullName();
+                    $couponDescription = "قرعه کشی وفاداران آلاء برای " . $user->getFullName();
                     $validSinceDate = "2018-06-11";
                     $validUntilDate = " 00:00:00";
                     $validSinceTime = "2018-06-15";
@@ -2431,8 +2373,8 @@ class HomeController extends Controller
                     }
                 }
 
-                dump("processed: ".$proccessed);
-                dump("failed: ".$failedCounter);
+                dump("processed: " . $proccessed);
+                dump("failed: " . $failedCounter);
                 dd("coupons done");
             }
 
@@ -2445,7 +2387,7 @@ class HomeController extends Controller
                 $bucket = "contentset";
                 $tagsJson = [
                     "bucket" => $bucket,
-                    "tags" => $tags,
+                    "tags"   => $tags,
                 ];
                 $contentset->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
 
@@ -2457,9 +2399,9 @@ class HomeController extends Controller
                         $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $contentset->created_at)->timestamp;
                     }
 
-                    $response = $this->sendRequest(config("constants.TAG_API_URL")."id/$bucket/".$contentset->id, "PUT", $params);
+                    $response = $this->sendRequest(config("constants.TAG_API_URL") . "id/$bucket/" . $contentset->id, "PUT", $params);
                 } else {
-                    dump("Error on updating #".$contentset->id);
+                    dump("Error on updating #" . $contentset->id);
                 }
 
                 $contents = $contentset->contents;
@@ -2470,7 +2412,7 @@ class HomeController extends Controller
                     $bucket = "content";
                     $tagsJson = [
                         "bucket" => $bucket,
-                        "tags" => $tags,
+                        "tags"   => $tags,
                     ];
                     $content->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
                     if ($content->update()) {
@@ -2481,9 +2423,9 @@ class HomeController extends Controller
                             $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $content->created_at)->timestamp;
                         }
 
-                        $response = $this->sendRequest(config("constants.TAG_API_URL")."id/$bucket/".$content->id, "PUT", $params);
+                        $response = $this->sendRequest(config("constants.TAG_API_URL") . "id/$bucket/" . $content->id, "PUT", $params);
                     } else {
-                        dump("Error on updating #".$content->id);
+                        dump("Error on updating #" . $content->id);
                     }
                 }
                 dd("Tags DONE!");
@@ -2493,9 +2435,9 @@ class HomeController extends Controller
 
             return $this->response->setStatusCode(503)->setContent([
                 "message" => $message,
-                "error" => $e->getMessage(),
-                "line" => $e->getLine(),
-                "file" => $e->getFile(),
+                "error"   => $e->getMessage(),
+                "line"    => $e->getLine(),
+                "file"    => $e->getFile(),
             ]);
         }
 
@@ -2615,141 +2557,143 @@ class HomeController extends Controller
          * dump("successful : ".$successCounter);
          * dump("failed: ".$failedCounter) ;
          * dd("finish");
-         **/ /**
-     * Giving gift to users
-     *
-     * $carbon = new Carbon("2018-02-20 00:00:00");
-     * $orderproducts = Orderproduct::whereIn("product_id" ,[ 100] )->whereHas("order" , function ($q) use ($carbon)
-     * {
-     * //           $q->where("orderstatus_id" , 1)->where("created_at" ,">" , $carbon);
-     * $q->where("orderstatus_id" , 2)->whereIn("paymentstatus_id" , [2,3])->where("completed_at" ,">" , $carbon);
-     * })->get();
-     * dump("تعداد سفارش ها" . $orderproducts->count());
-     * $users = array();
-     * $counter = 0;
-     * foreach ($orderproducts as $orderproduct)
-     * {
-     * $order = $orderproduct->order;
-     * if($order->orderproducts->where("product_id" , 107)->isNotEmpty()) continue ;
-     *
-     * $giftOrderproduct = new Orderproduct();
-     * $giftOrderproduct->orderproducttype_id = Config::get("constants.ORDER_PRODUCT_GIFT");
-     * $giftOrderproduct->order_id = $order->id ;
-     * $giftOrderproduct->product_id = 107 ;
-     * $giftOrderproduct->cost = 24000 ;
-     * $giftOrderproduct->discountPercentage = 100 ;
-     * $giftOrderproduct->save() ;
-     *
-     * $giftOrderproduct->parents()->attach($orderproduct->id , ["relationtype_id"=>Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
-     * $counter++;
-     * if(isset($order->user->id))
-     * array_push($users , $order->user->id);
-     * else
-     * array_push($users , 0);
-     * }
-     * dump($counter." done");
-     * dd($users);
-     */ /**
-     *  Converting Hamayesh with Poshtibani to without poshtibani
-     * if (!Auth::user()->hasRole("admin")) abort(404);
-     *
-     * $productsArray = [164, 160, 156, 152, 148, 144, 140, 136, 132, 128, 124, 120];
-     * $orders = Order::whereHas("orderproducts", function ($q) use ($productsArray) {
-     * $q->whereIn("product_id", $productsArray);
-     * })->whereIn("orderstatus_id", [Config::get("constants.ORDER_STATUS_CLOSED"), Config::set("constants.ORDER_STATUS_POSTED")])->whereIn("paymentstatus_id", [Config::get("constants.PAYMENT_STATUS_PAID"), Config::get("constants.PAYMENT_STATUS_INDEBTED")])->get();
-     *
-     *
-     * dump("Number of orders: ".$orders->count());
-     * $counter = 0;
-     * foreach ($orders as $order)
-     * {
-     * if($order->successfulTransactions->isEmpty()) continue ;
-     * $totalRefund = 0;
-     * foreach ($order->orderproducts->whereIn("product_id", $productsArray) as $orderproduct)
-     * {
-     * $orderproductTotalRefund = 0 ;
-     * $orderproductRefund = (int)((($orderproduct->cost / 88000) * 9000))  ;
-     * $orderproductRefundWithBon = $orderproductRefund * (1 - ($orderproduct->getTotalBonNumber() / 100)) ;
-     * if($order->couponDiscount>0 && $orderproduct->includedInCoupon)
-     * $orderproductTotalRefund += $orderproductRefundWithBon * (1 - ($order->couponDiscount / 100)) ;
-     * else
-     * $orderproductTotalRefund += $orderproductRefundWithBon ;
-     *
-     * $totalRefund += $orderproductTotalRefund ;
-     * $orderproduct->cost = $orderproduct->cost - $orderproductRefund ;
-     * switch ($orderproduct->product_id)
-     * {
-     * case 164:
-     * $orderproduct->product_id = 165 ;
-     * break;
-     * case 160:
-     * $orderproduct->product_id = 161 ;
-     * break;
-     * case 156:
-     * $orderproduct->product_id = 157 ;
-     * break;
-     * case 152:
-     * $orderproduct->product_id = 153 ;
-     * break;
-     * case 148:
-     * $orderproduct->product_id = 149 ;
-     * break;
-     * case 144:
-     * $orderproduct->product_id = 145 ;
-     * break;
-     * case 140:
-     * $orderproduct->product_id = 141 ;
-     * break;
-     * case 136:
-     * $orderproduct->product_id = 137 ;
-     * break;
-     * case 132:
-     * $orderproduct->product_id = 133 ;
-     * break;
-     * case 128:
-     * $orderproduct->product_id = 129 ;
-     * break;
-     * case 124:
-     * $orderproduct->product_id = 125 ;
-     * break;
-     * case 120:
-     * $orderproduct->product_id = 121 ;
-     * break;
-     * default:
-     * break;
-     * }
-     * if(!$orderproduct->update()) dump("orderproduct ".$orderproduct->id." wasn't saved");
-     * }
-     * $newOrder = Order::where("id" , $order->id)->get()->first();
-     * $orderCostArray = $newOrder->obtainOrderCost(true , false , "REOBTAIN");
-     * $newOrder->cost = $orderCostArray["rawCostWithDiscount"] ;
-     * $newOrder->costwithoutcoupon = $orderCostArray["rawCostWithoutDiscount"];
-     * $newOrder->update();
-     *
-     * if($totalRefund > 0 )
-     * {
-     * $transactionRequest =  new \App\Http\Requests\InsertTransactionRequest();
-     * $transactionRequest->offsetSet("comesFromAdmin" , true);
-     * $transactionRequest->offsetSet("order_id" , $order->id);
-     * $transactionRequest->offsetSet("cost" , -$totalRefund);
-     * $transactionRequest->offsetSet("managerComment" , "ثبت سیستمی بازگشت هزینه پشتیبانی همایش 1+5");
-     * $transactionRequest->offsetSet("destinationBankAccount_id" , 1);
-     * $transactionRequest->offsetSet("paymentmethod_id" , Config::get("constants.PAYMENT_METHOD_ATM"));
-     * $transactionRequest->offsetSet("transactionstatus_id" ,  Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"));
-     * $transactionController = new TransactionController();
-     * $transactionController->store($transactionRequest);
-     *
-     * if(session()->has("success")) {
-     * session()->forget("success");
-     * }elseif(session()->has("error")){
-     * dump("Transaction wasn't saved ,Order: ".$order->id);
-     * session()->forget("error");
-     * }
-     * $counter++;
-     * }
-     * }
-     * dump("Processed: ".$counter) ;
-     */
+         **/
+        /**
+         * Giving gift to users
+         *
+         * $carbon = new Carbon("2018-02-20 00:00:00");
+         * $orderproducts = Orderproduct::whereIn("product_id" ,[ 100] )->whereHas("order" , function ($q) use ($carbon)
+         * {
+         * //           $q->where("orderstatus_id" , 1)->where("created_at" ,">" , $carbon);
+         * $q->where("orderstatus_id" , 2)->whereIn("paymentstatus_id" , [2,3])->where("completed_at" ,">" , $carbon);
+         * })->get();
+         * dump("تعداد سفارش ها" . $orderproducts->count());
+         * $users = array();
+         * $counter = 0;
+         * foreach ($orderproducts as $orderproduct)
+         * {
+         * $order = $orderproduct->order;
+         * if($order->orderproducts->where("product_id" , 107)->isNotEmpty()) continue ;
+         *
+         * $giftOrderproduct = new Orderproduct();
+         * $giftOrderproduct->orderproducttype_id = Config::get("constants.ORDER_PRODUCT_GIFT");
+         * $giftOrderproduct->order_id = $order->id ;
+         * $giftOrderproduct->product_id = 107 ;
+         * $giftOrderproduct->cost = 24000 ;
+         * $giftOrderproduct->discountPercentage = 100 ;
+         * $giftOrderproduct->save() ;
+         *
+         * $giftOrderproduct->parents()->attach($orderproduct->id , ["relationtype_id"=>Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
+         * $counter++;
+         * if(isset($order->user->id))
+         * array_push($users , $order->user->id);
+         * else
+         * array_push($users , 0);
+         * }
+         * dump($counter." done");
+         * dd($users);
+         */
+        /**
+         *  Converting Hamayesh with Poshtibani to without poshtibani
+         * if (!Auth::user()->hasRole("admin")) abort(404);
+         *
+         * $productsArray = [164, 160, 156, 152, 148, 144, 140, 136, 132, 128, 124, 120];
+         * $orders = Order::whereHas("orderproducts", function ($q) use ($productsArray) {
+         * $q->whereIn("product_id", $productsArray);
+         * })->whereIn("orderstatus_id", [Config::get("constants.ORDER_STATUS_CLOSED"), Config::set("constants.ORDER_STATUS_POSTED")])->whereIn("paymentstatus_id", [Config::get("constants.PAYMENT_STATUS_PAID"), Config::get("constants.PAYMENT_STATUS_INDEBTED")])->get();
+         *
+         *
+         * dump("Number of orders: ".$orders->count());
+         * $counter = 0;
+         * foreach ($orders as $order)
+         * {
+         * if($order->successfulTransactions->isEmpty()) continue ;
+         * $totalRefund = 0;
+         * foreach ($order->orderproducts->whereIn("product_id", $productsArray) as $orderproduct)
+         * {
+         * $orderproductTotalRefund = 0 ;
+         * $orderproductRefund = (int)((($orderproduct->cost / 88000) * 9000))  ;
+         * $orderproductRefundWithBon = $orderproductRefund * (1 - ($orderproduct->getTotalBonNumber() / 100)) ;
+         * if($order->couponDiscount>0 && $orderproduct->includedInCoupon)
+         * $orderproductTotalRefund += $orderproductRefundWithBon * (1 - ($order->couponDiscount / 100)) ;
+         * else
+         * $orderproductTotalRefund += $orderproductRefundWithBon ;
+         *
+         * $totalRefund += $orderproductTotalRefund ;
+         * $orderproduct->cost = $orderproduct->cost - $orderproductRefund ;
+         * switch ($orderproduct->product_id)
+         * {
+         * case 164:
+         * $orderproduct->product_id = 165 ;
+         * break;
+         * case 160:
+         * $orderproduct->product_id = 161 ;
+         * break;
+         * case 156:
+         * $orderproduct->product_id = 157 ;
+         * break;
+         * case 152:
+         * $orderproduct->product_id = 153 ;
+         * break;
+         * case 148:
+         * $orderproduct->product_id = 149 ;
+         * break;
+         * case 144:
+         * $orderproduct->product_id = 145 ;
+         * break;
+         * case 140:
+         * $orderproduct->product_id = 141 ;
+         * break;
+         * case 136:
+         * $orderproduct->product_id = 137 ;
+         * break;
+         * case 132:
+         * $orderproduct->product_id = 133 ;
+         * break;
+         * case 128:
+         * $orderproduct->product_id = 129 ;
+         * break;
+         * case 124:
+         * $orderproduct->product_id = 125 ;
+         * break;
+         * case 120:
+         * $orderproduct->product_id = 121 ;
+         * break;
+         * default:
+         * break;
+         * }
+         * if(!$orderproduct->update()) dump("orderproduct ".$orderproduct->id." wasn't saved");
+         * }
+         * $newOrder = Order::where("id" , $order->id)->get()->first();
+         * $orderCostArray = $newOrder->obtainOrderCost(true , false , "REOBTAIN");
+         * $newOrder->cost = $orderCostArray["rawCostWithDiscount"] ;
+         * $newOrder->costwithoutcoupon = $orderCostArray["rawCostWithoutDiscount"];
+         * $newOrder->update();
+         *
+         * if($totalRefund > 0 )
+         * {
+         * $transactionRequest =  new \App\Http\Requests\InsertTransactionRequest();
+         * $transactionRequest->offsetSet("comesFromAdmin" , true);
+         * $transactionRequest->offsetSet("order_id" , $order->id);
+         * $transactionRequest->offsetSet("cost" , -$totalRefund);
+         * $transactionRequest->offsetSet("managerComment" , "ثبت سیستمی بازگشت هزینه پشتیبانی همایش 1+5");
+         * $transactionRequest->offsetSet("destinationBankAccount_id" , 1);
+         * $transactionRequest->offsetSet("paymentmethod_id" , Config::get("constants.PAYMENT_METHOD_ATM"));
+         * $transactionRequest->offsetSet("transactionstatus_id" ,  Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"));
+         * $transactionController = new TransactionController();
+         * $transactionController->store($transactionRequest);
+         *
+         * if(session()->has("success")) {
+         * session()->forget("success");
+         * }elseif(session()->has("error")){
+         * dump("Transaction wasn't saved ,Order: ".$order->id);
+         * session()->forget("error");
+         * }
+         * $counter++;
+         * }
+         * }
+         * dump("Processed: ".$counter) ;
+         */
         /**
          *  Fixing complementary products
          *
@@ -2832,7 +2776,7 @@ class HomeController extends Controller
 
     public function walletBot(Request $request)
     {
-        if (! $request->has("userGroup")) {
+        if (!$request->has("userGroup")) {
             session()->put("error", "لطفا گروه کاربران را تعیین کنید");
 
             return redirect()->back();
@@ -2922,27 +2866,27 @@ class HomeController extends Controller
             case "1":
                 $productSet = [
                     [
-                        "query" => "whereHas",
+                        "query"  => "whereHas",
                         //whereHas / whereDoesntHave
                         "filter" => "whereIn",
                         //whereIn / whereNotIn / all
-                        "id" => [$hamayesh5Plus1]
+                        "id"     => [$hamayesh5Plus1]
                         // products id
                     ],
                     [
-                        "query" => "whereHas",
+                        "query"  => "whereHas",
                         //whereHas / whereDoesntHave
                         "filter" => "whereIn",
                         //whereIn / whereNotIn / all
-                        "id" => [$hamayeshTalai]
+                        "id"     => [$hamayeshTalai]
                         // products id
                     ],
                     [
-                        "query" => "whereHas",
+                        "query"  => "whereHas",
                         //whereHas / whereDoesntHave
                         "filter" => "whereIn",
                         //whereIn / whereNotIn / all
-                        "id" => [
+                        "id"     => [
                             $ordooGheireHozoori,
                             $ordooHozoori,
                         ],
@@ -2953,30 +2897,30 @@ class HomeController extends Controller
             case "2":
                 $productSet = [
                     [
-                        "query" => "whereHas",
+                        "query"  => "whereHas",
                         //whereHas / whereDoesntHave
                         "filter" => "whereIn",
                         //whereIn / whereNotIn / all
-                        "id" => [$hamayesh5Plus1]
+                        "id"     => [$hamayesh5Plus1]
                         // products id
                     ],
                     [
-                        "query" => "whereHas",
+                        "query"  => "whereHas",
                         //whereHas / whereDoesntHave
                         "filter" => "whereIn",
                         //whereIn / whereNotIn / all
-                        "id" => [
+                        "id"     => [
                             $ordooGheireHozoori,
                             $ordooHozoori,
                         ],
                         // products id
                     ],
                     [
-                        "query" => "whereDoesntHave",
+                        "query"  => "whereDoesntHave",
                         //whereHas / whereDoesntHave
                         "filter" => "whereIn",
                         //whereIn / whereNotIn / all
-                        "id" => [$hamayeshTalai]
+                        "id"     => [$hamayeshTalai]
                         // products id
                     ],
                 ];
@@ -2984,19 +2928,19 @@ class HomeController extends Controller
             case "3":
                 $productSet = [
                     [
-                        "query" => "whereHas",
+                        "query"  => "whereHas",
                         //whereHas / whereDoesntHave
                         "filter" => "whereIn",
                         //whereIn / whereNotIn / all
-                        "id" => [$hamayesh5Plus1]
+                        "id"     => [$hamayesh5Plus1]
                         // products id
                     ],
                     [
-                        "query" => "whereDoesntHave",
+                        "query"  => "whereDoesntHave",
                         //whereHas / whereDoesntHave
                         "filter" => "whereNotIn",
                         //whereIn / whereNotIn / all
-                        "id" => [$hamayesh5Plus1]
+                        "id"     => [$hamayesh5Plus1]
                         // products id
                     ],
                 ];
@@ -3004,11 +2948,11 @@ class HomeController extends Controller
             case "4":
                 $productSet = [
                     [
-                        "query" => "whereDoesntHave",
+                        "query"  => "whereDoesntHave",
                         //whereHas / whereDoesntHave
                         "filter" => "all",
                         //whereIn / whereNotIn / all
-                        "id" => []
+                        "id"     => []
                         // products id
                     ],
                 ];
@@ -3016,19 +2960,19 @@ class HomeController extends Controller
             case "5":
                 $productSet = [
                     [
-                        "query" => "whereHas",
+                        "query"  => "whereHas",
                         //whereHas / whereDoesntHave
                         "filter" => "all",
                         //whereIn / whereNotIn / all
-                        "id" => []
+                        "id"     => []
                         // products id
                     ],
                     [
-                        "query" => "whereDoesntHave",
+                        "query"  => "whereDoesntHave",
                         //whereHas / whereDoesntHave
                         "filter" => "whereIn",
                         //whereIn / whereNotIn / all
-                        "id" => [
+                        "id"     => [
                             $hamayeshTalai,
                             $ordooHozoori,
                             $ordooGheireHozoori,
@@ -3041,31 +2985,31 @@ class HomeController extends Controller
             case "6":
                 $productSet = [
                     [
-                        "query" => "whereHas",
+                        "query"  => "whereHas",
                         //whereHas / whereDoesntHave
                         "filter" => "whereIn",
                         //whereIn / whereNotIn / all
-                        "id" => [
+                        "id"     => [
                             $hamayeshTalai,
                         ]
                         // products id
                     ],
                     [
-                        "query" => "whereHas",
+                        "query"  => "whereHas",
                         //whereHas / whereDoesntHave
                         "filter" => "whereIn",
                         //whereIn / whereNotIn / all
-                        "id" => [
+                        "id"     => [
                             $hamayesh5Plus1,
                         ]
                         // products id
                     ],
                     [
-                        "query" => "whereDoesntHave",
+                        "query"  => "whereDoesntHave",
                         //whereHas / whereDoesntHave
                         "filter" => "whereIn",
                         //whereIn / whereNotIn / all
-                        "id" => [
+                        "id"     => [
                             $ordooGheireHozoori,
                             $ordooHozoori,
                         ]
@@ -3076,11 +3020,11 @@ class HomeController extends Controller
             case "7":
                 $productSet = [
                     [
-                        "query" => "whereHas",
+                        "query"  => "whereHas",
                         //whereHas / whereDoesntHave
                         "filter" => "whereIn",
                         //whereIn / whereNotIn / all
-                        "id" => [
+                        "id"     => [
                             $hamayeshTalai,
                         ]
                         // products id
@@ -3113,10 +3057,10 @@ class HomeController extends Controller
                     }
 
                     $q->whereHas("orderproducts", function ($q2) use ($idArray, $filterType) {
-                        if (! empty($idArray) && strlen($filterType) > 0) {
+                        if (!empty($idArray) && strlen($filterType) > 0) {
                             foreach ($idArray as $key => $ids) {
                                 if ($key > 0) {
-                                    $myFilterType = "or".$filterType;
+                                    $myFilterType = "or" . $filterType;
                                 } else {
                                     $myFilterType = $filterType;
                                 }
@@ -3139,9 +3083,9 @@ class HomeController extends Controller
         }
 
         $users = $users->get();
-        dump("Total number of users:".$users->count());
+        dump("Total number of users:" . $users->count());
 
-        if (! $request->has("giveGift")) {
+        if (!$request->has("giveGift")) {
             dd("Done!");
         }
 
@@ -3159,7 +3103,7 @@ class HomeController extends Controller
                 $successCounter++;
             } else {
                 $failedCounter++;
-                dump("Credit for user: ".$user->id." was not given!"."wallet: ".$wallet." ,response: ".$result["responseText"]);
+                dump("Credit for user: " . $user->id . " was not given!" . "wallet: " . $wallet . " ,response: " . $result["responseText"]);
             }
         }
         dump("Number of successfully processed users: ", $successCounter);
@@ -3255,13 +3199,13 @@ class HomeController extends Controller
                 } else {
                     $point = (int)($transaction->cost / $amountUnit);
                     $users->push([
-                        "user_id" => $user->id,
+                        "user_id"     => $user->id,
                         "totalAmount" => $transaction->cost,
-                        "point" => $point,
+                        "point"       => $point,
                     ]);
                 }
             } else {
-                dump("User was not found for transaction ".$transaction->id);
+                dump("User was not found for transaction " . $transaction->id);
                 $warningCounter++;
             }
         }
@@ -3300,16 +3244,16 @@ class HomeController extends Controller
         //        }
         $bonName = config("constants.BON2");
         $bon = Bon::where("name", $bonName)->first();
-        if (! isset($bon)) {
+        if (!isset($bon)) {
             dd("Bon not found");
         }
 
-        dump("Number of available users: ".$users->count());
+        dump("Number of available users: " . $users->count());
         foreach ($users as $userPoint) {
             $userId = $userPoint["user_id"];
             $points = $userPoint["point"];
 
-            echo "User Id: ".$userId." , Points: ".$points;
+            echo "User Id: " . $userId . " , Points: " . $points;
             echo "<br>";
 
             if ($points == 0) {
@@ -3338,11 +3282,11 @@ class HomeController extends Controller
                 $successCounter++;
             } else {
                 $failedCounter++;
-                dump("Userbon for user ".$userId." was not created");
+                dump("Userbon for user " . $userId . " was not created");
             }
         }
-        dump("number of successfully processed users: ".$successCounter);
-        dump("number of failed users: ".$failedCounter);
+        dump("number of successfully processed users: " . $successCounter);
+        dump("number of failed users: " . $failedCounter);
         dd("Done!");
     }
 
@@ -3471,19 +3415,19 @@ class HomeController extends Controller
             $user = User::where("mobile", $mobile)->where("nationalCode", $nationalCode)->first();
             if (isset($user)) {
                 $flag = false;
-                if (! isset($user->firstName) && isset($firstName)) {
+                if (!isset($user->firstName) && isset($firstName)) {
                     $user->firstName = $firstName;
                     $flag = true;
                 }
-                if (! isset($user->lastName) && isset($lastName)) {
+                if (!isset($user->lastName) && isset($lastName)) {
                     $user->lastName = $lastName;
                     $flag = true;
                 }
-                if (! isset($user->major_id) && isset($major_id)) {
+                if (!isset($user->major_id) && isset($major_id)) {
                     $user->major_id = $major_id;
                     $flag = true;
                 }
-                if (! isset($user->gender_id) && isset($gender_id)) {
+                if (!isset($user->gender_id) && isset($gender_id)) {
                     $user->gender_id = $gender_id;
                     $flag = true;
                 }
@@ -3537,7 +3481,7 @@ class HomeController extends Controller
                 }
 
                 $giftOrderDone = true;
-                if (! empty($orderProductIds)) {
+                if (!empty($orderProductIds)) {
                     $orderController = new OrderController();
                     $storeOrderRequest = new Request();
                     $storeOrderRequest->offsetSet("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"));
@@ -3600,7 +3544,7 @@ class HomeController extends Controller
                 } else {
                     $gender = "";
                 }
-                $message = $gender.$user->full_name."\n";
+                $message = $gender . $user->full_name . "\n";
                 $message .= "همایش طلایی عربی و همایش حل مسائل شیمی به فایل های شما افزوده شد . دانلود در:";
                 $message .= "\n";
                 $message .= "sanatisharif.ir/asset/";
@@ -3624,9 +3568,9 @@ class HomeController extends Controller
 
             return $this->response->setStatusCode(500)->setContent([
                 "message" => $message,
-                "error" => $e->getMessage(),
-                "line" => $e->getLine(),
-                "file" => $e->getFile(),
+                "error"   => $e->getMessage(),
+                "line"    => $e->getLine(),
+                "file"    => $e->getFile(),
             ]);
         }
     }
@@ -3637,16 +3581,16 @@ class HomeController extends Controller
         $counter = 0;
         foreach ($disableContents as $content) {
             $tags = $content->retrievingTags();
-            if (! empty($tags)) {
+            if (!empty($tags)) {
                 $author = "";
                 if (isset($content->author_id)) {
                     $author = $content->user->lastName;
                 }
-                dump($content->id." has tags! type: ".$content->contenttype_id." author: ".$author);
+                dump($content->id . " has tags! type: " . $content->contenttype_id . " author: " . $author);
                 $counter++;
             }
         }
-        dump("count: ".$counter);
+        dump("count: " . $counter);
         dd("finish");
     }
 
@@ -3654,8 +3598,8 @@ class HomeController extends Controller
     {
         $counter = 0;
         try {
-            dump("start time:".Carbon::now("asia/tehran"));
-            if (! Input::has("t")) {
+            dump("start time:" . Carbon::now("asia/tehran"));
+            if (!Input::has("t")) {
                 return $this->response->setStatusCode(422)->setContent(["message" => "Wrong inputs: Please pass parameter t. Available values: v , p , cs , pr , e , b ,a"]);
             }
             $type = Input::get("t");
@@ -3673,11 +3617,11 @@ class HomeController extends Controller
                             "فیلم",
                         ];
                         $majors = $item->majors->pluck("description")->toArray();
-                        if (! empty($majors)) {
+                        if (!empty($majors)) {
                             $myTags = array_merge($myTags, $majors);
                         }
                         $grades = $item->grades->where("name", "graduated")->pluck("description")->toArray();
-                        if (! empty($grades)) {
+                        if (!empty($grades)) {
                             $myTags = array_merge($myTags, $grades);
                         }
                         switch ($item->id) {
@@ -3855,7 +3799,7 @@ class HomeController extends Controller
                         $myTags = array_merge($myTags, ["متوسطه2"]);
                         $tagsJson = [
                             "bucket" => $bucket,
-                            "tags" => $myTags,
+                            "tags"   => $myTags,
                         ];
                         $item->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
                         $item->update();
@@ -3875,11 +3819,11 @@ class HomeController extends Controller
                             "PDF",
                         ];
                         $majors = $item->majors->pluck("description")->toArray();
-                        if (! empty($majors)) {
+                        if (!empty($majors)) {
                             $myTags = array_merge($myTags, $majors);
                         }
                         $grades = $item->grades->where("name", "graduated")->pluck("description")->toArray();
-                        if (! empty($grades)) {
+                        if (!empty($grades)) {
                             $myTags = array_merge($myTags, $grades);
                         }
                         switch ($item->id) {
@@ -3991,7 +3935,7 @@ class HomeController extends Controller
                         $myTags = array_merge($myTags, ["متوسطه2"]);
                         $tagsJson = [
                             "bucket" => $bucket,
-                            "tags" => $myTags,
+                            "tags"   => $myTags,
                         ];
                         $item->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
                         $item->update();
@@ -4009,17 +3953,17 @@ class HomeController extends Controller
                             "نظام_آموزشی_جدید",
                         ];
                         $majors = $item->majors->pluck("description")->toArray();
-                        if (! empty($majors)) {
+                        if (!empty($majors)) {
                             $myTags = array_merge($myTags, $majors);
                         }
                         $grades = $item->grades->where("name", "graduated")->pluck("description")->toArray();
-                        if (! empty($grades)) {
+                        if (!empty($grades)) {
                             $myTags = array_merge($myTags, $grades);
                         }
                         $myTags = array_merge($myTags, ["متوسطه2"]);
                         $tagsJson = [
                             "bucket" => $bucket,
-                            "tags" => $myTags,
+                            "tags"   => $myTags,
                         ];
                         $item->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
                         $item->update();
@@ -4040,11 +3984,11 @@ class HomeController extends Controller
                         $myTags = array_merge($myTags, $childContentTypes);
 
                         $majors = $item->majors->pluck("description")->toArray();
-                        if (! empty($majors)) {
+                        if (!empty($majors)) {
                             $myTags = array_merge($myTags, $majors);
                         }
                         $grades = $item->grades->where("name", "graduated")->pluck("description")->toArray();
-                        if (! empty($grades)) {
+                        if (!empty($grades)) {
                             $myTags = array_merge($myTags, $grades);
                         }
 
@@ -4080,7 +4024,7 @@ class HomeController extends Controller
                         $myTags = array_merge($myTags, ["متوسطه2"]);
                         $tagsJson = [
                             "bucket" => $bucket,
-                            "tags" => $myTags,
+                            "tags"   => $myTags,
                         ];
                         $item->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
                         $item->update();
@@ -4095,11 +4039,11 @@ class HomeController extends Controller
                             "مقاله",
                         ];
                         $majors = $item->majors->pluck("description")->toArray();
-                        if (! empty($majors)) {
+                        if (!empty($majors)) {
                             $myTags = array_merge($myTags, $majors);
                         }
                         $grades = $item->grades->where("name", "graduated")->pluck("description")->toArray();
-                        if (! empty($grades)) {
+                        if (!empty($grades)) {
                             $myTags = array_merge($myTags, $grades);
                         }
                         switch ($item->id) {
@@ -4118,7 +4062,7 @@ class HomeController extends Controller
                         $myTags = array_merge($myTags, ["متوسطه2"]);
                         $tagsJson = [
                             "bucket" => $bucket,
-                            "tags" => $myTags,
+                            "tags"   => $myTags,
                         ];
                         $item->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
                         $item->update();
@@ -4477,7 +4421,7 @@ class HomeController extends Controller
 
                         $tagsJson = [
                             "bucket" => $bucket,
-                            "tags" => $myTags,
+                            "tags"   => $myTags,
                         ];
                         $item->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
                         $item->update();
@@ -4487,26 +4431,26 @@ class HomeController extends Controller
                     return $this->response->setStatusCode(422)->setContent(["message" => "Unprocessable input t."]);
                     break;
             }
-            dump("available items: ".$items->count());
+            dump("available items: " . $items->count());
             $successCounter = 0;
             $failedCounter = 0;
             $warningCounter = 0;
             foreach ($items as $item) {
-                if (! isset($item)) {
+                if (!isset($item)) {
                     $warningCounter++;
-                    dump("invalid item at counter".$counter);
+                    dump("invalid item at counter" . $counter);
                     continue;
                 } else {
-                    if (! isset($item->tags)) {
+                    if (!isset($item->tags)) {
                         $warningCounter++;
-                        dump("no tags found for".$item->id);
+                        dump("no tags found for" . $item->id);
                         continue;
                     } else {
                         $itemTagsArray = $item->tags->tags;
                     }
                 }
 
-                if (is_array($itemTagsArray) && ! empty($itemTagsArray) && isset($item["id"])) {
+                if (is_array($itemTagsArray) && !empty($itemTagsArray) && isset($item["id"])) {
                     $params = [
                         "tags" => json_encode($itemTagsArray, JSON_UNESCAPED_UNICODE),
                     ];
@@ -4514,39 +4458,39 @@ class HomeController extends Controller
                         $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $item->created_at)->timestamp;
                     }
 
-                    $response = $this->sendRequest(config("constants.TAG_API_URL")."id/$bucket/".$item->id, "PUT", $params);
+                    $response = $this->sendRequest(config("constants.TAG_API_URL") . "id/$bucket/" . $item->id, "PUT", $params);
 
                     if ($response["statusCode"] == 200) {
                         $successCounter++;
                     } else {
-                        dump("item #".$item["id"]." failed. response : ".$response["statusCode"]);
+                        dump("item #" . $item["id"] . " failed. response : " . $response["statusCode"]);
                         $failedCounter++;
                     }
                     $counter++;
                 } else {
                     if (is_array($itemTagsArray) && empty($itemTagsArray)) {
                         $warningCounter++;
-                        dump("warning no tags found for item #".$item->id);
+                        dump("warning no tags found for item #" . $item->id);
                     }
                 }
             }
-            dump($successCounter." items successfully done");
-            dump($failedCounter." items failed");
-            dump($warningCounter." warnings");
-            dump("finish time:".Carbon::now("asia/tehran"));
+            dump($successCounter . " items successfully done");
+            dump($failedCounter . " items failed");
+            dump($warningCounter . " warnings");
+            dump("finish time:" . Carbon::now("asia/tehran"));
 
-            return $this->response->setStatusCode(200)->setContent(["message" => "Done! number of processed items : ".$counter]);
+            return $this->response->setStatusCode(200)->setContent(["message" => "Done! number of processed items : " . $counter]);
         } catch (\Exception $e) {
             $message = "unexpected error";
-            dump($successCounter." items successfully done");
-            dump($failedCounter." items failed");
-            dump($warningCounter." warnings");
+            dump($successCounter . " items successfully done");
+            dump($failedCounter . " items failed");
+            dump($warningCounter . " warnings");
 
             return $this->response->setStatusCode(503)->setContent([
-                "message" => $message,
+                "message"                                => $message,
                 "number of successfully processed items" => $counter,
-                "error" => $e->getMessage(),
-                "line" => $e->getLine(),
+                "error"                                  => $e->getMessage(),
+                "line"                                   => $e->getLine(),
             ]);
         }
     }
@@ -4579,12 +4523,12 @@ class HomeController extends Controller
         SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
         SEO::opengraph()->addImage(route('image', [
             'category' => '11',
-            'w' => '100',
-            'h' => '100',
+            'w'        => '100',
+            'h'        => '100',
             'filename' => $this->setting->site->siteLogo,
         ]), [
             'height' => 100,
-            'width' => 100,
+            'width'  => 100,
         ]);
 
         return view("user.submitEventResultReport", compact("majors", "event", "sideBarMode", "userEventReport", "pageName", "user", "userCompletion"));
@@ -4631,12 +4575,12 @@ class HomeController extends Controller
         SEO::setDescription($this->setting->site->seo->homepage->metaDescription);
         SEO::opengraph()->addImage(route('image', [
             'category' => '11',
-            'w' => '100',
-            'h' => '100',
+            'w'        => '100',
+            'h'        => '100',
             'filename' => $this->setting->site->siteLogo,
         ]), [
             'height' => 100,
-            'width' => 100,
+            'width'  => 100,
         ]);
         $pageName = "schoolRegisterLanding";
 
@@ -4670,6 +4614,7 @@ class HomeController extends Controller
 
     /**
      * @param Request $request
+     *
      * @return
      */
     public function lernitoTree(Request $request)
@@ -4684,21 +4629,21 @@ class HomeController extends Controller
 
         $mote2 = [
             [
-                'id' => '6321',
-                'text' => 'ریاضی و فیزیک',
-                'tags' => json_encode(['ریاضی_و_فیزیک'], JSON_UNESCAPED_UNICODE),
+                'id'       => '6321',
+                'text'     => 'ریاضی و فیزیک',
+                'tags'     => json_encode(['ریاضی_و_فیزیک'], JSON_UNESCAPED_UNICODE),
                 'children' => $Riazi->getLernitoStyle(),
             ],
             [
-                'id' => '11552',
-                'text' => 'علوم تجربی',
-                'tags' => json_encode(['علوم_تجربی'], JSON_UNESCAPED_UNICODE),
+                'id'       => '11552',
+                'text'     => 'علوم تجربی',
+                'tags'     => json_encode(['علوم_تجربی'], JSON_UNESCAPED_UNICODE),
                 'children' => $Tajrobi->getLernitoStyle(),
             ],
             [
-                'id' => '15896',
-                'text' => 'علوم انسانی',
-                'tags' => json_encode(['علوم_انسانی'], JSON_UNESCAPED_UNICODE),
+                'id'       => '15896',
+                'text'     => 'علوم انسانی',
+                'tags'     => json_encode(['علوم_انسانی'], JSON_UNESCAPED_UNICODE),
                 'children' => $Ensani->getLernitoStyle(),
             ],
         ];
@@ -4715,9 +4660,9 @@ class HomeController extends Controller
             $lastUpdatedByLernitoKey = '';
             if ($key == 0) {
                 $lastUpdatedByLernitoKey = 'riaziUpdate';
-            } elseif ($key == 1) {
+            } else if ($key == 1) {
                 $lastUpdatedByLernitoKey = 'tajrobiUpdate';
-            } elseif ($key == 2) {
+            } else if ($key == 2) {
                 $lastUpdatedByLernitoKey = 'ensaniUpdate';
             }
 
@@ -4730,13 +4675,13 @@ class HomeController extends Controller
             if (isset($value['hasNewItem']) && $value['hasNewItem'] === true) {
                 $hasNew = '1';
             }
-            $htmlPrint .= '<li class="no_checkbox" data-has-new="'.$hasNew.'" data-alaa-node-id="'.$value['id'].'" data-jstree=\'{"checkbox_disabled":true, "icon":"/acm/extra/topicsTree/img/parent-icon.png"}\'>رشته: "'.$value['text'];
+            $htmlPrint .= '<li class="no_checkbox" data-has-new="' . $hasNew . '" data-alaa-node-id="' . $value['id'] . '" data-jstree=\'{"checkbox_disabled":true, "icon":"/acm/extra/topicsTree/img/parent-icon.png"}\'>رشته: "' . $value['text'];
 
             // loop in paie
             $htmlPrint .= '<ul>';
             foreach ($value['children'] as $key1 => $value1) {
-                $pathString2 = $pathString1.'@@**@@'.$value1['name'];
-                $pathId2 = $pathId1.'-'.$value1['id'];
+                $pathString2 = $pathString1 . '@@**@@' . $value1['name'];
+                $pathId2 = $pathId1 . '-' . $value1['id'];
 
                 $hasNew = '0';
                 if (isset($value1['hasNewItem']) && $value1['hasNewItem'] === true) {
@@ -4747,13 +4692,13 @@ class HomeController extends Controller
                     $isNew = '1';
                 }
 
-                $htmlPrint .= '<li class="no_checkbox" data-has-new="'.$hasNew.'" data-is-new="'.$isNew.'" data-alaa-node-id="'.$value1['id'].'" data-jstree=\'{"checkbox_disabled":true, "icon":"/acm/extra/topicsTree/img/parent-icon.png"}\'>پایه: '.$value1['name'];
+                $htmlPrint .= '<li class="no_checkbox" data-has-new="' . $hasNew . '" data-is-new="' . $isNew . '" data-alaa-node-id="' . $value1['id'] . '" data-jstree=\'{"checkbox_disabled":true, "icon":"/acm/extra/topicsTree/img/parent-icon.png"}\'>پایه: ' . $value1['name'];
 
                 // loop in dars
                 $htmlPrint .= '<ul>';
                 foreach ($value1['children'] as $key2 => $value2) {
-                    $pathString3 = $pathString2.'@@**@@'.$value2['name'];
-                    $pathId3 = $pathId2.'-'.$value2['id'];
+                    $pathString3 = $pathString2 . '@@**@@' . $value2['name'];
+                    $pathId3 = $pathId2 . '-' . $value2['id'];
                     $htmlPrint .= $this->printDars($value2, $pathString3, $pathId3);
                 }
                 $htmlPrint .= '</ul></li>';
@@ -4803,7 +4748,7 @@ class HomeController extends Controller
     {
         global $treePathData;
 
-        $name = 'درس: '.$nodeData['name'];
+        $name = 'درس: ' . $nodeData['name'];
         $data = $nodeData['children'];
         $id = $nodeData['id'];
 
@@ -4816,10 +4761,10 @@ class HomeController extends Controller
             $isNew = '1';
         }
 
-        $htmlPrint = '<li class="no_checkbox" data-has-new="'.$hasNew.'" data-is-new="'.$isNew.'" data-alaa-node-id="'.$id.'" data-jstree=\'{"checkbox_disabled":true, "icon":"/acm/extra/topicsTree/img/parent-icon.png"}\'>'.$name.'<ul>';
+        $htmlPrint = '<li class="no_checkbox" data-has-new="' . $hasNew . '" data-is-new="' . $isNew . '" data-alaa-node-id="' . $id . '" data-jstree=\'{"checkbox_disabled":true, "icon":"/acm/extra/topicsTree/img/parent-icon.png"}\'>' . $name . '<ul>';
         foreach ($data as $key => $value) {
-            $pathString = $ps.'@@**@@'.$value['name'];
-            $pathId = $pid.'-'.$value['id'];
+            $pathString = $ps . '@@**@@' . $value['name'];
+            $pathId = $pid . '-' . $value['id'];
 
             if (isset($value['children']) && count($value['children']) > 0) {
                 //                $htmlPrint .= '<li>('.$value['name'].')'.$this->printDars($value['name'], $value['children'], $value['id'], $pathString, $pathId).'</li>';
@@ -4831,9 +4776,9 @@ class HomeController extends Controller
                     $isNewItem = '1';
                 }
 
-                $htmlPrint .= '<li data-jstree=\'{"icon":"/acm/extra/topicsTree/img/book-icon-1.png"}\' data-alaa-node-id="'.$value['id'].'" data-is-new="'.$isNewItem.'" ps="'.$pathString.'" pid="'.$pathId.'" id="'.$value['id'].'">'.$value['name'].'</li>';
+                $htmlPrint .= '<li data-jstree=\'{"icon":"/acm/extra/topicsTree/img/book-icon-1.png"}\' data-alaa-node-id="' . $value['id'] . '" data-is-new="' . $isNewItem . '" ps="' . $pathString . '" pid="' . $pathId . '" id="' . $value['id'] . '">' . $value['name'] . '</li>';
                 $treePathData[$value['id']] = [
-                    'ps' => $pathString,
+                    'ps'  => $pathString,
                     'pid' => $pathId,
                 ];
             }
@@ -4852,7 +4797,7 @@ class HomeController extends Controller
 
     private function changeLernitoNodeChildren(array &$lernitoNodeChildren)
     {
-        $lernitoNodeChildren['id'] = time().'-'.$lernitoNodeChildren['_id'];
+        $lernitoNodeChildren['id'] = time() . '-' . $lernitoNodeChildren['_id'];
         $lernitoNodeChildren['name'] = $lernitoNodeChildren['label'];
         $lernitoNodeChildren['tags'] = json_encode([str_replace(' ', '_', $lernitoNodeChildren['label'])], JSON_UNESCAPED_UNICODE);
         unset($lernitoNodeChildren['_id']);
@@ -4868,11 +4813,11 @@ class HomeController extends Controller
     {
         if (isset($lastUpdatedByLernito['diff'])) {
             foreach ($lastUpdatedByLernito['diff'] as $diffKey => $diffNode) {
-                if (! isset($diffNode['diff']) && isset($diffNode['lernitoNode'])) {
+                if (!isset($diffNode['diff']) && isset($diffNode['lernitoNode'])) {
                     $newItem = $this->changeLernitoNodeToAlaaNode($diffNode['lernitoNode']);
                     $newItem['isNewItem'] = true;
                     $oldChildren[] = $newItem;
-                } elseif (isset($diffNode['diff']) && isset($diffNode['lernitoNode']) && isset($diffNode['alaaNode'])) {
+                } else if (isset($diffNode['diff']) && isset($diffNode['lernitoNode']) && isset($diffNode['alaaNode'])) {
                     foreach ($oldChildren as $oldChildrenKey => $oldChildrenValue) {
                         if ($diffNode['alaaNode']['id'] == $oldChildrenValue['id']) {
                             $oldChildren[$oldChildrenKey]['hasNewItem'] = true;
@@ -4886,7 +4831,7 @@ class HomeController extends Controller
 
     public function getTreeInPHPArrayString(Request $request, $lnid)
     {
-        if (! is_numeric($lnid)) {
+        if (!is_numeric($lnid)) {
             return '';
         }
         $lernitoNodeId = $lnid;
@@ -4907,7 +4852,7 @@ class HomeController extends Controller
         foreach ($lastUpdatedByLernito as $key => $value) {
             if (isset($value['lernitoNode']['_id']) && $value['lernitoNode']['_id'] == $lernitoNodeId) {
                 return $value['lernitoNode'];
-            } elseif (isset($value['diff'])) {
+            } else if (isset($value['diff'])) {
                 $nodeFound = $this->findLernitoNodeById($value['diff'], $lernitoNodeId);
                 if ($nodeFound != null) {
                     return $nodeFound;
@@ -4924,26 +4869,26 @@ class HomeController extends Controller
         $Tajrobi = new Tajrobi();
         $Ensani = new Ensani();
         $lastUpdatedByLernito = [
-            'riaziUpdate' => [
-                'diff' => $Riazi->getLastUpdatedByLernito(),
+            'riaziUpdate'   => [
+                'diff'     => $Riazi->getLastUpdatedByLernito(),
                 'alaaNode' => [
-                    'id' => '6321',
+                    'id'   => '6321',
                     'text' => 'ریاضی و فیزیک',
                     'tags' => json_encode(['ریاضی_و_فیزیک'], JSON_UNESCAPED_UNICODE),
                 ],
             ],
             'tajrobiUpdate' => [
-                'diff' => $Tajrobi->getLastUpdatedByLernito(),
+                'diff'     => $Tajrobi->getLastUpdatedByLernito(),
                 'alaaNode' => [
-                    'id' => '11552',
+                    'id'   => '11552',
                     'text' => 'علوم تجربی',
                     'tags' => json_encode(['علوم_تجربی'], JSON_UNESCAPED_UNICODE),
                 ],
             ],
-            'ensaniUpdate' => [
-                'diff' => $Ensani->getLastUpdatedByLernito(),
+            'ensaniUpdate'  => [
+                'diff'     => $Ensani->getLastUpdatedByLernito(),
                 'alaaNode' => [
-                    'id' => '15896',
+                    'id'   => '15896',
                     'text' => 'علوم انسانی',
                     'tags' => json_encode(['علوم_انسانی'], JSON_UNESCAPED_UNICODE),
                 ],
@@ -5018,4 +4963,32 @@ class HomeController extends Controller
 
         return $nodeArrayString;
     }
+
+    /**
+     * @param $products
+     *
+     * @return string
+     */
+    private function getMessageThatShouldByWhichProducts($products): string
+    {
+        $message = "شما ابتدا باید یکی از این محصولات را سفارش دهید و یا اگر سفارش داده اید مبلغ را تسویه نمایید: " . "<br>";
+        $productIds = [];
+        foreach ($products as $product) {
+            $myParents = $this->makeParentArray($product);
+            if (!empty($myParents)) {
+                $rootParent = end($myParents);
+                if (!in_array($rootParent->id, $productIds)) {
+                    $message .= '<a href="' . action('ProductController@show', $rootParent->id) . '">' . $rootParent->name . '</a><br>';
+                    array_push($productIds, $rootParent->id);
+                }
+            } else {
+                if (!in_array($product->id, $productIds)) {
+                    $message .= '<a href="' . action('ProductController@show', $product->id) . '">' . $product->name . '</a><br>';
+                    array_push($productIds, $product->id);
+                }
+            }
+        }
+        return $message;
+    }
+
 }

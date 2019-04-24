@@ -10,6 +10,7 @@ namespace App\Classes\Format;
 
 use App\Block;
 use App\Collection\BlockCollection;
+use Illuminate\Support\Facades\Log;
 
 class webBlockCollectionFormatter implements BlockCollectionFormatter
 {
@@ -31,11 +32,20 @@ class webBlockCollectionFormatter implements BlockCollectionFormatter
     public function format(BlockCollection $blocks)
     {
         $sections = collect();
+
+        //TODO:: fix some bugs!!
+        //FastCGI sent in stderr: "PHP message: PHP Fatal error:  Allowed memory size of
+        $user = auth()->user();
+        if(isset($user))
+            auth()->logout();
+
         foreach ($blocks as $block) {
             $section = $this->blockFormatter($block);
             $sections->push($section);
         }
 
+        if(isset($user))
+            auth()->login($user);
         return $sections;
     }
 

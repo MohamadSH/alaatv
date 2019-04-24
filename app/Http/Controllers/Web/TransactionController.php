@@ -9,6 +9,7 @@ use App\Order;
 use App\Orderproduct;
 use App\Paymentmethod;
 use App\Product;
+use App\Repositories\TransactionRepo;
 use App\Traits\Helper;
 use App\Traits\OrderCommon;
 use App\Transaction;
@@ -341,7 +342,15 @@ class TransactionController extends Controller
      */
     public function update(EditTransactionRequest $request, Transaction $transaction)
     {
-        $result = self::modify($transaction, $request->all());
+        $result = [];
+
+        if (TransactionRepo::modify($request->all(), $transaction->id)) {
+            $result['statusCode'] = Response::HTTP_OK;
+            $result['message'] = 'تراکنش با موفقیت اصلاح شد';
+        } else {
+            $result['statusCode'] = Response::HTTP_SERVICE_UNAVAILABLE;
+            $result['message'] = 'خطای پایگاه داده';
+        }
 
         if ($request->expectsJson()) {
             return $this->response->setStatusCode($result['statusCode']);
@@ -356,50 +365,8 @@ class TransactionController extends Controller
      * @param array $data
      * @return array
      */
-    public static function modify(Transaction $transaction, array $data)
+    private function modify(Transaction $transaction, array $data)
     {
-        $result = [
-            'statusCode' => Response::HTTP_OK,
-            'message' => '',
-            'transaction' => $transaction,
-        ];
-
-        $transaction->fill($data);
-        $props = [
-            'referenceNumber',
-            'traceNumber',
-            'transactionID',
-            'authority',
-            'paycheckNumber',
-            'managerComment',
-            'paymentmethod_id',
-        ];
-
-        foreach ($props as $prop) {
-            if (strlen($transaction->$prop) == 0) {
-                $transaction->$prop = null;
-            }
-        }
-
-        if (isset($data["deadline_at"]) && strlen($data["deadline_at"]) > 0) {
-            $transaction->deadline_at = Carbon::parse($data["deadline_at"])->addDay()->format('Y-m-d');
-        }
-
-        if (isset($data["completed_at"]) && strlen($data["completed_at"]) > 0) {
-            $transaction->completed_at = Carbon::parse($data["completed_at"])->addDay()->format('Y-m-d');
-        }
-
-        if ($transaction->update()) {
-            $result['statusCode'] = Response::HTTP_OK;
-            $result['message'] = 'تراکنش با موفقیت اصلاح شد';
-        } else {
-            $result['statusCode'] = Response::HTTP_SERVICE_UNAVAILABLE;
-            $result['message'] = 'خطای پایگاه داده';
-        }
-
-        $result['transaction'] = $transaction;
-
-        return $result;
     }
 
     /**

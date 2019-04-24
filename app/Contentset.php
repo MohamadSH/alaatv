@@ -129,11 +129,15 @@ class Contentset extends BaseModel implements Taggable
     {
         $key = "ContentSet:getLastContent".$this->cacheKey();
 
-        return Cache::tags('set')->remember($key, Config::get("constants.CACHE_300"), function () {
+        return Cache::tags('set')->remember($key, config("constants.CACHE_300"), function () {
 
-            $contentCollection = optional($this->getContents())->sortByDesc("order");
+            $r = $this->getContents();
 
-            return optional($contentCollection)->first();
+            if (isset($r)) {
+                return null;
+            }
+
+            return $r->sortByDesc("order")->first();
         });
     }
 
@@ -141,7 +145,7 @@ class Contentset extends BaseModel implements Taggable
     {
         $key = "ContentSet:getContents".$this->cacheKey();
 
-        return Cache::tags('set')->remember($key, Config::get("constants.CACHE_300"), function () {
+        return Cache::tags('set')->remember($key, config("constants.CACHE_300"), function () {
             return $this->contents()->active()->get();
         });
     }
@@ -207,7 +211,8 @@ class Contentset extends BaseModel implements Taggable
     public function getUrlAttribute($value): string
     {
 //        return action("Web\ContentsetController@show",$this);
-        $contentId = optional($this->getLastContent())->id;
+        $content = $this->getLastContent();
+        $contentId = !is_null($content) ? $content->id : null;
 
         return isset($contentId) ? action("Web\ContentController@show", $contentId) : "";
     }
@@ -226,8 +231,16 @@ class Contentset extends BaseModel implements Taggable
      */
     public function getAuthorAttribute($value): ?User
     {
-//        return action("Web\ContentsetController@show",$this);
-        return optional(optional($this->getLastContent())->author)->setVisible([
+        $content = $this->getLastContent();
+
+        if(is_null($content))
+            return null;
+        $author = $content->author ;
+
+        if(is_null($author))
+            return null;
+
+        return $author->setVisible([
             'id',
             'firstName',
             'lastName',
@@ -265,7 +278,7 @@ class Contentset extends BaseModel implements Taggable
 
     public function getTaggableScore()
     {
-        return optional($this->created_at)->timestamp;
+        return !is_null($this->created_at) ? $this->created_at->timestamp : null;
     }
 
     public function isTaggableActive(): bool

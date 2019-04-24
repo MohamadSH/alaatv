@@ -29,15 +29,19 @@
                 <span class="order_id hidden" id="{{$order->id}}"></span>
                 <span class="user_id hidden" id="{{$order->user->id}}"></span>
                 @permission((config('constants.SHOW_ORDER_ACCESS')))
-                <a target="_blank" class="btn btn-success" href="{{action("Web\OrderController@edit" , $order)}}"><i class="fa fa-pencil"></i> اصلاح </a>
+                    <a target="_blank" class="btn btn-success" href="{{action("Web\OrderController@edit" , $order)}}">
+                        <i class="fa fa-pencil"></i> اصلاح
+                    </a>
                 @endpermission
                 @permission((config('constants.REMOVE_ORDER_ACCESS')))
-                <a class="btn btn-danger deleteOrder" data-target="#deleteOrderConfirmationModal" data-toggle="modal"><i class="fa fa-remove"
-                                                                                                                         aria-hidden="true"></i> حذف </a>
+                    <a class="btn btn-danger deleteOrder" data-target="#deleteOrderConfirmationModal" data-toggle="modal">
+                        <i class="fa fa-remove" aria-hidden="true"></i> حذف
+                    </a>
                 @endpermission
                 @permission((config('constants.SEND_SMS_TO_USER_ACCESS')))
-                <a class="btn btn-info sendSms" data-target="#sendSmsModal" data-toggle="modal"><i class="fa fa-envelope" aria-hidden="true"></i> ارسال پیامک
-                </a>
+                    <a class="btn btn-info sendSms" data-target="#sendSmsModal" data-toggle="modal">
+                        <i class="fa fa-envelope" aria-hidden="true"></i> ارسال پیامک
+                    </a>
                 @endpermission
                 <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
             </div>
@@ -51,8 +55,7 @@
                             @if($orderproduct->orderproducttype_id == config("constants.ORDER_PRODUCT_GIFT"))
                                 <img src="/assets/extra/gift-box.png" width="25">
                             @endif
-                            <a style="color:#607075" target="_blank"
-                               href="@if($orderproduct->product->hasParents()){{action("Web\ProductController@show",$orderproduct->product->parents->first())}} @else  {{action("Web\ProductController@show",$orderproduct->product)}} @endif">
+                            <a style="color:#607075" target="_blank" href="@if($orderproduct->product->hasParents()){{action("Web\ProductController@show",$orderproduct->product->parents->first())}} @else  {{action("Web\ProductController@show",$orderproduct->product)}} @endif">
                                 {{$orderproduct->product->name}}
                             </a>
                         </span>
