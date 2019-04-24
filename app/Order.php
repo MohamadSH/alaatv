@@ -162,8 +162,11 @@ class Order extends BaseModel
         'user',
         'jalaliCreatedAt',
         'jalaliUpdatedAt',
+        'jalaliCompletedAt',
         'postingInfo',
-        'managerComment'
+        'managerComment',
+        'editOrderLink',
+        'removeOrderLink'
     ];
 
     const OPEN_ORDER_STATUSES = [
@@ -1151,23 +1154,35 @@ class Order extends BaseModel
                     'userstatus'
                 ];
 
-
-                if($this->isAuthenticatedUserHasPermission('constants.SHOW_USER_MOBILE'))
+                if($this->isAuthenticatedUserHasPermission(config('constants.SHOW_USER_MOBILE')))
                     $visibleColumns = array_merge($visibleColumns , ['mobile']);
 
-                if($this->isAuthenticatedUserHasPermission('constants.SHOW_USER_EMAIL'))
+                if($this->isAuthenticatedUserHasPermission(config('constants.SHOW_USER_EMAIL')))
                     $visibleColumns = array_merge($visibleColumns , ['email']);
 
                 return $order->user()->first()->setVisible($visibleColumns);
             });
      }
 
+    public function getJalaliUpdatedAtAttribute(){
+        $order = $this;
+        $key = "order:updated_at:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($order) {
+                if($this->isAuthenticatedUserHasPermission(config('constants.SHOW_ORDER_ACCESS')))
+                    return $this->convertDate($order->updated_at, "toJalali");
+
+                return null;
+            });
+
+    }
+
     public function getJalaliCreatedAtAttribute(){
         $order = $this;
         $key = "order:created_at:" . $order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if($this->isAuthenticatedUserHasPermission('constants.SHOW_ORDER_ACCESS'))
+                if($this->isAuthenticatedUserHasPermission(config('constants.SHOW_ORDER_ACCESS')))
                     return $this->convertDate($order->created_at, "toJalali");
 
                 return null;
@@ -1175,17 +1190,16 @@ class Order extends BaseModel
 
     }
 
-    public function getJalaliUpdatedAtAttribute(){
+    public function getJalaliCompletedAtAttribute(){
         $order = $this;
-        $key = "order:updated_at:" . $order->cacheKey();
+        $key = "order:completed_at:" . $order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if($this->isAuthenticatedUserHasPermission('constants.SHOW_ORDER_ACCESS'))
-                    return $this->convertDate($order->updated_at, "toJalali");
+                if($this->isAuthenticatedUserHasPermission(config('constants.SHOW_ORDER_ACCESS')))
+                    return $this->convertDate($order->completed_at, "toJalali");
 
                 return null;
             });
-
     }
 
     public function getPostingInfoAttribute(){
@@ -1212,4 +1226,33 @@ class Order extends BaseModel
 
     }
 
+    public function getEditOrderLinkAttribute(){
+        $order = $this;
+        $key = "order:editLink:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($order) {
+                if($this->isAuthenticatedUserHasPermission(config('constants.EDIT_ORDER_ACCESS')))
+                    return action('Web\OrderController@edit' , $order->id);
+
+                return null;
+            });
+
+    }
+
+    public function getRemoveOrderLinkAttribute(){
+        $order = $this;
+        $key = "order:removeLink:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($order) {
+                if($this->isAuthenticatedUserHasPermission(config('constants.REMOVE_ORDER_ACCESS')))
+                    return action('Web\OrderController@destroy' , $order->id);
+
+                return null;
+            });
+
+    }
+
+    private function isAuthenticatedUserHasPermission(string $permission):bool{
+        return (Auth::check() && Auth::user()->can($permission));
+    }
 }

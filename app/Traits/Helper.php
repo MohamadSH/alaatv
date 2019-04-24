@@ -105,12 +105,4 @@ trait Helper
 
         return $flag;
     }
-
-    /**
-     * @param string $permission
-     * @return bool
-     */
-    protected function isAuthenticatedUserHasPermission(string $permission):bool{
-        return (Auth::check() && Auth::user()->can($permission));
-    }
 }
