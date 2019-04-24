@@ -8,6 +8,8 @@
 
 namespace App\Classes\Payment\RefinementRequest;
 
+use App\Classes\Payment\RefinementRequest\Strategies\{ChargingWalletRefinement, OpenOrderRefinement, OrderIdRefinement, TransactionRefinement};
+
 class RefinementLauncher
 {
     /**
@@ -15,9 +17,9 @@ class RefinementLauncher
      */
     private $refinement;
 
-    public function __construct(Refinement $refinement)
+    public function __construct($refinement)
     {
-        $this->refinement = $refinement;
+        $this->refinement = $this->gteRefinementRequestStrategy($refinement);
     }
 
     /**
@@ -28,4 +30,22 @@ class RefinementLauncher
     {
         return $this->refinement->setData($inputData)->validateData()->loadData()->getData();
     }
+
+    /**
+     * @param array $inputData
+     * @return Refinement
+     */
+    private function gteRefinementRequestStrategy(array $inputData): Refinement
+    {
+        if (isset($inputData['transaction_id'])) { // closed order
+            return new TransactionRefinement();
+        } elseif (isset($inputData['order_id'])) { // closed order
+            return new OrderIdRefinement();
+        } elseif (isset($inputData['walletId']) && isset($inputData['walletChargingAmount'])) { // Charging Wallet
+            return new ChargingWalletRefinement();
+        } else { // open order
+            return new OpenOrderRefinement();
+        }
+    }
+
 }

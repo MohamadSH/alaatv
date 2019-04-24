@@ -11,6 +11,11 @@
 |
 */
 
+use App\Classes\Payment\PaymentVerifierController;
+use App\Http\Controllers\Web\OnlinePaymentController;
+use App\Http\Controllers\Web\PaymentStatusController;
+use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
+
 Route::get('embed/c/{content}', "Web\ContentController@embed");
 Route::get('/', 'Web\IndexPageController');
 Route::get('shop', 'Web\ShopPageController');
@@ -59,8 +64,8 @@ Route::group(['prefix' => 'checkout'], function () {
     Route::get('completeInfo', 'Web\OrderController@checkoutCompleteInfo');
     Route::get('review', "Web\OrderController@checkoutReview");
     Route::get('payment', "Web\OrderController@checkoutPayment");
-    Route::any('verifyPayment/online/{paymentMethod}/{device}', "Web\OnlinePaymentController@verifyPayment");
-    Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', "Web\OnlinePaymentController@showPaymentStatus");
+    Route::any('verifyPayment/online/{paymentMethod}/{device}', [PaymentVerifierController::class, 'verify'])->name('verifyOnlinePayment');
+    Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', [PaymentStatusController::class, 'show'])->name('showOnlinePaymentStatus');
     Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'Web\OfflinePaymentController@verifyPayment');
 });
 Route::group(['prefix' => 'orderproduct'], function () {
@@ -107,7 +112,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post("completeTransaction/{transaction}", "Web\TransactionController@completeTransaction");
     Route::post("myTransaction/{transaction}", "Web\TransactionController@limitedUpdate");
     Route::get('getUnverifiedTransactions', 'Web\TransactionController@getUnverifiedTransactions');
-    Route::any('paymentRedirect/{paymentMethod}/{device}', 'Web\OnlinePaymentController@paymentRedirect');
+    Route::any('paymentRedirect/{paymentMethod}/{device}', [RedirectUserToPaymentPage::class, 'sendUserToPaymentPage']);
 
     Route::get('exitAdminInsertOrder', 'Web\OrderController@exitAdminInsertOrder');
     Route::post('exchangeOrderproduct/{order}', 'Web\OrderController@exchangeOrderproduct');

@@ -14,7 +14,7 @@ use App\Order;
 trait HandleOrderPayment
 {
     /**
-     * @param
+     * @param $order
      *
      * @return array
      */
@@ -29,8 +29,6 @@ trait HandleOrderPayment
             $givesOrderBonsToUserResult = $this->givesOrderBonsToUser($order);
             $updateOrderPaymentStatusResult = array_merge($updateOrderPaymentStatusResult, $givesOrderBonsToUserResult);
         }
-
-        unset($updateOrderPaymentStatusResult['paymentstatus_id']); //ToDo
 
         return $updateOrderPaymentStatusResult;
     }

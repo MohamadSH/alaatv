@@ -365,8 +365,50 @@ class TransactionController extends Controller
      * @param array $data
      * @return array
      */
-    private function modify(Transaction $transaction, array $data)
+    public function modify(Transaction $transaction, array $data)
     {
+        $result = [
+            'statusCode' => Response::HTTP_OK,
+            'message' => '',
+            'transaction' => $transaction,
+        ];
+
+        $transaction->fill($data);
+        $props = [
+            'referenceNumber',
+            'traceNumber',
+            'transactionID',
+            'authority',
+            'paycheckNumber',
+            'managerComment',
+            'paymentmethod_id',
+        ];
+
+        foreach ($props as $prop) {
+            if (strlen($transaction->$prop) == 0) {
+                $transaction->$prop = null;
+            }
+        }
+
+        if (isset($data["deadline_at"]) && strlen($data["deadline_at"]) > 0) {
+            $transaction->deadline_at = Carbon::parse($data["deadline_at"])->addDay()->format('Y-m-d');
+        }
+
+        if (isset($data["completed_at"]) && strlen($data["completed_at"]) > 0) {
+            $transaction->completed_at = Carbon::parse($data["completed_at"])->addDay()->format('Y-m-d');
+        }
+
+        if ($transaction->update()) {
+            $result['statusCode'] = Response::HTTP_OK;
+            $result['message'] = 'تراکنش با موفقیت اصلاح شد';
+        } else {
+            $result['statusCode'] = Response::HTTP_SERVICE_UNAVAILABLE;
+            $result['message'] = 'خطای پایگاه داده';
+        }
+
+        $result['transaction'] = $transaction;
+
+        return $result;
     }
 
     /**

@@ -17,7 +17,7 @@ class Responses
         return response()->json(['message' => $msg], $statusCode);
     }
 
-    public static function noResponseFromBackError()
+    public static function noResponseFromBankError()
     {
         return self::sendErrorResponse('پاسخی از بانک دریافت نشد.', Response::HTTP_SERVICE_UNAVAILABLE);
     }
