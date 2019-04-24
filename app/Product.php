@@ -2,7 +2,12 @@
 
 namespace App;
 
-use App\Classes\{Advertisable, Checkout\Alaa\AlaaProductPriceCalculator, FavorableInterface, SEO\SeoInterface, SEO\SeoMetaTagsGenerator, Taggable};
+use App\Classes\{Advertisable,
+    Checkout\Alaa\AlaaProductPriceCalculator,
+    FavorableInterface,
+    SEO\SeoInterface,
+    SEO\SeoMetaTagsGenerator,
+    Taggable};
 use App\Collection\ProductCollection;
 use App\Collection\SetCollection;
 use App\Traits\{APIRequestCommon,
@@ -11,7 +16,8 @@ use App\Traits\{APIRequestCommon,
     Product\ProductAttributeTrait,
     Product\ProductBonTrait,
     Product\ProductPhotoTrait,
-    ProductCommon};
+    ProductCommon,
+    ProductRepository};
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\{Eloquent\Builder};
@@ -145,6 +151,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     use favorableTraits;
     use ModelTrackerTrait;
     use ProductAttributeTrait, ProductBonTrait, ProductPhotoTrait;
+    use ProductRepository;
 
     /*
     |--------------------------------------------------------------------------
