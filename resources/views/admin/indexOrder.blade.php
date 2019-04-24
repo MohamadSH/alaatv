@@ -714,6 +714,8 @@
         @permission((config('constants.LIST_ORDER_ACCESS')));
         function makeDataTable_loadWithAjax_orders() {
 
+            $("#order-portlet-loading").removeClass("d-none");
+            $('#order_table > tbody').html("");
             let columns = [
                 {
                     "data": null,
@@ -1104,7 +1106,11 @@
                 console.log('settings: ', data);
                 return data;
             };
-            makeDataTable_loadWithAjax("order_table", "/order", columns, dataFilter, ajaxData);
+            let dataSrc = function (json) {
+                $("#order-portlet-loading").addClass("d-none");
+                return json.data;
+            };
+            makeDataTable_loadWithAjax("order_table", "/order", columns, dataFilter, ajaxData, dataSrc);
         }
         @endpermission;
     </script>

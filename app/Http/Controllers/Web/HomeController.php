@@ -74,7 +74,7 @@ use SEO;
 
 class HomeController extends Controller
 {
-//    use Helper;
+    use Helper;
     use APIRequestCommon;
     use ProductCommon;
     use CharacterCommon;

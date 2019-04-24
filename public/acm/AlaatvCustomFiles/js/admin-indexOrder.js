@@ -60,8 +60,8 @@ var myOrderproducts ;
 $(document).on("click", "#order-portlet .reload", function (){
     // var formData = new FormData($("#filterOrderForm")[0]);
     // var formData = $("#filterOrderForm").serialize();
-    $("#order-portlet-loading").removeClass("d-none");
-    // $('#order_table > tbody').html("");
+    // $("#order-portlet-loading").removeClass("d-none");
+    $('#order_table > tbody').html("");
     // console.log(formData);
 
 

@@ -78,7 +78,7 @@ function makeDataTable(id) {
  * @param id : table id
  */
 
-function makeDataTable_loadWithAjax(id, url, columns, dataFilter, ajaxData) {
+function makeDataTable_loadWithAjax(id, url, columns, dataFilter, ajaxData, dataSrc) {
     var table = $('#'+id);
 
     var oTable = table.dataTable({
@@ -151,7 +151,8 @@ function makeDataTable_loadWithAjax(id, url, columns, dataFilter, ajaxData) {
         "ajax": {
             "url": url,
             "data": ajaxData,
-            'dataFilter': dataFilter
+            'dataFilter': dataFilter,
+            "dataSrc": dataSrc
         },
 
         "columns": columns
