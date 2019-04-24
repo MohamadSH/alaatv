@@ -22,7 +22,7 @@
             @else
                 <select class="mt-multiselect btn btn-default a--full-width" multiple="multiple" data-label="left" data-width="100%" data-filter="true" data-height="200"
                         id="majors" name="majors[]" title="رشته ها" disabled>
-                    <option value="0" class="bold font-red">بدون رشته ها</option>
+                    <option value="0" class="bold m--font-danger">بدون رشته ها</option>
                     @foreach($majors as $key=>$value)
                         <option value="{{$key}}">{{$value}}</option>
                     @endforeach

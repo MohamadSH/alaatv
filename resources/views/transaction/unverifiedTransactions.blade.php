@@ -101,7 +101,7 @@
                         @endforeach
                         @if(isset($error))
                             <tr>
-                                <td colspan="5" class="font-red bold text-center">خطا در برقراری ارتباط با سرویس دهنده
+                                <td colspan="5" class="m--font-danger bold text-center">خطا در برقراری ارتباط با سرویس دهنده
                                 </td>
                             </tr>
                         @endif

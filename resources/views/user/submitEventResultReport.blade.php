@@ -169,7 +169,7 @@
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                         <div class="icheck-list">
-                                                            <label class="font-red bold">
+                                                            <label class="m--font-danger bold">
                                                                 <input name="enableReportPublish" type="checkbox"
                                                                        class="icheck"
                                                                        data-checkbox="icheckbox_flat-green"> اجازه

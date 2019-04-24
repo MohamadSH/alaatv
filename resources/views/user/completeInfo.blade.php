@@ -23,7 +23,7 @@
 
 @section("content")
     <h1 class="page-title"> فرم تکمیل اطلاعات
-        <small class="font-red">لطفا در کمال دقت و صحت تکمیل نمایید</small>
+        <small class="m--font-danger">لطفا در کمال دقت و صحت تکمیل نمایید</small>
     </h1>
     @include("systemMessage.flash")
     {!! Form::model($user,['files'=>true , 'method'=>'POST' , 'action' => ['UserController@completeInformation',$user] ,'role'=>'form' , 'class'=>'form-horizontal ' ]) !!}
@@ -61,7 +61,7 @@
                         <div class="m-heading-1 border-blue m-bordered">
                             <p class="text-justify">
                                 کاربر گرامی توجه داشته باشید که پس از تکمیل اطلاعات به میزان ۱۰۰ درصد ، فرم <strong
-                                        class="font-red">قفل</strong> خواهد شد و قادر به اطلاح اطلاعات نخواهید بود. لذا
+                                        class="m--font-danger">قفل</strong> خواهد شد و قادر به اطلاح اطلاعات نخواهید بود. لذا
                                 خواهشمند است اطلاعات را در کمال صحت و دقت وارد نمایید.
                             </p>
                         </div>
@@ -493,7 +493,7 @@
                                                     </div>
                                                 </div>
 
-                                                <span class="help-block @if (!$errors->has('file')) font-blue @endif">
+                                                <span class="help-block @if (!$errors->has('file')) m--font-info @endif">
                                                 <strong>@if ($errors->has('file')){{ $errors->first('file') }} @else
                                                         فرمت های مجاز: jpg,jpeg,png,pdf,zip,rar @endif</strong>
                                             </span>
@@ -507,7 +507,7 @@
                                                 <li><a target="_blank" href = "{{action("Web\HomeController@download" , ["content"=>"فایل سفارش","fileName"=>$orderFile->file ])}}">{{$orderFile->file}}</a>
                                                 </li>
                                             @empty
-                                                <p class="bold font-red-mint">تاکنون فایلی آپلود نشده است</p>
+                                                <p class="bold m--font-danger-mint">تاکنون فایلی آپلود نشده است</p>
                                             @endforelse
                                         </ul>
                                     </div>

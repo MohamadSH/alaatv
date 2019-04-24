@@ -29,7 +29,7 @@
 @section("content")
     <div class="row">
         <div class="col-md-12 page-404">
-            <div class="number font-red"> 403</div>
+            <div class="number m--font-danger"> 403</div>
             <div class="details">
                 <h3>دسترسی غیر مجاز</h3>
                 <p> دسترسی شما به این بخش ممکن نمی باشد

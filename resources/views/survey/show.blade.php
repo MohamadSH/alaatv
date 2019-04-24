@@ -59,7 +59,7 @@
                                             @if(strcmp($question->control->name, "multiSelect") == 0)
                                                 <div class="col-md-12 margin-top-20">
                                                     <p>{{$question->statement}}</p>
-                                                    <p class="font-blue"
+                                                    <p class="m--font-info"
                                                        style="text-align: justify">{{$question->description}}</p>
                                                     <select class="mt-multiselect btn btn-default" multiple="multiple"
                                                             data-label="left" data-width="100%" data-filter="true"
@@ -92,7 +92,7 @@
                                                         </thead>
                                                         <tbody class="text-center">
                                                         @if(empty($answersData[$question->id]))
-                                                            <tr class="text-center bold font-red">
+                                                            <tr class="text-center bold m--font-danger">
                                                                 <td colspan="2">شما تاکنون موردی را درج ننموده اید</td>
                                                             </tr>
                                                         @else

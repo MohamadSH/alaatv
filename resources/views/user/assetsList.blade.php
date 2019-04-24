@@ -121,8 +121,8 @@
                         <div class="portlet light " id="pamphletPortlet">
                             <div class="portlet-title">
                                 <div class="caption caption-md">
-                                    <i class="fa fa-book font-red"></i>
-                                    <span class="caption-subject font-red bold uppercase">جزوه های شما</span>
+                                    <i class="fa fa-book m--font-danger"></i>
+                                    <span class="caption-subject m--font-danger bold uppercase">جزوه های شما</span>
                                 </div>
                             </div>
                             <div class="portlet-body">

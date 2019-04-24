@@ -4,17 +4,17 @@
         <div class="row">
             <label class="col-md-2 control-label " for="cost">مبلغ خام سفارش (تومان)</label>
             <div class="col-md-1">
-                <text class="form-control-static font-blue">@if(isset($order->cost) || isset($order->costwithoutcoupon)) {{number_format($order->cost + $order->costwithoutcoupon)}} @else
+                <text class="form-control-static m--font-info">@if(isset($order->cost) || isset($order->costwithoutcoupon)) {{number_format($order->cost + $order->costwithoutcoupon)}} @else
                         یافت نشد @endif</text>
             </div>
             <label class="col-md-2 control-label " for="cost"> قابل پرداخت (تومان)</label>
             <div class="col-md-1">
-                <text class="form-control-static font-blue">@if(isset($order->cost) || isset($order->costwithoutcoupon)) {{number_format($order->totalCost() )}} @else
+                <text class="form-control-static m--font-info">@if(isset($order->cost) || isset($order->costwithoutcoupon)) {{number_format($order->totalCost() )}} @else
                         یافت نشد @endif</text>
             </div>
             <label class="col-md-2 control-label " for="cost"> پرداخت شده (تومان)</label>
             <div class="col-md-1">
-                <text class="form-control-static font-blue">@if(isset($order->cost) || isset($order->costwithoutcoupon)) {{number_format($order->totalPaidCost() + $order->totalRefund())}} @else
+                <text class="form-control-static m--font-info">@if(isset($order->cost) || isset($order->costwithoutcoupon)) {{number_format($order->totalPaidCost() + $order->totalRefund())}} @else
                         یافت نشد @endif</text>
             </div>
             <label class="col-md-2 control-label" for="discount">تخفیف کلی (تومان)</label>
@@ -60,12 +60,12 @@
             <label class="col-md-3 control-label" for="coupon_id">کپن</label>
             <div class="col-md-2 {{ $errors->has('coupon_id') ? ' has-error' : '' }}">
                 {!! Form::select('coupon_id', $coupons ,null,['class' => 'form-control', 'id' => 'coupon_id']) !!}@if($order->hasCoupon())
-                    <label class="font-red">@if($order->determineCoupontype()["type"] == Config::get("constants.DISCOUNT_TYPE_PERCENTAGE")){{$order->determineCoupontype()["discount"]}}
+                    <label class="m--font-danger">@if($order->determineCoupontype()["type"] == Config::get("constants.DISCOUNT_TYPE_PERCENTAGE")){{$order->determineCoupontype()["discount"]}}
                         %
                         تخفیف  @elseif($order->determineCoupontype()["type"] == Config::get("constants.DISCOUNT_TYPE_COST")) {{number_format($order->determineCoupontype()["discount"])}}
                         تومان @endif</label>@endif
                 @if( count($coupons) == 1 )
-                    <span class="help-block font-red">
+                    <span class="help-block m--font-danger">
                         <strong>توجه!</strong> کپنی در سایت درج نشده است
                     </span>
                 @endif
@@ -95,7 +95,7 @@
                         </li>
                     </ul>
                 @empty
-                    <span class="bold font-red">کدی درج نشده است</span>
+                    <span class="bold m--font-danger">کدی درج نشده است</span>
                 @endforelse
 
             </div>

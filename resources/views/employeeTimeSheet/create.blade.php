@@ -51,7 +51,7 @@
                         @else
                             @if(isset($employeetimesheet))
                                 @if($employeetimesheet->getOriginal("timeSheetLock"))
-                                    <h4 class="font-red text-center bold col">ساعت کاری امروز شما قفل شده است</h4>
+                                    <h4 class="m--font-danger text-center bold col">ساعت کاری امروز شما قفل شده است</h4>
                                 @else
                                     {!! Form::model( $employeetimesheet,['method' => 'POST','action' => ['Web\UserController@submitWorkTime'] , 'class'=>'form-horizontal col' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
                                     @include('employeeTimeSheet.form')
@@ -148,12 +148,12 @@
                                         <div class="row">
                                             <div class="col-lg-12 col-md-12 col-sd-12">
                                                 <h5 class="bold">جمع کل اضافه کاری در بازه انتخاب شده:
-                                                    <span class="font-blue" dir="ltr" id="sumWorkSheet"></span>
+                                                    <span class="m--font-info" dir="ltr" id="sumWorkSheet"></span>
                                                 </h5>
                                             </div>
                                             <div class="col-lg-12 col-md-12 col-sd-12">
                                             <h5 class="bold">جمع کل ساعت کاری در بازه انتخاب شده:
-                                                <span class="font-blue" dir="ltr" id="sumRealWorkTime"></span>
+                                                <span class="m--font-info" dir="ltr" id="sumRealWorkTime"></span>
                                             </h5>
                                         </div>
                                         </div>
@@ -404,7 +404,7 @@
                         $("#employeeTimeSheet-portlet-loading").addClass("d-none");
 //                        $(".filter").each(function () {
 //                            if($(this).val() !== "" && $(this).val() !== null) {
-//                                $(this).addClass("font-red");
+//                                $(this).addClass("m--font-danger");
 //                            }
 //                        });
                     },

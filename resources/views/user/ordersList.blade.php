@@ -658,7 +658,7 @@
                     <label class = "col-md-4 control-label" for = "cost">مبلغ واریز شده(تومان):</label>
                     <div class = "col-md-7">
                         {!! Form::text('cost',old('cost'),['class' => 'form-control' , 'id'=>"ATMTransactionCost" , 'dir'=>'ltr' ]) !!}
-                        <text class = "form-control-static font-blue" id = "ATMTransactionCost-static"></text>
+                        <text class = "form-control-static m--font-info" id = "ATMTransactionCost-static"></text>
                         @if ($errors->has('cost'))
                             <span class = "help-block">
                                                                 <strong>{{ $errors->first('cost') }}</strong>

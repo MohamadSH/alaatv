@@ -83,10 +83,10 @@
                     @endforeach
                 </ul>
             @else
-                <h4 class="text-center bold font-red">شما محصولی انتخاب ننموده اید!</h4>
+                <h4 class="text-center bold m--font-danger">شما محصولی انتخاب ننموده اید!</h4>
             @endif
         @else
-            <h4 class="text-center bold font-red">خریداری یافت نشد</h4>
+            <h4 class="text-center bold m--font-danger">خریداری یافت نشد</h4>
         @endif
         @endpermission
     @endif

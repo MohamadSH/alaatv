@@ -62,7 +62,7 @@
             {{--<div class="note note-info">--}}
             {{--<h4 class="block"><strong>توجه!</strong></h4>--}}
             {{--@role(('admin'))<p>ادمین محترم‌، لیست بنهای تخصیص داده شده به کاربران به این صفحه اضافه شده است! همچنین افزودن بنهای محصول بعد از تایید سفارش نیز در اصلاح سفارشهای تایید نشده اضافه شده است.</p>@endrole--}}
-            {{--<strong class="font-red">لطفا کش مرورگر خود را خالی کنید</strong>--}}
+            {{--<strong class="m--font-danger">لطفا کش مرورگر خود را خالی کنید</strong>--}}
             {{--</div>--}}
             @permission((config('constants.SEND_SMS_TO_USER_ACCESS')))
             <!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -115,7 +115,7 @@
                                     {{--<label class="col-md-3">ارسال به</label>--}}
                                     {{--<div class="col-md-6" style="text-align: justify">--}}
                                     {{--{!! Form::select('relatives[]' , $relatives, [0], ['class' => 'form-control col-md-6', 'id' => 'relatives' , 'multiple']) !!}--}}
-                                    {{--<span class="bold font-red" style="font-size: small ; ">توجه پیامک به تمامی شماره موبایلهای ثبت شده برای پدر یا مادر ارسال خواهد شد</span>--}}
+                                    {{--<span class="bold m--font-danger" style="font-size: small ; ">توجه پیامک به تمامی شماره موبایلهای ثبت شده برای پدر یا مادر ارسال خواهد شد</span>--}}
                                     {{--</div>--}}
                                 </div>
                                 <div class="col-md-2">
@@ -136,7 +136,7 @@
                                 {!! Form::hidden('numberOfFatherPhones', "0" , ['id' => 'numberOfFatherPhones']) !!}
                                 {!! Form::hidden('numberOfMotherPhones', "0" , ['id' => 'numberOfMotherPhones']) !!}
                                 <div class="col-md-12">
-                                    <span class="help-block bold font-red">توجه پیامک به تمامی شماره موبایلهای ثبت شده برای پدر یا مادر ارسال خواهد شد</span>
+                                    <span class="help-block bold m--font-danger">توجه پیامک به تمامی شماره موبایلهای ثبت شده برای پدر یا مادر ارسال خواهد شد</span>
                                 </div>
                             </div>
                         </div>

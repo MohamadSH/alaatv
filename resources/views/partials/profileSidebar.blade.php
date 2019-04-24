@@ -149,7 +149,7 @@
                                 {{--class="hasRequestedVerificationCode {{(!isset($mobileVerificationCode) || is_null($mobileVerificationCode))?"hidden":""}}">--}}
                                 {{--<input type="text" name="code" class="form-control" id="form_control_1"--}}
                                 {{--placeholder="کد تایید شماره خود را وارد نمایید">--}}
-                                {{--<label for="form_control_1"><span class="font-red-thunderbird">تایید شماره موبایل(حساب کاربری)</span></label>--}}
+                                {{--<label for="form_control_1"><span class="m--font-danger-thunderbird">تایید شماره موبایل(حساب کاربری)</span></label>--}}
                                 {{--<span class="help-block">برای دریافت کد روی دکمه درخواست کلیک کنید</span>--}}
                                 {{--</fieldset>--}}
                                 {{--</div>--}}
@@ -197,7 +197,7 @@
 
                             @if(isset($hasCompleteProfile) && $hasCompleteProfile)
                             <li @if(strcmp(url()->current() , action("Web\UserController@information" , $user)) == 0) class="active" @endif >
-                                <a href="{{action("Web\UserController@information" , $user)}}" class="font-red">
+                                <a href="{{action("Web\UserController@information" , $user)}}" class="m--font-danger">
                                     <i class="fa fa-pencil"></i>
                                         تکمیل اطلاعات (مخصوص اردویی ها)
                                     </a>

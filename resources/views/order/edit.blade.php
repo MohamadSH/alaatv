@@ -267,11 +267,11 @@
                                                             <div class="row orderproductDiv" id="orderproductDiv_{{$orderproduct->id}}" style="display: none">
                                                                 <div class="col-md-4">
                                                                     محصول فعلی:
-                                                                    <text class="form-control-static font-blue">{{$orderproduct->product->name}}</text>
+                                                                    <text class="form-control-static m--font-info">{{$orderproduct->product->name}}</text>
                                                                 </div>
                                                                 <div class="col-md-2">
                                                                     پرداخت شده:
-                                                                    <text class="form-control-static font-blue" id = "orderproductExchangeOriginalCost_{{$orderproduct->id}}">{{$orderproduct->obtainOrderproductCost(true)["final"]}}</text>
+                                                                    <text class="form-control-static m--font-info" id = "orderproductExchangeOriginalCost_{{$orderproduct->id}}">{{$orderproduct->obtainOrderproductCost(true)["final"]}}</text>
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <div class="row">
@@ -365,7 +365,7 @@
                             </div>
                             <hr>
                             <h4 class="bold">آیتم های افزوده سفارش</h4>
-                            <span class="help-block font-red"> قیمت این آیتم ها به قیمت کل سبد اضافه می شود</span>
+                            <span class="help-block m--font-danger"> قیمت این آیتم ها به قیمت کل سبد اضافه می شود</span>
                             <ul>
                                 @foreach($order->orderproducts as $orderproduct)
                                     @if($orderproduct->attributevalues->where("pivot.extraCost" , ">" , "0")->isNotEmpty())
@@ -408,7 +408,7 @@
                                                 {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\TransactionController@store'], 'class'=>'nobottommargin' ]) !!}
                                                     <div class="modal-body">
                                                         @include('transaction.form' , ["class"=>["paymentmethod"=>"paymentMethodName"] , "name"=>["paymentmethod"=>"paymentMethodName"] , "id"=>["paymentmethod"=>"paymentMethodName"]])
-                                                        {{--<span class="help-block font-blue">( دقت شود از میان اطلاعات شماره مرجع ، شماره پیگیری و شماره چک که اطلاعات بانکی یک تراکنش محسوب می شوند ، تمامی آنها برای هر تراکنش وجود ندارد و نیاز به وارد نمودن همه ی آنها نیست)</span>--}}
+                                                        {{--<span class="help-block m--font-info">( دقت شود از میان اطلاعات شماره مرجع ، شماره پیگیری و شماره چک که اطلاعات بانکی یک تراکنش محسوب می شوند ، تمامی آنها برای هر تراکنش وجود ندارد و نیاز به وارد نمودن همه ی آنها نیست)</span>--}}
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" data-dismiss="modal"
@@ -485,7 +485,7 @@
                                         </td>
                                         <td style="text-align: center">
                                             <a class="deleteTransaction" data-target="#deleteTransactionConfirmationModal" data-toggle="modal">
-                                                <i class="fa fa-trash fa-lg font-red" aria-hidden="true"></i>
+                                                <i class="fa fa-trash fa-lg m--font-danger" aria-hidden="true"></i>
                                             </a>
                                             <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
                                         </td>
@@ -660,7 +660,7 @@
                             oTable.fnUpdate(jqInputs[i].value, nRow, i, false);
                         }
                         oTable.fnUpdate('<a class="edit" href="javascript:;"><i class="fa fa-pencil-square fa-lg font-green" aria-hidden="true"></i></a>', nRow, i, false);
-                        oTable.fnUpdate('<a class="deleteTransaction"  data-target="#deleteTransactionConfirmationModal" data-toggle="modal"><i class="fa fa-trash fa-lg font-red" aria-hidden="true"></i></a>', nRow, ++i, false);
+                        oTable.fnUpdate('<a class="deleteTransaction"  data-target="#deleteTransactionConfirmationModal" data-toggle="modal"><i class="fa fa-trash fa-lg m--font-danger" aria-hidden="true"></i></a>', nRow, ++i, false);
                     }
                     oTable.fnDraw();
                     updateRow(newData);

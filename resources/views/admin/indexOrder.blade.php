@@ -50,7 +50,7 @@
             {{--<div class="note note-info">--}}
             {{--<h4 class="block"><strong>توجه!</strong></h4>--}}
             {{--@role(('admin'))<p>ادمین محترم‌، لیست بنهای تخصیص داده شده به کاربران به این صفحه اضافه شده است! همچنین افزودن بنهای محصول بعد از تایید سفارش نیز در اصلاح سفارشهای تایید نشده اضافه شده است.</p>@endrole--}}
-            {{--<strong class="font-red">ادمین محترم سیستم فیلتر جدول سفارش ها ارتقاء یافته است. اگر این بار اول است که از تاریخ ۷ اسفند به بعد از این پنل استفاده می کنید ، لطفا کش بروزر خود را خالی نمایید . با تشکر</strong>--}}
+            {{--<strong class="m--font-danger">ادمین محترم سیستم فیلتر جدول سفارش ها ارتقاء یافته است. اگر این بار اول است که از تاریخ ۷ اسفند به بعد از این پنل استفاده می کنید ، لطفا کش بروزر خود را خالی نمایید . با تشکر</strong>--}}
             {{--</div>--}}
 
             @permission((config('constants.LIST_ORDER_ACCESS')))
@@ -131,19 +131,13 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <div class="row">
-                                            @include('admin.filters.postalCodeFilter')
-                                        </div>
+                                        @include('admin.filters.postalCodeFilter')
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="row">
-                                            @include('admin.filters.provinceFilter')
-                                        </div>
+                                        @include('admin.filters.provinceFilter')
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="row">
-                                            @include('admin.filters.cityFilter')
-                                        </div>
+                                        @include('admin.filters.cityFilter')
                                     </div>
                                 </div>
                                 <div class="row" style="margin-top: 2%">
@@ -159,9 +153,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="row">
-                                    @include('admin.filters.identityFilter')
-                                </div>
+                                @include('admin.filters.identityFilter')
                             </div>
                             <div class="form-group">
                                 <div class="row">
@@ -177,35 +169,25 @@
                                 <div class="row">
                                     <label class="col-md-2 bold control-label">تاریخ ثبت اولیه : </label>
                                     <div class="col-md-10">
-                                        <div class="row">
-                                            @include('admin.filters.timeFilter.createdAt' , ["id" => "order"])
-                                        </div>
+                                        @include('admin.filters.timeFilter.createdAt' , ["id" => "order"])
                                     </div>
                                     <label class="col-md-2 bold control-label">تاریخ اصلاح مدیریتی : </label>
                                     <div class="col-md-10">
-                                        <div class="row">
-                                            @include('admin.filters.timeFilter.updatedAt' , ["id" => "order"])
-                                        </div>
+                                        @include('admin.filters.timeFilter.updatedAt' , ["id" => "order"])
                                     </div>
                                     <label class="col-md-2 bold control-label">تاریخ ثبت نهایی : </label>
                                     <div class="col-md-10">
-                                        <div class="row">
-                                            @include('admin.filters.timeFilter.completedAt' , ["id" => "order"])
-                                        </div>
+                                        @include('admin.filters.timeFilter.completedAt' , ["id" => "order"])
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="row">
-                                            @include('admin.filters.costFilter', ["priceName" => "cost" , "compareName" => "filterByCost" ,"label"=>"قیمت سفارش"])
-                                        </div>
+                                        @include('admin.filters.costFilter', ["priceName" => "cost" , "compareName" => "filterByCost" ,"label"=>"قیمت سفارش"])
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="row">
-                                            @include('admin.filters.costFilter' , ["priceName" => "discountCost" , "compareName" => "filterByDiscount" , "label"=>"تخفیف سفارش"])
-                                        </div>
+                                        @include('admin.filters.costFilter' , ["priceName" => "discountCost" , "compareName" => "filterByDiscount" , "label"=>"تخفیف سفارش"])
                                     </div>
                                 </div>
                             </div>
@@ -221,11 +203,9 @@
                             </div>
                             <div class="form-group">
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <a href="javascript:" class="btn btn-lg bg-font-dark reload"
-                                           style="background: #489fff">فیلتر</a>
-                                        <img class="d-none" id="order-portlet-loading"
-                                             src="{{config('constants.FILTER_LOADING_GIF')}}" width="5%">
+                                    <div class="col">
+                                        <a href="javascript:" class="btn btn-lg bg-font-dark reload" style="background: #489fff">فیلتر</a>
+                                        <img class="d-none" id="order-portlet-loading" src="{{config('constants.FILTER_LOADING_GIF')}}" width="5%">
                                     </div>
                                 </div>
                             </div>
@@ -236,8 +216,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="btn-group">
-                                    <button id="checkOutButton" class="btn btn-outline blue d-none" data-toggle="modal"
-                                            href="#responsive-checkout">
+                                    <button id="checkOutButton" class="btn btn-outline blue d-none" data-toggle="modal" href="#responsive-checkout">
                                         محصولات انتخابی من در فیلتر شده ها را تسویه کن
                                     </button>
 
@@ -729,13 +708,412 @@
     <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-bootstrap-multiselect.min.js" type="text/javascript"></script>
 
-    <script src="/acm/AlaatvCustomFiles/js/admin-indexOrder.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/js/admin-makeDataTable.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        @permission((config('constants.LIST_ORDER_ACCESS')));
+        function makeDataTable_loadWithAjax_orders() {
+
+            let columns = [
+                {
+                    "data": null,
+                    "name": "row_child",
+                    "defaultContent": ""
+                },
+                { "data": "user.lastName" , "title": "نام خانوادگی"},
+                { "data": "user.firstName" , "title": "نام کوچک" },
+                {
+                    "data": null,
+                    "name": "functions",
+                    "title": "عملیات",
+                    defaultContent: '',
+                    "render": function ( data, type, row ) {
+                        return '\n' +
+                            '            <div class="btn-group">\n' +
+                            '                <span class="order_id hidden" id="'+row.id+'"></span>\n' +
+                            '                <span class="user_id hidden" id="'+row.user.id+'"></span>\n' +
+                            '                    <a target="_blank" class="btn btn-success" href="#">\n' +
+                            '                        <i class="fa fa-pencil"></i> اصلاح \n' +
+                            '                    </a>\n' +
+                            '                    <a class="btn btn-danger deleteOrder" data-target="#deleteOrderConfirmationModal" data-toggle="modal">\n' +
+                            '                        <i class="fa fa-remove" aria-hidden="true"></i> حذف \n' +
+                            '                    </a>\n' +
+                            '                    <a class="btn btn-info sendSms" data-target="#sendSmsModal" data-toggle="modal">\n' +
+                            '                        <i class="fa fa-envelope" aria-hidden="true"></i> ارسال پیامک\n' +
+                            '                    </a>\n' +
+                            '                <div id="ajax-modal" class="modal fade" tabindex="-1"></div>\n' +
+                            '            </div>';
+                    },
+                    // function ( api, rowIdx, columns ) {
+                    //     return 'hi';
+                    //     // var data = $.map( columns, function ( col, i ) {
+                    //     //     return col.hidden ?
+                    //     //         '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+                    //     //         '<td>'+col.title+':'+'</td> '+
+                    //     //         '<td>'+col.data+'</td>'+
+                    //     //         '</tr>' :
+                    //     //         '';
+                    //     // } ).join('');
+                    //     //
+                    //     // return data ?
+                    //     //     $('<table/>').append( data ) :
+                    //     //     false;
+                    // }
+
+                },
+                {
+                    "data": null,
+                    "name": "products",
+                    "title": "محصولات",
+                    defaultContent: '',
+                    "render": function ( data, type, row ) {
+                        if (row.orderproducts.length === 0) {
+                            return '<span class="m-badge m-badge--wide m-badge--danger">ندارد</span>';
+                        }
+                        let produtsNames = '';
+                        for (let index in row.orderproducts) {
+                            if(isNaN(index)) {
+                                continue;
+                            }
+                            let orderProduct = row.orderproducts[index];
+
+                            produtsNames += '<span class="bold " style="font-style: italic; ">';
+                            if (orderProduct.orderproducttype_id == {!! config("constants.ORDER_PRODUCT_GIFT") !!}) {
+                                produtsNames += '<img src="/assets/extra/gift-box.png" width="25">';
+                            }
+                            produtsNames += '<a style="color:#607075" target="_blank" href="#">\n' + orderProduct.product.name + '</a>';
+                            produtsNames += '</span>';
+                            if (typeof orderProduct.checkoutstatus_id !== 'undefined') {
+                                produtsNames += '- <span class="m--font-danger bold">'+orderProduct.checkoutstatus.displayName+'</span>';
+                            }
+                            produtsNames += '<br>';
+                        }
+                        return produtsNames;
+                    },
+                },
+                { "data": "user.info.major.name" , "title": "رشته" },
+                { "data": "user.province" , "title": "استان" },
+                { "data": "user.city" , "title": "شهر" },
+                { "data": "user.address" , "title": "آدرس" },
+                { "data": "user.postalCode" , "title": "کد پستی" },
+                @permission((config('constants.SHOW_USER_MOBILE')))
+                { "data": "user.mobile" , "title": "موبایل", "defaultContent": "......"},
+                { "data": "user.nationalCode" , "title": "کد ملی", "defaultContent": "-" },
+                @endpermission
+                { "data": "price" , "title": "مبلغ(تومان)", "defaultContent": "-" },
+                @permission((config('constants.SHOW_USER_EMAIL')))
+                { "data": "user.email" , "title": "ایمیل", "defaultContent": "......" },
+                @endpermission
+                { "data": "paidPrice" , "title": "پرداخت شده(تومان)", "defaultContent": "-" },
+                { "data": "refundPrice" , "title": "مبلغ برگشتی(تومان)", "defaultContent": "-" },
+                { "data": "debt" , "title": "بدهکار/بستانکار(تومان):", "defaultContent": "-" },
+                {
+                    "data": null,
+                    "name": "successfulTransactions",
+                    "title": "تراکنش های موفق:",
+                    defaultContent: '',
+                    "render": function ( data, type, row ) {
+                        if (row.successfulTransactions.length === 0) {
+                            return '<span class="m-badge m-badge--wide m-badge--warning">ندارد</span>';
+                        }
+
+                        let successfulTransactions = '';
+                        for (let index in row.successfulTransactions) {
+                            if(isNaN(index)) {
+                                continue;
+                            }
+                            let successfulTransaction = row.successfulTransactions[index];
+                            successfulTransactions += '<a target="_blank" href="#" class="btn m-btn--pill m-btn--air btn-info">اصلاح</a>';
+                            if (typeof successfulTransaction.grandParent !== 'undefined') {
+                                successfulTransactions += '<a target="_blank" href="#" class="btn m-btn--pill m-btn--air btn-info">رفتن به تراکنش والد</a>';
+                            }
+                            if (typeof successfulTransaction.paymentmethod !== 'undefined') {
+                                successfulTransactions += successfulTransaction.paymentmethod.displayName;
+                            } else {
+                                successfulTransactions += '<span class="m-badge m-badge--wide m-badge--danger">- نحوه پرداخت نامشخص</span>';
+                            }
+                            successfulTransactions += '- مبلغ: ';
+                            if (successfulTransaction.cost >= 0) {
+                                successfulTransactions += successfulTransaction.cost + '<br>';
+                            } else {
+                                successfulTransactions += successfulTransaction.cost + ' (دریافت) ' + '<br>';
+                            }
+                            successfulTransactions += ',تاریخ پرداخت:';
+                            if (typeof successfulTransaction.completed_at !== 'undefined') {
+                                successfulTransactions += successfulTransaction.completed_at;
+                            } else {
+                                successfulTransactions += '<span class="bold m--font-danger">نامشخص</span>';
+                            }
+                            successfulTransactions += ',توضیح مدیریتی:';
+                            if (typeof successfulTransaction.managerComment !== 'undefined') {
+                                successfulTransactions += successfulTransaction.managerComment;
+                            } else {
+                                successfulTransactions += '<span class="m-badge m-badge--wide m-badge--warning">ندارد</span>';
+                            }
+                        }
+                        return successfulTransactions;
+                    },
+                },
+                {
+                    "data": null,
+                    "name": "pendingTransactions",
+                    "title": "تراکنش های منتظر تایید:",
+                    defaultContent: '',
+                    "render": function ( data, type, row ) {
+                        if (row.pendingTransactions.length === 0) {
+                            return '<span class="m-badge m-badge--wide m-badge--success">ندارد</span>';
+                        }
+                        let pendingTransactions = '';
+                        for (let index in row.pendingTransactions) {
+                            if (isNaN(index)) {
+                                continue;
+                            }
+                            let pendingTransaction = row.pendingTransactions[index];
+                            pendingTransactions += '<a target="_blank" href="#" class="btn btn-xs blue-sharp btn-outline  sbold">اصلاح</a>';
+                            if (typeof pendingTransaction.paymentmethod !== 'undefined') {
+                                pendingTransactions += pendingTransaction.paymentmethod.displayName;
+                            }
+                            if (typeof pendingTransaction.transactionID !== 'undefined') {
+                                pendingTransactions += '  ,شماره تراکنش: ' + pendingTransaction.transactionID;
+                            }
+                            if (typeof pendingTransaction.traceNumber !== 'undefined') {
+                                pendingTransactions += '  ,شماره پیگیری: ' + pendingTransaction.traceNumber;
+                            }
+                            if (typeof pendingTransaction.referenceNumber !== 'undefined') {
+                                pendingTransactions += '  ,شماره مرجع: ' + pendingTransaction.referenceNumber;
+                            }
+                            if (typeof pendingTransaction.paycheckNumber !== 'undefined') {
+                                pendingTransactions += '  ,شماره چک: ' + pendingTransaction.paycheckNumber;
+                            }
+                            if (typeof pendingTransaction.cost !== 'undefined') {
+                                pendingTransactions += ' ,مبلغ:  ' + pendingTransaction.cost.toLocaleString('fa');
+                            } else {
+                                pendingTransactions += '<span class="bold m--font-danger">بدون مبلغ</span>';
+                            }
+                            pendingTransactions += ' ,تاریخ پرداخت: ';
+                            if (typeof pendingTransaction.completed_at !== 'undefined') {
+                                pendingTransactions += pendingTransaction.completed_at;
+                            } else {
+                                pendingTransactions += '<span class="bold m--font-danger">نامشخص</span>';
+                            }
+                            pendingTransactions += ' ,توضیح مدیریتی: ';
+                            if (typeof pendingTransaction.managerComment !== 'undefined' && pendingTransaction.managerComment.length > 0) {
+                                pendingTransactions += '<span class="bold m--font-info">' + pendingTransaction.managerComment + '</span>';
+                            } else {
+                                pendingTransactions += '<span class="bold m--font-danger">نامشخص</span>';
+                            }
+                        }
+                        return pendingTransactions;
+                    },
+                },
+                {
+                    "data": null,
+                    "name": "unpaidTransactions",
+                    "title": "تراکنش های منتظر پرداخت:",
+                    defaultContent: '',
+                    "render": function ( data, type, row ) {
+                        if (row.unpaidTransactions.length === 0) {
+                            return '<span class="m-badge m-badge--wide m-badge--success">ندارد</span>';
+                        }
+                        let unpaidTransactions = '';
+                        for (let index in row.unpaidTransactions) {
+                            if (isNaN(index)) {
+                                continue;
+                            }
+                            let unpaidTransaction = row.unpaidTransactions[index];
+                            unpaidTransactions += '<a target="_blank" href="#" class="btn m-btn--pill m-btn--air btn-info">اصلاح</a>';
+                            if (typeof unpaidTransaction.cost !== 'undefined') {
+                                unpaidTransactions += ' ,مبلغ:  ' + unpaidTransaction.cost.toLocaleString('fa');
+                            } else {
+                                unpaidTransactions += '<span class="bold m--font-danger">بدون مبلغ</span>';
+                            }
+                            unpaidTransactions += ' ,مهلت پرداخت: ';
+                            if (typeof unpaidTransaction.deadline_at !== 'undefined') {
+                                unpaidTransactions += unpaidTransaction.deadline_at;
+                            } else {
+                                unpaidTransactions += '<span class="bold m--font-danger">نامشخص</span>';
+                            }
+                            unpaidTransactions += ' ,توضیح مدیریتی: ';
+                            if (typeof unpaidTransaction.managerComment !== 'undefined') {
+                                unpaidTransactions += '<span class="bold m--font-info">' + unpaidTransaction.managerComment + '</span>';
+                            } else {
+                                unpaidTransactions += '<span class="m-badge m-badge--wide m-badge--warning">ندارد</span>';
+                            }
+                        }
+                        return unpaidTransactions;
+                    },
+                },
+                { "data": "managerComment" , "title": "توضیحات مسئول", "defaultContent": "-" },
+                {
+                    "data": null,
+                    "name": "postingInfo",
+                    "title": "کد مرسوله پستی",
+                    defaultContent: '',
+                    "render": function ( data, type, row ) {
+                        if (row.postingInfo.length === 0) {
+                            return '<span class="m-badge m-badge--wide m-badge--info">ندارد</span>';
+                        }
+                        let postingInfoHtml = '';
+                        for (let index in row.postingInfo) {
+                            if (isNaN(index)) {
+                                continue;
+                            }
+                            let postingInfoItem = row.postingInfo[index];
+                            postingInfoHtml += '<span class="m--font-danger bold">';
+                            for (let index1 in postingInfoItem) {
+                                if (isNaN(index1)) {
+                                    continue;
+                                }
+                                postingInfoHtml += postingInfoItem[index1].postCode + '<br>';
+                            }
+                            postingInfoHtml += '</span>';
+                        }
+                        return postingInfoHtml;
+                    },
+                },
+                {
+                    "data": null,
+                    "name": "customerDescription",
+                    "title": "توضیحات مشتری",
+                    defaultContent: '',
+                    "render": function ( data, type, row ) {
+                        if (typeof row.customerDescription !== 'undefined' && row.customerDescription !== null && row.customerDescription.length > 0) {
+                            return '<span class="m--font-danger bold">'+row.customerDescription+'<br></span>';
+                        } else {
+                            return '<span class="m-badge m-badge--wide m-badge--warning">بدون توضیح</span>';
+                        }
+                    },
+                },
+                {
+                    "data": null,
+                    "name": "orderstatus",
+                    "title": "وضعیت سفارش",
+                    defaultContent: '',
+                    "render": function ( data, type, row ) {
+                        if (typeof row.orderstatus.id !== 'undefined') {
+                            return '-';
+                        }
+                        let orderstatusId = row.orderstatus.id;
+                        let badgeStyle = 'm-badge--';
+                        if (orderstatusId == {!! config("constants.ORDER_STATUS_CLOSED") !!}) {
+                            badgeStyle += 'success';
+                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_CANCELED") !!}) {
+                            badgeStyle += 'danger';
+                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_POSTED") !!}) {
+                            badgeStyle += 'info';
+                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_REFUNDED") !!}) {
+                            badgeStyle += '';
+                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_OPEN") !!}) {
+                            badgeStyle += 'danger';
+                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_OPEN_BY_ADMIN") !!}) {
+                            badgeStyle += 'warning';
+                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_READY_TO_POST") !!}) {
+                            badgeStyle += 'info';
+                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_PENDING") !!}) {
+                            badgeStyle += '';
+                        }
+                        return '<span class="m-badge m-badge--wide '+badgeStyle+'"> '+orderstatusId+' - '+row.orderstatus.displayName+'</span>';
+                    },
+                },
+                {
+                    "data": null,
+                    "name": "paymentstatus",
+                    "title": "وضعیت پرداخت",
+                    defaultContent: '',
+                    "render": function ( data, type, row ) {
+                        if (typeof row.paymentstatus.id !== 'undefined') {
+                            return '-';
+                        }
+                        let paymentstatusId = row.paymentstatus.id;
+                        let badgeStyle = 'm-badge--';
+                        if (paymentstatusId == {!! config("constants.PAYMENT_STATUS_PAID") !!}) {
+                            badgeStyle += 'success';
+                        } else if (paymentstatusId == {!! config("constants.PAYMENT_STATUS_UNPAID") !!}) {
+                            badgeStyle += 'danger';
+                        } else if (paymentstatusId == {!! config("constants.PAYMENT_STATUS_INDEBTED") !!}) {
+                            badgeStyle += 'warning';
+                        } else if (paymentstatusId == 4) {
+                            badgeStyle += 'warning';
+                        }
+                        return '<span class="m-badge m-badge--wide '+badgeStyle+'"> '+paymentstatusId+' - '+row.paymentstatus.displayName+'</span>';
+                    },
+                },
+                { "data": "jalaliUpdatedAt" , "title": "تاریخ اصلاح مدیریتی:", "defaultContent": "<span class=\"m-badge m-badge--wide label-sm m-badge--danger\"> درج نشده </span>" },
+                { "data": "completed_at" , "title": "تاریخ ثبت نهایی:", "defaultContent": "<span class=\"m-badge m-badge--wide label-sm m-badge--danger\"> درج نشده </span>" },
+                { "data": "usedBonSum" , "title": "تعداد بن استفاده شده:", "defaultContent": "......" },
+                {
+                    "data": null,
+                    "name": "addedBonSum",
+                    "title": "تعداد بن اضافه شده به شما از این سفارش:",
+                    defaultContent: '',
+                    "render": function ( data, type, row ) {
+                        if (row.orderproducts.length === 0) {
+                            return '<span class="m-badge m-badge--wide m-badge--info">سفارش خالی است!</span>';
+                        }
+
+                        return row.addedBonSum;
+                    },
+                },
+                {
+                    "data": null,
+                    "name": "couponInfo",
+                    "title": "کپن استفاده شده:",
+                    defaultContent: '',
+                    "render": function ( data, type, row ) {
+                        if (row.couponInfo == null) {
+                            return '-';
+                        }
+
+                        let couponReport = ' کپن تخفیف ' +
+                            ' <strong>' + row.couponInfo.name + '</strong> ' +
+                            ' (' + row.couponInfo.code + ') ' +
+                            ' با ' +
+                            row.couponInfo.discount;
+
+                        if (row.couponInfo.typeHint === 'percentage') {
+                            couponReport += '% تخفیف';
+                        } else if (row.couponInfo.typeHint === 'cost') {
+                            couponReport += ' تومان تخفیف';
+                        }
+                        return couponReport;
+                    },
+                },
+                { "data": "paymentstatus.displayName" , "title": "وضعیت پرداخت:", "defaultContent": "نا مشخص" },
+                { "data": "jalaliCreatedAt" , "title": "تاریخ ایجاد اولیه", "defaultContent": "<span class=\"m-badge m-badge--wide label-sm m-badge--danger\"> درج نشده </span>" },
+            ];
+            let dataFilter = function(data){
+                var json = jQuery.parseJSON( data );
+                console.log(json);
+                json.recordsTotal = json.total;
+                json.recordsFiltered = json.total;
+                // for (let index in json.data) {
+                //     if(!isNaN(index)) {
+                //         json.data[index]['full_name'] =
+                //     }
+                // }
+                //
+                return JSON.stringify( json ); // return JSON string
+            };
+            let ajaxData = function (data) {
+                data.page = getNextPageParam(data.start, data.length);
+                let $form = $("#filterOrderForm");
+                let formData = getFormData($form);
+                // let formData = $form.serializeArray();
+                /* Merge defaults and options, without modifying defaults */
+                data = $.extend({}, data, formData);
+                console.log('settings: ', data);
+                return data;
+            };
+            makeDataTable_loadWithAjax("order_table", "/order", columns, dataFilter, ajaxData);
+        }
+        @endpermission;
+    </script>
+    <script src="/acm/AlaatvCustomFiles/js/admin-indexOrder.js" type="text/javascript"></script>
 
     <script type="text/javascript">
         //should run at first
-        $('#order_table > thead > tr').children('th:first').removeClass().addClass("none");
+
+        // $('#order_table > thead > tr').children('th:first').removeClass().addClass("none");
         $("#order_table thead tr th").each(function () {
             if (!$(this).hasClass("none")) {
                 thText = $(this).text().trim();
@@ -787,177 +1165,18 @@
             var newDataTable = $("#order_table").DataTable();
             newDataTable.destroy();
             // makeDataTable("order_table");
-            let columns = [
-                {
-                    "data": "row_child",
-                    "defaultContent": ""
-                },
-                { "data": "user.lastName" , "title": "نام خانوادگی"},
-                { "data": "user.firstName" , "title": "نام کوچک" },
-                {
-                    "data": null,
-                    "name": "functions",
-                    "title": "عملیات",
-                    defaultContent: '',
-                    "render": function ( data, type, row ) {
-                        return '\n' +
-                            '            <div class="btn-group">\n' +
-                            '                <span class="order_id hidden" id="'+row.id+'"></span>\n' +
-                            '                <span class="user_id hidden" id="'+row.user.id+'"></span>\n' +
-                            '                    <a target="_blank" class="btn btn-success" href="#">\n' +
-                            '                        <i class="fa fa-pencil"></i> اصلاح \n' +
-                            '                    </a>\n' +
-                            '                    <a class="btn btn-danger deleteOrder" data-target="#deleteOrderConfirmationModal" data-toggle="modal">\n' +
-                            '                        <i class="fa fa-remove" aria-hidden="true"></i> حذف \n' +
-                            '                    </a>\n' +
-                            '                    <a class="btn btn-info sendSms" data-target="#sendSmsModal" data-toggle="modal">\n' +
-                            '                        <i class="fa fa-envelope" aria-hidden="true"></i> ارسال پیامک\n' +
-                            '                    </a>\n' +
-                            '                <div id="ajax-modal" class="modal fade" tabindex="-1"></div>\n' +
-                            '            </div>';
-                    },
-                    // function ( api, rowIdx, columns ) {
-                    //     return 'hi';
-                    //     // var data = $.map( columns, function ( col, i ) {
-                    //     //     return col.hidden ?
-                    //     //         '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
-                    //     //         '<td>'+col.title+':'+'</td> '+
-                    //     //         '<td>'+col.data+'</td>'+
-                    //     //         '</tr>' :
-                    //     //         '';
-                    //     // } ).join('');
-                    //     //
-                    //     // return data ?
-                    //     //     $('<table/>').append( data ) :
-                    //     //     false;
-                    // }
-
-                },
-                {
-                    "data": null,
-                    "name": "products",
-                    "title": "محصولات",
-                    defaultContent: '',
-                    "render": function ( data, type, row ) {
-                        if (row.orderproducts.length < 0) {
-                            return '<span class="m-badge m-badge--wide m-badge--danger">ندارد</span>';
-                        }
-                        let produtsNames = '';
-                        for (let index in row.orderproducts) {
-                            if(isNaN(index)) {
-                                continue;
-                            }
-                            let orderProduct = row.orderproducts[index];
-
-                            produtsNames += '<span class="bold " style="font-style: italic; ">';
-                            if (orderProduct.orderproducttype_id == {!! config("constants.ORDER_PRODUCT_GIFT") !!}) {
-                                produtsNames += '<img src="/assets/extra/gift-box.png" width="25">';
-                            }
-                            produtsNames += '<a style="color:#607075" target="_blank" href="#">\n' + orderProduct.product.name + '</a>';
-                            produtsNames += '</span>';
-                            if (typeof orderProduct.checkoutstatus_id !== 'undefined') {
-                                produtsNames += '- <span class="font-red bold">'+orderProduct.checkoutstatus.displayName+'</span>';
-                            }
-                            produtsNames += '<br>';
-                        }
-                        return produtsNames;
-                    },
-                },
-                { "data": "user.info.major.name" , "title": "رشته" },
-                { "data": "user.province" , "title": "استان" },
-                { "data": "user.city" , "title": "شهر" },
-                { "data": "user.address" , "title": "آدرس" },
-                { "data": "user.postalCode" , "title": "کد پستی" },
-                { "data": "user.mobile" , "title": "موبایل", "defaultContent": "......"},
-                { "data": "user.nationalCode" , "title": "کد ملی", "defaultContent": "......" },
-                { "data": "user.price" , "title": "مبلغ(تومان)" },
-                { "data": "user.email" , "title": "ایمیل", "defaultContent": "......" },
-                { "data": "user.paidPrice" , "title": "پرداخت شده(تومان)" },
-                { "data": "user.refundPrice" , "title": "مبلغ برگشتی(تومان)" },
-                { "data": "debt" , "title": "بدهکار/بستانکار(تومان):" },
-                {
-                    "data": null,
-                    "name": "successfulTransactions",
-                    "title": "تراکنش های موفق:",
-                    defaultContent: '',
-                    "render": function ( data, type, row ) {
-                        if (row.successfulTransactions.length === 0) {
-                            return '<span class="m-badge m-badge--wide m-badge--warning">ندارد</span>';
-                        }
-
-                        let successfulTransactions = '';
-                        for (let index in row.successfulTransactions) {
-                            if(isNaN(index)) {
-                                continue;
-                            }
-                            let successfulTransaction = row.successfulTransactions[index];
-                            produtsNames += '<a target="_blank" href="#" class="btn btn-xs blue-sharp btn-outline  sbold">اصلاح</a>';
-                        }
-                        return produtsNames;
-                    },
-                },
-                {
-                    "data": null,
-                    "name": "pendingTransactions",
-                    "title": "تراکنش های منتظر تایید:",
-                    defaultContent: '',
-                    "render": function ( data, type, row ) {
-                        if (row.pendingTransactions.length === 0) {
-                            return '<span class="m-badge m-badge--wide m-badge--warning">ندارد</span>';
-                        }
-                        return '';
-                    },
-                },
-                {
-                    "data": null,
-                    "name": "unpaidTransactions",
-                    "title": "تراکنش های منتظر پرداخت:",
-                    defaultContent: '',
-                    "render": function ( data, type, row ) {
-                        if (row.unpaidTransactions.length === 0) {
-                            return '<span class="m-badge m-badge--wide m-badge--warning">ندارد</span>';
-                        }
-                        return '';
-                    },
-                },
-                { "data": "ordermanagercomments" , "title": "توضیحات مسئول" },
-                { "data": "orderpostinginfos" , "title": "کد مرسوله پستی" },
-                { "data": "customerDescription" , "title": "توضیحات مشتری" },
-                { "data": "orderstatus.id" , "title": "وضعیت سفارش" },
-                { "data": "paymentstatus.id" , "title": "وضعیت پرداخت" },
-                { "data": "updated_at" , "title": "تاریخ اصلاح مدیریتی:" },
-                { "data": "completed_at" , "title": "تاریخ ثبت نهایی:" },
-                { "data": "completed_at" , "title": "تعداد بن استفاده شده:", "defaultContent": "......" },
-                { "data": "addedBonSum" , "title": "تعداد بن اضافه شده به شما از این سفارش:", "defaultContent": "......" },
-                { "data": "coupon.name" , "title": "کپن استفاده شده:", "defaultContent": "......" },
-                { "data": "paymentstatus.displayName" , "title": "وضعیت پرداخت:", "defaultContent": "......" },
-                { "data": "created_at" , "title": "تاریخ ایجاد اولیه", "defaultContent": "......" },
-            ];
-            let dataFilter = function(data){
-                var json = jQuery.parseJSON( data );
-                console.log(json.data);
-                json.recordsTotal = json.total;
-                json.recordsFiltered = json.total;
-                // for (let index in json.data) {
-                //     if(!isNaN(index)) {
-                //         json.data[index]['full_name'] =
-                //     }
-                // }
-                //
-                return JSON.stringify( json ); // return JSON string
-            };
-            makeDataTable_loadWithAjax("order_table", "/order", columns, dataFilter);
+            makeDataTable_loadWithAjax_orders();
             $("#order-expand").trigger("click");
-            $("#order_table > tbody .dataTables_empty").text("برای نمایش اطلاعات ابتدا فیلتر کنید").addClass("font-red bold");
-            @endpermission;
-            @permission((config('constants.LIST_TRANSACTION_ACCESS')));
+            $("#order_table > tbody .dataTables_empty").text("برای نمایش اطلاعات ابتدا فیلتر کنید").addClass("m--font-danger bold");
+        @endpermission;
+        @permission((config('constants.LIST_TRANSACTION_ACCESS')));
             $("#transaction-portlet .reload").trigger("click");
             $("#transaction-expand").trigger("click");
-            @endpermission;
-            @permission((config('constants.LIST_USER_BON_ACCESS')));
+        @endpermission;
+        @permission((config('constants.LIST_USER_BON_ACCESS')));
             $("#userBon-portlet .reload").trigger("click");
             $("#userBon-expand").trigger("click");
-            @endpermission
+        @endpermission
 
         });
     </script>

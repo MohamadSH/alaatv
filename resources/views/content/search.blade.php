@@ -141,15 +141,15 @@
                                             @if(strlen($product->name)>0 ) {{$product->name}} @endif</h5>
                                         <h5 class="price-text-color bold">
                                             @if($product->isFree)
-                                                <div class="cbp-l-grid-projects-desc text-center bold font-red product-potfolio-free">
+                                                <div class="cbp-l-grid-projects-desc text-center bold m--font-danger product-potfolio-free">
                                                     رایگان
                                                 </div>
                                             @elseif($costCollection[$product->id]["cost"] == 0)
-                                                <div class="cbp-l-grid-projects-desc text-center bold font-blue product-potfolio-no-cost">
+                                                <div class="cbp-l-grid-projects-desc text-center bold m--font-info product-potfolio-no-cost">
                                                     قیمت: پس از انتخاب محصول
                                                 </div>
                                             @elseif($costCollection[$product->id]["productDiscount"]+$costCollection[$product->id]["bonDiscount"]>0)
-                                                <div class="cbp-l-grid-projects-desc text-center bold font-red product-potfolio-real-cost">@if(isset($costCollection[$product->id]["cost"])){{number_format($costCollection[$product->id]["cost"])}}
+                                                <div class="cbp-l-grid-projects-desc text-center bold m--font-danger product-potfolio-real-cost">@if(isset($costCollection[$product->id]["cost"])){{number_format($costCollection[$product->id]["cost"])}}
                                                     تومان@endif</div>
                                                 <div class="cbp-l-grid-projects-desc text-center bold font-green product-potfolio-discount-cost"> @if(Auth::check()) {{number_format((1 - ($costCollection[$product->id]["bonDiscount"] / 100)) * ((1 - ($costCollection[$product->id]["productDiscount"] / 100)) * $costCollection[$product->id]["cost"]))}} @else @if(isset($costCollection[$product->id]["cost"])){{number_format(((1-($costCollection[$product->id]["productDiscount"]/100))*$costCollection[$product->id]["cost"]))}}
                                                     تومان@endif @endif</div>
