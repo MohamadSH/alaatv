@@ -4,6 +4,7 @@ namespace App;
 
 use App\Classes\Taggable;
 use App\Classes\Verification\MustVerifyMobileNumber;
+use App\Collection\ProductCollection;
 use App\Collection\UserCollection;
 use App\Traits\APIRequestCommon;
 use App\Traits\CharacterCommon;
@@ -22,7 +23,7 @@ use App\Traits\User\{BonTrait,
     TeacherTrait,
     TrackTrait,
     VouchersTrait};
-use App\Traits\UserCommon;
+use Auth;
 use Cache;
 use Carbon\Carbon;
 use Hash;
@@ -582,6 +583,29 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         return $openOrder;
     }
 
+    /**
+     * @param $products
+     *
+     * @return mixed
+     */
+    public function getOrdersThatHaveSpecificProduct(ProductCollection $products)
+    {
+        $validOrders = $this->orders()
+                            ->whereHas('orderproducts', function ($q) use ($products) {
+                                $q->whereIn("product_id", $products->pluck("id"));
+                            })
+                            ->whereIn("orderstatus_id", [
+                                config("constants.ORDER_STATUS_CLOSED"),
+                                config("constants.ORDER_STATUS_POSTED"),
+                                config("constants.ORDER_STATUS_READY_TO_POST"),
+                            ])
+                            ->whereIn("paymentstatus_id", [
+                                config("constants.PAYMENT_STATUS_PAID"),
+                            ])
+                            ->get();
+        return $validOrders;
+    }
+
     public function getUserStatusAttribute()
     {
         $user = $this;
@@ -608,5 +632,9 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
             return $value;
 
         return null;
+    }
+
+    private function isAuthenticatedUserHasPermission(string $permission):bool{
+        return (Auth::check() && Auth::user()->can($permission));
     }
 }

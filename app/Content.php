@@ -49,7 +49,7 @@ use Stevebauman\Purify\Facades\Purify;
  * @property-read \App\Contenttype|null $contenttype
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contenttype[] $contenttypes
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\File[] $files
- * @property-read mixed $file
+ * @property mixed $file
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Grade[] $grades
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Major[] $majors
  * @property-read \App\Template|null $template
@@ -335,7 +335,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 $nextContent = $set->contents()->where('educationalcontents.order', $nextContentOrder)->get()->first();
             }
 
-            return isset($nextContent) ? $nextContent : null;
+            return ($nextContent) ?? null;
         });
     }
 
@@ -346,16 +346,12 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function getPreviousUrlAttribute($value)
     {
-        return optional(optional($this->getPreviousContent())->setVisible([
-            'url',
-        ]))->url;
+        return ($this->getPreviousContent() ?: new Content())->url;
     }
 
     public function getNextUrlAttribute($value)
     {
-        return optional(optional($this->getNextContent())->setVisible([
-            'url',
-        ]))->url;
+        return ($this->getNextContent() ?: new Content())->url;
     }
 
     public function getApiUrlAttribute($value): array
@@ -367,16 +363,12 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function getPreviousApiUrlAttribute($value)
     {
-        return optional(optional($this->getPreviousContent())->setVisible([
-            'apiUrl',
-        ]))->api_url;
+        return ($this->getPreviousContent() ?: new Content())->api_url;
     }
 
     public function getNextApiUrlAttribute($value)
     {
-        return optional(optional($this->getNextContent())->setVisible([
-            'apiUrl',
-        ]))->api_url;
+        return ($this->getNextContent() ?: new Content())->api_url;
     }
 
     /**
@@ -465,9 +457,14 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 $item->link = $this->isFree ? $l->getLinks() : $l->getLinks([
                     "content_id" => $this->id,
                 ]);
-
+                unset($item->url);
+                unset($item->disk);
+                unset($item->fileName);
+                if ($item->type === 'pamphlet')
+                    unset($item->res);
                 return $item;
             });
+
 
             return $fileCollection->count() > 0 ? $fileCollection->groupBy('type') : null;
         });
@@ -490,7 +487,9 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             $link = new LinkGenerator($t);
         }
 
-        return optional($link)->getLinks();
+        if(is_null($link))
+            return null;
+        return $link->getLinks();
     }
 
     /**
@@ -504,7 +503,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $key = "content:author".$content->cacheKey();
 
         return Cache::tags(["user"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
-            return optional($this->user)->setVisible([
+            $user = $this->user;
+            if(is_null($user))
+                return null;
+            return $user->setVisible([
                 'id',
                 'firstName',
                 'lastName',
@@ -516,7 +518,8 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function getAuthorNameAttribute(): string
     {
-        return $this->author->full_name;
+        $author = $this->author;
+        return isset($author) ? $author->full_name : '';
     }
 
     /**
@@ -548,7 +551,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function getPamphlets(): Collection
     {
-        $pamphlet = optional($this->file)->get('pamphlet');
+        $file = $this->file;
+        if(is_null($file))
+            return null;
+        $pamphlet = $file->get('pamphlet');
 
         return isset($pamphlet) ? $pamphlet : collect();
     }
@@ -560,7 +566,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function getVideos(): Collection
     {
-        $video = optional($this->file)->get('video');
+        $file = $this->file;
+        if(is_null($file))
+            return null;
+        $video = $file->get('video');
 
         return isset($video) ? $video : collect();
     }
@@ -577,7 +586,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
         $setMates = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
             $contentSet = $content->set;
-            $contentSetName = optional($contentSet)->name;
+            $contentSetName = isset($contentSet) ? $contentSet->name : null;
             if (isset($contentSet)) {
                 $sameContents = $contentSet->contents()->active()->get()->sortBy("order")->load('contenttype');
             } else {
@@ -632,7 +641,8 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
         $adItems = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
             $adItems = collect();
-            if (optional($content->set)->id != 199) {
+            $set = $content->set ?: new Contentset();
+            if ($set->id != 199) {
                 $adItems = Contentset::findOrFail(199)->contents()->where("enable", 1)->orderBy("order")->get();
             }
 
@@ -649,6 +659,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function getMetaTags(): array
     {
+        $file = $this->file ?: collect();
+        $videoDirectUrl  = $file->where('res', '480p') ?: collect();
+        $videoDirectUrl = $videoDirectUrl->first();
+        $videoDirectUrl = isset($videoDirectUrl) ?  $videoDirectUrl->link : null;
         return [
             'title' => $this->metaTitle,
             'description' => $this->metaDescription,
@@ -662,7 +676,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             'playerUrl' => action('ContentController@embed', $this),
             'playerWidth' => '854',
             'playerHeight' => '480',
-            'videoDirectUrl' => optional(optional(optional($this->file->first())->where('res', '480p'))->first())->link,
+            'videoDirectUrl' => $videoDirectUrl,
             'videoActorName' => $this->authorName,
             'videoActorRole' => 'دبیر',
             'videoDirector' => 'آلاء',
@@ -986,7 +1000,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function getTaggableScore()
     {
-        return optional($this->created_at)->timestamp;
+        return isset($this->created_at) ? $this->created_at->timestamp : null;
     }
 
     public function isTaggableActive(): bool

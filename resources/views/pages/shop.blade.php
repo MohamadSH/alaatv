@@ -100,7 +100,7 @@
     </div>
     <!--end:: Widgets/Stats-->
     @foreach($blocks as $block)
-        @if($block->products->count() > 0)
+        @if($block->products->count() > 0 and false)
             <div class = "row {{ $block->class }}">
 
                 <div class = "col-12">
