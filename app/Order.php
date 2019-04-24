@@ -164,7 +164,9 @@ class Order extends BaseModel
         'jalaliUpdatedAt',
         'jalaliCompletedAt',
         'postingInfo',
-        'managerComment'
+        'managerComment',
+        'editOrderLink',
+        'removeOrderLink'
     ];
 
     const OPEN_ORDER_STATUSES = [
@@ -1198,7 +1200,6 @@ class Order extends BaseModel
 
                 return null;
             });
-
     }
 
     public function getPostingInfoAttribute(){
@@ -1225,4 +1226,33 @@ class Order extends BaseModel
 
     }
 
+    public function getEditOrderLinkAttribute(){
+        $order = $this;
+        $key = "order:editLink:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($order) {
+                if($this->isAuthenticatedUserHasPermission(config('constants.EDIT_ORDER_ACCESS')))
+                    return action('Web\OrderController@edit' , $order->id);
+
+                return null;
+            });
+
+    }
+
+    public function getRemoveOrderLinkAttribute(){
+        $order = $this;
+        $key = "order:removeLink:" . $order->cacheKey();
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($order) {
+                if($this->isAuthenticatedUserHasPermission(config('constants.REMOVE_ORDER_ACCESS')))
+                    return action('Web\OrderController@destroy' , $order->id);
+
+                return null;
+            });
+
+    }
+
+    private function isAuthenticatedUserHasPermission(string $permission):bool{
+        return (Auth::check() && Auth::user()->can($permission));
+    }
 }

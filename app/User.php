@@ -23,6 +23,7 @@ use App\Traits\User\{BonTrait,
     TeacherTrait,
     TrackTrait,
     VouchersTrait};
+use Auth;
 use Cache;
 use Carbon\Carbon;
 use Hash;
@@ -582,7 +583,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         return $openOrder;
     }
 
-
     /**
      * @param $products
      *
@@ -605,7 +605,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
                             ->get();
         return $validOrders;
     }
-
 
     public function getUserStatusAttribute()
     {
@@ -633,5 +632,9 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
             return $value;
 
         return null;
+    }
+
+    private function isAuthenticatedUserHasPermission(string $permission):bool{
+        return (Auth::check() && Auth::user()->can($permission));
     }
 }
