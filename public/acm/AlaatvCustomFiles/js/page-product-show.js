@@ -275,20 +275,21 @@ jQuery(document).ready(function() {
 
     var player = null;
 
-    player = videojs('videoPlayer', {nuevo: true}, function () {
-        this.nuevoPlugin({
-            // plugin options here
-            logocontrolbar: '/assets/extra/Alaa-logo.gif',
-            logourl: '//sanatisharif.ir',
+    var player = videojs('videoPlayer');
+    player.nuevo({
+        // plugin options here
+        logocontrolbar: '/acm/extra/Alaa-logo.gif',
+        logourl: '//sanatisharif.ir',
 
-            videoInfo: true,
-            relatedMenu: true,
-            zoomMenu: true,
-            mirrorButton: true,
-            // related: related_videos,
-            // endAction: 'related',
-        });
+        videoInfo: true,
+        relatedMenu: true,
+        zoomMenu: true,
+        mirrorButton: true,
+        // related: related_videos,
+        // endAction: 'related',
     });
+
+    console.log('player: ', player);
 
     let callBack = function () {
         let productsState = ProductShowPage.getProductSelectValues();
@@ -428,20 +429,17 @@ jQuery(document).ready(function() {
 
     });
 
-    $(document).on("ifChanged change", ".attribute", function ()
-    {
+    $(document).on("ifChanged change", ".attribute", function () {
         var attributeState = ProductShowPage.getMainAttributeStates();
         ProductShowPage.refreshPrice(attributeState , [] ,[]);
     });
 
-    $(document).on("ifChanged change", ".extraAttribute", function ()
-    {
+    $(document).on("ifChanged change", ".extraAttribute", function () {
         var attributeState = ProductShowPage.getExtraAttributeStates();
         ProductShowPage.refreshPrice([] , [] , attributeState);
     });
 
-    $(document).on("ifChanged switchChange.bootstrapSwitch", ".product", function ()
-    {
+    $(document).on("ifChanged switchChange.bootstrapSwitch", ".product", function () {
         var productsState = ProductShowPage.getProductSelectValues() ;
         ProductShowPage.refreshPrice([] , productsState , []);
     });

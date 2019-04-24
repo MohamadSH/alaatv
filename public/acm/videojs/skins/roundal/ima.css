@@ -1,0 +1,189 @@
+/**
+ * Copyright 2014 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.ima-ad-container {
+  top: 0px;
+  position: absolute;
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+.ima-ad-container > div:first-of-type{
+   width:100%!important;
+   height:100%!important;
+}
+/* Move overlay if user fast-clicks play button. */
+.video-js.vjs-playing .bumpable-ima-ad-container {
+  margin-top: -40px;
+}
+
+/* Move overlay when controls are active. */
+.video-js.vjs-user-inactive.vjs-playing .bumpable-ima-ad-container {
+  margin-top: 0px;
+}
+
+.video-js.vjs-paused .bumpable-ima-ad-container,
+.video-js.vjs-playing:hover .bumpable-ima-ad-container,
+.video-js.vjs-user-active.vjs-playing .bumpable-ima-ad-container {
+  margin-top: -40px;
+}
+
+.ima-controls-div {
+    background-color: rgba(255,255,255,0.66);
+    bottom: 3px;
+    height: 35px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    width: 96%!important;
+    display: table!important;
+    z-index: 97;
+    margin: 0 2%;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -ms-border-radius: 6px;
+}
+
+.ima-countdown-div {
+  height: 35px;
+  color: #383838;
+  vertical-align:middle;
+  padding:0 15px;
+  font-size:12px;
+  cursor: default;
+  padding-left:10px;
+  line-height:35px;
+  display:table-cell!important;
+  white-space:nowrap;
+  position:relative;
+  width:auto;
+}
+
+
+.ima-seek-bar-div {
+    height: 35px;
+    vertical-align: middle;
+    display: table-cell!important;
+    background: transparent;
+    width: 100%;
+    padding: 0 10px;
+    position: relative;
+}
+.ima-seek-bar-div:before {
+    content: '';
+    height: 6px;
+    vertical-align: middle;
+    background: rgba(0,0,0,0.3);
+    width: 100%;
+    display: block;
+}
+
+.ima-progress-div {
+  width: 0px;
+    height: 6px;
+    background-color: #ff0000;
+    position: absolute;
+    top: 50%;
+    margin-top: -3px;
+}
+
+.ima-progress-div:before {
+    background: #fff;
+    border-radius: 50%;
+    content: '';
+    height: 12px;
+    position: absolute;
+    right: -6px;
+    top: -3px;
+    width: 12px;
+	box-shadow:0 1px 5px 1px #868ea3;
+}
+
+.ima-play-pause-div, .ima-mute-div, .ima-non-mute-div, .ima-fullscreen-div, .ima-non-fullscreen-div {
+  width: 35px;
+  min-width:35px;
+  height: 35px;
+  color: #000;
+  font-size: 1.8em;
+  line-height: 35px;
+  text-align: center;
+  font-family: nuevo;
+  cursor: pointer;
+  display:table-cell!important;
+  position:relative;
+}
+
+
+.ima-slider-div {
+  height: 35px;
+  background-color: #555555;
+  margin-right:3px;
+  display:none!important;
+}
+
+.ima-slider-level-div {
+  width: 100%;
+  height: 35px;
+  background-color: #00b1ff;
+  display:none!important;
+}
+
+.ima-playing, .ima-paused, .ima-fullscreen, .ima-non-fullscreen, .ima-muted, .ima-non-muted  {
+	font-family:'nuevo';
+	color:#383838;
+	transition:all 0.2s ease 0s;-webkit-transition:all 0.2s ease 0s;-moz-transition:all 0.2s ease 0s;-o-transition: all 0.2s ease 0s;
+}
+.ima-playing:hover, .ima-paused:hover, .ima-fullscreen:hover, .ima-non-fullscreen:hover, .ima-muted:hover, .ima-non-muted:hover  {
+	color:#F15374;
+}
+
+
+
+.ima-fullscreen, .ima-non-fullscreen {
+	font-size:1.3em;
+}
+.ima-muted, .ima-non-muted {
+	font-size:1.4em;
+	display:none!important;
+}
+.ima-playing:before {
+  content: "\f101";
+}
+
+.ima-paused:before {
+  content: "\f103";
+}
+
+.ima-non-muted:before {
+  content: "\f107";
+}
+
+.ima-muted:before {
+  content: "\f104";
+}
+
+.ima-non-fullscreen:before {
+  content: "\f108";
+  font-size:1.3em;
+}
+
+.ima-fullscreen:before {
+  content: "\f109";
+   font-size:1.3em;
+}
+
+
