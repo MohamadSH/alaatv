@@ -1053,6 +1053,8 @@ class Order extends BaseModel
                 'completed_at',
                 'paymentmethod',
                 'transactiongateway',
+                'managerComment',
+                'jalaliCompletedAt',
             ]);
 
             return $successfulTransactions;
@@ -1078,6 +1080,9 @@ class Order extends BaseModel
                             'completed_at',
                             'paymentmethod',
                             'transactiongateway',
+                            'managerComment',
+                            'jalaliCompletedAt',
+
                         ]);
 
                         return $pendingTransaction;
@@ -1103,6 +1108,8 @@ class Order extends BaseModel
                             'completed_at',
                             'paymentmethod',
                             'transactiongateway',
+                            'managerComment',
+                            'jalaliCompletedAt',
                         ]);
 
                         return $unpaidTransaction;

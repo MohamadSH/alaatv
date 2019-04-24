@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Collection\TransactionCollection;
+use Cache;
 
 /**
  * App\Transaction
@@ -110,6 +111,8 @@ class Transaction extends BaseModel
     protected $appends = [
         'paymentmethod',
         'transactiongateway',
+        'jalaliCompletedAt',
+        'jalaliDeadlineAt',
     ];
 
     protected $hidden = [
@@ -299,5 +302,23 @@ class Transaction extends BaseModel
             'displayName',
             'description',
         ]);
+    }
+
+    public function getJalaliCompletedAtAttribute(){
+        $transaction = $this;
+        $key = "transaction:completed_at:" . $transaction->cacheKey();
+        return Cache::tags(["transaction"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($transaction) {
+                return $this->convertDate($transaction->completed_at, "toJalali");
+            });
+    }
+
+    public function getJalaliDeadlineAtAttribute(){
+        $transaction = $this;
+        $key = "transaction:deadline_at:" . $transaction->cacheKey();
+        return Cache::tags(["transaction"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($transaction) {
+                return $this->convertDate($transaction->deadline_at, "toJalali");
+            });
     }
 }
