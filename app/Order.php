@@ -1167,7 +1167,7 @@ class Order extends BaseModel
         $key = "order:updated_at:" . $order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if($this->isAuthenticatedUserHasPermission('constants.SHOW_ORDER_ACCESS'))
+                if($this->isAuthenticatedUserHasPermission(config('constants.SHOW_ORDER_ACCESS')))
                     return $this->convertDate($order->updated_at, "toJalali");
 
                 return null;
@@ -1180,7 +1180,7 @@ class Order extends BaseModel
         $key = "order:created_at:" . $order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if($this->isAuthenticatedUserHasPermission('constants.SHOW_ORDER_ACCESS'))
+                if($this->isAuthenticatedUserHasPermission(config('constants.SHOW_ORDER_ACCESS')))
                     return $this->convertDate($order->created_at, "toJalali");
 
                 return null;
@@ -1193,7 +1193,7 @@ class Order extends BaseModel
         $key = "order:completed_at:" . $order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if($this->isAuthenticatedUserHasPermission('constants.SHOW_ORDER_ACCESS'))
+                if($this->isAuthenticatedUserHasPermission(config('constants.SHOW_ORDER_ACCESS')))
                     return $this->convertDate($order->completed_at, "toJalali");
 
                 return null;
