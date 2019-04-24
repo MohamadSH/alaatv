@@ -1,0 +1,161 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300');
+html, body {
+	margin:0!important;
+	padding:0!important;
+	background-color: #fff;
+	height:100%;
+	width:100%;
+}
+a { 
+	color:#990000; 
+	text-decoration:none;
+}
+a:hover {
+	text-decoration:underline;
+}
+h1, h2 {
+	text-align:center;
+    padding: 0;
+    color: #121212;
+    font-size: 30px;
+    margin: 20px;
+    line-height: 30px;
+    font-weight: 400;
+	font-family: 'Open Sans Condensed', sans-serif
+}
+.header {
+	width:100%;
+	background:#000000;
+	text-align:center;
+	font-family:Arial,sans-serif;
+}
+.header .menu {
+	max-width:860px;
+	margin:0 auto;
+	position:relative;
+}
+.browse {
+	color:#ffffff;
+	position:absolute;
+	top:15px;
+	left:15px;
+	padding-bottom:10px;
+}
+.browse a {
+	color:#ffffff; font-size:12px;
+}
+@media only screen and (max-width:480px) {
+	.browse {
+		position:relative;
+		top:0;
+		left:0;
+	}
+}
+.fullsize {
+	width:100%; height:100%;position:relative;
+}
+.container {
+	width:100%;
+	max-width:860px;
+	margin:0 auto;
+	margin-top:25px;
+	font-size:14px;
+	text-align:left;
+	line-height:1.5em;
+	margin-bottom:80px;
+}
+.container .mark {
+	color:#128DEB;
+}
+.container .comment {
+	color:#009900;
+}
+.container .info {
+
+	text-align:center;
+}
+video {
+	width:100%!important;
+	height:100%!important;
+}
+.media-parent {
+	width: 100%;
+    position: relative;
+    padding-top: 56.25%;
+    height: auto;
+    margin-top: 15px;
+}
+.media-child {
+	position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    max-height: none!important;
+    min-height: 0!important;
+    max-width: 100%;
+    width: 100%;
+}
+ul {
+	display: table;
+    line-height: 2em;
+    margin: 40px auto;
+	font-size:16px;
+}
+
+.footer {
+    width: 100%;
+    line-height:35px;
+    cursor: pointer;
+    background-color: #000000;
+	text-align:center;
+	color:#a5a5a5;
+	font-family:Arial,sans-serif;
+	font-size:12px;
+
+	position:fixed;
+	bottom:0;
+}
+.footer a {
+	color:#ffff!important; 
+	text-decoration:none;
+}
+.footer-light {
+	background: #e5e5e5;
+	border-top: solid 1px #fff;
+	color: #333333;
+}
+.footer-light a {
+	color:#990000!important; 
+}
+pre {
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: pre;
+    white-space: -moz-pre-wrap;
+    white-space: pre-wrap;
+    white-space: pre\9;
+    background: #e9e9e9;
+    border: 1px solid #fff;
+    color: #700;
+    font-size: 12px;
+    line-height: 1.5em;
+    margin: 10px 0;
+    padding: 5px 20px;
+    text-align: left;
+}
+#player_one {
+	width:100%; 
+	height:100%;
+}
+.explain {
+	padding: 15px;
+    font-size: 1.2em;
+    text-align: center;
+    line-height: 1.7em;
+}
+.autotable {
+	margin:20px auto;
+	display:table;
+	font-weight:bold;
+}

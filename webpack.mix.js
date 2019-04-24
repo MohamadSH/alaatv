@@ -68,11 +68,11 @@ mix.babel(
         'node_modules/lightgallery/modules/lg-zoom.min.js',
         'node_modules/jquery-sticky/jquery.sticky.js',
         'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
-        'public/acm/video-js/video.js',
-        'public/acm/video-js/videojs-ie8.min.js',
+        // 'public/acm/video-js/video.js',
+        // 'public/acm/video-js/videojs-ie8.min.js',
         'public/acm/video-js/nuevo/nuevo.min.js',
         'public/acm/AlaatvCustomFiles/js/UserCart.js',
-        'public/acm/AlaatvCustomFiles/js/page-product-show.js',
+        // 'public/acm/AlaatvCustomFiles/js/page-product-show.js',
     ],
     'public/js/product-show.js'
 ).version();
@@ -134,7 +134,7 @@ mix.styles(
 mix.styles(
     [
         'node_modules/lightgallery/src/css/lightgallery.css',
-        'public/acm/video-js/video-js.css',
+        // 'public/acm/video-js/video-js.css',
         'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
         'public/acm/AlaatvCustomFiles/css/page-product-show.css',
     ],
