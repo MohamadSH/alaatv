@@ -27,7 +27,7 @@ class RedirectData
     /**
      * @return mixed
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
@@ -35,7 +35,7 @@ class RedirectData
     /**
      * @return mixed
      */
-    public function getInput()
+    public function getInput(): array
     {
         return $this->input;
     }

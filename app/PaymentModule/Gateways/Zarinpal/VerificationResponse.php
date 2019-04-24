@@ -2,9 +2,10 @@
 
 namespace App\PaymentModule\Gateways\Zarinpal;
 
+use App\PaymentModule\OnlinePaymentVerificationResponseInterface;
 use Carbon\Carbon;
 
-class VerificationResponse
+class VerificationResponse implements OnlinePaymentVerificationResponseInterface
 {
     protected $exceptions = [
         -1 => 'اطلاعات ارسال شده ناقص است.',
@@ -32,9 +33,19 @@ class VerificationResponse
         $this->response = $response;
     }
 
-    function isSuccessfulPayment(): bool
+    public static function instance($result)
+    {
+        return new static($result);
+    }
+
+    public function isSuccessfulPayment(): bool
     {
         return in_array($this->getStatus(), ['verified_before', 'success',]) && $this->getRefId();
+    }
+
+    public function isVerifiedBefore()
+    {
+        return $this->getStatus() === 'verified_before';
     }
 
     public function getRefId()
@@ -84,7 +95,7 @@ class VerificationResponse
         return $this->getStatus() === 'verified_before';
     }
 
-    public function getStatus(): string
+    private function getStatus(): string
     {
         return $this->response['Status'] ?? '';
     }

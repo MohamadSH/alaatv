@@ -2,8 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Transaction;
 use Carbon\Carbon;
+use App\Transaction;
+use App\Bankaccount;
 
 class TransactionRepo
 {
@@ -65,5 +66,48 @@ class TransactionRepo
         if (isset($data[$column]) && strlen($data[$column]) > 0) {
             $transaction->$column = Carbon::parse($data[$column])->addDay()->format('Y-m-d');
         }
+    }
+
+    public static function getTransactionByAuthority($authority)
+    {
+        return nullable(Transaction::authority($authority)->first());
+    }
+
+    /**
+     * @param \App\Transaction $transaction
+     * @param string $refId
+     * @param string|null $cardPanMask
+     */
+    public static function handleTransactionStatus(Transaction $transaction, string $refId, string $cardPanMask = null)
+    {
+        $bankAccountId = null;
+
+        if (! is_null($cardPanMask)) {
+            $account = [
+                'accountNumber' => $cardPanMask,
+                'user_id' => optional($transaction->order)->user->id,
+            ];
+
+            $bankAccountId = Bankaccount::firstOrCreate($account)->id;
+        }
+
+        self::changeTransactionStatusToSuccessful($transaction->id, $refId, $bankAccountId);
+    }
+
+    /**
+     * @param $id
+     * @param string $transactionID
+     * @param int|null $bankAccountId
+     */
+    private static function changeTransactionStatusToSuccessful($id, string $transactionID, int $bankAccountId = null)
+    {
+        $data = [
+        'completed_at' => Carbon::now(),
+        'transactionID' => $transactionID,
+        'destinationBankAccount_id' => $bankAccountId,
+        'transactionstatus_id' => config("constants.TRANSACTION_STATUS_SUCCESSFUL"),
+        ];
+
+        static::modify($data,(int) $id);
     }
 }
