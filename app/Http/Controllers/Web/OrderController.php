@@ -69,7 +69,7 @@ class OrderController extends Controller
         $this->middleware('permission:'.config('constants.LIST_ORDER_ACCESS'), ['only' => 'index']);
         $this->middleware('permission:'.config('constants.INSERT_ORDER_ACCESS'), ['only' => 'create']);
         $this->middleware('permission:'.config('constants.REMOVE_ORDER_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.config('constants.SHOW_ORDER_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:'.config('constants.SHOW_ORDER_ACCESS'), ['only' => 'edit' , 'show']);
         $this->middleware('permission:'.config('constants.INSERT_ORDER_ACCESS'), ['only' => 'exitAdminInsertOrder']);
         $this->middleware([
             'completeInfo',
@@ -526,14 +526,12 @@ class OrderController extends Controller
     /**
      *
      * Display the specified resource.
-     * @param int $id
-     *
-     * @param $order
+     * @param Order $order
      * @return \Illuminate\Http\Response
      */
-    public function show($order)
+    public function show(Order $order)
     {
-        return $order;
+        return $order->orderproducts;
     }
 
     /**
