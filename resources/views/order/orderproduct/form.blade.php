@@ -27,7 +27,7 @@
                         <small class="bold">بن محصول جدید را به کاربر بده(اگر دارد)</small>
                     </div>
                     @include("admin.filters.productsFilter" , [ "listType"=>"childSelect", "selectType"=>"searchable" , 'label'=>["caption"=>""] ,"name"=>"newProductId" , "class"=>"newProductSelect" , "id"=>"newProductSelect" , "defaultValue"=>["value"=>0 , "caption"=>"انتخاب کنید"] , "disabled"=>true])
-                    <span class="help-block bold font-blue">قیمت: <lable id="newProductCostLabel">0</lable> تومان</span>
+                    <span class="help-block bold m--font-info">قیمت: <lable id="newProductCostLabel">0</lable> تومان</span>
                     <input type="hidden" id="newProductCostInput" name="newProductCost">
                 </div>
             </div>

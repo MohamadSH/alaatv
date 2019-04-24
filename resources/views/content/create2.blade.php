@@ -556,7 +556,7 @@
                          */
                         $("input[data-role=tagsinput]").tagsinput();
                     } else {
-                        $("#my-awesome-dropzone").append("<span class='font-red'>" + "خطا در آپلود فایل " + files.name + "</span></br>" + response.toString() + "</br>");
+                        $("#my-awesome-dropzone").append("<span class='m--font-danger'>" + "خطا در آپلود فایل " + files.name + "</span></br>" + response.toString() + "</br>");
                     }
 
 //                    if (typeof(response.sessionData) != "undefined" && response.sessionData != null)
@@ -572,7 +572,7 @@
 //                        });
                 });
                 this.on("error", function (files, response) {
-                    $("#my-awesome-dropzone").append("<span class='font-red'>" + "خطا در آپلود فایل " + files.name + "</span></br>" + response.toString() + "</br>");
+                    $("#my-awesome-dropzone").append("<span class='m--font-danger'>" + "خطا در آپلود فایل " + files.name + "</span></br>" + response.toString() + "</br>");
                     // Gets triggered when there was an error sending the files.
                     // Maybe show form again, and notify user of error
                 });

@@ -46,7 +46,7 @@
                         <div class="profile-usertitle-name">@if(!isset(Auth::user()->firstName) && !isset(Auth::user()->lastName))
                                 کاربر
                                 ناشناس @else @if(isset(Auth::user()->firstName)) {{Auth::user()->firstName}} @endif @if(isset(Auth::user()->lastName)){{Auth::user()->lastName}} @endif @endif</div>
-                        <div class="profile-usertitle-name font-red">مشاور</div>
+                        <div class="profile-usertitle-name m--font-danger">مشاور</div>
                     </div>
                     <div class="profile-userbuttons">
                         <button type="button" class="btn btn-circle green btn-sm" style="margin-bottom: 10%">شما

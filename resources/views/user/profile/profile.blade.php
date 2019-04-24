@@ -185,7 +185,7 @@
                                     <div class="form-group">
                                         <div class="input-group">
                                             <div class="m-checkbox-list">
-                                                <label class="m-checkbox m-checkbox--state-primary font-red bold">
+                                                <label class="m-checkbox m-checkbox--state-primary m--font-danger bold">
                                                     <input value="1" name="enableReportPublish" type="checkbox">
                                                     اجازه انتشار رتبه خود را در سایت می دهم
                                                     <span></span>

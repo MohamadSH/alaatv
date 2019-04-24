@@ -78,7 +78,7 @@ function makeDataTable(id) {
  * @param id : table id
  */
 
-function makeDataTable_loadWithAjax(id, url, columns, dataFilter) {
+function makeDataTable_loadWithAjax(id, url, columns, dataFilter, ajaxData, dataSrc) {
     var table = $('#'+id);
 
     var oTable = table.dataTable({
@@ -150,11 +150,9 @@ function makeDataTable_loadWithAjax(id, url, columns, dataFilter) {
         "serverSide": true,
         "ajax": {
             "url": url,
-            "data": function (data) {
-                data.page = getNextPageParam(data.start, data.length);
-                return data;
-            },
-            'dataFilter': dataFilter
+            "data": ajaxData,
+            'dataFilter': dataFilter,
+            "dataSrc": dataSrc
         },
 
         "columns": columns
@@ -164,6 +162,31 @@ function makeDataTable_loadWithAjax(id, url, columns, dataFilter) {
 function getNextPageParam(start, length) {
     let page = (start / length) + 1;
     return page;
+}
+function getFormData($form){
+    var unindexed_array = $form.serializeArray();
+    var indexed_array = {};
+
+    for (let index in unindexed_array) {
+        if (isNaN(index)) {
+            continue;
+        }
+        let item = unindexed_array[index];
+        if (item.name.indexOf("[]") !== -1) {
+            if (typeof indexed_array[item.name] === 'undefined') {
+                indexed_array[item.name] = [];
+            }
+            indexed_array[item.name].push(item.value);
+        } else {
+            indexed_array[item.name] = item.value;
+        }
+    }
+    
+    // $.map(unindexed_array, function(n, i){
+    //     indexed_array[n['name']] = n['value'];
+    // });
+
+    return indexed_array;
 }
 
 //dataTable without button

@@ -22,7 +22,7 @@
             <select class="mt-multiselect btn btn-default" multiple="multiple" data-label="left" data-width="100%"
                     data-filter="true" data-height="200"
                     id="grades" name="grades[]" title="رشته ها" disabled>
-                <option value="0" class="bold font-red">بدون رشته ها</option>
+                <option value="0" class="bold m--font-danger">بدون رشته ها</option>
                 @foreach($grades as $key=>$value)
                     <option value="{{$key}}">{{$value}}</option>
                 @endforeach

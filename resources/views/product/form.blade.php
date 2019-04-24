@@ -127,7 +127,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="mt-checkbox-list">
-                            <label class="mt-checkbox mt-checkbox-outline font-red bold">یکسان سازی قیمت فرزندان
+                            <label class="mt-checkbox mt-checkbox-outline m--font-danger bold">یکسان سازی قیمت فرزندان
                                 <input type="checkbox" value="1" name="changeChildrenPrice"/>
                                 <span></span>
                             </label>

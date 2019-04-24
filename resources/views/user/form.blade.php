@@ -98,7 +98,7 @@
             {{--@endif--}}
             {{--</div>--}}
             {{--</div>--}}
-            {{--<span class="help-block @if ($errors->has('photo')) font-red bold @else small @endif bg-font-dark">فرمتهای مجاز: jpg,png - حداکثر حجم مجاز: ۲۰۰ کیلوبایت</span>--}}
+            {{--<span class="help-block @if ($errors->has('photo')) m--font-danger bold @else small @endif bg-font-dark">فرمتهای مجاز: jpg,png - حداکثر حجم مجاز: ۲۰۰ کیلوبایت</span>--}}
             {{--<div class="form-group {{ $errors->has('photo') ? ' has-error' : '' }}">--}}
             {{--<label class="control-label visible-ie8 visible-ie9">عکس</label>--}}
             {{--<div class="fileinput fileinput-new" data-provides="fileinput">--}}
@@ -283,7 +283,7 @@
             {{--@endif--}}
             {{--</div>--}}
             {{--</div>--}}
-            {{--<span class="help-block @if ($errors->has('photo')) font-red bold @else small @endif bg-font-dark">فرمتهای مجاز: jpg,png - حداکثر حجم مجاز: ۲۰۰ کیلوبایت</span>--}}
+            {{--<span class="help-block @if ($errors->has('photo')) m--font-danger bold @else small @endif bg-font-dark">فرمتهای مجاز: jpg,png - حداکثر حجم مجاز: ۲۰۰ کیلوبایت</span>--}}
             {{--<div class="form-group {{ $errors->has('photo') ? ' has-error' : '' }}">--}}
             {{--<label class="control-label visible-ie8 visible-ie9">عکس</label>--}}
             {{--<div class="fileinput fileinput-new" data-provides="fileinput">--}}

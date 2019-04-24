@@ -40,7 +40,7 @@
                 <a href="#tab_general" data-toggle="tab"> اطلاعات محتوا </a>
             </li>
             <li>
-                <a href="#tab_category" data-toggle="tab"><span class="font-red"> * </span>
+                <a href="#tab_category" data-toggle="tab"><span class="m--font-danger"> * </span>
                     دسته بندی محتوا </a>
             </li>
             <li>

@@ -29,7 +29,7 @@
 @section("content")
     <div class="row">
         <div class="col-md-12 page-404">
-            <div class="number font-red"> 404</div>
+            <div class="number m--font-danger"> 404</div>
             <div class="details">
                 <h3>ظاهرا شما گم شده اید!</h3>
                 <p> صفحه ی مورد نظر شما یافت نشد

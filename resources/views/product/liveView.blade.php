@@ -39,13 +39,13 @@
     {{--<div class="col-md-10">--}}
     {{--<video style="width: 100%" controls  poster="/acm/extra/video-broken.png">--}}
     {{--<source src="" type="video/mp4">--}}
-    {{--<span class="bold font-red">مرورگر شما HTML5 را پشتیبانی نمی کند</span>--}}
+    {{--<span class="bold m--font-danger">مرورگر شما HTML5 را پشتیبانی نمی کند</span>--}}
     {{--</video>--}}
     {{--</div>--}}
     {{--</div>--}}
     {{--<div class="row">--}}
     {{--<div class=" col-md-12 bold" style="text-align: justify;line-height: 2;">--}}
-    {{--<h4 class="bold text-center font-red" style="line-height: 2">ضمن عرض پوزش ، پخش آنلاین همایش به دلیل انتخابات ریاست جمهوری قطع می باشد.</h4>--}}
+    {{--<h4 class="bold text-center m--font-danger" style="line-height: 2">ضمن عرض پوزش ، پخش آنلاین همایش به دلیل انتخابات ریاست جمهوری قطع می باشد.</h4>--}}
     {{--<p>شما عزیزان می توانید فردای روز برگزاری همایش ، فیلمهای همایش به همراه جزوات ارائه شده را با مراجعه به همین صفحه دانلود نمایید</p>--}}
     {{--<p style="">همچنین در صورتی که  مایل هستید فیلمها و جزوات را از طریق پست دریافت نمایید ، لازم است ابتدا با مراجعه به پروفایل خود ، قسمت آدرس را تکمیل نموده و سپس درخواست ارسال پستی را از طریق کانال تلگرام و یا تماس تلفنی به ما اعلام نمایید. لازم به ذکر است فیلم ها و جزوات از طریق پست پیشتاز برای شما ارسال خواهند شد و  <span class="font-red-thunderbird" style="font-size: larger">ارسال پستی رایگان بوده و هزینه ای دریافت نخواهد شد.</span></p>--}}
     {{--<p class="text-center"><a href="{{action("Web\UserController@showProfile")}}"  class="btn btn-lg purple" style="font-size: larger">تکمیل آدرس پستی</a></p>--}}
@@ -95,7 +95,7 @@
     {{--@endif--}}
     {{--</div>--}}
     {{--@else--}}
-    {{--<h3 class="font-red bold  text-center">هنوز درج نشده</h3>--}}
+    {{--<h3 class="m--font-danger bold  text-center">هنوز درج نشده</h3>--}}
     {{--@endif--}}
     {{--</div>--}}
     {{--</div>--}}
@@ -124,7 +124,7 @@
                                 style="border: hidden; width: 100% ;height:467px" frameborder="0" allowfullscreen
                                 webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
                     @else
-                        <h2 class="block bold text-center font-blue" style="line-height:normal">پخش آنلاین چهارشنبه
+                        <h2 class="block bold text-center m--font-info" style="line-height:normal">پخش آنلاین چهارشنبه
                             (96/12/2) ساعت 22:00 آغاز خواهد شد</h2>
                     @endif
                 </div>

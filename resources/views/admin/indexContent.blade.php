@@ -40,8 +40,8 @@
 
             {{--<div class="note note-info">--}}
             {{--<h4 class="block"><strong>توجه!</strong></h4>--}}
-            {{--@role(('admin'))<p class="bold font-red" style="font-size: x-large">ادمین محترم لیست پاسخنامه های MBTI به این صفحه اضافه شده است . لطفا کش مرورگر خود را خالی کنید</p>@endrole--}}
-            {{--<strong class="font-red"> اگر این بار اول است که از تاریخ ۳ اسفند به بعد از این پنل استفاده می کنید ، لطفا کش بروزر خود را خالی نمایید . با تشکر</strong>--}}
+            {{--@role(('admin'))<p class="bold m--font-danger" style="font-size: x-large">ادمین محترم لیست پاسخنامه های MBTI به این صفحه اضافه شده است . لطفا کش مرورگر خود را خالی کنید</p>@endrole--}}
+            {{--<strong class="m--font-danger"> اگر این بار اول است که از تاریخ ۳ اسفند به بعد از این پنل استفاده می کنید ، لطفا کش بروزر خود را خالی نمایید . با تشکر</strong>--}}
             {{--</div>--}}
 
             @permission((config('constants.LIST_EDUCATIONAL_CONTENT_ACCESS')))

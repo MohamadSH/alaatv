@@ -44,7 +44,7 @@
                        {{($pointsGiven)?"disabled":""}} target="_blank">
                         اهدای امتیاز به کاربران
                     </a>
-                    <span class="font-red bold">{{($pointsGiven)?"اهدا شده است":""}}</span>
+                    <span class="m--font-danger bold">{{($pointsGiven)?"اهدا شده است":""}}</span>
                     <hr>
                 </div>
             </div>
