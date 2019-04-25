@@ -66,6 +66,12 @@ use mysql_xdevapi\Collection;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed $orderproducttype_info
+ * @property-read mixed $bons
+ * @property-read mixed $grand_id
+ * @property-read mixed $grand_product
+ * @property-read mixed $photo
+ * @property-read mixed $price
+ * @property-read mixed $cache_cooldown_seconds
  */
 class Orderproduct extends BaseModel
 {

@@ -45,7 +45,7 @@ class webBlockCollectionFormatter implements BlockCollectionFormatter
         }
 
         if(isset($user))
-            auth()->login($user);
+            auth()->login($user,true);
         return $sections;
     }
 

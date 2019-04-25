@@ -113,6 +113,11 @@ use Stevebauman\Purify\Facades\Purify;
  * @property-read mixed $api_url
  * @property mixed next_content
  * @property mixed previous_content
+ * @property-read mixed $next_api_url
+ * @property-read mixed $next_url
+ * @property-read mixed $previous_api_url
+ * @property-read mixed $previous_url
+ * @property-read mixed $cache_cooldown_seconds
  */
 class Content extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {

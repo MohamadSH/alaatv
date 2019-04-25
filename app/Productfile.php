@@ -50,6 +50,13 @@ use Kalnoy\Nestedset\QueryBuilder;
  * @method static \Illuminate\Database\Eloquent\Builder|Productfile query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property int|null $content_id
+ * @property int|null $contentset_id
+ * @property-read \App\Content|null $content
+ * @property-read mixed $cache_cooldown_seconds
+ * @property-read \App\Contentset|null $set
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile whereContentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile whereContentsetId($value)
  */
 class Productfile extends BaseModel
 {

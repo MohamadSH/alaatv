@@ -83,6 +83,10 @@ use Cache;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property string|null $description توضیح تراکنش
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereDescription($value)
+ * @property-read mixed $jalali_completed_at
+ * @property-read mixed $jalali_deadline_at
+ * @property-read mixed $transaction_gateway
+ * @property-read mixed $cache_cooldown_seconds
  */
 class Transaction extends BaseModel
 {

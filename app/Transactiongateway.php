@@ -57,6 +57,8 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactiongateway query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed $cache_cooldown_seconds
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactiongateway name($name)
  */
 class Transactiongateway extends BaseModel
 {

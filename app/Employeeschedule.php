@@ -46,6 +46,7 @@ use Carbon\Carbon;
  * @method static where(string $string, int $userId)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed $cache_cooldown_seconds
  */
 class Employeeschedule extends BaseModel
 {

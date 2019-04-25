@@ -53,6 +53,7 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed $api_url
  * @property-read mixed $content_url
+ * @property-read mixed $cache_cooldown_seconds
  */
 class Contentset extends BaseModel implements Taggable
 {

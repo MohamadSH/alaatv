@@ -28,6 +28,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bloodtype query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed $cache_cooldown_seconds
  */
 class Bloodtype extends BaseModel
 {

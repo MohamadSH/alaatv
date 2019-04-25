@@ -62,6 +62,9 @@ use Carbon\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @method static code($couponCode)
+ * @property-read mixed $discount_type
+ * @property-read mixed $cache_cooldown_seconds
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereCode($value)
  */
 class Coupon extends BaseModel
 {

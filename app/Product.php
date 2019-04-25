@@ -136,6 +136,8 @@ use Kalnoy\Nestedset\QueryBuilder;
  * @property-read mixed $api_url
  * @property-read array|string $price
  * @property-read mixed $redirect_url
+ * @property-read \App\Collection\SetCollection|\App\Contentset[] $sets
+ * @property-read mixed $cache_cooldown_seconds
  */
 class Product extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {

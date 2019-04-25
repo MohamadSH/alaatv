@@ -36,6 +36,7 @@ namespace App;
  * @property string|null $source مسیر سرور جهت تغذیه فیلد (مثلا تغذیه آیتم های دراپ دان)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Afterloginformcontrol whereControlId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Afterloginformcontrol whereSource($value)
+ * @property-read mixed $cache_cooldown_seconds
  */
 class Afterloginformcontrol extends BaseModel
 {

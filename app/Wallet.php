@@ -37,6 +37,7 @@ use Carbon\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read \App\Wallettype|null $walletType
+ * @property-read mixed $cache_cooldown_seconds
  */
 class Wallet extends BaseModel
 {

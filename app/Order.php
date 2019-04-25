@@ -101,6 +101,27 @@ use Illuminate\Support\Facades\Cache;
  * @property-read mixed $info
  * @property mixed donates
  * @property mixed donate_amount
+ * @property-read mixed $added_bon_sum
+ * @property-read mixed $coupon_info
+ * @property-read mixed $debt
+ * @property-read int $donate_amount
+ * @property-read \Collection $donates
+ * @property-read mixed $edit_order_link
+ * @property-read mixed $jalali_completed_at
+ * @property-read mixed $jalali_created_at
+ * @property-read mixed $jalali_updated_at
+ * @property-read mixed $manager_comment
+ * @property-read mixed $order_posting_info
+ * @property-read int $paid_price
+ * @property-read mixed $pending_transactions
+ * @property-read mixed $posting_info
+ * @property-read mixed $price
+ * @property-read int $refund_price
+ * @property-read mixed $remove_order_link
+ * @property-read mixed $successful_transactions
+ * @property-read mixed $unpaid_transactions
+ * @property-read mixed $used_bon_sum
+ * @property-read mixed $cache_cooldown_seconds
  */
 class Order extends BaseModel
 {

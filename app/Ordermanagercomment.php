@@ -32,6 +32,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Ordermanagercomment query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed $cache_cooldown_seconds
  */
 class Ordermanagercomment extends BaseModel
 {

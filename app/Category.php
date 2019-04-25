@@ -38,6 +38,7 @@ use Kalnoy\Nestedset\NodeTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed $cache_cooldown_seconds
  */
 class Category extends BaseModel
 {

@@ -273,6 +273,12 @@ use Laravel\Passport\HasApiTokens;
  * @property static|null mobile_verified_at
  * @property mixed closed_orders
  * @property mixed email
+ * @property-read \App\Collection\OrderCollections|\App\Order[] $closedOrders
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Firebasetoken[] $firebasetokens
+ * @property-read mixed $closed_orders
+ * @property-read mixed $user_status
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User orWherePermissionIs($permission = '')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User orWhereRoleIs($role = '', $team = null)
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail
 {

@@ -47,6 +47,7 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property mixed $offer
+ * @property-read mixed $cache_cooldown_seconds
  */
 class Block extends BaseModel
 {
