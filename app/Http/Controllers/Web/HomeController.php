@@ -160,6 +160,15 @@ class HomeController extends Controller
     public function debug(Request $request, BlockCollectionFormatter $formatter)
 
     {
+        $v = [
+            'id',
+            'firstName',
+            'lastName',
+            'photo',
+            'full_name',
+        ];
+        $user =User::getNullInstant($v);
+        return $user->setVisible($v);
         try {
             $productFiles = Productfile::all();
             $productFiles->load('product');
@@ -235,6 +244,7 @@ class HomeController extends Controller
 
                         $content->file = $files;
                         $content->timestamps = true;
+                        return $content;
                     }
                     break;
                 }

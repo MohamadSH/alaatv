@@ -33,7 +33,8 @@ class InitializeCategoryTreeCommand extends Command
         $this->info("get Start");
 
         Category::truncate();
-        Category::create($this->makeAlaaArray());
+        //TODO::fix!
+//        Category::create($this->makeAlaaArray());
 
         $this->info("Finish!");
     }

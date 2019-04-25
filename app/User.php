@@ -275,7 +275,6 @@ use Laravel\Passport\HasApiTokens;
  * @property mixed email
  * @property-read \App\Collection\OrderCollections|\App\Order[] $closedOrders
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Firebasetoken[] $firebasetokens
- * @property-read mixed $closed_orders
  * @property-read mixed $user_status
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User orWherePermissionIs($permission = '')
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User orWhereRoleIs($role = '', $team = null)
@@ -642,5 +641,13 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
 
     private function isAuthenticatedUserHasPermission(string $permission):bool{
         return (Auth::check() && Auth::user()->can($permission));
+    }
+
+    public static function getNullInstant($visibleArray = []){
+        $user = new User();
+        foreach ($visibleArray as $key){
+            $user->$key = null;
+        }
+        return $user;
     }
 }

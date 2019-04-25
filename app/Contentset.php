@@ -126,7 +126,7 @@ class Contentset extends BaseModel implements Taggable
     |--------------------------------------------------------------------------
     */
 
-    public function getLastContent(): ?Content
+    public function getLastContent(): Content
     {
         $key = "ContentSet:getLastContent".$this->cacheKey();
 
@@ -134,20 +134,16 @@ class Contentset extends BaseModel implements Taggable
 
             $r = $this->getContents();
 
-            if (isset($r)) {
-                return null;
-            }
-
             return $r->sortByDesc("order")->first();
         });
     }
 
-    public function getContents(): ?ContentCollection
+    public function getContents(): ContentCollection
     {
         $key = "ContentSet:getContents".$this->cacheKey();
 
         return Cache::tags('set')->remember($key, config("constants.CACHE_300"), function () {
-            return $this->contents()->active()->get();
+            return $this->contents()->active()->get() ?: new ContentCollection();
         });
     }
 
@@ -228,18 +224,13 @@ class Contentset extends BaseModel implements Taggable
     /**
      * @param $value
      *
-     * @return User|null
+     * @return User
      */
-    public function getAuthorAttribute($value): ?User
+    public function getAuthorAttribute($value): User
     {
         $content = $this->getLastContent();
 
-        if(is_null($content))
-            return null;
         $author = $content->author ;
-
-        if(is_null($author))
-            return null;
 
         return $author->setVisible([
             'id',

@@ -20,7 +20,7 @@ class ComposerServiceProvider extends ServiceProvider
     public function boot()
     {
         // Using class based composers...
-        View::composer('pages.search', 'App\Http\ViewComposers\ContentSearchComposer');
+        View::composer('pages.content-search', 'App\Http\ViewComposers\ContentSearchComposer');
 
         View::composer([
             'content.show',

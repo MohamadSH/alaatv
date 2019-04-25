@@ -121,8 +121,6 @@
 
     <div class="row">
         <div class="col a--multi-level-search" id="contentSearchFilter">
-
-
             <style>
                 .a--multi-level-search .filterNavigationWarper {
                     /*background: #4c4c4c;*/

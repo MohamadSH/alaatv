@@ -13,12 +13,15 @@ class AddOvertimeConfirmationToEmployeetimesheets extends Migration
      */
     public function up()
     {
-        Schema::table('employeetimesheets', function (Blueprint $table) {
-            $table->boolean('overtime_confirmation')
-                ->default(false)
-                ->comment('تاییدیه اضافه کاری')
-                ->after('modifier_id');
-        });
+        if (!Schema::hasColumn('employeetimesheets', 'overtime_confirmation')) {
+            Schema::table('employeetimesheets', function (Blueprint $table) {
+                $table->boolean('overtime_confirmation')
+                      ->default(false)
+                      ->comment('تاییدیه اضافه کاری')
+                      ->after('modifier_id');
+            });
+        }
+
     }
 
     /**
@@ -28,8 +31,10 @@ class AddOvertimeConfirmationToEmployeetimesheets extends Migration
      */
     public function down()
     {
-        Schema::table('employeetimesheets', function (Blueprint $table) {
-            $table->dropColumn('overtime_confirmation');
-        });
+        if (Schema::hasColumn('employeetimesheets', 'overtime_confirmation')) {
+            Schema::table('employeetimesheets', function (Blueprint $table) {
+                $table->dropColumn('overtime_confirmation');
+            });
+        }
     }
 }

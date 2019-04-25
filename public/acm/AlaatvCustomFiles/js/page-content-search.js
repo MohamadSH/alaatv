@@ -69,7 +69,7 @@ var Alaasearch = function () {
         let widgetPic = (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail : data.photo;
         let widgetTitle = data.name;
         let widgetAuthor = {
-            photo: data.author.photo,
+            photo: (typeof (data.author.photo) === 'undefined' || data.author.photo == null) ? null : data.author.photo,
             name: data.author.firstName,
             full_name: data.author.full_name
         };
