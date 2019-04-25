@@ -38,7 +38,7 @@ class RegisterController extends Controller
     public function __construct(Request $request)
     {
         $this->middleware('guest');
-        $this->middleware('convert:mobile|passport|nationalCode');
+        $this->middleware('convert:mobile|password|nationalCode');
         $request->offsetSet("userstatus_id", $request->get('userstatus_id', 2));
     }
 

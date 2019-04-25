@@ -22,6 +22,13 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\FreeInternetAccept' => [
             'App\Listeners\FreeInternetAcceptListener',
         ],
+        'Laravel\Passport\Events\AccessTokenCreated' => [
+//            'App\Listeners\RevokeOldTokens',
+        ],
+
+        'Laravel\Passport\Events\RefreshTokenCreated' => [
+//            'App\Listeners\PruneOldTokens',
+        ],
     ];
 
     /**

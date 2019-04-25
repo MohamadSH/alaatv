@@ -8,17 +8,11 @@ use App\Traits\RedirectTrait;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
     use CharacterCommon;
     use RedirectTrait;
-
-    /**
-     * @var RegisterController
-     */
-    private $registerController;
 
     /*
     |--------------------------------------------------------------------------
@@ -36,14 +30,14 @@ class LoginController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param RegisterController $registerController
      */
-    public function __construct(RegisterController $registerController)
+    public function __construct()
     {
+
         $this->middleware('guest')->except('logout');
-        $this->middleware('convert:mobile|passport|nationalCode');
-        $this->registerController = $registerController;
-}
+
+        $this->middleware('convert:mobile|password|nationalCode');
+    }
 
     /**
      * Get the login username to be used by the controller.
@@ -79,17 +73,19 @@ class LoginController extends Controller
     /**
      * Handle a login request to the application.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request                      $request
+     *
+     *
+     * @param \App\Http\Controllers\Auth\RegisterController $registerController
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function login(Request $request)
+    public function login(Request $request, RegisterController $registerController)
     {
         $request->offsetSet("nationalCode", substr($request->get("password"), 0, 10));
         $request->offsetSet("userstatus_id", 1);
-
         /**
          * Validating mobile and password strings
          */
@@ -102,23 +98,22 @@ class LoginController extends Controller
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
         if ($this->hasTooManyLoginAttempts($request)) {
+
             $this->fireLockoutEvent($request);
 
             return $this->sendLockoutResponse($request);
         }
 
         if ($this->attemptLogin($request)) {
-//            Log::error('LoginController login 5-1');
             if (auth()->user()->userstatus_id == 1) {
-//                Log::error('LoginController login 5-2');
                 return $this->sendLoginResponse($request);
             } else {
-//                Log::error('LoginController login 5-3');
                 return redirect()->back()->withInput($request->only('mobile', 'remember'))->withErrors([
                     'inActive' => 'حساب کاربری شما غیر فعال شده است!',
                 ], "login");
             }
         }
+
 
 //        Log::error('LoginController login 6');
         // If the login attempt was unsuccessful we will increment the number of attempts
@@ -127,7 +122,7 @@ class LoginController extends Controller
         $this->incrementLoginAttempts($request);
 
 //        Log::error('LoginController login 7');
-        return $this->registerController->register($request);
+        return $registerController->register($request);
     }
 
     /**
@@ -139,7 +134,7 @@ class LoginController extends Controller
      */
     protected function sendLoginResponse(Request $request)
     {
-        if (! $request->expectsJson()) {
+        if (!$request->expectsJson()) {
             $request->session()->regenerate();
         }
         $this->clearLoginAttempts($request);
@@ -172,7 +167,7 @@ class LoginController extends Controller
      * The user has been authenticated.
      *
      * @param \Illuminate\Http\Request $request
-     * @param mixed $user
+     * @param mixed                    $user
      *
      * @return mixed
      */
@@ -184,13 +179,13 @@ class LoginController extends Controller
                 'user' => $user,
             ], $token);
             return response()->json([
-                'status' => 1,
-                'msg' => 'user sign in.',
+                'status'     => 1,
+                'msg'        => 'user sign in.',
                 'redirectTo' => $this->redirectTo($request),
-                'data' => $data,
+                'data'       => $data,
             ], Response::HTTP_OK);
         }
-        return null;
+        return redirect($this->redirectTo($request));
     }
 
     /**
@@ -204,8 +199,8 @@ class LoginController extends Controller
     {
         if ($request->expectsJson()) {
             return response()->json([
-                'status' => 1,
-                'msg' => 'user sign out.',
+                'status'     => 1,
+                'msg'        => 'user sign out.',
                 'redirectTo' => action("Web\IndexPageController"),
             ], Response::HTTP_OK);
         }
