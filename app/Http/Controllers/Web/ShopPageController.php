@@ -41,7 +41,7 @@ class ShopPageController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $blocks = Block::getShopBlocks();
+
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags($this->setting->site->seo->homepage->metaTitle, $this->setting->site->seo->homepage->metaDescription, $url,
             $url, route('image', [
@@ -51,8 +51,10 @@ class ShopPageController extends Controller
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
 
-        //$slides = collect();
+
+        $blocks = Block::getShopBlocks();
         $slides = Slideshow::getShopBanner();
+
         if (request()->expectsJson()) {
             return response()->setStatusCode(Response::HTTP_OK)->json([
                 'mainBanner' => $slides,
@@ -73,8 +75,6 @@ class ShopPageController extends Controller
             ]);
         }
         $pageName = "shop";
-//        dd($blocks,$slides);
-//        dd($blocks->first()->products);
         return view('pages.shop', compact('pageName', 'blocks', 'slides'));
     }
 }
