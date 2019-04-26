@@ -78,7 +78,6 @@ class MigrateDataProductSet extends Migration
 
             /** @var Productfile $productFile */
             foreach ($files as $productFile) {
-
                 $content = $this->getAssosiatedProductFileContent($productFile, $product);
                 $this->setFileForContentBasedOnProductFile($content, $productFile, true);
             }
@@ -92,7 +91,7 @@ class MigrateDataProductSet extends Migration
      * @param $files
      * @param $product
      */
-    private function makeSetForProductFiles($files, Product $product): void
+    private function makeSetForProductFiles( $files, Product $product): void
     {
         $contentSetId = $files->first()->contentset_id;
         if ($contentSetId == null) {
@@ -109,7 +108,7 @@ class MigrateDataProductSet extends Migration
         }
         $set = Contentset::find($contentSetId);
         Productfile::whereIn('id', $files->modelKeys())->update(['contentset_id' => $set->id]);
-        $product->sets()->attach($set,['order'=>$set->id]);
+        $this->attachSetToProducts($set,$files->first->name);
     }
 
 
@@ -194,5 +193,22 @@ class MigrateDataProductSet extends Migration
             $content->update();
             $content->timestamps = true;
         }
+    }
+
+    /**
+     * @param \App\Contentset  $set
+     * @param \App\Productfile $file
+     */
+    private function attachSetToProducts(Contentset $set, $fileName): void
+    {
+
+        $products = Product::getProductsThatHaveValidProductFileByFileNameRecursively($fileName);
+        $output = new ConsoleOutput();
+        $output->writeln('Count(products):'.$products->count());
+
+        foreach ($products as $product){
+            $product->sets()->attach($set, ['order' => $set->id]);
+        }
+
     }
 }

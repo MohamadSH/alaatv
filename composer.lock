@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "885bb5e27aa7068452b1ee0e7f7cbf28",
+    "content-hash": "d4fd0a2adaee7eebdc0d0c85d26052ef",
     "packages": [
         {
             "name": "algolia/algoliasearch-client-php",
@@ -142,16 +142,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.92.1",
+            "version": "3.92.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "94ecf9ad388d9fd04e8dfe492fd9484f94efb69e"
+                "reference": "a23edf1089d1f285abe5cf75db7f28c31e76d2df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/94ecf9ad388d9fd04e8dfe492fd9484f94efb69e",
-                "reference": "94ecf9ad388d9fd04e8dfe492fd9484f94efb69e",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/a23edf1089d1f285abe5cf75db7f28c31e76d2df",
+                "reference": "a23edf1089d1f285abe5cf75db7f28c31e76d2df",
                 "shasum": ""
             },
             "require": {
@@ -220,7 +220,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2019-04-19T18:08:54+00:00"
+            "time": "2019-04-25T18:09:43+00:00"
         },
         {
             "name": "cakephp/chronos",
@@ -1017,56 +1017,6 @@
             "time": "2018-02-23T01:58:20+00:00"
         },
         {
-            "name": "fico7489/laravel-pivot",
-            "version": "3.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fico7489/laravel-pivot.git",
-                "reference": "6090077a0da299099c8a8eb0f2a748e77bd4f90c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fico7489/laravel-pivot/zipball/6090077a0da299099c8a8eb0f2a748e77bd4f90c",
-                "reference": "6090077a0da299099c8a8eb0f2a748e77bd4f90c",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/database": ">5.5.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "2.*",
-                "orchestra/testbench": "3.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Fico7489\\Laravel\\Pivot\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Filip Horvat",
-                    "email": "filip.horvat@am2studio.hr",
-                    "homepage": "http://am2studio.hr",
-                    "role": "Developer"
-                }
-            ],
-            "description": "This package introduces new eloquent events for sync(), attach(), detach() or updateExistingPivot() methods on BelongsToMany relation.",
-            "homepage": "https://github.com/fico7489/laravel-pivot",
-            "keywords": [
-                "eloquent events",
-                "eloquent extra events",
-                "laravel BelongsToMany events",
-                "laravel pivot events",
-                "laravel sync events"
-            ],
-            "time": "2019-03-06T09:13:46+00:00"
-        },
-        {
             "name": "fideloper/proxy",
             "version": "4.1.0",
             "source": {
@@ -1165,68 +1115,6 @@
             "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
             "homepage": "https://github.com/firebase/php-jwt",
             "time": "2017-06-27T22:17:23+00:00"
-        },
-        {
-            "name": "genealabs/laravel-model-caching",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sanatisharif/laravel-model-caching.git",
-                "reference": "012774ab83feff4bc0da9e28506c3cd67b377db4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sanatisharif/laravel-model-caching/zipball/012774ab83feff4bc0da9e28506c3cd67b377db4",
-                "reference": "012774ab83feff4bc0da9e28506c3cd67b377db4",
-                "shasum": ""
-            },
-            "require": {
-                "fico7489/laravel-pivot": "*",
-                "illuminate/cache": "5.8.*",
-                "illuminate/config": "5.8.*",
-                "illuminate/console": "5.8.*",
-                "illuminate/database": "5.8.*",
-                "illuminate/support": "5.8.*",
-                "php": "^7.1.3"
-            },
-            "require-dev": {
-                "fzaninotto/faker": "*",
-                "mockery/mockery": "*",
-                "orchestra/database": "3.8.*",
-                "orchestra/testbench": "3.8.*",
-                "orchestra/testbench-browser-kit": "3.8.*",
-                "php-coveralls/php-coveralls": "*",
-                "phpmd/phpmd": "*",
-                "phpunit/phpunit": "^7.5",
-                "predis/predis": "*",
-                "sebastian/phpcpd": "*",
-                "symfony/thanks": "*"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "GeneaLabs\\LaravelModelCaching\\Providers\\Service"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "GeneaLabs\\LaravelModelCaching\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mike Bronner",
-                    "email": "hello@genealabs.com"
-                }
-            ],
-            "description": "Automatic caching for Eloquent models.",
-            "time": "2019-04-22T16:55:53+00:00"
         },
         {
             "name": "giggsey/libphonenumber-for-php",
@@ -3098,16 +2986,16 @@
         },
         {
             "name": "league/flysystem-sftp",
-            "version": "1.0.18",
+            "version": "1.0.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem-sftp.git",
-                "reference": "61bc5a6ade892b5ac81e62b8c21be2c1798acc2a"
+                "reference": "d1ac352947ddf375ecb42a024d2072c9a294fee9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-sftp/zipball/61bc5a6ade892b5ac81e62b8c21be2c1798acc2a",
-                "reference": "61bc5a6ade892b5ac81e62b8c21be2c1798acc2a",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-sftp/zipball/d1ac352947ddf375ecb42a024d2072c9a294fee9",
+                "reference": "d1ac352947ddf375ecb42a024d2072c9a294fee9",
                 "shasum": ""
             },
             "require": {
@@ -3136,7 +3024,7 @@
                 }
             ],
             "description": "Flysystem adapter for SFTP",
-            "time": "2019-01-07T11:56:21+00:00"
+            "time": "2019-04-25T10:20:55+00:00"
         },
         {
             "name": "league/iso3166",
@@ -3960,16 +3848,16 @@
         },
         {
             "name": "propaganistas/laravel-phone",
-            "version": "4.1.4",
+            "version": "4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Propaganistas/Laravel-Phone.git",
-                "reference": "408da6e0477977cfb8be57491bbc23d79dac5eab"
+                "reference": "f65d4e68e3200bfa40e83c92a33db5eeada78f29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Propaganistas/Laravel-Phone/zipball/408da6e0477977cfb8be57491bbc23d79dac5eab",
-                "reference": "408da6e0477977cfb8be57491bbc23d79dac5eab",
+                "url": "https://api.github.com/repos/Propaganistas/Laravel-Phone/zipball/f65d4e68e3200bfa40e83c92a33db5eeada78f29",
+                "reference": "f65d4e68e3200bfa40e83c92a33db5eeada78f29",
                 "shasum": ""
             },
             "require": {
@@ -4020,7 +3908,7 @@
                 "phone",
                 "validation"
             ],
-            "time": "2019-04-10T08:25:19+00:00"
+            "time": "2019-04-25T07:00:43+00:00"
         },
         {
             "name": "psr/cache",
@@ -8023,16 +7911,16 @@
         },
         {
             "name": "sebastian/environment",
-            "version": "4.1.0",
+            "version": "4.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "6fda8ce1974b62b14935adc02a9ed38252eca656"
+                "reference": "3095910f0f0fb155ac4021fc51a4a7a39ac04e8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/6fda8ce1974b62b14935adc02a9ed38252eca656",
-                "reference": "6fda8ce1974b62b14935adc02a9ed38252eca656",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/3095910f0f0fb155ac4021fc51a4a7a39ac04e8a",
+                "reference": "3095910f0f0fb155ac4021fc51a4a7a39ac04e8a",
                 "shasum": ""
             },
             "require": {
@@ -8047,7 +7935,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.1-dev"
+                    "dev-master": "4.2-dev"
                 }
             },
             "autoload": {
@@ -8072,7 +7960,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2019-02-01T05:27:49+00:00"
+            "time": "2019-04-25T07:55:20+00:00"
         },
         {
             "name": "sebastian/exporter",
@@ -8719,9 +8607,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "genealabs/laravel-model-caching": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

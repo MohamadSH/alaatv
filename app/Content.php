@@ -778,7 +778,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function products() :ProductCollection
     {
         return Cache::tags(['content','product'])->remember('products-of-content:'.$this->id,config('constants.CACHE_60'),function (){
-            return ($this->set->products ?: new ProductCollection())->makeHidden([
+            return $this->set->getProducts()->makeHidden([
                 'shortDescription',
                 'longDescription',
                 'tags',

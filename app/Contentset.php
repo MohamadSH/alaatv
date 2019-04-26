@@ -4,6 +4,7 @@ namespace App;
 
 use App\Classes\Taggable;
 use App\Collection\ContentCollection;
+use App\Collection\ProductCollection;
 use App\Collection\SetCollection;
 use App\Traits\favorableTraits;
 use Illuminate\Support\Facades\Cache;
@@ -197,6 +198,13 @@ class Contentset extends BaseModel implements Taggable
                     ])->withTimestamps()->orderBy('order');
     }
 
+    public function getProducts() :ProductCollection
+    {
+        return Cache::tags(['set','product'])->remember('products-of-set:'.$this->id,config('constants.CACHE_60'),function (){
+            return $this->products ?: new ProductCollection();
+        });
+
+    }
     public function getShortNameAttribute($value)
     {
         return $this->small_name;
