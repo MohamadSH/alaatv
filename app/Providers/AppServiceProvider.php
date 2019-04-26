@@ -14,11 +14,11 @@ class AppServiceProvider extends ServiceProvider
     use UserCommon;
 
     /**
-     * Bootstrap any application services.
+     * Register any application services.
      *
      * @return void
      */
-    public function boot()
+    public function register()
     {
         Content::observe(ContentObserver::class);
         Product::observe(ProductObserver::class);
@@ -40,11 +40,11 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register any application services.
+     * Bootstrap any application services.
      *
      * @return void
      */
-    public function register()
+    public function boot()
     {
         if ($this->app->environment() !== 'production') {
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
