@@ -82,7 +82,12 @@ class Slideshow extends BaseModel
             'banner',
             'page',
         ])->remember('getMainBanner', config('constants.CACHE_600'), function () {
-            return Websitepage::where('url', "/home")->first()->slides()->where("isEnable", 1)->orderBy("order")->get();
+            return Websitepage::where('url', "/home")
+                              ->first()
+                              ->slides()
+                              ->where("isEnable", 1)
+                              ->orderBy("order")
+                              ->get();
         });
     }
 
@@ -92,7 +97,12 @@ class Slideshow extends BaseModel
             'banner',
             'page',
         ])->remember('getShopBanner', config('constants.CACHE_600'), function () {
-            return Websitepage::where('url', "/shop")->first()->slides()->where("isEnable", 1)->orderBy("order")->get();
+            return Websitepage::where('url', "/shop")
+                              ->first()
+                              ->slides()
+                              ->where("isEnable", 1)
+                              ->orderBy("order")
+                              ->get();
         });
     }
 

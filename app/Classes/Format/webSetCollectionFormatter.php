@@ -28,7 +28,7 @@ class webSetCollectionFormatter implements SetCollectionFormatter
                 "displayName" => $set->shortName,
                 "author" => $set->author,
                 "pic" => $set->photo,
-                "content_id" => !is_null($content) ? $content->id : 0,
+                "content_id" => $content->id,
                 "content_count" => $set->contents_count,
             ];
             $lessons->push($lesson);

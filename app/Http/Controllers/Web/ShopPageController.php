@@ -15,8 +15,6 @@ class ShopPageController extends Controller
 {
     use MetaCommon;
 
-    protected $response;
-
     /**
      * PHP 5 allows developers to declare constructor methods for classes.
      * Classes which have a constructor method call this method on each newly-created object,
@@ -28,13 +26,11 @@ class ShopPageController extends Controller
      * param [ mixed $args [, $... ]]
      *
      * @link https://php.net/manual/en/language.oop5.decon.php
-     * @param Response $response
      * @param Websitesetting $setting
      */
-    public function __construct(Response $response, Websitesetting $setting)
+    public function __construct(Websitesetting $setting)
     {
         $this->setting = $setting->setting;
-        $this->response = $response;
     }
 
     /**
@@ -58,7 +54,7 @@ class ShopPageController extends Controller
         //$slides = collect();
         $slides = Slideshow::getShopBanner();
         if (request()->expectsJson()) {
-            return $this->response->setStatusCode(Response::HTTP_OK)->setContent([
+            return response()->setStatusCode(Response::HTTP_OK)->json([
                 'mainBanner' => $slides,
                 'block' => [
                     'current_page' => 1,
