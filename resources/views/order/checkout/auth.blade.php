@@ -11,29 +11,29 @@
 
     @include('systemMessage.flash')
 
-    <div class="container">
-    <div class="row align-items-center">
-        <div class="col-12 col-sm-9 col-md-6 col-lg-5 mx-auto">
+    <div class = "container">
+        <div class = "row align-items-center">
+            <div class = "col-12 col-sm-9 col-md-6 col-lg-5 mx-auto">
 
-            <div class="m-portlet m-portlet--bordered m-portlet--last">
-                <div class="m-portlet__head">
-                    <div class="m-portlet__head-caption">
-                        <div class="m-portlet__head-title">
-                            <h3 class="m-portlet__head-text">
-                                ورود
-                            </h3>
+                <div class = "m-portlet m-portlet--bordered m-portlet--last">
+                    <div class = "m-portlet__head">
+                        <div class = "m-portlet__head-caption">
+                            <div class = "m-portlet__head-title">
+                                <h3 class = "m-portlet__head-text">
+                                    ورود
+                                </h3>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="m-portlet__body">
+                    <div class = "m-portlet__body">
 
-                    @include("partials.loginForm")
+                        @include("partials.loginForm")
 
+                    </div>
                 </div>
+
             </div>
-
         </div>
-    </div>
     </div>
 
 @endsection
@@ -43,9 +43,9 @@
         <script>
             jQuery(document).ready(function () {
                 @if(!$errors->login->isEmpty())
-                    $("#signin-button").trigger("click");
+                $("#signin-button").trigger("click");
                 @else
-                    $("#signup-button").trigger("click");
+                $("#signup-button").trigger("click");
                 @endif
             });
         </script>

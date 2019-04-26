@@ -5,8 +5,8 @@
 
 
 @section('page-css')
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel="stylesheet" type="text/css"/>
+    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel = "stylesheet" type = "text/css"/>
     <style>
         h2.m-portlet__head-label.m-portlet__head-label--success {
             white-space: nowrap;
@@ -16,17 +16,17 @@
 @endsection
 
 @section('pageBar')
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <i class="flaticon-home-2 m--padding-right-5"></i>
-                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+    <nav aria-label = "breadcrumb">
+        <ol class = "breadcrumb">
+            <li class = "breadcrumb-item">
+                <i class = "flaticon-home-2 m--padding-right-5"></i>
+                <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
-            <li class="breadcrumb-item">
-                <a class="m-link" href="{{action("Web\HomeController@admin")}}">پنل مدیریتی</a>
+            <li class = "breadcrumb-item">
+                <a class = "m-link" href = "{{action("Web\HomeController@admin")}}">پنل مدیریتی</a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                <a class="m-link" href="#"> اصلاح اطلاعات تراکنش </a>
+            <li class = "breadcrumb-item active" aria-current = "page">
+                <a class = "m-link" href = "#"> اصلاح اطلاعات تراکنش</a>
             </li>
         </ol>
     </nav>
@@ -36,68 +36,68 @@
 
     @include("systemMessage.flash")
 
-    <div class="row">
+    <div class = "row">
 
 
         <!-- BEGIN SAMPLE FORM PORTLET-->
-        <div class="col-md-3"></div>
-        <div class="col-md-6">
+        <div class = "col-md-3"></div>
+        <div class = "col-md-6">
 
 
             <!-- BEGIN SAMPLE FORM PORTLET-->
-                <div class="m-portlet m-portlet--creative m-portlet--bordered-semi">
-                    <div class="m-portlet__head">
-                        <div class="m-portlet__head-caption">
-                            <div class="m-portlet__head-title">
-						<span class="m-portlet__head-icon m--hide">
-							<i class="flaticon-statistics"></i>
+            <div class = "m-portlet m-portlet--creative m-portlet--bordered-semi">
+                <div class = "m-portlet__head">
+                    <div class = "m-portlet__head-caption">
+                        <div class = "m-portlet__head-title">
+						<span class = "m-portlet__head-icon m--hide">
+							<i class = "flaticon-statistics"></i>
 						</span>
-                                <h3 class="m-portlet__head-text">
+                            <h3 class = "m-portlet__head-text">
 
-                                </h3>
-                                <h2 class="m-portlet__head-label m-portlet__head-label--success">
-                                    <i class="flaticon-cogwheel"></i>
+                            </h3>
+                            <h2 class = "m-portlet__head-label m-portlet__head-label--success">
+                                <i class = "flaticon-cogwheel"></i>
 
-                                    اصلاح اطلاعات تراکنش
-                                    @if(!isset($transaction->order->user->firstName) && !isset($transaction->order->user->lastName))
-                                        کاربر ناشناس
-                                    @else
-                                        @if(isset($transaction->order->user->firstName))
-                                            {{$transaction->order->user->firstName}}
-                                        @endif
-                                        @if(isset($transaction->order->user->lastName))
-                                            {{$transaction->order->user->lastName}}
-                                        @endif
+                                اصلاح اطلاعات تراکنش
+                                @if(!isset($transaction->order->user->firstName) && !isset($transaction->order->user->lastName))
+                                کاربر ناشناس
+                                @else
+                                    @if(isset($transaction->order->user->firstName))
+                                        {{$transaction->order->user->firstName}}
                                     @endif
+                                    @if(isset($transaction->order->user->lastName))
+                                        {{$transaction->order->user->lastName}}
+                                    @endif
+                                @endif
 
-                                </h2>
-                            </div>
-                        </div>
-                        <div class="m-portlet__head-tools">
-                            <a class = "btn btn-sm btn-primary m-btn--air" href = "{{action("Web\HomeController@adminOrder")}}">
-                                بازگشت
-                                <i class="fa fa-angle-left"></i>
-                            </a>
+                            </h2>
                         </div>
                     </div>
-                    <div class="m-portlet__body">
-
-
-                        <div class="form-body form">
-                            {!! Form::model($transaction,['method' => 'PUT','action' => ['Web\TransactionController@update',$transaction], 'class'=>'form-horizontal']) !!}
-                                @include('transaction.form' , ["id"=>["paymentmethod"=>"paymentmethod_id"] , "withCheckbox"=>["deadline_at" , "completed_at"]])
-                                <div class="row static-info margin-top-20" style="text-align: left">
-                                    <div class="col-md-9">
-                                        {!! Form::submit('اصلاح', ['class' => 'btn btn-lg m-btn--air btn-warning' ] ) !!}
-                                    </div>
-                                </div>
-                            {!! Form::close() !!}
-                        </div>
-
-
+                    <div class = "m-portlet__head-tools">
+                        <a class = "btn btn-sm btn-primary m-btn--air" href = "{{action("Web\HomeController@adminOrder")}}">
+                            بازگشت
+                            <i class = "fa fa-angle-left"></i>
+                        </a>
                     </div>
                 </div>
-                <!-- END SAMPLE FORM PORTLET-->
+                <div class = "m-portlet__body">
+
+
+                    <div class = "form-body form">
+                        {!! Form::model($transaction,['method' => 'PUT','action' => ['Web\TransactionController@update',$transaction], 'class'=>'form-horizontal']) !!}
+                        @include('transaction.form' , ["id"=>["paymentmethod"=>"paymentmethod_id"] , "withCheckbox"=>["deadline_at" , "completed_at"]])
+                        <div class = "row static-info margin-top-20" style = "text-align: left">
+                            <div class = "col-md-9">
+                                {!! Form::submit('اصلاح', ['class' => 'btn btn-lg m-btn--air btn-warning' ] ) !!}
+                            </div>
+                        </div>
+                        {!! Form::close() !!}
+                    </div>
+
+
+                </div>
+            </div>
+            <!-- END SAMPLE FORM PORTLET-->
 
         </div>
         <!-- END SAMPLE FORM PORTLET-->
@@ -107,25 +107,23 @@
 
 
 @section('page-js')
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
-    <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
-    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type = "text/javascript"></script>
+    <script src = "/acm/extra/persian-datepicker/lib/persian-date.js" type = "text/javascript"></script>
+    <script src = "/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type = "text/javascript"></script>
 
-    <script type="text/javascript">
+    <script type = "text/javascript">
         jQuery(document).ready(function () {
             $('#transactionDeadlineAtEnable').change(function () {
                 if ($(this).prop('checked') === true) {
                     $('#transactionDeadlineAt').attr('disabled', false);
-                }
-                else {
+                } else {
                     $('#transactionDeadlineAt').attr('disabled', true);
                 }
             });
             $('#transactionCompletedAtEnable').change(function () {
                 if ($(this).prop('checked') === true) {
                     $('#transactionCompletedAt').attr('disabled', false);
-                }
-                else {
+                } else {
                     $('#transactionCompletedAt').attr('disabled', true);
                 }
             });

@@ -1,25 +1,23 @@
-{{--@permission((Config::get('constants.SHOW_PRODUCT_ACCESS')))--}}
-@extends("app",["pageName"=>"admin"])
+{{--@permission((Config::get('constants.SHOW_PRODUCT_ACCESS')))--}}@extends("app",["pageName"=>"admin"])
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet"
-          type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
+    <link href = "/assets/global/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/assets/global/plugins/bootstrap-modal/css/bootstrap-modal.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel = "stylesheet" type = "text/css"/>
 @endsection
 
 
 @section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
+    <div class = "page-bar">
+        <ul class = "page-breadcrumb">
             <li>
-                <i class="icon-home"></i>
+                <i class = "icon-home"></i>
                 <a href = "{{action("Web\HomeController@admin")}}">پنل مدیریتی</a>
-                <i class="fa fa-angle-left"></i>
+                <i class = "fa fa-angle-left"></i>
             </li>
             <li>
                 <a href = "{{action("Web\ContactController@index", ["user" => $contact->user])}}">لیست مخاطبین</a>
-                <i class="fa fa-angle-left"></i>
+                <i class = "fa fa-angle-left"></i>
             </li>
             <li>
                 <span>اصلاح اطلاعات مخاطب</span>
@@ -29,67 +27,65 @@
 @endsection
 
 @section("content")
-    <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-6">
+    <div class = "row">
+        <div class = "col-md-3"></div>
+        <div class = "col-md-6">
         @include("systemMessage.flash")
         <!-- BEGIN SAMPLE FORM PORTLET-->
-            <div class="portlet light ">
-                <div class="portlet-title">
-                    <div class="caption">
-                        <i class="icon-settings font-dark"></i>
-                        <span class="caption-subject font-dark sbold uppercase">اصلاح اطلاعات مخاطب {{$contact->name}}</span>
+            <div class = "portlet light ">
+                <div class = "portlet-title">
+                    <div class = "caption">
+                        <i class = "icon-settings font-dark"></i>
+                        <span class = "caption-subject font-dark sbold uppercase">اصلاح اطلاعات مخاطب {{$contact->name}}</span>
                     </div>
-                    <div class="actions">
-                        <div class="btn-group">
-                            <a class="btn btn-sm dark dropdown-toggle" href = "{{action("Web\ContactController@index", ["user" => $contact->user])}}"> بازگشت
-                                <i class="fa fa-angle-left"></i>
+                    <div class = "actions">
+                        <div class = "btn-group">
+                            <a class = "btn btn-sm dark dropdown-toggle" href = "{{action("Web\ContactController@index", ["user" => $contact->user])}}"> بازگشت
+                                <i class = "fa fa-angle-left"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                <div class="portlet-body form">
+                <div class = "portlet-body form">
                     {!! Form::model($contact,['method' => 'PUT','action' => ['ContactController@update',$contact], 'class'=>'form-horizontal']) !!}
                     @include('contact.form')
                     {!! Form::close() !!}
 
                     {{--Adding Phone Number Modal--}}
-                    <div id="addPhone" class="modal fade" tabindex="-1" data-width="500" data-backdrop="static">
-                        <div class="modal-header">افزودن شماره</div>
+                    <div id = "addPhone" class = "modal fade" tabindex = "-1" data-width = "500" data-backdrop = "static">
+                        <div class = "modal-header">افزودن شماره</div>
                         {!! Form::open(['method' => 'POST' , 'action' => 'PhoneController@store' , 'class'=>'nobottommargin' , 'id' => 'phoneNumberForm']) !!}
-                        <div class="modal-body">
+                        <div class = "modal-body">
                             {!! Form::hidden('contact_id', $contact->id) !!}
-                            <div class="row">
-                                <div class="col-md-6">
+                            <div class = "row">
+                                <div class = "col-md-6">
                                     {!! Form::text('phoneNumber', null, ['class' => 'form-control', 'id' => 'phoneNumber'  , 'placeholder'=>'شماره تلفن']) !!}
-                                    <span class="help-block" id="phoneNumberAlert">
+                                    <span class = "help-block" id = "phoneNumberAlert">
                                                 <strong></strong>
                                             </span>
                                 </div>
-                                <div class="col-md-6">
+                                <div class = "col-md-6">
                                     {!! Form::select('phonetype_id', $phonetypes, null, ['class' => 'form-control', 'id' => 'phoneType']) !!}
-                                    <span class="help-block" id="phoneTypeAlert">
+                                    <span class = "help-block" id = "phoneTypeAlert">
                                                 <strong></strong>
                                             </span>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6">
+                            <div class = "row">
+                                <div class = "col-md-6">
                                     {!! Form::text('priority', null, ['class' => 'form-control', 'id' => 'priority'  , 'placeholder'=>'الویت شماره']) !!}
-                                    <span class="help-block" id="priorityAlert">
+                                    <span class = "help-block" id = "priorityAlert">
                                             <strong></strong>
                                         </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <div class="form-group">
-                                <div class="col-md-4">
-                                    <button type="button" data-dismiss="modal" class="btn btn-outline dark"
-                                            id="numberPhone-close">بستن
+                        <div class = "modal-footer">
+                            <div class = "form-group">
+                                <div class = "col-md-4">
+                                    <button type = "button" data-dismiss = "modal" class = "btn btn-outline dark" id = "numberPhone-close">بستن
                                     </button>
-                                    <button type="button" data-dismiss="modal" class="btn green"
-                                            id="numberPhone-submit">ذخیره
+                                    <button type = "button" data-dismiss = "modal" class = "btn green" id = "numberPhone-submit">ذخیره
                                     </button>
                                     {{--                                        {!! Form::submit('ذخیره' , ['class' => 'btn green' , 'data-dismiss' => "modal"]) !!}--}}
                                 </div>
@@ -106,18 +102,18 @@
 @endsection
 
 @section("footerPageLevelPlugin")
-    <script src="/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
+    <script src = "/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type = "text/javascript"></script>
+    <script src = "/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js" type = "text/javascript"></script>
+    <script src = "/assets/global/plugins/bootstrap-toastr/toastr.min.js" type = "text/javascript"></script>
 @endsection
 
 @section("footerPageLevelScript")
-    <script src="/assets/pages/scripts/ui-extended-modals.min.js" type="text/javascript"></script>
-    <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
+    <script src = "/assets/pages/scripts/ui-extended-modals.min.js" type = "text/javascript"></script>
+    <script src = "/assets/pages/scripts/ui-toastr.min.js" type = "text/javascript"></script>
 @endsection
 
 @section("extraJS")
-    <script type="text/javascript">
+    <script type = "text/javascript">
         $(document).on("click", "#numberPhone-submit", function () {
             var formData = $("#phoneNumberForm").serialize();
             $.ajax({

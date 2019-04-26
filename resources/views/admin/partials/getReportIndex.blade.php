@@ -5,11 +5,11 @@
             @if(isset($products))
                 <ul>
                     @foreach( $users as $user)
-                        <li class="bold">
+                        <li class = "bold">
                             @if(isset($user->firstName) && strlen($user->firstName)>0 || isset($user->lastName) && strlen($user->lastName)>0) @if(isset($user->firstName) && strlen($user->firstName)>0) {{ $user->firstName}} @endif @if(isset($user->lastName) && strlen($user->lastName)>0) {{$user->lastName}} @endif @else
                                 - @endif
                         </li>
-                        <ul style="    margin: 0px 0px 20px 0px;">
+                        <ul style = "    margin: 0px 0px 20px 0px;">
                             <li>کتاب ها:
                                 @if(isset($orders))
                                     @foreach($products as $product)
@@ -26,7 +26,7 @@
                                         @endif
                                     @endforeach
                                 @else
-                                    <span class="m-badge m-badge--wide label-sm m-badge--warning"> سفارشی یافت نشد </span>
+                                    <span class = "m-badge m-badge--wide label-sm m-badge--warning"> سفارشی یافت نشد </span>
                                 @endif
                             </li>
                             @if(isset($hasPishtaz))
@@ -35,9 +35,9 @@
                                         پست پیشتاز ✅
                                     @else
                                         @if(in_array($user->id , $hasPishtaz ))
-                                            پست پیشتاز ✅
+                                        پست پیشتاز ✅
                                         @else
-                                            پست پیشتاز ❌
+                                        پست پیشتاز ❌
                                         @endif
                                     @endif
                                 </li>
@@ -49,14 +49,12 @@
 
                             </li>
                             <li>
-                                کد
-                                پستی: @if(isset($user->postalCode) && strlen($user->postalCode)>0) {{ $user->postalCode }} @else
-                                    - @endif
+                                کد پستی: @if(isset($user->postalCode) && strlen($user->postalCode)>0) {{ $user->postalCode }} @else
+                                - @endif
                             </li>
                             <li>
-                                شماره
-                                موبایل:@if(isset($user->mobile) && strlen($user->mobile)>0) {{ ltrim($user->mobile, '0')}} @else
-                                    - @endif
+                                شماره موبایل:@if(isset($user->mobile) && strlen($user->mobile)>0) {{ ltrim($user->mobile, '0')}} @else
+                                - @endif
                             </li>
                             @if(isset($seePaidCost) && $seePaidCost)
                                 <li>
@@ -74,7 +72,7 @@
                                             }) ;
                                         })}}
                                     @else
-                                        -
+                                    -
                                     @endif
                                 </li>
                             @endif
@@ -83,10 +81,10 @@
                     @endforeach
                 </ul>
             @else
-                <h4 class="text-center bold m--font-danger">شما محصولی انتخاب ننموده اید!</h4>
+                <h4 class = "text-center bold m--font-danger">شما محصولی انتخاب ننموده اید!</h4>
             @endif
         @else
-            <h4 class="text-center bold m--font-danger">خریداری یافت نشد</h4>
+            <h4 class = "text-center bold m--font-danger">خریداری یافت نشد</h4>
         @endif
         @endpermission
     @endif
@@ -95,34 +93,35 @@
     @foreach( $users as $user)
         <tr>
             <th></th>
-            <td id="userFullName_{{$user->id}}">{{$user->lastName}}</td>
+            <td id = "userFullName_{{$user->id}}">{{$user->lastName}}</td>
             <td>{{$user->firstName}}</td>
             <td>@if(isset($user->major->id)) {{ $user->major->name }} @else  @endif</td>
-            <td>@if(isset($user->nationalCode) && strlen($user->nationalCode)>0) {{ $user->nationalCode }} @else <span
-                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
-            <td>@if(isset($user->mobile) && strlen($user->mobile)>0) {{ ltrim($user->mobile, '0')}} @else <span
-                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
-            <td>@if(isset($user->email) && strlen($user->email)>0) {{ $user->email }} @else <span
-                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
-            <td>@if(isset($user->city) && strlen($user->city)>0) {{ $user->city }} @else <span
-                        class="m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span>  @endif</td>
-            <td>@if(isset($user->province) && strlen($user->province)>0) {{ $user->province }} @else <span
-                        class="m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span> @endif</td>
-            <td>@if($user->hasVerifiedMobile()) <span class="m-badge m-badge--wide label-sm m-badge--success">احراز هویت کرده</span> @else
-                    <span class="m-badge m-badge--wide label-sm m-badge--danger"> نامعتبر </span> @endif</td>
-            <td>@if(isset($user->postalCode) && strlen($user->postalCode)>0) {{ $user->postalCode }} @else <span
-                        class="m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span> @endif</td>
-            <td>@if(isset($user->address) && strlen($user->address)>0) {{ $user->address }} @else <span
-                        class="m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span> @endif</td>
-            <td>@if(isset($user->school) && strlen($user->school)>0) {{ $user->school }} @else <span
-                        class="m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span> @endif</td>
+            <td>@if(isset($user->nationalCode) && strlen($user->nationalCode)>0) {{ $user->nationalCode }} @else
+                    <span class = "m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
+            <td>@if(isset($user->mobile) && strlen($user->mobile)>0) {{ ltrim($user->mobile, '0')}} @else
+                    <span class = "m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
+            <td>@if(isset($user->email) && strlen($user->email)>0) {{ $user->email }} @else
+                    <span class = "m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
+            <td>@if(isset($user->city) && strlen($user->city)>0) {{ $user->city }} @else
+                    <span class = "m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span>  @endif</td>
+            <td>@if(isset($user->province) && strlen($user->province)>0) {{ $user->province }} @else
+                    <span class = "m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span> @endif</td>
+            <td>@if($user->hasVerifiedMobile())
+                    <span class = "m-badge m-badge--wide label-sm m-badge--success">احراز هویت کرده</span> @else
+                    <span class = "m-badge m-badge--wide label-sm m-badge--danger"> نامعتبر </span> @endif</td>
+            <td>@if(isset($user->postalCode) && strlen($user->postalCode)>0) {{ $user->postalCode }} @else
+                    <span class = "m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span> @endif</td>
+            <td>@if(isset($user->address) && strlen($user->address)>0) {{ $user->address }} @else
+                    <span class = "m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span> @endif</td>
+            <td>@if(isset($user->school) && strlen($user->school)>0) {{ $user->school }} @else
+                    <span class = "m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span> @endif</td>
             <td>
-                <span class="m-badge m-badge--wide label-sm @if(strcmp($user->userstatus->name , "active")==0) m-badge--success @elseif(strcmp($user->userstatus->name , "inactive")==0) m-badge--warning @endif"> {{ $user->userstatus->displayName }} </span>
+                <span class = "m-badge m-badge--wide label-sm @if(strcmp($user->userstatus->name , "active")==0) m-badge--success @elseif(strcmp($user->userstatus->name , "inactive")==0) m-badge--warning @endif"> {{ $user->userstatus->displayName }} </span>
             </td>
-            <td>@if(isset($user->created_at) && strlen($user->created_at)>0) {{ $user->CreatedAt_Jalali() }} @else <span
-                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
-            <td>@if(isset($user->updated_at) && strlen($user->updated_at)>0) {{ $user->UpdatedAt_Jalali() }} @else <span
-                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
+            <td>@if(isset($user->created_at) && strlen($user->created_at)>0) {{ $user->CreatedAt_Jalali() }} @else
+                    <span class = "m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
+            <td>@if(isset($user->updated_at) && strlen($user->updated_at)>0) {{ $user->UpdatedAt_Jalali() }} @else
+                    <span class = "m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
             <td>{{$user->userHasBon(Config::get("constants.BON1"))}}</td>
             @if(isset($products))
                 @foreach($products as $product)
@@ -152,7 +151,7 @@
                                     {{--@if($order->paymentstatus->id == Config::get("constants.PAYMENT_STATUS_PAID"))<lable class="font-green">{{$order->paymentstatus->displayName}}</lable>--}}
                                     {{--@else--}}
                                     {{--{{$order->paymentstatus->displayName}}--}}
-                                    1
+                                        1
                                     {{--@endif--}}
 
                                     {{--</li>--}}
@@ -220,13 +219,13 @@
                                     {{--@else--}}
                                     {{--{{$order->paymentstatus->displayName}}--}}
                                     {{--@endif--}}
-                                    1
+                                        1
                                     {{--</li>--}}
                                 @endforeach
                                 {{--</ul>--}}
                             @endforeach
                         @else
-                            0
+                                        0
                         @endif
                     </td>
                 @endforeach
@@ -235,9 +234,11 @@
                 <td>
                     @if($user->lotteries->where("id" , $lotteries->first()->id)->isNotEmpty())
                         @if( $user->lotteries->where("id" , $lotteries->first()->id)->first()->pivot->rank == 0 )
-                            انصراف داده<br>هدیه:
+                            انصراف داده
+                            <br>هدیه:
                         @else
-                            نفر {{$user->lotteries->where("id" , $lotteries->first()->id)->first()->pivot->rank}}<br>
+                            نفر {{$user->lotteries->where("id" , $lotteries->first()->id)->first()->pivot->rank}}
+                                <br>
                             جایزه:
                         @endif
                         @foreach(json_decode($user->lotteries->where("id" , $lotteries->first()->id)->first()->pivot->prizes)->items as $item)
@@ -245,14 +246,14 @@
                             @if(isset($item->objectType) && strcmp($item->objectType , "App\Coupon") == 0 )
                                 <br>
                                 @if($user->orders->whereIn("orderstatus_id" , [2,5])->whereIn("paymentstatus_id" , [2,3])->where("coupon_id" , $item->objectId)->isEmpty())
-                                    - استفاده نکرده
+                            - استفاده نکرده
                                 @else
-                                    - استفاده کرده
+                            - استفاده کرده
                                 @endif
                             @endif
                         @endforeach
                     @else
-                        شرکت داده نشده
+                            شرکت داده نشده
                     @endif
                 </td>
             @endif

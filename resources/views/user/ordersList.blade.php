@@ -30,26 +30,24 @@
         <div class = "col">
 
             @if(isset($debitCard))
-                <div class="alert alert-info text-center" role="alert">
-                    شماره کارت برای
-                    واریز کارت به کارت مبلغ:
+                <div class = "alert alert-info text-center" role = "alert">
+                    شماره کارت برای واریز کارت به کارت مبلغ:
                     <br>
                     <strong>{{$debitCard->cardNumber}}</strong>
                     <br>
                     به نام
                     @if(!isset($debitCard->user->firstName) && !isset($debitCard->user->lastName))
-                        کاربر
+                    کاربر
                     ناشناس
                     @else
-                    @if(isset($debitCard->user->firstName))
+                        @if(isset($debitCard->user->firstName))
                             {{$debitCard->user->firstName}}
+                        @endif
+                        @if(isset($debitCard->user->lastName))
+                            {{$debitCard->user->lastName}}
+                        @endif
                     @endif
-                    @if(isset($debitCard->user->lastName))
-                        {{$debitCard->user->lastName}}
-                    @endif
-                    @endif
-                    -
-                    بانک {{$debitCard->bank->name}}
+                    - بانک {{$debitCard->bank->name}}
                 </div>
             @endif
 
@@ -421,101 +419,101 @@
                                                     <table class = "table m-table m-table--head-bg-success table-hover">
                                                         <thead>
                                                         <tr>
-                                                                <th> نحوه پرداخت</th>
-                                                                <th> وضعیت</th>
-                                                                <th> شناسه</th>
-                                                                <th> مبلغ تراکنش (تومان)</th>
-                                                                <th> نوع</th>
-                                                                <th> تاریخ پرداخت</th>
-                                                            </tr>
+                                                            <th> نحوه پرداخت</th>
+                                                            <th> وضعیت</th>
+                                                            <th> شناسه</th>
+                                                            <th> مبلغ تراکنش (تومان)</th>
+                                                            <th> نوع</th>
+                                                            <th> تاریخ پرداخت</th>
+                                                        </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @forelse($transactionArray as $transaction)
-                                                                <tr>
-                                                                    <td>
-                                                                        @if(isset($transaction->paymentmethod))
-                                                                            {{$transaction->paymentmethod->displayName}}
-                                                                            @if($transaction->paymentmethod->id == config("constants.PAYMENT_METHOD_WALLET"))
-                                                                                @if(
-                                                                                    isset($transaction->wallet_id) &&
-                                                                                    $transaction->wallet->wallettype_id == config("constants.WALLET_TYPE_GIFT")
-                                                                                    )
-                                                                                    - هدیه
-                                                                                @endif
+                                                        @forelse($transactionArray as $transaction)
+                                                            <tr>
+                                                                <td>
+                                                                    @if(isset($transaction->paymentmethod))
+                                                                        {{$transaction->paymentmethod->displayName}}
+                                                                        @if($transaction->paymentmethod->id == config("constants.PAYMENT_METHOD_WALLET"))
+                                                                            @if(
+                                                                                isset($transaction->wallet_id) &&
+                                                                                $transaction->wallet->wallettype_id == config("constants.WALLET_TYPE_GIFT")
+                                                                                )
+                                                                                - هدیه
                                                                             @endif
-                                                                        @else
-                                                                            <span class = "m-badge m-badge--wide m-badge--rounded m-badge--danger">
+                                                                        @endif
+                                                                    @else
+                                                                        <span class = "m-badge m-badge--wide m-badge--rounded m-badge--danger">
                                                                                 درج نشده
                                                                             </span>
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>
-                                                                        @if(isset($transaction->transactionstatus))
-                                                                            @if($transaction->transactionstatus->id == config("constants.TRANSACTION_STATUS_PENDING"))
-                                                                                <span class = "m-badge m-badge--wide m-badge--rounded m-badge--info">
+                                                                    @endif
+                                                                </td>
+                                                                <td>
+                                                                    @if(isset($transaction->transactionstatus))
+                                                                        @if($transaction->transactionstatus->id == config("constants.TRANSACTION_STATUS_PENDING"))
+                                                                            <span class = "m-badge m-badge--wide m-badge--rounded m-badge--info">
                                                                                     {{$transaction->transactionstatus->displayName}}
                                                                                 </span>
-                                                                            @else
-                                                                                {{$transaction->transactionstatus->displayName}}
-                                                                            @endif
                                                                         @else
-                                                                            <span class = "m-badge m-badge--wide m-badge--rounded m-badge--info">
+                                                                            {{$transaction->transactionstatus->displayName}}
+                                                                        @endif
+                                                                    @else
+                                                                        <span class = "m-badge m-badge--wide m-badge--rounded m-badge--info">
                                                                                 نامشخص
                                                                             </span>
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>
-                                                                        @if($transaction->getCode() === false)
-                                                                            <span class = "m-badge m-badge--wide m-badge--rounded m-badge--warning">
+                                                                    @endif
+                                                                </td>
+                                                                <td>
+                                                                    @if($transaction->getCode() === false)
+                                                                        <span class = "m-badge m-badge--wide m-badge--rounded m-badge--warning">
                                                                                 ندارد
                                                                             </span>
+                                                                    @else
+                                                                        {{$transaction->getCode()}}
+                                                                    @endif
+                                                                </td>
+                                                                <td dir = "ltr">
+                                                                    @if(isset($transaction->cost) && strlen($transaction->cost)>0)
+                                                                        @if($transaction->cost >= 0)
+                                                                            {{number_format($transaction->cost)}}
                                                                         @else
-                                                                            {{$transaction->getCode()}}
+                                                                            {{number_format(-$transaction->cost)}}
                                                                         @endif
-                                                                    </td>
-                                                                    <td dir = "ltr">
-                                                                        @if(isset($transaction->cost) && strlen($transaction->cost)>0)
-                                                                            @if($transaction->cost >= 0)
-                                                                                {{number_format($transaction->cost)}}
-                                                                            @else
-                                                                                {{number_format(-$transaction->cost)}}
-                                                                            @endif
-                                                                        @else
-                                                                            <span class = "m-badge m-badge--wide m-badge--rounded m-badge--danger">
+                                                                    @else
+                                                                        <span class = "m-badge m-badge--wide m-badge--rounded m-badge--danger">
                                                                                 درج نشده
                                                                             </span>
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>
-                                                                        @if(isset($transaction->cost) && strlen($transaction->cost)>0)
-                                                                            @if($transaction->cost >= 0)
-                                                                                پرداخت
-                                                                            @else
-                                                                                دریافت
-                                                                            @endif
+                                                                    @endif
+                                                                </td>
+                                                                <td>
+                                                                    @if(isset($transaction->cost) && strlen($transaction->cost)>0)
+                                                                        @if($transaction->cost >= 0)
+                                                                            پرداخت
                                                                         @else
-                                                                            <span class = "m-badge m-badge--wide m-badge--rounded m-badge--danger">
+                                                                            دریافت
+                                                                        @endif
+                                                                    @else
+                                                                        <span class = "m-badge m-badge--wide m-badge--rounded m-badge--danger">
                                                                                 درج نشده
                                                                             </span>
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>
-                                                                        @if(isset($transaction->completed_at) && strlen($transaction->completed_at) > 0)
-                                                                            {{ $transaction->CompletedAt_Jalali() }}
-                                                                        @else
-                                                                            <span class = "m-badge m-badge--wide m-badge--rounded m-badge--danger">
+                                                                    @endif
+                                                                </td>
+                                                                <td>
+                                                                    @if(isset($transaction->completed_at) && strlen($transaction->completed_at) > 0)
+                                                                        {{ $transaction->CompletedAt_Jalali() }}
+                                                                    @else
+                                                                        <span class = "m-badge m-badge--wide m-badge--rounded m-badge--danger">
                                                                                 درج نشده
                                                                             </span>
-                                                                        @endif
-                                                                    </td>
-                                                                </tr>
-                                                            @empty
-                                                                <tr class = "m-table__row--info">
-                                                                    <td colspan = "6">
-                                                                        شما تاکنون تراکنشی ثبت نکرده اید
-                                                                    </td>
-                                                                </tr>
-                                                            @endforelse
+                                                                    @endif
+                                                                </td>
+                                                            </tr>
+                                                        @empty
+                                                            <tr class = "m-table__row--info">
+                                                                <td colspan = "6">
+                                                                    شما تاکنون تراکنشی ثبت نکرده اید
+                                                                </td>
+                                                            </tr>
+                                                        @endforelse
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -531,52 +529,52 @@
                             <div class = "table-responsive">
                                 <table class = "table m-table m-table--head-bg-success table-hover">
                                     <thead>
-                                        <tr class="uppercase">
-                                            <th> مبلغ تراکنش (تومان)</th>
-                                            <th>عملیات</th>
-                                            <th> تاریخ سر رسید پرداخت</th>
-                                        </tr>
+                                    <tr class = "uppercase">
+                                        <th> مبلغ تراکنش (تومان)</th>
+                                        <th>عملیات</th>
+                                        <th> تاریخ سر رسید پرداخت</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($instalments as $transaction)
-                                            <tr>
-                                                <td dir = "ltr">
-                                                    @if(isset($transaction->cost) && strlen($transaction->cost)>0)
-                                                        @if($transaction->cost >= 0)
-                                                            <span id = "instalmentCost_{{$transaction->id}}">
+                                    @forelse($instalments as $transaction)
+                                        <tr>
+                                            <td dir = "ltr">
+                                                @if(isset($transaction->cost) && strlen($transaction->cost)>0)
+                                                    @if($transaction->cost >= 0)
+                                                        <span id = "instalmentCost_{{$transaction->id}}">
                                                                 {{number_format($transaction->cost)}}
                                                             </span>
-                                                        @else
-                                                            {{number_format(-$transaction->cost)}}
-                                                        @endif
                                                     @else
-                                                        <span class = "m-badge m-badge--wide m-badge--rounded m-badge--danger">
+                                                        {{number_format(-$transaction->cost)}}
+                                                    @endif
+                                                @else
+                                                    <span class = "m-badge m-badge--wide m-badge--rounded m-badge--danger">
                                                             درج نشده
                                                         </span>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <button type = "button" class = "btn btn-sm m-btn--pill m-btn--air btn-accent btnOnlinePayment" data-order-id = "{{$transaction->order_id}}" data-transaction-id = "{{$transaction->id}}" data-cost = "{{$transaction->cost}}">
-                                                        پرداخت آنلاین
-                                                    </button>
-                                                </td>
-                                                <td>
-                                                    @if(isset($transaction->deadline_at) && strlen($transaction->deadline_at) > 0)
-                                                        {{ $transaction->DeadlineAt_Jalali() }}
-                                                    @else
-                                                        <span class = "m-badge m-badge--wide m-badge--rounded m-badge--danger">
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <button type = "button" class = "btn btn-sm m-btn--pill m-btn--air btn-accent btnOnlinePayment" data-order-id = "{{$transaction->order_id}}" data-transaction-id = "{{$transaction->id}}" data-cost = "{{$transaction->cost}}">
+                                                    پرداخت آنلاین
+                                                </button>
+                                            </td>
+                                            <td>
+                                                @if(isset($transaction->deadline_at) && strlen($transaction->deadline_at) > 0)
+                                                    {{ $transaction->DeadlineAt_Jalali() }}
+                                                @else
+                                                    <span class = "m-badge m-badge--wide m-badge--rounded m-badge--danger">
                                                             نامشخص
                                                         </span>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr class = "m-table__row--info">
-                                                <td colspan = "7">
-                                                    شما تاکنون تراکنشی ثبت نکرده اید
-                                                </td>
-                                            </tr>
-                                        @endforelse
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr class = "m-table__row--info">
+                                            <td colspan = "7">
+                                                شما تاکنون تراکنشی ثبت نکرده اید
+                                            </td>
+                                        </tr>
+                                    @endforelse
                                     </tbody>
                                 </table>
                             </div>

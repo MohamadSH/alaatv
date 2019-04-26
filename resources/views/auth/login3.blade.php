@@ -47,34 +47,34 @@
                             </form>
                         </div>--}}
 
-{{--                        <div class = "m-login__forget-password">
-                            <div class = "m-login__head">
-                                <h3 class = "m-login__title">رمز عبور خود را فراموش کرده اید ؟</h3>
-                                <div class = "m-login__desc">ایمیل و یا شماره موبایل خود را برای دریافت رمز وارد نمایید</div>
-                            </div>
-                            <form class = "m-login__form m-form" action = "">
-                                <div class = "form-group m-form__group">
-                                    <input class = "form-control m-input" type = "text" placeholder = "ایمیل یا موبایل" name = "email" id = "m_email" autocomplete = "off">
-                                </div>
-                                <div class = "m-login__form-action">
-                                    <button id = "m_login_forget_password_submit" class = "btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air">ارسال رمز</button>
-                                    <button id = "m_login_forget_password_cancel" class = "btn btn-outline-focus m-btn m-btn--pill m-btn--custom">بازگشت</button>
-                                </div>
-                            </form>
-                        </div>--}}
+                        {{--                        <div class = "m-login__forget-password">
+                                                    <div class = "m-login__head">
+                                                        <h3 class = "m-login__title">رمز عبور خود را فراموش کرده اید ؟</h3>
+                                                        <div class = "m-login__desc">ایمیل و یا شماره موبایل خود را برای دریافت رمز وارد نمایید</div>
+                                                    </div>
+                                                    <form class = "m-login__form m-form" action = "">
+                                                        <div class = "form-group m-form__group">
+                                                            <input class = "form-control m-input" type = "text" placeholder = "ایمیل یا موبایل" name = "email" id = "m_email" autocomplete = "off">
+                                                        </div>
+                                                        <div class = "m-login__form-action">
+                                                            <button id = "m_login_forget_password_submit" class = "btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air">ارسال رمز</button>
+                                                            <button id = "m_login_forget_password_cancel" class = "btn btn-outline-focus m-btn m-btn--pill m-btn--custom">بازگشت</button>
+                                                        </div>
+                                                    </form>
+                                                </div>--}}
                     </div>
 
                 </div>
-{{--                <div class = "m-stack__item m-stack__item--center">
+                {{--                <div class = "m-stack__item m-stack__item--center">
 
-                    <div class = "m-login__account">
-						<span class = "m-login__account-msg">
-اگر 						کد ملی ایران ندارید :
-						</span>&nbsp;&nbsp;
-                        <a href = "javascript:" id = "m_login_signup" class = "m-link m-link--focus m-login__account-link">ثبت نام کنید!</a>
-                    </div>
+                                    <div class = "m-login__account">
+                                        <span class = "m-login__account-msg">
+                اگر 						کد ملی ایران ندارید :
+                                        </span>&nbsp;&nbsp;
+                                        <a href = "javascript:" id = "m_login_signup" class = "m-link m-link--focus m-login__account-link">ثبت نام کنید!</a>
+                                    </div>
 
-                </div>--}}
+                                </div>--}}
             </div>
         </div>
         <div class = "m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1	m-login__content m-grid-item--center" style = "background-image: url(/acm/image/bg-4.jpg)">

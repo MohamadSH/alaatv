@@ -12,17 +12,17 @@
                 --}}
 <div class = "@if($widgetScroll) item @else col-lg-3 col-xl-4 col-md-4 col-xs-4 @endif">
     <!--begin:: Widgets/Blog-->
-    <div class = "m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force" style="min-height-: 286px">
+    <div class = "m-portlet m-portlet--bordered-semi m-portlet--full-height  m-portlet--rounded-force" style = "min-height-: 286px">
         <div class = "m-portlet__head m-portlet__head--fit">
             <div class = "m-portlet__head-caption">
                 <div class = "m-portlet__head-action">
-                    <a href="{{ $widgetActionLink }}" class = "btn btn-sm m-btn--pill btn-brand">{{ $widgetActionName }}</a>
+                    <a href = "{{ $widgetActionLink }}" class = "btn btn-sm m-btn--pill btn-brand">{{ $widgetActionName }}</a>
                 </div>
             </div>
         </div>
         <div class = "m-portlet__body">
             <div class = "m-widget19">
-                <div class = "m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" >
+                <div class = "m-widget19__pic m-portlet-fit--top m-portlet-fit--sides">
                     <img src = "{{ $widgetPic }}" alt = " {{ $widgetTitle }}"/>
                     <h4 class = "m-widget19__title m--font-light m--bg-brand m--padding-top-15 m--padding-right-25 a--opacity-7 a--full-width m--regular-font-size-lg2">
                         <a href = "{{ $widgetLink }}" class = "m-link m--font-boldest m--font-light">

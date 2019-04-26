@@ -1,15 +1,14 @@
 @extends("app" , ["pageName" => "submitRequest"])
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-sweetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-1.1.3.css" rel="stylesheet"
-          type="text/css"/>
+    <link href = "/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/assets/global/plugins/bootstrap-sweetalert/sweetalert.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/acm/extra/persian-datepicker/dist/css/persian-datepicker-1.1.3.css" rel = "stylesheet" type = "text/css"/>
 @endsection
 
 @section("headPageLevelStyle")
-    <link rel="stylesheet" href="{{ mix('/css/page_level_style_all.css') }}">
+    <link rel = "stylesheet" href = "{{ mix('/css/page_level_style_all.css') }}">
 @endsection
 
 @section("bodyClass")
@@ -18,20 +17,20 @@
 
 @section("metadata")
     @parent()
-    <meta name="_token" content="{{ csrf_token() }}">
+    <meta name = "_token" content = "{{ csrf_token() }}">
 @endsection
 
 @section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
+    <div class = "page-bar">
+        <ul class = "page-breadcrumb">
             <li>
-                <i class="icon-home"></i>
+                <i class = "icon-home"></i>
                 <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
-                <i class="fa fa-angle-left"></i>
+                <i class = "fa fa-angle-left"></i>
             </li>
             <li>
                 <span>زندگی آلایی </span>
-                <i class="fa fa-angle-left"></i>
+                <i class = "fa fa-angle-left"></i>
             </li>
             <li>
                 <span>ثبت درخواست اینترنت آسیاتک</span>
@@ -56,30 +55,29 @@
     {{--</div>--}}
     {{--</div>--}}
     @include("systemMessage.flash")
-    <div class="row">
-        <div class="col-md-12">
-            <img src="/img/extra/asiatech_internet_raygan_rsz.jpg" width="100%">
+    <div class = "row">
+        <div class = "col-md-12">
+            <img src = "/img/extra/asiatech_internet_raygan_rsz.jpg" width = "100%">
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="portlet light ">
-                <div class="portlet-body">
+    <div class = "row">
+        <div class = "col-md-12">
+            <div class = "portlet light ">
+                <div class = "portlet-body">
                     <p>
                         آلایی هایی که اینترنت آسیاتک دارند، هم اکنون ترافیک آن ها از سایت آلاء رایگان می باشد.
                     </p>
                     <p>
-                        بقیه دوستان هم می تونند از طریق فرم زیر درخواست کد تخفیف 100% آسیاتک بدهند و رایگان ADSL آسیاتک
-                        را دریافت کنند.
+                        بقیه دوستان هم می تونند از طریق فرم زیر درخواست کد تخفیف 100% آسیاتک بدهند و رایگان ADSL آسیاتک را دریافت کنند.
                     </p>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
+    <div class = "row">
+        <div class = "col-md-12">
             <!-- BEGIN PROFILE SIDEBAR -->
-            <div class="profile-sidebar">
+            <div class = "profile-sidebar">
                 {{--ToDo: customzing photo layout for supporting jquery upload--}}
                 @include('partials.profileSidebar',[
                                             'user'=>$user ,
@@ -91,95 +89,91 @@
             </div>
             <!-- END BEGIN PROFILE SIDEBAR -->
             <!-- BEGIN PROFILE CONTENT -->
-            <div class="profile-content">
+            <div class = "profile-content">
                 @if($userHasRegistered)
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="portlet light ">
-                                <div class="portlet-title tabbable-line">
-                                    <div class="caption caption-md">
-                                        <i class="icon-globe theme-font hide"></i>
-                                        <span class="caption-subject font-purple-intense bold uppercase">
+                    <div class = "row">
+                        <div class = "col-md-12">
+                            <div class = "portlet light ">
+                                <div class = "portlet-title tabbable-line">
+                                    <div class = "caption caption-md">
+                                        <i class = "icon-globe theme-font hide"></i>
+                                        <span class = "caption-subject font-purple-intense bold uppercase">
                                                     درخواست اینترنت رایگان آسیاتک
                                     </span>
                                     </div>
                                 </div>
 
-                                <div class="portlet-body">
+                                <div class = "portlet-body">
                                     @if(isset($userVoucher))
-                                        <p class="list-group-item  bg-green-haze bg-font-green margin-bottom-10"
-                                           style="text-align: justify; line-height: normal">
+                                        <p class = "list-group-item  bg-green-haze bg-font-green margin-bottom-10" style = "text-align: justify; line-height: normal">
                                             درخواست شما برای دریافت اینترنت رایگان آسیاتک تایید شده است
                                             @if(isset($userVoucher))
                                                 <br>
-                                                کد تخفیف شما:
+                                            کد تخفیف شما:
                                                 <br>
-                                                <label class="font-dark bold" dir="ltr"
-                                                       style="font-size: larger">{{$userVoucher->code}}</label>
+                                                <label class = "font-dark bold" dir = "ltr" style = "font-size: larger">{{$userVoucher->code}}</label>
                                                 <br>
-                                                برای اطلاع از نحوه ثبت نام و استفاده از کد تخفیف فایل زیر را دانلود
-                                                نمایید
+                                            برای اطلاع از نحوه ثبت نام و استفاده از کد تخفیف فایل زیر را دانلود
+                                            نمایید
                                             @else
-                                                هنوز کد تخفیف به شما اختصاص داده نشده است . در اسرع وقت کد شما داده
-                                                خواهد شد و در همین صفحه قابل مشاهده خواهد بود
+                                            هنوز کد تخفیف به شما اختصاص داده نشده است . در اسرع وقت کد شما داده
+                                            خواهد شد و در همین صفحه قابل مشاهده خواهد بود
                                             @endif
                                         </p>
                                     @else
-                                        <p class="list-group-item  bg-blue-soft bg-font-blue-soft margin-bottom-10"
-                                           style="text-align: justify; line-height: normal">
+                                        <p class = "list-group-item  bg-blue-soft bg-font-blue-soft margin-bottom-10" style = "text-align: justify; line-height: normal">
                                             در خواست شما برای اینترنت رایگان آسیاتک در صف بررسی قرار گرفته است .
                                             @if(isset($rank))
                                                 <br>
-                                                <span class="bold" style="font-size: larger">شما نفر <label
-                                                            class="font-yellow-saffron bold">{{$rank}}</label> صف هستید</span>
+                                                <span class = "bold" style = "font-size: larger">شما نفر <label class = "font-yellow-saffron bold">{{$rank}}</label> صف هستید</span>
                                             @else
                                                 <br>
-                                                نوبت شما در صف مشخص نمی باشد
+                                            نوبت شما در صف مشخص نمی باشد
                                             @endif
                                         </p>
                                     @endif
-                                    <div class="alert alert-info alert-dismissable" style="text-align: justify">
-                                        <button type="button" class="close" data-dismiss="alert"
-                                                aria-hidden="true"></button>
-                                        <strong><a href="https://cdn.sanatisharif.ir/upload/rahnamaye_sabtename_asiatech.pdf?download=1">برای
-                                                دانلود راهنمای استفاده از کد تخفیف آسیاتک کلیک کنید</a></strong>
+                                    <div class = "alert alert-info alert-dismissable" style = "text-align: justify">
+                                        <button type = "button" class = "close" data-dismiss = "alert" aria-hidden = "true"></button>
+                                        <strong>
+                                            <a href = "https://cdn.sanatisharif.ir/upload/rahnamaye_sabtename_asiatech.pdf?download=1">برای دانلود راهنمای استفاده از کد تخفیف آسیاتک کلیک کنید</a>
+                                        </strong>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="portlet light ">
-                                <div class="portlet-title tabbable-line">
-                                    <div class="caption caption-md">
-                                        <i class="icon-globe theme-font hide"></i>
-                                        <span class="caption-subject font-green bold uppercase">
+                    <div class = "row">
+                        <div class = "col-md-12">
+                            <div class = "portlet light ">
+                                <div class = "portlet-title tabbable-line">
+                                    <div class = "caption caption-md">
+                                        <i class = "icon-globe theme-font hide"></i>
+                                        <span class = "caption-subject font-green bold uppercase">
                                                     اطلاعات ثبت شده شما
                                     </span>
                                     </div>
                                 </div>
 
-                                <div class="portlet-body">
+                                <div class = "portlet-body">
                                     @include('user.profile.profileView' , ["user" => $user])
                                 </div>
                             </div>
                         </div>
                     </div>
                 @else
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="portlet light ">
-                                <div class="portlet-title tabbable-line">
-                                    <div class="caption caption-md">
-                                        <i class="icon-globe theme-font hide"></i>
-                                        <span class="caption-subject font-purple-intense bold uppercase">
+                    <div class = "row">
+                        <div class = "col-md-12">
+                            <div class = "portlet light ">
+                                <div class = "portlet-title tabbable-line">
+                                    <div class = "caption caption-md">
+                                        <i class = "icon-globe theme-font hide"></i>
+                                        <span class = "caption-subject font-purple-intense bold uppercase">
                                                     ثبت درخواست اینترنت رایگان آسیاتک
                                     </span>
                                     </div>
                                 </div>
 
-                                <div class="portlet-body">
+                                <div class = "portlet-body">
                                     @include('user.profile.profileEditView' , ["withBio"=>false,
                                                                                 "withBirthdate"=>true ,
                                                                                 "withIntroducer"=>true ,
@@ -216,26 +210,25 @@
 @endsection
 
 @section("footerPageLevelPlugin")
-    <script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-sweetalert/sweetalert.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/morris/morris.min.js" type="text/javascript"></script>
-    <script src="/acm/extra/persian-datepicker/lib/persian-date-1.0.5.min.js" type="text/javascript"></script>
+    <script src = "/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type = "text/javascript"></script>
+    <script src = "/assets/global/plugins/bootstrap-sweetalert/sweetalert.min.js" type = "text/javascript"></script>
+    <script src = "/assets/global/plugins/bootstrap-toastr/toastr.min.js" type = "text/javascript"></script>
+    <script src = "/assets/global/plugins/jquery.sparkline.min.js" type = "text/javascript"></script>
+    <script src = "/assets/global/plugins/morris/morris.min.js" type = "text/javascript"></script>
+    <script src = "/acm/extra/persian-datepicker/lib/persian-date-1.0.5.min.js" type = "text/javascript"></script>
 @endsection
 
 @section("footerPageLevelScript")
-    <script src="/assets/pages/scripts/profile.min.js" type="text/javascript"></script>
-    <script src="/assets/pages/scripts/dashboard.min.js" type="text/javascript"></script>
-    <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
-    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-1.1.3.min.js"
-            type="text/javascript"></script>
-    <script src="/js/extraJS/scripts/profileUploadPhoto4.js" type="text/javascript"></script>
-    <script src="/js/extraJS/scripts/verificationCode.js" type="text/javascript"></script>
+    <script src = "/assets/pages/scripts/profile.min.js" type = "text/javascript"></script>
+    <script src = "/assets/pages/scripts/dashboard.min.js" type = "text/javascript"></script>
+    <script src = "/assets/pages/scripts/ui-toastr.min.js" type = "text/javascript"></script>
+    <script src = "/acm/extra/persian-datepicker/dist/js/persian-datepicker-1.1.3.min.js" type = "text/javascript"></script>
+    <script src = "/js/extraJS/scripts/profileUploadPhoto4.js" type = "text/javascript"></script>
+    <script src = "/js/extraJS/scripts/verificationCode.js" type = "text/javascript"></script>
 @endsection
 
 @section("extraJS")
-    <script type="text/javascript">
+    <script type = "text/javascript">
         var mobileVerification = {{($user->hasVerifiedMobile())?1:0}};
         /**
          * Set token for ajax request

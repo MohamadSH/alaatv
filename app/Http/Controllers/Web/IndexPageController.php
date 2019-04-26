@@ -20,12 +20,9 @@ class IndexPageController extends Controller
 
     private $setting;
 
-    protected $response;
-
-    public function __construct(Response $response, Websitesetting $setting)
+    public function __construct(Websitesetting $setting)
     {
         $this->setting = $setting->setting;
-        $this->response = $response;
     }
 
     /**
@@ -52,7 +49,7 @@ class IndexPageController extends Controller
         $slides = Slideshow::getMainBanner();
 
         if (request()->expectsJson()) {
-            return $this->response->setStatusCode(Response::HTTP_OK)->setContent([
+            return response()->json([
                 'mainBanner' => $slides,
                 'block' => [
                     'current_page' => 1,

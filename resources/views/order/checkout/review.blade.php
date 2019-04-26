@@ -27,19 +27,11 @@
                             </div>
                         </div>
                         <div class = "m-portlet__head-tools btnAddMoreProductToCartWraper">
-                            <button onclick = "window.location.href='{{action('Web\ShopPageController')}}';
-                                    mApp.block('.btnAddMoreProductToCartWraper', {
-                                    type: 'loader',
-                                    state: 'info',
-                                    });" type = "button" class = "btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info btnAddMoreProductToCart-desktop">
+                            <button onclick = "window.location.href='{{action('Web\ShopPageController')}}';mApp.block('.btnAddMoreProductToCartWraper', {type: 'loader',state: 'info',});" type = "button" class = "btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info btnAddMoreProductToCart-desktop">
                                 <i class = "flaticon-bag"></i>
                                 افزودن محصول جدید به سبد
                             </button>
-                            <button onclick = "window.location.href='{{action('Web\ShopPageController')}}';
-                                    mApp.block('.btnAddMoreProductToCartWraper', {
-                                    type: 'loader',
-                                    state: 'info',
-                                    });" type = "button" class = "btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info btnAddMoreProductToCart-mobile">
+                            <button onclick = "window.location.href='{{action('Web\ShopPageController')}}';mApp.block('.btnAddMoreProductToCartWraper', {type: 'loader',state: 'info',});" type = "button" class = "btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info btnAddMoreProductToCart-mobile">
                                 <i class = "flaticon-bag"></i>
                                 افزودن محصول جدید
                             </button>
@@ -335,12 +327,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type = "button" onclick = "window.location.href='{{action('Web\OrderController@checkoutPayment')}}';
-                                mApp.block('.CheckoutReviewTotalPriceWarper', {
-                                type: 'loader',
-                                state: 'info',
-                                });"
-                                class = "btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent btnGotoCheckoutPayment-desktop btnGotoCheckoutPayment">
+                        <button type = "button" onclick = "window.location.href='{{action('Web\OrderController@checkoutPayment')}}';mApp.block('.CheckoutReviewTotalPriceWarper', {type: 'loader',state: 'info',});" class = "btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent btnGotoCheckoutPayment-desktop btnGotoCheckoutPayment">
                             ادامه و ثبت سفارش
                         </button>
                     </div>
@@ -358,11 +345,7 @@
                     <div class = "m-alert__text text-center">
                         <strong>سبد خرید شما خالیست!</strong>
                         <br>
-                        <button onclick = "window.location.href='{{action('Web\ShopPageController')}}';
-                                mApp.block('.empteCartAlert', {
-                                type: 'loader',
-                                state: 'info',
-                                });" type = "button" class = "btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
+                        <button onclick = "window.location.href='{{action('Web\ShopPageController')}}';mApp.block('.empteCartAlert', {type: 'loader',state: 'info',});" type = "button" class = "btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
                             <i class = "flaticon-bag"></i>
                             افزودن محصول به سبد
                         </button>
@@ -375,17 +358,11 @@
         </div>
     @endif
 
-    <div class="m-portlet btnGotoCheckoutPayment_mobile">
-        <div class="m-portlet__body">
-            <div class="row">
-                <div class="col-6">
-                    <button type="button"
-                            onclick="window.location.href='{{action('Web\OrderController@checkoutPayment')}}';
-                                    mApp.block('.btnGotoCheckoutPayment_mobile', {
-                                    type: 'loader',
-                                    state: 'info',
-                                    });"
-                            class="btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent btnGotoCheckoutPayment">
+    <div class = "m-portlet btnGotoCheckoutPayment_mobile">
+        <div class = "m-portlet__body">
+            <div class = "row">
+                <div class = "col-6">
+                    <button type = "button" onclick = "window.location.href='{{action('Web\OrderController@checkoutPayment')}}';mApp.block('.btnGotoCheckoutPayment_mobile', {type: 'loader',state: 'info',});" class = "btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent btnGotoCheckoutPayment">
                         ثبت سفارش
                     </button>
                 </div>

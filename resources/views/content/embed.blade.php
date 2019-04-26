@@ -1,39 +1,29 @@
-<!DOCTYPE html>
-<!--[if IE 8]>
-<html lang="fa-IR" class="ie8 no-js"> <![endif]-->
-<!--[if IE 9]>
-<html lang="fa-IR" class="ie9 no-js"> <![endif]-->
-<!--[if !IE]><!-->
-<html lang="fa-IR" dir="rtl">
+<!DOCTYPE html><!--[if IE 8]>
+<html lang = "fa-IR" class = "ie8 no-js"> <![endif]--><!--[if IE 9]>
+<html lang = "fa-IR" class = "ie9 no-js"> <![endif]--><!--[if !IE]><!-->
+<html lang = "fa-IR" dir = "rtl">
 <head>
-    <script src="{{ mix('/js/core_all.js') }}" type="text/javascript"></script>
-    <link href="/video-js/video-js.min.css" rel="stylesheet">
+    <script src = "{{ mix('/js/core_all.js') }}" type = "text/javascript"></script>
+    <link href = "/video-js/video-js.min.css" rel = "stylesheet">
     <!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
-    <script src="/video-js/videojs-ie8.min.js"></script>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <script src = "/video-js/videojs-ie8.min.js"></script>
+    <meta charset = "utf-8"/>
+    <meta http-equiv = "X-UA-Compatible" content = "IE=edge">
+    <meta content = "width=device-width, initial-scale=1" name = "viewport"/>
     {!! SEO::generate(true) !!}
 </head>
 <body>
 <div data-vjs-player>
-    <video
-            id="video-{{$video->id}}"
-            poster="@if($video->thumbnails->isNotEmpty()){{$video->thumbnails->first()->name}}@endif"
-            width='100%'
-            height='450px'
-            style="width: 100%"
-            class="video-js vjs-default-skin" controls>
+    <video id = "video-{{$video->id}}" poster = "@if($video->thumbnails->isNotEmpty()){{$video->thumbnails->first()->name}}@endif" width = '100%' height = '450px' style = "width: 100%" class = "video-js vjs-default-skin" controls>
 
         @foreach($video->files as $source)
-            <source label="{{ $source->label }}" src="{{ $source->name }}" type='video/mp4'>
+            <source label = "{{ $source->label }}" src = "{{ $source->name }}" type = 'video/mp4'>
         @endforeach
-        <p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور
-            گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>
+        <p class = "vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>
     </video>
 </div>
-<script src="/video-js/video.min.js"></script>
-<script src="/video-js/nuevo/nuevo.min.js"></script>
+<script src = "/video-js/video.min.js"></script>
+<script src = "/video-js/nuevo/nuevo.min.js"></script>
 <script>
     var related_videos = [
             @foreach($contentsWithSameSet->whereIn("type" , "video" )->random( min(13,$contentsWithSameSet->whereIn("type" , "video" )->count())) as $item)

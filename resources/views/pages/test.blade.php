@@ -3,13 +3,13 @@
 @section("content")
     @include("systemMessage.flash")
 
-    <button id="btnFire" >ارسال</button>
+    <button id = "btnFire">ارسال</button>
 @endsection
 
 
 @section("page-js")
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -21,12 +21,12 @@
                     url: "http://192.168.4.2:9071/paymentRedirect/zarinpal",
                     type: "POST",
 
-                    success: function(data, textStatus, request){
+                    success: function (data, textStatus, request) {
                         alert(request.getResponseHeader('some_header'));
-                        console.log('success: '+ request.getAllResponseHeaders());
+                        console.log('success: ' + request.getAllResponseHeaders());
                     },
                     error: function (request, textStatus, errorThrown) {
-                        console.log('error- h: '+ request.getResponseHeader('location')+' - textStatus: '+textStatus+' - errorThrown: '+errorThrown);
+                        console.log('error- h: ' + request.getResponseHeader('location') + ' - textStatus: ' + textStatus + ' - errorThrown: ' + errorThrown);
                     }
 
                     // data: {},

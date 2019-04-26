@@ -1,55 +1,52 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="fa-IR" class="no-js">
+<html dir = "rtl" lang = "fa-IR" class = "no-js">
 
 <head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <meta name="application-name" content=""/>
-    <meta name="google" content="notranslate"/>
+    <meta charset = "UTF-8"/>
+    <meta http-equiv = "X-UA-Compatible" content = "IE=edge"/>
+    <meta name = "viewport" content = "width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name = "application-name" content = ""/>
+    <meta name = "google" content = "notranslate"/>
 
-    <meta name="google-site-verification" content=""/>
-    <meta name="alexaVerifyID" content=""/>
-    <meta name="norton-safeweb-site-verification" content=""/>
+    <meta name = "google-site-verification" content = ""/>
+    <meta name = "alexaVerifyID" content = ""/>
+    <meta name = "norton-safeweb-site-verification" content = ""/>
 
-    <meta name="designer" content="https://ivahid.com"/>
-    <meta name="copyright" content="&copy; 2017 ivahid.com"/>
-    <link rel="license" href="https://ivahid.com"/>
+    <meta name = "designer" content = "https://ivahid.com"/>
+    <meta name = "copyright" content = "&copy; 2017 ivahid.com"/>
+    <link rel = "license" href = "https://ivahid.com"/>
 
-    <link rel="author" href=""/>
-    <meta itemprop="name" content=""/>
-    <meta itemprop="description" content=""/>
-    <meta itemprop="image" content=""/>
+    <link rel = "author" href = ""/>
+    <meta itemprop = "name" content = ""/>
+    <meta itemprop = "description" content = ""/>
+    <meta itemprop = "image" content = ""/>
 
-    <meta name="theme-color" content="#f7b519"/>
-    <meta name="mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-    <meta name="apple-mobile-web-app-title" content="AlaaTv"/>
-    <meta name="msapplication-tooltip" content=""/>
-    <meta name="msapplication-starturl" content=""/>
-    <meta name="msapplication-navbutton-color" content=""/>
-    <meta name="msapplication-TileColor" content=""/>
-    <meta name="screen-orientation" content="portrait"/>
-    <meta name="full-screen" content="yes"/>
-    <meta name="imagemode" content="force"/>
-    <meta name="layoutmode" content="fitscreen"/>
-    <meta name="wap-font-scale" content="no"/>
+    <meta name = "theme-color" content = "#f7b519"/>
+    <meta name = "mobile-web-app-capable" content = "yes"/>
+    <meta name = "apple-mobile-web-app-capable" content = "yes"/>
+    <meta name = "apple-mobile-web-app-status-bar-style" content = "black-translucent"/>
+    <meta name = "apple-mobile-web-app-title" content = "AlaaTv"/>
+    <meta name = "msapplication-tooltip" content = ""/>
+    <meta name = "msapplication-starturl" content = ""/>
+    <meta name = "msapplication-navbutton-color" content = ""/>
+    <meta name = "msapplication-TileColor" content = ""/>
+    <meta name = "screen-orientation" content = "portrait"/>
+    <meta name = "full-screen" content = "yes"/>
+    <meta name = "imagemode" content = "force"/>
+    <meta name = "layoutmode" content = "fitscreen"/>
+    <meta name = "wap-font-scale" content = "no"/>
     {!! SEO::generate(true) !!}
-    <link rel="index" href="javascript:void(0)"/>
+    <link rel = "index" href = "javascript:void(0)"/>
 
     <title></title>
 
-    <link rel="stylesheet" href="/acm/extra/landing4/css/stylesheet2.css"/>
+    <link rel = "stylesheet" href = "/acm/extra/landing4/css/stylesheet2.css"/>
     <!--[if lt IE 10]>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flexibility/2.0.1/flexibility.js"></script>
-    <![endif]-->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/flexibility/2.0.1/flexibility.js"></script><![endif]--><!--[if lt IE 9]>
+    <script src = "https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src = "https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{Config('constants.google.analytics')}}"></script>
+    <script async src = "https://www.googletagmanager.com/gtag/js?id={{Config('constants.google.analytics')}}"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -75,53 +72,41 @@
 </head>
 
 <body>
-<div class="wrapper" id="main-page">
-    <header class="site-header">
-        <section class="header-top">
-            <div class="container">
-                <article class="art-proposal art-proposal-header">
-                    <a href="javascript:void(0)" class="a-proposal" title="">
+<div class = "wrapper" id = "main-page">
+    <header class = "site-header">
+        <section class = "header-top">
+            <div class = "container">
+                <article class = "art-proposal art-proposal-header">
+                    <a href = "javascript:void(0)" class = "a-proposal" title = "">
                         وقتی همه کنکوری ها گیج و سرگردانند شما مرور کنید ...
                     </a>
                 </article>
             </div>
         </section>
-        <section class="header-bottom">
-            <nav role="navigation">
-                <ul class="primary-menu" itemscope itemtype="http://www.schema.org/SiteNavigationElement">
-                    <li itemprop="name">
-                        <a itemprop="url" href="javascript:void(0)"
-                           onclick="$('html, body').animate({scrollTop: $('#section-5').offset().top}, 2000);"
-                           title="">
-                        </a>
-                        <i class="icon-business"></i>
+        <section class = "header-bottom">
+            <nav role = "navigation">
+                <ul class = "primary-menu" itemscope itemtype = "http://www.schema.org/SiteNavigationElement">
+                    <li itemprop = "name">
+                        <a itemprop = "url" href = "javascript:void(0)" onclick = "$('html, body').animate({scrollTop: $('#section-5').offset().top}, 2000);" title = ""></a>
+                        <i class = "icon-business"></i>
                         <span>با پکیج مرور طلایی آلاء</span>
                         <span>دوره کامل همه نکته های خاص وهم</span>
                     </li>
-                    <li itemprop="name">
-                        <a itemprop="url" href="javascript:void(0)"
-                           onclick="$('html, body').animate({scrollTop: $('#section-3').offset().top}, 2000);"
-                           title="">
-                        </a>
-                        <i class="icon-teacher"></i>
+                    <li itemprop = "name">
+                        <a itemprop = "url" href = "javascript:void(0)" onclick = "$('html, body').animate({scrollTop: $('#section-3').offset().top}, 2000);" title = ""></a>
+                        <i class = "icon-teacher"></i>
                         <span>با بهترین اساتید کشور</span>
                         <span>برای همه دانش آموزان ایران</span>
                     </li>
-                    <li itemprop="name">
-                        <a itemprop="url" href="javascript:void(0)"
-                           onclick="$('html, body').animate({scrollTop: $('#section-4').offset().top}, 2000);"
-                           title="">
-                        </a>
-                        <i class="icon-calendar"></i>
-                        <span style="display: block">در بهترین زمان</span>
+                    <li itemprop = "name">
+                        <a itemprop = "url" href = "javascript:void(0)" onclick = "$('html, body').animate({scrollTop: $('#section-4').offset().top}, 2000);" title = ""></a>
+                        <i class = "icon-calendar"></i>
+                        <span style = "display: block">در بهترین زمان</span>
 
                     </li>
-                    <li itemprop="name">
-                        <a itemprop="url" href="javascript:void(0)"
-                           onclick="$('html, body').animate({scrollTop: $('#section-footer').offset().top}, 2000);"
-                           title="">
-                        </a>
-                        <i class="icon-square"></i>
+                    <li itemprop = "name">
+                        <a itemprop = "url" href = "javascript:void(0)" onclick = "$('html, body').animate({scrollTop: $('#section-footer').offset().top}, 2000);" title = ""></a>
+                        <i class = "icon-square"></i>
                         <span>محتوای پکیج طلایی آلاء را مقایسه کنید</span>
 
                     </li>
@@ -130,11 +115,11 @@
         </section>
     </header>
     <main>
-        <section class="content-main">
-            <article class="art-content-main">
+        <section class = "content-main">
+            <article class = "art-content-main">
                 <header>
                     <h2>
-                        <a href="javascript:void(0)" title="">
+                        <a href = "javascript:void(0)" title = "">
                             محکم بشیـــــــــــــــــــــــــــــــن
                             <span>این دورِ آخره</span>
                         </a>
@@ -142,39 +127,35 @@
                     <p>
                         مهمترین راند یک رالی، دور آخره! شما دور آخر کنکور خود را چطور می‌گذرانید؟
                     </p>
-                    <p style="text-align: justify">
-                        در پکیج طلایی آلاء ابتدا کل مفاهیم یک درس را مرور می‌کنیم. طی این مرور، نکات مهم‌ترین تست‌های
-                        کنکور و تست هایی که احتمال مطرح شدن بالایی دارند نیز بررسی می‌شود. در آخر نوبت به یک آزمون با
-                        تست‌های پلاس می‌رسد؛ تست‌هایی ترکیبی و پیچیده که فهم آن‌ها می‌تواند شما را در دور آخر از
-                        رقبایتان جلو بیندازد.
+                    <p style = "text-align: justify">
+                        در پکیج طلایی آلاء ابتدا کل مفاهیم یک درس را مرور می‌کنیم. طی این مرور، نکات مهم‌ترین تست‌های کنکور و تست هایی که احتمال مطرح شدن بالایی دارند نیز بررسی می‌شود. در آخر نوبت به یک آزمون با تست‌های پلاس می‌رسد؛ تست‌هایی ترکیبی و پیچیده که فهم آن‌ها می‌تواند شما را در دور آخر از رقبایتان جلو بیندازد.
                     </p>
-                    <p style="text-align: justify">
+                    <p style = "text-align: justify">
                         علاوه بر این‌ها، ۲ آزمون جداگانه به همراه تشریح کامل جواب‌ها هم هدیه آلاء برای شماست.
                     </p>
 
                 </header>
                 <figure>
-                    <a href="javascript:void(0)" title="">
-                        <img src="/acm/extra/landing4/images/content/1.png" alt="1" title="1">
+                    <a href = "javascript:void(0)" title = "">
+                        <img src = "/acm/extra/landing4/images/content/1.png" alt = "1" title = "1">
                     </a>
                 </figure>
             </article>
-            <article class="art-slider-main" id="section-3">
-                <div class="container">
-                    <article class="art-proposal art-proposal-main">
-                        <a href="javascript:void(0)" class="a-proposal" title="">
+            <article class = "art-slider-main" id = "section-3">
+                <div class = "container">
+                    <article class = "art-proposal art-proposal-main">
+                        <a href = "javascript:void(0)" class = "a-proposal" title = "">
                             دور آخر را با دست فرمون برترین اساتید کشور تجربه کنید.
                         </a>
                     </article>
-                    <div class="swiper-container swiper-content-main">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <article class="slider-content-main">
+                    <div class = "swiper-container swiper-content-main">
+                        <div class = "swiper-wrapper">
+                            <div class = "swiper-slide">
+                                <article class = "slider-content-main">
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" data-role="210" class="link"
-                                                   title="خرید بسته آموزشی">
+                                                <a href = "javascript:void(0)" data-role = "210" class = "link" title = "خرید بسته آموزشی">
                                                     دکتر هامون سبطی
                                                 </a>
                                             </h1>
@@ -184,19 +165,18 @@
                                         <p>دبیر برتر آموزشگاه های هدف و سمپاد</p>
                                     </strong>
                                     <figure>
-                                        <a href="javascript:void(0)" title="">
-                                            <img src="/acm/extra/landing4/images/slider/S8.png" alt="" title="">
+                                        <a href = "javascript:void(0)" title = "">
+                                            <img src = "/acm/extra/landing4/images/slider/S8.png" alt = "" title = "">
                                         </a>
                                     </figure>
                                 </article>
                             </div>
-                            <div class="swiper-slide">
-                                <article class="slider-content-main">
+                            <div class = "swiper-slide">
+                                <article class = "slider-content-main">
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" data-role="211" class="link"
-                                                   title="خرید بسته آموزشی">
+                                                <a href = "javascript:void(0)" data-role = "211" class = "link" title = "خرید بسته آموزشی">
                                                     وحیده کاغذی
                                                 </a>
                                             </h1>
@@ -207,105 +187,91 @@
                                         <p>تمرکز و تاکید بر آیات و احادیث</p>
                                     </strong>
                                     <figure>
-                                        <a href="javascript:void(0)" title="">
-                                            <img src="/acm/extra/landing4/images/slider/S9.png" alt="" title="">
+                                        <a href = "javascript:void(0)" title = "">
+                                            <img src = "/acm/extra/landing4/images/slider/S9.png" alt = "" title = "">
                                         </a>
                                     </figure>
                                 </article>
                             </div>
-                            <div class="swiper-slide">
-                                <article class="slider-content-main">
+                            <div class = "swiper-slide">
+                                <article class = "slider-content-main">
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" data-role="212" class="link"
-                                                   title="خرید بسته آموزشی">
+                                                <a href = "javascript:void(0)" data-role = "212" class = "link" title = "خرید بسته آموزشی">
                                                     دکتر محمد چلاجور
                                                 </a>
                                             </h1>
                                             <span>جمع بندی مبحثی زیست شناسی کنکور</span>
                                         </header>
-                                        <p>زیست شناسی اصلی ترین درس رشته تجربی می باشد و در ارتباط با اهمیت آن هر چه
-                                            گفته شود کم است.</p>
-                                        <p>در کنکور سراسری در درس زیست هر مبحثی برای خودش اهمیت دارد و قرار نیست فصلی را
-                                            حذف کنید چون ممکن است مثل کنکور پارسال، همون سوالاتی که شما فکر می کردید
-                                            سخته، سوالات آسون از آن ها مطرح شود.</p>
+                                        <p>زیست شناسی اصلی ترین درس رشته تجربی می باشد و در ارتباط با اهمیت آن هر چه گفته شود کم است.</p>
+                                        <p>در کنکور سراسری در درس زیست هر مبحثی برای خودش اهمیت دارد و قرار نیست فصلی را حذف کنید چون ممکن است مثل کنکور پارسال، همون سوالاتی که شما فکر می کردید سخته، سوالات آسون از آن ها مطرح شود.</p>
                                     </strong>
                                     <figure>
-                                        <a href="javascript:void(0)" title="">
-                                            <img src="/acm/extra/landing4/images/slider/S10.png" alt="" title="">
+                                        <a href = "javascript:void(0)" title = "">
+                                            <img src = "/acm/extra/landing4/images/slider/S10.png" alt = "" title = "">
                                         </a>
                                     </figure>
                                 </article>
                             </div>
-                            <div class="swiper-slide">
-                                <article class="slider-content-main">
+                            <div class = "swiper-slide">
+                                <article class = "slider-content-main">
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" data-role="221" class="link"
-                                                   title="خرید بسته آموزشی">
+                                                <a href = "javascript:void(0)" data-role = "221" class = "link" title = "خرید بسته آموزشی">
                                                     سید احمد آل علی
                                                 </a>
                                             </h1>
                                             <span>جمع بندی ژنتیک کنکور در 6 الی 8 ساعت</span>
                                         </header>
-                                        <p>جمع بندی نکات و کسب مهارت در حلّ مسائل ژنتیک کنکور (فصل 8 زیست شناسی سوم
-                                            تجربی) </p>
+                                        <p>جمع بندی نکات و کسب مهارت در حلّ مسائل ژنتیک کنکور (فصل 8 زیست شناسی سوم تجربی)</p>
                                     </strong>
                                     <figure>
-                                        <a href="javascript:void(0)" title="">
-                                            <img src="/acm/extra/landing4/images/slider/S11.png" alt="" title="">
+                                        <a href = "javascript:void(0)" title = "">
+                                            <img src = "/acm/extra/landing4/images/slider/S11.png" alt = "" title = "">
                                         </a>
                                     </figure>
                                 </article>
                             </div>
-                            <div class="swiper-slide">
-                                <article class="slider-content-main">
+                            <div class = "swiper-slide">
+                                <article class = "slider-content-main">
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" data-role="213" class="link"
-                                                   title="خرید بسته آموزشی">
+                                                <a href = "javascript:void(0)" data-role = "213" class = "link" title = "خرید بسته آموزشی">
                                                     دکتر محمد چلاجور
                                                 </a>
                                             </h1>
                                             <span></span>
                                         </header>
-                                        <p>در ارتباط اهمیت درس زمین شناسی باید گفت که این درس برای گروه های ۲،۳،۴ و ۵
-                                            این درس ضزایب متفاوت دارد و رتبه کل برآیندی از رتبه های شما در زیر گروه های
-                                            شما است.</p>
-                                        <p>همین بس در ارتباط با اهمیت زمین شناسی در قبولی داروسازی که شما می توانید با
-                                            رتبه ۴ تا ۵ هزار با زدن ۳۰ تا ۵۰ درصد درس زمین شناسی، در رشته داروسازی در
-                                            دانشگاه های دولتی قبول شوید.</p>
+                                        <p>در ارتباط اهمیت درس زمین شناسی باید گفت که این درس برای گروه های ۲،۳،۴ و ۵ این درس ضزایب متفاوت دارد و رتبه کل برآیندی از رتبه های شما در زیر گروه های شما است.</p>
+                                        <p>همین بس در ارتباط با اهمیت زمین شناسی در قبولی داروسازی که شما می توانید با رتبه ۴ تا ۵ هزار با زدن ۳۰ تا ۵۰ درصد درس زمین شناسی، در رشته داروسازی در دانشگاه های دولتی قبول شوید.</p>
                                     </strong>
                                     <figure>
-                                        <a href="javascript:void(0)" title="">
-                                            <img src="/acm/extra/landing4/images/slider/S10.png" alt="" title="">
+                                        <a href = "javascript:void(0)" title = "">
+                                            <img src = "/acm/extra/landing4/images/slider/S10.png" alt = "" title = "">
                                         </a>
                                     </figure>
                                 </article>
                             </div>
-                            <div class="swiper-slide">
-                                <article class="slider-content-main">
+                            <div class = "swiper-slide">
+                                <article class = "slider-content-main">
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" data-role="214" class="link"
-                                                   title="خرید بسته آموزشی">
+                                                <a href = "javascript:void(0)" data-role = "214" class = "link" title = "خرید بسته آموزشی">
                                                     میلاد ناصح زاده
                                                 </a>
                                             </h1>
                                             <span>عربی را نقطه قوت خود کنید</span>
                                         </header>
                                         <p>پوشش ۹۲ درصد مباحث کنکور عربی با آنالیز کاربردی تست های کنکور ۵ سال اخیر؛</p>
-                                        <p>با آنالیز جز به جز تست های کنکور که شامل ۳۲ درصد ترجمه، ۸ درصد شکّل، ۱۲ درصد
-                                            تحلیل صرفی و ۱۴ درصد متن و ۳۲ درصد قواعد می شود، عربی کنکور خود را به ما
-                                            بسپارید.</p>
+                                        <p>با آنالیز جز به جز تست های کنکور که شامل ۳۲ درصد ترجمه، ۸ درصد شکّل، ۱۲ درصد تحلیل صرفی و ۱۴ درصد متن و ۳۲ درصد قواعد می شود، عربی کنکور خود را به ما بسپارید.</p>
                                     </strong>
                                     <figure>
-                                        <a href="javascript:void(0)" title="">
-                                            <img src="/acm/extra/landing4/images/slider/S1.png" alt="" title="">
+                                        <a href = "javascript:void(0)" title = "">
+                                            <img src = "/acm/extra/landing4/images/slider/S1.png" alt = "" title = "">
                                         </a>
                                     </figure>
                                 </article>
@@ -331,38 +297,34 @@
                             {{--</figure>--}}
                             {{--</article>--}}
                             {{--</div>--}}
-                            <div class="swiper-slide">
-                                <article class="slider-content-main">
+                            <div class = "swiper-slide">
+                                <article class = "slider-content-main">
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" data-role="218" class="link"
-                                                   title="خرید بسته آموزشی">
+                                                <a href = "javascript:void(0)" data-role = "218" class = "link" title = "خرید بسته آموزشی">
                                                     محمد صادق ثابتی
                                                 </a>
                                             </h1>
                                             <span>حمله به ۴۸ تست ریاضی کنکور</span>
                                         </header>
-                                        <p>این همایش به تحلیل موضوعات درس ریاضیات شامل دیفرانسیل، تحلیلی، گسسته، ریاضیات
-                                            پایه، جبر و احتمال و آمار می پردازد.</p>
+                                        <p>این همایش به تحلیل موضوعات درس ریاضیات شامل دیفرانسیل، تحلیلی، گسسته، ریاضیات پایه، جبر و احتمال و آمار می پردازد.</p>
                                         <p>هدف ما زدن تست ها با حداقل اطلاعات ممکن است</p>
-                                        <p>
-                                        </p>
+                                        <p></p>
                                     </strong>
                                     <figure>
-                                        <a href="javascript:void(0)" title="">
-                                            <img src="/acm/extra/landing4/images/slider/S5.png" alt="" title="">
+                                        <a href = "javascript:void(0)" title = "">
+                                            <img src = "/acm/extra/landing4/images/slider/S5.png" alt = "" title = "">
                                         </a>
                                     </figure>
                                 </article>
                             </div>
-                            <div class="swiper-slide">
-                                <article class="slider-content-main">
+                            <div class = "swiper-slide">
+                                <article class = "slider-content-main">
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" data-role="220" class="link"
-                                                   title="خرید بسته آموزشی">
+                                                <a href = "javascript:void(0)" data-role = "220" class = "link" title = "خرید بسته آموزشی">
                                                     محمد امین نباخته
                                                 </a>
                                             </h1>
@@ -370,23 +332,21 @@
                                         </header>
                                         <p>در این همایش موضوع به موضوع سوالات کنکور ۹۴ تا ۹۶ را بررسی می کنیم.</p>
                                         <p>الگوهای طراحان در این همایش معرفی شده و نکات را تشریح می کنیم.</p>
-                                        <p>
-                                        </p>
+                                        <p></p>
                                     </strong>
                                     <figure>
-                                        <a href="javascript:void(0)" title="">
-                                            <img src="/acm/extra/landing4/images/slider/S2.png" alt="" title="">
+                                        <a href = "javascript:void(0)" title = "">
+                                            <img src = "/acm/extra/landing4/images/slider/S2.png" alt = "" title = "">
                                         </a>
                                     </figure>
                                 </article>
                             </div>
-                            <div class="swiper-slide">
-                                <article class="slider-content-main">
+                            <div class = "swiper-slide">
+                                <article class = "slider-content-main">
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" data-role="216" class="link"
-                                                   title="خرید بسته آموزشی">
+                                                <a href = "javascript:void(0)" data-role = "216" class = "link" title = "خرید بسته آموزشی">
                                                     دکتر پیمان طلوعی
                                                 </a>
                                             </h1>
@@ -399,122 +359,111 @@
                                         </p>
                                     </strong>
                                     <figure>
-                                        <a href="javascript:void(0)" title="">
-                                            <img src="/acm/extra/landing4/images/slider/S3.png" alt="" title="">
+                                        <a href = "javascript:void(0)" title = "">
+                                            <img src = "/acm/extra/landing4/images/slider/S3.png" alt = "" title = "">
                                         </a>
                                     </figure>
                                 </article>
                             </div>
-                            <div class="swiper-slide">
-                                <article class="slider-content-main">
+                            <div class = "swiper-slide">
+                                <article class = "slider-content-main">
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" data-role="217" class="link"
-                                                   title="خرید بسته آموزشی">
+                                                <a href = "javascript:void(0)" data-role = "217" class = "link" title = "خرید بسته آموزشی">
                                                     مهدی صنیعی طهرانی
                                                 </a>
                                             </h1>
                                             <span>حل مسائل ترکیبی شیمی کنکور</span>
                                         </header>
-                                        <p>با حل و تحلیل ۱۱۰ مسئله ترکیبی و فوق العاده کنکور با توانی مضاعف سوالات شیمی
-                                            کنکور را به چالش می کشیم.</p>
-                                        <p>با این همایش قضاوت ما نسبت به مسائل شیمی تغییر می کند و ترازی تضمین شده از
-                                            شیمی را برداشت خواهیم کرد.</p>
+                                        <p>با حل و تحلیل ۱۱۰ مسئله ترکیبی و فوق العاده کنکور با توانی مضاعف سوالات شیمی کنکور را به چالش می کشیم.</p>
+                                        <p>با این همایش قضاوت ما نسبت به مسائل شیمی تغییر می کند و ترازی تضمین شده از شیمی را برداشت خواهیم کرد.</p>
                                     </strong>
                                     <figure>
-                                        <a href="javascript:void(0)" title="">
-                                            <img src="/acm/extra/landing4/images/slider/S6.png" alt="" title="">
+                                        <a href = "javascript:void(0)" title = "">
+                                            <img src = "/acm/extra/landing4/images/slider/S6.png" alt = "" title = "">
                                         </a>
                                     </figure>
                                 </article>
                             </div>
-                            <div class="swiper-slide">
-                                <article class="slider-content-main">
+                            <div class = "swiper-slide">
+                                <article class = "slider-content-main">
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" data-role="219" class="link"
-                                                   title="خرید بسته آموزشی">
+                                                <a href = "javascript:void(0)" data-role = "219" class = "link" title = "خرید بسته آموزشی">
                                                     مهدی امینی راد
                                                 </a>
                                             </h1>
                                             <span>بسته ریاضی تجربی</span>
                                         </header>
-                                        <p>در این همایش ریاضی تجربی به صورت خلاصه، منظم، الگوبندی شده و در قالبی روان و
-                                            دلپذیر جمع بندی و ارائه می شود.</p>
-                                        <p>شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار
-                                            کسب می کنید.</p>
+                                        <p>در این همایش ریاضی تجربی به صورت خلاصه، منظم، الگوبندی شده و در قالبی روان و دلپذیر جمع بندی و ارائه می شود.</p>
+                                        <p>شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار کسب می کنید.</p>
                                     </strong>
                                     <figure>
-                                        <a href="javascript:void(0)" title="">
-                                            <img src="/acm/extra/landing4/images/slider/S4.png" alt="" title="">
+                                        <a href = "javascript:void(0)" title = "">
+                                            <img src = "/acm/extra/landing4/images/slider/S4.png" alt = "" title = "">
                                         </a>
                                     </figure>
                                 </article>
                             </div>
-                            <div class="swiper-slide">
-                                <article class="slider-content-main">
+                            <div class = "swiper-slide">
+                                <article class = "slider-content-main">
                                     <strong>
                                         <header>
                                             <h1>
-                                                <a href="javascript:void(0)" data-role="222" class="link"
-                                                   title="خرید بسته آموزشی">
+                                                <a href = "javascript:void(0)" data-role = "222" class = "link" title = "خرید بسته آموزشی">
                                                     مهدی امینی راد
                                                 </a>
                                             </h1>
                                             <span>بسته ریاضی انسانی</span>
                                         </header>
-                                        <p>در این همایش ریاضی انسانی به صورت خلاصه، منظم، الگوبندی شده و در قالبی روان و
-                                            دلپذیر جمع بندی و ارائه می شود.</p>
-                                        <p>شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار
-                                            کسب می کنید.</p>
+                                        <p>در این همایش ریاضی انسانی به صورت خلاصه، منظم، الگوبندی شده و در قالبی روان و دلپذیر جمع بندی و ارائه می شود.</p>
+                                        <p>شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار کسب می کنید.</p>
                                     </strong>
                                     <figure>
-                                        <a href="javascript:void(0)" title="">
-                                            <img src="/acm/extra/landing4/images/slider/S4.png" alt="" title="">
+                                        <a href = "javascript:void(0)" title = "">
+                                            <img src = "/acm/extra/landing4/images/slider/S4.png" alt = "" title = "">
                                         </a>
                                     </figure>
                                 </article>
                             </div>
                         </div>
-                        <div class="swiper-pagination-red"></div>
+                        <div class = "swiper-pagination-red"></div>
                     </div>
                 </div>
-                <i class="icon-arrow-point-to-right arrow-next arrow-swiper"></i>
-                <i class="icon-arrow-left arrow-prev arrow-swiper"></i>
+                <i class = "icon-arrow-point-to-right arrow-next arrow-swiper"></i>
+                <i class = "icon-arrow-left arrow-prev arrow-swiper"></i>
             </article>
 
         </section>
-        <section class="forget-stress" id="section-4">
-            <div class="container">
-                <article class="art-proposal art-proposal-forget-stress">
-                    <a href="javascript:void(0)" class="a-proposal" title="">
+        <section class = "forget-stress" id = "section-4">
+            <div class = "container">
+                <article class = "art-proposal art-proposal-forget-stress">
+                    <a href = "javascript:void(0)" class = "a-proposal" title = "">
                         با ماندگاری مطالب در ذهنتان، استرس را فراموش کنید!
                     </a>
                 </article>
                 <p>
-                    چند ماه مانده به کنکور؛ دوران گیجی دانش‌آموزان است: آن‌هایی که زیاد خوانده‌اند دیوانه‌وار بیشتر و
-                    بیشتر می‌خوانند و آن‌هایی که کمتر خوانده‌اند پناهشان می‌شود جزوات متعدد دم کنکور! اما چاره این
-                    سرگیجه چیست؟
+                    چند ماه مانده به کنکور؛ دوران گیجی دانش‌آموزان است: آن‌هایی که زیاد خوانده‌اند دیوانه‌وار بیشتر و بیشتر می‌خوانند و آن‌هایی که کمتر خوانده‌اند پناهشان می‌شود جزوات متعدد دم کنکور! اما چاره این سرگیجه چیست؟
                 </p>
                 <p>
-                    با بررسی دلیل موفقیت برترین‌های کنکور در سال‌های متوالی یک نکته مهم در برطرف‌شدن این استرس نهفته
-                    است: مرور در ماه‌های آخر!
+                    با بررسی دلیل موفقیت برترین‌های کنکور در سال‌های متوالی یک نکته مهم در برطرف‌شدن این استرس نهفته است: مرور در ماه‌های آخر!
                 </p>
             </div>
         </section>
-        <section class="lottery-banner">
-            <div class="container clearfix">
-                <div class="ttla">هدیه خرید آلاء <span>برای کسانی که تا 26 اردیبهشت خرید می کنند</span></div>
+        <section class = "lottery-banner">
+            <div class = "container clearfix">
+                <div class = "ttla">هدیه خرید آلاء
+                    <span>برای کسانی که تا 26 اردیبهشت خرید می کنند</span>
+                </div>
 
-                <div class="bnra">
-                    <img class="banner" src="/acm/extra/landing4/images/banner2.png" alt="banner">
-                    <img class="infinite animated pulse shadow" src="/acm/extra/landing4/images/shadow.png"
-                         alt="banner">
+                <div class = "bnra">
+                    <img class = "banner" src = "/acm/extra/landing4/images/banner2.png" alt = "banner">
+                    <img class = "infinite animated pulse shadow" src = "/acm/extra/landing4/images/shadow.png" alt = "banner">
                 </div><!-- .bnra -->
 
-                <div class="gifts">
+                <div class = "gifts">
                     <table>
                         <thead>
                         <tr>
@@ -559,40 +508,40 @@
             </div><!-- .container -->
 
         </section>
-        <div class="div-tab-lesson" data-tabindex="most-product" id="section-5">
-            <section class="suprise-all-field">
-                <div class="container">
-                    <article class="art-proposal art-proposal-suprise-all-field">
-                        <a href="javascript:void(0)" class="a-proposal" title="">
+        <div class = "div-tab-lesson" data-tabindex = "most-product" id = "section-5">
+            <section class = "suprise-all-field">
+                <div class = "container">
+                    <article class = "art-proposal art-proposal-suprise-all-field">
+                        <a href = "javascript:void(0)" class = "a-proposal" title = "">
                             در این دور آخر برای تمام رشته ها سورپرایز داریم !
                         </a>
                     </article>
-                    <ul class="tab-title tab-lesson">
-                        <li data-tab="1">
-                            <a href="javascript:void(0)" title="همه دروس">همه دروس(اختصاصی و عمومی)</a>
+                    <ul class = "tab-title tab-lesson">
+                        <li data-tab = "1">
+                            <a href = "javascript:void(0)" title = "همه دروس">همه دروس(اختصاصی و عمومی)</a>
                         </li>
-                        <li data-tab="2">
-                            <a href="javascript:void(0)" title="ریاضی">اختصاصی ریاضی</a>
+                        <li data-tab = "2">
+                            <a href = "javascript:void(0)" title = "ریاضی">اختصاصی ریاضی</a>
                         </li>
-                        <li data-tab="3">
-                            <a href="javascript:void(0)" title="تجربی">اختصاصی تجربی</a>
+                        <li data-tab = "3">
+                            <a href = "javascript:void(0)" title = "تجربی">اختصاصی تجربی</a>
                         </li>
-                        <li data-tab="4">
-                            <a href="javascript:void(0)" title="تجربی">اختصاصی انسانی</a>
+                        <li data-tab = "4">
+                            <a href = "javascript:void(0)" title = "تجربی">اختصاصی انسانی</a>
                         </li>
                     </ul>
                 </div>
             </section>
-            <div class="content-tab-lesson" data-tabc="1">
-                <section class="sec-professors">
-                    <article class="art-professors">
+            <div class = "content-tab-lesson" data-tabc = "1">
+                <section class = "sec-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S8.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S8.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>دکتر هامون سبطی</h1>
                                     </a>
                                     <span>فارسی را با فاخته ادبیات ایران تجربه کنید.</span>
@@ -601,7 +550,7 @@
                         </figure>
                         <p> مولف کتاب های توصیه شده توسط آموزش و پرورش</p>
                         <p>دبیر برتر آموزشگاه های هدف و سمپاد</p>
-                        <div class="info-professors">
+                        <div class = "info-professors">
                             <header>
                                 <h4>مباحث همایش شامل :</h4>
                             </header>
@@ -609,30 +558,31 @@
                             <span>تاریخ ادبیات</span>
                             <span>املا و لغت</span>
                             <span>تناسب مفهومی و قرابت معنایی</span>
-                            <a href="javascript:void(0)" data-role="210" class="link" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" data-role = "210" class = "link" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S9.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S9.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>وحیده کاغذی</h1>
                                     </a>
                                     <span>همایش طلایی دین و زندگی</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">
-                            جمع بندی تمام دروس سه کتاب؛<br>
-                            تاکید بر مطالب مهم و کلیدی؛<br>
+                        <p style = "text-align: justify">
+                            جمع بندی تمام دروس سه کتاب؛
+                            <br>
+                            تاکید بر مطالب مهم و کلیدی؛
+                            <br>
                             تمرکز و تاکید بر آیات و احادیث
                         </p>
-                        <div class="info-professors">
+                        <div class = "info-professors">
                             <header>
                                 <h4>یک جمع بندی کامل</h4>
                             </header>
@@ -640,39 +590,33 @@
                             {{--<span></span>--}}
                             {{--<span></span>--}}
                             {{--<span></span>--}}
-                            <p style="text-align: justify; font-size: medium">
-                                در این جمع بندی درس به درس ، نکات مهم و کلیدی سه کتاب دوم، سوم و چهارم(پیش) مطرح می شود.
-                                از آنجایی که عمده تست ها را آیات و احایث تشکیل می دهند تاکید بر این موارد بیشتر انجام
-                                خواهد شد.
-                                بعد از بیان نکات مهم و کلیدی هر درس، تست های پر چالش از کنکور سراسری همراه با تحلیلی
-                                جذاب ارائه می گردد.
+                            <p style = "text-align: justify; font-size: medium">
+                                در این جمع بندی درس به درس ، نکات مهم و کلیدی سه کتاب دوم، سوم و چهارم(پیش) مطرح می شود. از آنجایی که عمده تست ها را آیات و احایث تشکیل می دهند تاکید بر این موارد بیشتر انجام خواهد شد. بعد از بیان نکات مهم و کلیدی هر درس، تست های پر چالش از کنکور سراسری همراه با تحلیلی جذاب ارائه می گردد.
                             </p>
-                            <a href="javascript:void(0)" class="link" data-role="211" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" data-role = "211" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S3.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S3.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>دکتر پیمان طلوعی</h1>
                                     </a>
                                     <span>همایش طلایی فیزیک کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">
-                            تحلیل فیزیک کنکور در ۲۰۰ تست پر نکته؛
-                            حلاجی و شرح نکات ریز و حل خلاقانه تست ها؛
+                        <p style = "text-align: justify">
+                            تحلیل فیزیک کنکور در ۲۰۰ تست پر نکته؛ حلاجی و شرح نکات ریز و حل خلاقانه تست ها؛
 
                             بعد از این همایش نظر شما نسبت به کنکور عوض خواهد شد.
 
                         </p>
-                        <div class="info-professors">
+                        <div class = "info-professors">
                             <header>
                                 <h4>جمع بندی مطمئن کنکور</h4>
                             </header>
@@ -680,34 +624,28 @@
                             {{--<span></span>--}}
                             {{--<span></span>--}}
                             {{--<span></span>--}}
-                            <p style="text-align: justify; font-size: medium">
-                                در این همایش با حل ۲۰۰ تست و دوره تمام نکات و مباحث اساسی فیزیک کنکور شما دیگر استرسی
-                                برای یک جمع بندی خوب و حرفه ای نخواهید داشت.
-                                امسال با همایشی بی نظیر و طلایی در درس فیزیک در کنار شما هستیم.
+                            <p style = "text-align: justify; font-size: medium">
+                                در این همایش با حل ۲۰۰ تست و دوره تمام نکات و مباحث اساسی فیزیک کنکور شما دیگر استرسی برای یک جمع بندی خوب و حرفه ای نخواهید داشت. امسال با همایشی بی نظیر و طلایی در درس فیزیک در کنار شما هستیم.
                             </p>
-                            <a href="javascript:void(0)" class="link" data-role="216" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" data-role = "216" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S6.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S6.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>مهدی صنیعی تهرانی</h1>
                                     </a>
                                     <span>همایش طلایی شیمی کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">با حل و تحلیل ۱۱۰ مسئله ترکیبی و فوق العاده کنکور با توانی مضاعف
-                            سوالات شیمی کنکور را به چالش می کشیم.
-                            با این همایش قضاوت ما نسبت به مسائل شیمی تغییر می کند و ترازی تضمین شده از شیمی را برداشت
-                            خواهیم کرد.</p>
-                        <div class="info-professors">
+                        <p style = "text-align: justify">با حل و تحلیل ۱۱۰ مسئله ترکیبی و فوق العاده کنکور با توانی مضاعف سوالات شیمی کنکور را به چالش می کشیم. با این همایش قضاوت ما نسبت به مسائل شیمی تغییر می کند و ترازی تضمین شده از شیمی را برداشت خواهیم کرد.</p>
+                        <div class = "info-professors">
                             <header>
                                 <h4>حل مسائل ترکیبی؛ قدمی بلند در شیمی کنکور</h4>
                             </header>
@@ -715,48 +653,39 @@
                             {{--<span></span>--}}
                             {{--<span></span>--}}
                             {{--<span></span>--}}
-                            <p style="text-align: justify; font-size: medium">
-                                در همایش شیمی سال ۹۶ با نحوه حل تک تک انواع مسائل آشنا شدیم؛
-                                با کمترین فرمول، کمترین محاسبه و کمترین زمان.
-                                در این همایش با حل مسائل ترکیبی به سطحی بالاتر در مواجهه با سوالات کنکور می رسیم.
-                                پس از این همایش سوالات با ساده ترین حالت خود در برابر ما قرار خواهد گرفت.
+                            <p style = "text-align: justify; font-size: medium">
+                                در همایش شیمی سال ۹۶ با نحوه حل تک تک انواع مسائل آشنا شدیم؛ با کمترین فرمول، کمترین محاسبه و کمترین زمان. در این همایش با حل مسائل ترکیبی به سطحی بالاتر در مواجهه با سوالات کنکور می رسیم. پس از این همایش سوالات با ساده ترین حالت خود در برابر ما قرار خواهد گرفت.
                             </p>
-                            <a href="javascript:void(0)" class="link" data-role="217" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" data-role = "217" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S1.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S1.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>میلاد ناصح زاده</h1>
                                     </a>
                                     <span>همایش ۲۰۰ تست طلایی کنکور عربی</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">پوشش ۹۲ درصد مباحث کنکور عربی با آنالیز کاربردی تست های کنکور ۵
-                            سال اخیر؛
-                            با آنالیز جز به جز تست های کنکور که شامل ۳۲ درصد ترجمه، ۸ درصد شکّل، ۱۲ درصد تحلیل صرفی و ۱۴
-                            درصد متن و ۳۲ درصد قواعد می شود، عربی کنکور خود را به ما پسپارید</p>
-                        <div class="info-professors">
+                        <p style = "text-align: justify">پوشش ۹۲ درصد مباحث کنکور عربی با آنالیز کاربردی تست های کنکور ۵ سال اخیر؛ با آنالیز جز به جز تست های کنکور که شامل ۳۲ درصد ترجمه، ۸ درصد شکّل، ۱۲ درصد تحلیل صرفی و ۱۴ درصد متن و ۳۲ درصد قواعد می شود، عربی کنکور خود را به ما پسپارید</p>
+                        <div class = "info-professors">
                             <header>
-                                <h4>پایان چالش در عربی </h4>
+                                <h4>پایان چالش در عربی</h4>
                             </header>
                             {{--<span></span>--}}
                             {{--<span></span>--}}
                             {{--<span></span>--}}
                             {{--<span></span>--}}
-                            <p style="text-align: justify; font-size: medium">
-                                با حل ۲۰۰ تست حاوی تمام نکات و مباحث، از صد در صد کنکور سراسری ۹۲ درصد آن را (به جز ۴
-                                درصد معتلات، ۴ درصد معلوم و مجهول) کامل جمع بندی و تحلیل می کنیم.
+                            <p style = "text-align: justify; font-size: medium">
+                                با حل ۲۰۰ تست حاوی تمام نکات و مباحث، از صد در صد کنکور سراسری ۹۲ درصد آن را (به جز ۴ درصد معتلات، ۴ درصد معلوم و مجهول) کامل جمع بندی و تحلیل می کنیم.
                             </p>
-                            <a href="javascript:void(0)" class="link" data-role="214" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" data-role = "214" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                     {{--<article class="art-professors">--}}
@@ -792,24 +721,23 @@
                     {{--</div>--}}
                     {{--</article>--}}
 
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S5.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S5.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>محمد صادق ثابتی</h1>
                                     </a>
                                     <span>همایش طلایی 48 تست کنکور ریاضی</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">این همایش به تحلیل موضوعات درس ریاضیات شامل دیفرانسیل، تحلیلی،
-                            گسسته، ریاضیات پایه، جبر و احتمال و آمار می پردازد.</p>
+                        <p style = "text-align: justify">این همایش به تحلیل موضوعات درس ریاضیات شامل دیفرانسیل، تحلیلی، گسسته، ریاضیات پایه، جبر و احتمال و آمار می پردازد.</p>
                         هدف ما زدن تست ها با حداقل اطلاعات ممکن است
-                        <div class="info-professors">
+                        <div class = "info-professors">
                             <header>
                                 <h4>عبور از کنکور با حداقل ها</h4>
                             </header>
@@ -817,66 +745,57 @@
                             {{--<span></span>--}}
                             {{--<span></span>--}}
                             {{--<span></span>--}}
-                            <p style="text-align: justify; font-size: medium">
-                                در این همایش نمونه تست های پیش بینی شده از طرف استاد ارائه شده و در کنار حل این مجموعه،
-                                تحلیل و بررسی دو سری سوالات کنکور انجام می شود.
-                                همراه درسنامه مختصر از موضوعات مهم و با این همایش شما با توانی بالا به استقبال کنکور ۹۷
-                                می روید. با ما در این مسیر به درکی از سوالات ریاضی می رسید که می توانید بدون نگرانی از
-                                سختی ظاهری سوالات از پس آن ها برآیید.
+                            <p style = "text-align: justify; font-size: medium">
+                                در این همایش نمونه تست های پیش بینی شده از طرف استاد ارائه شده و در کنار حل این مجموعه، تحلیل و بررسی دو سری سوالات کنکور انجام می شود. همراه درسنامه مختصر از موضوعات مهم و با این همایش شما با توانی بالا به استقبال کنکور ۹۷ می روید. با ما در این مسیر به درکی از سوالات ریاضی می رسید که می توانید بدون نگرانی از سختی ظاهری سوالات از پس آن ها برآیید.
                             </p>
-                            <a href="javascript:void(0)" class="link" data-role="218" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" data-role = "218" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
 
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S10.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S10.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>دکتر محمد چلاجور</h1>
                                     </a>
                                     <span>همایش طلایی زیست شناسی کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">زیست شناسی اصلی ترین درس رشته تجربی می باشد و در ارتباط با اهمیت
-                            آن هر چه گفته شود کم است.</p>
-                        <p style="text-align: justify">در کنکور سراسری در درس زیست هر مبحثی برای خودش اهمیت دارد و قرار
-                            نیست فصلی را حذف کنید چون ممکن است مثل کنکور پارسال، همون سوالاتی که شما فکر می کردید سخته،
-                            سوالات آسون از آن ها مطرح شود.</p>
-                        <div class="info-professors">
+                        <p style = "text-align: justify">زیست شناسی اصلی ترین درس رشته تجربی می باشد و در ارتباط با اهمیت آن هر چه گفته شود کم است.</p>
+                        <p style = "text-align: justify">در کنکور سراسری در درس زیست هر مبحثی برای خودش اهمیت دارد و قرار نیست فصلی را حذف کنید چون ممکن است مثل کنکور پارسال، همون سوالاتی که شما فکر می کردید سخته، سوالات آسون از آن ها مطرح شود.</p>
+                        <div class = "info-professors">
                             <header>
                                 <h4>دورنمای مباجث همایش و اهمیت آن ها در کنکور:</h4>
                             </header>
                             <span>جانوران، بدن انسانی، گیاهی و... </span>
                             <span>کل زیست به جز ژنتیکش رو قراره جمع بندی کنیم.</span>
                             <span>همچنین قراره تست های خاص گیاهی دکتر چلاجور رو تو این همایش داشته باشیم.</span>
-                            <a href="javascript:void(0)" class="link" data-role="212" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" data-role = "212" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S10.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S10.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>دکتر محمد چلاجور</h1>
                                     </a>
                                     <span>همایش طلایی زمین شناسی کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">
+                        <p style = "text-align: justify">
                             قرار است مطالبی رو که هر سال سوال می آید و یا تست های مهم زمین شناسی را با شما بررسی کنیم
                         </p>
-                        <div class="info-professors">
+                        <div class = "info-professors">
                             <header>
                                 <h4>در عرض ۵ ساعت شما می توانید:</h4>
                             </header>
@@ -884,55 +803,50 @@
                             <span>در کمترین زمان</span>
                             <span>و با بهترین راندمان</span>
                             <span>دست پیدا کنید</span>
-                            <a href="javascript:void(0)" class="link" data-role="213" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" data-role = "213" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S11.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S11.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>سید احمد آل علی</h1>
                                     </a>
                                     <span>همایش طلایی ژنتیک کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">
-                            خواهید دید که چگونه به راحتی می توانید انواع مسائل ژنتیک را در کم تر از 1 دقیق و با اطمینان
-                            پاسخ دهید
+                        <p style = "text-align: justify">
+                            خواهید دید که چگونه به راحتی می توانید انواع مسائل ژنتیک را در کم تر از 1 دقیق و با اطمینان پاسخ دهید
                         </p>
-                        <div class="info-professors">
+                        <div class = "info-professors">
                             <header>
                                 <h4>جمع بندی مبحث ژنتیک زیست کنکور در 6 الی 8 ساعت</h4>
                             </header>
                             <span>دسته بندی و بررسی تمام مسائل ژنتیک کنکور سراسری داخل و خارج کشور در 3 سال اخیر</span>
-                            <a href="javascript:void(0)" class="link" data-role="221" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" data-role = "221" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S2.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S2.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>محمد امین نباخته</h1>
                                     </a>
                                     <span>همایش طلایی ریاضی تجربی کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">در این همایش موضوع به موضوع سوالات کنکور ۹۴ تا ۹۶ را بررسی می
-                            کنیم.
-                            الگوهای طراحان در این همایش معرفی شده و نکات را تشریح می کنیم.</p>
-                        <div class="info-professors">
+                        <p style = "text-align: justify">در این همایش موضوع به موضوع سوالات کنکور ۹۴ تا ۹۶ را بررسی می کنیم. الگوهای طراحان در این همایش معرفی شده و نکات را تشریح می کنیم.</p>
+                        <div class = "info-professors">
                             <header>
                                 <h4>جمع بندی روشمند و جامع ریاضی کنکور تجربی</h4>
                             </header>
@@ -940,34 +854,28 @@
                             {{--<span></span>--}}
                             {{--<span></span>--}}
                             {{--<span></span>--}}
-                            <p style="text-align: justify; font-size: medium">
-                                با بررسی موضوعی سوالات ریاضی تجربی کنکور داخل و خارج ۹۵،۹۴ و ۹۶ از هم اکنون جای پای خود
-                                را در کنکور ۹۷ محکم می کنیم. با این همایش شما دانسته هایتان را با سلیقه طراحان کنکور
-                                طبقه بندی می کنید و برای به دست آوردن درصد بالایی از این درس خود را آماده می کنید.
+                            <p style = "text-align: justify; font-size: medium">
+                                با بررسی موضوعی سوالات ریاضی تجربی کنکور داخل و خارج ۹۵،۹۴ و ۹۶ از هم اکنون جای پای خود را در کنکور ۹۷ محکم می کنیم. با این همایش شما دانسته هایتان را با سلیقه طراحان کنکور طبقه بندی می کنید و برای به دست آوردن درصد بالایی از این درس خود را آماده می کنید.
                             </p>
-                            <a href="javascript:void(0)" class="link" data-role="220" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" data-role = "220" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S4.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S4.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>مهدی امینی راد</h1>
                                     </a>
                                     <span>همایش طلایی ریاضی تجربی کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">در این همایش ریاضی تجربی به صورت خلاصه، منظم، الگوبندی شده و در
-                            قالبی روان و دلپذیر جمع بندی و ارائه می شود.
-                            شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار کسب می
-                            کنید.</p>
-                        <div class="info-professors">
+                        <p style = "text-align: justify">در این همایش ریاضی تجربی به صورت خلاصه، منظم، الگوبندی شده و در قالبی روان و دلپذیر جمع بندی و ارائه می شود. شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار کسب می کنید.</p>
+                        <div class = "info-professors">
                             <header>
                                 <h4>مهارت در ریاضی تجربی</h4>
                             </header>
@@ -975,29 +883,25 @@
                             <span>صرفه جویی در زمان برای جمع بندی کنکور</span>
                             <span>فراگیری روش های جدید تست زنی</span>
                             <span>به همراه حل سوالات کنکور های گذشته و برخی سوالات تالیفی</span>
-                            <a href="javascript:void(0)" class="link" title="خرید بسته آموزشی" data-role="219">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" title = "خرید بسته آموزشی" data-role = "219">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S4.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S4.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>مهدی امینی راد</h1>
                                     </a>
                                     <span>همایش طلایی ریاضی انسانی کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">در این همایش ریاضی انسانی به صورت خلاصه، منظم، الگوبندی شده و در
-                            قالبی روان و دلپذیر جمع بندی و ارائه می شود.
-                            شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار کسب می
-                            کنید.</p>
-                        <div class="info-professors">
+                        <p style = "text-align: justify">در این همایش ریاضی انسانی به صورت خلاصه، منظم، الگوبندی شده و در قالبی روان و دلپذیر جمع بندی و ارائه می شود. شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار کسب می کنید.</p>
+                        <div class = "info-professors">
                             <header>
                                 <h4>مهارت در ریاضی انسانی</h4>
                             </header>
@@ -1005,33 +909,31 @@
                             <span>صرفه جویی در زمان برای جمع بندی کنکور</span>
                             <span>فراگیری روش های جدید تست زنی</span>
                             <span>به همراه حل سوالات کنکور های گذشته و برخی سوالات تالیفی</span>
-                            <a href="javascript:void(0)" class="link" title="خرید بسته آموزشی" data-role="222">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" title = "خرید بسته آموزشی" data-role = "222">خرید بسته آموزشی</a>
                         </div>
                     </article>
 
                 </section>
             </div>
-            <div class="content-tab-lesson" data-tabc="2">
-                <section class="sec-professors">
-                    <article class="art-professors">
+            <div class = "content-tab-lesson" data-tabc = "2">
+                <section class = "sec-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S5.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S5.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>محمد صادق ثابتی</h1>
                                     </a>
                                     <span>همایش طلایی 48 تست کنکور ریاضی</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">این همایش به تحلیل موضوعات درس ریاضیات شامل دیفرانسیل، تحلیلی،
-                            گسسته، ریاضیات پایه، جبر و احتمال و آمار می پردازد.</p>
+                        <p style = "text-align: justify">این همایش به تحلیل موضوعات درس ریاضیات شامل دیفرانسیل، تحلیلی، گسسته، ریاضیات پایه، جبر و احتمال و آمار می پردازد.</p>
                         هدف ما زدن تست ها با حداقل اطلاعات ممکن است
-                        <div class="info-professors">
+                        <div class = "info-professors">
                             <header>
                                 <h4>عبور از کنکور با حداقل ها</h4>
                             </header>
@@ -1039,39 +941,33 @@
                             {{--<span></span>--}}
                             {{--<span></span>--}}
                             {{--<span></span>--}}
-                            <p style="text-align: justify; font-size: medium">
-                                در این همایش نمونه تست های پیش بینی شده از طرف استاد ارائه شده و در کنار حل این مجموعه،
-                                تحلیل و بررسی دو سری سوالات کنکور انجام می شود.
-                                همراه درسنامه مختصر از موضوعات مهم و با این همایش شما با توانی بالا به استقبال کنکور ۹۷
-                                می روید. با ما در این مسیر به درکی از سوالات ریاضی می رسید که می توانید بدون نگرانی از
-                                سختی ظاهری سوالات از پس آن ها برآیید.
+                            <p style = "text-align: justify; font-size: medium">
+                                در این همایش نمونه تست های پیش بینی شده از طرف استاد ارائه شده و در کنار حل این مجموعه، تحلیل و بررسی دو سری سوالات کنکور انجام می شود. همراه درسنامه مختصر از موضوعات مهم و با این همایش شما با توانی بالا به استقبال کنکور ۹۷ می روید. با ما در این مسیر به درکی از سوالات ریاضی می رسید که می توانید بدون نگرانی از سختی ظاهری سوالات از پس آن ها برآیید.
                             </p>
-                            <a href="javascript:void(0)" class="link" data-role="218" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" data-role = "218" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S3.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S3.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>دکتر پیمان طلوعی</h1>
                                     </a>
                                     <span>همایش طلایی فیزیک کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">
-                            تحلیل فیزیک کنکور در ۲۰۰ تست پر نکته؛
-                            حلاجی و شرح نکات ریز و حل خلاقانه تست ها؛
+                        <p style = "text-align: justify">
+                            تحلیل فیزیک کنکور در ۲۰۰ تست پر نکته؛ حلاجی و شرح نکات ریز و حل خلاقانه تست ها؛
 
                             بعد از این همایش نظر شما نسبت به کنکور عوض خواهد شد.
 
                         </p>
-                        <div class="info-professors">
+                        <div class = "info-professors">
                             <header>
                                 <h4>جمع بندی مطمئن کنکور</h4>
                             </header>
@@ -1079,34 +975,28 @@
                             {{--<span></span>--}}
                             {{--<span></span>--}}
                             {{--<span></span>--}}
-                            <p style="text-align: justify; font-size: medium">
-                                در این همایش با حل ۲۰۰ تست و دوره تمام نکات و مباحث اساسی فیزیک کنکور شما دیگر استرسی
-                                برای یک جمع بندی خوب و حرفه ای نخواهید داشت.
-                                امسال با همایشی بی نظیر و طلایی در درس فیزیک در کنار شما هستیم.
+                            <p style = "text-align: justify; font-size: medium">
+                                در این همایش با حل ۲۰۰ تست و دوره تمام نکات و مباحث اساسی فیزیک کنکور شما دیگر استرسی برای یک جمع بندی خوب و حرفه ای نخواهید داشت. امسال با همایشی بی نظیر و طلایی در درس فیزیک در کنار شما هستیم.
                             </p>
-                            <a href="javascript:void(0)" class="link" data-role="216" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" data-role = "216" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S6.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S6.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>مهدی صنیعی تهرانی</h1>
                                     </a>
                                     <span>همایش طلایی شیمی کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">با حل و تحلیل ۱۱۰ مسئله ترکیبی و فوق العاده کنکور با توانی مضاعف
-                            سوالات شیمی کنکور را به چالش می کشیم.
-                            با این همایش قضاوت ما نسبت به مسائل شیمی تغییر می کند و ترازی تضمین شده از شیمی را برداشت
-                            خواهیم کرد.</p>
-                        <div class="info-professors">
+                        <p style = "text-align: justify">با حل و تحلیل ۱۱۰ مسئله ترکیبی و فوق العاده کنکور با توانی مضاعف سوالات شیمی کنکور را به چالش می کشیم. با این همایش قضاوت ما نسبت به مسائل شیمی تغییر می کند و ترازی تضمین شده از شیمی را برداشت خواهیم کرد.</p>
+                        <div class = "info-professors">
                             <header>
                                 <h4>حل مسائل ترکیبی؛ قدمی بلند در شیمی کنکور</h4>
                             </header>
@@ -1114,68 +1004,60 @@
                             {{--<span></span>--}}
                             {{--<span></span>--}}
                             {{--<span></span>--}}
-                            <p style="text-align: justify; font-size: medium">
-                                در همایش شیمی سال ۹۶ با نحوه حل تک تک انواع مسائل آشنا شدیم؛
-                                با کمترین فرمول، کمترین محاسبه و کمترین زمان.
-                                در این همایش با حل مسائل ترکیبی به سطحی بالاتر در مواجهه با سوالات کنکور می رسیم.
-                                پس از این همایش سوالات با ساده ترین حالت خود در برابر ما قرار خواهد گرفت.
+                            <p style = "text-align: justify; font-size: medium">
+                                در همایش شیمی سال ۹۶ با نحوه حل تک تک انواع مسائل آشنا شدیم؛ با کمترین فرمول، کمترین محاسبه و کمترین زمان. در این همایش با حل مسائل ترکیبی به سطحی بالاتر در مواجهه با سوالات کنکور می رسیم. پس از این همایش سوالات با ساده ترین حالت خود در برابر ما قرار خواهد گرفت.
                             </p>
-                            <a href="javascript:void(0)" class="link" data-role="217" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" data-role = "217" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                 </section>
             </div>
-            <div class="content-tab-lesson" data-tabc="3">
-                <section class="sec-professors">
-                    <article class="art-professors">
+            <div class = "content-tab-lesson" data-tabc = "3">
+                <section class = "sec-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S10.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S10.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>دکتر محمد چلاجور</h1>
                                     </a>
                                     <span>همایش طلایی زیست شناسی کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">زیست شناسی اصلی ترین درس رشته تجربی می باشد و در ارتباط با اهمیت
-                            آن هر چه گفته شود کم است.</p>
-                        <p style="text-align: justify">در کنکور سراسری در درس زیست هر مبحثی برای خودش اهمیت دارد و قرار
-                            نیست فصلی را حذف کنید چون ممکن است مثل کنکور پارسال، همون سوالاتی که شما فکر می کردید سخته،
-                            سوالات آسون از آن ها مطرح شود.</p>
-                        <div class="info-professors">
+                        <p style = "text-align: justify">زیست شناسی اصلی ترین درس رشته تجربی می باشد و در ارتباط با اهمیت آن هر چه گفته شود کم است.</p>
+                        <p style = "text-align: justify">در کنکور سراسری در درس زیست هر مبحثی برای خودش اهمیت دارد و قرار نیست فصلی را حذف کنید چون ممکن است مثل کنکور پارسال، همون سوالاتی که شما فکر می کردید سخته، سوالات آسون از آن ها مطرح شود.</p>
+                        <div class = "info-professors">
                             <header>
                                 <h4>دورنمای مباجث همایش و اهمیت آن ها در کنکور:</h4>
                             </header>
                             <span>جانوران، بدن انسانی، گیاهی و... </span>
                             <span>کل زیست به جز ژنتیکش رو قراره جمع بندی کنیم.</span>
                             <span>همچنین قراره تست های خاص گیاهی دکتر چلاجور رو تو این همایش داشته باشیم.</span>
-                            <a href="javascript:void(0)" class="link" data-role="212" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" data-role = "212" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S10.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S10.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>دکتر محمد چلاجور</h1>
                                     </a>
                                     <span>همایش طلایی زمین شناسی کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">
+                        <p style = "text-align: justify">
                             قرار است مطالبی رو که هر سال سوال می آید و یا تست های مهم زمین شناسی را با شما بررسی کنیم
                         </p>
-                        <div class="info-professors">
+                        <div class = "info-professors">
                             <header>
                                 <h4>در عرض ۵ ساعت شما می توانید:</h4>
                             </header>
@@ -1183,56 +1065,50 @@
                             <span>در کمترین زمان</span>
                             <span>و با بهترین راندمان</span>
                             <span>دست پیدا کنید</span>
-                            <a href="javascript:void(0)" class="link" data-role="213" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" data-role = "213" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S11.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S11.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>سید احمد آل علی</h1>
                                     </a>
                                     <span>همایش طلایی ژنتیک کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">
-                            خواهید دید که چگونه به راحتی می توانید انواع مسائل ژنتیک را در کم تر از 1 دقیق و با اطمینان
-                            پاسخ دهید
+                        <p style = "text-align: justify">
+                            خواهید دید که چگونه به راحتی می توانید انواع مسائل ژنتیک را در کم تر از 1 دقیق و با اطمینان پاسخ دهید
                         </p>
-                        <div class="info-professors">
+                        <div class = "info-professors">
                             <header>
                                 <h4>جمع بندی مبحث ژنتیک زیست کنکور در 6 الی 8 ساعت</h4>
                             </header>
                             <span>دسته بندی و بررسی تمام مسائل ژنتیک کنکور سراسری داخل و خارج کشور در 3 سال اخیر</span>
-                            <a href="javascript:void(0)" class="link" data-role="221" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" data-role = "221" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S4.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S4.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>مهدی امینی راد</h1>
                                     </a>
                                     <span>همایش طلایی ریاضی تجربی کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">در این همایش ریاضی تجربی به صورت خلاصه، منظم، الگوبندی شده و در
-                            قالبی روان و دلپذیر جمع بندی و ارائه می شود.
-                            شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار کسب می
-                            کنید.</p>
-                        <div class="info-professors">
+                        <p style = "text-align: justify">در این همایش ریاضی تجربی به صورت خلاصه، منظم، الگوبندی شده و در قالبی روان و دلپذیر جمع بندی و ارائه می شود. شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار کسب می کنید.</p>
+                        <div class = "info-professors">
                             <header>
                                 <h4>مهارت در ریاضی تجربی</h4>
                             </header>
@@ -1240,28 +1116,25 @@
                             <span>صرفه جویی در زمان برای جمع بندی کنکور</span>
                             <span>فراگیری روش های جدید تست زنی</span>
                             <span>به همراه حل سوالات کنکور های گذشته و برخی سوالات تالیفی</span>
-                            <a href="javascript:void(0)" class="link" title="خرید بسته آموزشی" data-role="219">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" title = "خرید بسته آموزشی" data-role = "219">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S2.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S2.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>محمد امین نباخته</h1>
                                     </a>
                                     <span>همایش طلایی ریاضی تجربی کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">در این همایش موضوع به موضوع سوالات کنکور ۹۴ تا ۹۶ را بررسی می
-                            کنیم.
-                            الگوهای طراحان در این همایش معرفی شده و نکات را تشریح می کنیم.</p>
-                        <div class="info-professors">
+                        <p style = "text-align: justify">در این همایش موضوع به موضوع سوالات کنکور ۹۴ تا ۹۶ را بررسی می کنیم. الگوهای طراحان در این همایش معرفی شده و نکات را تشریح می کنیم.</p>
+                        <div class = "info-professors">
                             <header>
                                 <h4>جمع بندی روشمند و جامع ریاضی کنکور تجربی</h4>
                             </header>
@@ -1269,37 +1142,33 @@
                             {{--<span></span>--}}
                             {{--<span></span>--}}
                             {{--<span></span>--}}
-                            <p style="text-align: justify; font-size: medium">
-                                با بررسی موضوعی سوالات ریاضی تجربی کنکور داخل و خارج ۹۵،۹۴ و ۹۶ از هم اکنون جای پای خود
-                                را در کنکور ۹۷ محکم می کنیم. با این همایش شما دانسته هایتان را با سلیقه طراحان کنکور
-                                طبقه بندی می کنید و برای به دست آوردن درصد بالایی از این درس خود را آماده می کنید.
+                            <p style = "text-align: justify; font-size: medium">
+                                با بررسی موضوعی سوالات ریاضی تجربی کنکور داخل و خارج ۹۵،۹۴ و ۹۶ از هم اکنون جای پای خود را در کنکور ۹۷ محکم می کنیم. با این همایش شما دانسته هایتان را با سلیقه طراحان کنکور طبقه بندی می کنید و برای به دست آوردن درصد بالایی از این درس خود را آماده می کنید.
                             </p>
-                            <a href="javascript:void(0)" class="link" data-role="220" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" data-role = "220" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S3.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S3.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>دکتر پیمان طلوعی</h1>
                                     </a>
                                     <span>همایش طلایی فیزیک کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">
-                            تحلیل فیزیک کنکور در ۲۰۰ تست پر نکته؛
-                            حلاجی و شرح نکات ریز و حل خلاقانه تست ها؛
+                        <p style = "text-align: justify">
+                            تحلیل فیزیک کنکور در ۲۰۰ تست پر نکته؛ حلاجی و شرح نکات ریز و حل خلاقانه تست ها؛
 
                             بعد از این همایش نظر شما نسبت به کنکور عوض خواهد شد.
 
                         </p>
-                        <div class="info-professors">
+                        <div class = "info-professors">
                             <header>
                                 <h4>جمع بندی مطمئن کنکور</h4>
                             </header>
@@ -1307,34 +1176,28 @@
                             {{--<span></span>--}}
                             {{--<span></span>--}}
                             {{--<span></span>--}}
-                            <p style="text-align: justify; font-size: medium">
-                                در این همایش با حل ۲۰۰ تست و دوره تمام نکات و مباحث اساسی فیزیک کنکور شما دیگر استرسی
-                                برای یک جمع بندی خوب و حرفه ای نخواهید داشت.
-                                امسال با همایشی بی نظیر و طلایی در درس فیزیک در کنار شما هستیم.
+                            <p style = "text-align: justify; font-size: medium">
+                                در این همایش با حل ۲۰۰ تست و دوره تمام نکات و مباحث اساسی فیزیک کنکور شما دیگر استرسی برای یک جمع بندی خوب و حرفه ای نخواهید داشت. امسال با همایشی بی نظیر و طلایی در درس فیزیک در کنار شما هستیم.
                             </p>
-                            <a href="javascript:void(0)" class="link" data-role="216" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" data-role = "216" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
-                    <article class="art-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S6.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S6.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>مهدی صنیعی تهرانی</h1>
                                     </a>
                                     <span>همایش طلایی شیمی کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">با حل و تحلیل ۱۱۰ مسئله ترکیبی و فوق العاده کنکور با توانی مضاعف
-                            سوالات شیمی کنکور را به چالش می کشیم.
-                            با این همایش قضاوت ما نسبت به مسائل شیمی تغییر می کند و ترازی تضمین شده از شیمی را برداشت
-                            خواهیم کرد.</p>
-                        <div class="info-professors">
+                        <p style = "text-align: justify">با حل و تحلیل ۱۱۰ مسئله ترکیبی و فوق العاده کنکور با توانی مضاعف سوالات شیمی کنکور را به چالش می کشیم. با این همایش قضاوت ما نسبت به مسائل شیمی تغییر می کند و ترازی تضمین شده از شیمی را برداشت خواهیم کرد.</p>
+                        <div class = "info-professors">
                             <header>
                                 <h4>حل مسائل ترکیبی؛ قدمی بلند در شیمی کنکور</h4>
                             </header>
@@ -1342,39 +1205,32 @@
                             {{--<span></span>--}}
                             {{--<span></span>--}}
                             {{--<span></span>--}}
-                            <p style="text-align: justify; font-size: medium">
-                                در همایش شیمی سال ۹۶ با نحوه حل تک تک انواع مسائل آشنا شدیم؛
-                                با کمترین فرمول، کمترین محاسبه و کمترین زمان.
-                                در این همایش با حل مسائل ترکیبی به سطحی بالاتر در مواجهه با سوالات کنکور می رسیم.
-                                پس از این همایش سوالات با ساده ترین حالت خود در برابر ما قرار خواهد گرفت.
+                            <p style = "text-align: justify; font-size: medium">
+                                در همایش شیمی سال ۹۶ با نحوه حل تک تک انواع مسائل آشنا شدیم؛ با کمترین فرمول، کمترین محاسبه و کمترین زمان. در این همایش با حل مسائل ترکیبی به سطحی بالاتر در مواجهه با سوالات کنکور می رسیم. پس از این همایش سوالات با ساده ترین حالت خود در برابر ما قرار خواهد گرفت.
                             </p>
-                            <a href="javascript:void(0)" class="link" data-role="217" title="خرید بسته آموزشی">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" data-role = "217" title = "خرید بسته آموزشی">خرید بسته آموزشی</a>
                         </div>
                     </article>
                 </section>
             </div>
-            <div class="content-tab-lesson" data-tabc="4">
-                <section class="sec-professors">
-                    <article class="art-professors">
+            <div class = "content-tab-lesson" data-tabc = "4">
+                <section class = "sec-professors">
+                    <article class = "art-professors">
                         <figure>
-                            <a href="javascript2:void(0)" title="">
-                                <img src="/acm/extra/landing4/images/professors/S4.png" alt="1" title="1">
+                            <a href = "javascript2:void(0)" title = "">
+                                <img src = "/acm/extra/landing4/images/professors/S4.png" alt = "1" title = "1">
                             </a>
                             <figcaption>
                                 <header>
-                                    <a href="javascript:void(0)" title="">
+                                    <a href = "javascript:void(0)" title = "">
                                         <h1>مهدی امینی راد</h1>
                                     </a>
                                     <span>همایش طلایی ریاضی انسانی کنکور</span>
                                 </header>
                             </figcaption>
                         </figure>
-                        <p style="text-align: justify">در این همایش ریاضی انسانی به صورت خلاصه، منظم، الگوبندی شده و در
-                            قالبی روان و دلپذیر جمع بندی و ارائه می شود.
-                            شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار کسب می
-                            کنید.</p>
-                        <div class="info-professors">
+                        <p style = "text-align: justify">در این همایش ریاضی انسانی به صورت خلاصه، منظم، الگوبندی شده و در قالبی روان و دلپذیر جمع بندی و ارائه می شود. شما با این همایش مهارت در پاسخگویی به سوالات در هر سه سطح ساده، متوسط و دشوار کسب می کنید.</p>
+                        <div class = "info-professors">
                             <header>
                                 <h4>مهارت در ریاضی انسانی</h4>
                             </header>
@@ -1382,8 +1238,7 @@
                             <span>صرفه جویی در زمان برای جمع بندی کنکور</span>
                             <span>فراگیری روش های جدید تست زنی</span>
                             <span>به همراه حل سوالات کنکور های گذشته و برخی سوالات تالیفی</span>
-                            <a href="javascript:void(0)" class="link" title="خرید بسته آموزشی" data-role="222">خرید بسته
-                                آموزشی</a>
+                            <a href = "javascript:void(0)" class = "link" title = "خرید بسته آموزشی" data-role = "222">خرید بسته آموزشی</a>
                         </div>
                     </article>
                 </section>
@@ -1391,16 +1246,18 @@
         </div>
     </main>
 
-    <section class="lottery-banner">
-        <div class="container clearfix">
-            <div class="ttla">هدیه خرید آلاء <span>برای کسانی که تا 26 اردیبهشت خرید می کنند</span></div>
+    <section class = "lottery-banner">
+        <div class = "container clearfix">
+            <div class = "ttla">هدیه خرید آلاء
+                <span>برای کسانی که تا 26 اردیبهشت خرید می کنند</span>
+            </div>
 
-            <div class="bnra">
-                <img class="banner" src="/acm/extra/landing4/images/banner2.png" alt="banner">
-                <img class="infinite animated pulse shadow" src="/acm/extra/landing4/images/shadow.png" alt="banner">
+            <div class = "bnra">
+                <img class = "banner" src = "/acm/extra/landing4/images/banner2.png" alt = "banner">
+                <img class = "infinite animated pulse shadow" src = "/acm/extra/landing4/images/shadow.png" alt = "banner">
             </div><!-- .bnra -->
 
-            <div class="gifts">
+            <div class = "gifts">
                 <table>
                     <thead>
                     <tr>
@@ -1445,22 +1302,19 @@
         </div><!-- .container -->
     </section>
 
-    <footer class="site-footer site-footer-lading" role="contentinfo" id="section-footer">
-        <div class="container">
-            <h1 style="text-align: center">
-                با ارسال کد 333 به شماره
-                500010409232
+    <footer class = "site-footer site-footer-lading" role = "contentinfo" id = "section-footer">
+        <div class = "container">
+            <h1 style = "text-align: center">
+                با ارسال کد 333 به شماره 500010409232
             </h1>
-            <article class="art-footer">
+            <article class = "art-footer">
                 <p>
-                    نمونه جزوات
-                    <em>
+                    نمونه جزوات <em>
                         <i>پکیج طلایی آ</i>
-                    </em>
-                    لاء را
-                    <a href="javascript:void(0)" class="" title="">
+                    </em> لاء را
+                    <a href = "javascript:void(0)" class = "" title = "">
                         دریافت
-                        <i class="icon-download-to-storage-drive"></i>
+                        <i class = "icon-download-to-storage-drive"></i>
                     </a>
                     کنید
                 </p>
@@ -1469,54 +1323,54 @@
         </div>
     </footer>
 </div>
-<nav id="menu" role="navigation" aria-label="منو موبایل">
+<nav id = "menu" role = "navigation" aria-label = "منو موبایل">
     <ul>
-        <div class="mm-header">
-            <div class="mm-brand">
-                <a href="javascript:void(0)" title="Site name | Site Description">
-                    <img src="" alt="Site name" title="Site name | Site Description" itemprop="logo"/>
+        <div class = "mm-header">
+            <div class = "mm-brand">
+                <a href = "javascript:void(0)" title = "Site name | Site Description">
+                    <img src = "" alt = "Site name" title = "Site name | Site Description" itemprop = "logo"/>
                     <em>Site Name</em>
                 </a>
             </div>
-            <form role="search" method="get" class="search-form" action="javascript:void(0)">
-                <input type="search" id="search" placeholder="جستجو کنید" value="" name="s" autocomplete="off"/>
-                <button type="submit"></button>
+            <form role = "search" method = "get" class = "search-form" action = "javascript:void(0)">
+                <input type = "search" id = "search" placeholder = "جستجو کنید" value = "" name = "s" autocomplete = "off"/>
+                <button type = "submit"></button>
             </form>
         </div>
         <li>
-            <a href="javascript:void(0)" title="صفحه اصلی">صفحه اصلی</a>
+            <a href = "javascript:void(0)" title = "صفحه اصلی">صفحه اصلی</a>
         </li>
         <li>
-            <a href="javascript:void(0)" title="خودرو ها">خودرو ها</a>
+            <a href = "javascript:void(0)" title = "خودرو ها">خودرو ها</a>
         </li>
         <li>
-            <a href="javascript:void(0)" title="خودرو ها">خودرو ها</a>
+            <a href = "javascript:void(0)" title = "خودرو ها">خودرو ها</a>
         </li>
-        <li class="menu-item-has-children">
-            <a href="javascript:void(0)" title="دیگر">دیگر</a>
+        <li class = "menu-item-has-children">
+            <a href = "javascript:void(0)" title = "دیگر">دیگر</a>
             <ul>
                 <li>
-                    <a href="javascript:void(0)" title="خدمات ما">خدمات ما</a>
+                    <a href = "javascript:void(0)" title = "خدمات ما">خدمات ما</a>
                 </li>
                 <li>
-                    <a href="javascript:void(0)" title="سرویس ها">سرویس ها</a>
+                    <a href = "javascript:void(0)" title = "سرویس ها">سرویس ها</a>
                 </li>
                 <li>
-                    <a href="javascript:void(0)" title="افتخارات">افتخارات</a>
+                    <a href = "javascript:void(0)" title = "افتخارات">افتخارات</a>
                 </li>
                 <li>
-                    <a href="javascript:void(0)" title="همکاران">همکاران</a>
+                    <a href = "javascript:void(0)" title = "همکاران">همکاران</a>
                 </li>
             </ul>
         </li>
     </ul>
 </nav>
 
-<script src="/acm/extra/landing4/js/jquery-1.12.4.min.js"></script>
+<script src = "/acm/extra/landing4/js/jquery-1.12.4.min.js"></script>
 
-<script src="/acm/extra/landing4/js/swiper.jquery.min.js" defer="defer"></script>
-<script src="/acm/extra/landing4/js/menu.min.js" defer="defer"></script>
-<script src="/acm/extra/landing4/js/script.js" defer="defer"></script>
+<script src = "/acm/extra/landing4/js/swiper.jquery.min.js" defer = "defer"></script>
+<script src = "/acm/extra/landing4/js/menu.min.js" defer = "defer"></script>
+<script src = "/acm/extra/landing4/js/script.js" defer = "defer"></script>
 <script>
     $('a.link').click(function () {
         var id = $(this).data('role');

@@ -1,7 +1,7 @@
 @extends("app")
 
 @section("headPageLevelStyle")
-    <link href="/assets/pages/css/error-rtl.min.css" rel="stylesheet" type="text/css"/>
+    <link href = "/assets/pages/css/error-rtl.min.css" rel = "stylesheet" type = "text/css"/>
 @endsection
 @section("headThemeLayoutStyle")
 
@@ -25,16 +25,17 @@
 @endsection
 
 @section("content")
-    <div class="row">
-        <div class="col-md-12 page-500">
-            <div class=" number m--font-danger"> 500</div>
-            <div class=" details">
+    <div class = "row">
+        <div class = "col-md-12 page-500">
+            <div class = " number m--font-danger"> 500</div>
+            <div class = " details">
                 {{--<h3>با عرض پوزش خطایی غیر منتظره رخ داده است!</h3>--}}
                 {{--<p> تیم ما در حال برطرف کردن این خطا می باشند . لطفا چند دقیقه دیگر دوباره اقدام خود را تکرار کنیید--}}
                 {{--<br/> </p>--}}
                 <p>
                     <a href = "{{action("Web\IndexPageController")}}" class = "btn red btn-outline"> @lang('page.Home') </a>
-                    <br></p>
+                    <br>
+                </p>
             </div>
         </div>
     </div>

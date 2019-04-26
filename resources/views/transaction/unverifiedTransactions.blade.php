@@ -1,9 +1,9 @@
 @extends('app' , ['pageName'=> $pageName])
 
 @section('page-css')
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css" rel="stylesheet" type="text/css"/>
+    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css" rel = "stylesheet" type = "text/css"/>
 @endsection
 
 @section('pageBar')
@@ -24,36 +24,35 @@
 @endsection
 
 @section("content")
-    <div class="row">
-        <div class="col">
+    <div class = "row">
+        <div class = "col">
 
 
-            <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
-                <div class="m-portlet__head">
-                    <div class="m-portlet__head-caption">
-                        <div class="m-portlet__head-title">
-                            <h3 class="m-portlet__head-text">
+            <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
+                <div class = "m-portlet__head">
+                    <div class = "m-portlet__head-caption">
+                        <div class = "m-portlet__head-title">
+                            <h3 class = "m-portlet__head-text">
                                 تراکنش های موفق ثبت نشده
                             </h3>
                         </div>
                     </div>
                 </div>
-                <div class="m-portlet__body">
+                <div class = "m-portlet__body">
 
-                    <div class="table-toolbar">
-                        <div class="btn-group"></div>
+                    <div class = "table-toolbar">
+                        <div class = "btn-group"></div>
                     </div>
 
-                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%"
-                           id="user_table">
+                    <table class = "table table-striped table-bordered table-hover dt-responsive" width = "100%" id = "user_table">
                         <thead>
                         <tr>
                             <th></th>
-                            <th class="all"> نام مشتری</th>
-                            <th class="all"> موبایل مشتری</th>
-                            <th class="min-tablet"> Authority</th>
-                            <th class="min-tablet"> مبلغ</th>
-                            <th class="min-tablet"> تاریخ</th>
+                            <th class = "all"> نام مشتری</th>
+                            <th class = "all"> موبایل مشتری</th>
+                            <th class = "min-tablet"> Authority</th>
+                            <th class = "min-tablet"> مبلغ</th>
+                            <th class = "min-tablet"> تاریخ</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -62,46 +61,46 @@
                                 <th></th>
                                 <td>
                                     @if(strlen($transaction["firstName"])>0 || strlen($transaction["lastName"])>0)
-                                        <a target="_blank" href = "{{action("Web\UserController@edit" , (isset($transaction["userId"]))?$transaction["userId"]:0 )}}">
+                                        <a target = "_blank" href = "{{action("Web\UserController@edit" , (isset($transaction["userId"]))?$transaction["userId"]:0 )}}">
                                             {{$transaction["firstName"]}} {{$transaction["lastName"]}}
                                         </a>
                                     @else
-                                        <span class="m-badge m-badge--wide label-sm m-badge--danger"> ناشناس </span>
+                                        <span class = "m-badge m-badge--wide label-sm m-badge--danger"> ناشناس </span>
                                     @endif
                                 </td>
                                 <td>
                                     @if(strlen($transaction["mobile"])>0)
                                         {{$transaction["mobile"]}}
                                     @else
-                                        <span class="m-badge m-badge--wide label-sm m-badge--danger"> نامشخص </span>
+                                        <span class = "m-badge m-badge--wide label-sm m-badge--danger"> نامشخص </span>
                                     @endif
                                 </td>
                                 <td>
                                     @if(strlen($transaction["authority"])>0)
                                         {{$transaction["authority"]}}
                                     @else
-                                        <span class="m-badge m-badge--wide label-sm m-badge--danger"> نامشخص </span>
+                                        <span class = "m-badge m-badge--wide label-sm m-badge--danger"> نامشخص </span>
                                     @endif
                                 </td>
                                 <td>
                                     @if(strlen($transaction["amount"])>0)
                                         {{$transaction["amount"]}}
                                     @else
-                                        <span class="m-badge m-badge--wide label-sm m-badge--danger"> نامشخص </span>
+                                        <span class = "m-badge m-badge--wide label-sm m-badge--danger"> نامشخص </span>
                                     @endif
                                 </td>
-                                <td dir="ltr">
+                                <td dir = "ltr">
                                     @if(strlen($transaction["created_at"])>0)
                                         {{$transaction["created_at"]}}
                                     @else
-                                        <span class="m-badge m-badge--wide label-sm m-badge--danger"> نامشخص </span>
+                                        <span class = "m-badge m-badge--wide label-sm m-badge--danger"> نامشخص </span>
                                     @endif
                                 </td>
                             </tr>
                         @endforeach
                         @if(isset($error))
                             <tr>
-                                <td colspan="5" class="m--font-danger bold text-center">خطا در برقراری ارتباط با سرویس دهنده
+                                <td colspan = "5" class = "m--font-danger bold text-center">خطا در برقراری ارتباط با سرویس دهنده
                                 </td>
                             </tr>
                         @endif
@@ -116,12 +115,12 @@
 @endsection
 
 @section('page-js')
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/app.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/js/admin-makeDataTable.js" type="text/javascript"></script>
-    <script type="text/javascript">
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/app.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/js/admin-makeDataTable.js" type = "text/javascript"></script>
+    <script type = "text/javascript">
         /**
          * Start up jquery
          */

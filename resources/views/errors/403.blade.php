@@ -1,7 +1,7 @@
 @extends("app")
 
 @section("headPageLevelStyle")
-    <link href="/assets/pages/css/error-rtl.min.css" rel="stylesheet" type="text/css"/>
+    <link href = "/assets/pages/css/error-rtl.min.css" rel = "stylesheet" type = "text/css"/>
 @endsection
 @section("headThemeLayoutStyle")
 
@@ -27,10 +27,10 @@
 @endsection
 
 @section("content")
-    <div class="row">
-        <div class="col-md-12 page-404">
-            <div class="number m--font-danger"> 403</div>
-            <div class="details">
+    <div class = "row">
+        <div class = "col-md-12 page-404">
+            <div class = "number m--font-danger"> 403</div>
+            <div class = "details">
                 <h3>دسترسی غیر مجاز</h3>
                 <p> دسترسی شما به این بخش ممکن نمی باشد
                     <br/>

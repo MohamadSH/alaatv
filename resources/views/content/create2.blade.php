@@ -1,8 +1,7 @@
-@permission((Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS')))
-@extends("app",["pageName"=>"admin"])
+@permission((Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS')))@extends("app",["pageName"=>"admin"])
 
 @section('page-css')
-    <link href="{{ mix('/css/admin-content-create.css') }}" rel="stylesheet" type="text/css"/>
+    <link href = "{{ mix('/css/admin-content-create.css') }}" rel = "stylesheet" type = "text/css"/>
     {{--<link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>--}}
     {{--<link href="/assets/global/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css"/>--}}
     {{--<link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.css" rel="stylesheet" type="text/css"/>--}}
@@ -17,6 +16,7 @@
         .datepicker-header {
             direction: ltr;
         }
+
         .bootstrap-tagsinput .tag {
             margin-right: 2px;
             color: #fff;
@@ -31,17 +31,17 @@
 
 @section('pageBar')
 
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <i class="flaticon-home-2 m--padding-right-5"></i>
-                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+    <nav aria-label = "breadcrumb">
+        <ol class = "breadcrumb">
+            <li class = "breadcrumb-item">
+                <i class = "flaticon-home-2 m--padding-right-5"></i>
+                <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
-            <li class="breadcrumb-item">
-                <a class="m-link" href="{{action("Web\HomeController@adminContent")}}">مدیریت محتوا</a>
+            <li class = "breadcrumb-item">
+                <a class = "m-link" href = "{{action("Web\HomeController@adminContent")}}">مدیریت محتوا</a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                <a class="m-link" href="#">درج محتوای آموزشی</a>
+            <li class = "breadcrumb-item active" aria-current = "page">
+                <a class = "m-link" href = "#">درج محتوای آموزشی</a>
             </li>
         </ol>
     </nav>
@@ -50,9 +50,9 @@
 
 @section('content')
     @include("systemMessage.flash")
-    <div class="row" style="margin-bottom: 10px">
-        <div class="col-md-12">
-            <form id="my-awesome-dropzone" class="dropzone dropzone-file-area needsclick dz-clickable">
+    <div class = "row" style = "margin-bottom: 10px">
+        <div class = "col-md-12">
+            <form id = "my-awesome-dropzone" class = "dropzone dropzone-file-area needsclick dz-clickable">
                 {{--{{ csrf_field() }}--}}
                 {{--<div class="row">--}}
                 {{--<div class="col-md-2">--}}
@@ -74,48 +74,48 @@
                 {{--</select>--}}
                 {{--</div>--}}
                 {{--</div>--}}
-                <div class="row">
-                    <div class="col-md-6">
-                        <select name="contenttype" class="form-control m-input m-input--air" id="rootContentTypes">
-                            <option value="" selected>انتخاب نوع محتوا</option>
+                <div class = "row">
+                    <div class = "col-md-6">
+                        <select name = "contenttype" class = "form-control m-input m-input--air" id = "rootContentTypes">
+                            <option value = "" selected>انتخاب نوع محتوا</option>
                             @foreach($rootContentTypes as $rootContentType)
-                                <option value="{{$rootContentType->id}}" data-title="{{$rootContentType->name}}">{{$rootContentType->displayName}}</option>
+                                <option value = "{{$rootContentType->id}}" data-title = "{{$rootContentType->name}}">{{$rootContentType->displayName}}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
+                <div class = "row">
+                    <div class = "col-md-6">
                         {!! Form::select('contentset', $contentsets , null, ['class' => 'form-control m-input m-input--air', 'id' => 'contentSets' , 'placeholder' => 'انتخاب پلی لیست'  ]) !!}
                     </div>
-                    <div class="col-md-6">
+                    <div class = "col-md-6">
                         {!! Form::select('author', $authors , null, ['class' => 'form-control m-input m-input--air', 'id' => 'authors' , 'placeholder' => 'انتخاب دبیر'  ]) !!}
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="fallback">
-                            <input name="file" type="file" multiple/>
+                <div class = "row">
+                    <div class = "col-md-12">
+                        <div class = "fallback">
+                            <input name = "file" type = "file" multiple/>
                         </div>
-                        <div class="dropzone-previews"></div>
-                        <div class="dz-message needsclick">
-                            <h4 class="sbold ">
+                        <div class = "dropzone-previews"></div>
+                        <div class = "dz-message needsclick">
+                            <h4 class = "sbold ">
                                 فایل خود را اینجا بیندازید و یا بر روی این قسمت کلیک کنید
                             </h4>
-                            <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">توجه:</span>
+                            <span class = "m-badge m-badge--info m-badge--wide m-badge--rounded">توجه:</span>
                             فرمت مجاز
-                            <label class="m--font-danger">pdf,rar</label>
+                            <label class = "m--font-danger">pdf,rar</label>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12" id="messageDiv"></div>
+    <div class = "row">
+        <div class = "col-md-12" id = "messageDiv"></div>
     </div>
-    <div class="row">
-        <div id="dropzone-elements" class="col dropzone dropzone-previews" style="background: none; border:none"></div>
+    <div class = "row">
+        <div id = "dropzone-elements" class = "col dropzone dropzone-previews" style = "background: none; border:none"></div>
     </div>
 @endsection
 
@@ -142,17 +142,17 @@
 @endsection
 
 @section("footerPageLevelScript111")
-    <script src="/assets/pages/scripts/components-editors.min.js" type="text/javascript"></script>
+    <script src = "/assets/pages/scripts/components-editors.min.js" type = "text/javascript"></script>
     {{--<script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript"></script>--}}
-    <script src="/assets/pages/scripts/form-input-mask.min.js" type="text/javascript"></script>
+    <script src = "/assets/pages/scripts/form-input-mask.min.js" type = "text/javascript"></script>
     {{--<script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>--}}
-    <script src="/assets/pages/scripts/form-icheck.min.js" type="text/javascript"></script>
+    <script src = "/assets/pages/scripts/form-icheck.min.js" type = "text/javascript"></script>
     {{--<script src="/assets/pages/scripts/components-bootstrap-multiselect.min.js" type="text/javascript"></script>--}}
 @endsection
 
 
 @section('page-js')
-    <script src="{{ mix('/js/admin-content-create.js') }}"></script>
+    <script src = "{{ mix('/js/admin-content-create.js') }}"></script>
     {{--<script src="/js/extraJS/scripts/admin-makeMultiSelect.js" type="text/javascript"></script>--}}
     <script>
         $(document).ready(function () {
@@ -195,7 +195,6 @@
                 '   <div class="m-portlet__body">\n' +
 
 
-
                 '<form method="POST" action="{{action('Web\ContentController@store')}}" accept-charset="UTF-8" class="contentInformationForm form-horizontal" enctype="multipart/form-data">\n' +
                 '   <div class="row">\n ' +
                 "       <input name='_token' type='hidden' value='{{csrf_token()}}'>\n" +
@@ -205,33 +204,33 @@
                 '                   <label><input name="enable" type="checkbox" value="1" class="icheck" checked> فعال بودن </label>\n' +
                 '               </div>\n' +
                 '           </div><!-- end of input-group -->' +
-                '           <div class=\"dz-preview dz-file-preview dz-processing dz-error dz-complete\">\n'+
-                '               <div class=\"dz-image\"><img data-dz-thumbnail /></div>'+
-                '               <div class=\"dz-details\">'+
-                '                   <div class=\"dz-size\"><span data-dz-size></span></div>'+
-                '                   <div class=\"dz-filename\"><span data-dz-name></span></div>'+
-                '               </div>'+
-                '               <div class=\"dz-progress\"><span class=\"dz-upload\" data-dz-uploadprogress></span></div>'+
-                '               <div class=\"dz-error-message\"><span data-dz-errormessage></span></div>'+
-                '               <div class=\"dz-success-mark\">'+
-                '                   <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sketch=\"http://www.bohemiancoding.com/sketch/ns\">'+
-                '                       <title>Check</title>'+
-                '                       <defs></defs>'+
-                '                       <g id=\"Page-1\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\" sketch:type=\"MSPage\">'+
-                '                           <path d=\"M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\" id=\"Oval-2\" stroke-opacity=\"0.198794158\" stroke=\"#747474\" fill-opacity=\"0.816519475\" fill=\"#FFFFFF\" sketch:type=\"MSShapeGroup\"></path>'+
-                '                       </g>'+
-                '                   </svg>'+
-                '               </div>'+
-                '               <div class=\"dz-error-mark\">'+
-                '                   <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sketch=\"http://www.bohemiancoding.com/sketch/ns\">'+
-                '                   <title>Error</title><defs></defs>'+
-                '                   <g id=\"Page-1\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\" sketch:type=\"MSPage\">'+
-                '                       <g id=\"Check-+-Oval-2\" sketch:type=\"MSLayerGroup\" stroke=\"#747474\" stroke-opacity=\"0.198794158\" fill=\"#FFFFFF\" fill-opacity=\"0.816519475\">'+
-                '                           <path d=\"M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\" id=\"Oval-2\" sketch:type=\"MSShapeGroup\"></path>'+
-                '                       </g>'+
-                '                   </g>'+
-                '                   </svg>'+
-                '               </div>'+
+                '           <div class=\"dz-preview dz-file-preview dz-processing dz-error dz-complete\">\n' +
+                '               <div class=\"dz-image\"><img data-dz-thumbnail /></div>' +
+                '               <div class=\"dz-details\">' +
+                '                   <div class=\"dz-size\"><span data-dz-size></span></div>' +
+                '                   <div class=\"dz-filename\"><span data-dz-name></span></div>' +
+                '               </div>' +
+                '               <div class=\"dz-progress\"><span class=\"dz-upload\" data-dz-uploadprogress></span></div>' +
+                '               <div class=\"dz-error-message\"><span data-dz-errormessage></span></div>' +
+                '               <div class=\"dz-success-mark\">' +
+                '                   <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sketch=\"http://www.bohemiancoding.com/sketch/ns\">' +
+                '                       <title>Check</title>' +
+                '                       <defs></defs>' +
+                '                       <g id=\"Page-1\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\" sketch:type=\"MSPage\">' +
+                '                           <path d=\"M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\" id=\"Oval-2\" stroke-opacity=\"0.198794158\" stroke=\"#747474\" fill-opacity=\"0.816519475\" fill=\"#FFFFFF\" sketch:type=\"MSShapeGroup\"></path>' +
+                '                       </g>' +
+                '                   </svg>' +
+                '               </div>' +
+                '               <div class=\"dz-error-mark\">' +
+                '                   <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sketch=\"http://www.bohemiancoding.com/sketch/ns\">' +
+                '                   <title>Error</title><defs></defs>' +
+                '                   <g id=\"Page-1\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\" sketch:type=\"MSPage\">' +
+                '                       <g id=\"Check-+-Oval-2\" sketch:type=\"MSLayerGroup\" stroke=\"#747474\" stroke-opacity=\"0.198794158\" fill=\"#FFFFFF\" fill-opacity=\"0.816519475\">' +
+                '                           <path d=\"M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\" id=\"Oval-2\" sketch:type=\"MSShapeGroup\"></path>' +
+                '                       </g>' +
+                '                   </g>' +
+                '                   </svg>' +
+                '               </div>' +
                 '           </div><!-- end of dz-preview -->' +
                 '       </div><!-- end of col-md-2 -->' +
 
@@ -291,8 +290,6 @@
                 '</form>' +
 
 
-
-
                 '<div class="row">' +
                 '   <div  class="custom-alerts alert alert-danger fade in margin-top-10 hidden">\n' +
                 '        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>\n' +
@@ -300,7 +297,6 @@
                 '        <strong></strong>' +
                 '    </div>' +
                 '</div>' +
-
 
 
                 '   </div>\n' +
@@ -347,7 +343,21 @@
                         clearMaskOnLostFocus: true
                     });
                     // Create the remove button
-                    var removeButton = Dropzone.createElement("<a href='javascript:;' class='btn red btn-sm btn-block' style='border-radius: 18px;'>Remove</a>");
+                    var removeButton = Dropzone.createElement("<a href="
+                    javascript:;
+                    " class="
+                    btn
+                    red
+                    btn - sm
+                    btn - block
+                    " style="
+                    border - radius
+                :
+                    18
+                    px;
+                    ">Remove</a>"
+                )
+                    ;
 
                     // Capture the Dropzone instance as closure.
                     var _this = this;
@@ -368,21 +378,54 @@
                     file.previewElement.querySelector('.dz-file-preview').appendChild(removeButton);
 
                     var rootContentTypeValue = $("#rootContentTypes option:selected").val();
-                    var rootContentTypeHidden = Dropzone.createElement("<input type='hidden' name='contenttype_id' value='" + rootContentTypeValue + "'>");
+                    var rootContentTypeHidden = Dropzone.createElement("<input type="
+                    hidden
+                    " name="
+                    contenttype_id
+                    " value="
+                    " + rootContentTypeValue + "
+                    ">"
+                )
+                    ;
                     file.previewElement.querySelector('.form-horizontal').appendChild(rootContentTypeHidden);
 
                     var contentSetValue = $("#contentSets option:selected").val();
                     if (contentSetValue.length > 0) {
-                        var contentSetHidden = Dropzone.createElement("<input type='hidden' name='contentset_id[]' value='" + contentSetValue + "'>");
+                        var contentSetHidden = Dropzone.createElement("<input type="
+                        hidden
+                        " name="
+                        contentset_id[]
+                        " value="
+                        " + contentSetValue + "
+                        ">"
+                    )
+                        ;
                         file.previewElement.querySelector('.form-horizontal').appendChild(contentSetHidden);
 
-                        var orderInput = Dropzone.createElement("<input type='text' placeholder='ترتیب' name='order' value=''>");
+                        var orderInput = Dropzone.createElement("<input type="
+                        text
+                        " placeholder="
+                        ترتیب
+                        " name="
+                        order
+                        " value="
+                        ">"
+                    )
+                        ;
                         file.previewElement.querySelector('.form-horizontal .description-group .description-group-textarea-column').appendChild(orderInput);
                     }
 
                     var authorValue = $("#authors option:selected").val();
                     if (authorValue.length > 0) {
-                        var authorHidden = Dropzone.createElement("<input type='hidden' name='author_id' value='" + authorValue + "'>");
+                        var authorHidden = Dropzone.createElement("<input type="
+                        hidden
+                        " name="
+                        author_id
+                        " value="
+                        " + authorValue + "
+                        ">"
+                    )
+                        ;
                         file.previewElement.querySelector('.form-horizontal').appendChild(authorHidden);
                     }
 
@@ -542,12 +585,37 @@
                     //                    files.previewElement.querySelector('.form-horizontal').appendChild(methodInput);
                     if (response.fileName.length > 0) {
                         // files.previewElement.querySelector('[type="submit"]').disabled=false;
-                        var fileNameHidden = Dropzone.createElement("<input type='hidden' name='file[]' value='" + response.fileName + "'>");
+                        var fileNameHidden = Dropzone.createElement("<input type="
+                        hidden
+                        " name="
+                        file[]
+                        " value="
+                        " + response.fileName + "
+                        ">"
+                    )
+                        ;
                         files.previewElement.querySelector('.form-horizontal').appendChild(fileNameHidden);
                         if ($("#rootContentTypes").data("title") == "video") {
-                            var fileCaptionHidden = Dropzone.createElement("<input type='hidden' name='caption[]' value='کیفیت عالی'>");
+                            var fileCaptionHidden = Dropzone.createElement("<input type="
+                            hidden
+                            " name="
+                            caption[]
+                            " value="
+                            کیفیت
+                            عالی
+                            ">"
+                        )
+                            ;
                             files.previewElement.querySelector('.form-horizontal').appendChild(fileCaptionHidden);
-                            var fileLabelHidden = Dropzone.createElement("<input type='hidden' name='label[]' value='hd'>");
+                            var fileLabelHidden = Dropzone.createElement("<input type="
+                            hidden
+                            " name="
+                            label[]
+                            " value="
+                            hd
+                            ">"
+                        )
+                            ;
                             files.previewElement.querySelector('.form-horizontal').appendChild(fileLabelHidden);
                         }
                         /**
@@ -556,7 +624,12 @@
                          */
                         $("input[data-role=tagsinput]").tagsinput();
                     } else {
-                        $("#my-awesome-dropzone").append("<span class='m--font-danger'>" + "خطا در آپلود فایل " + files.name + "</span></br>" + response.toString() + "</br>");
+                        $("#my-awesome-dropzone").append("<span class="
+                        m--
+                        font - danger
+                        ">" + "خطا در آپلود فایل " + files.name + "</span></br>" + response.toString() + "</br>"
+                    )
+                        ;
                     }
 
 //                    if (typeof(response.sessionData) != "undefined" && response.sessionData != null)
@@ -572,7 +645,12 @@
 //                        });
                 });
                 this.on("error", function (files, response) {
-                    $("#my-awesome-dropzone").append("<span class='m--font-danger'>" + "خطا در آپلود فایل " + files.name + "</span></br>" + response.toString() + "</br>");
+                    $("#my-awesome-dropzone").append("<span class="
+                    m--
+                    font - danger
+                    ">" + "خطا در آپلود فایل " + files.name + "</span></br>" + response.toString() + "</br>"
+                )
+                    ;
                     // Gets triggered when there was an error sending the files.
                     // Maybe show form again, and notify user of error
                 });
@@ -581,7 +659,11 @@
 
         $(document).on('submit', '.contentInformationForm', function (e) {
             e.preventDefault();
-            var loadingImage = "<img src = '/acm/extra/loading-arrow.gif' style='height: 20px;'>";
+            var loadingImage = "<img src = " / acm / extra / loading - arrow.gif
+            " style="
+            height: 20
+            px;
+            ">";
             var form = $(this);
             formData = form.serialize();
             url = form.attr("action");

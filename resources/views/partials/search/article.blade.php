@@ -1,7 +1,10 @@
 @if(optional($items)->isNotEmpty())
     <div class = "col-xl-12 m--margin-bottom-5">
         <a href = "#" class = "m-link m-link--primary">
-            <h3 style = "font-weight: bold"><i class="la la-comment"></i>مقالات آموزشی</h3>
+            <h3 style = "font-weight: bold">
+                <i class = "la la-comment"></i>
+                مقالات آموزشی
+            </h3>
         </a>
         <hr>
     </div>
@@ -17,5 +20,5 @@
         'widgetScroll'     => 0
         ])
     @endforeach
-    <input id="owl--js-var-next-page-article-url" class = "m--hide" type = "hidden" value = '{{ $items->nextPageUrl() }}'>
+    <input id = "owl--js-var-next-page-article-url" class = "m--hide" type = "hidden" value = '{{ $items->nextPageUrl() }}'>
 @endif

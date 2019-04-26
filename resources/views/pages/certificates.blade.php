@@ -5,13 +5,13 @@
 
 
 @section("pageBar")
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <i class="flaticon-home-2"></i>
+    <nav aria-label = "breadcrumb">
+        <ol class = "breadcrumb">
+            <li class = "breadcrumb-item">
+                <i class = "flaticon-home-2"></i>
                 <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">
+            <li class = "breadcrumb-item active" aria-current = "page">
                 مجوزها
             </li>
         </ol>
