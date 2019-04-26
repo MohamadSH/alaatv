@@ -198,10 +198,11 @@ class Contentset extends BaseModel implements Taggable
                     ])->withTimestamps()->orderBy('order');
     }
 
-    public function getProducts() :ProductCollection
+    public function getProducts($onlyActiveProduct = true) :ProductCollection
     {
-        return Cache::tags(['set','product'])->remember('products-of-set:'.$this->id,config('constants.CACHE_60'),function (){
-            return $this->products ?: new ProductCollection();
+        $key = 'products-of-set:'.$this->id.'onlyActiveProduct-'.$onlyActiveProduct;
+        return Cache::tags(['set','product'])->remember($key,config('constants.CACHE_60'),function () use ($onlyActiveProduct){
+            return ($onlyActiveProduct ? $this->products()->active()->get() : $this->products()->get()) ?: new ProductCollection();
         });
 
     }

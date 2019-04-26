@@ -773,6 +773,17 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $files->orderBy("order");
         return $files;
     }
+    /**
+     * Scope a query to only include product without redirect url.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeMain($query)
+    {
+        return $query->whereNull('redirectUrl');
+    }
 
     /**Determines whether this product is available for purchase or not
      *
