@@ -15,19 +15,6 @@ class ShopPageController extends Controller
 {
     use MetaCommon;
 
-    /**
-     * PHP 5 allows developers to declare constructor methods for classes.
-     * Classes which have a constructor method call this method on each newly-created object,
-     * so it is suitable for any initialization that the object may need before it is used.
-     *
-     * Note: Parent constructors are not called implicitly if the child class defines a constructor.
-     * In order to run a parent constructor, a call to parent::__construct() within the child constructor is required.
-     *
-     * param [ mixed $args [, $... ]]
-     *
-     * @link https://php.net/manual/en/language.oop5.decon.php
-     * @param Websitesetting $setting
-     */
     public function __construct(Websitesetting $setting)
     {
         $this->setting = $setting->setting;
@@ -56,7 +43,7 @@ class ShopPageController extends Controller
         $slides = Slideshow::getShopBanner();
 
         if (request()->expectsJson()) {
-            return response()->setStatusCode(Response::HTTP_OK)->json([
+            return response()->json([
                 'mainBanner' => $slides,
                 'block' => [
                     'current_page' => 1,
