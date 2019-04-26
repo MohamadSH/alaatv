@@ -4,6 +4,7 @@ use App\Content;
 use App\Contentset;
 use App\Product;
 use App\Productfile;
+use App\Traits\ProductRepository;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -19,6 +20,7 @@ class MigrateDataProductSet extends Migration
      */
     public function up()
     {
+        DB::table('contentset_product')->truncate();
         DB::beginTransaction();
 
         try{
@@ -108,7 +110,8 @@ class MigrateDataProductSet extends Migration
         }
         $set = Contentset::find($contentSetId);
         Productfile::whereIn('id', $files->modelKeys())->update(['contentset_id' => $set->id]);
-        $this->attachSetToProducts($set,$files->first->name);
+//        dd($files->first()->name);
+        $this->attachSetToProducts($set,$files->first()->file);
     }
 
 
@@ -196,13 +199,12 @@ class MigrateDataProductSet extends Migration
     }
 
     /**
-     * @param \App\Contentset  $set
-     * @param \App\Productfile $file
+     * @param \App\Contentset $set
+     * @param string          $fileName
      */
-    private function attachSetToProducts(Contentset $set, $fileName): void
+    private function attachSetToProducts(Contentset $set, string $fileName): void
     {
-
-        $products = Product::getProductsThatHaveValidProductFileByFileNameRecursively($fileName);
+        $products = ProductRepository::getProductsThatHaveValidProductFileByFileNameRecursively($fileName);
         $output = new ConsoleOutput();
         $output->writeln('Count(products):'.$products->count());
 

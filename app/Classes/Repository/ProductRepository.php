@@ -7,24 +7,22 @@
  */
 
 namespace App\Traits;
-
-
 use App\Product;
 
-trait ProductRepository
+class ProductRepository
 {
     /**
      * @param $fileName
      *
      * @return \App\Collection\ProductCollection
      */
-    public static function getProductsThatHaveValidProductFileByFileNameRecursively($fileName)
+    public static function getProductsThatHaveValidProductFileByFileNameRecursively(string $fileName)
     {
-        $products = Product::whereIn('id', Product::getArrayOfProductsIdThatHaveValidProductfileByFileName($fileName))
-                           ->OrwhereIn('id', Product::getArrayOfProductsIdThatTheirParentHaveValidProductFileByFileName($fileName))
-                           ->OrwhereIn('id', Product::getArrayOfProductsIdThatTheirComplimentaryHaveValidProductFileByFileName($fileName))
-                           ->OrwhereIn('id', Product::getArrayOfProductsIdThatTheirGiftHaveValidProductFileByFileName($fileName))
-                           ->OrwhereIn('id', Product::getArrayOfProductsIdThatTheirParentComplimentaryHaveValidProductFileByFileName($fileName))
+        $products = Product::whereIn('id', self::getArrayOfProductsIdThatHaveValidProductfileByFileName($fileName))
+                           ->OrwhereIn('id', self::getArrayOfProductsIdThatTheirParentHaveValidProductFileByFileName($fileName))
+                           ->OrwhereIn('id', self::getArrayOfProductsIdThatTheirComplimentaryHaveValidProductFileByFileName($fileName))
+                           ->OrwhereIn('id', self::getArrayOfProductsIdThatTheirGiftHaveValidProductFileByFileName($fileName))
+                           ->OrwhereIn('id', self::getArrayOfProductsIdThatTheirParentComplimentaryHaveValidProductFileByFileName($fileName))
                            ->get();
         return $products;
     }
@@ -36,9 +34,9 @@ trait ProductRepository
      */
     public static function getArrayOfProductsIdThatHaveValidProductFileByFileName($fileName): \Illuminate\Support\Collection
     {
-        return Product::whereHas('validProductfiles', function ($q) use ($fileName) {
-            $q->where("file", $fileName);
-        })->pluck("id");
+        return Product::whereHas('validProductfiles', function ($query) use ($fileName) {
+            $query->where("file", $fileName);
+        })->get()->pluck("id");
     }
 
     /**
@@ -52,7 +50,7 @@ trait ProductRepository
             $q->whereHas('validProductfiles', function ($q) use ($fileName) {
                 $q->where("file", $fileName);
             });
-        })->pluck("id");
+        })->get()->pluck("id");
     }
 
     /**
@@ -66,7 +64,7 @@ trait ProductRepository
             $q->whereHas('validProductfiles', function ($q) use ($fileName) {
                 $q->where("file", $fileName);
             });
-        })->pluck("id");
+        })->get()->pluck("id");
     }
 
     /**
@@ -80,7 +78,7 @@ trait ProductRepository
             $q->whereHas('validProductfiles', function ($q) use ($fileName) {
                 $q->where("file", $fileName);
             });
-        })->pluck("id");
+        })->get()->pluck("id");
     }
 
     /**
@@ -96,6 +94,6 @@ trait ProductRepository
                     $q->where("file", $fileName);
                 });
             });
-        })->pluck("id");
+        })->get()->pluck("id");
     }
 }

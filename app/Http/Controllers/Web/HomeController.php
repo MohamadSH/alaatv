@@ -43,6 +43,7 @@ use App\{Assignmentstatus,
     Traits\CharacterCommon,
     Traits\Helper,
     Traits\ProductCommon,
+    Traits\ProductRepository,
     Traits\RequestCommon,
     Traits\UserCommon,
     Transaction,
@@ -160,6 +161,11 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
+        $fileName = 'testha.pdf';
+        $p = Product::whereHas('validProductfiles', function ($query) use ($fileName) {
+            $query->where("file", $fileName);
+        })->get();
+        dd($p);
 //        return Product::find(65)->sets->first()->getContents() ;
         return Content::find(6560);
 
@@ -167,7 +173,7 @@ class HomeController extends Controller
 
     public function search(Request $request)
     {
-        return redirect(action("Web\ContentController@index"), Response::HTTP_REDIRECT_PERM);
+        return redirect(action("Web\ContentController@index"), Response::HTTP_MOVED_PERMANENTLY);
     }
 
     public function home()
@@ -974,7 +980,7 @@ class HomeController extends Controller
                 $diskName = Config::get('constants.DISK13');
 
                 if (!$user->can(Config::get("constants.DOWNLOAD_PRODUCT_FILE"))) {
-                    $products = Product::getProductsThatHaveValidProductFileByFileNameRecursively($fileName);
+                    $products = ProductRepository::getProductsThatHaveValidProductFileByFileNameRecursively($fileName);
                     $validOrders = $user->getOrdersThatHaveSpecificProduct($products);
 
                     if (!$products->isEmpty()) {
