@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
         Collection::macro('pushAt', function ($key, $item) {
             return $this->put($key, collect($this->get($key))->push($item));
         });
-        $this->defineValidationRules();
+
     }
 
     /**
@@ -50,6 +50,7 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
         }
+        $this->defineValidationRules();
     }
 
     private function defineValidationRules(): void
