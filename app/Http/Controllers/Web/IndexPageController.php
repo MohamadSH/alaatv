@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Block;
+use App\Classes\Format\BlockCollectionFormatter;
 use App\Classes\Format\webBlockCollectionFormatter;
 use App\Classes\Format\webSetCollectionFormatter;
 use App\Classes\SEO\SeoDummyTags;
@@ -28,15 +29,13 @@ class IndexPageController extends Controller
     /**
      * Handle the incoming request.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request                     $request
+     * @param \App\Classes\Format\BlockCollectionFormatter $blockCollectionFormatter
+     *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, BlockCollectionFormatter $blockCollectionFormatter)
     {
-
-//        $t = memory_get_usage(true)/(1024*1024);
-        $blocks = Block::getMainBlocks();
-//        dump(memory_get_usage(true)/(1024*1024) - $t);
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags($this->setting->site->seo->homepage->metaTitle, $this->setting->site->seo->homepage->metaDescription, $url,
             $url, route('image', [
@@ -47,7 +46,7 @@ class IndexPageController extends Controller
             ]), '100', '100', null));
 
         $slides = Slideshow::getMainBanner();
-
+        $blocks = Block::getMainBlocks();
         if (request()->expectsJson()) {
             return response()->json([
                 'mainBanner' => $slides,
@@ -67,9 +66,7 @@ class IndexPageController extends Controller
                 ],
             ]);
         }
-        $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format($blocks);
-//        dump(memory_get_usage(true)/(1024*1024) - $t);
-//        dd("invok!");
+        $sections = $blockCollectionFormatter->format($blocks);
         $pageName = "dashboard";
         return view('pages.dashboard1', compact('pageName', 'sections', 'slides'));
     }

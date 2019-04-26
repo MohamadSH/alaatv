@@ -10,6 +10,7 @@ namespace App\Classes\Format;
 
 use App\Block;
 use App\Collection\BlockCollection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class webBlockCollectionFormatter implements BlockCollectionFormatter
@@ -33,19 +34,19 @@ class webBlockCollectionFormatter implements BlockCollectionFormatter
     {
         $sections = collect();
 
-        //TODO:: fix some bugs!!
+        /*//TODO:: fix some bugs!!
         //FastCGI sent in stderr: "PHP message: PHP Fatal error:  Allowed memory size of
         $user = auth()->user();
         if(isset($user))
-            auth()->logout();
+            auth()->logout();*/
 
         foreach ($blocks as $block) {
-            $section = $this->blockFormatter($block);
-            $sections->push($section);
+            $sections->push($this->blockFormatter($block));
         }
 
-        if(isset($user))
+        /*if(isset($user))
             auth()->login($user,true);
+        */
         return $sections;
     }
 
@@ -56,19 +57,22 @@ class webBlockCollectionFormatter implements BlockCollectionFormatter
      */
     private function blockFormatter(Block $block): array
     {
-        $section = [
-            "name" => $block->class,
-            "displayName" => $block->title,
-            "descriptiveName" => $block->title,
-            "lessons" => $this->setFormatter->format($block->sets),
-            "tags" => $block->tags,
-            'ads' => [
+        return Cache::tags(['block'])->remember('format-block:'.$block->id, config('constants.CACHE_600'),function () use ($block){
+            $section = [
+                "name" => $block->class,
+                "displayName" => $block->title,
+                "descriptiveName" => $block->title,
+                "lessons" => $this->setFormatter->format($block->sets),
+                "tags" => $block->tags,
+                'ads' => [
 
-            ],
-            'class' => $block->class,
-            'url' => $block->url,
-        ];
+                ],
+                'class' => $block->class,
+                'url' => $block->url,
+            ];
 
-        return $section;
+            return $section;
+        });
+
     }
 }
