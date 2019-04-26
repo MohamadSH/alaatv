@@ -160,7 +160,8 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        return Content::find(9287);
+//        return Product::find(65)->sets->first()->getContents() ;
+        return Content::find(6560);
 
     }
 

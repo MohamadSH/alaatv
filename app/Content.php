@@ -214,6 +214,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'contentset_id',
         'template',
         'contenttype',
+
     ];
 
     /**
@@ -774,9 +775,29 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      *
      * @return \App\Collection\ProductCollection
      */
-    public function products()
+    public function products() :ProductCollection
     {
-        return new ProductCollection();
+        return Cache::tags(['content','product'])->remember('products-of-content:'.$this->id,config('constants.CACHE_60'),function (){
+            return ($this->set->products ?: new ProductCollection())->makeHidden([
+                'shortDescription',
+                'longDescription',
+                'tags',
+                'introVideo',
+                'order',
+                'page_view',
+                'gift',
+                'type',
+                'attributes',
+                'samplePhotos',
+                'sets',
+                'product_set',
+                'children',
+                'updated_at',
+                'amount',
+
+            ]);
+        });
+
     }
 
     public function grades()
@@ -804,7 +825,8 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function contentsets()
     {
         //ToDo : deprecated
-        return $this->belongsToMany("\App\Contentset", "contentset_educationalcontent", "edc_id", "contentset_id")->withPivot("order", "isDefault");
+        return $this->belongsToMany("\App\Contentset", "contentset_educationalcontent", "edc_id", "contentset_id")
+                    ->withPivot("order", "isDefault");
     }
 
     public function template()

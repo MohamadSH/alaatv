@@ -1494,9 +1494,12 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function sets()
     {
-        return $this->belongsToMany('App\Contentset')->using('App\ProductSet')->as('productSet')->withPivot([
-            'order',
-        ])->withTimestamps()->orderBy('order');
+        return $this->belongsToMany('App\Contentset')
+                    ->using('App\ProductSet')
+                    ->as('productSet')
+                    ->withPivot([
+                        'order',
+                    ])->withTimestamps()->orderBy('order');
     }
 
     public function getSetsAttribute()

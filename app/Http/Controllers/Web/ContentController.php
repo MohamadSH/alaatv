@@ -661,6 +661,8 @@ class ContentController extends Controller
      */
     private function userCanSeeContent(Request $request, Content $content): bool
     {
-        return $content->isFree || optional($request->user('web'))->hasContent($content);
+        /** @var User $user */
+        $user = $request->user('web');
+        return $content->isFree || optional($user)->hasContent($content);
     }
 }

@@ -7,7 +7,6 @@ use App\Collection\ContentCollection;
 use App\Collection\SetCollection;
 use App\Traits\favorableTraits;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 
 /**
  * App\Contentset
@@ -143,7 +142,11 @@ class Contentset extends BaseModel implements Taggable
         $key = "ContentSet:getContents".$this->cacheKey();
 
         return Cache::tags('set')->remember($key, config("constants.CACHE_300"), function () {
-            return $this->contents()->active()->get() ?: new ContentCollection();
+
+            $oldContentCollection = $this->contents()->active()->get()  ?: new ContentCollection();
+            $newContentCollection = $this->contents2()->active()->get() ?: new ContentCollection();
+            return $oldContentCollection->merge($newContentCollection);
+
         });
     }
 
@@ -170,9 +173,28 @@ class Contentset extends BaseModel implements Taggable
             $key, $time);
     }
 
+    //Old way ( before migrate)
     public function contents()
     {
-        return $this->belongsToMany("\App\Content", "contentset_educationalcontent", "contentset_id", "edc_id")->withPivot("order", "isDefault");
+        return $this->belongsToMany("\App\Content", "contentset_educationalcontent", "contentset_id", "edc_id")
+                    ->withPivot("order", "isDefault");
+    }
+
+
+    //new way ( after migrate )
+    public function contents2()
+    {
+        return $this->hasMany('\App\Content');
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany('App\Product')
+                    ->using('App\ProductSet')
+                    ->as('productSet')
+                    ->withPivot([
+                        'order',
+                    ])->withTimestamps()->orderBy('order');
     }
 
     public function getShortNameAttribute($value)

@@ -94,7 +94,8 @@ class MigrateDataProductSet extends Migration
      */
     private function makeSetForProductFiles($files, Product $product): void
     {
-        if ($files->first()->contentset_id == null) {
+        $contentSetId = $files->first()->contentset_id;
+        if ($contentSetId == null) {
 
             //make a set from Product
             $set = Contentset::create([
@@ -105,9 +106,10 @@ class MigrateDataProductSet extends Migration
             $set->enable = 1;
             $set->display = 1;
             $set->save();
-
-            Productfile::whereIn('id', $files->modelKeys())->update(['contentset_id' => $set->id]);
         }
+        $set = Contentset::find($contentSetId);
+        Productfile::whereIn('id', $files->modelKeys())->update(['contentset_id' => $set->id]);
+        $product->sets()->attach($set,['order'=>$set->id]);
     }
 
 

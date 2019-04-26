@@ -49,7 +49,7 @@
                                     <td><a target="_blank" href = "{{action("Web\ContentController@edit" , $content->id)}}">{{ $content->id }}</a>
                                     </td>
                                     <td><img src="{{ $content->thumbnail }}" class="img-responsive"/></td>
-                                    <td> {{ $content->pivot->order }}</td>
+                                    <td> {{ $content->order }}</td>
                                     <td> {{ $content->name }}</td>
                                     <td>{!!   $content->description !!}</td>
                                     <td>{{ $content->enable }}</td>
