@@ -149,7 +149,7 @@ class Block extends BaseModel
     {
         $blocks = Cache::tags('block')->remember('getShopBlocks', config('constants.CACHE_600'), function () {
             $offerBlock = self::getOfferBlock();
-            $blocks = Block::shop()->orderBy('order')->get()->loadMissing([
+            $blocks = self::shop()->orderBy('order')->get()->loadMissing([
                 'contents',
                 'sets',
                 'products',

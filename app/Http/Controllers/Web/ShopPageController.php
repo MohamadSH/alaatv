@@ -15,6 +15,8 @@ class ShopPageController extends Controller
 {
     use MetaCommon;
 
+    protected $setting;
+
     public function __construct(Websitesetting $setting)
     {
         $this->setting = $setting->setting;
@@ -24,6 +26,7 @@ class ShopPageController extends Controller
      * Handle the incoming request.
      *
      * @param \Illuminate\Http\Request $request
+     *
      * @return Response
      */
     public function __invoke(Request $request)
@@ -33,31 +36,31 @@ class ShopPageController extends Controller
         $this->generateSeoMetaTags(new SeoDummyTags($this->setting->site->seo->homepage->metaTitle, $this->setting->site->seo->homepage->metaDescription, $url,
             $url, route('image', [
                 'category' => '11',
-                'w' => '100',
-                'h' => '100',
+                'w'        => '100',
+                'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-
 
         $blocks = Block::getShopBlocks();
         $slides = Slideshow::getShopBanner();
 
         if (request()->expectsJson()) {
+            $numberOfBlocks = $blocks->count();
             return response()->json([
                 'mainBanner' => $slides,
-                'block' => [
-                    'current_page' => 1,
-                    'data' => $blocks,
+                'block'      => [
+                    'current_page'   => 1,
+                    'data'           => $blocks,
                     'first_page_url' => null,
-                    'from' => 1,
-                    'last_page' => 1,
-                    'last_page_url' => null,
-                    'next_page_url' => null,
-                    'path' => $url,
-                    'per_page' => $blocks->count() + 1,
-                    'prev_page_url' => null,
-                    'to' => $blocks->count(),
-                    'total' => $blocks->count(),
+                    'from'           => 1,
+                    'last_page'      => 1,
+                    'last_page_url'  => null,
+                    'next_page_url'  => null,
+                    'path'           => $url,
+                    'per_page'       => $numberOfBlocks + 1,
+                    'prev_page_url'  => null,
+                    'to'             => $numberOfBlocks,
+                    'total'          => $numberOfBlocks,
                 ],
             ]);
         }
