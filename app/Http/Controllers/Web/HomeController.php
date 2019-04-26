@@ -9,6 +9,7 @@ use App\{Assignmentstatus,
     Bon,
     Checkoutstatus,
     Classes\Format\BlockCollectionFormatter,
+    Classes\Repository\ContentRepositoryInterface,
     Consultationstatus,
     Content,
     Contentset,
@@ -158,109 +159,9 @@ class HomeController extends Controller
     }
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
-
     {
-        $v = [
-            'id',
-            'firstName',
-            'lastName',
-            'photo',
-            'full_name',
-        ];
-        $user =User::getNullInstant($v);
-        return $user->setVisible($v);
-        try {
-            $productFiles = Productfile::all();
-            $productFiles->load('product');
-            $productFiles->load('productfiletype');
-            foreach ($productFiles->groupBy('product_id') as $productId => $files) {
-                //get Product
-                $product = $files->first()->product;
+        return Content::find(9287);
 
-                if ($files->first()->contentset_id == null) {
-
-                    //make a set from Product
-                    $set = Contentset::create([
-                        'name'  => $product->name,
-                        'photo' => $product->photo,
-                        'tags'  => $product->tags->tags,
-                    ]);
-                    $set->enable = 1;
-                    $set->display = 1;
-                    $set->save();
-
-                    Productfile::whereIn('id', $files->modelKeys())->update(['contentset_id' => $set->id]);
-                }
-
-                //make content for each productFiles
-                $productTypeContentTypeLookupTable = [
-                    '1' => Content::CONTENT_TYPE_PAMPHLET,
-                    '2' => Content::CONTENT_TYPE_VIDEO,
-                ];
-                $productTypeContentTemplateLookupTable = [
-                    '1' => Content::CONTENT_TEMPLATE_PAMPHLET,
-                    '2' => Content::CONTENT_TEMPLATE_VIDEO,
-                ];
-                /** @var Productfile $productFile */
-                foreach ($files as $productFile) {
-                    if ($productFile->content_id == null) {
-                        $files = collect();
-                        $url = $productFile->cloudFile ?? $productFile->file;
-                        $files->push([
-                            "uuid" => null,
-                            "disk" => "productFileSFTP",
-                            "url" => null,
-                            "fileName" => parse_url($url)['path'],
-                            "size" => null,
-                            "caption" => null,
-                            "res" => "720p",
-                            "type" => "video",
-                            "ext" => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
-                        ]);
-                        //TODO://Fill file!
-                        $content = Content::create([
-                            'name'            => $productFile->name,
-                            'description'     => (isset($productFile) && strlen($productFile->description) > 1 ? $productFile->description : null),
-                            'context'         => null,
-                            'file'            => '',
-                            'order'           => $productFile->order,
-                            'validSince'      => $productFile->validSince,
-                            'metaTitle'       => null,
-                            'metaDescription' => null,
-                            'metaKeywords'    => null,
-                            'tags'            => $product->tags->tags,
-                            'author_id'       => null,
-                            'contenttype_id'  => $productTypeContentTypeLookupTable[$productFile->productfiletype_id],
-                            'template_id'     => $productTypeContentTemplateLookupTable[$productFile->productfiletype_id],
-                            'contentset_id'   => $productFile->contentset_id,
-                            'isFree'          => false,
-                            'enable'          => $productFile->enable,
-                        ]);
-                        $content->timestamps = false;
-                        $content->forceFill([
-                            'created_at' => $productFile->created_at,
-                            'updated_at' => $productFile->updated_at,
-                        ])->save();
-
-                        $content->file = $files;
-                        $content->timestamps = true;
-                        return $content;
-                    }
-                    break;
-                }
-                break;
-            }
-            dd(".");
-        } catch (\Exception    $e) {
-            $message = "unexpected error";
-
-            return $this->response->setStatusCode(503)->setContent([
-                "message" => $message,
-                "error"   => $e->getMessage(),
-                "line"    => $e->getLine(),
-                "file"    => $e->getFile(),
-            ]);
-        }
     }
 
     public function search(Request $request)
@@ -992,11 +893,13 @@ class HomeController extends Controller
     }
 
     /**
-     * @param $data
+     * @param                                                    $data
+     *
+     * @param \App\Classes\Repository\ContentRepositoryInterface $contentRepository
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function newDownload($data)
+    public function newDownload($data, ContentRepositoryInterface $contentRepository)
     {
         if (isset($data)) {
             try {
@@ -1006,11 +909,18 @@ class HomeController extends Controller
             }
             $url = $data["url"];
             $contentId = $data["data"]["content_id"];
-            if (Auth::check()) {
-                $user = auth()->user();
-                $user->hasContent($contentId);
+            $content = $contentRepository->getContentById($contentId);
 
-                return redirect($url);
+            if (Auth::check()) {
+                /** @var \App\User $user */
+                $user = auth()->user();
+                if(!$user->hasContent($content)) {
+                    return redirect()->action('Web\ContentController@show', $content)
+                                     ->setStatusCode(Response::HTTP_FOUND);
+                }
+                $finalLink = $this->getSecureUrl($url);
+
+                return redirect($finalLink);
             }
         }
         abort(403);
@@ -4999,6 +4909,28 @@ class HomeController extends Controller
             }
         }
         return $message;
+    }
+
+
+
+
+    /**
+     * @param $url
+     *
+     * @return string
+     */
+    private function getSecureUrl($url): string
+    {
+        $unixTime = Carbon::today()->addDays(2)->timestamp;
+        $userIP = request()->ip();
+        //TODO: fix diffrent Ip
+        $ipArray = explode(".", $userIP);
+        $ipArray[3] = 0;
+        $userIP = implode(".", $ipArray);
+
+        $linkHash = $this->generateSecurePathHash($unixTime, $userIP, "TakhteKhak", $url);
+        $finalLink = $url . "?md5=" . $linkHash . "&expires=" . $unixTime;
+        return $finalLink;
     }
 
 }

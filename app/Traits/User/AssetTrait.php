@@ -47,6 +47,34 @@ trait AssetTrait
      */
     public function hasContent(Content $content)
     {
-        return true;
+        return $this->IsThereACommonProduct($content) ;
     }
+
+    /**
+     * @return array
+     */
+    private function getUserProductsId(): array
+    {
+        return $this->products()->pluck('id')->toArray();
+    }
+
+    /**
+     * @param \App\Content $content
+     *
+     * @return array
+     */
+    private function getContentProductsId(Content $content): array
+    {
+        return $content->products()->pluck('id')->toArray();
+}
+
+    /**
+     * @param \App\Content $content
+     *
+     * @return bool
+     */
+    private function IsThereACommonProduct(Content $content): bool
+    {
+        return count(array_intersect($this->getUserProductsId(), $this->getContentProductsId($content))) > 0;
+}
 }

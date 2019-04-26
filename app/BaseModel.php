@@ -32,7 +32,7 @@ abstract class BaseModel extends Model
     public function cacheKey()
     {
         $key = $this->getKey();
-        $time = isset($this->updated_at) ? $this->updated_at->timestamp : $this->created_at->timestamp;
+        $time =  ( optional($this->updated_at)->timestamp ?: optional($this->created_at)->timestamp ) ?: 0;
 
         return sprintf("%s:%s-%s", $this->getTable(), $key, $time);
     }

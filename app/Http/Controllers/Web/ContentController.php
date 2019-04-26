@@ -229,35 +229,45 @@ class ContentController extends Controller
      */
     public function show(Request $request, Content $content)
     {
-        if ($content->isActive()) {
-
-            $adItems = $content->getAddItems();
-            $tags = $content->retrievingTags();
-            [
-                $author,
-                $content,
-                $contentsWithSameSet,
-                $videosWithSameSet,
-                $videosWithSameSetL,
-                $videosWithSameSetR,
-                $pamphletsWithSameSet,
-                $contentSetName,
-            ] = $this->getContentInformation($content);
-
-            $this->generateSeoMetaTags($content);
-            $seenCount = $content->pageView;
-
-            $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
-
-            if (request()->expectsJson()) {
-                return $this->response->setStatusCode(Response::HTTP_OK)->setContent($content);
-            }
-
-            return view("content.show",
-                compact("seenCount", "author", "content", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName", "tags",
-                    "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR"));
+        if (!$content->isActive()) {
+            abort(Response::HTTP_FORBIDDEN);
         }
-        abort(Response::HTTP_FORBIDDEN);
+        if (!$this->userCanSeeContent($request, $content)) {
+            $productsThatHaveThisContent = $content->products();
+
+            return response()->json([
+                'message' => trans('content.Not Free'),
+                'product' => $productsThatHaveThisContent->isEmpty() ? null : $productsThatHaveThisContent,
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        $adItems = $content->getAddItems();
+        $tags = $content->retrievingTags();
+        [
+            $author,
+            $content,
+            $contentsWithSameSet,
+            $videosWithSameSet,
+            $videosWithSameSetL,
+            $videosWithSameSetR,
+            $pamphletsWithSameSet,
+            $contentSetName,
+        ] = $this->getContentInformation($content);
+
+        $this->generateSeoMetaTags($content);
+        $seenCount = $content->pageView;
+
+        $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
+
+        if (request()->expectsJson()) {
+            return $this->response->setStatusCode(Response::HTTP_OK)->setContent($content);
+        }
+
+        return view("content.show",
+            compact("seenCount", "author", "content", "contentsWithSameSet", "videosWithSameSet", "pamphletsWithSameSet", "contentSetName", "tags",
+                "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR"));
+
+
     }
 
     /**
@@ -641,5 +651,16 @@ class ContentController extends Controller
     public function search()
     {
         return redirect('/c', Response::HTTP_MOVED_PERMANENTLY);
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Content $content
+     *
+     * @return bool
+     */
+    private function userCanSeeContent(Request $request, Content $content): bool
+    {
+        return $content->isFree || optional($request->user('web'))->hasContent($content);
     }
 }

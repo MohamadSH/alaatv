@@ -134,7 +134,7 @@ class Contentset extends BaseModel implements Taggable
 
             $r = $this->getContents();
 
-            return $r->sortByDesc("order")->first();
+            return $r->sortByDesc("order")->first() ?: new Content();
         });
     }
 

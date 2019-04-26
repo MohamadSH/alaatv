@@ -153,7 +153,7 @@ return [
             'root'       => "/alaa_media/dl/",
             'timeout'    => env('SFTP_TIMEOUT', '10'),
             'prefix'     => null,
-            'dHost'      => "dl.takhtekhak.com/",
+            'dHost'      => "paid.sanatisharif.ir",
             'dProtocol'  => "https://",
         ],
         'alaaCdnSFTP'     => [

@@ -1,10 +1,16 @@
 <?php
 
+use App\Content;
+use App\Contentset;
+use App\Product;
+use App\Productfile;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
-class AlterBlocksTableEnableSoftdelete extends Migration
+class ChnageProductFilesData extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +19,7 @@ class AlterBlocksTableEnableSoftdelete extends Migration
      */
     public function up()
     {
-        if (!Schema::hasColumn('blocks', 'deleted_at')) {
-            Schema::table('blocks', function (Blueprint $table) {
-                $table->softDeletes();
-            });
-        }
+
     }
 
     /**
@@ -27,10 +29,7 @@ class AlterBlocksTableEnableSoftdelete extends Migration
      */
     public function down()
     {
-        Schema::table('blocks', function (Blueprint $table) {
-            //
-
-
-        });
+        //
     }
+
 }

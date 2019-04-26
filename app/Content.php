@@ -458,6 +458,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return Cache::tags('content')->remember($key, Config::get("constants.CACHE_60"), function () use ($value) {
             $fileCollection = collect(json_decode($value));
             $fileCollection->transform(function ($item, $key) {
+//                dd($item);
                 $l = new LinkGenerator($item);
                 $item->link = $this->isFree ? $l->getLinks() : $l->getLinks([
                     "content_id" => $this->id,

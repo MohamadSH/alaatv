@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Classes\Search\Tag\AuthorTagManagerViaApi;
+use App\Classes\Search\Tag\ContentsetTagManagerViaApi;
 use App\Classes\Search\Tag\ContentTagManagerViaApi;
 use App\Classes\Search\Tag\ProductTagManagerViaApi;
 use App\Classes\Search\TaggingInterface;
@@ -10,6 +11,7 @@ use App\Console\Commands\AuthorTagCommand;
 use App\Console\Commands\ContentTagCommand;
 use App\Observers\ContentObserver;
 use App\Observers\ProductObserver;
+use App\Observers\SetObserver;
 use Illuminate\Support\ServiceProvider;
 
 class TagManagerProvider extends ServiceProvider
@@ -24,6 +26,10 @@ class TagManagerProvider extends ServiceProvider
 
         $this->app->when(ContentObserver::class)->needs(TaggingInterface::class)->give(function () {
             return (new ContentTagManagerViaApi());
+        });
+
+        $this->app->when(SetObserver::class)->needs(TaggingInterface::class)->give(function () {
+            return (new ContentsetTagManagerViaApi());
         });
 
         $this->app->when(ProductObserver::class)->needs(TaggingInterface::class)->give(function () {
