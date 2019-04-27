@@ -26,7 +26,7 @@ class Handler extends ExceptionHandler
         \Illuminate\Session\TokenMismatchException::class,
         \Illuminate\Validation\ValidationException::class,
     ];
-
+    
     /**
      * A list of the inputs that are never flashed for validation exceptions.
      *
@@ -36,11 +36,11 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
-
+    
     /**
      * Report or log an exception.
      *
-     * @param \Exception $exception
+     * @param  \Exception  $exception
      *
      * @return void
      */
@@ -48,12 +48,12 @@ class Handler extends ExceptionHandler
     {
         parent::report($exception);
     }
-
+    
     /**
      * Render an exception into an HTTP response.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Exception $exception
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Exception                $exception
      *
      * @return \Illuminate\Http\Response
      */
@@ -62,10 +62,10 @@ class Handler extends ExceptionHandler
         if ($exception instanceof TokenMismatchException) {
             Auth::logout();
             Session::flush();
-
+            
             return redirect()->back();
         }
-
+        
         if ($exception instanceof ModelNotFoundException && $request->wantsJson()) {
             return response()->json([
                 'error' => 'Resource not found',
@@ -76,15 +76,15 @@ class Handler extends ExceptionHandler
                 'error' => 'not found',
             ], 404);
         }
-
+        
         return parent::render($request, $exception);
     }
-
+    
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Illuminate\Auth\AuthenticationException $exception
+     * @param  \Illuminate\Http\Request                  $request
+     * @param  \Illuminate\Auth\AuthenticationException  $exception
      *
      * @return \Illuminate\Http\Response
      */
@@ -93,7 +93,7 @@ class Handler extends ExceptionHandler
         if ($request->expectsJson()) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
-
+        
         return redirect()->guest('login');
     }
 }

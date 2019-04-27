@@ -24,14 +24,14 @@ class OpenOrderRefinement extends Refinement
         }
         $openOrder = $this->getOpenOrder();
         $openOrder->load('orderproducts');
-
-        if (! $openOrder->orderproducts->isNotEmpty()) {
-            $this->message = 'سبد خرید شما خالیست';
+        
+        if (!$openOrder->orderproducts->isNotEmpty()) {
+            $this->message    = 'سبد خرید شما خالیست';
             $this->statusCode = Response::HTTP_BAD_REQUEST;
-
+            
             return $this;
         }
-
+        
         $this->order = $openOrder;
         $this->getOrderCost();
         $this->donateCost = $this->order->getDonateCost();
@@ -39,14 +39,14 @@ class OpenOrderRefinement extends Refinement
             $this->payByWallet();
         }
         $result = $this->getNewTransaction();
-
-        $this->statusCode = $result['statusCode'];
-        $this->message = $result['message'];
+        
+        $this->statusCode  = $result['statusCode'];
+        $this->message     = $result['message'];
         $this->transaction = $result['transaction'];
-
+        
         return $this;
     }
-
+    
     /**
      * @return Order
      */

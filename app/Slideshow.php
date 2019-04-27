@@ -7,17 +7,17 @@ use Illuminate\Support\Facades\Cache;
 /**
  * App\Slideshow
  *
- * @property int $id
- * @property int|null $websitepage_id آی دی مشخص کننده صفحه محل نمایش اسلاید
- * @property string|null $title
- * @property string|null $shortDescription
- * @property string|null $photo
- * @property string|null $link
- * @property int $order
- * @property int $isEnable
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property int                        $id
+ * @property int|null                   $websitepage_id آی دی مشخص کننده صفحه محل نمایش اسلاید
+ * @property string|null                $title
+ * @property string|null                $shortDescription
+ * @property string|null                $photo
+ * @property string|null                $link
+ * @property int                        $order
+ * @property int                        $isEnable
+ * @property \Carbon\Carbon|null        $created_at
+ * @property \Carbon\Carbon|null        $updated_at
+ * @property \Carbon\Carbon|null        $deleted_at
  * @property-read \App\Websitepage|null $websitepage
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Slideshow onlyTrashed()
@@ -39,10 +39,10 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow query()
- * @property-read mixed $url
+ * @property-read mixed                 $url
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed $cache_cooldown_seconds
+ * @property-read mixed                 $cache_cooldown_seconds
  */
 class Slideshow extends BaseModel
 {
@@ -58,11 +58,11 @@ class Slideshow extends BaseModel
         'order',
         'isEnable',
     ];
-
+    
     protected $appends = [
         'url',
     ];
-
+    
     protected $hidden = [
         'websitepage_id',
         'photo',
@@ -70,47 +70,49 @@ class Slideshow extends BaseModel
         'deleted_at',
         'created_at',
     ];
-
-    public function getUrlAttribute($value): string
-    {
-        return route('image', ['category' => 9, 'w' => '1280', 'h' => '500', 'filename' => $this->photo]);
-    }
-
+    
     public static function getMainBanner()
     {
         return Cache::tags([
             'banner',
             'page',
-        ])->remember('getMainBanner', config('constants.CACHE_600'), function () {
-            return Websitepage::where('url', "/home")
-                              ->first()
-                              ->slides()
-                              ->where("isEnable", 1)
-                              ->orderBy("order")
-                              ->get();
-        });
+        ])
+            ->remember('getMainBanner', config('constants.CACHE_600'), function () {
+                return Websitepage::where('url', "/home")
+                    ->first()
+                    ->slides()
+                    ->where("isEnable", 1)
+                    ->orderBy("order")
+                    ->get();
+            });
     }
-
+    
     public static function getShopBanner()
     {
         return Cache::tags([
             'banner',
             'page',
-        ])->remember('getShopBanner', config('constants.CACHE_600'), function () {
-            return Websitepage::where('url', "/shop")
-                              ->first()
-                              ->slides()
-                              ->where("isEnable", 1)
-                              ->orderBy("order")
-                              ->get();
-        });
+        ])
+            ->remember('getShopBanner', config('constants.CACHE_600'), function () {
+                return Websitepage::where('url', "/shop")
+                    ->first()
+                    ->slides()
+                    ->where("isEnable", 1)
+                    ->orderBy("order")
+                    ->get();
+            });
     }
-
+    
+    public function getUrlAttribute($value): string
+    {
+        return route('image', ['category' => 9, 'w' => '1280', 'h' => '500', 'filename' => $this->photo]);
+    }
+    
     public function websitepage()
     {
         return $this->belongsTo('\App\Websitepage');
     }
-
+    
     /**
      * @return string
      * Converting Created_at field to jalali
@@ -121,14 +123,14 @@ class Slideshow extends BaseModel
             $explodedDateTime = explode(" ", $this->created_at);
             if (strcmp($explodedDateTime[0], "0000-00-00") != 0) {
                 $explodedTime = $explodedDateTime[1];
-
+                
                 return $this->convertDate($explodedDateTime[0], 1)." ".$explodedTime;
             }
         }
-
+        
         return "نا مشخص";
     }
-
+    
     /**
      * @return string
      * Converting Updated_at field to jalali
@@ -139,11 +141,11 @@ class Slideshow extends BaseModel
             $explodedDateTime = explode(" ", $this->updated_at);
             if (strcmp($explodedDateTime[0], "0000-00-00") != 0) {
                 $explodedTime = $explodedDateTime[1];
-
+                
                 return $this->convertDate($explodedDateTime[0], 1)." ".$explodedTime;
             }
         }
-
+        
         return "نا مشخص";
     }
 }

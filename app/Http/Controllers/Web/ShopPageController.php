@@ -14,36 +14,37 @@ use Illuminate\Http\Response;
 class ShopPageController extends Controller
 {
     use MetaCommon;
-
+    
     protected $setting;
-
+    
     public function __construct(Websitesetting $setting)
     {
         $this->setting = $setting->setting;
     }
-
+    
     /**
      * Handle the incoming request.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      *
      * @return Response
      */
     public function __invoke(Request $request)
     {
-
+        
         $url = $request->url();
-        $this->generateSeoMetaTags(new SeoDummyTags($this->setting->site->seo->homepage->metaTitle, $this->setting->site->seo->homepage->metaDescription, $url,
+        $this->generateSeoMetaTags(new SeoDummyTags($this->setting->site->seo->homepage->metaTitle,
+            $this->setting->site->seo->homepage->metaDescription, $url,
             $url, route('image', [
                 'category' => '11',
                 'w'        => '100',
                 'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-
+        
         $blocks = Block::getShopBlocks();
         $slides = Slideshow::getShopBanner();
-
+        
         if (request()->expectsJson()) {
             $numberOfBlocks = $blocks->count();
             return response()->json([

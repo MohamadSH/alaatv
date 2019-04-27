@@ -15,13 +15,13 @@ class UserController extends Controller
 {
     use RequestCommon;
     use UserCommon;
-
+    
     /**
      * Update the specified resource in storage.
      * Note: Requests to this method must pass \App\Http\Middleware\trimUserRequest middle ware
      *
-     * @param EditUserRequest $request
-     * @param User $user
+     * @param  EditUserRequest  $request
+     * @param  User             $user
      *
      * @return array|Response
      */
@@ -46,73 +46,76 @@ class UserController extends Controller
                 ],
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
+        
         //ToDo : place in UserObserver
         if ($user->checkUserProfileForLocking()) {
             $user->lockProfile();
         }
-
+        
         if ($user->update()) {
-
+            
             //ToDo : place in UserObserver
             if ($request->has('roles')) {
                 $this->attachRoles($request->get('roles'), $authenticatedUser, $user);
             }
-
+            
             $message = 'User profile updated successfully';
-            $status = Response::HTTP_OK;
-        } else {
-            $message = 'Database error on updating user';
-            $status = Response::HTTP_SERVICE_UNAVAILABLE;
+            $status  = Response::HTTP_OK;
         }
-
+        else {
+            $message = 'Database error on updating user';
+            $status  = Response::HTTP_SERVICE_UNAVAILABLE;
+        }
+        
         if ($status == Response::HTTP_OK) {
             $response = [
-                'user' => $user,
+                'user'    => $user,
                 'message' => $message,
             ];
-        } else {
+        }
+        else {
             $response = [
                 'error' => [
-                    'code' => $status,
+                    'code'    => $status,
                     'message' => $message,
                 ],
             ];
         }
-
+        
         return response($response, Response::HTTP_OK);
     }
-
+    
     /**
      * Display the specified resource.
      *
      *
-     * @param User $user
-     * @param Request $request
+     * @param  User     $user
+     * @param  Request  $request
+     *
      * @return Response
      */
     public function show(Request $request, User $user)
     {
         $authenticatedUser = $request->user('api');
-
+        
         if ($authenticatedUser->id != $user->id) {
             return response([
                 'error' => [
-                    'code' => Response::HTTP_FORBIDDEN,
+                    'code'    => Response::HTTP_FORBIDDEN,
                     'message' => 'UnAuthorized',
                 ],
             ], 403);
         }
-
+        
         return response($user, Response::HTTP_OK);
     }
-
+    
     /**
      * Gets a list of user orders
      *
-     * @param Request $request
+     * @param  Request  $request
      *
-     * @param User $user
+     * @param  User     $user
      *
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|Response
      */
@@ -120,21 +123,21 @@ class UserController extends Controller
     {
         /** @var User $user */
         $authenticatedUser = $request->user('api');
-
+        
         if ($authenticatedUser->id != $user->id) {
             return response([
                 'error' => [
-                    'code' => Response::HTTP_FORBIDDEN,
+                    'code'    => Response::HTTP_FORBIDDEN,
                     'message' => 'UnAuthorized',
                 ],
             ], Response::HTTP_OK);
         }
-
+        
         $orders = $user->closed_orders;
-
+        
         return response()->json($orders);
     }
-
+    
     /**
      * Gets a list of transactions
      *

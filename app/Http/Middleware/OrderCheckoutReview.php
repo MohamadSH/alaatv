@@ -11,38 +11,42 @@ use Illuminate\Support\Facades\Auth;
 class OrderCheckoutReview
 {
     private $orderproductController;
-
+    
     /**
      * StoreOrderproductCookieInOpenOrder constructor.
      *
-     * @param OrderproductController $orderproductController
+     * @param  OrderproductController  $orderproductController
      */
     public function __construct(OrderproductController $orderproductController)
     {
         $this->orderproductController = $orderproductController;
     }
-
+    
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure                  $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (Auth::guard($guard)->check()) {
+        if (Auth::guard($guard)
+            ->check()) {
             /** @var User $user */
-            $user = Auth::guard($guard)->user();
-
+            $user = Auth::guard($guard)
+                ->user();
+            
             if ($request->has("order_id")) {
-                if (! $user->can("constants.SHOW_ORDER_INVOICE_ACCESS")) {
+                if (!$user->can("constants.SHOW_ORDER_INVOICE_ACCESS")) {
                     return response([], Response::HTTP_FORBIDDEN);
                 }
-            } else {
+            }
+            else {
                 $openOrder = $user->getOpenOrder();
                 $request->offsetSet("order_id", $openOrder->id);
-
+                
                 if (isset($_COOKIE["cartItems"])) {
                     $cookieOrderproducts = json_decode($_COOKIE["cartItems"]);
                     if ($this->validateCookieOrderproducts($cookieOrderproducts)) {
@@ -51,21 +55,22 @@ class OrderCheckoutReview
                             $this->orderproductController->storeOrderproductJsonObject($cookieOrderproduct, $data);
                         }
                     }
-
+                    
                     setcookie('cartItems', $_COOKIE["cartItems"], time() - 3600, '/');
                 }
             }
         }
-
+        
         return $next($request);
     }
-
+    
     /**
      * @param $cookieOrderproducts
+     *
      * @return bool
      */
     private function validateCookieOrderproducts($cookieOrderproducts): bool
     {
-        return is_array($cookieOrderproducts) && ! empty($cookieOrderproducts);
+        return is_array($cookieOrderproducts) && !empty($cookieOrderproducts);
     }
 }

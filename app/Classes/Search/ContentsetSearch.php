@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\{Cache};
 class ContentsetSearch extends SearchAbstract
 {
     protected $model = "App\Contentset";
-
+    
     protected $pageName = 'contentsetPage';
 
 //    protected $numberOfItemInEachPage = 2;
@@ -23,9 +23,9 @@ class ContentsetSearch extends SearchAbstract
         'name',
         'tags',
     ];
-
+    
     /**
-     * @param array $filters
+     * @param  array  $filters
      *
      * @return mixed
      */
@@ -34,29 +34,33 @@ class ContentsetSearch extends SearchAbstract
         $this->pageNum = $this->setPageNum($filters);
 //dd($this->pageNum);
         $key = $this->makeCacheKey($filters);
-
+        
         return Cache::tags([
             'contentset',
             'search',
-        ])->remember($key, $this->cacheTime, function () use ($filters) {
-            $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
-
-            return $this->getResults($query)->appends($filters);
-        });
+        ])
+            ->remember($key, $this->cacheTime, function () use ($filters) {
+                $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
+                
+                return $this->getResults($query)
+                    ->appends($filters);
+            });
     }
-
+    
     /**
-     * @param Builder $query
+     * @param  Builder  $query
      *
      * @return mixed
      */
     protected function getResults(Builder $query)
     {
-        $result = $query->active()->orderBy("created_at", "desc")->paginate($this->numberOfItemInEachPage, ['*'], $this->pageName, $this->pageNum);
-
+        $result = $query->active()
+            ->orderBy("created_at", "desc")
+            ->paginate($this->numberOfItemInEachPage, ['*'], $this->pageName, $this->pageNum);
+        
         return $result;
     }
-
+    
     /**
      * @param $decorator
      *
@@ -68,7 +72,7 @@ class ContentsetSearch extends SearchAbstract
         if ($decorator instanceof Tags) {
             $decorator->setTagManager(new ContentsetTagManagerViaApi());
         }
-
+        
         return $decorator;
     }
 }

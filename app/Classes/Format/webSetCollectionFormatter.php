@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Cache;
 class webSetCollectionFormatter implements SetCollectionFormatter
 {
     /**
-     * @param SetCollection $sets
+     * @param  SetCollection  $sets
      *
      * @return \Illuminate\Support\Collection
      */
@@ -28,25 +28,27 @@ class webSetCollectionFormatter implements SetCollectionFormatter
         }
         return $lessons;
     }
-
+    
     /**
-     * @param \App\Contentset $set
+     * @param  \App\Contentset  $set
      *
      * @return array
      */
     private function formatSet(Contentset $set): array
     {
-        return Cache::tags(['content','set'])->remember('format-set:'.$set->id, config('constants.CACHE_60'),function () use ($set){
-            $content = $set->getLastContent();
-            $lesson = [
-                "displayName"   => $set->shortName,
-                "author"        => $content->author,
-                "pic"           => $set->photo,
-                "content_id"    => $content->id,
-                "content_count" => $set->contents_count,
-            ];
-            return $lesson;
-        });
-
+        return Cache::tags(['content', 'set'])
+            ->remember('format-set:'.$set->id, config('constants.CACHE_60'), function () use ($set) {
+                $content = $set->getLastContent();
+                $lesson  = [
+                    "displayName"   => $set->shortName,
+                    "author"        => $content->author,
+                    "pic"           => $set->photo,
+                    "content_id"    => $content->id,
+                    "content_count" => $set->contents_count,
+                ];
+                
+                return $lesson;
+            });
+        
     }
 }

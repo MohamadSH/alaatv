@@ -17,25 +17,26 @@ use Illuminate\Support\Collection;
 class RefinementConfigurable implements RefinementInterface
 {
     private $attributes;
-
+    
     private $product;
-
+    
     public function __construct(Product $product, $data)
     {
         if (isset($data['attribute'])) {
             $this->attributes = $data["attribute"];
-            $this->product = $product;
-        } else {
+            $this->product    = $product;
+        }
+        else {
             throw new Exception('attribute not set!');
         }
     }
-
+    
     /**
      * @return ProductCollection|null
      */
     public function getProducts(): ?ProductCollection
     {
-        $children = $this->product->children->load('attributevalues');
+        $children      = $this->product->children->load('attributevalues');
         $simpleProduct = new ProductCollection();
         foreach ($children as $child) {
             $childHasAllAttributes = $this->checkAttributesOfChild($this->attributes, $child);
@@ -44,24 +45,25 @@ class RefinementConfigurable implements RefinementInterface
                 break;
             }
         }
-
+        
         return $simpleProduct;
     }
-
+    
     private function checkAttributesOfChild($attributes, $child)
     {
         $flag = true;
         /** @var Attributevalue|Collection $attributesOfChild */
         $attributesOfChild = $child->attributevalues;
         foreach ($attributes as $attribute) {
-            if (! $attributesOfChild->contains($attribute)) {
+            if (!$attributesOfChild->contains($attribute)) {
                 $flag = false;
                 break;
             }
         }
         if ($flag && $attributesOfChild->count() == count($this->attributes)) {
             return $child;
-        } else {
+        }
+        else {
             return false;
         }
     }

@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Console\Commands\CategoryTree\TotalTree;
+use Illuminate\Http\Request;
 
 class TopicsTreeController extends Controller
 {
     /**
-     * @param Request $request
+     * @param  Request  $request
+     *
      * @return
      */
     public function lernitoTree(Request $request)
@@ -17,10 +18,10 @@ class TopicsTreeController extends Controller
         $htmlPrint = $TotalTree->getLernitoTreeHtmlPrint();
         return view('admin.topicsTree.index', compact('htmlPrint'));
     }
-
+    
     public function getTreeInPHPArrayString(Request $request, $lnid)
     {
-        $TotalTree = new TotalTree();
+        $TotalTree    = new TotalTree();
         $stringFormat = $TotalTree->getTreeNodeByIdInHtmlString($lnid);
         return $stringFormat;
     }

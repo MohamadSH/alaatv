@@ -7,30 +7,30 @@ use Carbon\Carbon;
 /**
  * App\Coupon
  *
- * @property int $id
- * @property int|null $coupontype_id   آی دی مشخص کننده نوع کپن
- * @property int|null $discounttype_id نوع تخفیف
- * @property string|null $name            نام کپن
- * @property int $enable          فعال یا غیرفعال بودن کپن
+ * @property int                                                          $id
+ * @property int|null                                                     $coupontype_id   آی دی مشخص کننده نوع کپن
+ * @property int|null                                                     $discounttype_id نوع تخفیف
+ * @property string|null                                                  $name            نام کپن
+ * @property int                                                          $enable          فعال یا غیرفعال بودن کپن
  *           برای استفاده جدید
- * @property string|null $description     توضیحات کپن
- * @property string|null $code            کد کپن
- * @property float $discount        میزان تخفیف کپن به درصد
- * @property int|null $maxCost         بیشسینه قیمت مورد نیاز برای
+ * @property string|null                                                  $description     توضیحات کپن
+ * @property string|null                                                  $code            کد کپن
+ * @property float                                                        $discount        میزان تخفیف کپن به درصد
+ * @property int|null                                                     $maxCost         بیشسینه قیمت مورد نیاز برای
  *           استفاده از این کپن
- * @property int|null $usageLimit      حداکثر تعداد مجاز تعداد
+ * @property int|null                                                     $usageLimit      حداکثر تعداد مجاز تعداد
  *           استفاده از کپن - اگر نال باشد یعنی نامحدود
- * @property int $usageNumber     تعداد استفاده ها از کپن تا
+ * @property int                                                          $usageNumber     تعداد استفاده ها از کپن تا
  *           این لحظه
- * @property string|null $validSince      تاریخ شروع معتبر بودن کپن
- * @property string|null $validUntil      تاریخ پایان معتبر بودن کپن
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Coupontype|null $coupontype
- * @property-read \App\Discounttype|null $discounttype
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $marketers
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[] $orders
+ * @property string|null                                                  $validSince      تاریخ شروع معتبر بودن کپن
+ * @property string|null                                                  $validUntil      تاریخ پایان معتبر بودن کپن
+ * @property \Carbon\Carbon|null                                          $created_at
+ * @property \Carbon\Carbon|null                                          $updated_at
+ * @property \Carbon\Carbon|null                                          $deleted_at
+ * @property-read \App\Coupontype|null                                    $coupontype
+ * @property-read \App\Discounttype|null                                  $discounttype
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[]    $marketers
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[]   $orders
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[] $products
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Coupon onlyTrashed()
@@ -56,14 +56,14 @@ use Carbon\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon query()
- * @property-read mixed $coupon_type
+ * @property-read mixed                                                   $coupon_type
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon enable()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon valid()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @method static code($couponCode)
- * @property-read mixed $discount_type
- * @property-read mixed $cache_cooldown_seconds
+ * @property-read mixed                                                   $discount_type
+ * @property-read mixed                                                   $cache_cooldown_seconds
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereCode($value)
  */
 class Coupon extends BaseModel
@@ -73,12 +73,17 @@ class Coupon extends BaseModel
     | Traits
     |--------------------------------------------------------------------------
     */
-
+    
     /*
     |--------------------------------------------------------------------------
     | Properties
     |--------------------------------------------------------------------------
     */
+    const COUPON_VALIDATION_STATUS_OK = 0;
+    const COUPON_VALIDATION_STATUS_DISABLED = 1;
+    const COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN = 2;
+    const COUPON_VALIDATION_STATUS_EXPIRED = 3;
+    const COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED = 4;
     /**
      * @var array
      */
@@ -96,12 +101,10 @@ class Coupon extends BaseModel
         'coupontype_id',
         'discounttype_id',
     ];
-
     protected $appends = [
         'couponType',
         'discountType',
     ];
-
     protected $hidden = [
         'id',
         'enable',
@@ -116,64 +119,32 @@ class Coupon extends BaseModel
         'coupontype_id',
         'discounttype_id',
     ];
-
-    const COUPON_VALIDATION_STATUS_OK = 0;
-
-    const COUPON_VALIDATION_STATUS_DISABLED = 1;
-
-    const COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN = 2;
-
-    const COUPON_VALIDATION_STATUS_EXPIRED = 3;
-
-    const COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED = 4;
-
+    
     /*
     |--------------------------------------------------------------------------
     | Relations
     |--------------------------------------------------------------------------
     */
-
+    
     public function marketers()
     {
         return $this->belongsToMany('App\User');
     }
-
+    
     public function orders()
     {
         return $this->belongsToMany('App\Order');
     }
-
-    public function coupontype()
-    {
-        return $this->belongsTo('App\Coupontype');
-    }
-
+    
     public function products()
     {
         return $this->belongsToMany('App\Product');
     }
-
-    public function discounttype()
-    {
-        return $this->belongsTo("\App\Discounttype");
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Accessor
-    |--------------------------------------------------------------------------
-    */
-
-    /*
-    |--------------------------------------------------------------------------
-    | Scopes
-    |--------------------------------------------------------------------------
-    */
-
+    
     /**
      * Scope a query to only include enable(or disable) Coupons.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -181,43 +152,54 @@ class Coupon extends BaseModel
     {
         return $query->where('enable', '=', 1);
     }
-
+    
     /**
      * Scope a query to only include valid Coupons.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeValid($query)
     {
-        $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
-
+        $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+            ->timezone('Asia/Tehran');
+        
         return $query->where(function ($q) use ($now) {
-            $q->where('validSince', '<', $now)->orWhereNull('validSince');
-        })->where(function ($q) use ($now) {
-            $q->where('validUntil', '>', $now)->orWhereNull('validUntil');
-        });
+            $q->where('validSince', '<', $now)
+                ->orWhereNull('validSince');
+        })
+            ->where(function ($q) use ($now) {
+                $q->where('validUntil', '>', $now)
+                    ->orWhereNull('validUntil');
+            });
     }
-
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Accessor
+    |--------------------------------------------------------------------------
+    */
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Scopes
+    |--------------------------------------------------------------------------
+    */
+    
     /**
      * Scope a query by coupon code
      *
-     * @param $query
-     * @param string $code
+     * @param          $query
+     * @param  string  $code
+     *
      * @return mixed
      */
     public function scopeCode($query, string $code)
     {
         return $query->where('code', $code);
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Others
-    |--------------------------------------------------------------------------
-    */
-
+    
     /**
      * Validates a coupon
      *
@@ -225,23 +207,26 @@ class Coupon extends BaseModel
      */
     public function validateCoupon()
     {
-
+        
         $validationStatus = Coupon::COUPON_VALIDATION_STATUS_OK;
-        if (! $this->isEnable()) {
+        if (!$this->isEnable()) {
             $validationStatus = Coupon::COUPON_VALIDATION_STATUS_DISABLED;
-        } elseif (! $this->hasPassedSinceTime()) {
+        }
+        elseif (!$this->hasPassedSinceTime()) {
             $validationStatus = Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN;
-        } elseif (! $this->hasTimeToUntilTime()) {
+        }
+        elseif (!$this->hasTimeToUntilTime()) {
             $validationStatus = Coupon::COUPON_VALIDATION_STATUS_EXPIRED;
-        } else {
+        }
+        else {
             if ($this->hasTotalNumberFinished()) {
                 $validationStatus = Coupon::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED;
             }
         }
-
+        
         return $validationStatus;
     }
-
+    
     /**
      * Determines whether this coupon is enabled or not
      *
@@ -251,11 +236,18 @@ class Coupon extends BaseModel
     {
         if ($this->enable) {
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
-
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Others
+    |--------------------------------------------------------------------------
+    */
+    
     /**
      * Determines whether this coupon usage time has started or not
      *
@@ -263,13 +255,15 @@ class Coupon extends BaseModel
      */
     public function hasPassedSinceTime(): bool
     {
-        if (! isset($this->validSince) || Carbon::now()->setTimezone("Asia/Tehran") >= $this->validSince) {
+        if (!isset($this->validSince) || Carbon::now()
+                ->setTimezone("Asia/Tehran") >= $this->validSince) {
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
-
+    
     /**
      * Determines whether this coupon usage time has ended or not
      *
@@ -277,13 +271,15 @@ class Coupon extends BaseModel
      */
     public function hasTimeToUntilTime(): bool
     {
-        if (! isset($this->validUntil) || Carbon::now()->setTimezone("Asia/Tehran") <= $this->validUntil) {
+        if (!isset($this->validUntil) || Carbon::now()
+                ->setTimezone("Asia/Tehran") <= $this->validUntil) {
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
-
+    
     /**
      * Determines whether this coupon total number has finished or not
      *
@@ -293,24 +289,33 @@ class Coupon extends BaseModel
     {
         if (isset($this->usageLimit) && $this->usageNumber >= $this->usageLimit) {
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
-
+    
     public function getCouponTypeAttribute()
     {
-        return $this->coupontype()->first()->setVisible([
-            'name',
-            'displayName',
-            'description',
-        ]);
+        return $this->coupontype()
+            ->first()
+            ->setVisible([
+                'name',
+                'displayName',
+                'description',
+            ]);
     }
-
+    
+    public function coupontype()
+    {
+        return $this->belongsTo('App\Coupontype');
+    }
+    
     /**
      * Determines whether this coupon has the passed product or not
      *
-     * @param Product $product
+     * @param  Product  $product
+     *
      * @return bool
      */
     public function hasProduct(Product $product): bool
@@ -318,28 +323,35 @@ class Coupon extends BaseModel
         $flag = true;
         if ($this->coupontype->id == config("constants.COUPON_TYPE_PARTIAL")) {
             $couponProducts = $this->products;
-            $flag = $couponProducts->contains($product);
+            $flag           = $couponProducts->contains($product);
         }
-
+        
         return $flag;
     }
-
+    
     public function decreaseUseNumber()
     {
         $this->usageNumber--;
     }
-
+    
     public function encreaseUserNumber()
     {
         $this->usageNumber++;
     }
-
+    
     public function getDiscountTypeAttribute()
     {
-        return $this->discounttype()->first()->setVisible([
-            'name',
-            'displayName',
-            'description',
-        ]);
+        return $this->discounttype()
+            ->first()
+            ->setVisible([
+                'name',
+                'displayName',
+                'description',
+            ]);
+    }
+    
+    public function discounttype()
+    {
+        return $this->belongsTo("\App\Discounttype");
     }
 }

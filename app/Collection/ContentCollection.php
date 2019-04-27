@@ -16,27 +16,27 @@ use Illuminate\Support\Collection as BaseCollection;
 class ContentCollection extends Collection
 {
     use JsonResponseFormat;
-
+    
     public function videos()
     {
         return $this->where("contenttype_id", Content::CONTENT_TYPE_VIDEO);
     }
-
+    
     public function pamphlets()
     {
         return $this->where("contenttype_id", Content::CONTENT_TYPE_PAMPHLET);
     }
-
+    
     public function articles()
     {
         return $this->where("contenttype_id", Content::CONTENT_TYPE_ARTICLE);
     }
-
+    
     public function flashcards()
     {
         throw new \LogicException('define Content::CONTENT_TYPE_FLASHCARD');
     }
-
+    
     public function onlyItemTypes(array $itemTypes)
     {
         $result = new ContentCollection();
@@ -44,26 +44,26 @@ class ContentCollection extends Collection
             $filter = $itemType."s";
             $result = $result->merge($this->$filter());
         }
-
+        
         return $result;
     }
-
+    
     public function normalMates(): BaseCollection
     {
-        $items = $this;
+        $items  = $this;
         $result = collect();
-
+        
         foreach ($items as $content) {
-
+            
             $myContentType = optional($content->contenttype)->name;
             $result->push([
-                "content" => $content,
-                "type" => $myContentType,
+                "content"   => $content,
+                "type"      => $myContentType,
                 "thumbnail" => $content->thumbnail,
-                "session" => $content->session,
+                "session"   => $content->session,
             ]);
         }
-
+        
         return $result;
     }
 }

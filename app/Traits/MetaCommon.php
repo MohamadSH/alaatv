@@ -7,6 +7,49 @@ use SEO;
 
 trait MetaCommon
 {
+    public function generateCustomMeta($metaData)
+    {
+        if (isset($metaData["title"])) {
+            SEO::setTitle($metaData["title"]);
+        }
+        
+        if (isset($metaData["url"])) {
+            SEO::opengraph()
+                ->setUrl($metaData["url"]);
+            SEO::setCanonical($metaData["url"]);
+        }
+        
+        if (isset($metaData["siteName"])) {
+            SEO::twitter()
+                ->setSite(isset($metaData["siteName"]));
+        }
+        
+        if (isset($metaData["description"])) {
+            SEO::setDescription($metaData["description"]);
+        }
+        
+        if (isset($metaData["image"])) {
+            SEO::opengraph()
+                ->addImage(route('image', [
+                    'category' => '11',
+                    'w'        => '100',
+                    'h'        => '100',
+                    'filename' => $metaData["image"],
+                ]), [
+                    'height' => 100,
+                    'width'  => 100,
+                ]);
+        }
+    }
+    
+    protected function generateSeoMetaTags(SeoInterface $item)
+    {
+        try {
+            $seo = new SeoMetaTagsGenerator($item);
+        } catch (\Exception $e) {
+        }
+    }
+    
     /**
      *
      * Multibyte Keyword Generator
@@ -15,23 +58,23 @@ trait MetaCommon
      * that can be found in the LICENSE file.
      *
      * https://github.com/peterkahl/multibyte-keyword-generator
-     * @param        $text
-     * @param string $article_kw
-     * @param string $global_kw
-     * @param int $min_word_length
-     * @param int $min_word_occur
-     * @param int $min_2words_length
-     * @param int $min_2words_phrase_length
-     * @param int $min_2words_phrase_occur
-     * @param int $min_3words_length
-     * @param int $min_3words_phrase_length
-     * @param int $min_3words_phrase_occur
-     * @param string $encoding
-     * @param string $lang
+     * @param          $text
+     * @param  string  $article_kw
+     * @param  string  $global_kw
+     * @param  int     $min_word_length
+     * @param  int     $min_word_occur
+     * @param  int     $min_2words_length
+     * @param  int     $min_2words_phrase_length
+     * @param  int     $min_2words_phrase_occur
+     * @param  int     $min_3words_length
+     * @param  int     $min_3words_phrase_length
+     * @param  int     $min_3words_phrase_occur
+     * @param  string  $encoding
+     * @param  string  $lang
      *
      * @return string
      */
-
+    
     private function generateKeywordsMeta(
         $text /* the text */,
         $article_kw = '' /*  if some keywords are written by hand (by the author) ,
@@ -59,79 +102,39 @@ trait MetaCommon
         // ignore languages
         //	$params['ignore'] = array('zh_CN', 'zh_TW', 'ja_JP'); // must be an array; lower case; case sensitive !!!
         //----------------------------------------------------------------------
-
+        
         // REQUIRED
         // load the text, either from database or a file
         // text MAY contain HTML tags
-        $params['content'] = $text;
+        $params['content']  = $text;
         $params['encoding'] = $encoding; // case insensitive
-        $params['lang'] = $lang; // case insensitive
+        $params['lang']     = $lang; // case insensitive
         // OPTIONAL
         // specify only if you want any languages to be ignored by the class
         // What it does: If the class encounters this language(s), it will
         // return empty string ''
         // ignore languages
         //	$params['ignore'] = array('zh_CN', 'zh_TW', 'ja_JP'); // must be an array case sensitive !!!
-        $params['min_word_length'] = $min_word_length;
-        $params['min_word_occur'] = $min_word_occur;
-        $params['min_2words_length'] = $min_2words_length;
+        $params['min_word_length']          = $min_word_length;
+        $params['min_word_occur']           = $min_word_occur;
+        $params['min_2words_length']        = $min_2words_length;
         $params['min_2words_phrase_length'] = $min_2words_phrase_length;
-        $params['min_2words_phrase_occur'] = $min_2words_phrase_occur;
-        $params['min_3words_length'] = $min_3words_length;
+        $params['min_2words_phrase_occur']  = $min_2words_phrase_occur;
+        $params['min_3words_length']        = $min_3words_length;
         $params['min_3words_phrase_length'] = $min_3words_phrase_length;
-        $params['min_3words_phrase_occur'] = $min_3words_phrase_occur;
-
+        $params['min_3words_phrase_occur']  = $min_3words_phrase_occur;
+        
         //----------------------------------------------------------------------
         //REQUIRED
         $keyword = new colossalMindMbKeywordGen($params);
         // REQUIRED
         $autoKeywords = $keyword->get_keywords();
-
+        
         $keywords = $global_kw.','.$autoKeywords.','.$article_kw;
         // BONUS FUNCTION
         // clean up keywords; remove ONLY duplicate words; remove identical PLURAL words (English)
         $keywords = $keyword->removeDuplicateKw($keywords);
-
+        
         return $keywords;
-    }
-
-    protected function generateSeoMetaTags(SeoInterface $item)
-    {
-        try {
-            $seo = new SeoMetaTagsGenerator($item);
-        } catch (\Exception $e) {
-        }
-    }
-
-    public function generateCustomMeta($metaData)
-    {
-        if (isset($metaData["title"])) {
-            SEO::setTitle($metaData["title"]);
-        }
-
-        if (isset($metaData["url"])) {
-            SEO::opengraph()->setUrl($metaData["url"]);
-            SEO::setCanonical($metaData["url"]);
-        }
-
-        if (isset($metaData["siteName"])) {
-            SEO::twitter()->setSite(isset($metaData["siteName"]));
-        }
-
-        if (isset($metaData["description"])) {
-            SEO::setDescription($metaData["description"]);
-        }
-
-        if (isset($metaData["image"])) {
-            SEO::opengraph()->addImage(route('image', [
-                'category' => '11',
-                'w' => '100',
-                'h' => '100',
-                'filename' => $metaData["image"],
-            ]), [
-                'height' => 100,
-                'width' => 100,
-            ]);
-        }
     }
 }

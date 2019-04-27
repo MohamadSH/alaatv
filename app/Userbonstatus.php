@@ -5,15 +5,15 @@ namespace App;
 /**
  * App\Userbonstatus
  *
- * @property int $id
- * @property string|null $name        نام وضعیت
- * @property string|null $displayName نام قابل نمایش این وضعیت
- * @property string|null $description توضیح درباره وضعیت
- * @property int $order       ترتیب نمایش وضعیت - در صورت نیاز
+ * @property int                                                          $id
+ * @property string|null                                                  $name        نام وضعیت
+ * @property string|null                                                  $displayName نام قابل نمایش این وضعیت
+ * @property string|null                                                  $description توضیح درباره وضعیت
+ * @property int                                                          $order       ترتیب نمایش وضعیت - در صورت نیاز
  *           به استفاده
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property string|null $deleted_at
+ * @property \Carbon\Carbon|null                                          $created_at
+ * @property \Carbon\Carbon|null                                          $updated_at
+ * @property string|null                                                  $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Userbon[] $userbons
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Userbonstatus onlyTrashed()
@@ -34,7 +34,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbonstatus query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed $cache_cooldown_seconds
+ * @property-read mixed                                                   $cache_cooldown_seconds
  */
 class Userbonstatus extends BaseModel
 {
@@ -46,7 +46,7 @@ class Userbonstatus extends BaseModel
         'description',
         'order',
     ];
-
+    
     public function userbons()
     {
         return $this->hasMany('App\Userbon');

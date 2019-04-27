@@ -5,9 +5,9 @@ namespace App;
 /**
  * App\Websitesetting
  *
- * @property int $id
- * @property string $setting ستون شامل تنظیمات سایت
- * @property int|null $version ستون مشخص ککنده ورژن تنظیمات
+ * @property int                 $id
+ * @property string              $setting ستون شامل تنظیمات سایت
+ * @property int|null            $version ستون مشخص ککنده ورژن تنظیمات
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
@@ -28,7 +28,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitesetting query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed $cache_cooldown_seconds
+ * @property-read mixed          $cache_cooldown_seconds
  */
 class Websitesetting extends BaseModel
 {
@@ -36,7 +36,7 @@ class Websitesetting extends BaseModel
         'setting',
         'version',
     ];
-
+    
     public function getSettingAttribute($value)
     {
         return json_decode($value);

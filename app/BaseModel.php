@@ -15,7 +15,7 @@ abstract class BaseModel extends Model
     use Helper;
     use DateTrait;
     use CharacterCommon;
-
+    
     /**
      * The attributes that should be mutated to dates.
      *
@@ -26,12 +26,12 @@ abstract class BaseModel extends Model
         'updated_at',
         'deleted_at',
     ];
-
+    
     public function cacheKey()
     {
-        $key = $this->getKey();
-        $time =  ( optional($this->updated_at)->timestamp ?: optional($this->created_at)->timestamp ) ?: 0;
-
+        $key  = $this->getKey();
+        $time = (optional($this->updated_at)->timestamp ?: optional($this->created_at)->timestamp) ?: 0;
+        
         return sprintf("%s:%s-%s", $this->getTable(), $key, $time);
     }
 }

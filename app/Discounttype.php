@@ -5,13 +5,13 @@ namespace App;
 /**
  * App\Discounttype
  *
- * @property int $id
- * @property string|null $name        نام
- * @property string|null $displayName نام قابل نمایش
- * @property string|null $description توضیح کوتاه
+ * @property int                 $id
+ * @property string|null         $name        نام
+ * @property string|null         $displayName نام قابل نمایش
+ * @property string|null         $description توضیح کوتاه
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
- * @property string|null $deleted_at
+ * @property string|null         $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Discounttype whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Discounttype whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Discounttype whereDescription($value)
@@ -25,7 +25,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Discounttype query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed $cache_cooldown_seconds
+ * @property-read mixed          $cache_cooldown_seconds
  */
 class Discounttype extends BaseModel
 {

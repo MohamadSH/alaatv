@@ -7,23 +7,24 @@ class RedirectData
     private $redirectUrl;
     private $input;
     private $method;
-
-    public static function instance(string $redirectUrl, array $input = [], string $method = 'GET'): self
-    {
-        return new static($redirectUrl, $input, $method);
-    }
+    
     /**
-     * @param string $redirectUrl
-     * @param array $input
-     * @param $method
+     * @param  string  $redirectUrl
+     * @param  array   $input
+     * @param          $method
      */
     private function __construct(string $redirectUrl, array $input, string $method)
     {
         $this->redirectUrl = $redirectUrl;
-        $this->input = $input;
-        $this->method = $method;
+        $this->input       = $input;
+        $this->method      = $method;
     }
-
+    
+    public static function instance(string $redirectUrl, array $input = [], string $method = 'GET'): self
+    {
+        return new static($redirectUrl, $input, $method);
+    }
+    
     /**
      * @return mixed
      */
@@ -31,7 +32,7 @@ class RedirectData
     {
         return $this->method;
     }
-
+    
     /**
      * @return mixed
      */
@@ -39,7 +40,7 @@ class RedirectData
     {
         return $this->input;
     }
-
+    
     /**
      * @return string
      */

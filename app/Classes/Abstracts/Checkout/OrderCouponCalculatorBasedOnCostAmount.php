@@ -14,28 +14,30 @@ abstract class OrderCouponCalculatorBasedOnCostAmount extends CheckoutProcessor
 {
     public function process(Cashier $cashier)
     {
-        $couponDiscountCostAmount = $cashier->getOrderCouponDiscountCostAmount();
+        $couponDiscountCostAmount               = $cashier->getOrderCouponDiscountCostAmount();
         $temporaryTotalRawPriceWhichHasDiscount = $cashier->getTemporaryTotalPriceWithDiscount();
-        if (! isset($temporaryTotalRawPriceWhichHasDiscount)) {
+        if (!isset($temporaryTotalRawPriceWhichHasDiscount)) {
             throw new Exception('Temporary total price with discount has not been set');
         }
-
-        if (! isset($couponDiscountCostAmount)) {
+        
+        if (!isset($couponDiscountCostAmount)) {
             throw new Exception('Coupon discount cost amount has not been set');
         }
-
-        $totalPriceWithDiscount = $this->calculateDiscount($couponDiscountCostAmount, $temporaryTotalRawPriceWhichHasDiscount);
-
+        
+        $totalPriceWithDiscount = $this->calculateDiscount($couponDiscountCostAmount,
+            $temporaryTotalRawPriceWhichHasDiscount);
+        
         $cashier->setTotalPriceWithDiscount($totalPriceWithDiscount);
-
+        
         return $this->next($cashier);
     }
-
+    
     /**
      * Calculates discount for passed price and coupon discount type
      *
      * @param $couponDiscountCostAmount
      * @param $totalRawPriceWhichHasDiscount
+     *
      * @return int
      */
     abstract protected function calculateDiscount($couponDiscountCostAmount, $totalRawPriceWhichHasDiscount): int;

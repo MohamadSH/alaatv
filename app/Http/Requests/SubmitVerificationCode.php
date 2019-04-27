@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class SubmitVerificationCode extends FormRequest
 {
     use CharacterCommon;
-
+    
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,7 +18,7 @@ class SubmitVerificationCode extends FormRequest
     {
         return true;
     }
-
+    
     /**
      * Get the validation rules that apply to the request.
      *
@@ -30,13 +30,13 @@ class SubmitVerificationCode extends FormRequest
             'code' => 'required',
         ];
     }
-
+    
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-
+    
     protected function replaceNumbers()
     {
         $input = $this->request->all();

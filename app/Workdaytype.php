@@ -5,12 +5,12 @@ namespace App;
 /**
  * App\Workdaytype
  *
- * @property int $id
- * @property string|null $displayName نام نوع
- * @property string|null $description توضیح درباره این نوع
+ * @property int                 $id
+ * @property string|null         $displayName نام نوع
+ * @property string|null         $description توضیح درباره این نوع
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
- * @property string|null $deleted_at
+ * @property string|null         $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype whereDescription($value)
@@ -23,7 +23,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed $cache_cooldown_seconds
+ * @property-read mixed          $cache_cooldown_seconds
  */
 class Workdaytype extends BaseModel
 {

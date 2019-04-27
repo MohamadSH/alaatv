@@ -5,18 +5,18 @@ namespace App;
 /**
  * App\Userupload
  *
- * @property int $id
- * @property int $user_id             آی دی مشخص کننده کاربر آپلود کننده فایل
- * @property string|null $file                فایل آپلود شده
- * @property string|null $title               عنوان وارد شده کاربر برای این آپلود
- * @property string|null $comment             توضیح وارد شده کاربر درباره آپلود
- * @property string|null $staffComment        توضیح مسئول درباره فایل
- * @property int $isEnable            فعال / غیر فعال
- * @property int|null $useruploadstatus_id وضعیت فایل
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\User $user
+ * @property int                             $id
+ * @property int                             $user_id             آی دی مشخص کننده کاربر آپلود کننده فایل
+ * @property string|null                     $file                فایل آپلود شده
+ * @property string|null                     $title               عنوان وارد شده کاربر برای این آپلود
+ * @property string|null                     $comment             توضیح وارد شده کاربر درباره آپلود
+ * @property string|null                     $staffComment        توضیح مسئول درباره فایل
+ * @property int                             $isEnable            فعال / غیر فعال
+ * @property int|null                        $useruploadstatus_id وضعیت فایل
+ * @property \Carbon\Carbon|null             $created_at
+ * @property \Carbon\Carbon|null             $updated_at
+ * @property \Carbon\Carbon|null             $deleted_at
+ * @property-read \App\User                  $user
  * @property-read \App\Useruploadstatus|null $useruploadstatus
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Userupload onlyTrashed()
@@ -40,7 +40,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Userupload query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed $cache_cooldown_seconds
+ * @property-read mixed                      $cache_cooldown_seconds
  */
 class Userupload extends BaseModel
 {
@@ -56,12 +56,12 @@ class Userupload extends BaseModel
         'isEnable',
         'useruploadstatus_id',
     ];
-
+    
     public function useruploadstatus()
     {
         return $this->belongsTo('App\Useruploadstatus');
     }
-
+    
     public function user()
     {
         return $this->belongsTo('App\User');

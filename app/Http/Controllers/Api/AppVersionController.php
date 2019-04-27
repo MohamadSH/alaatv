@@ -11,7 +11,7 @@ class AppVersionController extends Controller
      * Display the specified resource.
      *
      *
-     * @param \App\Http\Requests\Request $request
+     * @param  \App\Http\Requests\Request  $request
      *
      * @return \Illuminate\Http\Response
      */

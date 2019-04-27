@@ -14,7 +14,7 @@ trait QueryCommon
                 }
             });
         }
-
+        
         return $query;
     }
 }

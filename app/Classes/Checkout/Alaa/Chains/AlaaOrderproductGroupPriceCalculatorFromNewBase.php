@@ -18,30 +18,31 @@ use Illuminate\Support\Collection;
 class AlaaOrderproductGroupPriceCalculatorFromNewBase extends OrderproductGroupPriceCalculatorFromNewBase
 {
     const MODE = OrderproductPriceCalculator::ORDERPRODUCT_CALCULATOR_MODE_CALCULATE_FROM_BASE;
-
+    
     protected function getOrderproductGroupPrice(Collection $orderproductsToCalculateFromBase): Collection
     {
         /** @var OrderproductCollection $orderproductsToCalculateFromBase */
-
+        
         foreach ($orderproductsToCalculateFromBase as $orderproduct) {
             $priceInfo = $this->getOrderproductPrice($orderproduct);
             $orderproductsToCalculateFromBase->setNewPriceForItem($orderproduct, $priceInfo);
         }
-
+        
         return $orderproductsToCalculateFromBase;
     }
-
+    
     /**
      * Gets Orderproduct price
      *
-     * @param Orderproduct $orderproduct
+     * @param  Orderproduct  $orderproduct
+     *
      * @return mixed
      */
     private function getOrderproductPrice(Orderproduct $orderproduct)
     {
         $orderproductCalculator = new AlaaOrderproductPriceCalculator($orderproduct);
         $orderproductCalculator->setMode(self::MODE);
-
+        
         return $orderproductCalculator->getPrice();
     }
 }

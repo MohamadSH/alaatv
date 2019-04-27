@@ -5,13 +5,13 @@ namespace App;
 /**
  * App\Orderproductinterrelation
  *
- * @property int $id
- * @property string|null $name        نام
- * @property string|null $displayName نام قابل نمایش
- * @property string|null $description توضیح
+ * @property int                 $id
+ * @property string|null         $name        نام
+ * @property string|null         $displayName نام قابل نمایش
+ * @property string|null         $description توضیح
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
- * @property string|null $deleted_at
+ * @property string|null         $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproductinterrelation whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproductinterrelation whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproductinterrelation whereDescription($value)
@@ -25,7 +25,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproductinterrelation query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed $cache_cooldown_seconds
+ * @property-read mixed          $cache_cooldown_seconds
  */
 class Orderproductinterrelation extends BaseModel
 {

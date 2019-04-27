@@ -17,16 +17,19 @@ trait FavoredTrait
     */
     public function favoredContent()
     {
-        return $this->morphedByMany('App\Content', 'favorable')->withTimestamps();
+        return $this->morphedByMany('App\Content', 'favorable')
+            ->withTimestamps();
     }
-
+    
     public function favoredSet()
     {
-        return $this->morphedByMany('App\Contentset', 'favorable')->withTimestamps();
+        return $this->morphedByMany('App\Contentset', 'favorable')
+            ->withTimestamps();
     }
-
+    
     public function favoredProduct()
     {
-        return $this->morphedByMany('App\Product', 'favorable')->withTimestamps();
+        return $this->morphedByMany('App\Product', 'favorable')
+            ->withTimestamps();
     }
 }

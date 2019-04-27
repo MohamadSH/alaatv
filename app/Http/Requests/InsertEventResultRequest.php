@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class InsertEventResultRequest extends FormRequest
 {
     use CharacterCommon;
-
+    
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,7 +18,7 @@ class InsertEventResultRequest extends FormRequest
     {
         return true;
     }
-
+    
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,21 +26,21 @@ class InsertEventResultRequest extends FormRequest
      */
     public function rules()
     {
-
+        
         return [
-            'rank' => 'required',
-//            'participationCode' => 'unique:eventresults,'.Hash::make($this->request->get('participationCode')),
-            'event_id' => 'required|exists:events,id',
+            'rank'       => 'required',
+            //            'participationCode' => 'unique:eventresults,'.Hash::make($this->request->get('participationCode')),
+            'event_id'   => 'required|exists:events,id',
             'reportFile' => 'required|mimes:jpeg,jpg,png,pdf,rar,zip',
         ];
     }
-
+    
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-
+    
     protected function replaceNumbers()
     {
         $input = $this->request->all();
@@ -55,7 +55,7 @@ class InsertEventResultRequest extends FormRequest
         if (isset($input["comment"])) {
             $input["comment"] = preg_replace('/\s+/', '', $input["comment"]);
         }
-
+        
         $this->replace($input);
     }
 }

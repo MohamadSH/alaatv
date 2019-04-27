@@ -5,12 +5,12 @@ namespace App;
 /**
  * App\Bank
  *
- * @property int $id
- * @property string|null $name        نام بانک
- * @property string|null $description توضیح درباره بانک
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property int                                                              $id
+ * @property string|null                                                      $name        نام بانک
+ * @property string|null                                                      $description توضیح درباره بانک
+ * @property \Carbon\Carbon|null                                              $created_at
+ * @property \Carbon\Carbon|null                                              $updated_at
+ * @property \Carbon\Carbon|null                                              $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Bankaccount[] $backaccounts
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|Bank onlyTrashed()
@@ -29,7 +29,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bank query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed $cache_cooldown_seconds
+ * @property-read mixed                                                       $cache_cooldown_seconds
  */
 class Bank extends BaseModel
 {
@@ -42,7 +42,7 @@ class Bank extends BaseModel
         'name',
         'description',
     ];
-
+    
     public function backaccounts()
     {
         return $this->hasMany('\App\Bankaccount');

@@ -15,7 +15,7 @@ class InsertMajorRequest extends FormRequest
     {
         return true;
     }
-
+    
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,7 +24,7 @@ class InsertMajorRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name'      => 'required',
             'majorCode' => 'required',
         ];
     }

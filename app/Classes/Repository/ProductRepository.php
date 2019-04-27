@@ -7,6 +7,7 @@
  */
 
 namespace App\Traits;
+
 use App\Product;
 
 class ProductRepository
@@ -19,14 +20,15 @@ class ProductRepository
     public static function getProductsThatHaveValidProductFileByFileNameRecursively(string $fileName)
     {
         $products = Product::whereIn('id', self::getArrayOfProductsIdThatHaveValidProductfileByFileName($fileName))
-                           ->OrwhereIn('id', self::getArrayOfProductsIdThatTheirParentHaveValidProductFileByFileName($fileName))
-                           ->OrwhereIn('id', self::getArrayOfProductsIdThatTheirComplimentaryHaveValidProductFileByFileName($fileName))
-                           ->OrwhereIn('id', self::getArrayOfProductsIdThatTheirGiftHaveValidProductFileByFileName($fileName))
-                           ->OrwhereIn('id', self::getArrayOfProductsIdThatTheirParentComplimentaryHaveValidProductFileByFileName($fileName))
-                           ->get();
+            ->OrwhereIn('id', self::getArrayOfProductsIdThatTheirParentHaveValidProductFileByFileName($fileName))
+            ->OrwhereIn('id', self::getArrayOfProductsIdThatTheirComplimentaryHaveValidProductFileByFileName($fileName))
+            ->OrwhereIn('id', self::getArrayOfProductsIdThatTheirGiftHaveValidProductFileByFileName($fileName))
+            ->OrwhereIn('id',
+                self::getArrayOfProductsIdThatTheirParentComplimentaryHaveValidProductFileByFileName($fileName))
+            ->get();
         return $products;
     }
-
+    
     /**
      * @param $fileName
      *
@@ -36,9 +38,11 @@ class ProductRepository
     {
         return Product::whereHas('validProductfiles', function ($query) use ($fileName) {
             $query->where("file", $fileName);
-        })->get()->pluck("id");
+        })
+            ->get()
+            ->pluck("id");
     }
-
+    
     /**
      * @param $fileName
      *
@@ -50,9 +54,11 @@ class ProductRepository
             $q->whereHas('validProductfiles', function ($q) use ($fileName) {
                 $q->where("file", $fileName);
             });
-        })->get()->pluck("id");
+        })
+            ->get()
+            ->pluck("id");
     }
-
+    
     /**
      * @param $fileName
      *
@@ -64,9 +70,11 @@ class ProductRepository
             $q->whereHas('validProductfiles', function ($q) use ($fileName) {
                 $q->where("file", $fileName);
             });
-        })->get()->pluck("id");
+        })
+            ->get()
+            ->pluck("id");
     }
-
+    
     /**
      * @param $fileName
      *
@@ -78,9 +86,11 @@ class ProductRepository
             $q->whereHas('validProductfiles', function ($q) use ($fileName) {
                 $q->where("file", $fileName);
             });
-        })->get()->pluck("id");
+        })
+            ->get()
+            ->pluck("id");
     }
-
+    
     /**
      * @param $fileName
      *
@@ -94,6 +104,8 @@ class ProductRepository
                     $q->where("file", $fileName);
                 });
             });
-        })->get()->pluck("id");
+        })
+            ->get()
+            ->pluck("id");
     }
 }

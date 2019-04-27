@@ -5,24 +5,24 @@ namespace App;
 /**
  * App\Consultation
  *
- * @property int $id
- * @property string|null $name                  نام مشاوره
- * @property string|null $description           توضیح درباره مشاوره
- * @property string|null $videoPageLink         لینک صفحه تماشای فیلم
+ * @property int                                                        $id
+ * @property string|null                                                $name                  نام مشاوره
+ * @property string|null                                                $description           توضیح درباره مشاوره
+ * @property string|null                                                $videoPageLink         لینک صفحه تماشای فیلم
  *           مشاوره
- * @property string|null $textScriptLink        لینک صفحه حاوی متن
+ * @property string|null                                                $textScriptLink        لینک صفحه حاوی متن
  *           مشاوره
- * @property int $order                 ترتیب مشاوره - در صورت
+ * @property int                                                        $order                 ترتیب مشاوره - در صورت
  *           نیاز به استفاده
- * @property int $enable                فعال بودن یا نبودن
+ * @property int                                                        $enable                فعال بودن یا نبودن
  *           مشاوره
- * @property int $consultationstatus_id آیدی مشخص کننده وضعیت
+ * @property int                                                        $consultationstatus_id آیدی مشخص کننده وضعیت
  *           مشاوره
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property string|null $thumbnail             عکس مشاوره
- * @property-read \App\Consultationstatus $consultationstatus
+ * @property \Carbon\Carbon|null                                        $created_at
+ * @property \Carbon\Carbon|null                                        $updated_at
+ * @property \Carbon\Carbon|null                                        $deleted_at
+ * @property string|null                                                $thumbnail             عکس مشاوره
+ * @property-read \App\Consultationstatus                               $consultationstatus
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Major[] $majors
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Consultation onlyTrashed()
@@ -47,7 +47,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Consultation query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed $cache_cooldown_seconds
+ * @property-read mixed                                                 $cache_cooldown_seconds
  */
 class Consultation extends BaseModel
 {
@@ -63,14 +63,15 @@ class Consultation extends BaseModel
         'enable',
         'consultationstatus_id',
     ];
-
+    
     public function consultationstatus()
     {
         return $this->belongsTo('App\Consultationstatus');
     }
-
+    
     public function majors()
     {
-        return $this->belongsToMany('App\Major')->withTimestamps();
+        return $this->belongsToMany('App\Major')
+            ->withTimestamps();
     }
 }

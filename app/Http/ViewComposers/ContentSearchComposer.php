@@ -10,24 +10,24 @@ use Illuminate\View\View;
 class ContentSearchComposer
 {
     use CharacterCommon;
-
-
+    
+    
     protected $request;
-
+    
     /**
      * Create a new ContentSearch composer.
      *
-     * @param Request  $request
+     * @param  Request  $request
      */
-    public function __construct( Request $request)
+    public function __construct(Request $request)
     {
         $this->request = $request;
     }
-
+    
     /**
      * Bind data to the view.
      *
-     * @param View $view
+     * @param  View  $view
      *
      * @return void
      */
@@ -35,37 +35,82 @@ class ContentSearchComposer
     {
         $sideBarMode = "closed";
         list($ads1, $ads2, $tags, $extraTags, $filterData) = $this->getData();
-
+        
         $view->with(compact('sideBarMode', 'ads1', 'ads2', 'tags', 'extraTags', 'filterData'));
     }
-
+    
     /**
-     * @param $tags
-     * @param $inputs
-     *
-     * @return string
+     * @return array
      */
-    private function findDefault(array $tags, array $inputs)
+    private function getData(): array
     {
-        $inputSlug = array_map(function ($input) {
-            return $this->make_slug($input, '_');
-        }, $inputs);
-        $default = array_intersect($tags, $inputSlug);
-        if (is_array($default)) {
-            $default = array_first($default);
-
-            return array_search($default, $inputSlug);
-        }
-
-        return null;
+        [
+            $ads1,
+            $ads2,
+        ] = $this->getAdsArray();
+        [
+            $tags,
+            $extraTags,
+        ] = $this->getTags();
+        
+        $filterData = $this->getFilterdData();
+        return [
+            $ads1,
+            $ads2,
+            $tags,
+            $extraTags,
+            $filterData,
+        ];
     }
-
+    
+    /**
+     * @return array
+     */
+    private function getAdsArray(): array
+    {
+//            $ads1 = [
+        //                //DINI SEBTI
+        //                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4',
+        //            ];
+        //            $ads2 = [
+        //                //DINI SEBTI
+        //                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-2.jpg' => 'https://sanatisharif.ir/landing/4',
+        //                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-3.jpg' => 'https://sanatisharif.ir/landing/4',
+        //            ];
+        $ads1 = [];
+        $ads2 = [];
+        return [
+            $ads1,
+            $ads2,
+        ];
+    }
+    
+    /**
+     * @return array
+     */
+    private function getTags(): array
+    {
+        /**
+         * Page inputs
+         */
+        $tags = [];
+        if ($this->request->has("tags")) {
+            $tags = $this->request->tags;
+        }
+        
+        $extraTags = [];
+        return [
+            $tags,
+            $extraTags,
+        ];
+    }
+    
     /**
      * @return array
      */
     private function getFilterdData(): array
     {
-        $lessonTeacher = collect([
+        $lessonTeacher  = collect([
             ""                    => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -392,7 +437,9 @@ class ContentSearchComposer
                     "firstName" => "امید",
                     "value"     => "امید_زاهدی",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "دیفرانسیل"           => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -419,7 +466,9 @@ class ContentSearchComposer
                     "firstName" => "سیروس",
                     "value"     => "سیروس_نصیری",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "گسسته"               => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -446,7 +495,9 @@ class ContentSearchComposer
                     "firstName" => "شاه",
                     "value"     => "شاه_محمدی",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "تحلیلی"              => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -468,7 +519,9 @@ class ContentSearchComposer
                     "firstName" => "محمد رضا",
                     "value"     => "محمد_رضا_حسینی_فرد",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "هندسه_پایه"          => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -495,7 +548,9 @@ class ContentSearchComposer
                     "firstName" => "حسن",
                     "value"     => "حسن_مرصعی",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "حسابان"              => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -517,7 +572,9 @@ class ContentSearchComposer
                     "firstName" => "شهروز",
                     "value"     => "شهروز_رحیمی",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "جبر_و_احتمال"        => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -534,7 +591,9 @@ class ContentSearchComposer
                     "firstName" => "رضا",
                     "value"     => "رضا_شامیزاده",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "ریاضی_پایه"          => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -566,7 +625,9 @@ class ContentSearchComposer
                     "firstName" => "محمدرضا",
                     "value"     => "محمدرضا_مقصودی",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "ریاضی_تجربی"         => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -598,7 +659,9 @@ class ContentSearchComposer
                     "firstName" => "علی",
                     "value"     => "علی_صدری",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "ریاضی_انسانی"        => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -662,7 +725,9 @@ class ContentSearchComposer
                     "firstName" => "جعفر",
                     "value"     => "جعفر_رنجبرزاده",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "شیمی"                => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -709,7 +774,9 @@ class ContentSearchComposer
                     "firstName" => "",
                     "value"     => "جعفری",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "فیزیک"               => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -751,7 +818,9 @@ class ContentSearchComposer
                     "firstName" => "",
                     "value"     => "جهانبخش",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "زبان_انگلیسی"        => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -773,7 +842,9 @@ class ContentSearchComposer
                     "firstName" => "",
                     "value"     => "درویش",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "دین_و_زندگی"         => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -790,7 +861,9 @@ class ContentSearchComposer
                     "firstName" => "جعفر",
                     "value"     => "جعفر_رنجبرزاده",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "زبان_و_ادبیات_فارسی" => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -827,7 +900,9 @@ class ContentSearchComposer
                     "firstName" => "میثم",
                     "value"     => "میثم__حسین_خانی",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "آمار_و_مدلسازی"      => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -849,7 +924,9 @@ class ContentSearchComposer
                     "firstName" => "مهدی",
                     "value"     => "مهدی_امینی_راد",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "زیست_شناسی"          => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -896,7 +973,9 @@ class ContentSearchComposer
                     "firstName" => "",
                     "value"     => "ارشی",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "ریاضی_و_آمار"        => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -908,7 +987,9 @@ class ContentSearchComposer
                     "firstName" => "مهدی",
                     "value"     => "مهدی_امینی_راد",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "منطق"                => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -925,7 +1006,9 @@ class ContentSearchComposer
                     "firstName" => "سید حسام",
                     "value"     => "سید_حسام_الدین_جلالی",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "المپیاد_فیزیک"       => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -937,7 +1020,9 @@ class ContentSearchComposer
                     "firstName" => "مصطفی",
                     "value"     => "مصطفی_جعفری_نژاد",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "المپیاد_نجوم"        => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -949,7 +1034,9 @@ class ContentSearchComposer
                     "firstName" => "یاشار",
                     "value"     => "یاشار_بهمند",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
             "مشاوره"              => collect([
                 [
                     "index"     => "همه دبیرها",
@@ -966,9 +1053,11 @@ class ContentSearchComposer
                     "firstName" => "امید",
                     "value"     => "امید_زاهدی",
                 ],
-            ])->sortBy("lastName")->values(),
+            ])
+                ->sortBy("lastName")
+                ->values(),
         ]);
-        $allLessons = collect([
+        $allLessons     = collect([
             [
                 "value"        => "",
                 "initialIndex" => "همه دروس",
@@ -1065,8 +1154,10 @@ class ContentSearchComposer
                 "value" => "المپیاد_فیزیک",
                 "index" => "المپیاد فیزیک",
             ],
-        ])->sortBy("index")->values();
-        $riaziLessons = collect([
+        ])
+            ->sortBy("index")
+            ->values();
+        $riaziLessons   = collect([
             [
                 "value"        => "",
                 "initialIndex" => "همه دروس",
@@ -1139,7 +1230,9 @@ class ContentSearchComposer
                 "value" => "المپیاد_فیزیک",
                 "index" => "المپیاد فیزیک",
             ],
-        ])->sortBy("index")->values();
+        ])
+            ->sortBy("index")
+            ->values();
         $tajrobiLessons = collect([
             [
                 "value"        => "",
@@ -1201,8 +1294,10 @@ class ContentSearchComposer
                 "value" => "المپیاد_فیزیک",
                 "index" => "المپیاد فیزیک",
             ],
-        ])->sortBy("index")->values();
-        $ensaniLessons = collect([
+        ])
+            ->sortBy("index")
+            ->values();
+        $ensaniLessons  = collect([
             [
                 "value"        => "",
                 "initialIndex" => "همه دروس",
@@ -1247,8 +1342,10 @@ class ContentSearchComposer
                 "value" => "آمار_و_مدلسازی",
                 "index" => "آمار و مدلسازی",
             ],
-        ])->sortBy("index")->values();
-
+        ])
+            ->sortBy("index")
+            ->values();
+        
         $filterData = [
             'lessonTeacher' => $lessonTeacher,
             'lessons'       => [
@@ -1260,70 +1357,25 @@ class ContentSearchComposer
         ];
         return $filterData;
     }
-
+    
     /**
-     * @return array
+     * @param $tags
+     * @param $inputs
+     *
+     * @return string
      */
-    private function getAdsArray(): array
+    private function findDefault(array $tags, array $inputs)
     {
-//            $ads1 = [
-        //                //DINI SEBTI
-        //                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-1.jpg' => 'https://sanatisharif.ir/landing/4',
-        //            ];
-        //            $ads2 = [
-        //                //DINI SEBTI
-        //                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-2.jpg' => 'https://sanatisharif.ir/landing/4',
-        //                'https://cdn.sanatisharif.ir/upload/ads/SMALL-SLIDE-3.jpg' => 'https://sanatisharif.ir/landing/4',
-        //            ];
-        $ads1 = [];
-        $ads2 = [];
-        return [
-            $ads1,
-            $ads2,
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function getTags(): array
-    {
-        /**
-         * Page inputs
-         */
-        $tags = [];
-        if ($this->request->has("tags")) {
-            $tags = $this->request->tags;
+        $inputSlug = array_map(function ($input) {
+            return $this->make_slug($input, '_');
+        }, $inputs);
+        $default   = array_intersect($tags, $inputSlug);
+        if (is_array($default)) {
+            $default = array_first($default);
+            
+            return array_search($default, $inputSlug);
         }
-
-        $extraTags = [];
-        return [
-            $tags,
-            $extraTags,
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function getData(): array
-    {
-        [
-            $ads1,
-            $ads2,
-        ] = $this->getAdsArray();
-        [
-            $tags,
-            $extraTags,
-        ] = $this->getTags();
-
-        $filterData = $this->getFilterdData();
-        return [
-            $ads1,
-            $ads2,
-            $tags,
-            $extraTags,
-            $filterData
-        ];
+        
+        return null;
     }
 }

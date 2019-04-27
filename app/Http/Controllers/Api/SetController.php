@@ -10,7 +10,7 @@ class SetController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Contentset $set
+     * @param  \App\Contentset  $set
      *
      * @return \Illuminate\Http\Response
      */

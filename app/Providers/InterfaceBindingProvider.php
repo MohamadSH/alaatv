@@ -19,14 +19,15 @@ class InterfaceBindingProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->bind('App\Classes\Format\BlockCollectionFormatter', 'App\Classes\Format\webBlockCollectionFormatter');
+        $this->app->bind('App\Classes\Format\BlockCollectionFormatter',
+            'App\Classes\Format\webBlockCollectionFormatter');
         $this->app->bind('App\Classes\Format\SetCollectionFormatter', 'App\Classes\Format\webSetCollectionFormatter');
         $this->app->bind(ContentRepositoryInterface::class, ContentRepository::class);
-
+        
         $this->app->bind(BlockCollectionFormatter::class, webBlockCollectionFormatter::class);
         $this->app->bind(SetCollectionFormatter::class, webSetCollectionFormatter::class);
     }
-
+    
     /**
      * Register services.
      *

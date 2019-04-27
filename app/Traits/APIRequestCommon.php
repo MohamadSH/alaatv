@@ -10,7 +10,7 @@ trait APIRequestCommon
 {
     public function sendRequest($path, $method, $parameters = [])
     {
-        $client = new Client();
+        $client  = new Client();
         $request = new Request();
         foreach ($parameters as $key => $parameter) {
             $request->offsetSet($key, $parameter);
@@ -21,10 +21,11 @@ trait APIRequestCommon
             Log::error($e->getMessage());
             throw new Exception('Guzzle exception');
         }
-
+        
         return [
             "statusCode" => $res->getStatusCode(),
-            "result" => $res->getBody()->getContents(),
+            "result"     => $res->getBody()
+                ->getContents(),
         ];
     }
 }

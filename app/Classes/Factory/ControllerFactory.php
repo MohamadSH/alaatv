@@ -13,7 +13,7 @@ class ControllerFactory
     static public function getControllerObject($controllerName)
     {
         $classPath = "\App\\Http\\Controllers\\".$controllerName;
-
+        
         return (new  $classPath);
     }
 }

@@ -5,13 +5,13 @@ namespace App;
 /**
  * App\Disk
  *
- * @property int $id
- * @property int|null $disktype_id آی دی مشخص کننده نوع دیسک
- * @property string $name        نام دیسک
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Disktype|null $disktype
+ * @property int                                                       $id
+ * @property int|null                                                  $disktype_id آی دی مشخص کننده نوع دیسک
+ * @property string                                                    $name        نام دیسک
+ * @property \Carbon\Carbon|null                                       $created_at
+ * @property \Carbon\Carbon|null                                       $updated_at
+ * @property \Carbon\Carbon|null                                       $deleted_at
+ * @property-read \App\Disktype|null                                   $disktype
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\File[] $files
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Disk onlyTrashed()
@@ -30,7 +30,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Disk query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed $cache_cooldown_seconds
+ * @property-read mixed                                                $cache_cooldown_seconds
  */
 class Disk extends BaseModel
 {
@@ -38,14 +38,15 @@ class Disk extends BaseModel
         'name',
         'disktype_id',
     ];
-
+    
     public function disktype()
     {
         return $this->belongsTo("\App\Disktype");
     }
-
+    
     public function files()
     {
-        return $this->belongsToMany("\App\File")->withPivot("priority");
+        return $this->belongsToMany("\App\File")
+            ->withPivot("priority");
     }
 }

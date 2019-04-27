@@ -11,14 +11,12 @@ namespace App\Classes\Report;
 use Google_Service_AnalyticsReporting;
 use Google_Service_AnalyticsReporting_DateRange;
 use Google_Service_AnalyticsReporting_Dimension;
-use Google_Service_AnalyticsReporting_DimensionFilter;
 use Google_Service_AnalyticsReporting_DimensionFilterClause;
 use Google_Service_AnalyticsReporting_GetReportsRequest;
 use Google_Service_AnalyticsReporting_GetReportsResponse;
 use Google_Service_AnalyticsReporting_Metric;
 use Google_Service_AnalyticsReporting_OrderBy;
 use Google_Service_AnalyticsReporting_ReportRequest;
-use Google_Service_AnalyticsReporting_SegmentDimensionFilter;
 use Illuminate\Support\Collection;
 
 abstract class GaReport implements ReportInterface
@@ -27,42 +25,42 @@ abstract class GaReport implements ReportInterface
      * @var Google_Service_AnalyticsReporting_DateRange
      */
     protected $dateRange;
-
+    
     /**
      * @var Google_Service_AnalyticsReporting_Metric[]
      */
     protected $metrics;
-
+    
     /**
      * @var Google_Service_AnalyticsReporting_Dimension
      */
     protected $dimension;
-
+    
     /**
      * @var Google_Service_AnalyticsReporting_OrderBy
      */
     protected $orderBy;
-
+    
     /**
      * @var Google_Service_AnalyticsReporting_DimensionFilterClause
      */
     protected $filter;
-
+    
     /**
      * @var Google_Service_AnalyticsReporting_ReportRequest
      */
     protected $request;
-
+    
     /**
      * @var Google_Service_AnalyticsReporting_GetReportsRequest
      */
     protected $body;
-
+    
     /**
      * @var Google_Service_AnalyticsReporting
      */
     protected $analytics;
-
+    
     public function __construct(
         Google_Service_AnalyticsReporting $analytics,
         Google_Service_AnalyticsReporting_GetReportsRequest $body,
@@ -72,72 +70,75 @@ abstract class GaReport implements ReportInterface
         Google_Service_AnalyticsReporting_Dimension $dimension,
         Google_Service_AnalyticsReporting_OrderBy $orderBy,
         Google_Service_AnalyticsReporting_DimensionFilterClause $filter
-    ) {
+    )
+    {
         $this->dateRange = $dateRange;
-        $this->metrics = $metrics;
+        $this->metrics   = $metrics;
         $this->dimension = $dimension;
-        $this->orderBy = $orderBy;
-        $this->filter = $filter;
-        $this->request = $request;
-        $this->body = $body;
+        $this->orderBy   = $orderBy;
+        $this->filter    = $filter;
+        $this->request   = $request;
+        $this->body      = $body;
         $this->analytics = $analytics;
     }
-
+    
     public abstract function getReport($path, $from = '2013-01-01', $to = 'today');
-
+    
     protected abstract function format(Google_Service_AnalyticsReporting_GetReportsResponse $reports);
-
+    
     protected function get()
     {
         $this->body->setReportRequests([$this->request]);
-
+        
         return $this->analytics->reports->batchGet($this->body);
     }
-
+    
     protected function baseFormat(Google_Service_AnalyticsReporting_GetReportsResponse $reports): Collection
     {
         $darray = [];
         $marray = [];
-        $mkey = [];
-
+        $mkey   = [];
+        
         for ($reportIndex = 0; $reportIndex < count($reports); $reportIndex++) {
-            $report = $reports[$reportIndex];
-            $header = $report->getColumnHeader();
+            $report           = $reports[$reportIndex];
+            $header           = $report->getColumnHeader();
             $dimensionHeaders = $header->getDimensions();
-            $metricHeaders = $header->getMetricHeader()->getMetricHeaderEntries();
-            $rows = $report->getData()->getRows();
-
+            $metricHeaders    = $header->getMetricHeader()
+                ->getMetricHeaderEntries();
+            $rows             = $report->getData()
+                ->getRows();
+            
             for ($j = 0; $j < count($metricHeaders); $j++) {
-                $entry = $metricHeaders[$j];
+                $entry  = $metricHeaders[$j];
                 $mkey[] = $entry->getName();
             }
-
+            
             for ($rowIndex = 0; $rowIndex < count($rows); $rowIndex++) {
-                $row = $rows[$rowIndex];
+                $row        = $rows[$rowIndex];
                 $dimensions = $row->getDimensions();
-                $metrics = $row->getMetrics();
-
+                $metrics    = $row->getMetrics();
+                
                 $darray[] = array_combine($dimensionHeaders, $dimensions);
-
+                
                 for ($j = 0; $j < count($metrics); $j++) {
-                    $values = $metrics[$j]->getValues();
+                    $values   = $metrics[$j]->getValues();
                     $marray[] = array_combine($mkey, $values);
                 }
             }
         }
-
-        $i = 0;
+        
+        $i       = 0;
         $mdarray = [];
         foreach ($darray as $value) {
             $mdarray[] = array_merge($value, $marray[$i]);
             $i++;
         }
-
+        
         $out = collect($mdarray);
-
+        
         return $out;
     }
-
+    
     /**
      * @param $path
      * @param $from
@@ -152,7 +153,7 @@ abstract class GaReport implements ReportInterface
         $this->setDimensionFilter($path);
         $this->setRequest();
     }
-
+    
     /**
      * @param $from
      * @param $to
@@ -163,15 +164,15 @@ abstract class GaReport implements ReportInterface
         $this->dateRange->setStartDate($from);
         $this->dateRange->setEndDate($to);
     }
-
+    
     protected abstract function setMetrics(): void;
-
+    
     protected abstract function setDimension(): void;
-
+    
     protected abstract function setOrderBy(): void;
-
+    
     protected abstract function setDimensionFilter($value): void;
-
+    
     protected function setRequest(): void
     {
         $this->request->setDateRanges($this->dateRange);

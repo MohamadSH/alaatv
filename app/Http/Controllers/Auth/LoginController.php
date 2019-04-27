@@ -13,7 +13,7 @@ class LoginController extends Controller
 {
     use CharacterCommon;
     use RedirectTrait;
-
+    
     /*
     |--------------------------------------------------------------------------
     | Login Controller
@@ -24,59 +24,73 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
-
+    
     use AuthenticatesUsers;
-
+    
     /**
      * Create a new controller instance.
      *
      */
     public function __construct()
     {
-
-        $this->middleware('guest')->except('logout');
-
+        
+        $this->middleware('guest')
+            ->except('logout');
+        
         $this->middleware('convert:mobile|password|nationalCode');
     }
-
-    /**
-     * Get the login username to be used by the controller.
-     *
-     * @return string
-     */
-    public function username()
-    {
-        return 'mobile';
-    }
-
+    
     /**
      * Log the user out of the application.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      *
      * @return \Illuminate\Http\Response
      */
     public function logout(Request $request)
     {
-        $this->guard()->logout();
-
+        $this->guard()
+            ->logout();
+        
         if ($request->expectsJson()) {
             //TODO:// revoke all apps!!!
-            $request->user()->token()->revoke();
-        } else {
-            $request->session()->invalidate();
+            $request->user()
+                ->token()
+                ->revoke();
         }
-
+        else {
+            $request->session()
+                ->invalidate();
+        }
+        
         return $this->loggedOut($request) ?: redirect('/');
     }
-
+    
+    /**
+     * The user has logged out of the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return mixed
+     */
+    protected function loggedOut(Request $request)
+    {
+        if ($request->expectsJson()) {
+            return response()->json([
+                'status'     => 1,
+                'msg'        => 'user sign out.',
+                'redirectTo' => action("Web\IndexPageController"),
+            ], Response::HTTP_OK);
+        }
+    }
+    
     /**
      * Handle a login request to the application.
      *
-     * @param \Illuminate\Http\Request                      $request
+     * @param  \Illuminate\Http\Request                       $request
      *
      *
-     * @param \App\Http\Controllers\Auth\RegisterController $registerController
+     * @param  \App\Http\Controllers\Auth\RegisterController  $registerController
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      *
@@ -93,24 +107,28 @@ class LoginController extends Controller
         /**
          * Login or register this new user
          */
-
+        
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
         if ($this->hasTooManyLoginAttempts($request)) {
-
+            
             $this->fireLockoutEvent($request);
-
+            
             return $this->sendLockoutResponse($request);
         }
-
+        
         if ($this->attemptLogin($request)) {
             if (auth()->user()->userstatus_id == 1) {
                 return $this->sendLoginResponse($request);
-            } else {
-                return redirect()->back()->withInput($request->only('mobile', 'remember'))->withErrors([
-                    'inActive' => 'حساب کاربری شما غیر فعال شده است!',
-                ], "login");
+            }
+            else {
+                return redirect()
+                    ->back()
+                    ->withInput($request->only('mobile', 'remember'))
+                    ->withErrors([
+                        'inActive' => 'حساب کاربری شما غیر فعال شده است!',
+                    ], "login");
             }
         }
 
@@ -124,50 +142,30 @@ class LoginController extends Controller
 //        Log::error('LoginController login 7');
         return $registerController->register($request);
     }
-
+    
     /**
      * Send the response after the user was authenticated.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      *
      * @return \Illuminate\Http\Response
      */
     protected function sendLoginResponse(Request $request)
     {
         if (!$request->expectsJson()) {
-            $request->session()->regenerate();
+            $request->session()
+                ->regenerate();
         }
         $this->clearLoginAttempts($request);
-        return $this->authenticated($request, $this->guard()->user()) ?: redirect()->intended($this->redirectPath());
+        return $this->authenticated($request, $this->guard()
+            ->user()) ?: redirect()->intended($this->redirectPath());
     }
-
-    /**
-     * Show the application login form.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function showLoginForm()
-    {
-        return view('auth.login3');
-    }
-
-    /**
-     * Get the needed authorization credentials from the request.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return array
-     */
-    protected function credentials(Request $request)
-    {
-        return $request->only($this->username(), 'nationalCode', 'password');
-    }
-
+    
     /**
      * The user has been authenticated.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param mixed                    $user
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed                     $user
      *
      * @return mixed
      */
@@ -175,7 +173,7 @@ class LoginController extends Controller
     {
         if ($request->expectsJson()) {
             $token = $user->getAppToken();
-            $data = array_merge([
+            $data  = array_merge([
                 'user' => $user,
             ], $token);
             return response()->json([
@@ -187,22 +185,36 @@ class LoginController extends Controller
         }
         return redirect($this->redirectTo($request));
     }
-
+    
     /**
-     * The user has logged out of the application.
+     * Show the application login form.
      *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return mixed
+     * @return \Illuminate\Http\Response
      */
-    protected function loggedOut(Request $request)
+    public function showLoginForm()
     {
-        if ($request->expectsJson()) {
-            return response()->json([
-                'status'     => 1,
-                'msg'        => 'user sign out.',
-                'redirectTo' => action("Web\IndexPageController"),
-            ], Response::HTTP_OK);
-        }
+        return view('auth.login3');
+    }
+    
+    /**
+     * Get the needed authorization credentials from the request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return array
+     */
+    protected function credentials(Request $request)
+    {
+        return $request->only($this->username(), 'nationalCode', 'password');
+    }
+    
+    /**
+     * Get the login username to be used by the controller.
+     *
+     * @return string
+     */
+    public function username()
+    {
+        return 'mobile';
     }
 }

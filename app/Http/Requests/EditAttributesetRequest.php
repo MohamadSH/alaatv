@@ -14,13 +14,15 @@ class EditAttributesetRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.EDIT_ATTRIBUTESET_ACCESS'))) {
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.EDIT_ATTRIBUTESET_ACCESS'))) {
             return true;
         }
-
+        
         return false;
     }
-
+    
     /**
      * Get the validation rules that apply to the request.
      *

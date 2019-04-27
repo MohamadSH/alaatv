@@ -12,8 +12,9 @@ class OrderCheckoutPayment
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure                  $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = null)
@@ -23,23 +24,27 @@ class OrderCheckoutPayment
                 action("Web\OrderController@checkoutPayment")) != 0) {
             return redirect(action("Web\OrderController@checkoutReview"));
         }
-
-        if (Auth::guard($guard)->check()) {
-            $user = Auth::guard($guard)->user();
-
+        
+        if (Auth::guard($guard)
+            ->check()) {
+            $user = Auth::guard($guard)
+                ->user();
+            
             if ($request->has("order_id")) {
-                if (! $user->can("constants.SHOW_ORDER_PAYMENT_ACCESS")) {
+                if (!$user->can("constants.SHOW_ORDER_PAYMENT_ACCESS")) {
                     return response([], Response::HTTP_FORBIDDEN);
                 }
-            } else {
+            }
+            else {
                 /** @var User $user */
                 $openOrder = $user->getOpenOrder();
                 $request->offsetSet("order_id", $openOrder->id);
             }
-        } else {
+        }
+        else {
             return redirect(action("Web\OrderController@checkoutAuth"));
         }
-
+        
         return $next($request);
     }
 }

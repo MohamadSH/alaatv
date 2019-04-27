@@ -5,12 +5,12 @@ namespace App;
 /**
  * App\Attributecontrol
  *
- * @property int $id
- * @property string|null $name        نام کنترل صفت
- * @property string|null $description توضیح درباره کنترل
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property int                                                            $id
+ * @property string|null                                                    $name        نام کنترل صفت
+ * @property string|null                                                    $description توضیح درباره کنترل
+ * @property \Carbon\Carbon|null                                            $created_at
+ * @property \Carbon\Carbon|null                                            $updated_at
+ * @property \Carbon\Carbon|null                                            $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Attribute[] $attributes
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Attributecontrol onlyTrashed()
@@ -29,7 +29,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributecontrol query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed $cache_cooldown_seconds
+ * @property-read mixed                                                     $cache_cooldown_seconds
  */
 class Attributecontrol extends BaseModel
 {
@@ -40,7 +40,7 @@ class Attributecontrol extends BaseModel
         'name',
         'description',
     ];
-
+    
     public function attributes()
     {
         return $this->hasMany('App\Attribute');

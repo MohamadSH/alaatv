@@ -23,39 +23,43 @@ class OrderIdRefinement extends Refinement
             return $this;
         }
         $orderId = $this->inputData['order_id'];
-        $order = $this->getOrder($orderId);
+        $order   = $this->getOrder($orderId);
         if ($order !== false) {
             $this->order = $order;
-            $this->user = $this->order->user;
+            $this->user  = $this->order->user;
             $this->getOrderCost();
             // ToDo: if sent open order_id user can't use wallet
             $this->donateCost = $this->order->getDonateCost();
             if ($this->canDeductFromWallet()) {
                 $this->payByWallet();
             }
-            $result = $this->getNewTransaction();
-            $this->statusCode = $result['statusCode'];
-            $this->message = $result['message'];
+            $result            = $this->getNewTransaction();
+            $this->statusCode  = $result['statusCode'];
+            $this->message     = $result['message'];
             $this->transaction = $result['transaction'];
-            $this->statusCode = Response::HTTP_OK;
-        } else {
-            $this->statusCode = Response::HTTP_NOT_FOUND;
-            $this->message = 'سفارشی یافت نشد.';
+            $this->statusCode  = Response::HTTP_OK;
         }
-
+        else {
+            $this->statusCode = Response::HTTP_NOT_FOUND;
+            $this->message    = 'سفارشی یافت نشد.';
+        }
+        
         return $this;
     }
-
+    
     /**
-     * @param int $orderId
+     * @param  int  $orderId
+     *
      * @return bool|Order
      */
     private function getOrder(int $orderId)
     {
-        $order = Order::with(['transactions', 'coupon'])->find($orderId);
+        $order = Order::with(['transactions', 'coupon'])
+            ->find($orderId);
         if (isset($order)) {
             return $order;
-        } else {
+        }
+        else {
             return false;
         }
     }

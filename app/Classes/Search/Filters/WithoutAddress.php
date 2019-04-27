@@ -13,11 +13,12 @@ use Illuminate\Database\Eloquent\Builder;
 class WithoutAddress extends FilterAbstract
 {
     protected $attribute = 'address';
-
+    
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         return $builder->where(function ($q) {
-            $q->whereNull($this->attribute)->orWhere($this->attribute, "");
+            $q->whereNull($this->attribute)
+                ->orWhere($this->attribute, "");
         });
     }
 }

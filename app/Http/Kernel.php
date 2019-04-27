@@ -21,7 +21,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         Middleware\TrustProxies::class,
     ];
-
+    
     /**
      * The application's route middleware groups.
      *
@@ -38,13 +38,13 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
         ],
-
+        
         'api' => [
             'throttle:120000,1',
             'bindings',
         ],
     ];
-
+    
     /**
      * The application's route middleware.
      *
@@ -53,29 +53,29 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \App\Http\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-        'completeInfo' => \App\Http\Middleware\CompleteInfo::class,
-        'role' => \Laratrust\Middleware\LaratrustRole::class,
-        'permission' => \Laratrust\Middleware\LaratrustPermission::class,
-        'ability' => \Laratrust\Middleware\LaratrustAbility::class,
-        'convert' => ModifyRequestInputMiddleware::class,
-        'CheckPermissionForSendOrderId' => Middleware\CheckPermissionForSendOrderId::class,
+        'auth'                                      => \App\Http\Middleware\Authenticate::class,
+        'auth.basic'                                => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'bindings'                                  => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        'can'                                       => \Illuminate\Auth\Middleware\Authorize::class,
+        'guest'                                     => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'throttle'                                  => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'verified'                                  => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'cache.headers'                             => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        'completeInfo'                              => \App\Http\Middleware\CompleteInfo::class,
+        'role'                                      => \Laratrust\Middleware\LaratrustRole::class,
+        'permission'                                => \Laratrust\Middleware\LaratrustPermission::class,
+        'ability'                                   => \Laratrust\Middleware\LaratrustAbility::class,
+        'convert'                                   => ModifyRequestInputMiddleware::class,
+        'CheckPermissionForSendOrderId'             => Middleware\CheckPermissionForSendOrderId::class,
         'CheckPermissionForSendExtraAttributesCost' => Middleware\CheckPermissionForSendExtraAttributesCost::class,
-        'OrderCheckoutReview' => Middleware\OrderCheckoutReview::class,
-        'OrderCheckoutPayment' => Middleware\OrderCheckoutPayment::class,
-        'SubmitOrderCoupon' => Middleware\SubmitOrderCoupon::class,
-        'OfflineVerifyPayment' => Middleware\OfflineVerifyPayment::class,
-        'RemoveOrderCoupon' => \App\Http\Middleware\RemoveOrderCoupon::class,
+        'OrderCheckoutReview'                       => Middleware\OrderCheckoutReview::class,
+        'OrderCheckoutPayment'                      => Middleware\OrderCheckoutPayment::class,
+        'SubmitOrderCoupon'                         => Middleware\SubmitOrderCoupon::class,
+        'OfflineVerifyPayment'                      => Middleware\OfflineVerifyPayment::class,
+        'RemoveOrderCoupon'                         => \App\Http\Middleware\RemoveOrderCoupon::class,
     ];
-
-
+    
+    
     /**
      * The priority-sorted list of middleware.
      *

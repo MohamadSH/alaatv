@@ -52,23 +52,23 @@ use Illuminate\Support\Facades\Cache;
 class Block extends BaseModel
 {
     public static $BLOCK_TYPE_MAIN = 1;
-
+    
     public static $BLOCK_TYPE_SHOP = 2;
-
+    
     public static $BLOCK_TYPE_OFFER = 3;
-
+    
     protected static $actionLookupTable = [
         "1" => "Web\ContentController@index",
         "2" => "Web\ProductController@index",
         "3" => null,
     ];
-
+    
     protected $isOfferBlock = false;
-
+    
     protected $cascadeDeletes = [
         'blockables',
     ];
-
+    
     protected $fillable = [
         'title',
         'tags',
@@ -77,12 +77,12 @@ class Block extends BaseModel
         'enable',
         'type',
     ];
-
+    
     protected $appends = [
         'url',
         'offer',
     ];
-
+    
     protected $hidden = [
         'enable',
         'tags',
@@ -91,110 +91,36 @@ class Block extends BaseModel
         'deleted_at',
         'type',
     ];
-
-    /**
-     * Scope a query to only blocks for shop.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeShop($query)
-    {
-        return $query->where('type', '=', 2);
-    }
-
-    /**
-     * Scope a query to only blocks for HomePage.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeMain($query)
-    {
-        return $query->where('type', '=', 1);
-    }
-
-    public function getOfferAttribute($value)
-    {
-        return $this->isOfferBlock;
-    }
-
-    public function setOfferAttribute($value)
-    {
-        return $this->isOfferBlock = (boolean)$value;
-    }
-
-    /**
-     * @param $value
-     *
-     * @return string
-     */
-    public function getUrlAttribute($value): ?string
-    {
-        return isset(self::$actionLookupTable[$this->type]) ? $this->makeUrl(self::$actionLookupTable[$this->type], $this->tags) : null;
-    }
-
-    private function makeUrl($action, $input = null)
-    {
-        if ($input) {
-            return urldecode(action($action, ["tags" => $input]));
-        } else {
-            return urldecode(action($action));
-        }
-    }
-
+    
     public static function getShopBlocks()
     {
-        $blocks = Cache::tags('block')->remember('getShopBlocks', config('constants.CACHE_600'), function () {
-            $offerBlock = self::getOfferBlock();
-            $blocks = self::shop()->orderBy('order')->get()->loadMissing([
-                'contents',
-                'sets',
-                'products',
-                'banners',
-            ]);
-
-            return $blocks->prepend($offerBlock);
-        });
-
+        $blocks = Cache::tags('block')
+            ->remember('getShopBlocks', config('constants.CACHE_600'), function () {
+                $offerBlock = self::getOfferBlock();
+                $blocks     = self::shop()
+                    ->orderBy('order')
+                    ->get()
+                    ->loadMissing([
+                        'contents',
+                        'sets',
+                        'products',
+                        'banners',
+                    ]);
+                
+                return $blocks->prepend($offerBlock);
+            });
+        
         return $blocks;
     }
-
-    protected function addProducts($products)
+    
+    /**
+     * @return \App\Block
+     */
+    protected static function getOfferBlock(): Block
     {
-        if ($products != null) {
-            foreach ($products as $product) {
-                $this->products->add($product);
-            }
-        }
-
-        return $this;
+        return self::getDummyBlock(true, 'محصولات شگفت انگیز', Product::getProductsHaveBestOffer());
     }
-
-    protected function addContents($contents)
-    {
-        if ($contents != null) {
-            foreach ($contents as $content) {
-                $this->contents->add($content);
-            }
-        }
-
-        return $this;
-    }
-
-    protected function addSets($sets)
-    {
-        if ($sets != null) {
-            foreach ($sets as $set) {
-                $this->contents->add($set);
-            }
-        }
-
-        return $this;
-    }
-
+    
     public static function getDummyBlock(
         bool $offer,
         string $title,
@@ -204,47 +130,130 @@ class Block extends BaseModel
     )
     {
         //TODO:// add Cache Layer!
-        $block = new Block;
-        $block->id = 0;
+        $block        = new Block;
+        $block->id    = 0;
         $block->offer = $offer;
-        $block->type = 3;
+        $block->type  = 3;
         $block->order = 0;
         $block->title = $title;
-
-        return $block->addProducts($products)->addContents($contents)->addSets($sets);
+        
+        return $block->addProducts($products)
+            ->addContents($contents)
+            ->addSets($sets);
     }
-
-    /**
-     * @return \App\Block
-     */
-    protected static function getOfferBlock(): Block
+    
+    protected function addSets($sets)
     {
-        return self::getDummyBlock(true, 'محصولات شگفت انگیز', Product::getProductsHaveBestOffer());
+        if ($sets != null) {
+            foreach ($sets as $set) {
+                $this->contents->add($set);
+            }
+        }
+        
+        return $this;
     }
-
+    
+    protected function addContents($contents)
+    {
+        if ($contents != null) {
+            foreach ($contents as $content) {
+                $this->contents->add($content);
+            }
+        }
+        
+        return $this;
+    }
+    
+    protected function addProducts($products)
+    {
+        if ($products != null) {
+            foreach ($products as $product) {
+                $this->products->add($product);
+            }
+        }
+        
+        return $this;
+    }
+    
     public static function getMainBlocks()
     {
-        $blocks = Cache::tags('block')->remember('getMainBlocks', config('constants.CACHE_600'), function () {
-            $blocks = Block::main()
-                           ->orderBy('order')
-                           ->get()
-                           ->loadMissing([
-                               'contents',
-                               'sets',
-                               'products',
-                               'banners',
-                           ]);
-
-            return $blocks;
-        });
-
+        $blocks = Cache::tags('block')
+            ->remember('getMainBlocks', config('constants.CACHE_600'), function () {
+                $blocks = Block::main()
+                    ->orderBy('order')
+                    ->get()
+                    ->loadMissing([
+                        'contents',
+                        'sets',
+                        'products',
+                        'banners',
+                    ]);
+                
+                return $blocks;
+            });
+        
         return $blocks;
     }
-
+    
+    /**
+     * Scope a query to only blocks for shop.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeShop($query)
+    {
+        return $query->where('type', '=', 2);
+    }
+    
+    /**
+     * Scope a query to only blocks for HomePage.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeMain($query)
+    {
+        return $query->where('type', '=', 1);
+    }
+    
+    public function getOfferAttribute($value)
+    {
+        return $this->isOfferBlock;
+    }
+    
+    public function setOfferAttribute($value)
+    {
+        return $this->isOfferBlock = (boolean) $value;
+    }
+    
+    /**
+     * @param $value
+     *
+     * @return string
+     */
+    public function getUrlAttribute($value): ?string
+    {
+        return isset(self::$actionLookupTable[$this->type]) ? $this->makeUrl(self::$actionLookupTable[$this->type],
+            $this->tags) : null;
+    }
+    
+    private function makeUrl($action, $input = null)
+    {
+        if ($input) {
+            return urldecode(action($action, ["tags" => $input]));
+        }
+        else {
+            return urldecode(action($action));
+        }
+    }
+    
     /**
      * Create a new Eloquent Collection instance.
      *
-     * @param array $models
+     * @param  array  $models
      *
      * @return BlockCollection
      */
@@ -252,16 +261,16 @@ class Block extends BaseModel
     {
         return new BlockCollection($models);
     }
-
+    
     public function getTagsAttribute($value)
     {
         return json_decode($value);
     }
-
+    
     /**
      * Scope a query to only include enable Blocks.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -269,11 +278,11 @@ class Block extends BaseModel
     {
         return $query->where('enable', 1);
     }
-
+    
     /**
      * Scope a query to only include active Contents.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -281,25 +290,28 @@ class Block extends BaseModel
     {
         return $query->enable();
     }
-
+    
     public function contents()
     {
-        return $this->morphedByMany('App\Content', 'blockable')->withTimestamps();
+        return $this->morphedByMany('App\Content', 'blockable')
+            ->withTimestamps();
     }
-
+    
     public function sets()
     {
         return $this->morphedByMany('App\Contentset', 'blockable')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
-
+    
     public function products()
     {
-        return $this->morphedByMany('App\Product', 'blockable')->withTimestamps();
+        return $this->morphedByMany('App\Product', 'blockable')
+            ->withTimestamps();
     }
-
+    
     public function banners()
     {
-        return $this->morphedByMany('App\Slideshow', 'blockable')->withTimestamps();
+        return $this->morphedByMany('App\Slideshow', 'blockable')
+            ->withTimestamps();
     }
 }

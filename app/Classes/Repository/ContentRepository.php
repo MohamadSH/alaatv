@@ -14,12 +14,13 @@ use Illuminate\Support\Facades\Cache;
 
 class ContentRepository implements ContentRepositoryInterface
 {
-    public function getContentById($contentId) :Content
+    public function getContentById($contentId): Content
     {
-
-        return Cache::tags(['content'])->remember('content:'.$contentId,config("constants.CACHE_600"),function () use ($contentId){
-            return Content::find($contentId) ?: new Content();
-        });
-
+        
+        return Cache::tags(['content'])
+            ->remember('content:'.$contentId, config("constants.CACHE_600"), function () use ($contentId) {
+                return Content::find($contentId) ?: new Content();
+            });
+        
     }
 }

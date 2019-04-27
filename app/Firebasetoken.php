@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Firebasetoken
  *
- * @property int user_id
- * @property int $id
- * @property int $user_id آیدی مشخص کننده کاربر صاحب توکن
- * @property string|null $token توکن فایربیس
+ * @property int                             user_id
+ * @property int                             $id
+ * @property int                             $user_id آیدی مشخص کننده کاربر صاحب توکن
+ * @property string|null                     $token   توکن فایربیس
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \App\User $user
+ * @property-read \App\User                  $user
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Firebasetoken newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Firebasetoken newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Firebasetoken query()
@@ -34,11 +34,11 @@ class Firebasetoken extends Model
         'updated_at',
         'deleted_at',
     ];
-
+    
     protected $fillable = [
         'token',
     ];
-
+    
     public function user()
     {
         return $this->belongsTo('App\User');

@@ -13,13 +13,13 @@ use App\Orderproduct;
 abstract class OrderproductPriceCalculator
 {
     const ORDERPRODUCT_CALCULATOR_MODE_CALCULATE_FROM_BASE = "calculate_mode_from_base";
-
+    
     const ORDERPRODUCT_CALCULATOR_MODE_CALCULATE_FROM_RECORD = "calculate_mode_from_record";
-
+    
     protected $orderproduct;
-
+    
     protected $mode;
-
+    
     /**
      * OrderproductPriceCalculator constructor.
      *
@@ -28,9 +28,9 @@ abstract class OrderproductPriceCalculator
     public function __construct($orderproduct)
     {
         $this->orderproduct = $orderproduct;
-        $this->mode = self::getDefaultMode();
+        $this->mode         = self::getDefaultMode();
     }
-
+    
     /**
      * Gets default mode
      *
@@ -40,18 +40,7 @@ abstract class OrderproductPriceCalculator
     {
         return self::ORDERPRODUCT_CALCULATOR_MODE_CALCULATE_FROM_BASE;
     }
-
-    /**
-     * @param string $mode
-     * @return OrderproductPriceCalculator
-     */
-    public function setMode(string $mode): OrderproductPriceCalculator
-    {
-        $this->mode = $mode;
-
-        return $this;
-    }
-
+    
     /**
      * @return string
      */
@@ -59,7 +48,19 @@ abstract class OrderproductPriceCalculator
     {
         return $this->mode;
     }
-
+    
+    /**
+     * @param  string  $mode
+     *
+     * @return OrderproductPriceCalculator
+     */
+    public function setMode(string $mode): OrderproductPriceCalculator
+    {
+        $this->mode = $mode;
+        
+        return $this;
+    }
+    
     /**
      * @return array
      */
@@ -76,82 +77,86 @@ abstract class OrderproductPriceCalculator
                 $priceArray = [];
                 break;
         }
-
+        
         return $priceArray;
     }
-
-    /**
-     * Gets intended Orderproduct price records
-     *
-     * @param Orderproduct $orderproduct
-     * @return array
-     */
-    protected function calculatePriceFromRecords(Orderproduct $orderproduct): array
-    {
-        $priceArray = $this->obtainOrderproductPrice($orderproduct, false);
-
-        return $priceArray;
-    }
-
+    
     /**
      * Gets intended Orderproduct calculated price
      *
-     * @param Orderproduct $orderproduct
+     * @param  Orderproduct  $orderproduct
+     *
      * @return array
      */
     protected function calculatePriceFromBase(Orderproduct $orderproduct): array
     {
         $priceArray = $this->obtainOrderproductPrice($orderproduct);
-
+        
         return $priceArray;
     }
-
+    
     /**
      * Calculates intended Orderproduct price
      *
-     * @param Orderproduct $orderproduct
-     * @param bool $calculate
+     * @param  Orderproduct  $orderproduct
+     * @param  bool          $calculate
+     *
      * @return array
      */
     protected function obtainOrderproductPrice(Orderproduct $orderproduct, $calculate = true): array
     {
         if ($calculate) {
-            $product = $orderproduct->product;
-            $priceArray = $product->calculatePayablePrice();
-            $price = $priceArray["cost"];
+            $product                   = $orderproduct->product;
+            $priceArray                = $product->calculatePayablePrice();
+            $price                     = $priceArray["cost"];
             $productDiscountPercentage = $priceArray["productDiscount"];
-            $productDiscountValue = $priceArray["productDiscountValue"];
-            $productDiscountAmount = $priceArray["productDiscountAmount"];
-        } else {
-            $price = $orderproduct->cost;
-            $productDiscountValue = $orderproduct->getOriginal("discountPercentage");
-            $productDiscountPercentage = $orderproduct->discountPercentage;
-            $productDiscountAmount = $orderproduct->discountAmount;
+            $productDiscountValue      = $priceArray["productDiscountValue"];
+            $productDiscountAmount     = $priceArray["productDiscountAmount"];
         }
-
-        $orderProductExtraPrice = $orderproduct->getExtraCost();
+        else {
+            $price                     = $orderproduct->cost;
+            $productDiscountValue      = $orderproduct->getOriginal("discountPercentage");
+            $productDiscountPercentage = $orderproduct->discountPercentage;
+            $productDiscountAmount     = $orderproduct->discountAmount;
+        }
+        
+        $orderProductExtraPrice     = $orderproduct->getExtraCost();
         $totalBonDiscountPercentage = $orderproduct->getTotalBonDiscountPercentage();
-        $totalBonDiscountValue = $orderproduct->getTotalBonDiscountDecimalValue();
-
-        $price = (int)$price;
-
-        $customerPrice = (int)(($price * (1 - $productDiscountPercentage)) * (1 - $totalBonDiscountPercentage) - $productDiscountAmount);
-        $discount = $price - $customerPrice;
-        $totalPrice = $orderproduct->quantity * $customerPrice;
-
+        $totalBonDiscountValue      = $orderproduct->getTotalBonDiscountDecimalValue();
+        
+        $price = (int) $price;
+        
+        $customerPrice = (int) (($price * (1 - $productDiscountPercentage)) * (1 - $totalBonDiscountPercentage) - $productDiscountAmount);
+        $discount      = $price - $customerPrice;
+        $totalPrice    = $orderproduct->quantity * $customerPrice;
+        
         return [
             ///////////////Details///////////////////////
-            "cost" => $price,
-            "extraCost" => $orderProductExtraPrice,
-            "productDiscount" => $productDiscountValue,
+            "cost"                      => $price,
+            "extraCost"                 => $orderProductExtraPrice,
+            "productDiscount"           => $productDiscountValue,
             "productDiscountPercentage" => $productDiscountPercentage,
-            'bonDiscount' => $totalBonDiscountValue,
-            'bonDiscountPercentage' => $totalBonDiscountPercentage,
-            "productDiscountAmount" => (int)$productDiscountAmount,
+            'bonDiscount'               => $totalBonDiscountValue,
+            'bonDiscountPercentage'     => $totalBonDiscountPercentage,
+            "productDiscountAmount"     => (int) $productDiscountAmount,
             ////////////////////Total///////////////////////
-            'customerCost' => $customerPrice,
-            'discount' => $discount,
-            'totalCost' => $totalPrice,
+            'customerCost'              => $customerPrice,
+            'discount'                  => $discount,
+            'totalCost'                 => $totalPrice,
         ];
+    }
+    
+    /**
+     * Gets intended Orderproduct price records
+     *
+     * @param  Orderproduct  $orderproduct
+     *
+     * @return array
+     */
+    protected function calculatePriceFromRecords(Orderproduct $orderproduct): array
+    {
+        $priceArray = $this->obtainOrderproductPrice($orderproduct, false);
+        
+        return $priceArray;
     }
 }

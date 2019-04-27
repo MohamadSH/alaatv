@@ -5,13 +5,13 @@ namespace App;
 /**
  * App\Paymentstatus
  *
- * @property int $id
- * @property string|null $name        نام این وضعیت
- * @property string|null $displayName نام قابل نمایش این وضعیت
- * @property string|null $description توضیح این وضعیت
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property int                                                        $id
+ * @property string|null                                                $name        نام این وضعیت
+ * @property string|null                                                $displayName نام قابل نمایش این وضعیت
+ * @property string|null                                                $description توضیح این وضعیت
+ * @property \Carbon\Carbon|null                                        $created_at
+ * @property \Carbon\Carbon|null                                        $updated_at
+ * @property \Carbon\Carbon|null                                        $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[] $orders
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Paymentstatus onlyTrashed()
@@ -31,7 +31,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Paymentstatus query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed $cache_cooldown_seconds
+ * @property-read mixed                                                 $cache_cooldown_seconds
  */
 class Paymentstatus extends BaseModel
 {
@@ -41,9 +41,9 @@ class Paymentstatus extends BaseModel
     protected $fillable = [
         'name',
         'description',
-
+    
     ];
-
+    
     public function orders()
     {
         return $this->hasMany('App\Order');

@@ -5,16 +5,16 @@ namespace App;
 /**
  * App\Lottery
  *
- * @property int $id
- * @property string|null $name            نام قرعه کشی
- * @property string|null $displayName     نام قابل نمایش قرعه کشی
- * @property string|null $holdingDate     تاریخ برگزاری
- * @property int $essentialPoints تعداد امتیاز لازم برای شرکت در
+ * @property int                                                       $id
+ * @property string|null                                               $name            نام قرعه کشی
+ * @property string|null                                               $displayName     نام قابل نمایش قرعه کشی
+ * @property string|null                                               $holdingDate     تاریخ برگزاری
+ * @property int                                                       $essentialPoints تعداد امتیاز لازم برای شرکت در
  *           قرعه کشی
- * @property string|null $prizes          جوایز قرعه کشی
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property string|null                                               $prizes          جوایز قرعه کشی
+ * @property \Carbon\Carbon|null                                       $created_at
+ * @property \Carbon\Carbon|null                                       $updated_at
+ * @property \Carbon\Carbon|null                                       $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $users
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Lottery onlyTrashed()
@@ -36,7 +36,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed $cache_cooldown_seconds
+ * @property-read mixed                                                $cache_cooldown_seconds
  */
 class Lottery extends BaseModel
 {
@@ -47,17 +47,18 @@ class Lottery extends BaseModel
         'essentialPoints',
         'prizes',
     ];
-
+    
     public function users()
     {
-        return $this->belongsToMany("\App\User")->withPivot("rank", "prizes");
+        return $this->belongsToMany("\App\User")
+            ->withPivot("rank", "prizes");
     }
-
+    
     public function prizes($rank)
     {
         $prizeName = "";
-        $amount = 0;
-        $memorial = "";
+        $amount    = 0;
+        $memorial  = "";
         if ($this->id == 4) {
             if ($rank == 1) {//nafare aval
                 $prizeName = "یک دستگاه پلی استیشن 4";
@@ -66,14 +67,14 @@ class Lottery extends BaseModel
             //            {
             //                $memorial = "کد تخفیف ayft با 70 درصد تخفیف";
             //            }
-
+            
             //            elseif($rank > 13 && $rank <= 123 )
             //            {
             //                $amount = 60000 ;
             //                $prizeName = "مبلغ ".number_format($amount). " تومان اعتبار هدیه";
             //            }
         }
-
+        
         return [
             $prizeName,
             $amount,

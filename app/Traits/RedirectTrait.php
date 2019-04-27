@@ -15,33 +15,40 @@ trait RedirectTrait
 {
     protected function redirectTo(Request $request = null)
     {
-        $baseUrl = url("/");
-        $targetUrl = redirect()->intended()->getTargetUrl();
+        $baseUrl    = url("/");
+        $targetUrl  = redirect()
+            ->intended()
+            ->getTargetUrl();
         $redirectTo = $baseUrl;
         if (strcmp($targetUrl, $baseUrl) == 0) {
             // Indicates a strange situation when target url is the home page despite
             // the fact that there is a probability that user must be redirected to another page except home page
-
+            
             if (strcmp(URL::previous(), route('login')) != 0) // User first had opened a page and then went to login
             {
                 $redirectTo = URL::previous();
             }
-        } else {
+        }
+        else {
             $redirectTo = $targetUrl;
         }
-
-        if (auth()->user()->completion("afterLoginForm") != 100) {
+        
+        if (auth()
+                ->user()
+                ->completion("afterLoginForm") != 100) {
             if (strcmp(URL::previous(), action("Web\OrderController@checkoutAuth")) == 0) {
                 $redirectTo = action("Web\OrderController@checkoutCompleteInfo");
-            } else {
+            }
+            else {
                 if ($request->expectsJson()) {
                     $redirectTo = action("Web\IndexPageController");
-                } else {
+                }
+                else {
                     $redirectTo = action("Web\UserController@completeRegister", ["redirect" => $redirectTo]);
                 }
             }
         }
-
+        
         return $redirectTo;
     }
 }

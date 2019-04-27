@@ -11,7 +11,7 @@ class InsertUserRequest extends FormRequest
 {
     use CharacterCommon;
     use UserCommon;
-
+    
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -20,14 +20,15 @@ class InsertUserRequest extends FormRequest
     public function authorize()
     {
         if (Auth::check()) {
-            if (Auth::user()->can(config('constants.INSERT_USER_ACCESS'))) {
+            if (Auth::user()
+                ->can(config('constants.INSERT_USER_ACCESS'))) {
                 return true;
             }
         }
-
+        
         return false;
     }
-
+    
     /**
      * Get the validation rules that apply to the request.
      *
@@ -37,13 +38,13 @@ class InsertUserRequest extends FormRequest
     {
         return $this->getInsertUserValidationRules($this->request->all());
     }
-
+    
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-
+    
     protected function replaceNumbers()
     {
         $input = $this->request->all();

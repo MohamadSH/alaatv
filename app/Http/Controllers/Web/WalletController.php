@@ -10,12 +10,12 @@ use Illuminate\Http\Response;
 class WalletController extends Controller
 {
     protected $response;
-
+    
     public function __construct()
     {
         $this->response = new Response();
     }
-
+    
     /**
      * Display a listing of the resource.
      *
@@ -25,7 +25,7 @@ class WalletController extends Controller
     {
         //
     }
-
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -35,11 +35,11 @@ class WalletController extends Controller
     {
         //
     }
-
+    
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -47,31 +47,35 @@ class WalletController extends Controller
     {
         $wallet = new Wallet();
         $wallet->fill($request->all());
-
+        
         $done = false;
         if ($wallet->save()) {
             $done = true;
         }
-
+        
         if ($done) {
             if ($request->expectsJson()) {
-                return $this->response->setStatusCode(200)->setContent(["wallet" => $wallet]);
-            } else {
-
+                return $this->response->setStatusCode(200)
+                    ->setContent(["wallet" => $wallet]);
             }
-        } else {
+            else {
+            
+            }
+        }
+        else {
             if ($request->expectsJson()) {
                 return $this->response->setStatusCode(503);
-            } else {
-
+            }
+            else {
+            
             }
         }
     }
-
+    
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -79,11 +83,11 @@ class WalletController extends Controller
     {
         //
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Wallet $wallet
+     * @param  \App\Wallet  $wallet
      *
      * @return \Illuminate\Http\Response
      */
@@ -91,12 +95,12 @@ class WalletController extends Controller
     {
         //
     }
-
+    
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Wallet $wallet
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Wallet               $wallet
      *
      * @return \Illuminate\Http\Response
      */
@@ -107,26 +111,29 @@ class WalletController extends Controller
         if ($wallet->update()) {
             $done = true;
         }
-
+        
         if ($done) {
             if ($request->expectsJson()) {
                 return $this->response->setStatusCode(200);
-            } else {
-
             }
-        } else {
+            else {
+            
+            }
+        }
+        else {
             if ($request->expectsJson()) {
                 return $this->response->setStatusCode(503);
-            } else {
-
+            }
+            else {
+            
             }
         }
     }
-
+    
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Wallet $wallet
+     * @param  \App\Wallet  $wallet
      *
      * @return \Illuminate\Http\Response
      */

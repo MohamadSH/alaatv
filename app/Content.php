@@ -23,37 +23,37 @@ use Stevebauman\Purify\Facades\Purify;
 /**
  * App\Content
  *
- * @property int $id
- * @property int|null $author_id       آی دی مشخص کننده به وجود
+ * @property int                                                              $id
+ * @property int|null                                                         $author_id       آی دی مشخص کننده به وجود
  *           آورنده اثر
- * @property int|null $contenttype_id  آی دی مشخص کننده نوع
+ * @property int|null                                                         $contenttype_id  آی دی مشخص کننده نوع
  *           محتوا
- * @property int|null $template_id     آی دی مشخص کننده قالب
+ * @property int|null                                                         $template_id     آی دی مشخص کننده قالب
  *           این گرافیکی این محتوا
- * @property string|null $name            نام محتوا
- * @property string|null $description     توضیح درباره محتوا
- * @property string|null $metaTitle       متا تایتل محتوا
- * @property string|null $metaDescription متا دیسکریپشن محتوا
- * @property string|null $metaKeywords    متای کلمات کلیدی محتوا
- * @property string|null $tags            تگ ها
- * @property string|null $context         محتوا
- * @property int $order           ترتیب
- * @property int $enable          فعال یا غیر فعال بودن
+ * @property string|null                                                      $name            نام محتوا
+ * @property string|null                                                      $description     توضیح درباره محتوا
+ * @property string|null                                                      $metaTitle       متا تایتل محتوا
+ * @property string|null                                                      $metaDescription متا دیسکریپشن محتوا
+ * @property string|null                                                      $metaKeywords    متای کلمات کلیدی محتوا
+ * @property string|null                                                      $tags            تگ ها
+ * @property string|null                                                      $context         محتوا
+ * @property int                                                              $order           ترتیب
+ * @property int                                                              $enable          فعال یا غیر فعال بودن
  *           محتوا
- * @property string|null $validSince      تاریخ شروع استفاده از
+ * @property string|null                                                      $validSince      تاریخ شروع استفاده از
  *           محتوا
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contentset[] $contentsets
- * @property-read \App\Contenttype|null $contenttype
+ * @property \Carbon\Carbon|null                                              $created_at
+ * @property \Carbon\Carbon|null                                              $updated_at
+ * @property \Carbon\Carbon|null                                              $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contentset[]  $contentsets
+ * @property-read \App\Contenttype|null                                       $contenttype
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contenttype[] $contenttypes
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\File[] $files
- * @property mixed $file
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Grade[] $grades
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Major[] $majors
- * @property-read \App\Template|null $template
- * @property-read \App\User|null $user
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\File[]        $files
+ * @property mixed                                                            $file
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Grade[]       $grades
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Major[]       $majors
+ * @property-read \App\Template|null                                          $template
+ * @property-read \App\User|null                                              $user
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content active()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content enable($enable = 1)
  * @method static bool|null forceDelete()
@@ -81,43 +81,43 @@ use Stevebauman\Purify\Facades\Purify;
  * @method static \Illuminate\Database\Query\Builder|\App\Content withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Content withoutTrashed()
  * @mixin \Eloquent
- * @property-read mixed $display_name
- * @property string $duration        مدت زمان فیلم
- * @property array|null|string $thumbnail       عکس هر محتوا
- * @property int $isFree          عکس هر محتوا
- * @property-read mixed $contentset
- * @property-read mixed $session
+ * @property-read mixed                                                       $display_name
+ * @property string                                                           $duration        مدت زمان فیلم
+ * @property array|null|string                                                $thumbnail       عکس هر محتوا
+ * @property int                                                              $isFree          عکس هر محتوا
+ * @property-read mixed                                                       $contentset
+ * @property-read mixed                                                       $session
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereDuration($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereFile($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereIsFree($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereThumbnail($value)
- * @property-read mixed $author
- * @property-read mixed $meta_description
- * @property-read mixed $meta_title
- * @property-read mixed $title
- * @property int|null $contentset_id
- * @property string|null $slug            slug
- * @property-read \App\Collection\UserCollection|\App\User[] $favoriteBy
- * @property-read \App\Contentset|null $set
+ * @property-read mixed                                                       $author
+ * @property-read mixed                                                       $meta_description
+ * @property-read mixed                                                       $meta_title
+ * @property-read mixed                                                       $title
+ * @property int|null                                                         $contentset_id
+ * @property string|null                                                      $slug            slug
+ * @property-read \App\Collection\UserCollection|\App\User[]                  $favoriteBy
+ * @property-read \App\Contentset|null                                        $set
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereContentsetId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereSlug($value)
- * @property mixed $page_view
+ * @property mixed                                                            $page_view
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content wherePageView($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content query()
- * @property-read mixed $author_name
- * @property-read mixed $url
+ * @property-read mixed                                                       $author_name
+ * @property-read mixed                                                       $url
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed $api_url
- * @property mixed next_content
- * @property mixed previous_content
- * @property-read mixed $next_api_url
- * @property-read mixed $next_url
- * @property-read mixed $previous_api_url
- * @property-read mixed $previous_url
- * @property-read mixed $cache_cooldown_seconds
+ * @property-read mixed                                                       $api_url
+ * @property mixed                                                            next_content
+ * @property mixed                                                            previous_content
+ * @property-read mixed                                                       $next_api_url
+ * @property-read mixed                                                       $next_url
+ * @property-read mixed                                                       $previous_api_url
+ * @property-read mixed                                                       $previous_url
+ * @property-read mixed                                                       $cache_cooldown_seconds
  */
 class Content extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
@@ -126,35 +126,35 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     | Traits
     |--------------------------------------------------------------------------
     */
-
+    
     use APIRequestCommon;
     use favorableTraits;
     use ModelTrackerTrait;
-
+    
     /*
     |--------------------------------------------------------------------------
     | Properties
     |--------------------------------------------------------------------------
     */
-
+    
     public const CONTENT_TYPE_PAMPHLET = 1;
-
+    
     public const CONTENT_TYPE_EXAM = 2;
-
+    
     public const CONTENT_TYPE_BOOK = 7;
-
+    
     public const CONTENT_TYPE_VIDEO = 8;
-
+    
     public const CONTENT_TYPE_ARTICLE = 9;
-
+    
     public const CONTENT_TEMPLATE_VIDEO = 1;
-
+    
     public const CONTENT_TEMPLATE_PAMPHLET = 2;
-
+    
     public const CONTENT_TEMPLATE_EXAM = 2;
-
+    
     protected static $purifyNullConfig = ['HTML.Allowed' => ''];
-
+    
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = [
         'created_at',
@@ -162,9 +162,9 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'deleted_at',
         'validSince',
     ];
-
+    
     protected $table = "educationalcontents";
-
+    
     protected $fillable = [
         'name',
         'description',
@@ -183,7 +183,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'isFree',
         'enable',
     ];
-
+    
     /**
      * The accessors to append to the model's array form.
      *
@@ -198,7 +198,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'previousApiUrl',
         'author',
     ];
-
+    
     protected $hidden = [
         'user',
         'deleted_at',
@@ -214,9 +214,9 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'contentset_id',
         'template',
         'contenttype',
-
+    
     ];
-
+    
     /**
      * @return array
      */
@@ -228,24 +228,24 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             "720p" => "کیفیت عالی",
         ];
     }
-
-
+    
+    
     /*
     |--------------------------------------------------------------------------
     | Private methods
     |--------------------------------------------------------------------------
     */
-
+    
     /*
     |--------------------------------------------------------------------------
     | Cache
     |--------------------------------------------------------------------------
     */
-
+    
     /**
      * Create a new Eloquent Collection instance.
      *
-     * @param array $models
+     * @param  array  $models
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
@@ -253,18 +253,18 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return new ContentCollection($models);
     }
-
+    
     /*
     |--------------------------------------------------------------------------
     | Scopes
     |--------------------------------------------------------------------------
     */
-
+    
     /**
      * Scope a query to only include enable(or disable) Contents.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int $enable
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int                                    $enable
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -272,111 +272,123 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return $query->where('enable', $enable);
     }
-
+    
     /**
      * Scope a query to only include Valid Contents.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeValid($query)
     {
-        return $query->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'))->orWhereNull('validSince');
+        return $query->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+            ->timezone('Asia/Tehran'))
+            ->orWhereNull('validSince');
     }
-
+    
     /**
      * Scope a query to only include active Contents.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeActive($query)
     {
-        return $query->enable()->valid();
+        return $query->enable()
+            ->valid();
     }
-
+    
     /**
      * Scope a query to only include Contents that will come soon.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSoon($query)
     {
-        return $query->where('validSince', '>', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran'));
+        return $query->where('validSince', '>', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+            ->timezone('Asia/Tehran'));
     }
-
+    
     /*
     |--------------------------------------------------------------------------
     | Accessor
     |--------------------------------------------------------------------------
     */
-
-    public function getPreviousContent()
-    {
-        $key = "Content:previousContent".$this->cacheKey();
-
-        return Cache::tags('content')->remember($key, config("constants.CACHE_600"), function () {
-            $previousContentOrder = $this->order - 1;
-            $set = $this->set;
-            if (isset($set)) {
-                $previousContent = $set->contents()->where('educationalcontents.order', $previousContentOrder)->get()->first();
-            }
-
-            return isset($previousContent) ? $previousContent : null;
-        });
-    }
-
-    public function getNextContent()
-    {
-        $key = "Content:nextContent".$this->cacheKey();
-
-        return Cache::tags('content')->remember($key, config("constants.CACHE_600"), function () {
-            $nextContentOrder = $this->order + 1;
-            $set = $this->set;
-            if (isset($set)) {
-                $nextContent = $set->contents()->where('educationalcontents.order', $nextContentOrder)->get()->first();
-            }
-
-            return ($nextContent) ?? null;
-        });
-    }
-
+    
     public function getUrlAttribute($value): string
     {
         return action("Web\ContentController@show", $this);
     }
-
+    
     public function getPreviousUrlAttribute($value)
     {
         return ($this->getPreviousContent() ?: new Content())->url;
     }
-
+    
+    public function getPreviousContent()
+    {
+        $key = "Content:previousContent".$this->cacheKey();
+        
+        return Cache::tags('content')
+            ->remember($key, config("constants.CACHE_600"), function () {
+                $previousContentOrder = $this->order - 1;
+                $set                  = $this->set;
+                if (isset($set)) {
+                    $previousContent = $set->contents()
+                        ->where('educationalcontents.order', $previousContentOrder)
+                        ->get()
+                        ->first();
+                }
+                
+                return isset($previousContent) ? $previousContent : null;
+            });
+    }
+    
     public function getNextUrlAttribute($value)
     {
         return ($this->getNextContent() ?: new Content())->url;
     }
-
+    
+    public function getNextContent()
+    {
+        $key = "Content:nextContent".$this->cacheKey();
+        
+        return Cache::tags('content')
+            ->remember($key, config("constants.CACHE_600"), function () {
+                $nextContentOrder = $this->order + 1;
+                $set              = $this->set;
+                if (isset($set)) {
+                    $nextContent = $set->contents()
+                        ->where('educationalcontents.order', $nextContentOrder)
+                        ->get()
+                        ->first();
+                }
+                
+                return ($nextContent) ?? null;
+            });
+    }
+    
     public function getApiUrlAttribute($value): array
     {
         return [
             'v1' => action("Api\ContentController@show", $this),
         ];
     }
-
+    
     public function getPreviousApiUrlAttribute($value)
     {
         return ($this->getPreviousContent() ?: new Content())->api_url;
     }
-
+    
     public function getNextApiUrlAttribute($value)
     {
         return ($this->getNextContent() ?: new Content())->api_url;
     }
-
+    
     /**
      * Get the content's title .
      *
@@ -388,7 +400,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return Purify::clean($value, self::$purifyNullConfig);
     }
-
+    
     /**
      * Get the content's description .
      *
@@ -400,7 +412,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return Purify::clean($value);
     }
-
+    
     /**
      * Get the content's name .
      *
@@ -412,7 +424,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return Purify::clean($value, self::$purifyNullConfig);
     }
-
+    
     /**
      * Get the content's meta title .
      *
@@ -424,11 +436,13 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if (isset($value[0])) {
             return Purify::clean($value, self::$purifyNullConfig);
-        } else {
-            return Purify::clean(mb_substr($this->display_name, 0, config("constants.META_TITLE_LIMIT"), "utf-8"), self::$purifyNullConfig);
+        }
+        else {
+            return Purify::clean(mb_substr($this->display_name, 0, config("constants.META_TITLE_LIMIT"), "utf-8"),
+                self::$purifyNullConfig);
         }
     }
-
+    
     /**
      * Get the content's meta description .
      *
@@ -440,11 +454,13 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if (isset($value[0])) {
             return Purify::clean($value, self::$purifyNullConfig);
-        } else {
-            return Purify::clean(mb_substr($this->description, 0, config("constants.META_DESCRIPTION_LIMIT"), "utf-8"), self::$purifyNullConfig);
+        }
+        else {
+            return Purify::clean(mb_substr($this->description, 0, config("constants.META_DESCRIPTION_LIMIT"), "utf-8"),
+                self::$purifyNullConfig);
         }
     }
-
+    
     /**
      * Get the content's files .
      *
@@ -455,28 +471,30 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getFileAttribute($value): ?Collection
     {
         $key = "Content:File".$this->cacheKey();
-
-        return Cache::tags('content')->remember($key, Config::get("constants.CACHE_60"), function () use ($value) {
-            $fileCollection = collect(json_decode($value));
-            $fileCollection->transform(function ($item, $key) {
+        
+        return Cache::tags('content')
+            ->remember($key, Config::get("constants.CACHE_60"), function () use ($value) {
+                $fileCollection = collect(json_decode($value));
+                $fileCollection->transform(function ($item, $key) {
 //                dd($item);
-                $l = new LinkGenerator($item);
-                $item->link = $this->isFree ? $l->getLinks() : $l->getLinks([
-                    "content_id" => $this->id,
-                ]);
-                unset($item->url);
-                unset($item->disk);
-                unset($item->fileName);
-                if ($item->type === 'pamphlet')
-                    unset($item->res);
-                return $item;
+                    $l          = new LinkGenerator($item);
+                    $item->link = $this->isFree ? $l->getLinks() : $l->getLinks([
+                        "content_id" => $this->id,
+                    ]);
+                    unset($item->url);
+                    unset($item->disk);
+                    unset($item->fileName);
+                    if ($item->type === 'pamphlet') {
+                        unset($item->res);
+                    }
+                    return $item;
+                });
+                
+                
+                return $fileCollection->count() > 0 ? $fileCollection->groupBy('type') : null;
             });
-
-
-            return $fileCollection->count() > 0 ? $fileCollection->groupBy('type') : null;
-        });
     }
-
+    
     /**
      * Get the content's thumbnail .
      *
@@ -488,17 +506,18 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function getThumbnailAttribute($value)
     {
-        $t = json_decode($value);
+        $t    = json_decode($value);
         $link = null;
         if (isset($t)) {
             $link = new LinkGenerator($t);
         }
-
-        if(is_null($link))
+        
+        if (is_null($link)) {
             return null;
+        }
         return $link->getLinks();
     }
-
+    
     /**
      * Get the content's author .
      *
@@ -507,28 +526,29 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getAuthorAttribute(): User
     {
         $content = $this;
-        $key = "content:author".$content->cacheKey();
-
-        return Cache::tags(["user"])->remember($key, Config::get("constants.CACHE_600"), function () use ($content) {
-
-            $visibleArray = [
-                'id',
-                'firstName',
-                'lastName',
-                'photo',
-                'full_name',
-            ];
-            $user = $this->user ?: User::getNullInstant($visibleArray);
-            return $user->setVisible($visibleArray);
-        });
+        $key     = "content:author".$content->cacheKey();
+        
+        return Cache::tags(["user"])
+            ->remember($key, Config::get("constants.CACHE_600"), function () use ($content) {
+                
+                $visibleArray = [
+                    'id',
+                    'firstName',
+                    'lastName',
+                    'photo',
+                    'full_name',
+                ];
+                $user         = $this->user ?: User::getNullInstant($visibleArray);
+                return $user->setVisible($visibleArray);
+            });
     }
-
+    
     public function getAuthorNameAttribute(): string
     {
         $author = $this->author;
         return isset($author) ? $author->full_name : '';
     }
-
+    
     /**
      * Get the content's tags .
      *
@@ -540,7 +560,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return json_decode($value);
     }
-
+    
     /**
      * Get the content's session .
      *
@@ -550,7 +570,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return $this->order;
     }
-
+    
     /**
      * Gets content's pamphlets
      *
@@ -559,13 +579,14 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getPamphlets(): Collection
     {
         $file = $this->file;
-        if(is_null($file))
+        if (is_null($file)) {
             return null;
+        }
         $pamphlet = $file->get('pamphlet');
-
+        
         return isset($pamphlet) ? $pamphlet : collect();
     }
-
+    
     /**
      * Gets content's videos
      *
@@ -574,13 +595,14 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getVideos(): Collection
     {
         $file = $this->file;
-        if(is_null($file))
+        if (is_null($file)) {
             return null;
+        }
         $video = $file->get('video');
-
+        
         return isset($video) ? $video : collect();
     }
-
+    
     /**
      * Gets content's set mates (contents which has same content set as this content
      *
@@ -589,26 +611,32 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getSetMates()
     {
         $content = $this;
-        $key = "content:setMates:".$this->cacheKey();
-
-        $setMates = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
-            $contentSet = $content->set;
-            $contentSetName = isset($contentSet) ? $contentSet->name : null;
-            if (isset($contentSet)) {
-                $sameContents = $contentSet->contents()->active()->get()->sortBy("order")->load('contenttype');
-            } else {
-                $sameContents = new ContentCollection([]);
-            }
-
-            return [
-                $sameContents,
-                $contentSetName,
-            ];
-        });
-
+        $key     = "content:setMates:".$this->cacheKey();
+        
+        $setMates = Cache::tags(["content"])
+            ->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
+                $contentSet     = $content->set;
+                $contentSetName = isset($contentSet) ? $contentSet->name : null;
+                if (isset($contentSet)) {
+                    $sameContents = $contentSet->contents()
+                        ->active()
+                        ->get()
+                        ->sortBy("order")
+                        ->load('contenttype');
+                }
+                else {
+                    $sameContents = new ContentCollection([]);
+                }
+                
+                return [
+                    $sameContents,
+                    $contentSetName,
+                ];
+            });
+        
         return $setMates;
     }
-
+    
     /**
      * Gets content's display name
      *
@@ -619,23 +647,23 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         try {
             $key = "content:getDisplayName".$this->cacheKey();
-            $c = $this;
-
+            $c   = $this;
+            
             return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($c) {
-                $displayName = "";
+                $displayName   = "";
                 $sessionNumber = $c->order;
                 if (isset($c->contenttype)) {
                     $displayName .= $c->contenttype->displayName." ";
                 }
                 $displayName .= (isset($sessionNumber) && $sessionNumber > -1 ? "جلسه ".$sessionNumber." - " : "")." ".(isset($c->name) ? $c->name : $c->user->name);
-
+                
                 return $displayName;
             });
         } catch (Exception $e) {
             throw $e;
         }
     }
-
+    
     /**
      * Gets content's advertisement items
      *
@@ -644,21 +672,26 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getAddItems(): Collection
     {
         $content = $this;
-        $key = "content:getAddItems".$content->cacheKey();
-
-        $adItems = Cache::tags(["content"])->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
-            $adItems = collect();
-            $set = $content->set ?: new Contentset();
-            if ($set->id != 199) {
-                $adItems = Contentset::findOrFail(199)->contents()->where("enable", 1)->orderBy("order")->get();
-            }
-
-            return $adItems;
-        });
-
+        $key     = "content:getAddItems".$content->cacheKey();
+        
+        $adItems = Cache::tags(["content"])
+            ->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
+                $adItems = collect();
+                $set     = $content->set ?: new Contentset();
+                if ($set->id != 199) {
+                    $adItems = Contentset::findOrFail(199)
+                        ->contents()
+                        ->where("enable", 1)
+                        ->orderBy("order")
+                        ->get();
+                }
+                
+                return $adItems;
+            });
+        
         return $adItems;
     }
-
+    
     /**
      * Gets content's meta tags array
      *
@@ -666,46 +699,46 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function getMetaTags(): array
     {
-        $file = $this->file ?: collect();
-        $videoDirectUrl  = $file->where('res', '480p') ?: collect();
+        $file           = $this->file ?: collect();
+        $videoDirectUrl = $file->where('res', '480p') ?: collect();
         $videoDirectUrl = $videoDirectUrl->first();
-        $videoDirectUrl = isset($videoDirectUrl) ?  $videoDirectUrl->link : null;
+        $videoDirectUrl = isset($videoDirectUrl) ? $videoDirectUrl->link : null;
         return [
-            'title' => $this->metaTitle,
-            'description' => $this->metaDescription,
-            'url' => action('ContentController@show', $this),
-            'canonical' => action('ContentController@show', $this),
-            'site' => 'آلاء',
-            'imageUrl' => $this->thumbnail,
-            'imageWidth' => '1280',
-            'imageHeight' => '720',
-            'seoMod' => SeoMetaTagsGenerator::SEO_MOD_VIDEO_TAGS,
-            'playerUrl' => action('ContentController@embed', $this),
-            'playerWidth' => '854',
-            'playerHeight' => '480',
-            'videoDirectUrl' => $videoDirectUrl,
-            'videoActorName' => $this->authorName,
-            'videoActorRole' => 'دبیر',
-            'videoDirector' => 'آلاء',
-            'videoWriter' => 'آلاء',
-            'videoDuration' => $this->duration,
-            'videoReleaseDate' => $this->validSince,
-            'tags' => $this->tags,
-            'videoWidth' => '854',
-            'videoHeight' => '480',
-            'videoType' => 'video/mp4',
-            'articleAuthor' => $this->authorName,
-            'articleModifiedTime' => $this->updated_at,
+            'title'                => $this->metaTitle,
+            'description'          => $this->metaDescription,
+            'url'                  => action('ContentController@show', $this),
+            'canonical'            => action('ContentController@show', $this),
+            'site'                 => 'آلاء',
+            'imageUrl'             => $this->thumbnail,
+            'imageWidth'           => '1280',
+            'imageHeight'          => '720',
+            'seoMod'               => SeoMetaTagsGenerator::SEO_MOD_VIDEO_TAGS,
+            'playerUrl'            => action('ContentController@embed', $this),
+            'playerWidth'          => '854',
+            'playerHeight'         => '480',
+            'videoDirectUrl'       => $videoDirectUrl,
+            'videoActorName'       => $this->authorName,
+            'videoActorRole'       => 'دبیر',
+            'videoDirector'        => 'آلاء',
+            'videoWriter'          => 'آلاء',
+            'videoDuration'        => $this->duration,
+            'videoReleaseDate'     => $this->validSince,
+            'tags'                 => $this->tags,
+            'videoWidth'           => '854',
+            'videoHeight'          => '480',
+            'videoType'            => 'video/mp4',
+            'articleAuthor'        => $this->authorName,
+            'articleModifiedTime'  => $this->updated_at,
             'articlePublishedTime' => $this->validSince,
         ];
     }
-
+    
     /*
     |--------------------------------------------------------------------------
     | Mutator
     |--------------------------------------------------------------------------
     */
-
+    
     /**
      *  Converts content's validSince to Jalali
      *
@@ -714,11 +747,11 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function validSince_Jalali(): string
     {
         $explodedDateTime = explode(" ", $this->validSince);
-        $explodedTime = $explodedDateTime[1];
-
+        $explodedTime     = $explodedDateTime[1];
+        
         return $this->convertDate($this->validSince, "toJalali")." ".$explodedTime;
     }
-
+    
     /**
      * Set the content's thumbnail.
      *
@@ -730,11 +763,11 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $this->attributes['thumbnail'] = json_encode($input, JSON_UNESCAPED_UNICODE);
     }
-
+    
     /**
      * Set the content's file.
      *
-     * @param Collection $input
+     * @param  Collection  $input
      *
      * @return void
      */
@@ -742,116 +775,121 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $this->attributes['file'] = $input->toJson(JSON_UNESCAPED_UNICODE);
     }
-
-
+    
+    
     /*
     |--------------------------------------------------------------------------
     | Relations
     |--------------------------------------------------------------------------
     */
-
+    
     /**
      * Set the content's tag.
      *
-     * @param array $value
+     * @param  array  $value
      *
      * @return void
      */
     public function setTagsAttribute(array $value)
     {
         $tags = null;
-        if (! empty($value)) {
+        if (!empty($value)) {
             $tags = json_encode([
                 "bucket" => "content",
-                "tags" => $value,
+                "tags"   => $value,
             ], JSON_UNESCAPED_UNICODE);
         }
-
+        
         $this->attributes['tags'] = $tags;
     }
-
+    
     /**
      * every products that have this content.
      *
      * @return \App\Collection\ProductCollection
      */
-    public function products() :ProductCollection
+    public function products(): ProductCollection
     {
-        return Cache::tags(['content','product'])->remember('products-of-content:'.$this->id,config('constants.CACHE_60'),function (){
-            return $this->set->getProducts()->makeHidden([
-                'shortDescription',
-                'longDescription',
-                'tags',
-                'introVideo',
-                'order',
-                'page_view',
-                'gift',
-                'type',
-                'attributes',
-                'samplePhotos',
-                'sets',
-                'product_set',
-                'children',
-                'updated_at',
-                'amount',
-
-            ]);
-        });
-
+        return Cache::tags(['content', 'product'])
+            ->remember('products-of-content:'.$this->id, config('constants.CACHE_60'), function () {
+                return $this->set->getProducts()
+                    ->makeHidden([
+                        'shortDescription',
+                        'longDescription',
+                        'tags',
+                        'introVideo',
+                        'order',
+                        'page_view',
+                        'gift',
+                        'type',
+                        'attributes',
+                        'samplePhotos',
+                        'sets',
+                        'product_set',
+                        'children',
+                        'updated_at',
+                        'amount',
+                    
+                    ]);
+            });
+        
     }
-
+    
     public function grades()
     {
         //ToDo : deprecated
         return $this->belongsToMany('App\Grade');
     }
-
+    
     public function majors()
     {
         //ToDo : deprecated
         return $this->belongsToMany('App\Major');
     }
-
+    
     public function thumbnails()
     {
-        return $this->files()->where('label', '=', 'thumbnail');
+        return $this->files()
+            ->where('label', '=', 'thumbnail');
     }
-
+    
     public function files()
     {
         return $this->belongsToMany('App\File', 'educationalcontent_file', 'content_id', 'file_id')
-                    ->withPivot("caption", "label");
+            ->withPivot("caption", "label");
     }
-
+    
     public function contentsets()
     {
         //ToDo : deprecated
         return $this->belongsToMany("\App\Contentset", "contentset_educationalcontent", "edc_id", "contentset_id")
-                    ->withPivot("order", "isDefault");
+            ->withPivot("order", "isDefault");
     }
-
+    
     public function template()
     {
-        return $this->belongsTo("\App\Template")->withDefault();
+        return $this->belongsTo("\App\Template")
+            ->withDefault();
     }
-
+    
     public function contenttype()
     {
-        return $this->belongsTo('App\Contenttype')->withDefault();
+        return $this->belongsTo('App\Contenttype')
+            ->withDefault();
     }
-
+    
     public function user()
     {
         return $this->belongsTo("\App\User", "author_id", "id")
-                    ->withDefault();
+            ->withDefault();
     }
-
+    
     /*
     |--------------------------------------------------------------------------
     |  Checkers (boolean)
     |--------------------------------------------------------------------------
     */
-
+    
     /**
      * Get the content's contentset .
      *
@@ -860,9 +898,9 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function set()
     {
         return $this->belongsTo("\App\Contentset", "contentset_id", "id")
-                    ->withDefault();
+            ->withDefault();
     }
-
+    
     /**
      * Fixes contents files (used in
      * /database/migrations/2018_08_21_143144_alter_table_educationalcontents_add_columns.php)
@@ -872,115 +910,119 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function fixFiles(): void
     {
         $content = $this;
-        $files = collect();
+        $files   = collect();
         switch ($content->template->name) {
             case "video1":
-                $file = $content->files->where("pivot.label", "hd")->first();
+                $file = $content->files->where("pivot.label", "hd")
+                    ->first();
                 if (isset($file)) {
-                    $url = $file->name;
-                    $size = null;
+                    $url     = $file->name;
+                    $size    = null;
                     $caption = $file->pivot->caption;
-                    $res = "720p";
-                    $type = "video";
-
+                    $res     = "720p";
+                    $type    = "video";
+                    
                     $files->push([
-                        "uuid" => $file->uuid,
-                        "disk" => "alaaCdnSFTP",
-                        "url" => $url,
+                        "uuid"     => $file->uuid,
+                        "disk"     => "alaaCdnSFTP",
+                        "url"      => $url,
                         "fileName" => parse_url($url)['path'],
-                        "size" => $size,
-                        "caption" => $caption,
-                        "res" => $res,
-                        "type" => $type,
-                        "ext" => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
+                        "size"     => $size,
+                        "caption"  => $caption,
+                        "res"      => $res,
+                        "type"     => $type,
+                        "ext"      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
                     ]);
                 }
-
-                $file = $content->files->where("pivot.label", "hq")->first();
+                
+                $file = $content->files->where("pivot.label", "hq")
+                    ->first();
                 if (isset($file)) {
-                    $url = $file->name;
-                    $size = null;
+                    $url     = $file->name;
+                    $size    = null;
                     $caption = $file->pivot->caption;
-                    $res = "480p";
-                    $type = "video";
-
+                    $res     = "480p";
+                    $type    = "video";
+                    
                     $files->push([
-                        "uuid" => $file->uuid,
-                        "disk" => "alaaCdnSFTP",
-                        "url" => $url,
+                        "uuid"     => $file->uuid,
+                        "disk"     => "alaaCdnSFTP",
+                        "url"      => $url,
                         "fileName" => parse_url($url)['path'],
-                        "size" => $size,
-                        "caption" => $caption,
-                        "res" => $res,
-                        "type" => $type,
-                        "ext" => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
+                        "size"     => $size,
+                        "caption"  => $caption,
+                        "res"      => $res,
+                        "type"     => $type,
+                        "ext"      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
                     ]);
                 }
-
-                $file = $content->files->where("pivot.label", "240p")->first();
+                
+                $file = $content->files->where("pivot.label", "240p")
+                    ->first();
                 if (isset($file)) {
-                    $url = $file->name;
-                    $size = null;
+                    $url     = $file->name;
+                    $size    = null;
                     $caption = $file->pivot->caption;
-                    $res = "240p";
-                    $type = "video";
-
+                    $res     = "240p";
+                    $type    = "video";
+                    
                     $files->push([
-                        "uuid" => $file->uuid,
-                        "disk" => "alaaCdnSFTP",
-                        "url" => $url,
+                        "uuid"     => $file->uuid,
+                        "disk"     => "alaaCdnSFTP",
+                        "url"      => $url,
                         "fileName" => parse_url($url)['path'],
-                        "size" => $size,
-                        "caption" => $caption,
-                        "res" => $res,
-                        "type" => $type,
-                        "ext" => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
+                        "size"     => $size,
+                        "caption"  => $caption,
+                        "res"      => $res,
+                        "type"     => $type,
+                        "ext"      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
                     ]);
                 }
-
-                $file = optional($content->files->where("pivot.label", "thumbnail")->first());
-
+                
+                $file = optional($content->files->where("pivot.label", "thumbnail")
+                    ->first());
+                
                 $url = $file->name;
                 if (isset($url)) {
                     $size = null;
                     $type = "thumbnail";
-
+                    
                     $this->thumbnail = [
-                        "uuid" => $file->uuid,
-                        "disk" => "alaaCdnSFTP",
-                        "url" => $url,
+                        "uuid"     => $file->uuid,
+                        "disk"     => "alaaCdnSFTP",
+                        "url"      => $url,
                         "fileName" => parse_url($url)['path'],
-                        "size" => $size,
-                        "caption" => null,
-                        "res" => null,
-                        "type" => $type,
-                        "ext" => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
+                        "size"     => $size,
+                        "caption"  => null,
+                        "res"      => null,
+                        "type"     => $type,
+                        "ext"      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
                     ];
                 }
                 break;
-
+            
             case  "pamphlet1":
                 $pFiles = $content->files;
                 foreach ($pFiles as $file) {
-                    $type = "pamphlet";
-                    $res = null;
+                    $type    = "pamphlet";
+                    $res     = null;
                     $caption = "فایل".' '.$file->pivot->caption;
-
+                    
                     if ($file->disks->isNotEmpty()) {
-                        $disk = $file->disks->first();
+                        $disk     = $file->disks->first();
                         $diskName = $disk->name;
                     }
-
+                    
                     $files->push([
-                        "uuid" => $file->uuid,
-                        "disk" => (isset($diskName) ? $diskName : null),
-                        "url" => null,
+                        "uuid"     => $file->uuid,
+                        "disk"     => (isset($diskName) ? $diskName : null),
+                        "url"      => null,
                         "fileName" => $file->name,
-                        "size" => null,
-                        "caption" => $caption,
-                        "res" => $res,
-                        "type" => $type,
-                        "ext" => pathinfo($file->name, PATHINFO_EXTENSION),
+                        "size"     => null,
+                        "caption"  => $caption,
+                        "res"      => $res,
+                        "type"     => $type,
+                        "ext"      => pathinfo($file->name, PATHINFO_EXTENSION),
                     ]);
                 }
                 break;
@@ -989,14 +1031,14 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             default:
                 break;
         }
-
+        
         //        dd($files);
         $this->file = $files;
         $this->updateWithoutTimestamp();
-
+        
         Artisan::call('cache:clear');
     }
-
+    
     /**
      * Retrieves content's tags
      *
@@ -1006,43 +1048,43 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return (new ContentTagManagerViaApi())->getTags($this->id);
     }
-
+    
     /*
     |--------------------------------------------------------------------------
     | Static methods
     |--------------------------------------------------------------------------
     */
-
+    
     public function getTaggableTags()
     {
         return $this->tags->tags;
     }
-
+    
     /*
     |--------------------------------------------------------------------------
     | Other
     |--------------------------------------------------------------------------
     */
-
+    
     public function getTaggableId(): int
     {
         return $this->id;
     }
-
+    
     public function getTaggableScore()
     {
         return isset($this->created_at) ? $this->created_at->timestamp : null;
     }
-
+    
     public function isTaggableActive(): bool
     {
-        if ($this->isActive() && isset($this->tags) && ! empty($this->tags->tags)) {
+        if ($this->isActive() && isset($this->tags) && !empty($this->tags->tags)) {
             return true;
         }
-
+        
         return false;
     }
-
+    
     /**
      * Checks whether the content is active or not .
      *
@@ -1052,7 +1094,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return ($this->isEnable() && $this->isValid() ? true : false);
     }
-
+    
     /**
      * Checks whether the content is enable or not .
      *
@@ -1063,10 +1105,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         if ($this->enable) {
             return true;
         }
-
+        
         return false;
     }
-
+    
     /**
      * Checks whether the content is valid or not .
      *
@@ -1074,10 +1116,11 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function isValid(): bool
     {
-        if ($this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran') || is_null($this->validSince)) {
+        if ($this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+                ->timezone('Asia/Tehran') || is_null($this->validSince)) {
             return true;
         }
-
+        
         return false;
     }
 }

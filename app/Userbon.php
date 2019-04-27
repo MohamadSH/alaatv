@@ -8,31 +8,31 @@ use Illuminate\Support\Facades\Config;
 /**
  * App\Userbon
  *
- * @property int $id
- * @property int $bon_id           آی دی مشخص کننده بن
+ * @property int                                                               $id
+ * @property int                                                               $bon_id           آی دی مشخص کننده بن
  *           تخصیص داده شده
- * @property int $user_id          آی دی مشخص کننده
+ * @property int                                                               $user_id          آی دی مشخص کننده
  *           کاربری که بن به او تخصیص داده شده
- * @property int $totalNumber      تعداد بن اختصاص داده
+ * @property int                                                               $totalNumber      تعداد بن اختصاص داده
  *           شده به کاربر
- * @property int $usedNumber       تعداد بنی که کاربر
+ * @property int                                                               $usedNumber       تعداد بنی که کاربر
  *           استفاده کرده
- * @property int|null $userbonstatus_id آی دی مشخص کننده وضعیت
+ * @property int|null                                                          $userbonstatus_id آی دی مشخص کننده وضعیت
  *           این بن کاربر
- * @property string|null $validSince       زمان شروع استفاده از
+ * @property string|null                                                       $validSince       زمان شروع استفاده از
  *           کپن ، نال به معنای شروع از زمان ایجاد است
- * @property string|null $validUntil       زمان پایان استفاده از
+ * @property string|null                                                       $validUntil       زمان پایان استفاده از
  *           کپن ، نال به معنای بدون محدودیت می باشد
- * @property int|null $orderproduct_id  آی دی مشخص کننده آیتمی
+ * @property int|null                                                          $orderproduct_id  آی دی مشخص کننده آیتمی
  *           که به واسطه آن این بن به کاربر اختصاص داده شده
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property string|null $deleted_at
- * @property-read \App\Bon $bon
- * @property-read \App\Orderproduct|null $orderproduct
+ * @property \Carbon\Carbon|null                                               $created_at
+ * @property \Carbon\Carbon|null                                               $updated_at
+ * @property string|null                                                       $deleted_at
+ * @property-read \App\Bon                                                     $bon
+ * @property-read \App\Orderproduct|null                                       $orderproduct
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[] $orderproducts
- * @property-read \App\User $user
- * @property-read \App\Userbonstatus|null $userbonstatus
+ * @property-read \App\User                                                    $user
+ * @property-read \App\Userbonstatus|null                                      $userbonstatus
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Userbon onlyTrashed()
  * @method static bool|null restore()
@@ -56,7 +56,7 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed $cache_cooldown_seconds
+ * @property-read mixed                                                        $cache_cooldown_seconds
  */
 class Userbon extends BaseModel
 {
@@ -73,32 +73,32 @@ class Userbon extends BaseModel
         'orderproduct_id',
         'userbonstatus_id',
     ];
-
+    
     public function userbonstatus()
     {
         return $this->belongsTo('App\Userbonstatus');
     }
-
+    
     public function bon()
     {
         return $this->belongsTo('\App\Bon');
     }
-
+    
     public function user()
     {
         return $this->belongsTo('\App\User');
     }
-
+    
     public function orderproducts()
     {
         return $this->belongsToMany('\App\Orderproduct');
     }
-
+    
     public function orderproduct()
     {
         return $this->belongsTo('\App\Orderproduct');
     }
-
+    
     /**
      * Validates a bon
      *
@@ -108,26 +108,29 @@ class Userbon extends BaseModel
     {
         if ($this->totalNumber <= $this->usedNumber) {
             return 0;
-        } else {
+        }
+        else {
             if (isset($this->validSince) && Carbon::now() < $this->validSince) {
                 return 0;
-            } else {
+            }
+            else {
                 if (isset($this->validUntil) && Carbon::now() > $this->validUntil) {
                     return 0;
-                } else {
+                }
+                else {
                     return $this->totalNumber - $this->usedNumber;
                 }
             }
         }
     }
-
+    
     public function void()
     {
-        $remainBonNumber = $this->totalNumber - $this->usedNumber;
-        $this->usedNumber = $this->totalNumber;
+        $remainBonNumber        = $this->totalNumber - $this->usedNumber;
+        $this->usedNumber       = $this->totalNumber;
         $this->userbonstatus_id = Config::get("constants.USERBON_STATUS_USED");
         $this->update();
-
+        
         return $remainBonNumber;
     }
 }

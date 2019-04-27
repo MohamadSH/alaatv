@@ -11,15 +11,15 @@ class HomeController extends Controller
     {
         $this->middleware('auth:api');
     }
-
+    
     public function debug(Request $request)
     {
         return response()->json([
-            'user' => $request->user(),
+            'user'  => $request->user(),
             'debug' => 2,
         ]);
     }
-
+    
     public function authTest(Request $request)
     {
         return response()->json([

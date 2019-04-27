@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\ProductSet
  *
- * @property int $contentset_id
- * @property int $product_id
- * @property int $order ترتیب
+ * @property int                             $contentset_id
+ * @property int                             $product_id
+ * @property int                             $order ترتیب
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -33,7 +33,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ProductSet extends Pivot
 {
     use SoftDeletes;
-
+    
     /**
      * The attributes that should be mutated to dates.
      *
@@ -44,7 +44,7 @@ class ProductSet extends Pivot
         'updated_at',
         'deleted_at',
     ];
-
+    
     protected $table = "contentset_product";
     //$p->sets()->updateExistingPivot($s,['order'=>4])
 }

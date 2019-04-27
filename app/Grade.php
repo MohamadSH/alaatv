@@ -5,13 +5,13 @@ namespace App;
 /**
  * App\Grade
  *
- * @property int $id
- * @property string|null $name        نام
- * @property string|null $displayName نام قابل نمایش
- * @property string|null $description توضیح
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property int                                                          $id
+ * @property string|null                                                  $name        نام
+ * @property string|null                                                  $displayName نام قابل نمایش
+ * @property string|null                                                  $description توضیح
+ * @property \Carbon\Carbon|null                                          $created_at
+ * @property \Carbon\Carbon|null                                          $updated_at
+ * @property \Carbon\Carbon|null                                          $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Content[] $contents
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Grade onlyTrashed()
@@ -31,7 +31,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Grade query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed $cache_cooldown_seconds
+ * @property-read mixed                                                   $cache_cooldown_seconds
  */
 class Grade extends BaseModel
 {
@@ -40,7 +40,7 @@ class Grade extends BaseModel
         'displayName',
         'description',
     ];
-
+    
     public function contents()
     {
         return $this->belongsToMany('App\Content');

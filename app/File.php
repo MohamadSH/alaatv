@@ -8,13 +8,13 @@ use Webpatser\Uuid\Uuid;
 /**
  * App\File
  *
- * @property int $id
- * @property string|null $uuid شناسه منحصر به فرد سراسری
- * @property string $name نام فایل
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Disk[] $disks
+ * @property int                                                          $id
+ * @property string|null                                                  $uuid شناسه منحصر به فرد سراسری
+ * @property string                                                       $name نام فایل
+ * @property \Carbon\Carbon|null                                          $created_at
+ * @property \Carbon\Carbon|null                                          $updated_at
+ * @property \Carbon\Carbon|null                                          $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Disk[]    $disks
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Content[] $contents
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\File onlyTrashed()
@@ -33,7 +33,7 @@ use Webpatser\Uuid\Uuid;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\File query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed $cache_cooldown_seconds
+ * @property-read mixed                                                   $cache_cooldown_seconds
  */
 class File extends BaseModel
 {
@@ -41,7 +41,7 @@ class File extends BaseModel
         'name',
         'uuid',
     ];
-
+    
     /**
      *  Setup model event hooks
      */
@@ -49,50 +49,55 @@ class File extends BaseModel
     {
         parent::boot();
         self::creating(function ($model) {
-            $model->uuid = (string)Uuid::generate(4);
+            $model->uuid = (string) Uuid::generate(4);
         });
     }
-
+    
     public function contents()
     {
-        return $this->belongsToMany('App\Content', 'educationalcontent_file', 'file_id', 'content_id')->withPivot("caption");
+        return $this->belongsToMany('App\Content', 'educationalcontent_file', 'file_id', 'content_id')
+            ->withPivot("caption");
     }
-
+    
     public function disks()
     {
-        return $this->belongsToMany("\App\Disk")->orderBy("priority")->withPivot("priority");
+        return $this->belongsToMany("\App\Disk")
+            ->orderBy("priority")
+            ->withPivot("priority");
     }
-
+    
     public function getUrl()
     {
         $fileRemotePath = "";
-        $disk = $this->disks->first();
+        $disk           = $this->disks->first();
         if (isset($disk)) {
-            $diskAdapter = Storage::disk($disk->name)->getAdapter();
-            $diskType = class_basename($diskAdapter);
-            $sftpRoot = config("constants.SFTP_ROOT");
-            $dProtocol = config("constants.DOWNLOAD_HOST_PROTOCOL");
-            $dName = config("constants.DOWNLOAD_HOST_NAME");
-
+            $diskAdapter = Storage::disk($disk->name)
+                ->getAdapter();
+            $diskType    = class_basename($diskAdapter);
+            $sftpRoot    = config("constants.SFTP_ROOT");
+            $dProtocol   = config("constants.DOWNLOAD_HOST_PROTOCOL");
+            $dName       = config("constants.DOWNLOAD_HOST_NAME");
+            
             switch ($diskType) {
                 case "SftpAdapter" :
                     //                $fileHost = $diskAdapter->getHost();
-                    $fileRoot = $diskAdapter->getRoot();
+                    $fileRoot       = $diskAdapter->getRoot();
                     $fileRemotePath = str_replace($sftpRoot, $dProtocol.$dName, $fileRoot);
                     $fileRemotePath .= $this->name;
                     break;
             }
-
+            
             return $fileRemotePath;
-        } else {
+        }
+        else {
             return action("Web\HomeController@error404");
         }
     }
-
+    
     public function getExtention()
     {
         $ext = pathinfo($this->name, PATHINFO_EXTENSION);
-
+        
         return $ext;
     }
 }

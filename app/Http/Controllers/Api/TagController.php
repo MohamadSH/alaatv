@@ -11,12 +11,12 @@ use App\Http\Requests\Request;
 class TagController extends Controller
 {
     protected $redis;
-
+    
     public function __construct()
     {
         $this->redis = RedisTagging::getInstance();
     }
-
+    
     /**
      * PUT /rt/id/:bucket/:id
      * Add or update an item. The URL contains the bucket (e.g. 'concerts') and the id for this item.
@@ -33,36 +33,36 @@ class TagController extends Controller
      *
      * true
      *
-     * @param \App\Http\Requests\Request|Request $request
-     * @param                                    $bucket
-     * @param                                    $id
+     * @param  \App\Http\Requests\Request|Request  $request
+     * @param                                      $bucket
+     * @param                                      $id
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function add(Request $request, $bucket, $id)
     {
-
-        $tags = json_decode($request->tags);
+        
+        $tags  = json_decode($request->tags);
         $score = $request->score;
-
+        
         if (is_null($score)) {
             $score = 0;
         }
-
+        
         if (is_null($tags)) {
             return response()->json([
                 'error' => "tag is not set!",
             ], 410);
         }
-
+        
         $response = null;
         $this->redis->set($bucket, $id, $tags, $score, function ($err, $result) use (& $response) {
             $this->callBack($err, $result, $response);
         });
-
+        
         return $response;
     }
-
+    
     private function callBack($err, $result, & $response)
     {
         if (isset($err)) {
@@ -70,26 +70,26 @@ class TagController extends Controller
                 'error' => "msg",
             ], 410);
         }
-        $header = [
+        $header   = [
             'Content-Type' => 'application/json; charset=UTF-8',
-            'charset' => 'utf-8',
+            'charset'      => 'utf-8',
         ];
         $response = response()->json([
             'data' => $result,
         ], 200, $header, JSON_UNESCAPED_UNICODE);
     }
-
+    
     /**
      * GET /rt/id/:bucket/:id
      * Get all tags for an ID
      *
-     * @param Request $request
-     * @param         $bucket
-     * @param         $id
+     * @param  Request  $request
+     * @param           $bucket
+     * @param           $id
      *
      * @return null
      */
-
+    
     public function get(Request $request, $bucket, $id)
     {
         $response = null;
@@ -99,18 +99,18 @@ class TagController extends Controller
                     'error' => "msg",
                 ], 410);
             }
-            $header = [
+            $header   = [
                 'Content-Type' => 'application/json; charset=UTF-8',
-                'charset' => 'utf-8',
+                'charset'      => 'utf-8',
             ];
             $response = response()->json([
                 'data' => $result,
             ], 200, $header, JSON_UNESCAPED_UNICODE);
         });
-
+        
         return $response;
     }
-
+    
     /**
      * DELETE /rt/id/:bucket/:id
      * Delete an item and all its tag associations.
@@ -121,9 +121,9 @@ class TagController extends Controller
      *
      * true
      *
-     * @param Request $request
-     * @param         $bucket
-     * @param         $id
+     * @param  Request  $request
+     * @param           $bucket
+     * @param           $id
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -133,10 +133,10 @@ class TagController extends Controller
         $this->redis->remove($bucket, $id, function ($err, $result) use (& $response) {
             $this->callBack($err, $result, $response);
         });
-
+        
         return $response;
     }
-
+    
     /**
      * GET /rt/tags/:bucket?queryparams
      * The main method. Return the IDs for one or more tags. When more than one tag is supplied the query can be an
@@ -163,8 +163,8 @@ class TagController extends Controller
      * "limit":2,
      * "offset":4
      * }
-     * @param Request $request
-     * @param         $bucket
+     * @param  Request  $request
+     * @param           $bucket
      *
      * @return null
      */
@@ -173,35 +173,36 @@ class TagController extends Controller
         $tags = $request->tags;
         $tags = str_replace("\"", "", $tags);
         $tags = explode(",", substr($tags, 1, -1));
-
-        $type = ! is_null($request->type) ? $request->type : "inter";
-        $limit = ! is_null($request->limit) ? $request->limit : 100;
-        $offset = ! is_null($request->offset) ? $request->offset : 0;
-        $withscores = ! is_null($request->withscores) ? $request->withscores : 0;
-        $order = ! is_null($request->order) ? $request->order : "desc";
-
+        
+        $type       = !is_null($request->type) ? $request->type : "inter";
+        $limit      = !is_null($request->limit) ? $request->limit : 100;
+        $offset     = !is_null($request->offset) ? $request->offset : 0;
+        $withscores = !is_null($request->withscores) ? $request->withscores : 0;
+        $order      = !is_null($request->order) ? $request->order : "desc";
+        
         $response = null;
-        $this->redis->tags($bucket, $tags, $limit, $offset, $withscores, $order, $type, function ($err, $result) use (& $response) {
-            if (isset($err)) {
+        $this->redis->tags($bucket, $tags, $limit, $offset, $withscores, $order, $type,
+            function ($err, $result) use (& $response) {
+                if (isset($err)) {
+                    $response = response()->json([
+                        'error' => "msg",
+                    ], 410);
+                }
+                
+                $header = [
+                    'Content-Type' => 'application/json; charset=UTF-8',
+                    'charset'      => 'utf-8',
+                ];
+                
                 $response = response()->json([
-                    'error' => "msg",
-                ], 410);
-            }
-
-            $header = [
-                'Content-Type' => 'application/json; charset=UTF-8',
-                'charset' => 'utf-8',
-            ];
-
-            $response = response()->json([
-                'data' => $result,
-            ], 200, $header, JSON_UNESCAPED_UNICODE);
-        });
-
+                    'data' => $result,
+                ], 200, $header, JSON_UNESCAPED_UNICODE);
+            });
+        
         //dd($response);
         return $response;
     }
-
+    
     public function flush(Request $request)
     {
         abort(404);
