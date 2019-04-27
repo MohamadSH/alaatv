@@ -29,7 +29,14 @@ class Boolean
             $this->respond($response);
         }
     }
-    
+
+    public function orRespondWith($response)
+    {
+        if (! $this->result) {
+            $this->respond($response);
+        }
+    }
+
     /**
      * @param $response
      */

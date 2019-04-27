@@ -73,8 +73,7 @@ class TransactionRepo
     
     public static function getTransactionByAuthority($authority)
     {
-        return nullable(Transaction::authority($authority)
-            ->first());
+        return nullable(Transaction::where('authority', $authority)->first());
     }
     
     /**

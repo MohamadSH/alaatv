@@ -12,6 +12,7 @@ class ZarinpalServiceProvider extends ServiceProvider
         $this->app->singleton('zarinpal.client', function () {
             return $this->initialize();
         });
+
         $this->app['zarinpal.isSandBox'] = $this->isZarinpalSandboxOn();
     }
     

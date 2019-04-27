@@ -1,13 +1,8 @@
 <?php
 
-namespace App\Classes\Payment;
+namespace  App\PaymentModule\Controllers;
 
-use App\Order;
-use App\PaymentModule\OnlinePaymentVerificationResponseInterface;
-use App\Repositories\TransactionRepo;
 use App\Traits\HandleOrderPayment;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Request;
 
 class PaymentVerifierController
 {
@@ -21,11 +16,13 @@ class PaymentVerifierController
      */
     public function verify(string $paymentMethod, string $device)
     {
-        $authority = Request::get(OnlineGateWay::getAuthorityKey());
-        
+        PaymentDriver::select($paymentMethod);
+        $key = OnlineGateWay::getAuthorityKey();
+        $authority = Request::get($key);
+
         $transaction = TransactionRepo::getTransactionByAuthority($authority)
             ->orFailWith([Responses::class, 'transactionNotFoundError']);
-        
+
         /**
          * @var OnlinePaymentVerificationResponseInterface $verificationResult
          */
