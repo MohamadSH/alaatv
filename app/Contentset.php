@@ -165,15 +165,6 @@ class Contentset extends BaseModel implements Taggable
     |--------------------------------------------------------------------------
     */
 
-    public function cacheKey()
-    {
-        $key = $this->getKey();
-        $time = isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-
-        return sprintf("%s-%s", //$this->getTable(),
-            $key, $time);
-    }
-
     //Old way ( before migrate)
     public function contents()
     {
@@ -195,7 +186,8 @@ class Contentset extends BaseModel implements Taggable
                     ->as('productSet')
                     ->withPivot([
                         'order',
-                    ])->withTimestamps()->orderBy('order');
+                    ])->withTimestamps()
+                      ->orderBy('order');
     }
 
     public function getProducts($onlyActiveProduct = true) :ProductCollection

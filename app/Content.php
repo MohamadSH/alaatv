@@ -819,7 +819,8 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function files()
     {
-        return $this->belongsToMany('App\File', 'educationalcontent_file', 'content_id', 'file_id')->withPivot("caption", "label");
+        return $this->belongsToMany('App\File', 'educationalcontent_file', 'content_id', 'file_id')
+                    ->withPivot("caption", "label");
     }
 
     public function contentsets()
@@ -831,17 +832,18 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function template()
     {
-        return $this->belongsTo("\App\Template");
+        return $this->belongsTo("\App\Template")->withDefault();
     }
 
     public function contenttype()
     {
-        return $this->belongsTo('App\Contenttype');
+        return $this->belongsTo('App\Contenttype')->withDefault();
     }
 
     public function user()
     {
-        return $this->belongsTo("\App\User", "author_id", "id");
+        return $this->belongsTo("\App\User", "author_id", "id")
+                    ->withDefault();
     }
 
     /*
@@ -857,7 +859,8 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function set()
     {
-        return $this->belongsTo("\App\Contentset", "contentset_id", "id");
+        return $this->belongsTo("\App\Contentset", "contentset_id", "id")
+                    ->withDefault();
     }
 
     /**

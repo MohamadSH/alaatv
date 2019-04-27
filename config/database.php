@@ -1,8 +1,19 @@
 <?php
 
-use Illuminate\Support\Str;
-
 return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | PDO Fetch Style
+    |--------------------------------------------------------------------------
+    |
+    | By default, database results will be returned as instances of the PHP
+    | stdClass object; however, you may desire to retrieve records in an
+    | array format for simplicity. Here you can tweak the fetch style.
+    |
+    */
+
+    'fetch' => PDO::FETCH_OBJ,
 
     /*
     |--------------------------------------------------------------------------
@@ -55,39 +66,10 @@ return [
             'prefix'      => '',
             'strict'      => true,
             'engine'      => null,
-        ],
-
-        'mysql_remote_takhtekhak' => [
-            'driver'    => 'mysql',
-            'host'      => "127.0.0.1",
-            'port'      => "3307",
-            'database'  => "orduetalaie",
-            'username'  => "orduetalaieUser",
-            'password'  => "T49q7z2NtepPL3rY",
-            'charset'   => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
             'prefix_indexes' => true,
-            'strict' => true,
-            'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
-        ],
-
-        'mysql_sanatisharif' => [
-            'driver'   => 'mysql',
-            'host'     => "127.0.0.1",
-            'port'     => "3306",
-            'database' => "sanatish_forat",
-            'username' => "foratuser",
-
-            'password'  => "GWxNU76nY6C5zUqS",
-            'charset'   => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix'    => '',
-            'strict'    => true,
-            'engine'    => null,
         ],
 
         'pgsql' => [
@@ -113,7 +95,6 @@ return [
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
-            'prefix_indexes' => true,
         ],
 
     ],

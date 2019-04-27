@@ -161,13 +161,8 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        $fileName = 'testha.pdf';
-        $p = Product::whereHas('validProductfiles', function ($query) use ($fileName) {
-            $query->where("file", $fileName);
-        })->get();
-        dd($p);
-//        return Product::find(65)->sets->first()->getContents() ;
-        return Content::find(6560);
+
+        dd(Content::find(9308)->set);
 
     }
 
