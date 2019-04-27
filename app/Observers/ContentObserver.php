@@ -10,41 +10,41 @@ use Illuminate\Support\Facades\Artisan;
 class ContentObserver
 {
     private $tagging;
-
+    
     use TaggableTrait;
-
+    
     public function __construct(TaggingInterface $tagging)
     {
         $this->tagging = $tagging;
     }
-
+    
     /**
      * Handle the content "created" event.
      *
-     * @param \App\Content $content
+     * @param  \App\Content  $content
      *
      * @return void
      */
     public function created(Content $content)
     {
-
+        
     }
-
+    
     /**
      * Handle the content "updated" event.
      *
-     * @param \App\Content $content
+     * @param  \App\Content  $content
      *
      * @return void
      */
     public function updated(Content $content)
     {
     }
-
+    
     /**
      * Handle the content "deleted" event.
      *
-     * @param \App\Content $content
+     * @param  \App\Content  $content
      *
      * @return void
      */
@@ -52,11 +52,11 @@ class ContentObserver
     {
         //
     }
-
+    
     /**
      * Handle the content "restored" event.
      *
-     * @param \App\Content $content
+     * @param  \App\Content  $content
      *
      * @return void
      */
@@ -64,11 +64,11 @@ class ContentObserver
     {
         //
     }
-
+    
     /**
      * Handle the content "force deleted" event.
      *
-     * @param \App\Content $content
+     * @param  \App\Content  $content
      *
      * @return void
      */
@@ -76,19 +76,19 @@ class ContentObserver
     {
         //
     }
-
+    
     /**
      * When issuing a mass update via Eloquent,
      * the saved and updated model events will not be fired for the updated models.
      * This is because the models are never actually retrieved when issuing a mass update.
      *
-     * @param Content $content
+     * @param  Content  $content
      */
     public function saving(Content $content)
     {
         $content->template_id = $this->findTemplateIdOfaContent($content);
     }
-
+    
     /**
      * @param $content
      *
@@ -97,12 +97,12 @@ class ContentObserver
     private function findTemplateIdOfaContent($content)
     {
         return [
-                Content::CONTENT_TYPE_PAMPHLET => Content::CONTENT_TEMPLATE_PAMPHLET,
-                Content::CONTENT_TYPE_EXAM => Content::CONTENT_TEMPLATE_EXAM,
-                Content::CONTENT_TYPE_VIDEO => Content::CONTENT_TEMPLATE_VIDEO,
-            ][$content->contenttype_id] ?? null;
+                   Content::CONTENT_TYPE_PAMPHLET => Content::CONTENT_TEMPLATE_PAMPHLET,
+                   Content::CONTENT_TYPE_EXAM     => Content::CONTENT_TEMPLATE_EXAM,
+                   Content::CONTENT_TYPE_VIDEO    => Content::CONTENT_TEMPLATE_VIDEO,
+               ][$content->contenttype_id] ?? null;
     }
-
+    
     public function saved(Content $content)
     {
         $this->sendTagsOfTaggableToApi($content, $this->tagging);

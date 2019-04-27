@@ -16,7 +16,7 @@ class PasswordRecoveryRequest extends FormRequest
     {
         return true;
     }
-
+    
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,12 +24,13 @@ class PasswordRecoveryRequest extends FormRequest
      */
     public function rules()
     {
-        if (! Auth::check()) {
+        if (!Auth::check()) {
             $rules = ["mobileNumber" => "required"];
-        } else {
+        }
+        else {
             $rules = [];
         }
-
+        
         return $rules;
     }
 }

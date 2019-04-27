@@ -19,70 +19,70 @@ class MedianaPatternClient implements SmsSenderClient
      * @var int
      */
     protected $number;
-
+    
     /**
      * Username for SMS Gateway.
      *
      * @var string
      */
     protected $userName;
-
+    
     /**
      * Password for SMS Gateway.
      *
      * @var string
      */
     protected $password;
-
+    
     protected $url;
-
+    
     /**
      * The HTTP Client instance.
      *
      * @var \GuzzleHttp\Client
      */
     protected $http;
-
+    
     public function __construct(HttpClient $http, $userName, $password, $number, $url)
     {
-        $this->number = $number;
+        $this->number   = $number;
         $this->userName = $userName;
-        $this->http = $http;
+        $this->http     = $http;
         $this->password = $password;
-        $this->url = $url;
+        $this->url      = $url;
     }
-
+    
     /**
-     * @param array $params
+     * @param  array  $params
      *
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function send(array $params)
     {
-        $url = $this->url;
+        $url  = $this->url;
         $base = [
-            'user' => $this->userName,
-            'pass' => $this->password,
+            'user'    => $this->userName,
+            'pass'    => $this->password,
             'fromNum' => $this->number,
         ];
         if (isset($params['from'])) {
             unset($base["from"]);
         }
-
+        
         $params = array_merge($base, $params);
         try {
             $response = $this->http->post($url, [
                 'headers' => [
-                    'Accept' => 'application/json',
+                    'Accept'     => 'application/json',
                     'User-Agent' => 'GuzzleHttp/6.3.3 curl/7.52.1',
                 ],
-                'json' => $params,
+                'json'    => $params,
             ]);
         } catch (GuzzleException $e) {
             throw $e;
         }
-
-        return json_decode((string)$response->getBody(), true);
+        
+        return json_decode((string) $response->getBody(), true);
     }
 }

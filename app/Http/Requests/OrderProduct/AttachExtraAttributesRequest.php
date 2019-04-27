@@ -17,10 +17,10 @@ class AttachExtraAttributesRequest extends FormRequest
         if ($user) {
             return true;
         }
-
+        
         return false;
     }
-
+    
     /**
      * Get the validation rules that apply to the request.
      *
@@ -29,12 +29,12 @@ class AttachExtraAttributesRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'extraAttribute' => 'required|array',
-            'extraAttribute.*' => 'required|array',
-            'extraAttribute.*.id' => 'required|numeric',
+            'extraAttribute'        => 'required|array',
+            'extraAttribute.*'      => 'required|array',
+            'extraAttribute.*.id'   => 'required|numeric',
             'extraAttribute.*.cost' => 'required|numeric',
         ];
-
+        
         return $rules;
     }
 }

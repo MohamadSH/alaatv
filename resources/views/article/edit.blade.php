@@ -1,23 +1,22 @@
-@permission((Config::get('constants.EDIT_ARTICLE_ACCESS')))
-@extends("app",["pageName"=>"admin"])
+@permission((Config::get('constants.EDIT_ARTICLE_ACCESS')))@extends("app",["pageName"=>"admin"])
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css"/>
+    <link href = "/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/assets/global/plugins/bootstrap-summernote/summernote.css" rel = "stylesheet" type = "text/css"/>
 @endsection
 
 
 @section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
+    <div class = "page-bar">
+        <ul class = "page-breadcrumb">
             <li>
-                <i class="icon-home"></i>
+                <i class = "icon-home"></i>
                 <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
-                <i class="fa fa-angle-left"></i>
+                <i class = "fa fa-angle-left"></i>
             </li>
             <li>
                 <a href = "{{action("Web\HomeController@adminContent")}}">پنل مدیریتی</a>
-                <i class="fa fa-angle-left"></i>
+                <i class = "fa fa-angle-left"></i>
             </li>
             <li>
                 <span>اصلاح اطلاعات مقاله</span>
@@ -27,9 +26,9 @@
 @endsection
 
 @section("content")
-    <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-8">
+    <div class = "row">
+        <div class = "col-md-3"></div>
+        <div class = "col-md-8">
             @include("systemMessage.flash")
             {!! Form::model($article,['files'=>true,'method' => 'PUT','action' => ['ArticleController@update',$article], 'class'=>'form-horizontal']) !!}
             @include('article.form')
@@ -39,12 +38,12 @@
 @endsection
 
 @section("footerPageLevelPlugin")
-    <script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-summernote/summernote.min.js" type="text/javascript"></script>
+    <script src = "/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type = "text/javascript"></script>
+    <script src = "/assets/global/plugins/bootstrap-summernote/summernote.min.js" type = "text/javascript"></script>
 @endsection
 
 @section("footerPageLevelScript")
-    <script src="/assets/pages/scripts/components-editors.min.js" type="text/javascript"></script>
+    <script src = "/assets/pages/scripts/components-editors.min.js" type = "text/javascript"></script>
 @endsection
 
 
@@ -74,12 +73,10 @@
             if (w < Math.round(100 * aNumberOfChar / maxChar)) {
                 $progressbar.css("width", w + "%");
                 $progressbar.css("background-color", '#ff5329');
-            }
-            else if (w <= Math.round(100 * bNumberOfChar / maxChar)) {
+            } else if (w <= Math.round(100 * bNumberOfChar / maxChar)) {
                 $progressbar.css("width", w + "%");
                 $progressbar.css("background-color", '#00aa11');
-            }
-            else {
+            } else {
                 $progressbar.css("width", w + "%");
                 $progressbar.css("background-color", '#ff0000');
             }

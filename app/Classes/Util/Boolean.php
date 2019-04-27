@@ -7,7 +7,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 class Boolean
 {
     private $result;
-
+    
     /**
      * Nullable constructor.
      *
@@ -17,12 +17,12 @@ class Boolean
     {
         $this->result = $result;
     }
-
+    
     public static function if($boolean)
     {
         return new static($boolean);
     }
-
+    
     public function thenRespondWith($response)
     {
         if ($this->result) {
@@ -32,7 +32,7 @@ class Boolean
 
     public function orRespondWith($response)
     {
-        if (!$this->result) {
+        if (! $this->result) {
             $this->respond($response);
         }
     }

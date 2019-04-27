@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 class PublishAt extends FilterAbstract
 {
     protected $attribute = 'validSince';
-
+    
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         throw new \LogicException("implements publishAt");

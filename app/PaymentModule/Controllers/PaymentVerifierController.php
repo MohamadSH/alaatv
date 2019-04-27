@@ -1,34 +1,33 @@
 <?php
 
-namespace App\Classes\Payment;
+namespace  App\PaymentModule\Controllers;
 
-use App\Order;
 use App\Traits\HandleOrderPayment;
-use App\Repositories\TransactionRepo;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Request;
-use App\PaymentModule\OnlinePaymentVerificationResponseInterface;
 
 class PaymentVerifierController
 {
     use HandleOrderPayment;
+    
     /**
-     * @param string $paymentMethod
-     * @param string $device
+     * @param  string  $paymentMethod
+     * @param  string  $device
      *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function verify(string $paymentMethod, string $device)
     {
-        $authority = Request::get(OnlineGateWay::getAuthorityKey());
+        PaymentDriver::select($paymentMethod);
+        $key = OnlineGateWay::getAuthorityKey();
+        $authority = Request::get($key);
 
-        $transaction = TransactionRepo::getTransactionByAuthority($authority)->orFailWith([Responses::class, 'transactionNotFoundError']);
+        $transaction = TransactionRepo::getTransactionByAuthority($authority)
+            ->orFailWith([Responses::class, 'transactionNotFoundError']);
 
         /**
          * @var OnlinePaymentVerificationResponseInterface $verificationResult
          */
         $verificationResult = OnlineGateWay::verifyPayment(abs($transaction->cost), $authority);
-
+        
         $transaction->order->detachUnusedCoupon();
         if ($verificationResult->isSuccessfulPayment()) {
             TransactionRepo::handleTransactionStatus(
@@ -37,27 +36,30 @@ class PaymentVerifierController
                 $verificationResult->getCardPanMask()
             );
             $this->handleOrderSuccessPayment($transaction->order);
-        } else {
+        }
+        else {
             $this->handleOrderCanceledPayment($transaction->order);
             $transaction->transactionstatus_id = config('constants.TRANSACTION_STATUS_UNSUCCESSFUL');
             $transaction->update();
         }
-       /*
-       if (isset($transaction->order_id)) {} else { if (isset($transaction->wallet_id)) { if ($result['status']) { $this->handleWalletChargingSuccessPayment($gatewayVerify['RefID'], $transaction, $gatewayVerify['cardPanMask']); } else { $this->handleWalletChargingCanceledPayment($transaction); } } } */
-
-        Cache::tags('bon')->flush();
-
-        Request::session()->flash('verifyResult', $verificationResult->getMessages());
-
+        /*
+        if (isset($transaction->order_id)) {} else { if (isset($transaction->wallet_id)) { if ($result['status']) { $this->handleWalletChargingSuccessPayment($gatewayVerify['RefID'], $transaction, $gatewayVerify['cardPanMask']); } else { $this->handleWalletChargingCanceledPayment($transaction); } } } */
+        
+        Cache::tags('bon')
+            ->flush();
+        
+        Request::session()
+            ->flash('verifyResult', $verificationResult->getMessages());
+        
         return redirect()->route('showOnlinePaymentStatus', [
-            'status' => ($verificationResult->isSuccessfulPayment()) ? 'successful' : 'failed',
+            'status'        => ($verificationResult->isSuccessfulPayment()) ? 'successful' : 'failed',
             'paymentMethod' => $paymentMethod,
-            'device' => $device,
+            'device'        => $device,
         ]);
     }
-
+    
     /**
-     * @param \App\Order $order
+     * @param  \App\Order  $order
      *
      * @return array
      */
@@ -69,7 +71,7 @@ class PaymentVerifierController
         }
         $order->refundWalletTransaction();
     }
-
+    
     /*
      * private function handleWalletChargingCanceledPayment(Transaction $transaction)
     {

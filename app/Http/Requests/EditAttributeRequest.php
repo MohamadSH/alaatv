@@ -14,13 +14,15 @@ class EditAttributeRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.EDIT_ATTRIBUTE_ACCESS'))) {
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.EDIT_ATTRIBUTE_ACCESS'))) {
             return true;
         }
-
+        
         return false;
     }
-
+    
     /**
      * Get the validation rules that apply to the request.
      *
@@ -29,8 +31,8 @@ class EditAttributeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'displayName' => 'required',
+            'name'                => 'required',
+            'displayName'         => 'required',
             'attributecontrol_id' => 'exists:attributecontrols,id',
         ];
     }

@@ -17,11 +17,11 @@ use Illuminate\Support\Facades\Schema;
 trait ProfileTrait
 {
     use WalletTrait;
-
+    
     private static $beProtected = [
         "roles",
     ];
-
+    
     /**
      * @return array
      */
@@ -29,42 +29,42 @@ trait ProfileTrait
     {
         return self::$beProtected;
     }
-
+    
     public function bloodtype()
     {
         return $this->belongsTo("\App\Bloodtype");
     }
-
+    
     public function grade()
     {
         return $this->belongsTo("\App\Grade");
     }
-
+    
     public function major()
     {
         return $this->belongsTo('App\Major');
     }
-
+    
     public function gender()
     {
         return $this->belongsTo('App\Gender');
     }
-
+    
     public function returnLockProfileItems()
     {
         return $this->lockProfileColumns;
     }
-
+    
     public function returnCompletionItems()
     {
         return $this->completeInfoColumns;
     }
-
+    
     public function returnMedicalItems()
     {
         return $this->medicalInfoColumns;
     }
-
+    
     public function getInfoAttribute()
     {
         return Cache::tags([
@@ -74,17 +74,18 @@ trait ProfileTrait
             'gender',
             'completion',
             'wallet',
-        ])->remember($this->cacheKey(), config("constants.CACHE_600"), function () {
-            return [
-                'major' => $this->getMajor(),
-                'grade' => $this->getGrade(),
-                'gender' => $this->getGender(),
-                'completion' => (int)$this->completion(),
-                'wallet' => $this->getWallet(),
-            ];
-        });
+        ])
+            ->remember($this->cacheKey(), config("constants.CACHE_600"), function () {
+                return [
+                    'major'      => $this->getMajor(),
+                    'grade'      => $this->getGrade(),
+                    'gender'     => $this->getGender(),
+                    'completion' => (int) $this->completion(),
+                    'wallet'     => $this->getWallet(),
+                ];
+            });
     }
-
+    
     /**
      * Gets an information array of user's major
      *
@@ -96,17 +97,18 @@ trait ProfileTrait
         $major = $this->major;
         if (isset($major)) {
             $majorReturn = [
-                'id' => $major->id,
-                'name' => $major->name,
+                'id'          => $major->id,
+                'name'        => $major->name,
                 'description' => $major->description,
             ];
-        } else {
+        }
+        else {
             $majorReturn = null;
         }
-
+        
         return $majorReturn;
     }
-
+    
     /**
      * Gets an information array of user's grade
      *
@@ -114,23 +116,24 @@ trait ProfileTrait
      */
     protected function getGrade()
     {
-
+        
         /** @var User $this */
         $grade = $this->grade;
         if (isset($grade)) {
             $gradeReturn = [
-                'id' => $grade->id,
-                'name' => $grade->name,
-                'hint' => $grade->displayName,
+                'id'          => $grade->id,
+                'name'        => $grade->name,
+                'hint'        => $grade->displayName,
                 'description' => $grade->description,
             ];
-        } else {
+        }
+        else {
             $gradeReturn = null;
         }
-
+        
         return $gradeReturn;
     }
-
+    
     /**
      * Gets an information array of user's gender
      *
@@ -142,22 +145,23 @@ trait ProfileTrait
         $gender = $this->gender;
         if (isset($gender)) {
             $genderReturn = [
-                'id' => $gender->id,
-                'name' => $gender->name,
+                'id'          => $gender->id,
+                'name'        => $gender->name,
                 'description' => $gender->description,
             ];
-        } else {
+        }
+        else {
             $genderReturn = null;
         }
-
+        
         return $genderReturn;
     }
-
+    
     /**
      * Calculates user profile completion percentage based on passed mode
      *
-     * @param string $type
-     * @param array $columns
+     * @param  string  $type
+     * @param  array   $columns
      *
      * @return float|int
      */
@@ -191,11 +195,15 @@ trait ProfileTrait
                 ];
                 break;
             case "lockProfile":
-                $customColumns = $this->lockProfileColumns;
-                $importantColumns = array_unique(array_merge($customColumns, Afterloginformcontrol::getFormFields()->pluck('name', 'id')->toArray()));
+                $customColumns    = $this->lockProfileColumns;
+                $importantColumns = array_unique(array_merge($customColumns, Afterloginformcontrol::getFormFields()
+                    ->pluck('name', 'id')
+                    ->toArray()));
                 break;
             case "afterLoginForm" :
-                $importantColumns = Afterloginformcontrol::getFormFields()->pluck('name', 'id')->toArray();
+                $importantColumns = Afterloginformcontrol::getFormFields()
+                    ->pluck('name', 'id')
+                    ->toArray();
                 break;
             case "completeInfo":
                 $importantColumns = $this->completeInfoColumns;
@@ -207,26 +215,30 @@ trait ProfileTrait
                 $importantColumns = [];
                 break;
         }
-
+        
         $numberOfColumns = count($importantColumns);
-        $unsetColumns = 0;
+        $unsetColumns    = 0;
         if ($numberOfColumns > 0) {
             foreach ($tableColumns as $tableColumn) {
                 if (in_array($tableColumn, $importantColumns)) {
-                    if (strcmp($tableColumn, "photo") == 0 && strcmp(Auth::user()->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0) {
+                    if (strcmp($tableColumn, "photo") == 0 && strcmp(Auth::user()->photo,
+                            config('constants.PROFILE_DEFAULT_IMAGE')) == 0) {
                         $unsetColumns++;
-                    } elseif (! isset($this->$tableColumn) || strlen(preg_replace('/\s+/', '', $this->$tableColumn)) == 0) {
+                    }
+                    elseif (!isset($this->$tableColumn) || strlen(preg_replace('/\s+/', '',
+                            $this->$tableColumn)) == 0) {
                         $unsetColumns++;
                     }
                 }
             }
-
+            
             return (1 - ($unsetColumns / $numberOfColumns)) * 100;
-        } else {
+        }
+        else {
             return 100;
         }
     }
-
+    
     /**
      * @return string
      * Converting Updated_at field to jalali
@@ -234,12 +246,12 @@ trait ProfileTrait
     public function Birthdate_Jalali()
     {
         $explodedDateTime = explode(" ", $this->birthdate);
-        $explodedDate = $explodedDateTime[0];
-
+        $explodedDate     = $explodedDateTime[0];
+        
         //        $explodedTime = $explodedDateTime[1] ;
         return $this->convertDate($explodedDate, "toJalali");
     }
-
+    
     /**
      * Locks user's profile
      */
@@ -247,7 +259,7 @@ trait ProfileTrait
     {
         $this->lockProfile = 1;
     }
-
+    
     /**
      *  Determines whether user's profile is locked or not
      *
@@ -257,21 +269,22 @@ trait ProfileTrait
     {
         return $this->lockProfile == 1;
     }
-
+    
     /**
      * Fills model from data provided by user
      *
-     * @param array $data
+     * @param  array  $data
      */
     public function fillByPublic(array $data)
     {
         foreach ($data as $key => $datum) {
-            if ((array_key_exists($key, $this->getAttributes()) && ! isset($this->$key)) || in_array($key, $this->fillableByPublic)) {
+            if ((array_key_exists($key, $this->getAttributes()) && !isset($this->$key)) || in_array($key,
+                    $this->fillableByPublic)) {
                 $this->$key = $datum;
             }
         }
     }
-
+    
     /**
      * Determines whether user's profile should be locked or not
      *

@@ -13,26 +13,26 @@ class BlockController extends Controller
      * @var BlockCollectionFormatter
      */
     private $formatter;
-
+    
     public function __construct(BlockCollectionFormatter $formatter)
     {
         $this->formatter = $formatter;
     }
-
+    
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return Block[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response
      */
     public function index(Request $request)
     {
         $blocks = Block::getMainBlocks();
-
+        
         return ($request->expectsJson() ? response()->json($blocks) : $blocks);
     }
-
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -42,11 +42,11 @@ class BlockController extends Controller
     {
         //
     }
-
+    
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -54,12 +54,12 @@ class BlockController extends Controller
     {
         //
     }
-
+    
     /**
      * Display the specified resource.
      *
-     * @param Request $request
-     * @param \App\Block $block
+     * @param  Request     $request
+     * @param  \App\Block  $block
      *
      * @return Block|\Illuminate\Http\JsonResponse
      */
@@ -67,11 +67,11 @@ class BlockController extends Controller
     {
         return ($request->expectsJson() ? response()->json($block) : $block);
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Block $block
+     * @param  \App\Block  $block
      *
      * @return \Illuminate\Http\Response
      */
@@ -79,12 +79,12 @@ class BlockController extends Controller
     {
         //
     }
-
+    
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Block $block
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Block                $block
      *
      * @return \Illuminate\Http\Response
      */
@@ -92,11 +92,11 @@ class BlockController extends Controller
     {
         //
     }
-
+    
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Block $block
+     * @param  \App\Block  $block
      *
      * @return \Illuminate\Http\Response
      */

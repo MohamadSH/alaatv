@@ -5,15 +5,15 @@ namespace App;
 /**
  * App\Assignmentstatus
  *
- * @property int $id
- * @property string|null $name        نام وضعیت
- * @property string|null $displayName نام قابل نمایش این وضعیت
- * @property string|null $description توضیح درباره وضعیت
- * @property int $order       ترتیب نمایش وضعیت - در صورت
+ * @property int                                                             $id
+ * @property string|null                                                     $name        نام وضعیت
+ * @property string|null                                                     $displayName نام قابل نمایش این وضعیت
+ * @property string|null                                                     $description توضیح درباره وضعیت
+ * @property int                                                             $order       ترتیب نمایش وضعیت - در صورت
  *           نیاز به استفاده
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property \Carbon\Carbon|null                                             $created_at
+ * @property \Carbon\Carbon|null                                             $updated_at
+ * @property \Carbon\Carbon|null                                             $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Assignment[] $assignments
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Assignmentstatus onlyTrashed()
@@ -34,6 +34,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Assignmentstatus query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed                                                      $cache_cooldown_seconds
  */
 class Assignmentstatus extends BaseModel
 {
@@ -45,7 +46,7 @@ class Assignmentstatus extends BaseModel
         'description',
         'order',
     ];
-
+    
     public function assignments()
     {
         return $this->hasMany('App\Assignment');

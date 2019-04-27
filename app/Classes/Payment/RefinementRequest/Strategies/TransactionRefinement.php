@@ -23,60 +23,60 @@ class TransactionRefinement extends Refinement
         if ($this->statusCode != Response::HTTP_OK) {
             return $this;
         }
-
+        
         $transaction = $this->getTransaction();
         if ($transaction === false) {
             $this->statusCode = Response::HTTP_NOT_FOUND;
-            $this->message = 'تراکنشی یافت نشد.';
-
+            $this->message    = 'تراکنشی یافت نشد.';
+            
             return $this;
         }
-
+        
         $this->transaction = $transaction;
-        $order = $this->getOrder();
-
+        $order             = $this->getOrder();
+        
         if ($order === false) {
             $this->statusCode = Response::HTTP_NOT_FOUND;
-            $this->message = 'سفارش یافت نشد.';
-
+            $this->message    = 'سفارش یافت نشد.';
+            
             return $this;
         }
-
+        
         $this->order = $order;
-        $this->user = $this->order->user;
-        $this->cost = $this->transaction->cost;
+        $this->user  = $this->order->user;
+        $this->cost  = $this->transaction->cost;
         if ($this->canDeductFromWallet()) {
             $this->payByWallet();
         }
-        $this->statusCode = Response::HTTP_OK;
+        $this->statusCode  = Response::HTTP_OK;
         $this->description .= $this->getDescription();
-
+        
         return $this;
     }
-
+    
     private function getTransaction(): Transaction
     {
         return Transaction::find($this->inputData["transaction_id"]);
     }
-
+    
     /**
      * @return Order|bool
      */
     private function getOrder()
     {
         $transaction = $this->transaction;
-        if (! isset($transaction)) {
+        if (!isset($transaction)) {
             return false;
         }
-
+        
         $order = $transaction->order->load(['transactions', 'coupon']);
-        if (! isset($order)) {
+        if (!isset($order)) {
             return false;
         }
-
+        
         return $order;
     }
-
+    
     /**
      * @return string
      */
@@ -86,7 +86,7 @@ class TransactionRefinement extends Refinement
         if (isset($this->inputData['transaction_id'])) {
             $description = 'پرداخت قسط -';
         }
-
+        
         return $description;
     }
 }

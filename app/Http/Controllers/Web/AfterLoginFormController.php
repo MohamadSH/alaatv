@@ -12,27 +12,31 @@ class AfterLoginFormController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
+     * @param  Request  $request
+     *
      * @return Response
      */
     public function index(Request $request)
     {
-        $afterLoginFormFields = Afterloginformcontrol::all()->sortBy("order");
-
+        $afterLoginFormFields = Afterloginformcontrol::all()
+            ->sortBy("order");
+        
         $sideBarMode = "closed";
-        $section = "afterLoginForm";
-
+        $section     = "afterLoginForm";
+        
         if ($request->expectsJson()) {
             return response([
                 'afterLoginFormFields' => $afterLoginFormFields,
             ], Response::HTTP_OK);
-        } else {
+        }
+        else {
             $availableFields = [];
-
-            return view("admin.siteConfiguration.afterLoginForm", compact("afterLoginFormFields", "availableFields", "sideBarMode", "section"));
+            
+            return view("admin.siteConfiguration.afterLoginForm",
+                compact("afterLoginFormFields", "availableFields", "sideBarMode", "section"));
         }
     }
-
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -42,11 +46,11 @@ class AfterLoginFormController extends Controller
     {
         //
     }
-
+    
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      *
      * @return Response
      */
@@ -54,20 +58,21 @@ class AfterLoginFormController extends Controller
     {
         $afterLoginFormField = new Afterloginformcontrol();
         $afterLoginFormField->fill($request->all());
-
+        
         if ($afterLoginFormField->save()) {
             session()->put("success", "فیلد با موفقیت اضافه شد");
-        } else {
+        }
+        else {
             session()->flash("error", "خطای پایگاه داده");
         }
-
+        
         return redirect()->back();
     }
-
+    
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      *
      * @return void
      */
@@ -75,11 +80,11 @@ class AfterLoginFormController extends Controller
     {
         //
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      *
      * @return void
      */
@@ -87,12 +92,12 @@ class AfterLoginFormController extends Controller
     {
         //
     }
-
+    
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int                       $id
      *
      * @return void
      */
@@ -100,11 +105,12 @@ class AfterLoginFormController extends Controller
     {
         //
     }
-
+    
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Afterloginformcontrol $field
+     * @param  \App\Afterloginformcontrol  $field
+     *
      * @return Response
      * @throws \Exception
      */
@@ -112,10 +118,11 @@ class AfterLoginFormController extends Controller
     {
         if ($field->delete()) {
             session()->put("success", "فیلد با موفقیت حذف شد");
-        } else {
+        }
+        else {
             session()->put("error", "خطای پایگاه داده");
         }
-
+        
         return response([
             'sessionData' => session()->all(),
         ]);

@@ -16,6 +16,6 @@ interface FavorableInterface
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function favoriteBy();
-
+    
     public function favoring(User $user);
 }

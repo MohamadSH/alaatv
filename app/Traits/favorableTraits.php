@@ -15,10 +15,11 @@ trait favorableTraits
 {
     public function favoring(User $user)
     {
-        $this->favoriteBy()->sync($user, false);
+        $this->favoriteBy()
+            ->sync($user, false);
         event(new FavoriteEvent($user, $this));
     }
-
+    
     /**
      * Get all of the users that favorite this
      *
@@ -26,6 +27,7 @@ trait favorableTraits
      */
     public function favoriteBy()
     {
-        return $this->morphToMany('App\User', 'favorable')->withTimestamps();
+        return $this->morphToMany('App\User', 'favorable')
+            ->withTimestamps();
     }
 }

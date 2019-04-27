@@ -16,18 +16,18 @@ use Illuminate\Support\Facades\{Cache};
 class ProductSearch extends SearchAbstract
 {
     protected $model = "App\Product";
-
+    
     protected $pageName = 'productPage';
-
+    
     protected $numberOfItemInEachPage = 5;
-
+    
     protected $validFilters = [
         'name',
         'tags',
     ];
-
+    
     /**
-     * @param array $filters
+     * @param  array  $filters
      *
      * @return mixed
      */
@@ -36,32 +36,37 @@ class ProductSearch extends SearchAbstract
         $this->pageNum = $this->setPageNum($filters);
 //        dd($this->pageNum);
         $key = $this->makeCacheKey($filters);
-
+        
         return Cache::tags([
             'product',
             'search',
-        ])->remember($key, $this->cacheTime, function () use ($filters) {
-            $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
+        ])
+            ->remember($key, $this->cacheTime, function () use ($filters) {
+                $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
 
 //                        dd($this->getResults($query));
-            return $this->getResults($query);
-        });
+                return $this->getResults($query);
+            });
     }
-
+    
     /**
-     * @param Builder $query
+     * @param  Builder  $query
      *
      * @return mixed
      */
     protected function getResults(Builder $query)
     {
         $result = $query//            Conflict with admin panel
-        ->active()->doesntHave('parents')->whereNull('deleted_at')->orderBy("created_at", "desc")->paginate($this->numberOfItemInEachPage, ['*'],
-            $this->pageName, $this->pageNum);
-
+        ->active()
+            ->doesntHave('parents')
+            ->whereNull('deleted_at')
+            ->orderBy("created_at", "desc")
+            ->paginate($this->numberOfItemInEachPage, ['*'],
+                $this->pageName, $this->pageNum);
+        
         return $result;
     }
-
+    
     /**
      * @param $decorator
      *
@@ -73,7 +78,7 @@ class ProductSearch extends SearchAbstract
         if ($decorator instanceof Tags) {
             $decorator->setTagManager(new ProductTagManagerViaApi());
         }
-
+        
         return $decorator;
     }
 }

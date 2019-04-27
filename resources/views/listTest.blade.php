@@ -1,7 +1,7 @@
 @extends("app")
 
 @section("css")
-    <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
+    <link rel = "stylesheet" href = "{{ mix('/css/all.css') }}">
 @endsection
 
 
@@ -13,24 +13,25 @@
 @endsection
 
 @section("content")
-    <div class="row">
-        <div class="col-md-12">
-            <div class="note note-success">
+    <div class = "row">
+        <div class = "col-md-12">
+            <div class = "note note-success">
                 <p> لیست فیلم های ثبت شده برای درس {{ $set->name }} - {{ $set->id  }} </p>
             </div>
 
-            <div class="portlet box yellow">
-                <div class="portlet-title">
-                    <div class="caption">
-                        <i class="fa fa-cogs"></i> تعداد فیلم های درج شده {{ $contents->count() }}
+            <div class = "portlet box yellow">
+                <div class = "portlet-title">
+                    <div class = "caption">
+                        <i class = "fa fa-cogs"></i>
+                        تعداد فیلم های درج شده {{ $contents->count() }}
                     </div>
-                    <div class="tools">
-                        <a href="javascript:" class="collapse"> </a>
+                    <div class = "tools">
+                        <a href = "javascript:" class = "collapse"></a>
                     </div>
                 </div>
-                <div class="portlet-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-hover">
+                <div class = "portlet-body">
+                    <div class = "table-responsive">
+                        <table class = "table table-striped table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th> #</th>
@@ -46,10 +47,13 @@
                             <tbody>
                             @foreach($contents as $content )
                                 <tr>
-                                    <td><a target="_blank" href = "{{action("Web\ContentController@edit" , $content->id)}}">{{ $content->id }}</a>
+                                    <td>
+                                        <a target = "_blank" href = "{{action("Web\ContentController@edit" , $content->id)}}">{{ $content->id }}</a>
                                     </td>
-                                    <td><img src="{{ $content->thumbnail }}" class="img-responsive"/></td>
-                                    <td> {{ $content->pivot->order }}</td>
+                                    <td>
+                                        <img src = "{{ $content->thumbnail }}" class = "img-responsive"/>
+                                    </td>
+                                    <td> {{ $content->order }}</td>
                                     <td> {{ $content->name }}</td>
                                     <td>{!!   $content->description !!}</td>
                                     <td>{{ $content->enable }}</td>

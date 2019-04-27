@@ -16,7 +16,7 @@ class CheckoutPaymentRequest extends FormRequest
     {
         return true;
     }
-
+    
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,7 +26,7 @@ class CheckoutPaymentRequest extends FormRequest
     {
         return $this->getRules();
     }
-
+    
     /**
      * @return array
      */
@@ -37,10 +37,11 @@ class CheckoutPaymentRequest extends FormRequest
             $rules = [
                 "order_id" => "required",
             ];
-        } else {
+        }
+        else {
             $rules = [];
         }
-
+        
         return $rules;
     }
 }

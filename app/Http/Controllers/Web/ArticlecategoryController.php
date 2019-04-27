@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Config;
 class ArticlecategoryController extends Controller
 {
     protected $response;
-
+    
     function __construct()
     {
         /** setting permissions
@@ -25,10 +25,10 @@ class ArticlecategoryController extends Controller
         $this->middleware('permission:'.Config::get('constants.REMOVE_ARTICLECATEGORY_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:'.Config::get('constants.SHOW_ARTICLECATEGORY_ACCESS'), ['only' => 'edit']);
         $this->middleware('permission:'.Config::get('constants.EDIT_ARTICLECATEGORY_ACCESS'), ['only' => 'update']);
-
+        
         $this->response = new Response();
     }
-
+    
     /**
      * Display a listing of the resource.
      *
@@ -37,10 +37,10 @@ class ArticlecategoryController extends Controller
     public function index()
     {
         $articlecategories = Articlecategory::all();
-
+        
         return view('articlecategory.index', compact('articlecategories'));
     }
-
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -50,11 +50,11 @@ class ArticlecategoryController extends Controller
     {
         //
     }
-
+    
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -63,22 +63,24 @@ class ArticlecategoryController extends Controller
         $articlecategory = new Articlecategory();
         if (isset($request->enable)) {
             $request->offsetSet("enable", 1);
-        } else {
+        }
+        else {
             $request->offsetSet("enable", 0);
         }
         $articlecategory->fill($request->all());
-
+        
         if ($articlecategory->save()) {
             return $this->response->setStatusCode(200);
-        } else {
+        }
+        else {
             return $this->response->setStatusCode(503);
         }
     }
-
+    
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -86,11 +88,11 @@ class ArticlecategoryController extends Controller
     {
         //
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -98,12 +100,12 @@ class ArticlecategoryController extends Controller
     {
         return view('articlecategory.edit', compact('articlecategory'));
     }
-
+    
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int                       $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -111,39 +113,42 @@ class ArticlecategoryController extends Controller
     {
         if (isset($request->enable)) {
             $request->offsetSet("enable", 1);
-        } else {
+        }
+        else {
             $request->offsetSet("enable", 0);
         }
         $articlecategory->fill($request->all());
-
+        
         if ($articlecategory->update()) {
             session()->put('success', 'اصلاح دسته با موفقیت انجام شد');
-        } else {
+        }
+        else {
             session()->put('error', 'خطای پایگاه داده');
         }
-
+        
         return redirect()->back();
     }
-
+    
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param  int  $id
      *
      * @return \Illuminate\Http\Response
      */
     public function destroy($articlecategory)
     {
         $categoryId = $articlecategory->id;
-
+        
         if ($articlecategory->delete()) {
             //            session()->put('success', 'دسته بندی با موفقیت حذف شد');
-            $articles = Article::where('articlecategory_id', $categoryId)->get();
+            $articles = Article::where('articlecategory_id', $categoryId)
+                ->get();
             foreach ($articles as $article) {
                 $article->articlecategory_id = null;
                 $article->update();
             }
-
+            
             return redirect()->back();
         }
         //        else session()->put('error', 'خطای پایگاه داده');

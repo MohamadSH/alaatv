@@ -28,9 +28,10 @@ class ProductCollection extends Collection
             if (isset($parent)) {
                 if ($this->contains($parent)) {
                     $this->forget($key);
-                } else {
+                }
+                else {
                     //ToDo :  bug: it includes grand parent in collection when the collection includes children in first depth
-
+                    
                     // if all children selected and father not selected then select father and remove all children
                     /*$children = $parent->children;
                     $allChildIsChecked = true;
@@ -46,18 +47,18 @@ class ProductCollection extends Collection
             }
         }
     }
-
+    
     /**
      * Removes products descendants from ProductCollection
      * Used in ProductCollection's keepOnlyParents method in order ro remove
      * a product's all descendants from a collection
      *
-     * @param Product $product
+     * @param  Product  $product
      */
     public function removeProductDescendants(Product $product): void
     {
         $children = $product->children;
-
+        
         foreach ($children as $child) {
 //          $ck = $this->search($child);  didn't work!!
             $findChildInCollection = $this->where('id', $child->id);

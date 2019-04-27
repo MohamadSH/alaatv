@@ -22,45 +22,51 @@ trait ProductBonTrait
     public function canApplyBon($bon): bool
     {
         /** @var Collection $bon */
-        return (! ($this->isFree || ($this->hasParents() && $this->parents()->first()->isFree)) && ($this->basePrice != 0) && $bon->isNotEmpty());
+        return (!($this->isFree || ($this->hasParents() && $this->parents()
+                        ->first()->isFree)) && ($this->basePrice != 0) && $bon->isNotEmpty());
     }
-
+    
     /**
      * Checks whether this product has this bon or not
      *
-     * @param int $bonId
+     * @param  int  $bonId
      *
      * @return bool
      */
     public function hasBon(int $bonId): bool
     {
         $key = "product:hasBon:-bonId:$bonId".$this->cacheKey();
-
-        return Cache::tags(["product"])->remember($key, config("constants.CACHE_600"), function () use ($bonId) {
-            return $this->bons->where("id", $bonId)->isNotEmpty();
-        });
+        
+        return Cache::tags(["product"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($bonId) {
+                return $this->bons->where("id", $bonId)
+                    ->isNotEmpty();
+            });
     }
-
+    
     public function calculateBonPlus($bonId)
     {
         $key = "product:calculateBonPlus:".$bonId.$this->cacheKey();
-
-        return Cache::tags(["product"])->remember($key, config("constants.CACHE_600"), function () use ($bonId) {
-            $bonPlus = 0;
-            $bonPlus += $this->bons->where("id", $bonId)->sum("pivot.bonPlus");
-            if ($bonPlus == 0) {
-                $parentsArray = $this->makeParentArray($this);
-                if (! empty($parentsArray)) {
-                    foreach ($parentsArray as $parent) {
-                        $bonPlus += $parent->bons->where("id", $bonId)->sum("pivot.bonPlus");
+        
+        return Cache::tags(["product"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($bonId) {
+                $bonPlus = 0;
+                $bonPlus += $this->bons->where("id", $bonId)
+                    ->sum("pivot.bonPlus");
+                if ($bonPlus == 0) {
+                    $parentsArray = $this->makeParentArray($this);
+                    if (!empty($parentsArray)) {
+                        foreach ($parentsArray as $parent) {
+                            $bonPlus += $parent->bons->where("id", $bonId)
+                                ->sum("pivot.bonPlus");
+                        }
                     }
                 }
-            }
-
-            return $bonPlus;
-        });
+                
+                return $bonPlus;
+            });
     }
-
+    
     /**
      * Obtains product's bon discount percentage
      *
@@ -71,69 +77,73 @@ trait ProductBonTrait
     public function obtainBonDiscount($bonName)
     {
         $key = "product:obtainBonDiscount:$bonName".$this->cacheKey();
-
-        return Cache::tags(["product"])->remember($key, config("constants.CACHE_10"), function () use ($bonName) {
-            $discount = 0;
-            $bons = $this->getBons($bonName);
-            if ($bons->isEmpty()) {
-                $parentsArray = $this->makeParentArray($this);
-                if (! empty($parentsArray)) {
-                    foreach ($parentsArray as $parent) {
-                        // ToDo : It does not check parents in a hierarchy to the root
-
-                        /** @var Product $parent */
-                        $bons = $parent->getBons($bonName);
-                        if ($bons->isNotEmpty()) {
-                            $bon = $bons->first();
-                            $discount = $bon->pivot->discount;
-                            break;
+        
+        return Cache::tags(["product"])
+            ->remember($key, config("constants.CACHE_10"), function () use ($bonName) {
+                $discount = 0;
+                $bons     = $this->getBons($bonName);
+                if ($bons->isEmpty()) {
+                    $parentsArray = $this->makeParentArray($this);
+                    if (!empty($parentsArray)) {
+                        foreach ($parentsArray as $parent) {
+                            // ToDo : It does not check parents in a hierarchy to the root
+                            
+                            /** @var Product $parent */
+                            $bons = $parent->getBons($bonName);
+                            if ($bons->isNotEmpty()) {
+                                $bon      = $bons->first();
+                                $discount = $bon->pivot->discount;
+                                break;
+                            }
                         }
                     }
                 }
-            } else {
-                $bon = $bons->first();
-                $discount = $bon->pivot->discount;
-            }
-
-            return $discount / 100;
-        });
+                else {
+                    $bon      = $bons->first();
+                    $discount = $bon->pivot->discount;
+                }
+                
+                return $discount / 100;
+            });
     }
-
+    
     /**
      * Gets product's bon collection and filters it by bon name and enable/disable
      *
-     * @param string $bonName
-     * @param int $enable
+     * @param  string  $bonName
+     * @param  int     $enable
      *
      * @return Collection
      */
     public function getBons($bonName = "", $enable = 1): Collection
     {
         $key = "product:getBons:".$this->cacheKey()."-bone:".$bonName;
-
-        return Cache::tags(["product"])->remember($key, config("constants.CACHE_600"), function () use ($bonName, $enable) {
-            /** @var Bon $bons */
-            $bons = $this->bons();
-            if (strlen($bonName) > 0) {
-                $bons = $bons->where("name", $bonName);
-            }
-
-            if ($enable) {
-                $bons = $bons->enable();
-            }
-
-            return $bons->get();
-        });
+        
+        return Cache::tags(["product"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($bonName, $enable) {
+                /** @var Bon $bons */
+                $bons = $this->bons();
+                if (strlen($bonName) > 0) {
+                    $bons = $bons->where("name", $bonName);
+                }
+                
+                if ($enable) {
+                    $bons = $bons->enable();
+                }
+                
+                return $bons->get();
+            });
     }
-
+    
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function bons()
     {
-        return $this->belongsToMany('\App\Bon')->withPivot('discount', 'bonPlus');
+        return $this->belongsToMany('\App\Bon')
+            ->withPivot('discount', 'bonPlus');
     }
-
+    
     /**
      * Gets products total bons = also checks whether his parents have any bons or not
      *
@@ -144,25 +154,26 @@ trait ProductBonTrait
     public function getTotalBons($bonName): Collection
     {
         $key = "product:getTotalBons:".$this->cacheKey()."-bone:".$bonName;
-
-        return Cache::tags(["product"])->remember($key, config("constants.CACHE_600"), function () use ($bonName) {
-            $bons = $this->getBons($bonName);
-            if ($bons->isEmpty()) {
-                $parentsArray = $this->makeParentArray($this);
-                if (! empty($parentsArray)) {
-                    foreach ($parentsArray as $parent) {
-                        // ToDo : It does not check parents in a hierarchy to the root
-
-                        /** @var Product $parent */
-                        $bons = $parent->getBons($bonName);
-                        if ($bons->isNotEmpty()) {
-                            break;
+        
+        return Cache::tags(["product"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($bonName) {
+                $bons = $this->getBons($bonName);
+                if ($bons->isEmpty()) {
+                    $parentsArray = $this->makeParentArray($this);
+                    if (!empty($parentsArray)) {
+                        foreach ($parentsArray as $parent) {
+                            // ToDo : It does not check parents in a hierarchy to the root
+                            
+                            /** @var Product $parent */
+                            $bons = $parent->getBons($bonName);
+                            if ($bons->isNotEmpty()) {
+                                break;
+                            }
                         }
                     }
                 }
-            }
-
-            return $bons;
-        });
+                
+                return $bons;
+            });
     }
 }

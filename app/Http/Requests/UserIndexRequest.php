@@ -18,7 +18,7 @@ class UserIndexRequest extends FormRequest
     {
         return true;
     }
-
+    
     /**
      * Get the validation rules that apply to the request.
      *
@@ -30,7 +30,7 @@ class UserIndexRequest extends FormRequest
             'tags' => 'array|min:1',
         ];
     }
-
+    
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json($validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY));

@@ -12,18 +12,25 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'Illuminate\Auth\Events\Registered' => [
+        'Illuminate\Auth\Events\Registered'          => [
             //            SendMobileVerificationNotification::class,
             //            SendEmailVerificationNotification::class,
         ],
-        'App\Events\MobileVerified' => [
+        'App\Events\MobileVerified'                  => [
             'App\Listeners\MobileVerifiedListener',
         ],
-        'App\Events\FreeInternetAccept' => [
+        'App\Events\FreeInternetAccept'              => [
             'App\Listeners\FreeInternetAcceptListener',
         ],
+        'Laravel\Passport\Events\AccessTokenCreated' => [
+//            'App\Listeners\RevokeOldTokens',
+        ],
+        
+        'Laravel\Passport\Events\RefreshTokenCreated' => [
+//            'App\Listeners\PruneOldTokens',
+        ],
     ];
-
+    
     /**
      * Register any events for your application.
      *

@@ -11,12 +11,12 @@ use Illuminate\Http\Response;
 class FileController extends Controller
 {
     protected $response;
-
+    
     function __construct()
     {
         $this->response = new Response();
     }
-
+    
     /**
      * Display a listing of the resource.
      *
@@ -26,7 +26,7 @@ class FileController extends Controller
     {
         //
     }
-
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -36,11 +36,11 @@ class FileController extends Controller
     {
         //
     }
-
+    
     /**
      * Store a newly created resource in storage.
      *
-     * @param \App\Http\Requests\InsertFileRequest $request
+     * @param  \App\Http\Requests\InsertFileRequest  $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -50,19 +50,21 @@ class FileController extends Controller
         $file->fill($request->all());
         if ($file->save()) {
             if ($request->has("disk_id")) {
-                $file->disks()->attach($request->get("disk_id"));
+                $file->disks()
+                    ->attach($request->get("disk_id"));
             }
-
+            
             return $file->id;
-        } else {
+        }
+        else {
             return false;
         }
     }
-
+    
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -70,11 +72,11 @@ class FileController extends Controller
     {
         //
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -82,12 +84,12 @@ class FileController extends Controller
     {
         //
     }
-
+    
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int                       $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -95,11 +97,11 @@ class FileController extends Controller
     {
         //
     }
-
+    
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\File $file
+     * @param  \App\File  $file
      *
      * @return \Illuminate\Http\Response
      */
@@ -107,9 +109,10 @@ class FileController extends Controller
     {
         if ($file->delete()) {
             session()->put('success', 'فایل با موفقیت اصلاح شد');
-
+            
             return $this->response->setStatusCode(200);
-        } else {
+        }
+        else {
             //            session()->put('error', 'خطای پایگاه داده');
             return $this->response->setStatusCode(503);
         }

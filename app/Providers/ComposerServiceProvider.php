@@ -20,8 +20,8 @@ class ComposerServiceProvider extends ServiceProvider
     public function boot()
     {
         // Using class based composers...
-        View::composer('pages.search', 'App\Http\ViewComposers\ContentSearchComposer');
-
+        View::composer('pages.content-search', 'App\Http\ViewComposers\ContentSearchComposer');
+        
         View::composer([
             'content.show',
             'pages.product-search',
@@ -35,15 +35,15 @@ class ComposerServiceProvider extends ServiceProvider
             $closedSideBar = true;
             $view->with(compact('closedSideBar'));
         });
-
+        
         View::composer('partials.header1', 'App\Http\ViewComposers\HeaderComposer');
-
+        
         /**
          *  lessons
          */
         View::composer([
 //            'pages.dashboard1',
-            'partials.sidebar',
+'partials.sidebar',
         ], function ($view) {
             $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getMainBlocks());
 //            $sections = collect();
@@ -52,7 +52,7 @@ class ComposerServiceProvider extends ServiceProvider
         });
         view()->share('bonName', Bon::getAlaaBonDisplayName());
         view()->share('userIpAddress', Request::ip());
-
+        
         View::composer([
             'product.partials.showChildren',
         ], function ($view) {
@@ -69,7 +69,7 @@ class ComposerServiceProvider extends ServiceProvider
             $view->with(compact('colors'));
         });
     }
-
+    
     /**
      * Register services.
      *

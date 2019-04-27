@@ -1,6 +1,6 @@
 <html>
 <head>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel = "stylesheet" id = "bootstrap-css">
     {{--<link href="css/style.css" rel="stylesheet" id="main-css">--}}
     <style>
         div.panel:first-child {
@@ -101,9 +101,9 @@
             outline: 0;
         }
     </style>
-    <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script type="text/javascript">
+    <script src = "//code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script type = "text/javascript">
         $.fn.extend({
             treeview: function () {
                 return this.each(function () {
@@ -116,7 +116,13 @@
                     tree.find('li').has("ul").each(function () {
                         var branch = $(this); //li with children ul
 
-                        branch.prepend("<i class='tree-indicator glyphicon glyphicon-chevron-right'></i>");
+                        branch.prepend("<i class="
+                        tree - indicator
+                        glyphicon
+                        glyphicon - chevron - right
+                        "></i>"
+                    )
+                        ;
                         branch.addClass('tree-branch');
                         branch.on('click', function (e) {
                             if (this == e.target) {
@@ -147,11 +153,11 @@
     </script>
 </head>
 <body>
-<div class="container">
-    <div class="panel panel-default">
-        <h2 class="panel-heading">TreeView Using Bootstrap</h2>
-        <div class="panel-body">
-            <ul class="treeview ">
+<div class = "container">
+    <div class = "panel panel-default">
+        <h2 class = "panel-heading">TreeView Using Bootstrap</h2>
+        <div class = "panel-body">
+            <ul class = "treeview ">
                 @each('partials.subTree', $categories, 'category')
             </ul>
         </div>

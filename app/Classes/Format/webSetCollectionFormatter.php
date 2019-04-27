@@ -10,11 +10,12 @@ namespace App\Classes\Format;
 
 use App\Collection\SetCollection;
 use App\Contentset;
+use Illuminate\Support\Facades\Cache;
 
 class webSetCollectionFormatter implements SetCollectionFormatter
 {
     /**
-     * @param SetCollection $sets
+     * @param  SetCollection  $sets
      *
      * @return \Illuminate\Support\Collection
      */
@@ -23,16 +24,31 @@ class webSetCollectionFormatter implements SetCollectionFormatter
         $lessons = collect();
         foreach ($sets as $set) {
             /** @var Contentset $set */
-            $content = $set->getLastContent();
-            $lesson = [
-                "displayName" => $set->shortName,
-                "author" => $set->author,
-                "pic" => $set->photo,
-                "content_id" => !is_null($content) ? $content->id : 0,
-                "content_count" => $set->contents_count,
-            ];
-            $lessons->push($lesson);
+            $lessons->push($this->formatSet($set));
         }
         return $lessons;
+    }
+    
+    /**
+     * @param  \App\Contentset  $set
+     *
+     * @return array
+     */
+    private function formatSet(Contentset $set): array
+    {
+        return Cache::tags(['content', 'set'])
+            ->remember('format-set:'.$set->id, config('constants.CACHE_60'), function () use ($set) {
+                $content = $set->getLastContent();
+                $lesson  = [
+                    "displayName"   => $set->shortName,
+                    "author"        => $content->author,
+                    "pic"           => $set->photo,
+                    "content_id"    => $content->id,
+                    "content_count" => $set->contents_count,
+                ];
+                
+                return $lesson;
+            });
+        
     }
 }

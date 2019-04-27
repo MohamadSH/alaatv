@@ -1,23 +1,23 @@
 @extends("app")
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <link href = "/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>
 
-    <link href="../assets/pages/css/blog-rtl.min.css" rel="stylesheet" type="text/css"/>
+    <link href = "../assets/pages/css/blog-rtl.min.css" rel = "stylesheet" type = "text/css"/>
 @endsection
 
 
 @section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
+    <div class = "page-bar">
+        <ul class = "page-breadcrumb">
             <li>
-                <i class="icon-home"></i>
+                <i class = "icon-home"></i>
                 <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
-                <i class="fa fa-angle-left"></i>
+                <i class = "fa fa-angle-left"></i>
             </li>
             <li>
                 <a href = "{{action("Web\ArticleController@showList")}}">لیست مقالات</a>
-                <i class="fa fa-angle-left"></i>
+                <i class = "fa fa-angle-left"></i>
             </li>
             <li>
                 <span>نمایش مقاله</span>
@@ -27,35 +27,35 @@
 @endsection
 
 @section("content")
-    <div class="blog-page blog-content-2">
-        <div class="row">
-            <div class="col-lg-9">
-                <div class="blog-single-content bordered blog-container">
-                    <div class="blog-single-head">
-                        <h1 class="blog-single-head-title">{{$article->title}}</h1>
-                        <div class="blog-single-head-date">
-                            <i class="icon-calendar m--font-info"></i>
-                            <a href="javascript:">{{$article->CreatedAt_Jalali()}}</a>
+    <div class = "blog-page blog-content-2">
+        <div class = "row">
+            <div class = "col-lg-9">
+                <div class = "blog-single-content bordered blog-container">
+                    <div class = "blog-single-head">
+                        <h1 class = "blog-single-head-title">{{$article->title}}</h1>
+                        <div class = "blog-single-head-date">
+                            <i class = "icon-calendar m--font-info"></i>
+                            <a href = "javascript:">{{$article->CreatedAt_Jalali()}}</a>
                         </div>
                     </div>
-                    <div class="blog-single-img">
-                        <img src="{{ route('image', ['category'=>'8','w'=>'608' , 'h'=>'608' ,  'filename' =>  $article->image ]) }}"
-                             alt="عکس مقاله@if(isset($article->title[0])) {{$article->title}} @endif"/></div>
-                    <div class="blog-single-desc">
+                    <div class = "blog-single-img">
+                        <img src = "{{ route('image', ['category'=>'8','w'=>'608' , 'h'=>'608' ,  'filename' =>  $article->image ]) }}" alt = "عکس مقاله@if(isset($article->title[0])) {{$article->title}} @endif"/>
+                    </div>
+                    <div class = "blog-single-desc">
                         <p> {!! $article->brief !!}</p>
                         <p> {!! $article->body !!}</p>
                     </div>
-                    <div class="blog-single-foot">
-                        <ul class="blog-post-tags">
+                    <div class = "blog-single-foot">
+                        <ul class = "blog-post-tags">
                             @if(sizeof($tags) > 0)
                                 @foreach($tags as $tag)
-                                    <li class="uppercase">
-                                        <a href="">{{$tag}}</a>
+                                    <li class = "uppercase">
+                                        <a href = "">{{$tag}}</a>
                                     </li>
                                 @endforeach
                             @else
-                                <li class="uppercase">
-                                    <a href="">{{$article->title}}</a>
+                                <li class = "uppercase">
+                                    <a href = "">{{$article->title}}</a>
                                 </li>
                             @endif
                         </ul>
@@ -127,19 +127,19 @@
                     {{--</div>--}}
                 </div>
             </div>
-            <div class="col-lg-3">
-                <div class="blog-single-sidebar bordered blog-container">
-                    <div class="blog-single-sidebar-search">
-                        <div class="input-icon right">
+            <div class = "col-lg-3">
+                <div class = "blog-single-sidebar bordered blog-container">
+                    <div class = "blog-single-sidebar-search">
+                        <div class = "input-icon right">
                             {{--<i class="icon-magnifier"></i>--}}
                             {{--<input type="text" class="form-control" placeholder="Search Blog"> --}}
                         </div>
                     </div>
-                    <div class="blog-single-sidebar-recent">
+                    <div class = "blog-single-sidebar-recent">
                         @if(strcmp($otherArticlesType, "same") == 0)
-                            <h3 class="blog-sidebar-title uppercase bold">مقالات دیگر این دسته</h3>
+                            <h3 class = "blog-sidebar-title uppercase bold">مقالات دیگر این دسته</h3>
                         @elseif(strcmp($otherArticlesType, "recent") == 0)
-                            <h3 class="blog-sidebar-title uppercase bold">مقالات اخیر</h3>
+                            <h3 class = "blog-sidebar-title uppercase bold">مقالات اخیر</h3>
                         @endif
 
                         <ul>
@@ -150,18 +150,18 @@
                             @endforeach
                         </ul>
                     </div>
-                    <div class="blog-single-sidebar-tags">
-                        <h3 class="blog-sidebar-title uppercase">کلمات کلیدی</h3>
-                        <ul class="blog-post-tags">
+                    <div class = "blog-single-sidebar-tags">
+                        <h3 class = "blog-sidebar-title uppercase">کلمات کلیدی</h3>
+                        <ul class = "blog-post-tags">
                             @if(sizeof($tags) > 0)
                                 @foreach($tags as $tag)
-                                    <li class="uppercase">
-                                        <a href="">{{$tag}}</a>
+                                    <li class = "uppercase">
+                                        <a href = "">{{$tag}}</a>
                                     </li>
                                 @endforeach
                             @else
-                                <li class="uppercase">
-                                    <a href="">{{$article->title}}</a>
+                                <li class = "uppercase">
+                                    <a href = "">{{$article->title}}</a>
                                 </li>
                             @endif
                         </ul>
@@ -228,5 +228,5 @@
 @endsection
 
 @section("footerPageLevelPlugin")
-    <script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+    <script src = "/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type = "text/javascript"></script>
 @endsection

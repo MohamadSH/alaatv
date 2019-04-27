@@ -12,14 +12,14 @@ class GenerateViewComposerCommand extends Command
      * @var string
      */
     protected $signature = 'make:composer {name}';
-
+    
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Generate a new view composer Class stub.';
-
+    
     /**
      * Execute the console command.
      *
@@ -28,12 +28,12 @@ class GenerateViewComposerCommand extends Command
     public function handle()
     {
         $composerName = $this->argument('name');
-        $stub = $this->compileTemplate($composerName);
-
+        $stub         = $this->compileTemplate($composerName);
+        
         $path = $this->makeFilterClass($composerName, $stub);
         $this->info($path."  created.");
     }
-
+    
     /**
      * @param $composerName
      *
@@ -43,10 +43,10 @@ class GenerateViewComposerCommand extends Command
     {
         $stub = file_get_contents(app_path('Console/viewComposer.stub'));
         $stub = str_replace("{{CLASS}}", $composerName, $stub);
-
+        
         return $stub;
     }
-
+    
     /**
      * @param $composerName
      * @param $stub
@@ -57,7 +57,7 @@ class GenerateViewComposerCommand extends Command
     {
         $path = app_path('Http/ViewComposers/').$composerName."Composer.php";
         file_put_contents($path, $stub);
-
+        
         return $path;
     }
 }

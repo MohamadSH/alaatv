@@ -7,7 +7,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 class Nullable
 {
     private $result;
-
+    
     /**
      * Nullable constructor.
      *
@@ -17,28 +17,15 @@ class Nullable
     {
         $this->result = $result;
     }
-
-    /**
-     * @param $default
-     * @return mixed
-     */
-    public function getValue($default)
+    
+    public function otherwise($response)
     {
-        if (! is_null($this->result) && $this->result !== false) {
-            return $this->result;
-        }
-
-        if (is_null($default)) {
-            return optional();
-        } elseif (is_callable($default)) {
-            return call_user_func($default);
-        } else {
-            return $default;
-        }
+        $this->orFailWith($response);
     }
-
+    
     /**
      * @param $response
+     *
      * @return mixed
      */
     public function orFailWith($response)
@@ -47,16 +34,33 @@ class Nullable
             if (is_callable($response)) {
                 $response = call_user_func($response);
             }
-
+            
             throw new HttpResponseException($response);
         });
     }
-
-    public function otherwise($response)
+    
+    /**
+     * @param $default
+     *
+     * @return mixed
+     */
+    public function getValue($default)
     {
-        $this->orFailWith($response);
+        if (!is_null($this->result) && $this->result !== false) {
+            return $this->result;
+        }
+        
+        if (is_null($default)) {
+            return optional();
+        }
+        elseif (is_callable($default)) {
+            return call_user_func($default);
+        }
+        else {
+            return $default;
+        }
     }
-
+    
     public function then($response)
     {
         if ($this->result) {

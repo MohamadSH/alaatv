@@ -1,27 +1,26 @@
-<div class="row">
-    <div class="col-md-6 col-xl-6">
-        <div class="m-portlet">
-            <div class="m-portlet__body">
-                <a onclick='window.open("https://trustseal.enamad.ir/Verify.aspx?id=107263&amp;p=hkhFyri8v2dbkqqJ", "Popup","toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30")'>
-                    <img class="img-fluid m--img-centered"
-                            src="/acm/extra/namad0.jpg" alt="enamad.ir"></a>
+<div class = "row">
+    <div class = "col-md-6 col-xl-6">
+        <div class = "m-portlet">
+            <div class = "m-portlet__body">
+                <a onclick = 'window.open("https://trustseal.enamad.ir/Verify.aspx?id=107263&amp;p=hkhFyri8v2dbkqqJ", "Popup","toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30")'>
+                    <img class = "img-fluid m--img-centered" src = "/acm/extra/namad0.jpg" alt = "enamad.ir">
+                </a>
                 <span> از مرکز توسعه تجارت الکترونیکی ایران</span>
-                <button type="button" class="btn blue bg-font-dark"
-                        onclick='window.open("https://trustseal.enamad.ir/Verify.aspx?id=107263&amp;p=hkhFyri8v2dbkqqJ", "Popup","toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30")'>
+                <button type = "button" class = "btn blue bg-font-dark" onclick = 'window.open("https://trustseal.enamad.ir/Verify.aspx?id=107263&amp;p=hkhFyri8v2dbkqqJ", "Popup","toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30")'>
                     نماد اعتماد الکترونیک
                 </button>
             </div>
         </div>
 
     </div>
-    <div class="col-md-6 col-xl-6">
-        <div class="m-portlet">
-            <div class="m-portlet__body">
-                <a onclick='window.open("https://logo.samandehi.ir/Verify.aspx?id=129649&p=rfthuiwkpfvlgvkaaodspfvl", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")'>
-                    <img class="img-fluid m--img-centered" src="https://cdn.sanatisharif.ir/upload/samandehi-logo.png" alt="لوگو ساماندهی آلاء"> </a>
+    <div class = "col-md-6 col-xl-6">
+        <div class = "m-portlet">
+            <div class = "m-portlet__body">
+                <a onclick = 'window.open("https://logo.samandehi.ir/Verify.aspx?id=129649&p=rfthuiwkpfvlgvkaaodspfvl", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")'>
+                    <img class = "img-fluid m--img-centered" src = "https://cdn.sanatisharif.ir/upload/samandehi-logo.png" alt = "لوگو ساماندهی آلاء">
+                </a>
                 <span>تحت قوانین جمهوری اسلامی ایران</span>
-                <button type="button" class="btn blue bg-font-dark"
-                        onclick='window.open("https://logo.samandehi.ir/Verify.aspx?id=129649&p=rfthuiwkpfvlgvkaaodspfvl", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")'>
+                <button type = "button" class = "btn blue bg-font-dark" onclick = 'window.open("https://logo.samandehi.ir/Verify.aspx?id=129649&p=rfthuiwkpfvlgvkaaodspfvl", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")'>
                     ستاد ساماندهی
                 </button>
             </div>

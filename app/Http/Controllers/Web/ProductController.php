@@ -36,7 +36,7 @@ class ProductController extends Controller
     | Traits
     |--------------------------------------------------------------------------
     */
-
+    
     use Helper;
     use ProductCommon;
     use MetaCommon;
@@ -44,40 +44,40 @@ class ProductController extends Controller
     use CharacterCommon;
     use RequestCommon;
     use SearchCommon;
-
+    
     /*
     |--------------------------------------------------------------------------
     | Properties
     |--------------------------------------------------------------------------
     */
-
+    
     const PARTIAL_SEARCH_TEMPLATE = 'partials.search.product';
-
+    
     const PARTIAL_INDEX_TEMPLATE = 'product.index';
-
+    
     protected $response;
-
+    
     protected $setting;
-
+    
     /*
     |--------------------------------------------------------------------------
     | Private methods
     |--------------------------------------------------------------------------
     */
-
+    
     /*
     |--------------------------------------------------------------------------
     | Private methods
     |--------------------------------------------------------------------------
     */
-
+    
     function __construct(Response $response, Websitesetting $setting)
     {
         $this->response = $response;
-        $this->setting = $setting->setting;
+        $this->setting  = $setting->setting;
         $this->callMiddlewares();
     }
-
+    
     private function callMiddlewares(): void
     {
         //        $this->middleware('permission:' . config('constants.LIST_PRODUCT_ACCESS'), ['only' => 'index']);
@@ -110,43 +110,47 @@ class ProductController extends Controller
             ],
         ]);
     }
-
+    
     /**
      * Display a listing of the resource.
      *
-     * @param ProductIndexRequest $request
+     * @param  ProductIndexRequest  $request
      *
-     * @param ProductSearch $productSearch
+     * @param  ProductSearch        $productSearch
+     *
      * @return \Illuminate\Http\Response
      */
     public function index(ProductIndexRequest $request, ProductSearch $productSearch)
     {
-        $tags = $request->get('tags');
-        $filters = $request->all();
-        $pageName = 'productPage';
-        $productResult = $productSearch->setPageName($pageName)->get($filters);
-
+        $tags          = $request->get('tags');
+        $filters       = $request->all();
+        $pageName      = 'productPage';
+        $productResult = $productSearch->setPageName($pageName)
+            ->get($filters);
+        
         $products = $productResult;
-
+        
         $url = $request->url();
-        $this->generateSeoMetaTags(new SeoDummyTags("محصولات ".$this->setting->site->name, 'کارگاه تست کنکور، همایش، جمع بندی و اردوطلایی نوروز آلاء', $url,
+        $this->generateSeoMetaTags(new SeoDummyTags("محصولات ".$this->setting->site->name,
+            'کارگاه تست کنکور، همایش، جمع بندی و اردوطلایی نوروز آلاء', $url,
             $url, route('image', [
                 'category' => '11',
-                'w' => '100',
-                'h' => '100',
+                'w'        => '100',
+                'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-
+        
         if (request()->expectsJson()) {
-            return $this->response->setStatusCode(Response::HTTP_OK)->setContent([
-                'result' => $products,
-                'tags' => $tags,
-            ]);
+            return $this->response->setStatusCode(Response::HTTP_OK)
+                ->setContent([
+                    'result' => $products,
+                    'tags'   => $tags,
+                ]);
         }
-
+        
         return view("pages.product-search", compact("products", 'tags'));
     }
-
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -156,11 +160,11 @@ class ProductController extends Controller
     {
         //
     }
-
+    
     /**
      * Store a newly created resource in storage.
      *
-     * @param InsertProductRequest $request
+     * @param  InsertProductRequest  $request
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
@@ -168,36 +172,39 @@ class ProductController extends Controller
     public function store(InsertProductRequest $request)
     {
         $product = new Product();
-
+        
         if ($this->strIsEmpty($request->get('bonPlus'))) {
             $bonPlus = 0;
-        } else {
+        }
+        else {
             $bonPlus = $request->get('bonPlus');
         }
-
+        
         if ($this->strIsEmpty($request->get('bonDiscount'))) {
             $bonDiscount = 0;
-        } else {
+        }
+        else {
             $bonDiscount = $request->get('bonDiscount');
         }
         $bonId = $request->get('bon_id');
-
+        
         $this->fillProductFromRequest($request, $product);
-
+        
         if ($product->save()) {
             if ($bonPlus || $bonDiscount) {
                 $this->attachBonToProduct($product, $bonId, $bonDiscount, $bonPlus);
             }
-
+            
             return $this->response->setStatusCode(Response::HTTP_OK);
-        } else {
+        }
+        else {
             return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
-
+    
     /**
-     * @param FormRequest $request
-     * @param Product $product
+     * @param  FormRequest  $request
+     * @param  Product      $product
      *
      * @return void
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
@@ -205,30 +212,30 @@ class ProductController extends Controller
     private function fillProductFromRequest(FormRequest $request, Product &$product): void
     {
         $inputData = $request->all();
-        $files = $request->has("files") ? [$request->files] : [];
-        $images = $request->has("image") ? [$request->image] : [];
-        $isFree = $request->has("isFree");
-
+        $files     = $request->has("files") ? [$request->files] : [];
+        $images    = $request->has("image") ? [$request->image] : [];
+        $isFree    = $request->has("isFree");
+        
         $product->fill($inputData);
-
+        
         $product->isFree = $isFree;
-        if (! $this->strIsEmpty($product->introVideo)) {
+        if (!$this->strIsEmpty($product->introVideo)) {
             $this->makeValidUrl($product->introVideo);
         }
         //Storing product's catalog
         $storeFileResult = $this->storeCatalogOfProduct($product, $files);
         //ToDo : delete the file if it is an update
-
+        
         //Storing product's image
         $storeImageResult = $this->storeImageOfProduct($product, $images);
         //ToDo : delete the file if it is an update
     }
-
+    
     /** Stores catalog file of the product
      *
-     * @param Product $product
+     * @param  Product  $product
      *
-     * @param array $files
+     * @param  array    $files
      *
      * @return array
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
@@ -237,23 +244,24 @@ class ProductController extends Controller
     {
         $done = [];
         foreach ($files as $key => $file) {
-            $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            $extension  = $file->getClientOriginalExtension();
+            $fileName   = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
             $done[$key] = false;
-            if (Storage::disk(config('constants.DISK5'))->put($fileName, File::get($file))) {
+            if (Storage::disk(config('constants.DISK5'))
+                ->put($fileName, File::get($file))) {
                 $product->file = $fileName;
-                $done[$key] = true;
+                $done[$key]    = true;
             }
         }
-
+        
         return $done;
     }
-
+    
     /** Stores image file of the product
      *
-     * @param Product $product
+     * @param  Product  $product
      *
-     * @param array $files
+     * @param  array    $files
      *
      * @return array
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
@@ -262,11 +270,12 @@ class ProductController extends Controller
     {
         $done = [];
         foreach ($files as $key => $file) {
-            $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            $extension  = $file->getClientOriginalExtension();
+            $fileName   = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
             $done[$key] = false;
-            if (Storage::disk(config('constants.DISK4'))->put($fileName, File::get($file))) {
-                $done[$key] = true;
+            if (Storage::disk(config('constants.DISK4'))
+                ->put($fileName, File::get($file))) {
+                $done[$key]     = true;
                 $product->image = $fileName;
                 /**
                  *  Snippet code : resizing the image using the ........ package
@@ -277,16 +286,16 @@ class ProductController extends Controller
                  * */
             }
         }
-
+        
         return $done;
     }
-
+    
     /*
     |--------------------------------------------------------------------------
     | Public methods
     |--------------------------------------------------------------------------
     */
-
+    
     /**
      * @param $product
      * @param $bonId
@@ -296,25 +305,26 @@ class ProductController extends Controller
     private function attachBonToProduct(Product $product, $bonId, $bonDiscount, $bonPlus): void
     {
         $bonQueryBuilder = $product->bons();
-
+        
         if ($product->hasBon($bonId)) {
             $bonQueryBuilder->updateExistingPivot($bonId, [
                 'discount' => $bonDiscount,
-                'bonPlus' => $bonPlus,
+                'bonPlus'  => $bonPlus,
             ]);
-        } else {
+        }
+        else {
             $bonQueryBuilder->attach($bonId, [
                 'discount' => $bonDiscount,
-                'bonPlus' => $bonPlus,
+                'bonPlus'  => $bonPlus,
             ]);
         }
     }
-
+    
     /**
      * Display the specified resource.
      *
-     * @param Request $request
-     * @param \App\Product $product
+     * @param  Request       $request
+     * @param  \App\Product  $product
      *
      * @return \Illuminate\Http\Response
      */
@@ -323,15 +333,16 @@ class ProductController extends Controller
         if (isset($product->redirectUrl)) {
             return redirect($product->redirectUrl, 301, $request->headers->all());
         }
-
+        
         if ($product->grandParent != null) {
             return redirect($product->grandParent->url, 301, $request->headers->all());
         }
-
+        
         $this->generateSeoMetaTags($product);
-
+        
         if (request()->expectsJson()) {
-            return $this->response->setStatusCode(Response::HTTP_OK)->setContent($product);
+            return $this->response->setStatusCode(Response::HTTP_OK)
+                ->setContent($product);
         }
 
 //        dd($product);
@@ -339,69 +350,74 @@ class ProductController extends Controller
 //        return $product->type['type'];
 //        return $product->attributes->get('main');
 //        return $product->type->get('main');
-
+        
         return view("product.show", compact("product"));
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \app\Product $product
+     * @param  \app\Product  $product
      *
      * @return \Illuminate\Http\Response
      */
     public function edit($product)
     {
-        $bonName = config("constants.BON1");
-        $amountLimit = Product::AMOUNT_LIMIT;
+        $bonName                  = config("constants.BON1");
+        $amountLimit              = Product::AMOUNT_LIMIT;
         $defaultProductPhotoOrder = 0;
-        $defaultAmountLimit = 0;
-        $defaultEnableStatus = 0;
-        $enableStatus = Product::ENABLE_STATUS;
-
+        $defaultAmountLimit       = 0;
+        $defaultEnableStatus      = 0;
+        $enableStatus             = Product::ENABLE_STATUS;
+        
         if ($product->isLimited()) {
             $defaultAmountLimit = 1;
         }
-
+        
         if ($product->enable) {
             $defaultEnableStatus = 1;
         }
-
-        $attributesets = Attributeset::pluck('name', 'id')->toArray();
-
+        
+        $attributesets = Attributeset::pluck('name', 'id')
+            ->toArray();
+        
         $bons = $product->bons();
         $bons->enable();
         $bons->ofName($bonName);
-        $bons = $bons->get()->first();
-
-        if (! isset($bons)) {
-            $bons = Bon::ofName($bonName)->first();
+        $bons = $bons->get()
+            ->first();
+        
+        if (!isset($bons)) {
+            $bons = Bon::ofName($bonName)
+                ->first();
         }
-
-        $productFiles = $product->productfiles->sortBy("order");
+        
+        $productFiles             = $product->productfiles->sortBy("order");
         $defaultProductFileOrders = $product->productFileTypesOrder();
-
+        
         $productFileTypes = Productfiletype::makeSelectArray();
 
 //        $products = $this->makeProductCollection();
-        $products = Product::where('id', '>', 240);
+        $products    = Product::where('id', '>', 240);
         $producttype = $product->producttype->displayName;
-
+        
         $productPhotos = $product->photos->sortByDesc("order");
         if ($productPhotos->isNotEmpty()) {
             $defaultProductPhotoOrder = $productPhotos->first()->order + 1;
         }
-
+        
         return view("product.edit",
-            compact("product", "amountLimit", "defaultAmountLimit", "enableStatus", "defaultEnableStatus", "attributesets", "bons", "productFiles",
-                "productFileTypes", "defaultProductFileOrders", "products", "producttype", "productPhotos", "defaultProductPhotoOrder"));
+            compact("product", "amountLimit", "defaultAmountLimit", "enableStatus", "defaultEnableStatus",
+                "attributesets", "bons", "productFiles",
+                "productFileTypes", "defaultProductFileOrders", "products", "producttype", "productPhotos",
+                "defaultProductPhotoOrder"));
     }
-
+    
     /**
      * Update the specified resource in storage.
      *
-     * @param EditProductRequest $request
-     * @param \app\Product $product
+     * @param  EditProductRequest  $request
+     * @param  \app\Product        $product
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
@@ -411,41 +427,44 @@ class ProductController extends Controller
         $bonId = $request->get('bon_id');
         if ($this->strIsEmpty($request->get('bonPlus'))) {
             $bonPlus = 0;
-        } else {
+        }
+        else {
             $bonPlus = $request->get('bonPlus');
         }
-
+        
         if ($this->strIsEmpty($request->get('bonDiscount'))) {
             $bonDiscount = 0;
-        } else {
+        }
+        else {
             $bonDiscount = $request->get('bonDiscount');
         }
         $childrenPriceEqualizer = $request->has("changeChildrenPrice");
-
+        
         $this->fillProductFromRequest($request, $product);
-
+        
         if ($childrenPriceEqualizer) {
             $product->equalizingChildrenPrice();
         }
-
+        
         if ($bonPlus || $bonDiscount) {
             $this->attachBonToProduct($product, $bonId, $bonDiscount, $bonPlus);
         }
-
+        
         if ($product->update()) {
             session()->put('success', 'اصلاح محصول با موفقیت انجام شد');
-        } else {
+        }
+        else {
             session()->put('error', 'خطای پایگاه داده');
         }
-
+        
         return redirect()->back();
     }
-
+    
     /**
      * Remove the specified resource from storage.
      *
-     * @param Request $request
-     * @param \app\Product $product
+     * @param  Request       $request
+     * @param  \app\Product  $product
      *
      * @return \Illuminate\Http\Response
      * @throws \Exception
@@ -456,28 +475,31 @@ class ProductController extends Controller
         if ($product->delete()) {
             $done = true;
         }
-
+        
         if ($request->expectsJson()) {
             if ($done) {
                 return $this->response->setStatusCode(Response::HTTP_OK);
-            } else {
+            }
+            else {
                 return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
             }
-        } else {
+        }
+        else {
             if ($done) {
                 session()->put('success', 'محصول با موفقیت اصلاح شد');
-            } else {
+            }
+            else {
                 session()->put('error', 'خطای پایگاه داده');
             }
-
+            
             return redirect()->back();
         }
     }
-
+    
     /**
      * Search for a product
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -485,12 +507,12 @@ class ProductController extends Controller
     {
         return redirect(action("Web\ProductController@index"), 301);
     }
-
+    
     /**
      * enable or disable children of product
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \app\Product $product
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \app\Product              $product
      *
      * @return \Illuminate\Http\Response
      */
@@ -500,8 +522,9 @@ class ProductController extends Controller
         if ($product->enable == 1) {
             $product->enable = 0;
             foreach ($product->attributevalues as $attributevalue) {
-                $flag = 0;
-                $children = $parent->children->where("id", "!=", $product->id)->where("enable", 1);
+                $flag     = 0;
+                $children = $parent->children->where("id", "!=", $product->id)
+                    ->where("enable", 1);
                 foreach ($children as $child) {
                     if ($child->attributevalues->contains($attributevalue) == true) {
                         $flag = 1;
@@ -509,239 +532,255 @@ class ProductController extends Controller
                     }
                 }
                 if ($flag == 0) {
-                    $parent->attributevalues()->detach($attributevalue);
+                    $parent->attributevalues()
+                        ->detach($attributevalue);
                 }
             }
-        } else {
+        }
+        else {
             if ($product->enable == 0) {
                 $product->enable = 1;
                 foreach ($product->attributevalues as $attributevalue) {
                     if ($parent->attributevalues->contains($attributevalue) == false) {
                         if (isset($attributevalue->pivot->extraCost) && $attributevalue->pivot->extraCost > 0) {
                             $attributevalueDescription = "+".number_format($attributevalue->pivot->extraCost)."تومان";
-                        } else {
+                        }
+                        else {
                             $attributevalueDescription = null;
                         }
-                        $parent->attributevalues()->attach($attributevalue->id, ["description" => $attributevalueDescription]);
+                        $parent->attributevalues()
+                            ->attach($attributevalue->id, ["description" => $attributevalueDescription]);
                     }
                 }
             }
         }
         if ($product->update()) {
             session()->put('success', 'وضعیت فرزند محصول با موفقیت تغییر کرد');
-        } else {
+        }
+        else {
             session()->put('error', 'خطای پایگاه داده');
         }
-
+        
         return redirect()->back();
     }
-
+    
     /**
      * Show the form for configure the specified resource.
      *
-     * @param \app\Product $product
+     * @param  \app\Product  $product
      *
      * @return \Illuminate\Http\Response
      */
     public function createConfiguration(Product $product)
     {
         $attributeCollection = collect();
-        $attributeGroups = $product->attributeset->attributeGroups;
+        $attributeGroups     = $product->attributeset->attributeGroups;
         foreach ($attributeGroups as $attributeGroup) {
-            $attributeType = Attributetype::where("name", "main")->get()->first();
-            $attributes = $product->attributeset->attributes()->where("attributetype_id", $attributeType->id);
+            $attributeType = Attributetype::where("name", "main")
+                ->get()
+                ->first();
+            $attributes    = $product->attributeset->attributes()
+                ->where("attributetype_id", $attributeType->id);
             foreach ($attributes as $attribute) {
-                $attributeValues = $attribute->attributevalues;
+                $attributeValues        = $attribute->attributevalues;
                 $attributeValuesCollect = collect();
                 foreach ($attributeValues as $attributeValue) {
                     $attributeValuesCollect->push($attributeValue);
                     //                        array_push($attributeValuesArray , $attributeValue);
                 }
                 $attributeCollection->push([
-                    "attribute" => $attribute,
+                    "attribute"        => $attribute,
                     "attributeControl" => $attribute->attributecontrol->name,
-                    "attributevalues" => $attributeValuesCollect,
+                    "attributevalues"  => $attributeValuesCollect,
                 ]);
             }
         }
-
+        
         return view("product.configureProduct.createConfiguration", compact("product", "attributeCollection"));
     }
-
+    
     /**
      * make children for product
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \app\Product $product
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \app\Product              $product
      *
      * @return \Illuminate\Http\Response
      */
     public function makeConfiguration(Request $request, $product)
     {
-
+        
         $matrix = [];
-        $array = []; // checkbox attribute values
-
+        $array  = []; // checkbox attribute values
+        
         $attributeIds = $request->get("attributevalues");
-        $extraCosts = $request->get("extraCost");
-        $orders = $request->get("order");
+        $extraCosts   = $request->get("extraCost");
+        $orders       = $request->get("order");
         $descriptions = $request->get("description");
-        $i = 0;
+        $i            = 0;
         foreach ($attributeIds as $attributeId) {
             $j = 0;
             foreach ($attributeId as $attributevalueId) {
                 $extraCost = $extraCosts[$attributevalueId];
-                if (! isset($extraCost[0])) {
+                if (!isset($extraCost[0])) {
                     $extraCost = 0;
                 }
-
+                
                 $order = $orders[$attributevalueId];
-                if (! isset($order[0])) {
+                if (!isset($order[0])) {
                     $order = 0;
                 }
-
+                
                 $description = $descriptions[$attributevalueId];
-                if (! isset($description[0])) {
+                if (!isset($description[0])) {
                     $description = null;
                 }
-
+                
                 $attributevalue = Attributevalue::findOrFail($attributevalueId);
-                $product->attributevalues()->attach($attributevalue, [
-                    "extraCost" => $extraCost,
-                    "order" => $order,
-                    "description" => $description,
-                ]);
+                $product->attributevalues()
+                    ->attach($attributevalue, [
+                        "extraCost"   => $extraCost,
+                        "order"       => $order,
+                        "description" => $description,
+                    ]);
                 if (strcmp($attributevalue->attribute->attributecontrol->name, "groupedCheckbox") == 0) {
                     array_push($array, $attributevalue->id);
-                } else {
+                }
+                else {
                     $matrix[$i][$j] = $attributevalue->id;
                     $j++;
                 }
             }
             $i++;
         }
-
+        
         if (sizeof($matrix) == 0) {
             return redirect()->back();
         }
         if (sizeof($matrix) == 1) {
             $productConfigurations = current($matrix);
-        } else {
+        }
+        else {
             if (sizeof($matrix) >= 2) {
-                $vertex = array_pop($matrix);
+                $vertex                = array_pop($matrix);
                 $productConfigurations = $this->cartesianProduct($matrix, $vertex)[0];
             }
         }
-
+        
         foreach ($array as $item) {
             foreach ($productConfigurations as $productConfig) {
                 $newProductConfig = $productConfig.",".$item;
                 array_push($productConfigurations, $newProductConfig);
             }
         }
-
+        
         foreach ($productConfigurations as $productConfig) {
-            $childProduct = $product->replicate();
+            $childProduct        = $product->replicate();
             $childProduct->order = 0;
-            $attributevalueIds = explode(",", $productConfig);
-            $productName = "";
-            $attributevalues = [];
+            $attributevalueIds   = explode(",", $productConfig);
+            $productName         = "";
+            $attributevalues     = [];
             foreach ($attributevalueIds as $attributevalueId) {
                 $attributevalue = Attributevalue::findOrFail($attributevalueId);
                 array_push($attributevalues, $attributevalue);
                 $productName = $productName."-".$attributevalue->name;
             }
-            $childProduct->name = $product->name.$productName;
+            $childProduct->name           = $product->name.$productName;
             $childProduct->producttype_id = 1;
             if ($childProduct->save()) {
-                $childProduct->parents()->attach($product);
+                $childProduct->parents()
+                    ->attach($product);
                 foreach ($attributevalues as $attributevalue) {
-
+                    
                     $extraCost = $extraCosts[$attributevalue->id];
-                    if (! isset($extraCost[0])) {
+                    if (!isset($extraCost[0])) {
                         $extraCost = 0;
                     }
-
+                    
                     $order = $orders[$attributevalue->id];
-                    if (! isset($order[0])) {
+                    if (!isset($order[0])) {
                         $order = 0;
                     }
-
+                    
                     $description = $descriptions[$attributevalue->id];
-                    if (! isset($description[0])) {
+                    if (!isset($description[0])) {
                         $description = null;
                     }
-
-                    $childProduct->attributevalues()->attach($attributevalue, [
-                        "extraCost" => $extraCost,
-                        "order" => $order,
-                        "description" => $description,
-                    ]);
+                    
+                    $childProduct->attributevalues()
+                        ->attach($attributevalue, [
+                            "extraCost"   => $extraCost,
+                            "order"       => $order,
+                            "description" => $description,
+                        ]);
                 }
-            } else {
+            }
+            else {
                 session()->put('error', 'خطای پایگاه داده');
             }
         }
-
+        
         return redirect(action("Web\ProductController@edit", $product));
     }
-
+    
     /**
      * Show the form for setting pivots for attributevalues
      *
-     * @param \app\Product $product
+     * @param  \app\Product  $product
      *
      * @return \Illuminate\Http\Response
      */
     public function editAttributevalues(Product $product)
     {
-
+        
         $attributeValuesCollection = collect();
-
-        $attributeset = $product->attributeset;
+        
+        $attributeset    = $product->attributeset;
         $attributeGroups = $attributeset->attributegroups;
         foreach ($attributeGroups as $attributeGroup) {
             $attributes = $attributeGroup->attributes->sortBy("order");
             foreach ($attributes as $attribute) {
-                $type = Attributetype::FindOrFail($attribute->attributetype_id);
+                $type                  = Attributetype::FindOrFail($attribute->attributetype_id);
                 $productAttributevlues = $product->attributevalues->where("attribute_id", $attribute->id);
-                $attrributevalues = $attribute->attributevalues;
-                if (! isset($attributeValuesCollection[$type->id])) {
+                $attrributevalues      = $attribute->attributevalues;
+                if (!isset($attributeValuesCollection[$type->id])) {
                     $attributeValuesCollection->put($type->id, collect([
-                        "name" => $type->name,
+                        "name"        => $type->name,
                         "displayName" => $type->description,
-                        "attributes" => [],
+                        "attributes"  => [],
                     ]));
                 }
                 $helperCollection = collect($attributeValuesCollection[$type->id]["attributes"]);
                 $helperCollection->push([
-                    "name" => $attribute->displayName,
-                    "type" => $type,
-                    "values" => $attrributevalues,
+                    "name"                   => $attribute->displayName,
+                    "type"                   => $type,
+                    "values"                 => $attrributevalues,
                     "productAttributevalues" => $productAttributevlues,
                 ]);
                 $attributeValuesCollection[$type->id]->put("attributes", $helperCollection);
             }
         }
-
+        
         return view('product.configureProduct.editAttributevalues', compact('product', 'attributeValuesCollection'));
     }
-
+    
     /**
      * set pivot for attributevalues
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \app\Product $product
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \app\Product              $product
      *
      * @return \Illuminate\Http\Response
      */
     public function updateAttributevalues(Request $request, Product $product)
     {
         dd($request->all());
-        $product->attributevalues()->detach($product->attributevalues->pluck("id")->toArray());
+        $product->attributevalues()
+            ->detach($product->attributevalues->pluck("id")
+                ->toArray());
         $newAttributevalues = $request->get("attributevalues");
-        $newExtraCost = $request->get("extraCost");
-        $newDescription = $request->get("description");
+        $newExtraCost       = $request->get("extraCost");
+        $newDescription     = $request->get("description");
         foreach ($newAttributevalues as $attributevalueId) {
             $extraCost = $newExtraCost[$attributevalueId];
             if (strlen($extraCost) == 0) {
@@ -751,153 +790,178 @@ class ProductController extends Controller
             if (strlen($extraCost) == 0) {
                 $extraCost = null;
             }
-            if ($product->attributevalues()->attach($attributevalueId, [
-                "extraCost" => $extraCost,
-                "description" => $description,
-            ])) {
-                $children = $product->children()->whereHas("attributevalues", function ($q) use ($attributevalueId) {
-                    $q->where("id", $attributevalueId);
-                })->get();
+            if ($product->attributevalues()
+                ->attach($attributevalueId, [
+                    "extraCost"   => $extraCost,
+                    "description" => $description,
+                ])) {
+                $children = $product->children()
+                    ->whereHas("attributevalues", function ($q) use ($attributevalueId) {
+                        $q->where("id", $attributevalueId);
+                    })
+                    ->get();
                 foreach ($children as $child) {
-                    $child->attributevalues()->where("id", $attributevalueId)->updateExistingPivot($attributevalueId, [
-                        "extraCost" => $extraCost,
-                        "description" => $description,
-                    ]);
+                    $child->attributevalues()
+                        ->where("id", $attributevalueId)
+                        ->updateExistingPivot($attributevalueId, [
+                            "extraCost"   => $extraCost,
+                            "description" => $description,
+                        ]);
                 }
             }
         }
-
+        
         return redirect(action("Web\ProductController@edit", $product));
     }
-
+    
     /**
      * Attach a complimentary product to a product
      *
-     * @param \App\Product $product
-     * @param \App\Http\Requests\AddComplimentaryProductRequest $request
+     * @param  \App\Product                                       $product
+     * @param  \App\Http\Requests\AddComplimentaryProductRequest  $request
      *
      * @return \Illuminate\Http\Response
      */
     public function addComplimentary(AddComplimentaryProductRequest $request, Product $product)
     {
         $complimentary = Product::findOrFail($request->get("complimentaryproducts"));
-
+        
         if ($product->complimentaryproducts->contains($complimentary)) {
             session()->put('error', 'این اشانتیون قبلا درج شده است');
-        } else {
-            $product->complimentaryproducts()->attach($complimentary);
+        }
+        else {
+            $product->complimentaryproducts()
+                ->attach($complimentary);
             session()->put('success', 'درج اشانتیون با موفقیت انجام شد');
         }
-
+        
         return redirect()->back();
     }
-
+    
     /**
      * Detach a complimentary product to a product
      *
-     * @param \App\Product $complimentary
-     * @param \Illuminate\Http\Request $request
+     * @param  \App\Product              $complimentary
+     * @param  \Illuminate\Http\Request  $request
      *
      * @return \Illuminate\Http\Response
      */
     public function removeComplimentary(Request $request, Product $complimentary)
     {
         $product = Product::findOrFail($request->get("productId"));
-        $product->complimentaryproducts()->detach($complimentary);
+        $product->complimentaryproducts()
+            ->detach($complimentary);
         session()->put('success', 'حذف اشانتیون با موفقیت انجام شد');
-
+        
         return $this->response->setStatusCode(200);
     }
-
+    
     /**
      * Attach a gift product to a product
      *
-     * @param \App\Product $product
-     * @param \Illuminate\Http\Request $request
+     * @param  \App\Product              $product
+     * @param  \Illuminate\Http\Request  $request
      *
      * @return \Illuminate\Http\Response
      */
     public function addGift(Request $request, Product $product)
     {
         $gift = Product::findOrFail($request->get("giftProducts"));
-
+        
         if ($product->gifts->contains($gift)) {
             session()->put('error', 'این هدیه قبلا به این محصول اضافه شده است');
-        } else {
-            $product->gifts()->attach($gift, ["relationtype_id" => config("constants.PRODUCT_INTERRELATION_GIFT")]);
+        }
+        else {
+            $product->gifts()
+                ->attach($gift, ["relationtype_id" => config("constants.PRODUCT_INTERRELATION_GIFT")]);
             session()->put('success', 'هدیه با موفقیت به محصول اضافه شد');
         }
-
+        
         return redirect()->back();
     }
-
+    
     /**
      * Detach a gift product to a product
      *
-     * @param \App\Product $product
-     * @param \App\Product $gift
-     * @param \Illuminate\Http\Request $request
+     * @param  \App\Product              $product
+     * @param  \App\Product              $gift
+     * @param  \Illuminate\Http\Request  $request
      *
      * @return \Illuminate\Http\Response
      */
     public function removeGift(Request $request, Product $product)
     {
-        $gift = Product::where("id", $request->get("giftId"))->get()->first();
-        if (! isset($gift)) {
-            return $this->response->setStatusCode(503)->setContent(["message" => "خطا! چنین محصول هدیه ای وجود ندارد"]);
+        $gift = Product::where("id", $request->get("giftId"))
+            ->get()
+            ->first();
+        if (!isset($gift)) {
+            return $this->response->setStatusCode(503)
+                ->setContent(["message" => "خطا! چنین محصول هدیه ای وجود ندارد"]);
         }
-
-        if ($product->gifts()->detach($gift->id)) {
-            return $this->response->setStatusCode(200)->setContent(["message" => "هدیه با موفقیت حذف شد"]);
-        } else {
-            return $this->response->setStatusCode(503)->setContent(["message" => "خطا در حذف هدیه . لطفا دوباره اقدام نمایید"]);
+        
+        if ($product->gifts()
+            ->detach($gift->id)) {
+            return $this->response->setStatusCode(200)
+                ->setContent(["message" => "هدیه با موفقیت حذف شد"]);
+        }
+        else {
+            return $this->response->setStatusCode(503)
+                ->setContent(["message" => "خطا در حذف هدیه . لطفا دوباره اقدام نمایید"]);
         }
     }
-
+    
     /**
      * Products Special Landing Page
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return \Illuminate\Http\Response
      */
     public function landing1(Request $request)
     {
         $url = $request->url();
-
-        $this->generateSeoMetaTags(new SeoDummyTags("آلاء| جمع بندی نیم سال اول", 'همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف', $url,
+        
+        $this->generateSeoMetaTags(new SeoDummyTags("آلاء| جمع بندی نیم سال اول",
+            'همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف', $url,
             $url, route('image', [
                 'category' => '11',
-                'w' => '100',
-                'h' => '100',
+                'w'        => '100',
+                'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
 
 //        $productIds = config("constants.HAMAYESH_PRODUCT");
         $productIds = [276, 275, 272, 270, 269];
-        $products = Product::whereIn("id", $productIds)->orderBy("order")->where("enable", 1)->get();
-        $attribute = Attribute::where("name", "major")->get()->first();
+        $products   = Product::whereIn("id", $productIds)
+            ->orderBy("order")
+            ->where("enable", 1)
+            ->get();
+        $attribute  = Attribute::where("name", "major")
+            ->get()
+            ->first();
         $withFilter = true;
-
+        
         $landingProducts = collect();
         foreach ($products as $product) {
             $majors = [];
             if (isset($attribute)) {
-                $majors = $product->attributevalues->where("attribute_id", $attribute->id)->pluck("name")->toArray();
+                $majors = $product->attributevalues->where("attribute_id", $attribute->id)
+                    ->pluck("name")
+                    ->toArray();
             }
-
+            
             $landingProducts->push([
                 "product" => $product,
-                "majors" => $majors,
+                "majors"  => $majors,
             ]);
         }
 
 //        $costCollection = $this->makeCostCollection($products);
         $costCollection = null;
-
+        
         return view("product.landing.landing1", compact("landingProducts", "costCollection", "withFilter"));
     }
-
+    
     /**
      * Products Special Landing Page
      *
@@ -920,23 +984,28 @@ class ProductController extends Controller
                     break;
             }
         }
-
-        $products = Product::whereIn("id", config("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))->orwhereIn("id",
-            config("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"))->orderBy("order")->where("enable", 1)->get();
-
+        
+        $products = Product::whereIn("id", config("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))
+            ->orwhereIn("id",
+                config("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"))
+            ->orderBy("order")
+            ->where("enable", 1)
+            ->get();
+        
         $landingProducts = collect();
         foreach ($products as $product) {
             $landingProducts->push(["product" => $product]);
         }
         $costCollection = $this->makeCostCollection($products);
-
-        return view("product.landing.landing2", compact("landingProducts", "costCollection", "utm_term", "gheireHozoori"));
+        
+        return view("product.landing.landing2",
+            compact("landingProducts", "costCollection", "utm_term", "gheireHozoori"));
     }
-
+    
     /**
      * Products Special Landing Page
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -944,65 +1013,70 @@ class ProductController extends Controller
     {
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags("آلاء | همایش های طلایی کنکور 97",
-            'وقتی همه کنکوری ها گیج و سرگردانند، شما مرور کنید. چالشی ترین نکات کنکوری در همایش های آلاء', $url, $url, route('image', [
+            'وقتی همه کنکوری ها گیج و سرگردانند، شما مرور کنید. چالشی ترین نکات کنکوری در همایش های آلاء', $url, $url,
+            route('image', [
                 'category' => '11',
-                'w' => '100',
-                'h' => '100',
+                'w'        => '100',
+                'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-
+        
         return view("product.landing.landing3");
     }
-
+    
     /**
      * Products Special Landing Page
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return \Illuminate\Http\Response
      */
     public function landing4(Request $request)
     {
         return redirect()->route('landing.3', $request->all());
-
+        
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags("آلاء | همایش های طلایی کنکور 97",
-            'وقتی همه کنکوری ها گیج و سرگردانند، شما مرور کنید. چالشی ترین نکات کنکوری در همایش های آلاء', $url, $url, route('image', [
+            'وقتی همه کنکوری ها گیج و سرگردانند، شما مرور کنید. چالشی ترین نکات کنکوری در همایش های آلاء', $url, $url,
+            route('image', [
                 'category' => '11',
-                'w' => '100',
-                'h' => '100',
+                'w'        => '100',
+                'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-
+        
         return view("product.landing.landing4");
     }
-
+    
     /**
      * Products Special Landing Page
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return \Illuminate\Http\Response
      */
     public function landing5(Request $request)
     {
-        $url = $request->url();
+        $url   = $request->url();
         $title = 'ضربه فنی کنکور نظام قدیم';
         SEO::setTitle($title);
-        SEO::opengraph()->setUrl($url);
+        SEO::opengraph()
+            ->setUrl($url);
         SEO::setCanonical($url);
-        SEO::twitter()->setSite("آلاء");
+        SEO::twitter()
+            ->setSite("آلاء");
         SEO::setDescription('ضربه فنی کنکور نظام قدیم،رشته ریاضی، رشته تجربی،  رشته انسانی ، زیست، شیمی، فیزیک، زمین شناسی، عربی، ادبیات، شب امتحان، همایش، تحلیل کنکور، جزوه، تست، جمع بندی، طرح 5+1، ریاضیات رشته تجربی، ریاضیات رشته انسانی، ریاضیات رشته ریاضی، جزوه علوم پایه');
-        SEO::opengraph()->addImage(route('image', [
-            'category' => '11',
-            'w' => '100',
-            'h' => '100',
-            'filename' => $this->setting->site->siteLogo,
-        ]), [
-            'height' => 100,
-            'width' => 100,
-        ]);
-
+        SEO::opengraph()
+            ->addImage(route('image', [
+                'category' => '11',
+                'w'        => '100',
+                'h'        => '100',
+                'filename' => $this->setting->site->siteLogo,
+            ]), [
+                'height' => 100,
+                'width'  => 100,
+            ]);
+        
         $product_ids = [
             242,
             240,
@@ -1015,11 +1089,14 @@ class ProductController extends Controller
             210,
             213,
         ];
-        $products = Product::whereIn('id', $product_ids)->orderBy('order')->enable()->get();
+        $products    = Product::whereIn('id', $product_ids)
+            ->orderBy('order')
+            ->enable()
+            ->get();
 //        $costCollection = $this->makeCostCollection($products);
-
+        
         $reshteIdArray = [
-
+            
             242 => 'riazi',
             240 => 'riazi',
             238 => 'riazi',
@@ -1031,7 +1108,7 @@ class ProductController extends Controller
             210 => 'tajrobi',
             213 => 'tajrobi',
         ];
-
+        
         $productsDataForView = [];
         foreach ($products as $key => $value) {
             $priceWithDiscount = 0;
@@ -1045,106 +1122,106 @@ class ProductController extends Controller
 //                elseif (isset($costCollection[$value->id]["cost"]))
 //                    $priceWithDiscount = (1 - ($costCollection[$value->id]["productDiscount"] / 100)) * $costCollection[$value->id]["cost"];
 //            }
-
+            
             $productsDataForView[] = [
-                'type' => $reshteIdArray[$value->id],
-                'price' => $price,
+                'type'              => $reshteIdArray[$value->id],
+                'price'             => $price,
                 'priceWithDiscount' => $priceWithDiscount,
-                'image' => route('image', [
+                'image'             => route('image', [
                     'category' => '4',
-                    'w' => '256',
-                    'h' => '256',
+                    'w'        => '256',
+                    'h'        => '256',
                     'filename' => $value->image,
                 ]),
-                'name' => $value->name,
-//                'link'              => action('Web\ProductController@show', $value->id)
-                'link' => null,
+                'name'              => $value->name,
+                //                'link'              => action('Web\ProductController@show', $value->id)
+                'link'              => null,
             ];
         }
-
+        
         $products = [
             [
-                'type' => 'riazi',
+                'type'  => 'riazi',
                 'price' => '-',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p10_20181119064116.jpg',
-                'name' => 'ریاضیات رشته ریاضی کنکور نظام قدیم',
-                'link' => action('Web\ProductController@show', 242),
+                'name'  => 'ریاضیات رشته ریاضی کنکور نظام قدیم',
+                'link'  => action('Web\ProductController@show', 242),
             ],
             [
-                'type' => 'riazi',
+                'type'  => 'riazi',
                 'price' => '-',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p6%20%282%29_20181119064128.jpg',
-                'name' => 'ریاضی تجربی کنکور نظام قدیم',
-                'link' => action('Web\ProductController@show', 240),
+                'name'  => 'ریاضی تجربی کنکور نظام قدیم',
+                'link'  => action('Web\ProductController@show', 240),
             ],
             [
-                'type' => 'riazi',
+                'type'  => 'riazi',
                 'price' => '-',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p8_20181119115159.jpg',
-                'name' => 'دین و زندگی کنکور نظام قدیم',
-                'link' => action('Web\ProductController@show', 238),
+                'name'  => 'دین و زندگی کنکور نظام قدیم',
+                'link'  => action('Web\ProductController@show', 238),
             ],
             [
-                'type' => 'riazi',
+                'type'  => 'riazi',
                 'price' => '-',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p7_20181119115215.jpg',
-                'name' => 'عربی کنکور نظام قدیم',
-                'link' => action('Web\ProductController@show', 236),
+                'name'  => 'عربی کنکور نظام قدیم',
+                'link'  => action('Web\ProductController@show', 236),
             ],
             [
-                'type' => 'tajrobi',
+                'type'  => 'tajrobi',
                 'price' => '-',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p2_20181118125322.jpg',
-                'name' => 'شیمی کنکور نظام قدیم',
-                'link' => action('Web\ProductController@show', 230),
+                'name'  => 'شیمی کنکور نظام قدیم',
+                'link'  => action('Web\ProductController@show', 230),
             ],
             [
-                'type' => 'tajrobi',
+                'type'  => 'tajrobi',
                 'price' => '-',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p5_20181119115230.jpg',
-                'name' => 'زیست کنکور نظام قدیم',
-                'link' => action('Web\ProductController@show', 234),
+                'name'  => 'زیست کنکور نظام قدیم',
+                'link'  => action('Web\ProductController@show', 234),
             ],
             [
-                'type' => 'tajrobi',
+                'type'  => 'tajrobi',
                 'price' => '-',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p4_20181118125640.jpg',
-                'name' => 'فیزیک کنکور نظام قدیم',
-                'link' => action('Web\ProductController@show', 232),
+                'name'  => 'فیزیک کنکور نظام قدیم',
+                'link'  => action('Web\ProductController@show', 232),
             ],
             [
-                'type' => 'tajrobi',
+                'type'  => 'tajrobi',
                 'price' => '49,000',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p-14_20180506124007.jpg',
-                'name' => 'همایش طلایی ریاضی انسانی کنکور',
-                'link' => action('Web\ProductController@show', 222),
+                'name'  => 'همایش طلایی ریاضی انسانی کنکور',
+                'link'  => action('Web\ProductController@show', 222),
             ],
             [
-                'type' => 'tajrobi',
+                'type'  => 'tajrobi',
                 'price' => '49,000',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p-10_20180428111412.jpg',
-                'name' => 'همایش طلایی ادبیات کنکور',
-                'link' => action('Web\ProductController@show', 210),
+                'name'  => 'همایش طلایی ادبیات کنکور',
+                'link'  => action('Web\ProductController@show', 210),
             ],
             [
-                'type' => 'tajrobi',
+                'type'  => 'tajrobi',
                 'price' => '49,000',
                 'image' => 'http://192.168.4.2:9070/image/4/256/256/p-12_20180428111303.jpg',
-                'name' => 'همایش طلایی زمین شناسی کنکور',
-                'link' => action('Web\ProductController@show', 213),
+                'name'  => 'همایش طلایی زمین شناسی کنکور',
+                'link'  => action('Web\ProductController@show', 213),
             ],
-
+        
         ];
-
+        
         $products = $productsDataForView;
-
+        
         return view("product.landing.landing5", compact("products"));
     }
-
+    
     /**
      * Products Special Landing Page
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -1159,44 +1236,51 @@ class ProductController extends Controller
             266,
             265,
         ];
-
+        
         $productIds = $producIds;
 //        $productIds = config("constants.HAMAYESH_PRODUCT");
-        $products = Product::whereIn("id", $productIds)->orderBy("order")->where("enable", 1)->get();
-
-        $attribute = Attribute::where("name", "major")->get()->first();
+        $products = Product::whereIn("id", $productIds)
+            ->orderBy("order")
+            ->where("enable", 1)
+            ->get();
+        
+        $attribute  = Attribute::where("name", "major")
+            ->get()
+            ->first();
         $withFilter = true;
-
+        
         $landingProducts = collect();
         foreach ($products as $product) {
             $majors = [];
             if (isset($attribute)) {
-                $majors = $product->attributevalues->where("attribute_id", $attribute->id)->pluck("name")->toArray();
+                $majors = $product->attributevalues->where("attribute_id", $attribute->id)
+                    ->pluck("name")
+                    ->toArray();
             }
-
+            
             $landingProducts->push([
                 "product" => $product,
-                "majors" => $majors,
+                "majors"  => $majors,
             ]);
         }
-
+        
         $costCollection = $this->makeCostCollection($products);
-
+        
         return view("product.landing.landing1", compact("landingProducts", "costCollection", "withFilter"));
     }
-
+    
     /**
      * Copy a product completely
      *
-     * @param \App\Product $product
+     * @param  \App\Product  $product
      *
      * @return \Illuminate\Http\Response
      */
     public function copy(Product $product)
     {
-        $newProduct = $product->replicate();
+        $newProduct          = $product->replicate();
         $correspondenceArray = [];
-        $done = true;
+        $done                = true;
         if ($newProduct->save()) {
             /**
              * Copying children
@@ -1205,45 +1289,52 @@ class ProductController extends Controller
                 foreach ($product->children as $child) {
                     $response = $this->copy($child);
                     if ($response->getStatusCode() == 200) {
-                        $response = json_decode($response->getContent());
+                        $response   = json_decode($response->getContent());
                         $newChildId = $response->newProductId;
                         if (isset($newChildId)) {
                             $correspondenceArray[$child->id] = $newChildId;
-                            $newProduct->children()->attach($newChildId);
-                        } else {
+                            $newProduct->children()
+                                ->attach($newChildId);
+                        }
+                        else {
                             $done = false;
                         }
-                    } else {
+                    }
+                    else {
                         $done = false;
                     }
                 }
             }
-
+            
             /**
              * Copying attributeValues
              */
             foreach ($product->attributevalues as $attributevalue) {
-                $newProduct->attributevalues()->attach($attributevalue->id, [
-                    "extraCost" => $attributevalue->pivot->extraCost,
-                    "description" => $attributevalue->pivot->description,
-                ]);
+                $newProduct->attributevalues()
+                    ->attach($attributevalue->id, [
+                        "extraCost"   => $attributevalue->pivot->extraCost,
+                        "description" => $attributevalue->pivot->description,
+                    ]);
             }
-
+            
             /**
              * Copying bons
              */
             foreach ($product->bons as $bon) {
-                $newProduct->bons()->attach($bon->id, [
-                    "discount" => $bon->pivot->discount,
-                    "bonPlus" => $bon->pivot->bonPlus,
-                ]);
+                $newProduct->bons()
+                    ->attach($bon->id, [
+                        "discount" => $bon->pivot->discount,
+                        "bonPlus"  => $bon->pivot->bonPlus,
+                    ]);
             }
-
+            
             /**
              * Copying coupons
              */
-            $newProduct->coupons()->attach($product->coupons->pluck('id')->toArray());
-
+            $newProduct->coupons()
+                ->attach($product->coupons->pluck('id')
+                    ->toArray());
+            
             /**
              * Copying complimentary
              */
@@ -1252,11 +1343,12 @@ class ProductController extends Controller
                     $product,
                     $complimentaryproduct,
                 ]));
-                if (! $flag) {
-                    $newProduct->complimentaryproducts()->attach($complimentaryproduct->id);
+                if (!$flag) {
+                    $newProduct->complimentaryproducts()
+                        ->attach($complimentaryproduct->id);
                 }
             }
-
+            
             /**
              * Copying gifts
              */
@@ -1265,39 +1357,48 @@ class ProductController extends Controller
                     $product,
                     $gift,
                 ]));
-                if (! $flag) {
-                    $newProduct->gifts()->attach($gift->id, ["relationtype_id" => config("constants.PRODUCT_INTERRELATION_GIFT")]);
+                if (!$flag) {
+                    $newProduct->gifts()
+                        ->attach($gift->id, ["relationtype_id" => config("constants.PRODUCT_INTERRELATION_GIFT")]);
                 }
             }
-
+            
             if ($product->hasChildren()) {
                 $children = $product->children;
                 foreach ($children as $child) {
                     $childComplementarities = $child->complimentaryproducts;
-                    $intersects = $childComplementarities->intersect($children);
+                    $intersects             = $childComplementarities->intersect($children);
                     foreach ($intersects as $intersect) {
-                        $correspondingChild = Product::where("id", $correspondenceArray[$child->id])->get()->first();
+                        $correspondingChild         = Product::where("id", $correspondenceArray[$child->id])
+                            ->get()
+                            ->first();
                         $correspondingComplimentary = $correspondenceArray[$intersect->id];
-                        $correspondingChild->complimentaryproducts()->attach($correspondingComplimentary);
+                        $correspondingChild->complimentaryproducts()
+                            ->attach($correspondingComplimentary);
                     }
                 }
             }
-
+            
             if ($done == false) {
                 foreach ($newProduct->children as $child) {
                     $child->forceDelete();
                 }
                 $newProduct->forceDelete();
-
-                return $this->response->setStatusCode(503)->setContent(["message" => "خطا در کپی از الجاقی محصول . لطفا دوباره اقدام نمایید"]);
-            } else {
-                return $this->response->setStatusCode(200)->setContent([
-                    "message" => "عملیات کپی با موفقیت انجام شد.",
-                    "newProductId" => $newProduct->id,
-                ]);
+                
+                return $this->response->setStatusCode(503)
+                    ->setContent(["message" => "خطا در کپی از الجاقی محصول . لطفا دوباره اقدام نمایید"]);
             }
-        } else {
-            return $this->response->setStatusCode(503)->setContent(["message" => "خطا در کپی از اطلاعات پایه ای محصول . لطفا دوباره اقدام نمایید"]);
+            else {
+                return $this->response->setStatusCode(200)
+                    ->setContent([
+                        "message"      => "عملیات کپی با موفقیت انجام شد.",
+                        "newProductId" => $newProduct->id,
+                    ]);
+            }
+        }
+        else {
+            return $this->response->setStatusCode(503)
+                ->setContent(["message" => "خطا در کپی از اطلاعات پایه ای محصول . لطفا دوباره اقدام نمایید"]);
         }
     }
 }

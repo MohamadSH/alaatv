@@ -33,8 +33,8 @@
                         </div>
                         <div class = "m-portlet__body m--padding-bottom-10">
 
-                            <div class="row">
-                                <div class="col-12 col-md-6">
+                            <div class = "row">
+                                <div class = "col-12 col-md-6">
 
                                     {{--tab title--}}
                                     <div class = "row">
@@ -110,8 +110,7 @@
                                                                 <br>
                                                                 6104-3375-6000-0026
                                                                 <br>
-                                                                به نام مؤسسه توسعه علمی آموزشی عدالت محور آلاء بانک ملت
-                                                                واریز نمایید.
+                                                                به نام مؤسسه توسعه علمی آموزشی عدالت محور آلاء بانک ملت واریز نمایید.
                                                             </div>
                                                         </div>
                                                         <div class = "col-12 col-md-3">
@@ -125,7 +124,7 @@
                                     </div>
 
                                 </div>
-                                <div class="col-12 col-md-6">
+                                <div class = "col-12 col-md-6">
 
                                     {{--dicount code--}}
                                     <div class = "row justify-content-center">
@@ -135,42 +134,25 @@
                                                     کد تخفیف:
                                                 </label>
                                             </span>
-                                            <span class="m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
-                                                <input type="checkbox"
-                                                       data-switch="true"
-                                                       @if(!isset($coupon))
-                                                       checked="checked"
-                                                       @endif
-                                                       data-on-text="ندارم"
-                                                       data-on-color="danger"
-                                                       data-off-text="دارم"
-                                                       data-off-color="success"
-                                                       data-size="small"
-                                                       {{--data-handle-width="40"--}}
-                                                       id="hasntDiscountCode">
+                                            <span class = "m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
+                                                <input type = "checkbox" data-switch = "true" @if(!isset($coupon))checked = "checked" @endifdata-on-text = "ندارم" data-on-color = "danger" data-off-text = "دارم" data-off-color = "success" data-size = "small" {{--data-handle-width="40"--}}id = "hasntDiscountCode">
                                             </span>
                                         </div>
-                                        <div class="col-12 col-md-6 m--margin-top-10">
-                                            <div class="input-group discountCodeValueWarper">
-                                                <div class="discountCodeValueWarperCover"></div>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       placeholder="کد تخفیف ..."
-                                                       @if(isset($coupon))
-                                                       value="{{ $coupon['code'] }}"
-                                                       @endif
-                                                       id="discountCodeValue">
-                                                <div class="input-group-prepend DiscountCodeActionsWarper">
-                                                    <button class="btn btn-danger @if (!isset($coupon)) a--d-none @endif" type="button" id="btnRemoveDiscountCodeValue">حذف</button>
-                                                    <button class="btn btn-success @if (isset($coupon)) a--d-none @endif"  type="button" id="btnSaveDiscountCodeValue">ثبت</button>
+                                        <div class = "col-12 col-md-6 m--margin-top-10">
+                                            <div class = "input-group discountCodeValueWarper">
+                                                <div class = "discountCodeValueWarperCover"></div>
+                                                <input type = "text" class = "form-control" placeholder = "کد تخفیف ..." @if(isset($coupon))value = "{{ $coupon['code'] }}" @endifid = "discountCodeValue">
+                                                <div class = "input-group-prepend DiscountCodeActionsWarper">
+                                                    <button class = "btn btn-danger @if (!isset($coupon)) a--d-none @endif" type = "button" id = "btnRemoveDiscountCodeValue">حذف</button>
+                                                    <button class = "btn btn-success @if (isset($coupon)) a--d-none @endif" type = "button" id = "btnSaveDiscountCodeValue">ثبت</button>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class = "col-12">
 
-                                            <div class="alert alert-success alert-dismissible fade show couponReportWarper @if (!isset($coupon)) a--d-none @endif" role="alert">
+                                            <div class = "alert alert-success alert-dismissible fade show couponReportWarper @if (!isset($coupon)) a--d-none @endif" role = "alert">
                                                 {{--<button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>--}}
-                                                <div class="couponReport">
+                                                <div class = "couponReport">
                                                     @if(isset($coupon) && $coupon['type'] == config('constants.DISCOUNT_TYPE_COST'))
                                                         کپن تخفیف
                                                         <strong>{{$coupon['name']}}</strong>
@@ -179,9 +161,9 @@
                                                         تومان تخفیف برای سفارش شما ثبت شد.
                                                     @elseif(isset($coupon))
                                                         کپن تخفیف
-                                                        <strong>{{$coupon['name']}}</strong>
+                                                            <strong>{{$coupon['name']}}</strong>
                                                         با
-                                                        {{$coupon['discount']}}
+                                                            {{$coupon['discount']}}
                                                         % تخفیف برای
                                                         سفارش شما ثبت شده است.
                                                     @endif
@@ -209,8 +191,8 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col notIncludedProductsInCouponReportArea">
+                            <div class = "row">
+                                <div class = "col notIncludedProductsInCouponReportArea">
 
                                 </div>
                             </div>
@@ -221,7 +203,7 @@
                                 <div class = "col text-center btnSubmitOrderWraper">
                                     <hr>
                                     <button type = "button"
-                                            onclick="window.location.href='{{action('Web\OnlinePaymentController@paymentRedirect', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}';
+                                            onclick="window.location.href='{{route('verifyOnlinePayment', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}';
                                                     mApp.block('.btnSubmitOrderWraper', {
                                                     type: 'loader',
                                                     state: 'info',
@@ -302,20 +284,8 @@
                                                                 به آلاء کمک
                                                             </label>
                                                         </span>
-                                                        <span class="m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
-                                                            <input type="checkbox"
-                                                                   data-switch="true"
-                                                                   @if(isset($orderHasDonate) && $orderHasDonate)
-                                                                   @else
-                                                                   checked=""
-                                                                   @endif
-                                                                   data-on-text="نمی کنم"
-                                                                   data-on-color="danger"
-                                                                   data-off-text="می کنم"
-                                                                   data-off-color="success"
-                                                                   data-size="small"
-                                                                   {{--data-handle-width="40"--}}
-                                                                   id="hasntDonate">
+                                                        <span class = "m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
+                                                            <input type = "checkbox" data-switch = "true" @if(isset($orderHasDonate) && $orderHasDonate)@elsechecked = "" @endifdata-on-text = "نمی کنم" data-on-color = "danger" data-off-text = "می کنم" data-off-color = "success" data-size = "small" {{--data-handle-width="40"--}}id = "hasntDonate">
                                                         </span>
                                                         <span>
                                                             <img src = "/acm/extra/sad.png" class = "face-sad m--margin-top-20" alt = "">
@@ -340,16 +310,16 @@
         </div>
     </div>
 
-    <div id="invoiceInfo-totalCost" class="d-none">
+    <div id = "invoiceInfo-totalCost" class = "d-none">
         {{ $invoiceInfo['price']['final'] }}
     </div>
 
-    <input type="hidden" id="invoiceInfo-couponCode" value="@if (isset($coupon)){{ $coupon['code'] }}@endif">
+    <input type = "hidden" id = "invoiceInfo-couponCode" value = "@if (isset($coupon)){{ $coupon['code'] }}@endif">
 
 
 
-    <input type="hidden" id="OrderController-submitCoupon" value="{{ action('Web\OrderController@submitCoupon') }}">
-    <input type="hidden" id="OrderController-removeCoupon" value="{{ action('Web\OrderController@removeCoupon') }}">
+    <input type = "hidden" id = "OrderController-submitCoupon" value = "{{ action('Web\OrderController@submitCoupon') }}">
+    <input type = "hidden" id = "OrderController-removeCoupon" value = "{{ action('Web\OrderController@removeCoupon') }}">
 
 @endsection
 
@@ -357,7 +327,7 @@
     <script src = "{{ mix('/js/checkout-payment.js') }}"></script>
 
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
             let notIncludedProductsInCoupon = {!! $notIncludedProductsInCoupon !!};
             CheckoutPaymentUi.PrintnotIncludedProductsInCoupon(notIncludedProductsInCoupon);
         });

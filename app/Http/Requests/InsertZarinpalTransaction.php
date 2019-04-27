@@ -15,7 +15,7 @@ class InsertZarinpalTransaction extends FormRequest
     {
         return true;
     }
-
+    
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,9 +24,9 @@ class InsertZarinpalTransaction extends FormRequest
     public function rules()
     {
         return [
-            'order_id' => 'required',
-            'cost' => 'required|integer',
-            'refId' => 'required|integer',
+            'order_id'  => 'required',
+            'cost'      => 'required|integer',
+            'refId'     => 'required|integer',
             'authority' => 'required|string',
         ];
     }

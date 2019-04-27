@@ -26,9 +26,9 @@ class AlaaOrderproductPriceCalculator extends OrderproductPriceCalculator
 //            'customerCost'                    => $customerPrice,
 //            'totalCost'                       => $totalPrice
 //        ];
-
+        
         $priceInfo = $this->getOrderproductPrice();
-
+        
         return $priceInfo;
     }
 }

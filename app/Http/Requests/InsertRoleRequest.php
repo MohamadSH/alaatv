@@ -13,13 +13,15 @@ class InsertRoleRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->hasRole('admin')) {
+        if (Auth()
+            ->user()
+            ->hasRole('admin')) {
             return true;
         }
-
+        
         return false;
     }
-
+    
     /**
      * Get the validation rules that apply to the request.
      *
@@ -28,9 +30,9 @@ class InsertRoleRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name'         => 'required',
             'display_name' => 'required',
-            'permissions' => 'exists:permissions,id',
+            'permissions'  => 'exists:permissions,id',
         ];
     }
 }

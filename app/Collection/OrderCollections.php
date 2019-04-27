@@ -18,11 +18,11 @@ class OrderCollections extends Collection
      */
     public function getCoupons(): BaseCollection
     {
-        $items = $this;
+        $items  = $this;
         $result = collect();
-
+        
         foreach ($items as $order) {
-            if (! isset($order->coupon_id)) {
+            if (!isset($order->coupon_id)) {
                 continue;
             }
             $orderCoupon = $order->coupon_discount_type;
@@ -31,7 +31,8 @@ class OrderCollections extends Collection
                     $result->put($order->id, [
                         "caption" => "کپن ".$order->coupon->name." با ".$orderCoupon["discount"]." % تخفیف",
                     ]);
-                } else {
+                }
+                else {
                     if ($orderCoupon["type"] == config("constants.DISCOUNT_TYPE_COST")) {
                         $result->put($order->id, [
                             "caption" => "کپن ".$order->coupon->name." با ".number_format($orderCoupon["discount"])." تومان تخفیف",
@@ -40,10 +41,10 @@ class OrderCollections extends Collection
                 }
             }
         }
-
+        
         return $result;
     }
-
+    
     /**
      * @return int
      */
@@ -53,7 +54,7 @@ class OrderCollections extends Collection
         foreach ($this as $order) {
             $sum += $order->numberOfProducts;
         }
-
+        
         return $sum;
     }
 }

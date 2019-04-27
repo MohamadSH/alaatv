@@ -1,5 +1,5 @@
 @if(isset($pageName))
-    <ul class="feeds">
+    <ul class = "feeds">
     @foreach($articles as $article)
         <!-- TIMELINE ITEM -->
             {{--<div class="timeline-item">--}}
@@ -23,20 +23,20 @@
             {{--</div>--}}
             <li>
                 <a href = "{{action("Web\ArticleController@show", $article)}}">
-                    <div class="col1">
-                        <div class="cont">
-                            <div class="cont-col1">
-                                <div class="m-badge m-badge--wide label-sm m-badge--danger">
-                                    <i class="fa fa-file-pdf-o"></i>
+                    <div class = "col1">
+                        <div class = "cont">
+                            <div class = "cont-col1">
+                                <div class = "m-badge m-badge--wide label-sm m-badge--danger">
+                                    <i class = "fa fa-file-pdf-o"></i>
                                 </div>
                             </div>
-                            <div class="cont-col2">
-                                <div class="desc">{{ $article->title }}</div>
+                            <div class = "cont-col2">
+                                <div class = "desc">{{ $article->title }}</div>
                             </div>
                         </div>
                     </div>
-                    <div class="col2">
-                        <div class="date">{{$article->CreatedAt_Jalali()}}</div>
+                    <div class = "col2">
+                        <div class = "date">{{$article->CreatedAt_Jalali()}}</div>
                     </div>
                 </a>
             </li>
@@ -48,26 +48,25 @@
     @permission((Config::get('constants.LIST_ARTICLE_ACCESS')))
 
     @foreach( $articles as $article)
-        <tr id="{{$article->id}}">
+        <tr id = "{{$article->id}}">
             <th></th>
-            <td>@if(isset($article->title) && strlen($article->title)>0) <a href = "{{action("Web\ArticleController@show", $article->id)}}">{{ $article->title}}</a> @else
-                    <span
-                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
+            <td>@if(isset($article->title) && strlen($article->title)>0)
+                    <a href = "{{action("Web\ArticleController@show", $article->id)}}">{{ $article->title}}</a> @else
+                    <span class = "m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
             <td>
-                <div class="mt-element-overlay">
-                    <div class="mt-overlay-1">
-                        <img alt="عکس مقاله @if(isset($article->title[0])) {{$article->title}} @endif"
-                             class="timeline-badge-userpic" style="width: 60px ;height: 60px"
-                             src="{{ route('image', [ 'category'=>'8','w'=>'60' , 'h'=>'60' , 'filename' =>  $article->image ]) }}"/>
-                        <div class="mt-overlay">
-                            <ul class="mt-info">
+                <div class = "mt-element-overlay">
+                    <div class = "mt-overlay-1">
+                        <img alt = "عکس مقاله @if(isset($article->title[0])) {{$article->title}} @endif" class = "timeline-badge-userpic" style = "width: 60px ;height: 60px" src = "{{ route('image', [ 'category'=>'8','w'=>'60' , 'h'=>'60' , 'filename' =>  $article->image ]) }}"/>
+                        <div class = "mt-overlay">
+                            <ul class = "mt-info">
                                 <li>
-                                    <a class="btn default btn-outline" data-toggle="modal"
-                                       href="#articleImage-{{$article->id}}"><i class="icon-magnifier"></i></a>
+                                    <a class = "btn default btn-outline" data-toggle = "modal" href = "#articleImage-{{$article->id}}">
+                                        <i class = "icon-magnifier"></i>
+                                    </a>
                                 </li>
                                 <li>
-                                    <a target="_blank" class="btn default btn-outline" href = "{{action("Web\HomeController@download" , ["content"=>"عکس مقاله","fileName"=>$article->image ])}}">
-                                        <i class="icon-link"></i>
+                                    <a target = "_blank" class = "btn default btn-outline" href = "{{action("Web\HomeController@download" , ["content"=>"عکس مقاله","fileName"=>$article->image ])}}">
+                                        <i class = "icon-link"></i>
                                     </a>
                                 </li>
                             </ul>
@@ -75,62 +74,61 @@
                     </div>
                 </div>
                 <!-- Image Modal -->
-                <div id="articleImage-{{$article->id}}" class="modal fade" tabindex="-1" data-width="760">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                        <h4 class="modal-title">نمایش عکس مقاله</h4>
+                <div id = "articleImage-{{$article->id}}" class = "modal fade" tabindex = "-1" data-width = "760">
+                    <div class = "modal-header">
+                        <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true"></button>
+                        <h4 class = "modal-title">نمایش عکس مقاله</h4>
                     </div>
-                    <div class="modal-body">
-                        <div class="row" style="text-align: center;">
-                            <img alt="عنوان مقاله @if(isset($article->title[0])) {{$article->title}} @endif"
-                                 style="width: 80%"
-                                 src="{{ route('image', ['category'=>'8','w'=>'608' , 'h'=>'608' ,  'filename' =>  $article->image ]) }}"/>
+                    <div class = "modal-body">
+                        <div class = "row" style = "text-align: center;">
+                            <img alt = "عنوان مقاله @if(isset($article->title[0])) {{$article->title}} @endif" style = "width: 80%" src = "{{ route('image', ['category'=>'8','w'=>'608' , 'h'=>'608' ,  'filename' =>  $article->image ]) }}"/>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" data-dismiss="modal" class="btn btn-outline dark">بستن</button>
+                    <div class = "modal-footer">
+                        <button type = "button" data-dismiss = "modal" class = "btn btn-outline dark">بستن</button>
                     </div>
                 </div>
             </td>
             <td>@if(isset($article->articlecategory_id) && strlen($article->articlecategory_id)>0) {{ $article->articlecategory->name}} @else
-                    <span class="m-badge m-badge--wide label-sm m-badge--warning"> بدون دسته </span> @endif </td>
-            <td>@if(isset($article->order)) {{ $article->order}} @else <span class="m-badge m-badge--wide label-sm m-badge--danger"> بدون ترتیب </span> @endif
+                    <span class = "m-badge m-badge--wide label-sm m-badge--warning"> بدون دسته </span> @endif </td>
+            <td>@if(isset($article->order)) {{ $article->order}} @else
+                    <span class = "m-badge m-badge--wide label-sm m-badge--danger"> بدون ترتیب </span> @endif
             </td>
-            <td>@if(isset($article->brief) && strlen($article->brief)>0) {{ $article->brief}} @else <span
-                        class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
+            <td>@if(isset($article->brief) && strlen($article->brief)>0) {{ $article->brief}} @else
+                    <span class = "m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
             <td>@if(isset($article->updated_at) && strlen($article->updated_at)>0) {{ $article->UpdatedAt_Jalali()}} @else
-                    <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
+                    <span class = "m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif </td>
             <td>
-                <div class="btn-group">
-                    <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown"
-                            aria-expanded="false"> عملیات
-                        <i class="fa fa-angle-down"></i>
+                <div class = "btn-group">
+                    <button class = "btn btn-xs black dropdown-toggle" type = "button" data-toggle = "dropdown" aria-expanded = "false"> عملیات
+                        <i class = "fa fa-angle-down"></i>
                     </button>
-                    <ul class="dropdown-menu" role="menu">
+                    <ul class = "dropdown-menu" role = "menu">
                         @permission((Config::get('constants.SHOW_ARTICLE_ACCESS')))
                         <li>
                             <a href = "{{action("Web\ArticleController@edit" , $article)}}">
-                                <i class="fa fa-pencil"></i> اصلاح </a>
+                                <i class = "fa fa-pencil"></i>
+                                اصلاح
+                            </a>
                         </li>
-                        @endpermission
-                        @permission((Config::get('constants.REMOVE_ARTICLE_ACCESS')))
+                        @endpermission @permission((Config::get('constants.REMOVE_ARTICLE_ACCESS')))
                         <li>
-                            <a data-target="#static-{{$article->id}}" data-toggle="modal">
-                                <i class="fa fa-remove"></i> حذف </a>
+                            <a data-target = "#static-{{$article->id}}" data-toggle = "modal">
+                                <i class = "fa fa-remove"></i>
+                                حذف
+                            </a>
                         </li>
                         @endpermission
                     </ul>
-                    <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
-                    <!-- static -->
-                    @permission((Config::get('constants.REMOVE_ARTICLE_ACCESS')))
-                    <div id="static-{{$article->id}}" class="modal fade" tabindex="-1" data-backdrop="static"
-                         data-keyboard="false">
-                        <div class="modal-body">
-                            <p> آیا مطمئن هستید؟ </p>
+                    <div id = "ajax-modal" class = "modal fade" tabindex = "-1"></div>
+                    <!-- static -->@permission((Config::get('constants.REMOVE_ARTICLE_ACCESS')))
+                    <div id = "static-{{$article->id}}" class = "modal fade" tabindex = "-1" data-backdrop = "static" data-keyboard = "false">
+                        <div class = "modal-body">
+                            <p> آیا مطمئن هستید؟</p>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>
-                            <button type="button" data-dismiss="modal" class="btn green" onclick = "removeArticle('{{action("Web\ArticleController@destroy" , $article)}}');">بله
+                        <div class = "modal-footer">
+                            <button type = "button" data-dismiss = "modal" class = "btn btn-outline dark">خیر</button>
+                            <button type = "button" data-dismiss = "modal" class = "btn green" onclick = "removeArticle('{{action("Web\ArticleController@destroy" , $article)}}');">بله
                             </button>
                         </div>
                     </div>

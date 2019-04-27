@@ -1,6 +1,4 @@
-
-<!DOCTYPE html>
-<!--
+<!DOCTYPE html><!--
 Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 4
 Author: KeenThemes
 Website: http://www.keenthemes.com/
@@ -12,7 +10,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 Renew Support: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
 License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
 -->
-<html lang="en" >
+<html lang = "en">
 <!-- begin::Head -->
 <head>
     <meta charset = "utf-8"/>
@@ -20,8 +18,8 @@ License: You must have a valid license purchased only from themeforest(the above
     <meta name = "csrf-token" content = "{{ csrf_token() }}">
 
     <!-- begin::seo meta tags -->
-    {!! SEO::generate(true) !!}
-    <!-- end:: seo meta tags -->
+{!! SEO::generate(true) !!}
+<!-- end:: seo meta tags -->
 
 
     <!--begin::Web font -->
@@ -77,93 +75,68 @@ License: You must have a valid license purchased only from themeforest(the above
 
 
 <!-- begin::Body -->
-<body  class="m--skin- m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--fixed m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default"  >
+<body class = "m--skin- m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--fixed m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default">
 
 
+<!-- begin:: Page -->
+<div class = "m-grid m-grid--hor m-grid--root m-page">
 
-    <!-- begin:: Page -->
-    <div class="m-grid m-grid--hor m-grid--root m-page">
 
+    <div class = "m-grid__item m-grid__item--fluid m-grid m-grid--hor m-login m-login--signin m-login--2 m-login-2--skin-1" id = "m_login" style = "background-image: url({{ asset('/assets/app/media/img//bg/bg-1.jpg') }});">
+        <div class = "m-grid__item m-grid__item--fluid m-login__wrapper">
+            <div class = "m-login__container">
 
-        <div class="m-grid__item m-grid__item--fluid m-grid m-grid--hor m-login m-login--signin m-login--2 m-login-2--skin-1" id="m_login" style="background-image: url({{ asset('/assets/app/media/img//bg/bg-1.jpg') }});">
-            <div class="m-grid__item m-grid__item--fluid m-login__wrapper">
-                <div class="m-login__container">
-
-                    <div class="m-login__signin">
-                        <div class="m-login__head">
-                            <h3 class="m-login__title">تکمیل ثبت نام</h3>
-                        </div>
-                        @include("user.form", ["formID"=>1 , "noteFontColor"=>"m--font-brand" , "hasHomeButton"=>1])
+                <div class = "m-login__signin">
+                    <div class = "m-login__head">
+                        <h3 class = "m-login__title">تکمیل ثبت نام</h3>
                     </div>
+                    @include("user.form", ["formID"=>1 , "noteFontColor"=>"m--font-brand" , "hasHomeButton"=>1])
                 </div>
             </div>
         </div>
-
-
     </div>
-    <!-- end:: Page -->
 
-    <!--begin::Global Theme Bundle -->
-    <script src = "{{ mix('/js/all.js') }}" type = "text/javascript"></script>
-    <!--end::Global Theme Bundle -->
-    <script>
-        $(function () {
-            /**
-             * Set token for ajax request
-             */
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': window.Laravel.csrfToken,
-                }
-            });
+
+</div>
+<!-- end:: Page -->
+
+<!--begin::Global Theme Bundle -->
+<script src = "{{ mix('/js/all.js') }}" type = "text/javascript"></script>
+<!--end::Global Theme Bundle -->
+<script>
+    $(function () {
+        /**
+         * Set token for ajax request
+         */
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': window.Laravel.csrfToken,
+            }
         });
-    </script>
+    });
+</script>
 
 </body>
 <!-- end::Body -->
 </html>
 
 
-
-
 {{--@extends('app')--}}
 
-{{--@section("headPageLevelStyle")--}}
-    {{--<link href="/assets/pages/css/login-4-rtl.min.css" rel="stylesheet" type="text/css"/>--}}
-{{--@endsection--}}
+{{--@section("headPageLevelStyle")--}}{{--<link href="/assets/pages/css/login-4-rtl.min.css" rel="stylesheet" type="text/css"/>--}}{{--@endsection--}}
 
 {{--@section("headThemeLayoutStyle")--}}
 
 {{--@endsection--}}
 
-{{--@section("header")--}}
-{{--@endsection--}}
-{{--@section("sidebar")--}}
-{{--@endsection--}}
-{{--@section("themePanel")--}}
-{{--@endsection--}}
-{{--@section("pageBar")--}}
-{{--@endsection--}}
-{{--@section('content')--}}
+{{--@section("header")--}}{{--@endsection--}}{{--@section("sidebar")--}}{{--@endsection--}}{{--@section("themePanel")--}}{{--@endsection--}}{{--@section("pageBar")--}}{{--@endsection--}}{{--@section('content')--}}
 
 
-    {{--<div class="m-portlet m-portlet--tab">--}}
-        {{--<div class="m-portlet__head">--}}
-            {{--<div class="m-portlet__head-caption">--}}
-                {{--<div class="m-portlet__head-title">--}}
-						{{--<span class="m-portlet__head-icon m--hide">--}}
-						{{--<i class="la la-gear"></i>--}}
-						{{--</span>--}}
-                    {{--<h3 class="m-portlet__head-text">--}}
-                        {{--تکمیل ثبت نام--}}
-                    {{--</h3>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-        {{--</div>--}}
+{{--<div class="m-portlet m-portlet--tab">--}}{{--<div class="m-portlet__head">--}}{{--<div class="m-portlet__head-caption">--}}{{--<div class="m-portlet__head-title">--}}                        {{--<span class="m-portlet__head-icon m--hide">--}}                        {{--<i class="la la-gear"></i>--}}                        {{--</span>--}}{{--<h3 class="m-portlet__head-text">--}}{{--تکمیل ثبت نام--}}{{--</h3>--}}{{--</div>--}}{{--</div>--}}{{--</div>--}}
 
-        {{--@include("user.form", ["formID"=>1 , "noteFontColor"=>"m--font-brand" , "hasHomeButton"=>1])--}}
+{{--@include("user.form", ["formID"=>1 , "noteFontColor"=>"m--font-brand" , "hasHomeButton"=>1])--}}
 
-    {{--</div>--}}
+{{--</div>--}}
 
 
 {{--@endsection--}}
@@ -172,16 +145,6 @@ License: You must have a valid license purchased only from themeforest(the above
 
 {{--@endsection--}}
 
-{{--@section("footerPageLevelPlugin")--}}
-    {{--<script src="/assets/global/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>--}}
-    {{--<script src="/assets/global/plugins/jquery-validation/js/additional-methods.min.js" type="text/javascript"></script>--}}
-    {{--<script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>--}}
-    {{--<script src="/assets/global/plugins/backstretch/jquery.backstretch.min.js" type="text/javascript"></script>--}}
-    {{--<script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>--}}
-    {{--<script src="/assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>--}}
-{{--@endsection--}}
+{{--@section("footerPageLevelPlugin")--}}{{--<script src="/assets/global/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>--}}{{--<script src="/assets/global/plugins/jquery-validation/js/additional-methods.min.js" type="text/javascript"></script>--}}{{--<script src="/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>--}}{{--<script src="/assets/global/plugins/backstretch/jquery.backstretch.min.js" type="text/javascript"></script>--}}{{--<script src="/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>--}}{{--<script src="/assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>--}}{{--@endsection--}}
 
-{{--@section("footerPageLevelScript")--}}
-    {{--<script src="/assets/pages/scripts/login-4.min.js" type="text/javascript"></script>--}}
-    {{--<script src="/assets/pages/scripts/ui-modals.min.js" type="text/javascript"></script>--}}
-{{--@endsection--}}
+{{--@section("footerPageLevelScript")--}}{{--<script src="/assets/pages/scripts/login-4.min.js" type="text/javascript"></script>--}}{{--<script src="/assets/pages/scripts/ui-modals.min.js" type="text/javascript"></script>--}}{{--@endsection--}}

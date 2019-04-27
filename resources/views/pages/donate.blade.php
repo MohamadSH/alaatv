@@ -1,62 +1,61 @@
 <!DOCTYPE html>
-<html class="no-js" lang="fa-IR" dir="rtl">
+<html class = "no-js" lang = "fa-IR" dir = "rtl">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="Designer" content="Developed by Am!n">
+    <meta charset = "utf-8">
+    <meta name = "viewport" content = "width=device-width, initial-scale=1">
+    <meta name = "Designer" content = "Developed by Am!n">
     {!! SEO::generate(true) !!}
 
-    <link rel="stylesheet" href="/acm/extra/donate/css/styles.min.css">
+    <link rel = "stylesheet" href = "/acm/extra/donate/css/styles.min.css">
 
-    <script src="/acm/extra/donate/js/jquery-2.2.4.min.js"></script>
+    <script src = "/acm/extra/donate/js/jquery-2.2.4.min.js"></script>
 
     <!--[if lt IE 9]>
-    <script type='text/javascript' src='aseets/js/html5shiv.js'></script>
-    <script type='text/javascript' src='aseets/js/respond.min.js'></script>
-    <![endif]-->
+    <script type = 'text/javascript' src = 'aseets/js/html5shiv.js'></script>
+    <script type = 'text/javascript' src = 'aseets/js/respond.min.js'></script><![endif]-->
 </head>
 <body>
-<div class="wrapper site-wrap" id="site_wrap">
-    <div class="hero">
-        <h1 class="hero-title">
-            <span class="helps-farsi"></span>
+<div class = "wrapper site-wrap" id = "site_wrap">
+    <div class = "hero">
+        <h1 class = "hero-title">
+            <span class = "helps-farsi"></span>
             مجری طرح توسعه عدالت آموزشی
         </h1>
 
-        <img class="hearts" src="/acm/extra/donate/images/hearts.png" alt="hearts">
+        <img class = "hearts" src = "/acm/extra/donate/images/hearts.png" alt = "hearts">
 
         {!! Form::open(['method'=>'POST' , 'action'=>'OrderController@donateOrder' , 'class'=>'donation-form']) !!}
         <p>با کمک های شما عزیزان مجموعه آلا به راحتی بر روی کیفیت خدمات کار می کند</p>
 
-        <div class="textfield">
-            <input type="text" placeholder="مبلغ مورد نظر شما" name="amount" id="amount">
-            <span class="suffix">تومان</span>
+        <div class = "textfield">
+            <input type = "text" placeholder = "مبلغ مورد نظر شما" name = "amount" id = "amount">
+            <span class = "suffix">تومان</span>
         </div><!-- .textfield -->
 
-        <button type="submit">همین الان کمک می کنم</button>
+        <button type = "submit">همین الان کمک می کنم</button>
         {!! Form::close() !!}
 
     </div><!-- .hero -->
 
-    <div class="last-donations container">
-        <div class="row">
-            <div class="recent-donators">
+    <div class = "last-donations container">
+        <div class = "row">
+            <div class = "recent-donators">
                 <h3>آخرین کمک های هفته</h3>
                 @if($latestDonors->isEmpty())
-                    <div class="hero" style="margin-bottom: 200px"><h2>کمکی نشده</h2></div>
+                    <div class = "hero" style = "margin-bottom: 200px">
+                        <h2>کمکی نشده</h2>
+                    </div>
                 @else
-                    <ul class="list">
+                    <ul class = "list">
                         @foreach($latestDonors as $latestDonor )
                             <li>
-                                <div class="donator">
-                                    <img src="{{ route('image', ['category'=>'1','w'=>'141' , 'h'=>'141' ,  'filename' =>  $latestDonor["avatar"] ]) }}"
-                                         alt="donator">
+                                <div class = "donator">
+                                    <img src = "{{ route('image', ['category'=>'1','w'=>'141' , 'h'=>'141' ,  'filename' =>  $latestDonor["avatar"] ]) }}" alt = "donator">
 
-                                    <span class="name">
+                                    <span class = "name">
                                     {{(strlen($latestDonor["firstName"])>0)?$latestDonor["firstName"]:""}} {{(strlen($latestDonor["lastName"])>0)?$latestDonor["lastName"]:""}}
                                 </span>
-                                    <span class="price">{{number_format($latestDonor["donateAmount"])}} <span
-                                                class="currency">تومان</span></span>
+                                    <span class = "price">{{number_format($latestDonor["donateAmount"])}} <span class = "currency">تومان</span></span>
                                 </div><!-- .donator -->
                             </li>
                         @endforeach
@@ -65,23 +64,23 @@
                 @endif
             </div><!-- .recent-donators -->
 
-            <div class="best-donators">
+            <div class = "best-donators">
                 <h3>بیشترین کمک های {{$currentJalaliMonthString}}</h3>
                 @if($maxDonors->isEmpty())
-                    <div class="hero" style="margin-bottom: 200px"><h2>کمکی نشده</h2></div>
+                    <div class = "hero" style = "margin-bottom: 200px">
+                        <h2>کمکی نشده</h2>
+                    </div>
                 @else
-                    <ul class="list">
+                    <ul class = "list">
                         @foreach($maxDonors as $maxDonor )
                             <li>
-                                <div class="donator">
-                                    <img src="{{ route('image', ['category'=>'1','w'=>'141' , 'h'=>'141' ,  'filename' =>  $maxDonor["avatar"] ]) }}"
-                                         alt="donator">
+                                <div class = "donator">
+                                    <img src = "{{ route('image', ['category'=>'1','w'=>'141' , 'h'=>'141' ,  'filename' =>  $maxDonor["avatar"] ]) }}" alt = "donator">
 
-                                    <span class="name">
+                                    <span class = "name">
                                         {{(strlen($maxDonor["firstName"])>0)?$maxDonor["firstName"]:""}} {{(strlen($maxDonor["lastName"])>0)?$maxDonor["lastName"]:""}}
                                     </span>
-                                    <span class="price">{{number_format($maxDonor["donateAmount"])}} <span
-                                                class="currency">تومان</span></span>
+                                    <span class = "price">{{number_format($maxDonor["donateAmount"])}} <span class = "currency">تومان</span></span>
                                 </div><!-- .donator -->
                             </li>
                         @endforeach
@@ -92,44 +91,42 @@
         </div><!-- .row -->
 
     </div>
-    <!-- .last-donations -->
+          <!-- .last-donations -->
 
-    <div class="best-donators  container" style="margin-bottom: 25px">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="donator">
+    <div class = "best-donators  container" style = "margin-bottom: 25px">
+        <div class = "row">
+            <div class = "col-md-12">
+                <div class = "donator">
                     <h3>به هر میزان که می توانید در تامین هزینه های آلاء مشارکت نمایید.</h3>
-                    <p style="  text-align: justify">مشارکت
-                        اختیاری بوده و از نظر شرعی آلاء متعهد می شود که این مشارکت ها را برای حفظ، نگهداری، توسعه و
-                        بهبود خدمات خود استفاده کند.
+                    <p style = "  text-align: justify">مشارکت اختیاری بوده و از نظر شرعی آلاء متعهد می شود که این مشارکت ها را برای حفظ، نگهداری، توسعه و بهبود خدمات خود استفاده کند.
                     </p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="monthly-charts">
-        <div class="container">
-            <div class="totals">
+    <div class = "monthly-charts">
+        <div class = "container">
+            <div class = "totals">
 
-                <div class="total">
-                    <span class="title">مجموع دونیت ها</span>
+                <div class = "total">
+                    <span class = "title">مجموع دونیت ها</span>
 
-                    <span class="amount">{{number_format($totalIncome)}}<span class="currency">تومان</span></span>
-                    <span class="title">از 1 مهر تا {{$currentJalaliDateString}}</span>
+                    <span class = "amount">{{number_format($totalIncome)}}<span class = "currency">تومان</span></span>
+                    <span class = "title">از 1 مهر تا {{$currentJalaliDateString}}</span>
                 </div><!-- .title -->
 
-                <div class="total">
-                    <span class="title">مجموع هزینه ها</span>
+                <div class = "total">
+                    <span class = "title">مجموع هزینه ها</span>
 
-                    <span class="amount">{{number_format($totalSpend)}}<span class="currency">تومان</span></span>
-                    <span class="title">از 1 مهر تا {{$currentJalaliDateString}}</span>
+                    <span class = "amount">{{number_format($totalSpend)}}<span class = "currency">تومان</span></span>
+                    <span class = "title">از 1 مهر تا {{$currentJalaliDateString}}</span>
                 </div><!-- .title -->
 
             </div><!-- .totals -->
 
-            <div class="chart-by-month">
-                <canvas id="monthlychart"></canvas>
+            <div class = "chart-by-month">
+                <canvas id = "monthlychart"></canvas>
             </div><!-- .chart-by-month -->
 
         </div><!-- .container -->
@@ -239,15 +236,15 @@
 
     {{--</div><!-- .provinces-charts -->--}}
 
-    <footer class="site-footer">
+    <footer class = "site-footer">
         <a class = "copyright" href = "{{action("Web\IndexPageController")}}">
-            <img src="/acm/extra/donate/images/copyright.png" alt="Copyright">
+            <img src = "/acm/extra/donate/images/copyright.png" alt = "Copyright">
         </a>
     </footer>
 
 </div><!-- #site_wrap -->
 
-<script src="/acm/extra/donate/js/Chart.bundle.min.js"></script>
+<script src = "/acm/extra/donate/js/Chart.bundle.min.js"></script>
 
 <script>
     var MONTHS = {!! $chartData->pluck("month")->toJson() !!};

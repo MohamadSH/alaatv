@@ -14,13 +14,15 @@ class InsertAttributegroupRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.INSERT_ATTRIBUTEGROUP_ACCESS'))) {
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.INSERT_ATTRIBUTEGROUP_ACCESS'))) {
             return true;
         }
-
+        
         return false;
     }
-
+    
     /**
      * Get the validation rules that apply to the request.
      *

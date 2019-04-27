@@ -5,11 +5,11 @@ namespace App;
 /**
  * App\Afterloginformcontrol
  *
- * @property int $id
- * @property string|null $name
- * @property string|null $displayName
- * @property int $enable
- * @property int $order
+ * @property int                 $id
+ * @property string|null         $name
+ * @property string|null         $displayName
+ * @property int                 $enable
+ * @property int                 $order
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
@@ -32,10 +32,11 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Afterloginformcontrol query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property int|null $control_id آی دی مشخص کننده کنترل فیلد مثلا تکس باکس
- * @property string|null $source مسیر سرور جهت تغذیه فیلد (مثلا تغذیه آیتم های دراپ دان)
+ * @property int|null            $control_id آی دی مشخص کننده کنترل فیلد مثلا تکس باکس
+ * @property string|null         $source     مسیر سرور جهت تغذیه فیلد (مثلا تغذیه آیتم های دراپ دان)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Afterloginformcontrol whereControlId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Afterloginformcontrol whereSource($value)
+ * @property-read mixed          $cache_cooldown_seconds
  */
 class Afterloginformcontrol extends BaseModel
 {
@@ -47,9 +48,11 @@ class Afterloginformcontrol extends BaseModel
         'displayName',
         'order',
     ];
-
+    
     public static function getFormFields()
     {
-        return Afterloginformcontrol::all()->where("enable", 1)->sortBy("order");
+        return Afterloginformcontrol::all()
+            ->where("enable", 1)
+            ->sortBy("order");
     }
 }

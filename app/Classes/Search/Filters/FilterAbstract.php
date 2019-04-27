@@ -14,28 +14,28 @@ use LogicException;
 class FilterAbstract implements Filter
 {
     protected $attribute;
-
+    
     protected $relation;
-
+    
     public function __construct()
     {
-        if (! isset($this->attribute)) {
+        if (!isset($this->attribute)) {
             throw new LogicException(get_class($this).' must have a $attribute');
         }
     }
-
+    
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         $value = $this->getSearchValue($value);
-
+        
         return $builder->where($this->attribute, 'LIKE', "%".$value."%");
     }
-
+    
     protected function getSearchValue($value)
     {
         return trim($value);
     }
-
+    
     /**
      * @return array|\Illuminate\Contracts\Translation\Translator|null|string
      */
@@ -43,7 +43,7 @@ class FilterAbstract implements Filter
     {
         return trans("filter.value should be set", ["filter" => get_class($this)]);
     }
-
+    
     /**
      * @return array|\Illuminate\Contracts\Translation\Translator|null|string
      */

@@ -19,3 +19,4 @@ worker.log
 storage
 storage/
 vendor/
+.phpunit.result.cache

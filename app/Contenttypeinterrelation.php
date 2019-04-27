@@ -5,10 +5,10 @@ namespace App;
 /**
  * App\Contenttypeinterrelation
  *
- * @property int $id
- * @property string|null $name        نام
- * @property string|null $displayName نام قابل نمایش
- * @property string|null $description توضیح
+ * @property int                 $id
+ * @property string|null         $name        نام
+ * @property string|null         $displayName نام قابل نمایش
+ * @property string|null         $description توضیح
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
@@ -30,6 +30,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttypeinterrelation query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed          $cache_cooldown_seconds
  */
 class Contenttypeinterrelation extends BaseModel
 {

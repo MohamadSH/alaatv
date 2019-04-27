@@ -20,20 +20,24 @@ trait TeacherTrait
     public static function getTeachers(): UserCollection
     {
         $key = "getTeachers";
-
-        return Cache::tags(["teachers"])->remember($key, config("constants.CACHE_600"), function () {
-            $authors = User::select()->role([config('constants.ROLE_TEACHER')])->orderBy('lastName')->get();
-
-            return $authors;
-        });
+        
+        return Cache::tags(["teachers"])
+            ->remember($key, config("constants.CACHE_600"), function () {
+                $authors = User::select()
+                    ->role([config('constants.ROLE_TEACHER')])
+                    ->orderBy('lastName')
+                    ->get();
+                
+                return $authors;
+            });
     }
-
+    
     /*
     |--------------------------------------------------------------------------
     | static methods
     |--------------------------------------------------------------------------
     */
-
+    
     public function contents()
     {
         return $this->hasMany("\App\Content", "author_id", "id");

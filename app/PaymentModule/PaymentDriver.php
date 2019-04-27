@@ -14,6 +14,8 @@ class PaymentDriver
             // To do : beh-pardakht
         ];
 
-        app()->bind(OnlineGatewayInterface::class, $map[$driver]);
+        $class = $map[$driver];
+
+        app()->bind(OnlineGatewayInterface::class, $class);
     }
 }

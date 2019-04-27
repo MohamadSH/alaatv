@@ -18,16 +18,16 @@ use League\Flysystem\Sftp\SftpAdapter;
 class AlaaSftpAdapter extends SftpAdapter
 {
     protected $orgRoot;
-
+    
     /**
      * @var string|null
      */
     protected $prefix;
-
+    
     protected $dProtocol;
-
+    
     protected $dHost;
-
+    
     /**
      * @var array
      */
@@ -36,22 +36,22 @@ class AlaaSftpAdapter extends SftpAdapter
         'dProtocol',
         'dHost',
     ];
-
+    
     /**
      * Constructor.
      *
-     * @param array $config
+     * @param  array  $config
      */
     public function __construct(array $config)
     {
         $this->configurable = array_merge($this->configurable, $this->newConfigurableArray);
-
+        
         parent::__construct($config);
-
+        
         $this->setOrgRoot(parent::getRoot());
         $this->setRoot(parent::getRoot().ltrim($this->getPrefix(), $this->separator));
     }
-
+    
     /**
      * @return null|string
      */
@@ -59,21 +59,21 @@ class AlaaSftpAdapter extends SftpAdapter
     {
         return $this->prefix;
     }
-
+    
     /**
      *
      *
-     * @param string $prefix
+     * @param  string  $prefix
      *
      * @return $this
      */
     protected function setPrefix($prefix)
     {
         $this->prefix = rtrim($prefix, '\\/').$this->separator;
-
+        
         return $this;
     }
-
+    
     /**
      * @param $fileName
      *
@@ -82,7 +82,7 @@ class AlaaSftpAdapter extends SftpAdapter
     public function getUrl($fileName)
     {
         $fileName = ltrim($fileName, $this->separator);
-
+        
         /*
                 $connection = $this->getConnection();
                 if($connection instanceof \phpseclib\Net\SFTP)
@@ -91,14 +91,15 @@ class AlaaSftpAdapter extends SftpAdapter
                 dd($this->getMetadata($fileName));
         */
         if ($this->has($fileName)) {
-            $prefixLink = str_replace($this->getOrgRoot(), $this->getDProtocol().$this->getDHost()."/", $this->getRoot());
-
+            $prefixLink = str_replace($this->getOrgRoot(), $this->getDProtocol().$this->getDHost()."/",
+                $this->getRoot());
+            
             return $prefixLink.$fileName;
         }
-
+        
         return "Not Exists!";
     }
-
+    
     /**
      * @return mixed
      */
@@ -106,15 +107,15 @@ class AlaaSftpAdapter extends SftpAdapter
     {
         return $this->orgRoot;
     }
-
+    
     /**
-     * @param mixed $orgRoot
+     * @param  mixed  $orgRoot
      */
     protected function setOrgRoot($orgRoot): void
     {
         $this->orgRoot = $orgRoot;
     }
-
+    
     /**
      * @return mixed
      */
@@ -122,19 +123,19 @@ class AlaaSftpAdapter extends SftpAdapter
     {
         return $this->dProtocol;
     }
-
+    
     /**
-     * @param mixed $dProtocol
+     * @param  mixed  $dProtocol
      *
      * @return AlaaSftpAdapter
      */
     protected function setDProtocol($dProtocol)
     {
         $this->dProtocol = $dProtocol;
-
+        
         return $this;
     }
-
+    
     /**
      * @return mixed
      */
@@ -142,16 +143,16 @@ class AlaaSftpAdapter extends SftpAdapter
     {
         return $this->dHost;
     }
-
+    
     /**
-     * @param mixed $dHost
+     * @param  mixed  $dHost
      *
      * @return AlaaSftpAdapter
      */
     protected function setDHost($dHost)
     {
         $this->dHost = $dHost;
-
+        
         return $this;
     }
 }

@@ -5,13 +5,13 @@ namespace App;
 /**
  * App\Orderproducttype
  *
- * @property int $id
- * @property string|null $name        نام
- * @property string|null $displayName نام قابل نمایش
- * @property string|null $description توضیح
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property int                                                        $id
+ * @property string|null                                                $name        نام
+ * @property string|null                                                $displayName نام قابل نمایش
+ * @property string|null                                                $description توضیح
+ * @property \Carbon\Carbon|null                                        $created_at
+ * @property \Carbon\Carbon|null                                        $updated_at
+ * @property \Carbon\Carbon|null                                        $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[] $orders
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Orderproducttype onlyTrashed()
@@ -31,6 +31,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproducttype query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed                                                 $cache_cooldown_seconds
  */
 class Orderproducttype extends BaseModel
 {
@@ -42,7 +43,7 @@ class Orderproducttype extends BaseModel
         'description',
         'displayName',
     ];
-
+    
     public function orders()
     {
         return $this->hasMany('\App\Order');

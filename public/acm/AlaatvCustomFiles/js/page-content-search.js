@@ -69,7 +69,7 @@ var Alaasearch = function () {
         let widgetPic = (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail : data.photo;
         let widgetTitle = data.name;
         let widgetAuthor = {
-            photo: data.author.photo,
+            photo: (typeof (data.author.photo) === 'undefined' || data.author.photo == null) ? null : data.author.photo,
             name: data.author.firstName,
             full_name: data.author.full_name
         };
@@ -393,7 +393,7 @@ var Alaasearch = function () {
             let nextPageUrl = $('#owl--js-var-next-page-product-carousel-url');
             let owl = $(this);
             // console.log("productAjaxLock:" + productAjaxLock);
-            if (!productAjaxLock) {
+            if (!productAjaxLock && nextPageUrl.val() !== "null") {
                 load(event, nextPageUrl.val(), owl, owlType, function (newPageUrl) {
                     // console.log("PRE:" + $('#owl--js-var-next-page-product-carousel-url').val());
                     if (newPageUrl === null) {
@@ -423,7 +423,7 @@ var Alaasearch = function () {
             var nextPageUrl = $('#owl--js-var-next-page-video-url');
             var owl = $(this);
 
-            if( !videoAjaxLock ) {
+            if( !videoAjaxLock && nextPageUrl.val() !== "null") {
 
                 load(event, nextPageUrl.val(), owl, owlType,function (newPageUrl) {
                     // console.log("PRE:" + nextPageUrl.val());
@@ -447,7 +447,7 @@ var Alaasearch = function () {
             var nextPageUrl = $('#owl--js-var-next-page-set-url');
             var owl = $(this);
             // console.log("nextPageUrl:"+nextPageUrl.val());
-            if( !setAjaxLock ) {
+            if( !setAjaxLock && nextPageUrl.val() !== "null") {
                 // console.log("se Ajax is not lock!");
                 load(event, nextPageUrl.val(), owl, owlType,function (newPageUrl) {
                     // console.log("PRE:" + nextPageUrl.val());
@@ -479,7 +479,7 @@ var Alaasearch = function () {
                 let nextPageUrl = $('#vertical-widget--js-var-next-page-pamphlet-url');
                 let vw = $('#pamphlet-vertical-widget');
 
-                if (!pamphletAjaxLock) {
+                if (!pamphletAjaxLock && nextPageUrl.val() !== "null") {
                     load(event, nextPageUrl.val(), vw, vwType, function (newPageUrl) {
                         $('#vertical-widget--js-var-next-page-pamphlet-url').val(decodeURI(newPageUrl));
                         unLockAjax(vwType);
@@ -510,7 +510,7 @@ var Alaasearch = function () {
                 let nextPageUrl = $('#vertical-widget--js-var-next-page-article-url');
                 let vw = $('#article-vertical-widget');
 
-                if (!pamphletAjaxLock) {
+                if (!pamphletAjaxLock && nextPageUrl.val() !== "null") {
                     load(event, nextPageUrl.val(), vw, vwType, function (newPageUrl) {
                         $('#vertical-widget--js-var-next-page-article-url').val(decodeURI(newPageUrl));
                         unLockAjax(vwType);

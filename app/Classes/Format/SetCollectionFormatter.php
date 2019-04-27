@@ -13,7 +13,7 @@ use App\Collection\SetCollection;
 interface SetCollectionFormatter
 {
     /**
-     * @param SetCollection $sets
+     * @param  SetCollection  $sets
      *
      * @return \Illuminate\Support\Collection
      */

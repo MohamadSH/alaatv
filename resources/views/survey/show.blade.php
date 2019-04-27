@@ -1,29 +1,28 @@
 @extends("app")
 
 @section("metadata")
-    <meta name="_token" content="{{ csrf_token() }}">
+    <meta name = "_token" content = "{{ csrf_token() }}">
 @endsection
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css" rel="stylesheet"
-          type="text/css"/>
+    <link href = "/assets/global/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css" rel = "stylesheet" type = "text/css"/>
 @endsection
 
 @section("headPageLevelStyle")
-    <link href="/assets/pages/css/about-rtl.min.css" rel="stylesheet" type="text/css"/>
+    <link href = "/assets/pages/css/about-rtl.min.css" rel = "stylesheet" type = "text/css"/>
 @endsection
 @section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
+    <div class = "page-bar">
+        <ul class = "page-breadcrumb">
             <li>
-                <i class="icon-home"></i>
+                <i class = "icon-home"></i>
                 <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
-                <i class="fa fa-angle-left"></i>
+                <i class = "fa fa-angle-left"></i>
             </li>
             <li>
-                <i class="icon-user"></i>
+                <i class = "icon-user"></i>
                 <a href = "{{action("Web\UserController@showSurvey")}}">فرم سؤالات</a>
-                <i class="fa fa-angle-left"></i>
+                <i class = "fa fa-angle-left"></i>
             </li>
             <li>
                 <span>فرم {{$survey->name}}</span>
@@ -33,67 +32,60 @@
 @endsection
 
 @section("content")
-    <div class="row">
-        <div class="col-md-12">
-            <div class="portlet box blue">
+    <div class = "row">
+        <div class = "col-md-12">
+            <div class = "portlet box blue">
                 {{--<div class="portlet-title">--}}
                 {{--<div class="caption">--}}
                 {{--<i class="fa fa-graduation-cap" aria-hidden="true"></i>فرم اطلاعات انتخاب رشته </div>--}}
                 {{--<div class="tools">--}}
                 {{--</div>--}}
                 {{--</div>--}}
-                <div class="portlet-body">
-                    <div class="row margin-top-20">
-                        <div class="col-md-12">
-                            <div class="nav-justified">
-                                <ul class="nav nav-tabs nav-justified">
+                <div class = "portlet-body">
+                    <div class = "row margin-top-20">
+                        <div class = "col-md-12">
+                            <div class = "nav-justified">
+                                <ul class = "nav nav-tabs nav-justified">
                                     @foreach($questions as $key => $question)
-                                        <li @if($key == 0) class="active" @endif>
-                                            <a href="#tab_1_1_{{$key+1}}" data-toggle="tab"> {{$question->title}} </a>
+                                        <li @if($key == 0) class = "active" @endif>
+                                            <a href = "#tab_1_1_{{$key+1}}" data-toggle = "tab"> {{$question->title}} </a>
                                         </li>
                                     @endforeach
                                 </ul>
-                                <div class="tab-content">
+                                <div class = "tab-content">
                                     @foreach($questions as $key => $question)
-                                        <div class="tab-pane @if($key == 0) active @endif" id="tab_1_1_{{$key+1}}">
+                                        <div class = "tab-pane @if($key == 0) active @endif" id = "tab_1_1_{{$key+1}}">
                                             @if(strcmp($question->control->name, "multiSelect") == 0)
-                                                <div class="col-md-12 margin-top-20">
+                                                <div class = "col-md-12 margin-top-20">
                                                     <p>{{$question->statement}}</p>
-                                                    <p class="m--font-info"
-                                                       style="text-align: justify">{{$question->description}}</p>
-                                                    <select class="mt-multiselect btn btn-default" multiple="multiple"
-                                                            data-label="left" data-width="100%" data-filter="true"
-                                                            data-action-onchange="true" id="question_{{$question->id}}">
+                                                    <p class = "m--font-info" style = "text-align: justify">{{$question->description}}</p>
+                                                    <select class = "mt-multiselect btn btn-default" multiple = "multiple" data-label = "left" data-width = "100%" data-filter = "true" data-action-onchange = "true" id = "question_{{$question->id}}">
                                                         @foreach($questionsData[$question->id] as $key => $items)
-                                                            <optgroup label="{{$key}}" class="group-{{$key}}">
+                                                            <optgroup label = "{{$key}}" class = "group-{{$key}}">
                                                                 @foreach($items as $key2 => $item)
-                                                                    <option value="{{$key2}}"
-                                                                            @if(array_key_exists($key2 , $answersData[$question->id])) selected="selected" @endif >{{$item}}</option>
+                                                                    <option value = "{{$key2}}" @if(array_key_exists($key2 , $answersData[$question->id])) selected = "selected" @endif >{{$item}}</option>
                                                                 @endforeach
                                                             </optgroup>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                             @endif
-                                            <div class="col-md-12">
-                                                <div class="table-scrollable">
-                                                    <table class="table table-bordered table-hover"
-                                                           id="answerTable_{{$question->id}}">
+                                            <div class = "col-md-12">
+                                                <div class = "table-scrollable">
+                                                    <table class = "table table-bordered table-hover" id = "answerTable_{{$question->id}}">
                                                         <thead>
                                                         <tr>
-                                                            <th class="text-center"> ثبت شده ها: <span
-                                                                        id="answerTableHeaderCounterNumber_{{$question->id}}">{{count($answersData[$question->id])}}</span><img
-                                                                        class="hidden"
-                                                                        id="answerTableHeaderCounterLoading_{{$question->id}}"
-                                                                        src="/assets/layouts/layout2/img/loading-spinner-blue.gif"
-                                                                        style="height: 25px"></th>
+                                                            <th class = "text-center"> ثبت شده ها:
+                                                                <span id = "answerTableHeaderCounterNumber_{{$question->id}}">{{count($answersData[$question->id])}}</span>
+                                                                <img class = "hidden" id = "answerTableHeaderCounterLoading_{{$question->id}}" src = "/assets/layouts/layout2/img/loading-spinner-blue.gif" style = "height: 25px">
+                                                            </th>
                                                             {{--<th class="text-center">دلیل انتخاب</th>--}}
                                                         </tr>
                                                         </thead>
-                                                        <tbody class="text-center">
+                                                        <tbody class = "text-center">
                                                         @if(empty($answersData[$question->id]))
-                                                            <tr class="text-center bold m--font-danger">
-                                                                <td colspan="2">شما تاکنون موردی را درج ننموده اید</td>
+                                                            <tr class = "text-center bold m--font-danger">
+                                                                <td colspan = "2">شما تاکنون موردی را درج ننموده اید</td>
                                                             </tr>
                                                         @else
                                                             @foreach($answersData[$question->id] as $item)
@@ -131,7 +123,7 @@
 @endsection
 
 @section("footerPageLevelPlugin")
-    <script src="/js/extraJS/scripts/showSurvey.js" type="text/javascript"></script>
+    <script src = "/js/extraJS/scripts/showSurvey.js" type = "text/javascript"></script>
     {{--<script src="/assets/global/plugins/bootstrap-multiselect/js/bootstrap-multiselect.js" type="text/javascript"></script>--}}
 
 @endsection

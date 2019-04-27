@@ -1,4 +1,5 @@
-<li><a href="#">{{ $category->name }}</a>
+<li>
+    <a href = "#">{{ $category->name }}</a>
     @if($category->children->count() > 0)
         <ul>
             @each('partials.subTree', $category->children, 'category')

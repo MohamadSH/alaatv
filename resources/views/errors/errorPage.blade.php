@@ -1,7 +1,7 @@
 @extends("app")
 
 @section("headPageLevelStyle")
-    <link href="/assets/pages/css/error-rtl.min.css" rel="stylesheet" type="text/css"/>
+    <link href = "/assets/pages/css/error-rtl.min.css" rel = "stylesheet" type = "text/css"/>
 @endsection
 @section("headThemeLayoutStyle")
 
@@ -27,13 +27,15 @@
 @endsection
 
 @section("content")
-    <div class="row">
-        <div class="col-md-12 page-404">
-            <div class="number"><img src="/acm/extra/stop.png" style=""></div>
+    <div class = "row">
+        <div class = "col-md-12 page-404">
+            <div class = "number">
+                <img src = "/acm/extra/stop.png" style = "">
+            </div>
             {{--<div class="number m--font-danger"> 404 </div>--}}
-            <div class="details">
+            <div class = "details">
                 {{--<h1 class="m--font-danger">خطا!</h1>--}}
-                <p class="bold "> {!!    $message !!}
+                <p class = "bold "> {!!    $message !!}
                     <br/>
                     <a class = "btn green" href = "{{action("Web\IndexPageController")}}"> صفحه اصلی</a>
                 {{--or try the search bar below. </p>--}}

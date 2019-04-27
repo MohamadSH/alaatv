@@ -14,33 +14,33 @@ use Illuminate\Queue\SerializesModels;
 class UserRegisterd extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
-
+    
     const MEDIANA_PATTERN_CODE_USER_REGISTERD = 799;
-
+    
     public $timeout = 120;
-
+    
     /**
      * @var User
      */
     protected $user;
-
+    
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      *
      * @return array
      */
     public function via($notifiable)
     {
         $this->user = $notifiable;
-
+        
         return [
             MedianaPatternChannel::class,
-
+        
         ];
     }
-
+    
     /**
      * @param $notifiable
      *
@@ -48,49 +48,52 @@ class UserRegisterd extends Notification implements ShouldQueue
      */
     public function toMediana($notifiable)
     {
-        if (! isset($this->user)) {
+        if (!isset($this->user)) {
             $this->user = $notifiable;
         }
-
-        return (new MedianaMessage())->content($this->msg())->setInputData($this->getInputData())->setPatternCode(self::MEDIANA_PATTERN_CODE_USER_REGISTERD)->sendAt(Carbon::now());
+        
+        return (new MedianaMessage())->content($this->msg())
+            ->setInputData($this->getInputData())
+            ->setPatternCode(self::MEDIANA_PATTERN_CODE_USER_REGISTERD)
+            ->sendAt(Carbon::now());
     }
-
+    
     private function msg(): string
     {
-        $gender = $this->getGender();
+        $gender      = $this->getGender();
         $messageCore = "به آلاء خوش آمدید، اطلاعات کاربری شما:"."\n"."نام کاربری:"."\n".$this->user->mobile."\n"."رمز عبور:"."\n".$this->user->nationalCode."\n"."پشتیبانی:"."\n"."https://goo.gl/jme5VU";
-        $message = "سلام ".$gender.$this->user->full_name."\n".$messageCore;
-
+        $message     = "سلام ".$gender.$this->user->full_name."\n".$messageCore;
+        
         return $message;
     }
-
-    private function getInputData(): array
-    {
-
-        return [
-            'username' => $this->user->mobile,
-            'password' => $this->user->nationalCode,
-            "https://goo.gl/jme5VU" => "https://goo.gl/jme5VU",
-        ];
-    }
-
+    
     /**
      * @return string
      */
     private function getGender(): string
     {
-        if (! isset($this->user->gender_id)) {
+        if (!isset($this->user->gender_id)) {
             return "";
         }
-
+        
         if ($this->user->gender->name == "خانم") {
             return "خانم ";
         }
-
+        
         if ($this->user->gender->name == "آقا") {
             return "آقای ";
         }
-
+        
         return "";
+    }
+    
+    private function getInputData(): array
+    {
+        
+        return [
+            'username'              => $this->user->mobile,
+            'password'              => $this->user->nationalCode,
+            "https://goo.gl/jme5VU" => "https://goo.gl/jme5VU",
+        ];
     }
 }

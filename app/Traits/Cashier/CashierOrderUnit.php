@@ -13,59 +13,13 @@ use App\Order;
 trait CashierOrderUnit
 {
     protected $order;
-
+    
     protected $totalPrice; // Total price before calculating Order's discount
-
+    
     protected $temporaryFinalPrice;
-
+    
     protected $finalPrice;
-
-    /**
-     * @param mixed $order
-     * @return mixed
-     */
-    public function setOrder($order)
-    {
-        $this->order = $order;
-
-        return $this;
-    }
-
-    /**
-     * @param mixed $totalPrice
-     * @return mixed
-     */
-    public function setTotalPrice($totalPrice)
-    {
-        $this->totalPrice = $totalPrice;
-        $this->temporaryFinalPrice = $totalPrice;
-
-        return $this;
-    }
-
-    /**
-     * @param mixed $temporaryFinalPrice
-     * @return mixed
-     */
-    public function setTemporaryFinalPrice($temporaryFinalPrice)
-    {
-        $this->temporaryFinalPrice = $temporaryFinalPrice;
-
-        return $this;
-    }
-
-    /**
-     * @param mixed $finalPrice
-     * @return mixed
-     */
-    public function setFinalPrice($finalPrice)
-    {
-        $this->finalPrice = $finalPrice;
-        $this->temporaryFinalPrice = $finalPrice;
-
-        return $this;
-    }
-
+    
     /**
      * @return Order
      */
@@ -73,7 +27,19 @@ trait CashierOrderUnit
     {
         return $this->order;
     }
-
+    
+    /**
+     * @param  mixed  $order
+     *
+     * @return mixed
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+        
+        return $this;
+    }
+    
     /**
      * @return mixed
      */
@@ -81,7 +47,20 @@ trait CashierOrderUnit
     {
         return $this->totalPrice;
     }
-
+    
+    /**
+     * @param  mixed  $totalPrice
+     *
+     * @return mixed
+     */
+    public function setTotalPrice($totalPrice)
+    {
+        $this->totalPrice          = $totalPrice;
+        $this->temporaryFinalPrice = $totalPrice;
+        
+        return $this;
+    }
+    
     /**
      * @return mixed
      */
@@ -89,12 +68,37 @@ trait CashierOrderUnit
     {
         return $this->temporaryFinalPrice;
     }
-
+    
+    /**
+     * @param  mixed  $temporaryFinalPrice
+     *
+     * @return mixed
+     */
+    public function setTemporaryFinalPrice($temporaryFinalPrice)
+    {
+        $this->temporaryFinalPrice = $temporaryFinalPrice;
+        
+        return $this;
+    }
+    
     /**
      * @return mixed
      */
     public function getFinalPrice()
     {
         return $this->finalPrice;
+    }
+    
+    /**
+     * @param  mixed  $finalPrice
+     *
+     * @return mixed
+     */
+    public function setFinalPrice($finalPrice)
+    {
+        $this->finalPrice          = $finalPrice;
+        $this->temporaryFinalPrice = $finalPrice;
+        
+        return $this;
     }
 }

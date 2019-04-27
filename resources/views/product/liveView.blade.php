@@ -106,26 +106,23 @@
     {{--</div>--}}
     {{--</div>--}}
     {{--@else--}}
-    <div class="row">
-        <div class="col-md-12">
+    <div class = "row">
+        <div class = "col-md-12">
             <!-- BEGIN SAMPLE FORM PORTLET-->
-            <div class="portlet light">
-                <div class="portlet-title">
-                    <div class="caption pull-right">
+            <div class = "portlet light">
+                <div class = "portlet-title">
+                    <div class = "caption pull-right">
                         {{--<i class="fa fa-play"></i>--}}
-                        <img src="/img/extra/live-rs.png" height="50px">
+                        <img src = "/img/extra/live-rs.png" height = "50px">
                         {{--<span class="caption-subject bold uppercase">پخش زنده</span>--}}
                         {{--<span class="caption-helper">weekly stats...</span>--}}
                     </div>
                 </div>
-                <div class="portlet-body">
+                <div class = "portlet-body">
                     @if(!$isLive)
-                        <iframe src="https://sanatisharif.ir/SanatiSharif-Video/15/30/7145"
-                                style="border: hidden; width: 100% ;height:467px" frameborder="0" allowfullscreen
-                                webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+                        <iframe src = "https://sanatisharif.ir/SanatiSharif-Video/15/30/7145" style = "border: hidden; width: 100% ;height:467px" frameborder = "0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
                     @else
-                        <h2 class="block bold text-center m--font-info" style="line-height:normal">پخش آنلاین چهارشنبه
-                            (96/12/2) ساعت 22:00 آغاز خواهد شد</h2>
+                        <h2 class = "block bold text-center m--font-info" style = "line-height:normal">پخش آنلاین چهارشنبه (96/12/2) ساعت 22:00 آغاز خواهد شد</h2>
                     @endif
                 </div>
             </div>

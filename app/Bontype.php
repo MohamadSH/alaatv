@@ -5,13 +5,13 @@ namespace App;
 /**
  * App\Bontype
  *
- * @property int $id
- * @property string $name        نام نوع بن
- * @property string|null $displayName نام قابل نمایش نوع بن
- * @property string|null $description توضیح درباره نوع بن
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property int                                                      $id
+ * @property string                                                   $name        نام نوع بن
+ * @property string|null                                              $displayName نام قابل نمایش نوع بن
+ * @property string|null                                              $description توضیح درباره نوع بن
+ * @property \Carbon\Carbon|null                                      $created_at
+ * @property \Carbon\Carbon|null                                      $updated_at
+ * @property \Carbon\Carbon|null                                      $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Bon[] $bons
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Bontype onlyTrashed()
@@ -31,6 +31,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bontype query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed                                               $cache_cooldown_seconds
  */
 class Bontype extends BaseModel
 {
@@ -39,7 +40,7 @@ class Bontype extends BaseModel
         'displayName',
         'description',
     ];
-
+    
     public function bons()
     {
         return $this->hasMany("\App\Bon");

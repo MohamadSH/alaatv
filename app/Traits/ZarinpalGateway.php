@@ -8,9 +8,6 @@
 
 namespace App\Traits;
 
-use Carbon\Carbon;
-use Zarinpal\Zarinpal as ZarinpalComposer;
-
 trait ZarinpalGateway
 {
 }

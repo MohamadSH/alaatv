@@ -5,18 +5,18 @@ namespace App;
 /**
  * App\Attributevalue
  *
- * @property int $id
- * @property int $attribute_id
- * @property string|null $name        نام مقدار نسبت داده شده
- * @property string|null $description توضیح درباره این مفدار
- * @property int|null $isDefault   مقدار پیش فرض - در صورت وجود
- * @property int $order       ترتیب مقدار
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Attribute $attribute
+ * @property int                                                               $id
+ * @property int                                                               $attribute_id
+ * @property string|null                                                       $name        نام مقدار نسبت داده شده
+ * @property string|null                                                       $description توضیح درباره این مفدار
+ * @property int|null                                                          $isDefault   مقدار پیش فرض - در صورت وجود
+ * @property int                                                               $order       ترتیب مقدار
+ * @property \Carbon\Carbon|null                                               $created_at
+ * @property \Carbon\Carbon|null                                               $updated_at
+ * @property \Carbon\Carbon|null                                               $deleted_at
+ * @property-read \App\Attribute                                               $attribute
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[] $orderproducts
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[] $products
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[]      $products
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Attributevalue onlyTrashed()
  * @method static bool|null restore()
@@ -37,6 +37,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributevalue query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed                                                        $cache_cooldown_seconds
  */
 class Attributevalue extends BaseModel
 {
@@ -49,17 +50,17 @@ class Attributevalue extends BaseModel
         'description',
         'isDefault',
     ];
-
+    
     public function attribute()
     {
         return $this->belongsTo('App\Attribute');
     }
-
+    
     public function products()
     {
         return $this->belongsToMany('App\Product');
     }
-
+    
     public function orderproducts()
     {
         return $this->belongsToMany('App\Orderproduct', 'attributevalue_orderproduct', 'value_id', 'orderproduct_id');

@@ -9,18 +9,18 @@ use Kalnoy\Nestedset\NodeTrait;
  * App\Category
  *
  * @mixin \Eloquent
- * @property int $id
- * @property string $name
- * @property string|null $description
- * @property int $enable
- * @property string|null $tags
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $_lft
- * @property int $_rgt
- * @property int|null $parent_id
+ * @property int                                               $id
+ * @property string                                            $name
+ * @property string|null                                       $description
+ * @property int                                               $enable
+ * @property string|null                                       $tags
+ * @property \Illuminate\Support\Carbon|null                   $created_at
+ * @property \Illuminate\Support\Carbon|null                   $updated_at
+ * @property int                                               $_lft
+ * @property int                                               $_rgt
+ * @property int|null                                          $parent_id
  * @property-read \Kalnoy\Nestedset\Collection|\App\Category[] $children
- * @property-read \App\Category|null $parent
+ * @property-read \App\Category|null                           $parent
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category d()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereDescription($value)
@@ -38,27 +38,31 @@ use Kalnoy\Nestedset\NodeTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed                                        $cache_cooldown_seconds
  */
 class Category extends BaseModel
 {
     use NodeTrait;
-
+    
     protected $fillable = [
         'name',
         'tags',
         'enable',
         'description',
     ];
-
+    
     public function scopeActive($query)
     {
         return $query->where('enable', 1);
     }
-
+    
     public function getWithDepth()
     {
-        return Cache::tags('tree')->remember('tree', config('constants.CACHE_600'), function () {
-            return Category::withDepth()->active()->get();
-        });
+        return Cache::tags('tree')
+            ->remember('tree', config('constants.CACHE_600'), function () {
+                return Category::withDepth()
+                    ->active()
+                    ->get();
+            });
     }
 }

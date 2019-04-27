@@ -21,15 +21,15 @@ class ChargingWalletRefinement extends Refinement
         if ($this->statusCode != Response::HTTP_OK) {
             return $this;
         }
-
+        
         $this->description .= 'شارژ کیف پول -';
-        $this->cost = $this->walletChargingAmount;
-        $result = $this->getNewTransaction(false);
-        $this->statusCode = $result['statusCode'];
-        $this->message = $result['message'];
+        $this->cost        = $this->walletChargingAmount;
+        $result            = $this->getNewTransaction(false);
+        $this->statusCode  = $result['statusCode'];
+        $this->message     = $result['message'];
         $this->transaction = $result['transaction'];
-        $this->statusCode = Response::HTTP_OK;
-
+        $this->statusCode  = Response::HTTP_OK;
+        
         return $this;
     }
 }

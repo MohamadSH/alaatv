@@ -5,15 +5,15 @@ namespace App;
 /**
  * App\Orderfile
  *
- * @property int $id
- * @property int $order_id    آی دی مشخص کننده سفارشی که این فایل به آن تعلق دارد
- * @property int|null $user_id     آی دی مشخص کننده کاربر آپلود کننده فایل
- * @property string $file        فایل آپلود شده
- * @property string|null $description توضیح درباره فایل
+ * @property int                 $id
+ * @property int                 $order_id    آی دی مشخص کننده سفارشی که این فایل به آن تعلق دارد
+ * @property int|null            $user_id     آی دی مشخص کننده کاربر آپلود کننده فایل
+ * @property string              $file        فایل آپلود شده
+ * @property string|null         $description توضیح درباره فایل
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Order $order
+ * @property-read \App\Order     $order
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Orderfile onlyTrashed()
  * @method static bool|null restore()
@@ -33,6 +33,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderfile query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed          $cache_cooldown_seconds
  */
 class Orderfile extends BaseModel
 {
@@ -45,7 +46,7 @@ class Orderfile extends BaseModel
         'file',
         'description',
     ];
-
+    
     public function order()
     {
         return $this->belongsTo('\App\Order');

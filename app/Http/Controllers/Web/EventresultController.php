@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Storage;
 class EventresultController extends Controller
 {
     protected $response;
-
+    
     function __construct()
     {
         /** setting permissions
@@ -25,10 +25,10 @@ class EventresultController extends Controller
          */
         $this->middleware('permission:'.Config::get('constants.LIST_EVENTRESULT_ACCESS')."|".Config::get('constants.LIST_SHARIF_REGISTER_ACCESS'),
             ['only' => 'index']);
-
+        
         $this->response = new Response();
     }
-
+    
     /**
      * Display a listing of the resource.
      *
@@ -37,26 +37,31 @@ class EventresultController extends Controller
     public function index()
     {
         $eventresults = Eventresult::orderBy("rank");
-
+        
         $eventIds = Input::get("event_id");
         if (isset($eventIds)) {
             $eventresults = $eventresults->whereIn("event_id", $eventIds);
-        } else {
+        }
+        else {
             $eventIds = [];
         }
-        $eventresults = $eventresults->get();
-        $sharifRegisterEvent = Event::where("name", "sabtename_sharif_97")->get()->first();
+        $eventresults        = $eventresults->get();
+        $sharifRegisterEvent = Event::where("name", "sabtename_sharif_97")
+            ->get()
+            ->first();
         if (isset($sharifRegisterEvent) && in_array($sharifRegisterEvent->id, $eventIds)) {
             $isSharifRegisterEvent = true;
-        } else {
+        }
+        else {
             $isSharifRegisterEvent = false;
         }
-
+        
         $eventResultStatuses = Eventresultstatus::pluck('displayName', 'id');
-
-        return view("event.result.index", compact("eventresults", "eventIds", "isSharifRegisterEvent", "eventResultStatuses"));
+        
+        return view("event.result.index",
+            compact("eventresults", "eventIds", "isSharifRegisterEvent", "eventResultStatuses"));
     }
-
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -66,11 +71,11 @@ class EventresultController extends Controller
     {
         //
     }
-
+    
     /**
      * Store a newly created resource in storage.
      *
-     * @param \App\Http\Requests\InsertEventResultRequest $request
+     * @param  \App\Http\Requests\InsertEventResultRequest  $request
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
@@ -79,106 +84,116 @@ class EventresultController extends Controller
     {
         $eventResult = new Eventresult();
         $eventResult->fill($request->all());
-
+        
         if ($request->has("participationCode")) {
             $eventResult->participationCode = encrypt($request->get("participationCode"));
         }
-
+        
         $user = $request->user();
         if ($request->has("user_id")) {
             if ($user->can(config('constants.INSET_EVENTRESULT_ACCESS'))) {
                 $eventResult->user_id = $request->get("user_id");
-            } else {
+            }
+            else {
                 abort(403);
             }
-        } else {
+        }
+        else {
             $eventResult->user_id = $user->id;
         }
-
+        
         $eventResult->enableReportPublish = $request->get("enableReportPublish", 0);
-
+        
         $userUpdate = false;
         if ($request->has("major_id")) {
-            $userUpdate = true;
+            $userUpdate     = true;
             $user->major_id = $request->get("major_id");
         }
-
+        
         if ($request->has("firstName")) {
-            $userUpdate = true;
+            $userUpdate      = true;
             $user->firstName = $request->get("firstName");
         }
-
+        
         if ($request->has("lastName")) {
-            $userUpdate = true;
+            $userUpdate     = true;
             $user->lastName = $request->get("lastName");
         }
-
+        
         if ($request->has("participationCode")) {
             if (strlen(preg_replace('/\s+/', '', $request->get("participationCode"))) == 0) {
                 $eventResult->participationCodeHash = null;
-            } else {
+            }
+            else {
                 $eventResult->participationCodeHash = bcrypt($request->get("participationCode"));
             }
-        } else {
+        }
+        else {
             $eventResult->participationCodeHash = null;
         }
-
+        
         if ($request->hasFile("reportFile")) {
-            $file = $request->reportFile;
+            $file      = $request->reportFile;
             $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-
+            $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            
             //            $oldReportFile = $eventResult->reportFile;
-
-            if (Storage::disk(Config::get('constants.DISK14'))->put($fileName, File::get($file))) {
+            
+            if (Storage::disk(Config::get('constants.DISK14'))
+                ->put($fileName, File::get($file))) {
                 //                if (isset($oldReportFile)) Storage::disk(Config::get('constants.DISK14'))->delete($oldReportFile);
                 $eventResult->reportFile = $fileName;
             }
         }
-
+        
         if ($eventResult->save()) {
             if ($userUpdate) {
                 $user->update();
             }
             if ($request->expectsJson()) {
                 $participationCode = $eventResult->participationCode;
-                $resultStatus = Response::HTTP_OK;
-            } else {
+                $resultStatus      = Response::HTTP_OK;
+            }
+            else {
                 session()->put("success", "کارنامه با موفقیت درج شد");
             }
-        } else {
+        }
+        else {
             if ($request->expectsJson()) {
-                $message = "Database error";
+                $message      = "Database error";
                 $resultStatus = Response::HTTP_SERVICE_UNAVAILABLE;
-            } else {
+            }
+            else {
                 session()->put("error", \Lang::get("responseText.Database error."));
             }
         }
         if ($request->expectsJson()) {
             if ($resultStatus == Response::HTTP_OK) {
                 $responseContent = [
-                    'message' => 'Result inserted successfully',
+                    'message'           => 'Result inserted successfully',
                     'participationCode' => $participationCode ?? $participationCode,
                 ];
-            } else {
+            }
+            else {
                 $responseContent = [
                     'error' => [
                         'message' => $message,
-                        'code' => $resultStatus,
+                        'code'    => $resultStatus,
                     ],
                 ];
             }
-
+            
             return response($responseContent, Response::HTTP_OK);
-        } else {
+        }
+        else {
             return redirect()->back();
         }
     }
-
+    
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -186,11 +201,11 @@ class EventresultController extends Controller
     {
         //
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -198,12 +213,12 @@ class EventresultController extends Controller
     {
         //
     }
-
+    
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param Eventresult $eventResult
+     * @param  \Illuminate\Http\Request  $request
+     * @param  Eventresult               $eventResult
      *
      * @return \Illuminate\Http\Response
      */
@@ -213,19 +228,20 @@ class EventresultController extends Controller
         $updateResult = $eventResult->update();
         if ($request->expectsJson()) {
             return $this->response->setStatusCode(200);
-        } else {
+        }
+        else {
             if ($updateResult) {
                 session()->put("success", "تغییرات با موفقیت ثبت شد");
             }
-
+            
             return redirect()->back();
         }
     }
-
+    
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param  int  $id
      *
      * @return \Illuminate\Http\Response
      */

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang = "fa">
 <head>
-    <meta charset="utf-8">
+    <meta charset = "utf-8">
 </head>
-<body style="direction: rtl;">
+<body style = "direction: rtl;">
 <h2>آلاء - تماس با ما</h2>
 
 <div>
@@ -21,7 +21,7 @@
 </div>
 
 <div>
-    <h4 style="text-decoration: underline;">پیام :</h4>
+    <h4 style = "text-decoration: underline;">پیام :</h4>
     {{ $comment  }}
 </div>
 <br/>

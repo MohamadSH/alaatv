@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Config;
 class AttacheUserBonRequest extends FormRequest
 {
     use CharacterCommon;
-
+    
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -17,13 +17,15 @@ class AttacheUserBonRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.ATTACHE_USER_BON_ACCESS'))) {
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.ATTACHE_USER_BON_ACCESS'))) {
             return true;
         }
-
+        
         return false;
     }
-
+    
     /**
      * Get the validation rules that apply to the request.
      *
@@ -35,13 +37,13 @@ class AttacheUserBonRequest extends FormRequest
             'totalNumber' => 'required|numeric',
         ];
     }
-
+    
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-
+    
     protected function replaceNumbers()
     {
         $input = $this->request->all();

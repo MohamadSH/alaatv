@@ -13,9 +13,9 @@ class GaReportProvider extends ServiceProvider
      */
     public function boot()
     {
-
+        
     }
-
+    
     /**
      * Register services.
      *

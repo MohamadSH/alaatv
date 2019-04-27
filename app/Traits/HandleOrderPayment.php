@@ -21,68 +21,70 @@ trait HandleOrderPayment
     protected function handleOrderSuccessPayment(Order $order): array
     {
         $order->closeWalletPendingTransactions();
-
+        
         $updateOrderPaymentStatusResult = $this->updateOrderPaymentStatus($order);
-
+        
         /** Attaching user bons for this order */
         if ($updateOrderPaymentStatusResult['paymentstatus_id'] == config('constants.PAYMENT_STATUS_PAID')) {
-            $givesOrderBonsToUserResult = $this->givesOrderBonsToUser($order);
+            $givesOrderBonsToUserResult     = $this->givesOrderBonsToUser($order);
             $updateOrderPaymentStatusResult = array_merge($updateOrderPaymentStatusResult, $givesOrderBonsToUserResult);
         }
-
+        
         return $updateOrderPaymentStatusResult;
     }
-
+    
     /**
-     * @param \App\Order $order
+     * @param  \App\Order  $order
      *
      * @return array
      */
     protected function updateOrderPaymentStatus(Order $order): array
     {
-        $result = [];
+        $result           = [];
         $paymentstatus_id = null;
-        if ((int)$order->totalPaidCost() < (int)$order->totalCost()) {
+        if ((int) $order->totalPaidCost() < (int) $order->totalCost()) {
             $paymentstatus_id = config('constants.PAYMENT_STATUS_INDEBTED');
-        } else {
+        }
+        else {
             $paymentstatus_id = config('constants.PAYMENT_STATUS_PAID');
         }
-
+        
         $result['paymentstatus_id'] = $paymentstatus_id;
-
+        
         $order->close($paymentstatus_id);
         $orderUpdateStatus = $order->updateWithoutTimestamp();
-
+        
         $result['saveOrder'] = $orderUpdateStatus ? 1 : 0;
-
+        
         return $result;
     }
-
+    
     /**
-     * @param \App\Order $order
+     * @param  \App\Order  $order
      *
      * @return array
      */
     private function givesOrderBonsToUser(Order $order): array
     {
-        $result = [];
+        $result  = [];
         $bonName = config('constants.BON1');
-        $bon = Bon::ofName($bonName)->first();
-
-        if (! isset($bon)) {
+        $bon     = Bon::ofName($bonName)
+            ->first();
+        
+        if (!isset($bon)) {
             return $result;
         }
-
+        
         list($givenBonNumber, $failedBonNumber) = $order->giveUserBons($bonName);
-
+        
         $result['saveBon'] = $givenBonNumber;
-
+        
         if ($givenBonNumber == 0) {
             $result['saveBon'] = $failedBonNumber > 0 ? -1 : 0;
         }
-
+        
         $result['bonName'] = $bon->displayName;
-
+        
         return $result;
     }
 }

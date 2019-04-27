@@ -5,9 +5,9 @@ namespace App;
 /**
  * App\Bloodtype
  *
- * @property int $id
- * @property string $name        نام
- * @property string|null $displayName نام قابل نمایش
+ * @property int                 $id
+ * @property string              $name        نام
+ * @property string|null         $displayName نام قابل نمایش
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
@@ -28,6 +28,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Bloodtype query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed          $cache_cooldown_seconds
  */
 class Bloodtype extends BaseModel
 {

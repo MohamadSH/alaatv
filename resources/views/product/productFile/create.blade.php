@@ -1,16 +1,15 @@
-@permission((Config::get('constants.INSERT_PRODUCT_FILE_ACCESS')))
-@extends('app',['pageName'=>'admin'])
+@permission((Config::get('constants.INSERT_PRODUCT_FILE_ACCESS')))@extends('app',['pageName'=>'admin'])
 
 @section('page-css')
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/dropzone/dropzone.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/dropzone/basic.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/icheck/skins/all.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/dropzone/dropzone.min.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/dropzone/basic.min.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr-rtl.min.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/icheck/skins/all.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/css/select2.min.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/css/select2-bootstrap.min.css" rel = "stylesheet" type = "text/css"/>
     <style>
         .datepicker-header {
             direction: ltr;
@@ -19,20 +18,20 @@
 @endsection
 
 @section('pageBar')
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <i class="flaticon-home-2 m--padding-right-5"></i>
-                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+    <nav aria-label = "breadcrumb">
+        <ol class = "breadcrumb">
+            <li class = "breadcrumb-item">
+                <i class = "flaticon-home-2 m--padding-right-5"></i>
+                <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
-            <li class="breadcrumb-item " aria-current="page">
-                <a class="m-link" href="{{action("Web\HomeController@adminProduct")}}">پنل مدیریتی محصولات</a>
+            <li class = "breadcrumb-item " aria-current = "page">
+                <a class = "m-link" href = "{{action("Web\HomeController@adminProduct")}}">پنل مدیریتی محصولات</a>
             </li>
-            <li class="breadcrumb-item" aria-current="page">
-                <a class="m-link" href="{{action("Web\ProductController@edit" , $product)}}">اصلاح محصول {{$product->name}} </a>
+            <li class = "breadcrumb-item" aria-current = "page">
+                <a class = "m-link" href = "{{action("Web\ProductController@edit" , $product)}}">اصلاح محصول {{$product->name}} </a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                <a class="m-link" href="#"> درج فایل محصول </a>
+            <li class = "breadcrumb-item active" aria-current = "page">
+                <a class = "m-link" href = "#"> درج فایل محصول</a>
             </li>
         </ol>
     </nav>
@@ -42,53 +41,53 @@
 
     @include("systemMessage.flash")
 
-    <div class="row" style="margin-bottom: 10px">
-        <div class="col-md-12">
-            <form id="my-awesome-dropzone" class="dropzone dropzone-file-area needsclick dz-clickable">
+    <div class = "row" style = "margin-bottom: 10px">
+        <div class = "col-md-12">
+            <form id = "my-awesome-dropzone" class = "dropzone dropzone-file-area needsclick dz-clickable">
                 @foreach($defaultProductFileOrders as $defaultProductFileOrder)
-                    <input type="hidden" id="lastProductFileOrder_{{$defaultProductFileOrder["fileTypeId"]}}"
-                           value="{{$defaultProductFileOrder["lastOrder"]}}">
+                    <input type = "hidden" id = "lastProductFileOrder_{{$defaultProductFileOrder["fileTypeId"]}}" value = "{{$defaultProductFileOrder["lastOrder"]}}">
                 @endforeach
-                <div class="row">
-                    <div class="col-md-12">
+                <div class = "row">
+                    <div class = "col-md-12">
                         @include("admin.filters.productsFilter" , ["listType"=>"ALL" , "name"=>"products"  , "defaultProductFilter"=>$product->id , "title"=>"محصول" , "id"=>"products" , "label"=>["caption"=> "انتخاب محصول"]])
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="fallback">
-                            <input name="file" type="file" multiple/>
+                <div class = "row">
+                    <div class = "col-md-12">
+                        <div class = "fallback">
+                            <input name = "file" type = "file" multiple/>
                         </div>
-                        <div class="dropzone-previews"></div>
-                        <div class="dz-message needsclick"><h4 class="sbold ">
-                                فایل خود را اینجا بیندازید و یا بر روی این قسمت کلیک کنید</h4>
-                            <span class="needsclick"><span class="m-badge m-badge--wide m-badge--info">توجه:</span> فرمت های مجاز <label
-                                        style="color:red;">pdf , mp4</label> </span>
+                        <div class = "dropzone-previews"></div>
+                        <div class = "dz-message needsclick">
+                            <h4 class = "sbold ">
+                                فایل خود را اینجا بیندازید و یا بر روی این قسمت کلیک کنید
+                            </h4>
+                            <span class = "needsclick"><span class = "m-badge m-badge--wide m-badge--info">توجه:</span> فرمت های مجاز <label style = "color:red;">pdf , mp4</label> </span>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    <div id="dropzone-elements" class="dropzone dropzone-previews" style="background: none; border:none"></div>
+    <div id = "dropzone-elements" class = "dropzone dropzone-previews" style = "background: none; border:none"></div>
 @endsection
 
 @section('page-js')
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.min.js" type="text/javascript"></script>
-    <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.input-ip-address-control-1.0.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/dropzone/dropzone.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/icheck/icheck.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js" type="text/javascript"></script>
-    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-input-mask.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-icheck.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/makeSelect2Single.js" type="text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.min.js" type = "text/javascript"></script>
+    <script src = "/acm/extra/persian-datepicker/lib/persian-date.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.input-ip-address-control-1.0.min.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/dropzone/dropzone.min.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/icheck/icheck.min.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js" type = "text/javascript"></script>
+    <script src = "/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-input-mask.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-icheck.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/makeSelect2Single.js" type = "text/javascript"></script>
     <script>
 
 
@@ -233,7 +232,21 @@
                     var orderInput = file.previewElement.querySelector('input[name="order"]');
                     orderInput.setAttribute("id", "order_" + myDropzone.files.length);
                     // Create the remove button
-                    var removeButton = Dropzone.createElement("<a href='javascript:;' class='btn red btn-sm btn-block' style='border-radius: 18px;'>Remove</a>");
+                    var removeButton = Dropzone.createElement("<a href="
+                    javascript:;
+                    " class="
+                    btn
+                    red
+                    btn - sm
+                    btn - block
+                    " style="
+                    border - radius
+                :
+                    18
+                    px;
+                    ">Remove</a>"
+                )
+                    ;
 
                     // Capture the Dropzone instance as closure.
                     var _this = this;
@@ -254,7 +267,15 @@
                     file.previewElement.querySelector('.dz-file-preview').appendChild(removeButton);
 
                     var productId = $("#products option:selected").val();
-                    var productHidden = Dropzone.createElement("<input type='hidden' name='product_id' value='" + productId + "'>");
+                    var productHidden = Dropzone.createElement("<input type="
+                    hidden
+                    " name="
+                    product_id
+                    " value="
+                    " + productId + "
+                    ">"
+                )
+                    ;
                     file.previewElement.querySelector('.form-horizontal').appendChild(productHidden);
                 });
 
@@ -311,7 +332,12 @@
                         var cloudFileHidden = Dropzone.createElement("<input type='hidden' name='cloudFile' value='/paid/{{$product->id}}/" + response.prefix + response.fileName + "'>");
                         files.previewElement.querySelector('.form-horizontal').appendChild(cloudFileHidden);
                     } else {
-                        $("#my-awesome-dropzone").append("<span class='m--font-danger'>" + "خطا در آپلود فایل " + files.name + "</span></br>");
+                        $("#my-awesome-dropzone").append("<span class="
+                        m--
+                        font - danger
+                        ">" + "خطا در آپلود فایل " + files.name + "</span></br>"
+                    )
+                        ;
                     }
 
 //                    if (typeof(response.sessionData) != "undefined" && response.sessionData != null)
@@ -327,7 +353,12 @@
 //                        });
                 });
                 this.on("error", function (files, response) {
-                    $("#my-awesome-dropzone").append("<span class='m--font-danger' >" + response.message + " " + files.name + "</span></br>");
+                    $("#my-awesome-dropzone").append("<span class="
+                    m--
+                    font - danger
+                    " >" + response.message + " " + files.name + "</span></br>"
+                )
+                    ;
                     // Gets triggered when there was an error sending the files.
                     // Maybe show form again, and notify user of error
                 });
@@ -336,7 +367,11 @@
 
         $(document).on('submit', '.productInformationForm', function (e) {
             e.preventDefault();
-            var loadingImage = "<img src = '/acm/extra/loading-arrow.gif' style='height: 20px;'>";
+            var loadingImage = "<img src = " / acm / extra / loading - arrow.gif
+            " style="
+            height: 20
+            px;
+            ">";
             var form = $(this);
             formData = form.serialize();
             url = form.attr("action");
@@ -407,7 +442,7 @@
             switch (fileTypeId) {
                 case "1":
                     var savedOrder = videoOrderMap["order_" + $(this).data("role")];
-                    if (typeof(savedOrder) != "undefined" && savedOrder !== null)
+                    if (typeof (savedOrder) != "undefined" && savedOrder !== null)
                         $("#order_" + $(this).data("role")).val(savedOrder);
                     else {
                         $("#order_" + $(this).data("role")).val(lastOrder);
@@ -418,7 +453,7 @@
                     break;
                 case "2":
                     var savedOrder = pamphletOrderMap["order_" + $(this).data("role")];
-                    if (typeof(savedOrder) != "undefined" && savedOrder !== null)
+                    if (typeof (savedOrder) != "undefined" && savedOrder !== null)
                         $("#order_" + $(this).data("role")).val(savedOrder);
                     else {
                         $("#order_" + $(this).data("role")).val(lastOrder);

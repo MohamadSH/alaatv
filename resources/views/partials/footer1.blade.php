@@ -1,7 +1,7 @@
-<div class="page-footer">
-    <div class="page-footer-inner"> @if(isset($wSetting->site->footer)) {!! $wSetting->site->footer !!} @endif</div>
-    <div class="scroll-to-top">
-        <i class="icon-arrow-up"></i>
+<div class = "page-footer">
+    <div class = "page-footer-inner"> @if(isset($wSetting->site->footer)) {!! $wSetting->site->footer !!} @endif</div>
+    <div class = "scroll-to-top">
+        <i class = "icon-arrow-up"></i>
     </div>
 </div>
 
@@ -17,11 +17,11 @@
             </div>
             <div class = "m-stack__item m-stack__item--right m-stack__item--middle m-stack__item--first">
                 <ul class = "m-footer__nav m-nav m-nav--inline m--pull-right">
-{{--                    <li class = "m-nav__item">
-                        <a href = "{{ action('HomeController@aboutUs') }}" class = "m-nav__link">
-                            <span class = "m-nav__link-text">درباره ما</span>
-                        </a>
-                    </li>--}}
+                    {{--                    <li class = "m-nav__item">
+                                            <a href = "{{ action('HomeController@aboutUs') }}" class = "m-nav__link">
+                                                <span class = "m-nav__link-text">درباره ما</span>
+                                            </a>
+                                        </li>--}}
                     <li class = "m-nav__item">
                         <a href = "{{ action("Web\RulesPageController") }}" class = "m-nav__link">
                             <span class = "m-nav__link-text">قوانین</span>
@@ -46,5 +46,4 @@
             </div>
         </div>
     </div>
-</footer>
-<!-- end::Footer -->
+</footer><!-- end::Footer -->

@@ -15,28 +15,28 @@ abstract class OrderPayablePriceByWalletCalculator extends CheckoutProcessor
 {
     public function process(Cashier $cashier)
     {
-        $order = $cashier->getOrder();
+        $order      = $cashier->getOrder();
         $finalPrice = $cashier->getFinalPrice();
-        if (! isset($order)) {
+        if (!isset($order)) {
             throw new Exception('Order has not been set');
         }
-
-        if (! isset($finalPrice)) {
+        
+        if (!isset($finalPrice)) {
             throw new Exception('Final price has not been set');
         }
-
+        
         $payableAmountByWallet = $this->calculateAmountPaidByWallet($order, $finalPrice);
-
+        
         $cashier->setPayableAmountByWallet($payableAmountByWallet);
-
+        
         return $this->next($cashier);
     }
-
+    
     /**
      * Calculates the sum price for passed Orderproduct collection
      *
-     * @param Order $order
-     * @param       $finalPrice
+     * @param  Order  $order
+     * @param         $finalPrice
      *
      * @return int
      */

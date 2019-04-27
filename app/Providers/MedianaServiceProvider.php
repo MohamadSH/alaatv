@@ -19,15 +19,21 @@ class MedianaServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->when(MedianaChannel::class)->needs(SmsSenderClient::class)->give(function () {
-            $config = $this->app['config']['services.medianaSMS.normal'];
-
-            return new MedianaClient(new HttpClient, $config['userName'], $config['password'], $config['from'], $config['url']);
-        });
-        $this->app->when(MedianaPatternChannel::class)->needs(SmsSenderClient::class)->give(function () {
-            $config = $this->app['config']['services.medianaSMS.pattern'];
-
-            return new MedianaPatternClient(new HttpClient, $config['userName'], $config['password'], $config['from'], $config['url']);
-        });
+        $this->app->when(MedianaChannel::class)
+            ->needs(SmsSenderClient::class)
+            ->give(function () {
+                $config = $this->app['config']['services.medianaSMS.normal'];
+                
+                return new MedianaClient(new HttpClient, $config['userName'], $config['password'], $config['from'],
+                    $config['url']);
+            });
+        $this->app->when(MedianaPatternChannel::class)
+            ->needs(SmsSenderClient::class)
+            ->give(function () {
+                $config = $this->app['config']['services.medianaSMS.pattern'];
+                
+                return new MedianaPatternClient(new HttpClient, $config['userName'], $config['password'],
+                    $config['from'], $config['url']);
+            });
     }
 }

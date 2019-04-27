@@ -1,7 +1,7 @@
 @extends("app" , ["pageName"=>"ConsultingQuestion"])
 
 @section("css")
-    <link rel="stylesheet" href="{{ mix('/css/all.css') }}">
+    <link rel = "stylesheet" href = "{{ mix('/css/all.css') }}">
 @endsection
 
 @section("title")
@@ -9,12 +9,12 @@
 @endsection
 
 @section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
+    <div class = "page-bar">
+        <ul class = "page-breadcrumb">
             <li>
-                <i class="icon-home"></i>
+                <i class = "icon-home"></i>
                 <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
-                <i class="fa fa-angle-left"></i>
+                <i class = "fa fa-angle-left"></i>
             </li>
             <li>
                 <span>آپلود سؤال مشاوره ای</span>
@@ -24,72 +24,70 @@
 @endsection
 
 @section("content")
-    <div class="custom-alerts alert alert-success fade in margin-top-10 hidden" id="successMessage">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-        <i class="fa fa-check-circle"></i>
-        <span class="message"></span>
+    <div class = "custom-alerts alert alert-success fade in margin-top-10 hidden" id = "successMessage">
+        <button type = "button" class = "close" data-dismiss = "alert" aria-hidden = "true"></button>
+        <i class = "fa fa-check-circle"></i>
+        <span class = "message"></span>
     </div>
-    <div class="custom-alerts alert alert-danger fade in margin-top-10 hidden" id="errorMessage">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-        <i class="fa fa-times-circle"></i>
-        <span class="message"></span>
+    <div class = "custom-alerts alert alert-danger fade in margin-top-10 hidden" id = "errorMessage">
+        <button type = "button" class = "close" data-dismiss = "alert" aria-hidden = "true"></button>
+        <i class = "fa fa-times-circle"></i>
+        <span class = "message"></span>
     </div>
-    <div class="row">
+    <div class = "row">
         @if(Auth::user()->completion() == 100)
-            <div class="col-md-12">
-                <div class="m-heading-1 border-green m-bordered">
+            <div class = "col-md-12">
+                <div class = "m-heading-1 border-green m-bordered">
                     <h3>سوال مشاوره ای خود را از ما بپرسید</h3>
-                    <p>شما می توانید پس از ضبط صوتی سؤال مشاوره ای خود ، فایل آن را از طریق پنل زیر آپلود نمایید. فایل
-                        صوتی سؤال شما در فیلم مشاوره ای با ذکر نام شما پخش خواهد شد و سپس مشاور محترم پاسخ سؤال شما را
-                        به صورت تصویری خواهند داد.</p>
-                    <p>پس از آپلود موفقیت آمیز سؤال ، می توانید وضعیت آن را با مراجعه به <a href = "{{action("Web\UserController@uploads")}}" class = "btn red btn-outline">لیست سوالات
-                                                                                                                                                                            خود</a> مشاهده نمایید.</p>
+                    <p>شما می توانید پس از ضبط صوتی سؤال مشاوره ای خود ، فایل آن را از طریق پنل زیر آپلود نمایید. فایل صوتی سؤال شما در فیلم مشاوره ای با ذکر نام شما پخش خواهد شد و سپس مشاور محترم پاسخ سؤال شما را به صورت تصویری خواهند داد.</p>
+                    <p>پس از آپلود موفقیت آمیز سؤال ، می توانید وضعیت آن را با مراجعه به
+                        <a href = "{{action("Web\UserController@uploads")}}" class = "btn red btn-outline">لیست سوالات خود</a>
+                       مشاهده نمایید.
+                    </p>
                 </div>
-                <form id="my-awesome-dropzone" class="col-md-12 dropzone dropzone-file-area needsclick dz-clickable">
+                <form id = "my-awesome-dropzone" class = "col-md-12 dropzone dropzone-file-area needsclick dz-clickable">
                     {{ csrf_field() }}
-                    <div class="row">
-                        <div class="col-md-4">
-                        </div>
-                        <div class="col-md-4">
+                    <div class = "row">
+                        <div class = "col-md-4"></div>
+                        <div class = "col-md-4">
                             {!! Form::text('title', null, ['class' => 'form-control' , 'placeholder'=>'عنوان سؤال شما' ,'id'=>'title' ]) !!}
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="fallback">
-                                <input name="file" type="file" multiple/>
+                    <div class = "row">
+                        <div class = "col-md-12">
+                            <div class = "fallback">
+                                <input name = "file" type = "file" multiple/>
                             </div>
-                            <div class="dropzone-previews"></div>
-                            <div class="dz-message needsclick"><h4 class="sbold ">
-                                    فایل خود را اینجا بیندازید و یا بر روی این قسمت کلیک کنید</h4>
-                                <span class="needsclick"><span class="m-badge m-badge--wide m-badge--info">توجه:</span>فرمت مجاز <label
-                                            style="color:red;">mp3</label> است و حداکثر حجم مجاز <label
-                                            style="color:red;">۲</label> مگابایت می باشد. همچنین وارد نمودن عنوان سؤال الزامی است. <label
-                                            style="color:red;"></span>
+                            <div class = "dropzone-previews"></div>
+                            <div class = "dz-message needsclick">
+                                <h4 class = "sbold ">
+                                    فایل خود را اینجا بیندازید و یا بر روی این قسمت کلیک کنید
+                                </h4>
+                                <span class = "needsclick"><span class = "m-badge m-badge--wide m-badge--info">توجه:</span>فرمت مجاز <label style = "color:red;">mp3</label> است و حداکثر حجم مجاز <label style = "color:red;">۲</label> مگابایت می باشد. همچنین وارد نمودن عنوان سؤال الزامی است. <label style = "color:red;"></span>
 
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <button type="submit" class="btn default btn-lg" id="submit">ارسال</button>
+                    <div class = "row">
+                        <div class = "col-md-12">
+                            <button type = "submit" class = "btn default btn-lg" id = "submit">ارسال</button>
                         </div>
                     </div>
 
                 </form>
             </div>
         @else
-            <div class="col-md-12">
-                <div class="m-heading-1 border-red m-bordered">
+            <div class = "col-md-12">
+                <div class = "m-heading-1 border-red m-bordered">
                     <h3>پروفایل شما کامل نمی باشد!</h3>
-                    <p>کاربر گرامی برای آپلود سؤالات مشاوره ای خود ابتدا باید درصد تکمیل پروفایل شما <span
-                                class="m--font-danger bold">100</span> باشد .</p>
-                    <p>پس از تکمیل اطلاعات پروفایل با مراجعه به این صفحه قادر خواهید بود سؤالات مشاوره ای خود را ، که به
-                        صورت فایل صوتی ضبط نموده اید ، آپلود نموده و همچنین به لیست سؤالات مشاوره ای خود دسترسی داشته
-                        باشید </p>
+                    <p>کاربر گرامی برای آپلود سؤالات مشاوره ای خود ابتدا باید درصد تکمیل پروفایل شما
+                        <span class = "m--font-danger bold">100</span>
+                       باشد .
+                    </p>
+                    <p>پس از تکمیل اطلاعات پروفایل با مراجعه به این صفحه قادر خواهید بود سؤالات مشاوره ای خود را ، که به صورت فایل صوتی ضبط نموده اید ، آپلود نموده و همچنین به لیست سؤالات مشاوره ای خود دسترسی داشته باشید</p>
                     <p>
-                        <a href = "{{ action("Web\UserController@show",Auth::user()) }}" class = "btn green-haze btn-outline">تکمیل
-                                                                                                                              اطلاعات پروفایل</a></p>
+                        <a href = "{{ action("Web\UserController@show",Auth::user()) }}" class = "btn green-haze btn-outline">تکمیل اطلاعات پروفایل</a>
+                    </p>
                 </div>
             </div>
         @endif
@@ -98,15 +96,15 @@
 @endsection
 
 @section("footerPageLevelPlugin")
-    <script src="/assets/global/plugins/dropzone/dropzone.min.js" type="text/javascript"></script>
+    <script src = "/assets/global/plugins/dropzone/dropzone.min.js" type = "text/javascript"></script>
 @endsection
 
 @section("footerPageLevelScript")
-    <script src="/assets/pages/scripts/form-dropzone.min.js" type="text/javascript"></script>
+    <script src = "/assets/pages/scripts/form-dropzone.min.js" type = "text/javascript"></script>
 @endsection
 
 @section("extraJS")
-    <script type="text/javascript">
+    <script type = "text/javascript">
         Dropzone.options.myAwesomeDropzone = { // The camelized version of the ID of the form element
 
             // The configuration we've talked about above
@@ -195,13 +193,12 @@
                     // Redirect user or notify of success.
 //                    console.log(response);
 //                    console.log(response.responseText);
-                    if (typeof(response.sessionData) != "undefined" && response.sessionData != null)
+                    if (typeof (response.sessionData) != "undefined" && response.sessionData != null)
                         $.each(response.sessionData, function (index, value) {
-                            if (index == 'error' && typeof(value) != "undefined" && value != null) {
+                            if (index == 'error' && typeof (value) != "undefined" && value != null) {
                                 $("#errorMessage").removeClass("hidden");
                                 $("#errorMessage .message").html(response.sessionData.error);
-                            }
-                            else if (index == 'success' && typeof(value) != "undefined" && value != null) {
+                            } else if (index == 'success' && typeof (value) != "undefined" && value != null) {
                                 $("#successMessage").removeClass("hidden");
                                 $("#successMessage .message").html(response.sessionData.success);
                             }

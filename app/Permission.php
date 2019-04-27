@@ -15,12 +15,12 @@ use Laratrust\Models\LaratrustPermission;
 /**
  * App\Permission
  *
- * @property int $id
- * @property string $name
- * @property string|null $display_name
- * @property string|null $description
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
+ * @property int                                                       $id
+ * @property string                                                    $name
+ * @property string|null                                               $display_name
+ * @property string|null                                               $description
+ * @property \Carbon\Carbon|null                                       $created_at
+ * @property \Carbon\Carbon|null                                       $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Role[] $roles
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission whereDescription($value)
@@ -37,7 +37,7 @@ class Permission extends LaratrustPermission
 {
     use Helper;
     use DateTrait;
-
+    
     /**
      * @var array
      */
@@ -46,7 +46,7 @@ class Permission extends LaratrustPermission
         'display_name',
         'description',
     ];
-
+    
     protected $dates = [
         'created_at',
         'updated_at',

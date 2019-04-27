@@ -15,60 +15,60 @@ use LogicException;
 class Tags extends FilterAbstract
 {
     protected $attribute = 'tags';
-
+    
     protected $tagManager;
-
+    
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         $this->isSetTagManager();
-
-        if (! $this->validateTags($value, $callback)) {
+        
+        if (!$this->validateTags($value, $callback)) {
             return $builder;
         }
-
+        
         $resultArray = $this->retriveTagable($value);
-
+        
         $callback->success($builder, $resultArray);
-
+        
         return $builder->whereIn('id', $resultArray);
     }
-
+    
     private function isSetTagManager(): void
     {
-        if (! isset($this->tagManager)) {
+        if (!isset($this->tagManager)) {
             throw new LogicException(get_class($this).' must have a $tagManager');
         }
-        if (! ($this->tagManager instanceof TaggingInterface)) {
+        if (!($this->tagManager instanceof TaggingInterface)) {
             throw new LogicException(get_class($this).' tagManager should be instance of TaggingInterface');
         }
     }
-
+    
     /**
-     * @param                $value
-     * @param FilterCallback $callback
+     * @param                  $value
+     * @param  FilterCallback  $callback
      *
      * @return bool
      */
     private function validateTags($value, FilterCallback $callback): bool
     {
-        if (! isset($value)) {
+        if (!isset($value)) {
             $callback->err([
                 "message" => $this->getValueShouldBeSetMessage(),
             ]);
-
+            
             return false;
         }
-        if (! is_array($value)) {
+        if (!is_array($value)) {
             $callback->err([
                 "message" => $this->getValueShouldBeArrayMessage(),
             ]);
-
+            
             return false;
         }
-
+        
         return true;
     }
-
+    
     /**
      * @param $value
      *
@@ -81,19 +81,19 @@ class Tags extends FilterAbstract
             $numberOfResult,
             $resultArray,
         ] = $this->tagManager->getTaggable($tags);
-
+        
         return $resultArray;
     }
-
+    
     /**
-     * @param TaggingInterface $tagManager
+     * @param  TaggingInterface  $tagManager
      *
      * @return Tags
      */
     public function setTagManager(TaggingInterface $tagManager)
     {
         $this->tagManager = $tagManager;
-
+        
         return $this;
     }
 }

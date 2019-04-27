@@ -15,7 +15,8 @@ use Illuminate\Support\Collection;
 class AlaaInvoiceGenerator
 {
     /**
-     * @param Order $order
+     * @param  Order  $order
+     *
      * @return array
      * @throws \Exception
      */
@@ -24,96 +25,104 @@ class AlaaInvoiceGenerator
         $orderproductsInfo = $this->getOrderproductsInfo($order);
         /** @var OrderproductCollection $orderproducts */
         $orderproducts = $orderproductsInfo['purchasedOrderproducts'];
-
+        
         $orderproducts->reCheckOrderproducs();
-
+        
         $order = $order->fresh();
-
+        
         $orderPriceArray = $order->obtainOrderCost(true);
-
+        
         /** @var OrderproductCollection $calculatedOrderproducts */
         $calculatedOrderproducts = $orderPriceArray['calculatedOrderproducts'];
         $calculatedOrderproducts->updateCostValues();
-
+        
         $orderproductsRawCost = $orderPriceArray['sumOfOrderproductsRawCost'];
-        $totalCost = $orderPriceArray['totalCost'];
-        $payableByWallet = $orderPriceArray['payableAmountByWallet'];
-
+        $totalCost            = $orderPriceArray['totalCost'];
+        $payableByWallet      = $orderPriceArray['payableAmountByWallet'];
+        
         $orderProductCount = $this->orderproductFormatter($calculatedOrderproducts);
-
-        return $this->invoiceFormatter($calculatedOrderproducts, $orderProductCount, $orderproductsRawCost, $totalCost, $payableByWallet);
+        
+        return $this->invoiceFormatter($calculatedOrderproducts, $orderProductCount, $orderproductsRawCost, $totalCost,
+            $payableByWallet);
     }
-
+    
     /**
-     * @param Collection $fakeOrderproducts
-     * @return array
-     */
-    public function generateFakeOrderproductsInvoice(Collection $fakeOrderproducts)
-    {
-        /** @var OrderproductCollection $fakeOrderproducts */
-        $groupPriceInfo = $fakeOrderproducts->calculateGroupPrice();
-
-        $orderProductCount = $this->orderproductFormatter($fakeOrderproducts);
-
-        return $this->invoiceFormatter($fakeOrderproducts, $orderProductCount, $groupPriceInfo['rawCost'], $groupPriceInfo['customerCost'], 0);
-    }
-
-    /**
-     * @param Order $order
+     * @param  Order  $order
+     *
      * @return array
      */
     private function getOrderproductsInfo(Order $order)
     {
         /** @var OrderproductCollection $allOrderproducts */
         $allOrderproducts = $order->orderproducts->sortByDesc('created_at');
-
+        
         $purchasedOrderproducts = $allOrderproducts->whereType([config('constants.ORDER_PRODUCT_TYPE_DEFAULT')]);
-        $giftOrderproducts = $allOrderproducts->whereType([config('constants.ORDER_PRODUCT_GIFT')]);
-
+        $giftOrderproducts      = $allOrderproducts->whereType([config('constants.ORDER_PRODUCT_GIFT')]);
+        
         return [
             'purchasedOrderproducts' => $purchasedOrderproducts,
-            'giftOrderproducts' => $giftOrderproducts,
+            'giftOrderproducts'      => $giftOrderproducts,
         ];
     }
-
+    
     /**
      * Formats orderproduct collection and return total number of orderproducts
      *
-     * @param OrderproductCollection $orderproducts
+     * @param  OrderproductCollection  $orderproducts
+     *
      * @return int
      */
     private function orderproductFormatter(OrderproductCollection &$orderproducts): int
     {
         $newPrices = $orderproducts->getNewPrices();
-
+        
         $orderProductCount = 0;
-        $orderproducts = new OrderproductCollection($orderproducts->groupBy('grandId')->map(function ($orderproducts) use (&$orderProductCount) {
-            $orderProductCount += $orderproducts->count();
-
-            return [
-                'grand' => $orderproducts->first()->grandProduct ?? null,
-                'orderproducts' => $orderproducts,
-            ];
-        })->values()->all());
-
+        $orderproducts     = new OrderproductCollection($orderproducts->groupBy('grandId')
+            ->map(function ($orderproducts) use (&$orderProductCount) {
+                $orderProductCount += $orderproducts->count();
+                
+                return [
+                    'grand'         => $orderproducts->first()->grandProduct ?? null,
+                    'orderproducts' => $orderproducts,
+                ];
+            })
+            ->values()
+            ->all());
+        
         $orderproducts = $orderproducts->setNewPrices($newPrices);
-
+        
         return $orderProductCount;
     }
-
+    
     private function invoiceFormatter($orderproducts, $orderproductCount, $orderproductsRawCost, $totalCost, $payableByWallet)
     {
         $discount = $orderproductsRawCost - $totalCost;
-
+        
         return [
-            'items' => $orderproducts,
+            'items'             => $orderproducts,
             'orderproductCount' => $orderproductCount,
-            'price' => [
-                'base' => $orderproductsRawCost,
-                'discount' => $discount,
-                'final' => $totalCost,
+            'price'             => [
+                'base'            => $orderproductsRawCost,
+                'discount'        => $discount,
+                'final'           => $totalCost,
                 'payableByWallet' => $payableByWallet,
             ],
         ];
+    }
+    
+    /**
+     * @param  Collection  $fakeOrderproducts
+     *
+     * @return array
+     */
+    public function generateFakeOrderproductsInvoice(Collection $fakeOrderproducts)
+    {
+        /** @var OrderproductCollection $fakeOrderproducts */
+        $groupPriceInfo = $fakeOrderproducts->calculateGroupPrice();
+        
+        $orderProductCount = $this->orderproductFormatter($fakeOrderproducts);
+        
+        return $this->invoiceFormatter($fakeOrderproducts, $orderProductCount, $groupPriceInfo['rawCost'],
+            $groupPriceInfo['customerCost'], 0);
     }
 }

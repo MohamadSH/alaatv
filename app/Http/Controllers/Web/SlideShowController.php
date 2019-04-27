@@ -25,7 +25,7 @@ class SlideShowController extends Controller
         $this->middleware('permission:'.Config::get('constants.REMOVE_SLIDESHOW_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:'.Config::get('constants.SHOW_SLIDESHOW_ACCESS'), ['only' => 'show']);
     }
-
+    
     /**
      * Display a listing of the resource.
      *
@@ -33,11 +33,12 @@ class SlideShowController extends Controller
      */
     public function index()
     {
-        $slides = Slideshow::all()->sortBy("order");
-
+        $slides = Slideshow::all()
+            ->sortBy("order");
+        
         return $slides;
     }
-
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -47,11 +48,11 @@ class SlideShowController extends Controller
     {
         //
     }
-
+    
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -75,55 +76,60 @@ class SlideShowController extends Controller
         //        }
         $slide = new Slideshow();
         $slide->fill($request->all());
-
+        
         if (strlen($slide->order) == 0) {
             $slide->order = 0;
         }
-
+        
         if (strlen($slide->link) == 0) {
             $slide->link = null;
-        } else {
+        }
+        else {
             if (isset($slide->link)) {
                 if (strcmp($slide->link[0], "#") != 0) {
-                    if (! preg_match("/^http:\/\//", $slide->link) && ! preg_match("/^https:\/\//", $slide->link)) {
+                    if (!preg_match("/^http:\/\//", $slide->link) && !preg_match("/^https:\/\//", $slide->link)) {
                         $slide->link = "https://".$slide->link;
                     }
                 }
             }
         }
-
+        
         if ($request->hasFile("photo")) {
-            $file = $request->file('photo');
+            $file      = $request->file('photo');
             $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-
-            if (Storage::disk(Config::get('constants.DISK9'))->put($fileName, File::get($file))) {
+            $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            
+            if (Storage::disk(Config::get('constants.DISK9'))
+                ->put($fileName, File::get($file))) {
                 $slide->photo = $fileName;
-            } else {
+            }
+            else {
                 session()->put('error', 'بارگذاری عکس بسته با مشکل مواجه شد!');
             }
         }
-
+        
         $isEnable = $request->get("isEnable");
         if (isset($isEnable)) {
             $slide->isEnable = 1;
-        } else {
+        }
+        else {
             $slide->isEnable = 0;
         }
-
+        
         if ($slide->save()) {
             session()->put('success', 'اسلاید با موفقیت افزوده شد!');
-        } else {
+        }
+        else {
             session()->put('error', 'خطای پایگاه داده!');
         }
-
+        
         return redirect()->back();
     }
-
+    
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -131,11 +137,11 @@ class SlideShowController extends Controller
     {
         //
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Slideshow $slide
+     * @param  \App\Slideshow  $slide
      *
      * @return \Illuminate\Http\Response
      */
@@ -144,7 +150,7 @@ class SlideShowController extends Controller
         $slideWebsitePage = $slide->websitepage->url;
         switch ($slideWebsitePage) {
             case "/home":
-                $slideDisk = 9;
+                $slideDisk   = 9;
                 $previousUrl = action("Web\HomeController@adminSlideShow");
                 break;
             //            case "/لیست-مقالات":
@@ -155,15 +161,15 @@ class SlideShowController extends Controller
                 break;
         }
         $slideWebsitepageId = $slide->websitepage->id;
-
+        
         return view("slideShow.edit", compact('slide', 'slideDisk', 'slideWebsitepageId', 'previousUrl'));
     }
-
+    
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Slideshow $slide
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Slideshow            $slide
      *
      * @return \Illuminate\Http\Response
      */
@@ -185,60 +191,66 @@ class SlideShowController extends Controller
         //                $diskName = Config::get('constants.DISK9');
         //                break;
         //        }
-
+        
         $oldPhoto = $slide->photo;
-
+        
         $slide->fill($request->all());
-
+        
         if (strlen($slide->order) == 0) {
             $slide->order = 0;
         }
-
+        
         if (strlen($slide->link) == 0) {
             $slide->link = null;
-        } else {
+        }
+        else {
             if (isset($slide->link)) {
                 if (strcmp($slide->link[0], "#") != 0) {
-                    if (! preg_match("/^http:\/\//", $slide->link) && ! preg_match("/^https:\/\//", $slide->link)) {
+                    if (!preg_match("/^http:\/\//", $slide->link) && !preg_match("/^https:\/\//", $slide->link)) {
                         $slide->link = "https://".$slide->link;
                     }
                 }
             }
         }
-
+        
         if ($request->hasFile("photo")) {
-            $file = $request->file('photo');
+            $file      = $request->file('photo');
             $extension = $file->getClientOriginalExtension();
-            $fileName = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-
-            if (Storage::disk(Config::get('constants.DISK9'))->put($fileName, File::get($file))) {
-                Storage::disk(Config::get('constants.DISK9'))->delete($oldPhoto);
+            $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            
+            if (Storage::disk(Config::get('constants.DISK9'))
+                ->put($fileName, File::get($file))) {
+                Storage::disk(Config::get('constants.DISK9'))
+                    ->delete($oldPhoto);
                 $slide->photo = $fileName;
-            } else {
+            }
+            else {
                 session()->put('error', 'بارگذاری عکس بسته با مشکل مواجه شد!');
             }
         }
-
+        
         $isEnable = $request->get("isEnable");
         if (isset($isEnable)) {
             $slide->isEnable = 1;
-        } else {
+        }
+        else {
             $slide->isEnable = 0;
         }
-
+        
         if ($slide->update()) {
             session()->put('success', 'اسلاید با موفقیت اصلاح شد!');
-        } else {
+        }
+        else {
             session()->put('error', 'خطای پایگاه داده!');
         }
-
+        
         return redirect()->back();
     }
-
+    
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Slideshow $slide
+     * @param  \App\Slideshow  $slide
      *
      * @return \Illuminate\Http\Response
      */
@@ -246,10 +258,11 @@ class SlideShowController extends Controller
     {
         if ($slide->delete()) {
             session()->put('success', 'اسلاید با موفقیت حذف شد!');
-        } else {
+        }
+        else {
             session()->put('error', 'خطای پایگاه داده!');
         }
-
+        
         return response([
             'sessionData' => session()->all(),
         ]);

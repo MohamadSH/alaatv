@@ -13,9 +13,11 @@ class AlterBlocksTableEnableSoftdelete extends Migration
      */
     public function up()
     {
-        Schema::table('blocks', function (Blueprint $table) {
-            $table->softDeletes();
-        });
+        if (!Schema::hasColumn('blocks', 'deleted_at')) {
+            Schema::table('blocks', function (Blueprint $table) {
+                $table->softDeletes();
+            });
+        }
     }
 
     /**

@@ -1,8 +1,8 @@
 @extends("app")
 
 @section("headPageLevelPlugin")
-    <link href="/assets/global/plugins/jquery-nestable/jquery.nestable.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
+    <link href = "/assets/global/plugins/jquery-nestable/jquery.nestable.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel = "stylesheet" type = "text/css"/>
 @endsection
 
 @section("headPageLevelStyle")
@@ -13,17 +13,17 @@
 @endsection
 
 @section("pageBar")
-    <div class="page-bar">
-        <ul class="page-breadcrumb">
+    <div class = "page-bar">
+        <ul class = "page-breadcrumb">
             <li>
-                <i class="icon-home"></i>
+                <i class = "icon-home"></i>
                 <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
-                <i class="fa fa-angle-left"></i>
+                <i class = "fa fa-angle-left"></i>
             </li>
             <li>
-                <i class="fa fa-list-alt"></i>
+                <i class = "fa fa-list-alt"></i>
                 <a href = "{{action("Web\HomeController@consultantEntekhabReshteList")}}">لیست دانش آموزان</a>
-                <i class="fa fa-angle-left"></i>
+                <i class = "fa fa-angle-left"></i>
             </li>
             <li>
                 <span>پنل انتخاب رشته</span>
@@ -33,14 +33,14 @@
 @endsection
 
 @section("content")
-    <div class="row">
-        <div class="col-md-12">
-            <div class="portlet box blue-chambray">
-                <div class="portlet-title ">
-                    <div class="caption ">
-                        <i class="icon-user"></i>
-                        <span class="caption-subject sbold uppercase">مشخصات دانش آموز</span>
-                        <input type="hidden" value="1" name="parentMajor">
+    <div class = "row">
+        <div class = "col-md-12">
+            <div class = "portlet box blue-chambray">
+                <div class = "portlet-title ">
+                    <div class = "caption ">
+                        <i class = "icon-user"></i>
+                        <span class = "caption-subject sbold uppercase">مشخصات دانش آموز</span>
+                        <input type = "hidden" value = "1" name = "parentMajor">
                     </div>
                     {{--<div class="actions">--}}
                     {{--<div class="btn-group btn-group-devided" data-toggle="buttons">--}}
@@ -51,24 +51,23 @@
                     {{--</div>--}}
                     {{--</div>--}}
                 </div>
-                <div class="portlet-body">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <img width="100%" height="100%" alt="عکس دانش آموز"
-                                 src="{{ route('image', ['category'=>'1','w'=>'100' , 'h'=>'100' ,  'filename' =>  $user->photo ]) }}">
+                <div class = "portlet-body">
+                    <div class = "row">
+                        <div class = "col-md-2">
+                            <img width = "100%" height = "100%" alt = "عکس دانش آموز" src = "{{ route('image', ['category'=>'1','w'=>'100' , 'h'=>'100' ,  'filename' =>  $user->photo ]) }}">
                         </div>
-                        <div class="col-md-8 profile-info">
-                            <h3 class="m--font-info sbold uppercase">@if(isset($user->firstName) || isset($user->lastName)) @if(isset($user->firstName)) {{$user->firstName}} @endif @if(isset($user->lastName)) {{$user->lastName}} @endif @else
+                        <div class = "col-md-8 profile-info">
+                            <h3 class = "m--font-info sbold uppercase">@if(isset($user->firstName) || isset($user->lastName)) @if(isset($user->firstName)) {{$user->firstName}} @endif @if(isset($user->lastName)) {{$user->lastName}} @endif @else
                                     کاربر ناشناس @endif</h3>
                             {{--<p> Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt laoreet dolore magna aliquam tincidunt erat volutpat laoreet dolore magna aliquam tincidunt erat volutpat.--}}
                             {{--</p>--}}
                             {{--<p>--}}
                             {{--<a href="javascript:;"> www.mywebsite.com </a>--}}
                             {{--</p>--}}
-                            <ul class="list-inline">
-                                <li class="bold">
-                                    <i class="fa fa-graduation-cap" aria-hidden="true"></i> دانش آموز
-                                    رشته @if(isset($user->major->id)) {{$user->major->name}} @endif </li>
+                            <ul class = "list-inline">
+                                <li class = "bold">
+                                    <i class = "fa fa-graduation-cap" aria-hidden = "true"></i>
+                                    دانش آموز رشته @if(isset($user->major->id)) {{$user->major->name}} @endif </li>
                                 {{--<li>--}}
                                 {{--<i class="fa fa-calendar"></i> 18 Jan 1982 </li>--}}
                                 {{--<li>--}}
@@ -78,18 +77,16 @@
                                 {{--<li>--}}
                                 {{--<i class="fa fa-heart"></i> BASE Jumping </li>--}}
                             </ul>
-                            <div class="panel-group accordion" id="accordion1">
+                            <div class = "panel-group accordion" id = "accordion1">
                                 @foreach($userSurveyAnswers as $key => $userSurveyAnswer)
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
-                                                <a class="accordion-toggle accordion-toggle-styled collapsed"
-                                                   data-toggle="collapse" data-parent="#accordion1"
-                                                   href="#collapse_1_{{$key}}"> {{$userSurveyAnswer["questionStatement"]}} </a>
+                                    <div class = "panel panel-default">
+                                        <div class = "panel-heading">
+                                            <h4 class = "panel-title">
+                                                <a class = "accordion-toggle accordion-toggle-styled collapsed" data-toggle = "collapse" data-parent = "#accordion1" href = "#collapse_1_{{$key}}"> {{$userSurveyAnswer["questionStatement"]}} </a>
                                             </h4>
                                         </div>
-                                        <div id="collapse_1_{{$key}}" class="panel-collapse collapse">
-                                            <div class="panel-body">
+                                        <div id = "collapse_1_{{$key}}" class = "panel-collapse collapse">
+                                            <div class = "panel-body">
                                                 <ul>
                                                     @foreach($userSurveyAnswer["questionAnswer"] as $answer)
                                                         <li>
@@ -109,57 +106,50 @@
         </div>
     </div>
     @include("systemMessage.flash")
-    <div class="row">
-        <div class="col-md-12">
+    <div class = "row">
+        <div class = "col-md-12">
             <form method = "POST" action = "{{action("Web\HomeController@consultantStoreEntekhabReshte")}}">
-                <input type="hidden" value="1" name="parentMajor">
-                <input type="hidden" value="{{$user->id}}" name="user">
+                <input type = "hidden" value = "1" name = "parentMajor">
+                <input type = "hidden" value = "{{$user->id}}" name = "user">
                 {{ csrf_field() }}
-                <div class="portlet light ">
-                    <div class="portlet-title">
-                        <div class="caption">
-                            <i class="fa fa-pencil font-purple"></i>
-                            <span class="caption-subject font-purple sbold uppercase">انتخاب رشته گروه @if(isset($user->major->id)) {{$user->major->name}} @endif</span>
+                <div class = "portlet light ">
+                    <div class = "portlet-title">
+                        <div class = "caption">
+                            <i class = "fa fa-pencil font-purple"></i>
+                            <span class = "caption-subject font-purple sbold uppercase">انتخاب رشته گروه @if(isset($user->major->id)) {{$user->major->name}} @endif</span>
 
                         </div>
-                        <div class="actions">
-                            <div class="btn-group btn-group-devided">
+                        <div class = "actions">
+                            <div class = "btn-group btn-group-devided">
                                 {{--<label class="btn btn-transparent grey-salsa btn-circle btn-sm active">--}}
                                 {{--<input type="radio" name="options" class="toggle" id="option1">New</label>--}}
                                 {{--<label class="btn btn-transparent grey-salsa btn-circle btn-sm">--}}
                                 {{--<input type="radio" name="options" class="toggle" id="option2">Returning</label>--}}
-                                <button type="submit" class="btn btn-transparent grey-salsa btn-circle btn-sm active">
+                                <button type = "submit" class = "btn btn-transparent grey-salsa btn-circle btn-sm active">
                                     ثبت انتخاب رشته
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div class="portlet-body">
+                    <div class = "portlet-body">
 
-                        <div class="row">
-                            <div class="dd" id="nestable_list_3">
-                                <ol class="dd-list">
+                        <div class = "row">
+                            <div class = "dd" id = "nestable_list_3">
+                                <ol class = "dd-list">
                                     @for($i=1 ; $i<=2 ; $i++)
-                                        <div class="col-md-6" id="list_{{$i}}">
+                                        <div class = "col-md-6" id = "list_{{$i}}">
                                             @for($j=(($i-1)*90)+1 ; $j<=$i*90 ; $j++)
-                                                <li class="dd-item dd3-item" data-id="{{$j}}" id="dd-item_{{$j}}">
-                                                    <div class="dd-handle dd3-handle">
-                                                    </div>
-                                                    <div class="dd3-content" style="padding-top: 0px">
-                                                        <div class="col-md-1 col-sm-1 col-xs-1 dd-item-caption">
+                                                <li class = "dd-item dd3-item" data-id = "{{$j}}" id = "dd-item_{{$j}}">
+                                                    <div class = "dd-handle dd3-handle"></div>
+                                                    <div class = "dd3-content" style = "padding-top: 0px">
+                                                        <div class = "col-md-1 col-sm-1 col-xs-1 dd-item-caption">
                                                             {{$j}}
                                                         </div>
-                                                        <div class="col-md-2 col-sm-2 col-xs-3">
-                                                            <input type="text"
-                                                                   @if(isset($storedMajors[$j-1])) value="{{$storedMajors[$j-1]}}"
-                                                                   @endif name="majorCodes[]" class="majorCode"
-                                                                   id="majorCode_{{$j}}" style="width: 100%">
+                                                        <div class = "col-md-2 col-sm-2 col-xs-3">
+                                                            <input type = "text" @if(isset($storedMajors[$j-1])) value = "{{$storedMajors[$j-1]}}" @endif name = "majorCodes[]" class = "majorCode" id = "majorCode_{{$j}}" style = "width: 100%">
                                                         </div>
-                                                        <div class="col-md-8 col-sm-8 col-xs-7">
-                                                            <input type="text"
-                                                                   @if(isset($storedMajors[$j-1]) && isset($selectedMajors[$storedMajors[$j-1]])) value="{{$selectedMajors[$storedMajors[$j-1]]}}"
-                                                                   @endif  class="majorName" id="majorName_{{$j}}"
-                                                                   style="width: 100%" disabled="disabled">
+                                                        <div class = "col-md-8 col-sm-8 col-xs-7">
+                                                            <input type = "text" @if(isset($storedMajors[$j-1]) && isset($selectedMajors[$storedMajors[$j-1]])) value = "{{$selectedMajors[$storedMajors[$j-1]]}}" @endif  class = "majorName" id = "majorName_{{$j}}" style = "width: 100%" disabled = "disabled">
                                                         </div>
                                                     </div>
                                                 </li>
@@ -179,12 +169,12 @@
 @endsection
 
 @section("footerPageLevelPlugin")
-    <script src="/assets/global/plugins/jquery-nestable/jquery.nestable-rtl.js" type="text/javascript"></script>
-    <script src="/assets/global/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
+    <script src = "/assets/global/plugins/jquery-nestable/jquery.nestable-rtl.js" type = "text/javascript"></script>
+    <script src = "/assets/global/plugins/bootstrap-toastr/toastr.min.js" type = "text/javascript"></script>
 @endsection
 
 @section("footerPageLevelScript")
-    <script src="/assets/pages/scripts/ui-toastr.min.js" type="text/javascript"></script>
+    <script src = "/assets/pages/scripts/ui-toastr.min.js" type = "text/javascript"></script>
     {{--<script src="/assets/pages/scripts/ui-nestable.min.js" type="text/javascript"></script>--}}
     <script>
         var UINestable = function () {
@@ -343,8 +333,7 @@
                                 if (response.length != 0) {
                                     $("#majorName_" + textId).val(response[0].name);
                                     insertedMajorCodes.push(parseInt(majorCode));
-                                }
-                                else {
+                                } else {
                                     $("#majorCode_" + textId).val("");
                                     toastr.options = {
                                         "closeButton": true,

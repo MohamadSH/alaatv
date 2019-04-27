@@ -49,7 +49,8 @@ return [
         'sqlite' => [
             'driver'   => 'sqlite',
             'database' => env('DB_DATABASE', database_path('database.sqlite')),
-            'prefix'   => '',
+            'prefix' => '',
+            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
         'mysql' => [
@@ -65,50 +66,10 @@ return [
             'prefix'      => '',
             'strict'      => true,
             'engine'      => null,
-        ],
-
-        'mysql_remote_takhtekhak' => [
-            'driver'    => 'mysql',
-            'host'      => "127.0.0.1",
-            'port'      => "3307",
-            'database'  => "orduetalaie",
-            'username'  => "orduetalaieUser",
-            'password'  => "T49q7z2NtepPL3rY",
-            'charset'   => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix'    => '',
-            'strict'    => true,
-            'engine'    => null,
-        ],
-
-        'mysql_remote_sanatisharif' => [
-            'driver'   => 'mysql',
-            'host'     => "127.0.0.1",
-            'port'     => "3307",
-            'database' => "sanatish_forat",
-            'username' => "foratuser",
-
-            'password'  => "GWxNU76nY6C5zUqS",
-            'charset'   => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix'    => '',
-            'strict'    => true,
-            'engine'    => null,
-        ],
-
-        'mysql_sanatisharif' => [
-            'driver'   => 'mysql',
-            'host'     => "127.0.0.1",
-            'port'     => "3306",
-            'database' => "sanatish_forat",
-            'username' => "foratuser",
-
-            'password'  => "GWxNU76nY6C5zUqS",
-            'charset'   => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix'    => '',
-            'strict'    => true,
-            'engine'    => null,
+            'prefix_indexes' => true,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
         ],
 
         'pgsql' => [
@@ -118,10 +79,11 @@ return [
             'database' => env('DB_DATABASE', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
-            'charset'  => 'utf8',
-            'prefix'   => '',
-            'schema'   => 'public',
-            'sslmode'  => 'prefer',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'schema' => 'public',
+            'sslmode' => 'prefer',
         ],
 
         'sqlsrv' => [
@@ -131,8 +93,8 @@ return [
             'database' => env('DB_DATABASE', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
-            'charset'  => 'utf8',
-            'prefix'   => '',
+            'charset' => 'utf8',
+            'prefix' => '',
         ],
 
     ],
@@ -156,7 +118,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Redis is an open source, fast, and advanced key-value store that also
-    | provides a richer set of commands than a typical key-value systems
+    | provides a richer body of commands than a typical key-value system
     | such as APC or Memcached. Laravel makes it easy to dig right in.
     |
     */

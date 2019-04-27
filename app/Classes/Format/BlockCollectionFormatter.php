@@ -13,7 +13,7 @@ use App\Collection\BlockCollection;
 interface BlockCollectionFormatter
 {
     /**
-     * @param BlockCollection $blocks
+     * @param  BlockCollection  $blocks
      *
      * @return \Illuminate\Support\Collection
      */
