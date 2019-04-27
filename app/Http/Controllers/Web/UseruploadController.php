@@ -37,23 +37,12 @@ class UseruploadController extends Controller
      */
     public function index()
     {
-        $questions        = Userupload::all()
-            ->sortByDesc("created_at");
+        $questions        = Userupload::all()->sortByDesc("created_at");
         $questionStatuses = Useruploadstatus::pluck('displayName', 'id');
         
         $counter = 1;
         
         return view("userUpload.index", compact("questions", "counter", "questionStatuses"));
-    }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
     
     /**
@@ -113,19 +102,7 @@ class UseruploadController extends Controller
         
         return view("userUpload.show", compact("user", "counter", "consultationStatuses"));
     }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -138,30 +115,17 @@ class UseruploadController extends Controller
     {
         $oldUserUploadStatus = $userupload->useruploadstatus_id;
         $userupload->fill($request->all());
-        if ($userupload->update()) {
-            if ($oldUserUploadStatus != $userupload->useruploadstatus_id) {
-                $userUploadStatusName = Useruploadstatus::where('id', $userupload->useruploadstatus_id)
-                    ->pluck('displayName')
-                    ->toArray();
-                $userupload->user->notify(new CounselingStatusChanged($userUploadStatusName[0]));
-            }
-            
-            return $this->response->setStatusCode(200);
-        }
-        else {
+
+        if (! $userupload->update()) {
             return $this->response->setStatusCode(503);
         }
-    }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+
+        if ($oldUserUploadStatus != $userupload->useruploadstatus_id) {
+            $userUploadStatusName = Useruploadstatus::where('id', $userupload->useruploadstatus_id)->pluck('displayName')->toArray();
+            $userupload->user->notify(new CounselingStatusChanged($userUploadStatusName[0]));
+        }
+
+        return $this->response->setStatusCode(200);
+
     }
 }

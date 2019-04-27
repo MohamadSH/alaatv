@@ -2,7 +2,13 @@
 
 namespace  App\PaymentModule\Controllers;
 
+use App\Classes\Payment\OnlineGateWay;
+use App\Classes\Payment\Responses;
+use App\PaymentModule\PaymentDriver;
+use App\Repositories\TransactionRepo;
 use App\Traits\HandleOrderPayment;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Request;
 
 class PaymentVerifierController
 {
@@ -48,8 +54,7 @@ class PaymentVerifierController
         Cache::tags('bon')
             ->flush();
         
-        Request::session()
-            ->flash('verifyResult', $verificationResult->getMessages());
+        Request::session()->flash('verifyResult', $verificationResult->getMessages());
         
         return redirect()->route('showOnlinePaymentStatus', [
             'status'        => ($verificationResult->isSuccessfulPayment()) ? 'successful' : 'failed',

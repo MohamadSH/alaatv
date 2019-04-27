@@ -17,26 +17,6 @@ class WalletController extends Controller
     }
     
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-    
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -52,48 +32,14 @@ class WalletController extends Controller
         if ($wallet->save()) {
             $done = true;
         }
-        
-        if ($done) {
-            if ($request->expectsJson()) {
-                return $this->response->setStatusCode(200)
-                    ->setContent(["wallet" => $wallet]);
-            }
-            else {
-            
-            }
-        }
-        else {
-            if ($request->expectsJson()) {
+
+        if ($request->expectsJson()) {
+            if ($done) {
+                return $this->response->setStatusCode(200)->setContent(["wallet" => $wallet]);
+            } else {
                 return $this->response->setStatusCode(503);
             }
-            else {
-            
-            }
         }
-    }
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Wallet  $wallet
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Wallet $wallet)
-    {
-        //
     }
     
     /**
@@ -111,34 +57,13 @@ class WalletController extends Controller
         if ($wallet->update()) {
             $done = true;
         }
-        
-        if ($done) {
-            if ($request->expectsJson()) {
+
+        if ($request->expectsJson()) {
+            if ($done) {
                 return $this->response->setStatusCode(200);
-            }
-            else {
-            
-            }
-        }
-        else {
-            if ($request->expectsJson()) {
+            } else {
                 return $this->response->setStatusCode(503);
             }
-            else {
-            
-            }
         }
-    }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Wallet  $wallet
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Wallet $wallet)
-    {
-        //
     }
 }

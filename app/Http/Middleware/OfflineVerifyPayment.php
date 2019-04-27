@@ -22,8 +22,7 @@ class OfflineVerifyPayment
         if ($request->has("coi")) {
             $request->offsetSet("order_id", $request->coi);
         }
-        elseif (Auth::guard($guard)
-            ->check()) {
+        elseif (Auth::guard($guard)->check()) {
             $user      = $request->user();
             $openOrder = $user->openOrders->first();
             if (isset($openOrder)) {

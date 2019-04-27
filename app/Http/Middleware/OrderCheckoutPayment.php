@@ -25,25 +25,21 @@ class OrderCheckoutPayment
             return redirect(action("Web\OrderController@checkoutReview"));
         }
         
-        if (Auth::guard($guard)
-            ->check()) {
-            $user = Auth::guard($guard)
-                ->user();
-            
-            if ($request->has("order_id")) {
-                if (!$user->can("constants.SHOW_ORDER_PAYMENT_ACCESS")) {
-                    return response([], Response::HTTP_FORBIDDEN);
-                }
-            }
-            else {
-                /** @var User $user */
-                $openOrder = $user->getOpenOrder();
-                $request->offsetSet("order_id", $openOrder->id);
-            }
-        }
-        else {
+        if (! Auth::guard($guard)->check()) {
             return redirect(action("Web\OrderController@checkoutAuth"));
         }
+        $user = Auth::guard($guard)->user();
+
+        if ($request->has("order_id")) {
+            if (! $user->can("constants.SHOW_ORDER_PAYMENT_ACCESS")) {
+                return response([], Response::HTTP_FORBIDDEN);
+            }
+        } else {
+            /** @var User $user */
+            $openOrder = $user->getOpenOrder();
+            $request->offsetSet("order_id", $openOrder->id);
+        }
+
         
         return $next($request);
     }
