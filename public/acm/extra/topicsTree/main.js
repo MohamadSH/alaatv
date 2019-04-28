@@ -108,6 +108,7 @@ function updateSelectedItems() {
             selectedItemsText.push(treePathData[selectedIds[key]].ps);
         }
     }
+    console.log('selectedItemsText: ', selectedItemsText);
 
     let sameReport = matchString(selectedItemsText);
 

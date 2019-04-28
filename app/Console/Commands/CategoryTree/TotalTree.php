@@ -4,6 +4,8 @@ namespace App\Console\Commands\CategoryTree;
 
 class TotalTree
 {
+    private $treePathData;
+    
     public function getLernitoTreeHtmlPrint()
     {
         $Riazi   = new Riazi();
@@ -37,7 +39,7 @@ class TotalTree
         /*return $mote2;*/
         
         $htmlPrint    = '';
-        $treePathData = [];
+        $this->treePathData = [];
         // loop in reshte
         $htmlPrint .= '<ul>';
         foreach ($mote2 as $key => $value) {
@@ -96,7 +98,7 @@ class TotalTree
         }
         $htmlPrint .= '</ul>';
         
-        return $htmlPrint;
+        return [$htmlPrint, $this->treePathData];
     }
     
     private function getLastUpdatedByLernito(): array
@@ -177,8 +179,6 @@ class TotalTree
     
     private function printDars(array $nodeData, string $ps, string $pid)
     {
-        global $treePathData;
-        
         $name = 'درس: '.$nodeData['name'];
         $data = $nodeData['children'];
         $id   = $nodeData['id'];
@@ -209,7 +209,7 @@ class TotalTree
                 }
                 
                 $htmlPrint                  .= '<li data-jstree=\'{"icon":"/acm/extra/topicsTree/img/book-icon-1.png"}\' data-alaa-node-id="'.$value['id'].'" data-is-new="'.$isNewItem.'" ps="'.$pathString.'" pid="'.$pathId.'" id="'.$value['id'].'">'.$value['name'].'</li>';
-                $treePathData[$value['id']] = [
+                $this->treePathData[$value['id']] = [
                     'ps'  => $pathString,
                     'pid' => $pathId,
                 ];

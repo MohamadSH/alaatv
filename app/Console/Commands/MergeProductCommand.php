@@ -9,6 +9,7 @@ use App\Product;
 use App\Traits\APIRequestCommon;
 use App\Traits\ProductCommon;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Artisan;
@@ -40,7 +41,7 @@ class MergeProductCommand extends Command
     
     private $tagging;
     
-
+    
     public function __construct()
     {
         parent::__construct();
@@ -359,7 +360,7 @@ class MergeProductCommand extends Command
      * @param  ProductController  $productController
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(ProductController $productController)
     {
