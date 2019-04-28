@@ -289,8 +289,6 @@ jQuery(document).ready(function() {
         // endAction: 'related',
     });
 
-    console.log('player: ', player);
-
     let callBack = function () {
         let productsState = ProductShowPage.getProductSelectValues();
         ProductShowPage.refreshPrice([], productsState, []);
