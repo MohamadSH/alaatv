@@ -11,6 +11,7 @@
 |
 */
 
+use App\Block;
 use App\Classes\Payment\PaymentVerifierController;
 use App\Http\Controllers\Web\OnlinePaymentController;
 use App\Http\Controllers\Web\PaymentStatusController;

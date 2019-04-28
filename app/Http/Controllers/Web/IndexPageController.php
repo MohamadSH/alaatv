@@ -32,6 +32,7 @@ class IndexPageController extends Controller
      */
     public function __invoke(Request $request, BlockCollectionFormatter $blockCollectionFormatter)
     {
+       
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags($this->setting->site->seo->homepage->metaTitle,
             $this->setting->site->seo->homepage->metaDescription, $url,
