@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Console\Commands\CategoryTree\TotalTree;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Console\Commands\CategoryTree\TotalTree;
 
 class TopicsTreeController extends Controller
 {
@@ -15,8 +15,8 @@ class TopicsTreeController extends Controller
     public function lernitoTree(Request $request)
     {
         $TotalTree = new TotalTree();
-        $htmlPrint = $TotalTree->getLernitoTreeHtmlPrint();
-        return view('admin.topicsTree.index', compact('htmlPrint'));
+        list($htmlPrint, $treePathData) = $TotalTree->getLernitoTreeHtmlPrint();
+        return view('admin.topicsTree.index', compact('htmlPrint', 'treePathData'));
     }
 
     public function getTreeInPHPArrayString(Request $request, $lnid)

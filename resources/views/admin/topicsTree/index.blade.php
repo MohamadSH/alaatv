@@ -164,6 +164,8 @@
 
 <script type = "text/javascript">
 
+    var treePathData = {!! json_encode($treePathData) !!};
+    
     $(document).ready(function () {
         $('#html')
         // listen for event
@@ -178,7 +180,7 @@
                 // $('#event_result').html('Selected: ' + r.join(', '));
             })
             .on('loaded.jstree', function (e, data) {
-                updateSelectedItems()
+                updateSelectedItems();
                 $('#loadingHtml').fadeOut();
                 $('#html').fadeIn();
             })
