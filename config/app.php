@@ -177,7 +177,6 @@ return [
          * Package Service Providers...
          */
         Backup\BackupServiceProvider::class,
-        Laravel\Passport\PassportServiceProvider::class,
         Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
 
         //        Laravel\Scout\ScoutServiceProvider::class,
@@ -189,6 +188,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        App\Providers\TelescopeServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\WebsiteSettingProvider::class,
 

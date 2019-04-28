@@ -95,7 +95,9 @@ return [
         Watchers\JobWatcher::class => env('TELESCOPE_JOB_WATCHER', true),
         Watchers\LogWatcher::class => env('TELESCOPE_LOG_WATCHER', true),
         Watchers\MailWatcher::class => env('TELESCOPE_MAIL_WATCHER', true),
+
         Watchers\ModelWatcher::class => env('TELESCOPE_MODEL_WATCHER', true),
+
         Watchers\NotificationWatcher::class => env('TELESCOPE_NOTIFICATION_WATCHER', true),
 
         Watchers\QueryWatcher::class => [
@@ -112,4 +114,6 @@ return [
 
         Watchers\ScheduleWatcher::class => env('TELESCOPE_SCHEDULE_WATCHER', true),
     ],
+
+
 ];

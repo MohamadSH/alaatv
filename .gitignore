@@ -19,4 +19,6 @@ worker.log
 storage
 storage/
 vendor/
+laradock-alaatv
+laradock-alaatv/
 .phpunit.result.cache

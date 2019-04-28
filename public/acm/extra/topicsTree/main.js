@@ -4,18 +4,6 @@ var level2 = [];
 var phpArray = '';
 var counterForId = 0;
 
-// for (var key in lernitoTreeData) {
-//     if (lernitoTreeData[key].level==0) {
-//
-//     }
-//     else if (lernitoTreeData[key].level==1) {
-//         let item1111 = getItemChildren(lernitoTreeData[key]);
-//         console.log(item1111);
-//         phpArray += printChildren(lernitoTreeData[key].label, item1111);
-//     }
-// }
-
-
 function getItemData(id) {
     let report;
     for (var key in lernitoTreeData) {
