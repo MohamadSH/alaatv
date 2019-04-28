@@ -1,6 +1,13 @@
 @extends('app')
 @section('page-css')
-    <link href="/acm/videojs/skins/nuevo/videojs.min.css" rel="stylesheet">
+{{--    <link href="/acm/videojs/skins/nuevo/videojs.min.css" rel="stylesheet">--}}
+    
+    <link href="/acm/videojs/skins/nuevo/videojs.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/videojs/skins/nuevo/videojs.rtl.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/videojs/plugins/pip/videojs.pip.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/videojs/plugins/pip/videojs.pip.rtl.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/videojs/plugins/seek-to-point.css" rel="stylesheet" type="text/css"/>
+
     <link href="{{ mix('/css/product-show/product-show.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 @section('pageBar')
@@ -473,8 +480,17 @@
     </div>
 @endsection
 @section('page-js')
-    <script src="{{ asset('/acm/videojs/video.min.js') }}"></script>
-    <script src="{{ asset('/acm/videojs/nuevo.min.js') }}"></script>
+    
+    <script type="text/javascript" src="/acm/videojs/video.min.js"></script>
+    <script type="text/javascript" src="/acm/videojs/plugins/pip/videojs.pip.min.js"></script>
+    <script type="text/javascript" src="/acm/videojs/nuevo.min.js"></script>
+    <script type="text/javascript" src="/acm/videojs/plugins/videojs.p2p.min.js"></script>
+    <script type="text/javascript" src="/acm/videojs/plugins/videojs.hotkeys.min.js"></script>
+    <script type="text/javascript" src="/acm/videojs/plugins/seek-to-point.js"></script>
+    
+{{--    <script src="{{ asset('/acm/videojs/video.min.js') }}"></script>--}}
+{{--    <script src="{{ asset('/acm/videojs/nuevo.min.js') }}"></script>--}}
+    
     {{--<script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>--}}
     {{--<script src='https://vjs.zencdn.net/7.5.4/video.js'></script>--}}
     <script src="{{ mix('/js/product-show.js') }}"></script>

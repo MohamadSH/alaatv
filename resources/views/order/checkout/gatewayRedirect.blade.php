@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang = "fa" direction = "rtl" style = "direction: rtl">
+<html lang="fa" direction="rtl" style="direction: rtl">
 <!-- begin::Head -->
 <head>
-    <meta charset = "utf-8"/>
-    <meta name = "viewport" content = "width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-    <meta name = "csrf-token" content = "{{ csrf_token() }}">
-
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
     <!--begin::Global Theme Styles -->
-    <link href = "{{ mix('/css/all.css') }}" rel = "stylesheet" type = "text/css"/>
+    <link href="{{ mix('/css/all.css') }}" rel="stylesheet" type="text/css"/>
     <!--end::Global Theme Styles -->
     <style>
         body {
@@ -21,7 +21,7 @@
             height: 20px;
             margin: auto;
         }
-
+        
         .spinningSquaresG {
             position: absolute;
             top: 0;
@@ -54,7 +54,7 @@
             -webkit-transform: scale(.3);
             -moz-transform: scale(.3);
         }
-
+        
         #spinningSquaresG_1 {
             left: 0;
             animation-delay: 0.466s;
@@ -63,7 +63,7 @@
             -webkit-animation-delay: 0.466s;
             -moz-animation-delay: 0.466s;
         }
-
+        
         #spinningSquaresG_2 {
             left: 21px;
             animation-delay: 0.5825s;
@@ -72,7 +72,7 @@
             -webkit-animation-delay: 0.5825s;
             -moz-animation-delay: 0.5825s;
         }
-
+        
         #spinningSquaresG_3 {
             left: 42px;
             animation-delay: 0.699s;
@@ -81,7 +81,7 @@
             -webkit-animation-delay: 0.699s;
             -moz-animation-delay: 0.699s;
         }
-
+        
         #spinningSquaresG_4 {
             left: 63px;
             animation-delay: 0.8155s;
@@ -90,7 +90,7 @@
             -webkit-animation-delay: 0.8155s;
             -moz-animation-delay: 0.8155s;
         }
-
+        
         #spinningSquaresG_5 {
             left: 84px;
             animation-delay: 0.932s;
@@ -99,7 +99,7 @@
             -webkit-animation-delay: 0.932s;
             -moz-animation-delay: 0.932s;
         }
-
+        
         #spinningSquaresG_6 {
             left: 105px;
             animation-delay: 1.0485s;
@@ -108,7 +108,7 @@
             -webkit-animation-delay: 1.0485s;
             -moz-animation-delay: 1.0485s;
         }
-
+        
         #spinningSquaresG_7 {
             left: 126px;
             animation-delay: 1.165s;
@@ -117,7 +117,7 @@
             -webkit-animation-delay: 1.165s;
             -moz-animation-delay: 1.165s;
         }
-
+        
         #spinningSquaresG_8 {
             left: 147px;
             animation-delay: 1.2915s;
@@ -126,62 +126,62 @@
             -webkit-animation-delay: 1.2915s;
             -moz-animation-delay: 1.2915s;
         }
-
-
+        
+        
         @keyframes bounce_spinningSquaresG {
             0% {
                 transform: scale(1);
                 background-color: rgb(34, 255, 0);
             }
-
+            
             100% {
                 transform: scale(.3) rotate(90deg);
                 background-color: rgb(0, 255, 213);
             }
         }
-
+        
         @-o-keyframes bounce_spinningSquaresG {
             0% {
                 -o-transform: scale(1);
                 background-color: rgb(34, 255, 0);
             }
-
+            
             100% {
                 -o-transform: scale(.3) rotate(90deg);
                 background-color: rgb(0, 255, 213);
             }
         }
-
+        
         @-ms-keyframes bounce_spinningSquaresG {
             0% {
                 -ms-transform: scale(1);
                 background-color: rgb(34, 255, 0);
             }
-
+            
             100% {
                 -ms-transform: scale(.3) rotate(90deg);
                 background-color: rgb(0, 255, 213);
             }
         }
-
+        
         @-webkit-keyframes bounce_spinningSquaresG {
             0% {
                 -webkit-transform: scale(1);
                 background-color: rgb(34, 255, 0);
             }
-
+            
             100% {
                 -webkit-transform: scale(.3) rotate(90deg);
                 background-color: rgb(0, 255, 213);
             }
         }
-
+        
         @-moz-keyframes bounce_spinningSquaresG {
             0% {
                 -moz-transform: scale(1);
                 background-color: rgb(34, 255, 0);
             }
-
+            
             100% {
                 -moz-transform: scale(.3) rotate(90deg);
                 background-color: rgb(0, 255, 213);
@@ -192,25 +192,26 @@
 <body>
 
 
-<div class = "container">
-    <div class = "row align-items-center m--margin-top-100">
-        <div class = "col align-self-center text-center">
-            <img src = "{{ asset('acm/extra/payment/gateway/zarinpal.png') }}" class = "img-responsive img-thumbnail rounded">
+<div class="container">
+    <div class="row align-items-center m--margin-top-100">
+        <div class="col align-self-center text-center">
+            <img src="{{ asset('acm/extra/payment/gateway/zarinpal.png') }}"
+                 class="img-responsive img-thumbnail rounded">
         </div>
-        <div class = "col align-self-center text-center">
-            <div id = "spinningSquaresG">
-                <div id = "spinningSquaresG_1" class = "spinningSquaresG"></div>
-                <div id = "spinningSquaresG_2" class = "spinningSquaresG"></div>
-                <div id = "spinningSquaresG_3" class = "spinningSquaresG"></div>
-                <div id = "spinningSquaresG_4" class = "spinningSquaresG"></div>
-                <div id = "spinningSquaresG_5" class = "spinningSquaresG"></div>
-                <div id = "spinningSquaresG_6" class = "spinningSquaresG"></div>
-                <div id = "spinningSquaresG_7" class = "spinningSquaresG"></div>
-                <div id = "spinningSquaresG_8" class = "spinningSquaresG"></div>
+        <div class="col align-self-center text-center">
+            <div id="spinningSquaresG">
+                <div id="spinningSquaresG_1" class="spinningSquaresG"></div>
+                <div id="spinningSquaresG_2" class="spinningSquaresG"></div>
+                <div id="spinningSquaresG_3" class="spinningSquaresG"></div>
+                <div id="spinningSquaresG_4" class="spinningSquaresG"></div>
+                <div id="spinningSquaresG_5" class="spinningSquaresG"></div>
+                <div id="spinningSquaresG_6" class="spinningSquaresG"></div>
+                <div id="spinningSquaresG_7" class="spinningSquaresG"></div>
+                <div id="spinningSquaresG_8" class="spinningSquaresG"></div>
             </div>
         </div>
-        <div class = "col align-self-center text-center">
-            <img src = "{{ asset('acm/extra/Alaa-logo.gif') }}" class = "img-responsive">
+        <div class="col align-self-center text-center">
+            <img src="{{ asset('acm/extra/Alaa-logo.gif') }}" class="img-responsive">
         </div>
     </div>
 </div>
@@ -221,9 +222,9 @@
 @endforeach
 {!! Form::close() !!}
 <!--begin::Global Theme Bundle -->
-<script src = "{{ mix('/js/all.js') }}" type = "text/javascript"></script>
+<script src="{{ mix('/js/all.js') }}" type="text/javascript"></script>
 <!--end::Global Theme Bundle -->
-<script type = "text/javascript">
+<script type="text/javascript">
 
     $(document).ready(function () {
         setTimeout(function () {

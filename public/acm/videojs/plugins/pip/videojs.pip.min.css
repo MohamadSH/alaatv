@@ -1,0 +1,79 @@
+.video-js .vjs-pip {
+    z-index:999998;
+    cursor:pointer;
+    position:absolute;
+    max-width:320px;
+    width:33%;
+    right:0;
+    padding:0;
+    color:#fff
+}
+.vjs-pip-show {
+    opacity:1 !important;
+    -khtml-opacity:1 !important
+}
+.vjs-user-inactive.vjs-playing .vjs-pip {
+    bottom:-3px
+}
+.video-js .vjs-pip .vjs-piptitle {
+    background:#000;
+    line-height:30px;
+    height:30px;
+    border-bottom:solid 1px #222
+}
+.video-js .vjs-pip .vjs-piptitle span {
+    padding-left:10px
+}
+.video-js .vjs-pip .vjs-piptitle .vjs-pipclose {
+    float:right;
+    margin-right:10px;
+    font-size:1.2em
+}
+.video-js .vjs-pip .vjs-vid-title {
+    color:#fff;
+    text-shadow:1px 1px 1px #000;
+    position:absolute;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    padding:0 8px;
+    top:0;
+    left:0;
+    width:100%;
+    height:35px;
+    text-align:center;
+    font-style:italic;
+    font-family:serif;
+    font-size:16px;
+    line-height:35px;
+    background:linear-gradient(to top,transparent 0,rgba(0,0,0,.24) 39%,rgba(0,0,0,.48) 95%,rgba(0,0,0,.64) 100%)
+}
+.vjs-pip-hidden {
+    display:none
+}
+.video-js .vjs-pip .vjs-watch-now {
+    position:absolute;
+    text-shadow:1px 1px 1px #000;
+    font-size:1.1em;
+    font-style:italic;
+    right:10px;
+    bottom:10px;
+    background:#c00;
+    padding:4px 5px;
+    text-decoration:none;
+    color:#fff;
+    outline:0
+}
+.video-js .vjs-pip .pip-video-el {
+    position:relative;
+    color:#fff;
+    text-decoration:none
+}
+.video-js .vjs-pip .pip-video-el video {
+    width:100%
+}
+@media screen and (max-width:480px) {
+    .video-js .vjs-pip {
+        display:none !important
+    }
+}
