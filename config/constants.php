@@ -347,13 +347,13 @@ return [
     'HAMAYESH_LOTTERY_EXCHANGE_AMOUNT'         => 30000,
 
     //Cache
-    'CACHE_600'                                => env('CACHE_600',600),
-    'CACHE_300'                                => env('CACHE_300',300),
-    'CACHE_60'                                 => env('CACHE_60' ,60),
-    'CACHE_10'                                 => env('CACHE_10' ,10),
-    'CACHE_5'                                  => env('CACHE_5'  ,5),
-    'CACHE_3'                                  => env('CACHE_3'  ,3),
-    'CACHE_1'                                  => env('CACHE_1'  ,1),
+    'CACHE_600'                                => env('CACHE_600',0),
+    'CACHE_300'                                => env('CACHE_300',0),
+    'CACHE_60'                                 => env('CACHE_60' ,0),
+    'CACHE_10'                                 => env('CACHE_10' ,0),
+    'CACHE_5'                                  => env('CACHE_5'  ,0),
+    'CACHE_3'                                  => env('CACHE_3'  ,0),
+    'CACHE_1'                                  => env('CACHE_1'  ,0),
     'CACHE_0'                                  => env('CACHE_0'  ,0),
 
     //

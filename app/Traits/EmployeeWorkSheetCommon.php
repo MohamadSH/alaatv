@@ -33,22 +33,25 @@ trait EmployeeWorkSheetCommon
      */
     public function sumWorkAndShiftDiff($workTimeSheets)
     {
-        $totalConfirmedWorkAndShiftDiff   = 0;   //In seconds
-        $totalUnConfirmedWorkAndShiftDiff = 0;   //In seconds
-        /** @var Employeetimesheet $workTimeSheet */
-        foreach ($workTimeSheets as $workTimeSheet) {
-            if ($workTimeSheet->overtime_confirmation) {
-                $totalConfirmedWorkAndShiftDiff += $workTimeSheet->obtainWorkAndShiftDiff("IN_SECONDS");
+        $totalConfirmedWorkAndShiftDiff = 0 ;   //In seconds
+        foreach ($workTimeSheets as $workTimeSheet)
+        {
+            $workTimeDif = $workTimeSheet->obtainWorkAndShiftDiff("IN_SECONDS");
+            if($workTimeDif < 0)
+            {
+                $totalConfirmedWorkAndShiftDiff += $workTimeDif;
+                continue;
             }
-            else {
-                $totalUnConfirmedWorkAndShiftDiff += $workTimeSheet->obtainWorkAndShiftDiff("IN_SECONDS");
-            }
+
+            if($workTimeSheet->overtime_confirmation)
+                $totalConfirmedWorkAndShiftDiff += $workTimeDif;
+
         }
-        if ($totalConfirmedWorkAndShiftDiff < 0) {
-            return "- ".$this->convertSecToHour(abs($totalConfirmedWorkAndShiftDiff));
-        }
-        else {
-            return "+ ".$this->convertSecToHour(abs($totalConfirmedWorkAndShiftDiff));
-        }
+
+        if ($totalConfirmedWorkAndShiftDiff < 0)
+            return "- " .$this->convertSecToHour(abs($totalConfirmedWorkAndShiftDiff));
+
+        return "+ " .$this->convertSecToHour(abs($totalConfirmedWorkAndShiftDiff)) ;
+
     }
 }
