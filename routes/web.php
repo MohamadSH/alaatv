@@ -61,9 +61,9 @@ Route::group(['prefix' => 'sitemap'], function () {
 
 Route::group(['prefix' => 'checkout'], function () {
     Route::get('auth', "Web\OrderController@checkoutAuth");
-    Route::get('completeInfo', 'Web\OrderController@checkoutCompleteInfo');
-    Route::get('review', "Web\OrderController@checkoutReview");
-    Route::get('payment', "Web\OrderController@checkoutPayment");
+    Route::get('completeInfo', 'Web\OrderController@checkoutCompleteInfo')->name('checkoutCompleteInfo');
+    Route::get('review', "Web\OrderController@checkoutReview")->name('checkoutReview');
+    Route::get('payment', "Web\OrderController@checkoutPayment")->name('checkoutPayment');
     Route::any('verifyPayment/online/{paymentMethod}/{device}', [PaymentVerifierController::class, 'verify'])->name('verifyOnlinePayment');
     Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', [PaymentStatusController::class, 'show'])->name('showOnlinePaymentStatus');
     Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'Web\OfflinePaymentController@verifyPayment');
@@ -105,7 +105,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('teleMarketingAdminPanel', 'Web\HomeController@adminTeleMarketing');
     Route::post('adminSendSMS', 'Web\HomeController@sendSMS');
     Route::get('asset', 'Web\UserController@userProductFiles');
-    Route::get('complete-register', 'Web\UserController@completeRegister');
+    Route::get('complete-register', 'Web\UserController@completeRegister')->name('completeRegister');
     Route::get('survey', 'Web\UserController@showSurvey');
     Route::get('97', 'Web\HomeController@submitKonkurResult');
     Route::post("transactionToDonate/{transaction}", "Web\TransactionController@convertToDonate");
