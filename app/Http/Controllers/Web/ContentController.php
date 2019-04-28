@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\{ContentIndexRequest, EditContentRequest, InsertContentRequest, Request};
 use App\Traits\{APIRequestCommon,
     CharacterCommon,
+    Content\ContentControllerResponseTrait,
     FileCommon,
     Helper,
     MetaCommon,
@@ -44,6 +45,7 @@ class ContentController extends Controller
     use CharacterCommon;
     use MetaCommon;
     use SearchCommon;
+    use ContentControllerResponseTrait;
     
     /*
     |--------------------------------------------------------------------------
@@ -243,16 +245,26 @@ class ContentController extends Controller
      */
     public function show(Request $request, Content $content)
     {
+        
         if (!$content->isActive()) {
             abort(Response::HTTP_FORBIDDEN);
         }
         if (!$this->userCanSeeContent($request, $content)) {
             $productsThatHaveThisContent = $content->products();
             
-            return response()->json([
-                'message' => trans('content.Not Free'),
-                'product' => $productsThatHaveThisContent->isEmpty() ? null : $productsThatHaveThisContent,
-            ], Response::HTTP_FORBIDDEN);
+            if ($productsThatHaveThisContent->isEmpty()) {
+                if (request()->expectsJson()) {
+                    return $this->userCanNotSeeContentResponse(trans('content.Not Free And you can\'t buy it') ,
+                        Response::HTTP_FORBIDDEN,$productsThatHaveThisContent,true);
+                }
+                return trans('content.Not Free And you can\'t buy it');
+            }
+            
+            if (request()->expectsJson()) {
+                return $this->userCanNotSeeContentResponse(trans('content.Not Free') ,
+                    Response::HTTP_FORBIDDEN,$productsThatHaveThisContent,true);
+            }
+            return trans('content.Not Free');
         }
         
         $adItems = $content->getAddItems();
@@ -274,8 +286,7 @@ class ContentController extends Controller
         $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
         
         if (request()->expectsJson()) {
-            return $this->response->setStatusCode(Response::HTTP_OK)
-                ->setContent($content);
+            return request()->json($content, Response::HTTP_OK);
         }
         
         return view("content.show",
