@@ -1,5 +1,6 @@
 <?php
 
+use App\Providers\Gateways\ZarinpalServiceProvider;
 use Illuminate\Validation\ValidationServiceProvider;
 
 return [
@@ -197,6 +198,7 @@ return [
         App\Providers\TagManagerProvider::class,
         App\Providers\InterfaceBindingProvider::class,
         Zarinpal\Laravel\ZarinpalServiceProvider::class,
+        ZarinpalServiceProvider::class,
 
     ],
     /*

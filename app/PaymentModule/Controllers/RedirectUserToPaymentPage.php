@@ -40,13 +40,14 @@ class RedirectUserToPaymentPage
         /** @var Transaction $transaction */
         $transaction = $data['transaction'];
         
+
         if ($data['statusCode'] != Response::HTTP_OK) {
             $this->sendErrorResponse($data['message'], $data['statusCode']);
         }
-        
+
         /** @var string $description */
         $description = $this->getTransactionDescription($data['description'], $user->mobile, $order);
-        
+
         if ($this->isPayingAnOrder($order)) {
             $order->customerDescription = $request->get('customerDescription');
         }
@@ -55,13 +56,13 @@ class RedirectUserToPaymentPage
             ->thenRespondWith([Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order->id]);
         PaymentDriver::select($paymentMethod);
         $url = $this->comeBackFromGateWayUrl($paymentMethod, $device);
-        $authorityCode = OnlineGateWay::getAuthorityFromGate($url, $cost, $description)
+        $authorityCode = OnlineGateWay::getAuthorityFromGate($url, $cost, $description, $order->id)
             ->orFailWith([Responses::class, 'noResponseFromBankError']);
 
         TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id, $description)
             ->orRespondWith([Responses::class, 'editTransactionError']);
 
-        $redirectData = OnlineGateWay::getGatewayUrl();
+        $redirectData = OnlineGateWay::getGatewayUrl($authorityCode);
         
         return view("order.checkout.gatewayRedirect", compact('redirectData'));
     }

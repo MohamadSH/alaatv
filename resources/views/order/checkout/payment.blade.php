@@ -135,13 +135,13 @@
                                                 </label>
                                             </span>
                                             <span class = "m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
-                                                <input type = "checkbox" data-switch = "true" @if(!isset($coupon))checked = "checked" @endifdata-on-text = "ندارم" data-on-color = "danger" data-off-text = "دارم" data-off-color = "success" data-size = "small" {{--data-handle-width="40"--}}id = "hasntDiscountCode">
+                                                <input type = "checkbox" data-switch = "true" @if(!isset($coupon))checked = "checked" @endif data-on-text = "ندارم" data-on-color = "danger" data-off-text = "دارم" data-off-color = "success" data-size = "small" {{--data-handle-width="40"--}}id = "hasntDiscountCode">
                                             </span>
                                         </div>
                                         <div class = "col-12 col-md-6 m--margin-top-10">
                                             <div class = "input-group discountCodeValueWarper">
                                                 <div class = "discountCodeValueWarperCover"></div>
-                                                <input type = "text" class = "form-control" placeholder = "کد تخفیف ..." @if(isset($coupon))value = "{{ $coupon['code'] }}" @endifid = "discountCodeValue">
+                                                <input type = "text" class = "form-control" placeholder = "کد تخفیف ..." @if(isset($coupon))value = "{{ $coupon['code'] }}" @endif id = "discountCodeValue">
                                                 <div class = "input-group-prepend DiscountCodeActionsWarper">
                                                     <button class = "btn btn-danger @if (!isset($coupon)) a--d-none @endif" type = "button" id = "btnRemoveDiscountCodeValue">حذف</button>
                                                     <button class = "btn btn-success @if (isset($coupon)) a--d-none @endif" type = "button" id = "btnSaveDiscountCodeValue">ثبت</button>
@@ -203,7 +203,7 @@
                                 <div class = "col text-center btnSubmitOrderWraper">
                                     <hr>
                                     <button type = "button"
-                                            onclick="window.location.href='{{route('verifyOnlinePayment', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}';
+                                            onclick="window.location.href='{{route('redirectToBank', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}';
                                                     mApp.block('.btnSubmitOrderWraper', {
                                                     type: 'loader',
                                                     state: 'info',
@@ -285,7 +285,7 @@
                                                             </label>
                                                         </span>
                                                         <span class = "m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
-                                                            <input type = "checkbox" data-switch = "true" @if(isset($orderHasDonate) && $orderHasDonate)@elsechecked = "" @endifdata-on-text = "نمی کنم" data-on-color = "danger" data-off-text = "می کنم" data-off-color = "success" data-size = "small" {{--data-handle-width="40"--}}id = "hasntDonate">
+                                                            <input type = "checkbox" data-switch = "true" @if(isset($orderHasDonate) && $orderHasDonate)@elsechecked = "" @endif data-on-text = "نمی کنم" data-on-color = "danger" data-off-text = "می کنم" data-off-color = "success" data-size = "small" {{--data-handle-width="40"--}}id = "hasntDonate">
                                                         </span>
                                                         <span>
                                                             <img src = "/acm/extra/sad.png" class = "face-sad m--margin-top-20" alt = "">

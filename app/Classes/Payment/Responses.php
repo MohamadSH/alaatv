@@ -7,7 +7,7 @@ use Illuminate\Http\Response;
 
 class Responses
 {
-    public static function noResponseFromBankError()
+    public static function noResponseFromBankError($msg)
     {
         return self::sendErrorResponse('پاسخی از بانک دریافت نشد.', Response::HTTP_SERVICE_UNAVAILABLE);
     }

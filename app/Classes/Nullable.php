@@ -7,15 +7,19 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 class Nullable
 {
     private $result;
-    
+
+    private $data = [];
+
     /**
      * Nullable constructor.
      *
      * @param $result
+     * @param $data
      */
-    public function __construct($result)
+    public function __construct($result, $data)
     {
         $this->result = $result;
+        $this->data = $data;
     }
     
     public function otherwise($response)
@@ -32,7 +36,7 @@ class Nullable
     {
         return $this->getValue(function () use ($response) {
             if (is_callable($response)) {
-                $response = call_user_func($response);
+                $response = call_user_func($response, ...(array)$this->data);
             }
             
             throw new HttpResponseException($response);
@@ -49,14 +53,12 @@ class Nullable
         if (!is_null($this->result) && $this->result !== false) {
             return $this->result;
         }
-        
+
         if (is_null($default)) {
             return optional();
-        }
-        elseif (is_callable($default)) {
+        } elseif (is_callable($default)) {
             return call_user_func($default);
-        }
-        else {
+        } else {
             return $default;
         }
     }
