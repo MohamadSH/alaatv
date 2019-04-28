@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Classes\Payment;
+namespace  App\PaymentModule\Controllers;
 
-use App\Order;
-use App\PaymentModule\OnlinePaymentVerificationResponseInterface;
+use App\Classes\Payment\OnlineGateWay;
+use App\Classes\Payment\Responses;
+use App\PaymentModule\PaymentDriver;
 use App\Repositories\TransactionRepo;
 use App\Traits\HandleOrderPayment;
 use Illuminate\Support\Facades\Cache;
@@ -21,11 +22,13 @@ class PaymentVerifierController
      */
     public function verify(string $paymentMethod, string $device)
     {
-        $authority = Request::get(OnlineGateWay::getAuthorityKey());
-        
+        PaymentDriver::select($paymentMethod);
+        $key = OnlineGateWay::getAuthorityKey();
+        $authority = Request::get($key);
+
         $transaction = TransactionRepo::getTransactionByAuthority($authority)
             ->orFailWith([Responses::class, 'transactionNotFoundError']);
-        
+
         /**
          * @var OnlinePaymentVerificationResponseInterface $verificationResult
          */
@@ -51,8 +54,7 @@ class PaymentVerifierController
         Cache::tags('bon')
             ->flush();
         
-        Request::session()
-            ->flash('verifyResult', $verificationResult->getMessages());
+        Request::session()->flash('verifyResult', $verificationResult->getMessages());
         
         return redirect()->route('showOnlinePaymentStatus', [
             'status'        => ($verificationResult->isSuccessfulPayment()) ? 'successful' : 'failed',

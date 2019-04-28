@@ -11,10 +11,9 @@
 |
 */
 
-use App\Block;
-use App\Classes\Payment\PaymentVerifierController;
 use App\Http\Controllers\Web\OnlinePaymentController;
 use App\Http\Controllers\Web\PaymentStatusController;
+use App\PaymentModule\Controllers\PaymentVerifierController;
 use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
 
 Route::get('embed/c/{content}', "Web\ContentController@embed");

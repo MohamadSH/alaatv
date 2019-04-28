@@ -50,22 +50,22 @@ class RedirectUserToPaymentPage
         if ($this->isPayingAnOrder($order)) {
             $order->customerDescription = $request->get('customerDescription');
         }
-        
+
         $this->shouldGoToOfflinePayment($cost)
             ->thenRespondWith([Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order->id]);
         PaymentDriver::select($paymentMethod);
-        $url           = $this->comeBackFromGateWayUrl($paymentMethod, $device);
+        $url = $this->comeBackFromGateWayUrl($paymentMethod, $device);
         $authorityCode = OnlineGateWay::getAuthorityFromGate($url, $cost, $description)
             ->orFailWith([Responses::class, 'noResponseFromBankError']);
-        
+
         TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id, $description)
             ->orRespondWith([Responses::class, 'editTransactionError']);
-        
+
         $redirectData = OnlineGateWay::getGatewayUrl();
         
         return view("order.checkout.gatewayRedirect", compact('redirectData'));
     }
-    
+
     /**
      * @param $inputData
      * @param $user
@@ -79,7 +79,7 @@ class RedirectUserToPaymentPage
         
         return (new RefinementLauncher($inputData))->getData($inputData);
     }
-    
+
     /**
      * @param  string  $msg
      * @param  int     $statusCode

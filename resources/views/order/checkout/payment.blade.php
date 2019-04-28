@@ -202,7 +202,13 @@
                             <div class = "row justify-content-center">
                                 <div class = "col text-center btnSubmitOrderWraper">
                                     <hr>
-                                    <button type = "button" onclick = "window.location.href='{{action('Web\OnlinePaymentController@paymentRedirect', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}';mApp.block('.btnSubmitOrderWraper', {type: 'loader',state: 'info',});" class = "btn btn-lg m-btn--pill m-btn--air m-btn m-btn--gradient-from-info
+                                    <button type = "button"
+                                            onclick="window.location.href='{{route('verifyOnlinePayment', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}';
+                                                    mApp.block('.btnSubmitOrderWraper', {
+                                                    type: 'loader',
+                                                    state: 'info',
+                                                    });"
+                                            class = "btn btn-lg m-btn--pill m-btn--air m-btn m-btn--gradient-from-info
                                             m-btn--gradient-to-accent m--padding-top-20 m--padding-bottom-20
                                              m--padding-right-50 m--padding-left-50 btnSubmitOrder"></button>
                                 </div>
