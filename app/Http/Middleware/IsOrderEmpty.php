@@ -19,10 +19,8 @@ class IsOrderEmpty
     {
         if ($request->has("order_id")) {
             $order = Order::Find($request->order_id);
-            if (isset($order)) {
-                if ($order->orderproducts->isEmpty()) {
-                    return redirect(action("Web\OrderController@checkoutReview"));
-                }
+            if (isset($order) and $order->orderproducts->isEmpty()) {
+                return redirect(action("Web\OrderController@checkoutReview"));
             }
         }
         

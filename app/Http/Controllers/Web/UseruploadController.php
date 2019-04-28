@@ -47,16 +47,6 @@ class UseruploadController extends Controller
     }
     
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-    
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \app\Http\Requests\InsertUserUploadRequest  $request
@@ -115,18 +105,6 @@ class UseruploadController extends Controller
     }
     
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-    
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -138,30 +116,19 @@ class UseruploadController extends Controller
     {
         $oldUserUploadStatus = $userupload->useruploadstatus_id;
         $userupload->fill($request->all());
-        if ($userupload->update()) {
-            if ($oldUserUploadStatus != $userupload->useruploadstatus_id) {
-                $userUploadStatusName = Useruploadstatus::where('id', $userupload->useruploadstatus_id)
-                    ->pluck('displayName')
-                    ->toArray();
-                $userupload->user->notify(new CounselingStatusChanged($userUploadStatusName[0]));
-            }
-            
-            return $this->response->setStatusCode(200);
-        }
-        else {
+        
+        if (!$userupload->update()) {
             return $this->response->setStatusCode(503);
         }
-    }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        
+        if ($oldUserUploadStatus != $userupload->useruploadstatus_id) {
+            $userUploadStatusName = Useruploadstatus::where('id', $userupload->useruploadstatus_id)
+                ->pluck('displayName')
+                ->toArray();
+            $userupload->user->notify(new CounselingStatusChanged($userUploadStatusName[0]));
+        }
+        
+        return $this->response->setStatusCode(200);
+        
     }
 }

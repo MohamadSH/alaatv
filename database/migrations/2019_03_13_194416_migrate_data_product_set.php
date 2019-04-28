@@ -76,7 +76,7 @@ class MigrateDataProductSet extends Migration
 
             //get Product
             $product = $files->first()->product;
-            $this->makeSetForProductFiles($files, $product);
+            $this->makeSetForProductFiles($files, $product, true);
 
             /** @var Productfile $productFile */
             foreach ($files as $productFile) {
@@ -93,10 +93,10 @@ class MigrateDataProductSet extends Migration
      * @param $files
      * @param $product
      */
-    private function makeSetForProductFiles( $files, Product $product): void
+    private function makeSetForProductFiles( $files, Product $product, $force=false): void
     {
         $contentSetId = $files->first()->contentset_id;
-        if ($contentSetId == null) {
+        if ($contentSetId == null || $force) {
 
             //make a set from Product
             $set = Contentset::create([
@@ -108,7 +108,7 @@ class MigrateDataProductSet extends Migration
             $set->display = 1;
             $set->save();
         }
-        $set = Contentset::find($contentSetId);
+        $set = $set ?: Contentset::find($contentSetId);
         Productfile::whereIn('id', $files->modelKeys())->update(['contentset_id' => $set->id]);
 //        dd($files->first()->name);
         $this->attachSetToProducts($set,$files->first()->file);

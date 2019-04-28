@@ -6,6 +6,15 @@
     "framework",
     "laravel"
   ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "http://packagist.org"
+    },
+    {
+      "packagist": false
+    }
+  ],
   "license": "MIT",
   "require": {
     "php": "^7.1.3",
@@ -57,11 +66,14 @@
   "config": {
     "optimize-autoloader": true,
     "preferred-install": "dist",
-    "sort-packages": true
+    "sort-packages": true,
+    "secure-http":false
   },
   "extra": {
     "laravel": {
-      "dont-discover": []
+      "dont-discover": [
+        "laravel/telescope"
+      ]
     }
   },
   "autoload": {

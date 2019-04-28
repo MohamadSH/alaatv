@@ -119,7 +119,8 @@ class LoginController extends Controller
         }
         
         if ($this->attemptLogin($request)) {
-            if (auth()->user()->userstatus_id == 1) {
+            if ($this->guard()
+                    ->user()->userstatus_id == 1) {
                 return $this->sendLoginResponse($request);
             }
             else {
@@ -131,9 +132,7 @@ class LoginController extends Controller
                     ], "login");
             }
         }
-
-
-//        Log::error('LoginController login 6');
+        
         // If the login attempt was unsuccessful we will increment the number of attempts
         // to login and redirect the user back to the login form. Of course, when this
         // user surpasses their maximum number of attempts they will get locked out.
@@ -171,19 +170,20 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
-        if ($request->expectsJson()) {
-            $token = $user->getAppToken();
-            $data  = array_merge([
-                'user' => $user,
-            ], $token);
-            return response()->json([
-                'status'     => 1,
-                'msg'        => 'user sign in.',
-                'redirectTo' => $this->redirectTo($request),
-                'data'       => $data,
-            ], Response::HTTP_OK);
+        if (!$request->expectsJson()) {
+            return redirect($this->redirectTo($request));
         }
-        return redirect($this->redirectTo($request));
+        
+        $token = $user->getAppToken();
+        $data  = array_merge([
+            'user' => $user,
+        ], $token);
+        return response()->json([
+            'status'     => 1,
+            'msg'        => 'user sign in.',
+            'redirectTo' => $this->redirectTo($request),
+            'data'       => $data,
+        ], Response::HTTP_OK);
     }
     
     /**
