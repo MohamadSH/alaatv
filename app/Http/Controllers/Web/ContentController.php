@@ -261,9 +261,8 @@ class ContentController extends Controller
         $seenCount = $content->pageView;
         
         $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
-        
         if (request()->expectsJson()) {
-            return request()->json($content, Response::HTTP_OK);
+            return response()->json($content, Response::HTTP_OK);
         }
         
         return view("content.show",
