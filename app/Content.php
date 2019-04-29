@@ -298,6 +298,8 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         unset($array['updated_at']);
         unset($array['deleted_at']);
         unset($array['validSince']);
+        unset($array['page_view']);
+        unset($array['thumbnail']);
         return $array;
     }
     
@@ -842,9 +844,9 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      *
      * @return void
      */
-    public function setFileAttribute(Collection $input)
+    public function setFileAttribute(Collection $input = null)
     {
-        $this->attributes['file'] = $input->toJson(JSON_UNESCAPED_UNICODE);
+        $this->attributes['file'] = optional($input)->toJson(JSON_UNESCAPED_UNICODE);
     }
     
     
@@ -861,7 +863,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      *
      * @return void
      */
-    public function setTagsAttribute(array $value)
+    public function setTagsAttribute(array $value = null)
     {
         $tags = null;
         if (!empty($value)) {

@@ -148,9 +148,9 @@ class Contentset extends BaseModel implements Taggable
             'enable',
             'display',
             'updated_at',
-            'created_at'
+            'created_at',
         ];
-        foreach ($unSetArrayItems as $item ){
+        foreach ($unSetArrayItems as $item) {
             unset($array[$item]);
         }
         return $array;
@@ -195,6 +195,7 @@ class Contentset extends BaseModel implements Taggable
                 return self::getProductOfSet($onlyActiveProduct, $this);
             });
     }
+    
     /**
      * @param  bool        $onlyActiveProduct
      * @param  Contentset  $set
@@ -251,7 +252,7 @@ class Contentset extends BaseModel implements Taggable
      *
      * @return void
      */
-    public function setTagsAttribute(array $value)
+    public function setTagsAttribute(array $value = null)
     {
         $tags = null;
         if (!empty($value)) {
@@ -353,8 +354,7 @@ class Contentset extends BaseModel implements Taggable
         if ($response["statusCode"] == 200) {
             $result = json_decode($response["result"]);
             $tags   = $result->data->tags;
-        }
-        else {
+        } else {
             $tags = [];
         }
         

@@ -670,7 +670,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      *
      * @param $value
      */
-    public function setOrderAttribute($value): void
+    public function setOrderAttribute($value=null): void
     {
         if ($this->strIsEmpty($value)) {
             $value = 0;
@@ -679,7 +679,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         if ($this->attributes["order"] != $value) {
             self::shiftProductOrders($value);
         }
-        
+    
         $this->attributes["order"] = $value;
     }
     
