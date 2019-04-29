@@ -40,9 +40,13 @@ mix.scripts(
 
 mix.scripts(
     [
-        'public/acm/video-js/video.min.js',
-        'public/acm/video-js/nuevo/nuevo.min.js',
-        'public/acm/page-content-show.js'
+        'public/acm/videojs/video.min.js',
+        'public/acm/videojs/plugins/pip/videojs.pip.min.js',
+        'public/acm/videojs/nuevo.min.js',
+        'public/acm/videojs/plugins/videojs.p2p.min.js',
+        'public/acm/videojs/plugins/videojs.hotkeys.min.js',
+        'public/acm/videojs/plugins/seek-to-point.js',
+        // 'public/acm/page-content-show.js'
     ],
     'public/js/content-show.js'
 ).version();
@@ -68,9 +72,12 @@ mix.babel(
         'node_modules/lightgallery/modules/lg-zoom.min.js',
         'node_modules/jquery-sticky/jquery.sticky.js',
         'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
-        // 'public/acm/video-js/video.js',
-        // 'public/acm/video-js/videojs-ie8.min.js',
-        // 'public/acm/video-js/nuevo/nuevo.min.js',
+        'public/acm/videojs/video.min.js',
+        'public/acm/videojs/plugins/pip/videojs.pip.min.js',
+        'public/acm/videojs/nuevo.min.js',
+        'public/acm/videojs/plugins/videojs.p2p.min.js',
+        'public/acm/videojs/plugins/videojs.hotkeys.min.js',
+        'public/acm/videojs/plugins/seek-to-point.js',
         'public/acm/AlaatvCustomFiles/js/UserCart.js',
         // 'public/acm/AlaatvCustomFiles/js/page-product-show.js',
     ],
@@ -134,11 +141,18 @@ mix.styles(
 mix.styles(
     [
         'node_modules/lightgallery/src/css/lightgallery.css',
-        // 'public/acm/video-js/video-js.css',
+
+        'public/acm/videojs/skins/nuevo/videojs.min.css',
+        'public/acm/videojs/skins/nuevo/videojs.rtl.css',
+        'public/acm/videojs/plugins/pip/videojs.pip.min.css',
+        'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
+        'public/acm/videojs/plugins/seek-to-point.css',
+        'public/acm/videojs/fonts/load-font-for-laravel-mix.css',
+
         'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
         'public/acm/AlaatvCustomFiles/css/page-product-show.css',
     ],
-    'public/css/product-show/product-show.css'
+    'public/css/product-show.css'
 ).version();
 
 
@@ -234,7 +248,13 @@ mix.styles(
 
 mix.styles(
     [
-        'public/acm/video-js/video-js.min.css',
+        // 'public/acm/videojs/skins/nuevo/videojs.min.css',
+        'public/acm/videojs/skins/nuevo/videojs.rtl.css',
+        'public/acm/videojs/plugins/pip/videojs.pip.min.css',
+        'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
+        'public/acm/videojs/plugins/seek-to-point.css',
+        'public/acm/videojs/fonts/load-font-for-laravel-mix.css',
+
         'public/acm/AlaatvCustomFiles/css/page-content-show.css'
     ],
     'public/css/content-show.css'
