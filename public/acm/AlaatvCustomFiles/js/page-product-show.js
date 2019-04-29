@@ -272,9 +272,6 @@ jQuery(document).ready(function() {
 
     let childLevel = ProductSwitch.init();
 
-    var player = null;
-
-
     var player = videojs('videoPlayer');
     player.nuevo({
         // logotitle:"آموزش مجازی آلاء",
@@ -319,6 +316,29 @@ jQuery(document).ready(function() {
     });
 
     player.pic2pic();
+
+    player.on('mode',function(event,mode) {
+        console.log('mode: ', mode);
+        let width = '100%';
+        if(mode=='large') {
+            $('.productDetailesColumns .column1').addClass('order-2');
+            $('.productDetailesColumns .column2').addClass('order-3');
+            $('.productDetailesColumns .column3').addClass('order-1');
+            $('.productDetailesColumns .column3').removeClass('col-lg-4');
+            $('.productDetailesColumns .column3').addClass('col-lg-9');
+            $('.productDetailesColumns .clearfixColumn').removeClass('d-none');
+            width = '70%';
+        } else {
+            $('.productDetailesColumns .column1').removeClass('order-2');
+            $('.productDetailesColumns .column2').removeClass('order-3');
+            $('.productDetailesColumns .column3').removeClass('order-1');
+            $('.productDetailesColumns .column3').removeClass('col-lg-9');
+            $('.productDetailesColumns .column3').addClass('col-lg-4');
+            $('.productDetailesColumns .clearfixColumn').addClass('d-none');
+        }
+
+        // document.querySelector("#videoPlayer").style.width=width;
+    });
 
     // var player = videojs('videoPlayer');
     // player.nuevo({

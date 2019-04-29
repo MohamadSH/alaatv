@@ -44,8 +44,8 @@
                     <div class="m-section m-section--last">
                         <div class="m-section__content">
                             <!--begin::Preview-->
-                            <div class="row">
-                                <div class="col-lg-3">
+                            <div class="row productDetailesColumns">
+                                <div class="col-lg-3 column column1">
                                     <div class="m--margin-bottom-45">
                                         <img src="{{ route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]) }}" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid m--marginless"/>
                                         @if(isset($product->bons->first()->pivot->bonPlus))
@@ -78,7 +78,7 @@
                                     {{--@endif--}}
 
                                 </div>
-                                <div class="col">
+                                <div class="col column column2">
 
                                     {{--ویژگی ها و دارای --}}
                                     <div class="row">
@@ -323,7 +323,7 @@
                                     @endif
 
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 column column3">
 
                                     <div class="m-portlet m-portlet--bordered-semi m-portlet--rounded-force m--margin-bottom-45 videoPlayerPortlet @if(!isset($product->introVideo)) m--hide @endif">
                                         <div class="m-portlet__head m-portlet__head--fit"></div>
@@ -337,11 +337,9 @@
                                                            video-js
                                                            vjs-fluid
                                                            vjs-default-skin
-                                                           vjs-big-play-centered
-                                                           a--full-width"
+                                                           vjs-big-play-centered"
                                                            controls preload="auto"
-                                                           poster = 'https://cdn.sanatisharif.ir/media/204/240p/204054ssnv.jpg'
-                                                    >
+                                                           poster = 'https://cdn.sanatisharif.ir/media/204/240p/204054ssnv.jpg'>
 
                                                         <source
                                                                 src="{{$product->introVideo}}"
@@ -419,6 +417,7 @@
                                         {{--@include('product.partials.pamphlet')--}}
                                     {{--@endif--}}
                                 </div>
+                                <div class="clearfix clearfixColumn d-none"></div>
                             </div>
                             <!--end::Preview-->
                         </div>
