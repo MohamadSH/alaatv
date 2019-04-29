@@ -11,7 +11,7 @@
     "/js/user-orders.js": "/js/user-orders.js?id=bbb997652034d70a42d0",
     "/js/user-dashboard.js": "/js/user-dashboard.js?id=78c22646e88fb97cd9ab",
     "/css/user-profile.css": "/css/user-profile.css?id=8d5fec191eb4c9f1dca5",
-    "/css/product-show.css": "/css/product-show.css?id=35ca40094a3342d004ad",
+    "/css/product-show/product-show.css": "/css/product-show/product-show.css?id=fc3f0794766d3d35cc42",
     "/css/checkout-review.css": "/css/checkout-review.css?id=07772bd0a2dc23a8fea8",
     "/css/user-dashboard.css": "/css/user-dashboard.css?id=2f73ec69c73befde2621",
     "/css/checkout-payment.css": "/css/checkout-payment.css?id=017aa31a1a18be944fa6",
@@ -19,5 +19,5 @@
     "/js/admin-content-create.js": "/js/admin-content-create.js?id=f9c41495a93ce1200819",
     "/css/admin-content-create.css": "/css/admin-content-create.css?id=424fc04c4fccce78fab5",
     "/css/landing5-allcss.min.css": "/css/landing5-allcss.min.css?id=0972d6eb0fc0b7ec8acf",
-    "/css/content-show.css": "/css/content-show.css?id=086c01f9f2a6682c271b"
+    "/css/content-show.css": "/css/content-show.css?id=7fe1aeacd20ab9ee64a3"
 }
