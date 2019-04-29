@@ -23,12 +23,7 @@ class AttributesetController extends Controller
         $this->middleware('permission:'.Config::get('constants.REMOVE_ATTRIBUTESET_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:'.Config::get('constants.SHOW_ATTRIBUTESET_ACCESS'), ['only' => 'edit']);
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $attributesets = Attributeset::all()
@@ -36,14 +31,7 @@ class AttributesetController extends Controller
         
         return view('attributeset.index', compact('attributesets'));
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(InsertAttributesetRequest $request)
     {
         $attributeset = new Attributeset();
@@ -56,14 +44,7 @@ class AttributesetController extends Controller
             return $this->response->setStatusCode(503);
         }
     }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(Attributeset $attributeset)
     {
         //        $attributegroups = $attributeset->attributegroups;
@@ -72,15 +53,7 @@ class AttributesetController extends Controller
         
         return view('attributeset.edit', compact('attributeset', 'attributes'));
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int                       $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(EditAttributesetRequest $request, Attributeset $attributeset)
     {
         $attributeset->fill($request->all());
@@ -94,14 +67,7 @@ class AttributesetController extends Controller
         
         return redirect()->back();
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(Attributeset $attributeset)
     {
         if ($attributeset->delete()) {

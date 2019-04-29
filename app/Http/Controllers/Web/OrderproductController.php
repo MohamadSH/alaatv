@@ -53,17 +53,7 @@ class OrderproductController extends Controller
         ]);
         $this->middleware('CheckPermissionForSendExtraAttributesCost', ['only' => ['attachExtraAttributes']]);
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return void
-     */
-    public function index()
-    {
-        //
-    }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -73,14 +63,7 @@ class OrderproductController extends Controller
     {
         //
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  OrderProductStoreRequest  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(OrderProductStoreRequest $request)
     {
         if ($request->has('extraAttribute')) {
@@ -288,26 +271,7 @@ class OrderproductController extends Controller
             return false;
         }
     }
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return void
-     */
-    public function show($id)
-    {
-        //
-    }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Orderproduct  $orderproduct
-     *
-     * @return Response
-     */
+
     public function edit($orderproduct)
     {
         $products                = $this->makeProductCollection();
@@ -515,15 +479,7 @@ class OrderproductController extends Controller
         
         return redirect()->back();
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Orderproduct  $orderproduct
-     *
-     * @return Response
-     * @throws \Exception
-     */
+
     public function destroy(Orderproduct $orderproduct)
     {
         $orderproduct_userbons = $orderproduct->userbons;
@@ -567,14 +523,7 @@ class OrderproductController extends Controller
                 ->setContent(["message" => "خطا در حذف محصول سفارش"]);
         }
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *
-     * @return Response
-     */
+
     public function checkOutOrderproducts(Request $request)
     {
         $orderproductIds      = $request->get("orderproducts");

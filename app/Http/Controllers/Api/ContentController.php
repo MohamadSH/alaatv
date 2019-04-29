@@ -13,15 +13,7 @@ use Illuminate\Http\Response;
 class ContentController extends Controller
 {
     use ContentControllerResponseTrait;
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  Request  $request
-     * @param  Content  $content
-     *
-     * @return Response
-     */
+
     public function show(Request $request, Content $content)
     {
         if (!$content->isActive()) {

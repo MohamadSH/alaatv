@@ -10,12 +10,26 @@
 | to using a Closure or controller method. Build something great!
 |
 */
-
+use App\Classes\Payment\OnlineGateWay;
+use App\Classes\Payment\Responses;
 use App\Http\Controllers\Web\OnlinePaymentController;
 use App\Http\Controllers\Web\PaymentStatusController;
 use App\PaymentModule\Controllers\PaymentVerifierController;
 use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
+use App\PaymentModule\PaymentDriver;
 
+
+Route::get('fake-pay', function () {
+    PaymentDriver::select($paymentMethod = 'mellat');
+
+    $authorityCode = OnlineGateWay::generateAuthorityCode(route('verifyOnlinePayment',
+        ['paymentMethod' => 'mellat', 'device' => 'asdca']), $price = 1000, '$description', time())
+        ->orFailWith([Responses::class, 'noResponseFromBankError']);
+
+    $redirectData = OnlineGateWay::generatePaymentPageUriObject($authorityCode);
+
+    return view("order.checkout.gatewayRedirect", compact('redirectData'));
+});
 Route::get('embed/c/{content}', "Web\ContentController@embed");
 Route::get('/', 'Web\IndexPageController');
 Route::get('shop', 'Web\ShopPageController');
@@ -46,7 +60,7 @@ Route::get('sanati-sharif-pamphlet/{lId?}/{dId?}/{pId?}', 'Web\Sanatisharifmerge
 Route::get('SanatiSharif-News', 'Web\HomeController@home');
 Route::get('Alaa-App/{mod?}', 'Web\SanatisharifmergeController@AlaaApp');
 Route::get('image/{category}/{w}/{h}/{filename}', [
-    'as'   => 'image',
+    'as' => 'image',
     'uses' => 'Web\HomeController@getImage',
 ]);
 Route::get("sharif", "Web\HomeController@schoolRegisterLanding");
@@ -61,9 +75,9 @@ Route::group(['prefix' => 'sitemap'], function () {
 
 Route::group(['prefix' => 'checkout'], function () {
     Route::get('auth', "Web\OrderController@checkoutAuth");
-    Route::get('completeInfo', 'Web\OrderController@checkoutCompleteInfo');
-    Route::get('review', "Web\OrderController@checkoutReview");
-    Route::get('payment', "Web\OrderController@checkoutPayment");
+    Route::get('completeInfo', 'Web\OrderController@checkoutCompleteInfo')->name('checkoutCompleteInfo');
+    Route::get('review', "Web\OrderController@checkoutReview")->name('checkoutReview');
+    Route::get('payment', "Web\OrderController@checkoutPayment")->name('checkoutPayment');
     Route::any('verifyPayment/online/{paymentMethod}/{device}', [PaymentVerifierController::class, 'verify'])->name('verifyOnlinePayment');
     Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', [PaymentStatusController::class, 'show'])->name('showOnlinePaymentStatus');
     Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'Web\OfflinePaymentController@verifyPayment');
@@ -79,7 +93,7 @@ Route::group(['prefix' => 'landing'], function () {
     Route::get('1', 'Web\ProductController@landing1');
     Route::get('2', 'Web\ProductController@landing2');
     Route::get('3', [
-        'as'   => 'landing.3',
+        'as' => 'landing.3',
         'uses' => 'Web\ProductController@landing3',
     ]);
     Route::get('4', 'Web\ProductController@landing4');
@@ -105,20 +119,19 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('teleMarketingAdminPanel', 'Web\HomeController@adminTeleMarketing');
     Route::post('adminSendSMS', 'Web\HomeController@sendSMS');
     Route::get('asset', 'Web\UserController@userProductFiles');
-    Route::get('complete-register', 'Web\UserController@completeRegister');
+    Route::get('complete-register', 'Web\UserController@completeRegister')->name('completeRegister');
     Route::get('survey', 'Web\UserController@showSurvey');
     Route::get('97', 'Web\HomeController@submitKonkurResult');
     Route::post("transactionToDonate/{transaction}", "Web\TransactionController@convertToDonate");
     Route::post("completeTransaction/{transaction}", "Web\TransactionController@completeTransaction");
     Route::post("myTransaction/{transaction}", "Web\TransactionController@limitedUpdate");
     Route::get('getUnverifiedTransactions', 'Web\TransactionController@getUnverifiedTransactions');
-    Route::any('paymentRedirect/{paymentMethod}/{device}', [RedirectUserToPaymentPage::class, 'sendUserToPaymentPage']);
+    Route::any('paymentRedirect/{paymentMethod}/{device}', '\\'.RedirectUserToPaymentPage::class)->name('redirectToBank');
 
     Route::get('exitAdminInsertOrder', 'Web\OrderController@exitAdminInsertOrder');
     Route::post('exchangeOrderproduct/{order}', 'Web\OrderController@exchangeOrderproduct');
     Route::get('MBTI-Participation', "Web\MbtianswerController@create");
     Route::get('MBTI-Introduction', "Web\MbtianswerController@introduction");
-
 
     Route::get('holdlottery', "Web\LotteryController@holdLottery");
     Route::get('givePrize', "Web\LotteryController@givePrizes");
@@ -215,7 +228,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('lottery', 'Web\LotteryController');
     Route::resource('cat', 'Web\CategoryController');
 
-
     Route::get("copylessonfromremote", "Web\RemoteDataCopyController@copyLesson");
     Route::get("copydepartmentfromremote", "Web\RemoteDataCopyController@copyDepartment");
     Route::get("copydepartmentlessonfromremote", "Web\RemoteDataCopyController@copyDepartmentlesson");
@@ -271,15 +283,12 @@ Route::resource('block', 'Web\BlockController');
 Auth::routes(['verify' => true]);
 
 Route::group(['prefix' => 'mobile'], function () {
-    Route::get("verify", "Web\MobileVerificationController@show")
-         ->name('mobile.verification.notice');
-    Route::post("verify", "Web\MobileVerificationController@verify")
-         ->name('mobile.verification.verify');
-    Route::get("resend", "Web\MobileVerificationController@resend")
-         ->name('mobile.verification.resend');
+    Route::get("verify", "Web\MobileVerificationController@show")->name('mobile.verification.notice');
+    Route::post("verify", "Web\MobileVerificationController@verify")->name('mobile.verification.verify');
+    Route::get("resend", "Web\MobileVerificationController@resend")->name('mobile.verification.resend');
 });
 Route::post("cd3b472d9ba631a73cb7b66ba513df53", "Web\CouponController@generateRandomCoupon");
-Route::view('uiTest','pages.certificates');
+Route::view('uiTest', 'pages.certificates');
 
 Route::view('testrtl', 'product.show_ali');
 

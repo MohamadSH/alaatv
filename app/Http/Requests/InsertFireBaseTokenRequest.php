@@ -24,12 +24,7 @@ class InsertFireBaseTokenRequest extends FormRequest
         
         return $authorized;
     }
-    
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
+
     public function rules()
     {
         return [

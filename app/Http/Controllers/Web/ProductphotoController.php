@@ -18,14 +18,7 @@ class ProductphotoController extends Controller
     {
         $this->response = new Response();
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         $photo = new Productphoto();
@@ -70,51 +63,12 @@ class ProductphotoController extends Controller
         
         return redirect()->back();
     }
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Productphoto  $productphoto
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Productphoto $productphoto)
-    {
-        //
-    }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Productphoto  $productphoto
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(Productphoto $productphoto)
     {
         //
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Productphoto         $productphoto
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Productphoto $productphoto)
-    {
-        //
-    }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Productphoto  $productphoto
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(Productphoto $productphoto)
     {
         if ($productphoto->delete()) {

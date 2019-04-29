@@ -14,12 +14,6 @@ class FavorableController extends Controller
         $this->callMiddlewares($this->getAuthExceptionArray());
     }
     
-    /*
-    |--------------------------------------------------------------------------
-    | Public methods
-    |--------------------------------------------------------------------------
-    */
-    
     /**
      * @param $authException
      */
@@ -37,12 +31,6 @@ class FavorableController extends Controller
         
         return $authException;
     }
-    
-    /*
-    |--------------------------------------------------------------------------
-    | Private methods
-    |--------------------------------------------------------------------------
-    */
     
     public function markFavorableFavorite(Request $request, FavorableInterface $favorable)
     {

@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Classes\Payment;
+namespace App\PaymentModule;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
  * Class OnlineGateWay
  *
- * @method static getGatewayUrl();
- * @method static getAuthorityKey();
+ * @method static generatePaymentPageUriObject();
+ * @method static getAuthorityValue();
  * @method static verifyPayment($amount, $authority);
- * @method static getAuthorityFromGate(string $callbackUrl, int $cost, string $description);
+ * @method static generateAuthorityCode(string $callbackUrl, int $cost, string $description);
  *
  * @package App\Classes\Payment
  */

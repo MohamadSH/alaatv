@@ -2,15 +2,13 @@
 
 namespace  App\PaymentModule\Controllers;
 
-use App\Classes\Payment\OnlineGateWay;
-use App\Classes\Payment\Responses;
-use App\PaymentModule\PaymentDriver;
+use App\PaymentModule\{OnlineGateWay, Responses, PaymentDriver};
 use App\Repositories\TransactionRepo;
 use App\Traits\HandleOrderPayment;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\{Cache, Request};
 
-class PaymentVerifierController
+class PaymentVerifierController extends Controller
 {
     use HandleOrderPayment;
     
@@ -23,8 +21,7 @@ class PaymentVerifierController
     public function verify(string $paymentMethod, string $device)
     {
         PaymentDriver::select($paymentMethod);
-        $key = OnlineGateWay::getAuthorityKey();
-        $authority = Request::get($key);
+        $authority = OnlineGateWay::getAuthorityValue();
 
         $transaction = TransactionRepo::getTransactionByAuthority($authority)
             ->orFailWith([Responses::class, 'transactionNotFoundError']);
@@ -42,8 +39,7 @@ class PaymentVerifierController
                 $verificationResult->getCardPanMask()
             );
             $this->handleOrderSuccessPayment($transaction->order);
-        }
-        else {
+        } else {
             $this->handleOrderCanceledPayment($transaction->order);
             $transaction->transactionstatus_id = config('constants.TRANSACTION_STATUS_UNSUCCESSFUL');
             $transaction->update();
@@ -51,8 +47,7 @@ class PaymentVerifierController
         /*
         if (isset($transaction->order_id)) {} else { if (isset($transaction->wallet_id)) { if ($result['status']) { $this->handleWalletChargingSuccessPayment($gatewayVerify['RefID'], $transaction, $gatewayVerify['cardPanMask']); } else { $this->handleWalletChargingCanceledPayment($transaction); } } } */
         
-        Cache::tags('bon')
-            ->flush();
+        Cache::tags('bon')->flush();
         
         Request::session()->flash('verifyResult', $verificationResult->getMessages());
         

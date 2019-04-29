@@ -29,12 +29,7 @@ class UseruploadController extends Controller
         
         $this->response = new Response();
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $questions        = Userupload::all()
@@ -87,14 +82,7 @@ class UseruploadController extends Controller
             'sessionData' => session()->all(),
         ]);
     }
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  \app\Userupload  $userUpload
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(Userupload $userUpload)
     {
         $user                 = $userUpload->user;
@@ -103,15 +91,7 @@ class UseruploadController extends Controller
         
         return view("userUpload.show", compact("user", "counter", "consultationStatuses"));
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \app\Userupload           $userupload
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, Userupload $userupload)
     {
         $oldUserUploadStatus = $userupload->useruploadstatus_id;

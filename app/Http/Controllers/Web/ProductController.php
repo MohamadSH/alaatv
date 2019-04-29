@@ -58,19 +58,11 @@ class ProductController extends Controller
     protected $response;
     
     protected $setting;
-    
-    /*
-    |--------------------------------------------------------------------------
-    | Private methods
-    |--------------------------------------------------------------------------
-    */
-    
-    /*
-    |--------------------------------------------------------------------------
-    | Private methods
-    |--------------------------------------------------------------------------
-    */
-    
+
+
+
+
+
     function __construct(Response $response, Websitesetting $setting)
     {
         $this->response = $response;
@@ -110,16 +102,7 @@ class ProductController extends Controller
             ],
         ]);
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @param  ProductIndexRequest  $request
-     *
-     * @param  ProductSearch        $productSearch
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(ProductIndexRequest $request, ProductSearch $productSearch)
     {
         $tags          = $request->get('tags');
@@ -150,16 +133,7 @@ class ProductController extends Controller
         
         return view("pages.product-search", compact("products", 'tags'));
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+
     
     /**
      * Store a newly created resource in storage.
@@ -290,12 +264,6 @@ class ProductController extends Controller
         return $done;
     }
     
-    /*
-    |--------------------------------------------------------------------------
-    | Public methods
-    |--------------------------------------------------------------------------
-    */
-    
     /**
      * @param $product
      * @param $bonId
@@ -319,15 +287,7 @@ class ProductController extends Controller
             ]);
         }
     }
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  Request       $request
-     * @param  \App\Product  $product
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(Request $request, Product $product)
     {
         if (isset($product->redirectUrl)) {
@@ -353,14 +313,7 @@ class ProductController extends Controller
         
         return view("product.show", compact("product"));
     }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \app\Product  $product
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($product)
     {
         $bonName                  = config("constants.BON1");
@@ -412,16 +365,7 @@ class ProductController extends Controller
                 "productFileTypes", "defaultProductFileOrders", "products", "producttype", "productPhotos",
                 "defaultProductPhotoOrder"));
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  EditProductRequest  $request
-     * @param  \app\Product        $product
-     *
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
+
     public function update(EditProductRequest $request, Product $product)
     {
         $bonId = $request->get('bon_id');
