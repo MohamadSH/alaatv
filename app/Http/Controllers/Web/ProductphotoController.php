@@ -64,11 +64,6 @@ class ProductphotoController extends Controller
         return redirect()->back();
     }
 
-    public function edit(Productphoto $productphoto)
-    {
-        //
-    }
-
     public function destroy(Productphoto $productphoto)
     {
         if ($productphoto->delete()) {
