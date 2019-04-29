@@ -1,12 +1,14 @@
 <?php
 
-namespace App\PaymentModule\Gateways\Zarinpal;
+namespace App\PaymentModule\Gateways\Behpardakht;
 
 use App\Classes\Nullable;
-use App\Classes\Payment\OnlineGatewayInterface;
-use App\Classes\Payment\RedirectData;
-use App\PaymentModule\Gateways\OnlinePaymentRedirectionUriInterface;
-use App\PaymentModule\OnlinePaymentVerificationResponseInterface;
+use App\PaymentModule\{
+    Gateways\OnlinePaymentRedirectionUriInterface,
+    OnlineGatewayInterface,
+    OnlinePaymentVerificationResponseInterface,
+    RedirectData
+};
 use DateTime;
 
 class BehpardakhtGateWay implements OnlineGatewayInterface
@@ -58,14 +60,14 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
         61 => 'خطا در واریز',
     ];
 
-    public function getAuthorityFromGate(string $callbackUrl, int $cost, string $description, $orderId = null): Nullable
+    public function generateAuthorityCode(string $callbackUrl, int $cost, string $description, $orderId = null): Nullable
     {
         $dateTime = new DateTime();
 
         $fields = [
-            'terminalId' => (int)config('gateway.mellat.terminalId'),
-            'userName' => config('gateway.mellat.username'),
-            'userPassword' => (int)config('gateway.mellat.password'),
+            'terminalId' => (int)config('behpardakht.terminalId'),
+            'userName' => config('behpardakht.username'),
+            'userPassword' => (int)config('behpardakht.password'),
             'orderId' => $orderId,
             'amount' => $cost,
             'localDate' => $dateTime->format('Ymd'),
@@ -91,17 +93,19 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
         return nullable($response[1]);
     }
 
-    public function getGatewayUrl($refId): OnlinePaymentRedirectionUriInterface
+    public function generatePaymentPageUriObject($refId): OnlinePaymentRedirectionUriInterface
     {
         $serverUrl = 'https://bpm.shaparak.ir/pgwchannel/startpay.mellat';
-        $data = [['name' => 'RefId', 'value' => $refId,]];
+        $data = [
+            ['name' => 'RefId', 'value' => $refId,]
+        ];
 
         return RedirectData::instance($serverUrl, $data, 'POST');
     }
 
-    public function getAuthorityKey(): string
+    public function getAuthorityValue(): string
     {
-        return 'Authority';
+        return '';
     }
 
     public function verifyPayment($amount, $authority): OnlinePaymentVerificationResponseInterface
@@ -114,25 +118,20 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
             return true;
         }
 
-        $fields = array(
-            'terminalId' => config('gateway.mellat.terminalId'),
-            'userName' => config('gateway.mellat.username'),
-            'userPassword' => config('gateway.mellat.password'),
-            'orderId' => $refId,
-            'saleOrderId' => $refId,
-            'saleReferenceId' => $trackingCode
-        );
+        $fields = $this->getVerificationParams($refId, $trackingCode);
+
         try {
             $soap = new \SoapClient( 'https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl');
             $response = $soap->bpVerifyRequest($fields);
         } catch (\SoapFault $e) {
-//            $this->transactionFailed();
-//            $this->newLog('SoapFault', $e->getMessage());
             throw $e;
         }
 
+        if ($response->return == '0' || $response->return == '45') {
 
-        return VerificationResponse::instance();
+            return VerificationResponse::instance(request()->all());
+        }
+
     }
 
     /**
@@ -150,30 +149,34 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
         $cardNumber = Input::get('CardHolderPan');
         $payRequestResCode = Input::get('ResCode');
 
-        $fields = array(
-            'terminalId' => config('gateway.mellat.terminalId'),
-            'userName' => config('gateway.mellat.username'),
-            'userPassword' => config('gateway.mellat.password'),
-            'orderId' => $refId,
-            'saleOrderId' => $refId,
-            'saleReferenceId' => $trackingCode
-        );
+        $fields = $this->getVerificationParams($refId, $trackingCode);
         try {
             $soap = new \SoapClient( 'https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl');
             $response = $soap->bpSettleRequest($fields);
         } catch (\SoapFault $e) {
-//            $this->transactionFailed();
-//            $this->newLog('SoapFault', $e->getMessage());
             throw $e;
         }
 
         if ($response->return == '0' || $response->return == '45') {
-//            $this->transactionSucceed();
-//            $this->newLog($response->return, Enum::TRANSACTION_SUCCEED_TEXT);
             return true;
         }
-//        $this->transactionFailed();
-//        $this->newLog($response->return, MellatException::$errors[$response->return]);
 //        throw new MellatException($response->return);
+    }
+
+    /**
+     * @param $refId
+     * @param $trackingCode
+     * @return array
+     */
+    private function getVerificationParams($refId, $trackingCode): array
+    {
+        return [
+            'terminalId' => config('behpardakht.terminalId'),
+            'userName' => config('behpardakht.username'),
+            'userPassword' => config('behpardakht.password'),
+            'orderId' => $refId,
+            'saleOrderId' => $refId,
+            'saleReferenceId' => $trackingCode
+        ];
     }
 }

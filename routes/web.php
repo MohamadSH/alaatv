@@ -10,12 +10,26 @@
 | to using a Closure or controller method. Build something great!
 |
 */
-
+use App\Classes\Payment\OnlineGateWay;
+use App\Classes\Payment\Responses;
 use App\Http\Controllers\Web\OnlinePaymentController;
 use App\Http\Controllers\Web\PaymentStatusController;
 use App\PaymentModule\Controllers\PaymentVerifierController;
 use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
+use App\PaymentModule\PaymentDriver;
 
+
+Route::get('fake-pay', function () {
+    PaymentDriver::select($paymentMethod = 'mellat');
+
+    $authorityCode = OnlineGateWay::generateAuthorityCode(route('verifyOnlinePayment',
+        ['paymentMethod' => 'mellat', 'device' => 'asdca']), $price = 1000, '$description', time())
+        ->orFailWith([Responses::class, 'noResponseFromBankError']);
+
+    $redirectData = OnlineGateWay::generatePaymentPageUriObject($authorityCode);
+
+    return view("order.checkout.gatewayRedirect", compact('redirectData'));
+});
 Route::get('embed/c/{content}', "Web\ContentController@embed");
 Route::get('/', 'Web\IndexPageController');
 Route::get('shop', 'Web\ShopPageController');

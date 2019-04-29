@@ -3,28 +3,30 @@
 namespace App\PaymentModule\Gateways\Zarinpal;
 
 use App\Classes\Nullable;
-use App\Classes\Payment\{OnlineGatewayInterface, RedirectData};
-use App\PaymentModule\OnlinePaymentVerificationResponseInterface;
+//use App\Classes\Payment\{OnlineGatewayInterface, RedirectData};
+use App\PaymentModule\Gateways\OnlinePaymentVerificationResponseInterface;
 use App\PaymentModule\Gateways\OnlinePaymentRedirectionUriInterface;
+use App\PaymentModule\OnlineGatewayInterface;
+use App\PaymentModule\RedirectData;
 
 class ZarinpalGateWay implements OnlineGatewayInterface
 {
-    public function getAuthorityFromGate(string $callbackUrl, int $cost, string $description, $orderId = null): Nullable
+    public function generateAuthorityCode(string $callbackUrl, int $cost, string $description, $orderId = null): Nullable
     {
         $zarinpalResponse = resolve('zarinpal.client')->request($callbackUrl, $cost, $description);
         
         return nullable($zarinpalResponse['Authority'] ?? null);
     }
     
-    public function getAuthorityKey(): string
+    public function getAuthorityValue(): string
     {
-        return 'Authority';
+        return request()->get('Authority');
     }
     
-    public function getGatewayUrl($refId): OnlinePaymentRedirectionUriInterface
+    public function generatePaymentPageUriObject($refId): OnlinePaymentRedirectionUriInterface
     {
         $url = app('zarinpal.client')->redirectUrl();
-        
+
         return RedirectData::instance($url);
     }
     

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Classes\Payment;
+namespace App\PaymentModule;
 
 use App\Order;
 use Illuminate\Http\Response;
@@ -9,7 +9,7 @@ class Responses
 {
     public static function noResponseFromBankError($msg)
     {
-        return self::sendErrorResponse('پاسخی از بانک دریافت نشد.', Response::HTTP_SERVICE_UNAVAILABLE);
+        return self::sendErrorResponse($msg, Response::HTTP_SERVICE_UNAVAILABLE);
     }
     
     /**

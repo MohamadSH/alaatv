@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Classes\Payment;
+namespace App\PaymentModule;
 
 use App\Classes\Nullable;
 use App\PaymentModule\Gateways\OnlinePaymentRedirectionUriInterface;
@@ -8,11 +8,11 @@ use App\PaymentModule\OnlinePaymentVerificationResponseInterface;
 
 interface OnlineGatewayInterface
 {
-    public function getAuthorityFromGate(string $callbackUrl, int $cost, string $description, $orderId = null) : Nullable;
+    public function generateAuthorityCode(string $callbackUrl, int $cost, string $description, $orderId = null) : Nullable;
 
-    public function getAuthorityKey(): string;
+    public function getAuthorityValue(): string;
     
-    public function getGatewayUrl($refId): OnlinePaymentRedirectionUriInterface;
+    public function generatePaymentPageUriObject($refId): OnlinePaymentRedirectionUriInterface;
     
     public function verifyPayment($amount, $authority): OnlinePaymentVerificationResponseInterface;
 }
