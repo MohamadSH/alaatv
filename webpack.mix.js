@@ -70,7 +70,7 @@ mix.babel(
         'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
         // 'public/acm/video-js/video.js',
         // 'public/acm/video-js/videojs-ie8.min.js',
-        'public/acm/video-js/nuevo/nuevo.min.js',
+        // 'public/acm/video-js/nuevo/nuevo.min.js',
         'public/acm/AlaatvCustomFiles/js/UserCart.js',
         // 'public/acm/AlaatvCustomFiles/js/page-product-show.js',
     ],

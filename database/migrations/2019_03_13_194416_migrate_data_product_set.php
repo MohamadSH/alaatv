@@ -13,6 +13,21 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 class MigrateDataProductSet extends Migration
 {
     /**
+     * @var ConsoleOutput
+     */
+    private $output;
+    
+    /**
+     * MigrateDataProductSet constructor.
+     *
+     */
+    public function __construct()
+    {
+        
+        $this->output = new ConsoleOutput();
+    }
+    
+    /**
      * Run the migrations.
      *
      * @return void
@@ -20,39 +35,40 @@ class MigrateDataProductSet extends Migration
      */
     public function up()
     {
-        DB::table('contentset_product')->truncate();
+        DB::table('contentset_product')
+            ->truncate();
         DB::beginTransaction();
-
-        try{
+        
+        try {
             Schema::table('productfiles', function (Blueprint $table) {
-                    $table->unsignedInteger('content_id')
-                          ->nullable();
-                    $table->unsignedInteger('contentset_id')
-                          ->nullable();
-
-
-                    $table->foreign('content_id')
-                          ->references('id')
-                          ->on('educationalcontents')
-                          ->onDelete('cascade')
-                          ->onupdate('cascade');
-
-                    $table->foreign('contentset_id')
-                          ->references('id')
-                          ->on('contentsets')
-                          ->onDelete('cascade')
-                          ->onupdate('cascade');
-
-
+                $table->unsignedInteger('content_id')
+                    ->nullable();
+                $table->unsignedInteger('contentset_id')
+                    ->nullable();
+                
+                
+                $table->foreign('content_id')
+                    ->references('id')
+                    ->on('educationalcontents')
+                    ->onDelete('cascade')
+                    ->onupdate('cascade');
+                
+                $table->foreign('contentset_id')
+                    ->references('id')
+                    ->on('contentsets')
+                    ->onDelete('cascade')
+                    ->onupdate('cascade');
+                
+                
             });
-        }catch (Illuminate\Database\QueryException $e) {
-
+        } catch (Illuminate\Database\QueryException $e) {
+        
         }
         DB::commit();
-
+        
         $this->migrateData();
     }
-
+    
     /**
      * Reverse the migrations.
      *
@@ -62,22 +78,25 @@ class MigrateDataProductSet extends Migration
     {
         //
     }
-
+    
     private function migrateData(): void
     {
+        
         $productFiles = Productfile::all();
-        $output = new ConsoleOutput();
-        $output->writeln('update product files....');
-        $progress = new ProgressBar($output, $productFiles->count());
-
+        $this->output->writeln('update product files....');
+        $progress = new ProgressBar($this->output, $productFiles->count());
+        
         $productFiles->load('product');
         $productFiles->load('productfiletype');
         foreach ($productFiles->groupBy('product_id') as $productId => $files) {
-
+            
             //get Product
-            $product = $files->first()->product;
-            $this->makeSetForProductFiles($files, $product, true);
-
+            $product = Product::find($productId);
+            
+            $this->makeSetForProductFiles($files, $product, function (Contentset $set, Productfile $pFile) {
+                $this->attachSetToProducts($set, $pFile->file);
+            });
+            
             /** @var Productfile $productFile */
             foreach ($files as $productFile) {
                 $content = $this->getAssosiatedProductFileContent($productFile, $product);
@@ -86,48 +105,70 @@ class MigrateDataProductSet extends Migration
             $progress->advance();
         }
         $progress->finish();
-        $output->writeln('Done!');
+        $this->output->writeln('Done!');
     }
-
+    
     /**
-     * @param $files
-     * @param $product
+     * @param            $files
+     * @param  Product   $product
+     *
+     *
+     * @param  callable  $callback
+     *
+     * @return void
      */
-    private function makeSetForProductFiles( $files, Product $product, $force=false): void
+    private function makeSetForProductFiles($files, Product $product, callable $callback): void
     {
-        $contentSetId = $files->first()->contentset_id;
-        if ($contentSetId == null || $force) {
-
-            //make a set from Product
-            $set = Contentset::create([
+//        $this->output->writeln('makeSetForProductFiles');
+        /** @var Productfile $pFile */
+        $pFile = $files->first();
+        $set   = $pFile->set;
+        
+        if (is_null($set)) {
+            $set               = Contentset::create([
                 'name'  => $product->name,
                 'photo' => $product->photo,
-                'tags'  => (array)optional($product->tags)->tags,
+                'tags'  => (array) optional($product->tags)->tags,
             ]);
-            $set->enable = 1;
-            $set->display = 1;
-            $set->save();
+            $set->enable       = 1;
+            $set->display      = 1;
+            $setSaveResult     = $set->save();
+            $pFile->timestamps = false;
+            $pFile->set()
+                ->associate($set);
+            $pFile->timestamps = true;
+            $pSaveResult       = $pFile->save();
+            if (!($setSaveResult && $pSaveResult)) {
+                $this->output->writeln("\r\n"."Error\ ProductFile: ".$pFile->id);
+            }
         }
-        $set = $set ?: Contentset::find($contentSetId);
-        Productfile::whereIn('id', $files->modelKeys())->update(['contentset_id' => $set->id]);
-//        dd($files->first()->name);
-        $this->attachSetToProducts($set,$files->first()->file);
+        
+        Productfile::whereIn('id', $files->modelKeys())
+            ->update(['contentset_id' => $set->id]);
+        
+        call_user_func($callback, $set, $pFile);
     }
-
-
+    
+    
     /**
      * @param $productFile
      * @param $product
      *
      * @return \App\Content|\App\Content[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null
      */
-    private function getAssosiatedProductFileContent(Productfile $productFile,Product $product)
+    private function getAssosiatedProductFileContent(Productfile $productFile, Product $product)
     {
+//        $this->output->writeln('getAssosiatedProductFileContent');
+        $set = $productFile->set;
+        
         if ($productFile->content_id != null) {
-            return Content::find($productFile->content_id);
+            $content = $productFile->content;
+//            $this->output->writeln('product'.$product->id.' \forceFill: '.$productFile->contentset_id.'productFile:'.$productFile->id);
+            $this->assosiateSetToContent($content, $set);
+            return $content;
         }
         //make content for each productFiles
-        $productTypeContentTypeLookupTable = [
+        $productTypeContentTypeLookupTable     = [
             '1' => Content::CONTENT_TYPE_PAMPHLET,
             '2' => Content::CONTENT_TYPE_VIDEO,
         ];
@@ -135,51 +176,54 @@ class MigrateDataProductSet extends Migration
             '1' => Content::CONTENT_TEMPLATE_PAMPHLET,
             '2' => Content::CONTENT_TEMPLATE_VIDEO,
         ];
-        $content = Content::create([
+        $content                               = Content::create([
             'name'            => $productFile->name,
             'description'     => (isset($productFile) && strlen($productFile->description) > 1 ? $productFile->description : null),
             'context'         => null,
+            'file'            => null,
             'order'           => $productFile->order,
             'validSince'      => $productFile->validSince,
             'metaTitle'       => null,
             'metaDescription' => null,
             'metaKeywords'    => null,
-            'tags'            => (array)optional($product->tags)->tags,
+            'tags'            => (array) optional($product->tags)->tags,
             'author_id'       => null,
-            'contenttype_id'  => $productTypeContentTypeLookupTable[$productFile->productfiletype_id],
             'template_id'     => $productTypeContentTemplateLookupTable[$productFile->productfiletype_id],
-            'contentset_id'   => $productFile->contentset_id,
+            'contenttype_id'  => $productTypeContentTypeLookupTable[$productFile->productfiletype_id],
             'isFree'          => false,
             'enable'          => $productFile->enable,
         ]);
         $content->forceFill([
             'created_at' => $productFile->created_at,
             'updated_at' => $productFile->updated_at,
-        ])->save();
+        ])
+            ->save();
+        $this->assosiateSetToContent($content, $set);
         $productFile->timestamps = false;
         $productFile->content_id = $content->id;
         $productFile->update();
         $productFile->timestamps = true;
         return $content;
-
+        
     }
-
+    
     /**
-     * @param      $content
-     * @param      $productFile
-     * @param bool $force
+     * @param        $content
+     * @param        $productFile
+     * @param  bool  $force
      */
-    private function setFileForContentBasedOnProductFile(Content &$content,Productfile $productFile, $force = false): void
+    private function setFileForContentBasedOnProductFile(Content &$content, Productfile $productFile, $force = false): void
     {
+//        $this->output->writeln('\r\n setFileForContentBasedOnProductFile');
         //make content for each productFiles
         $productTypeContentTypeLookupTable = [
             '1' => "pamphlet",
             '2' => "video",
         ];
-
+        
         if (is_null($content->file) || $force) {
             $files = collect();
-            $url = $productFile->cloudFile ?? $productFile->file;
+            $url   = $productFile->cloudFile ?? $productFile->file;
             $files->push([
                 "uuid"     => null,
                 "disk"     => "productFileSFTP",
@@ -192,25 +236,36 @@ class MigrateDataProductSet extends Migration
                 "ext"      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
             ]);
             $content->timestamps = false;
-            $content->file = $files;
+            $content->file       = $files;
             $content->update();
             $content->timestamps = true;
         }
     }
-
+    
     /**
-     * @param \App\Contentset $set
-     * @param string          $fileName
+     * @param  \App\Contentset  $set
+     * @param  string           $fileName
      */
     private function attachSetToProducts(Contentset $set, string $fileName): void
     {
+//        $this->output->writeln('attachSetToProducts');
         $products = ProductRepository::getProductsThatHaveValidProductFileByFileNameRecursively($fileName);
-        $output = new ConsoleOutput();
-        $output->writeln('Count(products):'.$products->count());
-
-        foreach ($products as $product){
-            $product->sets()->attach($set, ['order' => $set->id]);
+        $this->output->writeln('  -Count(products):'.$products->count());
+        
+        foreach ($products as $product) {
+            $product->sets()
+                ->attach($set, ['order' => $set->id]);
         }
-
+    }
+    
+    /**
+     * @param  Content|null     $content
+     * @param  Contentset|null  $set
+     */
+    private function assosiateSetToContent(?Content $content, ?Contentset $set): void
+    {
+        $content->set()
+            ->associate($set)
+            ->save();
     }
 }

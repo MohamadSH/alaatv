@@ -1,0 +1,11 @@
+.video-js .vjs-pip-trans {
+    direction: rtl;
+    text-align: right;
+}
+.video-js .vjs-pip .vjs-piptitle .vjs-pipclose {
+    float: left;
+    margin-left: 10px;
+}
+.video-js .vjs-pip .vjs-piptitle span {
+    padding-right: 10px;
+}
