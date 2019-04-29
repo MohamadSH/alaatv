@@ -18,6 +18,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\{Artisan, Cache, Config};
+use Laravel\Scout\Searchable;
 use Stevebauman\Purify\Facades\Purify;
 
 /**
@@ -126,7 +127,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     | Traits
     |--------------------------------------------------------------------------
     */
-    
+    use Searchable;
     use APIRequestCommon;
     use favorableTraits;
     use ModelTrackerTrait;
@@ -229,6 +230,76 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         ];
     }
     
+    /**
+     * Get the index name for the model.
+     *
+     * @return string
+     */
+    public function searchableAs()
+    {
+        return 'contents_index';
+    }
+    
+    public function shouldBeSearchable()
+    {
+        return $this->isPublished();
+    }
+    
+    private function isPublished()
+    {
+        return $this->isActive();
+    }
+    
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+        
+        unset($array['basePrice']);
+    
+        unset($array['user']);
+        unset($array['deleted_at']);
+        unset($array['validSince']);
+        unset($array['enable']);
+        unset($array['metaKeywords']);
+        unset($array['metaDescription']);
+        unset($array['metaTitle']);
+        unset($array['author_id']);
+        unset($array['template_id']);
+        unset($array['slug']);
+        unset($array['contentset_id']);
+        unset($array['template']);
+        unset($array['contenttype']);
+        unset($array['url']);
+        unset($array['apiUrl']);
+        unset($array['nextUrl']);
+        unset($array['nextApiUrl']);
+        unset($array['previousUrl']);
+        unset($array['previousApiUrl']);
+        unset($array['author']);
+        unset($array['file']);
+        unset($array['order']);
+        unset($array['validSince']);
+        unset($array['metaTitle']);
+        unset($array['metaDescription']);
+        unset($array['metaKeywords']);
+        unset($array['tags']);
+        unset($array['author_id']);
+        unset($array['template_id']);
+        unset($array['contenttype_id']);
+        unset($array['contentset_id']);
+        unset($array['isFree']);
+        unset($array['enable']);
+        unset($array['created_at']);
+        unset($array['updated_at']);
+        unset($array['deleted_at']);
+        unset($array['validSince']);
+        return $array;
+    }
     
     /*
     |--------------------------------------------------------------------------
@@ -1123,4 +1194,5 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         
         return false;
     }
+
 }
