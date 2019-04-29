@@ -22,3 +22,12 @@ vendor/
 laradock-alaatv
 laradock-alaatv/
 .phpunit.result.cache
+app/Services/
+public/acm/extra/fullcalendar-Jalaali/
+public/acm/video-js/custom/
+public/assets/vendors/base/images/ion-rangeslider/
+resources/theme/angular/dist/demo/default/src/app/content/pages/snippets/errors/
+resources/theme/classic/demos/default/assets/demo/default/
+resources/theme/default/src/js/demo/demo11/custom/crud/datatables/advanced/
+resources/theme/default/src/js/demo/demo11/custom/crud/datatables/data-sources/
+resources/theme/default/src/js/demo/demo11/custom/crud/datatables/extensions/

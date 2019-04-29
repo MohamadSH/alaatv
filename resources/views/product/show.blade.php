@@ -1,7 +1,6 @@
 @extends('app')
 @section('page-css')
-    <link href="/acm/videojs/skins/nuevo/videojs.min.css" rel="stylesheet">
-    <link href="{{ mix('/css/product-show/product-show.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ mix('/css/product-show.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 @section('pageBar')
     <nav aria-label="breadcrumb">
@@ -330,11 +329,9 @@
                                                            video-js
                                                            vjs-fluid
                                                            vjs-default-skin
-                                                           vjs-big-play-centered
-                                                           a--full-width"
+                                                           vjs-big-play-centered"
                                                            controls preload="auto"
-                                                           poster = 'https://cdn.sanatisharif.ir/media/204/240p/204054ssnv.jpg'
-                                                    >
+                                                           poster = 'https://cdn.sanatisharif.ir/media/204/240p/204054ssnv.jpg'>
 
                                                         <source
                                                                 src="{{$product->introVideo}}"
@@ -473,10 +470,6 @@
     </div>
 @endsection
 @section('page-js')
-    <script src="{{ asset('/acm/videojs/video.min.js') }}"></script>
-    <script src="{{ asset('/acm/videojs/nuevo.min.js') }}"></script>
-    {{--<script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>--}}
-    {{--<script src='https://vjs.zencdn.net/7.5.4/video.js'></script>--}}
     <script src="{{ mix('/js/product-show.js') }}"></script>
     <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-product-show.js') }}"></script>
 @endsection

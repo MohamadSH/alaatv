@@ -555,7 +555,7 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
-        return $order->orderproducts;
+        return $order;
     }
 
     public function edit($order)
