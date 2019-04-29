@@ -23,12 +23,7 @@ class AttributeController extends Controller
         $this->middleware('permission:'.Config::get('constants.REMOVE_ATTRIBUTE_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:'.Config::get('constants.SHOW_ATTRIBUTE_ACCESS'), ['only' => 'edit']);
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $attributes = Attribute::all()
@@ -36,14 +31,7 @@ class AttributeController extends Controller
         
         return view('attribute.index', compact('attributes'));
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(InsertAttributeRequest $request)
     {
         $attribute = new Attribute();
@@ -59,14 +47,7 @@ class AttributeController extends Controller
             return $this->response->setStatusCode(503);
         }
     }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  Attribute  $attribute
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(Attribute $attribute)
     {
         $attributecontrols = Attributecontrol::pluck('name', 'id')
@@ -77,15 +58,7 @@ class AttributeController extends Controller
         
         return view('attribute.edit', compact('attribute', 'attributecontrols', 'attributevalues'));
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  EditAttributeRequest  $request
-     * @param  Attribute             $attribute
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(EditAttributeRequest $request, Attribute $attribute)
     {
         $attribute->fill($request->all());
@@ -102,15 +75,7 @@ class AttributeController extends Controller
         
         return redirect()->back();
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Attribute  $attribute
-     *
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
-     */
+
     public function destroy(Attribute $attribute)
     {
         if ($attribute->delete()) {

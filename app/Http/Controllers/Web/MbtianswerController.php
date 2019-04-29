@@ -28,12 +28,7 @@ class MbtianswerController extends Controller
         $this->response          = new Response();
         $this->numberOfQuestions = Config::get('constants.MBTI_NUMBER_OF_QUESTIONS');
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $mbtiAnswers = Mbtianswer::all()
@@ -42,12 +37,7 @@ class MbtianswerController extends Controller
         //       dd($mbtiAnswers->first()->getOrdooName());
         return view("mbti.index", compact("mbtiAnswers"));
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         $action = Input::get("action");
@@ -213,14 +203,7 @@ class MbtianswerController extends Controller
             return true;
         }
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         if ($this->isAuthorized() && !$this->userHasTakenMBTI(Auth::user())) {
@@ -249,57 +232,13 @@ class MbtianswerController extends Controller
             return $this->response->setStatusCode(403);
         }
     }
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  \app\Mbtianswer  $mbtianswer
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(Mbtianswer $mbtianswer)
     {
         $answers = json_decode($mbtianswer->answers);
         dd(count($answers));
     }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int                       $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-    
+
     /**
      * Display a description about MBTI and a link to begin the exam
      *

@@ -9,14 +9,6 @@ use Illuminate\Http\Response;
 
 class ContentController extends Controller
 {
-    /**
-     * Display the specified resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Content              $content
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function show(Request $request, Content $content)
     {
         if (!$content->isActive()) {

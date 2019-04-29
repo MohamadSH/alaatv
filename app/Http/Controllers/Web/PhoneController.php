@@ -22,14 +22,7 @@ class PhoneController extends Controller
         
         $this->response = new Response();
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(InsertPhoneRequest $request)
     {
         $phone = new Phone();
@@ -45,15 +38,7 @@ class PhoneController extends Controller
             return $this->response->setStatusCode(503);
         }
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int                       $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(EditPhoneRequest $request, $phone)
     {
         $phone->fill($request->all());
@@ -70,14 +55,7 @@ class PhoneController extends Controller
         
         return redirect()->back();
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
         return $id;

@@ -25,14 +25,7 @@ class DonateController extends Controller
     {
         $this->setting = $setting->setting;
     }
-    
-    /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function __invoke(Request $request)
     {
         $url   = $request->url();
@@ -47,10 +40,7 @@ class DonateController extends Controller
         
         return $this->makeDonatePage();
     }
-    
-    /**
-     * @return \Illuminate\Http\Response
-     */
+
     private function makeDonatePage()
     {
         /** INITIAL VALUES    */

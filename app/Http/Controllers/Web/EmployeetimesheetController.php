@@ -41,12 +41,7 @@ class EmployeetimesheetController extends Controller
             ],
         ]);
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         /** @var Employeetimesheet $employeeTimeSheets */
@@ -92,12 +87,7 @@ class EmployeetimesheetController extends Controller
         
         return response(json_encode($result, JSON_UNESCAPED_UNICODE), 200)->header('Content-Type', 'application/json');
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         /** @var User $user */
@@ -140,14 +130,7 @@ class EmployeetimesheetController extends Controller
             compact("employeetimesheet", "employeeSchedule", "isTimeSheetExtra", "toDay", "employees", "formVisible",
                 "workdayTypes"));
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  InsertEmployeeTimeSheet  $request
-     *
-     * @return bool|\Illuminate\Http\RedirectResponse
-     */
+
     public function store(InsertEmployeeTimeSheet $request)
     {
         /** @var User $user */
@@ -222,24 +205,7 @@ class EmployeetimesheetController extends Controller
             }
         }
     }
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Employeetimesheet  $employeetimesheet
-     */
-    public function show(Employeetimesheet $employeetimesheet)
-    {
-        //
-    }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Employeetimesheet  $employeetimesheet
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(Employeetimesheet $employeetimesheet)
     {
         if ($employeetimesheet->workdaytype_id == config("constants.WORKDAY_ID_EXTRA")) {
@@ -253,15 +219,7 @@ class EmployeetimesheetController extends Controller
         
         return view("employeeTimeSheet.edit", compact("employeetimesheet", "isExtra"));
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Employeetimesheet    $employeeTimeSheet
-     *
-     * @return bool|\Illuminate\Http\RedirectResponse
-     */
+
     public function update(Request $request, Employeetimesheet $employeeTimeSheet)
     {
         /** @var User $user */
@@ -324,16 +282,7 @@ class EmployeetimesheetController extends Controller
             }
         }
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Employeetimesheet  $employeetimesheet
-     * @param  Response                $response
-     *
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
-     */
+
     public function destroy(Employeetimesheet $employeetimesheet, Response $response)
     {
         if ($employeetimesheet->delete()) {

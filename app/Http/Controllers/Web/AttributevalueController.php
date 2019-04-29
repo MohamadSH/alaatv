@@ -23,14 +23,7 @@ class AttributevalueController extends Controller
         
         $this->response = new Response();
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(InsertAttributevalueRequest $request)
     {
         $attributevalue = new Attributevalue();
@@ -45,29 +38,14 @@ class AttributevalueController extends Controller
         
         return redirect()->back();
     }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(Attributevalue $attributevalue)
     {
         $attribute = Attribute::findOrFail($attributevalue->attribute_id);
         
         return view('attributevalue.edit', compact('attribute', 'attributevalue'));
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int                       $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(EditAttributevalueRequest $request, Attributevalue $attributevalue)
     {
         $attribute = Attribute::findOrFail($attributevalue->attribute_id);
@@ -81,14 +59,7 @@ class AttributevalueController extends Controller
         
         return redirect(action('AttributeController@edit', $attribute));
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(Attributevalue $attributevalue)
     {
         if ($attributevalue->delete()) {

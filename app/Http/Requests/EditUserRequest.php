@@ -53,12 +53,7 @@ class EditUserRequest extends FormRequest
         
         return $authorized;
     }
-    
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
+
     public function rules()
     {
         $userId = $this->request->get('id');

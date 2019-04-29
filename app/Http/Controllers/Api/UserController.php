@@ -84,16 +84,7 @@ class UserController extends Controller
         
         return response($response, Response::HTTP_OK);
     }
-    
-    /**
-     * Display the specified resource.
-     *
-     *
-     * @param  User     $user
-     * @param  Request  $request
-     *
-     * @return Response
-     */
+
     public function show(Request $request, User $user)
     {
         $authenticatedUser = $request->user('api');
