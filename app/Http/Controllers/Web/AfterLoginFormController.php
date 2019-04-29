@@ -31,11 +31,6 @@ class AfterLoginFormController extends Controller
         }
     }
 
-    public function create()
-    {
-        //
-    }
-
     public function store(Request $request)
     {
         $afterLoginFormField = new Afterloginformcontrol();
