@@ -147,6 +147,21 @@ class BlocksTableSeeder extends Seeder
                                                    ]));
         $data = [
             [
+                'id'         => 10,
+                'title'      => 'پروژه تفتان آلاء',
+                'tags'       => json_encode([
+                    "محصول",
+                    "نظام_آموزشی_جدید",
+                    "کنکور",
+                ], JSON_UNESCAPED_UNICODE),
+                'order'      => 1,
+                'enable'     => 1,
+                'type'       => 2,
+                'created_at' => \Carbon\Carbon::now(),
+                'class'      => 'konkoor2',
+                
+            ],
+            [
                 'id'         => 6,
                 'title'      => 'کنکور نظام جدید',
                 'tags'       => json_encode([

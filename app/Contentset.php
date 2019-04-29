@@ -136,16 +136,27 @@ class Contentset extends BaseModel implements Taggable
     
     public function getProducts($onlyActiveProduct = true): ProductCollection
     {
-        $key = 'products-of-set:'.$this->id.'onlyActiveProduct-'.$onlyActiveProduct;
+        $key = 'products-of-set:'.$this->cacheKey().'onlyActiveProduct-'.$onlyActiveProduct;
         return Cache::tags(['set', 'product'])
             ->remember($key, config('constants.CACHE_60'), function () use ($onlyActiveProduct) {
-                return ($onlyActiveProduct ? $this->products()
-                    ->active()
-                    ->get() : $this->products()
-                    ->get()) ?: new ProductCollection();
+                return self::getProductOfSet($onlyActiveProduct, $this);
             });
-        
     }
+    /**
+     * @param  bool        $onlyActiveProduct
+     * @param  Contentset  $set
+     *
+     * @return ProductCollection
+     */
+    public static function getProductOfSet(bool $onlyActiveProduct, Contentset $set): ProductCollection
+    {
+        return ($onlyActiveProduct ? $set->products()
+            ->active()
+            ->get() : $set->products()
+            ->get()) ?: new
+        ProductCollection();
+    }
+    
     
     public function products()
     {
@@ -166,7 +177,7 @@ class Contentset extends BaseModel implements Taggable
     */
     
     //Old way ( before migrate)
-
+    
     public function getShortNameAttribute($value)
     {
         return $this->small_name;
@@ -174,7 +185,7 @@ class Contentset extends BaseModel implements Taggable
     
     
     //new way ( after migrate )
-
+    
     public function getTagsAttribute($value)
     {
         return json_decode($value);

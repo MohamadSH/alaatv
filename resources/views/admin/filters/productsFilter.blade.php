@@ -11,12 +11,12 @@
     @endif
     @if(isset($withCheckbox))
         <div class = "col-md-11" @if(isset($withCheckbox) && $withCheckbox) style = "padding-right: 0px" @endif>
-            @else
-                <div class = "col">
-                    @endif
+    @else
+        <div class = "col">
+    @endif
                     @if(isset($listType))
                         @if(strcmp($listType , "configurables") == 0)
-                            <select class = "mt-multiselect btn btn-default a--full-width" multiple = "multiple" data-label = "left" data-width = "100%" data-filter = "true" data-height = "200" id = "{{isset($id) ? $id : "products"}}" name = "{{isset($name) ? $name : 'products[]'}}" @if(isset($withCheckbox) && $withCheckbox) disabled @endiftitle = "{{isset($title) ? $title : 'انتخاب محصول دیده شده'}}">
+                            <select class = "mt-multiselect btn btn-default a--full-width" multiple = "multiple" data-label = "left" data-width = "100%" data-filter = "true" data-height = "200" id = "{{isset($id) ? $id : "products"}}" name = "{{isset($name) ? $name : 'products[]'}}" @if(isset($withCheckbox) && $withCheckbox) disabled @endif title = "{{isset($title) ? $title : 'انتخاب محصول دیده شده'}}">
                                 @foreach($products as $product)
                                     <option value = "{{$product->id}}">{{$product->name}}</option>
                                 @endforeach
@@ -73,7 +73,7 @@
                             </select>
                         @endif
                     @else
-                        <select class = "mt-multiselect btn btn-default a--full-width" multiple = "multiple" data-label = "left" data-width = "100%" data-filter = "true" data-height = "200" id = "{{isset($id) ? $id : "products"}}" name = "{{isset($name) ? $name : 'products[]'}}" @if(isset($withCheckbox) && $withCheckbox) disabled @endiftitle = "{{isset($title) ? $title : 'انتخاب محصول سفارش داده شده'}}">
+                        <select class = "mt-multiselect btn btn-default a--full-width" multiple = "multiple" data-label = "left" data-width = "100%" data-filter = "true" data-height = "200" id = "{{isset($id) ? $id : "products"}}" name = "{{isset($name) ? $name : 'products[]'}}" @if(isset($withCheckbox) && $withCheckbox) disabled @endif title = "{{isset($title) ? $title : 'انتخاب محصول سفارش داده شده'}}">
                             @if(isset($withoutOrder) && $withoutOrder)
                                 <option value = "-1" class = "m--font-danger">بدون سفارش ها</option>
                             @endif
@@ -104,5 +104,5 @@
                         </select>
                     @endif
 
-                </div>
         </div>
+    </div>
