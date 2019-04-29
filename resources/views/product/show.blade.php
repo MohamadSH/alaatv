@@ -1,6 +1,13 @@
 @extends('app')
 @section('page-css')
-    <link href="/acm/videojs/skins/nuevo/videojs.min.css" rel="stylesheet">
+{{--    <link href="/acm/videojs/skins/nuevo/videojs.min.css" rel="stylesheet">--}}
+    
+    <link href="/acm/videojs/skins/nuevo/videojs.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/videojs/skins/nuevo/videojs.rtl.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/videojs/plugins/pip/videojs.pip.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/videojs/plugins/pip/videojs.pip.rtl.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/videojs/plugins/seek-to-point.css" rel="stylesheet" type="text/css"/>
+
     <link href="{{ mix('/css/product-show/product-show.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 @section('pageBar')
@@ -37,8 +44,8 @@
                     <div class="m-section m-section--last">
                         <div class="m-section__content">
                             <!--begin::Preview-->
-                            <div class="row">
-                                <div class="col-lg-3">
+                            <div class="row productDetailesColumns">
+                                <div class="col-lg-3 column column1">
                                     <div class="m--margin-bottom-45">
                                         <img src="{{ route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]) }}" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid m--marginless"/>
                                         @if(isset($product->bons->first()->pivot->bonPlus))
@@ -71,7 +78,7 @@
                                     {{--@endif--}}
 
                                 </div>
-                                <div class="col">
+                                <div class="col column column2">
 
                                     {{--ویژگی ها و دارای --}}
                                     <div class="row">
@@ -316,7 +323,7 @@
                                     @endif
 
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 column column3">
 
                                     <div class="m-portlet m-portlet--bordered-semi m-portlet--rounded-force m--margin-bottom-45 videoPlayerPortlet @if(!isset($product->introVideo)) m--hide @endif">
                                         <div class="m-portlet__head m-portlet__head--fit"></div>
@@ -330,11 +337,9 @@
                                                            video-js
                                                            vjs-fluid
                                                            vjs-default-skin
-                                                           vjs-big-play-centered
-                                                           a--full-width"
+                                                           vjs-big-play-centered"
                                                            controls preload="auto"
-                                                           poster = 'https://cdn.sanatisharif.ir/media/204/240p/204054ssnv.jpg'
-                                                    >
+                                                           poster = 'https://cdn.sanatisharif.ir/media/204/240p/204054ssnv.jpg'>
 
                                                         <source
                                                                 src="{{$product->introVideo}}"
@@ -412,6 +417,7 @@
                                         {{--@include('product.partials.pamphlet')--}}
                                     {{--@endif--}}
                                 </div>
+                                <div class="clearfix clearfixColumn d-none"></div>
                             </div>
                             <!--end::Preview-->
                         </div>
@@ -473,8 +479,17 @@
     </div>
 @endsection
 @section('page-js')
-    <script src="{{ asset('/acm/videojs/video.min.js') }}"></script>
-    <script src="{{ asset('/acm/videojs/nuevo.min.js') }}"></script>
+    
+    <script type="text/javascript" src="/acm/videojs/video.min.js"></script>
+    <script type="text/javascript" src="/acm/videojs/plugins/pip/videojs.pip.min.js"></script>
+    <script type="text/javascript" src="/acm/videojs/nuevo.min.js"></script>
+    <script type="text/javascript" src="/acm/videojs/plugins/videojs.p2p.min.js"></script>
+    <script type="text/javascript" src="/acm/videojs/plugins/videojs.hotkeys.min.js"></script>
+    <script type="text/javascript" src="/acm/videojs/plugins/seek-to-point.js"></script>
+    
+{{--    <script src="{{ asset('/acm/videojs/video.min.js') }}"></script>--}}
+{{--    <script src="{{ asset('/acm/videojs/nuevo.min.js') }}"></script>--}}
+    
     {{--<script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>--}}
     {{--<script src='https://vjs.zencdn.net/7.5.4/video.js'></script>--}}
     <script src="{{ mix('/js/product-show.js') }}"></script>

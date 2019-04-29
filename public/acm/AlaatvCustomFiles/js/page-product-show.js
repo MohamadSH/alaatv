@@ -235,11 +235,10 @@ var ProductShowPage = function () {
         //     if ($(this).val())
         //         return $(this).val();
         // }).get();
-        var productsState = $('input[type=checkbox][name="products[]"]:checked').map(function(){
+        return $('input[type=checkbox][name="products[]"]:checked').map(function () {
             if ($(this).val())
                 return $(this).val();
         }).get();
-        return productsState;
     }
 
     return {
@@ -273,21 +272,87 @@ jQuery(document).ready(function() {
 
     let childLevel = ProductSwitch.init();
 
-    var player = null;
-
     var player = videojs('videoPlayer');
     player.nuevo({
-        // plugin options here
+        // logotitle:"آموزش مجازی آلاء",
+        // logo:"https://sanatisharif.ir/image/11/135/67/logo-150x22_20180430222256.png",
         logocontrolbar: '/acm/extra/Alaa-logo.gif',
-        logourl: '//sanatisharif.ir',
-
-        videoInfo: true,
-        relatedMenu: true,
-        zoomMenu: true,
-        mirrorButton: true,
+        // logoposition:"RT", // logo position (LT - top left, RT - top right)
+        logourl:'//sanatisharif.ir',
         // related: related_videos,
-        // endAction: 'related',
+        // shareUrl:"https://www.nuevolab.com/videojs/",
+        // shareTitle: "Nuevo plugin for VideoJs Player",
+        // slideImage:"//cdn.nuevolab.com/media/sprite.jpg",
+
+        // videoInfo: true,
+        // infoSize: 18,
+        // infoIcon: "https://sanatisharif.ir/image/11/150/150/favicon_32_20180819090313.png",
+
+        closeallow:false,
+        mute:true,
+        rateMenu:true,
+        resume:true, // (false) enable/disable resume option to start video playback from last time position it was left
+        theaterButton: true,
+        timetooltip: true,
+        mousedisplay: true,
+        endAction: 'related', // (undefined) If defined (share/related) either sharing panel or related panel will display when video ends.
+        container: "inline",
+
+
+        // limit: 20,
+        // limiturl: "http://localdev.alaatv.com/videojs/examples/basic.html",
+        // limitimage : "//cdn.nuevolab.com/media/limit.png", // limitimage or limitmessage
+        // limitmessage: "اگه می خوای بقیه اش رو ببینی باید پول بدی :)",
+
+
+        // overlay: "//domain.com/overlay.html" //(undefined) - overlay URL to display html on each pause event example: https://www.nuevolab.com/videojs/tryit/overlay
+
     });
+
+    player.hotkeys({
+        volumeStep: 0.1,
+        seekStep: 5,
+        alwaysCaptureHotkeys: true
+    });
+
+    player.pic2pic();
+
+    player.on('mode',function(event,mode) {
+        console.log('mode: ', mode);
+        let width = '100%';
+        if(mode=='large') {
+            $('.productDetailesColumns .column1').addClass('order-2');
+            $('.productDetailesColumns .column2').addClass('order-3');
+            $('.productDetailesColumns .column3').addClass('order-1');
+            $('.productDetailesColumns .column3').removeClass('col-lg-4');
+            $('.productDetailesColumns .column3').addClass('col-lg-9');
+            $('.productDetailesColumns .clearfixColumn').removeClass('d-none');
+            width = '70%';
+        } else {
+            $('.productDetailesColumns .column1').removeClass('order-2');
+            $('.productDetailesColumns .column2').removeClass('order-3');
+            $('.productDetailesColumns .column3').removeClass('order-1');
+            $('.productDetailesColumns .column3').removeClass('col-lg-9');
+            $('.productDetailesColumns .column3').addClass('col-lg-4');
+            $('.productDetailesColumns .clearfixColumn').addClass('d-none');
+        }
+
+        // document.querySelector("#videoPlayer").style.width=width;
+    });
+
+    // var player = videojs('videoPlayer');
+    // player.nuevo({
+    //     // plugin options here
+    //     logocontrolbar: '/acm/extra/Alaa-logo.gif',
+    //     logourl: '//sanatisharif.ir',
+    //
+    //     videoInfo: true,
+    //     relatedMenu: true,
+    //     zoomMenu: true,
+    //     mirrorButton: true,
+    //     // related: related_videos,
+    //     // endAction: 'related',
+    // });
 
     let callBack = function () {
         let productsState = ProductShowPage.getProductSelectValues();
