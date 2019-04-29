@@ -1,6 +1,6 @@
 <?php
 
-namespace App\PaymentModule;
+namespace App\PaymentModule\Gateways;
 
 interface OnlinePaymentVerificationResponseInterface
 {

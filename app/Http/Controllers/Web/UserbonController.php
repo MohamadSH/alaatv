@@ -29,12 +29,7 @@ class UserbonController extends Controller
         
         $this->response = new Response();
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $userbons = Userbon::OrderBy('created_at', 'Desc');
@@ -107,14 +102,7 @@ class UserbonController extends Controller
         
         return view('userBon.index', compact('userbons'));
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \app\Http\Requests\InsertUserBonRequest  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(InsertUserBonRequest $request)
     {
         $userbon = new Userbon();
@@ -126,14 +114,7 @@ class UserbonController extends Controller
             return $this->response->setStatusCode(503);
         }
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($userbon)
     {
         $userbon->delete();

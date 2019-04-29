@@ -2,7 +2,7 @@
 
 namespace App\PaymentModule\Gateways\Zarinpal;
 
-use App\PaymentModule\OnlinePaymentVerificationResponseInterface;
+use App\PaymentModule\Gateways\OnlinePaymentVerificationResponseInterface;
 use Carbon\Carbon;
 
 class VerificationResponse implements OnlinePaymentVerificationResponseInterface

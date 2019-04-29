@@ -7,14 +7,6 @@ use App\Http\Requests\Request;
 
 class AppVersionController extends Controller
 {
-    /**
-     * Display the specified resource.
-     *
-     *
-     * @param  \App\Http\Requests\Request  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function show(Request $request)
     {
         return response()->json([

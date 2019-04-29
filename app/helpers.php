@@ -1,8 +1,8 @@
 <?php
 if (!function_exists('nullable')) {
-    function nullable($result): \App\Classes\Nullable
+    function nullable($result, $data = []): \App\Classes\Nullable
     {
-        return new \App\Classes\Nullable($result);
+        return new \App\Classes\Nullable($result, $data);
     }
 }
 

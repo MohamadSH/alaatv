@@ -41,17 +41,7 @@ class ProductfileController extends Controller
         $this->response = new Response();
     }
     
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-    
-    /**
+/**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -89,14 +79,7 @@ class ProductfileController extends Controller
         return view("product.productFile.create",
             compact("product", "products", "productFileTypes", "defaultProductFileOrders"));
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\InsertProductfileRequest  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(InsertProductfileRequest $request)
     {
         $productFile = new Productfile();
@@ -172,26 +155,7 @@ class ProductfileController extends Controller
         
         return redirect()->back();
     }
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($productFile)
     {
         $validDate        = Carbon::parse($productFile->validSince)
@@ -205,15 +169,7 @@ class ProductfileController extends Controller
         
         return view("product.productFile.edit", compact("productFile", "validDate", "validTime", "productFileTypes"));
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\EditProductfileRequest  $request
-     * @param  int                                        $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(EditProductfileRequest $request, $productFile)
     {
         $oldFile = $productFile->file;
@@ -294,17 +250,5 @@ class ProductfileController extends Controller
         }
         
         return redirect()->back();
-    }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

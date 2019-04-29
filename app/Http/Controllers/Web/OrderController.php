@@ -83,12 +83,7 @@ class OrderController extends Controller
         $this->middleware('RemoveOrderCoupon', ['only' => ['removeCoupon'],]);
         $this->setting = $setting->setting;
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $user = Auth::user();
@@ -509,12 +504,7 @@ class OrderController extends Controller
         ];
         return response(json_encode($result, JSON_UNESCAPED_UNICODE), 200)->header('Content-Type', 'application/json');
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         $customer_id = Input::get("customer_id");
@@ -550,14 +540,7 @@ class OrderController extends Controller
         
         return redirect(action("Web\ProductController@search"));
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *
-     * @return \App\Order|null
-     */
+
     public function store(Request $request)
     {
         $order = new Order();
@@ -569,27 +552,12 @@ class OrderController extends Controller
             return null;
         }
     }
-    
-    /**
-     *
-     * Display the specified resource.
-     *
-     * @param  Order  $order
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(Order $order)
     {
         return $order;
     }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($order)
     {
         $orderstatuses   = Orderstatus::pluck('displayName', 'id')
@@ -802,14 +770,7 @@ class OrderController extends Controller
         
         return redirect()->back();
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($order)
     {
         //        if ($order->delete()) session()->flash('success', 'سفارش با موفقیت اصلاح شد');

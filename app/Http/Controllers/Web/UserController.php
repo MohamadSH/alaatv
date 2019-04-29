@@ -62,12 +62,6 @@ use stdClass;
 
 class UserController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Traits
-    |--------------------------------------------------------------------------
-    */
-    
     use ProductCommon;
     use DateTrait;
     use RequestCommon;
@@ -92,11 +86,7 @@ class UserController extends Controller
     
     protected $setting;
     
-    /*
-    |--------------------------------------------------------------------------
-    | Private methods
-    |--------------------------------------------------------------------------
-    */
+
     
     public function __construct(Agent $agent, Websitesetting $setting)
     {
@@ -148,14 +138,7 @@ class UserController extends Controller
         
         return 0;
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @param  UserIndexRequest  $request
-     *
-     * @return Response
-     */
+
     public function index(UserIndexRequest $request)
     {
         //======================================================================
@@ -751,14 +734,7 @@ class UserController extends Controller
     {
         //
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \app\Http\Requests\InsertUserRequest  $request
-     *
-     * @return Response
-     */
+
     public function store(InsertUserRequest $request)
     {
         try {
@@ -865,12 +841,6 @@ class UserController extends Controller
         return $response;
     }
     
-    /*
-    |--------------------------------------------------------------------------
-    | Public methods
-    |--------------------------------------------------------------------------
-    */
-    
     /**
      * @param  array   $inputData
      * @param  User    $authenticatedUser
@@ -908,16 +878,7 @@ class UserController extends Controller
             $this->storePhotoOfUser($user, $file);
         }
     }
-    
-    /**
-     * Display the specified resource.
-     *
-     *
-     * @param  User     $user
-     * @param  Request  $request
-     *
-     * @return Response
-     */
+
     public function show(Request $request, User $user = null)
     {
         if ($user === null) {
@@ -1386,14 +1347,7 @@ class UserController extends Controller
             $questionsData->put($question->id, $provinceCityArray);
         }
     }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  User  $user
-     *
-     * @return Response
-     */
+
     public function edit($user)
     {
         $majors       = Major::pluck('name', 'id')
@@ -1409,15 +1363,7 @@ class UserController extends Controller
         
         return view("user.edit", compact("user", "majors", "userStatuses", "roles", "userRoles", "genders"));
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  User  $user
-     *
-     * @return Response
-     * @throws \Exception
-     */
+
     public function destroy($user)
     {
         $user->delete();

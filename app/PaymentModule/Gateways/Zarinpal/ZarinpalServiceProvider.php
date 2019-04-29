@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers\Gateways;
+namespace App\PaymentModule\Gateways\Zarinpal;
 
 use Illuminate\Support\ServiceProvider;
 use Zarinpal\Zarinpal;
@@ -9,6 +9,8 @@ class ZarinpalServiceProvider extends ServiceProvider
 {
     public function register()
     {
+        $this->mergeConfigFrom(__DIR__.'/config.php', 'Zarinpal');
+
         $this->app->singleton('zarinpal.client', function () {
             return $this->initialize();
         });
@@ -39,7 +41,7 @@ class ZarinpalServiceProvider extends ServiceProvider
      */
     private function getMerchantNumber()
     {
-        return config('Zarinpal.merchantID');
+        return config('Zarinpal::merchantID');
     }
     
     /**
@@ -47,7 +49,7 @@ class ZarinpalServiceProvider extends ServiceProvider
      */
     private function isZarinpalSandboxOn()
     {
-        return config('app.env', 'deployment') != 'deployment' && config('Zarinpal.Sandbox', false);
+        return config('app.env', 'deployment') != 'deployment' && config('Zarinpal::Sandbox', false);
     }
     
     /**
@@ -55,6 +57,11 @@ class ZarinpalServiceProvider extends ServiceProvider
      */
     private function isZarinGateOn()
     {
-        return config('Zarinpal.ZarinGate', false);
+        return config('Zarinpal::ZarinGate', false);
+    }
+
+    public function boot()
+    {
+
     }
 }

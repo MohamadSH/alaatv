@@ -1,6 +1,6 @@
 <?php
 
-namespace App\PaymentModule\Gateways\Zarinpal;
+namespace App\PaymentModule\Gateways;
 
 interface OnlinePaymentRedirectionUriInterface
 {

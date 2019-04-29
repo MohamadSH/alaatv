@@ -15,14 +15,7 @@ class WalletController extends Controller
     {
         $this->response = new Response();
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         $wallet = new Wallet();
@@ -43,15 +36,7 @@ class WalletController extends Controller
             }
         }
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Wallet               $wallet
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, Wallet $wallet)
     {
         $wallet->fill($request->all());

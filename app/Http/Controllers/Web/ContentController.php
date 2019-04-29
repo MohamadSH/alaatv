@@ -75,11 +75,7 @@ class ContentController extends Controller
      */
     private $productSearch;
     
-    /*
-    |--------------------------------------------------------------------------
-    | Private methods
-    |--------------------------------------------------------------------------
-    */
+
     
     public function __construct(
         Agent $agent,
@@ -204,12 +200,7 @@ class ContentController extends Controller
         
         return view("content.embed", compact('video', 'contentsWithSameSet', 'contentSetName'));
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         $rootContentTypes = Contenttype::getRootContentType();
@@ -220,12 +211,7 @@ class ContentController extends Controller
         
         return view("content.create2", compact("rootContentTypes", "contentsets", "authors"));
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create2()
     {
         $contenttypes = Contenttype::getRootContentType()
@@ -233,16 +219,7 @@ class ContentController extends Controller
         
         return view("content.create3", compact("contenttypes"));
     }
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  Request       $request
-     * @param  \App\Content  $content
-     *
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
-     */
+
     public function show(Request $request, Content $content)
     {
         
@@ -284,9 +261,8 @@ class ContentController extends Controller
         $seenCount = $content->pageView;
         
         $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
-        
         if (request()->expectsJson()) {
-            return request()->json($content, Response::HTTP_OK);
+            return response()->json($content, Response::HTTP_OK);
         }
         
         return view("content.show",
@@ -349,20 +325,7 @@ class ContentController extends Controller
             });
         
     }
-    
-    /*
-    |--------------------------------------------------------------------------
-    | Public methods
-    |--------------------------------------------------------------------------
-    */
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Content  $content
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($content)
     {
         $validSinceTime = optional($content->validSince)->format('H:i:s');
@@ -378,14 +341,7 @@ class ContentController extends Controller
         
         return view("content.edit", $result);
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\InsertContentRequest  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(InsertContentRequest $request)
     {
         //TODO:// validate Data Format in Requests
@@ -650,15 +606,7 @@ class ContentController extends Controller
             "ext"      => pathinfo(parse_url($thumbnailUrl)['path'], PATHINFO_EXTENSION),
         ];
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\EditContentRequest  $request
-     * @param  \App\Content                           $content
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(EditContentRequest $request, $content)
     {
         $this->fillContentFromRequest($request, $content);
@@ -673,15 +621,7 @@ class ContentController extends Controller
         
         return redirect()->back();
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Content  $content
-     *
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
-     */
+
     public function destroy($content)
     {
         //TODO:// remove Tags From Redis, ( Do it in ContentObserver)

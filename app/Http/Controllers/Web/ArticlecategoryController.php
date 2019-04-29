@@ -28,36 +28,14 @@ class ArticlecategoryController extends Controller
         
         $this->response = new Response();
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $articlecategories = Articlecategory::all();
         
         return view('articlecategory.index', compact('articlecategories'));
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(InsertArticlecategoryRequest $request)
     {
         $articlecategory = new Articlecategory();
@@ -76,39 +54,12 @@ class ArticlecategoryController extends Controller
             return $this->response->setStatusCode(503);
         }
     }
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($articlecategory)
     {
         return view('articlecategory.edit', compact('articlecategory'));
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int                       $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(EditArticlecategoryRequest $request, $articlecategory)
     {
         if (isset($request->enable)) {
@@ -128,14 +79,7 @@ class ArticlecategoryController extends Controller
         
         return redirect()->back();
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($articlecategory)
     {
         $categoryId = $articlecategory->id;

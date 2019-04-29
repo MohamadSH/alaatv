@@ -292,7 +292,7 @@ jQuery(document).ready(function() {
         mute:true,
         rateMenu:true,
         resume:true, // (false) enable/disable resume option to start video playback from last time position it was left
-        theaterButton: true,
+        // theaterButton: true,
         timetooltip: true,
         mousedisplay: true,
         endAction: 'related', // (undefined) If defined (share/related) either sharing panel or related panel will display when video ends.
@@ -317,41 +317,24 @@ jQuery(document).ready(function() {
 
     player.pic2pic();
 
-    player.on('mode',function(event,mode) {
-        console.log('mode: ', mode);
-        let width = '100%';
-        if(mode=='large') {
-            $('.productDetailesColumns .column1').addClass('order-2');
-            $('.productDetailesColumns .column2').addClass('order-3');
-            $('.productDetailesColumns .column3').addClass('order-1');
-            $('.productDetailesColumns .column3').removeClass('col-lg-4');
-            $('.productDetailesColumns .column3').addClass('col-lg-9');
-            $('.productDetailesColumns .clearfixColumn').removeClass('d-none');
-            width = '70%';
-        } else {
-            $('.productDetailesColumns .column1').removeClass('order-2');
-            $('.productDetailesColumns .column2').removeClass('order-3');
-            $('.productDetailesColumns .column3').removeClass('order-1');
-            $('.productDetailesColumns .column3').removeClass('col-lg-9');
-            $('.productDetailesColumns .column3').addClass('col-lg-4');
-            $('.productDetailesColumns .clearfixColumn').addClass('d-none');
-        }
-
-        // document.querySelector("#videoPlayer").style.width=width;
-    });
-
-    // var player = videojs('videoPlayer');
-    // player.nuevo({
-    //     // plugin options here
-    //     logocontrolbar: '/acm/extra/Alaa-logo.gif',
-    //     logourl: '//sanatisharif.ir',
-    //
-    //     videoInfo: true,
-    //     relatedMenu: true,
-    //     zoomMenu: true,
-    //     mirrorButton: true,
-    //     // related: related_videos,
-    //     // endAction: 'related',
+    // player.on('mode',function(event,mode) {
+    //     console.log('mode: ', mode);
+    //     let width = '100%';
+    //     if(mode=='large') {
+    //         // $('.productDetailesColumns .column1').addClass('order-2');
+    //         // $('.productDetailesColumns .column2').addClass('order-3');
+    //         $('.productDetailesColumns .column3').addClass('order-first');
+    //         $('.productDetailesColumns .column3').removeClass('col-lg-4');
+    //         $('.productDetailesColumns .column3').addClass('col-lg-12');
+    //         $('.productDetailesColumns .column3 .videoPlayerPortlet').css({'width':'60%'});
+    //     } else {
+    //         // $('.productDetailesColumns .column1').removeClass('order-2');
+    //         // $('.productDetailesColumns .column2').removeClass('order-3');
+    //         $('.productDetailesColumns .column3').removeClass('order-first');
+    //         $('.productDetailesColumns .column3').removeClass('col-lg-12');
+    //         $('.productDetailesColumns .column3').addClass('col-lg-4');
+    //         $('.productDetailesColumns .column3 .videoPlayerPortlet').css({'width':'100%'});
+    //     }
     // });
 
     let callBack = function () {

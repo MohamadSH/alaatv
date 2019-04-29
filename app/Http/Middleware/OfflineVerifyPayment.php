@@ -11,9 +11,9 @@ class OfflineVerifyPayment
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure                  $next
-     * @param  null                      $guard
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
+     * @param null $guard
      *
      * @return mixed
      */
@@ -21,21 +21,16 @@ class OfflineVerifyPayment
     {
         if ($request->has("coi")) {
             $request->offsetSet("order_id", $request->coi);
-        }
-        elseif (Auth::guard($guard)
-            ->check()) {
-            $user      = $request->user();
+        } elseif (Auth::guard($guard)->check()) {
+            $user = $request->user();
             $openOrder = $user->openOrders->first();
             if (isset($openOrder)) {
                 $request->offsetSet("order_id", $openOrder->id);
             }
+        } else {
+            return response()->setStatusCode(Response::HTTP_BAD_REQUEST)->setContent(["message" => "Bad input"]);
         }
-        else {
-            return response()
-                ->setStatusCode(Response::HTTP_BAD_REQUEST)
-                ->setContent(["message" => "Bad input"]);
-        }
-        
+
         return $next($request);
     }
 }

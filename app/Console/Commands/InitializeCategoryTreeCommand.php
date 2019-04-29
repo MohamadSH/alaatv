@@ -31,7 +31,7 @@ class InitializeCategoryTreeCommand extends Command
      */
     public function handle()
     {
-        $this->info("get Start");
+        $this->info("get Start - Category Tree");
         $data = $this->makeAlaaArray();
         Category::truncate();
         Category::create($data);

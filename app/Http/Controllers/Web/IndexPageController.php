@@ -21,15 +21,7 @@ class IndexPageController extends Controller
     {
         $this->setting = $setting->setting;
     }
-    
-    /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request                      $request
-     * @param  \App\Classes\Format\BlockCollectionFormatter  $blockCollectionFormatter
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function __invoke(Request $request, BlockCollectionFormatter $blockCollectionFormatter)
     {
         

@@ -102,24 +102,8 @@ class SetController extends Controller
         
         return view("set.index", compact("sets", 'tags'));
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  InsertContentsetRequest  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function store(InsertContentsetRequest $request)
     {
         $contentSet = new Contentset();
@@ -153,15 +137,7 @@ class SetController extends Controller
         $contentset->enable  = $enabled ? 1 : 0;
         $contentset->display = $display ? 1 : 0;
     }
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Contentset                $set
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(Request $request, Contentset $set)
     {
         if ($request->expectsJson()) {
@@ -172,47 +148,5 @@ class SetController extends Controller
         
         return view('listTest', compact('set', 'contents'));
     }
-    
-    /*
-    |--------------------------------------------------------------------------
-    | Private methods
-    |--------------------------------------------------------------------------
-    */
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int                       $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-}

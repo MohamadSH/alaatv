@@ -484,7 +484,6 @@ class Order extends BaseModel
         
         return $result;
     }
-    
 
     public function refreshCost()
     {

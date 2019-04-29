@@ -24,12 +24,7 @@ class AttributegroupController extends Controller
         
         $this->response = new Response();
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $attributesetId  = Input::get('attributeset_id');
@@ -38,24 +33,7 @@ class AttributegroupController extends Controller
         
         return view('attributegroup.index', compact('attributegroups'));
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(InsertAttributegroupRequest $request)
     {
         $attributegroup = new Attributegroup();
@@ -73,26 +51,7 @@ class AttributegroupController extends Controller
         
         return redirect()->back();
     }
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Attributegroup $attributegroup)
-    {
-        //
-    }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(Attributegroup $attributegroup)
     {
         $attributeset    = $attributegroup->attributeset_id;
@@ -104,15 +63,7 @@ class AttributegroupController extends Controller
         
         return view('attributegroup.edit', compact('attributegroup', 'attributeset', 'groupAttributes', 'attributes'));
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int                       $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(EditAttributegroupRequest $request, Attributegroup $attributegroup)
     {
         $attributeset = $attributegroup->attributeset_id;
@@ -129,14 +80,7 @@ class AttributegroupController extends Controller
         
         return redirect(action("Web\AttributesetController@edit", $attributeset));
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(Attributegroup $attributegroup)
     {
         if ($attributegroup->delete()) {

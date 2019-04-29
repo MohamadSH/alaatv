@@ -9,14 +9,14 @@ use Illuminate\Http\Request;
 class ModifyRequestInputMiddleware
 {
     use CharacterCommon;
-    
+
     protected $input;
-    
+
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure                  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
      * @param                            $index
      *
      * @return mixed
@@ -24,13 +24,12 @@ class ModifyRequestInputMiddleware
     public function handle($request, Closure $next, $index)
     {
         $this->replaceNumbers($request, explode("|", $index));
-        
+
         return $next($request);
     }
-    
+
     protected function replaceNumbers(Request &$request, array $array)
     {
-        
         $input = $request->all();
         foreach ($array as $item) {
             if (isset($input[$item])) {

@@ -13,15 +13,7 @@ use Illuminate\Http\Response;
 class ContentController extends Controller
 {
     use ContentControllerResponseTrait;
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  Request  $request
-     * @param  Content  $content
-     *
-     * @return Response
-     */
+
     public function show(Request $request, Content $content)
     {
         if (!$content->isActive()) {
@@ -33,10 +25,8 @@ class ContentController extends Controller
         }
         
         if ($this->userCanSeeContent($request, $content,'api')) {
-            dd("test");
             return response()->json($content, Response::HTTP_OK);
         }
-        
         $productsThatHaveThisContent = $content->products();
         
         if ($productsThatHaveThisContent->isEmpty()) {
