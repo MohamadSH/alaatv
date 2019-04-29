@@ -601,43 +601,43 @@
                         <span aria-hidden = "true">&times;</span>
                     </button>
                 </div>
-                {!! Form::open(['method' => 'GET','action' => ['Web\OnlinePaymentController@paymentRedirect', 'paymentMethod'=>'zarinpal', 'device'=>'web']]) !!}
-                <div class = "modal-body">
+{{--                {!! Form::open(['method' => 'GET','action' => ['Web\OnlinePaymentController@paymentRedirect', 'paymentMethod'=>'zarinpal', 'device'=>'web']]) !!}--}}
+{{--                <div class = "modal-body">--}}
 
-                    {!! Form::hidden('order_id',null) !!}
-                    {!! Form::hidden('transaction_id',null , ["disabled"]) !!}
+{{--                    {!! Form::hidden('order_id',null) !!}--}}
+{{--                    {!! Form::hidden('transaction_id',null , ["disabled"]) !!}--}}
 
-                    <div class = "row margin-top-20" id = "gatewayDiv">
-                        <div class = "col">
-                            <div class = "form-group">
-                                <label class = "col-md-3 control-label" for = "gateway">
-                                    انتخاب درگاه:
-                                </label>
-                                <div class = "col-md-7">
-                                    {!! Form::select('gateway',$gateways,null,['class' => 'form-control' , 'id'=>'gatewaySelect' ]) !!}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class = "row margin-top-40 text-center">
-                        <div class = "col">
-                            <span class = "m-badge m-badge--success m-badge--wide m-badge--rounded orderCostReport"></span>
-                        </div>
-                    </div>
-                    {{--<div class="row static-info margin-top-20" style="text-align: center;">--}}
-                    {{--<button type="submit"  class="btn green btn-outline">پرداخت</button>--}}
-                    {{--</div>--}}
+{{--                    <div class = "row margin-top-20" id = "gatewayDiv">--}}
+{{--                        <div class = "col">--}}
+{{--                            <div class = "form-group">--}}
+{{--                                <label class = "col-md-3 control-label" for = "gateway">--}}
+{{--                                    انتخاب درگاه:--}}
+{{--                                </label>--}}
+{{--                                <div class = "col-md-7">--}}
+{{--                                    {!! Form::select('gateway',$gateways,null,['class' => 'form-control' , 'id'=>'gatewaySelect' ]) !!}--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class = "row margin-top-40 text-center">--}}
+{{--                        <div class = "col">--}}
+{{--                            <span class = "m-badge m-badge--success m-badge--wide m-badge--rounded orderCostReport"></span>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    --}}{{--<div class="row static-info margin-top-20" style="text-align: center;">--}}
+{{--                    --}}{{--<button type="submit"  class="btn green btn-outline">پرداخت</button>--}}
+{{--                    --}}{{--</div>--}}
 
-                </div>
-                <div class = "modal-footer">
-                    <button type = "button" class = "btn m-btn--pill m-btn--air btn-outline-brand m-btn m-btn--custom" data-dismiss = "modal">
-                        بستن
-                    </button>
-                    <button type = "submit" class = "btn m-btn--pill m-btn--air btn-outline-success m-btn m-btn--custom">
-                        انتقال به درگاه پرداخت
-                    </button>
-                </div>
-                {!! Form::close() !!}
+{{--                </div>--}}
+{{--                <div class = "modal-footer">--}}
+{{--                    <button type = "button" class = "btn m-btn--pill m-btn--air btn-outline-brand m-btn m-btn--custom" data-dismiss = "modal">--}}
+{{--                        بستن--}}
+{{--                    </button>--}}
+{{--                    <button type = "submit" class = "btn m-btn--pill m-btn--air btn-outline-success m-btn m-btn--custom">--}}
+{{--                        انتقال به درگاه پرداخت--}}
+{{--                    </button>--}}
+{{--                </div>--}}
+{{--                {!! Form::close() !!}--}}
             </div>
         </div>
     </div>
