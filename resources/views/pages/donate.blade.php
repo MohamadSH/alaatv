@@ -24,7 +24,7 @@
 
         <img class = "hearts" src = "/acm/extra/donate/images/hearts.png" alt = "hearts">
 
-        {!! Form::open(['method'=>'POST' , 'action'=>'OrderController@donateOrder' , 'class'=>'donation-form']) !!}
+        {!! Form::open(['method'=>'POST' , 'action'=>'Web\OrderController@donateOrder' , 'class'=>'donation-form']) !!}
         <p>با کمک های شما عزیزان مجموعه آلا به راحتی بر روی کیفیت خدمات کار می کند</p>
 
         <div class = "textfield">
