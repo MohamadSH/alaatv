@@ -57,15 +57,15 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
         55  => 'تراکنش نامعتبر است',
         61  => 'خطا در واریز',
     ];
-    
+
     public function generateAuthorityCode(string $callbackUrl, int $cost, string $description, $orderId = null): Nullable
     {
         $dateTime = new DateTime();
-        
+
         $fields = [
-            'terminalId'     => (int)config('behpardakht.terminalId'),
+            'terminalId'     => (int) config('behpardakht.terminalId'),
             'userName'       => config('behpardakht.username'),
-            'userPassword'   => (int)config('behpardakht.password'),
+            'userPassword'   => (int) config('behpardakht.password'),
             'orderId'        => $orderId,
             'amount'         => $cost,
             'localDate'      => $dateTime->format('Ymd'),
@@ -74,20 +74,20 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
             'callBackUrl'    => $callbackUrl,
             'payerId'        => 0,
         ];
-        
+
         try {
             $soap     = new \SoapClient('https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl');
             $response = $soap->bpPayRequest($fields);
         } catch (\SoapFault $e) {
             return nullable(null);
         }
-        
+
         $response = explode(',', $response->return);
-        
+
         if ($response[0] != '0') {
             return nullable(null, [$this->errors[$response[0]]]);
         }
-        
+
         return nullable($response[1]);
     }
     
@@ -97,7 +97,7 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
         $data      = [
             ['name' => 'RefId', 'value' => $refId,]
         ];
-        
+    
         return RedirectData::instance($serverUrl, $data, 'POST');
     }
     
@@ -115,21 +115,20 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
         if ($payRequestResCode == '0') {
             return true;
         }
-        
+    
         $fields = $this->getVerificationParams($refId, $trackingCode);
-        
+    
         try {
-            $soap     = new \SoapClient( 'https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl');
+            $soap     = new \SoapClient('https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl');
             $response = $soap->bpVerifyRequest($fields);
         } catch (\SoapFault $e) {
             throw $e;
         }
-        
+    
         if ($response->return == '0' || $response->return == '45') {
-            
+        
             return VerificationResponse::instance(request()->all());
         }
-        
     }
     
     protected function settleRequest()
@@ -138,15 +137,15 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
         $trackingCode      = Input::get('SaleReferenceId');
         $cardNumber        = Input::get('CardHolderPan');
         $payRequestResCode = Input::get('ResCode');
-        
+    
         $fields = $this->getVerificationParams($refId, $trackingCode);
         try {
-            $soap     = new \SoapClient( 'https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl');
+            $soap     = new \SoapClient('https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl');
             $response = $soap->bpSettleRequest($fields);
         } catch (\SoapFault $e) {
             throw $e;
         }
-        
+    
         if ($response->return == '0' || $response->return == '45') {
             return true;
         }
