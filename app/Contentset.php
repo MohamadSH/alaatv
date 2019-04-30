@@ -8,6 +8,7 @@ use App\Collection\ProductCollection;
 use App\Collection\SetCollection;
 use App\Traits\favorableTraits;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Scout\Searchable;
 
 /**
  * App\Contentset
@@ -58,6 +59,7 @@ use Illuminate\Support\Facades\Cache;
 class Contentset extends BaseModel implements Taggable
 {
     use favorableTraits;
+    use Searchable;
     
     /**
      * @var array
@@ -102,6 +104,57 @@ class Contentset extends BaseModel implements Taggable
         return new SetCollection($models);
     }
     
+    
+    /**
+     * Get the index name for the model.
+     *
+     * @return string
+     */
+    public function searchableAs()
+    {
+        return 'contents_index';
+    }
+    
+    public function shouldBeSearchable()
+    {
+        return $this->isPublished();
+    }
+    
+    private function isPublished()
+    {
+        return $this->isActive();
+    }
+    
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+        
+        $unSetArrayItems = [
+            'tags',
+            'photo',
+            'url',
+            'apiUrl',
+            'shortName',
+            'author',
+            'contentUrl',
+            'deleted_at',
+            'small_name',
+            'pivot',
+            'enable',
+            'display',
+            'updated_at',
+            'created_at',
+        ];
+        foreach ($unSetArrayItems as $item) {
+            unset($array[$item]);
+        }
+        return $array;
+    }
     /*
     |--------------------------------------------------------------------------
     | Scopes
@@ -142,6 +195,7 @@ class Contentset extends BaseModel implements Taggable
                 return self::getProductOfSet($onlyActiveProduct, $this);
             });
     }
+    
     /**
      * @param  bool        $onlyActiveProduct
      * @param  Contentset  $set
@@ -198,7 +252,7 @@ class Contentset extends BaseModel implements Taggable
      *
      * @return void
      */
-    public function setTagsAttribute(array $value)
+    public function setTagsAttribute(array $value = null)
     {
         $tags = null;
         if (!empty($value)) {
@@ -300,8 +354,7 @@ class Contentset extends BaseModel implements Taggable
         if ($response["statusCode"] == 200) {
             $result = json_decode($response["result"]);
             $tags   = $result->data->tags;
-        }
-        else {
+        } else {
             $tags = [];
         }
         

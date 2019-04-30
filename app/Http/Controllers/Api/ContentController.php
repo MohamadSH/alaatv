@@ -25,10 +25,8 @@ class ContentController extends Controller
         }
         
         if ($this->userCanSeeContent($request, $content,'api')) {
-            dd("test");
             return response()->json($content, Response::HTTP_OK);
         }
-        
         $productsThatHaveThisContent = $content->products();
         
         if ($productsThatHaveThisContent->isEmpty()) {

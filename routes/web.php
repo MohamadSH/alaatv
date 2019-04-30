@@ -160,7 +160,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('orders', 'Web\UserController@userOrders');
         Route::get('question', 'Web\UserController@uploads');
         Route::get('getVerificationCode', 'Web\UserController@sendVerificationCode');
-        Route::post('verifyAccount', 'Web\UserController@submitVerificationCode');
         Route::post('sendSMS', 'Web\UserController@sendSMS');
         Route::post('submitWorkTime', 'Web\UserController@submitWorkTime');
         Route::post('removeFromLottery', 'Web\UserController@removeFromLottery');

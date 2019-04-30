@@ -22,6 +22,7 @@ use Exception;
 use Illuminate\Database\{Eloquent\Builder};
 use Illuminate\Support\{Collection, Facades\Cache};
 use Kalnoy\Nestedset\QueryBuilder;
+use Laravel\Scout\Searchable;
 
 /**
  * App\Product
@@ -146,7 +147,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     |--------------------------------------------------------------------------
     */
     
-    //    use Searchable;
+    use Searchable;
     use ProductCommon;
     use APIRequestCommon;
     use favorableTraits;
@@ -669,16 +670,14 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      *
      * @param $value
      */
-    public function setOrderAttribute($value): void
+    public function setOrderAttribute($value=null): void
     {
         if ($this->strIsEmpty($value)) {
             $value = 0;
         }
         
-        if ($this->attributes["order"] != $value) {
-            self::shiftProductOrders($value);
-        }
-        
+        self::shiftProductOrders($value);
+
         $this->attributes["order"] = $value;
     }
     
@@ -1121,6 +1120,15 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return 'products_index';
     }
     
+    public function shouldBeSearchable()
+    {
+        return $this->isPublished();
+    }
+    
+    private function isPublished()
+    {
+        return $this->isActive();
+    }
     /**
      * Get the indexable data array for the model.
      *

@@ -114,12 +114,15 @@ trait ProductAttributeTrait
                 $simpleInfoAttributes      = collect();
                 $checkboxInfoAttributes    = collect();
                 $attributeset              = $product->attributeset;
-                $attributes                = $attributeset->attributes();
+                $attributes                = optional($attributeset)->attributes();
                 $productType               = $product->producttype->id;
                 if (!$product->relationLoaded('attributevalues')) {
                     $product->load('attributevalues');
                 }
-                
+
+                if(!isset($attributes))
+                    return null;
+
                 $attributes->load('attributetype', 'attributecontrol');
                 
                 foreach ($attributes as $attribute) {

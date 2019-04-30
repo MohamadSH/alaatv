@@ -2137,12 +2137,10 @@ class UserController extends Controller
             
             $message = 'اطلاعات با موفقیت اصلاح شد';
             $status  = Response::HTTP_OK;
-            session()->flash('success', $message);
         }
         else {
             $message = 'Database error on updating user';
             $status  = Response::HTTP_SERVICE_UNAVAILABLE;
-            session()->flash('error', $message);
         }
         
         if ($request->expectsJson()) {
