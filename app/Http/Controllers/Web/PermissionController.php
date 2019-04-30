@@ -31,16 +31,6 @@ class PermissionController extends Controller
         return view("permission.index", compact('permissions'));
     }
     
-    public function show($permission)
-    {
-    
-    }
-    
-    public function create()
-    {
-    
-    }
-    
     public function store(InsertPermissionRequest $request)
     {
         

@@ -28,11 +28,10 @@ class AttributevalueController extends Controller
     {
         $attributevalue = new Attributevalue();
         $attributevalue->fill($request->all());
-        
+
         if ($attributevalue->save()) {
             return $this->response->setStatusCode(200);
-        }
-        else {
+        } else {
             return $this->response->setStatusCode(503);
         }
         
@@ -52,8 +51,7 @@ class AttributevalueController extends Controller
         $attributevalue->fill($request->all());
         if ($attributevalue->update()) {
             session()->put("success", "اطلاعات مقدار صفت با موفقیت اصلاح شد");
-        }
-        else {
+        } else {
             session()->put("error", "خطای پایگاه داده.");
         }
         
@@ -64,8 +62,7 @@ class AttributevalueController extends Controller
     {
         if ($attributevalue->delete()) {
             session()->put('success', 'مقدار صفت با موفقیت حذف شد');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده');
         }
         

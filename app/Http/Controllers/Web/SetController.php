@@ -103,7 +103,6 @@ class SetController extends Controller
         return view("set.index", compact("sets", 'tags'));
     }
 
-
     public function store(InsertContentsetRequest $request)
     {
         $contentSet = new Contentset();

@@ -12,32 +12,30 @@ class EditAssignmentRequest extends FormRequest
 
     public function authorize()
     {
-        if (Auth()
-            ->user()
-            ->can(Config::get('constants.EDIT_ASSIGNMENT_ACCESS'))) {
+        if (Auth()->user()->can(Config::get('constants.EDIT_ASSIGNMENT_ACCESS'))) {
             return true;
         }
-        
+
         return false;
     }
 
     public function rules()
     {
         return [
-            'questionFile'        => 'file|mimes:pdf,rar,zip',
-            'solutionFile'        => 'file|mimes:pdf,rar,zip',
-            'majors'              => 'required|exists:majors,id',
+            'questionFile' => 'file|mimes:pdf,rar,zip',
+            'solutionFile' => 'file|mimes:pdf,rar,zip',
+            'majors' => 'required|exists:majors,id',
             'assignmentstatus_id' => 'required|exists:assignmentstatuses,id',
-            'numberOfQuestions'   => 'integer|min:1',
+            'numberOfQuestions' => 'integer|min:1',
         ];
     }
-    
+
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function replaceNumbers()
     {
         $input = $this->request->all();
@@ -45,7 +43,7 @@ class EditAssignmentRequest extends FormRequest
             $input["numberOfQuestions"] = preg_replace('/\s+/', '', $input["numberOfQuestions"]);
             $input["numberOfQuestions"] = $this->convertToEnglish($input["numberOfQuestions"]);
         }
-        
+
         if (isset($input["order"])) {
             $input["order"] = preg_replace('/\s+/', '', $input["order"]);
             $input["order"] = $this->convertToEnglish($input["order"]);

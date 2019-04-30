@@ -12,34 +12,32 @@ class InsertArticleRequest extends FormRequest
 
     public function authorize()
     {
-        if (Auth()
-            ->user()
-            ->can(Config::get('constants.INSERT_ARTICLE_ACCESS'))) {
+        if (Auth()->user()->can(Config::get('constants.INSERT_ARTICLE_ACCESS'))) {
             return true;
         }
-        
+
         return false;
     }
 
     public function rules()
     {
         return [
-            'title'              => 'required|max:100',
-            'order'              => 'required|numeric',
-            'keyword'            => 'max:200',
-            'brief'              => 'required|max:200',
-            'body'               => 'required',
-            'image'              => 'image|mimes:jpeg,jpg,png',
+            'title' => 'required|max:100',
+            'order' => 'required|numeric',
+            'keyword' => 'max:200',
+            'brief' => 'required|max:200',
+            'body' => 'required',
+            'image' => 'image|mimes:jpeg,jpg,png',
             'articlecategory_id' => 'exists:articlecategories,id',
         ];
     }
-    
+
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function replaceNumbers()
     {
         $input = $this->request->all();
