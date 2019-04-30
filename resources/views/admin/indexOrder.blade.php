@@ -248,6 +248,7 @@
                             </div>
                         </div>
                     </div>
+                    
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="order_table">
                         {{--delete order modal--}}
                         @permission((config('constants.REMOVE_ORDER_ACCESS')))
@@ -726,17 +727,15 @@
                     "render": function ( data, type, row ) {
                         return '\n' +
                             '            <div class="btn-group">\n' +
-                            '                <span class="order_id hidden" id="'+row.id+'"></span>\n' +
-                            '                <span class="user_id hidden" id="'+row.user.id+'"></span>\n' +
-                            '                    <a target="_blank" class="btn btn-success" href="#">\n' +
-                            '                        <i class="fa fa-pencil"></i> اصلاح \n' +
-                            '                    </a>\n' +
-                            '                    <a class="btn btn-danger deleteOrder" data-target="#deleteOrderConfirmationModal" data-toggle="modal">\n' +
-                            '                        <i class="fa fa-remove" aria-hidden="true"></i> حذف \n' +
-                            '                    </a>\n' +
-                            '                    <a class="btn btn-info sendSms" data-target="#sendSmsModal" data-toggle="modal">\n' +
-                            '                        <i class="fa fa-envelope" aria-hidden="true"></i> ارسال پیامک\n' +
-                            '                    </a>\n' +
+                            '                <a target="_blank" class="btn btn-success" href="'+row.editOrderLink+'">\n' +
+                            '                    <i class="fa fa-pencil"></i> اصلاح \n' +
+                            '                </a>\n' +
+                            '                <a class="btn btn-danger deleteOrder" data-target="#deleteOrderConfirmationModal" data-toggle="modal">\n' +
+                            '                    <i class="fa fa-remove" aria-hidden="true"></i> حذف \n' +
+                            '                </a>\n' +
+                            '                <a class="btn btn-info sendSms" data-target="#sendSmsModal" data-toggle="modal">\n' +
+                            '                    <i class="fa fa-envelope" aria-hidden="true"></i> ارسال پیامک\n' +
+                            '                </a>\n' +
                             '                <div id="ajax-modal" class="modal fade" tabindex="-1"></div>\n' +
                             '            </div>';
                     },
@@ -798,7 +797,7 @@
                 @endpermission
                 { "data": "price" , "title": "مبلغ(تومان)", "defaultContent": "-" },
                 @permission((config('constants.SHOW_USER_EMAIL')))
-                { "data": "user.email" , "title": "ایمیل", "defaultContent": "......" },
+                { "data": "user.email" , "title": "ایمیل", "defaultContent": "<span class=\"m-badge m-badge--wide label-sm m-badge--danger\"> درج نشده </span>" },
                 @endpermission
                 { "data": "paidPrice" , "title": "پرداخت شده(تومان)", "defaultContent": "-" },
                 { "data": "refundPrice" , "title": "مبلغ برگشتی(تومان)", "defaultContent": "-" },
@@ -989,26 +988,26 @@
                         if (typeof row.orderstatus.id !== 'undefined') {
                             return '-';
                         }
-                        let orderstatusId = row.orderstatus.id;
+                        let orderstatusName = row.orderstatus.name;
                         let badgeStyle = 'm-badge--';
-                        if (orderstatusId == {!! config("constants.ORDER_STATUS_CLOSED") !!}) {
+                        if (orderstatusName === 'closed') {
                             badgeStyle += 'success';
-                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_CANCELED") !!}) {
+                        } else if (orderstatusName === 'canceled') {
                             badgeStyle += 'danger';
-                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_POSTED") !!}) {
+                        } else if (orderstatusName === 'posted') {
                             badgeStyle += 'info';
-                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_REFUNDED") !!}) {
+                        } else if (orderstatusName === 'refunded') {
                             badgeStyle += '';
-                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_OPEN") !!}) {
+                        } else if (orderstatusName === 'open') {
                             badgeStyle += 'danger';
-                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_OPEN_BY_ADMIN") !!}) {
+                        } else if (orderstatusName === 'openByAdmin') {
                             badgeStyle += 'warning';
-                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_READY_TO_POST") !!}) {
+                        } else if (orderstatusName === 'readyToPost') {
                             badgeStyle += 'info';
-                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_PENDING") !!}) {
+                        } else if (orderstatusName === 'pending') {
                             badgeStyle += '';
                         }
-                        return '<span class="m-badge m-badge--wide '+badgeStyle+'"> '+orderstatusId+' - '+row.orderstatus.displayName+'</span>';
+                        return '<span class="m-badge m-badge--wide '+badgeStyle+'"> '+row.orderstatus.displayName+'</span>';
                     },
                 },
                 {
@@ -1020,22 +1019,22 @@
                         if (typeof row.paymentstatus.id !== 'undefined') {
                             return '-';
                         }
-                        let paymentstatusId = row.paymentstatus.id;
+                        let paymentstatusName = row.paymentstatus.name;
                         let badgeStyle = 'm-badge--';
-                        if (paymentstatusId == {!! config("constants.PAYMENT_STATUS_PAID") !!}) {
+                        if (paymentstatusName === 'paid') {
                             badgeStyle += 'success';
-                        } else if (paymentstatusId == {!! config("constants.PAYMENT_STATUS_UNPAID") !!}) {
+                        } else if (paymentstatusName === 'unpaid') {
                             badgeStyle += 'danger';
-                        } else if (paymentstatusId == {!! config("constants.PAYMENT_STATUS_INDEBTED") !!}) {
+                        } else if (paymentstatusName === 'indebted') {
                             badgeStyle += 'warning';
-                        } else if (paymentstatusId == 4) {
+                        } else if (paymentstatusName === 'approvedIndebted') {
                             badgeStyle += 'warning';
                         }
-                        return '<span class="m-badge m-badge--wide '+badgeStyle+'"> '+paymentstatusId+' - '+row.paymentstatus.displayName+'</span>';
+                        return '<span class="m-badge m-badge--wide '+badgeStyle+'">'+row.paymentstatus.displayName+'</span>';
                     },
                 },
                 { "data": "jalaliUpdatedAt" , "title": "تاریخ اصلاح مدیریتی:", "defaultContent": "<span class=\"m-badge m-badge--wide label-sm m-badge--danger\"> درج نشده </span>" },
-                { "data": "completed_at" , "title": "تاریخ ثبت نهایی:", "defaultContent": "<span class=\"m-badge m-badge--wide label-sm m-badge--danger\"> درج نشده </span>" },
+                { "data": "jalaliCompletedAt" , "title": "تاریخ ثبت نهایی:", "defaultContent": "<span class=\"m-badge m-badge--wide label-sm m-badge--danger\"> درج نشده </span>" },
                 { "data": "usedBonSum" , "title": "تعداد بن استفاده شده:", "defaultContent": "......" },
                 {
                     "data": null,

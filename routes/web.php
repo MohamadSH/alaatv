@@ -12,10 +12,9 @@
 */
 
 use App\PaymentModule\Responses;
-use App\PaymentModule\PaymentDriver;
 use App\PaymentModule\OnlineGateWay;
+use App\PaymentModule\PaymentDriver;
 use App\Http\Controllers\Web\PaymentStatusController;
-use App\Http\Controllers\Web\OnlinePaymentController;
 use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
 use App\PaymentModule\Controllers\PaymentVerifierController;
 
@@ -26,8 +25,10 @@ Route::get('fake-pay', function () {
     $authorityCode = OnlineGateWay::generateAuthorityCode(
         route('verifyOnlinePayment', [
             'paymentMethod' => 'mellat', 'device' => 'asdca',
-        ]), $price = 1000, '$description', time())
-        ->orFailWith([Responses::class, 'noResponseFromBankError']);
+        ]), $price = 1000, '$description', 12345)
+        ->orFailWith([
+            Responses::class, 'noResponseFromBankError',
+        ]);
     
     $redirectData = OnlineGateWay::generatePaymentPageUriObject($authorityCode);
     

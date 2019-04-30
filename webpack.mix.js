@@ -28,7 +28,8 @@ mix.scripts(
         'public/assets/vendors/base/vendors.bundle.js',
         'public/assets/demo/demo12/base/scripts.bundle.js',
         // 'public/acm/cubeportfolio/js/jquery.cubeportfolio.min.js',
-        'public/acm/custom-js-app.js'
+        'public/acm/custom-js-app.js',
+        'public/acm/AlaatvCustomFiles/js/mLayout.js'
     ],
     'public/js/all.js'
 ).version();
