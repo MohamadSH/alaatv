@@ -167,8 +167,7 @@ class HomeController extends Controller
     
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        
-        dd(Content::find(9308)->set);
+        return Content::find(9308) ;
         
     }
     

@@ -23,8 +23,9 @@ use App\User;
 use App\Websitesetting;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\{Cache, Config};
 use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
@@ -56,14 +57,9 @@ class ContentController extends Controller
     
     const PARTIAL_INDEX_TEMPLATE = 'content.index';
     
-    protected $response;
     
     protected $setting;
     
-    /**
-     * @var ContentSearch
-     */
-    private $contentSearch;
     
     /**
      * @var ContentsetSearch
@@ -75,24 +71,15 @@ class ContentController extends Controller
      */
     private $productSearch;
     
-
     
     public function __construct(
         Agent $agent,
-        Response $response,
-        Websitesetting $setting,
-        ContentSearch $contentSearch,
-        ContentsetSearch $setSearch,
-        ProductSearch $productSearch
+        Websitesetting $setting
     )
     {
-        $this->response = $response;
-        $this->setting  = $setting->setting;
-        $authException  = $this->getAuthExceptionArray($agent);
+        $this->setting = $setting->setting;
+        $authException = $this->getAuthExceptionArray($agent);
         $this->callMiddlewares($authException);
-        $this->contentSearch = $contentSearch;
-        $this->setSearch     = $setSearch;
-        $this->productSearch = $productSearch;
     }
     
     /**
@@ -108,8 +95,7 @@ class ContentController extends Controller
                 "show",
                 "embed",
             ];
-        }
-        else {
+        } else {
             $authException = ["index"];
         }
         //TODO:// preview(Telegram)
@@ -130,20 +116,20 @@ class ContentController extends Controller
     private function callMiddlewares($authException): void
     {
         $this->middleware('auth', ['except' => $authException]);
-        $this->middleware('permission:'.Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS'), [
+        $this->middleware('permission:'.config('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS'), [
             'only' => [
                 'store',
                 'create',
                 'create2',
             ],
         ]);
-        $this->middleware('permission:'.Config::get("constants.EDIT_EDUCATIONAL_CONTENT"), [
+        $this->middleware('permission:'.config("constants.EDIT_EDUCATIONAL_CONTENT"), [
             'only' => [
                 'update',
                 'edit',
             ],
         ]);
-        $this->middleware('permission:'.Config::get("constants.REMOVE_EDUCATIONAL_CONTENT_ACCESS"),
+        $this->middleware('permission:'.config("constants.REMOVE_EDUCATIONAL_CONTENT_ACCESS"),
             ['only' => 'destroy']);
         $this->middleware('convert:order|title', [
             'only' => [
@@ -159,30 +145,34 @@ class ContentController extends Controller
      * @param  ContentIndexRequest  $request
      *
      *
-     * @return \Illuminate\Http\Response
+     * @param  ContentSearch        $contentSearch
+     * @param  ContentsetSearch     $setSearch
+     * @param  ProductSearch        $productSearch
+     *
+     * @return Response
      */
-    public function index(ContentIndexRequest $request)
+    public function index(ContentIndexRequest $request, ContentSearch $contentSearch,
+        ContentsetSearch $setSearch,
+        ProductSearch $productSearch)
     {
         $contentTypes = array_filter($request->get('contentType', Contenttype::List()));
         $contentOnly  = $request->get('contentOnly', false);
         $tags         = (array) $request->get('tags');
         $filters      = $request->all();
         
-        $result = $this->contentSearch->get(compact('filters', 'contentTypes'));
+        $result = $contentSearch->get(compact('filters', 'contentTypes'));
         
-        $result->offsetSet('set', !$contentOnly ? $this->setSearch->get($filters) : null);
-        $result->offsetSet('product', !$contentOnly ? $this->productSearch->get($filters) : null);
+        $result->offsetSet('set', !$contentOnly ? $setSearch->get($filters) : null);
+        $result->offsetSet('product', !$contentOnly ? $productSearch->get($filters) : null);
         
         $pageName = "content-search";
-        if (request()->expectsJson()) {
-            return $this->response->setStatusCode(Response::HTTP_OK)
-                ->setContent([
-                    'result' => $result,
-                    'tags'   => empty($tags) ? null : $tags,
-                ]);
-        }
         
-        return view("pages.content-search", compact("result", "contentTypes", 'tags', 'pageName'));
+        $api  = response()->json([
+            'result' => $result,
+            'tags'   => empty($tags) ? null : $tags,
+        ]);
+        $view = view("pages.content-search", compact("result", "contentTypes", 'tags', 'pageName'));
+        return httpResponse($api, $view);
     }
     
     public function embed(Request $request, Content $content)
@@ -198,9 +188,10 @@ class ContentController extends Controller
             $contentSetName,
         ] = $video->getSetMates();
         
-        return view("content.embed", compact('video', 'contentsWithSameSet', 'contentSetName'));
+        $view = view("content.embed", compact('video', 'contentsWithSameSet', 'contentSetName'));
+        return httpResponse(null, $view);
     }
-
+    
     public function create()
     {
         $rootContentTypes = Contenttype::getRootContentType();
@@ -209,39 +200,36 @@ class ContentController extends Controller
         $authors          = User::getTeachers()
             ->pluck("full_name", "id");
         
-        return view("content.create2", compact("rootContentTypes", "contentsets", "authors"));
+        $view = view("content.create2", compact("rootContentTypes", "contentsets", "authors"));
+        return httpResponse(null, $view);
     }
-
+    
     public function create2()
     {
         $contenttypes = Contenttype::getRootContentType()
             ->pluck('displayName', 'id');
         
-        return view("content.create3", compact("contenttypes"));
+        $view = view("content.create3", compact("contenttypes"));
+        return httpResponse(null, $view);
     }
-
+    
     public function show(Request $request, Content $content)
     {
-        
         if (!$content->isActive()) {
             abort(Response::HTTP_FORBIDDEN);
         }
-        if (!$this->userCanSeeContent($request, $content)) {
+        if (!$this->userCanSeeContent($request, $content, 'web')) {
             $productsThatHaveThisContent = $content->products();
             
-            if ($productsThatHaveThisContent->isEmpty()) {
-                if (request()->expectsJson()) {
-                    return $this->userCanNotSeeContentResponse(trans('content.Not Free And you can\'t buy it') ,
-                        Response::HTTP_FORBIDDEN,$productsThatHaveThisContent,true);
-                }
-                return trans('content.Not Free And you can\'t buy it');
-            }
+            $view = trans('content.Not Free And you can\'t buy it');
+            $api  = $this->userCanNotSeeContentResponse(trans('content.Not Free And you can\'t buy it'),
+                Response::HTTP_FORBIDDEN, $productsThatHaveThisContent, true);
             
-            if (request()->expectsJson()) {
-                return $this->userCanNotSeeContentResponse(trans('content.Not Free') ,
-                    Response::HTTP_FORBIDDEN,$productsThatHaveThisContent,true);
-            }
-            return trans('content.Not Free');
+            $view1 = trans('content.Not Free');
+            $api1  = $this->userCanNotSeeContentResponse(trans('content.Not Free'),
+                Response::HTTP_FORBIDDEN, $productsThatHaveThisContent, true);
+            return $productsThatHaveThisContent->isEmpty() ? httpResponse($api,
+                $view) : httpResponse($api1, $view1);
         }
         
         $adItems = $content->getAddItems();
@@ -261,29 +249,13 @@ class ContentController extends Controller
         $seenCount = $content->pageView;
         
         $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
-        if (request()->expectsJson()) {
-            return response()->json($content, Response::HTTP_OK);
-        }
         
-        return view("content.show",
+        $api2  = response()->json($content, Response::HTTP_OK);
+        $view2 = view("content.show",
             compact("seenCount", "author", "content", "contentsWithSameSet", "videosWithSameSet",
                 "pamphletsWithSameSet", "contentSetName", "tags",
                 "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR"));
-        
-        
-    }
-    
-    /**
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Content              $content
-     *
-     * @return bool
-     */
-    private function userCanSeeContent(Request $request, Content $content): bool
-    {
-        /** @var User $user */
-        $user = $request->user('web');
-        return $content->isFree || optional($user)->hasContent($content);
+        return httpResponse($api2, $view2);
     }
     
     /**
@@ -325,23 +297,22 @@ class ContentController extends Controller
             });
         
     }
-
+    
     public function edit($content)
     {
         $validSinceTime = optional($content->validSince)->format('H:i:s');
         $tags           = optional($content->tags)->tags;
         $tags           = implode(",", isset($tags) ? $tags : []);
         $contentset     = $content->set;
-
-//        $rootContentTypes = $this->getRootsContentTypes();
         
         $result = compact("content", "rootContentTypes", "validSinceTime", "tags",
             "contentset"//            "rootContentTypes"
         );
         
-        return view("content.edit", $result);
+        $view = view("content.edit", $result);
+        return httpResponse(null, $view);
     }
-
+    
     public function store(InsertContentRequest $request)
     {
         //TODO:// validate Data Format in Requests
@@ -367,82 +338,16 @@ class ContentController extends Controller
         $this->fillContentFromRequest($request, $content);
         
         if ($content->save()) {
-            return $this->response->setStatusCode(Response::HTTP_OK)
-                ->setContent([
-                    "id" => $content->id,
-                ]);
+            $api = response()->json([
+                "id" => $content->id,
+            ]);
+            return httpResponse($api, null);
         }
         
-        return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
+        $api1 = response()->json([], Response::HTTP_SERVICE_UNAVAILABLE);
+        return httpResponse($api1, null);
     }
     
-    /**
-     * @param  FormRequest  $request
-     * @param  Content      $content
-     *
-     * @return void
-     */
-    private function fillContentFromRequest(FormRequest $request, Content &$content): void
-    {
-        $inputData  = $request->all();
-        $time       = $request->get("validSinceTime");
-        $validSince = $request->get("validSinceDate");
-        $enabled    = $request->has("enable");
-        $tagString  = $request->get("tags");
-        $files      = json_decode($request->get("files"));
-        
-        $content->fill($inputData);
-        $content->validSince = $this->getValidSinceDateTime($time, $validSince);
-        $content->enable     = $enabled ? 1 : 0;
-        $content->tags       = $this->getTagsArrayFromTagString($tagString);
-        
-        if (isset($files)) {
-            $this->storeFilesOfContent($content, $files);
-        }
-    }
-    
-    /**
-     * @param $time
-     * @param $validSince
-     *
-     * @return null|string
-     */
-    private function getValidSinceDateTime($time, $validSince): string
-    {
-        if (isset($time)) {
-            if (strlen($time) > 0) {
-                $time = Carbon::parse($time)
-                    ->format('H:i:s');
-            }
-            else {
-                $time = "00:00:00";
-            }
-        }
-        if (isset($validSince)) {
-            $validSince = Carbon::parse($validSince)
-                ->format('Y-m-d'); //Muhammad : added a day because it returns one day behind and IDK why!!
-            if (isset($time)) {
-                $validSince = $validSince." ".$time;
-            }
-            
-            return $validSince;
-        }
-        
-        return null;
-    }
-    
-    /**
-     * @param $tagString
-     *
-     * @return array
-     */
-    private function getTagsArrayFromTagString($tagString): array
-    {
-        $tags = explode(",", $tagString);
-        $tags = array_filter($tags);
-        
-        return $tags;
-    }
     
     /**
      * @param  Content  $content
@@ -483,7 +388,7 @@ class ContentController extends Controller
     /**
      * @param  Request  $request
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return RedirectResponse|Redirector
      * @throws Exception
      */
     public function basicStore(Request $request)
@@ -500,8 +405,7 @@ class ContentController extends Controller
         
         if (isset($lastContent)) {
             $newContent = $lastContent->replicate();
-        }
-        else {
+        } else {
             session()->put("error", trans('content.No previous content found'));
             
             return redirect()->back();
@@ -525,88 +429,19 @@ class ContentController extends Controller
             
             $newContent->save();
             if (!isset($order)) {
+                //TODO://deprecate
                 $order = $lastContent->pivot->order + 1;
             }
+            //TODO://deprecate
             $this->attachContentSetToContent($newContent, $contentset->id, $order);
             
             return redirect(action("Web\ContentController@edit", $newContent->id));
-        }
-        else {
+        } else {
             throw new Exception("replicate Error!".$contentset_id);
         }
     }
     
-    public function makeVideoFileArray($fileName, $contentset_id): array
-    {
-        $fileUrl = [
-            "720p" => "/media/".$contentset_id."/HD_720p/".$fileName,
-            "480p" => "/media/".$contentset_id."/hq/".$fileName,
-            "240p" => "/media/".$contentset_id."/240p/".$fileName,
-        ];
-        $files   = [];
-        $files[] = $this->makeVideoFileStdClass($fileUrl["240p"], "240p");
-        
-        $files[] = $this->makeVideoFileStdClass($fileUrl["480p"], "480p");
-        
-        $files[] = $this->makeVideoFileStdClass($fileUrl["720p"], "720p");
-        
-        return $files;
-    }
     
-    /**
-     * @param $filename
-     * @param $res
-     *
-     * @return \stdClass
-     */
-    private function makeVideoFileStdClass($filename, $res): \stdClass
-    {
-        $file          = new \stdClass();
-        $file->name    = $filename;
-        $file->res     = $res;
-        $file->caption = Content::videoFileCaptionTable()[$res];
-        $file->type    = "video";
-        
-        return $file;
-    }
-    
-    /**
-     * @param $fileName
-     * @param $contentset_id
-     *
-     * @return string
-     */
-    private function makeThumbnailUrlFromFileName($fileName, $contentset_id): string
-    {
-        $baseUrl = "https://cdn.sanatisharif.ir/media/";
-        //thumbnail
-        $thumbnailFileName = pathinfo($fileName, PATHINFO_FILENAME).".jpg";
-        $thumbnailUrl      = $baseUrl."thumbnails/".$contentset_id."/".$thumbnailFileName;
-        
-        return $thumbnailUrl;
-    }
-    
-    /**
-     * @param $thumbnailUrl
-     *
-     * @return array
-     */
-    private function makeThumbanilFile($thumbnailUrl): array
-    {
-        return [
-            "uuid"     => Str::uuid()
-                ->toString(),
-            "disk"     => "alaaCdnSFTP",
-            "url"      => $thumbnailUrl,
-            "fileName" => parse_url($thumbnailUrl)['path'],
-            "size"     => null,
-            "caption"  => null,
-            "res"      => null,
-            "type"     => "thumbnail",
-            "ext"      => pathinfo(parse_url($thumbnailUrl)['path'], PATHINFO_EXTENSION),
-        ];
-    }
-
     public function update(EditContentRequest $request, $content)
     {
         $this->fillContentFromRequest($request, $content);
@@ -614,23 +449,23 @@ class ContentController extends Controller
         //TODO:// update default contentset
         if ($content->update()) {
             session()->put('success', 'اصلاح محتوا با موفقیت انجام شد');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده');
         }
         
         return redirect()->back();
     }
-
-    public function destroy($content)
+    
+    public function destroy(Content $content)
     {
         //TODO:// remove Tags From Redis, ( Do it in ContentObserver)
-        if ($content->delete()) {
-            return $this->response->setStatusCode(Response::HTTP_OK);
+        try {
+            if ($content->delete()) {
+                return response()->json([], Response::HTTP_OK);
+            }
+        } catch (Exception $e) {
         }
-        else {
-            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
-        }
+        return response()->json([], Response::HTTP_SERVICE_UNAVAILABLE);
     }
     
     /**
@@ -638,7 +473,7 @@ class ContentController extends Controller
      *
      * @param
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function search()
     {

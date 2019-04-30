@@ -54,16 +54,6 @@ class OrderproductController extends Controller
         $this->middleware('CheckPermissionForSendExtraAttributesCost', ['only' => ['attachExtraAttributes']]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return void
-     */
-    public function create()
-    {
-        //
-    }
-
     public function store(OrderProductStoreRequest $request)
     {
         if ($request->has('extraAttribute')) {

@@ -21,6 +21,7 @@ class ContentSearch extends SearchAbstract
 
 //    protected $numberOfItemInEachPage = 2;
     protected $validFilters = [
+        'q',
         'name',
         'set',
         'tags',
