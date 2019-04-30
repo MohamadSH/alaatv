@@ -11,24 +11,26 @@
 |
 */
 
-use App\Classes\Payment\Responses;
-use App\PaymentModule\OnlineGateWay;
+use App\PaymentModule\Responses;
 use App\PaymentModule\PaymentDriver;
-use App\Http\Controllers\Web\OnlinePaymentController;
+use App\PaymentModule\OnlineGateWay;
 use App\Http\Controllers\Web\PaymentStatusController;
-use App\PaymentModule\Controllers\PaymentVerifierController;
+use App\Http\Controllers\Web\OnlinePaymentController;
 use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
+use App\PaymentModule\Controllers\PaymentVerifierController;
 
 
 Route::get('fake-pay', function () {
     PaymentDriver::select($paymentMethod = 'mellat');
-
-    $authorityCode = OnlineGateWay::generateAuthorityCode(route('verifyOnlinePayment',
-        ['paymentMethod' => 'mellat', 'device' => 'asdca']), $price = 1000, '$description', time())
+    
+    $authorityCode = OnlineGateWay::generateAuthorityCode(
+        route('verifyOnlinePayment', [
+            'paymentMethod' => 'mellat', 'device' => 'asdca',
+        ]), $price = 1000, '$description', time())
         ->orFailWith([Responses::class, 'noResponseFromBankError']);
-
+    
     $redirectData = OnlineGateWay::generatePaymentPageUriObject($authorityCode);
-
+    
     return view("order.checkout.gatewayRedirect", compact('redirectData'));
 });
 Route::get('embed/c/{content}', "Web\ContentController@embed");
@@ -61,7 +63,7 @@ Route::get('sanati-sharif-pamphlet/{lId?}/{dId?}/{pId?}', 'Web\Sanatisharifmerge
 Route::get('SanatiSharif-News', 'Web\HomeController@home');
 Route::get('Alaa-App/{mod?}', 'Web\SanatisharifmergeController@AlaaApp');
 Route::get('image/{category}/{w}/{h}/{filename}', [
-    'as' => 'image',
+    'as'   => 'image',
     'uses' => 'Web\HomeController@getImage',
 ]);
 Route::get("sharif", "Web\HomeController@schoolRegisterLanding");
@@ -76,11 +78,16 @@ Route::group(['prefix' => 'sitemap'], function () {
 
 Route::group(['prefix' => 'checkout'], function () {
     Route::get('auth', "Web\OrderController@checkoutAuth");
-    Route::get('completeInfo', 'Web\OrderController@checkoutCompleteInfo')->name('checkoutCompleteInfo');
-    Route::get('review', "Web\OrderController@checkoutReview")->name('checkoutReview');
-    Route::get('payment', "Web\OrderController@checkoutPayment")->name('checkoutPayment');
-    Route::any('verifyPayment/online/{paymentMethod}/{device}', [PaymentVerifierController::class, 'verify'])->name('verifyOnlinePayment');
-    Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', [PaymentStatusController::class, 'show'])->name('showOnlinePaymentStatus');
+    Route::get('completeInfo', 'Web\OrderController@checkoutCompleteInfo')
+        ->name('checkoutCompleteInfo');
+    Route::get('review', "Web\OrderController@checkoutReview")
+        ->name('checkoutReview');
+    Route::get('payment', "Web\OrderController@checkoutPayment")
+        ->name('checkoutPayment');
+    Route::any('verifyPayment/online/{paymentMethod}/{device}', [PaymentVerifierController::class, 'verify'])
+        ->name('verifyOnlinePayment');
+    Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', [PaymentStatusController::class, 'show'])
+        ->name('showOnlinePaymentStatus');
     Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'Web\OfflinePaymentController@verifyPayment');
 });
 Route::group(['prefix' => 'orderproduct'], function () {
@@ -94,13 +101,13 @@ Route::group(['prefix' => 'landing'], function () {
     Route::get('1', 'Web\ProductController@landing1');
     Route::get('2', 'Web\ProductController@landing2');
     Route::get('3', [
-        'as' => 'landing.3',
+        'as'   => 'landing.3',
         'uses' => 'Web\ProductController@landing3',
     ]);
     Route::get('4', 'Web\ProductController@landing4');
 });
 Route::group(['middleware' => 'auth'], function () {
-
+    
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
     Route::get('usersAdmin', 'Web\HomeController@admin');
     Route::get('consultantPanel', 'Web\HomeController@consultantAdmin');
@@ -120,20 +127,22 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('teleMarketingAdminPanel', 'Web\HomeController@adminTeleMarketing');
     Route::post('adminSendSMS', 'Web\HomeController@sendSMS');
     Route::get('asset', 'Web\UserController@userProductFiles');
-    Route::get('complete-register', 'Web\UserController@completeRegister')->name('completeRegister');
+    Route::get('complete-register', 'Web\UserController@completeRegister')
+        ->name('completeRegister');
     Route::get('survey', 'Web\UserController@showSurvey');
     Route::get('97', 'Web\HomeController@submitKonkurResult');
     Route::post("transactionToDonate/{transaction}", "Web\TransactionController@convertToDonate");
     Route::post("completeTransaction/{transaction}", "Web\TransactionController@completeTransaction");
     Route::post("myTransaction/{transaction}", "Web\TransactionController@limitedUpdate");
     Route::get('getUnverifiedTransactions', 'Web\TransactionController@getUnverifiedTransactions');
-    Route::any('paymentRedirect/{paymentMethod}/{device}', '\\'.RedirectUserToPaymentPage::class)->name('redirectToBank');
-
+    Route::any('paymentRedirect/{paymentMethod}/{device}', '\\'.RedirectUserToPaymentPage::class)
+        ->name('redirectToBank');
+    
     Route::get('exitAdminInsertOrder', 'Web\OrderController@exitAdminInsertOrder');
     Route::post('exchangeOrderproduct/{order}', 'Web\OrderController@exchangeOrderproduct');
     Route::get('MBTI-Participation', "Web\MbtianswerController@create");
     Route::get('MBTI-Introduction', "Web\MbtianswerController@introduction");
-
+    
     Route::get('holdlottery', "Web\LotteryController@holdLottery");
     Route::get('givePrize', "Web\LotteryController@givePrizes");
     Route::get('smsbot', "Web\HomeController@smsBot");
@@ -145,17 +154,18 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get("specialAddUser", "Web\HomeController@specialAddUser");
     Route::get("v/asiatech", "Web\UserController@voucherRequest");
     Route::put("v", "Web\UserController@submitVoucherRequest");
-
+    
     Route::resource('orderproduct', 'Web\OrderproductController');
-
+    
     Route::group(['prefix' => 'user'], function () {
-
-
-        Route::get('{user}/dashboard', 'Web\DashboardPageController')->name('web.user.dashboard');
+        
+        
+        Route::get('{user}/dashboard', 'Web\DashboardPageController')
+            ->name('web.user.dashboard');
         Route::get('profile', 'Web\UserController@show');
         Route::post('profile', 'Web\UserController@update')
             ->name('web.authenticatedUser.profile.update');
-
+        
         Route::get('info', "Web\UserController@informationPublicUrl");
         Route::get('{user}/info', 'Web\UserController@information');
         Route::post('{user}/completeInfo', 'Web\UserController@completeInformation');
@@ -195,7 +205,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('addComplimentary/{product}', 'Web\ProductController@addComplimentary');
         Route::put('removeComplimentary/{product}', 'Web\ProductController@removeComplimentary');
     });
-
+    
     Route::resource('user', 'Web\UserController');
     Route::resource('userbon', 'Web\UserbonController');
     Route::resource('assignment', 'Web\AssignmentController');
@@ -228,7 +238,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('employeetimesheet', 'Web\EmployeetimesheetController');
     Route::resource('lottery', 'Web\LotteryController');
     Route::resource('cat', 'Web\CategoryController');
-
+    
     Route::get("copylessonfromremote", "Web\RemoteDataCopyController@copyLesson");
     Route::get("copydepartmentfromremote", "Web\RemoteDataCopyController@copyDepartment");
     Route::get("copydepartmentlessonfromremote", "Web\RemoteDataCopyController@copyDepartmentlesson");
@@ -237,20 +247,20 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get("copydepartmentlessontotakhtekhak", "Web\SanatisharifmergeController@copyDepartmentlesson");
     Route::get("copycontenttotakhtekhak", "Web\SanatisharifmergeController@copyContent");
     Route::get("tagbot", "Web\HomeController@tagbot");
-
+    
     Route::get("donate", "Web\DonateController");
     Route::post("donateOrder", "Web\OrderController@donateOrder");
     Route::get('adminGenerateRandomCoupon', "Web\HomeController@adminGenerateRandomCoupon");
 });
 
 Route::group(['prefix' => 'c'], function () {
-
+    
     Route::get('search', 'Web\ContentController@search');
     Route::get('create2', 'Web\ContentController@create2');
-
+    
     Route::get('{c}/favored', 'Web\FavorableController@getUsersThatFavoredThisFavorable');
     Route::post('{c}/favored', 'Web\FavorableController@markFavorableFavorite');
-
+    
     Route::post('basicStore', 'Web\ContentController@basicStore');
     Route::group(['prefix' => '{c}/attach'], function () {
         Route::post('set/{set}', 'Web\ContentController@attachContentToContentSet');
@@ -274,9 +284,12 @@ Route::resource('block', 'Web\BlockController');
 Auth::routes(['verify' => true]);
 
 Route::group(['prefix' => 'mobile'], function () {
-    Route::get("verify", "Web\MobileVerificationController@show")->name('mobile.verification.notice');
-    Route::post("verify", "Web\MobileVerificationController@verify")->name('mobile.verification.verify');
-    Route::get("resend", "Web\MobileVerificationController@resend")->name('mobile.verification.resend');
+    Route::get("verify", "Web\MobileVerificationController@show")
+        ->name('mobile.verification.notice');
+    Route::post("verify", "Web\MobileVerificationController@verify")
+        ->name('mobile.verification.verify');
+    Route::get("resend", "Web\MobileVerificationController@resend")
+        ->name('mobile.verification.resend');
 });
 Route::post("cd3b472d9ba631a73cb7b66ba513df53", "Web\CouponController@generateRandomCoupon");
 Route::view('uiTest', 'pages.certificates');
