@@ -21,6 +21,7 @@ use App\{Assignmentstatus,
     Events\FreeInternetAccept,
     Gender,
     Http\Requests\ContactUsFormRequest,
+    Http\Requests\InsertCouponRequest,
     Http\Requests\InsertUserRequest,
     Http\Requests\Request,
     Lottery,
@@ -63,9 +64,15 @@ use App\Console\Commands\CategoryTree\Tajrobi;
 use App\Http\Controllers\Controller;
 use Auth;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\{Config, File, Input, Route, Storage};
+use Illuminate\View\View;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
 use Maatwebsite\ExcelLight\Excel;
@@ -158,6 +165,7 @@ class HomeController extends Controller
         ]);
         $this->response = $response;
         $this->setting  = $setting->setting;
+//        dd('hi');
     }
     
     public function test(Product $product)
@@ -184,7 +192,7 @@ class HomeController extends Controller
     /**
      * Show the not found page.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function error404()
     {
@@ -194,7 +202,7 @@ class HomeController extends Controller
     /**
      * Show forbidden page.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function error403()
     {
@@ -204,7 +212,7 @@ class HomeController extends Controller
     /**
      * Show general error page.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function error500()
     {
@@ -214,7 +222,7 @@ class HomeController extends Controller
     /**
      * Show admin panel main page
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function admin()
     {
@@ -320,7 +328,7 @@ class HomeController extends Controller
     /**
      * Show product admin panel page
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function adminProduct()
     {
@@ -366,7 +374,7 @@ class HomeController extends Controller
     /**
      * Show order admin panel page
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function adminOrder()
     {
@@ -517,7 +525,7 @@ class HomeController extends Controller
     /**
      * Show content admin panel page
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function adminContent()
     {
@@ -535,7 +543,7 @@ class HomeController extends Controller
     /**
      * Show consultant admin panel page
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function consultantAdmin()
     {
@@ -564,8 +572,8 @@ class HomeController extends Controller
     /**
      * Show consultant admin entekhab reshte
      *
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @return Response
+     * @throws FileNotFoundException
      */
     public function consultantEntekhabReshte()
     {
@@ -628,7 +636,7 @@ class HomeController extends Controller
     /**
      * Show consultant admin entekhab reshte
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function consultantEntekhabReshteList()
     {
@@ -648,7 +656,7 @@ class HomeController extends Controller
     /**
      * Storing consultant entekhab reshte
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function consultantStoreEntekhabReshte(\Illuminate\Http\Request $request)
     {
@@ -669,7 +677,7 @@ class HomeController extends Controller
     /**
      * Show adminSMS panel main page
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function adminSMS()
     {
@@ -992,9 +1000,9 @@ class HomeController extends Controller
     /**
      * @param                                                      $data
      *
-     * @param  \App\Classes\Repository\ContentRepositoryInterface  $contentRepository
+     * @param  ContentRepositoryInterface                          $contentRepository
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return RedirectResponse|Redirector
      */
     public function newDownload($data, ContentRepositoryInterface $contentRepository)
     {
@@ -1009,7 +1017,7 @@ class HomeController extends Controller
             $content   = $contentRepository->getContentById($contentId);
             
             if (Auth::check()) {
-                /** @var \App\User $user */
+                /** @var User $user */
                 $user = auth()->user();
                 if (!$user->hasContent($content)) {
                     return redirect()
@@ -1305,7 +1313,7 @@ class HomeController extends Controller
      *
      * @param  string  $message
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function errorPage($message)
     {
@@ -1375,7 +1383,7 @@ class HomeController extends Controller
      *
      * @param  \app\Http\Requests\ContactUsFormRequest  $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function sendMail(ContactUsFormRequest $request)
     {
@@ -1495,7 +1503,7 @@ class HomeController extends Controller
                 
                 return redirect()->back();
             }
-        } catch (\Exception    $error) {
+        } catch (Exception    $error) {
             $message = "با عرض پوزش مشکلی در ارسال پیام پیش آمده است . لطفا بعدا اقدام نمایید";
             
             return $this->errorPage($message);
@@ -1507,7 +1515,7 @@ class HomeController extends Controller
      *
      * @param  Request  $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function sendSMS(Request $request)
     {
@@ -1583,7 +1591,7 @@ class HomeController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function uploadFile(\Illuminate\Http\Request $request)
     {
@@ -1690,7 +1698,7 @@ class HomeController extends Controller
             else {
                 return $this->response->setStatusCode(503);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             //            return $this->TAG.' '.$e->getMessage();
             $message = "unexpected error";
             
@@ -2466,7 +2474,7 @@ class HomeController extends Controller
                 foreach ($users as $user) {
                     do {
                         $couponCode = str_random(5);
-                    } while (\App\Coupon::where("code", $couponCode)
+                    } while (Coupon::where("code", $couponCode)
                         ->get()
                         ->isNotEmpty());
                     
@@ -2477,7 +2485,7 @@ class HomeController extends Controller
                     $validUntilDate    = " 00:00:00";
                     $validSinceTime    = "2018-06-15";
                     $validUntilTime    = "12:00:00";
-                    $couponProducts    = \App\Product::whereNotIn("id", [
+                    $couponProducts    = Product::whereNotIn("id", [
                         179,
                         180,
                         182,
@@ -2488,7 +2496,7 @@ class HomeController extends Controller
                     $discount          = 55;
                     /** Coupon Settings */
                     
-                    $insertCouponRequest = new \App\Http\Requests\InsertCouponRequest();
+                    $insertCouponRequest = new InsertCouponRequest();
                     $insertCouponRequest->offsetSet("enable", 1);
                     $insertCouponRequest->offsetSet("usageNumber", 0);
                     $insertCouponRequest->offsetSet("limitStatus", 0);
@@ -2606,7 +2614,7 @@ class HomeController extends Controller
                 }
                 dd("Tags DONE!");
             }
-        } catch (\Exception    $e) {
+        } catch (Exception    $e) {
             $message = "unexpected error";
             
             return $this->response->setStatusCode(503)
@@ -3786,7 +3794,7 @@ class HomeController extends Controller
             else {
                 return redirect()->back();
             }
-        } catch (\Exception    $e) {
+        } catch (Exception    $e) {
             $message = "unexpected error";
             
             return $this->response->setStatusCode(500)
@@ -4737,7 +4745,7 @@ class HomeController extends Controller
             
             return $this->response->setStatusCode(200)
                 ->setContent(["message" => "Done! number of processed items : ".$counter]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $message = "unexpected error";
             dump($successCounter." items successfully done");
             dump($failedCounter." items failed");
@@ -4756,7 +4764,7 @@ class HomeController extends Controller
     /**
      * Showing create form for user's kunkoor result
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function submitKonkurResult(Request $request)
     {
@@ -4878,7 +4886,7 @@ class HomeController extends Controller
      *
      * @param  Request  $request
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function adminGenerateRandomCoupon(Request $request)
     {
