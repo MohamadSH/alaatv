@@ -2,8 +2,8 @@
 
 namespace App\PaymentModule;
 
-use App\PaymentModule\Gateways\Behpardakht\BehpardakhtGateWay;
 use App\PaymentModule\Gateways\Zarinpal\ZarinpalGateWay;
+use App\PaymentModule\Gateways\Behpardakht\BehpardakhtGateWay;
 
 class PaymentDriver
 {

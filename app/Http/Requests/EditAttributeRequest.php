@@ -2,14 +2,16 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
 
 class EditAttributeRequest extends FormRequest
 {
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.EDIT_ATTRIBUTE_ACCESS'))) {
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.EDIT_ATTRIBUTE_ACCESS'))) {
             return true;
         }
 
@@ -19,8 +21,8 @@ class EditAttributeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'displayName' => 'required',
+            'name'                => 'required',
+            'displayName'         => 'required',
             'attributecontrol_id' => 'exists:attributecontrols,id',
         ];
     }

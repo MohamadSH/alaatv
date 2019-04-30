@@ -119,9 +119,10 @@ trait ProductAttributeTrait
                 if (!$product->relationLoaded('attributevalues')) {
                     $product->load('attributevalues');
                 }
-
-                if(!isset($attributes))
+    
+                if (!isset($attributes)) {
                     return null;
+                }
 
                 $attributes->load('attributetype', 'attributecontrol');
                 
