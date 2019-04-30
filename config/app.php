@@ -85,8 +85,8 @@ return [
         App\Providers\TagManagerProvider::class,
         App\Providers\InterfaceBindingProvider::class,
         Zarinpal\Laravel\ZarinpalServiceProvider::class,
-        App\PaymentModule\Gateways\Zarinpal\ZarinpalServiceProvider::class,
-        App\PaymentModule\Gateways\Behpardakht\BehpardakhtServiceProvider::class,
+//        App\PaymentModule\Gateways\Zarinpal\ZarinpalServiceProvider::class,
+//        App\PaymentModule\Gateways\Behpardakht\BehpardakhtServiceProvider::class,
 
     ],
     /*

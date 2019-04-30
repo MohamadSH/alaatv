@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Web;
 
 use App\Coupon;
-use App\Coupontype;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\EditCouponRequest;
-use App\Http\Requests\InsertCouponRequest;
-use App\Http\Requests\Request;
 use App\Product;
 use Carbon\Carbon;
+use App\Coupontype;
 use Illuminate\Http\Response;
+use App\Http\Requests\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Config;
+use App\Http\Requests\EditCouponRequest;
+use App\Http\Requests\InsertCouponRequest;
 
 class CouponController extends Controller
 {
@@ -38,7 +38,7 @@ class CouponController extends Controller
     
     public function edit($coupon)
     {
-        $limitStatus = [
+        $limitStatus        = [
             0 => 'نامحدود',
             1 => 'محدود',
         ];
@@ -51,13 +51,17 @@ class CouponController extends Controller
         $coupontype     = Coupontype::pluck('displayName', 'id');
 
         if (isset($coupon->validSince)) {
-            $validSinceDate = Carbon::parse($coupon->validSince)->format('Y-m-d');
-            $validSinceTime = Carbon::parse($coupon->validSince)->format('H:i');
+            $validSinceDate = Carbon::parse($coupon->validSince)
+                ->format('Y-m-d');
+            $validSinceTime = Carbon::parse($coupon->validSince)
+                ->format('H:i');
         }
 
         if (isset($coupon->validUntil)) {
-            $validUntilDate = Carbon::parse($coupon->validUntil)->format('Y-m-d');
-            $validUntilTime = Carbon::parse($coupon->validUntil)->format('H:i');
+            $validUntilDate = Carbon::parse($coupon->validUntil)
+                ->format('Y-m-d');
+            $validUntilTime = Carbon::parse($coupon->validUntil)
+                ->format('H:i');
         }
         
         return view('coupon.edit',
@@ -69,7 +73,7 @@ class CouponController extends Controller
     public function update(EditCouponRequest $request, $coupon)
     {
         $coupon->fill($request->all());
-
+    
         $coupon->validSince = $this->setValidSince($request);
         $coupon->validUntil = $this->getValidUntil($request);
 
@@ -81,7 +85,7 @@ class CouponController extends Controller
         if (strlen($coupon->discount) == 0) {
             $coupon->discount = 0;
         }
-
+    
         $coupon->enable = $request->has("enable") ? 1 : 0;
         
         $coupon->maxCost = preg_replace('/\s+/', '', $coupon->maxCost);
@@ -171,8 +175,8 @@ class CouponController extends Controller
     {
         $coupon = new Coupon();
         $coupon->fill($request->all());
-        $coupon->validSince =$this->setValidSince($request);
-
+        $coupon->validSince = $this->setValidSince($request);
+    
         $coupon->validUntil = $this->getValidUntil($request);
         
         if ($request->get('limitStatus') === 0) {
@@ -182,45 +186,52 @@ class CouponController extends Controller
         if (strlen($coupon->discount) == 0) {
             $coupon->discount = 0;
         }
-
+    
         $coupon->enable = $request->has("enable") ? 1 : 0;
         
         $coupon->maxCost = preg_replace('/\s+/', '', $coupon->maxCost);
         if (strlen($coupon->maxCost) == 0) {
             $coupon->maxCost = null;
         }
-        
-        if (! $coupon->save()) {
-            return $this->response->setStatusCode(503)->setContent(["message" => "خطا در درج کد"]);
+    
+        if (!$coupon->save()) {
+            return $this->response->setStatusCode(503)
+                ->setContent(["message" => "خطا در درج کد"]);
         }
-        $coupon->products()->sync($request->get('products', []));
-
-        return $this->response->setStatusCode(200)->setContent(["message" => "کد تخفیف با موفقیت درج شد", "id" => $coupon->id, "code" => $coupon->code]);
+        $coupon->products()
+            ->sync($request->get('products', []));
+    
+        return $this->response->setStatusCode(200)
+            ->setContent(["message" => "کد تخفیف با موفقیت درج شد", "id" => $coupon->id, "code" => $coupon->code]);
     }
-
+    
     private function getValidUntil(EditCouponRequest $request)
     {
-        if (! $request->has("validUntilEnable") || ! $request->has("validUntil") || strlen($request->get("validUntil")) <= 0) {
+        if (!$request->has("validUntilEnable") || !$request->has("validUntil") || strlen($request->get("validUntil")) <= 0) {
             return null;
         }
-
-        $validUntil = Carbon::parse($request->get("validUntil"))->format('Y-m-d');
-        $untilTime = $request->get("untilTime");
-        $untilTime = strlen($untilTime) > 0 ? Carbon::parse($untilTime)->format('H:i:s') : "00:00:00";
-
+        
+        $validUntil = Carbon::parse($request->get("validUntil"))
+            ->format('Y-m-d');
+        $untilTime  = $request->get("untilTime");
+        $untilTime  = strlen($untilTime) > 0 ? Carbon::parse($untilTime)
+            ->format('H:i:s') : "00:00:00";
+        
         return $validUntil." ".$untilTime;
     }
-
+    
     private function setValidSince(EditCouponRequest $request)
     {
-        if (! $request->has("validSinceEnable") || ! $request->has("validSince") || strlen($request->get("validSince")) <= 0) {
+        if (!$request->has("validSinceEnable") || !$request->has("validSince") || strlen($request->get("validSince")) <= 0) {
             return null;
         }
-
-        $validSince = Carbon::parse($request->get("validSince"))->format('Y-m-d');
-        $sinceTime = $request->get("sinceTime");
-        $sinceTime = strlen($sinceTime) > 0 ? Carbon::parse($sinceTime)->format('H:i:s') : "00:00:00";
-
+        
+        $validSince = Carbon::parse($request->get("validSince"))
+            ->format('Y-m-d');
+        $sinceTime  = $request->get("sinceTime");
+        $sinceTime  = strlen($sinceTime) > 0 ? Carbon::parse($sinceTime)
+            ->format('H:i:s') : "00:00:00";
+        
         return $validSince." ".$sinceTime;
     }
 }
