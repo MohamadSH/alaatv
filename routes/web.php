@@ -242,16 +242,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('adminGenerateRandomCoupon', "Web\HomeController@adminGenerateRandomCoupon");
 });
 
-/*
-Route::group(['prefix' => 'product'], function () {
-
-});
-*/
-
-/*Route::group(['prefix' => 's'], function(){
-    Route::get('{set}', "Web\SetController@show");
-});*/
-
 Route::group(['prefix' => 'c'], function () {
 
     Route::get('search', 'Web\ContentController@search');

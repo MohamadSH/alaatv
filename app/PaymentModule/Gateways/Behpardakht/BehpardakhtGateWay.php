@@ -130,7 +130,6 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
 
             return VerificationResponse::instance(request()->all());
         }
-
     }
 
     protected function settleRequest()
