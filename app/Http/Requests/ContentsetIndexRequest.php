@@ -9,7 +9,6 @@ use Illuminate\Http\Response;
 
 class ContentsetIndexRequest extends FormRequest
 {
-
     public function authorize()
     {
         return true;
@@ -21,7 +20,7 @@ class ContentsetIndexRequest extends FormRequest
             'tags' => 'array|min:1',
         ];
     }
-    
+
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json($validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY));

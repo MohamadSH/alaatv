@@ -9,32 +9,29 @@ use App\User;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 
 class MbtianswerController extends Controller
 {
     protected $response;
-    
+
     protected $numberOfQuestions;
-    
+
     function __construct()
     {
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.Config::get('constants.LIST_MBTIANSWER_ACCESS'), ['only' => 'index']);
-        
-        $this->response          = new Response();
-        $this->numberOfQuestions = Config::get('constants.MBTI_NUMBER_OF_QUESTIONS');
+        $this->middleware('permission:'.config('constants.LIST_MBTIANSWER_ACCESS'), ['only' => 'index']);
+
+        $this->response = new Response();
+        $this->numberOfQuestions = config('constants.MBTI_NUMBER_OF_QUESTIONS');
     }
 
     public function index()
     {
-        $mbtiAnswers = Mbtianswer::all()
-            ->sortByDesc("created_at");
-        
-        //       dd($mbtiAnswers->first()->getOrdooName());
+        $mbtiAnswers = Mbtianswer::all()->sortByDesc("created_at");
+
         return view("mbti.index", compact("mbtiAnswers"));
     }
 
@@ -42,42 +39,36 @@ class MbtianswerController extends Controller
     {
         $action = Input::get("action");
         if (strcmp($action, "correctExam") == 0) {
-            if (!Auth::user()
-                ->can(Config::get('constants.LIST_MBTIANSWER_ACCESS'))) {
+            if (! Auth::user()->can(config('constants.LIST_MBTIANSWER_ACCESS'))) {
                 redirect(action("Web\HomeController@error403"));
             }
             $userId = Input::get("user_id");
-            if (!isset($userId)) {
+            if (! isset($userId)) {
                 redirect(action("Web\HomeController@error404"));
             }
-            $pageMode   = "correctExam";
-            $mbtiAnswer = Mbtianswer::all()
-                ->where("user_id", $userId)
-                ->first();
+            $pageMode = "correctExam";
+            $mbtiAnswer = Mbtianswer::all()->where("user_id", $userId)->first();
             if (isset($mbtiAnswer)) {
                 $answers = json_decode($mbtiAnswer->answers);
             }
-        }
-        else {
-            if ($this->isAuthorized()) {
-                $takenExam = $this->userHasTakenMBTI(Auth::user());
-                $pageMode  = "takeExam";
-            }
-            else {
+        } else {
+            if (! $this->isAuthorized()) {
                 return redirect(action("Web\HomeController@error403"));
             }
+            $takenExam = $this->userHasTakenMBTI(Auth::user());
+            $pageMode = "takeExam";
         }
-        $pageName  = "MBTI";
+        $pageName = "MBTI";
         $questions = collect([
-            1  => "دوست دارم حرف بزنم،بشنوم و تفسیر کنم ",
-            2  => "من انتقاد شخص را به دل می گیرم. می گویند که من بیش از اندازه حساس هستم",
-            3  => "دوست دارم برای هر چیزی جایی داشته باشم و همه چیزهایم در جای خودش باشد",
-            4  => "من از اینجا و اکنون لذت می برم",
-            5  => "طبق برنامه بودن برای من مهمترین چیز زندکی نیست",
-            6  => "قبل از اینکه حرف بزنم مدتی وقت می گذرانم و فکر می کنم که چه باید بگویم",
-            7  => "اگر مدتی طولانی تنها بمانم ، احساس بیقراری فراوان و تنهایی می کنم",
-            8  => "اگر محیط من سازمان یافته نباشد برایم آرام گرفتن دشوار میشود",
-            9  => "رعایت ادب به اندازه صداقت اهمیت دارد",
+            1 => "دوست دارم حرف بزنم،بشنوم و تفسیر کنم ",
+            2 => "من انتقاد شخص را به دل می گیرم. می گویند که من بیش از اندازه حساس هستم",
+            3 => "دوست دارم برای هر چیزی جایی داشته باشم و همه چیزهایم در جای خودش باشد",
+            4 => "من از اینجا و اکنون لذت می برم",
+            5 => "طبق برنامه بودن برای من مهمترین چیز زندکی نیست",
+            6 => "قبل از اینکه حرف بزنم مدتی وقت می گذرانم و فکر می کنم که چه باید بگویم",
+            7 => "اگر مدتی طولانی تنها بمانم ، احساس بیقراری فراوان و تنهایی می کنم",
+            8 => "اگر محیط من سازمان یافته نباشد برایم آرام گرفتن دشوار میشود",
+            9 => "رعایت ادب به اندازه صداقت اهمیت دارد",
             10 => "از صحبت کردن با دیگران انرژی می گیرم",
             11 => "اشخاص گاهی مرا تحلیل گر می پندارند",
             12 => "باید مراقب باشم تا به دیگران هم فرصت حرف زدن بدهم",
@@ -150,11 +141,11 @@ class MbtianswerController extends Controller
             79 => "پروژه های دستی مثل ، ساختن مدل های اتومبیل ، سوار کردن چیزها یا سوزن دوزی را دوست دارم",
             80 => "من از چیزهای غیره منتظره لذت می برم",
         ]);
-        
+
         //soal 34 avaz shod
         return view("mbti.create", compact("pageName", "questions", "pageMode", "takenExam", "mbtiAnswer", "answers"));
     }
-    
+
     /**
      * Checks whether user is authorized to take the exxam or not
      *
@@ -162,29 +153,18 @@ class MbtianswerController extends Controller
      */
     private function isAuthorized()
     {
-        $userOrdoo = Auth::user()
-            ->orders()
-            ->whereHas('orderproducts', function ($q) {
+        $userOrdoo = Auth::user()->orders()->whereHas('orderproducts', function ($q) {
                 $q->whereIn("product_id", Product::whereHas('parents', function ($q) {
                     $q->whereIn("parent_id", [
                         1,
                         13,
                     ]);
-                })
-                    ->pluck("id"));
-            })
-            ->whereIn("orderstatus_id", [Config::get("constants.ORDER_STATUS_CLOSED")])
-            ->get();
-        
-        if ($userOrdoo->isEmpty() && !Auth::user()
-                ->hasRole(Config::get('constants.ROLE_ADMIN'))) {
-            return false;
-        }
-        else {
-            return true;
-        }
+                })->pluck("id"));
+            })->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED")])->get();
+
+        return $userOrdoo->isEmpty() && ! Auth::user()->hasRole(config('constants.ROLE_ADMIN')) ? false : true;
     }
-    
+
     /**
      * Checks whether user has taken MBTI or not
      *
@@ -194,43 +174,36 @@ class MbtianswerController extends Controller
      */
     private function userHasTakenMBTI(User $user)
     {
-        $userAnswers = Mbtianswer::all()
-            ->where("user_id", $user->id);
-        if ($userAnswers->isEmpty()) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        $userAnswers = Mbtianswer::all()->where("user_id", $user->id);
+
+        return $userAnswers->isEmpty() ? false : true;
     }
 
     public function store(Request $request)
     {
-        if ($this->isAuthorized() && !$this->userHasTakenMBTI(Auth::user())) {
-            $answers = [];
-            for ($i = 1; $i <= $this->numberOfQuestions; $i++) {
-                if ($request->has("question".$i)) {
-                    array_push($answers, $request->get("question".$i));
-                }
-            }
-            if (count($answers) == $this->numberOfQuestions) {
-                $mbtiAnswer          = new Mbtianswer();
-                $mbtiAnswer->user_id = Auth::user()->id;
-                $mbtiAnswer->answers = json_encode($answers, JSON_UNESCAPED_UNICODE);
-                if ($mbtiAnswer->save()) {
-                    return $this->response->setStatusCode(200);
-                }
-                else {
-                    return $this->response->setStatusCode(503);
-                }
-            }
-            else {
-                return $this->response->setStatusCode(422);
-            }
-        }
-        else {
+        if (! $this->isAuthorized() || $this->userHasTakenMBTI(Auth::user())) {
             return $this->response->setStatusCode(403);
         }
+
+        $answers = [];
+        for ($i = 1; $i <= $this->numberOfQuestions; $i++) {
+            if ($request->has("question".$i)) {
+                array_push($answers, $request->get("question".$i));
+            }
+        }
+
+        if (count($answers) != $this->numberOfQuestions) {
+            return $this->response->setStatusCode(422);
+        }
+
+        $mbtiAnswer = new Mbtianswer();
+        $mbtiAnswer->user_id = Auth::user()->id;
+        $mbtiAnswer->answers = json_encode($answers, JSON_UNESCAPED_UNICODE);
+        if (! $mbtiAnswer->save()) {
+            return $this->response->setStatusCode(503);
+        }
+
+        return $this->response->setStatusCode(200);
     }
 
     public function show(Mbtianswer $mbtianswer)
@@ -248,10 +221,9 @@ class MbtianswerController extends Controller
     {
         if ($this->isAuthorized()) {
             $pageName = "MBTI";
-            
+
             return view("mbti.intro", compact("pageName"));
-        }
-        else {
+        } else {
             return redirect(action("Web\HomeController@error403"));
         }
     }
