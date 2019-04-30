@@ -248,16 +248,16 @@ var mLayout = function() {
             the.showProgress();  
                       
             $.ajax({
-                url: 'inc/api/quick_search.php',
-                data: {query: the.query},
-                dataType: 'html',
+                url: '/c',
+                data: {q: the.query},
+                dataType: 'json',
                 success: function(res) {
                     the.hideProgress();
                     the.showResult(res);                     
                 },
                 error: function(res) {
                     the.hideProgress();
-                    the.showError('Connection error. Pleae try again later.');      
+                    the.showError('ارتباط با سرور برقرار نشد، لطفا بعدا امتحان کنید.');
                 }
             });
         });  
