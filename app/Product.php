@@ -676,10 +676,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
             $value = 0;
         }
         
-        if ($this->attributes["order"] != $value) {
-            self::shiftProductOrders($value);
-        }
-    
+        self::shiftProductOrders($value);
+
         $this->attributes["order"] = $value;
     }
     
