@@ -245,11 +245,19 @@ var mLayout = function() {
         //<div class="m-search-results m-search-results--skin-light"><span class="m-search-result__message">Something went wrong</div></div>
 
         quicksearch.on('search', function(the) {
+            the.showResult = function(res) {
+
+                the.dropdown.setContent(res);
+                Plugin.showDropdown();
+
+                return the;
+            };
+
             the.showProgress();  
                       
             $.ajax({
                 url: '/c',
-                data: {q: the.query},
+                data: {q: the.query, contentOnly:1},
                 dataType: 'json',
                 success: function(res) {
                     the.hideProgress();
