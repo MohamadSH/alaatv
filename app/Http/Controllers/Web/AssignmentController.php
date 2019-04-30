@@ -29,12 +29,7 @@ class AssignmentController extends Controller
         
         $this->response = new Response();
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $assignments = Assignment::all()
@@ -43,24 +38,12 @@ class AssignmentController extends Controller
         
         return view("assignment.index", compact("assignments", "pageName"));
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         return view("assignment.create");
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \app\Http\Requests\AssignmentRequest  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(InsertAssignmentRequest $request)
     {
         $assignment = new Assignment();
@@ -103,26 +86,7 @@ class AssignmentController extends Controller
             return $this->response->setStatusCode(503);
         }
     }
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  Assignment  $assignment
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($assignment)
-    {
-        //
-    }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  Assignment  $assignment
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($assignment)
     {
         $majors             = Major::pluck('name', 'id')
@@ -134,15 +98,7 @@ class AssignmentController extends Controller
         
         return view("assignment.edit", compact("assignment", "majors", "assignmentStatuses", "assignmentMajors"));
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \app\Http\Requests\AssignmentRequest  $request
-     * @param  Assignment                            $assignment
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(EditAssignmentRequest $request, $assignment)
     {
         $questionFile = $assignment->questionFile;
@@ -190,14 +146,7 @@ class AssignmentController extends Controller
         
         return redirect()->back();
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Assignment  $assignment
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($assignment)
     {
         if ($assignment->delete()) {

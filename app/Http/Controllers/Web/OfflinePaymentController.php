@@ -120,12 +120,7 @@ class OfflinePaymentController extends Controller
         
         return $result;
     }
-    
-    /**
-     * @param  Order  $order
-     *
-     * @return array
-     */
+
     private function checkOrder(Order $order): array
     {
         $result = [

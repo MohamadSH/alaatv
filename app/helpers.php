@@ -1,14 +1,28 @@
 <?php
+
+use App\Classes\Nullable;
+use App\Classes\Util\Boolean as UtilBoolean;
+
 if (!function_exists('nullable')) {
-    function nullable($result): \App\Classes\Nullable
+    function nullable($result, $data = []): Nullable
     {
-        return new \App\Classes\Nullable($result);
+        return new Nullable($result, $data);
     }
 }
 
 if (!function_exists('boolean')) {
-    function boolean($result): \App\Classes\Util\Boolean
+    function boolean($result): UtilBoolean
     {
-        return new \App\Classes\Util\Boolean($result);
+        return new UtilBoolean($result);
+    }
+}
+
+if (!function_exists('httpResponse')) {
+    function httpResponse($api = null, $view = null)
+    {
+        if (request()->expectsJson()) {
+            return $api;
+        }
+        return $view;
     }
 }

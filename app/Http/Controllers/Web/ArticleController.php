@@ -42,12 +42,7 @@ class ArticleController extends Controller
         
         $this->response = new Response();
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $articles = Article::all()
@@ -55,12 +50,7 @@ class ArticleController extends Controller
         
         return view('article.index', compact('articles'));
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         $articlecategories = Articlecategory::where('enable', 1)
@@ -68,14 +58,7 @@ class ArticleController extends Controller
         
         return view("article.create", compact("articlecategories"));
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\InsertArticleRequest  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(InsertArticleRequest $request)
     {
         $article = new Article();
@@ -135,14 +118,7 @@ class ArticleController extends Controller
         
         return redirect()->back();
     }
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Article  $article
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(Request $request, $article)
     {
         $articlecategories = Articlecategory::where('enable', 1)
@@ -167,14 +143,7 @@ class ArticleController extends Controller
         return view('article.show',
             compact('article', 'articlecategories', 'otherArticles', 'otherArticlesType', 'tags'));
     }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Article  $article
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($article)
     {
         $articlecategories = Articlecategory::where('enable', 1)
@@ -182,15 +151,7 @@ class ArticleController extends Controller
         
         return view('article.edit', compact('article', 'articlecategories'));
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Article              $article
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(EditArticleRequest $request, $article)
     {
         $oldImage = $article->image;
@@ -250,14 +211,7 @@ class ArticleController extends Controller
         
         return redirect()->back();
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Article  $article
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($article)
     {
         if ($article->delete()) {

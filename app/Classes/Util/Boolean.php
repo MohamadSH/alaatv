@@ -7,15 +7,22 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 class Boolean
 {
     private $result;
-    
+
+    /**
+     * @var array
+     */
+    private $data;
+
     /**
      * Nullable constructor.
      *
      * @param $result
+     * @param array $data
      */
-    public function __construct($result)
+    public function __construct($result, $data = [])
     {
         $this->result = $result;
+        $this->data = $data;
     }
     
     public static function if($boolean)

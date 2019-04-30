@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Classes\Payment;
+namespace App\PaymentModule;
 
-class RedirectData
+use App\PaymentModule\Gateways\OnlinePaymentRedirectionUriInterface;
+
+class RedirectData implements OnlinePaymentRedirectionUriInterface
 {
     private $redirectUrl;
     private $input;

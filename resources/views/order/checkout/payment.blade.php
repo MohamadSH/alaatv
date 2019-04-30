@@ -139,6 +139,7 @@
                                                     کد تخفیف:
                                                 </label>
                                             </span>
+
                                             <span class="m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
                                                 <input type="checkbox" data-switch="true"
                                                        @if(!isset($coupon))checked="checked" @endif data-on-text="ندارم"
@@ -221,8 +222,10 @@
                             <div class="row justify-content-center">
                                 <div class="col text-center btnSubmitOrderWraper">
                                     <hr>
-                                    <button type="button"
-                                            onclick="window.location.href='{{route('verifyOnlinePayment', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}';
+
+                                    <button type = "button"
+                                            onclick="window.location.href='{{route('redirectToBank', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}';
+
                                                     mApp.block('.btnSubmitOrderWraper', {
                                                     type: 'loader',
                                                     state: 'info',
@@ -306,6 +309,7 @@
                                                                 به آلاء کمک
                                                             </label>
                                                         </span>
+
                                                         <span class="m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
                                                             <input type="checkbox" data-switch="true"
                                                                    @if(isset($orderHasDonate) && $orderHasDonate)@elsechecked=""
@@ -313,6 +317,7 @@
                                                                    data-off-text="می کنم" data-off-color="success"
                                                                    data-size="small"
                                                                    {{--data-handle-width="40"--}}id="hasntDonate">
+
                                                         </span>
                                                         <span>
                                                             <img src="/acm/extra/sad.png"

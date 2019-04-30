@@ -38,12 +38,7 @@ class TransactionController extends Controller
         $this->middleware('role:admin', ['only' => 'getUnverifiedTransactions']);
         //        $this->middleware('permission:'.config('constants.INSERT_TRANSACTION_ACCESS'),['only'=>'store']);
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         try {
@@ -369,16 +364,6 @@ class TransactionController extends Controller
     }
     
     /**
-     * Show the form for creating a new resource  = making the request to payment gateway
-     *
-     * @return void
-     */
-    public function create()
-    {
-        //
-    }
-    
-    /**
      * @param  Transaction  $transaction
      * @param  array        $data
      *
@@ -434,14 +419,7 @@ class TransactionController extends Controller
         
         return $result;
     }
-    
-    /**
-     * Store a newly created resource in storage
-     *
-     * @param  \app\Http\Requests\InsertTransactionRequest  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(InsertTransactionRequest $request)
     {
         $order = Order::find($request->get('order_id'));
@@ -508,26 +486,7 @@ class TransactionController extends Controller
         
         return $result;
     }
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return void
-     */
-    public function show($id)
-    {
-        //
-    }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Transaction  $transaction
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(Transaction $transaction)
     {
         $transactionPaymentmethods = Paymentmethod::pluck('displayName', 'id')
@@ -549,15 +508,7 @@ class TransactionController extends Controller
             compact('transaction', 'transactionPaymentmethods', 'transactionStatuses', '$transactionStatuses',
                 'deadlineAt', 'completedAt'));
     }
-    
-    /**
-     * Limited update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Transaction          $transaction
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function limitedUpdate(Request $request, Transaction $transaction)
     {
         $order = Order::FindOrFail($request->get("order_id"));
@@ -604,15 +555,7 @@ class TransactionController extends Controller
         
         return redirect()->back();
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\EditTransactionRequest  $request
-     * @param  \App\Transaction                           $transaction
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(EditTransactionRequest $request, Transaction $transaction)
     {
         $result = [];
@@ -633,15 +576,7 @@ class TransactionController extends Controller
         
         return redirect()->back();
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \app\Transaction
-     *
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
-     */
+
     public function destroy(Transaction $transaction)
     {
         if ($transaction->delete()) {

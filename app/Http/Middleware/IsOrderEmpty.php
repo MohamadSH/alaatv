@@ -10,8 +10,8 @@ class IsOrderEmpty
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure                  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
      *
      * @return mixed
      */
@@ -23,7 +23,7 @@ class IsOrderEmpty
                 return redirect(action("Web\OrderController@checkoutReview"));
             }
         }
-        
+
         return $next($request);
     }
 }

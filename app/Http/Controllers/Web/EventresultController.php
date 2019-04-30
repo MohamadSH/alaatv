@@ -28,12 +28,7 @@ class EventresultController extends Controller
         
         $this->response = new Response();
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $eventresults = Eventresult::orderBy("rank");
@@ -61,25 +56,7 @@ class EventresultController extends Controller
         return view("event.result.index",
             compact("eventresults", "eventIds", "isSharifRegisterEvent", "eventResultStatuses"));
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\InsertEventResultRequest  $request
-     *
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
+
     public function store(InsertEventResultRequest $request)
     {
         $eventResult = new Eventresult();
@@ -189,39 +166,7 @@ class EventresultController extends Controller
             return redirect()->back();
         }
     }
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Eventresult               $eventResult
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, Eventresult $eventResult)
     {
         $eventResult->fill($request->all());
@@ -236,17 +181,5 @@ class EventresultController extends Controller
             
             return redirect()->back();
         }
-    }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

@@ -20,24 +20,13 @@ class ZarinpalTransactionController extends Controller
     
     protected $transactionController;
     
-    /**
-     * ZarinpalTransactionController constructor.
-     *
-     * @param  \App\Http\Controllers\Web\TransactionController  $transactionController
-     */
+
     function __construct(TransactionController $transactionController)
     {
         $this->middleware(['CheckPermissionForSendOrderId',]);
         $this->transactionController = $transactionController;
     }
-    
-    /**
-     * Handle the incoming request.
-     *
-     * @param  \App\Http\Requests\InsertZarinpalTransaction  $request
-     *
-     * @return
-     */
+
     public function __invoke(InsertZarinpalTransaction $request)
     {
         $paymentData['Authority'] = $request->get('authority');

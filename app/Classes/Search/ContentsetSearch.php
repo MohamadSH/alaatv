@@ -20,6 +20,7 @@ class ContentsetSearch extends SearchAbstract
 
 //    protected $numberOfItemInEachPage = 2;
     protected $validFilters = [
+        'q',
         'name',
         'tags',
     ];

@@ -9,41 +9,29 @@ use Illuminate\Support\Facades\Config;
 class InsertUserBonRequest extends FormRequest
 {
     use CharacterCommon;
-    
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+
     public function authorize()
     {
-        if (Auth()
-            ->user()
-            ->can(Config::get('constants.INSERT_USER_BON_ACCESS'))) {
+        if (Auth()->user()->can(Config::get('constants.INSERT_USER_BON_ACCESS'))) {
             return true;
         }
-        
+
         return false;
     }
-    
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
+
     public function rules()
     {
         return [
             'totalNumber' => 'required|numeric|min:0',
         ];
     }
-    
+
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function replaceNumbers()
     {
         $input = $this->request->all();
@@ -51,12 +39,12 @@ class InsertUserBonRequest extends FormRequest
             $input["totalNumber"] = preg_replace('/\s+/', '', $input["totalNumber"]);
             $input["totalNumber"] = $this->convertToEnglish($input["totalNumber"]);
         }
-        
+
         if (isset($input["usedNumber"])) {
             $input["usedNumber"] = preg_replace('/\s+/', '', $input["usedNumber"]);
             $input["usedNumber"] = $this->convertToEnglish($input["usedNumber"]);
         }
-        
+
         $this->replace($input);
     }
 }

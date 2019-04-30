@@ -2,12 +2,13 @@
 
 namespace App\PaymentModule\Controllers;
 
-use App\Classes\Payment\OnlineGateWay;
+//use App\Classes\Payment\OnlineGateWay;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
-use App\Classes\Payment\Responses;
 use App\Http\Controllers\Web\TransactionController;
 use App\Order;
+use App\PaymentModule\OnlineGateWay;
 use App\PaymentModule\PaymentDriver;
+use App\PaymentModule\Responses;
 use App\Repositories\TransactionRepo;
 use App\Transaction;
 use App\User;
@@ -15,8 +16,9 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Controller;
 
-class RedirectUserToPaymentPage
+class RedirectUserToPaymentPage extends Controller
 {
     /**
      * redirect the user to online payment page
@@ -40,28 +42,30 @@ class RedirectUserToPaymentPage
         /** @var Transaction $transaction */
         $transaction = $data['transaction'];
         
+
         if ($data['statusCode'] != Response::HTTP_OK) {
             $this->sendErrorResponse($data['message'], $data['statusCode']);
         }
-        
+
         /** @var string $description */
         $description = $this->getTransactionDescription($data['description'], $user->mobile, $order);
-        
+
         if ($this->isPayingAnOrder($order)) {
             $order->customerDescription = $request->get('customerDescription');
         }
 
         $this->shouldGoToOfflinePayment($cost)
             ->thenRespondWith([Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order->id]);
+
         PaymentDriver::select($paymentMethod);
         $url = $this->comeBackFromGateWayUrl($paymentMethod, $device);
-        $authorityCode = OnlineGateWay::getAuthorityFromGate($url, $cost, $description)
+        $authorityCode = OnlineGateWay::generateAuthorityCode($url, $cost, $description, $order->id)
             ->orFailWith([Responses::class, 'noResponseFromBankError']);
 
         TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id, $description)
             ->orRespondWith([Responses::class, 'editTransactionError']);
 
-        $redirectData = OnlineGateWay::getGatewayUrl();
+        $redirectData = OnlineGateWay::generatePaymentPageUriObject($authorityCode);
         
         return view("order.checkout.gatewayRedirect", compact('redirectData'));
     }

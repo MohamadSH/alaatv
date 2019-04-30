@@ -30,12 +30,7 @@ class ConsultationController extends Controller
         
         $this->response = new Response();
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $consultations = Consultation::all()
@@ -44,24 +39,12 @@ class ConsultationController extends Controller
         
         return view("consultation.index", compact("consultations", "pageName"));
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         return view("consultation.create");
     }
-    
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \app\Http\Requests\InsertConsultationRequest  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(InsertConsultationRequest $request)
     {
         $consultation = new Consultation();
@@ -104,26 +87,12 @@ class ConsultationController extends Controller
             return $this->response->setStatusCode(503);
         }
     }
-    
-    /**
-     * Display the specified resource.
-     *
-     * @param  Consultation  $consultation
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($consultation)
     {
         return redirect(action('ConsultationController@edit', $consultation));
     }
-    
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  Consultation  $consultation
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($consultation)
     {
         $majors               = Major::pluck('name', 'id')
@@ -135,15 +104,7 @@ class ConsultationController extends Controller
         return view("consultation.edit",
             compact("consultation", "majors", "consultationStatuses", "consultationMajors"));
     }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \app\Http\Requests\ConsultationRequest  $request
-     * @param  Consultation                            $consultation
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(EditConsultationRequest $request, $consultation)
     {
         $thumbnail = $consultation->thumbnail;
@@ -184,14 +145,7 @@ class ConsultationController extends Controller
         
         return redirect()->back();
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Consultation  $consultation
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($consultation)
     {
         if ($consultation->delete()) {
