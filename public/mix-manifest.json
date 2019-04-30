@@ -2,9 +2,9 @@
     "/css/all.css": "/css/all.css?id=1c895c0f08a302202a1c",
     "/js/all.js": "/js/all.js?id=f4e27a8f8aec4f6edc24",
     "/js/login.js": "/js/login.js?id=6fbe1e90287ee752a919",
-    "/js/content-show.js": "/js/content-show.js?id=ec8dd01fbc6aa3b74303",
+    "/js/content-show.js": "/js/content-show.js?id=ba8ddac173dfcc2fc3c3",
     "/js/contactUs.js": "/js/contactUs.js?id=b31119504d54e0d3dd58",
-    "/js/product-show.js": "/js/product-show.js?id=69974bcd8ca32d90d72a",
+    "/js/product-show.js": "/js/product-show.js?id=da0ee172e80494c7eb72",
     "/js/checkout-review.js": "/js/checkout-review.js?id=1d9acee6dc31063f2800",
     "/js/checkout-payment.js": "/js/checkout-payment.js?id=9d5b7763f2b185c95191",
     "/js/user-profile.js": "/js/user-profile.js?id=7f59a1fa675c4256a91c",
@@ -19,5 +19,5 @@
     "/js/admin-content-create.js": "/js/admin-content-create.js?id=f9c41495a93ce1200819",
     "/css/admin-content-create.css": "/css/admin-content-create.css?id=424fc04c4fccce78fab5",
     "/css/landing5-allcss.min.css": "/css/landing5-allcss.min.css?id=0972d6eb0fc0b7ec8acf",
-    "/css/content-show.css": "/css/content-show.css?id=086c01f9f2a6682c271b"
+    "/css/content-show.css": "/css/content-show.css?id=13f2adeb5635e2f78b9d"
 }
