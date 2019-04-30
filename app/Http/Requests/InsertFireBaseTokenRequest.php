@@ -9,19 +9,19 @@ class InsertFireBaseTokenRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return bool
      */
     public function authorize(Request $request)
     {
-        $authorized = true;
+        $authorized        = true;
         $authenticatedUser = $request->user('api');
-        $userId = $request->segment(4);
+        $userId            = $request->segment(4);
         if ($userId != $authenticatedUser->id) {
             $authorized = false;
         }
-
+    
         return $authorized;
     }
 

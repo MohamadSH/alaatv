@@ -14,12 +14,12 @@ class PasswordRecoveryRequest extends FormRequest
 
     public function rules()
     {
-        if (! Auth::check()) {
+        if (!Auth::check()) {
             $rules = ["mobileNumber" => "required"];
         } else {
             $rules = [];
         }
-
+    
         return $rules;
     }
 }

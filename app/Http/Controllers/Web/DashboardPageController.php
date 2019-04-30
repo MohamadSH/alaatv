@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
 
 class DashboardPageController extends Controller
 {
@@ -21,7 +21,7 @@ class DashboardPageController extends Controller
         }
         $pageName             = "shop";
         $userAssetsCollection = $user->getDashboardBlocks();
-
+    
         if ($request->expectsJson()) {
             return response()->json([
                 'user_id' => $user->id,

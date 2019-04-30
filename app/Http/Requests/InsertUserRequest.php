@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Traits\CharacterCommon;
-use App\Traits\UserCommon;
 use Auth;
+use App\Traits\UserCommon;
+use App\Traits\CharacterCommon;
 use Illuminate\Foundation\Http\FormRequest;
 
 class InsertUserRequest extends FormRequest
@@ -15,11 +15,12 @@ class InsertUserRequest extends FormRequest
     public function authorize()
     {
         if (Auth::check()) {
-            if (Auth::user()->can(config('constants.INSERT_USER_ACCESS'))) {
+            if (Auth::user()
+                ->can(config('constants.INSERT_USER_ACCESS'))) {
                 return true;
             }
         }
-
+    
         return false;
     }
 
@@ -27,13 +28,13 @@ class InsertUserRequest extends FormRequest
     {
         return $this->getInsertUserValidationRules($this->request->all());
     }
-
+    
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-
+    
     protected function replaceNumbers()
     {
         $input = $this->request->all();

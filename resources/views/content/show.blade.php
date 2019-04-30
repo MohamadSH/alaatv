@@ -2,8 +2,8 @@
 
 @section('page-css')
     <link href="{{ asset("/acm/videojs/skins/alaa-theme/videojs.css") }}" rel="stylesheet">
-{{--    <link href="{{ asset("/acm/videojs/skins/treso/videojs.css") }}" rel="stylesheet">--}}
-{{--    <link href="{{ asset("/acm/videojs/skins/default/videojs.css") }}" rel="stylesheet">--}}
+    {{--    <link href="{{ asset("/acm/videojs/skins/treso/videojs.css") }}" rel="stylesheet">--}}
+    {{--    <link href="{{ asset("/acm/videojs/skins/default/videojs.css") }}" rel="stylesheet">--}}
     <link href="{{ mix("/css/content-show.css") }}" rel="stylesheet">
 @endsection
 

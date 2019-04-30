@@ -188,7 +188,7 @@
     });
 
 
-    mLayout = function() {
+    mLayout = function () {
         var header;
         var horMenu;
         var asideMenu;
@@ -201,12 +201,12 @@
         var mainPortlet;
 
         //== Header
-        var initStickyHeader = function() {
+        var initStickyHeader = function () {
             var tmp;
             var headerEl = mUtil.get('m_header');
             var options = {
                 offset: {},
-                minimize:{}
+                minimize: {}
             };
 
             if (mUtil.attr(headerEl, 'm-minimize-mobile') == 'hide') {
@@ -237,7 +237,7 @@
         };
 
         //== Hor menu
-        var initHorMenu = function() {
+        var initHorMenu = function () {
             // init aside left offcanvas
             horMenuOffcanvas = new mOffcanvas('m_header_menu', {
                 overlay: true,
@@ -263,15 +263,15 @@
         };
 
         //== Aside menu
-        var initLeftAsideMenu = function() {
+        var initLeftAsideMenu = function () {
             //== Init aside menu
             var menu = mUtil.get('m_ver_menu');
             var menuDesktopMode = (mUtil.attr(menu, 'm-menu-dropdown') === '1' ? 'dropdown' : 'accordion');
 
             var scroll;
-            if ( mUtil.attr(menu, 'm-menu-scrollable') === '1' ) {
+            if (mUtil.attr(menu, 'm-menu-scrollable') === '1') {
                 scroll = {
-                    height: function() {
+                    height: function () {
                         if (mUtil.isInResponsiveRange('desktop')) {
                             return mUtil.getViewPort().height - parseInt(mUtil.css('m_header', 'height'));
                         }
@@ -307,7 +307,7 @@
         };
 
         //== Aside
-        var initLeftAside = function() {
+        var initLeftAside = function () {
             // init aside left offcanvas
             var body = mUtil.get('body');
             var asideLeft = mUtil.get('m_aside_left');
@@ -328,13 +328,13 @@
                 var insideTm;
                 var outsideTm;
 
-                mUtil.addEvent(asideLeft, 'mouseenter', function() {
+                mUtil.addEvent(asideLeft, 'mouseenter', function () {
                     if (outsideTm) {
                         clearTimeout(outsideTm);
                         outsideTm = null;
                     }
 
-                    insideTm = setTimeout(function() {
+                    insideTm = setTimeout(function () {
                         if (mUtil.hasClass(body, 'm-aside-left--minimize') && mUtil.isInResponsiveRange('desktop')) {
                             mUtil.removeClass(body, 'm-aside-left--minimize');
                             mUtil.addClass(body, 'm-aside-left--minimize-hover');
@@ -344,13 +344,13 @@
                     }, 300);
                 });
 
-                mUtil.addEvent(asideLeft, 'mouseleave', function() {
+                mUtil.addEvent(asideLeft, 'mouseleave', function () {
                     if (insideTm) {
                         clearTimeout(insideTm);
                         insideTm = null;
                     }
 
-                    outsideTm = setTimeout(function() {
+                    outsideTm = setTimeout(function () {
                         if (mUtil.hasClass(body, 'm-aside-left--minimize-hover') && mUtil.isInResponsiveRange('desktop')) {
                             mUtil.removeClass(body, 'm-aside-left--minimize-hover');
                             mUtil.addClass(body, 'm-aside-left--minimize');
@@ -363,8 +363,8 @@
         };
 
         //== Sidebar toggle
-        var initLeftAsideToggle = function() {
-            if ($('#m_aside_left_minimize_toggle').length === 0 ) {
+        var initLeftAsideToggle = function () {
+            if ($('#m_aside_left_minimize_toggle').length === 0) {
                 return;
             }
 
@@ -374,7 +374,7 @@
                 togglerState: 'm-brand__toggler--active'
             });
 
-            asideLeftToggle.on('toggle', function(toggle) {
+            asideLeftToggle.on('toggle', function (toggle) {
                 if (mUtil.get('main_portlet')) {
                     mainPortlet.updateSticky();
                 }
@@ -391,8 +391,8 @@
         };
 
         //== Sidebar hide
-        var initLeftAsideHide = function() {
-            if ($('#m_aside_left_hide_toggle').length === 0 ) {
+        var initLeftAsideHide = function () {
+            if ($('#m_aside_left_hide_toggle').length === 0) {
                 return;
             }
 
@@ -402,7 +402,7 @@
                 togglerState: 'm-brand__toggler--active'
             });
 
-            initLeftAsideHide.on('toggle', function(toggle) {
+            initLeftAsideHide.on('toggle', function (toggle) {
                 horMenu.pauseDropdownHover(800);
                 asideMenu.pauseDropdownHover(800);
 
@@ -415,37 +415,37 @@
         };
 
         //== Topbar
-        var initTopbar = function() {
-            $('#m_aside_header_topbar_mobile_toggle').click(function() {
+        var initTopbar = function () {
+            $('#m_aside_header_topbar_mobile_toggle').click(function () {
                 $('body').toggleClass('m-topbar--on');
             });
         };
 
         //== Quicksearch
-        var initQuicksearch = function() {
-            if ($('#m_quicksearch').length === 0 ) {
+        var initQuicksearch = function () {
+            if ($('#m_quicksearch').length === 0) {
                 return;
             }
 
             quicksearch = new mQuicksearch('m_quicksearch', {
-                mode: mUtil.attr( 'm_quicksearch', 'm-quicksearch-mode' ), // quick search type
+                mode: mUtil.attr('m_quicksearch', 'm-quicksearch-mode'), // quick search type
                 minLength: 1
             });
 
             //<div class="m-search-results m-search-results--skin-light"><span class="m-search-result__message">Something went wrong</div></div>
 
-            quicksearch.on('search', function(the) {
+            quicksearch.on('search', function (the) {
                 the.showProgress();
-                
+
                 $.ajax({
                     url: 'inc/api/quick_search.php',
                     data: {query: the.query},
                     dataType: 'html',
-                    success: function(res) {
+                    success: function (res) {
                         the.hideProgress();
                         the.showResult(res);
                     },
-                    error: function(res) {
+                    error: function (res) {
                         the.hideProgress();
                         the.showError('Connection error. Pleae try again later.');
                     }
@@ -454,7 +454,7 @@
         };
 
         //== Scrolltop
-        var initScrollTop = function() {
+        var initScrollTop = function () {
             var scrollTop = new mScrollTop('m_scroll_top', {
                 offset: 300,
                 speed: 600
@@ -462,17 +462,17 @@
         };
 
         //== Main portlet(sticky portlet)
-        var createMainPortlet = function() {
+        var createMainPortlet = function () {
             return new mPortlet('main_portlet', {
                 sticky: {
-                    offset: parseInt(mUtil.css( mUtil.get('m_header'), 'height')) + parseInt(mUtil.css( mUtil.get('a_top_section'), 'height')),
+                    offset: parseInt(mUtil.css(mUtil.get('m_header'), 'height')) + parseInt(mUtil.css(mUtil.get('a_top_section'), 'height')),
                     zIndex: 90,
                     position: {
-                        top: function() {
-                            return parseInt(mUtil.css( mUtil.get('m_header'), 'height') );
+                        top: function () {
+                            return parseInt(mUtil.css(mUtil.get('m_header'), 'height'));
                         },
-                        left: function() {
-                            var left = parseInt(mUtil.css( mUtil.getByClass('m-content'), 'paddingLeft'));
+                        left: function () {
+                            var left = parseInt(mUtil.css(mUtil.getByClass('m-content'), 'paddingLeft'));
 
                             if (mUtil.isInResponsiveRange('desktop')) {
                                 //left += parseInt(mUtil.css(mUtil.get('m_aside_left'), 'width') );
@@ -485,8 +485,8 @@
 
                             return left;
                         },
-                        right: function() {
-                            return parseInt(mUtil.css( mUtil.getByClass('m-content'), 'paddingRight') );
+                        right: function () {
+                            return parseInt(mUtil.css(mUtil.getByClass('m-content'), 'paddingRight'));
                         }
                     }
                 }
@@ -494,12 +494,12 @@
         };
 
         return {
-            init: function() {
+            init: function () {
                 this.initHeader();
                 this.initAside();
                 this.initMainPortlet();
             },
-            initMainPortlet: function() {
+            initMainPortlet: function () {
                 if (!mUtil.get('main_portlet')) {
                     return;
                 }
@@ -507,18 +507,18 @@
                 mainPortlet = createMainPortlet();
                 mainPortlet.initSticky();
 
-                mUtil.addResizeHandler(function(){
+                mUtil.addResizeHandler(function () {
                     mainPortlet.updateSticky();
                 });
             },
 
-            resetMainPortlet: function() {
+            resetMainPortlet: function () {
                 mainPortlet.destroySticky();
                 mainPortlet = createMainPortlet();
                 mainPortlet.initSticky();
             },
 
-            initHeader: function() {
+            initHeader: function () {
                 initStickyHeader();
                 initHorMenu();
                 initTopbar();
@@ -526,13 +526,13 @@
                 initScrollTop();
             },
 
-            initAside: function() {
+            initAside: function () {
                 initLeftAside();
                 initLeftAsideMenu();
                 initLeftAsideToggle();
                 initLeftAsideHide();
 
-                this.onLeftSidebarToggle(function(e) {
+                this.onLeftSidebarToggle(function (e) {
                     //== Update sticky portlet
                     if (mainPortlet) {
                         mainPortlet.updateSticky();
@@ -540,29 +540,29 @@
 
                     var datatables = $('.m-datatable');
 
-                    $(datatables).each(function() {
+                    $(datatables).each(function () {
                         $(this).mDatatable('redraw');
                     });
                 });
             },
 
-            getAsideMenu: function() {
+            getAsideMenu: function () {
                 return asideMenu;
             },
 
-            onLeftSidebarToggle: function(handler) {
+            onLeftSidebarToggle: function (handler) {
                 if (asideLeftToggle) {
                     asideLeftToggle.on('toggle', handler);
                 }
             },
 
-            closeMobileAsideMenuOffcanvas: function() {
+            closeMobileAsideMenuOffcanvas: function () {
                 if (mUtil.isMobileDevice()) {
                     asideMenuOffcanvas.hide();
                 }
             },
 
-            closeMobileHorMenuOffcanvas: function() {
+            closeMobileHorMenuOffcanvas: function () {
                 if (mUtil.isMobileDevice()) {
                     horMenuOffcanvas.hide();
                 }
