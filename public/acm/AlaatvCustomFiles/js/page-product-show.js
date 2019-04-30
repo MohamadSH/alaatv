@@ -272,7 +272,7 @@ jQuery(document).ready(function() {
 
     let childLevel = ProductSwitch.init();
 
-    var player = videojs('videoPlayer');
+    var player = videojs('videoPlayer', {language: 'fa'});
     player.nuevo({
         // logotitle:"آموزش مجازی آلاء",
         // logo:"https://sanatisharif.ir/image/11/135/67/logo-150x22_20180430222256.png",

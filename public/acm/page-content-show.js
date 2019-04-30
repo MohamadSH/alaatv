@@ -5,20 +5,17 @@ var SnippetContentShow = function(){
         var contentEmbedUrl = $('#js-var-contentEmbedUrl').val();
         var contentDisplayName = $('#js-var-contentDName').val();
 
-        var player = videojs('video-' + contentId);
+        var player = videojs('video-' + contentId, {language: 'fa'});
         player.nuevo({
             // logotitle:"آموزش مجازی آلاء",
             // logo:"https://sanatisharif.ir/image/11/135/67/logo-150x22_20180430222256.png",
             logocontrolbar: '/acm/extra/Alaa-logo.gif',
             // logoposition:"RT", // logo position (LT - top left, RT - top right)
             logourl:'//sanatisharif.ir',
-            related: related_videos,
 
             shareTitle: contentDisplayName,
             shareUrl: contentUrl,
             shareEmbed: '<iframe src="' + contentEmbedUrl + '" width="640" height="360" frameborder="0" allowfullscreen></iframe>',
-
-            language: 'fa',
 
 
 
@@ -29,7 +26,8 @@ var SnippetContentShow = function(){
 
             relatedMenu: true,
             zoomMenu: true,
-            mirrorButton: true,
+            related: related_videos,
+            // mirrorButton: true,
 
             closeallow:false,
             mute:true,
@@ -37,7 +35,7 @@ var SnippetContentShow = function(){
             resume:true, // (false) enable/disable resume option to start video playback from last time position it was left
             // theaterButton: true,
             timetooltip: true,
-            mousedisplay: true,
+            mousedisplay: false,
             endAction: 'related', // (undefined) If defined (share/related) either sharing panel or related panel will display when video ends.
             container: "inline",
 
@@ -53,9 +51,9 @@ var SnippetContentShow = function(){
         });
 
         player.hotkeys({
+            enableVolumeScroll: false,
             volumeStep: 0.1,
-            seekStep: 5,
-            alwaysCaptureHotkeys: true
+            seekStep: 5
         });
 
         player.pic2pic();

@@ -23,6 +23,7 @@
     "bootstrap-fileinput": "^5.0.2",
     "bootstrap-multiselect": "^0.9.13-1",
     "bootstrap-tagsinput": "^0.7.1",
+    "gulp": "^4.0.1",
     "icheck": "^1.0.2",
     "jquery-multiselect": "^1.0.0",
     "jquery-sticky": "^1.0.4",

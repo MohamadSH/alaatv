@@ -253,7 +253,7 @@ mix.styles(
         'public/acm/videojs/plugins/pip/videojs.pip.min.css',
         'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
         'public/acm/videojs/plugins/seek-to-point.css',
-        'public/acm/videojs/fonts/load-font-for-laravel-mix.css',
+        // 'public/acm/videojs/fonts/load-font-for-laravel-mix.css',
 
         'public/acm/AlaatvCustomFiles/css/page-content-show.css'
     ],
