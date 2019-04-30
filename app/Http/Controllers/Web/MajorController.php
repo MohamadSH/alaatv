@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\InsertMajorRequest;
 use App\Major;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
+use App\Http\Requests\InsertMajorRequest;
 
 class MajorController extends Controller
 {
@@ -41,7 +41,6 @@ class MajorController extends Controller
         
         return $majors->get();
     }
-
 
     public function store(InsertMajorRequest $request)
     {

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\EditPermissionRequest;
-use App\Http\Requests\InsertPermissionRequest;
 use App\Permission;
 use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Config;
+use App\Http\Requests\EditPermissionRequest;
+use App\Http\Requests\InsertPermissionRequest;
 
 class PermissionController extends Controller
 {
@@ -29,16 +29,6 @@ class PermissionController extends Controller
             ->sortByDesc('created_at');
         
         return view("permission.index", compact('permissions'));
-    }
-    
-    public function show($permission)
-    {
-    
-    }
-    
-    public function create()
-    {
-    
     }
     
     public function store(InsertPermissionRequest $request)

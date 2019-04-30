@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
 
 class EditArticlecategoryRequest extends FormRequest
 {
@@ -17,7 +17,7 @@ class EditArticlecategoryRequest extends FormRequest
             ->can(Config::get('constants.EDIT_ARTICLECATEGORY_ACCESS'))) {
             return true;
         }
-        
+
         return false;
     }
 

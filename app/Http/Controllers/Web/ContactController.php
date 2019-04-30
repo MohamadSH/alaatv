@@ -3,16 +3,16 @@
 namespace App\Http\Controllers\Web;
 
 use App\Contact;
-use App\Contacttype;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\EditContactRequest;
-use App\Http\Requests\EditPhoneRequest;
-use App\Http\Requests\InsertContactRequest;
-use App\Phonetype;
 use App\Relative;
+use App\Phonetype;
+use App\Contacttype;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Config;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Config;
+use App\Http\Requests\EditPhoneRequest;
+use App\Http\Requests\EditContactRequest;
+use App\Http\Requests\InsertContactRequest;
 
 class ContactController extends Controller
 {
@@ -44,7 +44,6 @@ class ContactController extends Controller
         
         return view('contact.index', compact('contacts', 'userId', 'relatives', 'contacttypes'));
     }
-
 
     public function store(InsertContactRequest $request)
     {

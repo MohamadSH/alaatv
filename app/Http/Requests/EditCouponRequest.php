@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
 
 class EditCouponRequest extends FormRequest
 {
@@ -17,7 +17,7 @@ class EditCouponRequest extends FormRequest
             ->can(Config::get('constants.EDIT_COUPON_ACCESS'))) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -47,22 +47,22 @@ class EditCouponRequest extends FormRequest
             $input["code"] = preg_replace('/\s+/', '', $input["code"]);
             $input["code"] = $this->convertToEnglish($input["code"]);
         }
-        
+    
         if (isset($input["discount"])) {
             $input["discount"] = preg_replace('/\s+/', '', $input["discount"]);
             $input["discount"] = $this->convertToEnglish($input["discount"]);
         }
-        
+    
         if (isset($input["usageNumber"])) {
             $input["usageNumber"] = preg_replace('/\s+/', '', $input["usageNumber"]);
             $input["usageNumber"] = $this->convertToEnglish($input["usageNumber"]);
         }
-        
+    
         if (isset($input["usageLimit"])) {
             $input["usageLimit"] = preg_replace('/\s+/', '', $input["usageLimit"]);
             $input["usageLimit"] = $this->convertToEnglish($input["usageLimit"]);
         }
-        
+    
         $this->replace($input);
     }
 }

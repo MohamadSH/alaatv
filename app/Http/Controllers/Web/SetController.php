@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Classes\Search\ContentsetSearch;
-use App\Classes\SEO\SeoDummyTags;
 use App\Contentset;
+use App\Websitesetting;
+use App\Traits\MetaCommon;
+use Illuminate\Http\Request;
+use App\Traits\RequestCommon;
+use Illuminate\Http\Response;
+use App\Classes\SEO\SeoDummyTags;
 use App\Http\Controllers\Controller;
+use App\Classes\Search\ContentsetSearch;
+use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Requests\ContentsetIndexRequest;
 use App\Http\Requests\InsertContentsetRequest;
-use App\Traits\MetaCommon;
-use App\Traits\RequestCommon;
-use App\Websitesetting;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class SetController extends Controller
 {
@@ -102,7 +102,6 @@ class SetController extends Controller
         
         return view("set.index", compact("sets", 'tags'));
     }
-
 
     public function store(InsertContentsetRequest $request)
     {

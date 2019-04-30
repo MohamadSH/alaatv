@@ -2,13 +2,12 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
 
 class EditContentRequest extends FormRequest
 {
-
     public function authorize()
     {
         if (Auth()
@@ -16,7 +15,7 @@ class EditContentRequest extends FormRequest
             ->can(Config::get('constants.EDIT_EDUCATIONAL_CONTENT'))) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -26,12 +25,12 @@ class EditContentRequest extends FormRequest
         if (Input::hasFile("file1")) {
             $file1ExtraRule = "mimes:pdf";
         }
-        
+    
         $file2ExtraRule = "";
         if (Input::hasFile("file2")) {
             $file2ExtraRule = "mimes:pdf";
         }
-        
+    
         return [
             //            'order' => 'required|numeric',
             'name'  => 'required',

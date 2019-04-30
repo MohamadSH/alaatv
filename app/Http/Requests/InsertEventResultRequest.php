@@ -16,7 +16,7 @@ class InsertEventResultRequest extends FormRequest
 
     public function rules()
     {
-        
+
         return [
             'rank'       => 'required',
             //            'participationCode' => 'unique:eventresults,'.Hash::make($this->request->get('participationCode')),
@@ -45,7 +45,7 @@ class InsertEventResultRequest extends FormRequest
         if (isset($input["comment"])) {
             $input["comment"] = preg_replace('/\s+/', '', $input["comment"]);
         }
-        
+    
         $this->replace($input);
     }
 }

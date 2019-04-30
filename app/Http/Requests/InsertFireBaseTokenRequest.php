@@ -21,7 +21,7 @@ class InsertFireBaseTokenRequest extends FormRequest
         if ($userId != $authenticatedUser->id) {
             $authorized = false;
         }
-        
+    
         return $authorized;
     }
 

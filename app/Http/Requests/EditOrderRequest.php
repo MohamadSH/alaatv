@@ -3,14 +3,14 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
 
 class EditOrderRequest extends FormRequest
 {
     use CharacterCommon;
-    
+
     protected $id;
 
     public function authorize()
@@ -20,7 +20,7 @@ class EditOrderRequest extends FormRequest
             ->can(Config::get('constants.EDIT_ORDER_ACCESS'))) {
             return true;
         }
-        
+    
         return false;
     }
 
@@ -35,7 +35,7 @@ class EditOrderRequest extends FormRequest
         if (Input::get(['transactionstatus_id']) != Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL")) {
             $rules['transactionID'] = 'max:0';
         }
-        
+    
         return $rules;
     }
     

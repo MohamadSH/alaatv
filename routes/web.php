@@ -10,13 +10,14 @@
 | to using a Closure or controller method. Build something great!
 |
 */
-use App\Classes\Payment\OnlineGateWay;
+
 use App\Classes\Payment\Responses;
+use App\PaymentModule\OnlineGateWay;
+use App\PaymentModule\PaymentDriver;
 use App\Http\Controllers\Web\OnlinePaymentController;
 use App\Http\Controllers\Web\PaymentStatusController;
 use App\PaymentModule\Controllers\PaymentVerifierController;
 use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
-use App\PaymentModule\PaymentDriver;
 
 
 Route::get('fake-pay', function () {
@@ -152,7 +153,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('{user}/dashboard', 'Web\DashboardPageController')->name('web.user.dashboard');
         Route::get('profile', 'Web\UserController@show');
-        Route::post('profile/update', 'Web\UserController@update')->name('web.authenticatedUser.profile.update');
+        Route::post('profile', 'Web\UserController@update')
+            ->name('web.authenticatedUser.profile.update');
 
         Route::get('info', "Web\UserController@informationPublicUrl");
         Route::get('{user}/info', 'Web\UserController@information');

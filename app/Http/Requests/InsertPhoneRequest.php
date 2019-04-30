@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
 
 class InsertPhoneRequest extends FormRequest
 {
@@ -17,7 +17,7 @@ class InsertPhoneRequest extends FormRequest
             ->can(Config::get('constants.INSERT_CONTACT_ACCESS'))) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -44,7 +44,7 @@ class InsertPhoneRequest extends FormRequest
             $input["phoneNumber"] = preg_replace('/\s+/', '', $input["phoneNumber"]);
             $input["phoneNumber"] = $this->convertToEnglish($input["phoneNumber"]);
         }
-        
+    
         if (isset($input["priority"])) {
             $input["priority"] = preg_replace('/\s+/', '', $input["priority"]);
             $input["priority"] = $this->convertToEnglish($input["priority"]);

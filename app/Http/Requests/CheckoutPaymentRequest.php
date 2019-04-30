@@ -7,7 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CheckoutPaymentRequest extends FormRequest
 {
-
     public function authorize()
     {
         return true;
@@ -17,7 +16,7 @@ class CheckoutPaymentRequest extends FormRequest
     {
         return $this->getRules();
     }
-    
+
     /**
      * @return array
      */
@@ -28,11 +27,10 @@ class CheckoutPaymentRequest extends FormRequest
             $rules = [
                 "order_id" => "required",
             ];
-        }
-        else {
+        } else {
             $rules = [];
         }
-        
+    
         return $rules;
     }
 }

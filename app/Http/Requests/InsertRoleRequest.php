@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class InsertRoleRequest extends FormRequest
 {
-
     public function authorize()
     {
         if (Auth()
@@ -14,7 +13,7 @@ class InsertRoleRequest extends FormRequest
             ->hasRole('admin')) {
             return true;
         }
-        
+
         return false;
     }
 

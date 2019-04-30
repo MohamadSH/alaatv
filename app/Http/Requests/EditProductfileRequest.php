@@ -35,12 +35,12 @@ class EditProductfileRequest extends FormRequest
             $input["cloudFile"] = preg_replace('/\s+/', '', $input["cloudFile"]);
             $input["cloudFile"] = $this->convertToEnglish($input["cloudFile"]);
         }
-        
+    
         if (isset($input["order"])) {
             $input["order"] = preg_replace('/\s+/', '', $input["order"]);
             $input["order"] = $this->convertToEnglish($input["order"]);
         }
-        
+    
         $this->replace($input);
     }
 }

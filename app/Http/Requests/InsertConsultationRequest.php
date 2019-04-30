@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
 
 class InsertConsultationRequest extends FormRequest
 {
@@ -17,7 +17,7 @@ class InsertConsultationRequest extends FormRequest
             ->can(Config::get('constants.INSERT_CONSULTATION_ACCESS'))) {
             return true;
         }
-        
+
         return false;
     }
 

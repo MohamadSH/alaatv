@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
 
 class InsertContactRequest extends FormRequest
 {
-
     public function authorize()
     {
         if (Auth()
@@ -15,7 +14,7 @@ class InsertContactRequest extends FormRequest
             ->can(Config::get('constants.INSERT_CONTACT_ACCESS'))) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -25,7 +24,7 @@ class InsertContactRequest extends FormRequest
             $this->request->set("relative_id", null);
         }
         $userId = $this->get('user_id');
-        
+
         return [
             'name'           => 'required',
             'contacttype_id' => 'exists:contacttypes,id',

@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
 
 class EditAttributesetRequest extends FormRequest
 {
-
     public function authorize()
     {
         if (Auth()
@@ -15,7 +14,7 @@ class EditAttributesetRequest extends FormRequest
             ->can(Config::get('constants.EDIT_ATTRIBUTESET_ACCESS'))) {
             return true;
         }
-        
+    
         return false;
     }
 

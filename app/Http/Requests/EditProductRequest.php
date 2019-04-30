@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
 
 class EditProductRequest extends FormRequest
 {
@@ -17,7 +17,7 @@ class EditProductRequest extends FormRequest
             ->can(Config::get('constants.EDIT_PRODUCT_ACCESS'))) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -50,12 +50,12 @@ class EditProductRequest extends FormRequest
             $input["order"] = preg_replace('/\s+/', '', $input["order"]);
             $input["order"] = $this->convertToEnglish($input["order"]);
         }
-        
+    
         if (isset($input["discount"])) {
             $input["discount"] = preg_replace('/\s+/', '', $input["discount"]);
             $input["discount"] = $this->convertToEnglish($input["discount"]);
         }
-        
+    
         if (isset($input["amount"])) {
             $input["amount"] = preg_replace('/\s+/', '', $input["amount"]);
             $input["amount"] = $this->convertToEnglish($input["amount"]);

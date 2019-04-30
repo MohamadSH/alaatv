@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
 
 class AttacheUserBonRequest extends FormRequest
 {
@@ -17,7 +17,7 @@ class AttacheUserBonRequest extends FormRequest
             ->can(Config::get('constants.ATTACHE_USER_BON_ACCESS'))) {
             return true;
         }
-        
+    
         return false;
     }
 

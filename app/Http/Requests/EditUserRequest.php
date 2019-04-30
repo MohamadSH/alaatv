@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Support\Arr;
+use App\Traits\RequestCommon;
 use App\Afterloginformcontrol;
 use App\Traits\CharacterCommon;
-use App\Traits\RequestCommon;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 
 class EditUserRequest extends FormRequest
 {
@@ -38,22 +38,19 @@ class EditUserRequest extends FormRequest
         $authorized = true;
         
         $authenticatedUser = $request->user();
-        $userId            = $request->segment(2);
-        if ($userId == null) {
-            $user = $authenticatedUser;
-            if ($user->isUserProfileLocked()) {
+        $userId            = $this->getUserIdFromRequestBody($request)
+            ->getValue(false);
+        if (!$userId) {
+            if ($authenticatedUser->isUserProfileLocked()) {
                 $authorized = false;
             }
+        } elseif ($userId !== $authenticatedUser->id && !$authenticatedUser->can(config('constants.EDIT_USER_ACCESS'))) {
+            $authorized = false;
+            
         }
-        else {
-            if ($userId !== $authenticatedUser->id && !$authenticatedUser->can(config('constants.EDIT_USER_ACCESS'))) {
-                $authorized = false;
-            }
-        }
-        
         return $authorized;
     }
-
+    
     public function rules()
     {
         $userId = $this->request->get('id');
@@ -120,12 +117,10 @@ class EditUserRequest extends FormRequest
                     $rule = 'required';
                     if (strcmp($afterLoginField, 'email') == 0) {
                         $rule .= '|email';
-                    }
-                    else {
+                    } else {
                         if (strcmp($afterLoginField, 'photo') == 0) {
                             $rule .= self::PHOTO_RULE;
-                        }
-                        else {
+                        } else {
                             $rule .= '|max:255';
                         }
                     }
@@ -203,5 +198,16 @@ class EditUserRequest extends FormRequest
             $input['email'] = $this->convertToEnglish($input['email']);
         }
         $this->replace($input);
+    }
+    
+    private function getUserIdFromRequestBody(Request $request)
+    {
+        $userId = $request->segment(2);
+        if ((int) $userId == 0) {
+            $userId = null;
+        }
+        
+        return nullable($userId);
+        
     }
 }

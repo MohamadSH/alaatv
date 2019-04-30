@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
 
 class InsertTransactionRequest extends FormRequest
 {
@@ -29,17 +29,17 @@ class InsertTransactionRequest extends FormRequest
             'completed_at'         => 'sometimes|date_format:Y-m-d',
             'deadline_at'          => 'sometimes|date_format:Y-m-d',
         ];
-        
+
         return $rules;
     }
-    
+
     public function prepareForValidation()
     {
         $this->initiateValues();
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function initiateValues()
     {
         $input = $this->request->all();

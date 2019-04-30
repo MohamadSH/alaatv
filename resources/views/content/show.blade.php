@@ -1,9 +1,10 @@
 @extends('app')
 
 @section('page-css')
-    <link href="{{ asset("/acm/videojs/skins/treso/videojs.min.css") }}" rel="stylesheet">
+    <link href="{{ asset("/acm/videojs/skins/alaa-theme/videojs.css") }}" rel="stylesheet">
+    {{--    <link href="{{ asset("/acm/videojs/skins/treso/videojs.css") }}" rel="stylesheet">--}}
+    {{--    <link href="{{ asset("/acm/videojs/skins/default/videojs.css") }}" rel="stylesheet">--}}
     <link href="{{ mix("/css/content-show.css") }}" rel="stylesheet">
-
 @endsection
 
 @section('pageBar')
@@ -419,7 +420,7 @@
         ];
     </script>
     <script src="{{ mix("/js/content-show.js") }}" type="text/javascript"></script>
-{{--    <script src="{{ asset("/acm/videojs/lang/fa.js") }}" type="text/javascript"></script>--}}
+    <script src="{{ asset("/acm/videojs/lang/fa.js") }}" type="text/javascript"></script>
     <script src="{{ asset("/acm/page-content-show.js") }}" type="text/javascript"></script>
 
 @endsection

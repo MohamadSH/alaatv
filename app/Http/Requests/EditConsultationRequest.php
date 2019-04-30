@@ -3,13 +3,12 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
 
 class EditConsultationRequest extends FormRequest
 {
     use CharacterCommon;
-    
 
     public function authorize()
     {
@@ -18,7 +17,7 @@ class EditConsultationRequest extends FormRequest
             ->can(Config::get('constants.EDIT_CONSULTATION_ACCESS'))) {
             return true;
         }
-        
+
         return false;
     }
 

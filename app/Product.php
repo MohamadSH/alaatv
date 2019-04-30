@@ -2,27 +2,27 @@
 
 namespace App;
 
-use App\Classes\{Advertisable,
-    Checkout\Alaa\AlaaProductPriceCalculator,
-    FavorableInterface,
-    SEO\SeoInterface,
-    SEO\SeoMetaTagsGenerator,
-    Taggable};
-use App\Collection\ProductCollection;
+use Exception;
+use Carbon\Carbon;
+use Illuminate\Database\{Eloquent\Builder};
+use Laravel\Scout\Searchable;
 use App\Collection\SetCollection;
-use App\Traits\{APIRequestCommon,
+use Kalnoy\Nestedset\QueryBuilder;
+use App\Collection\ProductCollection;
+use Illuminate\Support\{Collection, Facades\Cache};
+use App\Classes\{Taggable,
+    Advertisable,
+    SEO\SeoInterface,
+    FavorableInterface,
+    SEO\SeoMetaTagsGenerator,
+    Checkout\Alaa\AlaaProductPriceCalculator};
+use App\Traits\{ProductCommon,
     favorableTraits,
+    APIRequestCommon,
     ModelTrackerTrait,
-    Product\ProductAttributeTrait,
     Product\ProductBonTrait,
     Product\ProductPhotoTrait,
-    ProductCommon};
-use Carbon\Carbon;
-use Exception;
-use Illuminate\Database\{Eloquent\Builder};
-use Illuminate\Support\{Collection, Facades\Cache};
-use Kalnoy\Nestedset\QueryBuilder;
-use Laravel\Scout\Searchable;
+    Product\ProductAttributeTrait};
 
 /**
  * App\Product
@@ -675,11 +675,9 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         if ($this->strIsEmpty($value)) {
             $value = 0;
         }
-        
-        if ($this->attributes["order"] != $value) {
-            self::shiftProductOrders($value);
-        }
     
+        self::shiftProductOrders($value);
+
         $this->attributes["order"] = $value;
     }
     

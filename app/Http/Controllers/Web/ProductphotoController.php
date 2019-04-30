@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Controllers\Controller;
 use App\Productphoto;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Config;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 
 class ProductphotoController extends Controller
 {
     protected $response;
-    
+
     function __construct()
     {
         $this->response = new Response();
@@ -26,7 +26,7 @@ class ProductphotoController extends Controller
         if ($request->get("enable") != 1) {
             $photo->enable = 0;
         }
-        
+
         if ($request->hasFile("file")) {
             $file      = $request->file('file');
             $extension = $file->getClientOriginalExtension();
@@ -36,7 +36,7 @@ class ProductphotoController extends Controller
                 $photo->file = $fileName;
             }
         }
-        
+
         if ($request->has("order") && isset($photo->product->id)) {
             if (strlen(preg_replace('/\s+/', '', $request->get("order"))) == 0) {
                 $photo->order = 0;
@@ -53,24 +53,22 @@ class ProductphotoController extends Controller
                 }
             }
         }
-        
+    
         if ($photo->save()) {
             session()->put('success', 'درج عکس با موفقیت انجام شد');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده');
         }
-        
+    
         return redirect()->back();
     }
-
+    
+    
     public function destroy(Productphoto $productphoto)
     {
         if ($productphoto->delete()) {
-            
             return $this->response->setStatusCode(200);
-        }
-        else {
+        } else {
             return $this->response->setStatusCode(503);
         }
     }

@@ -25,16 +25,16 @@ class EditTransactionRequest extends FormRequest
             'authority'       => 'unique:transactions,authority,'.$transaction->id.',id,deleted_at,NULL|numeric|nullable',
             'paycheckNumber'  => 'unique:transactions,paycheckNumber,'.$transaction->id.',id,deleted_at,NULL|nullable',
         ];
-        
+
         return $rules;
     }
-    
+
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function replaceNumbers()
     {
         $input = $this->request->all();
@@ -44,35 +44,35 @@ class EditTransactionRequest extends FormRequest
                 $input["cost"] = (int) $this->convertToEnglish($input["cost"]);
             }
         }
-        
+
         if (isset($input["referenceNumber"])) {
             $input["referenceNumber"] = preg_replace('/\s+/', '', $input["referenceNumber"]);
             if (strlen($input["referenceNumber"]) > 0) {
                 $input["referenceNumber"] = (int) $this->convertToEnglish($input["referenceNumber"]);
             }
         }
-        
+    
         if (isset($input["traceNumber"])) {
             $input["traceNumber"] = preg_replace('/\s+/', '', $input["traceNumber"]);
             if (strlen($input["traceNumber"]) > 0) {
                 $input["traceNumber"] = (int) $this->convertToEnglish($input["traceNumber"]);
             }
         }
-        
+    
         if (isset($input["transactionID"])) {
             $input["transactionID"] = preg_replace('/\s+/', '', $input["transactionID"]);
             if (strlen($input["transactionID"]) > 0) {
                 $input["transactionID"] = (int) $this->convertToEnglish($input["transactionID"]);
             }
         }
-        
+    
         if (isset($input["authority"])) {
             $input["authority"] = preg_replace('/\s+/', '', $input["authority"]);
             if (strlen($input["authority"]) > 0) {
                 $input["authority"] = (int) $this->convertToEnglish($input["authority"]);
             }
         }
-        
+    
         if (isset($input["paycheckNumber"])) {
             if (strlen($input["paycheckNumber"]) > 0) {
                 $input["paycheckNumber"] = (int) $this->convertToEnglish($input["paycheckNumber"]);

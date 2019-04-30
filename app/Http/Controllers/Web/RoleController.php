@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Role;
+use App\Permission;
+use Zizaco\Entrust\Entrust;
+use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditRoleRequest;
 use App\Http\Requests\InsertRoleRequest;
-use App\Permission;
-use App\Role;
-use Illuminate\Http\Response;
-use Zizaco\Entrust\Entrust;
 
 class RoleController extends Controller
 {
@@ -29,16 +29,6 @@ class RoleController extends Controller
         return view("role.index", compact('roles'));
     }
     
-    public function show()
-    {
-        
-    }
-    
-    public function create()
-    {
-        
-    }
-    
     public function store(InsertRoleRequest $request)
     {
         $role = new Role();
@@ -48,8 +38,7 @@ class RoleController extends Controller
             $role->attachPermissions($request->get('permissions', []));
             
             return $this->response->setStatusCode(200);
-        }
-        else {
+        } else {
             return $this->response->setStatusCode(503);
         }
     }
@@ -85,8 +74,7 @@ class RoleController extends Controller
             $role->permissions()
                 ->sync($request->get('permissions', []));
             session()->put("success", "اطلاعات نقش با موفقیت اصلاح شد");
-        }
-        else {
+        } else {
             session()->put("error", "خطای پایگاه داده.");
         }
         
@@ -102,8 +90,7 @@ class RoleController extends Controller
         }
         if ($role->delete()) {
             session()->put('success', 'نقش با موفقیت حذف شد');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده');
         }
         

@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
 
 class InsertAssignmentRequest extends FormRequest
 {
@@ -17,7 +17,7 @@ class InsertAssignmentRequest extends FormRequest
             ->can(Config::get('constants.INSERT_ASSIGNMENT_ACCESS'))) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -45,7 +45,7 @@ class InsertAssignmentRequest extends FormRequest
             $input["numberOfQuestions"] = preg_replace('/\s+/', '', $input["numberOfQuestions"]);
             $input["numberOfQuestions"] = $this->convertToEnglish($input["numberOfQuestions"]);
         }
-        
+    
         if (isset($input["order"])) {
             $input["order"] = preg_replace('/\s+/', '', $input["order"]);
             $input["order"] = $this->convertToEnglish($input["order"]);
