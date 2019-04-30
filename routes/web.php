@@ -10,12 +10,12 @@
 | to using a Closure or controller method. Build something great!
 |
 */
-use App\Classes\Payment\OnlineGateWay;
 use App\Classes\Payment\Responses;
 use App\Http\Controllers\Web\OnlinePaymentController;
 use App\Http\Controllers\Web\PaymentStatusController;
 use App\PaymentModule\Controllers\PaymentVerifierController;
 use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
+use App\PaymentModule\OnlineGateWay;
 use App\PaymentModule\PaymentDriver;
 
 

@@ -2,7 +2,6 @@
 
 namespace App\PaymentModule;
 
-use App\Classes\Payment\OnlineGatewayInterface;
 use App\PaymentModule\Gateways\Behpardakht\BehpardakhtGateWay;
 use App\PaymentModule\Gateways\Zarinpal\ZarinpalGateWay;
 
