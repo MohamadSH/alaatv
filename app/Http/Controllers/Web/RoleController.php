@@ -29,16 +29,6 @@ class RoleController extends Controller
         return view("role.index", compact('roles'));
     }
     
-    public function show()
-    {
-        
-    }
-    
-    public function create()
-    {
-        
-    }
-    
     public function store(InsertRoleRequest $request)
     {
         $role = new Role();

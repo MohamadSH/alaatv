@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class InsertZarinpalTransaction extends FormRequest
 {
-
     public function authorize()
     {
         return true;
@@ -15,9 +14,9 @@ class InsertZarinpalTransaction extends FormRequest
     public function rules()
     {
         return [
-            'order_id'  => 'required',
-            'cost'      => 'required|integer',
-            'refId'     => 'required|integer',
+            'order_id' => 'required',
+            'cost' => 'required|integer',
+            'refId' => 'required|integer',
             'authority' => 'required|string',
         ];
     }

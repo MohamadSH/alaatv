@@ -5,10 +5,9 @@ namespace App\PaymentModule\Gateways\Behpardakht;
 use App\Classes\Nullable;
 use App\PaymentModule\{
     Gateways\OnlinePaymentRedirectionUriInterface,
+    Gateways\OnlinePaymentVerificationResponseInterface,
     OnlineGatewayInterface,
-    OnlinePaymentVerificationResponseInterface,
-    RedirectData
-};
+    RedirectData};
 use DateTime;
 
 class BehpardakhtGateWay implements OnlineGatewayInterface
@@ -134,14 +133,6 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
 
     }
 
-    /**
-     * Send settle request
-     *
-     * @return bool
-     *
-     * @throws MellatException
-     * @throws SoapFault
-     */
     protected function settleRequest()
     {
         $refId = Input::get('RefId');
