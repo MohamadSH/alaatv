@@ -12,29 +12,27 @@ class EditArticlecategoryRequest extends FormRequest
 
     public function authorize()
     {
-        if (Auth()
-            ->user()
-            ->can(Config::get('constants.EDIT_ARTICLECATEGORY_ACCESS'))) {
+        if (Auth()->user()->can(Config::get('constants.EDIT_ARTICLECATEGORY_ACCESS'))) {
             return true;
         }
-        
+
         return false;
     }
 
     public function rules()
     {
         return [
-            'name'  => 'required',
+            'name' => 'required',
             'order' => 'integer|min:0',
         ];
     }
-    
+
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function replaceNumbers()
     {
         $input = $this->request->all();

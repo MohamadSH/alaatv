@@ -8,7 +8,6 @@ use Illuminate\Foundation\Http\FormRequest;
 class ContactUsFormRequest extends FormRequest
 {
     use CharacterCommon;
-    
 
     public function authorize()
     {
@@ -18,13 +17,13 @@ class ContactUsFormRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'email'                => 'sometimes|nullable|email',
-            'fullName'             => 'required|max:255',
-            'phone'                => 'sometimes|nullable|numeric',
-            'message'              => 'required',
+            'email' => 'sometimes|nullable|email',
+            'fullName' => 'required|max:255',
+            'phone' => 'sometimes|nullable|numeric',
+            'message' => 'required',
             'g-recaptcha-response' => 'required|recaptcha',
         ];
-        
+
         //        if($this->request->has("securityQuestion"))
         //        {
         //            $securityQuestion = $this->request->get("securityQuestion");
@@ -39,13 +38,13 @@ class ContactUsFormRequest extends FormRequest
         //        }
         return $rules;
     }
-    
+
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function replaceNumbers()
     {
         $input = $this->request->all();

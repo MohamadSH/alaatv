@@ -119,15 +119,8 @@ class DonateController extends Controller
             Product::DONATE_PRODUCT_5_HEZAR,
         ];
         array_push($donateProductArray, Product::CUSTOM_DONATE_PRODUCT);
-        $orders = Order::whereHas("orderproducts", function ($q) use ($donateProductArray) {
-            $q->whereIn("product_id", $donateProductArray);
-        })
-            ->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
-            ->where("paymentstatus_id",
-                config("constants.PAYMENT_STATUS_PAID"))
-            ->orderBy("completed_at", "DESC")
-            ->get();
-        
+        $orders = $this->repo_getOrders($donateProductArray);
+
         $currentGregorianDate     = Carbon::now()
             ->timezone('Asia/Tehran');
         $delimiter                = "/";
@@ -168,27 +161,15 @@ class DonateController extends Controller
         /** END **/
         
         /** CURRENT MONTH MAXIMUM DONATES **/
-        $today            = $monthToPeriodConvert->where("month", $currentJalaliMonthString)
-            ->first();
+        $today            = $monthToPeriodConvert->where("month", $currentJalaliMonthString)->first();
         $today            = $today["periodBegin"];
         $today            = explode("-", $today);
         $todayYear        = $today[0];
         $todayMonth       = $today[1];
         $todayDay         = $today[2];
         $date             = Carbon::createMidnightDate($todayYear, $todayMonth, $todayDay);
-        $thisMonthDonates = $orders->where("completed_at", ">=", $date)
-            ->pluck("id")
-            ->toArray();
-        $maxDonates       = Orderproduct::whereIn("order_id", $thisMonthDonates)
-            ->where(function ($q) {
-                $q->where("orderproducttype_id", config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
-                    ->orWhereNull("orderproducttype_id");
-            })
-            ->whereIn("product_id", $donateProductArray)
-            ->orderBy("cost", "DESC")
-            ->orderBy("created_at", "DESC")
-            ->take($LATEST_MAX_NUMBER)
-            ->get();
+        $thisMonthDonates = $this->repo_getThisMonthDonates($orders, $date);
+        $maxDonates = $this->repo_MaxDonates($thisMonthDonates, $donateProductArray, $LATEST_MAX_NUMBER);
         $maxDonors        = collect();
         foreach ($maxDonates as $maxDonate) {
             if (isset($maxDonate->order->user->id)) {
@@ -290,13 +271,9 @@ class DonateController extends Controller
                 
                 $totalMonthIncome = 0;
                 foreach ($donates as $donate) {
-                    
-                    $amount = $donate->orderproducts(config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
-                        ->whereIn("product_id",
-                            $donateProductArray)
-                        ->get()
-                        ->sum("cost");
-                    
+
+                    $amount = $this->repo_getTotal($donate, $donateProductArray);
+
                     $totalMonthIncome += $amount;
                 }
                 $dayRatio        = 1 / $currentJalaliMonthDays;
@@ -332,11 +309,7 @@ class DonateController extends Controller
                         
                         $totalMonthIncome = 0;
                         foreach ($donates as $donate) {
-                            $amount = $donate->orderproducts(config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
-                                ->whereIn("product_id",
-                                    $donateProductArray)
-                                ->get()
-                                ->sum("cost");
+                            $amount = $this->repo_getTotal($donate, $donateProductArray);
                             
                             $totalMonthIncome += $amount;
                         }
@@ -353,8 +326,7 @@ class DonateController extends Controller
                 $totalSpend  += $totalMonthSpend;
                 if ($month == $currentJalaliMonthString) {
                     $monthData = $currentJalaliDay." ".$month;
-                }
-                else {
+                } else {
                     $monthData = $month;
                 }
                 
@@ -375,5 +347,56 @@ class DonateController extends Controller
         return view("pages.donate",
             compact("latestDonors", "maxDonors", "months", "chartData", "totalSpend", "totalIncome",
                 "currentJalaliDateString", "currentJalaliMonthString"));
+    }
+
+    /**
+     * @param array $donateProductArray
+     * @return \App\Order[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection
+     */
+    private function repo_getOrders(array $donateProductArray)
+    {
+        return Order::whereHas("orderproducts", function ($q) use ($donateProductArray) {
+            $q->whereIn("product_id", $donateProductArray);
+        })->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))->where("paymentstatus_id",
+                config("constants.PAYMENT_STATUS_PAID"))->orderBy("completed_at", "DESC")->get();
+    }
+
+    /**
+     * @param array $thisMonthDonates
+     * @param array $donateProductArray
+     * @param int $LATEST_MAX_NUMBER
+     * @return \Illuminate\Support\Collection
+     */
+    private function repo_MaxDonates(array $thisMonthDonates, array $donateProductArray, int $LATEST_MAX_NUMBER): \Illuminate\Support\Collection
+    {
+        $maxDonates = Orderproduct::whereIn("order_id", $thisMonthDonates)->where(function ($q) {
+                $q->where("orderproducttype_id", config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))->orWhereNull("orderproducttype_id");
+            })->whereIn("product_id", $donateProductArray)->orderBy("cost", "DESC")->orderBy("created_at", "DESC")->take($LATEST_MAX_NUMBER)->get();
+
+        return $maxDonates;
+    }
+
+    /**
+     * @param $orders
+     * @param $date
+     * @return mixed
+     */
+    private function repo_getThisMonthDonates($orders, $date)
+    {
+        $thisMonthDonates = $orders->where("completed_at", ">=", $date)->pluck("id")->toArray();
+
+        return $thisMonthDonates;
+    }
+
+    /**
+     * @param $donate
+     * @param array $donateProductArray
+     * @return mixed
+     */
+    private function repo_getTotal($donate, array $donateProductArray)
+    {
+        $amount = $donate->orderproducts(config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))->whereIn("product_id", $donateProductArray)->get()->sum("cost");
+
+        return $amount;
     }
 }

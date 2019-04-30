@@ -42,7 +42,6 @@ class MajorController extends Controller
         return $majors->get();
     }
 
-
     public function store(InsertMajorRequest $request)
     {
         $major = Major::where("name", "like", $request->get("name"))

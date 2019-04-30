@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class InsertContentsetRequest extends FormRequest
 {
-
     public function authorize()
     {
         return false;

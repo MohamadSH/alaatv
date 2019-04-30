@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class InsertEmployeeTimeSheet extends FormRequest
 {
-
     public function authorize()
     {
         return true;
@@ -16,7 +15,7 @@ class InsertEmployeeTimeSheet extends FormRequest
     {
         return [
             'user_id' => 'required|exists:users,id',
-            'date'    => 'required|date',
+            'date' => 'required|date',
         ];
     }
 }

@@ -45,7 +45,6 @@ class ContactController extends Controller
         return view('contact.index', compact('contacts', 'userId', 'relatives', 'contacttypes'));
     }
 
-
     public function store(InsertContactRequest $request)
     {
         $contact = new Contact();

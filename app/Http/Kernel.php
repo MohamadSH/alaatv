@@ -21,7 +21,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         Middleware\TrustProxies::class,
     ];
-    
+
     /**
      * The application's route middleware groups.
      *
@@ -38,13 +38,13 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
         ],
-        
+
         'api' => [
             'throttle:120000,1',
             'bindings',
         ],
     ];
-    
+
     /**
      * The application's route middleware.
      *
@@ -74,8 +74,7 @@ class Kernel extends HttpKernel
         'OfflineVerifyPayment'                      => Middleware\OfflineVerifyPayment::class,
         'RemoveOrderCoupon'                         => \App\Http\Middleware\RemoveOrderCoupon::class,
     ];
-    
-    
+
     /**
      * The priority-sorted list of middleware.
      *

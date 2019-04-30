@@ -7,15 +7,12 @@ use Illuminate\Support\Facades\Config;
 
 class EditAttributegroupRequest extends FormRequest
 {
-
     public function authorize()
     {
-        if (Auth()
-            ->user()
-            ->can(Config::get('constants.EDIT_ATTRIBUTEGROUP_ACCESS'))) {
+        if (Auth()->user()->can(Config::get('constants.EDIT_ATTRIBUTEGROUP_ACCESS'))) {
             return true;
         }
-        
+
         return false;
     }
 

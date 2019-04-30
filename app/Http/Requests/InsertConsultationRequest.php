@@ -12,29 +12,27 @@ class InsertConsultationRequest extends FormRequest
 
     public function authorize()
     {
-        if (Auth()
-            ->user()
-            ->can(Config::get('constants.INSERT_CONSULTATION_ACCESS'))) {
+        if (Auth()->user()->can(Config::get('constants.INSERT_CONSULTATION_ACCESS'))) {
             return true;
         }
-        
+
         return false;
     }
 
     public function rules()
     {
         return [
-            'majors'                => 'required|exists:majors,id',
+            'majors' => 'required|exists:majors,id',
             'consultationstatus_id' => 'required|exists:consultationstatuses,id',
         ];
     }
-    
+
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function replaceNumbers()
     {
         $input = $this->request->all();
