@@ -152,7 +152,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('{user}/dashboard', 'Web\DashboardPageController')->name('web.user.dashboard');
         Route::get('profile', 'Web\UserController@show');
-        Route::post('profile/update', 'Web\UserController@update')->name('web.authenticatedUser.profile.update');
+        Route::post('profile', 'Web\UserController@update')->name('web.authenticatedUser.profile.update');
 
         Route::get('info', "Web\UserController@informationPublicUrl");
         Route::get('{user}/info', 'Web\UserController@information');
