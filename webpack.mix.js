@@ -25,10 +25,13 @@ mix.copyDirectory('public/assets/vendors/base', 'public/css');
 
 mix.scripts(
     [
-        'public/assets/vendors/base/vendors.bundle.js',
+        'public/assets/vendors/base/vendors.bundle.edited.js',
         'public/assets/demo/demo12/base/scripts.bundle.js',
+
         // 'public/acm/cubeportfolio/js/jquery.cubeportfolio.min.js',
-        'public/acm/custom-js-app.js'
+
+        'public/acm/custom-js-app.js',
+        'public/acm/AlaatvCustomFiles/js/mLayout.js'
     ],
     'public/js/all.js'
 ).version();
@@ -38,15 +41,17 @@ mix.scripts(
     'public/js/login.js'
 ).version();
 
-mix.scripts(
+mix.babel(
     [
+        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
         'public/acm/videojs/video.min.js',
         'public/acm/videojs/plugins/pip/videojs.pip.min.js',
         'public/acm/videojs/nuevo.min.js',
         'public/acm/videojs/plugins/videojs.p2p.min.js',
         'public/acm/videojs/plugins/videojs.hotkeys.min.js',
         'public/acm/videojs/plugins/seek-to-point.js',
-        // 'public/acm/page-content-show.js'
+        'public/acm/videojs/lang/fa.js',
+        'public/acm/AlaatvCustomFiles/js/page-content-show.js'
     ],
     'public/js/content-show.js'
 ).version();
@@ -79,7 +84,8 @@ mix.babel(
         'public/acm/videojs/plugins/videojs.hotkeys.min.js',
         'public/acm/videojs/plugins/seek-to-point.js',
         'public/acm/AlaatvCustomFiles/js/UserCart.js',
-        // 'public/acm/AlaatvCustomFiles/js/page-product-show.js',
+        'public/acm/videojs/lang/fa.js',
+        'public/acm/AlaatvCustomFiles/js/page-product-show.js',
     ],
     'public/js/product-show.js'
 ).version();
@@ -97,7 +103,7 @@ mix.babel(
     [
         'public/assets/demo/demo12/custom/crud/forms/widgets/bootstrap-switch.js',
         // 'public/assets/demo/demo12/custom/crud/forms/widgets/nouislider.js',
-        'public/acm/AlaatvCustomFiles/js/page-checkout-payment.js',
+        // 'public/acm/AlaatvCustomFiles/js/page-checkout-payment.js',
     ],
     'public/js/checkout-payment.js'
 ).version();
@@ -140,21 +146,24 @@ mix.styles(
 
 mix.styles(
     [
-        'node_modules/lightgallery/src/css/lightgallery.css',
+        'public/acm/AlaatvCustomFiles/css/page-user-orders.css',
+    ],
+    'public/css/user-orders.css'
+).version();
 
-        'public/acm/videojs/skins/nuevo/videojs.min.css',
-        'public/acm/videojs/skins/nuevo/videojs.rtl.css',
+mix.styles(
+    [
+        'node_modules/lightgallery/src/css/lightgallery.css',
+        'public/acm/videojs/skins/alaa-theme/videojs.css',
         'public/acm/videojs/plugins/pip/videojs.pip.min.css',
         'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
         'public/acm/videojs/plugins/seek-to-point.css',
         'public/acm/videojs/fonts/load-font-for-laravel-mix.css',
-
         'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
         'public/acm/AlaatvCustomFiles/css/page-product-show.css',
     ],
     'public/css/product-show.css'
 ).version();
-
 
 mix.styles(
     [
@@ -218,6 +227,13 @@ mix.babel(
     'public/js/admin-content-create.js'
 );
 
+mix.babel(
+    [
+        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+    ],
+    'public/js/page-shop.js'
+);
+
 mix.styles(
     [
         'node_modules/persian-datepicker/dist/css/persian-datepicker.min.css',
@@ -248,14 +264,26 @@ mix.styles(
 
 mix.styles(
     [
-        // 'public/acm/videojs/skins/nuevo/videojs.min.css',
+        'node_modules/slick-carousel/slick/slick.css',
+        'node_modules/slick-carousel/slick/slick-theme.css',
+        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
+        'public/acm/videojs/skins/alaa-theme/videojs.css',
         'public/acm/videojs/skins/nuevo/videojs.rtl.css',
         'public/acm/videojs/plugins/pip/videojs.pip.min.css',
         'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
         'public/acm/videojs/plugins/seek-to-point.css',
-        'public/acm/videojs/fonts/load-font-for-laravel-mix.css',
 
-        'public/acm/AlaatvCustomFiles/css/page-content-show.css'
+        // 'public/acm/AlaatvCustomFiles/css/page-content-show.css'
     ],
     'public/css/content-show.css'
 );
+
+mix.styles(
+    [
+        'node_modules/slick-carousel/slick/slick.css',
+        'node_modules/slick-carousel/slick/slick-theme.css',
+        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
+        'public/acm/AlaatvCustomFiles/css/page-shop.css',
+    ],
+    'public/css/page-shop.css'
+).version();

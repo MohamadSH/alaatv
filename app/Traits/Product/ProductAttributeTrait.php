@@ -62,10 +62,10 @@ trait ProductAttributeTrait
                         array_push($attributesArray, $attribute->id);
                     }
                 }
-                $parentArray = $this->makeParentArray($this);
-                array_push($parentArray, $this);
+                $parentsCollection = $this->getAllParents();
+                $parentsCollection->push($this);
                 $attributes = collect();
-                foreach ($parentArray as $parent) {
+                foreach ($parentsCollection as $parent) {
                     if (isset($attributesArray)) {
                         $attributevalues = $parent->attributevalues->whereIn("attribute_id", $attributesArray);
                     }
@@ -114,12 +114,16 @@ trait ProductAttributeTrait
                 $simpleInfoAttributes      = collect();
                 $checkboxInfoAttributes    = collect();
                 $attributeset              = $product->attributeset;
-                $attributes                = $attributeset->attributes();
+                $attributes                = optional($attributeset)->attributes();
                 $productType               = $product->producttype->id;
                 if (!$product->relationLoaded('attributevalues')) {
                     $product->load('attributevalues');
                 }
-                
+    
+                if (!isset($attributes)) {
+                    return null;
+                }
+
                 $attributes->load('attributetype', 'attributecontrol');
                 
                 foreach ($attributes as $attribute) {

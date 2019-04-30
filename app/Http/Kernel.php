@@ -2,8 +2,29 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\ModifyRequestInputMiddleware;
+use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\CompleteInfo;
+use Laratrust\Middleware\LaratrustRole;
+use Illuminate\Auth\Middleware\Authorize;
+use App\Http\Middleware\RemoveOrderCoupon;
+use Laratrust\Middleware\LaratrustAbility;
+use Laratrust\Middleware\LaratrustPermission;
+use Illuminate\Http\Middleware\SetCacheHeaders;
+use Illuminate\Session\Middleware\StartSession;
+use App\Http\Middleware\CheckForMaintenanceMode;
+use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Routing\Middleware\ThrottleRequests;
+use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
+use App\Http\Middleware\ModifyRequestInputMiddleware;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Session\Middleware\AuthenticateSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
+use Laravel\Passport\Http\Middleware\CreateFreshApiToken;
+use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
 
 class Kernel extends HttpKernel
 {
@@ -15,13 +36,13 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        \App\Http\Middleware\CheckForMaintenanceMode::class,
-        \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
+        CheckForMaintenanceMode::class,
+        ValidatePostSize::class,
         Middleware\TrimStrings::class,
-        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        ConvertEmptyStringsToNull::class,
         Middleware\TrustProxies::class,
     ];
-
+    
     /**
      * The application's route middleware groups.
      *
@@ -30,21 +51,21 @@ class Kernel extends HttpKernel
     protected $middlewareGroups = [
         'web' => [
             Middleware\EncryptCookies::class,
-            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\Session\Middleware\AuthenticateSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            AddQueuedCookiesToResponse::class,
+            StartSession::class,
+            AuthenticateSession::class,
+            ShareErrorsFromSession::class,
             Middleware\VerifyCsrfToken::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
+            SubstituteBindings::class,
+            CreateFreshApiToken::class,
         ],
-
+        
         'api' => [
             'throttle:120000,1',
             'bindings',
         ],
     ];
-
+    
     /**
      * The application's route middleware.
      *
@@ -53,18 +74,18 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth'                                      => \App\Http\Middleware\Authenticate::class,
-        'auth.basic'                                => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'bindings'                                  => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        'can'                                       => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest'                                     => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle'                                  => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'verified'                                  => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'cache.headers'                             => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-        'completeInfo'                              => \App\Http\Middleware\CompleteInfo::class,
-        'role'                                      => \Laratrust\Middleware\LaratrustRole::class,
-        'permission'                                => \Laratrust\Middleware\LaratrustPermission::class,
-        'ability'                                   => \Laratrust\Middleware\LaratrustAbility::class,
+        'auth'                                      => Authenticate::class,
+        'auth.basic'                                => AuthenticateWithBasicAuth::class,
+        'bindings'                                  => SubstituteBindings::class,
+        'can'                                       => Authorize::class,
+        'guest'                                     => RedirectIfAuthenticated::class,
+        'throttle'                                  => ThrottleRequests::class,
+        'verified'                                  => EnsureEmailIsVerified::class,
+        'cache.headers'                             => SetCacheHeaders::class,
+        'completeInfo'                              => CompleteInfo::class,
+        'role'                                      => LaratrustRole::class,
+        'permission'                                => LaratrustPermission::class,
+        'ability'                                   => LaratrustAbility::class,
         'convert'                                   => ModifyRequestInputMiddleware::class,
         'CheckPermissionForSendOrderId'             => Middleware\CheckPermissionForSendOrderId::class,
         'CheckPermissionForSendExtraAttributesCost' => Middleware\CheckPermissionForSendExtraAttributesCost::class,
@@ -72,9 +93,9 @@ class Kernel extends HttpKernel
         'OrderCheckoutPayment'                      => Middleware\OrderCheckoutPayment::class,
         'SubmitOrderCoupon'                         => Middleware\SubmitOrderCoupon::class,
         'OfflineVerifyPayment'                      => Middleware\OfflineVerifyPayment::class,
-        'RemoveOrderCoupon'                         => \App\Http\Middleware\RemoveOrderCoupon::class,
+        'RemoveOrderCoupon'                         => RemoveOrderCoupon::class,
     ];
-
+    
     /**
      * The priority-sorted list of middleware.
      *
@@ -83,11 +104,11 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middlewarePriority = [
-        \Illuminate\Session\Middleware\StartSession::class,
-        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        \App\Http\Middleware\Authenticate::class,
-        \Illuminate\Session\Middleware\AuthenticateSession::class,
-        \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        \Illuminate\Auth\Middleware\Authorize::class,
+        StartSession::class,
+        ShareErrorsFromSession::class,
+        Authenticate::class,
+        AuthenticateSession::class,
+        SubstituteBindings::class,
+        Authorize::class,
     ];
 }

@@ -1092,8 +1092,8 @@ class OrderController extends Controller
                     }
                     foreach ($orderproduct->attributevalues as $value) {
                         if ($orderproduct->product->hasParents()) {
-                            $myParent       = $this->makeParentArray($orderproduct->product);
-                            $myParent       = end($myParent);
+                            $myParent       = $orderproduct->product->getAllParents();
+                            $myParent       = $myParent->last();
                             $attributevalue = $myParent->attributevalues->where("id", $value->id);
                         }
                         else {

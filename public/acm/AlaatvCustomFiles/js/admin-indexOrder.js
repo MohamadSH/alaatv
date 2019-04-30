@@ -18,15 +18,21 @@ var $modal = $('#ajax-modal');
  * Order Admin Ajax
  */
 $(document).on("click", ".deleteOrder", function (){
-    var order_id = $(this).parent().find('.order_id').attr('id');
-    $("input[name=order_id]").val(order_id);
-    $("#deleteOrderTitle").text($("#orderProductFullName_"+order_id).text()+" مربوط به "+ $("#orderCustomerFullName_"+order_id).text());
+    // var order_id = $(this).parent().find('.order_id').attr('id');
+    var remove_link = $(this).attr('remove-link');
+    var fullname = $(this).attr('fullname');
+    $("input[name=order_id]").val(remove_link);
+    $("#deleteOrderTitle").text(fullname + " مربوط به ");
 });
 function removeOrder(){
-    var order_id = $("input[name=order_id]").val();
+    mApp.block('#deleteOrderConfirmationModal', {
+        type: "loader",
+        state: "success",
+    });
+    var remove_link = $("input[name=order_id]").val();
     $.ajax({
         type: 'POST',
-        url: 'order/'+order_id,
+        url: remove_link,
         data:{_method: 'delete'},
         success: function (result) {
             // console.log(result);
@@ -46,11 +52,22 @@ function removeOrder(){
                 "hideMethod": "fadeOut"
             };
             toastr["success"]("سفارش با موفقیت حذف شد!", "پیام سیستم");
-            $("#order-portlet .reload").trigger("click");
+            // $("#order-portlet .reload").trigger("click");
+            $('#deleteOrderConfirmationModal').modal('hide');
+            mApp.unblock('#deleteOrderConfirmationModal');
+
+            var newDataTable =$("#order_table").DataTable();
+            newDataTable.destroy();
+            makeDataTable_loadWithAjax_orders();
         },
         error: function (result) {
             // console.log(result);
             // console.log(result.responseText);
+            mApp.unblock('#deleteOrderConfirmationModal');
+
+            var newDataTable =$("#order_table").DataTable();
+            newDataTable.destroy();
+            makeDataTable_loadWithAjax_orders();
         }
     });
 }

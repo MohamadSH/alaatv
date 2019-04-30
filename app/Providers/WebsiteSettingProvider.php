@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Websitesetting;
-use Illuminate\Support\Facades\{Cache, Config, Schema};
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\{Cache, Config, Schema};
 
 class WebsiteSettingProvider extends ServiceProvider
 {

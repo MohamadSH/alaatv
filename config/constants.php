@@ -65,6 +65,7 @@ return [
     'REMOVE_PERMISSION_ACCESS'                    => 'removePermission',
     'SHOW_PERMISSION_ACCESS'                      => 'showPermission',
     'INSET_USER_ROLE'                             => 'insertUserRole',
+    'SHOW_USER_ROLE'                              => 'showUserRole',
     'LIST_COUPON_ACCESS'                          => 'listCoupon',
     'INSERT_COUPON_ACCESS'                        => "insertCoupon",
     'EDIT_COUPON_ACCESS'                          => "editCoupon",
@@ -99,6 +100,7 @@ return [
     'EDIT_TRANSACTION_ACCESS'                     => 'editTransaction',
     'INSERT_TRANSACTION_ACCESS'                   => 'insertTransaction',
     'SHOW_TRANSACTION_ACCESS'                     => 'showTransaction',
+    'REMOVE_TRANSACTION_ACCESS'                   => 'removeTransaction',
     'EDIT_TRANSACTION_ORDERID_ACCESS'             => 'editTransactionOrderID',
     'LIST_MBTIANSWER_ACCESS'                      => 'listMBTIAnswer',
     'LIST_CONTACT_ACCESS'                         => 'listContact',
@@ -164,6 +166,7 @@ return [
     'GET_USER_REPORT'                             => 'getUserReport',
     'TELEMARKETING_PANEL_ACCESS'                  => 'telemarketingPanel',
     'INSERT_ORDERPRODUCT_ACCESS'                  => 'insertOrderproduct',
+    'SHOW_USER_TOTAL_BON_NUMBER'                  => 'showUserTotalBonNumber',
 
 
     //Technician

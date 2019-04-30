@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Web;
 
 use App\Attribute;
 use App\Attributevalue;
+use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Config;
 use App\Http\Requests\EditAttributevalueRequest;
 use App\Http\Requests\InsertAttributevalueRequest;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Config;
 
 class AttributevalueController extends Controller
 {

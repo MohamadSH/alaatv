@@ -2,75 +2,75 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\{Assignmentstatus,
-    Attribute,
-    Attributecontrol,
-    Attributeset,
-    Bon,
-    Checkoutstatus,
-    Classes\Format\BlockCollectionFormatter,
-    Classes\Repository\ContentRepositoryInterface,
-    Consultationstatus,
-    Content,
-    Contentset,
-    Contenttype,
-    Coupon,
-    Coupontype,
-    Event,
-    Eventresult,
-    Events\FreeInternetAccept,
-    Gender,
-    Http\Requests\ContactUsFormRequest,
-    Http\Requests\InsertUserRequest,
-    Http\Requests\Request,
-    Lottery,
-    Major,
-    Notifications\GeneralNotice,
-    Notifications\GiftGiven,
-    Notifications\UserRegisterd,
-    Order,
-    Orderstatus,
-    Paymentmethod,
-    Paymentstatus,
-    Permission,
-    Product,
-    Productfile,
-    Producttype,
-    Productvoucher,
-    Question,
-    Role,
-    Traits\APIRequestCommon,
-    Traits\CharacterCommon,
-    Traits\Helper,
-    Traits\ProductCommon,
-    Traits\ProductRepository,
-    Traits\RequestCommon,
-    Traits\UserCommon,
-    Transaction,
-    Transactionstatus,
-    User,
-    Userbon,
-    Userbonstatus,
-    Userstatus,
-    Usersurveyanswer,
-    Userupload,
-    Useruploadstatus,
-    Websitepage,
-    Websitesetting};
-use App\Console\Commands\CategoryTree\Ensani;
-use App\Console\Commands\CategoryTree\Riazi;
-use App\Console\Commands\CategoryTree\Tajrobi;
-use App\Http\Controllers\Controller;
+use SEO;
 use Auth;
 use Carbon\Carbon;
-use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\{Config, File, Input, Route, Storage};
 use League\Flysystem\Filesystem;
-use League\Flysystem\Sftp\SftpAdapter;
 use Maatwebsite\ExcelLight\Excel;
-use Maatwebsite\ExcelLight\Spout\{Reader, Row, Sheet, Writer};
-use SEO;
+use App\Http\Controllers\Controller;
+use League\Flysystem\Sftp\SftpAdapter;
+use App\Console\Commands\CategoryTree\Riazi;
+use App\Console\Commands\CategoryTree\Ensani;
+use App\Console\Commands\CategoryTree\Tajrobi;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Maatwebsite\ExcelLight\Spout\{Row, Sheet, Reader, Writer};
+use Illuminate\Support\Facades\{File, Input, Route, Config, Storage};
+use App\{Bon,
+    Role,
+    User,
+    Event,
+    Major,
+    Order,
+    Coupon,
+    Gender,
+    Content,
+    Lottery,
+    Product,
+    Userbon,
+    Question,
+    Attribute,
+    Contentset,
+    Coupontype,
+    Permission,
+    Userstatus,
+    Userupload,
+    Contenttype,
+    Eventresult,
+    Orderstatus,
+    Productfile,
+    Producttype,
+    Transaction,
+    Websitepage,
+    Attributeset,
+    Paymentmethod,
+    Paymentstatus,
+    Traits\Helper,
+    Userbonstatus,
+    Checkoutstatus,
+    Productvoucher,
+    Websitesetting,
+    Assignmentstatus,
+    Attributecontrol,
+    Usersurveyanswer,
+    Useruploadstatus,
+    Traits\UserCommon,
+    Transactionstatus,
+    Consultationstatus,
+    Traits\ProductCommon,
+    Traits\RequestCommon,
+    Http\Requests\Request,
+    Traits\CharacterCommon,
+    Notifications\GiftGiven,
+    Traits\APIRequestCommon,
+    Events\FreeInternetAccept,
+    Notifications\GeneralNotice,
+    Notifications\UserRegisterd,
+    Http\Requests\InsertUserRequest,
+    Http\Requests\ContactUsFormRequest,
+    Classes\Format\BlockCollectionFormatter,
+    Classes\Repository\ContentRepositoryInterface,
+    Classes\Repository\ProductRepository as ProductRepository};
 
 //use Jenssegers\Agent\Agent;
 
@@ -105,25 +105,26 @@ class HomeController extends Controller
         //            $authException = ['index' , 'getImage' , 'error404' , 'error403' , 'error500' , 'errorPage' , 'siteMapXML', 'download' ];
         //        }else{
         $authException = [
-//            'debug',
-'download',
-'telgramAgent',
-'index',
-'getImage',
-'error404',
-'error403',
-'error500',
-'errorPage',
-'aboutUs',
-'contactUs',
-'sendMail',
-'rules',
-'siteMapXML',
-'uploadFile',
-'search',
-'schoolRegisterLanding',
-'lernitoTree',
-'getTreeInPHPArrayString',
+            'debug',
+            'newDownload',
+            'download',
+            'telgramAgent',
+            'index',
+            'getImage',
+            'error404',
+            'error403',
+            'error500',
+            'errorPage',
+            'aboutUs',
+            'contactUs',
+            'sendMail',
+            'rules',
+            'siteMapXML',
+            'uploadFile',
+            'search',
+            'schoolRegisterLanding',
+            'lernitoTree',
+            'getTreeInPHPArrayString',
         ];
         //        }
         $this->middleware('auth', ['except' => $authException]);
@@ -167,9 +168,16 @@ class HomeController extends Controller
     
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        
-        dd(Content::find(9308)->set);
-        
+//        dd(Content::find(10233));
+        dd(Content::find(10233)
+            ->getTaggableTags());
+        return [
+            Product::find(226)->sets->first()
+                ->getContents(),
+            Product::find(227)->sets,
+            Product::find(228)->sets,
+            Product::find(229)->sets,
+        ];
     }
     
     public function search(Request $request)
@@ -307,9 +315,6 @@ class HomeController extends Controller
         
         $pageName = "admin";
         
-        $products = Product::where('id', 240)
-            ->get();
-        
         return view("admin.index",
             compact("pageName", "majors", "userStatuses", "permissions", "roles", "limitStatus", "orderstatuses",
                 "paymentstatuses", "enableStatus", "genders",
@@ -351,8 +356,7 @@ class HomeController extends Controller
         if (isset($lastProduct)) {
             $lastOrderNumber     = $lastProduct->order + 1;
             $defaultProductOrder = $lastOrderNumber;
-        }
-        else {
+        } else {
             $defaultProductOrder = 1;
         }
         
@@ -376,8 +380,7 @@ class HomeController extends Controller
         if ($user->can(Config::get('constants.SHOW_OPENBYADMIN_ORDER'))) {
             $orderstatuses = Orderstatus::whereNotIn('id', [Config::get("constants.ORDER_STATUS_OPEN")])
                 ->pluck('displayName', 'id');
-        }
-        else {
+        } else {
             $orderstatuses = Orderstatus::whereNotIn('id', [
                 Config::get("constants.ORDER_STATUS_OPEN"),
                 Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
@@ -397,11 +400,10 @@ class HomeController extends Controller
         
         $products = collect();
         if ($user->hasRole("onlineNoroozMarketing")) {
-//            $products = [Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ROOT")];
-//            $products = $this->makeProductCollection($products);
-        }
-        else {
-//            $products = $this->makeProductCollection();
+            $products = [Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ROOT")];
+            $products = $this->makeProductCollection($products);
+        } else {
+            $products = $this->makeProductCollection();
         }
         
         $paymentMethods = Paymentmethod::pluck('displayName', 'id')
@@ -733,13 +735,8 @@ class HomeController extends Controller
         $coupons = Coupon::pluck('name', 'id')
             ->toArray();
         $coupons = array_sort_recursive($coupons);
-        
-        //        Meta::set('title', substr("آلاء|پنل پیامک", 0, Config::get("constants.META_TITLE_LIMIT")));
-        //        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
-        
-        $products = Product::where('id', 240)
-            ->get();
-        
+    
+    
         return view("admin.indexSMS",
             compact("pageName", "majors", "userStatuses", "roles", "relatives", "orderstatuses", "paymentstatuses",
                 "genders", "gendersWithUnknown", "products",
@@ -906,8 +903,6 @@ class HomeController extends Controller
         $checkoutStatuses[0] = "نامشخص";
         $checkoutStatuses    = array_sort_recursive($checkoutStatuses);
         
-        $products = Product::where('id', 240);
-        
         return view("admin.indexGetReport",
             compact("pageName", "majors", "userStatuses", "permissions", "roles", "limitStatus", "orderstatuses",
                 "paymentstatuses", "enableStatus", "genders",
@@ -999,30 +994,26 @@ class HomeController extends Controller
      */
     public function newDownload($data, ContentRepositoryInterface $contentRepository)
     {
-        if (isset($data)) {
-            try {
-                $data = (array) decrypt($data);
-            } catch (DecryptException $e) {
-                abort(403);
-            }
-            $url       = $data["url"];
-            $contentId = $data["data"]["content_id"];
-            $content   = $contentRepository->getContentById($contentId);
-            
-            if (Auth::check()) {
-                /** @var \App\User $user */
-                $user = auth()->user();
-                if (!$user->hasContent($content)) {
-                    return redirect()
-                        ->action('Web\ContentController@show', $content)
-                        ->setStatusCode(Response::HTTP_FOUND);
-                }
-                $finalLink = $this->getSecureUrl($url);
-                
-                return redirect($finalLink);
-            }
+        $user = getAuthenticatedUser();
+        if (is_null($data) || is_null($user)) {
+            abort(403, 'Not authorized.');
         }
-        abort(403);
+        try {
+            $data = (array) decrypt($data);
+        } catch (DecryptException $e) {
+            abort(403, 'invalid Data!');
+        }
+        $url       = $data["url"];
+        $contentId = $data["data"]["content_id"];
+        $content   = $contentRepository->getContentById($contentId);
+        if (!$user->hasContent($content)) {
+            return redirect()
+                ->action('Web\ContentController@show', $content)
+                ->setStatusCode(Response::HTTP_FOUND);
+        }
+        $finalLink = $this->getSecureUrl($url);
+    
+        return redirect($finalLink);
     }
     
     /**
@@ -1120,8 +1111,7 @@ class HomeController extends Controller
                 if (Storage::disk(Config::get('constants.DISK18_CLOUD'))
                     ->exists($fileName)) {
                     $diskName = Config::get('constants.DISK18_CLOUD');
-                }
-                else {
+                } else {
                     $diskName = Config::get('constants.DISK18');
                 }
                 break;
@@ -1129,8 +1119,7 @@ class HomeController extends Controller
                 if (Storage::disk(Config::get('constants.DISK19_CLOUD'))
                     ->exists($fileName)) {
                     $diskName = Config::  get('constants.DISK19_CLOUD');
-                }
-                else {
+                } else {
                     $diskName = Config::get('constants.DISK19');
                 }
                 break;
@@ -1138,8 +1127,7 @@ class HomeController extends Controller
                 if (Storage::disk(Config::get('constants.DISK20_CLOUD'))
                     ->exists($fileName)) {
                     $diskName = Config::  get('constants.DISK20_CLOUD');
-                }
-                else {
+                } else {
                     $diskName = Config::get('constants.DISK20');
                 }
                 break;
@@ -1151,20 +1139,17 @@ class HomeController extends Controller
                     if ($file->disks->isNotEmpty()) {
                         $diskName = $file->disks->first()->name;
                         $fileName = $file->name;
-                    }
-                    else {
+                    } else {
                         $externalLink = $file->name;
                     }
-                }
-                else {
+                } else {
                     abort("404");
                 }
         }
         if (isset($downloadPriority) && strcmp($downloadPriority, "cloudFirst") == 0) {
             if (isset($externalLink)) {
                 return redirect($externalLink);
-            }
-            else {
+            } else {
                 if (Storage::disk($diskName)
                     ->exists($fileName)) {
                     $filePrefixPath = Storage::drive($diskName)
@@ -1182,8 +1167,7 @@ class HomeController extends Controller
                             "Content-Length"      => $fs->getSize($fileName),
                             "Content-disposition" => "attachment; filename=\"".basename($fileName)."\"",
                         ]);
-                    }
-                    else {
+                    } else {
                         $fileHost = Storage::drive($diskName)
                             ->getAdapter()
                             ->getHost();
@@ -1197,8 +1181,7 @@ class HomeController extends Controller
                                     $fileRoot)[1];
                             
                             return response()->redirectTo($fileRemotePath.$fileName);
-                        }
-                        else {
+                        } else {
                             $fs     = Storage::disk($diskName)
                                 ->getDriver();
                             $stream = $fs->readStream($fileName);
@@ -1215,8 +1198,7 @@ class HomeController extends Controller
                     //
                 }
             }
-        }
-        else {
+        } else {
             if (isset($diskName) && Storage::disk($diskName)
                     ->exists($fileName)) {
                 $diskAdapter = Storage::disk($diskName)
@@ -1228,8 +1210,7 @@ class HomeController extends Controller
                             $url = $file->getUrl();
                             if (isset($url[0])) {
                                 return response()->redirectTo($url);
-                            }
-                            else {
+                            } else {
                                 $fs     = Storage::disk($diskName)
                                     ->getDriver();
                                 $stream = $fs->readStream($fileName);
@@ -1261,8 +1242,7 @@ class HomeController extends Controller
                     default:
                         break;
                 }
-            }
-            else {
+            } else {
                 if (isset($externalLink)) {
                     return redirect($externalLink);
                 }
@@ -1280,17 +1260,17 @@ class HomeController extends Controller
     {
         $message    = "شما ابتدا باید یکی از این محصولات را سفارش دهید و یا اگر سفارش داده اید مبلغ را تسویه نمایید: "."<br>";
         $productIds = [];
+        /** @var Product $product */
         foreach ($products as $product) {
-            $myParents = $this->makeParentArray($product);
-            if (!empty($myParents)) {
-                $rootParent = end($myParents);
+            $myParents = $product->getAllParents();
+            if ($myParents->isNotEmpty()) {
+                $rootParent = $myParents->last();
                 if (!in_array($rootParent->id, $productIds)) {
                     $message .= '<a href="'.action('ProductController@show',
                             $rootParent->id).'">'.$rootParent->name.'</a><br>';
                     array_push($productIds, $rootParent->id);
                 }
-            }
-            else {
+            } else {
                 if (!in_array($product->id, $productIds)) {
                     $message .= '<a href="'.action('ProductController@show',
                             $product->id).'">'.$product->name.'</a><br>';
@@ -1432,8 +1412,7 @@ class HomeController extends Controller
         
         if (isset($wSetting->branches->main->emails[0]->address)) {
             $to = $wSetting->branches->main->emails[0]->address;
-        }
-        else {
+        } else {
             $to = "";
         }
         // To send HTML mail, the Content-type header must be set
@@ -1490,8 +1469,7 @@ class HomeController extends Controller
                 session()->put('success', 'پیام با موفقیت ارسال شد');
                 
                 return redirect()->back();
-            }
-            else {
+            } else {
                 session()->put('error', 'خطا در ارسال پیام ، لطفا دوباره اقدام نمایید');
                 
                 return redirect()->back();
@@ -1573,8 +1551,7 @@ class HomeController extends Controller
             
             return $this->response->setContent($smsCredit)
                 ->setStatusCode(200);
-        }
-        else {
+        } else {
             return $this->response->setStatusCode(503);
         }
     }
@@ -1616,8 +1593,7 @@ class HomeController extends Controller
             if (strcmp($disk, "product") == 0) {
                 if ($ext == "mp4") {
                     $directory = "video";
-                }
-                else {
+                } else {
                     if ($ext == "pdf") {
                         $directory = "pamphlet";
                     }
@@ -1646,14 +1622,12 @@ class HomeController extends Controller
                     if ($filesystem->put(fopen($newFileNameDir, 'r+'))) {
                         $done = true;
                     }
-                }
-                else {
+                } else {
                     if ($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
                         $done = true;
                     }
                 }
-            }
-            else {
+            } else {
                 if (strcmp($disk, "video") == 0) {
                     $adapter    = new SftpAdapter([
                         'host'          => config('constants.SFTP_HOST'),
@@ -1672,8 +1646,7 @@ class HomeController extends Controller
                         // example:  https://cdn.sanatisharif.ir/media/203/hq/203001dtgr.mp4
                         $fileName = config("constants.DOWNLOAD_SERVER_PROTOCOL").config("constants.DOWNLOAD_SERVER_NAME").config("constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH").$contentSetId.$originalFileName;
                     }
-                }
-                else {
+                } else {
                     $filesystem = Storage::disk($disk."Sftp");
                     //                Storage::putFileAs('photos', new File('/path/to/photo'), 'photo.jpg');
                     if ($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
@@ -1687,8 +1660,7 @@ class HomeController extends Controller
                         "fileName" => $fileName,
                         "prefix"   => $filePrefix,
                     ]);
-            }
-            else {
+            } else {
                 return $this->response->setStatusCode(503);
             }
         } catch (\Exception $e) {
@@ -1731,8 +1703,7 @@ class HomeController extends Controller
         $pageName = "adminBot";
         if (strlen($view) > 0) {
             return view($view, compact('pageName', 'params'));
-        }
-        else {
+        } else {
             abort(404);
         }
     }
@@ -1804,23 +1775,19 @@ class HomeController extends Controller
                                     
                                     event(new FreeInternetAccept($orderUser));
                                     $counter++;
-                                }
-                                else {
+                                } else {
                                     echo "<span style='color:red'>Error on giving voucher to user #".$orderUser->id."</span>";
                                     echo "<br>";
                                 }
-                            }
-                            else {
+                            } else {
                                 echo "<span style='color:orangered'>User  #".$orderUser->id." already has a voucher code</span>";
                                 echo "<br>";
                             }
-                        }
-                        else {
+                        } else {
                             echo "<span style='color:red'>Error on updating order #".$voucherOrder->id." for user #".$orderUser->id."</span>";
                             echo "<br>";
                         }
-                    }
-                    else {
+                    } else {
                         echo "<span style='color:orangered'>Could not find voucher for user  #".$orderUser->id."</span>";
                         echo "<br>";
                     }
@@ -2539,8 +2506,7 @@ class HomeController extends Controller
                         //                        session()->forget('couponMessageError');
                         //                        session()->forget('couponMessageSuccess');
                         //                    }
-                    }
-                    else {
+                    } else {
                         $failedCounter++;
                     }
                 }
@@ -2574,8 +2540,7 @@ class HomeController extends Controller
                     
                     $response = $this->sendRequest(config("constants.TAG_API_URL")."id/$bucket/".$contentset->id, "PUT",
                         $params);
-                }
-                else {
+                } else {
                     dump("Error on updating #".$contentset->id);
                 }
                 
@@ -2600,8 +2565,7 @@ class HomeController extends Controller
                         
                         $response = $this->sendRequest(config("constants.TAG_API_URL")."id/$bucket/".$content->id,
                             "PUT", $params);
-                    }
-                    else {
+                    } else {
                         dump("Error on updating #".$content->id);
                     }
                 }
@@ -2905,7 +2869,7 @@ class HomeController extends Controller
          * }
          * }
          * //$parentsArray = $product->parents;
-         * $parentsArray = $this->makeParentArray($product);
+         * $parentsArray = $product->$parentsCollection();
          * if (!empty($parentsArray)) {
          * foreach ($parentsArray as $parent) {
          * foreach ($parent->gifts as $gift) {
@@ -2958,8 +2922,7 @@ class HomeController extends Controller
             session()->put("error", "لطفا گروه کاربران را تعیین کنید");
             
             return redirect()->back();
-        }
-        else {
+        } else {
             $userGroup = $request->get("userGroup");
         }
         
@@ -3035,8 +2998,7 @@ class HomeController extends Controller
         ];
         if ($request->has("giftCost")) {
             $giftCredit = $request->get("giftCost");
-        }
-        else {
+        } else {
             session()->put("error", "لطفا مبلغ هدیه را تعیین کنید");
             
             return redirect()->back();
@@ -3226,15 +3188,13 @@ class HomeController extends Controller
                 if ($products["filter"] != "all") {
                     if (isset($products["filter"])) {
                         $filterType = $products["filter"];
-                    }
-                    else {
+                    } else {
                         $filterType = "";
                     }
                     
                     if (isset($products["id"])) {
                         $idArray = $products["id"];
-                    }
-                    else {
+                    } else {
                         $idArray = [];
                     }
                     
@@ -3243,8 +3203,7 @@ class HomeController extends Controller
                             foreach ($idArray as $key => $ids) {
                                 if ($key > 0) {
                                     $myFilterType = "or".$filterType;
-                                }
-                                else {
+                                } else {
                                     $myFilterType = $filterType;
                                 }
                                 
@@ -3279,15 +3238,13 @@ class HomeController extends Controller
             $result = $user->deposit($giftCredit, 2);
             if (isset($result["wallet"])) {
                 $wallet = $result["wallet"];
-            }
-            else {
+            } else {
                 $wallet = "unknown";
             }
             if ($result["result"]) {
                 $user->notify(new GiftGiven($giftCredit));
                 $successCounter++;
-            }
-            else {
+            } else {
                 $failedCounter++;
                 dump("Credit for user: ".$user->id." was not given!"."wallet: ".$wallet." ,response: ".$result["responseText"]);
             }
@@ -3388,8 +3345,7 @@ class HomeController extends Controller
                     $userRecord["totalAmount"] += $transaction->cost;
                     $point                     = (int) ($userRecord["totalAmount"] / $amountUnit);
                     $userRecord["point"]       = $point;
-                }
-                else {
+                } else {
                     $point = (int) ($transaction->cost / $amountUnit);
                     $users->push([
                         "user_id"     => $user->id,
@@ -3397,8 +3353,7 @@ class HomeController extends Controller
                         "point"       => $point,
                     ]);
                 }
-            }
-            else {
+            } else {
                 dump("User was not found for transaction ".$transaction->id);
                 $warningCounter++;
             }
@@ -3475,8 +3430,7 @@ class HomeController extends Controller
                 echo "</span>";
                 echo "<br>";
                 $successCounter++;
-            }
-            else {
+            } else {
                 $failedCounter++;
                 dump("Userbon for user ".$userId." was not created");
             }
@@ -3539,8 +3493,7 @@ class HomeController extends Controller
                                 if (isset($row["major"])) {
                                     if ($row["major"] == "r") {
                                         $request->offsetSet("major_id", 1);
-                                    }
-                                    else {
+                                    } else {
                                         if ($row["major"] == "t") {
                                             $request->offsetSet("major_id", 2);
                                         }
@@ -3549,8 +3502,7 @@ class HomeController extends Controller
                                 if (isset($row["gender"])) {
                                     if ($row["gender"] == "پسر") {
                                         $request->offsetSet("gender_id", 1);
-                                    }
-                                    else {
+                                    } else {
                                         if ($row["gender"] == "دختر") {
                                             $request->offsetSet("gender_id", 2);
                                         }
@@ -3562,15 +3514,13 @@ class HomeController extends Controller
                                     $counter++;
                                     echo "User inserted: ".$lastName." ".$mobile;
                                     echo "<br>";
-                                }
-                                else {
+                                } else {
                                     echo "<span style='color:red'>";
                                     echo "Error on inserting user: ".$lastName." ".$mobile;
                                     echo "</span>";
                                     echo "<br>";
                                 }
-                            }
-                            else {
+                            } else {
                                 $fault = "";
                                 if (!$nationalCodeValidation) {
                                     $fault .= " wrong nationalCode ";
@@ -3585,8 +3535,7 @@ class HomeController extends Controller
                                 echo "</span>";
                                 echo "<br>";
                             }
-                        }
-                        else {
+                        } else {
                             echo "<span style='color:orange'>";
                             echo "Warning! user incomplete information: ".$lastName." ,in sheet : ".$sheetName;
                             echo "</span>";
@@ -3638,8 +3587,7 @@ class HomeController extends Controller
                 if ($flag) {
                     $user->update();
                 }
-            }
-            else {
+            } else {
                 $registerRequest = new InsertUserRequest();
                 $registerRequest->offsetSet("mobile", $mobile);
                 $registerRequest->offsetSet("nationalCode", $nationalCode);
@@ -3719,8 +3667,7 @@ class HomeController extends Controller
                                 $result         = json_decode($response->getContent());
                                 if ($responseStatus == 200) {
                                 
-                                }
-                                else {
+                                } else {
                                     $giftOrderDone    = false;
                                     $giftOrderMessage = "خطا در ثبت آیتم سفارش";
                                     foreach ($result as $value) {
@@ -3728,23 +3675,19 @@ class HomeController extends Controller
                                         $giftOrderMessage .= $value;
                                     }
                                 }
-                            }
-                            else {
+                            } else {
                                 $giftOrderDone    = false;
                                 $giftOrderMessage = "خطا در ثبت آیتم سفارش. محصول یافت نشد.";
                             }
                         }
-                    }
-                    else {
+                    } else {
                         $giftOrderDone    = false;
                         $giftOrderMessage = "خطا در ثبت سفارش";
                     }
-                }
-                else {
+                } else {
                     $giftOrderMessage = "کاربر مورد نظر محصولات را از قبل داشت";
                 }
-            }
-            else {
+            } else {
                 $giftOrderMessage = "خطا در یافتن کاربر";
             }
             
@@ -3752,17 +3695,14 @@ class HomeController extends Controller
                 if (isset($user->gender_id)) {
                     if ($user->gender->name == "خانم") {
                         $gender = "خانم ";
-                    }
-                    else {
+                    } else {
                         if ($user->gender->name == "آقا") {
                             $gender = "آقای ";
-                        }
-                        else {
+                        } else {
                             $gender = "";
                         }
                     }
-                }
-                else {
+                } else {
                     $gender = "";
                 }
                 $message = $gender.$user->full_name."\n";
@@ -3771,20 +3711,17 @@ class HomeController extends Controller
                 $message .= "sanatisharif.ir/asset/";
                 $user->notify(new GeneralNotice($message));
                 session()->put("success", $giftOrderMessage);
-            }
-            else {
+            } else {
                 session()->put("error", $giftOrderMessage);
             }
             
             if ($request->expectsJson()) {
                 if ($giftOrderDone) {
                     return $this->response->setStatusCode(200);
-                }
-                else {
+                } else {
                     return $this->response->setStatusCode(503);
                 }
-            }
-            else {
+            } else {
                 return redirect()->back();
             }
         } catch (\Exception    $e) {
@@ -4333,8 +4270,7 @@ class HomeController extends Controller
                     if (Input::has("id")) {
                         $id         = Input::get("id");
                         $productIds = [$id];
-                    }
-                    else {
+                    } else {
                         $productIds = [
                             99,
                             104,
@@ -4692,14 +4628,12 @@ class HomeController extends Controller
                     $warningCounter++;
                     dump("invalid item at counter".$counter);
                     continue;
-                }
-                else {
+                } else {
                     if (!isset($item->tags)) {
                         $warningCounter++;
                         dump("no tags found for".$item->id);
                         continue;
-                    }
-                    else {
+                    } else {
                         $itemTagsArray = $item->tags->tags;
                     }
                 }
@@ -4717,14 +4651,12 @@ class HomeController extends Controller
                     
                     if ($response["statusCode"] == 200) {
                         $successCounter++;
-                    }
-                    else {
+                    } else {
                         dump("item #".$item["id"]." failed. response : ".$response["statusCode"]);
                         $failedCounter++;
                     }
                     $counter++;
-                }
-                else {
+                } else {
                     if (is_array($itemTagsArray) && empty($itemTagsArray)) {
                         $warningCounter++;
                         dump("warning no tags found for item #".$item->id);
@@ -4814,8 +4746,7 @@ class HomeController extends Controller
                 ->get();
             if ($event->isEmpty()) {
                 dd("ثبت نام آغاز نشده است");
-            }
-            else {
+            } else {
                 $event           = $event->first();
                 $events          = $user->eventresults->where("user_id", $user->id)
                     ->where("event_id", $event->id);
@@ -4883,9 +4814,8 @@ class HomeController extends Controller
      */
     public function adminGenerateRandomCoupon(Request $request)
     {
-//        $productCollection = $products = $this->makeProductCollection();
-        $productCollection = Product::where('id', 240);
-        
+        $productCollection = $products = $this->makeProductCollection();
+    
         return view("admin.generateSpecialCoupon", compact("productCollection"));
     }
     
@@ -4937,12 +4867,10 @@ class HomeController extends Controller
             $lastUpdatedByLernitoKey = '';
             if ($key == 0) {
                 $lastUpdatedByLernitoKey = 'riaziUpdate';
-            }
-            else {
+            } else {
                 if ($key == 1) {
                     $lastUpdatedByLernitoKey = 'tajrobiUpdate';
-                }
-                else {
+                } else {
                     if ($key == 2) {
                         $lastUpdatedByLernitoKey = 'ensaniUpdate';
                     }
@@ -5036,8 +4964,7 @@ class HomeController extends Controller
                     $newItem              = $this->changeLernitoNodeToAlaaNode($diffNode['lernitoNode']);
                     $newItem['isNewItem'] = true;
                     $oldChildren[]        = $newItem;
-                }
-                else {
+                } else {
                     if (isset($diffNode['diff']) && isset($diffNode['lernitoNode']) && isset($diffNode['alaaNode'])) {
                         foreach ($oldChildren as $oldChildrenKey => $oldChildrenValue) {
                             if ($diffNode['alaaNode']['id'] == $oldChildrenValue['id']) {
@@ -5098,8 +5025,7 @@ class HomeController extends Controller
             if (isset($value['children']) && count($value['children']) > 0) {
                 //                $htmlPrint .= '<li>('.$value['name'].')'.$this->printDars($value['name'], $value['children'], $value['id'], $pathString, $pathId).'</li>';
                 $htmlPrint .= $this->printDars($value, $pathString, $pathId);
-            }
-            else {
+            } else {
                 
                 $isNewItem = '0';
                 if (isset($value['isNewItem']) && $value['isNewItem'] === true) {
@@ -5168,8 +5094,7 @@ class HomeController extends Controller
                     $maxId = $newMaxId;
                 }
             }
-        }
-        else {
+        } else {
             foreach ($tree as $key => $value) {
                 if (isset($value['id'])) {
                     $value['id'] = (int) $value['id'];
@@ -5195,8 +5120,7 @@ class HomeController extends Controller
         foreach ($lastUpdatedByLernito as $key => $value) {
             if (isset($value['lernitoNode']['_id']) && $value['lernitoNode']['_id'] == $lernitoNodeId) {
                 return $value['lernitoNode'];
-            }
-            else {
+            } else {
                 if (isset($value['diff'])) {
                     $nodeFound = $this->findLernitoNodeById($value['diff'], $lernitoNodeId);
                     if ($nodeFound != null) {
@@ -5229,8 +5153,7 @@ class HomeController extends Controller
             $nodeArrayString .= "
                 <div>]</div>
             </div>";
-        }
-        else {
+        } else {
             $nodeArrayString = "[";
             foreach ($alaaNode as $key => $value) {
                 $nodeId++;
@@ -5253,8 +5176,7 @@ class HomeController extends Controller
             if (count($alaaNode) > 0) {
                 $nodeArrayString .= "
                     <div>]</div>";
-            }
-            else {
+            } else {
                 $nodeArrayString .= "]";
             }
         }

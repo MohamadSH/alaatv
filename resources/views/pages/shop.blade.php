@@ -1,6 +1,7 @@
 @extends('app' , ["pageName"=>$pageName])
 
-@section('right-aside')
+@section('page-css')
+    <link href = "{{ mix('/css/user-dashboard.css') }}" rel = "stylesheet" type = "text/css"/>
 @endsection
 @section('pageBar')
     <nav aria-label = "breadcrumb">
@@ -99,33 +100,89 @@
         </div>
     </div>
     <!--end:: Widgets/Stats-->
+    
     @foreach($blocks as $block)
         @if($block->products->count() > 0)
-            <div class = "row {{ $block->class }}">
-
-                <div class = "col-12">
-                    <div class = "a--devider-with-title">
-                        <div class = "a--devider-title">
-                            <a href = "{{ $block->url }}" class = "m-link m-link--primary">
-                                {{ $block->title }}
-                            </a>
+    
+    
+            <div class = "row blockId-{{ $block->id }} {{ $block->class }}">
+                <div class = "col">
+                    <div class = "m-portlet  m-portlet--bordered" id = "owlCarousel_{{ $block->id }}">
+                        <div class = "m-portlet__head">
+                            <div class = "m-portlet__head-caption">
+                                <div class = "m-portlet__head-title">
+                                    <h3 class = "m-portlet__head-text">
+                                        <a href = "{{ $block->url }}" class = "m-link">
+                                            {{ $block->title }}
+                                        </a>
+                                    </h3>
+                                </div>
+                            </div>
+                            <div class = "m-portlet__head-tools">
+                                <a href = "#" class = "btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
+                                    <i class = "fa flaticon-shapes"></i>
+                                </a>
+                                <a href = "#" class = "btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
+                                    <i class = "flaticon-more-v4"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class = "m-portlet__body m-portlet__body--no-padding">
+                            <!--begin::Widget 30-->
+                            <div class = "m-widget30">
+                        
+                                <div class = "m-widget_head">
+                                    <div class = "m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
+                                        @foreach($block->products as $productKey=>$product)
+                                            <div class = "m-widget_head-owlcarousel-item carousel background-gradient" data-position = "{{ $productKey }}">
+                                                <a href="{{ $product->url }}" >
+                                                    <img class = "a--owl-carousel-type-2-item-image" src = "{{ $product->photo }}">
+                                                </a>
+                                                <br>
+                                                <div class = "m--font-primary">
+                                                    <span>{{ $product->priceText }}</span>
+                                                </div>
+                                                <br>
+                                                <a href="{{ $product->url }}" target="_blank" class="m-link">{{ $product->name }}</a>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                            
+                                </div>
+                            </div>
+                            <!--end::Widget 30-->
                         </div>
                     </div>
                 </div>
-                <div class = "col-12">
-                    <div class = "a--owl-carousel-type-1 owl-carousel owl-theme">
-                        @foreach($block->products as $product)
-                            @include('partials.widgets.product2',[
-                        'widgetTitle'      => $product->name,
-                        'widgetPic'        => $product->photo,
-                        'widgetLink'       => $product->url,
-                        'widgetPrice'      => $product->priceText,
-                        'widgetPriceLabel' => ($product->isFree || $product->basePrice == 0 ? 0 : 1)
-                        ])
-                        @endforeach
-                    </div>
-                </div>
             </div>
+    
+            
+{{--            --}}
+{{--            <div class = "row {{ $block->class }}">--}}
+
+{{--                <div class = "col-12">--}}
+{{--                    <div class = "a--devider-with-title">--}}
+{{--                        <div class = "a--devider-title">--}}
+{{--                            <a href = "{{ $block->url }}" class = "m-link m-link--primary">--}}
+{{--                                {{ $block->title }}--}}
+{{--                            </a>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                <div class = "col-12">--}}
+{{--                    <div class = "a--owl-carousel-type-1 owl-carousel owl-theme">--}}
+{{--                        @foreach($block->products as $product)--}}
+{{--                            @include('partials.widgets.product2',[--}}
+{{--                                'widgetTitle'      => $product->name,--}}
+{{--                                'widgetPic'        => $product->photo,--}}
+{{--                                'widgetLink'       => $product->url,--}}
+{{--                                'widgetPrice'      => $product->priceText,--}}
+{{--                                'widgetPriceLabel' => ($product->isFree || $product->basePrice == 0 ? 0 : 1)--}}
+{{--                                ])--}}
+{{--                        @endforeach--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
 
             {{--@foreach($section["ads"] as $image => $link)
                 @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
@@ -161,4 +218,18 @@
     </div>
 
     @include("partials.certificates")
+@endsection
+
+@section('page-js')
+    <script src = "{{ mix('/js/page-shop.js') }}"></script>
+    
+    <script>
+    
+        @foreach($blocks as $block)
+            @if($block->products->count() > 0)
+                $('#owlCarousel_{{ $block->id }}').OwlCarouselType2();
+            @endif
+        @endforeach
+
+    </script>
 @endsection

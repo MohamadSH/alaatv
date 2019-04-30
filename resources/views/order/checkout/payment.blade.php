@@ -74,18 +74,18 @@
                                             </span>
                                                     <div class="m-form__group form-group text-center m--margin-top-10">
                                                         <div class="m-radio-inline">
-                                                            <label class="m-radio m-radio--solid m-radio--state-info">
-                                                                <input type="radio" name="radioBankType" value="1"
-                                                                       checked>
-                                                                <img src="/acm/extra/payment/gateway/zarinpal-logo.png"
-                                                                     class="img-thumbnail bankLogo" alt="bank-logo">
+{{--                                                            <label class="m-radio m-radio--solid m-radio--state-info">--}}
+{{--                                                                <input type="radio" name="radioBankType" value="1"--}}
+{{--                                                                       checked>--}}
+{{--                                                                <img src="/acm/extra/payment/gateway/zarinpal-logo.png"--}}
+{{--                                                                     class="img-thumbnail bankLogo" alt="bank-logo">--}}
+{{--                                                                <span></span>--}}
+{{--                                                            </label>--}}
+                                                            <label class = "m-radio m-radio--solid m-radio--state-info">
+                                                                <input type = "radio" name = "radioBankType" value = "2" checked>
+                                                                <img src = "/acm/extra/payment/gateway/mellat-logo.png" class = "img-thumbnail bankLogo" alt = "bank-logo">
                                                                 <span></span>
                                                             </label>
-                                                            {{--<label class = "m-radio m-radio--solid m-radio--state-info">--}}
-                                                            {{--<input type = "radio" name = "radioBankType" value = "2">--}}
-                                                            {{--<img src = "/acm/extra/payment/gateway/mellat-logo.png" class = "img-thumbnail bankLogo" alt = "bank-logo">--}}
-                                                            {{--<span></span>--}}
-                                                            {{--</label>--}}
                                                             {{--<label class = "m-radio m-radio--solid m-radio--state-info">--}}
                                                             {{--<input type = "radio" name = "radioBankType" value = "3">--}}
                                                             {{--<img src = "/acm/extra/payment/gateway/pasargad-logo.jpg" class = "img-thumbnail bankLogo" alt = "bank-logo">--}}
@@ -312,17 +312,22 @@
 
                                                         <span class="m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
                                                             <input type="checkbox" data-switch="true"
-                                                                   @if(isset($orderHasDonate) && $orderHasDonate)@elsechecked=""
-                                                                   @endif data-on-text="نمی کنم" data-on-color="danger"
-                                                                   data-off-text="می کنم" data-off-color="success"
+                                                                   @if(isset($orderHasDonate) && $orderHasDonate)
+                                                                   @else
+                                                                   checked=""
+                                                                   @endif
+                                                                   data-on-text="نمی کنم"
+                                                                   data-on-color="danger"
+                                                                   data-off-text="می کنم"
+                                                                   data-off-color="success"
                                                                    data-size="small"
                                                                    {{--data-handle-width="40"--}}id="hasntDonate">
 
                                                         </span>
                                                         <span>
-                                                            <img src="/acm/extra/sad.png"
+                                                            <img src="/acm/extra/sad.gif"
                                                                  class="face-sad m--margin-top-20" alt="">
-                                                            <img src="/acm/extra/happy.png"
+                                                            <img src="/acm/extra/happy.gif"
                                                                  class="face-happy m--margin-top-20" alt="">
                                                         </span>
                                                         <input type="hidden" id="addDonateUrl"
@@ -330,7 +335,11 @@
                                                         <input type="hidden" id="removeDonateUrl"
                                                                value="{{ action('Web\OrderController@removeOrderproduct' , 180) }}">
                                                         <input type="hidden" id="orderHasDonate"
-                                                               value="@if(isset($orderHasDonate) && $orderHasDonate)1 @else 0 @endif">
+                                                               @if(isset($orderHasDonate) && $orderHasDonate)
+                                                               value="1"
+                                                               @else
+                                                               value="0"
+                                                               @endif>
                                                     </div>
                                                 </div>
                                             </div>
@@ -351,7 +360,7 @@
         {{ $invoiceInfo['price']['final'] }}
     </div>
     
-    <input type="hidden" id="invoiceInfo-couponCode" value="@if (isset($coupon)){{ $coupon['code'] }}@endif">
+    <input type="hidden" id="invoiceInfo-couponCode" value="@if(isset($coupon)){{ $coupon['code'] }}@endif">
     
     
     
@@ -362,10 +371,12 @@
 
 @section('page-js')
     <script src="{{ mix('/js/checkout-payment.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/UserCart.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-checkout-payment.js') }}"></script>
     
     <script>
         $(document).ready(function () {
-            let notIncludedProductsInCoupon = {!! $notIncludedProductsInCoupon !!};
+            let notIncludedProductsInCoupon = {!! json_encode($notIncludedProductsInCoupon) !!};
             CheckoutPaymentUi.PrintnotIncludedProductsInCoupon(notIncludedProductsInCoupon);
         });
     </script>

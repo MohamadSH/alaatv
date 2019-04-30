@@ -2,21 +2,21 @@
 
 namespace App;
 
-use App\Collection\BlockCollection;
-use App\Collection\ContentCollection;
-use App\Collection\ProductCollection;
 use App\Collection\SetCollection;
+use App\Collection\BlockCollection;
+use App\Collection\ProductCollection;
+use App\Collection\ContentCollection;
 use Illuminate\Support\Facades\Cache;
 
 /**
  * App\Block
  *
- * @property int                                                            $id
- * @property string|null                                                    $title
- * @property string|null                                                    $tags
- * @property int                                                            $order
- * @property int                                                            $enable
- * @property \Illuminate\Support\Carbon|null                                $created_at
+ * @property int                             $id
+ * @property string|null                     $title
+ * @property string|null                     $tags
+ * @property int                             $order
+ * @property int                             $enable
+ * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null                                $updated_at
  * @property-read \App\Collection\ContentCollection|\App\Content[]          $contents
  * @property-read \App\Collection\ProductCollection|\App\Product[]          $products
@@ -92,7 +92,7 @@ class Block extends BaseModel
         'type',
     ];
     
-    public static function getShopBlocks()
+    public static function getShopBlocks(): ?BlockCollection
     {
         $blocks = Cache::tags('block')
             ->remember('getShopBlocks', config('constants.CACHE_600'), function () {
@@ -175,7 +175,7 @@ class Block extends BaseModel
         return $this;
     }
     
-    public static function getMainBlocks()
+    public static function getMainBlocks(): ?BlockCollection
     {
         $blocks = Cache::tags('block')
             ->remember('getMainBlocks', config('constants.CACHE_600'), function () {
@@ -191,7 +191,6 @@ class Block extends BaseModel
                 
                 return $blocks;
             });
-        
         return $blocks;
     }
     
@@ -244,8 +243,7 @@ class Block extends BaseModel
     {
         if ($input) {
             return urldecode(action($action, ["tags" => $input]));
-        }
-        else {
+        } else {
             return urldecode(action($action));
         }
     }

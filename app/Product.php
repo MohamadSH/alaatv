@@ -2,26 +2,27 @@
 
 namespace App;
 
-use App\Classes\{Advertisable,
-    Checkout\Alaa\AlaaProductPriceCalculator,
-    FavorableInterface,
-    SEO\SeoInterface,
-    SEO\SeoMetaTagsGenerator,
-    Taggable};
-use App\Collection\ProductCollection;
+use Exception;
+use Carbon\Carbon;
+use Illuminate\Database\{Eloquent\Builder};
+use Laravel\Scout\Searchable;
 use App\Collection\SetCollection;
-use App\Traits\{APIRequestCommon,
+use Kalnoy\Nestedset\QueryBuilder;
+use App\Collection\ProductCollection;
+use Illuminate\Support\{Collection, Facades\Cache};
+use App\Classes\{Taggable,
+    Advertisable,
+    SEO\SeoInterface,
+    FavorableInterface,
+    SEO\SeoMetaTagsGenerator,
+    Checkout\Alaa\AlaaProductPriceCalculator};
+use App\Traits\{ProductCommon,
     favorableTraits,
+    APIRequestCommon,
     ModelTrackerTrait,
-    Product\ProductAttributeTrait,
     Product\ProductBonTrait,
     Product\ProductPhotoTrait,
-    ProductCommon};
-use Carbon\Carbon;
-use Exception;
-use Illuminate\Database\{Eloquent\Builder};
-use Illuminate\Support\{Collection, Facades\Cache};
-use Kalnoy\Nestedset\QueryBuilder;
+    Product\ProductAttributeTrait};
 
 /**
  * App\Product
@@ -137,6 +138,7 @@ use Kalnoy\Nestedset\QueryBuilder;
  * @property-read mixed                                                          $redirect_url
  * @property-read \App\Collection\SetCollection|\App\Contentset[]                $sets
  * @property-read mixed                                                          $cache_cooldown_seconds
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product main()
  */
 class Product extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
@@ -146,7 +148,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     |--------------------------------------------------------------------------
     */
     
-    //    use Searchable;
+    use Searchable;
     use ProductCommon;
     use APIRequestCommon;
     use favorableTraits;
@@ -227,6 +229,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'created_at',
         'attributevalues',
         'grand',
+        'productSet',
     ];
     
     /**
@@ -282,8 +285,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
             if ($enable == 1) {
                 $products = $products->enable();
             }
-        }
-        else {
+        } else {
             if ($configurable == 0) {
                 $products = Product::select()
                     ->doesntHave('parents')
@@ -311,8 +313,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     default:
                         break;
                 }
-            }
-            else {
+            } else {
                 $products->orderBy("order");
             }
         }
@@ -438,8 +439,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if (isset($this->slogan) && strlen($this->slogan) > 0) {
             return $this->name.":".$this->slogan;
-        }
-        else {
+        } else {
             return $this->name;
         }
     }
@@ -532,8 +532,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 'discount' => $cost - $customerPrice,
                 'final'    => $customerPrice,
             ];
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -603,8 +602,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if ($value == 0) {
             $this->attributes["amount"] = null;
-        }
-        else {
+        } else {
             $this->attributes["amount"] = $value;
         }
     }
@@ -617,8 +615,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["discount"] = null;
-        }
-        else {
+        } else {
             $this->attributes["discount"] = $value;
         }
     }
@@ -631,8 +628,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["shortDescription"] = null;
-        }
-        else {
+        } else {
             $this->attributes["shortDescription"] = $value;
         }
     }
@@ -645,8 +641,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["longDescription"] = null;
-        }
-        else {
+        } else {
             $this->attributes["longDescription"] = $value;
         }
     }
@@ -659,8 +654,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["specialDescription"] = null;
-        }
-        else {
+        } else {
             $this->attributes["specialDescription"] = $value;
         }
     }
@@ -669,16 +663,14 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      *
      * @param $value
      */
-    public function setOrderAttribute($value): void
+    public function setOrderAttribute($value = null): void
     {
         if ($this->strIsEmpty($value)) {
             $value = 0;
         }
-        
-        if ($this->attributes["order"] != $value) {
-            self::shiftProductOrders($value);
-        }
-        
+    
+        self::shiftProductOrders($value);
+    
         $this->attributes["order"] = $value;
     }
     
@@ -887,8 +879,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 }
                 if (!isset($myParent) || $counter != $depth) {
                     return false;
-                }
-                else {
+                } else {
                     return true;
                 }
             });
@@ -908,13 +899,13 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         
         return Cache::tags(["product"])
             ->remember($key, config("constants.CACHE_60"), function () {
-                $parentsArray = $this->makeParentArray($this);
-                if (empty($parentsArray)) {
+                $parentsArray = $this->getAllParents();
+                if ($parentsArray->isEmpty()) {
                     return false;
                 }
-                else {
-                    return array_last($parentsArray);
-                }
+                
+                return array_last($parentsArray);
+    
             });
     }
     
@@ -1026,8 +1017,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
             if ($this->amount > 0) {
                 $isInStock = true;
             }
-        }
-        else {
+        } else {
             $isInStock = true;
         }
         
@@ -1090,20 +1080,16 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if (!$this->enable) {
             return "محصول مورد نظر غیر فعال است";
-        }
-        else {
+        } else {
             if (isset($this->amount) && $this->amount >= 0) {
                 return "محصول مورد نظر تمام شده است";
-            }
-            else {
+            } else {
                 if (isset($this->validSince) && Carbon::now() < $this->validSince) {
                     return "تاریخ شروع سفارش محصول مورد نظر آغاز نشده است";
-                }
-                else {
+                } else {
                     if (isset($this->validUntil) && Carbon::now() > $this->validUntil) {
                         return "تاریخ سفارش محصول مورد نظر  به پایان رسیده است";
-                    }
-                    else {
+                    } else {
                         return "";
                     }
                 }
@@ -1119,6 +1105,16 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function searchableAs()
     {
         return 'products_index';
+    }
+    
+    public function shouldBeSearchable()
+    {
+        return $this->isPublished();
+    }
+    
+    private function isPublished()
+    {
+        return $this->isActive();
     }
     
     /**
@@ -1172,8 +1168,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         if ($response["statusCode"] == 200) {
             $result = json_decode($response["result"]);
             $tags   = $result->data->tags;
-        }
-        else {
+        } else {
             $tags = [];
         }
         
@@ -1199,8 +1194,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     "fileTypeId" => $key,
                     "lastOrder"  => $lastOrderNumber,
                 ]);
-            }
-            else {
+            } else {
                 $defaultProductFileOrders->push([
                     "fileTypeId" => $key,
                     "lastOrder"  => 1,
@@ -1247,8 +1241,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 }
                 if (!isset($myChildren) || $counter != $depth) {
                     return false;
-                }
-                else {
+                } else {
                     return true;
                 }
             });
@@ -1269,8 +1262,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     if ($grandParent->enable) {
                         $link = action("Web\ProductController@show", $this->grandParent);
                     }
-                }
-                else {
+                } else {
                     if ($this->enable) {
                         $link = action("Web\ProductController@show", $this);
                     }
@@ -1304,7 +1296,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     
     public function getTaggableTags()
     {
-        return $this->tags->tags;
+        return optional($this->tags)->tags;
     }
     
     public function getTaggableId(): int
@@ -1337,12 +1329,10 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                             if ($enableChildren->count() == 1) {
                                 $cost = $enableChildren->first()
                                     ->obtainPrice();
-                            }
-                            else {
+                            } else {
                                 $cost = $this->basePrice;
                             }
-                        }
-                        else {
+                        } else {
                             if ($this->producttype_id == config("constants.PRODUCT_TYPE_SELECTABLE")) {
                                 $allChildren = $this->getAllChildren()
                                     ->where("pivot.isDefault", 1);
@@ -1352,26 +1342,22 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                                         /** @var Product $product */
                                         $cost += $product->obtainPrice();
                                     }
-                                }
-                                else {
+                                } else {
                                     if ($this->basePrice != 0) {
                                         $cost = $this->basePrice;
                                     }
                                 }
-                            }
-                            else {
+                            } else {
                                 $cost = $this->basePrice;
                             }
                         }
-                    }
-                    else {
+                    } else {
                         $grandParent            = $this->grandParent;
                         $grandParentProductType = $grandParent->producttype_id;
                         if ($grandParentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
                             if ($this->basePrice != 0) {
                                 $cost = $this->basePrice;
-                            }
-                            else {
+                            } else {
                                 $cost = $grandParent->basePrice;
                             }
                             
@@ -1381,8 +1367,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                                 if (isset($attributevalue->pivot->extraCost))
                                     $cost += $attributevalue->pivot->extraCost;
                             }*/
-                        }
-                        else {
+                        } else {
                             if ($grandParentProductType == config("constants.PRODUCT_TYPE_SELECTABLE")) {
                                 if ($this->basePrice == 0) {
                                     $children = $this->children;
@@ -1390,8 +1375,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                                     foreach ($children as $child) {
                                         $cost = $child->basePrice;
                                     }
-                                }
-                                else {
+                                } else {
                                     $cost = $this->basePrice;
                                 }
                             }
@@ -1401,8 +1385,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 
                 if (isset($cost)) {
                     return $cost;
-                }
-                else {
+                } else {
                     return null;
                 }
             });
@@ -1433,7 +1416,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $key = "product:makeChildrenArray:".$this->cacheKey();
         
         return Cache::tags(["product"])
-            ->remember($key, config("constants.CACHE_60"), function () {
+            ->remember($key, config("constants.CACHE_600"), function () {
                 $children = collect();
                 if ($this->hasChildren()) {
                     $thisChildren = $this->children;
@@ -1445,6 +1428,38 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 
                 return $children;
             });
+    }
+    
+    public function getAllParents()
+    {
+        $myProduct = $this;
+        $key       = "product:getAllParents:".$myProduct->cacheKey();
+        
+        return Cache::remember($key, config("constants.CACHE_600"), function () use ($myProduct) {
+            $parents = collect();
+            while ($myProduct->hasParents()) {
+                $myparent = $myProduct->parents->first();
+                $parents->push($myparent);
+                $myProduct = $myparent;
+            }
+    
+            return $parents;
+        });
+    }
+    
+    /**
+     * @return Collection
+     */
+    public function getProductChain()
+    {
+        $productChain = collect();
+        $parents      = $this->getAllParents();
+        $productChain = $productChain->merge($parents);
+    
+        $children     = $this->getAllChildren();
+        $productChain = $productChain->merge($children);
+    
+        return $productChain;
     }
     
     /**
@@ -1477,20 +1492,17 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     if ($grandParentProductType == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
                         if ($this->discount > 0) {
                             $discount += $this->discount;
-                        }
-                        else {
+                        } else {
                             if ($grandParent->discount > 0) {
                                 $discount += $this->parents->first()->discount;
                             }
                         }
-                    }
-                    else {
+                    } else {
                         if ($grandParentProductType == config("constants.PRODUCT_TYPE_SELECTABLE")) {
                             $discount = $this->discount;
                         }
                     }
-                }
-                else {
+                } else {
                     $discount = $this->discount;
                 }
                 
@@ -1554,8 +1566,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         if (isset($this->amount) && $this->amount > 0) {
             if ($this->amount < $value) {
                 $this->amount = 0;
-            }
-            else {
+            } else {
                 $this->amount -= $value;
             }
             $this->update();
@@ -1571,8 +1582,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     ->lte($now) && Carbon::parse($this->validUntil)
                     ->gte($now)) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -1588,18 +1598,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
             ->remember($key, config("constants.CACHE_600"), function () {
                 /** @var SetCollection $sets */
                 $sets = $this->sets()
+                    ->wherePivot('deleted_at', '=', null)
                     ->get();
-//            $sets->setVisible([
-//                'name',
-//                'tags',
-//                'contents_count',
-//                'url',
-//                'apiUrl',
-//                'shortName',
-//                'author',
-//                'contentUrl',
-//                'product_set',
-//            ]);
                 return $sets;
             });
     }

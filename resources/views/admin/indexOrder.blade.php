@@ -12,6 +12,14 @@
     <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css" rel="stylesheet" type="text/css"/>
+    <style>
+        .transactionItem {
+            box-shadow: 0px 0px 10px 0px #A4AFFC;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 15px;
+        }
+    </style>
 @endsection
 
 @section('pageBar')
@@ -248,6 +256,7 @@
                             </div>
                         </div>
                     </div>
+                    
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="order_table">
                         {{--delete order modal--}}
                         @permission((config('constants.REMOVE_ORDER_ACCESS')))
@@ -710,14 +719,15 @@
 
             $("#order-portlet-loading").removeClass("d-none");
             $('#order_table > tbody').html("");
+            let defaultContent = "<span class=\"m-badge m-badge--wide label-sm m-badge--danger\"> درج نشده </span>";
             let columns = [
                 {
                     "data": null,
                     "name": "row_child",
                     "defaultContent": ""
                 },
-                { "data": "user.lastName" , "title": "نام خانوادگی"},
-                { "data": "user.firstName" , "title": "نام کوچک" },
+                { "data": "user.lastName" , "title": "نام خانوادگی", "defaultContent": defaultContent},
+                { "data": "user.firstName" , "title": "نام کوچک", "defaultContent": defaultContent},
                 {
                     "data": null,
                     "name": "functions",
@@ -726,17 +736,15 @@
                     "render": function ( data, type, row ) {
                         return '\n' +
                             '            <div class="btn-group">\n' +
-                            '                <span class="order_id hidden" id="'+row.id+'"></span>\n' +
-                            '                <span class="user_id hidden" id="'+row.user.id+'"></span>\n' +
-                            '                    <a target="_blank" class="btn btn-success" href="#">\n' +
-                            '                        <i class="fa fa-pencil"></i> اصلاح \n' +
-                            '                    </a>\n' +
-                            '                    <a class="btn btn-danger deleteOrder" data-target="#deleteOrderConfirmationModal" data-toggle="modal">\n' +
-                            '                        <i class="fa fa-remove" aria-hidden="true"></i> حذف \n' +
-                            '                    </a>\n' +
-                            '                    <a class="btn btn-info sendSms" data-target="#sendSmsModal" data-toggle="modal">\n' +
-                            '                        <i class="fa fa-envelope" aria-hidden="true"></i> ارسال پیامک\n' +
-                            '                    </a>\n' +
+                            '                <a target="_blank" class="btn btn-success" href="'+row.editOrder+'">\n' +
+                            '                    <i class="fa fa-pencil"></i> اصلاح \n' +
+                            '                </a>\n' +
+                            '                <a class="btn btn-danger deleteOrder" data-target="#deleteOrderConfirmationModal" data-toggle="modal" remove-link="'+row.removeLink+'" fullname="'+row.user.firstName+row.user.lastName+'">\n' +
+                            '                    <i class="fa fa-remove" aria-hidden="true"></i> حذف \n' +
+                            '                </a>\n' +
+                            '                <a class="btn btn-info sendSms" data-target="#sendSmsModal" data-toggle="modal">\n' +
+                            '                    <i class="fa fa-envelope" aria-hidden="true"></i> ارسال پیامک\n' +
+                            '                </a>\n' +
                             '                <div id="ajax-modal" class="modal fade" tabindex="-1"></div>\n' +
                             '            </div>';
                     },
@@ -787,22 +795,66 @@
                         return produtsNames;
                     },
                 },
-                { "data": "user.info.major.name" , "title": "رشته" },
-                { "data": "user.province" , "title": "استان" },
-                { "data": "user.city" , "title": "شهر" },
-                { "data": "user.address" , "title": "آدرس" },
-                { "data": "user.postalCode" , "title": "کد پستی" },
+                { "data": "user.info.major.name" , "title": "رشته", "defaultContent": defaultContent},
+                { "data": "user.province" , "title": "استان", "defaultContent": defaultContent},
+                { "data": "user.city" , "title": "شهر", "defaultContent": defaultContent},
+                { "data": "user.address" , "title": "آدرس", "defaultContent": defaultContent},
+                { "data": "user.postalCode" , "title": "کد پستی", "defaultContent": defaultContent},
                 @permission((config('constants.SHOW_USER_MOBILE')))
-                { "data": "user.mobile" , "title": "موبایل", "defaultContent": "......"},
-                { "data": "user.nationalCode" , "title": "کد ملی", "defaultContent": "-" },
+                { "data": "user.mobile" , "title": "موبایل", "defaultContent": defaultContent},
+                { "data": "user.nationalCode" , "title": "کد ملی", "defaultContent": defaultContent},
                 @endpermission
-                { "data": "price" , "title": "مبلغ(تومان)", "defaultContent": "-" },
+                {
+                    "data": null,
+                    "name": "price",
+                    "title": "مبلغ(تومان)",
+                    defaultContent: defaultContent,
+                    "render": function ( data, type, row ) {
+                        if (row.price === null) {
+                            return defaultContent;
+                        }
+                        return row.price.toLocaleString('fa');
+                    },
+                },
                 @permission((config('constants.SHOW_USER_EMAIL')))
-                { "data": "user.email" , "title": "ایمیل", "defaultContent": "......" },
+                { "data": "user.email" , "title": "ایمیل", "defaultContent": defaultContent},
                 @endpermission
-                { "data": "paidPrice" , "title": "پرداخت شده(تومان)", "defaultContent": "-" },
-                { "data": "refundPrice" , "title": "مبلغ برگشتی(تومان)", "defaultContent": "-" },
-                { "data": "debt" , "title": "بدهکار/بستانکار(تومان):", "defaultContent": "-" },
+                {
+                    "data": null,
+                    "name": "paidPrice",
+                    "title": "پرداخت شده(تومان)",
+                    defaultContent: defaultContent,
+                    "render": function ( data, type, row ) {
+                        if (row.paidPrice === null) {
+                            return defaultContent;
+                        }
+                        return row.paidPrice.toLocaleString('fa');
+                    },
+                },
+                {
+                    "data": null,
+                    "name": "refundPrice",
+                    "title": "مبلغ برگشتی(تومان)",
+                    defaultContent: defaultContent,
+                    "render": function ( data, type, row ) {
+                        if (row.refundPrice === null) {
+                            return defaultContent;
+                        }
+                        return row.refundPrice.toLocaleString('fa');
+                    },
+                },
+                {
+                    "data": null,
+                    "name": "debt",
+                    "title": "بدهکار/بستانکار(تومان):",
+                    defaultContent: defaultContent,
+                    "render": function ( data, type, row ) {
+                        if (row.debt === null) {
+                            return defaultContent;
+                        }
+                        return row.debt.toLocaleString('fa');
+                    },
+                },
                 {
                     "data": null,
                     "name": "successfulTransactions",
@@ -818,11 +870,8 @@
                             if(isNaN(index)) {
                                 continue;
                             }
+                            successfulTransactions += '<div class="transactionItem successfulTransactionItem">';
                             let successfulTransaction = row.successfulTransactions[index];
-                            successfulTransactions += '<a target="_blank" href="#" class="btn m-btn--pill m-btn--air btn-info">اصلاح</a>';
-                            if (typeof successfulTransaction.grandParent !== 'undefined') {
-                                successfulTransactions += '<a target="_blank" href="#" class="btn m-btn--pill m-btn--air btn-info">رفتن به تراکنش والد</a>';
-                            }
                             if (typeof successfulTransaction.paymentmethod !== 'undefined') {
                                 successfulTransactions += successfulTransaction.paymentmethod.displayName;
                             } else {
@@ -830,22 +879,31 @@
                             }
                             successfulTransactions += '- مبلغ: ';
                             if (successfulTransaction.cost >= 0) {
-                                successfulTransactions += successfulTransaction.cost + '<br>';
+                                successfulTransactions += successfulTransaction.cost.toLocaleString('fa');
                             } else {
-                                successfulTransactions += successfulTransaction.cost + ' (دریافت) ' + '<br>';
+                                successfulTransactions += successfulTransaction.cost.toLocaleString('fa') + ' (دریافت) ';
                             }
+
+                            successfulTransactions += '<a target="_blank" href="#" class="btn btn-sm m-btn--pill m-btn--air btn-info m--margin-left-10">اصلاح</a>';
+                            if (typeof successfulTransaction.grandParent !== 'undefined') {
+                                successfulTransactions += '<a target="_blank" href="#" class="btn btn-sm m-btn--pill m-btn--air btn-info m--margin-left-10">رفتن به تراکنش والد</a>';
+                            }
+                            
+                            successfulTransactions += '<br>';
+                            
                             successfulTransactions += ',تاریخ پرداخت:';
-                            if (typeof successfulTransaction.completed_at !== 'undefined') {
-                                successfulTransactions += successfulTransaction.completed_at;
+                            if (typeof successfulTransaction.jalaliCompletedAt !== 'undefined' && successfulTransaction.jalaliCompletedAt !== null) {
+                                successfulTransactions += successfulTransaction.jalaliCompletedAt;
                             } else {
                                 successfulTransactions += '<span class="bold m--font-danger">نامشخص</span>';
                             }
                             successfulTransactions += ',توضیح مدیریتی:';
-                            if (typeof successfulTransaction.managerComment !== 'undefined') {
+                            if (typeof successfulTransaction.managerComment !== 'undefined' && successfulTransaction.managerComment !== null) {
                                 successfulTransactions += successfulTransaction.managerComment;
                             } else {
                                 successfulTransactions += '<span class="m-badge m-badge--wide m-badge--warning">ندارد</span>';
                             }
+                            successfulTransactions += '</div>';
                         }
                         return successfulTransactions;
                     },
@@ -864,11 +922,21 @@
                             if (isNaN(index)) {
                                 continue;
                             }
+                            pendingTransactions += '<div class="transactionItem pendingTransactionItem">';
                             let pendingTransaction = row.pendingTransactions[index];
-                            pendingTransactions += '<a target="_blank" href="#" class="btn btn-xs blue-sharp btn-outline  sbold">اصلاح</a>';
+                            
                             if (typeof pendingTransaction.paymentmethod !== 'undefined') {
                                 pendingTransactions += pendingTransaction.paymentmethod.displayName;
                             }
+
+                            if (typeof pendingTransaction.cost !== 'undefined') {
+                                pendingTransactions += ' ,مبلغ:  ' + pendingTransaction.cost.toLocaleString('fa');
+                            } else {
+                                pendingTransactions += '<span class="bold m--font-danger">بدون مبلغ</span>';
+                            }
+                            pendingTransactions += '<br>';
+                            pendingTransactions += '<a target="_blank" href="#" class="btn btn-sm btn-xs blue-sharp btn-outline sbold m--margin-left-10">اصلاح</a>';
+                            
                             if (typeof pendingTransaction.transactionID !== 'undefined') {
                                 pendingTransactions += '  ,شماره تراکنش: ' + pendingTransaction.transactionID;
                             }
@@ -881,23 +949,19 @@
                             if (typeof pendingTransaction.paycheckNumber !== 'undefined') {
                                 pendingTransactions += '  ,شماره چک: ' + pendingTransaction.paycheckNumber;
                             }
-                            if (typeof pendingTransaction.cost !== 'undefined') {
-                                pendingTransactions += ' ,مبلغ:  ' + pendingTransaction.cost.toLocaleString('fa');
-                            } else {
-                                pendingTransactions += '<span class="bold m--font-danger">بدون مبلغ</span>';
-                            }
                             pendingTransactions += ' ,تاریخ پرداخت: ';
-                            if (typeof pendingTransaction.completed_at !== 'undefined') {
-                                pendingTransactions += pendingTransaction.completed_at;
+                            if (typeof pendingTransaction.jalaliCompletedAt !== 'undefined' && pendingTransaction.jalaliCompletedAt !== null) {
+                                pendingTransactions += pendingTransaction.jalaliCompletedAt;
                             } else {
                                 pendingTransactions += '<span class="bold m--font-danger">نامشخص</span>';
                             }
                             pendingTransactions += ' ,توضیح مدیریتی: ';
-                            if (typeof pendingTransaction.managerComment !== 'undefined' && pendingTransaction.managerComment.length > 0) {
+                            if (typeof pendingTransaction.managerComment !== 'undefined' && pendingTransaction.managerComment !== null) {
                                 pendingTransactions += '<span class="bold m--font-info">' + pendingTransaction.managerComment + '</span>';
                             } else {
                                 pendingTransactions += '<span class="bold m--font-danger">نامشخص</span>';
                             }
+                            pendingTransactions += '</div>';
                         }
                         return pendingTransactions;
                     },
@@ -916,35 +980,41 @@
                             if (isNaN(index)) {
                                 continue;
                             }
+                            unpaidTransactions += '<div class="transactionItem unpaidTransactionItem">';
                             let unpaidTransaction = row.unpaidTransactions[index];
-                            unpaidTransactions += '<a target="_blank" href="#" class="btn m-btn--pill m-btn--air btn-info">اصلاح</a>';
+                            
                             if (typeof unpaidTransaction.cost !== 'undefined') {
                                 unpaidTransactions += ' ,مبلغ:  ' + unpaidTransaction.cost.toLocaleString('fa');
                             } else {
                                 unpaidTransactions += '<span class="bold m--font-danger">بدون مبلغ</span>';
                             }
+                            unpaidTransactions += '<a target="_blank" href="#" class="btn btn-sm m-btn--pill m-btn--air btn-info m--margin-left-10">اصلاح</a>';
+
+                            unpaidTransactions += '<br>';
+                            
                             unpaidTransactions += ' ,مهلت پرداخت: ';
-                            if (typeof unpaidTransaction.deadline_at !== 'undefined') {
-                                unpaidTransactions += unpaidTransaction.deadline_at;
+                            if (typeof unpaidTransaction.jalaliDeadlineAt !== 'undefined') {
+                                unpaidTransactions += unpaidTransaction.jalaliDeadlineAt;
                             } else {
                                 unpaidTransactions += '<span class="bold m--font-danger">نامشخص</span>';
                             }
                             unpaidTransactions += ' ,توضیح مدیریتی: ';
-                            if (typeof unpaidTransaction.managerComment !== 'undefined') {
+                            if (typeof unpaidTransaction.managerComment !== 'undefined' &&  unpaidTransaction.managerComment !== null) {
                                 unpaidTransactions += '<span class="bold m--font-info">' + unpaidTransaction.managerComment + '</span>';
                             } else {
                                 unpaidTransactions += '<span class="m-badge m-badge--wide m-badge--warning">ندارد</span>';
                             }
+                            unpaidTransactions += '</div>';
                         }
                         return unpaidTransactions;
                     },
                 },
-                { "data": "managerComment" , "title": "توضیحات مسئول", "defaultContent": "-" },
+                { "data": "managerComment" , "title": "توضیحات مسئول", "defaultContent": defaultContent},
                 {
                     "data": null,
                     "name": "postingInfo",
                     "title": "کد مرسوله پستی",
-                    defaultContent: '',
+                    defaultContent: '<span class="m-badge m-badge--wide m-badge--info">ندارد</span>',
                     "render": function ( data, type, row ) {
                         if (row.postingInfo.length === 0) {
                             return '<span class="m-badge m-badge--wide m-badge--info">ندارد</span>';
@@ -971,7 +1041,7 @@
                     "data": null,
                     "name": "customerDescription",
                     "title": "توضیحات مشتری",
-                    defaultContent: '',
+                    defaultContent: '<span class="m-badge m-badge--wide m-badge--warning">بدون توضیح</span>',
                     "render": function ( data, type, row ) {
                         if (typeof row.customerDescription !== 'undefined' && row.customerDescription !== null && row.customerDescription.length > 0) {
                             return '<span class="m--font-danger bold">'+row.customerDescription+'<br></span>';
@@ -984,64 +1054,64 @@
                     "data": null,
                     "name": "orderstatus",
                     "title": "وضعیت سفارش",
-                    defaultContent: '',
+                    defaultContent: defaultContent,
                     "render": function ( data, type, row ) {
                         if (typeof row.orderstatus.id !== 'undefined') {
-                            return '-';
+                            return defaultContent;
                         }
-                        let orderstatusId = row.orderstatus.id;
+                        let orderstatusName = row.orderstatus.name;
                         let badgeStyle = 'm-badge--';
-                        if (orderstatusId == {!! config("constants.ORDER_STATUS_CLOSED") !!}) {
+                        if (orderstatusName === 'closed') {
                             badgeStyle += 'success';
-                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_CANCELED") !!}) {
+                        } else if (orderstatusName === 'canceled') {
                             badgeStyle += 'danger';
-                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_POSTED") !!}) {
+                        } else if (orderstatusName === 'posted') {
                             badgeStyle += 'info';
-                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_REFUNDED") !!}) {
+                        } else if (orderstatusName === 'refunded') {
                             badgeStyle += '';
-                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_OPEN") !!}) {
+                        } else if (orderstatusName === 'open') {
                             badgeStyle += 'danger';
-                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_OPEN_BY_ADMIN") !!}) {
+                        } else if (orderstatusName === 'openByAdmin') {
                             badgeStyle += 'warning';
-                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_READY_TO_POST") !!}) {
+                        } else if (orderstatusName === 'readyToPost') {
                             badgeStyle += 'info';
-                        } else if (orderstatusId == {!! config("constants.ORDER_STATUS_PENDING") !!}) {
+                        } else if (orderstatusName === 'pending') {
                             badgeStyle += '';
                         }
-                        return '<span class="m-badge m-badge--wide '+badgeStyle+'"> '+orderstatusId+' - '+row.orderstatus.displayName+'</span>';
+                        return '<span class="m-badge m-badge--wide '+badgeStyle+'"> '+row.orderstatus.displayName+'</span>';
                     },
                 },
                 {
                     "data": null,
                     "name": "paymentstatus",
                     "title": "وضعیت پرداخت",
-                    defaultContent: '',
+                    defaultContent: defaultContent,
                     "render": function ( data, type, row ) {
                         if (typeof row.paymentstatus.id !== 'undefined') {
-                            return '-';
+                            return defaultContent;
                         }
-                        let paymentstatusId = row.paymentstatus.id;
+                        let paymentstatusName = row.paymentstatus.name;
                         let badgeStyle = 'm-badge--';
-                        if (paymentstatusId == {!! config("constants.PAYMENT_STATUS_PAID") !!}) {
+                        if (paymentstatusName === 'paid') {
                             badgeStyle += 'success';
-                        } else if (paymentstatusId == {!! config("constants.PAYMENT_STATUS_UNPAID") !!}) {
+                        } else if (paymentstatusName === 'unpaid') {
                             badgeStyle += 'danger';
-                        } else if (paymentstatusId == {!! config("constants.PAYMENT_STATUS_INDEBTED") !!}) {
+                        } else if (paymentstatusName === 'indebted') {
                             badgeStyle += 'warning';
-                        } else if (paymentstatusId == 4) {
+                        } else if (paymentstatusName === 'approvedIndebted') {
                             badgeStyle += 'warning';
                         }
-                        return '<span class="m-badge m-badge--wide '+badgeStyle+'"> '+paymentstatusId+' - '+row.paymentstatus.displayName+'</span>';
+                        return '<span class="m-badge m-badge--wide '+badgeStyle+'">'+row.paymentstatus.displayName+'</span>';
                     },
                 },
-                { "data": "jalaliUpdatedAt" , "title": "تاریخ اصلاح مدیریتی:", "defaultContent": "<span class=\"m-badge m-badge--wide label-sm m-badge--danger\"> درج نشده </span>" },
-                { "data": "completed_at" , "title": "تاریخ ثبت نهایی:", "defaultContent": "<span class=\"m-badge m-badge--wide label-sm m-badge--danger\"> درج نشده </span>" },
-                { "data": "usedBonSum" , "title": "تعداد بن استفاده شده:", "defaultContent": "......" },
+                { "data": "jalaliUpdatedAt" , "title": "تاریخ اصلاح مدیریتی:", "defaultContent": defaultContent },
+                { "data": "jalaliCompletedAt" , "title": "تاریخ ثبت نهایی:", "defaultContent": defaultContent },
+                { "data": "usedBonSum" , "title": "تعداد بن استفاده شده:", "defaultContent": defaultContent },
                 {
                     "data": null,
                     "name": "addedBonSum",
                     "title": "تعداد بن اضافه شده به شما از این سفارش:",
-                    defaultContent: '',
+                    defaultContent: '<span class="m-badge m-badge--wide m-badge--info">سفارش خالی است!</span>',
                     "render": function ( data, type, row ) {
                         if (row.orderproducts.length === 0) {
                             return '<span class="m-badge m-badge--wide m-badge--info">سفارش خالی است!</span>';
@@ -1054,10 +1124,10 @@
                     "data": null,
                     "name": "couponInfo",
                     "title": "کپن استفاده شده:",
-                    defaultContent: '',
+                    defaultContent: "<span class=\"m-badge m-badge--wide label-sm m-badge--info\"> ندارد </span>",
                     "render": function ( data, type, row ) {
                         if (row.couponInfo == null) {
-                            return '-';
+                            return "<span class=\"m-badge m-badge--wide label-sm m-badge--info\"> ندارد </span>";
                         }
 
                         let couponReport = ' کپن تخفیف ' +
@@ -1074,8 +1144,8 @@
                         return couponReport;
                     },
                 },
-                { "data": "paymentstatus.displayName" , "title": "وضعیت پرداخت:", "defaultContent": "نا مشخص" },
-                { "data": "jalaliCreatedAt" , "title": "تاریخ ایجاد اولیه", "defaultContent": "<span class=\"m-badge m-badge--wide label-sm m-badge--danger\"> درج نشده </span>" },
+                { "data": "paymentstatus.displayName" , "title": "وضعیت پرداخت:", "defaultContent": defaultContent },
+                { "data": "jalaliCreatedAt" , "title": "تاریخ ایجاد اولیه", "defaultContent": defaultContent },
             ];
             let dataFilter = function(data){
                 var json = jQuery.parseJSON( data );
@@ -1091,7 +1161,11 @@
                 return JSON.stringify( json ); // return JSON string
             };
             let ajaxData = function (data) {
-                data.page = getNextPageParam(data.start, data.length);
+                mApp.block('#order_table_wrapper', {
+                    type: "loader",
+                    state: "info",
+                });
+                data.orders = getNextPageParam(data.start, data.length);
                 let $form = $("#filterOrderForm");
                 let formData = getFormData($form);
                 // let formData = $form.serializeArray();
@@ -1102,6 +1176,7 @@
             };
             let dataSrc = function (json) {
                 $("#order-portlet-loading").addClass("d-none");
+                mApp.unblock('#order_table_wrapper');
                 return json.data;
             };
             makeDataTable_loadWithAjax("order_table", "/order", columns, dataFilter, ajaxData, dataSrc);

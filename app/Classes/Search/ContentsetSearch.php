@@ -20,6 +20,7 @@ class ContentsetSearch extends SearchAbstract
 
 //    protected $numberOfItemInEachPage = 2;
     protected $validFilters = [
+        'q',
         'name',
         'tags',
     ];
@@ -32,7 +33,6 @@ class ContentsetSearch extends SearchAbstract
     protected function apply(array $filters)
     {
         $this->pageNum = $this->setPageNum($filters);
-//dd($this->pageNum);
         $key = $this->makeCacheKey($filters);
         
         return Cache::tags([

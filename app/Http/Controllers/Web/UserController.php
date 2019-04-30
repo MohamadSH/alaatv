@@ -910,6 +910,7 @@ class UserController extends Controller
             ->first();
         
         $userCompletion = $user->info['completion'];
+
         
         return view("user.profile.profile",
             compact("user", 'event', 'userKonkurResult', 'genders', 'majors', 'sideBarMode',
@@ -1010,9 +1011,9 @@ class UserController extends Controller
             $videos    = collect();
             foreach ($products as $product) {
                 
-                $parentsArray = $this->makeParentArray($product);
+                $parents = $product->getAllParents();
                 
-                $this->addVideoPamphlet($parentsArray, $pamphlets, $videos);
+                $this->addVideoPamphlet($parents, $pamphlets, $videos);
                 
                 $childrenArray = $product->children;
                 $this->addVideoPamphlet($childrenArray, $pamphlets, $videos, "digChildren");
@@ -2137,12 +2138,10 @@ class UserController extends Controller
             
             $message = 'اطلاعات با موفقیت اصلاح شد';
             $status  = Response::HTTP_OK;
-            session()->flash('success', $message);
         }
         else {
             $message = 'Database error on updating user';
             $status  = Response::HTTP_SERVICE_UNAVAILABLE;
-            session()->flash('error', $message);
         }
         
         if ($request->expectsJson()) {

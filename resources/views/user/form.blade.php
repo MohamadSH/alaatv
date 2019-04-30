@@ -730,7 +730,7 @@
 
 
         <!--begin::Form-->
-        {!! Form::open(['files' => 'true', 'method' => 'PUT', 'class' => 'm-form m-form--fit m-form--label-align-right', 'action' => ['Web\UserController@update' , Auth::user()]]) !!}
+        {!! Form::open(['files' => 'true', 'method' => 'POST','url' => [route('web.authenticatedUser.profile.update')] , 'role'=>'form' , 'class' => 'm-form m-form--fit m-form--label-align-right']) !!}
 
 
         <div class = "m-portlet__body">
