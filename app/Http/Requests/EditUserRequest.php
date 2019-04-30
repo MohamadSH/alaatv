@@ -38,19 +38,16 @@ class EditUserRequest extends FormRequest
         $authorized = true;
         
         $authenticatedUser = $request->user();
-        $userId            = $request->segment(2);
-        if ($userId == null) {
-            $user = $authenticatedUser;
-            if ($user->isUserProfileLocked()) {
+        $userId            = $this->getUserIdFromRequestBody($request)->getValue(false);
+        if (!$userId) {
+            if ($authenticatedUser->isUserProfileLocked()) {
                 $authorized = false;
             }
         }
-        else {
-            if ($userId !== $authenticatedUser->id && !$authenticatedUser->can(config('constants.EDIT_USER_ACCESS'))) {
+        elseif ($userId !== $authenticatedUser->id && !$authenticatedUser->can(config('constants.EDIT_USER_ACCESS'))) {
                 $authorized = false;
-            }
+
         }
-        
         return $authorized;
     }
 
@@ -203,5 +200,14 @@ class EditUserRequest extends FormRequest
             $input['email'] = $this->convertToEnglish($input['email']);
         }
         $this->replace($input);
+    }
+
+    private function getUserIdFromRequestBody(Request $request){
+        $userId            = $request->segment(2);
+        if ((int)$userId == 0)
+            $userId = null;
+
+        return nullable($userId);
+
     }
 }
