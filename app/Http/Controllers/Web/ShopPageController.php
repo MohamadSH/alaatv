@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Web;
 
 use App\Block;
+use App\Slideshow;
+use App\Websitesetting;
+use App\Traits\MetaCommon;
+use Illuminate\Http\Request;
 use App\Classes\SEO\SeoDummyTags;
 use App\Http\Controllers\Controller;
-use App\Slideshow;
-use App\Traits\MetaCommon;
-use App\Websitesetting;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use App\Http\Resources\Block as BlockResource;
 
 class ShopPageController extends Controller
 {
@@ -41,10 +41,10 @@ class ShopPageController extends Controller
         if (request()->expectsJson()) {
             $numberOfBlocks = $blocks->count();
             return response()->json([
-                'mainBanner' => $slides,
+                'mainBanner' => $slides->isNotEmpty() ? $slides : null,
                 'block'      => [
                     'current_page'   => 1,
-                    'data'           => $blocks,
+                    'data'           => BlockResource::collection($blocks),
                     'first_page_url' => null,
                     'from'           => 1,
                     'last_page'      => 1,

@@ -77,12 +77,36 @@ var UesrCart = function () {
         setCookie('cartItems', JSON.stringify(userCart), 7);
     }
 
+    function increaseOneProductNumber() {
+        let shoppingBasketOfUserNumber = $('.shoppingBasketOfUserNumber');
+        if (shoppingBasketOfUserNumber.length === 0) {
+            return 0;
+        }
+        let number = parseInt(shoppingBasketOfUserNumber.html());
+        shoppingBasketOfUserNumber.html((++number));
+    }
+
+    function reduceOneProductNumber() {
+        let shoppingBasketOfUserNumber = $('.shoppingBasketOfUserNumber');
+        if (shoppingBasketOfUserNumber.length === 0) {
+            return 0;
+        }
+        let number = parseInt(shoppingBasketOfUserNumber.html());
+        shoppingBasketOfUserNumber.html((--number));
+    }
+
     return {
         addToCartInCookie: function (data) {
             addToCartInCookie(data);
         },
         removeFromCartInCookie: function (data) {
             removeFromCartInCookie(data);
+        },
+        increaseOneProductNumber: function () {
+            increaseOneProductNumber();
+        },
+        reduceOneProductNumber: function () {
+            reduceOneProductNumber();
         },
     };
 }();

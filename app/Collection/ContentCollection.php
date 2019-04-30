@@ -17,6 +17,7 @@ class ContentCollection extends Collection
 {
     use JsonResponseFormat;
     
+    
     public function videos()
     {
         return $this->where("contenttype_id", Content::CONTENT_TYPE_VIDEO);

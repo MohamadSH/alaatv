@@ -18,19 +18,19 @@ class InsertEventResultRequest extends FormRequest
     {
 
         return [
-            'rank' => 'required',
+            'rank'       => 'required',
             //            'participationCode' => 'unique:eventresults,'.Hash::make($this->request->get('participationCode')),
-            'event_id' => 'required|exists:events,id',
+            'event_id'   => 'required|exists:events,id',
             'reportFile' => 'required|mimes:jpeg,jpg,png,pdf,rar,zip',
         ];
     }
-
+    
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-
+    
     protected function replaceNumbers()
     {
         $input = $this->request->all();
@@ -45,7 +45,7 @@ class InsertEventResultRequest extends FormRequest
         if (isset($input["comment"])) {
             $input["comment"] = preg_replace('/\s+/', '', $input["comment"]);
         }
-
+    
         $this->replace($input);
     }
 }

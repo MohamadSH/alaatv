@@ -294,4 +294,113 @@ trait ProfileTrait
     {
         return $this->completion('lockProfile') == 100;
     }
+
+    public function getUserStatusAttribute()
+    {
+        $user = $this;
+        $key  = "user:userstatus".$user->cacheKey();
+        return \Cache::tags(["user"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($user) {
+                return $this->userstatus()
+                    ->first()
+                    ->setVisible([
+                        'name',
+                        'displayName',
+                        'description',
+                    ]);
+            });
+    }
+
+    public function getEmailAttribute($value)
+    {
+        if (hasAuthenticatedUserPermission('constants.SHOW_USER_EMAIL'))
+            return $value;
+
+
+        return null;
+    }
+
+    public function getMobileAttribute($value)
+    {
+        if (hasAuthenticatedUserPermission('constants.SHOW_USER_MOBILE'))
+            return $value;
+
+
+        return null;
+    }
+
+    public function getRolesAttribute($value){
+        $user = $this;
+        $key  = "user:roles".$user->cacheKey();
+        return \Cache::tags(["user"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($user) {
+                if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_ROLE')))
+                    return $this->roles()->get();
+
+                return null;
+            });
+    }
+
+    public function getTotalBonNumberAttribute($value){
+        $user = $this;
+        $key  = "user:totalBonNumber".$user->cacheKey();
+        return \Cache::tags(["user"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($user) {
+                if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_TOTAL_BON_NUMBER')))
+                    return $this->userHasBon();
+
+                return null;
+            });
+    }
+
+    public function getJalaliUpdatedAtAttribute()
+    {
+        $user = $this;
+        $key   = "user:updated_at:".$user->cacheKey();
+        return Cache::tags(["user"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($user) {
+                if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_ACCESS'))) {
+                    /** @var User $user */
+                    return $this->convertDate($user->updated_at, "toJalali");
+                }
+
+                return null;
+            });
+
+    }
+
+    public function getJalaliCreatedAtAttribute()
+    {
+        $user = $this;
+        $key   = "user:created_at:".$user->cacheKey();
+        return Cache::tags(["user"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($user) {
+                if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_ACCESS'))) {
+                    /** @var User $user */
+                    return $this->convertDate($user->created_at, "toJalali");
+                }
+
+                return null;
+            });
+
+    }
+
+    public function getEditLinkAttribute()
+    {
+        if (hasAuthenticatedUserPermission(config('constants.EDIT_USER_ACCESS'))) {
+            return action('Web\UserController@edit', $this->id);
+        }
+
+        return null;
+    }
+
+    public function getRemoveLinkAttribute()
+    {
+        if (hasAuthenticatedUserPermission(config('constants.REMOVE_USER_ACCESS'))) {
+            return action('Web\UserController@destroy', $this->id);
+        }
+
+        return null;
+    }
+
 }

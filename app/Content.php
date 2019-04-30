@@ -2,40 +2,40 @@
 
 namespace App;
 
-use App\Classes\Advertisable;
-use App\Classes\FavorableInterface;
-use App\Classes\LinkGenerator;
-use App\Classes\Search\Tag\ContentTagManagerViaApi;
-use App\Classes\SEO\SeoInterface;
-use App\Classes\SEO\SeoMetaTagsGenerator;
+use Exception;
+use Carbon\Carbon;
 use App\Classes\Taggable;
+use App\Classes\Advertisable;
+use Laravel\Scout\Searchable;
+use App\Classes\LinkGenerator;
+use App\Traits\favorableTraits;
+use App\Traits\APIRequestCommon;
+use App\Classes\SEO\SeoInterface;
+use App\Traits\ModelTrackerTrait;
+use Illuminate\Support\Collection;
+use App\Classes\FavorableInterface;
 use App\Collection\ContentCollection;
 use App\Collection\ProductCollection;
-use App\Traits\APIRequestCommon;
-use App\Traits\favorableTraits;
-use App\Traits\ModelTrackerTrait;
-use Carbon\Carbon;
-use Exception;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\{Artisan, Cache, Config};
-use Laravel\Scout\Searchable;
 use Stevebauman\Purify\Facades\Purify;
+use App\Classes\SEO\SeoMetaTagsGenerator;
+use App\Classes\Search\Tag\ContentTagManagerViaApi;
+use Illuminate\Support\Facades\{Cache, Config, Artisan};
 
 /**
  * App\Content
  *
- * @property int                                                              $id
- * @property int|null                                                         $author_id       آی دی مشخص کننده به وجود
+ * @property int         $id
+ * @property int|null    $author_id       آی دی مشخص کننده به وجود
  *           آورنده اثر
- * @property int|null                                                         $contenttype_id  آی دی مشخص کننده نوع
+ * @property int|null    $contenttype_id  آی دی مشخص کننده نوع
  *           محتوا
- * @property int|null                                                         $template_id     آی دی مشخص کننده قالب
+ * @property int|null    $template_id     آی دی مشخص کننده قالب
  *           این گرافیکی این محتوا
- * @property string|null                                                      $name            نام محتوا
- * @property string|null                                                      $description     توضیح درباره محتوا
- * @property string|null                                                      $metaTitle       متا تایتل محتوا
- * @property string|null                                                      $metaDescription متا دیسکریپشن محتوا
- * @property string|null                                                      $metaKeywords    متای کلمات کلیدی محتوا
+ * @property string|null $name            نام محتوا
+ * @property string|null $description     توضیح درباره محتوا
+ * @property string|null $metaTitle       متا تایتل محتوا
+ * @property string|null $metaDescription متا دیسکریپشن محتوا
+ * @property string|null $metaKeywords    متای کلمات کلیدی محتوا
  * @property string|null                                                      $tags            تگ ها
  * @property string|null                                                      $context         محتوا
  * @property int                                                              $order           ترتیب
@@ -257,49 +257,52 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function toSearchableArray()
     {
-        $array = $this->toArray();
-        
-        unset($array['basePrice']);
-    
-        unset($array['user']);
-        unset($array['deleted_at']);
-        unset($array['validSince']);
-        unset($array['enable']);
-        unset($array['metaKeywords']);
-        unset($array['metaDescription']);
-        unset($array['metaTitle']);
-        unset($array['author_id']);
-        unset($array['template_id']);
-        unset($array['slug']);
-        unset($array['contentset_id']);
-        unset($array['template']);
-        unset($array['contenttype']);
-        unset($array['url']);
-        unset($array['apiUrl']);
-        unset($array['nextUrl']);
-        unset($array['nextApiUrl']);
-        unset($array['previousUrl']);
-        unset($array['previousApiUrl']);
-        unset($array['author']);
-        unset($array['file']);
-        unset($array['order']);
-        unset($array['validSince']);
-        unset($array['metaTitle']);
-        unset($array['metaDescription']);
-        unset($array['metaKeywords']);
-        unset($array['tags']);
-        unset($array['author_id']);
-        unset($array['template_id']);
-        unset($array['contenttype_id']);
-        unset($array['contentset_id']);
-        unset($array['isFree']);
-        unset($array['enable']);
-        unset($array['created_at']);
-        unset($array['updated_at']);
-        unset($array['deleted_at']);
-        unset($array['validSince']);
-        unset($array['page_view']);
-        unset($array['thumbnail']);
+        $array      = $this->toArray();
+        $unSetArray = [
+            'basePrice',
+            'user',
+            'deleted_at',
+            'validSince',
+            'enable',
+            'metaKeywords',
+            'metaDescription',
+            'metaTitle',
+            'author_id',
+            'template_id',
+            'slug',
+            'contentset_id',
+            'template',
+            'contenttype',
+            'url',
+            'apiUrl',
+            'nextUrl',
+            'nextApiUrl',
+            'previousUrl',
+            'previousApiUrl',
+            'author',
+            'file',
+            'order',
+            'validSince',
+            'metaTitle',
+            'metaDescription',
+            'metaKeywords',
+            'tags',
+            'author_id',
+            'template_id',
+            'contenttype_id',
+            'contentset_id',
+            'isFree',
+            'enable',
+            'created_at',
+            'updated_at',
+            'deleted_at',
+            'validSince',
+            'page_view',
+            'thumbnail',
+        ];
+        foreach ($unSetArray as $key) {
+            unset($array[$key]);
+        }
         return $array;
     }
     
@@ -509,8 +512,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if (isset($value[0])) {
             return Purify::clean($value, self::$purifyNullConfig);
-        }
-        else {
+        } else {
             return Purify::clean(mb_substr($this->display_name, 0, config("constants.META_TITLE_LIMIT"), "utf-8"),
                 self::$purifyNullConfig);
         }
@@ -527,8 +529,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if (isset($value[0])) {
             return Purify::clean($value, self::$purifyNullConfig);
-        }
-        else {
+        } else {
             return Purify::clean(mb_substr($this->description, 0, config("constants.META_DESCRIPTION_LIMIT"), "utf-8"),
                 self::$purifyNullConfig);
         }
@@ -696,8 +697,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                         ->get()
                         ->sortBy("order")
                         ->load('contenttype');
-                }
-                else {
+                } else {
                     $sameContents = new ContentCollection([]);
                 }
                 
@@ -971,7 +971,18 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function set()
     {
         return $this->belongsTo("\App\Contentset", "contentset_id", "id")
-            ->withDefault();
+            ->withDefault([
+                'id'         => 0,
+                'url'        => null,
+                'apiUrl'     => [
+                    'v1' => null,
+                ],
+                'shortName'  => null,
+                'author'     => [
+                    'full_name' => null,
+                ],
+                'contentUrl' => null,
+            ]);
     }
     
     /**
@@ -1130,7 +1141,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     
     public function getTaggableTags()
     {
-        return $this->tags->tags;
+        return optional($this->tags)->tags;
     }
     
     /*
@@ -1196,5 +1207,5 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         
         return false;
     }
-
+    
 }

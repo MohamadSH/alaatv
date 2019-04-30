@@ -143,6 +143,9 @@
 }
 
 @media (max-width: 767.98px) {
+    .a--userCartList .a--userCartList-items {
+        margin-top: 15px;
+    }
     .a--userCartList .m-widget5__item {
         position: relative;
     }
@@ -156,7 +159,7 @@
     .a--userCartList .m-widget5__stats2 {
         position: absolute;
         top: -30px;
-        left: -24px;
+        left: 0;
         display: block;
     }
 
@@ -204,7 +207,8 @@
     }
 
     #m_scroll_top {
-        bottom: 60px;
+        bottom: 70px;
+        z-index: 99999;
     }
 
     .m-grid__item.m-footer {

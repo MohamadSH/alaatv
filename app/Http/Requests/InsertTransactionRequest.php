@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
 
 class InsertTransactionRequest extends FormRequest
 {
@@ -18,16 +18,16 @@ class InsertTransactionRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'order_id' => 'required',
-            'cost' => 'required|integer',
+            'order_id'             => 'required',
+            'cost'                 => 'required|integer',
             'transactionstatus_id' => 'required|exists:transactionstatuses,id',
-            'paymentmethod_id' => 'required|string|min:2',
-            'referenceNumber' => 'sometimes|string|min:2',
-            'traceNumber' => 'sometimes|string|min:2',
-            'authority' => 'sometimes|string|min:2',
-            'paycheckNumber' => 'sometimes|string|min:2',
-            'completed_at' => 'sometimes|date_format:Y-m-d',
-            'deadline_at' => 'sometimes|date_format:Y-m-d',
+            'paymentmethod_id'     => 'required|string|min:2',
+            'referenceNumber'      => 'sometimes|string|min:2',
+            'traceNumber'          => 'sometimes|string|min:2',
+            'authority'            => 'sometimes|string|min:2',
+            'paycheckNumber'       => 'sometimes|string|min:2',
+            'completed_at'         => 'sometimes|date_format:Y-m-d',
+            'deadline_at'          => 'sometimes|date_format:Y-m-d',
         ];
 
         return $rules;
@@ -48,28 +48,28 @@ class InsertTransactionRequest extends FormRequest
             switch ($paymentMethod) {
                 case "online":
                     $input["paymentmethod_id"] = 1;
-                    if (! isset($input["transactionstatus_id"])) {
+                    if (!isset($input["transactionstatus_id"])) {
                         $input["transactionstatus_id"] = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL");
                     }
-                    if (! isset($input["transactiongateway_id"])) {
+                    if (!isset($input["transactiongateway_id"])) {
                         $input["transactiongateway_id"] = 1;
                     }
                     break;
                 case "ATM":
                     $input["paymentmethod_id"] = 2;
-                    if (! isset($input["transactionstatus_id"])) {
+                    if (!isset($input["transactionstatus_id"])) {
                         $input["transactionstatus_id"] = Config::get("constants.TRANSACTION_STATUS_PENDING");
                     }
                     break;
                 case "POS":
                     $input["paymentmethod_id"] = 3;
-                    if (! isset($input["transactionstatus_id"])) {
+                    if (!isset($input["transactionstatus_id"])) {
                         $input["transactionstatus_id"] = Config::get("constants.TRANSACTION_STATUS_PENDING");
                     }
                     break;
                 case "paycheck":
                     $input["paymentmethod_id"] = 4;
-                    if (! isset($input["transactionstatus_id"])) {
+                    if (!isset($input["transactionstatus_id"])) {
                         $input["transactionstatus_id"] = Config::get("constants.TRANSACTION_STATUS_PENDING");
                     }
                     break;
@@ -84,7 +84,7 @@ class InsertTransactionRequest extends FormRequest
         $input["destinationBankAccount_id"] = 1;
         $this->replace($input);
     }
-
+    
     protected function replaceNumbers()
     {
         $input = $this->request->all();

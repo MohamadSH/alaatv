@@ -910,6 +910,7 @@ class UserController extends Controller
             ->first();
         
         $userCompletion = $user->info['completion'];
+
         
         return view("user.profile.profile",
             compact("user", 'event', 'userKonkurResult', 'genders', 'majors', 'sideBarMode',
@@ -1010,9 +1011,9 @@ class UserController extends Controller
             $videos    = collect();
             foreach ($products as $product) {
                 
-                $parentsArray = $this->makeParentArray($product);
+                $parents = $product->getAllParents();
                 
-                $this->addVideoPamphlet($parentsArray, $pamphlets, $videos);
+                $this->addVideoPamphlet($parents, $pamphlets, $videos);
                 
                 $childrenArray = $product->children;
                 $this->addVideoPamphlet($childrenArray, $pamphlets, $videos, "digChildren");

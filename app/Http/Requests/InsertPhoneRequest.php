@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Foundation\Http\FormRequest;
 
 class InsertPhoneRequest extends FormRequest
 {
@@ -12,7 +12,9 @@ class InsertPhoneRequest extends FormRequest
 
     public function authorize()
     {
-        if (Auth()->user()->can(Config::get('constants.INSERT_CONTACT_ACCESS'))) {
+        if (Auth()
+            ->user()
+            ->can(Config::get('constants.INSERT_CONTACT_ACCESS'))) {
             return true;
         }
 
@@ -22,19 +24,19 @@ class InsertPhoneRequest extends FormRequest
     public function rules()
     {
         return [
-            'phoneNumber' => 'required|numeric',
-            'priority' => 'numeric',
-            'contact_id' => 'exists:contacts,id',
+            'phoneNumber'  => 'required|numeric',
+            'priority'     => 'numeric',
+            'contact_id'   => 'exists:contacts,id',
             'phonetype_id' => 'exists:phonetypes,id',
         ];
     }
-
+    
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-
+    
     protected function replaceNumbers()
     {
         $input = $this->request->all();
@@ -42,7 +44,7 @@ class InsertPhoneRequest extends FormRequest
             $input["phoneNumber"] = preg_replace('/\s+/', '', $input["phoneNumber"]);
             $input["phoneNumber"] = $this->convertToEnglish($input["phoneNumber"]);
         }
-
+    
         if (isset($input["priority"])) {
             $input["priority"] = preg_replace('/\s+/', '', $input["priority"]);
             $input["priority"] = $this->convertToEnglish($input["priority"]);

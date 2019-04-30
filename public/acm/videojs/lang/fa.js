@@ -22,14 +22,15 @@ videojs.addLanguage("fa",{
  "A network error caused the media download to fail part-way.": "مشکل در دریافت ویدئو ...",
  "The media could not be loaded, either because the server or network failed or because the format is not supported.": "فرمت پشتیبانی نمیشود یا خطایی روی داده است.",
  "The media playback was aborted due to a corruption problem or because the media used features your browser did not support.": "مشکل در دریافت ویدئو ...",
- "No compatible source was found for this media.": "هیچ ورودی ای برای این رسانه شناسایی نشد.",
+    "No compatible source was found for this media.": "هیچ ورودی ای برای این رسانه شناسایی نشد.",
 
- "Speed": "سرعت",
- "Zoom": "بزرگ نمایی",
- "ZOOM": "بزرگ نمایی",
- "Related": "مرتبط",
- "Share": "اشتراک گزاری",
- "ZOOM RESET": "حالت اولیه",
- "Normal": "ساده",
- "Use +/- key and arrow keys to scroll zoomed area":"از دکمه های +، - و دکمه های جهت برای بزرگ نمایی و جابجایی صفحه استفاده کنید."
+    "Speed": "سرعت",
+    "Zoom": "بزرگ نمایی",
+    "ZOOM": "بزرگ نمایی",
+    "Related": "مرتبط",
+    "Share": "اشتراک گزاری",
+    "ZOOM RESET": "حالت اولیه",
+    "Normal": "ساده",
+    "Use +/- key and arrow keys to scroll zoomed area": "از دکمه های +، - و دکمه های جهت برای بزرگ نمایی و جابجایی صفحه استفاده کنید.",
+    "Replay": "پخش مجدد"
 });

@@ -3,22 +3,11 @@
 namespace App\Http\Controllers\Web;
 
 use App\Block;
-use App\Classes\Format\BlockCollectionFormatter;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class BlockController extends Controller
 {
-    /**
-     * @var BlockCollectionFormatter
-     */
-    private $formatter;
-    
-    public function __construct(BlockCollectionFormatter $formatter)
-    {
-        $this->formatter = $formatter;
-    }
-
     public function index(Request $request)
     {
         $blocks = Block::getMainBlocks();

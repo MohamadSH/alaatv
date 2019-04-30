@@ -2,33 +2,34 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Classes\Search\ContentSearch;
-use App\Classes\Search\ContentsetSearch;
-use App\Classes\Search\ProductSearch;
+use App\User;
+use Exception;
 use App\Content;
+use Carbon\Carbon;
 use App\Contentset;
 use App\Contenttype;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\{ContentIndexRequest, EditContentRequest, InsertContentRequest, Request};
-use App\Traits\{APIRequestCommon,
-    CharacterCommon,
-    Content\ContentControllerResponseTrait,
-    FileCommon,
-    Helper,
-    MetaCommon,
-    ProductCommon,
-    RequestCommon,
-    SearchCommon};
-use App\User;
 use App\Websitesetting;
-use Carbon\Carbon;
-use Exception;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\{Cache, Config};
 use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\{Cache};
+use Illuminate\Routing\Redirector;
+use App\Http\Controllers\Controller;
+use App\Collection\ProductCollection;
+use App\Classes\Search\ContentSearch;
+use App\Classes\Search\ProductSearch;
+use Illuminate\Http\RedirectResponse;
+use App\Classes\Search\ContentsetSearch;
+use App\Http\Requests\{Request, EditContentRequest, ContentIndexRequest, InsertContentRequest};
+use App\Traits\{Helper,
+    FileCommon,
+    MetaCommon,
+    SearchCommon,
+    RequestCommon,
+    ProductCommon,
+    CharacterCommon,
+    APIRequestCommon,
+    Content\ContentControllerResponseTrait};
 
 class ContentController extends Controller
 {
@@ -48,28 +49,7 @@ class ContentController extends Controller
     use SearchCommon;
     use ContentControllerResponseTrait;
     
-    /*
-    |--------------------------------------------------------------------------
-    | Properties
-    |--------------------------------------------------------------------------
-    */
-    const PARTIAL_SEARCH_TEMPLATE_ROOT = 'partials.search';
-    
-    const PARTIAL_INDEX_TEMPLATE = 'content.index';
-    
-    
     protected $setting;
-    
-    
-    /**
-     * @var ContentsetSearch
-     */
-    private $setSearch;
-    
-    /**
-     * @var ProductSearch
-     */
-    private $productSearch;
     
     
     public function __construct(
@@ -113,7 +93,7 @@ class ContentController extends Controller
     /**
      * @param $authException
      */
-    private function callMiddlewares($authException): void
+    private function callMiddlewares(array $authException): void
     {
         $this->middleware('auth', ['except' => $authException]);
         $this->middleware('permission:'.config('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS'), [
@@ -153,7 +133,7 @@ class ContentController extends Controller
      */
     public function index(ContentIndexRequest $request, ContentSearch $contentSearch,
         ContentsetSearch $setSearch,
-        ProductSearch $productSearch)
+        ProductSearch $productSearch): Response
     {
         $contentTypes = array_filter($request->get('contentType', Contenttype::List()));
         $contentOnly  = $request->get('contentOnly', false);
@@ -179,7 +159,7 @@ class ContentController extends Controller
     {
         $url = action('ContentController@show', $content);
         $this->generateSeoMetaTags($content);
-        if ($content->contenttype_id != Content::CONTENT_TYPE_VIDEO) {
+        if ($content->contenttype_id !== Content::CONTENT_TYPE_VIDEO) {
             return redirect($url, Response::HTTP_MOVED_PERMANENTLY);
         }
         $video = $content;
@@ -187,8 +167,8 @@ class ContentController extends Controller
             $contentsWithSameSet,
             $contentSetName,
         ] = $video->getSetMates();
-        
-        $view = view("content.embed", compact('video', 'contentsWithSameSet', 'contentSetName'));
+    
+        $view = view('content.embed', compact('video', 'contentsWithSameSet', 'contentSetName'));
         return httpResponse(null, $view);
     }
     
@@ -196,11 +176,11 @@ class ContentController extends Controller
     {
         $rootContentTypes = Contenttype::getRootContentType();
         $contentsets      = Contentset::latest()
-            ->pluck("name", "id");
+            ->pluck('name', 'id');
         $authors          = User::getTeachers()
-            ->pluck("full_name", "id");
-        
-        $view = view("content.create2", compact("rootContentTypes", "contentsets", "authors"));
+            ->pluck('full_name', 'id');
+    
+        $view = view('content.create2', compact('rootContentTypes', 'contentsets', 'authors'));
         return httpResponse(null, $view);
     }
     
@@ -216,22 +196,23 @@ class ContentController extends Controller
     public function show(Request $request, Content $content)
     {
         if (!$content->isActive()) {
-            abort(Response::HTTP_FORBIDDEN);
+            abort(Response::HTTP_LOCKED, 'Deactivated!');
         }
-        if (!$this->userCanSeeContent($request, $content, 'web')) {
-            $productsThatHaveThisContent = $content->products();
+        $user_can_see_content        = $this->userCanSeeContent($request, $content, 'web');
+        $message                     = null;
+        $productsThatHaveThisContent = $content->products() ?: new ProductCollection();
+        if (!$user_can_see_content) {
+    
+            $jsonResponse = $this->getUserCanNotSeeContentJsonResponse($content, $productsThatHaveThisContent,
+                static function ($msg) use (&$message) {
+                    $message = $msg;
+                });
             
-            $view = trans('content.Not Free And you can\'t buy it');
-            $api  = $this->userCanNotSeeContentResponse(trans('content.Not Free And you can\'t buy it'),
-                Response::HTTP_FORBIDDEN, $productsThatHaveThisContent, true);
-            
-            $view1 = trans('content.Not Free');
-            $api1  = $this->userCanNotSeeContentResponse(trans('content.Not Free'),
-                Response::HTTP_FORBIDDEN, $productsThatHaveThisContent, true);
-            return $productsThatHaveThisContent->isEmpty() ? httpResponse($api,
-                $view) : httpResponse($api1, $view1);
+            if (request()->expectsJson()) {
+                return $jsonResponse;
+            }
         }
-        
+        $this->generateSeoMetaTags($content);
         $adItems = $content->getAddItems();
         $tags    = $content->retrievingTags();
         [
@@ -244,18 +225,18 @@ class ContentController extends Controller
             $pamphletsWithSameSet,
             $contentSetName,
         ] = $this->getContentInformation($content);
-        
-        $this->generateSeoMetaTags($content);
+    
+    
         $seenCount = $content->pageView;
         
         $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
-        
-        $api2  = response()->json($content, Response::HTTP_OK);
-        $view2 = view("content.show",
-            compact("seenCount", "author", "content", "contentsWithSameSet", "videosWithSameSet",
-                "pamphletsWithSameSet", "contentSetName", "tags",
-                "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR"));
-        return httpResponse($api2, $view2);
+        $apiResponse       = response()->json($content, Response::HTTP_OK);
+        $viewResponse      = view('content.show',
+            compact('seenCount', 'author', 'content', 'contentsWithSameSet', 'videosWithSameSet',
+                'pamphletsWithSameSet', 'contentSetName', 'tags',
+                'userCanSeeCounter', 'adItems', 'videosWithSameSetL', 'videosWithSameSetR',
+                'productsThatHaveThisContent', 'user_can_see_content', 'message'));
+        return httpResponse($apiResponse, $viewResponse);
     }
     
     /**
@@ -354,7 +335,7 @@ class ContentController extends Controller
      *
      * @param  array    $files
      */
-    private function storeFilesOfContent(Content &$content, array $files): void
+    private function storeFilesOfContent(Content $content, array $files): void
     {
         $disk = $content->isFree ? config("constants.DISK_FREE_CONTENT") : config("constants.DISK_PRODUCT_CONTENT");
         
@@ -479,4 +460,6 @@ class ContentController extends Controller
     {
         return redirect('/c', Response::HTTP_MOVED_PERMANENTLY);
     }
+    
+    
 }

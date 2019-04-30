@@ -2,8 +2,8 @@
 
 namespace App;
 
-use App\Collection\TransactionCollection;
 use Cache;
+use App\Collection\TransactionCollection;
 
 /**
  * App\Transaction
@@ -117,6 +117,8 @@ class Transaction extends BaseModel
         'transactiongateway',
         'jalaliCompletedAt',
         'jalaliDeadlineAt',
+        'editLink',
+        'removeLink',
     ];
     
     protected $hidden = [
@@ -343,4 +345,22 @@ class Transaction extends BaseModel
                 return $this->convertDate($transaction->deadline_at, "toJalali");
             });
     }
+
+    public function getEditLinkAttribute()
+    {
+        if (hasAuthenticatedUserPermission(config('constants.EDIT_TRANSACTION_ACCESS')))
+            return action('Web\TransactionController@edit', $this->id);
+
+        return null;
+
+    }
+
+    public function getRemoveLinkAttribute()
+    {
+        if (hasAuthenticatedUserPermission(config('constants.REMOVE_TRANSACTION_ACCESS')))
+            return action('Web\TransactionController@destroy', $this->id);
+
+        return null;
+    }
+
 }

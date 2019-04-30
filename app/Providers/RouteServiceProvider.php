@@ -2,39 +2,39 @@
 
 namespace App\Providers;
 
-use App\{Afterloginformcontrol,
+use Illuminate\Support\Facades\{Cache, Route, Config};
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use App\{City,
+    Role,
+    User,
+    Order,
+    Phone,
+    Coupon,
+    Wallet,
     Article,
-    Articlecategory,
-    Assignment,
-    Attribute,
-    Attributegroup,
-    Attributeset,
-    Attributevalue,
-    City,
-    Consultation,
     Contact,
     Content,
-    Contentset,
-    Coupon,
-    Employeetimesheet,
-    Eventresult,
-    Mbtianswer,
-    Order,
-    Orderproduct,
-    Permission,
-    Phone,
     Product,
-    Productfile,
-    Productphoto,
-    Role,
-    Slideshow,
-    User,
     Userbon,
+    Attribute,
+    Slideshow,
+    Assignment,
+    Contentset,
+    Mbtianswer,
+    Permission,
     Userupload,
-    Wallet,
-    Websitesetting};
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\{Cache, Config, Route};
+    Eventresult,
+    Productfile,
+    Attributeset,
+    Consultation,
+    Orderproduct,
+    Productphoto,
+    Attributegroup,
+    Attributevalue,
+    Websitesetting,
+    Articlecategory,
+    Employeetimesheet,
+    Afterloginformcontrol};
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -55,7 +55,6 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-        
         parent::boot();
         $this->modelBinding();
     }

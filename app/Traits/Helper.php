@@ -45,21 +45,18 @@ trait Helper
     public function generateRandomPassword($length)
     {
         $generatedPassword     = rand(1000, 9999);
-        $generatedPasswordHash = bcrypt($generatedPassword);
-        
+
         return [
             "rawPassword"  => $generatedPassword,
-            "hashPassword" => $generatedPasswordHash,
+            "hashPassword" => bcrypt($generatedPassword),
         ];
     }
     
     public function timeFilterQuery($list, $sinceDate, $tillDate, $by = 'created_at', $sinceTime = "00:00:00", $tillTime = "23:59:59", $timeZoneConvert = true)
     {
-        $sinceDate = Carbon::parse($sinceDate)
-                ->format('Y-m-d')." ".$sinceTime;
-        $tillDate  = Carbon::parse($tillDate)
-                ->format('Y-m-d')." ".$tillTime;
-        
+        $sinceDate = Carbon::parse($sinceDate)->format('Y-m-d')." ".$sinceTime;
+        $tillDate = Carbon::parse($tillDate)->format('Y-m-d')." ".$tillTime;
+
         if ($timeZoneConvert) {
             $sinceDate = Carbon::parse($sinceDate, "Asia/Tehran");
             $sinceDate->setTimezone('UTC');
@@ -70,7 +67,7 @@ trait Helper
             $sinceDate,
             $tillDate,
         ]);
-        
+
         return $list;
     }
     
@@ -88,10 +85,7 @@ trait Helper
     
     public function mergeCollections($firstCollection, $secondCollection): Collection
     {
-        $merge = $firstCollection->toBase()
-            ->merge($secondCollection);
-        
-        return $merge;
+        return $firstCollection->toBase()->merge($secondCollection);
     }
     
     /**

@@ -350,8 +350,7 @@ class ProductController extends Controller
         
         $productFileTypes = Productfiletype::makeSelectArray();
 
-//        $products = $this->makeProductCollection();
-        $products    = Product::where('id', '>', 240);
+        $products = $this->makeProductCollection();
         $producttype = $product->producttype->displayName;
         
         $productPhotos = $product->photos->sortByDesc("order");

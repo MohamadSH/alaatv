@@ -275,20 +275,4 @@ trait ProductCommon
             return $flag;
         });
     }
-    
-    protected function makeParentArray($myProduct)
-    {
-        $key = "product:makeParentArray:".$myProduct->cacheKey();
-        
-        return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($myProduct) {
-            $counter      = 1;
-            $parentsArray = [];
-            while ($myProduct->hasParents()) {
-                $parentsArray = array_add($parentsArray, $counter++, $myProduct->parents->first());
-                $myProduct    = $myProduct->parents->first();
-            }
-            
-            return $parentsArray;
-        });
-    }
 }

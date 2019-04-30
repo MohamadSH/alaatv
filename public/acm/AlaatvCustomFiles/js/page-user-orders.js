@@ -18,17 +18,31 @@ $(document).ready(function () {
 
     function getRefCode(transactionItem) {
         let refCode = '';
-        if (transactionItem.paymentmethod.name === 'paycheck') {
-            refCode = 'شماره چک: ' + transactionItem.paycheckNumber;
-        } else if (transactionItem.paymentmethod.name === 'wallet') {
+        // if (transactionItem.paymentmethod.name === 'paycheck') {
+        //     refCode = 'شماره چک: ' + transactionItem.paycheckNumber;
+        // } else if (transactionItem.paymentmethod.name === 'wallet') {
+        //     refCode = '';
+        // } else if (transactionItem.paymentmethod.name === 'POS') {
+        //     refCode = ' شماره مرجع: ' + transactionItem.referenceNumber;
+        // } else if (transactionItem.paymentmethod.name === 'ATM') {
+        //     refCode = ' شماره پیگیری: ' + transactionItem.traceNumber;
+        // } else if (transactionItem.paymentmethod.name === 'online') {
+        //     refCode = ' شماره تراکنش: ' + transactionItem.transactionID;
+        // }
+
+        if (transactionItem.paycheckNumber !== null && transactionItem.paycheckNumber.length > 0) {
+            refCode = transactionItem.paycheckNumber;
+        } else if (transactionItem.referenceNumber !== null && transactionItem.referenceNumber.length > 0) {
+            refCode = transactionItem.referenceNumber;
+        } else if (transactionItem.traceNumber !== null && transactionItem.traceNumber.length > 0) {
+            refCode = transactionItem.traceNumber;
+        } else if (transactionItem.transactionID !== null && transactionItem.transactionID.length > 0) {
+            refCode = transactionItem.transactionID;
+        } else {
             refCode = '';
-        } else if (transactionItem.paymentmethod.name === 'POS') {
-            refCode = ' شماره مرجع: ' + transactionItem.referenceNumber;
-        } else if (transactionItem.paymentmethod.name === 'ATM') {
-            refCode = ' شماره پیگیری: ' + transactionItem.traceNumber;
-        } else if (transactionItem.paymentmethod.name === 'online') {
-            refCode = ' شماره تراکنش: ' + transactionItem.transactionID;
         }
+
+
         return refCode;
     }
 
@@ -42,7 +56,10 @@ $(document).ready(function () {
 
         $('.orderDetailes-orderPostingInfo').html((typeof orders[index].orderPostingInfo[0] !== 'undefined') ? orders[index].orderPostingInfo[0].postCode : 'پست نشده');
         $('.orderDetailes-debt').html(orders[index].debt.toLocaleString('fa') + ' تومان ');
+
+        let hideAllDiscountInfo = true;
         let couponMessage = 'کپن ندارد';
+        $('.orderDiscountInfoInModal tbody').find('.orderDetailes-couponInfo').remove();
         if (orders[index].couponInfo !== null) {
             couponMessage = orders[index].couponInfo.name + ' با ' + orders[index].couponInfo.discount;
             if (orders[index].couponInfo.typeHint === 'percentage') {
@@ -51,10 +68,51 @@ $(document).ready(function () {
                 couponMessage += ' تومان ';
             }
             couponMessage += ' تخفیف ';
+            let orderDetailes_couponInfo = '\n' +
+                '<tr class="orderDetailes-couponInfo">\n' +
+                '    <td>کپن استفاده شده:</td>\n' +
+                '    <td>'+couponMessage+'</td>\n' +
+                '</tr>';
+            $('.orderDiscountInfoInModal tbody').append(orderDetailes_couponInfo);
+            hideAllDiscountInfo = false;
         }
-        $('.orderDetailes-couponInfo').html(couponMessage);
-        $('.orderDetailes-usedBonSum').html(orders[index].usedBonSum);
-        $('.orderDetailes-addedBonSum').html(orders[index].addedBonSum);
+        $('.orderDiscountInfoInModal tbody').find('.orderDetailes-usedBonSum').remove();
+        if (orders[index].usedBonSum > 0) {
+            let orderDetailes_usedBonSum = '\n' +
+                '<tr class="orderDetailes-usedBonSum">\n' +
+                '    <td>تعداد بن استفاده شده:</td>\n' +
+                '    <td>'+orders[index].usedBonSum+'</td>\n' +
+                '</tr>';
+            $('.orderDiscountInfoInModal tbody').append(orderDetailes_usedBonSum);
+            hideAllDiscountInfo = false;
+        }
+        $('.orderDiscountInfoInModal tbody').find('.orderDetailes-addedBonSum').remove();
+        if (orders[index].addedBonSum > 0) {
+            let orderDetailes_addedBonSum = '\n' +
+                '<tr class="orderDetailes-addedBonSum">\n' +
+                '    <td>تعداد بن اضافه شده به شما از این سفارش: </td>\n' +
+                '    <td>'+orders[index].addedBonSum+'</td>\n' +
+                '</tr>';
+            $('.orderDiscountInfoInModal tbody').append(orderDetailes_addedBonSum);
+            hideAllDiscountInfo = false;
+        }
+
+        $('.orderDiscountInfoInModal tbody').find('.orderDetailes-totalOrderDiscount').remove();
+        if (orders[index].discount > 0) {
+            let orderDetailes_totalOrderDiscount = '\n' +
+                '<tr class="orderDetailes-totalOrderDiscount">\n' +
+                '    <td>تخفیف کلی سفارش: </td>\n' +
+                '    <td>'+orders[index].discount.toLocaleString('fa') + ' تومان '+'</td>\n' +
+                '</tr>';
+            $('.orderDiscountInfoInModal tbody').append(orderDetailes_totalOrderDiscount);
+            hideAllDiscountInfo = false;
+        }
+
+        if (hideAllDiscountInfo) {
+            $('.orderDiscountInfoInModal').parent('.alert-success').fadeOut();
+        } else {
+            $('.orderDiscountInfoInModal').parent('.alert-success').fadeIn();
+        }
 
         $('.orderDetailes-created_at').html(new persianDate(Date.parse(orders[index].created_at)).format("dddd, DD MMMM YYYY"));
 
@@ -70,42 +128,47 @@ $(document).ready(function () {
 
             let price = '<span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">';
             if (opItem.price.final !== opItem.price.base) {
-                let sum = opItem.price.final + opItem.price.extraCost;
-                price += '<span class="m-badge m-badge--warning a--productRealPrice">' + sum.toLocaleString('fa') + '</span>';
+                price += '<span class="m-badge m-badge--warning a--productRealPrice">' + opItem.price.base.toLocaleString('fa') + '</span>';
             }
-            let paidPride = opItem.price.final + opItem.price.extraCost;
-            console.log('paidPride', paidPride);
-            price += paidPride.toLocaleString('fa') + ' تومان ';
-            if ((opItem.price.discountDetail.bonDiscount + opItem.price.discountDetail.productDiscount) > 0) {
+            price += opItem.price.final.toLocaleString('fa') + ' تومان ';
+            let percent = Math.round((1 - (opItem.price.final / opItem.price.base)) * 100);
+            if (percent > 0) {
                 let percent = Math.round((1 - (opItem.price.final / opItem.price.base)) * 100);
                 price += '<span class="m-badge m-badge--info a--productDiscount">' + percent + '%</span>';
             }
+            let gift = '';
+            if(opItem.orderproducttype.name === 'gift') {
+                gift = '<span class="m-badge m-badge--success m-badge--wide m--margin-left-10">هدیه</span>';
+            }
             price += '</span>';
-
             productHtml += '\n' +
-                '                                                                    <div class="m-widget3__item">\n' +
-                '                                                                        <div class="m-widget3__header">\n' +
-                '                                                                            <div class="m-widget3__user-img">\n' +
-                '                                                                                <img class="m-widget3__img" src="' + opItem.product.photo + '" alt="">\n' +
-                '                                                                            </div>\n' +
-                '                                                                            <div class="m-widget3__info">\n' +
-                '                                                                                <span class="m-widget3__username">\n' +
-                '                                                                                ' + opItem.product.name + '\n' +
-                '                                                                                </span>\n' +
-                '                                                                                <br>\n' +
-                '                                                                                <span class="m-widget3__time">\n' +
-                '                                                                                ' + atvHtml + '\n' +
-                '                                                                                </span>\n' +
-                '                                                                            </div>\n' +
-                '                                                                            <span class="orderProductItemPrice">\n' +
-                '                                                                                ' + price + '\n' +
-                '                                                                            </span>\n' +
-                '                                                                        </div>\n' +
-                '                                                                        <div class="m-widget3__body">\n' +
-                '                                                                            <p class="m-widget3__text">\n' +
-                '                                                                            </p>\n' +
-                '                                                                        </div>\n' +
-                '                                                                    </div>';
+                '<div class="m-widget3__item">\n' +
+                '    <div class="m-widget3__header">\n' +
+                '        <div class="m-widget3__user-img">\n' +
+                '            <a class="m-link" href="'+opItem.product.url+'" target="_blank">' +
+                '                <img class="m-widget3__img" src="' + opItem.product.photo + '" alt="">\n' +
+                '            </a>' +
+                '        </div>\n' +
+                '        <div class="m-widget3__info">\n' +
+                '            <span class="m-widget3__username">\n' +
+                '                <a class="m-link" href="'+opItem.product.url+'" target="_blank">' +
+                '                    ' + opItem.product.name + gift + '\n' +
+                '                </a>' +
+                '            </span>\n' +
+                '            <br>\n' +
+                '            <span class="m-widget3__time">\n' +
+                '                ' + atvHtml + '\n' +
+                '            </span>\n' +
+                '        </div>\n' +
+                '        <span class="orderProductItemPrice">\n' +
+                '            ' + price + '\n' +
+                '        </span>\n' +
+                '    </div>\n' +
+                '    <div class="m-widget3__body">\n' +
+                '        <p class="m-widget3__text">\n' +
+                '        </p>\n' +
+                '    </div>\n' +
+                '</div>';
         }
         if (productHtml.trim().length > 0) {
             $('.orderDetailes-orderprouctList').html(productHtml);
@@ -121,9 +184,13 @@ $(document).ready(function () {
             let refCode = getRefCode(successfulTransactionItem);
             let completed_at = new persianDate(Date.parse(successfulTransactionItem.completed_at)).format("dddd, DD MMMM YYYY, h:mm:ss a");
 
+            let amount = Math.abs(successfulTransactionItem.cost).toLocaleString('fa') + ' تومان ';
+            if (successfulTransactionItem.cost < 0) {
+                amount += '<span class="m-badge m-badge--wide m-badge--metal">بازگشت هزینه</span>';
+            }
             successfulTransactionsHtml +=
                 '<tr>\n' +
-                '    <td>' + successfulTransactionItem.cost.toLocaleString('fa') + ' تومان ' + '</td>\n' +
+                '    <td>' + amount + '</td>\n' +
                 '    <td>' + successfulTransactionItem.paymentmethod.description + '</td>\n' +
                 '    <td>' + refCode + '</td>\n' +
                 '    <td>' + completed_at + '</td>\n' +
@@ -143,9 +210,13 @@ $(document).ready(function () {
             let refCode = getRefCode(pendingTransactionItem);
             let created_at = new persianDate(Date.parse(pendingTransactionItem.created_at)).format("dddd, DD MMMM YYYY, h:mm:ss a");
 
+            let amount = Math.abs(pendingTransactionItem.cost).toLocaleString('fa') + ' تومان ';
+            if (pendingTransactionItem.cost < 0) {
+                amount += '<span class="m-badge m-badge--wide m-badge--metal">بازگشت هزینه</span>';
+            }
             pendingTransactionsHtml +=
                 '<tr>\n' +
-                '    <td>' + pendingTransactionItem.cost.toLocaleString('fa') + ' تومان ' + '</td>\n' +
+                '    <td>' + amount + '</td>\n' +
                 '    <td>' + pendingTransactionItem.paymentmethod.description + '</td>\n' +
                 '    <td>' + refCode + '</td>\n' +
                 '    <td>' + created_at + '</td>\n' +
@@ -165,9 +236,13 @@ $(document).ready(function () {
             let created_at = new persianDate(Date.parse(unpaidTransactionItem.created_at)).format("dddd, DD MMMM YYYY, h:mm:ss a");
             let deadline_at = new persianDate(Date.parse(unpaidTransactionItem.deadline_at)).format("dddd, DD MMMM YYYY, h:mm:ss a");
 
+            let amount = Math.abs(unpaidTransactionItem.cost).toLocaleString('fa') + ' تومان ';
+            if (unpaidTransactionItem.cost < 0) {
+                amount += '<span class="m-badge m-badge--wide m-badge--metal">بازگشت هزینه</span>';
+            }
             unpaidTransactionsHtml +=
                 '<tr>\n' +
-                '    <td>' + unpaidTransactionItem.cost.toLocaleString('fa') + ' تومان ' + '</td>\n' +
+                '    <td>' + amount + '</td>\n' +
                 '    <td>' + created_at + '</td>\n' +
                 '    <td>' + deadline_at + '</td>\n' +
                 '</tr>';

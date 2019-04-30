@@ -25,3 +25,24 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.a-widget5 .a-widget5__item .a-widget5__content .a-widget5__pic {
+    width: 170px;
+}
+.a-widget5 .a-widget5__item .a-widget5__content .a-widget5__section {
+    width: calc( 100% - 170px);
+}
+
+
+/*media query*/
+@media only screen and (max-width: 1100px) and (min-width: 992px) {
+    .a-widget5 .a-widget5__item .a-widget5__content .a-widget5__pic,
+    .a-widget5 .a-widget5__item .a-widget5__content .a-widget5__section {
+        display: block;
+        float: none;
+        width: 100%;
+    }
+    .a-widget5 .a-widget5__item .a-widget5__content .a-widget5__pic {
+        text-align: center;
+    }
+}

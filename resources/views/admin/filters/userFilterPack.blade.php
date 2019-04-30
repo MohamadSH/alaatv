@@ -26,7 +26,7 @@
             @include('admin.filters.roleFilter')
         </div>
         <div class = "col-lg-4 col-md-4">
-            @include('admin.filters.majorFilter' , ["withEnableCheckbox"=>true])
+            @include('admin.filters.majorFilter' , ["withCheckbox"=>true])
         </div>
         <div class = "col-lg-4 col-md-4">
             @include('admin.filters.couponFilter')

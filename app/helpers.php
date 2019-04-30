@@ -2,6 +2,7 @@
 
 use App\Classes\Nullable;
 use App\Classes\Util\Boolean as UtilBoolean;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 if (!function_exists('nullable')) {
     function nullable($result, $data = []): Nullable
@@ -24,5 +25,27 @@ if (!function_exists('httpResponse')) {
             return $api;
         }
         return $view;
+    }
+}
+
+if (!function_exists('hasAuthenticatedUserPermission')) {
+    function hasAuthenticatedUserPermission(string $permission): bool
+    {
+        return (Auth::check() && Auth::user()
+                ->can($permission));
+    }
+}
+
+if (!function_exists('getAuthenticatedUser')) {
+    /**
+     * @return Authenticatable
+     */
+    function getAuthenticatedUser(): ?Authenticatable
+    {
+        try {
+            return auth('web')->user() ?: auth('api')->user();
+        } catch (Exception $e) {
+            return null;
+        }
     }
 }

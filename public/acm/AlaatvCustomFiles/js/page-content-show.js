@@ -27,7 +27,7 @@ var SnippetContentShow = function(){
             relatedMenu: true,
             zoomMenu: true,
             related: related_videos,
-            // mirrorButton: true,
+            mirrorButton: true,
 
             closeallow:false,
             mute:true,
@@ -85,7 +85,9 @@ var SnippetContentShow = function(){
         var contentId = $('#js-var-contentId').val();
         var container = $("#playListScroller"),
             scrollTo = $("#playlistItem_" + contentId);
-        container.scrollTop(scrollTo.offset().top - 400);
+        if (scrollTo.length > 0) {
+            container.scrollTop(scrollTo.offset().top - 400);
+        }
     };
     return {
       init: function (related_videos) {
@@ -96,4 +98,10 @@ var SnippetContentShow = function(){
 }();
 jQuery(document).ready( function() {
     SnippetContentShow.init(related_videos);
+    $('#owlCarouselParentProducts').OwlCarouselType2();
+    $(document).on('click', '.scrollToOwlCarouselParentProducts', function(){
+        $([document.documentElement, document.body]).animate({
+            scrollTop: ($("#owlCarouselParentProducts").offset().top - 80)
+        }, 500);
+    });
 });
