@@ -3,12 +3,12 @@
 namespace App;
 
 use App\Classes\Taggable;
-use App\Collection\ContentCollection;
-use App\Collection\ProductCollection;
-use App\Collection\SetCollection;
-use App\Traits\favorableTraits;
-use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
+use App\Traits\favorableTraits;
+use App\Collection\SetCollection;
+use App\Collection\ProductCollection;
+use Illuminate\Support\Facades\Cache;
+use App\Collection\ContentCollection;
 
 /**
  * App\Contentset
@@ -89,7 +89,7 @@ class Contentset extends BaseModel implements Taggable
         'pivot',
         'enable',
         'display',
-    
+        'productSet',
     ];
     
     /**

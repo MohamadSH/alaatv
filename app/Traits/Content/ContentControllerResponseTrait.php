@@ -4,14 +4,14 @@
 namespace App\Traits\Content;
 
 
-use App\Collection\ProductCollection;
+use stdClass;
 use App\Content;
 use Carbon\Carbon;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use stdClass;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Collection\ProductCollection;
+use Illuminate\Foundation\Http\FormRequest;
 
 trait ContentControllerResponseTrait
 {
@@ -31,7 +31,7 @@ trait ContentControllerResponseTrait
         if ($productInResponse) {
             return response()->json([
                 'message' => $message,
-                'product' => $productsThatHaveThisContent,
+                'product' => $productsThatHaveThisContent->isEmpty() ? null : $productsThatHaveThisContent,
             ], $code);
             
         }
