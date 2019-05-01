@@ -32,8 +32,6 @@
     {{--{{ dd($userAssetsCollection) }}--}}
     {{--{{ dd($userAssetsCollection[0]->products[0]->name) }}--}}
 
-
-
     <div class = "row">
         <div class = "col">
             <div class = "m-portlet  m-portlet--bordered" id = "owlCarouselMyProduct">
@@ -59,17 +57,18 @@
                     <div class = "m-widget30">
 
                         <div class = "m-widget_head">
-
+                            
                             <div class = "m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">
-
                                 @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
                                     @if($userAsset->title === 'محصولات من')
                                         @foreach($userAsset->products as $productKey=>$product)
                                             @if(count($product->sets)===0)
                                                 <div class = "m-widget_head-owlcarousel-item carousel background-gradient" data-position = "{{ $productKey }}">
-                                                    <img class = "a--owl-carousel-type-2-item-image" src = "{{ $product->photo }}">
+                                                    <a href="{{ $product->url }}" >
+                                                        <img class = "a--owl-carousel-type-2-item-image" src = "{{ $product->photo }}">
+                                                    </a>
                                                     <br>
-                                                    {{ $product->name }}
+                                                    <a href="{{ $product->url }}" target="_blank" class="m-link">{{ $product->name }}</a>
                                                 </div>
                                             @elseif(count($product->sets)===1)
                                                 <div class = "m-widget_head-owlcarousel-item carousel background-gradient" data-position = "{{ $productKey }}">
@@ -104,6 +103,13 @@
                                 @endforeach
                             </div>
 
+                            @if(count($userAssetsCollection->filter(function ($value, $key) {return $value->title === 'محصولات من'; })->all())===0)
+                                <div class="alert alert-info" role="alert">
+                                    <strong> هنوز از آلاء خرید نکرده اید. </strong>
+                                    بعد از اینکه از آلاء خرید کنید، امکان مشاهده خریدهای شما در این قسمت فراهم می شود.
+                                </div>
+                            @endif
+                            
                         </div>
                         <div class = "m-portlet a--owl-carousel-type-2-slide-detailes">
                             <div class = "m-portlet__head">
