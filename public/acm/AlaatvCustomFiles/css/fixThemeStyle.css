@@ -71,3 +71,7 @@ select.form-control {
         padding: 5px !important;
     }
 }
+
+.m-header--fixed-mobile .m-topbar {
+    top: -60px;
+}

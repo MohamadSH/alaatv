@@ -1,7 +1,7 @@
 @extends('app' , ["pageName"=>$pageName])
 
 @section('page-css')
-    <link href = "{{ mix('/css/user-dashboard.css') }}" rel = "stylesheet" type = "text/css"/>
+    <link href = "{{ mix('/css/page-shop.css') }}" rel = "stylesheet" type = "text/css"/>
 @endsection
 
 @section('pageBar')
@@ -89,9 +89,11 @@
                                                 </div>
                                             @else
                                                 <div class = "m-widget_head-owlcarousel-item carousel" data-position = "{{ $productKey }}">
-                                                    <img class = "a--owl-carousel-type-2-item-image" src = "{{ $product->photo }}">
+                                                    <a href="{{ $product->url }}" >
+                                                        <img class = "a--owl-carousel-type-2-item-image" src = "{{ $product->photo }}">
+                                                    </a>
                                                     <br>
-                                                    {{ $product->name }}
+                                                    <a href="{{ $product->url }}" target="_blank" class="m-link">{{ $product->name }}</a>
                                                     <hr>
                                                     <a class = "btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-type-2-show-detailes">
                                                         <i class = "flaticon-more-v6"></i>
