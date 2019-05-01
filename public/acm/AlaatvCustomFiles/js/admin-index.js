@@ -208,81 +208,85 @@ $(document).on("click", "#user-portlet .reload", function (){
 
     var formData = $("#filterUserForm").serialize();
 
-    if($("#userTableColumnFilter").val() !== null) {
+    if ($("#userTableColumnFilter").val() !== null) {
         var columns = $("#userTableColumnFilter").val();
-        $("#user_table thead tr th").each(function() {
-            if(columns.includes($(this).text().trim())){
+        $("#user_table thead tr th").each(function () {
+            if (columns.includes($(this).text().trim())) {
                 $(this).removeClass().addClass("all");
-            }
-            else if($(this).text() !== "") {
+            } else if ($(this).text() !== "") {
                 $(this).removeClass().addClass("none");
             }
         });
-    }
-    else {
-        $("#user_table thead tr th").each(function() {
-                $(this).removeClass().addClass("none");
+    } else {
+        $("#user_table thead tr th").each(function () {
+            $(this).removeClass().addClass("none");
         });
     }
 
-    if(userAjax) {
-        userAjax.abort();
-    }
-    userAjax = $.ajax({
-        type: "GET",
-        url: $("#filterUserForm").attr("action"),
-        data: formData,
-        contentType: "application/json",
-        dataType: "json",
-        statusCode: {
-            200:function (response) {
-                // console.log(response);
-                var responseJson = response;
-                var newDataTable =$("#user_table").DataTable();
-                newDataTable.destroy();
-                $('#user_table > tbody').html(responseJson.index);
-                if(response === null || response === "" ) {
-                    $('#user_table > thead > tr').children('th:first').removeClass().addClass("none");
-                }
-                else{
-                    $('#user_table > thead > tr').children('th:first').removeClass("none");
-                }
-                makeDataTable("user_table");
 
-                $("#user-portlet-loading").addClass("d-none");
-                $(".filter").each(function () {
-                    if($(this).val() !== "" && $(this).val() !== null) {
-                        $(this).addClass("font-red");
-                    }
-                });
-            },
-            //The status for when the user is not authorized for making the request
-            401:function (ressponse) {
-                location.reload();
-            },
-            403: function (response) {
-                window.location.replace("/403");
-            },
-            404: function (response) {
-                window.location.replace("/404");
-            },
-            //The status for when form data is not valid
-            422: function (response) {
-                //
-            },
-            //The status for when there is error php code
-            500: function (response) {
-                console.log(response.responseText);
-                toastr["error"]("خطای برنامه!", "پیام سیستم");
-            },
-            //The status for when there is error php code
-            503: function (response) {
-                toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
-            }
-        }
-    });
+    var newDataTable = $("#user_table").DataTable();
+    newDataTable.destroy();
+    makeDataTable_loadWithAjax_users();
 
-    return false;
+
+    // if(userAjax) {
+    //     userAjax.abort();
+    // }
+    // userAjax = $.ajax({
+    //     type: "GET",
+    //     url: $("#filterUserForm").attr("action"),
+    //     data: formData,
+    //     contentType: "application/json",
+    //     dataType: "json",
+    //     statusCode: {
+    //         200:function (response) {
+    //             // console.log(response);
+    //             var responseJson = response;
+    //             var newDataTable =$("#user_table").DataTable();
+    //             newDataTable.destroy();
+    //             $('#user_table > tbody').html(responseJson.index);
+    //             if(response === null || response === "" ) {
+    //                 $('#user_table > thead > tr').children('th:first').removeClass().addClass("none");
+    //             }
+    //             else{
+    //                 $('#user_table > thead > tr').children('th:first').removeClass("none");
+    //             }
+    //             makeDataTable("user_table");
+    //
+    //             $("#user-portlet-loading").addClass("d-none");
+    //             $(".filter").each(function () {
+    //                 if($(this).val() !== "" && $(this).val() !== null) {
+    //                     $(this).addClass("font-red");
+    //                 }
+    //             });
+    //         },
+    //         //The status for when the user is not authorized for making the request
+    //         401:function (ressponse) {
+    //             location.reload();
+    //         },
+    //         403: function (response) {
+    //             window.location.replace("/403");
+    //         },
+    //         404: function (response) {
+    //             window.location.replace("/404");
+    //         },
+    //         //The status for when form data is not valid
+    //         422: function (response) {
+    //             //
+    //         },
+    //         //The status for when there is error php code
+    //         500: function (response) {
+    //             console.log(response.responseText);
+    //             toastr["error"]("خطای برنامه!", "پیام سیستم");
+    //         },
+    //         //The status for when there is error php code
+    //         503: function (response) {
+    //             toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+    //         }
+    //     }
+    // });
+
+    // return false;
 });
 $(document).on("click", ".addBon", function (){
     var user_id = $(this).closest('ul').attr('id');

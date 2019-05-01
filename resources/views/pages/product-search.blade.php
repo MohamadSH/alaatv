@@ -19,9 +19,10 @@
     
     <div class="row justify-content-center">
         @if($products->isEmpty())
-            <div class="note " style="background-color: #00d4db;">
-                <h4 class="block bold" style="text-align: center">کاربر گرامی در حال حاضر موردی برای ثبت نام وجود ندارد.
-                    همایشها و اردوهای بعدی به زودی اعلام خواهند شد.</h4>
+            <div class="alert alert-info" role="alert">
+                <strong>
+                    کاربر گرامی در حال حاضر موردی برای ثبت نام وجود ندارد. همایشها و اردوهای بعدی به زودی اعلام خواهند شد.
+                </strong>
             </div>
         @else
             @foreach($products as $product)
