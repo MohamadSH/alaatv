@@ -228,6 +228,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'created_at',
         'attributevalues',
         'grand',
+        'productSet',
     ];
     
     /**
