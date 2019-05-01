@@ -320,9 +320,9 @@
 
                                                         </span>
                                                         <span>
-                                                            <img src="/acm/extra/sad.png"
+                                                            <img src="/acm/extra/sad.gif"
                                                                  class="face-sad m--margin-top-20" alt="">
-                                                            <img src="/acm/extra/happy.png"
+                                                            <img src="/acm/extra/happy.gif"
                                                                  class="face-happy m--margin-top-20" alt="">
                                                         </span>
                                                         <input type="hidden" id="addDonateUrl"

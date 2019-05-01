@@ -577,54 +577,34 @@
     <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-bootstrap-multiselect.min.js" type = "text/javascript"></script>
 
 
-    <script src = "/acm/AlaatvCustomFiles/js/admin-index.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/js/admin-makeDataTable.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type = "text/javascript"></script>
-
-
     <script type = "text/javascript">
-        //should run at first
-        $("#user_table thead tr th").each(function () {
-            if (!$(this).hasClass("none")) {
-                thText = $(this).text().trim();
-                $("#userTableColumnFilter > option").each(function () {
-                    if ($(this).val() === thText) {
-                        $(this).prop("selected", true);
-                    }
-                });
-            }
-        });
-
-        /**
-         * Start up jquery
-         */
-
 
         function makeDataTable_loadWithAjax_users() {
             $("#user-portlet-loading").removeClass("d-none");
             $('#user_table > tbody').html("");
+            let defaultContent = "<span class=\"m-badge m-badge--wide label-sm m-badge--danger\"> درج نشده </span>";
             let columns = [
                 {
                     "data": "row_child",
                     "defaultContent": ""
                 },
-                {"data": "full_name", "title": "نام خانوادگی"},
-                {"data": "firstName", "title": "نام کوچک"},
-                {"data": "info.major", "title": "رشته"},
-                {"data": "nationalCode", "title": "کد ملی"},
-                {"data": "mobile", "title": "موبایل"},
-                {"data": "email", "title": "ایمیل"},
-                {"data": "city", "title": "شهر"},
-                {"data": "province", "title": "استان"},
-                {"data": "mobile_verified_at", "title": "وضعیت شماره موبایل"},
-                {"data": "postalCode", "title": "کد پستی"},
-                {"data": "address", "title": "آدرس"},
-                {"data": "school", "title": "مدرسه"},
-                {"data": "full_name", "title": "وضعیت"},
-                {"data": "created_at", "title": "زمان ثبت نام"},
-                {"data": "updated_at", "title": "زمان اصلاح"},
-                {"data": "full_name", "title": "نقش های کاربر"},
-                {"data": "full_name", "title": "تعداد بن"},
+                {"data": "full_name", "title": "نام خانوادگی", "defaultContent": defaultContent},
+                {"data": "firstName", "title": "نام کوچک", "defaultContent": defaultContent},
+                {"data": "info.major.name", "title": "رشته", "defaultContent": defaultContent},
+                {"data": "nationalCode", "title": "کد ملی", "defaultContent": defaultContent},
+                {"data": "mobile", "title": "موبایل", "defaultContent": defaultContent},
+                {"data": "email", "title": "ایمیل", "defaultContent": defaultContent},
+                {"data": "city", "title": "شهر", "defaultContent": defaultContent},
+                {"data": "province", "title": "استان", "defaultContent": defaultContent},
+                {"data": "mobile_verified_at", "title": "وضعیت شماره موبایل", "defaultContent": defaultContent},
+                {"data": "postalCode", "title": "کد پستی", "defaultContent": defaultContent},
+                {"data": "address", "title": "آدرس", "defaultContent": defaultContent},
+                {"data": "school", "title": "مدرسه", "defaultContent": defaultContent},
+                {"data": "userstatus.displayName", "title": "وضعیت", "defaultContent": defaultContent},
+                {"data": "created_at", "title": "زمان ثبت نام", "defaultContent": defaultContent},
+                {"data": "updated_at", "title": "زمان اصلاح", "defaultContent": defaultContent},
+                {"data": "full_name", "title": "نقش های کاربر", "defaultContent": defaultContent},
+                {"data": "full_name", "title": "تعداد بن", "defaultContent": defaultContent},
                 {
                     "data": null,
                     "name": "functions",
@@ -677,32 +657,51 @@
                 console.log('dataFilter: ', json.data);
                 json.recordsTotal = json.total;
                 json.recordsFiltered = json.total;
-                // for (let index in json.data) {
-                //     if(!isNaN(index)) {
-                //         json.data[index]['full_name'] =
-                //     }
-                // }
-                //
                 return JSON.stringify(json); // return JSON string
             };
             let ajaxData = function (data) {
-                data.page = getNextPageParam(data.start, data.length);
-                // let $form = $("#filterOrderForm");
-                // let formData = getFormData($form);
+                mApp.block('#user_table_wrapper', {
+                    type: "loader",
+                    state: "info",
+                });
+                data.orders = getNextPageParam(data.start, data.length);
+                let $form = $("#filterUserForm");
+                let formData = getFormData($form);
                 /* Merge data and formData, without modifying data */
-                // data = $.extend({}, data, formData);
+                data = $.extend({}, data, formData);
                 // console.log('settings: ', data);
                 return data;
             };
             let dataSrc = function (json) {
-                // $("#order-portlet-loading").addClass("d-none");
-                console.log('data received!');
+                $("#user-portlet-loading").addClass("d-none");
+                mApp.unblock('#user_table_wrapper');
                 return json.data;
             };
             makeDataTable_loadWithAjax("user_table", $("#filterUserForm").attr("action"), columns, dataFilter, ajaxData, dataSrc);
         }
+        
+    </script>
+    <script src = "/acm/AlaatvCustomFiles/js/admin-index.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/js/admin-makeDataTable.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type = "text/javascript"></script>
 
 
+    <script type = "text/javascript">
+        //should run at first
+        $("#user_table thead tr th").each(function () {
+            if (!$(this).hasClass("none")) {
+                thText = $(this).text().trim();
+                $("#userTableColumnFilter > option").each(function () {
+                    if ($(this).val() === thText) {
+                        $(this).prop("selected", true);
+                    }
+                });
+            }
+        });
+
+        /**
+         * Start up jquery
+         */
         jQuery(document).ready(function () {
         @permission((config('constants.LIST_USER_ACCESS')));
             var newDataTable = $("#user_table").DataTable();
