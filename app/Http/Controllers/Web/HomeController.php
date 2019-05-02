@@ -63,14 +63,14 @@ use App\{Bon,
     Traits\CharacterCommon,
     Notifications\GiftGiven,
     Traits\APIRequestCommon,
-    Traits\ProductRepository,
     Events\FreeInternetAccept,
     Notifications\GeneralNotice,
     Notifications\UserRegisterd,
     Http\Requests\InsertUserRequest,
     Http\Requests\ContactUsFormRequest,
     Classes\Format\BlockCollectionFormatter,
-    Classes\Repository\ContentRepositoryInterface};
+    Classes\Repository\ContentRepositoryInterface,
+    Classes\Repository\ProductRepository as ProductRepository};
 
 //use Jenssegers\Agent\Agent;
 
@@ -167,8 +167,9 @@ class HomeController extends Controller
     
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        return Product::find(226)
-            ->load('sets');
+        return [
+            ProductRepository::getArrayOfProductsIdThatTheirParentHaveValidProductFileByFileName('fizik_paye_dahom.pdf'),
+        ];
     }
     
     public function search(Request $request)
@@ -726,8 +727,8 @@ class HomeController extends Controller
         $coupons = Coupon::pluck('name', 'id')
             ->toArray();
         $coupons = array_sort_recursive($coupons);
-        
-
+    
+    
         return view("admin.indexSMS",
             compact("pageName", "majors", "userStatuses", "roles", "relatives", "orderstatuses", "paymentstatuses",
                 "genders", "gendersWithUnknown", "products",
@@ -4809,7 +4810,7 @@ class HomeController extends Controller
     public function adminGenerateRandomCoupon(Request $request)
     {
         $productCollection = $products = $this->makeProductCollection();
-
+    
         return view("admin.generateSpecialCoupon", compact("productCollection"));
     }
     
