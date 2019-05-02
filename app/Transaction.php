@@ -2,8 +2,8 @@
 
 namespace App;
 
-use App\Collection\TransactionCollection;
 use Cache;
+use App\Collection\TransactionCollection;
 
 /**
  * App\Transaction

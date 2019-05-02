@@ -2,34 +2,34 @@
 
 namespace App;
 
-use App\Classes\Advertisable;
-use App\Classes\FavorableInterface;
-use App\Classes\LinkGenerator;
-use App\Classes\Search\Tag\ContentTagManagerViaApi;
-use App\Classes\SEO\SeoInterface;
-use App\Classes\SEO\SeoMetaTagsGenerator;
+use Exception;
+use Carbon\Carbon;
 use App\Classes\Taggable;
+use App\Classes\Advertisable;
+use Laravel\Scout\Searchable;
+use App\Classes\LinkGenerator;
+use App\Traits\favorableTraits;
+use App\Traits\APIRequestCommon;
+use App\Classes\SEO\SeoInterface;
+use App\Traits\ModelTrackerTrait;
+use Illuminate\Support\Collection;
+use App\Classes\FavorableInterface;
 use App\Collection\ContentCollection;
 use App\Collection\ProductCollection;
-use App\Traits\APIRequestCommon;
-use App\Traits\favorableTraits;
-use App\Traits\ModelTrackerTrait;
-use Carbon\Carbon;
-use Exception;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\{Artisan, Cache, Config};
-use Laravel\Scout\Searchable;
 use Stevebauman\Purify\Facades\Purify;
+use App\Classes\SEO\SeoMetaTagsGenerator;
+use App\Classes\Search\Tag\ContentTagManagerViaApi;
+use Illuminate\Support\Facades\{Cache, Config, Artisan};
 
 /**
  * App\Content
  *
- * @property int                                                              $id
- * @property int|null                                                         $author_id       آی دی مشخص کننده به وجود
+ * @property int      $id
+ * @property int|null $author_id       آی دی مشخص کننده به وجود
  *           آورنده اثر
- * @property int|null                                                         $contenttype_id  آی دی مشخص کننده نوع
+ * @property int|null $contenttype_id  آی دی مشخص کننده نوع
  *           محتوا
- * @property int|null                                                         $template_id     آی دی مشخص کننده قالب
+ * @property int|null $template_id     آی دی مشخص کننده قالب
  *           این گرافیکی این محتوا
  * @property string|null                                                      $name            نام محتوا
  * @property string|null                                                      $description     توضیح درباره محتوا
@@ -260,7 +260,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $array = $this->toArray();
         
         unset($array['basePrice']);
-    
+        
         unset($array['user']);
         unset($array['deleted_at']);
         unset($array['validSince']);
@@ -509,8 +509,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if (isset($value[0])) {
             return Purify::clean($value, self::$purifyNullConfig);
-        }
-        else {
+        } else {
             return Purify::clean(mb_substr($this->display_name, 0, config("constants.META_TITLE_LIMIT"), "utf-8"),
                 self::$purifyNullConfig);
         }
@@ -527,8 +526,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if (isset($value[0])) {
             return Purify::clean($value, self::$purifyNullConfig);
-        }
-        else {
+        } else {
             return Purify::clean(mb_substr($this->description, 0, config("constants.META_DESCRIPTION_LIMIT"), "utf-8"),
                 self::$purifyNullConfig);
         }
@@ -696,8 +694,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                         ->get()
                         ->sortBy("order")
                         ->load('contenttype');
-                }
-                else {
+                } else {
                     $sameContents = new ContentCollection([]);
                 }
                 
@@ -1196,5 +1193,5 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         
         return false;
     }
-
+    
 }

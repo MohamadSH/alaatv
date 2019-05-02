@@ -2,8 +2,8 @@
 
 namespace App;
 
-use App\Traits\Helper;
 use Carbon\Carbon;
+use App\Traits\Helper;
 use Kalnoy\Nestedset\QueryBuilder;
 
 /**

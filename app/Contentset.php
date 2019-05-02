@@ -55,6 +55,8 @@ use App\Collection\ContentCollection;
  * @property-read mixed                                            $api_url
  * @property-read mixed                                            $content_url
  * @property-read mixed                                            $cache_cooldown_seconds
+ * @property-read \App\Collection\ContentCollection|\App\Content[] $contents2
+ * @property-read \App\Collection\ProductCollection|\App\Product[] $products
  */
 class Contentset extends BaseModel implements Taggable
 {

@@ -2,37 +2,37 @@
 
 namespace App;
 
+use Hash;
+use Carbon\Carbon;
+use App\Traits\Helper;
 use App\Classes\Taggable;
-use App\Classes\Verification\MustVerifyMobileNumber;
-use App\Collection\ProductCollection;
-use App\Collection\UserCollection;
-use App\Traits\APIRequestCommon;
-use App\Traits\CharacterCommon;
 use App\Traits\DateTrait;
 use App\Traits\HasWallet;
-use App\Traits\Helper;
-use App\Traits\MustVerifyMobileNumberTrait;
 use App\Traits\OrderCommon;
+use App\Traits\CharacterCommon;
+use App\Traits\APIRequestCommon;
+use App\Collection\UserCollection;
+use Kalnoy\Nestedset\QueryBuilder;
+use Laravel\Passport\HasApiTokens;
+use App\Collection\ProductCollection;
+use Illuminate\Notifications\Notifiable;
+use Laratrust\Traits\LaratrustUserTrait;
+use App\Traits\MustVerifyMobileNumberTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Iatstuti\Database\Support\CascadeSoftDeletes;
+use App\Classes\Verification\MustVerifyMobileNumber;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Traits\User\{BonTrait,
     DashboardTrait,
+    TagTrait,
+    TrackTrait,
     LotteryTrait,
     MutatorTrait,
     PaymentTrait,
     ProfileTrait,
-    TagTrait,
     TeacherTrait,
-    TrackTrait,
     VouchersTrait};
-use Carbon\Carbon;
-use Hash;
-use Iatstuti\Database\Support\CascadeSoftDeletes;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Kalnoy\Nestedset\QueryBuilder;
-use Laratrust\Traits\LaratrustUserTrait;
-use Laravel\Passport\HasApiTokens;
 
 /**
  * App\User
@@ -276,8 +276,14 @@ use Laravel\Passport\HasApiTokens;
  * @property-read mixed                                                               $user_status
  * @property mixed updated_at
  * @property mixed created_at
+ * @property-read \App\Collection\OrderCollections|\App\Order[]                 $closedOrders
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Firebasetoken[] $firebasetokens
+ * @property-read mixed                                                         $user_status
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User orWherePermissionIs($permission = '')
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User orWhereRoleIs($role = '', $team = null)
+ * @property string|null                                                        $lastServiceCall آخرین تماس کارمندان روابط عمومی با کاربر
+ * @property-read mixed                                                         $closed_orders
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLastServiceCall($value)
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail
 {
@@ -570,8 +576,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     {
         if (Hash::check($password, $this->password)) {
             $result = true;
-        }
-        else {
+        } else {
             $result = false;
         }
         

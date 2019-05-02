@@ -2,20 +2,20 @@
 
 namespace App;
 
-use App\Classes\Checkout\Alaa\OrderCheckout;
-use App\Classes\Checkout\Alaa\ReObtainOrderFromRecords;
-use App\Collection\OrderCollections;
-use App\Collection\OrderproductCollection;
-use App\Collection\ProductCollection;
-use App\Collection\TransactionCollection;
-use App\Traits\Helper;
-use App\Traits\ProductCommon;
+use DB;
 use Auth;
 use Carbon\Carbon;
-use DB;
-use Doctrine\DBAL\Query\QueryBuilder;
+use App\Traits\Helper;
+use App\Traits\ProductCommon;
 use Illuminate\Support\Collection;
+use App\Collection\OrderCollections;
+use App\Collection\ProductCollection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Illuminate\Support\Facades\Cache;
+use App\Collection\TransactionCollection;
+use App\Collection\OrderproductCollection;
+use App\Classes\Checkout\Alaa\OrderCheckout;
+use App\Classes\Checkout\Alaa\ReObtainOrderFromRecords;
 
 /**
  * App\Order

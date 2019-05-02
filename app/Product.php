@@ -138,6 +138,7 @@ use App\Traits\{ProductCommon,
  * @property-read mixed                                                          $redirect_url
  * @property-read \App\Collection\SetCollection|\App\Contentset[]                $sets
  * @property-read mixed                                                          $cache_cooldown_seconds
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product main()
  */
 class Product extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
