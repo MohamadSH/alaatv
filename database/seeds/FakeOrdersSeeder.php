@@ -124,7 +124,7 @@ class FakeOrdersSeeder extends Seeder
                 'user_id'  =>   $this->mohamad->id,
                 'costwithoutcoupon'  =>  0,
                 'cost'  =>  330000,
-                'coupon_id' =>  $this->testCoupon->Id ,
+                'coupon_id' =>  $this->testCoupon->id ,
                 'couponDiscount' =>  $this->testCoupon->discount ,
                 'completed_at'=>    Carbon::Now(),
                 'orderstatus_id'    =>  config('constants.ORDER_STATUS_POSTED') ,
@@ -491,6 +491,8 @@ class FakeOrdersSeeder extends Seeder
             $orderSeed->coupon_id = $order['coupon_id'];
         if (isset($order['couponDiscount']))
             $orderSeed->couponDiscount = $order['couponDiscount'];
+        if (isset($order['couponDiscountAmount']))
+            $orderSeed->couponDiscountAmount = $order['couponDiscountAmount'];
         if (isset($order['discount']))
             $orderSeed->discount = $order['discount'];
 
