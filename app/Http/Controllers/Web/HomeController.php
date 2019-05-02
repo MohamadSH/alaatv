@@ -167,7 +167,8 @@ class HomeController extends Controller
     
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-    
+        return Product::find(226)
+            ->load('sets');
     }
     
     public function search(Request $request)
