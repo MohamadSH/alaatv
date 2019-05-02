@@ -1251,11 +1251,11 @@ class Order extends BaseModel
                     'userstatus',
                 ];
                 
-                if ($this->isAuthenticatedUserHasPermission(config('constants.SHOW_USER_MOBILE'))) {
+                if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_MOBILE'))) {
                     $visibleColumns = array_merge($visibleColumns, ['mobile']);
                 }
                 
-                if ($this->isAuthenticatedUserHasPermission(config('constants.SHOW_USER_EMAIL'))) {
+                if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_EMAIL'))) {
                     $visibleColumns = array_merge($visibleColumns, ['email']);
                 }
                 
@@ -1263,12 +1263,6 @@ class Order extends BaseModel
                     ->first()
                     ->setVisible($visibleColumns);
             });
-    }
-    
-    private function isAuthenticatedUserHasPermission(string $permission): bool
-    {
-        return (Auth::check() && Auth::user()
-                ->can($permission));
     }
     
     public function user()
@@ -1282,7 +1276,7 @@ class Order extends BaseModel
         $key   = "order:updated_at:".$order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if ($this->isAuthenticatedUserHasPermission(config('constants.SHOW_ORDER_ACCESS'))) {
+                if (hasAuthenticatedUserPermission(config('constants.SHOW_ORDER_ACCESS'))) {
                     return $this->convertDate($order->updated_at, "toJalali");
                 }
                 
@@ -1297,7 +1291,7 @@ class Order extends BaseModel
         $key   = "order:created_at:".$order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if ($this->isAuthenticatedUserHasPermission(config('constants.SHOW_ORDER_ACCESS'))) {
+                if (hasAuthenticatedUserPermission(config('constants.SHOW_ORDER_ACCESS'))) {
                     return $this->convertDate($order->created_at, "toJalali");
                 }
                 
@@ -1312,7 +1306,7 @@ class Order extends BaseModel
         $key   = "order:completed_at:".$order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if ($this->isAuthenticatedUserHasPermission(config('constants.SHOW_ORDER_ACCESS'))) {
+                if (hasAuthenticatedUserPermission(config('constants.SHOW_ORDER_ACCESS'))) {
                     return $this->convertDate($order->completed_at, "toJalali");
                 }
                 
@@ -1339,7 +1333,7 @@ class Order extends BaseModel
         $key   = "order:managerComment:".$order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if ($this->isAuthenticatedUserHasPermission('constants.SHOW_ORDER_ACCESS')) {
+                if (hasAuthenticatedUserPermission('constants.SHOW_ORDER_ACCESS')) {
                     return $order->ordermanagercomments()
                         ->get();
                 }
@@ -1360,7 +1354,7 @@ class Order extends BaseModel
         $key   = "order:editLink:".$order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if ($this->isAuthenticatedUserHasPermission(config('constants.EDIT_ORDER_ACCESS'))) {
+                if (hasAuthenticatedUserPermission(config('constants.EDIT_ORDER_ACCESS'))) {
                     return action('Web\OrderController@edit', $order->id);
                 }
                 
@@ -1375,7 +1369,7 @@ class Order extends BaseModel
         $key   = "order:removeLink:".$order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if ($this->isAuthenticatedUserHasPermission(config('constants.REMOVE_ORDER_ACCESS'))) {
+                if (hasAuthenticatedUserPermission(config('constants.REMOVE_ORDER_ACCESS'))) {
                     return action('Web\OrderController@destroy', $order->id);
                 }
                 

@@ -26,3 +26,10 @@ if (!function_exists('httpResponse')) {
         return $view;
     }
 }
+
+if (!function_exists('hasAuthenticatedUserPermission')) {
+    function hasAuthenticatedUserPermission(string $permission): bool
+    {
+        return (Auth::check() && Auth::user()->can($permission));
+    }
+}
