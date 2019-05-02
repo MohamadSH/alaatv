@@ -45,8 +45,10 @@
                                    preload="auto" height='360' width="640" poster='{{ $content->thumbnail }}'>
                                 @foreach($content->getVideos() as $source)
                                     <source src="{{ $source->link }}" type='video/mp4' res="{{ $source->res }}"
-                                            @if(strcmp( $source->res,"240p") == 0) default
-                                            @endif label="{{ $source->caption }}"/>
+                                            @if(strcmp( $source->res,"240p") == 0)
+                                                default
+                                            @endif
+                                            label="{{ $source->caption }}"/>
                                 @endforeach
                                 <p class="vjs-no-js">@lang('content.javascript is disables! we need it to play a video')</p>
                             </video>
