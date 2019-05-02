@@ -2,33 +2,33 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Classes\Search\ContentSearch;
-use App\Classes\Search\ContentsetSearch;
-use App\Classes\Search\ProductSearch;
+use App\User;
+use Exception;
 use App\Content;
+use Carbon\Carbon;
 use App\Contentset;
 use App\Contenttype;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\{ContentIndexRequest, EditContentRequest, InsertContentRequest, Request};
-use App\Traits\{APIRequestCommon,
-    CharacterCommon,
-    Content\ContentControllerResponseTrait,
-    FileCommon,
-    Helper,
-    MetaCommon,
-    ProductCommon,
-    RequestCommon,
-    SearchCommon};
-use App\User;
 use App\Websitesetting;
-use Carbon\Carbon;
-use Exception;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\{Cache, Config};
 use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\{Cache};
+use Illuminate\Routing\Redirector;
+use App\Http\Controllers\Controller;
+use App\Classes\Search\ContentSearch;
+use App\Classes\Search\ProductSearch;
+use Illuminate\Http\RedirectResponse;
+use App\Classes\Search\ContentsetSearch;
+use App\Http\Requests\{Request, EditContentRequest, ContentIndexRequest, InsertContentRequest};
+use App\Traits\{Helper,
+    FileCommon,
+    MetaCommon,
+    SearchCommon,
+    RequestCommon,
+    ProductCommon,
+    CharacterCommon,
+    APIRequestCommon,
+    Content\ContentControllerResponseTrait};
 
 class ContentController extends Controller
 {
@@ -220,14 +220,13 @@ class ContentController extends Controller
         }
         if (!$this->userCanSeeContent($request, $content, 'web')) {
             $productsThatHaveThisContent = $content->products();
-            
             $view = trans('content.Not Free And you can\'t buy it');
             $api  = $this->userCanNotSeeContentResponse(trans('content.Not Free And you can\'t buy it'),
-                Response::HTTP_FORBIDDEN, $productsThatHaveThisContent, true);
+                Response::HTTP_FORBIDDEN, $content, $productsThatHaveThisContent, true);
             
             $view1 = trans('content.Not Free');
             $api1  = $this->userCanNotSeeContentResponse(trans('content.Not Free'),
-                Response::HTTP_FORBIDDEN, $productsThatHaveThisContent, true);
+                Response::HTTP_FORBIDDEN, $content, $productsThatHaveThisContent, true);
             return $productsThatHaveThisContent->isEmpty() ? httpResponse($api,
                 $view) : httpResponse($api1, $view1);
         }

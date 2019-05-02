@@ -910,6 +910,7 @@ class UserController extends Controller
             ->first();
         
         $userCompletion = $user->info['completion'];
+
         
         return view("user.profile.profile",
             compact("user", 'event', 'userKonkurResult', 'genders', 'majors', 'sideBarMode',

@@ -2,20 +2,20 @@
 
 namespace App;
 
-use App\Classes\Checkout\Alaa\OrderCheckout;
-use App\Classes\Checkout\Alaa\ReObtainOrderFromRecords;
-use App\Collection\OrderCollections;
-use App\Collection\OrderproductCollection;
-use App\Collection\ProductCollection;
-use App\Collection\TransactionCollection;
-use App\Traits\Helper;
-use App\Traits\ProductCommon;
+use DB;
 use Auth;
 use Carbon\Carbon;
-use DB;
-use Doctrine\DBAL\Query\QueryBuilder;
+use App\Traits\Helper;
+use App\Traits\ProductCommon;
 use Illuminate\Support\Collection;
+use App\Collection\OrderCollections;
+use App\Collection\ProductCollection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Illuminate\Support\Facades\Cache;
+use App\Collection\TransactionCollection;
+use App\Collection\OrderproductCollection;
+use App\Classes\Checkout\Alaa\OrderCheckout;
+use App\Classes\Checkout\Alaa\ReObtainOrderFromRecords;
 
 /**
  * App\Order
@@ -98,18 +98,18 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                               $invoice
  * @property-read mixed                                                               $info
- * @property mixed                                                                    donates
- * @property mixed                                                                    donate_amount
- * @property-read mixed                                                               $added_bon_sum
- * @property-read mixed                                                               $coupon_info
- * @property-read mixed                                                               $debt
- * @property-read int                                                                 $donate_amount
- * @property-read \Collection                                                         $donates
- * @property-read mixed                                                               $edit_order_link
- * @property-read mixed                                                               $jalali_completed_at
- * @property-read mixed                                                               $jalali_created_at
- * @property-read mixed                                                               $jalali_updated_at
- * @property-read mixed                                                               $manager_comment
+ * @property mixed           donates
+ * @property mixed           donate_amount
+ * @property-read mixed      $added_bon_sum
+ * @property-read mixed      $coupon_info
+ * @property-read mixed      $debt
+ * @property-read int        $donate_amount
+ * @property-read Collection $donates
+ * @property-read mixed      $edit_order_link
+ * @property-read mixed      $jalali_completed_at
+ * @property-read mixed      $jalali_created_at
+ * @property-read mixed      $jalali_updated_at
+ * @property-read mixed      $manager_comment
  * @property-read mixed                                                               $order_posting_info
  * @property-read int                                                                 $paid_price
  * @property-read mixed                                                               $pending_transactions
@@ -143,7 +143,7 @@ class Order extends BaseModel
     | Properties methods
     |--------------------------------------------------------------------------
     */
-    protected $table = 'orders';
+    protected $table          = 'orders';
     protected $cascadeDeletes = [
         'transactions',
         'files',
@@ -166,7 +166,7 @@ class Order extends BaseModel
         'checkOutDateTime',
         'completed_at',
     ];
-    protected $appends = [
+    protected $appends  = [
         'price',
         'orderstatus',
         'paymentstatus',
@@ -187,10 +187,10 @@ class Order extends BaseModel
         'jalaliCompletedAt',
         'postingInfo',
         'managerComment',
-        'editOrderLink',
-        'removeOrderLink',
+        'editLink',
+        'removeLink',
     ];
-    protected $hidden = [
+    protected $hidden   = [
         'id',
         'couponDiscount',
         'coupon',
@@ -222,8 +222,7 @@ class Order extends BaseModel
                 /** @var QueryBuilder $q */
                 $q->whereDoesntHave("major");
             });
-        }
-        else {
+        } else {
             $orders = $orders->whereHas('user', function ($q) use ($majorsId) {
                 /** @var QueryBuilder $q */
                 $q->whereIn("major_id", $majorsId);
@@ -304,21 +303,18 @@ class Order extends BaseModel
                         $q->where("orderproducttype_id", $type)
                             ->orWhereNull("orderproducttype_id");
                     });
-            }
-            else {
+            } else {
                 $relation = $this->hasMany('App\Orderproduct')
                     ->where("orderproducttype_id", $type);
             }
-        }
-        else {
+        } else {
             $relation = $this->hasMany('App\Orderproduct');
         }
         
         foreach ($filters as $filter) {
             if (isset($filter["isArray"])) {
                 $relation->whereIn($filter["attribute"], $filter["value"]);
-            }
-            else {
+            } else {
                 $relation->where($filter["attribute"], $filter["value"]);
             }
         }
@@ -340,8 +336,7 @@ class Order extends BaseModel
                 'typeHint' => 'percentage',
                 'discount' => $this->couponDiscount,
             ];
-        }
-        else {
+        } else {
             if ($this->couponDiscountAmount > 0) {
                 return [
                     'type'     => config('constants.DISCOUNT_TYPE_COST'),
@@ -387,8 +382,7 @@ class Order extends BaseModel
         if ($couponType !== false) {
             if ($couponType["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE")) {
                 $totalCost = ((1 - ($couponType["discount"] / 100)) * $totalCost);
-            }
-            else {
+            } else {
                 if ($couponType["type"] == config("constants.DISCOUNT_TYPE_COST")) {
                     $totalCost = $totalCost - $couponType["discount"];
                 }
@@ -406,8 +400,7 @@ class Order extends BaseModel
                     "type"     => config("constants.DISCOUNT_TYPE_PERCENTAGE"),
                     "discount" => $this->couponDiscount,
                 ];
-            }
-            else {
+            } else {
                 return [
                     "type"     => config("constants.DISCOUNT_TYPE_COST"),
                     "discount" => $this->couponDiscountAmount,
@@ -427,8 +420,7 @@ class Order extends BaseModel
     {
         if (isset($this->coupon->id)) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -461,8 +453,7 @@ class Order extends BaseModel
                 if (empty($orderproductTypes)) {
                     $join->on('products.id', '=', 'orderproducts.product_id')
                         ->whereNull('orderproducts.deleted_at');
-                }
-                else {
+                } else {
                     $join->on('products.id', '=', 'orderproducts.product_id')
                         ->whereNull('orderproducts.deleted_at')
                         ->whereIn("orderproducttype_id",
@@ -484,7 +475,7 @@ class Order extends BaseModel
         
         return $result;
     }
-
+    
     public function refreshCost()
     {
         $orderCost               = $this->obtainOrderCost(true);
@@ -541,8 +532,7 @@ class Order extends BaseModel
                         }
                         $alaaCashierFacade = new OrderCheckout($this, $orderproductsToCalculateFromBaseIds,
                             $reCheckIncludedOrderproductsInCoupon);
-                    }
-                    else {
+                    } else {
                         $this->load('normalOrderproducts', 'normalOrderproducts.product',
                             'normalOrderproducts.product.parents', 'normalOrderproducts.userbons',
                             'normalOrderproducts.attributevalues', 'normalOrderproducts.product.attributevalues');
@@ -612,8 +602,7 @@ class Order extends BaseModel
                     $userbon->orderproduct_id  = $orderproduct->id;
                     if ($userbon->save()) {
                         $totalSuccessfulBons += $userbon->totalNumber;
-                    }
-                    else {
+                    } else {
                         $totalFailedBons += $bon->pivot->bonPlus;
                     }
                 }
@@ -653,8 +642,7 @@ class Order extends BaseModel
         foreach ($products as $product) {
             if ($this->hasTheseProducts([$product->id])) {
                 // can increase amount of product
-            }
-            else {
+            } else {
                 $notDuplicateProduct->push($product);
             }
         }
@@ -774,8 +762,7 @@ class Order extends BaseModel
         
         if ($notIncludedProducts->isNotEmpty()) {
             return $notIncludedProducts;
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -1210,8 +1197,7 @@ class Order extends BaseModel
                 $bonSum = 0;
                 if (isset($intendedUser)) {
                     $user = $intendedUser;
-                }
-                else {
+                } else {
                     if (Auth::check()) {
                         $user = Auth::user();
                     }
@@ -1251,11 +1237,11 @@ class Order extends BaseModel
                     'userstatus',
                 ];
                 
-                if ($this->isAuthenticatedUserHasPermission(config('constants.SHOW_USER_MOBILE'))) {
+                if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_MOBILE'))) {
                     $visibleColumns = array_merge($visibleColumns, ['mobile']);
                 }
                 
-                if ($this->isAuthenticatedUserHasPermission(config('constants.SHOW_USER_EMAIL'))) {
+                if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_EMAIL'))) {
                     $visibleColumns = array_merge($visibleColumns, ['email']);
                 }
                 
@@ -1263,12 +1249,6 @@ class Order extends BaseModel
                     ->first()
                     ->setVisible($visibleColumns);
             });
-    }
-    
-    private function isAuthenticatedUserHasPermission(string $permission): bool
-    {
-        return (Auth::check() && Auth::user()
-                ->can($permission));
     }
     
     public function user()
@@ -1282,7 +1262,7 @@ class Order extends BaseModel
         $key   = "order:updated_at:".$order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if ($this->isAuthenticatedUserHasPermission(config('constants.SHOW_ORDER_ACCESS'))) {
+                if (hasAuthenticatedUserPermission(config('constants.SHOW_ORDER_ACCESS'))) {
                     return $this->convertDate($order->updated_at, "toJalali");
                 }
                 
@@ -1297,7 +1277,7 @@ class Order extends BaseModel
         $key   = "order:created_at:".$order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if ($this->isAuthenticatedUserHasPermission(config('constants.SHOW_ORDER_ACCESS'))) {
+                if (hasAuthenticatedUserPermission(config('constants.SHOW_ORDER_ACCESS'))) {
                     return $this->convertDate($order->created_at, "toJalali");
                 }
                 
@@ -1312,7 +1292,7 @@ class Order extends BaseModel
         $key   = "order:completed_at:".$order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if ($this->isAuthenticatedUserHasPermission(config('constants.SHOW_ORDER_ACCESS'))) {
+                if (hasAuthenticatedUserPermission(config('constants.SHOW_ORDER_ACCESS'))) {
                     return $this->convertDate($order->completed_at, "toJalali");
                 }
                 
@@ -1339,7 +1319,7 @@ class Order extends BaseModel
         $key   = "order:managerComment:".$order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if ($this->isAuthenticatedUserHasPermission('constants.SHOW_ORDER_ACCESS')) {
+                if (hasAuthenticatedUserPermission('constants.SHOW_ORDER_ACCESS')) {
                     return $order->ordermanagercomments()
                         ->get();
                 }
@@ -1354,13 +1334,13 @@ class Order extends BaseModel
         return $this->hasMany('App\Ordermanagercomment');
     }
     
-    public function getEditOrderLinkAttribute()
+    public function getEditLinkAttribute()
     {
         $order = $this;
         $key   = "order:editLink:".$order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if ($this->isAuthenticatedUserHasPermission(config('constants.EDIT_ORDER_ACCESS'))) {
+                if (hasAuthenticatedUserPermission(config('constants.EDIT_ORDER_ACCESS'))) {
                     return action('Web\OrderController@edit', $order->id);
                 }
                 
@@ -1369,18 +1349,17 @@ class Order extends BaseModel
         
     }
     
-    public function getRemoveOrderLinkAttribute()
+    public function getRemoveLinkAttribute()
     {
         $order = $this;
         $key   = "order:removeLink:".$order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if ($this->isAuthenticatedUserHasPermission(config('constants.REMOVE_ORDER_ACCESS'))) {
+                if (hasAuthenticatedUserPermission(config('constants.REMOVE_ORDER_ACCESS'))) {
                     return action('Web\OrderController@destroy', $order->id);
                 }
                 
                 return null;
             });
-        
     }
 }

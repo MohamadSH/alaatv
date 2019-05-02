@@ -167,8 +167,7 @@ class HomeController extends Controller
     
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        return Content::find(9308);
-        
+    
     }
     
     public function search(Request $request)

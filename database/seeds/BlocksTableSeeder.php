@@ -15,6 +15,7 @@ class BlocksTableSeeder extends Seeder
           ->delete();
         DB::table('blocks')
           ->delete();
+        //HomePage
         $data = [
             [
                 'id'         => 1,
@@ -145,6 +146,23 @@ class BlocksTableSeeder extends Seeder
                                                        164,
                                                        155,
                                                    ]));
+    
+        \App\Block::find(1)
+            ->products()
+            ->attach(\App\Product::find([
+                291,
+                292,
+            ]));
+        \App\Block::find(1)
+            ->contents()
+            ->attach(\App\Content::find([
+                3927,
+                6320,
+                6920,
+                1442,
+            ]));
+    
+        //ShopPage
         $data = [
             [
                 'id'         => 10,
@@ -262,5 +280,19 @@ class BlocksTableSeeder extends Seeder
                       181,
                       225
                   ]));
+    
+        \App\Block::find(10)
+            ->products()
+            ->attach(\App\Product::find([
+                285,
+                286,
+                287,
+                288,
+                289,
+                290,
+                291,
+                292,
+                293,
+            ]));
     }
 }

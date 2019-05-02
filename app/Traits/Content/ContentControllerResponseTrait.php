@@ -4,34 +4,36 @@
 namespace App\Traits\Content;
 
 
-use App\Collection\ProductCollection;
+use stdClass;
 use App\Content;
 use Carbon\Carbon;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use stdClass;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Collection\ProductCollection;
+use Illuminate\Foundation\Http\FormRequest;
 
 trait ContentControllerResponseTrait
 {
     
     /**
      * @param                                     $message
-     * @param  ProductCollection                  $productsThatHaveThisContent
      * @param  int                                $code
      *
+     * @param  Content                            $content
+     * @param  ProductCollection                  $productsThatHaveThisContent
      * @param  bool                               $productInResponse
      *
      * @return JsonResponse
      */
-    protected function userCanNotSeeContentResponse($message, int $code, ProductCollection $productsThatHaveThisContent = null,
-        bool $productInResponse = false) :JsonResponse
+    protected function userCanNotSeeContentResponse($message, int $code, Content $content, ProductCollection $productsThatHaveThisContent = null,
+        bool $productInResponse = false): JsonResponse
     {
         if ($productInResponse) {
             return response()->json([
                 'message' => $message,
-                'product' => $productsThatHaveThisContent,
+                'content' => $content->makeHidden('file'),
+                'product' => $productsThatHaveThisContent->isEmpty() ? null : $productsThatHaveThisContent,
             ], $code);
             
         }
