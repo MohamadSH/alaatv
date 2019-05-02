@@ -191,7 +191,6 @@ class Block extends BaseModel
                 
                 return $blocks;
             });
-        
         return $blocks;
     }
     

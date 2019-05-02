@@ -2,19 +2,20 @@
 
 namespace App;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
 /**
  * App\Slideshow
  *
- * @property int                        $id
- * @property int|null                   $websitepage_id آی دی مشخص کننده صفحه محل نمایش اسلاید
- * @property string|null                $title
- * @property string|null                $shortDescription
- * @property string|null                $photo
- * @property string|null                $link
- * @property int                        $order
- * @property int                        $isEnable
+ * @property int         $id
+ * @property int|null    $websitepage_id آی دی مشخص کننده صفحه محل نمایش اسلاید
+ * @property string|null $title
+ * @property string|null $shortDescription
+ * @property string|null $photo
+ * @property string|null $link
+ * @property int         $order
+ * @property int         $isEnable
  * @property \Carbon\Carbon|null        $created_at
  * @property \Carbon\Carbon|null        $updated_at
  * @property \Carbon\Carbon|null        $deleted_at
@@ -42,7 +43,7 @@ use Illuminate\Support\Facades\Cache;
  * @property-read mixed                 $url
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed                 $cache_cooldown_seconds
+ * @property-read mixed  $cache_cooldown_seconds
  */
 class Slideshow extends BaseModel
 {
@@ -71,7 +72,7 @@ class Slideshow extends BaseModel
         'created_at',
     ];
     
-    public static function getMainBanner()
+    public static function getMainBanner(): Collection
     {
         return Cache::tags([
             'banner',

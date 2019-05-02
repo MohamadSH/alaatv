@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Collection\ProductCollection;
 use App\Content;
-use App\Http\Controllers\Controller;
-use App\Traits\Content\ContentControllerResponseTrait;
-use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
+use App\Traits\Content\ContentControllerResponseTrait;
 
 class ContentController extends Controller
 {
@@ -31,11 +29,11 @@ class ContentController extends Controller
         
         if ($productsThatHaveThisContent->isEmpty()) {
             return $this->userCanNotSeeContentResponse(trans('content.Not Free And you can\'t buy it') ,
-                Response::HTTP_FORBIDDEN,$productsThatHaveThisContent,true);
+                Response::HTTP_FORBIDDEN, $content);
             
         }
         return $this->userCanNotSeeContentResponse(trans('content.Not Free') ,
-            Response::HTTP_FORBIDDEN,$productsThatHaveThisContent,true);
+            Response::HTTP_FORBIDDEN, $content, $productsThatHaveThisContent, true);
     }
     
 }
