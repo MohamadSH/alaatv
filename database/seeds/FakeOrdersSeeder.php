@@ -9,7 +9,8 @@ use App\Coupon;
     use App\Transactiongateway;
 use App\User;
     use App\Userbon;
-    use Carbon\Carbon;
+use App\Wallet;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
     use Illuminate\Support\Collection;
 
@@ -17,8 +18,6 @@ class FakeOrdersSeeder extends Seeder
 {
     private $mohamad;
     private $mohamadWallet;
-    private $sohrab;
-    private $sohrabWallet;
     private $zarinPal;
     private $testCoupon;
     private $products ;
@@ -26,10 +25,11 @@ class FakeOrdersSeeder extends Seeder
 
     public function __construct()
     {
-        $this->mohamad = User::find(237020);
-        $this->mohamadWallet = User::find(235367);
-        $this->sohrab = User::find(8070);
-        $this->sohrabWallet = User::find(8070);
+        $user = $this->insertFakeUser();
+        $this->mohamad = $user;
+
+        $wallet = $this->insertFakeWallet($user);
+        $this->mohamadWallet = $wallet;
         $this->zarinPal = Transactiongateway::where('name', 'zarinpal')->first();
         $this->testCoupon = Coupon::where('code', 'aminirad')->first();
         $initialProducts = Product::whereIn('id', [
@@ -423,14 +423,6 @@ class FakeOrdersSeeder extends Seeder
     }
 
     private function isDataProvided():bool{
-        if(!isset($this->mohamad))
-            return false;
-        if(!isset($this->mohamadWallet))
-            return false;
-        if(!isset($this->sohrab))
-            return false;
-        if(!isset($this->sohrabWallet))
-            return false;
         if(!isset($this->zarinPal))
             return false;
         if(!isset($this->testCoupon))
@@ -595,6 +587,43 @@ class FakeOrdersSeeder extends Seeder
             $transactionSeed->completed_at = $transaction['completed_at'];
 
         $transactionSeed->save();
+    }
+
+    /**
+     * @return User|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
+     */
+    private function insertFakeUser()
+    {
+        $fakeMobile = '09194251469';
+        $fakeNationalCode = '0000000000';
+        $user = User::where('mobile', $fakeMobile)->where('nationalCode', $fakeNationalCode)->first();
+        if (is_null($user))
+            $user = User::create([
+                'firstName' => 'محمد 2',
+                'lastName' => 'شاهرخی 2',
+                'mobile' => $fakeMobile,
+                'nationalCode' => $fakeNationalCode,
+                'password' => bcrypt($fakeNationalCode),
+                'userstatus_id' => config('constants.USER_STATUS_ACTIVE'),
+            ]);
+        return $user;
+    }
+
+    /**
+     * @param $user
+     * @return Wallet|\Illuminate\Database\Eloquent\Model
+     */
+    private function insertFakeWallet($user)
+    {
+        $initialBalance = 100000;
+        $wallet = $user->wallets->where('wallettype_id', config('constants.WALLET_TYPE_GIFT'))->first();
+        if (is_null($wallet))
+            $wallet = Wallet::create([
+                'user_id' => $user->id,
+                'wallettype_id' => config('constants.WALLET_TYPE_GIFT'),
+                'balance' => $initialBalance
+            ]);
+        return $wallet;
     }
 
 }
