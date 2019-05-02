@@ -910,7 +910,9 @@ class UserController extends Controller
             ->first();
         
         $userCompletion = $user->info['completion'];
-        
+
+        return $user;
+
         return view("user.profile.profile",
             compact("user", 'event', 'userKonkurResult', 'genders', 'majors', 'sideBarMode',
                 /*'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName' , */

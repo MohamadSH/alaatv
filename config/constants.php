@@ -65,6 +65,7 @@ return [
     'REMOVE_PERMISSION_ACCESS'                    => 'removePermission',
     'SHOW_PERMISSION_ACCESS'                      => 'showPermission',
     'INSET_USER_ROLE'                             => 'insertUserRole',
+    'SHOW_USER_ROLE'                              => 'showUserRole',
     'LIST_COUPON_ACCESS'                          => 'listCoupon',
     'INSERT_COUPON_ACCESS'                        => "insertCoupon",
     'EDIT_COUPON_ACCESS'                          => "editCoupon",
@@ -164,6 +165,7 @@ return [
     'GET_USER_REPORT'                             => 'getUserReport',
     'TELEMARKETING_PANEL_ACCESS'                  => 'telemarketingPanel',
     'INSERT_ORDERPRODUCT_ACCESS'                  => 'insertOrderproduct',
+    'SHOW_USER_TOTAL_BON_NUMBER'                  => 'showUserTotalBonNumber',
 
 
     //Technician

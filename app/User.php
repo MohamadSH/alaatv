@@ -274,6 +274,8 @@ use Laravel\Passport\HasApiTokens;
  * @property-read \App\Collection\OrderCollections|\App\Order[]                       $closedOrders
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Firebasetoken[]       $firebasetokens
  * @property-read mixed                                                               $user_status
+ * @property mixed updated_at
+ * @property mixed created_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User orWherePermissionIs($permission = '')
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User orWhereRoleIs($role = '', $team = null)
  */
@@ -305,6 +307,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'userstatus',
         'roles',
         'totalBonNumber',
+        'jalaliCreatedAt',
+        'jalaliUpdatedAt',
     ];
     
     protected $cascadeDeletes = [
