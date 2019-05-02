@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Web;
 
 use App\Block;
-use App\Classes\Format\BlockCollectionFormatter;
+use App\Slideshow;
+use App\Websitesetting;
+use App\Traits\MetaCommon;
+use Illuminate\Http\Request;
 use App\Classes\SEO\SeoDummyTags;
 use App\Http\Controllers\Controller;
-use App\Slideshow;
-use App\Traits\MetaCommon;
-use App\Websitesetting;
-use Illuminate\Http\Request;
+use App\Http\Resources\Block as BlockResource;
+use App\Classes\Format\BlockCollectionFormatter;
 
 class IndexPageController extends Controller
 {
@@ -21,7 +22,7 @@ class IndexPageController extends Controller
     {
         $this->setting = $setting->setting;
     }
-
+    
     public function __invoke(Request $request, BlockCollectionFormatter $blockCollectionFormatter)
     {
         
@@ -39,10 +40,10 @@ class IndexPageController extends Controller
         $blocks = Block::getMainBlocks();
         if (request()->expectsJson()) {
             return response()->json([
-                'mainBanner' => $slides,
+                'mainBanner' => $slides->isNotEmpty() ? $slides : null,
                 'block'      => [
                     'current_page'   => 1,
-                    'data'           => $blocks,
+                    'data'           => BlockResource::collection($blocks),
                     'first_page_url' => null,
                     'from'           => 1,
                     'last_page'      => 1,
