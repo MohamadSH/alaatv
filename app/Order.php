@@ -1035,6 +1035,7 @@ class Order extends BaseModel
                     'transactiongateway',
                     'managerComment',
                     'jalaliCompletedAt',
+                    'editLink',
                 ]);
                 
                 return $successfulTransactions;
@@ -1074,7 +1075,7 @@ class Order extends BaseModel
                     'transactiongateway',
                     'managerComment',
                     'jalaliCompletedAt',
-                
+                    'editLink',
                 ]);
                 
                 return $pendingTransaction;
@@ -1109,6 +1110,8 @@ class Order extends BaseModel
                     'transactiongateway',
                     'managerComment',
                     'jalaliCompletedAt',
+                    'jalaliDeadlineAt',
+                    'editLink',
                 ]);
                 
                 return $unpaidTransaction;
@@ -1244,7 +1247,11 @@ class Order extends BaseModel
                 if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_EMAIL'))) {
                     $visibleColumns = array_merge($visibleColumns, ['email']);
                 }
-                
+
+                if (hasAuthenticatedUserPermission(config('constants.EDIT_USER_ACCESS'))) {
+                    $visibleColumns = array_merge($visibleColumns, ['editLink']);
+                }
+
                 return $order->user()
                     ->first()
                     ->setVisible($visibleColumns);
@@ -1336,30 +1343,18 @@ class Order extends BaseModel
     
     public function getEditLinkAttribute()
     {
-        $order = $this;
-        $key   = "order:editLink:".$order->cacheKey();
-        return Cache::tags(["order"])
-            ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if (hasAuthenticatedUserPermission(config('constants.EDIT_ORDER_ACCESS'))) {
-                    return action('Web\OrderController@edit', $order->id);
-                }
-                
-                return null;
-            });
-        
+        if (hasAuthenticatedUserPermission(config('constants.EDIT_ORDER_ACCESS')))
+            return action('Web\OrderController@edit', $this->id);
+
+        return null;
+
     }
     
     public function getRemoveLinkAttribute()
     {
-        $order = $this;
-        $key   = "order:removeLink:".$order->cacheKey();
-        return Cache::tags(["order"])
-            ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if (hasAuthenticatedUserPermission(config('constants.REMOVE_ORDER_ACCESS'))) {
-                    return action('Web\OrderController@destroy', $order->id);
-                }
-                
-                return null;
-            });
+        if (hasAuthenticatedUserPermission(config('constants.REMOVE_ORDER_ACCESS')))
+            return action('Web\OrderController@destroy', $this->id);
+
+        return null;
     }
 }
