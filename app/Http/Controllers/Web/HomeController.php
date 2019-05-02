@@ -154,9 +154,6 @@ class HomeController extends Controller
     
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-//        dd(Content::find(10233));
-        dd(Content::find(10233)
-            ->getTaggableTags());
         return [
             Product::find(226)->sets->first()
                 ->getContents(),
@@ -721,22 +718,12 @@ class HomeController extends Controller
         $coupons = Coupon::pluck('name', 'id')
             ->toArray();
         $coupons = array_sort_recursive($coupons);
-<<<<<<< HEAD
-    
-
-=======
-        
-<<<<<<< HEAD
         //        Meta::set('title', substr("آلاء|پنل پیامک", 0, config("constants.META_TITLE_LIMIT")));
         //        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         
         $products = Product::where('id', 240)
             ->get();
         
-=======
-
->>>>>>> 6da8dc2fc... User admin debug
->>>>>>> a04e63207... User admin debug
         return view("admin.indexSMS",
             compact("pageName", "majors", "userStatuses", "roles", "relatives", "orderstatuses", "paymentstatuses",
                 "genders", "gendersWithUnknown", "products",
@@ -2016,7 +2003,7 @@ class HomeController extends Controller
     public function adminGenerateRandomCoupon(Request $request)
     {
         $productCollection = $products = $this->makeProductCollection();
-
+    
         return view("admin.generateSpecialCoupon", compact("productCollection"));
     }
     
