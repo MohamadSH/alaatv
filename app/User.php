@@ -309,6 +309,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'totalBonNumber',
         'jalaliCreatedAt',
         'jalaliUpdatedAt',
+        'editLink',
+        'removeLink',
     ];
     
     protected $cascadeDeletes = [

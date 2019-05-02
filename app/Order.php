@@ -187,8 +187,8 @@ class Order extends BaseModel
         'jalaliCompletedAt',
         'postingInfo',
         'managerComment',
-        'editOrderLink',
-        'removeOrderLink',
+        'editLink',
+        'removeLink',
     ];
     protected $hidden = [
         'id',
@@ -1348,7 +1348,7 @@ class Order extends BaseModel
         return $this->hasMany('App\Ordermanagercomment');
     }
     
-    public function getEditOrderLinkAttribute()
+    public function getEditLinkAttribute()
     {
         $order = $this;
         $key   = "order:editLink:".$order->cacheKey();
@@ -1363,7 +1363,7 @@ class Order extends BaseModel
         
     }
     
-    public function getRemoveOrderLinkAttribute()
+    public function getRemoveLinkAttribute()
     {
         $order = $this;
         $key   = "order:removeLink:".$order->cacheKey();
@@ -1375,6 +1375,5 @@ class Order extends BaseModel
                 
                 return null;
             });
-        
     }
 }
