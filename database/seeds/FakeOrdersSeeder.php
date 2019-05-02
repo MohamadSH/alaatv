@@ -302,8 +302,8 @@ class FakeOrdersSeeder extends Seeder
             [
                 'fakeOrder_id'  =>  2,
                 'cost'  =>  128100,
-                'authority' =>  '000000000000000000000000000032175424',
-                'transactionID' =>  'orderTest2',
+                'authority' =>  '00000000000000000000000002'.Carbon::now()->timestamp,
+                'transactionID' =>  Carbon::now()->timestamp.'orderTest2',
                 'paymentmethod_id'  =>  config('constants.PAYMENT_METHOD_ONLINE'),
                 'transactiongateway_id' =>  $this->zarinPal->id ,
                 'transactionstatus_id'  =>  config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
@@ -321,8 +321,8 @@ class FakeOrdersSeeder extends Seeder
             [
                 'fakeOrder_id'  =>  3,
                 'cost'  =>  3380,
-                'authority' =>  '000000000000000000000000000032175427',
-                'transactionID' =>  'orderTest3',
+                'authority' =>  '00000000000000000000000003'.Carbon::now()->timestamp,
+                'transactionID' =>  Carbon::now()->timestamp.'orderTest3',
                 'paymentmethod_id'  =>  config('constants.PAYMENT_METHOD_ONLINE'),
                 'transactiongateway_id' =>  $this->zarinPal->id ,
                 'transactionstatus_id'  =>  config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
@@ -340,7 +340,7 @@ class FakeOrdersSeeder extends Seeder
             [
                 'fakeOrder_id'  =>  5,
                 'cost'  =>  40000,
-                'referenceNumber' =>  'orderTest563256555698',
+                'referenceNumber' =>  Carbon::now()->timestamp.'orderTest5',
                 'paymentmethod_id'  =>  config('constants.PAYMENT_METHOD_ATM'),
                 'transactionstatus_id'  =>  config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
                 'completed_at'  =>  Carbon::now(),
@@ -360,7 +360,7 @@ class FakeOrdersSeeder extends Seeder
             [
                 'fakeOrder_id'  =>  6,
                 'cost'  =>  240900,
-                'traceNumber' =>  'orderTest6',
+                'traceNumber' =>  Carbon::now()->timestamp.'orderTest6',
                 'paymentmethod_id'  =>  config('constants.PAYMENT_METHOD_ATM'),
                 'transactionstatus_id'  =>  config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
                 'completed_at'  =>  Carbon::now(),
@@ -368,8 +368,8 @@ class FakeOrdersSeeder extends Seeder
             [
                 'fakeOrder_id'  =>  7,
                 'cost'  =>  230000,
-                'authority' =>  '000000000000000000000000000032175437',
-                'transactionID' =>  'orderTest7',
+                'authority' =>  '00000000000000000000000007'.Carbon::now()->timestamp,
+                'transactionID' =>  Carbon::now()->timestamp.'orderTest7',
                 'paymentmethod_id'  =>  config('constants.PAYMENT_METHOD_ONLINE'),
                 'transactiongateway_id' =>  $this->zarinPal->id ,
                 'transactionstatus_id'  =>  config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
@@ -379,8 +379,8 @@ class FakeOrdersSeeder extends Seeder
             [
                 'fakeOrder_id'  =>  8,
                 'cost'  =>  18905,
-                'authority' =>  '000000000000000000000000000032175446',
-                'transactionID' =>  'orderTest8',
+                'authority' =>  '00000000000000000000000008'.Carbon::now()->timestamp,
+                'transactionID' =>  Carbon::now()->timestamp.'orderTest8',
                 'paymentmethod_id'  =>  config('constants.PAYMENT_METHOD_ONLINE'),
                 'transactiongateway_id' =>  $this->zarinPal->id ,
                 'transactionstatus_id'  =>  config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
@@ -390,8 +390,8 @@ class FakeOrdersSeeder extends Seeder
             [
                 'fakeOrder_id'  =>  10,
                 'cost'  =>  330000,
-                'authority' =>  '000000000000000000000000000032175455',
-                'transactionID' =>  'orderTest10',
+                'authority' =>  '00000000000000000000000010'.Carbon::now()->timestamp,
+                'transactionID' =>  Carbon::now()->timestamp.'orderTest10',
                 'paymentmethod_id'  =>  config('constants.PAYMENT_METHOD_ONLINE'),
                 'transactiongateway_id' =>  $this->zarinPal->id ,
                 'transactionstatus_id'  =>  config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
@@ -401,7 +401,7 @@ class FakeOrdersSeeder extends Seeder
             [
                 'fakeOrder_id'  =>  10,
                 'cost'  =>  -330000,
-                'referenceNumber' =>  'orderTest10_refund',
+                'referenceNumber' =>  Carbon::now()->timestamp.'orderTest10_refund',
                 'paymentmethod_id'  =>  config('constants.PAYMENT_METHOD_ATM'),
                 'transactionstatus_id'  =>  config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
                 'managerComment'    =>  'refunded',
