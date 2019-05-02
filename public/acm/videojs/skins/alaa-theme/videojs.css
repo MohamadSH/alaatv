@@ -1,21 +1,29 @@
+@font-face {
+    font-family:nuevo;
+    src:url(/acm/videojs/skins/alaa-theme/fonts/nuevo.eot?crm9vn);
+    src:url(/acm/videojs/skins/alaa-theme/fonts/nuevo.eot?crm9vn#iefix) format('embedded-opentype'),
+    url(/acm/videojs/skins/alaa-theme/fonts/nuevo.ttf?crm9vn) format('truetype'),
+    url(/acm/videojs/skins/alaa-theme/fonts/nuevo.woff?crm9vn) format('woff'),
+    url(/css/fonts/nuevo/nuevo.svg?crm9vn#nuevo) format('svg');
+    font-weight:400;
+    font-style:normal
+}
+
 /*@font-face {*/
-/*    font-family:nuevo;*/
-/*    src:url(/css/fonts/nuevo/nuevo.eot?crm9vn);*/
-/*    src:url(/css/fonts/nuevo/nuevo.eot?crm9vn#iefix) format('embedded-opentype'),*/
-/*    url(/css/fonts/nuevo/nuevo.ttf?crm9vn) format('truetype'),*/
-/*    url(/css/fonts/nuevo/nuevo.woff?crm9vn) format('woff'),*/
-/*    url(/css/fonts/nuevo/nuevo.svg?crm9vn#nuevo) format('svg');*/
-/*    font-weight:400;*/
-/*    font-style:normal*/
+/*    font-family: nuevo;*/
+/*    src: url(http://a.alaatv.com/acm/videojs/fonts/nuevo.eot?crm9vn);*/
+/*    src: url(http://a.alaatv.com/acm/videojs/fonts/nuevo.eot?crm9vn#iefix) format('embedded-opentype'), url(http://a.alaatv.com/acm/videojs/fonts/nuevo.ttf?crm9vn) format('truetype'), url(http://a.alaatv.com/acm/videojs/fonts/nuevo.woff?crm9vn) format('woff'), url(http://a.alaatv.com/acm/videojs/fonts/nuevo.svg?crm9vn#nuevo) format('svg');*/
+/*    font-weight: 400;*/
+/*    font-style: normal*/
 /*}*/
 
-@font-face {
-    font-family: nuevo;
-    src: url(fonts/nuevo.eot?crm9vn);
-    src: url(fonts/nuevo.eot?crm9vn#iefix) format('embedded-opentype'), url(fonts/nuevo.ttf?crm9vn) format('truetype'), url(fonts/nuevo.woff?crm9vn) format('woff'), url(fonts/nuevo.svg?crm9vn#nuevo) format('svg');
-    font-weight: 400;
-    font-style: normal
-}
+/*@font-face {*/
+/*    font-family: nuevo;*/
+/*    src: url(fonts/nuevo.eot?crm9vn);*/
+/*    src: url(fonts/nuevo.eot?crm9vn#iefix) format('embedded-opentype'), url(fonts/nuevo.ttf?crm9vn) format('truetype'), url(fonts/nuevo.woff?crm9vn) format('woff'), url(fonts/nuevo.svg?crm9vn#nuevo) format('svg');*/
+/*    font-weight: 400;*/
+/*    font-style: normal*/
+/*}*/
 
 ::-moz-focus-inner,
 :active,
@@ -731,7 +739,7 @@ body.vjs-full-window {
 }
 
 .video-js .vjs-big-play-button {
-    background-image: url('img/pp.png');
+    background-image: url('/acm/videojs/skins/alaa-theme/img/pp.png');
     background-repeat: no-repeat;
     background-size: cover;
     height: 86px;
@@ -779,7 +787,8 @@ body.vjs-full-window {
     width: 126px;
     height: 126px;
     opacity: 0;
-    visibility: hidden;
+    /*visibility: hidden;*/
+    display: none;
     margin: -63px 0 0 -63px;
     background-size: cover;
 }

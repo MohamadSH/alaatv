@@ -1,10 +1,8 @@
 @extends('app')
 
 @section('page-css')
-    <link href="{{ asset("/acm/videojs/skins/alaa-theme/videojs.css") }}" rel="stylesheet">
-    {{--    <link href="{{ asset("/acm/videojs/skins/treso/videojs.css") }}" rel="stylesheet">--}}
-    {{--    <link href="{{ asset("/acm/videojs/skins/default/videojs.css") }}" rel="stylesheet">--}}
     <link href="{{ mix("/css/content-show.css") }}" rel="stylesheet">
+    <link href="{{ asset("/acm/AlaatvCustomFiles/css/page-content-show.css") }}" rel="stylesheet">
 @endsection
 
 @section('pageBar')
@@ -303,21 +301,18 @@
                                             <img src="/assets/app/media/img/files/pdf.svg" alt="">
                                         </div>
                                         <div class="m-widget4__info">
-                                            <a href="{{ action("Web\ContentController@show" , $item["content"]) }}"
-                                               class="m-link m--font-light">
+                                            <a href="{{ action("Web\ContentController@show" , $item["content"]) }}" class="m-link m--font-light">
                                                 <span class="m-widget4__text ">
-                                                {{ $item["content"]->name }}
+                                                    {{ $item["content"]->name }}
                                                 </span>
                                             </a>
-                                        
                                         </div>
                                         <div class="m-widget4__ext">
-                                            <a href="{{ $item["content"]->name }}" class="m-widget4__icon">
-                                                <i class="m--link la 	la-long-arrow-left"></i>
+                                            <a href="{{ action("Web\ContentController@show" , $item["content"]) }}" class="m-widget4__icon">
+                                                <i class="m--link la la-long-arrow-left"></i>
                                             </a>
                                         </div>
                                     </div>
-                                
                                 </div>
                                 <!--end::Widget 4-->
                                 <div class="m-separator m-separator--space m-separator--dashed"></div>
@@ -347,7 +342,9 @@
                         </div>
                     </div>
                     <div class="m-portlet__body m--padding-10">
-                        <div id="playListScroller" class="m-scrollable" data-scrollable="true"
+                        <div id="playListScroller"
+                             class="m-scrollable11"
+                             data-scrollable="true"
                              data-height="{{ min($videosWithSameSet->count(),(optional($content->template)->name == "video1" ?  11 : 4)) * 103 }}"
                              data-scrollbar-shown="true">
                             <div class="m-portlet__body-progress">Loading</div>
@@ -360,7 +357,7 @@
                                             <div class="a-widget5__pic">
                                                 <a class="m-link"
                                                    href="{{action("Web\ContentController@show" , $item["content"])}}">
-                                                    <img class="m-widget7__img"
+                                                    <img class="m-widget7__img a--full-width"
                                                          src="{{ isset($item["thumbnail"]) ? $item["thumbnail"]."?w=210&h=118":'' }}"
                                                          alt="{{ $item["content"]->name }}">
                                                 </a>
@@ -417,8 +414,5 @@
         ];
     </script>
     <script src="{{ mix("/js/content-show.js") }}" type="text/javascript"></script>
-    <script src="{{ asset("/acm/videojs/lang/fa.js") }}" type="text/javascript"></script>
-    <script src="{{ asset("/acm/page-content-show.js") }}" type="text/javascript"></script>
-
 @endsection
 
