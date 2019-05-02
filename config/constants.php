@@ -100,6 +100,7 @@ return [
     'EDIT_TRANSACTION_ACCESS'                     => 'editTransaction',
     'INSERT_TRANSACTION_ACCESS'                   => 'insertTransaction',
     'SHOW_TRANSACTION_ACCESS'                     => 'showTransaction',
+    'REMOVE_TRANSACTION_ACCESS'                   => 'removeTransaction',
     'EDIT_TRANSACTION_ORDERID_ACCESS'             => 'editTransactionOrderID',
     'LIST_MBTIANSWER_ACCESS'                      => 'listMBTIAnswer',
     'LIST_CONTACT_ACCESS'                         => 'listContact',
