@@ -387,31 +387,20 @@ trait ProfileTrait
 
     public function getEditLinkAttribute()
     {
-        $user = $this;
-        $key   = "user:editLink:".$user->cacheKey();
-        return Cache::tags(["user"])
-            ->remember($key, config("constants.CACHE_600"), function () use ($user) {
-                if (hasAuthenticatedUserPermission(config('constants.EDIT_USER_ACCESS'))) {
-                    return action('Web\UserController@edit', $user->id);
-                }
+        if (hasAuthenticatedUserPermission(config('constants.EDIT_USER_ACCESS'))) {
+            return action('Web\UserController@edit', $this->id);
+        }
 
-                return null;
-            });
-
+        return null;
     }
 
     public function getRemoveLinkAttribute()
     {
-        $user = $this;
-        $key   = "user:removeLink:".$user->cacheKey();
-        return Cache::tags(["user"])
-            ->remember($key, config("constants.CACHE_600"), function () use ($user) {
-                if (hasAuthenticatedUserPermission(config('constants.REMOVE_USER_ACCESS'))) {
-                    return action('Web\UserController@destroy', $user->id);
-                }
+        if (hasAuthenticatedUserPermission(config('constants.REMOVE_USER_ACCESS'))) {
+            return action('Web\UserController@destroy', $this->id);
+        }
 
-                return null;
-            });
+        return null;
     }
 
 }
