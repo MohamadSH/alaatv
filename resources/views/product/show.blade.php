@@ -471,5 +471,4 @@
 @endsection
 @section('page-js')
     <script src="{{ mix('/js/product-show.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-product-show.js') }}"></script>
 @endsection
