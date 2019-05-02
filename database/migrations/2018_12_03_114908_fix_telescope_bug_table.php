@@ -13,12 +13,15 @@ class FixTelescopeBugTable extends Migration
      */
     public function up()
     {
-        Schema::table('telescope_entries', function (Blueprint $table) {
-            $table->dropColumn('content');
-        });
-        Schema::table('telescope_entries', function (Blueprint $table) {
-            $table->longText('content');
-        });
+        if (Schema::hasTable('telescope_entries')) {
+            Schema::table('telescope_entries', function (Blueprint $table) {
+                $table->dropColumn('content');
+            });
+            Schema::table('telescope_entries', function (Blueprint $table) {
+                $table->longText('content');
+            });
+        }
+        
     }
 
     /**
@@ -28,8 +31,10 @@ class FixTelescopeBugTable extends Migration
      */
     public function down()
     {
-        Schema::table('telescope_entries', function (Blueprint $table) {
-            //
-        });
+        if (Schema::hasTable('telescope_entries')) {
+            Schema::table('telescope_entries', function (Blueprint $table) {
+                //
+            });
+        }
     }
 }

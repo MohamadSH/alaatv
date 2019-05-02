@@ -317,8 +317,7 @@ class TotalTree
                     <div class='objectBody'>
                         <div>'id' => '$nodeId',</div>
                         <div>'name' => '".$alaaNode['name']."',</div>
-                        <div>'tags' => ".json_encode([str_replace(' ', '_', $alaaNode['name'])],
-                    JSON_UNESCAPED_UNICODE).",</div>
+                        <div>'tags' => json_encode(['".str_replace(' ', '_', $alaaNode['name'])."'], JSON_UNESCAPED_UNICODE),</div>
                         <div>'children' => ".$this->convertAlaaNodeArrayToStringFormat((isset($alaaNode['children'])) ? $alaaNode['children'] : [],
                     $nodeId)."</div>
                     </div>";

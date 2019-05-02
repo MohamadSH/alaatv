@@ -7,6 +7,9 @@
 .m-portlet.m-portlet--head-overlay > .m-portlet__body {
     margin-top: -5.1rem;
 }
+.dropdown-menu > li > a {
+    cursor: pointer;
+}
 
 /*missed css*/
 .m-widget4__item.m-widget4__item--last, .m-widget4__item:last-child {
@@ -17,6 +20,9 @@
 .form-control {
     font-family: IRANSans;
     font-size: 11px;
+}
+select.form-control {
+    padding: 10px 16px;
 }
 
 /*fix swithch*/
@@ -64,4 +70,8 @@
     .m-portlet__body {
         padding: 5px !important;
     }
+}
+
+.m-header--fixed-mobile .m-topbar {
+    top: -60px;
 }

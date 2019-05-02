@@ -35,10 +35,10 @@
 
 @section('content')
     <div class="row">
-        <div class="col-xl-8 col-lg-8 col-md-8 col-sm-6">
-        @if(isset($content->template))
-            @if(optional($content->template)->name == "video1")
-                <!--begin::Portlet-->
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8">
+            @if(isset($content->template))
+                @if(optional($content->template)->name == "video1")
+                    <!--begin::Portlet-->
                     <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
                         <div class="m-portlet__body">
                             <div class="m-portlet__body-progress">Loading</div>
@@ -136,8 +136,8 @@
                                     <p>
                                         با IDM یا ADM و یا wget دانلود کنید.
                                     </p>
-                                @foreach($content->file->get('video') as $file)
-                                    <!--begin::m-widget4-->
+                                    @foreach($content->file->get('video') as $file)
+                                        <!--begin::m-widget4-->
                                         <div class="m-widget4">
                                             <div class="m-widget4__item">
                                                 <div class="m-widget4__img m-widget4__img--icon">
@@ -169,9 +169,8 @@
                         </div>
                     </div>
                     <!--end::Portlet-->
-            
-            @elseif(optional($content->template)->name == "pamphlet1" )
-                <!--begin::Portlet-->
+                @elseif(optional($content->template)->name == "pamphlet1" )
+                    <!--begin::Portlet-->
                     <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
                         <div class="m-portlet__body">
                             <div class="m-portlet__body-progress">Loading</div>
@@ -180,8 +179,7 @@
                                 <div class="m-widget5__item">
                                     <div class="m-widget5__content">
                                         <div class="m-widget5__pic">
-                                            <img class="m-widget7__img img-fluid"
-                                                 src="/assets/app/media/img/files/pdf.svg" alt="pdf">
+                                            <img class="m-widget7__img img-fluid" src="/assets/app/media/img/files/pdf.svg" alt="pdf">
                                         </div>
                                         <div class="m-widget5__section">
                                             <h4 class="m-widget5__title">
@@ -193,7 +191,8 @@
                                                         <a href="{{ $file->link }}" target="_blank"
                                                            title="دانلود مستقیم">
                                                             <button type="button" class="btn btn-primary">
-                                                                دانلود {{ $file->caption }}</button>
+                                                                دانلود {{ $file->caption }}
+                                                            </button>
                                                         </a>
                                                     @endforeach
                                                 </div>
@@ -239,8 +238,8 @@
                         </div>
                     </div>
                     <!--end::Portlet-->
-            @elseif(optional($content->template)->name == "article1")
-                <!--begin::Portlet-->
+                @elseif(optional($content->template)->name == "article1")
+                    <!--begin::Portlet-->
                     <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
                         <div class="m-portlet__head">
                             <div class="m-portlet__head-caption">
@@ -261,7 +260,6 @@
                                 @include("partials.search.tagLabel" , ["tags"=>$tags])
                             @endif
                         </div>
-                    
                     </div>
                     <!--end::Portlet-->
                 @endif
@@ -297,8 +295,8 @@
                     </div>
                     <div class="m-portlet__body">
                         <div class="m-scrollable" data-scrollable="true" data-height="450" data-scrollbar-shown="true">
-                        @foreach($pamphletsWithSameSet as  $item)
-                            <!--begin::m-widget4-->
+                            @foreach($pamphletsWithSameSet as  $item)
+                                <!--begin::m-widget4-->
                                 <div class="m-widget4">
                                     <div class="m-widget4__item">
                                         <div class="m-widget4__img m-widget4__img--icon">
@@ -330,9 +328,9 @@
                 <!--end::Portlet-->
             @endif
         </div>
-        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
-        @if(isset($videosWithSameSet) and $videosWithSameSet->count() > 0)
-            <!--begin::Portlet-->
+        <div class="col-12 col-sm-12 col-md-12 col-lg-4">
+            @if(isset($videosWithSameSet) and $videosWithSameSet->count() > 0)
+                <!--begin::Portlet-->
                 <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">
@@ -384,7 +382,6 @@
                                         </div>
                                     </div>
                                 @endforeach
-                            
                             </div>
                             <!--end::m-widget5-->
                         
