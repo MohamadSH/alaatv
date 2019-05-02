@@ -23,8 +23,6 @@ use App\Traits\User\{BonTrait,
     TeacherTrait,
     TrackTrait,
     VouchersTrait};
-use Auth;
-use Cache;
 use Carbon\Carbon;
 use Hash;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
@@ -305,6 +303,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'info',
         'full_name',
         'userstatus',
+        'roles',
+        'totalBonNumber',
     ];
     
     protected $cascadeDeletes = [
@@ -444,6 +444,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'password',
         'remember_token',
         'wallets',
+        'userbons'
     ];
     
     public static function getNullInstant($visibleArray = [])
@@ -609,22 +610,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         return $validOrders;
     }
     
-    public function getUserStatusAttribute()
-    {
-        $user = $this;
-        $key  = "user:userstatus".$user->cacheKey();
-        return Cache::tags(["order"])
-            ->remember($key, config("constants.CACHE_600"), function () use ($user) {
-                return $this->userstatus()
-                    ->first()
-                    ->setVisible([
-                        'name',
-                        'displayName',
-                        'description',
-                    ]);
-            });
-    }
-    
     public function cacheKey()
     {
         $key  = $this->getKey();
@@ -637,28 +622,5 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     {
         return $this->belongsTo('App\Userstatus');
     }
-    
-    public function getEmailAttribute($value)
-    {
-        if (!$this->isAuthenticatedUserHasPermission('constants.SHOW_USER_EMAIL')) {
-            return $value;
-        }
-        
-        return null;
-    }
-    
-    private function isAuthenticatedUserHasPermission(string $permission): bool
-    {
-        return (Auth::check() && Auth::user()
-                ->can($permission));
-    }
-    
-    public function getMobileAttribute($value)
-    {
-        if (!$this->isAuthenticatedUserHasPermission('constants.SHOW_USER_MOBILE')) {
-            return $value;
-        }
-        
-        return null;
-    }
+
 }
