@@ -291,8 +291,6 @@ class OrderproductController extends Controller
             ->toArray();
         $checkoutStatuses       = array_sort_recursive($checkoutStatuses);
         
-        $products = Product::where('id', 240)
-            ->get();
         $product  = $orderproduct->product()
             ->first();
         
