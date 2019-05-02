@@ -32,3 +32,7 @@ resources/theme/default/src/js/demo/demo11/custom/crud/datatables/advanced/
 resources/theme/default/src/js/demo/demo11/custom/crud/datatables/data-sources/
 resources/theme/default/src/js/demo/demo11/custom/crud/datatables/extensions/
 mix-manifest.json
+public/css/page-shop.css
+public/js/page-shop.js
+public/phpinfo.php
+public/test.php
