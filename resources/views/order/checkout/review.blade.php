@@ -43,7 +43,7 @@
                         <!--begin::Content-->
                         <div class="tab-content">
                             <!--begin::m-widget5-->
-                            <div class="m-widget5">
+                            <div class="m-widget5 a--userCartList-items">
                                 @if(isset($invoiceInfo['items']))
                                     @foreach($invoiceInfo['items'] as $key=>$orderProductItem)
                                         @if($orderProductItem['grand']==null)
@@ -401,12 +401,12 @@
                 <div class="col-6">
                     <div class="priceReport">
                         <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                            @if(isset($invoiceInfo['orderproductsRawCost']) && isset($invoiceInfo['totalCost']) && $invoiceInfo['orderproductsRawCost']>$invoiceInfo['totalCost'])
-                                <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($invoiceInfo['orderproductsRawCost']) }}</span>
-                                <span class="m-badge m-badge--info a--productDiscount">{{ round((1-($invoiceInfo['totalCost']/$invoiceInfo['orderproductsRawCost']))*100) }}%</span>
+                            @if(isset($invoiceInfo['price']['base']) && isset($invoiceInfo['price']['final']) && $invoiceInfo['price']['base']>$invoiceInfo['price']['final'])
+                                <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($invoiceInfo['price']['final']) }}</span>
+                                <span class="m-badge m-badge--info a--productDiscount">{{ round((1-($invoiceInfo['price']['final']/$invoiceInfo['price']['base']))*100) }}%</span>
                             @endif
-                            @if(isset($invoiceInfo['totalCost']))
-                                {{ number_format($invoiceInfo['totalCost']) }} تومان
+                            @if(isset($invoiceInfo['price']['final']))
+                                {{ number_format($invoiceInfo['price']['final']) }} تومان
                             @endif
                         </span>
                     </div>
