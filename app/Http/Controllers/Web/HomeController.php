@@ -307,9 +307,6 @@ class HomeController extends Controller
         
         $pageName = "admin";
         
-        $products = Product::where('id', 240)
-            ->get();
-        
         return view("admin.index",
             compact("pageName", "majors", "userStatuses", "permissions", "roles", "limitStatus", "orderstatuses",
                 "paymentstatuses", "enableStatus", "genders",
@@ -395,10 +392,10 @@ class HomeController extends Controller
         
         $products = collect();
         if ($user->hasRole("onlineNoroozMarketing")) {
-//            $products = [Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ROOT")];
-//            $products = $this->makeProductCollection($products);
+            $products = [Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ROOT")];
+            $products = $this->makeProductCollection($products);
         } else {
-//            $products = $this->makeProductCollection();
+            $products = $this->makeProductCollection();
         }
         
         $paymentMethods = Paymentmethod::pluck('displayName', 'id')
@@ -731,12 +728,7 @@ class HomeController extends Controller
             ->toArray();
         $coupons = array_sort_recursive($coupons);
         
-        //        Meta::set('title', substr("آلاء|پنل پیامک", 0, Config::get("constants.META_TITLE_LIMIT")));
-        //        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
-        
-        $products = Product::where('id', 240)
-            ->get();
-        
+
         return view("admin.indexSMS",
             compact("pageName", "majors", "userStatuses", "roles", "relatives", "orderstatuses", "paymentstatuses",
                 "genders", "gendersWithUnknown", "products",
@@ -902,8 +894,6 @@ class HomeController extends Controller
             ->toArray();
         $checkoutStatuses[0] = "نامشخص";
         $checkoutStatuses    = array_sort_recursive($checkoutStatuses);
-        
-        $products = Product::where('id', 240);
         
         return view("admin.indexGetReport",
             compact("pageName", "majors", "userStatuses", "permissions", "roles", "limitStatus", "orderstatuses",
@@ -4819,9 +4809,8 @@ class HomeController extends Controller
      */
     public function adminGenerateRandomCoupon(Request $request)
     {
-//        $productCollection = $products = $this->makeProductCollection();
-        $productCollection = Product::where('id', 240);
-        
+        $productCollection = $products = $this->makeProductCollection();
+
         return view("admin.generateSpecialCoupon", compact("productCollection"));
     }
     
