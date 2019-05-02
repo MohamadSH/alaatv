@@ -222,11 +222,11 @@ class ContentController extends Controller
             $productsThatHaveThisContent = $content->products();
             $view = trans('content.Not Free And you can\'t buy it');
             $api  = $this->userCanNotSeeContentResponse(trans('content.Not Free And you can\'t buy it'),
-                Response::HTTP_FORBIDDEN, $productsThatHaveThisContent, true);
+                Response::HTTP_FORBIDDEN, $content, $productsThatHaveThisContent, true);
             
             $view1 = trans('content.Not Free');
             $api1  = $this->userCanNotSeeContentResponse(trans('content.Not Free'),
-                Response::HTTP_FORBIDDEN, $productsThatHaveThisContent, true);
+                Response::HTTP_FORBIDDEN, $content, $productsThatHaveThisContent, true);
             return $productsThatHaveThisContent->isEmpty() ? httpResponse($api,
                 $view) : httpResponse($api1, $view1);
         }

@@ -25,7 +25,7 @@ return [
     'cipher' => 'AES-256-CBC',
 
     'providers' => [
-
+    
         /*
          * Laravel Framework Service Providers...
          */
@@ -51,8 +51,8 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-
-
+    
+    
         Collective\Html\HtmlServiceProvider::class,
         Zarinpal\Laravel\ZarinpalServiceProvider::class,
         Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
@@ -60,13 +60,13 @@ return [
         Laratrust\LaratrustServiceProvider::class,
         Watson\Sitemap\SitemapServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-
+    
         /*
          * Package Service Providers...
          */
         Backup\BackupServiceProvider::class,
         Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
-
+    
         Laravel\Scout\ScoutServiceProvider::class,
         Yab\MySQLScout\Providers\MySQLScoutServiceProvider::class,
         /*
@@ -79,14 +79,14 @@ return [
         App\Providers\TelescopeServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\WebsiteSettingProvider::class,
-
+    
         App\Providers\MedianaServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
         App\Providers\TagManagerProvider::class,
         App\Providers\InterfaceBindingProvider::class,
         Zarinpal\Laravel\ZarinpalServiceProvider::class,
-//        App\PaymentModule\Gateways\Zarinpal\ZarinpalServiceProvider::class,
-//        App\PaymentModule\Gateways\Behpardakht\BehpardakhtServiceProvider::class,
+        App\PaymentModule\Gateways\Zarinpal\ZarinpalServiceProvider::class,
+        App\PaymentModule\Gateways\Behpardakht\BehpardakhtServiceProvider::class,
 
     ],
     /*
