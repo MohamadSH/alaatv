@@ -6,7 +6,7 @@
  * Time: 18:07
  */
 
-namespace App\Traits;
+namespace App\Classes\Repository;
 
 use App\Product;
 

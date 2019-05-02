@@ -15,6 +15,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\{Cache};
 use Illuminate\Routing\Redirector;
 use App\Http\Controllers\Controller;
+use App\Collection\ProductCollection;
 use App\Classes\Search\ContentSearch;
 use App\Classes\Search\ProductSearch;
 use Illuminate\Http\RedirectResponse;
@@ -218,17 +219,26 @@ class ContentController extends Controller
         if (!$content->isActive()) {
             abort(Response::HTTP_FORBIDDEN);
         }
-        if (!$this->userCanSeeContent($request, $content, 'web')) {
-            $productsThatHaveThisContent = $content->products();
-            $view = trans('content.Not Free And you can\'t buy it');
-            $api  = $this->userCanNotSeeContentResponse(trans('content.Not Free And you can\'t buy it'),
-                Response::HTTP_FORBIDDEN, $content, $productsThatHaveThisContent, true);
+        $user_can_see_content        = $this->userCanSeeContent($request, $content, 'web');
+        $productsThatHaveThisContent = new ProductCollection();
+        $message                     = null;
+        if (!$user_can_see_content) {
             
-            $view1 = trans('content.Not Free');
-            $api1  = $this->userCanNotSeeContentResponse(trans('content.Not Free'),
+            $productsThatHaveThisContent = $content->products();
+            $msg                         = trans('content.Not Free And you can\'t buy it');
+            $api                         = $this->userCanNotSeeContentResponse($msg,
                 Response::HTTP_FORBIDDEN, $content, $productsThatHaveThisContent, true);
-            return $productsThatHaveThisContent->isEmpty() ? httpResponse($api,
-                $view) : httpResponse($api1, $view1);
+        
+            $msg1 = trans('content.Not Free');
+            $api1 = $this->userCanNotSeeContentResponse($msg1,
+                Response::HTTP_FORBIDDEN, $content, $productsThatHaveThisContent, true);
+        
+            $product_that_have_this_content_is_empty = $productsThatHaveThisContent->isEmpty();
+            $message                                 = $product_that_have_this_content_is_empty ? $msg : $msg1;
+        
+            if (request()->expectsJson()) {
+                return $product_that_have_this_content_is_empty ? $api : $api1;
+            }
         }
         
         $adItems = $content->getAddItems();
@@ -253,7 +263,8 @@ class ContentController extends Controller
         $view2 = view("content.show",
             compact("seenCount", "author", "content", "contentsWithSameSet", "videosWithSameSet",
                 "pamphletsWithSameSet", "contentSetName", "tags",
-                "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR"));
+                "userCanSeeCounter", "adItems", "videosWithSameSetL", "videosWithSameSetR",
+                'productsThatHaveThisContent', 'user_can_see_content', 'message'));
         return httpResponse($api2, $view2);
     }
     

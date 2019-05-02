@@ -47,7 +47,8 @@ mix.scripts(
         'public/acm/videojs/plugins/videojs.p2p.min.js',
         'public/acm/videojs/plugins/videojs.hotkeys.min.js',
         'public/acm/videojs/plugins/seek-to-point.js',
-        // 'public/acm/page-content-show.js'
+        'public/acm/videojs/lang/fa.js',
+        'public/acm/AlaatvCustomFiles/js/page-content-show.js'
     ],
     'public/js/content-show.js'
 ).version();
@@ -80,7 +81,8 @@ mix.babel(
         'public/acm/videojs/plugins/videojs.hotkeys.min.js',
         'public/acm/videojs/plugins/seek-to-point.js',
         'public/acm/AlaatvCustomFiles/js/UserCart.js',
-        // 'public/acm/AlaatvCustomFiles/js/page-product-show.js',
+        'public/acm/videojs/lang/fa.js',
+        'public/acm/AlaatvCustomFiles/js/page-product-show.js',
     ],
     'public/js/product-show.js'
 ).version();
@@ -142,20 +144,16 @@ mix.styles(
 mix.styles(
     [
         'node_modules/lightgallery/src/css/lightgallery.css',
-
-        'public/acm/videojs/skins/nuevo/videojs.min.css',
-        'public/acm/videojs/skins/nuevo/videojs.rtl.css',
+        'public/acm/videojs/skins/alaa-theme/videojs.css',
         'public/acm/videojs/plugins/pip/videojs.pip.min.css',
         'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
         'public/acm/videojs/plugins/seek-to-point.css',
         'public/acm/videojs/fonts/load-font-for-laravel-mix.css',
-
         'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
         'public/acm/AlaatvCustomFiles/css/page-product-show.css',
     ],
     'public/css/product-show.css'
 ).version();
-
 
 mix.styles(
     [
@@ -256,14 +254,13 @@ mix.styles(
 
 mix.styles(
     [
-        // 'public/acm/videojs/skins/nuevo/videojs.min.css',
+        'public/acm/videojs/skins/alaa-theme/videojs.css',
         'public/acm/videojs/skins/nuevo/videojs.rtl.css',
         'public/acm/videojs/plugins/pip/videojs.pip.min.css',
         'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
         'public/acm/videojs/plugins/seek-to-point.css',
-        // 'public/acm/videojs/fonts/load-font-for-laravel-mix.css',
 
-        'public/acm/AlaatvCustomFiles/css/page-content-show.css'
+        // 'public/acm/AlaatvCustomFiles/css/page-content-show.css'
     ],
     'public/css/content-show.css'
 );

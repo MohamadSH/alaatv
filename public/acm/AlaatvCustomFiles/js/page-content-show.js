@@ -27,9 +27,9 @@ var SnippetContentShow = function(){
             relatedMenu: true,
             zoomMenu: true,
             related: related_videos,
-            // mirrorButton: true,
+            mirrorButton: true,
 
-            closeallow:false,
+            closeallow:true,
             mute:true,
             rateMenu:true,
             resume:true, // (false) enable/disable resume option to start video playback from last time position it was left

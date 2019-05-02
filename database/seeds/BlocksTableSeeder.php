@@ -176,7 +176,7 @@ class BlocksTableSeeder extends Seeder
                 'enable'     => 1,
                 'type'       => 2,
                 'created_at' => \Carbon\Carbon::now(),
-                'class'      => 'konkoor2',
+                'class'      => 'taftan',
                 
             ],
             [
