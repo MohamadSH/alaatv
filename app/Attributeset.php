@@ -2,17 +2,17 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
 
 /**
  * App\Attributeset
  *
- * @property int                                                                 $id
- * @property string|null                                                         $name        نام دسته
- * @property string|null                                                         $description توضیح دسته
- * @property int                                                                 $order       ترتیب دسته صفت
+ * @property int         $id
+ * @property string|null $name        نام دسته
+ * @property string|null $description توضیح دسته
+ * @property int         $order       ترتیب دسته صفت
  * @property \Carbon\Carbon|null                                                 $created_at
  * @property \Carbon\Carbon|null                                                 $updated_at
  * @property \Carbon\Carbon|null                                                 $deleted_at
@@ -77,6 +77,7 @@ class Attributeset extends BaseModel
                 ])
                 ->where('attributesets.id', '=', $this->id)
                 ->whereNull('attributesets.deleted_at')
+                ->orderBy('pivot_order')
                 ->get();
             
             $result = Attribute::hydrate($result->toArray());
