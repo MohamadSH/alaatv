@@ -41,7 +41,7 @@ class ZarinpalServiceProvider extends ServiceProvider
      */
     private function getMerchantNumber()
     {
-        return config('Zarinpal::merchantID');
+        return config('Zarinpal.merchantID');
     }
     
     /**
@@ -49,7 +49,7 @@ class ZarinpalServiceProvider extends ServiceProvider
      */
     private function isZarinpalSandboxOn()
     {
-        return config('app.env', 'deployment') != 'deployment' && config('Zarinpal::Sandbox', false);
+        return config('app.env', 'deployment') != 'deployment' && config('Zarinpal.Sandbox', false);
     }
     
     /**
@@ -57,7 +57,7 @@ class ZarinpalServiceProvider extends ServiceProvider
      */
     private function isZarinGateOn()
     {
-        return config('Zarinpal::ZarinGate', false);
+        return config('Zarinpal.ZarinGate', false);
     }
 
     public function boot()

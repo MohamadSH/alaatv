@@ -105,9 +105,9 @@
         @if($block->products->count() > 0)
     
     
-            <div class = "row {{ $block->class }}">
+            <div class = "row blockId-{{ $block->id }} {{ $block->class }}">
                 <div class = "col">
-                    <div class = "m-portlet  m-portlet--bordered" id = "owlCarousel_{{ $block->class }}">
+                    <div class = "m-portlet  m-portlet--bordered" id = "owlCarousel_{{ $block->id }}">
                         <div class = "m-portlet__head">
                             <div class = "m-portlet__head-caption">
                                 <div class = "m-portlet__head-title">
@@ -132,8 +132,7 @@
                             <div class = "m-widget30">
                         
                                 <div class = "m-widget_head">
-                            
-                                    <div class = "m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 carousel_block_{{ $block->class }}">
+                                    <div class = "m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
                                         @foreach($block->products as $productKey=>$product)
                                             <div class = "m-widget_head-owlcarousel-item carousel background-gradient" data-position = "{{ $productKey }}">
                                                 <a href="{{ $product->url }}" >
@@ -228,7 +227,7 @@
     
         @foreach($blocks as $block)
             @if($block->products->count() > 0)
-                $('#owlCarousel_{{ $block->class }}').OwlCarouselType2();
+                $('#owlCarousel_{{ $block->id }}').OwlCarouselType2();
             @endif
         @endforeach
 
