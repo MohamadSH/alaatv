@@ -2,11 +2,12 @@
 
 namespace  App\PaymentModule\Controllers;
 
-use App\PaymentModule\{OnlineGateWay, Responses, PaymentDriver};
-use App\Repositories\TransactionRepo;
+use App\Order;
 use App\Traits\HandleOrderPayment;
 use Illuminate\Routing\Controller;
+use App\Repositories\TransactionRepo;
 use Illuminate\Support\Facades\{Cache, Request};
+use App\PaymentModule\{Responses, OnlineGateWay, PaymentDriver};
 
 class PaymentVerifierController extends Controller
 {

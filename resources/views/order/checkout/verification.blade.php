@@ -81,9 +81,12 @@
 
                                 @if($paymentMethod === 'zarinpal' && isset($result['zarinpalVerifyResult']['message']))
                                     <div class="alert
-                                        @if($status==='successful')alert-success
-                                        @elsealert-warning
-                                        @endifalert-dismissible fade show" role="alert">
+                                        @if($status==='successful')
+                                            alert-success
+                                        @else
+                                            alert-warning
+                                        @endif
+                                            alert-dismissible fade show" role="alert">
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         </button>
                                             @foreach($result['zarinpalVerifyResult']['message'] as $message)
