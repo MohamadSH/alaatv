@@ -168,8 +168,14 @@ class HomeController extends Controller
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
         return [
-            ProductRepository::getProductsThatHaveValidProductFileByFileNameRecursively('fizik_paye_dahom.pdf'),
+            Product::find(226)->sets->first->getContents(),
+            Product::find(227)->sets,
+            Product::find(228)->sets,
+            Product::find(229)->sets,
         ];
+        dd(ProductRepository::getProductsThatHaveValidProductFileByFileNameRecursively('fizik_paye_dahom.pdf')
+            ->pluck
+            ('id'));
     }
     
     public function search(Request $request)
