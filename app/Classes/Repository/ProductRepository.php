@@ -9,9 +9,12 @@
 namespace App\Classes\Repository;
 
 use App\Product;
+use App\Traits\ProductCommon;
 
 class ProductRepository
 {
+    use ProductCommon;
+
     /**
      * @param $fileName
      *
@@ -26,7 +29,19 @@ class ProductRepository
             ->OrwhereIn('id',
                 self::getArrayOfProductsIdThatTheirParentComplimentaryHaveValidProductFileByFileName($fileName))
             ->get();
-        return $products;
+
+        $totalProducts = collect();
+        /** @var Product $product */
+        foreach ($products as $product){
+            $parents = $product->getAllParents();
+            $totalProducts = $totalProducts->merge($parents);
+
+            $children = $product->getAllChildren();
+            $totalProducts = $totalProducts->merge($children);
+        }
+        $totalProducts = $totalProducts->merge($products);
+
+        return $totalProducts;
     }
     
     /**
