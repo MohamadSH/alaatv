@@ -52,6 +52,9 @@ select.form-control {
 .alert.m-alert--outline.alert-warning.m-alert--icon-solid .m-alert__icon span {
     border-right-color: #ffb822;
 }
+.alert.m-alert--outline.alert-info.m-alert--icon-solid .m-alert__icon span {
+    border-right-color: #36a3f7;
+}
 .m-invoice-1 .m-invoice__wrapper .m-invoice__head .m-invoice__container .m-invoice__desc {
     text-align: right;
 }
@@ -74,4 +77,8 @@ select.form-control {
 
 .m-header--fixed-mobile .m-topbar {
     top: -60px;
+}
+
+.m-portlet.m-portlet--skin-dark .m-portlet__body .table {
+    color: #fff;
 }

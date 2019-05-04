@@ -24,16 +24,42 @@
     </nav>
     <input id="js-var-contentId" class="m--hide" type="hidden" value='{{ $content->id }}'>
     <input id="js-var-contentDName" class="m--hide" type="hidden" value='{{ $content->displayName }}'>
-    <input id="js-var-contentUrl" class="m--hide" type="hidden"
-           value='{{action("Web\ContentController@show" , $content)}}'>
-    <input id="js-var-contentEmbedUrl" class="m--hide" type="hidden"
-           value='{{action("Web\ContentController@embed" , $content)}}'>
+    <input id="js-var-contentUrl" class="m--hide" type="hidden" value='{{action("Web\ContentController@show" , $content)}}'>
+    <input id="js-var-contentEmbedUrl" class="m--hide" type="hidden" value='{{action("Web\ContentController@embed" , $content)}}'>
 @endsection
 
 
 @section('content')
     <div class="row">
-        <div class="col-12 col-sm-12 col-md-12 col-lg-8">
+        
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8 mx-auto">
+            
+            @if(!$user_can_see_content)
+                <div class="m-alert m-alert--icon m-alert--icon-solid m-alert--outline alert alert-info alert-dismissible fade show" role="alert">
+                    <div class="m-alert__icon">
+                        <i class="flaticon-exclamation-1"></i>
+                        <span></span>
+                    </div>
+                    <div class="m-alert__text">
+                        <strong>{{ $message }}</strong>
+                    </div>
+                    @if($productsThatHaveThisContent->isNotEmpty())
+                        <div class="m-alert__actions" style="width: 160px;">
+                            <button type="button" class="btn m-btn--air btn-warning btn-sm m-btn m-btn--pill m-btn--wide scrollToOwlCarouselParentProducts">مشاهده محصولات</button>
+                        </div>
+                    @endif
+                    <div class="m-alert__close">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            @endif
+            
+{{--            @if(!isset($videosWithSameSet) or $videosWithSameSet->count() === 0)--}}
+{{--                <div class="alert alert-info" role="alert">--}}
+{{--                    <strong>حیف!</strong> این مجموعه فیلم ندارد.--}}
+{{--                </div>--}}
+{{--            @endif--}}
+            
             @if(isset($content->template))
                 @if(optional($content->template)->name == "video1")
                     <!--begin::Portlet-->
@@ -269,7 +295,7 @@
                 </div>
             @endif
             @if($pamphletsWithSameSet->count() > 0 and $pamphletsWithSameSet->where("content.id" , "<>",$content->id)->isNotEmpty())
-            <!--begin::Portlet-->
+                <!--begin::Portlet-->
                 <div class="m-portlet m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="m_portlet_tools_7">
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">
@@ -325,77 +351,121 @@
                 <!--end::Portlet-->
             @endif
         </div>
+        @if(isset($videosWithSameSet) and $videosWithSameSet->count() > 0)
         <div class="col-12 col-sm-12 col-md-12 col-lg-4">
-            @if(isset($videosWithSameSet) and $videosWithSameSet->count() > 0)
-                <!--begin::Portlet-->
-                <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
-                    <div class="m-portlet__head">
-                        <div class="m-portlet__head-caption">
-                            <div class="m-portlet__head-title">
-                                <h3 class="m-portlet__head-text">
-                                    فیلم ها
-                                    @if(isset($contentSetName))
-                                        <small>
-                                            {{ $contentSetName }}
-                                        </small>
-                                    @endif
+            <!--begin::Portlet-->
+            <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                فیلم ها
+                                @if(isset($contentSetName))
+                                    <small>
+                                        {{ $contentSetName }}
+                                    </small>
+                                @endif
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-portlet__body m--padding-10">
+                    <div id="playListScroller"
+                         class="m-scrollable11"
+                         data-scrollable="true"
+                         data-height="{{ min($videosWithSameSet->count(),(optional($content->template)->name == "video1" ?  11 : 4)) * 103 }}"
+                         data-scrollbar-shown="true">
+                        <div class="m-portlet__body-progress">Loading</div>
+                        
+                        <!--begin::m-widget5-->
+                        <div class="a-widget5">
+                            @foreach($videosWithSameSet as $item)
+                                <div class="a-widget5__item" id="playlistItem_{{ $item["content"]->id }}">
+                                    <div class="a-widget5__content  {{ $item["content"]->id == $content->id ? 'm--bg-primary' : '' }}">
+                                        <div class="a-widget5__pic">
+                                            <a class="m-link"
+                                               href="{{action("Web\ContentController@show" , $item["content"])}}">
+                                                <img class="m-widget7__img a--full-width"
+                                                     src="{{ isset($item["thumbnail"]) ? $item["thumbnail"]."?w=210&h=118":'' }}"
+                                                     alt="{{ $item["content"]->name }}">
+                                            </a>
+                                        </div>
+                                        <div class="a-widget5__section">
+                                            <h4 class="a-widget5__title">
+                                                <a class="m-link"
+                                                   href="{{action("Web\ContentController@show" , $item["content"])}}">
+                                                    {{ $item["content"]->display_name }}
+                                                </a>
+                                            </h4>
+                                            <div class="a-widget5__info">
+                                                <div class="content-description">
+                                                    {!! $item["content"]->description !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        <!--end::m-widget5-->
+                    
+                    </div>
+                </div>
+            </div>
+            <!--end::Portlet-->
+        </div>
+        @endif
+    </div>
+
+    @if($productsThatHaveThisContent->isNotEmpty())
+        <div class = "row">
+            <div class = "col">
+                <div class = "m-portlet  m-portlet--bordered" id = "owlCarouselParentProducts">
+                    <div class = "m-portlet__head">
+                        <div class = "m-portlet__head-caption">
+                            <div class = "m-portlet__head-title">
+                                <h3 class = "m-portlet__head-text">
+                                    محصولاتی که شامل این محتوا هستند
                                 </h3>
                             </div>
                         </div>
-                    </div>
-                    <div class="m-portlet__body m--padding-10">
-                        <div id="playListScroller"
-                             class="m-scrollable11"
-                             data-scrollable="true"
-                             data-height="{{ min($videosWithSameSet->count(),(optional($content->template)->name == "video1" ?  11 : 4)) * 103 }}"
-                             data-scrollbar-shown="true">
-                            <div class="m-portlet__body-progress">Loading</div>
-                            
-                            <!--begin::m-widget5-->
-                            <div class="a-widget5">
-                                @foreach($videosWithSameSet as $item)
-                                    <div class="a-widget5__item" id="playlistItem_{{ $item["content"]->id }}">
-                                        <div class="a-widget5__content  {{ $item["content"]->id == $content->id ? 'm--bg-primary' : '' }}">
-                                            <div class="a-widget5__pic">
-                                                <a class="m-link"
-                                                   href="{{action("Web\ContentController@show" , $item["content"])}}">
-                                                    <img class="m-widget7__img a--full-width"
-                                                         src="{{ isset($item["thumbnail"]) ? $item["thumbnail"]."?w=210&h=118":'' }}"
-                                                         alt="{{ $item["content"]->name }}">
-                                                </a>
-                                            </div>
-                                            <div class="a-widget5__section">
-                                                <h4 class="a-widget5__title">
-                                                    <a class="m-link"
-                                                       href="{{action("Web\ContentController@show" , $item["content"])}}">
-                                                        {{ $item["content"]->display_name }}
-                                                    </a>
-                                                </h4>
-                                                <div class="a-widget5__info">
-                                                    <div class="content-description">
-                                                        {!! $item["content"]->description !!}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                            <!--end::m-widget5-->
-                        
+                        <div class = "m-portlet__head-tools">
+                            <a href = "#" class = "btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
+                                <i class = "fa flaticon-shapes"></i>
+                            </a>
+                            <a href = "#" class = "btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
+                                <i class = "flaticon-more-v4"></i>
+                            </a>
                         </div>
                     </div>
+                    <div class = "m-portlet__body m-portlet__body--no-padding">
+                        <!--begin::Widget 30-->
+                        <div class = "m-widget30">
+                        
+                            <div class = "m-widget_head">
+                            
+                                <div class = "m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 parentProducts">
+                                    @foreach($productsThatHaveThisContent as $productKey=>$product)
+                                        <div class = "m-widget_head-owlcarousel-item carousel background-gradient" data-position = "{{ $productKey }}">
+                                            <a href="{{ $product->url }}" >
+                                                <img class = "a--owl-carousel-type-2-item-image" src = "{{ $product->photo }}">
+                                            </a>
+                                            <br>
+                                            <a href="{{ $product->url }}" target="_blank" class="m-link">{{ $product->name }}</a>
+                                        </div>
+                                    @endforeach
+                                </div>
+                        
+                            </div>
+                    
+                        </div>
+                        <!--end::Widget 30-->
+                    </div>
                 </div>
-                <!--end::Portlet-->
-            @else
-                <div class="alert alert-info" role="alert">
-                    <strong>حیف!</strong> این مجموعه فیلم ندارد.
-                </div>
-                <p></p>
-            @endif
+            </div>
         </div>
-    </div>
+    @endif
 @endsection
 
 @section('page-js')
