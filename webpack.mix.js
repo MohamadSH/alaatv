@@ -41,6 +41,7 @@ mix.scripts(
 
 mix.scripts(
     [
+        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
         'public/acm/videojs/video.min.js',
         'public/acm/videojs/plugins/pip/videojs.pip.min.js',
         'public/acm/videojs/nuevo.min.js',
@@ -118,7 +119,7 @@ mix.babel(
 mix.babel(
     [
         'node_modules/persian-date/dist/persian-date.js',
-        'public/acm/AlaatvCustomFiles/js/page-user-orders.js'
+        // 'public/acm/AlaatvCustomFiles/js/page-user-orders.js'
     ],
     'public/js/user-orders.js'
 ).version();
@@ -254,6 +255,9 @@ mix.styles(
 
 mix.styles(
     [
+        'node_modules/slick-carousel/slick/slick.css',
+        'node_modules/slick-carousel/slick/slick-theme.css',
+        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
         'public/acm/videojs/skins/alaa-theme/videojs.css',
         'public/acm/videojs/skins/nuevo/videojs.rtl.css',
         'public/acm/videojs/plugins/pip/videojs.pip.min.css',

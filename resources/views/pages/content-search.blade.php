@@ -51,7 +51,7 @@
         }
 
         .a--multi-level-search .selectorItem {
-
+            margin-top: 10px;
         }
 
         .a--multi-level-search .selectorItem .selectorItemTitle {
@@ -62,18 +62,22 @@
         }
 
         .a--multi-level-search .selectorItem .subItem:hover {
-            background-color: #fd7e14;
+            background-color: #2bbbad;
+            box-shadow: 0 5px 15px 15px rgba(0,0,0,.18),0 4px 15px 0 rgba(0,0,0,.15);
+            z-index: 2;
         }
 
         .a--multi-level-search .selectorItem .subItem {
             white-space: nowrap;
             text-align: center;
-            margin: 2px;
+            margin: 0px;
             padding: 10px 50px;
-            background-color: #7FDBFF;
+            background-color: #4285f4;
             cursor: pointer;
             transition-property: all;
             transition-duration: 0.3s;
+            color: white;
+            box-shadow: 0 5px 11px 0 rgba(0,0,0,.18),0 4px 15px 0 rgba(0,0,0,.15);
         }
 
         .a--multi-level-search .selectorItem .select2 {

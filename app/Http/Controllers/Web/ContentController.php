@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Product;
 use App\User;
 use Exception;
 use App\Content;
@@ -240,6 +241,7 @@ class ContentController extends Controller
                 return $product_that_have_this_content_is_empty ? $api : $api1;
             }
         }
+        $productsThatHaveThisContent = Product::whereIn('id', [293, 292, 291, 290, 289, 226])->get();
         
         $adItems = $content->getAddItems();
         $tags    = $content->retrievingTags();
@@ -258,7 +260,6 @@ class ContentController extends Controller
         $seenCount = $content->pageView;
         
         $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
-        
         $api2  = response()->json($content, Response::HTTP_OK);
         $view2 = view("content.show",
             compact("seenCount", "author", "content", "contentsWithSameSet", "videosWithSameSet",

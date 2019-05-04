@@ -736,7 +736,7 @@
                     "render": function ( data, type, row ) {
                         return '\n' +
                             '            <div class="btn-group">\n' +
-                            '                <a target="_blank" class="btn btn-success" href="'+row.editOrderLink+'">\n' +
+                            '                <a target="_blank" class="btn btn-success" href="'+row.editOrder+'">\n' +
                             '                    <i class="fa fa-pencil"></i> اصلاح \n' +
                             '                </a>\n' +
                             '                <a class="btn btn-danger deleteOrder" data-target="#deleteOrderConfirmationModal" data-toggle="modal">\n' +
