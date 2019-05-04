@@ -8,8 +8,10 @@
 
 namespace App\Classes\Repository;
 
+use App\Collection\ProductCollection;
 use App\Product;
 use App\Traits\ProductCommon;
+use Illuminate\Support\Collection;
 
 class ProductRepository
 {
@@ -30,18 +32,7 @@ class ProductRepository
                 self::getArrayOfProductsIdThatTheirParentComplimentaryHaveValidProductFileByFileName($fileName))
             ->get();
 
-        $totalProducts = collect();
-        /** @var Product $product */
-        foreach ($products as $product){
-            $parents = $product->getAllParents();
-            $totalProducts = $totalProducts->merge($parents);
-
-            $children = $product->getAllChildren();
-            $totalProducts = $totalProducts->merge($children);
-        }
-        $totalProducts = $totalProducts->merge($products);
-
-        return $totalProducts;
+        return self::getTotalProducts($products);
     }
     
     /**
@@ -123,4 +114,23 @@ class ProductRepository
             ->get()
             ->pluck("id");
     }
+
+    /**
+     * @param Collection $products
+     * @return ProductCollection
+     */
+    private static function getTotalProducts(Collection $products)
+    {
+        $totalProducts = new ProductCollection();
+        /** @var Product $product */
+        foreach ($products as $product) {
+            $productChain = $product->getProductChain();
+
+            $totalProducts = $totalProducts->merge($productChain);
+        }
+        $totalProducts = $totalProducts->merge($products);
+
+        return $totalProducts;
+    }
+
 }

@@ -1472,6 +1472,21 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
             return $parents;
         });
     }
+
+    /**
+     * @return Collection
+     */
+    public function getProductChain()
+    {
+        $productChain = collect();
+        $parents = $this->getAllParents();
+        $productChain = $productChain->merge($parents);
+
+        $children = $this->getAllChildren();
+        $productChain = $productChain->merge($children);
+
+        return $productChain;
+    }
     
     /**
      * Obtains product's discount percentage
