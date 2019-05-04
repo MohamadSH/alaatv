@@ -739,7 +739,7 @@
                             '                <a target="_blank" class="btn btn-success" href="'+row.editOrder+'">\n' +
                             '                    <i class="fa fa-pencil"></i> اصلاح \n' +
                             '                </a>\n' +
-                            '                <a class="btn btn-danger deleteOrder" data-target="#deleteOrderConfirmationModal" data-toggle="modal" remove-link="'+row.removeLink+'">\n' +
+                            '                <a class="btn btn-danger deleteOrder" data-target="#deleteOrderConfirmationModal" data-toggle="modal" remove-link="'+row.removeLink+'" fullname="'+row.user.firstName+row.user.lastName+'">\n' +
                             '                    <i class="fa fa-remove" aria-hidden="true"></i> حذف \n' +
                             '                </a>\n' +
                             '                <a class="btn btn-info sendSms" data-target="#sendSmsModal" data-toggle="modal">\n' +
@@ -1165,7 +1165,7 @@
                     type: "loader",
                     state: "info",
                 });
-                data.page = getNextPageParam(data.start, data.length);
+                data.orders = getNextPageParam(data.start, data.length);
                 let $form = $("#filterOrderForm");
                 let formData = getFormData($form);
                 // let formData = $form.serializeArray();

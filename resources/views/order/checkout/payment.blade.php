@@ -74,18 +74,18 @@
                                             </span>
                                                     <div class="m-form__group form-group text-center m--margin-top-10">
                                                         <div class="m-radio-inline">
-                                                            <label class="m-radio m-radio--solid m-radio--state-info">
-                                                                <input type="radio" name="radioBankType" value="1"
-                                                                       checked>
-                                                                <img src="/acm/extra/payment/gateway/zarinpal-logo.png"
-                                                                     class="img-thumbnail bankLogo" alt="bank-logo">
+{{--                                                            <label class="m-radio m-radio--solid m-radio--state-info">--}}
+{{--                                                                <input type="radio" name="radioBankType" value="1"--}}
+{{--                                                                       checked>--}}
+{{--                                                                <img src="/acm/extra/payment/gateway/zarinpal-logo.png"--}}
+{{--                                                                     class="img-thumbnail bankLogo" alt="bank-logo">--}}
+{{--                                                                <span></span>--}}
+{{--                                                            </label>--}}
+                                                            <label class = "m-radio m-radio--solid m-radio--state-info">
+                                                                <input type = "radio" name = "radioBankType" value = "2" checked>
+                                                                <img src = "/acm/extra/payment/gateway/mellat-logo.png" class = "img-thumbnail bankLogo" alt = "bank-logo">
                                                                 <span></span>
                                                             </label>
-                                                            {{--<label class = "m-radio m-radio--solid m-radio--state-info">--}}
-                                                            {{--<input type = "radio" name = "radioBankType" value = "2">--}}
-                                                            {{--<img src = "/acm/extra/payment/gateway/mellat-logo.png" class = "img-thumbnail bankLogo" alt = "bank-logo">--}}
-                                                            {{--<span></span>--}}
-                                                            {{--</label>--}}
                                                             {{--<label class = "m-radio m-radio--solid m-radio--state-info">--}}
                                                             {{--<input type = "radio" name = "radioBankType" value = "3">--}}
                                                             {{--<img src = "/acm/extra/payment/gateway/pasargad-logo.jpg" class = "img-thumbnail bankLogo" alt = "bank-logo">--}}
