@@ -119,7 +119,7 @@ mix.babel(
 mix.babel(
     [
         'node_modules/persian-date/dist/persian-date.js',
-        // 'public/acm/AlaatvCustomFiles/js/page-user-orders.js'
+        'public/acm/AlaatvCustomFiles/js/page-user-orders.js'
     ],
     'public/js/user-orders.js'
 ).version();
@@ -140,6 +140,13 @@ mix.styles(
         'public/acm/AlaatvCustomFiles/css/page-user-profile.css',
     ],
     'public/css/user-profile.css'
+).version();
+
+mix.styles(
+    [
+        'public/acm/AlaatvCustomFiles/css/page-user-orders.css',
+    ],
+    'public/css/user-orders.css'
 ).version();
 
 mix.styles(
