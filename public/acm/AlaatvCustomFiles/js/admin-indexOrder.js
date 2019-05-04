@@ -18,8 +18,9 @@ var $modal = $('#ajax-modal');
  * Order Admin Ajax
  */
 $(document).on("click", ".deleteOrder", function (){
-    var order_id = $(this).parent().find('.order_id').attr('id');
-    $("input[name=order_id]").val(order_id);
+    // var order_id = $(this).parent().find('.order_id').attr('id');
+    var remove_link = $(this).attr('remove-link');
+    $("input[name=order_id]").val(remove_link);
     $("#deleteOrderTitle").text($("#orderProductFullName_"+order_id).text()+" مربوط به "+ $("#orderCustomerFullName_"+order_id).text());
 });
 function removeOrder(){
