@@ -739,7 +739,7 @@
                             '                <a target="_blank" class="btn btn-success" href="'+row.editOrder+'">\n' +
                             '                    <i class="fa fa-pencil"></i> اصلاح \n' +
                             '                </a>\n' +
-                            '                <a class="btn btn-danger deleteOrder" data-target="#deleteOrderConfirmationModal" data-toggle="modal">\n' +
+                            '                <a class="btn btn-danger deleteOrder" data-target="#deleteOrderConfirmationModal" data-toggle="modal" remove-link="'+row.removeLink+'">\n' +
                             '                    <i class="fa fa-remove" aria-hidden="true"></i> حذف \n' +
                             '                </a>\n' +
                             '                <a class="btn btn-info sendSms" data-target="#sendSmsModal" data-toggle="modal">\n' +
@@ -865,11 +865,12 @@
                             return '<span class="m-badge m-badge--wide m-badge--warning">ندارد</span>';
                         }
 
-                        let successfulTransactions = '<div class="transactionItem successfulTransactionItem">';
+                        let successfulTransactions = '';
                         for (let index in row.successfulTransactions) {
                             if(isNaN(index)) {
                                 continue;
                             }
+                            successfulTransactions += '<div class="transactionItem successfulTransactionItem">';
                             let successfulTransaction = row.successfulTransactions[index];
                             if (typeof successfulTransaction.paymentmethod !== 'undefined') {
                                 successfulTransactions += successfulTransaction.paymentmethod.displayName;
@@ -902,8 +903,8 @@
                             } else {
                                 successfulTransactions += '<span class="m-badge m-badge--wide m-badge--warning">ندارد</span>';
                             }
+                            successfulTransactions += '</div>';
                         }
-                        successfulTransactions += '</div>';
                         return successfulTransactions;
                     },
                 },
@@ -916,11 +917,12 @@
                         if (row.pendingTransactions.length === 0) {
                             return '<span class="m-badge m-badge--wide m-badge--success">ندارد</span>';
                         }
-                        let pendingTransactions = '<div class="transactionItem pendingTransactionItem">';
+                        let pendingTransactions = '';
                         for (let index in row.pendingTransactions) {
                             if (isNaN(index)) {
                                 continue;
                             }
+                            pendingTransactions += '<div class="transactionItem pendingTransactionItem">';
                             let pendingTransaction = row.pendingTransactions[index];
                             
                             if (typeof pendingTransaction.paymentmethod !== 'undefined') {
@@ -959,8 +961,8 @@
                             } else {
                                 pendingTransactions += '<span class="bold m--font-danger">نامشخص</span>';
                             }
+                            pendingTransactions += '</div>';
                         }
-                        pendingTransactions += '</div>';
                         return pendingTransactions;
                     },
                 },
@@ -973,11 +975,12 @@
                         if (row.unpaidTransactions.length === 0) {
                             return '<span class="m-badge m-badge--wide m-badge--success">ندارد</span>';
                         }
-                        let unpaidTransactions = '<div class="transactionItem unpaidTransactionItem">';
+                        let unpaidTransactions = '';
                         for (let index in row.unpaidTransactions) {
                             if (isNaN(index)) {
                                 continue;
                             }
+                            unpaidTransactions += '<div class="transactionItem unpaidTransactionItem">';
                             let unpaidTransaction = row.unpaidTransactions[index];
                             
                             if (typeof unpaidTransaction.cost !== 'undefined') {
@@ -985,8 +988,9 @@
                             } else {
                                 unpaidTransactions += '<span class="bold m--font-danger">بدون مبلغ</span>';
                             }
-                            unpaidTransactions += '<br>';
                             unpaidTransactions += '<a target="_blank" href="#" class="btn btn-sm m-btn--pill m-btn--air btn-info m--margin-left-10">اصلاح</a>';
+
+                            unpaidTransactions += '<br>';
                             
                             unpaidTransactions += ' ,مهلت پرداخت: ';
                             if (typeof unpaidTransaction.jalaliDeadlineAt !== 'undefined') {
@@ -995,11 +999,12 @@
                                 unpaidTransactions += '<span class="bold m--font-danger">نامشخص</span>';
                             }
                             unpaidTransactions += ' ,توضیح مدیریتی: ';
-                            if (typeof unpaidTransaction.managerComment !== 'undefined') {
+                            if (typeof unpaidTransaction.managerComment !== 'undefined' &&  unpaidTransaction.managerComment !== null) {
                                 unpaidTransactions += '<span class="bold m--font-info">' + unpaidTransaction.managerComment + '</span>';
                             } else {
                                 unpaidTransactions += '<span class="m-badge m-badge--wide m-badge--warning">ندارد</span>';
                             }
+                            unpaidTransactions += '</div>';
                         }
                         return unpaidTransactions;
                     },

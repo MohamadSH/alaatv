@@ -241,7 +241,6 @@ class ContentController extends Controller
                 return $product_that_have_this_content_is_empty ? $api : $api1;
             }
         }
-        $productsThatHaveThisContent = Product::whereIn('id', [293, 292, 291, 290, 289, 226])->get();
         
         $adItems = $content->getAddItems();
         $tags    = $content->retrievingTags();

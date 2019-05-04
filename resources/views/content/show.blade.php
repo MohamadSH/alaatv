@@ -54,11 +54,11 @@
                 </div>
             @endif
             
-            @if(!isset($videosWithSameSet) or $videosWithSameSet->count() === 0)
-                <div class="alert alert-info" role="alert">
-                    <strong>حیف!</strong> این مجموعه فیلم ندارد.
-                </div>
-            @endif
+{{--            @if(!isset($videosWithSameSet) or $videosWithSameSet->count() === 0)--}}
+{{--                <div class="alert alert-info" role="alert">--}}
+{{--                    <strong>حیف!</strong> این مجموعه فیلم ندارد.--}}
+{{--                </div>--}}
+{{--            @endif--}}
             
             @if(isset($content->template))
                 @if(optional($content->template)->name == "video1")
