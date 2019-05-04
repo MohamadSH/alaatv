@@ -129,7 +129,7 @@ class ProductRepository
             $totalProducts = $totalProducts->merge($productChain);
         }
         $totalProducts = $totalProducts->merge($products);
-        
+
         return $totalProducts;
     }
 
