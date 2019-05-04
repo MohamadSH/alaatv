@@ -168,12 +168,9 @@ class HomeController extends Controller
     
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        dump(auth('api')->check());
-    
-        dd(auth('api')->check());
-    
-    
-        dd($request->user());
+//        dd(Content::find(10233));
+        dd(Content::find(10233)
+            ->getTaggableTags());
         return [
             Product::find(226)->sets->first()
                 ->getContents(),
