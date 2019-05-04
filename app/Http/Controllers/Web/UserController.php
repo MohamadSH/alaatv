@@ -1011,9 +1011,9 @@ class UserController extends Controller
             $videos    = collect();
             foreach ($products as $product) {
                 
-                $parentsArray = $this->makeParentArray($product);
+                $parents = $product->getAllParents();
                 
-                $this->addVideoPamphlet($parentsArray, $pamphlets, $videos);
+                $this->addVideoPamphlet($parents, $pamphlets, $videos);
                 
                 $childrenArray = $product->children;
                 $this->addVideoPamphlet($childrenArray, $pamphlets, $videos, "digChildren");

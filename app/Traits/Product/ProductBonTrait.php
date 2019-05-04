@@ -54,9 +54,9 @@ trait ProductBonTrait
                 $bonPlus += $this->bons->where("id", $bonId)
                     ->sum("pivot.bonPlus");
                 if ($bonPlus == 0) {
-                    $parentsArray = $this->makeParentArray($this);
-                    if (!empty($parentsArray)) {
-                        foreach ($parentsArray as $parent) {
+                    $parents = $this->getAllParents();
+                    if ($parents->isNotEmpty()) {
+                        foreach ($parents as $parent) {
                             $bonPlus += $parent->bons->where("id", $bonId)
                                 ->sum("pivot.bonPlus");
                         }
@@ -83,9 +83,9 @@ trait ProductBonTrait
                 $discount = 0;
                 $bons     = $this->getBons($bonName);
                 if ($bons->isEmpty()) {
-                    $parentsArray = $this->makeParentArray($this);
-                    if (!empty($parentsArray)) {
-                        foreach ($parentsArray as $parent) {
+                    $parents = $this->getAllParents();
+                    if ($parents->isNotEmpty()) {
+                        foreach ($parents as $parent) {
                             // ToDo : It does not check parents in a hierarchy to the root
                             
                             /** @var Product $parent */
@@ -159,9 +159,9 @@ trait ProductBonTrait
             ->remember($key, config("constants.CACHE_600"), function () use ($bonName) {
                 $bons = $this->getBons($bonName);
                 if ($bons->isEmpty()) {
-                    $parentsArray = $this->makeParentArray($this);
-                    if (!empty($parentsArray)) {
-                        foreach ($parentsArray as $parent) {
+                    $parents = $this->getAllParents();
+                    if ($parents->isNotEmpty()) {
+                        foreach ($parents as $parent) {
                             // ToDo : It does not check parents in a hierarchy to the root
                             
                             /** @var Product $parent */

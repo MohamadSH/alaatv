@@ -8,10 +8,15 @@
 
 namespace App\Classes\Repository;
 
+use App\Collection\ProductCollection;
 use App\Product;
+use App\Traits\ProductCommon;
+use Illuminate\Support\Collection;
 
 class ProductRepository
 {
+    use ProductCommon;
+
     /**
      * @param $fileName
      *
@@ -26,7 +31,8 @@ class ProductRepository
             ->OrwhereIn('id',
                 self::getArrayOfProductsIdThatTheirParentComplimentaryHaveValidProductFileByFileName($fileName))
             ->get();
-        return $products;
+
+        return self::getTotalProducts($products);
     }
     
     /**
@@ -108,4 +114,23 @@ class ProductRepository
             ->get()
             ->pluck("id");
     }
+
+    /**
+     * @param Collection $products
+     * @return ProductCollection
+     */
+    private static function getTotalProducts(Collection $products)
+    {
+        $totalProducts = new ProductCollection();
+        /** @var Product $product */
+        foreach ($products as $product) {
+            $productChain = $product->getProductChain();
+
+            $totalProducts = $totalProducts->merge($productChain);
+        }
+        $totalProducts = $totalProducts->merge($products);
+        
+        return $totalProducts;
+    }
+
 }

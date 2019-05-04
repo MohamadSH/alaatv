@@ -909,13 +909,12 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         
         return Cache::tags(["product"])
             ->remember($key, config("constants.CACHE_60"), function () {
-                $parentsArray = $this->makeParentArray($this);
-                if (empty($parentsArray)) {
+                $parentsArray = $this->getAllParents();
+                if ($parentsArray->isEmpty())
                     return false;
-                }
-                else {
-                    return array_last($parentsArray);
-                }
+
+                return array_last($parentsArray);
+
             });
     }
     
@@ -1443,7 +1442,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $key = "product:makeChildrenArray:".$this->cacheKey();
         
         return Cache::tags(["product"])
-            ->remember($key, config("constants.CACHE_60"), function () {
+            ->remember($key, config("constants.CACHE_600"), function () {
                 $children = collect();
                 if ($this->hasChildren()) {
                     $thisChildren = $this->children;
@@ -1455,6 +1454,38 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 
                 return $children;
             });
+    }
+
+    public function getAllParents()
+    {
+        $myProduct = $this;
+        $key = "product:getAllParents:".$myProduct->cacheKey();
+
+        return Cache::remember($key, config("constants.CACHE_600"), function () use ($myProduct) {
+            $parents = collect();
+            while ($myProduct->hasParents()) {
+                $myparent = $myProduct->parents->first();
+                $parents->push($myparent);
+                $myProduct    = $myparent;
+            }
+
+            return $parents;
+        });
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getProductChain()
+    {
+        $productChain = collect();
+        $parents = $this->getAllParents();
+        $productChain = $productChain->merge($parents);
+
+        $children = $this->getAllChildren();
+        $productChain = $productChain->merge($children);
+
+        return $productChain;
     }
     
     /**

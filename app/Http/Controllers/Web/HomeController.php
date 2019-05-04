@@ -168,7 +168,7 @@ class HomeController extends Controller
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
         return [
-            ProductRepository::getArrayOfProductsIdThatTheirParentHaveValidProductFileByFileName('fizik_paye_dahom.pdf'),
+            ProductRepository::getProductsThatHaveValidProductFileByFileNameRecursively('fizik_paye_dahom.pdf'),
         ];
     }
     
@@ -1256,10 +1256,11 @@ class HomeController extends Controller
     {
         $message    = "شما ابتدا باید یکی از این محصولات را سفارش دهید و یا اگر سفارش داده اید مبلغ را تسویه نمایید: "."<br>";
         $productIds = [];
+        /** @var Product $product */
         foreach ($products as $product) {
-            $myParents = $this->makeParentArray($product);
-            if (!empty($myParents)) {
-                $rootParent = end($myParents);
+            $myParents = $product->getAllParents();
+            if ($myParents->isNotEmpty()) {
+                $rootParent = $myParents->last();
                 if (!in_array($rootParent->id, $productIds)) {
                     $message .= '<a href="'.action('ProductController@show',
                             $rootParent->id).'">'.$rootParent->name.'</a><br>';
@@ -2864,7 +2865,7 @@ class HomeController extends Controller
          * }
          * }
          * //$parentsArray = $product->parents;
-         * $parentsArray = $this->makeParentArray($product);
+         * $parentsArray = $product->$parentsCollection();
          * if (!empty($parentsArray)) {
          * foreach ($parentsArray as $parent) {
          * foreach ($parent->gifts as $gift) {
