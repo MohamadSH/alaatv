@@ -44,7 +44,7 @@ if (!function_exists('getAuthenticatedUser')) {
     {
         try {
             return auth('web')->user() ?: auth('api')->user();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return null;
         }
     }
