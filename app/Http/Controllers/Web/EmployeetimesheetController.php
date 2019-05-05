@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Employeeschedule;
-use App\Employeetimesheet;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\InsertEmployeeTimeSheet;
-use App\Traits\DateTrait;
-use App\Traits\EmployeeWorkSheetCommon;
 use App\User;
-use App\Workdaytype;
 use Carbon\Carbon;
+use App\Workdaytype;
+use App\Employeeschedule;
+use App\Traits\DateTrait;
+use App\Employeetimesheet;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Input;
+use App\Traits\EmployeeWorkSheetCommon;
+use App\Http\Requests\InsertEmployeeTimeSheet;
 
 class EmployeetimesheetController extends Controller
 {
@@ -28,9 +28,9 @@ class EmployeetimesheetController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('ability:'.config("constants.EMPLOYEE_ROLE").','.config("constants.LIST_EMPLOPYEE_WORK_SHEET"),
+        $this->middleware('ability:'.config('constants.EMPLOYEE_ROLE').','.config('constants.LIST_EMPLOPYEE_WORK_SHEET'),
             ['only' => 'index']);
-        $this->middleware('ability:'.config("constants.EMPLOYEE_ROLE").'|,'.config("constants.INSERT_EMPLOPYEE_WORK_SHEET").'|'.config("constants.LIST_EMPLOPYEE_WORK_SHEET"),
+        $this->middleware('ability:'.config('constants.EMPLOYEE_ROLE').'|,'.config('constants.INSERT_EMPLOPYEE_WORK_SHEET').'|'.config('constants.LIST_EMPLOPYEE_WORK_SHEET'),
             ['only' => ['create']]);
         $this->middleware('permission:'.config('constants.INSERT_EMPLOPYEE_WORK_SHEET'), ['only' => 'store']);
         $this->middleware('permission:'.config('constants.REMOVE_EMPLOPYEE_WORK_SHEET'), ['only' => 'destroy']);
@@ -38,6 +38,13 @@ class EmployeetimesheetController extends Controller
             'only' => [
                 'edit',
                 'update',
+            ],
+        ]);
+        $this->middleware('CanAccessEmployeeTimeSheet', [
+            'except' => [
+                'index',
+                'create',
+                'show',
             ],
         ]);
     }
@@ -222,65 +229,58 @@ class EmployeetimesheetController extends Controller
 
     public function update(Request $request, Employeetimesheet $employeeTimeSheet)
     {
-        /** @var User $user */
-        $user = Auth::user();
-        if (!$request->has("modifier_id")) {
-            $request->offsetSet("modifier_id", $user->id);
+        $user = auth()->user();
+        if (!$request->has('modifier_id')) {
+            $request->offsetSet('modifier_id', $user->id);
         }
-        
         $employeeTimeSheet->fill($request->all());
         if ($request->has('isExtraDay')) {
             $employeeTimeSheet->workdaytype_id = config('constants.WORKDAY_ID_EXTRA');
             $employeeTimeSheet->isPaid         = 0;
-        }
-        else {
+        } else {
             $employeeTimeSheet->workdaytype_id = config('constants.WORKDAY_ID_USUAL');
             $employeeTimeSheet->isPaid         = 1;
         }
-        
         if ($request->has('timeSheetLock')) {
             $employeeTimeSheet->timeSheetLock = 1;
-        }
-        else {
+        } else {
             $employeeTimeSheet->timeSheetLock = 0;
         }
-        
         if ($request->has('isPaid')) {
             $employeeTimeSheet->isPaid = 1;
-        }
-        else {
+        } else {
             $employeeTimeSheet->isPaid = 0;
         }
-        
-        /** @var User $user */
-        if ($user->can(config('constants.EDIT_EMPLOPYEE_WORK_SHEET'))) {
+        $realWorkTime = $employeeTimeSheet->obtainRealWorkTime('IN_SECONDS');
+        /*if(
+            ($realWorkTime>0 &&
+                !$user->can(config('constants.editEmployeeWorkSheet'))
+            ) ||
+            (
+                $request->has('OvertimeConfirmation') &&
+                $request->get('OvertimeConfirmation') == 1 &&
+                $user->can(config('constants.editEmployeeWorkSheet'))
+            )
+        )*/
+        if ($request->has('overtime_confirmation')) {
             $employeeTimeSheet->overtime_confirmation = true;
-        }
-        else {
+        } else {
             $employeeTimeSheet->overtime_confirmation = false;
         }
-        
         $done = $employeeTimeSheet->update();
-        if ($done) {
-            if ($request->has("serverSide")) {
+        if ($done)
+            if ($request->has('serverSide')) {
                 return true;
-            }
-            else {
-                session()->flash("success", "ساعت کاری با موفقیت اصلاح شد");
-                
+            } else {
+                session()->flash('success', 'ساعت کاری با موفقیت اصلاح شد');
                 return redirect()->back();
             }
-        }
-        else {
-            if ($request->has("serverSide")) {
+        elseif ($request->has('serverSide')) {
                 return false;
+            } else {
+            session()->flash('error', 'خطای پایگاه داده');
+            return redirect()->back();
             }
-            else {
-                session()->flash("error", Lang::get("responseText.Database error."));
-                
-                return redirect()->back();
-            }
-        }
     }
 
     public function destroy(Employeetimesheet $employeetimesheet, Response $response)
