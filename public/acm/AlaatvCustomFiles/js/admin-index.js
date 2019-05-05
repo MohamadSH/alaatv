@@ -18,15 +18,20 @@ var $modal = $('#ajax-modal');
  * User Admin Ajax
  */
 $(document).on("click", ".deleteUser", function (){
-    var user_id = $(this).closest('ul').attr('id');
-    $("input[name=user_id]").val(user_id);
-    $("#deleteUserFullName").text($("#userFullName_"+user_id).text());
+    var removeLink = $(this).data('link');
+    var fullname = $(this).data('fullname');
+    $("input[name=user_remove_link]").val(removeLink);
+    $("#deleteUserFullName").text(fullname);
 });
 function removeUser(){
-    var user_id = $("input[name=user_id]").val();
+    mApp.block('#deleteUserConfirmationModal', {
+        type: "loader",
+        state: "success",
+    });
+    var removeLink = $("input[name=user_remove_link]").val();
     $.ajax({
         type: 'POST',
-        url: 'user/'+user_id,
+        url: removeLink,
         data:{_method: 'delete'},
         success: function (result) {
             // console.log(result);
@@ -46,16 +51,31 @@ function removeUser(){
                 "hideMethod": "fadeOut"
             };
             toastr["success"]("کاربر با موفقیت حذف شد!", "پیام سیستم");
-            $("#user-portlet .reload").trigger("click");
+            // $("#user-portlet .reload").trigger("click");
+            mApp.unblock('#deleteUserConfirmationModal');
+            $('#deleteUserConfirmationModal').modal('hide');
+
+            var newDataTable =$("#user_table").DataTable();
+            newDataTable.destroy();
+            makeDataTable_loadWithAjax_users();
         },
         error: function (result) {
             // console.log(result);
             // console.log(result.responseText);
+            mApp.unblock('#deleteUserConfirmationModal');
+            $('#deleteUserConfirmationModal').modal('hide');
+
+            var newDataTable =$("#user_table").DataTable();
+            newDataTable.destroy();
+            makeDataTable_loadWithAjax_users();
         }
     });
 }
 $(document).on("click", "#userForm-submit", function (){
-    $('body').modalmanager('loading');
+    mApp.block('#responsive-user', {
+        type: "loader",
+        state: "success",
+    });
     var el = $(this);
 
     //initializing form alerts
@@ -115,13 +135,31 @@ $(document).on("click", "#userForm-submit", function (){
                 toastr["success"](message, "پیام سیستم");
                 // console.log(response);
                 // console.log(response.responseText);
+                mApp.unblock('#responsive-user');
+                $('#responsive-user').modal('hide');
+
+                var newDataTable =$("#user_table").DataTable();
+                newDataTable.destroy();
+                makeDataTable_loadWithAjax_users();
             },
             //The status for when the user is not authorized for making the request
             403: function (response) {
                 toastr["error"]("کد 403!", "پیام سیستم");
+                mApp.unblock('#responsive-user');
+                $('#responsive-user').modal('hide');
+
+                var newDataTable =$("#user_table").DataTable();
+                newDataTable.destroy();
+                makeDataTable_loadWithAjax_users();
             },
             404: function (response) {
                 toastr["error"]("کد 404!", "پیام سیستم");
+                mApp.unblock('#responsive-user');
+                $('#responsive-user').modal('hide');
+
+                var newDataTable =$("#user_table").DataTable();
+                newDataTable.destroy();
+                makeDataTable_loadWithAjax_users();
             },
             //The status for when form data is not valid
             422: function (response) {
@@ -176,12 +214,24 @@ $(document).on("click", "#userForm-submit", function (){
                             break;
                     }
                 });
+                mApp.unblock('#responsive-user');
+                $('#responsive-user').modal('hide');
+
+                var newDataTable =$("#user_table").DataTable();
+                newDataTable.destroy();
+                makeDataTable_loadWithAjax_users();
             },
             //The status for when there is error php code
             500: function (response) {
                 console.log(response);
                 console.log(response.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
+                mApp.unblock('#responsive-user');
+                $('#responsive-user').modal('hide');
+
+                var newDataTable =$("#user_table").DataTable();
+                newDataTable.destroy();
+                makeDataTable_loadWithAjax_users();
             },
             //The status for when there is error php code
             503: function (response) {
@@ -190,14 +240,18 @@ $(document).on("click", "#userForm-submit", function (){
                     toastr["error"](errors.message, "پیام سیستم");
                 else
                     toastr["error"]("خطای غیر منتظره", "پیام سیستم");
+                mApp.unblock('#responsive-user');
+                $('#responsive-user').modal('hide');
+
+                var newDataTable =$("#user_table").DataTable();
+                newDataTable.destroy();
+                makeDataTable_loadWithAjax_users();
             }
         },
         cache: false,
         contentType: false,
         processData: false
     });
-    $modal.modal().hide();
-    $modal.modal('toggle');
 });
 
 var userAjax;
@@ -394,7 +448,13 @@ $(document).on("click", ".sendSms", function (){
     $("#smsUserFullName").text($("#userFullName_"+user_id).text());
 });
 $(document).on("click", "#sendSmsForm-submit", function (){
-    $('body').modalmanager('loading');
+    // $('body').modalmanager('loading');
+
+    mApp.block('#smsModal', {
+        type: "loader",
+        state: "success",
+    });
+
     $("#send-sms-loading").removeClass("d-none");
 
     //initializing form alerts
@@ -428,6 +488,9 @@ $(document).on("click", "#sendSmsForm-submit", function (){
                 };
                 $("#sendSmsForm")[0].reset();
                 toastr["success"]("پیامک با موفقیت ارسال شد!", "پیام سیستم");
+                mApp.unblock('#smsModal');
+                $('#smsModal').modal('hide');
+                $("#send-sms-loading").addClass("d-none");
             },
 
             //The status for when the user is not authorized for making the request
@@ -450,19 +513,30 @@ $(document).on("click", "#sendSmsForm-submit", function (){
                             break;
                     }
                 });
+                mApp.unblock('#smsModal');
+                $('#smsModal').modal('hide');
             },
             //The status for when there is error php code
             500: function (response) {
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
+                mApp.unblock('#smsModal');
+                $('#smsModal').modal('hide');
+                $("#send-sms-loading").addClass("d-none");
             },
             //The status for when there is error php code
             503: function (response) {
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+                mApp.unblock('#smsModal');
+                $('#smsModal').modal('hide');
+                $("#send-sms-loading").addClass("d-none");
             },
 
             //The status for Unavailable For Legal Reasons
             451: function (response) {
                 toastr["error"]("کاربری انتخاب نشده است!", "پیام سیستم");
+                mApp.unblock('#smsModal');
+                $('#smsModal').modal('hide');
+                $("#send-sms-loading").addClass("d-none");
             }
 
         },
@@ -470,8 +544,8 @@ $(document).on("click", "#sendSmsForm-submit", function (){
         contentType: false,
         processData: false
     });
-    $modal.modal().hide();
-    $modal.modal('toggle');
+    // $modal.modal().hide();
+    // $modal.modal('toggle');
 });
 $(document).ready(function () {
 

@@ -421,6 +421,7 @@
                 @endif
             </div>
         </div>
+        {{ dd($user->mobile) }}
         <div class = "form-group {{ $errors->has('lastName') ? ' has-error' : '' }}">
             <label class = "col-md-3 control-label" for = "lastName">نام خانوادگی</label>
             <div class = "col-md-9">

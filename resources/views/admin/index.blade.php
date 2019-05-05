@@ -241,7 +241,7 @@
                                             </div>
                                             <div class = "modal-body">
                                                 <p> آیا مطمئن هستید؟</p>
-                                                {!! Form::hidden('user_id', null) !!}
+                                                {!! Form::hidden('user_remove_link', null) !!}
                                             </div>
                                             <div class = "modal-footer">
                                                 <button type = "button" class = "btn btn-secondary" data-dismiss = "modal">خیر</button>
@@ -636,8 +636,13 @@
                             '                <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> عملیات</button>\n' +
                             '                <ul class="dropdown-menu" role="menu" id="' + row.id + '">\n' +
                             '                    <li>\n' +
-                            '                        <a class="deleteUser" data-target="#deleteUserConfirmationModal" data-toggle="modal">\n' +
-                            '                            <i class="fa fa-remove" aria-hidden="true"></i> حذف\n' +
+                            '                        <a href="'+row.editLink+'">\n' +
+                            '                            <i class="flaticon-edit" aria-hidden="true"></i> ویرایش\n' +
+                            '                        </a>\n' +
+                            '                    </li>\n' +
+                            '                    <li>\n' +
+                            '                        <a class="deleteUser" data-target="#deleteUserConfirmationModal" data-toggle="modal" data-link="'+row.removeLink+'" data-fullname="'+row.firstName+' '+row.lastName+'">\n' +
+                            '                            <i class="flaticon-delete" aria-hidden="true"></i> حذف\n' +
                             '                        </a>\n' +
                             '                    </li>\n' +
                             '                    <li>\n' +
