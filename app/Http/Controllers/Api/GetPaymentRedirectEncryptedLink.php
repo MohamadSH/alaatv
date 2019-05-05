@@ -20,7 +20,7 @@ class GetPaymentRedirectEncryptedLink extends Controller
         $device = $request->get('device');
         $encryptedPostfix = encrypt($user->id);
 
-        $encryptedRedirectUrl =  route('GetPaymentRedirectEncryptedLink', ['paymentMethod'=>$paymentMethod, 'device'=>$device , 'encryptionData'=>$encryptedPostfix]);
+        $encryptedRedirectUrl =  route('redirectToBank', ['paymentMethod'=>$paymentMethod, 'device'=>$device , 'encryptionData'=>$encryptedPostfix]);
         $encryptedRedirectUrl .= '?sign=test';
 
         return response()->json([
