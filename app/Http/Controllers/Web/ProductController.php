@@ -2,32 +2,32 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\{Attribute,
-    Attributeset,
-    Attributetype,
-    Attributevalue,
-    Bon,
-    Classes\Search\ProductSearch,
-    Classes\SEO\SeoDummyTags,
-    Http\Requests\AddComplimentaryProductRequest,
-    Http\Requests\EditProductRequest,
-    Http\Requests\InsertProductRequest,
-    Http\Requests\ProductIndexRequest,
-    Product,
-    Productfiletype,
-    Traits\CharacterCommon,
-    Traits\Helper,
-    Traits\MathCommon,
-    Traits\MetaCommon,
-    Traits\ProductCommon,
-    Traits\RequestCommon,
-    Traits\SearchCommon,
-    Websitesetting};
-use App\Http\Controllers\Controller;
+use SEO;
 use Illuminate\Foundation\Http\{FormRequest};
+use App\Http\Controllers\Controller;
 use Illuminate\Http\{Request, Response};
 use Illuminate\Support\{Facades\File, Facades\Input, Facades\Storage};
-use SEO;
+use App\{Bon,
+    Product,
+    Attribute,
+    Attributeset,
+    Attributetype,
+    Traits\Helper,
+    Attributevalue,
+    Websitesetting,
+    Productfiletype,
+    Traits\MathCommon,
+    Traits\MetaCommon,
+    Traits\SearchCommon,
+    Traits\ProductCommon,
+    Traits\RequestCommon,
+    Traits\CharacterCommon,
+    Classes\SEO\SeoDummyTags,
+    Classes\Search\ProductSearch,
+    Http\Requests\EditProductRequest,
+    Http\Requests\ProductIndexRequest,
+    Http\Requests\InsertProductRequest,
+    Http\Requests\AddComplimentaryProductRequest};
 
 class ProductController extends Controller
 {
@@ -58,12 +58,9 @@ class ProductController extends Controller
     protected $response;
     
     protected $setting;
-
-
-
-
-
-    function __construct(Response $response, Websitesetting $setting)
+    
+    
+    public function __construct(Response $response, Websitesetting $setting)
     {
         $this->response = $response;
         $this->setting  = $setting->setting;
@@ -102,7 +99,7 @@ class ProductController extends Controller
             ],
         ]);
     }
-
+    
     public function index(ProductIndexRequest $request, ProductSearch $productSearch)
     {
         $tags          = $request->get('tags');
@@ -133,7 +130,7 @@ class ProductController extends Controller
         
         return view("pages.product-search", compact("products", 'tags'));
     }
-
+    
     
     /**
      * Store a newly created resource in storage.
@@ -149,15 +146,13 @@ class ProductController extends Controller
         
         if ($this->strIsEmpty($request->get('bonPlus'))) {
             $bonPlus = 0;
-        }
-        else {
+        } else {
             $bonPlus = $request->get('bonPlus');
         }
         
         if ($this->strIsEmpty($request->get('bonDiscount'))) {
             $bonDiscount = 0;
-        }
-        else {
+        } else {
             $bonDiscount = $request->get('bonDiscount');
         }
         $bonId = $request->get('bon_id');
@@ -171,9 +166,8 @@ class ProductController extends Controller
             
             return $this->response->setStatusCode(Response::HTTP_OK);
         }
-        else {
-            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
-        }
+    
+        return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
     }
     
     /**
@@ -183,7 +177,7 @@ class ProductController extends Controller
      * @return void
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    private function fillProductFromRequest(FormRequest $request, Product &$product): void
+    private function fillProductFromRequest(FormRequest $request, Product $product): void
     {
         $inputData = $request->all();
         $files     = $request->has("files") ? [$request->files] : [];
@@ -214,7 +208,7 @@ class ProductController extends Controller
      * @return array
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    private function storeCatalogOfProduct(Product &$product, array $files): array
+    private function storeCatalogOfProduct(Product $product, array $files): array
     {
         $done = [];
         foreach ($files as $key => $file) {
@@ -240,7 +234,7 @@ class ProductController extends Controller
      * @return array
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    private function storeImageOfProduct(Product &$product, array $files): array
+    private function storeImageOfProduct(Product $product, array $files): array
     {
         $done = [];
         foreach ($files as $key => $file) {
@@ -279,15 +273,14 @@ class ProductController extends Controller
                 'discount' => $bonDiscount,
                 'bonPlus'  => $bonPlus,
             ]);
-        }
-        else {
+        } else {
             $bonQueryBuilder->attach($bonId, [
                 'discount' => $bonDiscount,
                 'bonPlus'  => $bonPlus,
             ]);
         }
     }
-
+    
     public function show(Request $request, Product $product)
     {
         if (isset($product->redirectUrl)) {
@@ -311,12 +304,12 @@ class ProductController extends Controller
 //        return $product->attributes->get('main');
 //        return $product->type->get('main');
         
-        return view("product.show", compact("product"));
+        return view('product.show', compact('product'));
     }
-
+    
     public function edit($product)
     {
-        $bonName                  = config("constants.BON1");
+        $bonName                  = config('constants.BON1');
         $amountLimit              = Product::AMOUNT_LIMIT;
         $defaultProductPhotoOrder = 0;
         $defaultAmountLimit       = 0;
@@ -349,36 +342,34 @@ class ProductController extends Controller
         $defaultProductFileOrders = $product->productFileTypesOrder();
         
         $productFileTypes = Productfiletype::makeSelectArray();
-
-        $products = $this->makeProductCollection();
+    
+        $products    = $this->makeProductCollection();
         $producttype = $product->producttype->displayName;
         
         $productPhotos = $product->photos->sortByDesc("order");
         if ($productPhotos->isNotEmpty()) {
             $defaultProductPhotoOrder = $productPhotos->first()->order + 1;
         }
-        
-        return view("product.edit",
-            compact("product", "amountLimit", "defaultAmountLimit", "enableStatus", "defaultEnableStatus",
-                "attributesets", "bons", "productFiles",
-                "productFileTypes", "defaultProductFileOrders", "products", "producttype", "productPhotos",
-                "defaultProductPhotoOrder"));
+    
+        return view('product.edit',
+            compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
+                'attributesets', 'bons', 'productFiles',
+                'productFileTypes', 'defaultProductFileOrders', 'products', 'producttype', 'productPhotos',
+                'defaultProductPhotoOrder'));
     }
-
+    
     public function update(EditProductRequest $request, Product $product)
     {
         $bonId = $request->get('bon_id');
         if ($this->strIsEmpty($request->get('bonPlus'))) {
             $bonPlus = 0;
-        }
-        else {
+        } else {
             $bonPlus = $request->get('bonPlus');
         }
         
         if ($this->strIsEmpty($request->get('bonDiscount'))) {
             $bonDiscount = 0;
-        }
-        else {
+        } else {
             $bonDiscount = $request->get('bonDiscount');
         }
         $childrenPriceEqualizer = $request->has("changeChildrenPrice");
@@ -395,8 +386,7 @@ class ProductController extends Controller
         
         if ($product->update()) {
             session()->put('success', 'اصلاح محصول با موفقیت انجام شد');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده');
         }
         
@@ -423,20 +413,17 @@ class ProductController extends Controller
             if ($done) {
                 return $this->response->setStatusCode(Response::HTTP_OK);
             }
-            else {
-                return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
-            }
+    
+            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
         }
-        else {
-            if ($done) {
-                session()->put('success', 'محصول با موفقیت اصلاح شد');
-            }
-            else {
-                session()->put('error', 'خطای پایگاه داده');
-            }
-            
-            return redirect()->back();
+    
+        if ($done) {
+            session()->put('success', 'محصول با موفقیت اصلاح شد');
+        } else {
+            session()->put('error', 'خطای پایگاه داده');
         }
+    
+        return redirect()->back();
     }
     
     /**
@@ -466,8 +453,8 @@ class ProductController extends Controller
             $product->enable = 0;
             foreach ($product->attributevalues as $attributevalue) {
                 $flag     = 0;
-                $children = $parent->children->where("id", "!=", $product->id)
-                    ->where("enable", 1);
+                $children = $parent->children->where('id', '!=', $product->id)
+                    ->where('enable', 1);
                 foreach ($children as $child) {
                     if ($child->attributevalues->contains($attributevalue) == true) {
                         $flag = 1;
@@ -479,28 +466,25 @@ class ProductController extends Controller
                         ->detach($attributevalue);
                 }
             }
-        }
-        else {
+        } else {
             if ($product->enable == 0) {
                 $product->enable = 1;
                 foreach ($product->attributevalues as $attributevalue) {
                     if ($parent->attributevalues->contains($attributevalue) == false) {
                         if (isset($attributevalue->pivot->extraCost) && $attributevalue->pivot->extraCost > 0) {
-                            $attributevalueDescription = "+".number_format($attributevalue->pivot->extraCost)."تومان";
-                        }
-                        else {
+                            $attributevalueDescription = "+".number_format($attributevalue->pivot->extraCost).'تومان';
+                        } else {
                             $attributevalueDescription = null;
                         }
                         $parent->attributevalues()
-                            ->attach($attributevalue->id, ["description" => $attributevalueDescription]);
+                            ->attach($attributevalue->id, ['description' => $attributevalueDescription]);
                     }
                 }
             }
         }
         if ($product->update()) {
             session()->put('success', 'وضعیت فرزند محصول با موفقیت تغییر کرد');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده');
         }
         
@@ -523,7 +507,7 @@ class ProductController extends Controller
                 ->get()
                 ->first();
             $attributes    = $product->attributeset->attributes()
-                ->where("attributetype_id", $attributeType->id);
+                ->where('attributetype_id', $attributeType->id);
             foreach ($attributes as $attribute) {
                 $attributeValues        = $attribute->attributevalues;
                 $attributeValuesCollect = collect();
@@ -532,14 +516,14 @@ class ProductController extends Controller
                     //                        array_push($attributeValuesArray , $attributeValue);
                 }
                 $attributeCollection->push([
-                    "attribute"        => $attribute,
-                    "attributeControl" => $attribute->attributecontrol->name,
-                    "attributevalues"  => $attributeValuesCollect,
+                    'attribute'        => $attribute,
+                    'attributeControl' => $attribute->attributecontrol->name,
+                    'attributevalues'  => $attributeValuesCollect,
                 ]);
             }
         }
-        
-        return view("product.configureProduct.createConfiguration", compact("product", "attributeCollection"));
+    
+        return view('product.configureProduct.createConfiguration', compact('product', 'attributeCollection'));
     }
     
     /**
@@ -555,11 +539,11 @@ class ProductController extends Controller
         
         $matrix = [];
         $array  = []; // checkbox attribute values
-        
-        $attributeIds = $request->get("attributevalues");
-        $extraCosts   = $request->get("extraCost");
-        $orders       = $request->get("order");
-        $descriptions = $request->get("description");
+    
+        $attributeIds = $request->get('attributevalues');
+        $extraCosts   = $request->get('extraCost');
+        $orders       = $request->get('order');
+        $descriptions = $request->get('description');
         $i            = 0;
         foreach ($attributeIds as $attributeId) {
             $j = 0;
@@ -586,25 +570,23 @@ class ProductController extends Controller
                         "order"       => $order,
                         "description" => $description,
                     ]);
-                if (strcmp($attributevalue->attribute->attributecontrol->name, "groupedCheckbox") == 0) {
-                    array_push($array, $attributevalue->id);
-                }
-                else {
+                if (strcmp($attributevalue->attribute->attributecontrol->name, 'groupedCheckbox') == 0) {
+                    $array[] = $attributevalue->id;
+                } else {
                     $matrix[$i][$j] = $attributevalue->id;
                     $j++;
                 }
             }
             $i++;
         }
-        
-        if (sizeof($matrix) == 0) {
+    
+        if (count($matrix) == 0) {
             return redirect()->back();
         }
-        if (sizeof($matrix) == 1) {
+        if (count($matrix) == 1) {
             $productConfigurations = current($matrix);
-        }
-        else {
-            if (sizeof($matrix) >= 2) {
+        } else {
+            if (count($matrix) >= 2) {
                 $vertex                = array_pop($matrix);
                 $productConfigurations = $this->cartesianProduct($matrix, $vertex)[0];
             }
@@ -612,21 +594,21 @@ class ProductController extends Controller
         
         foreach ($array as $item) {
             foreach ($productConfigurations as $productConfig) {
-                $newProductConfig = $productConfig.",".$item;
-                array_push($productConfigurations, $newProductConfig);
+                $newProductConfig        = $productConfig.",".$item;
+                $productConfigurations[] = $newProductConfig;
             }
         }
         
         foreach ($productConfigurations as $productConfig) {
             $childProduct        = $product->replicate();
             $childProduct->order = 0;
-            $attributevalueIds   = explode(",", $productConfig);
-            $productName         = "";
+            $attributevalueIds   = explode(',', $productConfig);
+            $productName         = '';
             $attributevalues     = [];
             foreach ($attributevalueIds as $attributevalueId) {
-                $attributevalue = Attributevalue::findOrFail($attributevalueId);
-                array_push($attributevalues, $attributevalue);
-                $productName = $productName."-".$attributevalue->name;
+                $attributevalue    = Attributevalue::findOrFail($attributevalueId);
+                $attributevalues[] = $attributevalue;
+                $productName       = $productName.'-'.$attributevalue->name;
             }
             $childProduct->name           = $product->name.$productName;
             $childProduct->producttype_id = 1;
@@ -657,8 +639,7 @@ class ProductController extends Controller
                             "description" => $description,
                         ]);
                 }
-            }
-            else {
+            } else {
                 session()->put('error', 'خطای پایگاه داده');
             }
         }
@@ -681,26 +662,26 @@ class ProductController extends Controller
         $attributeset    = $product->attributeset;
         $attributeGroups = $attributeset->attributegroups;
         foreach ($attributeGroups as $attributeGroup) {
-            $attributes = $attributeGroup->attributes->sortBy("order");
+            $attributes = $attributeGroup->attributes->sortBy('order');
             foreach ($attributes as $attribute) {
                 $type                  = Attributetype::FindOrFail($attribute->attributetype_id);
-                $productAttributevlues = $product->attributevalues->where("attribute_id", $attribute->id);
+                $productAttributevlues = $product->attributevalues->where('attribute_id', $attribute->id);
                 $attrributevalues      = $attribute->attributevalues;
                 if (!isset($attributeValuesCollection[$type->id])) {
                     $attributeValuesCollection->put($type->id, collect([
-                        "name"        => $type->name,
-                        "displayName" => $type->description,
-                        "attributes"  => [],
+                        'name'        => $type->name,
+                        'displayName' => $type->description,
+                        'attributes'  => [],
                     ]));
                 }
-                $helperCollection = collect($attributeValuesCollection[$type->id]["attributes"]);
+                $helperCollection = collect($attributeValuesCollection[$type->id]['attributes']);
                 $helperCollection->push([
-                    "name"                   => $attribute->displayName,
-                    "type"                   => $type,
-                    "values"                 => $attrributevalues,
-                    "productAttributevalues" => $productAttributevlues,
+                    'name'                   => $attribute->displayName,
+                    'type'                   => $type,
+                    'values'                 => $attrributevalues,
+                    'productAttributevalues' => $productAttributevlues,
                 ]);
-                $attributeValuesCollection[$type->id]->put("attributes", $helperCollection);
+                $attributeValuesCollection[$type->id]->put('attributes', $helperCollection);
             }
         }
         
@@ -721,9 +702,9 @@ class ProductController extends Controller
         $product->attributevalues()
             ->detach($product->attributevalues->pluck("id")
                 ->toArray());
-        $newAttributevalues = $request->get("attributevalues");
-        $newExtraCost       = $request->get("extraCost");
-        $newDescription     = $request->get("description");
+        $newAttributevalues = $request->get('attributevalues');
+        $newExtraCost       = $request->get('extraCost');
+        $newDescription     = $request->get('description');
         foreach ($newAttributevalues as $attributevalueId) {
             $extraCost = $newExtraCost[$attributevalueId];
             if (strlen($extraCost) == 0) {
@@ -767,12 +748,11 @@ class ProductController extends Controller
      */
     public function addComplimentary(AddComplimentaryProductRequest $request, Product $product)
     {
-        $complimentary = Product::findOrFail($request->get("complimentaryproducts"));
+        $complimentary = Product::findOrFail($request->get('complimentaryproducts'));
         
         if ($product->complimentaryproducts->contains($complimentary)) {
             session()->put('error', 'این اشانتیون قبلا درج شده است');
-        }
-        else {
+        } else {
             $product->complimentaryproducts()
                 ->attach($complimentary);
             session()->put('success', 'درج اشانتیون با موفقیت انجام شد');
@@ -791,12 +771,12 @@ class ProductController extends Controller
      */
     public function removeComplimentary(Request $request, Product $complimentary)
     {
-        $product = Product::findOrFail($request->get("productId"));
+        $product = Product::findOrFail($request->get('productId'));
         $product->complimentaryproducts()
             ->detach($complimentary);
         session()->put('success', 'حذف اشانتیون با موفقیت انجام شد');
-        
-        return $this->response->setStatusCode(200);
+    
+        return response()->json();
     }
     
     /**
@@ -809,14 +789,13 @@ class ProductController extends Controller
      */
     public function addGift(Request $request, Product $product)
     {
-        $gift = Product::findOrFail($request->get("giftProducts"));
+        $gift = Product::findOrFail($request->get('giftProducts'));
         
         if ($product->gifts->contains($gift)) {
             session()->put('error', 'این هدیه قبلا به این محصول اضافه شده است');
-        }
-        else {
+        } else {
             $product->gifts()
-                ->attach($gift, ["relationtype_id" => config("constants.PRODUCT_INTERRELATION_GIFT")]);
+                ->attach($gift, ['relationtype_id' => config('constants.PRODUCT_INTERRELATION_GIFT')]);
             session()->put('success', 'هدیه با موفقیت به محصول اضافه شد');
         }
         
@@ -834,22 +813,20 @@ class ProductController extends Controller
      */
     public function removeGift(Request $request, Product $product)
     {
-        $gift = Product::where("id", $request->get("giftId"))
+        $gift = Product::where("id", $request->get('giftId'))
             ->get()
             ->first();
         if (!isset($gift)) {
-            return $this->response->setStatusCode(503)
-                ->setContent(["message" => "خطا! چنین محصول هدیه ای وجود ندارد"]);
+            return response()->json(['message' => 'خطا! چنین محصول هدیه ای وجود ندارد'],
+                Response::HTTP_SERVICE_UNAVAILABLE);
         }
         
         if ($product->gifts()
             ->detach($gift->id)) {
-            return $this->response->setStatusCode(200)
-                ->setContent(["message" => "هدیه با موفقیت حذف شد"]);
-        }
-        else {
-            return $this->response->setStatusCode(503)
-                ->setContent(["message" => "خطا در حذف هدیه . لطفا دوباره اقدام نمایید"]);
+            return response()->json(['message' => 'هدیه با موفقیت حذف شد']);
+        } else {
+            return response()->json(['message' => 'خطا در حذف هدیه . لطفا دوباره اقدام نمایید'],
+                Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
     
@@ -863,8 +840,8 @@ class ProductController extends Controller
     public function landing1(Request $request)
     {
         $url = $request->url();
-        
-        $this->generateSeoMetaTags(new SeoDummyTags("آلاء| جمع بندی نیم سال اول",
+    
+        $this->generateSeoMetaTags(new SeoDummyTags('آلاء| جمع بندی نیم سال اول',
             'همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف', $url,
             $url, route('image', [
                 'category' => '11',
@@ -875,11 +852,11 @@ class ProductController extends Controller
 
 //        $productIds = config("constants.HAMAYESH_PRODUCT");
         $productIds = [276, 275, 272, 270, 269];
-        $products   = Product::whereIn("id", $productIds)
-            ->orderBy("order")
-            ->where("enable", 1)
+        $products   = Product::whereIn('id', $productIds)
+            ->orderBy('order')
+            ->where('enable', 1)
             ->get();
-        $attribute  = Attribute::where("name", "major")
+        $attribute  = Attribute::where('name', 'major')
             ->get()
             ->first();
         $withFilter = true;
@@ -888,7 +865,7 @@ class ProductController extends Controller
         foreach ($products as $product) {
             $majors = [];
             if (isset($attribute)) {
-                $majors = $product->attributevalues->where("attribute_id", $attribute->id)
+                $majors = $product->attributevalues->where('attribute_id', $attribute->id)
                     ->pluck("name")
                     ->toArray();
             }
@@ -901,8 +878,8 @@ class ProductController extends Controller
 
 //        $costCollection = $this->makeCostCollection($products);
         $costCollection = null;
-        
-        return view("product.landing.landing1", compact("landingProducts", "costCollection", "withFilter"));
+    
+        return view("product.landing.landing1", compact('landingProducts', 'costCollection', 'withFilter'));
     }
     
     /**
@@ -913,36 +890,36 @@ class ProductController extends Controller
     public function landing2()
     {
         return redirect("/landing/4", 302);
-        $gheireHozoori = config("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER");
-        if (Input::has("utm_term")) {
-            $utm_term = Input::get("utm_term");
+        $gheireHozoori = config('constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER');
+        if (Input::has('utm_term')) {
+            $utm_term = Input::get('utm_term');
             switch ($utm_term) {
                 case "700":
-                    $gheireHozoori = config("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER");
+                    $gheireHozoori = config('constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER');
                     break;
                 case "260":
-                    $gheireHozoori = config("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_DEFAULT");
+                    $gheireHozoori = config('constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_DEFAULT');
                     break;
                 default:
                     break;
             }
         }
-        
-        $products = Product::whereIn("id", config("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT"))
+    
+        $products = Product::whereIn('id', config('constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT'))
             ->orwhereIn("id",
-                config("constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT"))
-            ->orderBy("order")
-            ->where("enable", 1)
+                config('constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT'))
+            ->orderBy('order')
+            ->where('enable', 1)
             ->get();
         
         $landingProducts = collect();
         foreach ($products as $product) {
-            $landingProducts->push(["product" => $product]);
+            $landingProducts->push(['product' => $product]);
         }
         $costCollection = $this->makeCostCollection($products);
-        
-        return view("product.landing.landing2",
-            compact("landingProducts", "costCollection", "utm_term", "gheireHozoori"));
+    
+        return view('product.landing.landing2',
+            compact('landingProducts', 'costCollection', 'utm_term', 'gheireHozoori'));
     }
     
     /**
@@ -955,7 +932,7 @@ class ProductController extends Controller
     public function landing3(Request $request)
     {
         $url = $request->url();
-        $this->generateSeoMetaTags(new SeoDummyTags("آلاء | همایش های طلایی کنکور 97",
+        $this->generateSeoMetaTags(new SeoDummyTags('آلاء | همایش های طلایی کنکور 97',
             'وقتی همه کنکوری ها گیج و سرگردانند، شما مرور کنید. چالشی ترین نکات کنکوری در همایش های آلاء', $url, $url,
             route('image', [
                 'category' => '11',
@@ -963,8 +940,8 @@ class ProductController extends Controller
                 'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-        
-        return view("product.landing.landing3");
+    
+        return view('product.landing.landing3');
     }
     
     /**
@@ -979,7 +956,7 @@ class ProductController extends Controller
         return redirect()->route('landing.3', $request->all());
         
         $url = $request->url();
-        $this->generateSeoMetaTags(new SeoDummyTags("آلاء | همایش های طلایی کنکور 97",
+        $this->generateSeoMetaTags(new SeoDummyTags('آلاء | همایش های طلایی کنکور 97',
             'وقتی همه کنکوری ها گیج و سرگردانند، شما مرور کنید. چالشی ترین نکات کنکوری در همایش های آلاء', $url, $url,
             route('image', [
                 'category' => '11',
@@ -987,8 +964,8 @@ class ProductController extends Controller
                 'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-        
-        return view("product.landing.landing4");
+    
+        return view('product.landing.landing4');
     }
     
     /**
@@ -1007,7 +984,7 @@ class ProductController extends Controller
             ->setUrl($url);
         SEO::setCanonical($url);
         SEO::twitter()
-            ->setSite("آلاء");
+            ->setSite('آلاء');
         SEO::setDescription('ضربه فنی کنکور نظام قدیم،رشته ریاضی، رشته تجربی،  رشته انسانی ، زیست، شیمی، فیزیک، زمین شناسی، عربی، ادبیات، شب امتحان، همایش، تحلیل کنکور، جزوه، تست، جمع بندی، طرح 5+1، ریاضیات رشته تجربی، ریاضیات رشته انسانی، ریاضیات رشته ریاضی، جزوه علوم پایه');
         SEO::opengraph()
             ->addImage(route('image', [
@@ -1182,12 +1159,12 @@ class ProductController extends Controller
         
         $productIds = $producIds;
 //        $productIds = config("constants.HAMAYESH_PRODUCT");
-        $products = Product::whereIn("id", $productIds)
-            ->orderBy("order")
-            ->where("enable", 1)
+        $products = Product::whereIn('id', $productIds)
+            ->orderBy('order')
+            ->where('enable', 1)
             ->get();
-        
-        $attribute  = Attribute::where("name", "major")
+    
+        $attribute  = Attribute::where('name', 'major')
             ->get()
             ->first();
         $withFilter = true;
@@ -1196,20 +1173,20 @@ class ProductController extends Controller
         foreach ($products as $product) {
             $majors = [];
             if (isset($attribute)) {
-                $majors = $product->attributevalues->where("attribute_id", $attribute->id)
-                    ->pluck("name")
+                $majors = $product->attributevalues->where('attribute_id', $attribute->id)
+                    ->pluck('name')
                     ->toArray();
             }
             
             $landingProducts->push([
-                "product" => $product,
-                "majors"  => $majors,
+                'product' => $product,
+                'majors'  => $majors,
             ]);
         }
         
         $costCollection = $this->makeCostCollection($products);
-        
-        return view("product.landing.landing1", compact("landingProducts", "costCollection", "withFilter"));
+    
+        return view('product.landing.landing1', compact('landingProducts', 'costCollection', 'withFilter'));
     }
     
     /**
@@ -1238,12 +1215,10 @@ class ProductController extends Controller
                             $correspondenceArray[$child->id] = $newChildId;
                             $newProduct->children()
                                 ->attach($newChildId);
-                        }
-                        else {
+                        } else {
                             $done = false;
                         }
-                    }
-                    else {
+                    } else {
                         $done = false;
                     }
                 }
@@ -1255,8 +1230,8 @@ class ProductController extends Controller
             foreach ($product->attributevalues as $attributevalue) {
                 $newProduct->attributevalues()
                     ->attach($attributevalue->id, [
-                        "extraCost"   => $attributevalue->pivot->extraCost,
-                        "description" => $attributevalue->pivot->description,
+                        'extraCost'   => $attributevalue->pivot->extraCost,
+                        'description' => $attributevalue->pivot->description,
                     ]);
             }
             
@@ -1266,8 +1241,8 @@ class ProductController extends Controller
             foreach ($product->bons as $bon) {
                 $newProduct->bons()
                     ->attach($bon->id, [
-                        "discount" => $bon->pivot->discount,
-                        "bonPlus"  => $bon->pivot->bonPlus,
+                        'discount' => $bon->pivot->discount,
+                        'bonPlus'  => $bon->pivot->bonPlus,
                     ]);
             }
             
@@ -1302,7 +1277,7 @@ class ProductController extends Controller
                 ]));
                 if (!$flag) {
                     $newProduct->gifts()
-                        ->attach($gift->id, ["relationtype_id" => config("constants.PRODUCT_INTERRELATION_GIFT")]);
+                        ->attach($gift->id, ['relationtype_id' => config('constants.PRODUCT_INTERRELATION_GIFT')]);
                 }
             }
             
@@ -1327,21 +1302,18 @@ class ProductController extends Controller
                     $child->forceDelete();
                 }
                 $newProduct->forceDelete();
-                
-                return $this->response->setStatusCode(503)
-                    ->setContent(["message" => "خطا در کپی از الجاقی محصول . لطفا دوباره اقدام نمایید"]);
+    
+                return response()->json(['message' => 'خطا در کپی از الجاقی محصول . لطفا دوباره اقدام نمایید'],
+                    Response::HTTP_SERVICE_UNAVAILABLE);
             }
-            else {
-                return $this->response->setStatusCode(200)
-                    ->setContent([
-                        "message"      => "عملیات کپی با موفقیت انجام شد.",
-                        "newProductId" => $newProduct->id,
-                    ]);
-            }
+    
+            return response()->json([
+                'message'      => 'عملیات کپی با موفقیت انجام شد.',
+                'newProductId' => $newProduct->id,
+            ]);
         }
-        else {
-            return $this->response->setStatusCode(503)
-                ->setContent(["message" => "خطا در کپی از اطلاعات پایه ای محصول . لطفا دوباره اقدام نمایید"]);
-        }
+    
+        return response()->json(['message' => 'خطا در کپی از اطلاعات پایه ای محصول . لطفا دوباره اقدام نمایید'],
+            Response::HTTP_SERVICE_UNAVAILABLE);
     }
 }
