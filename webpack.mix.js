@@ -25,9 +25,11 @@ mix.copyDirectory('public/assets/vendors/base', 'public/css');
 
 mix.scripts(
     [
-        'public/assets/vendors/base/vendors.bundle.js',
+        'public/assets/vendors/base/vendors.bundle.edited.js',
         'public/assets/demo/demo12/base/scripts.bundle.js',
+
         // 'public/acm/cubeportfolio/js/jquery.cubeportfolio.min.js',
+
         'public/acm/custom-js-app.js',
         'public/acm/AlaatvCustomFiles/js/mLayout.js'
     ],

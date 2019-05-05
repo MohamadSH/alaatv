@@ -31,5 +31,6 @@ videojs.addLanguage("fa",{
     "Share": "اشتراک گزاری",
     "ZOOM RESET": "حالت اولیه",
     "Normal": "ساده",
-    "Use +/- key and arrow keys to scroll zoomed area": "از دکمه های +، - و دکمه های جهت برای بزرگ نمایی و جابجایی صفحه استفاده کنید."
+    "Use +/- key and arrow keys to scroll zoomed area": "از دکمه های +، - و دکمه های جهت برای بزرگ نمایی و جابجایی صفحه استفاده کنید.",
+    "Replay": "پخش مجدد"
 });
