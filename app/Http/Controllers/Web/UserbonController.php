@@ -23,9 +23,9 @@ class UserbonController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.Config::get('constants.INSERT_USER_BON_ACCESS'), ['only' => 'store']);
-        $this->middleware('permission:'.Config::get('constants.LIST_USER_BON_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_USER_BON_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:'.config('constants.INSERT_USER_BON_ACCESS'), ['only' => 'store']);
+        $this->middleware('permission:'.config('constants.LIST_USER_BON_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.config('constants.REMOVE_USER_BON_ACCESS'), ['only' => 'destroy']);
         
         $this->response = new Response();
     }

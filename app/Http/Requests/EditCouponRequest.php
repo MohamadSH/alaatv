@@ -14,7 +14,7 @@ class EditCouponRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.EDIT_COUPON_ACCESS'))) {
+            ->can(config('constants.EDIT_COUPON_ACCESS'))) {
             return true;
         }
 

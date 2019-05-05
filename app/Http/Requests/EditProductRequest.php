@@ -14,7 +14,7 @@ class EditProductRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.EDIT_PRODUCT_ACCESS'))) {
+            ->can(config('constants.EDIT_PRODUCT_ACCESS'))) {
             return true;
         }
 

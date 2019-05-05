@@ -15,25 +15,25 @@ trait HasWallet
     {
         return $this->hasMany(Wallet::class);
     }
-
+    
     /**
      * Retrieve the balance of all of this user's wallet
      */
     public function getTotalWalletBalance()
     {
-        $wallets = $this->wallets;
+        $wallets      = $this->wallets;
         $totalBalance = 0;
         foreach ($wallets as $wallet) {
             $totalBalance += $wallet->balance;
         }
-
+        
         return $totalBalance;
     }
-
+    
     /**
      * Determine if the user can withdraw the given amount
      *
-     * @param integer $amount
+     * @param  integer  $amount
      *
      * @return boolean
      */
@@ -41,62 +41,80 @@ trait HasWallet
     {
         return $this->getWalletBalance() >= $amount;
     }
-
+    
     /**
      * Retrieve the balance of this user's wallet
      *
-     * @param int $type
+     * @param  int  $type
      *
      * @return int
      */
     public function getWalletBalance($type = 1)
     {
-        return $this->wallets->where("wallettype_id", $type)->value('balance') ?: 0;
+        return $this->wallets->where("wallettype_id", $type)
+            ->value('balance') ?: 0;
     }
-
+    
     /**
      * Fail to move credits to this account
      *
-     * @param integer $amount
-     * @param string $type
-     * @param array $meta
+     * @param  integer  $amount
+     * @param  string   $type
+     * @param  array    $meta
      */
     public function failDeposit($amount, $type = 'deposit', $meta = [])
     {
         $this->deposit($amount, $type, $meta, false);
     }
-
+    
     /**
      * Move credits to this account
      *
-     * @param integer $amount
-     * @param null $walletType
+     * @param  integer  $amount
+     * @param  null     $walletType
      *
      * @return array
      */
     public function deposit($amount = 0, $walletType = null)
     {
         $walletType = $walletType ?: config("constants.WALLET_TYPE_MAIN");
-
-        $wallet = $this->wallets->where("wallettype_id", $walletType)->first();
-
+        
+        $wallet = $this->wallets->where("wallettype_id", $walletType)
+            ->first();
+        
         /*     if (!$wallet) {
                 return $this->createAndDepositeInWallet($amount, $walletType, $wallet);
             }*/
-
+        
         $result = $wallet->deposit($amount);
-
+        
         if ($result) {
             return $this->respond(true, "SUCCESSFUL", $wallet);
         }
-
+        
         return $this->respond(false, "CAN_NOT_UPDATE_WALLET", $wallet);
     }
-
+    
+    /**
+     * @param  bool    $result
+     * @param  string  $responseText
+     * @param          $wallet
+     *
+     * @return array
+     */
+    private function respond(bool $result, string $responseText, $wallet): array
+    {
+        return [
+            "result"       => $result,
+            "responseText" => $responseText,
+            "wallet"       => (isset($wallet)) ? $wallet->id : 0,
+        ];
+    }
+    
     /**
      * Move credits from this account
      *
-     * @param integer $amount
+     * @param  integer  $amount
      * @param           $walletType
      *
      * @return array
@@ -106,37 +124,38 @@ trait HasWallet
         if (!isset($walletType)) {
             $walletType = config("constants.WALLET_TYPE_MAIN");
         }
-
+        
         return $this->withdraw($amount, $walletType, false);
     }
-
+    
     /**
      * Attempt to move credits from this account
      *
-     * @param integer $amount
-     * @param null $walletType
+     * @param  integer  $amount
+     * @param  null     $walletType
      *
      * @return array
      */
     public function withdraw($amount, $walletType = null)
     {
         $walletType = $walletType ?: config("constants.WALLET_TYPE_MAIN");
-
-        $wallet = $this->wallets->where("wallettype_id", $walletType)->first();
-
+        
+        $wallet = $this->wallets->where("wallettype_id", $walletType)
+            ->first();
+        
         if ($wallet) {
             $result = $wallet->withdraw($amount);
-
+            
             if ($result) {
                 return $this->respond(true, 'SUCCESSFUL', $wallet);
             }
-
+            
             return $this->respond(false, 'failed to withdraw', $wallet);
         }
 
 //        return $this->createAndDepositeInWallet($amount = 0, $walletType, $wallet);
     }
-
+    
     /**
      * Returns the actual balance for this wallet.
      * Might be different from the balance property if the database is manipulated
@@ -149,63 +168,51 @@ trait HasWallet
         //        $debits = $this->wallet->transactions() ->whereIn('type', ['withdraw', 'payout']) ->sum('amount');
         //        return $credits - $debits;
     }
-
+    
+    /**
+     * @param $amount
+     * @param $walletType
+     * @param $wallet
+     *
+     * @return array
+     */
+    private function createAndDepositeInWallet($amount, $walletType, $wallet): array
+    {
+        $walletId = $this->storeWallet($walletType);
+        
+        if (!$walletId) {
+            return $this->respond(false, "CAN_NOT_CREATE_WALLET", $wallet);
+        }
+        
+        $wallet = $this->depositWallet($amount, $walletId);
+        
+        return $this->respond(true, "SUCCESSFUL", $wallet);
+    }
+    
     /**
      * @param $walletType
+     *
      * @return \App\Http\Controllers\Web\WalletController|void
      */
     private function storeWallet($walletType)
     {
         return WalletRepo::insertNewRow([
-            "user_id" => $this->id,
+            "user_id"       => $this->id,
             "wallettype_id" => $walletType,
         ]);
     }
-
+    
     /**
      * @param $amount
      * @param $walletId
+     *
      * @return mixed
      */
     private function depositWallet($amount, $walletId)
     {
         $wallet = Wallet::find($walletId);
         $wallet->deposit($amount);
-
+        
         return $wallet;
-    }
-
-    /**
-     * @param bool $result
-     * @param string $responseText
-     * @param $wallet
-     * @return array
-     */
-    private function respond(bool $result, string $responseText, $wallet): array
-    {
-        return [
-            "result" => $result,
-            "responseText" => $responseText,
-            "wallet" => (isset($wallet)) ? $wallet->id : 0,
-        ];
-    }
-
-    /**
-     * @param $amount
-     * @param $walletType
-     * @param $wallet
-     * @return array
-     */
-    private function createAndDepositeInWallet($amount, $walletType, $wallet): array
-    {
-        $walletId = $this->storeWallet($walletType);
-
-        if (!$walletId) {
-            return $this->respond(false, "CAN_NOT_CREATE_WALLET", $wallet);
-        }
-
-        $wallet = $this->depositWallet($amount, $walletId);
-
-        return $this->respond(true, "SUCCESSFUL", $wallet);
     }
 }

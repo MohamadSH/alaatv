@@ -8,7 +8,7 @@ use App\PaymentModule\Gateways\OnlinePaymentVerificationResponseInterface;
 
 interface OnlineGatewayInterface
 {
-    public function generateAuthorityCode(string $callbackUrl, Money $cost, string $description, $orderId = null) : Nullable;
+    public function generateAuthorityCode(string $callbackUrl, Money $cost, string $description, $orderId = null): Nullable;
 
     public function getAuthorityValue(): string;
     

@@ -14,7 +14,7 @@ class InsertArticlecategoryRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.INSERT_ARTICLECATEGORY_ACCESS'))) {
+            ->can(config('constants.INSERT_ARTICLECATEGORY_ACCESS'))) {
             return true;
         }
         

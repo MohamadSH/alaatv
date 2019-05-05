@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Classes\RedisTagging;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Request;
+use App\Http\Controllers\Controller;
 
 //https://github.com/smrchy/rest-tagging
 
@@ -44,14 +44,14 @@ class TagController extends Controller
         
         $tags  = json_decode($request->tags);
         $score = $request->score;
-        
-        if (is_null($score)) {
+    
+        if ($score === null) {
             $score = 0;
         }
-        
-        if (is_null($tags)) {
+    
+        if ($tags === null) {
             return response()->json([
-                'error' => "tag is not set!",
+                'error' => 'tag is not set!',
             ], 410);
         }
         
@@ -173,19 +173,19 @@ class TagController extends Controller
         $tags = $request->tags;
         $tags = str_replace("\"", "", $tags);
         $tags = explode(",", substr($tags, 1, -1));
-        
-        $type       = !is_null($request->type) ? $request->type : "inter";
-        $limit      = !is_null($request->limit) ? $request->limit : 100;
-        $offset     = !is_null($request->offset) ? $request->offset : 0;
-        $withscores = !is_null($request->withscores) ? $request->withscores : 0;
-        $order      = !is_null($request->order) ? $request->order : "desc";
+    
+        $type       = $request->type ?? 'inter';
+        $limit      = $request->limit ?? 100;
+        $offset     = $request->offset ?? 0;
+        $withscores = $request->withscores ?? 0;
+        $order      = $request->order ?? 'desc';
         
         $response = null;
         $this->redis->tags($bucket, $tags, $limit, $offset, $withscores, $order, $type,
             function ($err, $result) use (& $response) {
                 if (isset($err)) {
                     $response = response()->json([
-                        'error' => "msg",
+                        'error' => 'msg',
                     ], 410);
                 }
                 
@@ -193,6 +193,8 @@ class TagController extends Controller
                     'Content-Type' => 'application/json; charset=UTF-8',
                     'charset'      => 'utf-8',
                 ];
+    
+                mb_convert_encoding($result, 'UTF-8', 'UTF-8');
                 
                 $response = response()->json([
                     'data' => $result,
@@ -206,7 +208,7 @@ class TagController extends Controller
     public function flush(Request $request)
     {
         abort(404);
-        $this->redis->flushDB(function ($err, $result) {
+        $this->redis->flushDB(static function ($err, $result) {
             return $result;
         });
     }

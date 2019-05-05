@@ -32,7 +32,7 @@
     {{--{{ dd($userAssetsCollection) }}--}}
     {{--{{ dd($userAssetsCollection[0]->products[0]->name) }}--}}
 
-    
+
     <div class = "row">
         <div class = "col">
             <div class = "m-portlet  m-portlet--bordered" id = "owlCarouselMyProduct">
@@ -83,8 +83,10 @@
                                                             جزوات
                                                         </button>
                                                         @if(count($product->sets[0]->video) > 0)
-                                                            <button type = "button" class = "btn btn-success btnViewVideo" data-content-type = "video" data-content-url = "{{ $product->sets[0]->contentUrl }}">
-                                                                <i class = "la la-film"></i>
+                                                            <button type="button" class="btn btn-success btnViewVideo"
+                                                                    data-content-type="video"
+                                                                    data-content-url="{{ $product->sets[0]->contentUrl }}">
+                                                                <i class="la la-film"></i>
                                                                 فیلم ها
                                                             </button>
                                                         @endif

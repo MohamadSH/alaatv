@@ -60,7 +60,8 @@ trait HandleOrderPayment
     {
         $result  = [];
         $bonName = config('constants.BON1');
-        $bon     = Bon::ofName($bonName)->first();
+        $bon     = Bon::ofName($bonName)
+            ->first();
         
         if (!isset($bon)) {
             return $result;

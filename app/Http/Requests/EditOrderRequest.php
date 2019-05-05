@@ -17,7 +17,7 @@ class EditOrderRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.EDIT_ORDER_ACCESS'))) {
+            ->can(config('constants.EDIT_ORDER_ACCESS'))) {
             return true;
         }
     
@@ -32,7 +32,7 @@ class EditOrderRequest extends FormRequest
             'orderstatus_id'   => 'exists:orderstatuses,id',
             'paymentstatus_id' => 'exists:paymentstatuses,id',
         ];
-        if (Input::get(['transactionstatus_id']) != Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL")) {
+        if (Input::get(['transactionstatus_id']) != config("constants.TRANSACTION_STATUS_SUCCESSFUL")) {
             $rules['transactionID'] = 'max:0';
         }
     

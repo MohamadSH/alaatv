@@ -14,7 +14,7 @@ class EditArticleRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.EDIT_ARTICLE_ACCESS'))) {
+            ->can(config('constants.EDIT_ARTICLE_ACCESS'))) {
             return true;
         }
 

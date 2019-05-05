@@ -49,7 +49,7 @@ class InsertTransactionRequest extends FormRequest
                 case "online":
                     $input["paymentmethod_id"] = 1;
                     if (!isset($input["transactionstatus_id"])) {
-                        $input["transactionstatus_id"] = Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL");
+                        $input["transactionstatus_id"] = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
                     }
                     if (!isset($input["transactiongateway_id"])) {
                         $input["transactiongateway_id"] = 1;
@@ -58,24 +58,24 @@ class InsertTransactionRequest extends FormRequest
                 case "ATM":
                     $input["paymentmethod_id"] = 2;
                     if (!isset($input["transactionstatus_id"])) {
-                        $input["transactionstatus_id"] = Config::get("constants.TRANSACTION_STATUS_PENDING");
+                        $input["transactionstatus_id"] = config("constants.TRANSACTION_STATUS_PENDING");
                     }
                     break;
                 case "POS":
                     $input["paymentmethod_id"] = 3;
                     if (!isset($input["transactionstatus_id"])) {
-                        $input["transactionstatus_id"] = Config::get("constants.TRANSACTION_STATUS_PENDING");
+                        $input["transactionstatus_id"] = config("constants.TRANSACTION_STATUS_PENDING");
                     }
                     break;
                 case "paycheck":
                     $input["paymentmethod_id"] = 4;
                     if (!isset($input["transactionstatus_id"])) {
-                        $input["transactionstatus_id"] = Config::get("constants.TRANSACTION_STATUS_PENDING");
+                        $input["transactionstatus_id"] = config("constants.TRANSACTION_STATUS_PENDING");
                     }
                     break;
                 //            case "cash":
                 //                $this->request->set("paymentmethod_id" , 5);
-                ////                $this->request->set("transactionstatus_id" , Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"));
+                ////                $this->request->set("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"));
                 //                break;
                 default:
                     break;

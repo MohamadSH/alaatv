@@ -5,7 +5,8 @@ namespace App\PaymentModule\Wallet;
 class WalletRepo
 {
     /**
-     * @param array $data
+     * @param  array  $data
+     *
      * @return array
      */
     public static function insertNewRow(array $data): array

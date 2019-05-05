@@ -12,7 +12,7 @@ class EditContentRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.EDIT_EDUCATIONAL_CONTENT'))) {
+            ->can(config('constants.EDIT_EDUCATIONAL_CONTENT'))) {
             return true;
         }
 

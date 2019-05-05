@@ -18,7 +18,7 @@ class PhoneController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.Config::get('constants.EDIT_CONTACT_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:'.config('constants.EDIT_CONTACT_ACCESS'), ['only' => 'edit']);
         
         $this->response = new Response();
     }

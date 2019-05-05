@@ -2,9 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Bankaccount;
-use App\Transaction;
 use Carbon\Carbon;
+use App\Transaction;
+use App\Bankaccount;
 
 class TransactionRepo
 {

@@ -34,11 +34,12 @@ trait Helper
                 break;
         }
     }
-
+    
     /**
      * Sending SMS request to Mediana SMS Panel
      *
-     * @param array $params
+     * @param  array  $params
+     *
      * @return array|string
      */
     public function medianaSendSMS(array $params)
@@ -46,44 +47,45 @@ trait Helper
         $url = config("services.medianaSMS.normal.url");
 
 //        $rcpt_nm = array('9121111111','9122222222');
-        if(isset($params["to"]))
-            $rcpt_nm =  $params["to"];
-        if(isset($params["from"]))
+        if (isset($params["to"])) {
+            $rcpt_nm = $params["to"];
+        }
+        if (isset($params["from"])) {
             $from = $params["from"];
-        else
-            $from =config("constants.SMS_PROVIDER_DEFAULT_NUMBER") ;
-
+        } else {
+            $from = config("constants.SMS_PROVIDER_DEFAULT_NUMBER");
+        }
+        
         $param = [
-            'uname'=>config("services.medianaSMS.normal.userName"),
-            'pass'=>config("services.medianaSMS.normal.password"),
-            'from'=>$from,
-            'message'=>$params["message"],
-            'to'=>json_encode($rcpt_nm),
-            'op'=>'send'
+            'uname'   => config("services.medianaSMS.normal.userName"),
+            'pass'    => config("services.medianaSMS.normal.password"),
+            'from'    => $from,
+            'message' => $params["message"],
+            'to'      => json_encode($rcpt_nm),
+            'op'      => 'send',
         ];
-
+        
         $handler = curl_init($url);
         curl_setopt($handler, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($handler, CURLOPT_POSTFIELDS, $param);
         curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
-
+        
         $response = curl_exec($handler);
-        $response =  json_decode($response);
+        $response = json_decode($response);
         $res_code = $response[0];
         $res_data = $response[1];
-
-        switch ($res_code)
-        {
+        
+        switch ($res_code) {
             case 0 :
                 return [
-                    "error"=>false ,
-                    "message"=>"ارسال موفقیت آمیز بود"
+                    "error"   => false,
+                    "message" => "ارسال موفقیت آمیز بود",
                 ];
                 break;
             default:
                 return [
-                    "error"=>true ,
-                    "message"=>$res_data
+                    "error"   => true,
+                    "message" => $res_data,
                 ];
                 break;
         }
@@ -109,8 +111,10 @@ trait Helper
     
     public function timeFilterQuery($list, $sinceDate, $tillDate, $by = 'created_at', $sinceTime = "00:00:00", $tillTime = "23:59:59", $timeZoneConvert = true)
     {
-        $sinceDate = Carbon::parse($sinceDate)->format('Y-m-d')." ".$sinceTime;
-        $tillDate = Carbon::parse($tillDate)->format('Y-m-d')." ".$tillTime;
+        $sinceDate = Carbon::parse($sinceDate)
+                ->format('Y-m-d')." ".$sinceTime;
+        $tillDate  = Carbon::parse($tillDate)
+                ->format('Y-m-d')." ".$tillTime;
 
         if ($timeZoneConvert) {
             $sinceDate = Carbon::parse($sinceDate, "Asia/Tehran");
@@ -140,7 +144,8 @@ trait Helper
     
     public function mergeCollections($firstCollection, $secondCollection): Collection
     {
-        return $firstCollection->toBase()->merge($secondCollection);
+        return $firstCollection->toBase()
+            ->merge($secondCollection);
     }
     
     /**

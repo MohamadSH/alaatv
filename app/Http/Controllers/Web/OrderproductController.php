@@ -352,7 +352,7 @@ class OrderproductController extends Controller
                 $orderproduct->product_id = $newProduct->id;
                 if ($request->has("newProductBonPlus")) {
                     $bon = Bon::all()
-                        ->where('name', Config::get("constants.BON1"))
+                        ->where('name', config("constants.BON1"))
                         ->where('isEnable', 1)
                         ->first();
                     if (isset($bon)) {
@@ -365,7 +365,7 @@ class OrderproductController extends Controller
                             }
                             $request->offsetSet("totalNumber", $bonPlus);
                             $request->offsetSet("orderproduct_id", $orderproduct->id);
-                            $request->offsetSet("userbonstatus_id", Config::get("constants.USERBON_STATUS_ACTIVE"));
+                            $request->offsetSet("userbonstatus_id", config("constants.USERBON_STATUS_ACTIVE"));
                             /*$response = */
                             $userbonController->store($request);
                             /*if ($response->getStatusCode() == 200) {

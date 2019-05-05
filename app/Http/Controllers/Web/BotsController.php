@@ -89,8 +89,7 @@ class BotsController extends Controller
         $pageName = "adminBot";
         if (strlen($view) > 0) {
             return view($view, compact('pageName', 'params'));
-        }
-        else {
+        } else {
             abort(404);
         }
     }
@@ -162,23 +161,19 @@ class BotsController extends Controller
                                     
                                     event(new FreeInternetAccept($orderUser));
                                     $counter++;
-                                }
-                                else {
+                                } else {
                                     echo "<span style='color:red'>Error on giving voucher to user #".$orderUser->id."</span>";
                                     echo "<br>";
                                 }
-                            }
-                            else {
+                            } else {
                                 echo "<span style='color:orangered'>User  #".$orderUser->id." already has a voucher code</span>";
                                 echo "<br>";
                             }
-                        }
-                        else {
+                        } else {
                             echo "<span style='color:red'>Error on updating order #".$voucherOrder->id." for user #".$orderUser->id."</span>";
                             echo "<br>";
                         }
-                    }
-                    else {
+                    } else {
                         echo "<span style='color:orangered'>Could not find voucher for user  #".$orderUser->id."</span>";
                         echo "<br>";
                     }
@@ -897,8 +892,7 @@ class BotsController extends Controller
                         //                        session()->forget('couponMessageError');
                         //                        session()->forget('couponMessageSuccess');
                         //                    }
-                    }
-                    else {
+                    } else {
                         $failedCounter++;
                     }
                 }
@@ -932,8 +926,7 @@ class BotsController extends Controller
                     
                     $response = $this->sendRequest(config("constants.TAG_API_URL")."id/$bucket/".$contentset->id, "PUT",
                         $params);
-                }
-                else {
+                } else {
                     dump("Error on updating #".$contentset->id);
                 }
                 
@@ -958,8 +951,7 @@ class BotsController extends Controller
                         
                         $response = $this->sendRequest(config("constants.TAG_API_URL")."id/$bucket/".$content->id,
                             "PUT", $params);
-                    }
-                    else {
+                    } else {
                         dump("Error on updating #".$content->id);
                     }
                 }
@@ -1294,8 +1286,7 @@ class BotsController extends Controller
             session()->put("error", "لطفا گروه کاربران را تعیین کنید");
             
             return redirect()->back();
-        }
-        else {
+        } else {
             $userGroup = $request->get("userGroup");
         }
         
@@ -1371,8 +1362,7 @@ class BotsController extends Controller
         ];
         if ($request->has("giftCost")) {
             $giftCredit = $request->get("giftCost");
-        }
-        else {
+        } else {
             session()->put("error", "لطفا مبلغ هدیه را تعیین کنید");
             
             return redirect()->back();
@@ -1562,15 +1552,13 @@ class BotsController extends Controller
                 if ($products["filter"] != "all") {
                     if (isset($products["filter"])) {
                         $filterType = $products["filter"];
-                    }
-                    else {
+                    } else {
                         $filterType = "";
                     }
                     
                     if (isset($products["id"])) {
                         $idArray = $products["id"];
-                    }
-                    else {
+                    } else {
                         $idArray = [];
                     }
                     
@@ -1579,8 +1567,7 @@ class BotsController extends Controller
                             foreach ($idArray as $key => $ids) {
                                 if ($key > 0) {
                                     $myFilterType = "or".$filterType;
-                                }
-                                else {
+                                } else {
                                     $myFilterType = $filterType;
                                 }
                                 
@@ -1615,15 +1602,13 @@ class BotsController extends Controller
             $result = $user->deposit($giftCredit, 2);
             if (isset($result["wallet"])) {
                 $wallet = $result["wallet"];
-            }
-            else {
+            } else {
                 $wallet = "unknown";
             }
             if ($result["result"]) {
                 $user->notify(new GiftGiven($giftCredit));
                 $successCounter++;
-            }
-            else {
+            } else {
                 $failedCounter++;
                 dump("Credit for user: ".$user->id." was not given!"."wallet: ".$wallet." ,response: ".$result["responseText"]);
             }
@@ -1724,8 +1709,7 @@ class BotsController extends Controller
                     $userRecord["totalAmount"] += $transaction->cost;
                     $point                     = (int) ($userRecord["totalAmount"] / $amountUnit);
                     $userRecord["point"]       = $point;
-                }
-                else {
+                } else {
                     $point = (int) ($transaction->cost / $amountUnit);
                     $users->push([
                         "user_id"     => $user->id,
@@ -1733,8 +1717,7 @@ class BotsController extends Controller
                         "point"       => $point,
                     ]);
                 }
-            }
-            else {
+            } else {
                 dump("User was not found for transaction ".$transaction->id);
                 $warningCounter++;
             }
@@ -1811,8 +1794,7 @@ class BotsController extends Controller
                 echo "</span>";
                 echo "<br>";
                 $successCounter++;
-            }
-            else {
+            } else {
                 $failedCounter++;
                 dump("Userbon for user ".$userId." was not created");
             }
@@ -1875,8 +1857,7 @@ class BotsController extends Controller
                                 if (isset($row["major"])) {
                                     if ($row["major"] == "r") {
                                         $request->offsetSet("major_id", 1);
-                                    }
-                                    else {
+                                    } else {
                                         if ($row["major"] == "t") {
                                             $request->offsetSet("major_id", 2);
                                         }
@@ -1885,8 +1866,7 @@ class BotsController extends Controller
                                 if (isset($row["gender"])) {
                                     if ($row["gender"] == "پسر") {
                                         $request->offsetSet("gender_id", 1);
-                                    }
-                                    else {
+                                    } else {
                                         if ($row["gender"] == "دختر") {
                                             $request->offsetSet("gender_id", 2);
                                         }
@@ -1898,15 +1878,13 @@ class BotsController extends Controller
                                     $counter++;
                                     echo "User inserted: ".$lastName." ".$mobile;
                                     echo "<br>";
-                                }
-                                else {
+                                } else {
                                     echo "<span style='color:red'>";
                                     echo "Error on inserting user: ".$lastName." ".$mobile;
                                     echo "</span>";
                                     echo "<br>";
                                 }
-                            }
-                            else {
+                            } else {
                                 $fault = "";
                                 if (!$nationalCodeValidation) {
                                     $fault .= " wrong nationalCode ";
@@ -1921,8 +1899,7 @@ class BotsController extends Controller
                                 echo "</span>";
                                 echo "<br>";
                             }
-                        }
-                        else {
+                        } else {
                             echo "<span style='color:orange'>";
                             echo "Warning! user incomplete information: ".$lastName." ,in sheet : ".$sheetName;
                             echo "</span>";
@@ -1939,7 +1916,7 @@ class BotsController extends Controller
         dd("Done!");
         //        $rows = Excel::load('storage\\exports\\'. $fileName)->get();
     }
-
+    
     public function checkDisableContentTagBot()
     {
         $disableContents = Content::where("enable", 0)
@@ -2473,8 +2450,7 @@ class BotsController extends Controller
                     if (Input::has("id")) {
                         $id         = Input::get("id");
                         $productIds = [$id];
-                    }
-                    else {
+                    } else {
                         $productIds = [
                             99,
                             104,
@@ -2832,14 +2808,12 @@ class BotsController extends Controller
                     $warningCounter++;
                     dump("invalid item at counter".$counter);
                     continue;
-                }
-                else {
+                } else {
                     if (!isset($item->tags)) {
                         $warningCounter++;
                         dump("no tags found for".$item->id);
                         continue;
-                    }
-                    else {
+                    } else {
                         $itemTagsArray = $item->tags->tags;
                     }
                 }
@@ -2857,14 +2831,12 @@ class BotsController extends Controller
                     
                     if ($response["statusCode"] == 200) {
                         $successCounter++;
-                    }
-                    else {
+                    } else {
                         dump("item #".$item["id"]." failed. response : ".$response["statusCode"]);
                         $failedCounter++;
                     }
                     $counter++;
-                }
-                else {
+                } else {
                     if (is_array($itemTagsArray) && empty($itemTagsArray)) {
                         $warningCounter++;
                         dump("warning no tags found for item #".$item->id);

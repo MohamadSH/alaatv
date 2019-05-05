@@ -3,16 +3,16 @@
 namespace App\Console\Commands;
 
 //use App\Classes\Search\Tag\ProductTagManagerViaApi;
-use App\Http\Controllers\Web\ProductController;
-use App\Orderproduct;
-use App\Product;
-use App\Traits\APIRequestCommon;
-use App\Traits\ProductCommon;
-use Carbon\Carbon;
 use Exception;
-use Illuminate\Console\Command;
+use App\Product;
+use Carbon\Carbon;
+use App\Orderproduct;
+use App\Traits\ProductCommon;
 use Illuminate\Http\Response;
+use Illuminate\Console\Command;
+use App\Traits\APIRequestCommon;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\Web\ProductController;
 
 //use App\Traits\TaggableTrait;
 
@@ -364,6 +364,8 @@ class MergeProductCommand extends Command
      */
     public function handle(ProductController $productController)
     {
+        //TODO: pull from master
+        dd("TODO");
         $productCount = count($this->productArray);
         if ($this->confirm('Products will be merged into '.$productCount.'. Do you wish to continue?', true)) {
             $this->performMergingForAllProducts($productController, $productCount);

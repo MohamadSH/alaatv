@@ -13,21 +13,21 @@ class WebsiteSettingController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:'.Config::get('constants.LIST_SITE_CONFIG_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_SITE_CONFIG_ACCESS'), [
+        $this->middleware('permission:'.config('constants.LIST_SITE_CONFIG_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.config('constants.INSERT_SITE_CONFIG_ACCESS'), [
             'only' => [
                 'create',
                 'store',
             ],
         ]);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_SITE_CONFIG_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.Config::get('constants.EDIT_SITE_CONFIG_ACCESS'), [
+        $this->middleware('permission:'.config('constants.REMOVE_SITE_CONFIG_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:'.config('constants.EDIT_SITE_CONFIG_ACCESS'), [
             'only' => [
                 'edit',
                 'update',
             ],
         ]);
-        $this->middleware('permission:'.Config::get('constants.SHOW_SITE_CONFIG_ACCESS'), ['only' => 'show']);
+        $this->middleware('permission:'.config('constants.SHOW_SITE_CONFIG_ACCESS'), ['only' => 'show']);
     }
 
     public function show(Websitesetting $setting)
@@ -89,9 +89,9 @@ class WebsiteSettingController extends Controller
             $file      = $request->file('favicon');
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-            if (Storage::disk(Config::get('constants.DISK11'))
+            if (Storage::disk(config('constants.DISK11'))
                 ->put($fileName, File::get($file))) {
-                Storage::disk(Config::get('constants.DISK11'))
+                Storage::disk(config('constants.DISK11'))
                     ->delete($oldLogo);
                 $wSetting->site->favicon = $fileName;
             }
@@ -101,9 +101,9 @@ class WebsiteSettingController extends Controller
             $file      = $request->file('siteLogo');
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-            if (Storage::disk(Config::get('constants.DISK11'))
+            if (Storage::disk(config('constants.DISK11'))
                 ->put($fileName, File::get($file))) {
-                Storage::disk(Config::get('constants.DISK11'))
+                Storage::disk(config('constants.DISK11'))
                     ->delete($oldLogo);
                 $wSetting->site->siteLogo = $fileName;
             }

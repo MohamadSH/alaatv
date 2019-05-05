@@ -62,7 +62,7 @@ class Mbtianswer extends BaseModel
                 })
                     ->pluck("id"));
             })
-            ->whereIn("orderstatus_id", [Config::get("constants.ORDER_STATUS_CLOSED")])
+            ->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED")])
             ->get();
         
         switch ($output) {

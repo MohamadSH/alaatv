@@ -11,7 +11,7 @@ class EditPermissionRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.EDIT_PERMISSION_ACCESS'))) {
+            ->can(config('constants.EDIT_PERMISSION_ACCESS'))) {
             return true;
         }
 

@@ -11,7 +11,7 @@ class InsertAttributeRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.INSERT_ATTRIBUTE_ACCESS'))) {
+            ->can(config('constants.INSERT_ATTRIBUTE_ACCESS'))) {
             return true;
         }
 

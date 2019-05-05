@@ -325,20 +325,20 @@
 
                                                     <video
                                                             id="videoPlayer"
-                                                           class="
+                                                            class="
                                                            video-js
                                                            vjs-fluid
                                                            vjs-default-skin
                                                            vjs-big-play-centered"
-                                                           controls
-                                                           {{-- preload="auto"--}}
-                                                           preload="none"
-                                                           poster = 'https://cdn.sanatisharif.ir/media/204/240p/204054ssnv.jpg'>
-
-{{--                                                        <source--}}
-{{--                                                                src="{{$product->introVideo}}"--}}
-{{--                                                                id="videoPlayerSource"--}}
-{{--                                                                type = 'video/mp4'/>--}}
+                                                            controls
+                                                            {{-- preload="auto"--}}
+                                                            preload="none"
+                                                            poster = 'https://cdn.sanatisharif.ir/media/204/240p/204054ssnv.jpg'>
+    
+                                                        {{--                                                        <source--}}
+                                                        {{--                                                                src="{{$product->introVideo}}"--}}
+                                                        {{--                                                                id="videoPlayerSource"--}}
+                                                        {{--                                                                type = 'video/mp4'/>--}}
 
                                                         {{--<p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>--}}
                                                     </video>
@@ -476,21 +476,21 @@
     <script>
 
         var player = videojs('videoPlayer', {language: 'fa'});
+
+        jQuery(document).ready(function () {
         
-        jQuery(document).ready(function() {
-            
             @if( $product->introVideo )
             player.src([
-                { type: "video/mp4", src: "{{ $product->introVideo }}" }
+                {type: "video/mp4", src: "{{ $product->introVideo }}"}
             ]);
             @endif
-            
+
             player.nuevo({
                 // logotitle:"آموزش مجازی آلاء",
                 // logo:"https://sanatisharif.ir/image/11/135/67/logo-150x22_20180430222256.png",
                 logocontrolbar: '/acm/extra/Alaa-logo.gif',
                 // logoposition:"RT", // logo position (LT - top left, RT - top right)
-                logourl:'//sanatisharif.ir',
+                logourl: '//sanatisharif.ir',
                 // related: related_videos,
                 // shareUrl:"https://www.nuevolab.com/videojs/",
                 // shareTitle: "Nuevo plugin for VideoJs Player",
@@ -500,10 +500,10 @@
                 // infoSize: 18,
                 // infoIcon: "https://sanatisharif.ir/image/11/150/150/favicon_32_20180819090313.png",
 
-                closeallow:false,
-                mute:true,
-                rateMenu:true,
-                resume:true, // (false) enable/disable resume option to start video playback from last time position it was left
+                closeallow: false,
+                mute: true,
+                rateMenu: true,
+                resume: true, // (false) enable/disable resume option to start video playback from last time position it was left
                 // theaterButton: true,
                 timetooltip: true,
                 mousedisplay: true,
