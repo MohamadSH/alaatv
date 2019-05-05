@@ -62,10 +62,10 @@ trait ProductAttributeTrait
                         array_push($attributesArray, $attribute->id);
                     }
                 }
-                $parentArray = $this->makeParentArray($this);
-                array_push($parentArray, $this);
+                $parentsCollection = $this->getAllParents();
+                $parentsCollection->push($this);
                 $attributes = collect();
-                foreach ($parentArray as $parent) {
+                foreach ($parentsCollection as $parent) {
                     if (isset($attributesArray)) {
                         $attributevalues = $parent->attributevalues->whereIn("attribute_id", $attributesArray);
                     }

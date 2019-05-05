@@ -4,8 +4,8 @@ use App\Content;
 use App\Product;
 use App\Contentset;
 use App\Productfile;
-use App\Traits\ProductRepository;
 use Illuminate\Database\Schema\Blueprint;
+use App\Classes\Repository\ProductRepository;
 use Illuminate\Database\Migrations\Migration;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -424,7 +424,7 @@ class MigrateDataProductSet extends Migration
             $set               = Contentset::create([
                 'name'  => $product->name,
                 'photo' => $setImage,
-                'tags'  => (array) optional($product->tags)->tags,
+                'tags'  => (array) optional($product->grandParent->tags)->tags,
             ]);
             $set->enable       = 1;
             $set->display      = 1;
@@ -454,12 +454,10 @@ class MigrateDataProductSet extends Migration
      */
     private function getAssosiatedProductFileContent(Productfile $productFile, Product $product)
     {
-//        $this->output->writeln('getAssosiatedProductFileContent');
         $set = $productFile->set;
         
         if ($productFile->content_id != null) {
             $content = $productFile->content;
-//            $this->output->writeln('product'.$product->id.' \forceFill: '.$productFile->contentset_id.'productFile:'.$productFile->id);
             $this->assosiateSetToContent($content, $set);
             return $content;
         }
@@ -482,7 +480,7 @@ class MigrateDataProductSet extends Migration
             'metaTitle'       => null,
             'metaDescription' => null,
             'metaKeywords'    => null,
-            'tags'            => (array) optional($product->tags)->tags,
+            'tags'            => (array) optional($product->grandParent->tags)->tags,
             'author_id'       => $this->productAuthorLookupTable[$product->id] ?: null,
             'template_id'     => $productTypeContentTemplateLookupTable[$productFile->productfiletype_id],
             'contenttype_id'  => $productTypeContentTypeLookupTable[$productFile->productfiletype_id],
@@ -547,21 +545,27 @@ class MigrateDataProductSet extends Migration
 //        $this->output->writeln('attachSetToProducts');
         $products = ProductRepository::getProductsThatHaveValidProductFileByFileNameRecursively($fileName);
         $this->output->writeln('  -Count(products):'.$products->count());
+    
+        $progress = new ProgressBar($this->output, $products->count());
         
         foreach ($products as $product) {
             $product->sets()
-                ->attach($set, ['order' => $set->id]);
+                ->attach($set, [
+                    'order' => $set->id,
+                ]);
+            $progress->advance();
         }
+        $progress->finish();
+        $this->output->writeln('');
     }
     
     /**
      * @param  Content|null     $content
      * @param  Contentset|null  $set
      */
-    private function assosiateSetToContent(?Content $content, ?Contentset $set): void
+    private function assosiateSetToContent(?Content &$content, ?Contentset &$set): void
     {
-        $content->set()
-            ->associate($set)
-            ->save();
+        $content->contentset_id = $set->id;
+        $content->updateWithoutTimestamp();
     }
 }

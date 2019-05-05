@@ -41,7 +41,7 @@ mix.scripts(
     'public/js/login.js'
 ).version();
 
-mix.scripts(
+mix.babel(
     [
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
         'public/acm/videojs/video.min.js',

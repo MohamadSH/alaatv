@@ -63,14 +63,14 @@ use App\{Bon,
     Traits\CharacterCommon,
     Notifications\GiftGiven,
     Traits\APIRequestCommon,
-    Traits\ProductRepository,
     Events\FreeInternetAccept,
     Notifications\GeneralNotice,
     Notifications\UserRegisterd,
     Http\Requests\InsertUserRequest,
     Http\Requests\ContactUsFormRequest,
     Classes\Format\BlockCollectionFormatter,
-    Classes\Repository\ContentRepositoryInterface};
+    Classes\Repository\ContentRepositoryInterface,
+    Classes\Repository\ProductRepository as ProductRepository};
 
 //use Jenssegers\Agent\Agent;
 
@@ -105,25 +105,26 @@ class HomeController extends Controller
         //            $authException = ['index' , 'getImage' , 'error404' , 'error403' , 'error500' , 'errorPage' , 'siteMapXML', 'download' ];
         //        }else{
         $authException = [
-//            'debug',
-'download',
-'telgramAgent',
-'index',
-'getImage',
-'error404',
-'error403',
-'error500',
-'errorPage',
-'aboutUs',
-'contactUs',
-'sendMail',
-'rules',
-'siteMapXML',
-'uploadFile',
-'search',
-'schoolRegisterLanding',
-'lernitoTree',
-'getTreeInPHPArrayString',
+            'debug',
+            'newDownload',
+            'download',
+            'telgramAgent',
+            'index',
+            'getImage',
+            'error404',
+            'error403',
+            'error500',
+            'errorPage',
+            'aboutUs',
+            'contactUs',
+            'sendMail',
+            'rules',
+            'siteMapXML',
+            'uploadFile',
+            'search',
+            'schoolRegisterLanding',
+            'lernitoTree',
+            'getTreeInPHPArrayString',
         ];
         //        }
         $this->middleware('auth', ['except' => $authException]);
@@ -167,8 +168,16 @@ class HomeController extends Controller
     
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        return Product::find(226)
-            ->load('sets');
+//        dd(Content::find(10233));
+        dd(Content::find(10233)
+            ->getTaggableTags());
+        return [
+            Product::find(226)->sets->first()
+                ->getContents(),
+            Product::find(227)->sets,
+            Product::find(228)->sets,
+            Product::find(229)->sets,
+        ];
     }
     
     public function search(Request $request)
@@ -726,8 +735,8 @@ class HomeController extends Controller
         $coupons = Coupon::pluck('name', 'id')
             ->toArray();
         $coupons = array_sort_recursive($coupons);
-        
-
+    
+    
         return view("admin.indexSMS",
             compact("pageName", "majors", "userStatuses", "roles", "relatives", "orderstatuses", "paymentstatuses",
                 "genders", "gendersWithUnknown", "products",
@@ -985,30 +994,26 @@ class HomeController extends Controller
      */
     public function newDownload($data, ContentRepositoryInterface $contentRepository)
     {
-        if (isset($data)) {
-            try {
-                $data = (array) decrypt($data);
-            } catch (DecryptException $e) {
-                abort(403);
-            }
-            $url       = $data["url"];
-            $contentId = $data["data"]["content_id"];
-            $content   = $contentRepository->getContentById($contentId);
-            
-            if (Auth::check()) {
-                /** @var \App\User $user */
-                $user = auth()->user();
-                if (!$user->hasContent($content)) {
-                    return redirect()
-                        ->action('Web\ContentController@show', $content)
-                        ->setStatusCode(Response::HTTP_FOUND);
-                }
-                $finalLink = $this->getSecureUrl($url);
-                
-                return redirect($finalLink);
-            }
+        $user = getAuthenticatedUser();
+        if (is_null($data) || is_null($user)) {
+            abort(403, 'Not authorized.');
         }
-        abort(403);
+        try {
+            $data = (array) decrypt($data);
+        } catch (DecryptException $e) {
+            abort(403, 'invalid Data!');
+        }
+        $url       = $data["url"];
+        $contentId = $data["data"]["content_id"];
+        $content   = $contentRepository->getContentById($contentId);
+        if (!$user->hasContent($content)) {
+            return redirect()
+                ->action('Web\ContentController@show', $content)
+                ->setStatusCode(Response::HTTP_FOUND);
+        }
+        $finalLink = $this->getSecureUrl($url);
+    
+        return redirect($finalLink);
     }
     
     /**
@@ -1255,10 +1260,11 @@ class HomeController extends Controller
     {
         $message    = "شما ابتدا باید یکی از این محصولات را سفارش دهید و یا اگر سفارش داده اید مبلغ را تسویه نمایید: "."<br>";
         $productIds = [];
+        /** @var Product $product */
         foreach ($products as $product) {
-            $myParents = $this->makeParentArray($product);
-            if (!empty($myParents)) {
-                $rootParent = end($myParents);
+            $myParents = $product->getAllParents();
+            if ($myParents->isNotEmpty()) {
+                $rootParent = $myParents->last();
                 if (!in_array($rootParent->id, $productIds)) {
                     $message .= '<a href="'.action('ProductController@show',
                             $rootParent->id).'">'.$rootParent->name.'</a><br>';
@@ -2863,7 +2869,7 @@ class HomeController extends Controller
          * }
          * }
          * //$parentsArray = $product->parents;
-         * $parentsArray = $this->makeParentArray($product);
+         * $parentsArray = $product->$parentsCollection();
          * if (!empty($parentsArray)) {
          * foreach ($parentsArray as $parent) {
          * foreach ($parent->gifts as $gift) {
@@ -4809,7 +4815,7 @@ class HomeController extends Controller
     public function adminGenerateRandomCoupon(Request $request)
     {
         $productCollection = $products = $this->makeProductCollection();
-
+    
         return view("admin.generateSpecialCoupon", compact("productCollection"));
     }
     

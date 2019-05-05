@@ -11,29 +11,10 @@
 |
 */
 
-use App\PaymentModule\Responses;
-use App\PaymentModule\OnlineGateWay;
-use App\PaymentModule\PaymentDriver;
 use App\Http\Controllers\Web\PaymentStatusController;
 use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
 use App\PaymentModule\Controllers\PaymentVerifierController;
 
-
-Route::get('fake-pay', function () {
-    PaymentDriver::select($paymentMethod = 'mellat');
-    
-    $authorityCode = OnlineGateWay::generateAuthorityCode(
-        route('verifyOnlinePayment', [
-            'paymentMethod' => 'mellat', 'device' => 'asdca',
-        ]), $price = 1000, '$description', 12345)
-        ->orFailWith([
-            Responses::class, 'noResponseFromBankError',
-        ]);
-    
-    $redirectData = OnlineGateWay::generatePaymentPageUriObject($authorityCode);
-    
-    return view("order.checkout.gatewayRedirect", compact('redirectData'));
-});
 Route::get('embed/c/{content}', "Web\ContentController@embed");
 Route::get('/', 'Web\IndexPageController');
 Route::get('shop', 'Web\ShopPageController');

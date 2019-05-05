@@ -4,11 +4,12 @@ namespace App\Exceptions;
 
 use Auth;
 use Exception;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Session\TokenMismatchException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
@@ -75,6 +76,13 @@ class Handler extends ExceptionHandler
             return response()->json([
                 'error' => 'not found',
             ], 404);
+        }
+    
+        if ($exception instanceof HttpException && $request->wantsJson()) {
+            return response()->json([
+                'error' => $exception->getMessage(),
+            ], $exception->getStatusCode());
+        
         }
         
         return parent::render($request, $exception);
