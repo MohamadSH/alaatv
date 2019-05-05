@@ -41,20 +41,12 @@ trait HandleOrderPayment
     protected function updateOrderPaymentStatus(Order $order): array
     {
         $result           = [];
-        $paymentstatus_id = null;
-        if ((int) $order->totalPaidCost() < (int) $order->totalCost()) {
-            $paymentstatus_id = config('constants.PAYMENT_STATUS_INDEBTED');
-        }
-        else {
-            $paymentstatus_id = config('constants.PAYMENT_STATUS_PAID');
-        }
+        $paymentstatus_id = (int) $order->totalPaidCost() < (int) $order->totalCost() ? config('constants.PAYMENT_STATUS_INDEBTED') : config('constants.PAYMENT_STATUS_PAID');
         
         $result['paymentstatus_id'] = $paymentstatus_id;
         
         $order->close($paymentstatus_id);
-        $orderUpdateStatus = $order->updateWithoutTimestamp();
-        
-        $result['saveOrder'] = $orderUpdateStatus ? 1 : 0;
+        $result['saveOrder'] = $order->updateWithoutTimestamp() ? 1 : 0;
         
         return $result;
     }
@@ -68,8 +60,7 @@ trait HandleOrderPayment
     {
         $result  = [];
         $bonName = config('constants.BON1');
-        $bon     = Bon::ofName($bonName)
-            ->first();
+        $bon     = Bon::ofName($bonName)->first();
         
         if (!isset($bon)) {
             return $result;
