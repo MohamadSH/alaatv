@@ -35,12 +35,10 @@ use App\{Bon,
     Permission,
     Userstatus,
     Userupload,
-    Contenttype,
     Eventresult,
     Orderstatus,
     Productfile,
     Producttype,
-    Transaction,
     Websitepage,
     Attributeset,
     Paymentmethod,
@@ -97,11 +95,6 @@ class HomeController extends Controller
     
     public function __construct(Response $response, Websitesetting $setting)
     {
-        //        $agent = new Agent();
-        //        if ($agent->isRobot())
-        //        {
-        //            $authException = ['index' , 'getImage' , 'error404' , 'error403' , 'error500' , 'errorPage' , 'siteMapXML', 'download' ];
-        //        }else{
         $authException = [
             'debug',
             'newDownload',
