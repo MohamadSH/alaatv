@@ -63,7 +63,6 @@
                                 @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
                                     @if($userAsset->title === 'محصولات من')
                                         @foreach($userAsset->products as $productKey=>$product)
-                                            {{ dd($product->sets) }}
                                             @if(count($product->sets)===0)
                                                 <div class = "m-widget_head-owlcarousel-item carousel background-gradient" data-position = "{{ $productKey }}">
                                                     <a href="{{ $product->url }}" >
