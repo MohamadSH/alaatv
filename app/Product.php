@@ -1296,7 +1296,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     
     public function getTaggableTags()
     {
-        return $this->tags->tags;
+        return optional($this->tags)->tags;
     }
     
     public function getTaggableId(): int
