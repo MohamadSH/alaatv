@@ -11,7 +11,7 @@ class EditAttributesetRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.EDIT_ATTRIBUTESET_ACCESS'))) {
+            ->can(config('constants.EDIT_ATTRIBUTESET_ACCESS'))) {
             return true;
         }
     

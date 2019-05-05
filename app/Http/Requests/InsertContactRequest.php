@@ -11,7 +11,7 @@ class InsertContactRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.INSERT_CONTACT_ACCESS'))) {
+            ->can(config('constants.INSERT_CONTACT_ACCESS'))) {
             return true;
         }
 

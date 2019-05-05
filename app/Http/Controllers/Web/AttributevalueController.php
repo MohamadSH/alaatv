@@ -16,10 +16,10 @@ class AttributevalueController extends Controller
     
     function __construct()
     {
-        $this->middleware('permission:'.Config::get('constants.LIST_ATTRIBUTEVALUE_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_ATTRIBUTEVALUE_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_ATTRIBUTEVALUE_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.Config::get('constants.SHOW_ATTRIBUTEVALUE_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:'.config('constants.LIST_ATTRIBUTEVALUE_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.config('constants.INSERT_ATTRIBUTEVALUE_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:'.config('constants.REMOVE_ATTRIBUTEVALUE_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:'.config('constants.SHOW_ATTRIBUTEVALUE_ACCESS'), ['only' => 'edit']);
         
         $this->response = new Response();
     }

@@ -18,10 +18,10 @@ class AttributeController extends Controller
     {
         $this->response = new Response();
         
-        $this->middleware('permission:'.Config::get('constants.LIST_ATTRIBUTE_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_ATTRIBUTE_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_ATTRIBUTE_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.Config::get('constants.SHOW_ATTRIBUTE_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:'.config('constants.LIST_ATTRIBUTE_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.config('constants.INSERT_ATTRIBUTE_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:'.config('constants.REMOVE_ATTRIBUTE_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:'.config('constants.SHOW_ATTRIBUTE_ACCESS'), ['only' => 'edit']);
     }
 
     public function index()

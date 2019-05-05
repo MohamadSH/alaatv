@@ -14,7 +14,7 @@ class EditConsultationRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.EDIT_CONSULTATION_ACCESS'))) {
+            ->can(config('constants.EDIT_CONSULTATION_ACCESS'))) {
             return true;
         }
 

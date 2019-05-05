@@ -23,7 +23,7 @@ class EventresultController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.Config::get('constants.LIST_EVENTRESULT_ACCESS')."|".Config::get('constants.LIST_SHARIF_REGISTER_ACCESS'),
+        $this->middleware('permission:'.config('constants.LIST_EVENTRESULT_ACCESS')."|".config('constants.LIST_SHARIF_REGISTER_ACCESS'),
             ['only' => 'index']);
         
         $this->response = new Response();
@@ -116,9 +116,9 @@ class EventresultController extends Controller
             
             //            $oldReportFile = $eventResult->reportFile;
             
-            if (Storage::disk(Config::get('constants.DISK14'))
+            if (Storage::disk(config('constants.DISK14'))
                 ->put($fileName, File::get($file))) {
-                //                if (isset($oldReportFile)) Storage::disk(Config::get('constants.DISK14'))->delete($oldReportFile);
+                //                if (isset($oldReportFile)) Storage::disk(config('constants.DISK14'))->delete($oldReportFile);
                 $eventResult->reportFile = $fileName;
             }
         }

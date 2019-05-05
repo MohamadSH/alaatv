@@ -24,8 +24,8 @@ class UseruploadController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.Config::get('constants.LIST_QUESTION_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.Config::get('constants.SHOW_QUESTION_ACCESS'), ['only' => 'show']);
+        $this->middleware('permission:'.config('constants.LIST_QUESTION_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.config('constants.SHOW_QUESTION_ACCESS'), ['only' => 'show']);
         
         $this->response = new Response();
     }
@@ -63,7 +63,7 @@ class UseruploadController extends Controller
             $file      = $request->file('consultingAudioQuestions');
             $extension = $file->getClientOriginalExtension();
             $fileName  = date("YmdHis").'.'.$extension;
-            if (Storage::disk(Config::get('constants.DISK6'))
+            if (Storage::disk(config('constants.DISK6'))
                 ->put($fileName, File::get($file))) {
                 $userUpload->file = $fileName;
             }

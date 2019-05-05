@@ -56,7 +56,7 @@ class Attributeset extends BaseModel
     {
         $key = "Attributeset:".$this->cacheKey();
         
-        return Cache::remember($key, Config::get("constants.CACHE_60"), function () {
+        return Cache::remember($key, config("constants.CACHE_60"), function () {
             $result = DB::table('attributesets')
                 ->join('attributegroups', function ($join) {
                     $join->on('attributesets.id', '=', 'attributegroups.attributeset_id')

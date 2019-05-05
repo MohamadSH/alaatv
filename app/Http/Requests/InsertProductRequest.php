@@ -14,7 +14,7 @@ class InsertProductRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.INSERT_PRODUCT_ACCESS'))) {
+            ->can(config('constants.INSERT_PRODUCT_ACCESS'))) {
             return true;
         }
 

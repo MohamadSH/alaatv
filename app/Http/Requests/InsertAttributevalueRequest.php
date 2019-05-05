@@ -12,7 +12,7 @@ class InsertAttributevalueRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.INSERT_ATTRIBUTEVALUE_ACCESS'))) {
+            ->can(config('constants.INSERT_ATTRIBUTEVALUE_ACCESS'))) {
             return true;
         }
         

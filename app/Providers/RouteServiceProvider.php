@@ -71,7 +71,7 @@ class RouteServiceProvider extends ServiceProvider
                 'user',
                 $key,
             ])
-                ->remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+                ->remember($key, config("constants.CACHE_5"), function () use ($value) {
                     return User::where('id', $value)
                             ->first() ?? abort(404);
                 });
@@ -79,7 +79,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('assignment', function ($value) {
             $key = "Assignment:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Assignment::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -87,7 +87,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('consultation', function ($value) {
             $key = "Consultation:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Consultation::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -95,7 +95,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('order', function ($value) {
             $key = "Order:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Order::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -103,7 +103,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('product', function ($value) {
             $key = "Product:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 $product = Product::where('id', $value)
                     ->first();
                 if (!isset($product) || is_null($product)) {
@@ -115,7 +115,7 @@ class RouteServiceProvider extends ServiceProvider
                 if (!$product->relationLoaded('attributeset')) {
                     $product->load('attributeset');
                 }
-                if ($product->producttype_id == Config::get("constants.PRODUCT_TYPE_SELECTABLE")) {
+                if ($product->producttype_id == config("constants.PRODUCT_TYPE_SELECTABLE")) {
                     $product->load('children');
                 }
                 if (!$product->relationLoaded('bons')) {
@@ -128,7 +128,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('orderproduct', function ($value) {
             $key = "Orderproduct:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Orderproduct::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -136,7 +136,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('attributevalue', function ($value) {
             $key = "Attributevalue:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Attributevalue::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -144,7 +144,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('permission', function ($value) {
             $key = "Permission:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Permission::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -152,7 +152,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('role', function ($value) {
             $key = "Role:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Role::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -160,7 +160,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('coupon', function ($value) {
             $key = "Coupon:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Coupon::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -168,7 +168,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('userupload', function ($value) {
             $key = "Userupload:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Userupload::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -176,7 +176,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('attribute', function ($value) {
             $key = "Attribute:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Attribute::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -184,7 +184,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('attributeset', function ($value) {
             $key = "Attributeset:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Attributeset::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -192,7 +192,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('attributegroup', function ($value) {
             $key = "Attributegroup:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Attributegroup::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -200,7 +200,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('userbon', function ($value) {
             $key = "Userbon:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Userbon::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -208,7 +208,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('mbtianswer', function ($value) {
             $key = "Mbtianswer:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Mbtianswer::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -216,7 +216,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('contact', function ($value) {
             $key = "Contact:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Contact::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -224,7 +224,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('phone', function ($value) {
             $key = "Phone:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Phone::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -232,7 +232,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('afterloginformcontrol', function ($value) {
             $key = "Afterloginformcontrol:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Afterloginformcontrol::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -240,7 +240,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('article', function ($value) {
             $key = "Article:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Article::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -248,7 +248,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('articlecategory', function ($value) {
             $key = "Articlecategory:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Articlecategory::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -256,7 +256,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('slideshow', function ($value) {
             $key = "Slideshow:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Slideshow::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -264,7 +264,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('websiteSetting', function ($value) {
             $key = "Websitesetting:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Websitesetting::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -272,7 +272,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('productfile', function ($value) {
             $key = "Productfile:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Productfile::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -280,7 +280,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('city', function ($value) {
             $key = "City:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return City::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -288,7 +288,7 @@ class RouteServiceProvider extends ServiceProvider
         /*
                 Route::bind('content', function($value){
                     $key = "Content:".$value;
-                   return Cache::remember($key,Config::get("constants.CACHE_60"),function () use ($value){
+                   return Cache::remember($key,config("constants.CACHE_60"),function () use ($value){
                        $c = Content::where('id', $value)->first();
                        if (isset($c)) {
                            if (!$c->relationLoaded('template'))
@@ -304,7 +304,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('c', function ($value) {
             $key = "Content:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_60"), function () use ($value) {
                 $c = Content::where('id', $value)
                     ->first();
                 if (isset($c)) {
@@ -326,7 +326,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('set', function ($value) {
             $key = "Set:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_60"), function () use ($value) {
                 $set = Contentset::where('id', $value)
                     ->first();
                 
@@ -337,7 +337,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind("employeetimesheet", function ($value) {
             $key = "Employeetimesheet:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Employeetimesheet::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -345,7 +345,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind("productphoto", function ($value) {
             $key = "Productphoto:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Productphoto::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -353,7 +353,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind("wallet", function ($value) {
             $key = "Wallet:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Wallet::where('id', $value)
                         ->first() ?? abort(404);
             });
@@ -361,7 +361,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind("eventresult", function ($value) {
             $key = "Eventresuly:".$value;
             
-            return Cache::remember($key, Config::get("constants.CACHE_5"), function () use ($value) {
+            return Cache::remember($key, config("constants.CACHE_5"), function () use ($value) {
                 return Eventresult::where('id', $value)
                         ->first() ?? abort(404);
             });

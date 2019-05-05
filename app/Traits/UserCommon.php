@@ -24,7 +24,7 @@ trait UserCommon
      * $insertCouponRequest->offsetSet("enable" , 1);
      * $insertCouponRequest->offsetSet("name" , "قرعه کشی همایش ویژه دی برای ".$user->getFullName());
      * $insertCouponRequest->offsetSet("code" , $couponCode);
-     * $insertCouponRequest->offsetSet("discount" , Config::get("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT"));
+     * $insertCouponRequest->offsetSet("discount" , config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT"));
      * $insertCouponRequest->offsetSet("usageNumber" , 0);
      * $insertCouponRequest->offsetSet("usageLimit" , 1);
      * $insertCouponRequest->offsetSet("limitStatus" , 1);
@@ -42,7 +42,7 @@ trait UserCommon
      * $orderController->submitCoupon($attachCouponRequest) ;
      * session()->forget('couponMessageError');
      * session()->forget('couponMessageSuccess');
-     * $prizeName = "کد تخفیف ".$couponCode." با ".Config::get("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT")."% تخفیف( تا تاریخ 1396/09/28 اعتبار دارد )" ;
+     * $prizeName = "کد تخفیف ".$couponCode." با ".config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT")."% تخفیف( تا تاریخ 1396/09/28 اعتبار دارد )" ;
      * }
      */
         

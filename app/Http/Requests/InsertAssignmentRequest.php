@@ -14,7 +14,7 @@ class InsertAssignmentRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.INSERT_ASSIGNMENT_ACCESS'))) {
+            ->can(config('constants.INSERT_ASSIGNMENT_ACCESS'))) {
             return true;
         }
 

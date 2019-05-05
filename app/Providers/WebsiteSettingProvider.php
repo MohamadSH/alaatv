@@ -36,7 +36,7 @@ class WebsiteSettingProvider extends ServiceProvider
     {
         $key = "AppServiceProvider:websitesettings";
         if (Schema::hasTable('websitesettings')) {
-            return Cache::remember($key, Config::get("constants.CACHE_600"), function () {
+            return Cache::remember($key, config("constants.CACHE_600"), function () {
                 return Websitesetting::where("version", 1)
                     ->get()
                     ->first();

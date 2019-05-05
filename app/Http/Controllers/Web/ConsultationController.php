@@ -23,10 +23,10 @@ class ConsultationController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.Config::get('constants.LIST_CONSULTATION_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_CONSULTATION_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_CONSULTATION_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.Config::get('constants.SHOW_CONSULTATION_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:'.config('constants.LIST_CONSULTATION_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.config('constants.INSERT_CONSULTATION_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:'.config('constants.REMOVE_CONSULTATION_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:'.config('constants.SHOW_CONSULTATION_ACCESS'), ['only' => 'edit']);
         
         $this->response = new Response();
     }
@@ -68,13 +68,13 @@ class ConsultationController extends Controller
             $file      = $request->file('thumbnail');
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-            if (Storage::disk(Config::get('constants.DISK7'))
+            if (Storage::disk(config('constants.DISK7'))
                 ->put($fileName, File::get($file))) {
                 $consultation->thumbnail = $fileName;
             }
         }
         else {
-            $consultation->thumbnail = Config::get('constants.CONSULTATION_DEFAULT_IMAGE');
+            $consultation->thumbnail = config('constants.CONSULTATION_DEFAULT_IMAGE');
         }
         
         if ($consultation->save()) {
@@ -114,9 +114,9 @@ class ConsultationController extends Controller
             $file      = $request->file('thumbnail');
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-            if (Storage::disk(Config::get('constants.DISK7'))
+            if (Storage::disk(config('constants.DISK7'))
                 ->put($fileName, File::get($file))) {
-                Storage::disk(Config::get('constants.DISK7'))
+                Storage::disk(config('constants.DISK7'))
                     ->delete($thumbnail);
                 $consultation->thumbnail = $fileName;
             }

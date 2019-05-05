@@ -128,22 +128,22 @@ class HomeController extends Controller
         ];
         //        }
         $this->middleware('auth', ['except' => $authException]);
-        $this->middleware('ability:'.Config::get("constants.ROLE_ADMIN").','.Config::get("constants.USER_ADMIN_PANEL_ACCESS"),
+        $this->middleware('ability:'.config("constants.ROLE_ADMIN").','.config("constants.USER_ADMIN_PANEL_ACCESS"),
             ['only' => 'admin']);
-        $this->middleware('permission:'.Config::get('constants.CONSULTANT_PANEL_ACCESS'),
+        $this->middleware('permission:'.config('constants.CONSULTANT_PANEL_ACCESS'),
             ['only' => 'consultantAdmin']);
-        $this->middleware('permission:'.Config::get("constants.PRODUCT_ADMIN_PANEL_ACCESS"),
+        $this->middleware('permission:'.config("constants.PRODUCT_ADMIN_PANEL_ACCESS"),
             ['only' => 'adminProduct']);
-        $this->middleware('permission:'.Config::get("constants.CONTENT_ADMIN_PANEL_ACCESS"),
+        $this->middleware('permission:'.config("constants.CONTENT_ADMIN_PANEL_ACCESS"),
             ['only' => 'adminContent']);
-        $this->middleware('permission:'.Config::get("constants.LIST_ORDER_ACCESS"), ['only' => 'adminOrder']);
-        $this->middleware('permission:'.Config::get("constants.SMS_ADMIN_PANEL_ACCESS"), ['only' => 'adminSMS']);
-        $this->middleware('permission:'.Config::get("constants.REPORT_ADMIN_PANEL_ACCESS"), ['only' => 'adminReport']);
-        $this->middleware('permission:'.Config::get("constants.LIST_EDUCATIONAL_CONTENT_ACCESS"),
+        $this->middleware('permission:'.config("constants.LIST_ORDER_ACCESS"), ['only' => 'adminOrder']);
+        $this->middleware('permission:'.config("constants.SMS_ADMIN_PANEL_ACCESS"), ['only' => 'adminSMS']);
+        $this->middleware('permission:'.config("constants.REPORT_ADMIN_PANEL_ACCESS"), ['only' => 'adminReport']);
+        $this->middleware('permission:'.config("constants.LIST_EDUCATIONAL_CONTENT_ACCESS"),
             ['only' => 'contentSetListTest']);
-        $this->middleware('ability:'.Config::get("constants.ROLE_ADMIN").','.Config::get("constants.TELEMARKETING_PANEL_ACCESS"),
+        $this->middleware('ability:'.config("constants.ROLE_ADMIN").','.config("constants.TELEMARKETING_PANEL_ACCESS"),
             ['only' => 'adminTeleMarketing']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_COUPON_ACCESS'),
+        $this->middleware('permission:'.config('constants.INSERT_COUPON_ACCESS'),
             ['only' => 'adminGenerateRandomCoupon']);
         $this->middleware('role:admin', [
             'only' => [
@@ -245,7 +245,7 @@ class HomeController extends Controller
             1 => 'فعال',
         ];
         
-        $orderstatuses = Orderstatus::whereNotIn('id', [Config::get("constants.ORDER_STATUS_OPEN")])
+        $orderstatuses = Orderstatus::whereNotIn('id', [config("constants.ORDER_STATUS_OPEN")])
             ->pluck('displayName', 'id');
         
         $paymentstatuses = Paymentstatus::pluck('displayName', 'id');
@@ -377,13 +377,13 @@ class HomeController extends Controller
     {
         $pageName = "admin";
         $user     = Auth::user();
-        if ($user->can(Config::get('constants.SHOW_OPENBYADMIN_ORDER'))) {
-            $orderstatuses = Orderstatus::whereNotIn('id', [Config::get("constants.ORDER_STATUS_OPEN")])
+        if ($user->can(config('constants.SHOW_OPENBYADMIN_ORDER'))) {
+            $orderstatuses = Orderstatus::whereNotIn('id', [config("constants.ORDER_STATUS_OPEN")])
                 ->pluck('displayName', 'id');
         } else {
             $orderstatuses = Orderstatus::whereNotIn('id', [
-                Config::get("constants.ORDER_STATUS_OPEN"),
-                Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
+                config("constants.ORDER_STATUS_OPEN"),
+                config("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
             ])
                 ->pluck('displayName', 'id')
                 ->toArray();
@@ -400,7 +400,7 @@ class HomeController extends Controller
         
         $products = collect();
         if ($user->hasRole("onlineNoroozMarketing")) {
-            $products = [Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ROOT")];
+            $products = [config("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ROOT")];
             $products = $this->makeProductCollection($products);
         } else {
             $products = $this->makeProductCollection();
@@ -621,7 +621,7 @@ class HomeController extends Controller
             ]);
         }
         
-        //        Meta::set('title', substr("آلاء|پنل انتخاب رشته", 0, Config::get("constants.META_TITLE_LIMIT")));
+        //        Meta::set('title', substr("آلاء|پنل انتخاب رشته", 0, config("constants.META_TITLE_LIMIT")));
         //        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         
         return view("admin.consultant.consultantEntekhabReshte",
@@ -642,7 +642,7 @@ class HomeController extends Controller
             ->get()
             ->groupBy("user_id");
         
-        //        Meta::set('title', substr("آلاء|لیست انتخاب رشته", 0, Config::get("constants.META_TITLE_LIMIT")));
+        //        Meta::set('title', substr("آلاء|لیست انتخاب رشته", 0, config("constants.META_TITLE_LIMIT")));
         //        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         
         return view("admin.consultant.consultantEntekhabReshteList", compact("usersurveyanswers"));
@@ -730,7 +730,7 @@ class HomeController extends Controller
         
         $smsCredit = (int) $this->medianaGetCredit();
         
-        $smsProviderNumber = Config::get('constants.SMS_PROVIDER_NUMBER');
+        $smsProviderNumber = config('constants.SMS_PROVIDER_NUMBER');
         
         $coupons = Coupon::pluck('name', 'id')
             ->toArray();
@@ -843,7 +843,7 @@ class HomeController extends Controller
             1 => 'فعال',
         ];
         
-        $orderstatuses = Orderstatus::whereNotIn('id', [Config::get("constants.ORDER_STATUS_OPEN")])
+        $orderstatuses = Orderstatus::whereNotIn('id', [config("constants.ORDER_STATUS_OPEN")])
             ->pluck('displayName', 'id');
         
         $paymentstatuses = Paymentstatus::pluck('displayName', 'id');
@@ -974,9 +974,9 @@ class HomeController extends Controller
                 ->whereHas("orderproducts", function ($q2) use ($marketingProducts) {
                     $q2->whereIn("product_id", $marketingProducts);
                 })
-                ->where("orderstatus_id", Config::get("constants.ORDER_STATUS_CLOSED"))
+                ->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
                 ->where("paymentstatus_id",
-                    Config::get("constants.PAYMENT_STATUS_PAID"))
+                    config("constants.PAYMENT_STATUS_PAID"))
                 ->where("completed_at", ">=", $baseDataTime)
                 ->get();
             $orders->load("orderproducts");
@@ -1044,45 +1044,45 @@ class HomeController extends Controller
         
         switch ($contentType) {
             case "عکس پروفایل":
-                $diskName = Config::get('constants.DISK1');
+                $diskName = config('constants.DISK1');
                 break;
             case "عکس محصول":
-                $diskName = Config::get('constants.DISK4');
+                $diskName = config('constants.DISK4');
                 break;
             case "تمرین":
                 // check if he has permission for downloading the assignment :
                 
-                //if(!Auth::user()->permissions->contains(Permission::all()->where("name", Config::get('constants.DOWNLOAD_ASSIGNMENT_ACCESS'))->first()->id)) return redirect(action(("HomeController@error403"))) ;
+                //if(!Auth::user()->permissions->contains(Permission::all()->where("name", config('constants.DOWNLOAD_ASSIGNMENT_ACCESS'))->first()->id)) return redirect(action(("HomeController@error403"))) ;
                 //  checking permission through the user's role
                 //$user->hasRole('goldenUser');
-                $diskName = Config::get('constants.DISK2');
+                $diskName = config('constants.DISK2');
                 break;
             case "پاسخ تمرین":
-                $diskName = Config::get('constants.DISK3');
+                $diskName = config('constants.DISK3');
                 break;
             case "کاتالوگ محصول":
-                $diskName = Config::get('constants.DISK5');
+                $diskName = config('constants.DISK5');
                 break;
             case "سؤال مشاوره ای":
-                $diskName = Config::get('constants.DISK6');
+                $diskName = config('constants.DISK6');
                 break;
             case "تامبنیل مشاوره":
-                $diskName = Config::get('constants.DISK7');
+                $diskName = config('constants.DISK7');
                 break;
             case "عکس مقاله" :
-                $diskName = Config::get('constants.DISK8');
+                $diskName = config('constants.DISK8');
                 break;
             case "عکس اسلاید صفحه اصلی" :
-                $diskName = Config::get('constants.DISK9');
+                $diskName = config('constants.DISK9');
                 break;
             case "فایل سفارش" :
-                $diskName = Config::get('constants.DISK10');
+                $diskName = config('constants.DISK10');
                 break;
             case "فایل محصول" :
                 $productId = Input::get("pId");
-                $diskName  = Config::get('constants.DISK13');
+                $diskName  = config('constants.DISK13');
                 
-                if (!$user->can(Config::get("constants.DOWNLOAD_PRODUCT_FILE"))) {
+                if (!$user->can(config("constants.DOWNLOAD_PRODUCT_FILE"))) {
                     $products    = ProductRepository::getProductsThatHaveValidProductFileByFileNameRecursively($fileName);
                     $validOrders = $user->getOrdersThatHaveSpecificProduct($products);
                     
@@ -1105,30 +1105,30 @@ class HomeController extends Controller
                 }
                 break;
             case "فایل کارنامه" :
-                $diskName = Config::get('constants.DISK14');
+                $diskName = config('constants.DISK14');
                 break;
-            case Config::get('constants.DISK18') :
-                if (Storage::disk(Config::get('constants.DISK18_CLOUD'))
+            case config('constants.DISK18') :
+                if (Storage::disk(config('constants.DISK18_CLOUD'))
                     ->exists($fileName)) {
-                    $diskName = Config::get('constants.DISK18_CLOUD');
+                    $diskName = config('constants.DISK18_CLOUD');
                 } else {
-                    $diskName = Config::get('constants.DISK18');
+                    $diskName = config('constants.DISK18');
                 }
                 break;
-            case Config::get('constants.DISK19'):
-                if (Storage::disk(Config::get('constants.DISK19_CLOUD'))
+            case config('constants.DISK19'):
+                if (Storage::disk(config('constants.DISK19_CLOUD'))
                     ->exists($fileName)) {
                     $diskName = Config::  get('constants.DISK19_CLOUD');
                 } else {
-                    $diskName = Config::get('constants.DISK19');
+                    $diskName = config('constants.DISK19');
                 }
                 break;
-            case Config::get('constants.DISK20'):
-                if (Storage::disk(Config::get('constants.DISK20_CLOUD'))
+            case config('constants.DISK20'):
+                if (Storage::disk(config('constants.DISK20_CLOUD'))
                     ->exists($fileName)) {
                     $diskName = Config::  get('constants.DISK20_CLOUD');
                 } else {
-                    $diskName = Config::get('constants.DISK20');
+                    $diskName = config('constants.DISK20');
                 }
                 break;
             default :
@@ -1302,22 +1302,22 @@ class HomeController extends Controller
     {
         switch ($category) {
             case "1";
-                $diskName = Config::get('constants.DISK1');
+                $diskName = config('constants.DISK1');
                 break;
             case "4":
-                $diskName = Config::get('constants.DISK4');
+                $diskName = config('constants.DISK4');
                 break;
             case "7":
-                $diskName = Config::get('constants.DISK7');
+                $diskName = config('constants.DISK7');
                 break;
             case "8":
-                $diskName = Config::get('constants.DISK8');
+                $diskName = config('constants.DISK8');
                 break;
             case "9":
-                $diskName = Config::get('constants.DISK9');
+                $diskName = config('constants.DISK9');
                 break;
             case "11":
-                $diskName = Config::get('constants.DISK11');
+                $diskName = config('constants.DISK11');
                 break;
             default:
                 break;
@@ -2718,14 +2718,14 @@ class HomeController extends Controller
          * if($order->orderproducts->where("product_id" , 107)->isNotEmpty()) continue ;
          *
          * $giftOrderproduct = new Orderproduct();
-         * $giftOrderproduct->orderproducttype_id = Config::get("constants.ORDER_PRODUCT_GIFT");
+         * $giftOrderproduct->orderproducttype_id = config("constants.ORDER_PRODUCT_GIFT");
          * $giftOrderproduct->order_id = $order->id ;
          * $giftOrderproduct->product_id = 107 ;
          * $giftOrderproduct->cost = 24000 ;
          * $giftOrderproduct->discountPercentage = 100 ;
          * $giftOrderproduct->save() ;
          *
-         * $giftOrderproduct->parents()->attach($orderproduct->id , ["relationtype_id"=>Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
+         * $giftOrderproduct->parents()->attach($orderproduct->id , ["relationtype_id"=>config("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
          * $counter++;
          * if(isset($order->user->id))
          * array_push($users , $order->user->id);
@@ -2742,7 +2742,7 @@ class HomeController extends Controller
          * $productsArray = [164, 160, 156, 152, 148, 144, 140, 136, 132, 128, 124, 120];
          * $orders = Order::whereHas("orderproducts", function ($q) use ($productsArray) {
          * $q->whereIn("product_id", $productsArray);
-         * })->whereIn("orderstatus_id", [Config::get("constants.ORDER_STATUS_CLOSED"), Config::set("constants.ORDER_STATUS_POSTED")])->whereIn("paymentstatus_id", [Config::get("constants.PAYMENT_STATUS_PAID"), Config::get("constants.PAYMENT_STATUS_INDEBTED")])->get();
+         * })->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED"), Config::set("constants.ORDER_STATUS_POSTED")])->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID"), config("constants.PAYMENT_STATUS_INDEBTED")])->get();
          *
          *
          * dump("Number of orders: ".$orders->count());
@@ -2820,8 +2820,8 @@ class HomeController extends Controller
          * $transactionRequest->offsetSet("cost" , -$totalRefund);
          * $transactionRequest->offsetSet("managerComment" , "ثبت سیستمی بازگشت هزینه پشتیبانی همایش 1+5");
          * $transactionRequest->offsetSet("destinationBankAccount_id" , 1);
-         * $transactionRequest->offsetSet("paymentmethod_id" , Config::get("constants.PAYMENT_METHOD_ATM"));
-         * $transactionRequest->offsetSet("transactionstatus_id" ,  Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"));
+         * $transactionRequest->offsetSet("paymentmethod_id" , config("constants.PAYMENT_METHOD_ATM"));
+         * $transactionRequest->offsetSet("transactionstatus_id" ,  config("constants.TRANSACTION_STATUS_SUCCESSFUL"));
          * $transactionController = new TransactionController();
          * $transactionController->store($transactionRequest);
          *
@@ -2845,8 +2845,8 @@ class HomeController extends Controller
          * {
          * $orders = \App\Order::whereHas("orderproducts" , function ($q2) use ($product){
          * $q2->where("product_id" , $product->id)->whereNull("orderproducttype_id");
-         * })->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED") , Config::get("constants.ORDER_STATUS_POSTED") , Config::get("constants.ORDER_STATUS_READY_TO_POST")])
-         * ->whereIn("paymentstatus_id" , [Config::get("constants.PAYMENT_STATUS_INDEBTED") , Config::get("constants.PAYMENT_STATUS_PAID")])->get();
+         * })->whereIn("orderstatus_id" , [config("constants.ORDER_STATUS_CLOSED") , config("constants.ORDER_STATUS_POSTED") , config("constants.ORDER_STATUS_READY_TO_POST")])
+         * ->whereIn("paymentstatus_id" , [config("constants.PAYMENT_STATUS_INDEBTED") , config("constants.PAYMENT_STATUS_PAID")])->get();
          *
          * dump("Number of orders: ".$orders->count());
          * foreach ($orders as $order)

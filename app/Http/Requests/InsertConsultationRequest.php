@@ -14,7 +14,7 @@ class InsertConsultationRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.INSERT_CONSULTATION_ACCESS'))) {
+            ->can(config('constants.INSERT_CONSULTATION_ACCESS'))) {
             return true;
         }
 

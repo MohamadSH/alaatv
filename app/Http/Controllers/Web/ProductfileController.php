@@ -24,15 +24,15 @@ class ProductfileController extends Controller
     
     function __construct()
     {
-        $this->middleware('permission:'.Config::get('constants.LIST_PRODUCT_FILE_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_PRODUCT_FILE_ACCESS'), [
+        $this->middleware('permission:'.config('constants.LIST_PRODUCT_FILE_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.config('constants.INSERT_PRODUCT_FILE_ACCESS'), [
             'only' => [
                 'create',
                 'store',
             ],
         ]);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_PRODUCT_FILE_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.Config::get('constants.EDIT_PRODUCT_FILE_ACCESS'), [
+        $this->middleware('permission:'.config('constants.REMOVE_PRODUCT_FILE_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:'.config('constants.EDIT_PRODUCT_FILE_ACCESS'), [
             'only' => [
                 'edit',
                 'update',
@@ -106,7 +106,7 @@ class ProductfileController extends Controller
             $file      = $request->file('file');
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-            if (Storage::disk(Config::get('constants.DISK13'))
+            if (Storage::disk(config('constants.DISK13'))
                 ->put($fileName, File::get($file))) {
                 $productFile->file = $fileName;
             }
@@ -199,9 +199,9 @@ class ProductfileController extends Controller
             $file      = $request->file('file');
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-            if (Storage::disk(Config::get('constants.DISK13'))
+            if (Storage::disk(config('constants.DISK13'))
                 ->put($fileName, File::get($file))) {
-                Storage::disk(Config::get('constants.DISK13'))
+                Storage::disk(config('constants.DISK13'))
                     ->delete($oldFile);
                 $productFile->file = $fileName;
             }

@@ -11,7 +11,7 @@ class EditAttributegroupRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.EDIT_ATTRIBUTEGROUP_ACCESS'))) {
+            ->can(config('constants.EDIT_ATTRIBUTEGROUP_ACCESS'))) {
             return true;
         }
     
