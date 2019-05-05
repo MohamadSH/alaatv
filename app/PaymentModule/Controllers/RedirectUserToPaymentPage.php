@@ -3,7 +3,6 @@
 namespace App\PaymentModule\Controllers;
 
 //use App\Classes\Payment\OnlineGateWay;
-use App\PaymentModule\Repositories\OrdersRepo;
 use App\User;
 use App\Order;
 use App\Transaction;
@@ -16,6 +15,7 @@ use Illuminate\Routing\Controller;
 use App\PaymentModule\OnlineGateWay;
 use App\PaymentModule\PaymentDriver;
 use App\Repositories\TransactionRepo;
+use App\PaymentModule\Repositories\OrdersRepo;
 use App\Http\Controllers\Web\TransactionController;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;

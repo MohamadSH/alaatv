@@ -86,7 +86,7 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
         $response = explode(',', $response->return);
 
         if ($response[0] != '0') {
-            return nullable(null, [$this->errors[$response[0]]]);
+            return nullable(null, ['خطای ارتباط با درگاه بانک']);
         }
 
         return nullable($response[1]);
@@ -121,10 +121,9 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
             "_token" => "CATNE2rXs0TWtSh2I4aFNyqpYMOq15cLGwVgcKpD"`
         ]
          */
-
-        if ($amount->rials() !== Input::get('FinalAmount')) {
-            return 'fake request.';
-        }
+//        if ($amount->rials() !== Input::get('FinalAmount')) {
+//            return 'fake request.';
+//        }
         /*
         $refId             = Input::get('RefId');
         $trackingCode      = Input::get('SaleReferenceId');
@@ -132,23 +131,19 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
         $resCode           = Input::get('ResCode');
         $saleOrderId       = Input::get('SaleOrderId');*/
 
-        /* if ($resCode != '0') {
-            return true;
-        }*/
+            if (Input::get('ResCode') == 0) {
+                $response = $this->verify();
+                $response = $this->settleRequest();
+            }
 
-        $response = $this->verify();
-        $response = $this->settleRequest();
-
-        if ($response->return == '0' || $response->return == '45') {
-        
             return VerificationResponse::instance(request()->all());
-        }
     }
     
     protected function settleRequest()
     {
         /*
-    array:4 [▼
+         * enseraf karbar :
+        array:4 [▼
             "RefId" => "5925E561FF4B2421"
             "ResCode" => "17"
             "SaleOrderId" => "15"
@@ -160,14 +155,9 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
         } catch (\SoapFault $e) {
             throw $e;
         }
-
-        // return $this->errors[(int)$response->return];
-        // throw new MellatException($response->return);
     }
     
     /**
-     * @param $refId
-     * @param $trackingCode
      * @return array
      */
     private function getVerificationParams(): array

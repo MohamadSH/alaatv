@@ -224,7 +224,7 @@
                                     <hr>
 
                                     <button type = "button"
-                                            onclick="window.location.href='{{route('redirectToBank', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}';
+                                            onclick="window.location.href='{{route('redirectToBank', ['paymentMethod'=>'mellat', 'device'=>'web'])}}';
 
                                                     mApp.block('.btnSubmitOrderWraper', {
                                                     type: 'loader',
