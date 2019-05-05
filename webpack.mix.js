@@ -25,9 +25,11 @@ mix.copyDirectory('public/assets/vendors/base', 'public/css');
 
 mix.scripts(
     [
-        'public/assets/vendors/base/vendors.bundle.js',
+        'public/assets/vendors/base/vendors.bundle.edited.js',
         'public/assets/demo/demo12/base/scripts.bundle.js',
+
         // 'public/acm/cubeportfolio/js/jquery.cubeportfolio.min.js',
+
         'public/acm/custom-js-app.js',
         'public/acm/AlaatvCustomFiles/js/mLayout.js'
     ],
@@ -75,15 +77,15 @@ mix.babel(
         'node_modules/lightgallery/modules/lg-zoom.min.js',
         'node_modules/jquery-sticky/jquery.sticky.js',
         'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
-        // 'public/acm/videojs/video.min.js',
-        // 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
-        // 'public/acm/videojs/nuevo.min.js',
+        'public/acm/videojs/video.min.js',
+        'public/acm/videojs/plugins/pip/videojs.pip.min.js',
+        'public/acm/videojs/nuevo.min.js',
         'public/acm/videojs/plugins/videojs.p2p.min.js',
         'public/acm/videojs/plugins/videojs.hotkeys.min.js',
         'public/acm/videojs/plugins/seek-to-point.js',
         'public/acm/AlaatvCustomFiles/js/UserCart.js',
         'public/acm/videojs/lang/fa.js',
-        // 'public/acm/AlaatvCustomFiles/js/page-product-show.js',
+        'public/acm/AlaatvCustomFiles/js/page-product-show.js',
     ],
     'public/js/product-show.js'
 ).version();

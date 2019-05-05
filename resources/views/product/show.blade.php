@@ -472,12 +472,7 @@
     </div>
 @endsection
 @section('page-js')
-    <script src="{{ asset('/acm/videojs/video.min.js') }}"></script>
-    <script src="{{ asset('/acm/videojs/plugins/pip/videojs.pip.min.js') }}"></script>
-    <script src="{{ asset('/acm/videojs/plugins/pip/videojs.pip.min.js') }}"></script>
-    <script src="{{ asset('/acm/videojs/nuevo.min.js') }}"></script>
     <script src="{{ mix('/js/product-show.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-product-show.js') }}"></script>
     <script>
 
         var player = videojs('videoPlayer', {language: 'fa'});

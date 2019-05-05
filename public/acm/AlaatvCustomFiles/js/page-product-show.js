@@ -307,7 +307,6 @@ jQuery(document).ready(function() {
         $("#videoPlayerTitle").html(videoTitle);
         $("#videoPlayerDescription").html(videoDescription);
 
-
         mApp.unblock('.videoPlayerPortlet');
 
         player.pause();
