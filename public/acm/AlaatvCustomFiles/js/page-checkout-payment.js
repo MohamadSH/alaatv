@@ -175,6 +175,7 @@ var CheckoutPaymentUi = function () {
         }
     }
     function setUiHasDiscountCode() {
+        $("#hasntDiscountCode").bootstrapSwitch('state', false);
         // $('.discountCodeValueWarper').fadeIn();
         $('.discountCodeValueWarperCover').fadeOut();
         let discountCodeValue = $('#discountCodeValue');
@@ -185,6 +186,7 @@ var CheckoutPaymentUi = function () {
         btnSaveDiscountCodeValue.prop('readonly', false);
     }
     function setUiHasntDiscountCode() {
+        $("#hasntDiscountCode").bootstrapSwitch('state', true);
         // $('.discountCodeValueWarper').fadeOut();
         $('.discountCodeValueWarperCover').fadeIn();
         let discountCodeValue = $('#discountCodeValue');
