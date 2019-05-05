@@ -7,8 +7,10 @@ namespace App\Traits\Content;
 use stdClass;
 use App\Content;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use App\Collection\ProductCollection;
 use Illuminate\Foundation\Http\FormRequest;
@@ -26,14 +28,15 @@ trait ContentControllerResponseTrait
      *
      * @return JsonResponse
      */
-    protected function userCanNotSeeContentResponse($message, int $code, Content $content, ProductCollection $productsThatHaveThisContent = null,
+    protected function userCanNotSeeContentResponse(string $message, int $code, Content $content, ProductCollection $productsThatHaveThisContent = null,
         bool $productInResponse = false): JsonResponse
     {
         if ($productInResponse) {
             return response()->json([
                 'message' => $message,
                 'content' => $content->makeHidden('file'),
-                'product' => $productsThatHaveThisContent->isEmpty() ? null : $productsThatHaveThisContent,
+                'product' => isset($productsThatHaveThisContent) && $productsThatHaveThisContent->isEmpty() ? null :
+                    $productsThatHaveThisContent,
             ], $code);
             
         }
@@ -61,7 +64,7 @@ trait ContentControllerResponseTrait
      *
      * @return void
      */
-    protected function fillContentFromRequest(FormRequest $request, Content &$content): void
+    protected function fillContentFromRequest(FormRequest $request, Content $content): void
     {
         $inputData  = $request->all();
         $time       = $request->get("validSinceTime");
@@ -120,6 +123,21 @@ trait ContentControllerResponseTrait
         $tags = array_filter($tags);
         
         return $tags;
+    }
+    
+    protected function getUserCanNotSeeContentJsonResponse(Content $content, ProductCollection $productsThatHaveThisContent, callable $callback): JsonResponse
+    {
+        $product_that_have_this_content_is_empty = $productsThatHaveThisContent->isEmpty();
+        
+        $messageLookupTable = [
+            '0' => trans('content.Not Free'),
+            '1' => trans('content.Not Free And you can\'t buy it'),
+        ];
+        $message            = Arr::get($messageLookupTable, (int) $product_that_have_this_content_is_empty);
+        
+        $callback($message);
+        return $this->userCanNotSeeContentResponse($message,
+            Response::HTTP_FORBIDDEN, $content, $productsThatHaveThisContent, true);
     }
     
     /**

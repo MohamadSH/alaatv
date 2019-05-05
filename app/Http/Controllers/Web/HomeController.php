@@ -105,25 +105,26 @@ class HomeController extends Controller
         //            $authException = ['index' , 'getImage' , 'error404' , 'error403' , 'error500' , 'errorPage' , 'siteMapXML', 'download' ];
         //        }else{
         $authException = [
-//            'debug',
-'download',
-'telgramAgent',
-'index',
-'getImage',
-'error404',
-'error403',
-'error500',
-'errorPage',
-'aboutUs',
-'contactUs',
-'sendMail',
-'rules',
-'siteMapXML',
-'uploadFile',
-'search',
-'schoolRegisterLanding',
-'lernitoTree',
-'getTreeInPHPArrayString',
+            'debug',
+            'newDownload',
+            'download',
+            'telgramAgent',
+            'index',
+            'getImage',
+            'error404',
+            'error403',
+            'error500',
+            'errorPage',
+            'aboutUs',
+            'contactUs',
+            'sendMail',
+            'rules',
+            'siteMapXML',
+            'uploadFile',
+            'search',
+            'schoolRegisterLanding',
+            'lernitoTree',
+            'getTreeInPHPArrayString',
         ];
         //        }
         $this->middleware('auth', ['except' => $authException]);
@@ -167,15 +168,16 @@ class HomeController extends Controller
     
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
+//        dd(Content::find(10233));
+        dd(Content::find(10233)
+            ->getTaggableTags());
         return [
-            Product::find(226)->sets->first->getContents(),
+            Product::find(226)->sets->first()
+                ->getContents(),
             Product::find(227)->sets,
             Product::find(228)->sets,
             Product::find(229)->sets,
         ];
-        dd(ProductRepository::getProductsThatHaveValidProductFileByFileNameRecursively('fizik_paye_dahom.pdf')
-            ->pluck
-            ('id'));
     }
     
     public function search(Request $request)
@@ -992,30 +994,26 @@ class HomeController extends Controller
      */
     public function newDownload($data, ContentRepositoryInterface $contentRepository)
     {
-        if (isset($data)) {
-            try {
-                $data = (array) decrypt($data);
-            } catch (DecryptException $e) {
-                abort(403);
-            }
-            $url       = $data["url"];
-            $contentId = $data["data"]["content_id"];
-            $content   = $contentRepository->getContentById($contentId);
-            
-            if (Auth::check()) {
-                /** @var \App\User $user */
-                $user = auth()->user();
-                if (!$user->hasContent($content)) {
-                    return redirect()
-                        ->action('Web\ContentController@show', $content)
-                        ->setStatusCode(Response::HTTP_FOUND);
-                }
-                $finalLink = $this->getSecureUrl($url);
-                
-                return redirect($finalLink);
-            }
+        $user = getAuthenticatedUser();
+        if (is_null($data) || is_null($user)) {
+            abort(403, 'Not authorized.');
         }
-        abort(403);
+        try {
+            $data = (array) decrypt($data);
+        } catch (DecryptException $e) {
+            abort(403, 'invalid Data!');
+        }
+        $url       = $data["url"];
+        $contentId = $data["data"]["content_id"];
+        $content   = $contentRepository->getContentById($contentId);
+        if (!$user->hasContent($content)) {
+            return redirect()
+                ->action('Web\ContentController@show', $content)
+                ->setStatusCode(Response::HTTP_FOUND);
+        }
+        $finalLink = $this->getSecureUrl($url);
+    
+        return redirect($finalLink);
     }
     
     /**
