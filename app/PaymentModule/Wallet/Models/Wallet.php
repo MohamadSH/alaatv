@@ -71,43 +71,32 @@ class Wallet extends BaseModel
         return $this->withdraw($amount, false);
     }
     
-    /**
-     * Attempt to add credits to this wallet
-     *
-     * @param  integer  $amount
-     * @param  null     $orderId
-     *
-     * @return array
-     */
-    public function withdrawAll($amount, $orderId = null) {
-
-    }
-
     public function withdraw($amount, $orderId = null)
     {
         if ($amount <= 0) {
             return false;
         }
-
+        
         if (!($this->hasEnoughBalance($amount))) {
             return false;
         }
-
+        
         $this->balance = $this->balance - $amount;
-
+        
         if (!$this->update()) {
             return false;
         }
-
-        $this->transactions()->create([
-            'order_id' => $orderId,
-            'wallet_id' => $this->id,
-            'cost' => $amount,
-            'transactionstatus_id' => config("constants.TRANSACTION_STATUS_SUCCESSFUL"),
-            'paymentmethod_id' => config("constants.PAYMENT_METHOD_WALLET"),
-            'completed_at' => Carbon::now(),
-        ]);
-
+        
+        $this->transactions()
+            ->create([
+                'order_id'             => $orderId,
+                'wallet_id'            => $this->id,
+                'cost'                 => $amount,
+                'transactionstatus_id' => config("constants.TRANSACTION_STATUS_SUCCESSFUL"),
+                'paymentmethod_id'     => config("constants.PAYMENT_METHOD_WALLET"),
+                'completed_at'         => Carbon::now(),
+            ]);
+        
         return true;
     }
     
@@ -132,6 +121,19 @@ class Wallet extends BaseModel
     }
     
     /**
+     * Attempt to add credits to this wallet
+     *
+     * @param  integer  $amount
+     * @param  null     $orderId
+     *
+     * @return array
+     */
+    public function withdrawAll($amount, $orderId = null)
+    {
+    
+    }
+    
+    /**
      * Attempt to move credits from this wallet
      *
      * @param  integer  $amount
@@ -144,22 +146,23 @@ class Wallet extends BaseModel
         $newBalance    = $this->balance + $amount;
         $this->balance = $newBalance;
         $result        = $this->update();
-
+        
         if (!$result) {
             return false;
         }
-
+        
         if ($amount <= 0 || $withoutTransaction) {
             return true;
         }
-
-        $this->transactions()->create([
-            'wallet_id' => $this->id,
-            'cost' => -$amount,
-            'transactionstatus_id' => config("constants.TRANSACTION_STATUS_SUCCESSFUL"),
-            'completed_at' => Carbon::now(),
-        ]);
-
+        
+        $this->transactions()
+            ->create([
+                'wallet_id'            => $this->id,
+                'cost'                 => -$amount,
+                'transactionstatus_id' => config("constants.TRANSACTION_STATUS_SUCCESSFUL"),
+                'completed_at'         => Carbon::now(),
+            ]);
+        
         return true;
     }
     
@@ -167,33 +170,34 @@ class Wallet extends BaseModel
     {
         return $this->belongsTo(Wallettype::class, 'wallettype_id', 'id');
     }
-
+    
     /**
- * @return array
- */
+     * @return array
+     */
     private function respondFail($msg): array
     {
         return $this->response($msg, false);
     }
-
+    
+    /**
+     * @param        $msg
+     * @param  bool  $status
+     *
+     * @return array
+     */
+    private function response($msg, $status = true): array
+    {
+        return [
+            "result"       => $status,
+            "responseText" => $msg,
+        ];
+    }
+    
     /**
      * @return array
      */
     private function respondSuccess($msg): array
     {
         return $this->response($msg);
-    }
-
-    /**
-     * @param $msg
-     * @param bool $status
-     * @return array
-     */
-    private function response($msg, $status = true): array
-    {
-        return [
-            "result" => $status,
-            "responseText" => $msg,
-        ];
     }
 }

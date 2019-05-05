@@ -1,10 +1,10 @@
 <?php namespace App\Traits;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use PHPUnit\Framework\Exception;
+use Illuminate\Support\Facades\Log;
+use GuzzleHttp\Exception\GuzzleException;
 
 trait APIRequestCommon
 {

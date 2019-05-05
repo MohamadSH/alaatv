@@ -17,10 +17,10 @@ class PermissionController extends Controller
     {
         $this->response = new Response();
         
-        $this->middleware('permission:'.Config::get('constants.LIST_PERMISSION_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_PERMISSION_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_PERMISSION_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.Config::get('constants.SHOW_PERMISSION_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:'.config('constants.LIST_PERMISSION_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.config('constants.INSERT_PERMISSION_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:'.config('constants.REMOVE_PERMISSION_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:'.config('constants.SHOW_PERMISSION_ACCESS'), ['only' => 'edit']);
     }
     
     public function index()

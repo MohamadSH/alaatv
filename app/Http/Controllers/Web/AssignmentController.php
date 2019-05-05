@@ -22,10 +22,10 @@ class AssignmentController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.Config::get('constants.LIST_ASSIGNMENT_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_ASSIGNMENT_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_ASSIGNMENT_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.Config::get('constants.SHOW_ASSIGNMENT_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:'.config('constants.LIST_ASSIGNMENT_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.config('constants.INSERT_ASSIGNMENT_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:'.config('constants.REMOVE_ASSIGNMENT_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:'.config('constants.SHOW_ASSIGNMENT_ACCESS'), ['only' => 'edit']);
         
         $this->response = new Response();
     }
@@ -52,7 +52,7 @@ class AssignmentController extends Controller
             $file      = $request->file('questionFile');
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-            if (Storage::disk(Config::get('constants.DISK2'))
+            if (Storage::disk(config('constants.DISK2'))
                 ->put($fileName, File::get($file))) {
                 $assignment->questionFile = $fileName;
             }
@@ -109,9 +109,9 @@ class AssignmentController extends Controller
             $file      = $request->file('questionFile');
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-            if (Storage::disk(Config::get('constants.DISK2'))
+            if (Storage::disk(config('constants.DISK2'))
                 ->put($fileName, File::get($file))) {
-                Storage::disk(Config::get('constants.DISK2'))
+                Storage::disk(config('constants.DISK2'))
                     ->delete($questionFile);
                 $assignment->questionFile = $fileName;
             }

@@ -13,17 +13,17 @@ class SlideShowController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:'.Config::get('constants.LIST_SLIDESHOW_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_SLIDESHOW_ACCESS'), [
+        $this->middleware('permission:'.config('constants.LIST_SLIDESHOW_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.config('constants.INSERT_SLIDESHOW_ACCESS'), [
             'only' => 'create',
             'store',
         ]);
-        $this->middleware('permission:'.Config::get('constants.EDIT_SLIDESHOW_ACCESS'), [
+        $this->middleware('permission:'.config('constants.EDIT_SLIDESHOW_ACCESS'), [
             'only' => 'update',
             'edit',
         ]);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_SLIDESHOW_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.Config::get('constants.SHOW_SLIDESHOW_ACCESS'), ['only' => 'show']);
+        $this->middleware('permission:'.config('constants.REMOVE_SLIDESHOW_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:'.config('constants.SHOW_SLIDESHOW_ACCESS'), ['only' => 'show']);
     }
 
     public function index()
@@ -43,13 +43,13 @@ class SlideShowController extends Controller
         //        switch ($websitepage)
         //        {
         //            case "/home":
-        //                $diskName = Config::get('constants.DISK9');
+        //                $diskName = config('constants.DISK9');
         //                break;
         //            case "/لیست-مقالات":
-        //                $diskName = Config::get('constants.DISK13');
+        //                $diskName = config('constants.DISK13');
         //                break;
         //            default :
-        //                $diskName = Config::get('constants.DISK9');
+        //                $diskName = config('constants.DISK9');
         //                break;
         //        }
         $slide = new Slideshow();
@@ -77,7 +77,7 @@ class SlideShowController extends Controller
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
             
-            if (Storage::disk(Config::get('constants.DISK9'))
+            if (Storage::disk(config('constants.DISK9'))
                 ->put($fileName, File::get($file))) {
                 $slide->photo = $fileName;
             }
@@ -133,13 +133,13 @@ class SlideShowController extends Controller
         //        switch ($websitepage)
         //        {
         //            case "/home":
-        //                $diskName = Config::get('constants.DISK9');
+        //                $diskName = config('constants.DISK9');
         //                break;
         //            case "/لیست-مقالات":
-        //                $diskName = Config::get('constants.DISK13');
+        //                $diskName = config('constants.DISK13');
         //                break;
         //            default :
-        //                $diskName = Config::get('constants.DISK9');
+        //                $diskName = config('constants.DISK9');
         //                break;
         //        }
         
@@ -169,9 +169,9 @@ class SlideShowController extends Controller
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
             
-            if (Storage::disk(Config::get('constants.DISK9'))
+            if (Storage::disk(config('constants.DISK9'))
                 ->put($fileName, File::get($file))) {
-                Storage::disk(Config::get('constants.DISK9'))
+                Storage::disk(config('constants.DISK9'))
                     ->delete($oldPhoto);
                 $slide->photo = $fileName;
             }

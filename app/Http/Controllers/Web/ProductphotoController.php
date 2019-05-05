@@ -31,7 +31,7 @@ class ProductphotoController extends Controller
             $file      = $request->file('file');
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-            if (Storage::disk(Config::get('constants.DISK4'))
+            if (Storage::disk(config('constants.DISK4'))
                 ->put($fileName, File::get($file))) {
                 $photo->file = $fileName;
             }

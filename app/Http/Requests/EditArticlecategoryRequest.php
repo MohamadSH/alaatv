@@ -14,7 +14,7 @@ class EditArticlecategoryRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.EDIT_ARTICLECATEGORY_ACCESS'))) {
+            ->can(config('constants.EDIT_ARTICLECATEGORY_ACCESS'))) {
             return true;
         }
 

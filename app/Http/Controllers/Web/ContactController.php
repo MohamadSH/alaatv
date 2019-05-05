@@ -20,9 +20,9 @@ class ContactController extends Controller
     
     function __construct()
     {
-        $this->middleware('permission:'.Config::get('constants.LIST_CONTACT_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_CONTACT_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.Config::get('constants.EDIT_CONTACT_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:'.config('constants.LIST_CONTACT_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.config('constants.REMOVE_CONTACT_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:'.config('constants.EDIT_CONTACT_ACCESS'), ['only' => 'edit']);
         
         $this->response = new Response();
     }

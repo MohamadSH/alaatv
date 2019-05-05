@@ -14,7 +14,7 @@ class InsertCouponRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.INSERT_COUPON_ACCESS'))) {
+            ->can(config('constants.INSERT_COUPON_ACCESS'))) {
             return true;
         }
 

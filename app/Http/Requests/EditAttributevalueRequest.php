@@ -11,7 +11,7 @@ class EditAttributevalueRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.EDIT_ATTRIBUTEVALUE_ACCESS'))) {
+            ->can(config('constants.EDIT_ATTRIBUTEVALUE_ACCESS'))) {
             return true;
         }
     

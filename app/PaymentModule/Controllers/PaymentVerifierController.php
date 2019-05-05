@@ -30,7 +30,7 @@ class PaymentVerifierController extends Controller
         /**
          * @var OnlinePaymentVerificationResponseInterface $verificationResult
          */
-        $money = Money::fromTomans(abs($transaction->cost));
+        $money              = Money::fromTomans(abs($transaction->cost));
         $verificationResult = OnlineGateWay::verifyPayment($money, $authority);
         
         $transaction->order->detachUnusedCoupon();

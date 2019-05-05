@@ -9,9 +9,9 @@ class PaymentDriver
 {
     private static $map = [
         'zarinpal' => ZarinpalGateWay::class,
-        'mellat' => BehpardakhtGateWay::class,
+        'mellat'   => BehpardakhtGateWay::class,
     ];
-
+    
     public static function select($driver)
     {
         app()->bind(OnlineGatewayInterface::class, self::$map[$driver]);

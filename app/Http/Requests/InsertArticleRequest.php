@@ -14,7 +14,7 @@ class InsertArticleRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.INSERT_ARTICLE_ACCESS'))) {
+            ->can(config('constants.INSERT_ARTICLE_ACCESS'))) {
             return true;
         }
 

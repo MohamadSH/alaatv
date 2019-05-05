@@ -14,7 +14,7 @@ class InsertUserBonRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.INSERT_USER_BON_ACCESS'))) {
+            ->can(config('constants.INSERT_USER_BON_ACCESS'))) {
             return true;
         }
     

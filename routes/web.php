@@ -11,10 +11,10 @@ use App\PaymentModule\Controllers\PaymentVerifierController;
 
 Route::get('fake-pay', function () {
     PaymentDriver::select($paymentMethod = 'mellat');
-    $url = route('verifyOnlinePayment', ['paymentMethod' => 'mellat', 'device' => 'asdca']);
-    $authorityCode = OnlineGateWay::generateAuthorityCode($url, Money::fromTomans(100) , '$description', time())
+    $url           = route('verifyOnlinePayment', ['paymentMethod' => 'mellat', 'device' => 'asdca']);
+    $authorityCode = OnlineGateWay::generateAuthorityCode($url, Money::fromTomans(100), '$description', time())
         ->orFailWith([Responses::class, 'noResponseFromBankError']);
-    $redirectData = OnlineGateWay::generatePaymentPageUriObject($authorityCode);
+    $redirectData  = OnlineGateWay::generatePaymentPageUriObject($authorityCode);
     
     return view("order.checkout.gatewayRedirect", compact('redirectData'));
 });
@@ -69,15 +69,16 @@ Route::group(['prefix' => 'checkout'], function () {
 
     Route::get('review', "Web\OrderController@checkoutReview")
         ->name('checkoutReview');
-
-    Route::get('payment', "Web\OrderController@checkoutPayment")->name('checkoutPayment');
+    
+    Route::get('payment', "Web\OrderController@checkoutPayment")
+        ->name('checkoutPayment');
 
     Route::any('verifyPayment/online/{paymentMethod}/{device}', [PaymentVerifierController::class, 'verify'])
         ->name('verifyOnlinePayment');
-
+    
     Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', [PaymentStatusController::class, 'show'])
         ->name('showOnlinePaymentStatus');
-
+    
     Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'Web\OfflinePaymentController@verifyPayment')
         ->name('verifyOfflinePayment');
 });
