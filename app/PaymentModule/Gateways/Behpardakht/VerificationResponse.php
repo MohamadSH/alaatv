@@ -65,9 +65,9 @@ class VerificationResponse implements OnlinePaymentVerificationResponseInterface
         
         $message = ['خطایی در پرداخت رخ داده است.'];
         
-        if ($this->response['error']) {
+        /*if ($this->response['error']) {
             $message[] = $this->exceptions[$this->response['error']];
-        }
+        }*/
     }
     
     public function isSuccessfulPayment(): bool

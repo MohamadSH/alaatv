@@ -103,7 +103,7 @@ mix.babel(
     [
         'public/assets/demo/demo12/custom/crud/forms/widgets/bootstrap-switch.js',
         // 'public/assets/demo/demo12/custom/crud/forms/widgets/nouislider.js',
-        'public/acm/AlaatvCustomFiles/js/page-checkout-payment.js',
+        // 'public/acm/AlaatvCustomFiles/js/page-checkout-payment.js',
     ],
     'public/js/checkout-payment.js'
 ).version();

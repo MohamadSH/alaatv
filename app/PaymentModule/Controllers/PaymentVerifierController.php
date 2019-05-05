@@ -7,7 +7,7 @@ use App\Traits\HandleOrderPayment;
 use Illuminate\Routing\Controller;
 use App\Repositories\TransactionRepo;
 use Illuminate\Support\Facades\{Cache, Request};
-use App\PaymentModule\{Responses, OnlineGateWay, PaymentDriver};
+use App\PaymentModule\{Money, Responses, OnlineGateWay, PaymentDriver};
 
 class PaymentVerifierController extends Controller
 {
@@ -30,7 +30,8 @@ class PaymentVerifierController extends Controller
         /**
          * @var OnlinePaymentVerificationResponseInterface $verificationResult
          */
-        $verificationResult = OnlineGateWay::verifyPayment(abs($transaction->cost), $authority);
+        $money = Money::fromTomans(abs($transaction->cost));
+        $verificationResult = OnlineGateWay::verifyPayment($money, $authority);
         
         $transaction->order->detachUnusedCoupon();
         if ($verificationResult->isSuccessfulPayment()) {

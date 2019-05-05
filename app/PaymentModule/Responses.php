@@ -44,9 +44,9 @@ class Responses
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public static function sendToOfflinePaymentProcess(string $device, Order $order)
+    public static function sendToOfflinePaymentProcess(string $device, $order)
     {
-        return redirect()->action('Web\OfflinePaymentController@verifyPayment', [
+        return redirect()->route('verifyOfflinePayment', [
             'device'        => $device,
             'paymentMethod' => 'wallet',
             'coi'           => isset($order) ? $order->id : null,
