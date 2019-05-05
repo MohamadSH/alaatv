@@ -601,10 +601,30 @@
                 {"data": "address", "title": "آدرس", "defaultContent": defaultContent},
                 {"data": "school", "title": "مدرسه", "defaultContent": defaultContent},
                 {"data": "userstatus.displayName", "title": "وضعیت", "defaultContent": defaultContent},
-                {"data": "created_at", "title": "زمان ثبت نام", "defaultContent": defaultContent},
-                {"data": "updated_at", "title": "زمان اصلاح", "defaultContent": defaultContent},
-                {"data": "full_name", "title": "نقش های کاربر", "defaultContent": defaultContent},
-                {"data": "full_name", "title": "تعداد بن", "defaultContent": defaultContent},
+                {"data": "jalaliCreatedAt", "title": "زمان ثبت نام", "defaultContent": defaultContent},
+                {"data": "jalaliUpdatedAt", "title": "زمان اصلاح", "defaultContent": defaultContent},
+                {
+                    "data": null,
+                    "name": "roles",
+                    "title": "نقش های کاربر",
+                    defaultContent: '<span class="m-badge m-badge--metal m-badge--wide m-badge--rounded">ندارد</span>',
+                    "render": function ( data, type, row ) {
+                        if (row.roles.length === 0) {
+                            return '<span class="m-badge m-badge--metal m-badge--wide m-badge--rounded">ندارد</span>';
+                        }
+
+                        let rolesHtml = '';
+                        for (let index in row.roles) {
+                            if(isNaN(index)) {
+                                continue;
+                            }
+                            let role = row.roles[index];
+                            rolesHtml += '<span class="m-badge m-badge--info m-badge--wide m-badge--rounded">'+role.display_name+'</span>';
+                        }
+                        return rolesHtml;
+                    },
+                },
+                {"data": "totalBonNumber", "title": "تعداد بن", "defaultContent": defaultContent},
                 {
                     "data": null,
                     "name": "functions",
