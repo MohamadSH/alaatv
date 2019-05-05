@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CompleteInfo;
+use Illuminate\Routing\Middleware\ValidateSignature;
 use Laratrust\Middleware\LaratrustRole;
 use Illuminate\Auth\Middleware\Authorize;
 use App\Http\Middleware\RemoveOrderCoupon;
@@ -42,7 +43,7 @@ class Kernel extends HttpKernel
         ConvertEmptyStringsToNull::class,
         Middleware\TrustProxies::class,
     ];
-    
+
     /**
      * The application's route middleware groups.
      *
@@ -59,13 +60,13 @@ class Kernel extends HttpKernel
             SubstituteBindings::class,
             CreateFreshApiToken::class,
         ],
-        
+
         'api' => [
             'throttle:120000,1',
             'bindings',
         ],
     ];
-    
+
     /**
      * The application's route middleware.
      *
@@ -94,8 +95,9 @@ class Kernel extends HttpKernel
         'SubmitOrderCoupon'                         => Middleware\SubmitOrderCoupon::class,
         'OfflineVerifyPayment'                      => Middleware\OfflineVerifyPayment::class,
         'RemoveOrderCoupon'                         => RemoveOrderCoupon::class,
+        'signed'                                    => ValidateSignature::class,
     ];
-    
+
     /**
      * The priority-sorted list of middleware.
      *
