@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\URL;
 
 class GetPaymentRedirectEncryptedLink extends Controller
 {
@@ -15,16 +16,48 @@ class GetPaymentRedirectEncryptedLink extends Controller
      */
     public function __invoke(Request $request)
     {
+        $paymentMethod = $request->get('paymentMethod' , 'zarinpal');
+        $device = $request->get('device' , 'android');
         $user = $request->user();
-        $paymentMethod = $request->get('paymentMethod');
-        $device = $request->get('device');
-        $encryptedPostfix = encrypt($user->id);
 
-        $encryptedRedirectUrl =  route('redirectToBank', ['paymentMethod'=>$paymentMethod, 'device'=>$device , 'encryptionData'=>$encryptedPostfix]);
-        $encryptedRedirectUrl .= '?sign=test';
+        $encryptedPostfix = $this->getEncryptedPostfix($user);
+
+        $redirectTo = $this->getEncryptedUrl($paymentMethod, $device, $encryptedPostfix);
 
         return response()->json([
-            'redirectUrl'   =>  $encryptedRedirectUrl
+            'redirectUrl'   =>  $redirectTo
         ]);
+    }
+
+    /**
+     * @param $user
+     * @return string
+     */
+    private function getEncryptedPostfix($user): string
+    {
+        return encrypt([
+            'user_id' => $user->id,
+        ]);
+    }
+
+    /**
+     * @param string $paymentMethod
+     * @param string $device
+     * @param string $encryptedPostfix
+     * @return string
+     */
+    private function getEncryptedUrl(string $paymentMethod,string $device, string $encryptedPostfix)
+    {
+        $parameters = [
+            'paymentMethod' => $paymentMethod,
+            'device' => $device,
+            'encryptionData' => $encryptedPostfix
+        ];
+
+        return URL::temporarySignedRoute(
+            'redirectToPaymentRoute',
+            3600,
+            $parameters
+        );
     }
 }

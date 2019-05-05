@@ -1,6 +1,7 @@
 <?php
 
 
+use App\PaymentModule\Controllers\RedirectAPIUserToPaymentRoute;
 use App\PaymentModule\Money;
 use App\PaymentModule\Responses;
 use App\PaymentModule\OnlineGateWay;
@@ -129,7 +130,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('getUnverifiedTransactions', 'Web\TransactionController@getUnverifiedTransactions');
     Route::any('paymentRedirect/{paymentMethod}/{device}', '\\'.RedirectUserToPaymentPage::class)
         ->name('redirectToBank');
-
     Route::get('exitAdminInsertOrder', 'Web\OrderController@exitAdminInsertOrder');
     Route::post('exchangeOrderproduct/{order}', 'Web\OrderController@exchangeOrderproduct');
     Route::get('MBTI-Participation', "Web\MbtianswerController@create");
@@ -290,3 +290,5 @@ Route::view('testrtl', 'product.show_ali');
 
 Route::get("tree", "Web\TopicsTreeController@lernitoTree");
 Route::get("tree/getArrayString/{lnid}", "Web\TopicsTreeController@getTreeInPHPArrayString");
+Route::any('goToPaymentRoute/{paymentMethod}/{device}/', '\\'.RedirectAPIUserToPaymentRoute::class)
+    ->name('redirectToPaymentRoute');
