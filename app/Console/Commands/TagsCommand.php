@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Content;
 use App\Product;
 use Carbon\Carbon;
 use App\Contentset;
-use App\Educationalcontent;
 use Illuminate\Console\Command;
 use App\Traits\APIRequestCommon;
 
@@ -57,8 +57,8 @@ class TagsCommand extends Command
 
 //        $this->contentSetTag();
 //        $bar->advance();
-        
-        $this->productTag();
+
+//        $this->productTag();
         $bar->advance();
     }
     
@@ -144,7 +144,7 @@ class TagsCommand extends Command
     private function contentTag()
     {
         $bucket = "content";
-        $items  = Educationalcontent::orderBy("id")
+        $items  = Content::orderBy("id")
             ->where("enable", 1)
             ->where('id', '>', '2255')
             ->get();
