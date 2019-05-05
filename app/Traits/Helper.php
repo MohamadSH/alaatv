@@ -34,7 +34,62 @@ trait Helper
                 break;
         }
     }
-    
+
+    /**
+     * Sending SMS request to Mediana SMS Panel
+     *
+     * @param array $params
+     * @return array|string
+     */
+    public function medianaSendSMS(array $params)
+    {
+        $url = config("services.medianaSMS.normal.url");
+
+//        $rcpt_nm = array('9121111111','9122222222');
+        if(isset($params["to"]))
+            $rcpt_nm =  $params["to"];
+        if(isset($params["from"]))
+            $from = $params["from"];
+        else
+            $from =config("constants.SMS_PROVIDER_DEFAULT_NUMBER") ;
+
+        $param = [
+            'uname'=>config("services.medianaSMS.normal.userName"),
+            'pass'=>config("services.medianaSMS.normal.password"),
+            'from'=>$from,
+            'message'=>$params["message"],
+            'to'=>json_encode($rcpt_nm),
+            'op'=>'send'
+        ];
+
+        $handler = curl_init($url);
+        curl_setopt($handler, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($handler, CURLOPT_POSTFIELDS, $param);
+        curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
+
+        $response = curl_exec($handler);
+        $response =  json_decode($response);
+        $res_code = $response[0];
+        $res_data = $response[1];
+
+        switch ($res_code)
+        {
+            case 0 :
+                return [
+                    "error"=>false ,
+                    "message"=>"ارسال موفقیت آمیز بود"
+                ];
+                break;
+            default:
+                return [
+                    "error"=>true ,
+                    "message"=>$res_data
+                ];
+                break;
+        }
+    }
+
+
     /**
      * Generates a random password that does not belong to anyone
      *
