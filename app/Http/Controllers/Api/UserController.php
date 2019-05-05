@@ -49,7 +49,7 @@ class UserController extends Controller
         
         //ToDo : place in UserObserver
         if ($user->checkUserProfileForLocking()) {
-            $user->lockProfile();
+            $user->lockHisProfile();
         }
         
         if ($user->update()) {

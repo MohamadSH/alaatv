@@ -1,5 +1,7 @@
 <?php namespace App\Traits;
 
+use Illuminate\Foundation\Http\FormRequest;
+
 trait RequestCommon
 {
     /**
@@ -70,5 +72,17 @@ trait RequestCommon
                 return $user;
             });
         }
+    }
+
+    /**
+     * @param FormRequest $request
+     * @param $dependencyIndex
+     * @param $secondaryIndex
+     */
+    private function checkOffsetDependency(FormRequest $request, $dependencyIndex, $secondaryIndex): void
+    {
+        $dependencyValue =  $request->get($dependencyIndex);
+        if (!isset($dependencyValue))
+            $request->offsetUnset($secondaryIndex);
     }
 }

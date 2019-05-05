@@ -12,6 +12,7 @@ use App\Product;
 use App\Repositories\TransactionRepo;
 use App\Traits\Helper;
 use App\Traits\OrderCommon;
+use App\Traits\RequestCommon;
 use App\Transaction;
 use App\Transactiongateway;
 use App\Transactionstatus;
@@ -26,6 +27,7 @@ class TransactionController extends Controller
 {
     use OrderCommon;
     use Helper;
+    use RequestCommon;
     
     protected $response;
     
@@ -559,7 +561,11 @@ class TransactionController extends Controller
     public function update(EditTransactionRequest $request, Transaction $transaction)
     {
         $result = [];
-        
+
+
+        $this->checkOffsetDependency($request, 'deadlineAtEnable', 'deadline_at');
+        $this->checkOffsetDependency($request, 'completedAtEnable', 'completed_at');
+
         if (TransactionRepo::modify($request->all(), $transaction->id)) {
             $result['statusCode'] = Response::HTTP_OK;
             $result['message']    = 'تراکنش با موفقیت اصلاح شد';
@@ -710,4 +716,5 @@ class TransactionController extends Controller
             }
         }
     }
+
 }

@@ -66,7 +66,6 @@ class TransactionRepo
     {
         if (isset($data[$column]) && strlen($data[$column]) > 0) {
             $transaction->$column = Carbon::parse($data[$column])
-                ->addDay()
                 ->format('Y-m-d');
         }
     }
