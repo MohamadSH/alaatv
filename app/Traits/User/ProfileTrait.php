@@ -8,9 +8,9 @@
 
 namespace App\Traits\User;
 
-use App\Afterloginformcontrol;
-use App\User;
 use Auth;
+use App\User;
+use App\Afterloginformcontrol;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 
@@ -255,7 +255,7 @@ trait ProfileTrait
     /**
      * Locks user's profile
      */
-    public function lockProfile(): void
+    public function lockHisProfile(): void
     {
         $this->lockProfile = 1;
     }
@@ -313,20 +313,22 @@ trait ProfileTrait
 
     public function getEmailAttribute($value)
     {
-        if (hasAuthenticatedUserPermission('constants.SHOW_USER_EMAIL'))
+        //ToDo :
+//        if (hasAuthenticatedUserPermission('constants.SHOW_USER_EMAIL'))
             return $value;
 
 
-        return null;
+//        return null;
     }
 
     public function getMobileAttribute($value)
     {
-        if (hasAuthenticatedUserPermission('constants.SHOW_USER_MOBILE'))
+        //ToDo :
+//        if (hasAuthenticatedUserPermission('constants.SHOW_USER_MOBILE'))
             return $value;
 
 
-        return null;
+//        return null;
     }
 
     public function getRolesAttribute($value){

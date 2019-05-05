@@ -2,30 +2,32 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\EditTransactionRequest;
-use App\Http\Requests\InsertTransactionRequest;
 use App\Order;
+use App\Product;
+use Carbon\Carbon;
+use App\Transaction;
 use App\Orderproduct;
 use App\Paymentmethod;
-use App\Product;
-use App\Repositories\TransactionRepo;
 use App\Traits\Helper;
-use App\Traits\OrderCommon;
-use App\Transaction;
-use App\Transactiongateway;
-use App\Transactionstatus;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\View;
 use Zarinpal\Zarinpal;
+use App\Transactionstatus;
+use App\Traits\OrderCommon;
+use App\Transactiongateway;
+use Illuminate\Http\Request;
+use App\Traits\RequestCommon;
+use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\View;
+use App\Repositories\TransactionRepo;
+use Illuminate\Support\Facades\Input;
+use App\Http\Requests\EditTransactionRequest;
+use App\Http\Requests\InsertTransactionRequest;
 
 class TransactionController extends Controller
 {
     use OrderCommon;
     use Helper;
+    use RequestCommon;
     
     protected $response;
     
@@ -559,7 +561,11 @@ class TransactionController extends Controller
     public function update(EditTransactionRequest $request, Transaction $transaction)
     {
         $result = [];
-        
+    
+    
+        $this->checkOffsetDependency($request, 'deadlineAtEnable', 'deadline_at');
+        $this->checkOffsetDependency($request, 'completedAtEnable', 'completed_at');
+
         if (TransactionRepo::modify($request->all(), $transaction->id)) {
             $result['statusCode'] = Response::HTTP_OK;
             $result['message']    = 'تراکنش با موفقیت اصلاح شد';
@@ -710,4 +716,5 @@ class TransactionController extends Controller
             }
         }
     }
+    
 }

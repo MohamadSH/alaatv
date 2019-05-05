@@ -2,9 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Bankaccount;
-use App\Transaction;
 use Carbon\Carbon;
+use App\Transaction;
+use App\Bankaccount;
 
 class TransactionRepo
 {
@@ -66,7 +66,6 @@ class TransactionRepo
     {
         if (isset($data[$column]) && strlen($data[$column]) > 0) {
             $transaction->$column = Carbon::parse($data[$column])
-                ->addDay()
                 ->format('Y-m-d');
         }
     }

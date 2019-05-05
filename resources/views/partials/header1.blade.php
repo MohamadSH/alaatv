@@ -272,7 +272,7 @@
                                         <span class = "m-nav__link-icon">
                                             <span class = "m-nav__link-icon-wrapper"><i class = "flaticon-shopping-basket"></i></span>
                                             @if(Auth::user()->numberOfProductsInBasket > 0)
-                                                <span class = "m-nav__link-badge m-badge m-badge--danger">{{ Auth::user()->numberOfProductsInBasket }}</span>
+                                                <span class="shoppingBasketOfUserNumber m-nav__link-badge m-badge m-badge--danger">{{ Auth::user()->numberOfProductsInBasket }}</span>
                                             @endif
                                         </span>
                                     </a>

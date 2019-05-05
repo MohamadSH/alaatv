@@ -1,20 +1,23 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| This file is where you may define all of the routes that are handled
-| by your application. Just tell Laravel the URIs it should respond
-| to using a Closure or controller method. Build something great!
-|
-*/
 
+use App\PaymentModule\Money;
+use App\PaymentModule\Responses;
+use App\PaymentModule\OnlineGateWay;
+use App\PaymentModule\PaymentDriver;
 use App\Http\Controllers\Web\PaymentStatusController;
 use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
 use App\PaymentModule\Controllers\PaymentVerifierController;
 
+Route::get('fake-pay', function () {
+    PaymentDriver::select($paymentMethod = 'mellat');
+    $url           = route('verifyOnlinePayment', ['paymentMethod' => 'mellat', 'device' => 'asdca']);
+    $authorityCode = OnlineGateWay::generateAuthorityCode($url, Money::fromTomans(100), '$description', time())
+        ->orFailWith([Responses::class, 'noResponseFromBankError']);
+    $redirectData  = OnlineGateWay::generatePaymentPageUriObject($authorityCode);
+    
+    return view("order.checkout.gatewayRedirect", compact('redirectData'));
+});
 Route::get('embed/c/{content}', "Web\ContentController@embed");
 Route::get('/', 'Web\IndexPageController');
 Route::get('shop', 'Web\ShopPageController');
@@ -60,17 +63,24 @@ Route::group(['prefix' => 'sitemap'], function () {
 
 Route::group(['prefix' => 'checkout'], function () {
     Route::get('auth', "Web\OrderController@checkoutAuth");
+
     Route::get('completeInfo', 'Web\OrderController@checkoutCompleteInfo')
         ->name('checkoutCompleteInfo');
+
     Route::get('review', "Web\OrderController@checkoutReview")
         ->name('checkoutReview');
+    
     Route::get('payment', "Web\OrderController@checkoutPayment")
         ->name('checkoutPayment');
+
     Route::any('verifyPayment/online/{paymentMethod}/{device}', [PaymentVerifierController::class, 'verify'])
         ->name('verifyOnlinePayment');
+    
     Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', [PaymentStatusController::class, 'show'])
         ->name('showOnlinePaymentStatus');
-    Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'Web\OfflinePaymentController@verifyPayment');
+    
+    Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'Web\OfflinePaymentController@verifyPayment')
+        ->name('verifyOfflinePayment');
 });
 Route::group(['prefix' => 'orderproduct'], function () {
 //    Route::get('store', 'Web\OrderproductController@store');

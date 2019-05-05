@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\User;
+use App\Traits\UserCommon;
+use Illuminate\Http\Request;
+use App\Traits\RequestCommon;
+use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditUserRequest;
-use App\Traits\RequestCommon;
-use App\Traits\UserCommon;
-use App\User;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
@@ -49,7 +49,7 @@ class UserController extends Controller
         
         //ToDo : place in UserObserver
         if ($user->checkUserProfileForLocking()) {
-            $user->lockProfile();
+            $user->lockHisProfile();
         }
         
         if ($user->update()) {

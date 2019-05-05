@@ -564,12 +564,9 @@ class OrderController extends Controller
             ->orderBy("order")
             ->pluck('displayName', 'id')
             ->toArray();
+    
+        $products = $this->makeProductCollection();
 
-//        $products = $this->makeProductCollection();
-        $products = Product::where('id', 240)
-            ->get();
-        dd($products);
-        
         return view('order.edit',
             compact('order', 'orderstatuses', 'paymentstatuses', 'coupons', 'orderTransactions', 'transactionstatuses',
                 'productBon',
@@ -1700,18 +1697,15 @@ class OrderController extends Controller
                 $cost = $result->cost;
             }
             if (isset($cost)) {
-                $request = new Request();
-                $request->offsetSet("gateway", "zarinpal");
-                $request->offsetSet("order_id", $donateOrder->id);
-                $request->offsetSet("forcePay_bhrk", true);
-                $transactionController = new TransactionController();
-                $result                = $transactionController->paymentRedirect($request);
-                //                dd($result);
+                $parameters = [
+                    'order_id' => $donateOrder->id,
+                ];
+    
+                $this->sendRequest(route('redirectToBank', ['paymentMethod' => 'zarinpal', 'device' => 'web']), 'GET',
+                    $parameters);
             }
-        } else {
-            //            dd($result);
         }
-        
+    
         return redirect()->back();
     }
     

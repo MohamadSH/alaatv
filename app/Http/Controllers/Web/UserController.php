@@ -2,63 +2,63 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\{Afterloginformcontrol,
-    Bankaccount,
-    Bloodtype,
-    Bon,
-    Classes\Search\UserSearch,
-    Classes\SEO\SeoDummyTags,
-    Collection\ProductCollection,
-    Contact,
-    Employeeschedule,
-    Employeetimesheet,
+use SEO;
+use Auth;
+use stdClass;
+use Carbon\Carbon;
+use Jenssegers\Agent\Agent;
+use PHPUnit\Framework\Exception;
+use Kalnoy\Nestedset\QueryBuilder;
+use App\Http\Controllers\Controller;
+use Illuminate\{Http\Request,
+    Http\Response,
+    Support\Collection,
+    Support\Facades\DB,
+    Support\Facades\View,
+    Support\Facades\Input,
+    Support\Facades\Route,
+    Support\Facades\Cache,
+    Contracts\Filesystem\FileNotFoundException};
+use App\{Bon,
+    Role,
+    User,
     Event,
-    Gender,
     Grade,
-    Http\Controllers\Auth\RegisterController,
-    Http\Requests\EditUserRequest,
-    Http\Requests\InsertUserRequest,
-    Http\Requests\InsertVoucherRequest,
-    Http\Requests\PasswordRecoveryRequest,
-    Http\Requests\RegisterForSanatiSharifHighSchoolRequest,
-    Http\Requests\UserIndexRequest,
-    Lottery,
     Major,
     Order,
     Phone,
+    Gender,
+    Contact,
+    Lottery,
     Product,
     Province,
-    Role,
-    Traits\CharacterCommon,
-    Traits\DateTrait,
+    Bloodtype,
+    Userstatus,
+    Bankaccount,
     Traits\Helper,
+    Websitesetting,
+    Employeeschedule,
+    Traits\DateTrait,
+    Employeetimesheet,
     Traits\MetaCommon,
+    Traits\UserCommon,
     Traits\OrderCommon,
+    Transactiongateway,
+    Traits\SearchCommon,
     Traits\ProductCommon,
     Traits\RequestCommon,
-    Traits\SearchCommon,
-    Traits\UserCommon,
-    Transactiongateway,
-    User,
-    Userstatus,
-    Websitesetting};
-use App\Http\Controllers\Controller;
-use Auth;
-use Carbon\Carbon;
-use Illuminate\{Contracts\Filesystem\FileNotFoundException,
-    Http\Request,
-    Http\Response,
-    Support\Collection,
-    Support\Facades\Cache,
-    Support\Facades\DB,
-    Support\Facades\Input,
-    Support\Facades\Route,
-    Support\Facades\View};
-use Jenssegers\Agent\Agent;
-use Kalnoy\Nestedset\QueryBuilder;
-use PHPUnit\Framework\Exception;
-use SEO;
-use stdClass;
+    Afterloginformcontrol,
+    Traits\CharacterCommon,
+    Classes\SEO\SeoDummyTags,
+    Classes\Search\UserSearch,
+    Collection\ProductCollection,
+    Http\Requests\EditUserRequest,
+    Http\Requests\UserIndexRequest,
+    Http\Requests\InsertUserRequest,
+    Http\Requests\InsertVoucherRequest,
+    Http\Requests\PasswordRecoveryRequest,
+    Http\Controllers\Auth\RegisterController,
+    Http\Requests\RegisterForSanatiSharifHighSchoolRequest};
 
 class UserController extends Controller
 {
@@ -729,8 +729,8 @@ class UserController extends Controller
     {
         try {
             $result = $this->new($request->all(), $request->user());
-            
-            if ($result['error']) {
+    
+            if (isset($result['error'])) {
                 $resultMessage = 'خطا در ذخیره کاربر';
                 $resultCode    = Response::HTTP_INTERNAL_SERVER_ERROR;
             }
@@ -815,7 +815,7 @@ class UserController extends Controller
         }
         
         if ($user->checkUserProfileForLocking()) {
-            $user->lockProfile();
+            $user->lockHisProfile();
         }
         
         if (in_array("roles", $data)) {
@@ -846,18 +846,21 @@ class UserController extends Controller
         if ($authenticatedUser->can($moderatorPermission)) {
             $user->fill($inputData);
             $hasMobileVerifiedAt = in_array('mobileNumberVerification', $inputData);
-            $hasPassword         = in_array('password', $inputData);
-            
+            //Shahrokhi: false barmigardanad dar soodati li agar mrghdar ra dar khorooji chap konid dar array vojood darad!
+//            $hasPassword         = in_array('password', $inputData);
+            $hasPassword = isset($inputData['password']);
+
             if ($hasMobileVerifiedAt) {
                 $user->mobile_verified_at = ($inputData['mobileNumberVerification'] == '1') ? Carbon::now()
                     ->setTimezone('Asia/Tehran') : null;
             }
-            
+
             if ($hasPassword) {
                 $user->password = bcrypt($inputData['password']);
             }
-            
-            $user->lockProfile = array_get($inputData, 'lockProfile', $user->lockProfile);
+    
+            $user->lockProfile = array_get($inputData, 'lockProfile',
+                (isset($user->lockProfile) ? $user->lockProfile : 0));
         }
         else {
             $user->fillByPublic($inputData);
@@ -1528,7 +1531,7 @@ class UserController extends Controller
         $completionPercentage = (int) (($completedFieldsCount / $completionFieldsCount) * 100);
         
         if ($completionPercentage == 100 && $user->completion("lockProfile") == 100) {
-            $user->lockProfile();
+            $user->lockHisProfile();
             $user->updateWithoutTimestamp();
         }
         
@@ -2126,7 +2129,7 @@ class UserController extends Controller
         
         //ToDo : place in UserObserver
         if ($user->checkUserProfileForLocking()) {
-            $user->lockProfile();
+            $user->lockHisProfile();
         }
         
         if ($user->update()) {
@@ -2448,7 +2451,7 @@ class UserController extends Controller
         if ($responseStatus != 200) {
             return $this->sessionPutAndRedirectBack("خطا در ثبت محصول اینرنت رایگان آسیاتک");
         }
-        $user->lockProfile();
+        $user->lockHisProfile();
         $user->update();
         
         return redirect()->back();

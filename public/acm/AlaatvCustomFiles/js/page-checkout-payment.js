@@ -1,5 +1,6 @@
 var CheckoutPaymentUi = function () {
 
+    var isInternalSwitch = false;
     var lockDonateAjax = false;
     var lockCouponAjax = false;
 
@@ -8,7 +9,6 @@ var CheckoutPaymentUi = function () {
     }
     function setFinalCost(finalCost) {
         if (!isNaN(finalCost)) {
-            console.log('setFinalCost: ', finalCost);
             $('.finalPriceValue').html(finalCost.toLocaleString('fa'));
             $('#invoiceInfo-totalCost').html(parseInt(finalCost));
         }
@@ -44,27 +44,41 @@ var CheckoutPaymentUi = function () {
 
     }
 
-    function donate() {
+    function donate(isInit) {
+        isInternalSwitch = true;
         $("#hasntDonate").bootstrapSwitch('state', false);
         $('.face-sad').fadeOut(0);
         $('.face-happy').fadeIn(0);
         $('.visibleInDonate').css({'visibility': 'visible'});
+        $('#orderHasDonate').val(1);
+        if (!isInit) {
+            UesrCart.increaseOneProductNumber();
+        }
+        isInternalSwitch = false;
     }
 
-    function dontdonate() {
+    function dontdonate(isInit) {
+        isInternalSwitch = true;
         $("#hasntDonate").bootstrapSwitch('state', true);
         $('.face-sad').fadeIn(0);
         $('.face-happy').fadeOut(0);
         $('.visibleInDonate').css({'visibility': 'hidden'});
+        $('#orderHasDonate').val(0);
+        if (!isInit) {
+            UesrCart.reduceOneProductNumber();
+        }
+        isInternalSwitch = false;
     }
 
-    function getDonateStatus() {
-        let switchStatus = $('#hasntDonate').prop('checked');
-        if (switchStatus) {
-            return false;
-        } else {
-            return true;
-        }
+    function orderHasDonate() {
+        // let switchStatus = $('#hasntDonate').prop('checked');
+        // if (switchStatus) {
+        //     return false;
+        // } else {
+        //     return true;
+        // }
+        let switchStatus = parseInt($('#orderHasDonate').val());
+        return switchStatus === 1;
     }
 
     function setTotalCostWithDonate(donateValue) {
@@ -72,9 +86,16 @@ var CheckoutPaymentUi = function () {
         setFinalCost(calcTotalCost);
     }
 
-    function refreshUiBasedOnDonateStatus() {
-        if (getDonateStatus()) {
-            donate();
+    function refreshUiBasedOnDonateStatus(isInit) {
+        if (isInternalSwitch) {
+            return false;
+        }
+        let orderHasDonateValue = orderHasDonate();
+        if (isInit) {
+            orderHasDonateValue = !orderHasDonateValue;
+        }
+        if (!orderHasDonateValue) {
+            donate(isInit);
             let donateValue = 5;
             if (lockDonateAjax) {
                 return false;
@@ -93,14 +114,14 @@ var CheckoutPaymentUi = function () {
                     lockDonateAjax = true;
                     if (data.error) {
                         if (data.error.code === 503) {
-                            donate();
+                            // donate();
                         } else {
-                            dontdonate();
+                            dontdonate(isInit);
                             donateValue = 0;
                             toastr.warning('مشکلی رخ داده است. مجدد سعی کنید.');
                         }
                     } else {
-                        donate();
+                        // donate();
                         setTotalCostWithDonate(donateValue);
                     }
                     mApp.unblock('.addDonateWarper');
@@ -108,7 +129,7 @@ var CheckoutPaymentUi = function () {
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     lockDonateAjax = true;
-                    dontdonate();
+                    dontdonate(isInit);
                     donateValue = 0;
                     toastr.warning('مشکلی رخ داده است. مجدد سعی کنید.');
                     mApp.unblock('.addDonateWarper');
@@ -116,7 +137,7 @@ var CheckoutPaymentUi = function () {
                 }
             });
         } else {
-            dontdonate();
+            dontdonate(isInit);
             let donateValue = -5;
             if (lockDonateAjax) {
                 return false;
@@ -134,10 +155,10 @@ var CheckoutPaymentUi = function () {
                 success: function (data) {
                     lockDonateAjax = true;
                     if (data.error) {
-                        donate();
+                        donate(isInit);
                         toastr.warning('مشکلی رخ داده است. مجدد سعی کنید.');
                     } else {
-                        dontdonate();
+                        // dontdonate();
                         setTotalCostWithDonate(donateValue);
                     }
                     mApp.unblock('.addDonateWarper');
@@ -145,7 +166,7 @@ var CheckoutPaymentUi = function () {
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     lockDonateAjax = true;
-                    donate();
+                    donate(isInit);
                     toastr.warning('مشکلی رخ داده است. مجدد سعی کنید.');
                     mApp.unblock('.addDonateWarper');
                     lockDonateAjax = false;
@@ -341,11 +362,11 @@ var CheckoutPaymentUi = function () {
     }
 
     return {
-        refreshUi:function () {
+        initUi: function () {
             lockDonateAjax = true;
             lockCouponAjax = true;
             refreshUiBasedOnPaymentType();
-            refreshUiBasedOnDonateStatus();
+            refreshUiBasedOnDonateStatus(true);
             refreshUiBasedOnHasntDiscountCodeStatus();
             lockDonateAjax = false;
             lockCouponAjax = false;
@@ -357,7 +378,7 @@ var CheckoutPaymentUi = function () {
             refreshUiBasedOnPaymentType();
         },
         refreshUiBasedOnDonateStatus:function (donateValue) {
-            refreshUiBasedOnDonateStatus(donateValue);
+            refreshUiBasedOnDonateStatus(false);
         },
         attachCoupon:function () {
             attachCoupon();
@@ -376,7 +397,7 @@ jQuery(document).ready(function () {
     let n = document.getElementById('m_nouislider_1_input');
     let e = document.getElementById('m_nouislider_1');
 
-    CheckoutPaymentUi.refreshUi();
+    CheckoutPaymentUi.initUi();
 
     $(document).on('click', '#btnSaveDiscountCodeValue', function () {
         CheckoutPaymentUi.attachCoupon();
@@ -395,6 +416,7 @@ jQuery(document).ready(function () {
     });
 
     $(document).on('switchChange.bootstrapSwitch', '#hasntDonate', function (e) {
+        console.log('switchChange.bootstrapSwitch');
         CheckoutPaymentUi.refreshUiBasedOnDonateStatus($('#m_nouislider_1_input').val());
     });
 

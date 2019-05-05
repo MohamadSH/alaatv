@@ -24,7 +24,6 @@ use Iatstuti\Database\Support\CascadeSoftDeletes;
 use App\Classes\Verification\MustVerifyMobileNumber;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Traits\User\{BonTrait,
-    DashboardTrait,
     TagTrait,
     TrackTrait,
     LotteryTrait,
@@ -32,7 +31,8 @@ use App\Traits\User\{BonTrait,
     PaymentTrait,
     ProfileTrait,
     TeacherTrait,
-    VouchersTrait};
+    VouchersTrait,
+    DashboardTrait};
 
 /**
  * App\User
@@ -276,13 +276,9 @@ use App\Traits\User\{BonTrait,
  * @property-read mixed                                                               $user_status
  * @property mixed updated_at
  * @property mixed created_at
- * @property-read \App\Collection\OrderCollections|\App\Order[]                 $closedOrders
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Firebasetoken[] $firebasetokens
- * @property-read mixed                                                         $user_status
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User orWherePermissionIs($permission = '')
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User orWhereRoleIs($role = '', $team = null)
  * @property string|null                                                        $lastServiceCall آخرین تماس کارمندان روابط عمومی با کاربر
- * @property-read mixed                                                         $closed_orders
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLastServiceCall($value)
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail

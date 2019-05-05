@@ -36,6 +36,63 @@ trait Helper
     }
     
     /**
+     * Sending SMS request to Mediana SMS Panel
+     *
+     * @param  array  $params
+     *
+     * @return array|string
+     */
+    public function medianaSendSMS(array $params)
+    {
+        $url = config("services.medianaSMS.normal.url");
+
+//        $rcpt_nm = array('9121111111','9122222222');
+        if (isset($params["to"])) {
+            $rcpt_nm = $params["to"];
+        }
+        if (isset($params["from"])) {
+            $from = $params["from"];
+        } else {
+            $from = config("constants.SMS_PROVIDER_DEFAULT_NUMBER");
+        }
+        
+        $param = [
+            'uname'   => config("services.medianaSMS.normal.userName"),
+            'pass'    => config("services.medianaSMS.normal.password"),
+            'from'    => $from,
+            'message' => $params["message"],
+            'to'      => json_encode($rcpt_nm),
+            'op'      => 'send',
+        ];
+        
+        $handler = curl_init($url);
+        curl_setopt($handler, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($handler, CURLOPT_POSTFIELDS, $param);
+        curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
+        
+        $response = curl_exec($handler);
+        $response = json_decode($response);
+        $res_code = $response[0];
+        $res_data = $response[1];
+        
+        switch ($res_code) {
+            case 0 :
+                return [
+                    "error"   => false,
+                    "message" => "ارسال موفقیت آمیز بود",
+                ];
+                break;
+            default:
+                return [
+                    "error"   => true,
+                    "message" => $res_data,
+                ];
+                break;
+        }
+    }
+
+
+    /**
      * Generates a random password that does not belong to anyone
      *
      * @param  int  $length
@@ -45,11 +102,10 @@ trait Helper
     public function generateRandomPassword($length)
     {
         $generatedPassword     = rand(1000, 9999);
-        $generatedPasswordHash = bcrypt($generatedPassword);
-        
+
         return [
             "rawPassword"  => $generatedPassword,
-            "hashPassword" => $generatedPasswordHash,
+            "hashPassword" => bcrypt($generatedPassword),
         ];
     }
     
@@ -59,7 +115,7 @@ trait Helper
                 ->format('Y-m-d')." ".$sinceTime;
         $tillDate  = Carbon::parse($tillDate)
                 ->format('Y-m-d')." ".$tillTime;
-        
+
         if ($timeZoneConvert) {
             $sinceDate = Carbon::parse($sinceDate, "Asia/Tehran");
             $sinceDate->setTimezone('UTC');
@@ -70,7 +126,7 @@ trait Helper
             $sinceDate,
             $tillDate,
         ]);
-        
+
         return $list;
     }
     
@@ -88,10 +144,8 @@ trait Helper
     
     public function mergeCollections($firstCollection, $secondCollection): Collection
     {
-        $merge = $firstCollection->toBase()
+        return $firstCollection->toBase()
             ->merge($secondCollection);
-        
-        return $merge;
     }
     
     /**
