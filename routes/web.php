@@ -119,7 +119,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('getUnverifiedTransactions', 'Web\TransactionController@getUnverifiedTransactions');
     Route::any('paymentRedirect/{paymentMethod}/{device}', '\\'.RedirectUserToPaymentPage::class)
         ->name('redirectToBank');
-    
+    Route::any('paymentRedirect/{paymentMethod}/{device}/{encryptionData}', '\\'.RedirectUserToPaymentPage::class)
+        ->name('getBankRedirectLink');
+
     Route::get('exitAdminInsertOrder', 'Web\OrderController@exitAdminInsertOrder');
     Route::post('exchangeOrderproduct/{order}', 'Web\OrderController@exchangeOrderproduct');
     Route::get('MBTI-Participation', "Web\MbtianswerController@create");
