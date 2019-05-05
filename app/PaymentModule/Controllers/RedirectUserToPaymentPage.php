@@ -3,9 +3,11 @@
 namespace App\PaymentModule\Controllers;
 
 //use App\Classes\Payment\OnlineGateWay;
+use App\PaymentModule\Repositories\OrdersRepo;
 use App\User;
 use App\Order;
 use App\Transaction;
+use App\PaymentModule\Money;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\PaymentModule\Responses;
@@ -37,8 +39,8 @@ class RedirectUserToPaymentPage extends Controller
         $user = $data['user'];
         /** @var Order $order */
         $order = $data['order'];
-        /** @var int $cost */
-        $cost = (int) $data['cost'];
+        /** @var Money $cost */
+        $cost = Money::fromTomans((int) $data['cost']);
         /** @var Transaction $transaction */
         $transaction = $data['transaction'];
 
@@ -53,13 +55,14 @@ class RedirectUserToPaymentPage extends Controller
             $order->customerDescription = $request->get('customerDescription');
         }
 
-        $this->shouldGoToOfflinePayment($cost)->thenRespondWith([Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order->id]);
+        $this->shouldGoToOfflinePayment($cost->rials())->thenRespondWith([Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order->id]);
 
         PaymentDriver::select($paymentMethod);
         $url = $this->comeBackFromGateWayUrl($paymentMethod, $device);
         $authorityCode = OnlineGateWay::generateAuthorityCode($url, $cost, $description, $order->id)->orFailWith([Responses::class, 'noResponseFromBankError']);
 
         TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id, $description)->orRespondWith([Responses::class, 'editTransactionError']);
+        OrdersRepo::closeOrder($order->id);
 
         $redirectData = OnlineGateWay::generatePaymentPageUriObject($authorityCode);
 
@@ -149,6 +152,6 @@ class RedirectUserToPaymentPage extends Controller
      */
     private function comeBackFromGateWayUrl(string $paymentMethod, string $device)
     {
-        return route('verifyOnlinePayment', ['paymentMethod' => $paymentMethod, 'device' => $device]);
+        return route('verifyOnlinePayment', ['paymentMethod' => $paymentMethod, 'device' => $device, '_token' => csrf_token()]);
     }
 }

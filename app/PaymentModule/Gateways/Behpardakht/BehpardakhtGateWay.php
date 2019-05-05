@@ -4,7 +4,9 @@ namespace App\PaymentModule\Gateways\Behpardakht;
 
 use DateTime;
 use App\Classes\Nullable;
-use App\PaymentModule\{RedirectData,
+use Illuminate\Support\Facades\Input;
+use App\PaymentModule\{Money,
+    RedirectData,
     OnlineGatewayInterface,
     Gateways\OnlinePaymentRedirectionUriInterface,
     Gateways\OnlinePaymentVerificationResponseInterface};
@@ -58,7 +60,7 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
         61  => 'خطا در واریز',
     ];
 
-    public function generateAuthorityCode(string $callbackUrl, int $cost, string $description, $orderId = null): Nullable
+    public function generateAuthorityCode(string $callbackUrl, Money $cost, string $description, $orderId = null): Nullable
     {
         $dateTime = new DateTime();
 
@@ -67,7 +69,7 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
             'userName'       => config('behpardakht.username'),
             'userPassword'   => (int) config('behpardakht.password'),
             'orderId'        => $orderId,
-            'amount'         => $cost,
+            'amount'         => $cost->rials(),
             'localDate'      => $dateTime->format('Ymd'),
             'localTime'      => $dateTime->format('His'),
             'additionalData' => $description,
@@ -76,8 +78,7 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
         ];
 
         try {
-            $soap     = new \SoapClient('https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl');
-            $response = $soap->bpPayRequest($fields);
+            $response = $this->makeSoapClient()->bpPayRequest($fields);
         } catch (\SoapFault $e) {
             return nullable(null);
         }
@@ -103,28 +104,41 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
     
     public function getAuthorityValue(): string
     {
-        return '';
+        return Input::get('RefId', '');
     }
     
-    public function verifyPayment($amount, $authority): OnlinePaymentVerificationResponseInterface
+    public function verifyPayment(Money $amount, $authority): OnlinePaymentVerificationResponseInterface
     {
+        /**
+`            array:8 [▼
+            "RefId" => "723D241477D96CD1"
+            "ResCode" => "0"
+            "SaleOrderId" => "19"
+            "SaleReferenceId" => "150078823126"
+            "CardHolderInfo" => "DC514292D753D85BD5D91874EBD2A35DD64E8E1EC066A7A2C7D4C9C51BA994C5"
+            "CardHolderPan" => "603799******9276"
+            "FinalAmount" => "1002"
+            "_token" => "CATNE2rXs0TWtSh2I4aFNyqpYMOq15cLGwVgcKpD"`
+        ]
+         */
+
+        if ($amount->rials() !== Input::get('FinalAmount')) {
+            return 'fake request.';
+        }
+        /*
         $refId             = Input::get('RefId');
         $trackingCode      = Input::get('SaleReferenceId');
         $cardNumber        = Input::get('CardHolderPan');
-        $payRequestResCode = Input::get('ResCode');
-        if ($payRequestResCode == '0') {
+        $resCode           = Input::get('ResCode');
+        $saleOrderId       = Input::get('SaleOrderId');*/
+
+        /* if ($resCode != '0') {
             return true;
-        }
-    
-        $fields = $this->getVerificationParams($refId, $trackingCode);
-    
-        try {
-            $soap     = new \SoapClient('https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl');
-            $response = $soap->bpVerifyRequest($fields);
-        } catch (\SoapFault $e) {
-            throw $e;
-        }
-    
+        }*/
+
+        $response = $this->verify();
+        $response = $this->settleRequest();
+
         if ($response->return == '0' || $response->return == '45') {
         
             return VerificationResponse::instance(request()->all());
@@ -133,23 +147,22 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
     
     protected function settleRequest()
     {
-        $refId             = Input::get('RefId');
-        $trackingCode      = Input::get('SaleReferenceId');
-        $cardNumber        = Input::get('CardHolderPan');
-        $payRequestResCode = Input::get('ResCode');
-    
-        $fields = $this->getVerificationParams($refId, $trackingCode);
+        /*
+    array:4 [▼
+            "RefId" => "5925E561FF4B2421"
+            "ResCode" => "17"
+            "SaleOrderId" => "15"
+            "_token" => "CATNE2rXs0TWtSh2I4aFNyqpYMOq15cLGwVgcKpD"
+        ]
+*/
         try {
-            $soap     = new \SoapClient('https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl');
-            $response = $soap->bpSettleRequest($fields);
+            return $this->makeSoapClient()->bpSettleRequest($this->getVerificationParams());
         } catch (\SoapFault $e) {
             throw $e;
         }
-    
-        if ($response->return == '0' || $response->return == '45') {
-            return true;
-        }
-//        throw new MellatException($response->return);
+
+        // return $this->errors[(int)$response->return];
+        // throw new MellatException($response->return);
     }
     
     /**
@@ -157,15 +170,37 @@ class BehpardakhtGateWay implements OnlineGatewayInterface
      * @param $trackingCode
      * @return array
      */
-    private function getVerificationParams($refId, $trackingCode): array
+    private function getVerificationParams(): array
     {
         return [
             'terminalId'      => config('behpardakht.terminalId'),
             'userName'        => config('behpardakht.username'),
             'userPassword'    => config('behpardakht.password'),
-            'orderId'         => $refId,
-            'saleOrderId'     => $refId,
-            'saleReferenceId' => $trackingCode
+            'orderId'         => Input::get('SaleOrderId'),
+            'saleOrderId'     => Input::get('SaleOrderId'),
+            'saleReferenceId' => Input::get('SaleReferenceId'),
         ];
+    }
+
+    /**
+     * @return \SoapClient
+     * @throws \SoapFault
+     */
+    private function makeSoapClient(): \SoapClient
+    {
+        return new \SoapClient('https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl');
+    }
+
+    /**
+     * @return mixed
+     * @throws \SoapFault
+     */
+    private function verify()
+    {
+        try {
+            return $this->makeSoapClient()->bpVerifyRequest($this->getVerificationParams());
+        } catch (\SoapFault $e) {
+            throw $e;
+        }
     }
 }

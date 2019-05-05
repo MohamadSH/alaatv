@@ -6,15 +6,16 @@ use App\Classes\Nullable;
 //use App\Classes\Payment\{OnlineGatewayInterface, RedirectData};
 use App\PaymentModule\Gateways\OnlinePaymentVerificationResponseInterface;
 use App\PaymentModule\Gateways\OnlinePaymentRedirectionUriInterface;
+use App\PaymentModule\Money;
 use App\PaymentModule\OnlineGatewayInterface;
 use App\PaymentModule\RedirectData;
 
 class ZarinpalGateWay implements OnlineGatewayInterface
 {
-    public function generateAuthorityCode(string $callbackUrl, int $cost, string $description, $orderId = null): Nullable
+    public function generateAuthorityCode(string $callbackUrl, Money $cost, string $description, $orderId = null): Nullable
     {
-        $zarinpalResponse = resolve('zarinpal.client')->request($callbackUrl, $cost, $description);
-        
+        $zarinpalResponse = resolve('zarinpal.client')->request($callbackUrl, $cost->tomans(), $description);
+
         return nullable($zarinpalResponse['Authority'] ?? null);
     }
     
@@ -30,9 +31,9 @@ class ZarinpalGateWay implements OnlineGatewayInterface
         return RedirectData::instance($url);
     }
     
-    public function verifyPayment($amount, $authority): OnlinePaymentVerificationResponseInterface
+    public function verifyPayment(Money $amount, $authority): OnlinePaymentVerificationResponseInterface
     {
-        $result = app('zarinpal.client')->verify($amount, $authority);
+        $result = app('zarinpal.client')->verify($amount->tomans(), $authority);
         
         return VerificationResponse::instance($result);
     }
