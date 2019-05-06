@@ -726,7 +726,18 @@
                     "name": "row_child",
                     "defaultContent": ""
                 },
-                { "data": "user.lastName" , "title": "نام خانوادگی", "defaultContent": defaultContent},
+                {
+                    "data": null,
+                    "name": "user.lastName",
+                    "title": "نام خانوادگی",
+                    defaultContent: defaultContent,
+                    "render": function ( data, type, row ) {
+                        if (row.user.lastName === null) {
+                            return defaultContent;
+                        }
+                        return '<a href="'+row.user.editLink+'" target="_blank" class="m-link">'+row.user.lastName+'</a>';
+                    },
+                },
                 { "data": "user.firstName" , "title": "نام کوچک", "defaultContent": defaultContent},
                 {
                     "data": null,
@@ -736,7 +747,7 @@
                     "render": function ( data, type, row ) {
                         return '\n' +
                             '            <div class="btn-group">\n' +
-                            '                <a target="_blank" class="btn btn-success" href="'+row.editOrder+'">\n' +
+                            '                <a target="_blank" class="btn btn-success" href="'+row.editLink+'">\n' +
                             '                    <i class="fa fa-pencil"></i> اصلاح \n' +
                             '                </a>\n' +
                             '                <a class="btn btn-danger deleteOrder" data-target="#deleteOrderConfirmationModal" data-toggle="modal" remove-link="'+row.removeLink+'" fullname="'+row.user.firstName+row.user.lastName+'">\n' +
@@ -884,7 +895,7 @@
                                 successfulTransactions += successfulTransaction.cost.toLocaleString('fa') + ' (دریافت) ';
                             }
 
-                            successfulTransactions += '<a target="_blank" href="#" class="btn btn-sm m-btn--pill m-btn--air btn-info m--margin-left-10">اصلاح</a>';
+                            successfulTransactions += '<a target="_blank" href="'+successfulTransaction.editLink+'" class="btn btn-sm m-btn--pill m-btn--air btn-info m--margin-left-10">اصلاح</a>';
                             if (typeof successfulTransaction.grandParent !== 'undefined') {
                                 successfulTransactions += '<a target="_blank" href="#" class="btn btn-sm m-btn--pill m-btn--air btn-info m--margin-left-10">رفتن به تراکنش والد</a>';
                             }

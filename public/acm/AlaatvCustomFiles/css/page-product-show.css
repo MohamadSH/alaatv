@@ -9,7 +9,7 @@
 
 .productDetailes .m-portlet__head {
     background: white;
-    z-index: 99 !important;
+    z-index: 40 !important;
 }
 
 .productPamphletWarper .productPamphletBody {
