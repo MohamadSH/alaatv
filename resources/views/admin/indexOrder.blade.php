@@ -792,11 +792,11 @@
                             }
                             let orderProduct = row.orderproducts[index];
 
-                            produtsNames += '<span class="bold " style="font-style: italic; ">';
-                            if (orderProduct.orderproducttype_id == {!! config("constants.ORDER_PRODUCT_GIFT") !!}) {
-                                produtsNames += '<img src="/assets/extra/gift-box.png" width="25">';
+                            produtsNames += '<span class="m-badge m-badge--info m-badge--wide m-badge--rounded">';
+                            if (orderProduct.orderproducttype.name === 'gift') {
+                                produtsNames += '<img class="m--margin-right-5" src="/acm/extra/gift-box.png" width="25">';
                             }
-                            produtsNames += '<a style="color:#607075" target="_blank" href="#">\n' + orderProduct.product.name + '</a>';
+                            produtsNames += '<a class="m-link" target="_blank" href="'+orderProduct.product.url+'">\n' + orderProduct.product.name + '</a>';
                             produtsNames += '</span>';
                             if (typeof orderProduct.checkoutstatus_id !== 'undefined') {
                                 produtsNames += '- <span class="m--font-danger bold">'+orderProduct.checkoutstatus.displayName+'</span>';
