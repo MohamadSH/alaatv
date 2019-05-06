@@ -375,7 +375,7 @@ class Contentset extends BaseModel implements Taggable
     
     public function getTaggableScore()
     {
-        return !is_null($this->created_at) ? $this->created_at->timestamp : null;
+        return $this->created_at !== null ? $this->created_at->timestamp : null;
     }
     
     public function isTaggableActive(): bool

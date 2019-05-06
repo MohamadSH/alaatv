@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\User;
 use Illuminate\Support\Arr;
 use App\Traits\RequestCommon;
 use App\Afterloginformcontrol;
@@ -35,20 +36,16 @@ class EditUserRequest extends FormRequest
      */
     public function authorize(Request $request)
     {
-        $authorized = true;
-        
         $authenticatedUser = $request->user();
-        $userId            = $this->getUserIdFromRequestBody($request)
-            ->getValue(false);
-        if (!$userId) {
-            if ($authenticatedUser->isUserProfileLocked()) {
-                $authorized = false;
-            }
-        } elseif ($userId !== $authenticatedUser->id && !$authenticatedUser->can(config('constants.EDIT_USER_ACCESS'))) {
-            $authorized = false;
-            
-        }
-        return $authorized;
+        $userId            = $this->getUserIdFromRequestBody($request)->getValue(false);
+        
+        if($this->isHeUpdatingHisOwnProfile($userId, $authenticatedUser))//He is updating his own profile
+            return true;
+        
+        if($this->hasUserAuthorityForEditAction($authenticatedUser)) 
+            return true;
+        
+        return false;
     }
     
     public function rules()
@@ -209,5 +206,24 @@ class EditUserRequest extends FormRequest
         
         return nullable($userId);
         
+    }
+
+    /**
+     * @param User $authenticatedUser
+     * @return bool
+     */
+    private function hasUserAuthorityForEditAction(User $authenticatedUser): bool
+    {
+        return  $authenticatedUser->can(config('constants.EDIT_USER_ACCESS'));
+    }
+
+    /**
+     * @param $userId
+     * @param User $authenticatedUser
+     * @return bool
+     */
+    private function isHeUpdatingHisOwnProfile($userId, User $authenticatedUser): bool
+    {
+        return !$userId || $userId !== $authenticatedUser->id;
     }
 }
