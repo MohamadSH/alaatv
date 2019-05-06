@@ -103,8 +103,6 @@ use App\Classes\Checkout\Alaa\ReObtainOrderFromRecords;
  * @property-read mixed      $added_bon_sum
  * @property-read mixed      $coupon_info
  * @property-read mixed      $debt
- * @property-read int        $donate_amount
- * @property-read Collection $donates
  * @property-read mixed      $edit_order_link
  * @property-read mixed      $jalali_completed_at
  * @property-read mixed      $jalali_created_at
@@ -1228,6 +1226,7 @@ class Order extends BaseModel
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
                 $visibleColumns = [
+                    'id',
                     'firstName',
                     'lastName',
                     'nationalCode',
