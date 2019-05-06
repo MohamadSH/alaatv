@@ -172,13 +172,14 @@ $(document).on("click", ".filter" , function () {
 });
 
 $(document).on("click", ".sendSms", function (){
-    var order_id = $(this).parent().find('.order_id').attr('id');
-    var user_id = $(this).parent().find('.user_id').attr('id');
+    var userFullname = $(this).parent().find('.userFullname').val();
+    var user_id = $(this).parent().find('.userId').val();
     $("#users").val(user_id);
-    $("#smsUserFullName").text($("#orderCustomerFullName_"+order_id).text());
+    $("#smsUserFullName").text(userFullname);
 });
 $(document).on("click", "#sendSmsForm-submit", function (){
-    $('body').modalmanager('loading');
+
+    // $('body').modalmanager('loading');
     $("#send-sms-loading").removeClass("d-none");
 
     //initializing form alerts
@@ -194,8 +195,8 @@ $(document).on("click", "#sendSmsForm-submit", function (){
         statusCode: {
             //The status for when action was successful
             200: function (response) {
+                $('#sendSmsModal').modal('hide');
                 $("#send-sms-loading").addClass("d-none");
-                $("#sendSmsForm-close").trigger("click");
                 toastr.options = {
                     "closeButton": true,
                     "debug": false,
@@ -233,18 +234,22 @@ $(document).on("click", "#sendSmsForm-submit", function (){
                             break;
                     }
                 });
+                $('#sendSmsModal').modal('hide');
             },
             //The status for when there is error php code
             500: function (response) {
+                $('#sendSmsModal').modal('hide');
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
             },
             //The status for when there is error php code
             503: function (response) {
+                $('#sendSmsModal').modal('hide');
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
             },
 
             //The status for Unavailable For Legal Reasons
             451: function (response) {
+                $('#sendSmsModal').modal('hide');
                 toastr["error"]("کاربری انتخاب نشده است!", "پیام سیستم");
             }
 
@@ -253,8 +258,7 @@ $(document).on("click", "#sendSmsForm-submit", function (){
         contentType: false,
         processData: false
     });
-    $modal.modal().hide();
-    $modal.modal('toggle');
+
 });
 $(document).ready(function () {
 
