@@ -26,7 +26,7 @@ class GetPaymentRedirectEncryptedLink extends Controller
         $redirectTo = $this->getEncryptedUrl($paymentMethod, $device, $encryptedPostfix);
         
         return response()->json([
-            'redirectUrl' => $redirectTo,
+            'url' => $redirectTo,
         ]);
     }
     

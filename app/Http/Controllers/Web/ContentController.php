@@ -189,7 +189,8 @@ class ContentController extends Controller
     
         $pageName = 'content-search';
     
-        $isApp = (strstr($request->header('User-Agent'), 'Alaa') !== '') ? true : false;
+        $strstr = strstr($request->header('User-Agent'), 'Alaa');
+        $isApp  = ($strstr !== false && $strstr !== '') ? true : false;
         if ($isApp) {
             return response()->json($this->makeJsonForAndroidApp($result->get('video')
                 ->items()));
