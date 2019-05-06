@@ -453,12 +453,12 @@
                             </ul>
                         </div>
                         <div class="tab-pane" id="portlet_tab3" role="tabpanel">
-                            <div class="alert alert-success alert-dismissible fade show" role="alert"
+                            <div class="alert alert-success alert-dismissible fade show d-none" role="alert"
                                  id="removeTransactionSuccess">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
                                 تراکنش با موفقیت اصلاح شد
                             </div>
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                            <div class="alert alert-danger alert-dismissible fade show d-none" role="alert"
                                  id="removeTransactionError">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
                                 <span></span>
@@ -1353,7 +1353,7 @@
                                             data: {orderproducts: orderproductIds, order:{{$order->id}}  },
                                             statusCode: {
                                                 200: function (response) {
-                                                    // console.log(response);
+                                                    console.log('detachOrderproductAjax: ', response);
                                                     // console.log($.parseJSON(response.responseText)) ;
                                                     location.reload();
                                                 },
