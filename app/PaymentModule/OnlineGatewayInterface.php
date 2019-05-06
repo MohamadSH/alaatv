@@ -3,8 +3,6 @@
 namespace App\PaymentModule;
 
 use App\Classes\Nullable;
-use App\PaymentModule\Gateways\OnlinePaymentRedirectionUriInterface;
-use App\PaymentModule\Gateways\OnlinePaymentVerificationResponseInterface;
 
 interface OnlineGatewayInterface
 {

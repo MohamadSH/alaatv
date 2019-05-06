@@ -7,7 +7,7 @@ use App\Traits\HandleOrderPayment;
 use Illuminate\Routing\Controller;
 use App\Repositories\TransactionRepo;
 use Illuminate\Support\Facades\{Cache, Request};
-use App\PaymentModule\{Money, Responses, OnlineGateWay, PaymentDriver};
+use App\PaymentModule\{Money, OnlinePaymentVerificationResponseInterface, Responses, OnlineGateWay, PaymentDriver};
 
 class PaymentVerifierController extends Controller
 {
@@ -27,10 +27,10 @@ class PaymentVerifierController extends Controller
         $transaction = TransactionRepo::getTransactionByAuthority($authority)
             ->orFailWith([Responses::class, 'transactionNotFoundError']);
 
+        $money = Money::fromTomans(abs($transaction->cost));
         /**
          * @var OnlinePaymentVerificationResponseInterface $verificationResult
          */
-        $money              = Money::fromTomans(abs($transaction->cost));
         $verificationResult = OnlineGateWay::verifyPayment($money, $authority);
         
         $transaction->order->detachUnusedCoupon();
@@ -50,8 +50,12 @@ class PaymentVerifierController extends Controller
         if (isset($transaction->order_id)) {} else { if (isset($transaction->wallet_id)) { if ($result['status']) { $this->handleWalletChargingSuccessPayment($gatewayVerify['RefID'], $transaction, $gatewayVerify['cardPanMask']); } else { $this->handleWalletChargingCanceledPayment($transaction); } } } */
         
         Cache::tags('bon')->flush();
-        
-        Request::session()->flash('verifyResult', $verificationResult->getMessages());
+
+        Request::session()->flash('verifyResult', [
+            'messages' => $verificationResult->getMessages(),
+            'cardPanMask' => '',
+            'cardPanMask' => '',
+        ]);
         
         return redirect()->route('showOnlinePaymentStatus', [
             'status'        => ($verificationResult->isSuccessfulPayment()) ? 'successful' : 'failed',

@@ -362,8 +362,6 @@
 
     <input type="hidden" id="invoiceInfo-couponCode" value="@if(isset($coupon)){{ $coupon['code'] }}@endif">
     
-    
-    
     <input type="hidden" id="OrderController-submitCoupon" value="{{ action('Web\OrderController@submitCoupon') }}">
     <input type="hidden" id="OrderController-removeCoupon" value="{{ action('Web\OrderController@removeCoupon') }}">
 
@@ -371,8 +369,6 @@
 
 @section('page-js')
     <script src="{{ mix('/js/checkout-payment.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/UserCart.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-checkout-payment.js') }}"></script>
     
     <script>
         $(document).ready(function () {
