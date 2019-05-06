@@ -22,6 +22,7 @@ use App\Traits\{ProductCommon,
     ModelTrackerTrait,
     Product\ProductBonTrait,
     Product\ProductPhotoTrait,
+    Product\TaggableProductTrait,
     Product\ProductAttributeTrait};
 
 /**
@@ -154,7 +155,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     use favorableTraits;
     use ModelTrackerTrait;
     use ProductAttributeTrait, ProductBonTrait, ProductPhotoTrait;
-    
+    use TaggableProductTrait;
     /*
     |--------------------------------------------------------------------------
     | Properties
@@ -954,14 +955,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     |--------------------------------------------------------------------------
     */
     
-    public function isTaggableActive(): bool
-    {
-        if ($this->isActive() && isset($this->tags) && !empty($this->tags->tags)) {
-            return true;
-        }
-        
-        return false;
-    }
     
     /**
      * Checks whether the product is active or not .
@@ -1158,22 +1151,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         throw new Exception("product Advertisable should be impediment");
     }
     
-    public function retrievingTags()
-    {
-        /**
-         *      Retrieving Tags
-         */
-        $response = $this->sendRequest(config("constants.TAG_API_URL")."id/product/".$this->id, "GET");
-        
-        if ($response["statusCode"] == 200) {
-            $result = json_decode($response["result"]);
-            $tags   = $result->data->tags;
-        } else {
-            $tags = [];
-        }
-        
-        return $tags;
-    }
     
     /**
      * @return Collection
@@ -1284,30 +1261,17 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $productsFiles = $this->validProductfiles($type)
             ->get();
         foreach ($productsFiles as $productfile) {
-            array_push($filesArray, [
-                "file"       => $productfile->file,
-                "name"       => $productfile->name,
-                "product_id" => $productfile->product_id,
-            ]);
+            $filesArray[] = [
+                'file'       => $productfile->file,
+                'name'       => $productfile->name,
+                'product_id' => $productfile->product_id,
+            ];
         }
         
         return $filesArray;
     }
     
-    public function getTaggableTags()
-    {
-        return optional($this->tags)->tags;
-    }
     
-    public function getTaggableId(): int
-    {
-        return $this->id;
-    }
-    
-    public function getTaggableScore()
-    {
-        return optional($this->created_at)->timestamp;
-    }
     
     /**
      * Obtains product's price (rawCost)

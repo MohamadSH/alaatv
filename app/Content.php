@@ -18,8 +18,8 @@ use App\Collection\ContentCollection;
 use App\Collection\ProductCollection;
 use Stevebauman\Purify\Facades\Purify;
 use App\Classes\SEO\SeoMetaTagsGenerator;
-use App\Classes\Search\Tag\ContentTagManagerViaApi;
-use Illuminate\Support\Facades\{Cache, Config, Artisan};
+use App\Traits\Content\TaggableContentTrait;
+use Illuminate\Support\Facades\{Cache, Artisan};
 
 /**
  * App\Content
@@ -131,7 +131,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     use APIRequestCommon;
     use favorableTraits;
     use ModelTrackerTrait;
-    
+    use TaggableContentTrait;
     /*
     |--------------------------------------------------------------------------
     | Properties
@@ -164,7 +164,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'validSince',
     ];
     
-    protected $table = "educationalcontents";
+    protected $table = 'educationalcontents';
     
     protected $fillable = [
         'name',
@@ -970,7 +970,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function set()
     {
-        return $this->belongsTo("\App\Contentset", "contentset_id", "id")
+        return $this->belongsTo('\App\Contentset', 'contentset_id', 'id')
             ->withDefault([
                 'id'         => 0,
                 'url'        => null,
@@ -997,73 +997,73 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $files   = collect();
         switch ($content->template->name) {
             case "video1":
-                $file = $content->files->where("pivot.label", "hd")
+                $file = $content->files->where('pivot.label', 'hd')
                     ->first();
                 if (isset($file)) {
                     $url     = $file->name;
                     $size    = null;
                     $caption = $file->pivot->caption;
-                    $res     = "720p";
-                    $type    = "video";
+                    $res     = '720p';
+                    $type    = 'video';
                     
                     $files->push([
-                        "uuid"     => $file->uuid,
-                        "disk"     => "alaaCdnSFTP",
-                        "url"      => $url,
-                        "fileName" => parse_url($url)['path'],
-                        "size"     => $size,
-                        "caption"  => $caption,
-                        "res"      => $res,
-                        "type"     => $type,
-                        "ext"      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
+                        'uuid'     => $file->uuid,
+                        'disk'     => "alaaCdnSFTP",
+                        'url'      => $url,
+                        'fileName' => parse_url($url)['path'],
+                        'size'     => $size,
+                        'caption'  => $caption,
+                        'res'      => $res,
+                        'type'     => $type,
+                        'ext'      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
                     ]);
                 }
-                
-                $file = $content->files->where("pivot.label", "hq")
+    
+                $file = $content->files->where('pivot.label', 'hq')
                     ->first();
                 if (isset($file)) {
                     $url     = $file->name;
                     $size    = null;
                     $caption = $file->pivot->caption;
-                    $res     = "480p";
-                    $type    = "video";
+                    $res     = '480p';
+                    $type    = 'video';
                     
                     $files->push([
-                        "uuid"     => $file->uuid,
-                        "disk"     => "alaaCdnSFTP",
-                        "url"      => $url,
-                        "fileName" => parse_url($url)['path'],
-                        "size"     => $size,
-                        "caption"  => $caption,
-                        "res"      => $res,
-                        "type"     => $type,
-                        "ext"      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
+                        'uuid'     => $file->uuid,
+                        'disk'     => 'alaaCdnSFTP',
+                        'url'      => $url,
+                        'fileName' => parse_url($url)['path'],
+                        'size'     => $size,
+                        'caption'  => $caption,
+                        'res'      => $res,
+                        'type'     => $type,
+                        'ext'      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
                     ]);
                 }
-                
-                $file = $content->files->where("pivot.label", "240p")
+    
+                $file = $content->files->where('pivot.label', '240p')
                     ->first();
                 if (isset($file)) {
                     $url     = $file->name;
                     $size    = null;
                     $caption = $file->pivot->caption;
-                    $res     = "240p";
-                    $type    = "video";
+                    $res     = '240p';
+                    $type    = 'video';
                     
                     $files->push([
-                        "uuid"     => $file->uuid,
-                        "disk"     => "alaaCdnSFTP",
-                        "url"      => $url,
-                        "fileName" => parse_url($url)['path'],
-                        "size"     => $size,
-                        "caption"  => $caption,
-                        "res"      => $res,
-                        "type"     => $type,
-                        "ext"      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
+                        'uuid'     => $file->uuid,
+                        'disk'     => 'alaaCdnSFTP',
+                        'url'      => $url,
+                        'fileName' => parse_url($url)['path'],
+                        'size'     => $size,
+                        'caption'  => $caption,
+                        'res'      => $res,
+                        'type'     => $type,
+                        'ext'      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
                     ]);
                 }
-                
-                $file = optional($content->files->where("pivot.label", "thumbnail")
+    
+                $file = optional($content->files->where('pivot.label', 'thumbnail')
                     ->first());
                 
                 $url = $file->name;
@@ -1072,25 +1072,25 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     $type = "thumbnail";
                     
                     $this->thumbnail = [
-                        "uuid"     => $file->uuid,
-                        "disk"     => "alaaCdnSFTP",
-                        "url"      => $url,
-                        "fileName" => parse_url($url)['path'],
-                        "size"     => $size,
-                        "caption"  => null,
-                        "res"      => null,
-                        "type"     => $type,
-                        "ext"      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
+                        'uuid'     => $file->uuid,
+                        'disk'     => 'alaaCdnSFTP',
+                        'url'      => $url,
+                        'fileName' => parse_url($url)['path'],
+                        'size'     => $size,
+                        'caption'  => null,
+                        'res'      => null,
+                        'type'     => $type,
+                        'ext'      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
                     ];
                 }
                 break;
-            
-            case  "pamphlet1":
+    
+            case  'pamphlet1':
                 $pFiles = $content->files;
                 foreach ($pFiles as $file) {
-                    $type    = "pamphlet";
+                    $type    = 'pamphlet';
                     $res     = null;
-                    $caption = "فایل".' '.$file->pivot->caption;
+                    $caption = 'فایل'.' '.$file->pivot->caption;
                     
                     if ($file->disks->isNotEmpty()) {
                         $disk     = $file->disks->first();
@@ -1098,15 +1098,15 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     }
                     
                     $files->push([
-                        "uuid"     => $file->uuid,
-                        "disk"     => (isset($diskName) ? $diskName : null),
-                        "url"      => null,
-                        "fileName" => $file->name,
-                        "size"     => null,
-                        "caption"  => $caption,
-                        "res"      => $res,
-                        "type"     => $type,
-                        "ext"      => pathinfo($file->name, PATHINFO_EXTENSION),
+                        'uuid'     => $file->uuid,
+                        'disk'     => (isset($diskName) ? $diskName : null),
+                        'url'      => null,
+                        'fileName' => $file->name,
+                        'size'     => null,
+                        'caption'  => $caption,
+                        'res'      => $res,
+                        'type'     => $type,
+                        'ext'      => pathinfo($file->name, PATHINFO_EXTENSION),
                     ]);
                 }
                 break;
@@ -1123,15 +1123,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         Artisan::call('cache:clear');
     }
     
-    /**
-     * Retrieves content's tags
-     *
-     * @return array
-     */
-    public function retrievingTags(): array
-    {
-        return (new ContentTagManagerViaApi())->getTags($this->id);
-    }
+    
     
     /*
     |--------------------------------------------------------------------------
@@ -1139,35 +1131,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     |--------------------------------------------------------------------------
     */
     
-    public function getTaggableTags()
-    {
-        return optional($this->tags)->tags;
-    }
     
-    /*
-    |--------------------------------------------------------------------------
-    | Other
-    |--------------------------------------------------------------------------
-    */
-    
-    public function getTaggableId(): int
-    {
-        return $this->id;
-    }
-    
-    public function getTaggableScore()
-    {
-        return isset($this->created_at) ? $this->created_at->timestamp : null;
-    }
-    
-    public function isTaggableActive(): bool
-    {
-        if ($this->isActive() && isset($this->tags) && !empty($this->tags->tags)) {
-            return true;
-        }
-        
-        return false;
-    }
     
     /**
      * Checks whether the content is active or not .
@@ -1200,8 +1164,8 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function isValid(): bool
     {
-        if ($this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                ->timezone('Asia/Tehran') || is_null($this->validSince)) {
+        if ($this->validSince === null || $this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+                ->timezone('Asia/Tehran')) {
             return true;
         }
         
