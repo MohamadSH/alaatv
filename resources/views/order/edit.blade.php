@@ -468,55 +468,76 @@
                                     <div class="col-md-6">
                                         <div class="btn-group">
                                             {{--@permission((config('constants.INSERT_USER_ACCESS')))--}}
-                                            <a class="btn btn-outline green-soft" id="insertTransaction-button"
+                                            <a class="btn m-btn--air btn-info m--margin-bottom-10" id="insertTransaction-button"
                                                data-toggle="modal" href="#responsive-transaction">
                                                 <i class="fa fa-plus"></i>
                                                 افزودن تراکنش
                                             </a>
-                                            <!-- responsive modal -->
-                                            <div id="responsive-transaction" class="modal fade" tabindex="-1"
-                                                 data-width="760">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                            aria-hidden="true"></button>
-                                                    <h4 class="modal-title">افزودن تراکنش جدید</h4>
+    
+                                            <!--begin::Modal-->
+                                            <div class="modal fade" id="responsive-transaction" tabindex="-1" role="dialog"
+                                                 aria-labelledby="orderproductExchangeModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="orderproductExchangeModalLabel">
+                                                                افزودن تراکنش جدید
+                                                            </h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\TransactionController@store'], 'class'=>'nobottommargin' ]) !!}
+                                                        <div class="modal-body">
+                                                            @include('transaction.form' , ["class"=>["paymentmethod"=>"paymentMethodName"] , "name"=>["paymentmethod"=>"paymentMethodName"] , "id"=>["paymentmethod"=>"paymentMethodName"]])
+                                                            {{--<span class="help-block m--font-info">( دقت شود از میان اطلاعات شماره مرجع ، شماره پیگیری و شماره چک که اطلاعات بانکی یک تراکنش محسوب می شوند ، تمامی آنها برای هر تراکنش وجود ندارد و نیاز به وارد نمودن همه ی آنها نیست)</span>--}}
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="userForm-close">بستن</button>
+                                                            <button type="submit" class="btn btn-primary">ذخیره</button>
+                                                        </div>
+                                                        {!! Form::close() !!}
+                                                    </div>
                                                 </div>
-                                                {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\TransactionController@store'], 'class'=>'nobottommargin' ]) !!}
-                                                <div class="modal-body">
-                                                    @include('transaction.form' , ["class"=>["paymentmethod"=>"paymentMethodName"] , "name"=>["paymentmethod"=>"paymentMethodName"] , "id"=>["paymentmethod"=>"paymentMethodName"]])
-                                                    {{--<span class="help-block m--font-info">( دقت شود از میان اطلاعات شماره مرجع ، شماره پیگیری و شماره چک که اطلاعات بانکی یک تراکنش محسوب می شوند ، تمامی آنها برای هر تراکنش وجود ندارد و نیاز به وارد نمودن همه ی آنها نیست)</span>--}}
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" data-dismiss="modal"
-                                                            class="btn btn-outline dark" id="userForm-close">بستن
-                                                    </button>
-                                                    <button type="submit" class="btn blue">ذخیره</button>
-                                                </div>
-                                                {!! Form::close() !!}
                                             </div>
-                                            {{--@endpermission--}}
+                                            <!--end::Modal-->
+                                            
+                                            
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <table class="table table-striped table-hover table-bordered" id="sample_editable_1">
-                                <div id="deleteTransactionConfirmationModal" class="modal fade" tabindex="-1"
-                                     data-backdrop="static" data-keyboard="false">
-                                    <div class="modal-header">حذف تراکنش
-                                        <span id="deleteTransactionFullName"></span>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p> آیا مطمئن هستید؟</p>
-                                        {!! Form::hidden('transaction_id', null) !!}
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر
-                                        </button>
-                                        <button type="button" data-dismiss="modal" class="btn green"
-                                                onclick="removeTransaction()">بله
-                                        </button>
+    
+                                <!--begin::Modal-->
+                                <div class="modal fade" id="deleteTransactionConfirmationModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="orderproductExchangeModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="orderproductExchangeModalLabel">
+                                                    حذف تراکنش
+                                                    <span id="deleteTransactionFullName"></span>
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p> آیا مطمئن هستید؟</p>
+                                                {!! Form::hidden('transaction_id', null) !!}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                                                <button type="submit" class="btn btn-primary" onclick="removeTransaction()">بله</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                                <!--end::Modal-->
+                                
                                 <thead>
                                 <tr>
                                     <th> روش پرداخت</th>
@@ -567,7 +588,7 @@
                                         </td>
                                         <td style="text-align: center">
                                             <a class="edit" href="javascript:">
-                                                <i class="fa fa-pencil-square fa-lg font-green" aria-hidden="true"></i>
+                                                <i class="flaticon-edit m--font-success" aria-hidden="true"></i>
                                             </a>
                                         </td>
                                         <td style="text-align: center">

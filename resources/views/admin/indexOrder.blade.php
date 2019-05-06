@@ -564,9 +564,9 @@
                             <th class="none"> تاریخ ثبت :</th>
                             <th class="none"> مهلت پرداخت :</th>
                             <th class="none"> تاریخ پرداخت :</th>
-                            <th class="none">عملیات</th>
+                            <th class="none">عملیات تراکنش</th>
                             <th class="none"> توضیح مدیریتی :</th>
-                            <th class="all"> عملیات</th>
+                            <th class="all">عملیات سفارش</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -577,115 +577,143 @@
             </div>
             @endpermission
 
-            {{--@permission((config('constants.LIST_USER_BON_ACCESS')))--}}
-            {{--<!-- BEGIN ORDER TABLE PORTLET-->--}}
-            {{--<div class="portlet box green-turquoise" id="userBon-portlet">--}}
-                {{--<div class="portlet-title">--}}
-                    {{--<div class="caption">--}}
-                        {{--<i class="fa fa-cogs"></i>مدیریت بن کاربران--}}
-                    {{--</div>--}}
-                    {{--<div class="tools">--}}
-                        {{--<a href="javascript:" class="collapse" id="userBon-expand"> </a>--}}
-                        {{--<a href="#portlet-config" data-toggle="modal" class="config"> </a>--}}
-                        {{--<a href="javascript:" class="reload"> </a>--}}
-                        {{--<a href="javascript:" class="remove"> </a>--}}
-                    {{--</div>--}}
-                    {{--<div class="tools"> </div>--}}
-                {{--</div>--}}
-                {{--<div class="portlet-body" style="display: block;">--}}
-                    {{--<div class="portlet box blue" style="background: #e7ecf1">--}}
-                        {{--<div class="portlet-title">--}}
-                        {{--<div class="caption "><h3 class="bold">--}}
-                        {{--<i class="fa fa-filter"></i>فیلتر جدول</h3></div>--}}
-                        {{--</div>--}}
-                        {{--<style>--}}
-                            {{--.form .form-row-seperated .form-group {--}}
-                                {{--border-bottom-color: #bfbfbf !important;--}}
-                            {{--}--}}
-                        {{--</style>--}}
-                        {{--<div class="portlet-body form" style="border-top: #3598dc solid 1px">--}}
-                            {{--{!! Form::open(['class'=>'form-horizontal form-row-seperated' , 'id' => 'filterUserBonForm']) !!}--}}
-                            {{--<div class="form-body" style="background: #e7ecf1">--}}
-                                {{--<div class="form-group">--}}
-                                    {{--<div class="col-md-6">--}}
-                                        {{--@include("admin.filters.productsFilter" , ["id" => "userBonProduct" , "title" => "نام کالایی که از خرید آن بن دریافت کرده است" , "everyProduct"=>1])--}}
-                                    {{--</div>--}}
-                                    {{--<div class="col-md-4">--}}
-                                        {{--@include("admin.filters.userBonStatusFilter")--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                                {{--<div class="form-group">--}}
-                                    {{--@include('admin.filters.identityFilter')--}}
-                                {{--</div>--}}
-                                {{--<div class="form-group">--}}
-                                    {{--<label class="col-md-2 bold control-label">تاریخ درج : </label>--}}
-                                    {{--<div class="col-md-10">--}}
-                                        {{--@include('admin.filters.timeFilter.createdAt' , ["id" => "userBon" , "default" => true])--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                                {{--<div class="form-group">--}}
-                                    {{--<div class="col-lg-3 col-md-3">--}}
-                                        {{--@include("admin.filters.columnFilter" , ["id" => "userBonTableColumnFilter" , "tableDefaultColumns" => $userBonTableDefaultColumns])--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                                {{--<div class="form-group">--}}
-                                    {{--<div class="col-md-12">--}}
-                                        {{--<a href="javascript:" class="btn btn-lg bg-font-dark reload"--}}
-                                           {{--style="background: #489fff">فیلتر</a>--}}
-                                        {{--<img class="d-none" id="userBon-portlet-loading"--}}
-                                             {{--src="{{config('constants.FILTER_LOADING_GIF')}}" width="5%">--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                            {{--{!! Form::close() !!}--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                    {{--<div class="table-toolbar">--}}
-                        {{--<div class="row">--}}
-                            {{--<div class="col-md-6">--}}
-                                {{--<div class="btn-group">--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                    {{--delete conformation--}}
-                    {{--@permission((config('constants.REMOVE_USER_BON_ACCESS')))--}}
-                    {{--<div id="deleteUserBonConfirmationModal" class="modal fade" tabindex="-1" data-backdrop="static"--}}
-                         {{--data-keyboard="false">--}}
-                        {{--<div class="modal-header">حذف بن کاربر <span id="deleteUserBonFullName"></span></div>--}}
-                        {{--<div class="modal-body">--}}
-                            {{--<p> آیا مطمئن هستید؟ </p>--}}
-                            {{--{!! Form::hidden('userbon_id', null) !!}--}}
-                        {{--</div>--}}
-                        {{--<div class="modal-footer">--}}
-                            {{--<button type="button" data-dismiss="modal" class="btn btn-outline dark">خیر</button>--}}
-                            {{--<button type="button" data-dismiss="modal" class="btn green" onclick="removeUserBon();">--}}
-                                {{--بله--}}
-                            {{--</button>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                    {{--@endpermission--}}
-                    {{--<table class="table table-striped table-bordered table-hover dt-responsive" width="100%"--}}
-                           {{--id="userBon_table">--}}
-                        {{--<thead>--}}
-                        {{--<tr>--}}
-                            {{--<th></th>--}}
-                            {{--<th class="all"> نام کاربر</th>--}}
-                            {{--<th class="all"> تعداد بن تخصیص داده شده</th>--}}
-                            {{--<th class="all"> وضعیت بن</th>--}}
-                            {{--<th class="none"> نام کالایی که از خرید آن بن دریافت کرده است</th>--}}
-                            {{--<th class="none">تاریخ درج</th>--}}
-                            {{--<th class="all"> عملیات</th>--}}
-                        {{--</tr>--}}
-                        {{--</thead>--}}
-                        {{--<tbody>--}}
-                        {{--Loading by ajax--}}
-                        {{--</tbody>--}}
-                    {{--</table>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-            {{--<!-- END SAMPLE TABLE PORTLET-->--}}
-            {{--@endpermission--}}
+            @permission((config('constants.LIST_USER_BON_ACCESS')))
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--primary m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="userBon-portlet">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-cogs"></i>
+                            </span>
+                            <h3 class="m-portlet__head-text">
+                                مدیریت بن کاربران
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="m-portlet__head-tools">
+                        <ul class="m-portlet__nav">
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload"><i class="la la-refresh"></i></a>
+                            </li>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-angle-down"></i></a>
+                            </li>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-expand"></i></a>
+                            </li>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-close"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="m-portlet__body">
+                    <div class="portlet box blue" style="background: #e7ecf1">
+                        <div class="portlet-title">
+                            <div class="caption "><h3 class="bold">
+                                    <i class="fa fa-filter"></i>فیلتر جدول</h3></div>
+                        </div>
+                        <style>
+                            .form .form-row-seperated .form-group {
+                                border-bottom-color: #bfbfbf !important;
+                            }
+                        </style>
+                        <div class="portlet-body form" style="border-top: #3598dc solid 1px">
+                            {!! Form::open(['class'=>'form-horizontal form-row-seperated' , 'id' => 'filterUserBonForm']) !!}
+                            <div class="form-body" style="background: #e7ecf1">
+                                <div class="form-group">
+                                    <div class="col-md-6">
+                                        @include("admin.filters.productsFilter" , ["id" => "userBonProduct" , "title" => "نام کالایی که از خرید آن بن دریافت کرده است" , "everyProduct"=>1])
+                                    </div>
+                                    <div class="col-md-4">
+                                        @include("admin.filters.userBonStatusFilter")
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @include('admin.filters.identityFilter')
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 bold control-label">تاریخ درج : </label>
+                                    <div class="col-md-10">
+                                        @include('admin.filters.timeFilter.createdAt' , ["id" => "userBon" , "default" => true])
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-3 col-md-3">
+                                        @include("admin.filters.columnFilter" , ["id" => "userBonTableColumnFilter" , "tableDefaultColumns" => $userBonTableDefaultColumns])
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <a href="javascript:" class="btn btn-lg bg-font-dark reload"
+                                           style="background: #489fff">فیلتر</a>
+                                        <img class="d-none" id="userBon-portlet-loading"
+                                             src="{{config('constants.FILTER_LOADING_GIF')}}" width="5%">
+                                    </div>
+                                </div>
+                            </div>
+                            {!! Form::close() !!}
+                        </div>
+                    </div>
+                    <div class="table-toolbar">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="btn-group">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    delete conformation
+                    @permission((config('constants.REMOVE_USER_BON_ACCESS')))
+    
+                    <!--begin::Modal-->
+                    <div class="modal fade" id="deleteUserBonConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="completeTransactionInfoLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="completeTransactionInfoLabel">
+                                        حذف بن کاربر <span id="deleteUserBonFullName"></span>
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p> آیا مطمئن هستید؟ </p>
+                                    {!! Form::hidden('userbon_id', null) !!}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                                    <button type="button" class="btn btn-primary" onclick="removeUserBon();">بله</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Modal-->
+                    
+                    @endpermission
+                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%"
+                           id="userBon_table">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th class="all"> نام کاربر</th>
+                            <th class="all"> تعداد بن تخصیص داده شده</th>
+                            <th class="all"> وضعیت بن</th>
+                            <th class="none"> نام کالایی که از خرید آن بن دریافت کرده است</th>
+                            <th class="none">تاریخ درج</th>
+                            <th class="all"> عملیات</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        Loading by ajax
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
         </div>
     </div>
@@ -747,6 +775,8 @@
                     "render": function ( data, type, row ) {
                         return '\n' +
                             '            <div class="btn-group">\n' +
+                            '                <input type="hidden" class="userFullname" name="userFullname" value="'+row.user.firstName+' '+row.user.lastName+'">\n' +
+                            '                <input type="hidden" class="userId" name="userId" value="'+row.user.id+'">\n' +
                             '                <a target="_blank" class="btn btn-success" href="'+row.editLink+'">\n' +
                             '                    <i class="fa fa-pencil"></i> اصلاح \n' +
                             '                </a>\n' +
@@ -792,11 +822,11 @@
                             }
                             let orderProduct = row.orderproducts[index];
 
-                            produtsNames += '<span class="bold " style="font-style: italic; ">';
-                            if (orderProduct.orderproducttype_id == {!! config("constants.ORDER_PRODUCT_GIFT") !!}) {
-                                produtsNames += '<img src="/assets/extra/gift-box.png" width="25">';
+                            produtsNames += '<span class="m-badge m-badge--info m-badge--wide m-badge--rounded">';
+                            if (orderProduct.orderproducttype.name === 'gift') {
+                                produtsNames += '<img class="m--margin-right-5" src="/acm/extra/gift-box.png" width="25">';
                             }
-                            produtsNames += '<a style="color:#607075" target="_blank" href="#">\n' + orderProduct.product.name + '</a>';
+                            produtsNames += '<a class="m-link" target="_blank" href="'+orderProduct.product.url+'">\n' + orderProduct.product.name + '</a>';
                             produtsNames += '</span>';
                             if (typeof orderProduct.checkoutstatus_id !== 'undefined') {
                                 produtsNames += '- <span class="m--font-danger bold">'+orderProduct.checkoutstatus.displayName+'</span>';
