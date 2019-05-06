@@ -2,7 +2,7 @@
 
 namespace App\PaymentModule\Gateways\Zarinpal;
 
-use App\PaymentModule\Gateways\OnlinePaymentVerificationResponseInterface;
+use App\PaymentModule\OnlinePaymentVerificationResponseInterface;
 use Carbon\Carbon;
 
 class VerificationResponse implements OnlinePaymentVerificationResponseInterface
@@ -33,7 +33,7 @@ class VerificationResponse implements OnlinePaymentVerificationResponseInterface
         $this->response = $response;
     }
     
-    public static function instance($result)
+    public static function instance($result) : OnlinePaymentVerificationResponseInterface
     {
         return new static($result);
     }
