@@ -1511,7 +1511,7 @@ class OrderController extends Controller
                 }
     
                 session()->put('success',
-                    'سفارش با موفقیت تفکیک شد . رفتن به سفارش جدید : '."<a target='_blank' href='".action('OrderController@edit',
+                    'سفارش با موفقیت تفکیک شد . رفتن به سفارش جدید : '."<a target='_blank' href='".action('Web\OrderController@edit',
                         $newOrder)."'>".$newOrder->id.'</a>');
     
                 return response()->json([
