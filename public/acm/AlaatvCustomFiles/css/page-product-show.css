@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'lg';
+    src: url("/css/fonts/fontslightGallery/lg.eot?n1z373");
+    src: url("/css/fonts/fontslightGallery/lg.eot?#iefixn1z373") format("embedded-opentype"), url("/css/fonts/fontslightGallery/lg.woff?n1z373") format("woff"), url("/css/fonts/fontslightGallery/lg.ttf?n1z373") format("truetype"), url("/css/fonts/fontslightGallery/lg.svg?n1z373#lg") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
 
 .productGifts img {
     max-width: 100%;
