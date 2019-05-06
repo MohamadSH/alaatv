@@ -60,7 +60,35 @@
             {{--@role(('admin'))<p>ادمین محترم‌، لیست بنهای تخصیص داده شده به کاربران به این صفحه اضافه شده است! همچنین افزودن بنهای محصول بعد از تایید سفارش نیز در اصلاح سفارشهای تایید نشده اضافه شده است.</p>@endrole--}}
             {{--<strong class="m--font-danger">ادمین محترم سیستم فیلتر جدول سفارش ها ارتقاء یافته است. اگر این بار اول است که از تاریخ ۷ اسفند به بعد از این پنل استفاده می کنید ، لطفا کش بروزر خود را خالی نمایید . با تشکر</strong>--}}
             {{--</div>--}}
-
+    
+            {{--delete order modal--}}
+            @permission((config('constants.REMOVE_ORDER_ACCESS')))
+            <!--begin::Modal-->
+            <div class="modal fade" id="deleteOrderConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteOrderConfirmationModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteOrderConfirmationModalLabel">
+                                حذف سفارش محصول <span id="deleteOrderTitle"></span>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p> آیا مطمئن هستید؟ </p>
+                            {!! Form::hidden('order_id', null) !!}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                            <button type="button" class="btn btn-primary" onclick="removeOrder()">بله</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end::Modal-->
+            @endpermission
+            
             @permission((config('constants.LIST_ORDER_ACCESS')))
             <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="order-portlet">
                 <div class="m-portlet__head">
@@ -258,33 +286,7 @@
                     </div>
                     
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="order_table">
-                        {{--delete order modal--}}
-                        @permission((config('constants.REMOVE_ORDER_ACCESS')))
-                        <!--begin::Modal-->
-                        <div class="modal fade" id="deleteOrderConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteOrderConfirmationModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="deleteOrderConfirmationModalLabel">
-                                            حذف سفارش محصول <span id="deleteOrderTitle"></span>
-                                        </h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p> آیا مطمئن هستید؟ </p>
-                                        {!! Form::hidden('order_id', null) !!}
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
-                                        <button type="button" class="btn btn-primary" onclick="removeOrder()">بله</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--end::Modal-->
-                        @endpermission
+
                         {{--sms panel modal--}}
                         @permission((config('constants.SEND_SMS_TO_USER_ACCESS')))
 

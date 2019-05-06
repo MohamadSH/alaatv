@@ -4,7 +4,7 @@
         <div class = "m-portlet__head-caption">
             <div class = "m-portlet__head-action">
 
-                @if(isset($withPhotoUpload) && $withPhotoUpload)
+                @if(isset($withPhotoUpload) && $withPhotoUpload && !$user->lockProfile)
                     <button type = "button" id = "btnEditUserPhoto" class = "btn btn-sm m-btn--pill btn-info btnEditProfilePic" data-toggle = "m-tooltip" {{--data-placement="left"--}}data-original-title = "حجم عکس حداکثر 500 کیلوبایت و فرمت آن jpg یا png باشد">
                         ویرایش
                     </button>
