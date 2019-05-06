@@ -1,24 +1,11 @@
 <?php
 
 
-use App\PaymentModule\Controllers\RedirectAPIUserToPaymentRoute;
-use App\PaymentModule\Money;
-use App\PaymentModule\Responses;
-use App\PaymentModule\OnlineGateWay;
-use App\PaymentModule\PaymentDriver;
 use App\Http\Controllers\Web\PaymentStatusController;
 use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
 use App\PaymentModule\Controllers\PaymentVerifierController;
+use App\PaymentModule\Controllers\RedirectAPIUserToPaymentRoute;
 
-Route::get('fake-pay', function () {
-    PaymentDriver::select($paymentMethod = 'mellat');
-    $url           = route('verifyOnlinePayment', ['paymentMethod' => 'mellat', 'device' => 'asdca']);
-    $authorityCode = OnlineGateWay::generateAuthorityCode($url, Money::fromTomans(100), '$description', time())
-        ->orFailWith([Responses::class, 'noResponseFromBankError']);
-    $redirectData  = OnlineGateWay::generatePaymentPageUriObject($authorityCode);
-    
-    return view("order.checkout.gatewayRedirect", compact('redirectData'));
-});
 Route::get('embed/c/{content}', "Web\ContentController@embed");
 Route::get('/', 'Web\IndexPageController');
 Route::get('shop', 'Web\ShopPageController');

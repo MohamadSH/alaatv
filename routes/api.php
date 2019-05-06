@@ -47,7 +47,8 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('review', 'Api\OrderController@checkoutReview')->name('api.checkout.review');
             Route::get('payment', 'Api\OrderController@checkoutPayment')->name('api.checkout.payment');
         });
-
-        Route::any('getPaymentRedirectEncryptedLink', '\\'.GetPaymentRedirectEncryptedLink::class)->name('api.payment.getEncryptedLink');
+    
+        Route::any('getPaymentRedirectEncryptedLink', '\\'.GetPaymentRedirectEncryptedLink::class)
+            ->name('api.payment.getEncryptedLink');
     });
 });
