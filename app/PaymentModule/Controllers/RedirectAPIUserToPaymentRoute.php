@@ -2,10 +2,11 @@
 
 namespace App\PaymentModule\Controllers;
 
+use App\PaymentModule\Responses;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,7 @@ class RedirectAPIUserToPaymentRoute extends Controller
 
         $userId = Arr::get($decryptedData , 'user_id');
         //ToDo : check with Iman
-        $user =  $this->getUser($userId)->orFailWith([Response::class, 'sendErrorResponse' , ['User not found' , Response::HTTP_BAD_REQUEST]]);
+        $user =  $this->getUser($userId)->orFailWith([Responses::class, 'sendErrorResponse' ]);
 
         Auth::login($user);
 
@@ -47,6 +48,6 @@ class RedirectAPIUserToPaymentRoute extends Controller
     private function getUser(int $userId){
         $user = User::find($userId);
 
-        return nullable($user);
+        return nullable($user, ['User not found' , Response::HTTP_BAD_REQUEST]);
     }
 }
