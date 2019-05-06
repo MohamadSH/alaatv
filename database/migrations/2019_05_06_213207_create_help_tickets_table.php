@@ -17,18 +17,21 @@ class CreateHelpTicketsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('color');
+            $table->softDeletes();
         });
         
         Schema::create('help_priorities', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('color');
+            $table->softDeletes();
         });
         
         Schema::create('help_categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('color');
+            $table->softDeletes();
         });
         
         Schema::create('help_categories_users', function (Blueprint $table) {
