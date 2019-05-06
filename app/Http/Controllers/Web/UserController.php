@@ -2096,23 +2096,25 @@ class UserController extends Controller
         
         return redirect()->back();
     }
-    
+
     /**
      * Update the specified resource in storage.
      * Note: Requests to this method must pass \App\Http\Middleware\trimUserRequest middle ware
      *
-     * @param  EditUserRequest  $request
-     * @param  User             $user
+     * @param EditUserRequest $request
+     * @param User $user
      *
      * @return array|Response
      */
     public function update(EditUserRequest $request, User $user = null)
     {
-        
         $authenticatedUser = $request->user();
         if ($user === null) {
             $user = $authenticatedUser;
         }
+
+        if($user->isUserProfileLocked())
+            return response([] , Response::HTTP_LOCKED);
         
         try {
             $this->fillContentFromRequest($request->all(), $authenticatedUser, config('constants.EDIT_USER_ACCESS'),
