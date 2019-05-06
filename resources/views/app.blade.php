@@ -33,9 +33,6 @@
         .datepicker-plot-area {
             z-index: 1061;
         }
-        .m-badge.m-badge--info a {
-            color: white;
-        }
     </style>
 
     <link rel = "shortcut icon" href = "@if(isset($wSetting->site->favicon)) {{route('image', ['category'=>'11','w'=>'150' , 'h'=>'150' ,  'filename' =>  $wSetting->site->favicon ])}} @endif"/>

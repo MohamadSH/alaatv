@@ -82,3 +82,7 @@ select.form-control {
 .m-portlet.m-portlet--skin-dark .m-portlet__body .table {
     color: #fff;
 }
+
+.m-badge.m-badge--info a {
+    color: white;
+}
