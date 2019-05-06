@@ -4,7 +4,6 @@ namespace App\Http;
 
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CompleteInfo;
-use Illuminate\Routing\Middleware\ValidateSignature;
 use Laratrust\Middleware\LaratrustRole;
 use Illuminate\Auth\Middleware\Authorize;
 use App\Http\Middleware\RemoveOrderCoupon;
@@ -16,6 +15,7 @@ use App\Http\Middleware\CheckForMaintenanceMode;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Routing\Middleware\ThrottleRequests;
+use Illuminate\Routing\Middleware\ValidateSignature;
 use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
 use App\Http\Middleware\ModifyRequestInputMiddleware;
 use Illuminate\Routing\Middleware\SubstituteBindings;
@@ -66,7 +66,7 @@ class Kernel extends HttpKernel
             'bindings',
         ],
     ];
-
+    
     /**
      * The application's route middleware.
      *
@@ -97,7 +97,7 @@ class Kernel extends HttpKernel
         'RemoveOrderCoupon'                         => RemoveOrderCoupon::class,
         'signed'                                    => ValidateSignature::class,
     ];
-
+    
     /**
      * The priority-sorted list of middleware.
      *

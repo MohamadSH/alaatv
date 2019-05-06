@@ -3,11 +3,11 @@
 namespace App\PaymentModule\Controllers;
 
 use App\User;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class RedirectAPIUserToPaymentRoute extends Controller
@@ -15,9 +15,9 @@ class RedirectAPIUserToPaymentRoute extends Controller
     public function __construct()
     {
         $this->middleware('signed');
-
+        
     }
-
+    
     /**
      * redirect the user to online payment page
      *
@@ -29,24 +29,27 @@ class RedirectAPIUserToPaymentRoute extends Controller
      */
     public function __invoke(string $paymentMethod, string $device, Request $request)
     {
-        $decryptedData =  $this->getDecryptedData($request->encryptionData);
-
-        $userId = Arr::get($decryptedData , 'user_id');
+        $decryptedData = $this->getDecryptedData($request->encryptionData);
+        
+        $userId = Arr::get($decryptedData, 'user_id');
         //ToDo : check with Iman
-        $user =  $this->getUser($userId)->orFailWith([Response::class, 'sendErrorResponse' , ['User not found' , Response::HTTP_BAD_REQUEST]]);
-
+        $user = $this->getUser($userId)
+            ->orFailWith([Response::class, 'sendErrorResponse', ['User not found', Response::HTTP_BAD_REQUEST]]);
+        
         Auth::login($user);
-
-        return redirect(route('redirectToBank', ['paymentMethod'=>$paymentMethod, 'device'=>$device]));
+        
+        return redirect(route('redirectToBank', ['paymentMethod' => $paymentMethod, 'device' => $device]));
     }
-
-    private function getDecryptedData(string $encryptedData){
-           return  (array) decrypt($encryptedData);
+    
+    private function getDecryptedData(string $encryptedData)
+    {
+        return (array) decrypt($encryptedData);
     }
-
-    private function getUser(int $userId){
+    
+    private function getUser(int $userId)
+    {
         $user = User::find($userId);
-
+        
         return nullable($user);
     }
 }
