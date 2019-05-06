@@ -2,12 +2,12 @@
 
 namespace App\PaymentModule;
 
-use App\PaymentModule\Gateways\OnlinePaymentRedirectionUriInterface;
-
 class RedirectData implements OnlinePaymentRedirectionUriInterface
 {
     private $redirectUrl;
+
     private $input;
+
     private $method;
     
     /**

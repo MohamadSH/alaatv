@@ -4,7 +4,6 @@ namespace App\PaymentModule;
 
 use App\Classes\Nullable;
 use Illuminate\Support\Facades\Facade;
-use App\PaymentModule\Gateways\OnlinePaymentRedirectionUriInterface;
 
 /**
  * Class OnlineGateWay

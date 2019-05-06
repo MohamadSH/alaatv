@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Input;
 use App\PaymentModule\{Money,
     RedirectData,
     OnlineGatewayInterface,
-    Gateways\OnlinePaymentRedirectionUriInterface,
-    Gateways\OnlinePaymentVerificationResponseInterface};
+    OnlinePaymentRedirectionUriInterface,
+    OnlinePaymentVerificationResponseInterface};
 
 class BehpardakhtGateWay implements OnlineGatewayInterface
 {
