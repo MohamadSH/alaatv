@@ -130,6 +130,10 @@
     position: relative;
 }
 
+.a--owl-carousel-type-2-gridViewWarper {
+    margin: 0px;
+}
+
 .a--owl-carousel-type-2-gridViewWarper .carousel:hover > img.a--owl-carousel-type-2-item-image {
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
