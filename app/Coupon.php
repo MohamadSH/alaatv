@@ -79,11 +79,11 @@ class Coupon extends BaseModel
     | Properties
     |--------------------------------------------------------------------------
     */
-    const COUPON_VALIDATION_STATUS_OK = 0;
-    const COUPON_VALIDATION_STATUS_DISABLED = 1;
-    const COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN = 2;
-    const COUPON_VALIDATION_STATUS_EXPIRED = 3;
-    const COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED = 4;
+    public const COUPON_VALIDATION_STATUS_OK                   = 0;
+    public const COUPON_VALIDATION_STATUS_DISABLED             = 1;
+    public const COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN = 2;
+    public const COUPON_VALIDATION_STATUS_EXPIRED              = 3;
+    public const COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED = 4;
     /**
      * @var array
      */
@@ -101,11 +101,11 @@ class Coupon extends BaseModel
         'coupontype_id',
         'discounttype_id',
     ];
-    protected $appends = [
+    protected $appends  = [
         'couponType',
         'discountType',
     ];
-    protected $hidden = [
+    protected $hidden   = [
         'id',
         'enable',
         'maxCost',
@@ -208,23 +208,20 @@ class Coupon extends BaseModel
     public function validateCoupon()
     {
         
-        $validationStatus = Coupon::COUPON_VALIDATION_STATUS_OK;
         if (!$this->isEnable()) {
-            $validationStatus = Coupon::COUPON_VALIDATION_STATUS_DISABLED;
+            return self::COUPON_VALIDATION_STATUS_DISABLED;
         }
-        elseif (!$this->hasPassedSinceTime()) {
-            $validationStatus = Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN;
+        if (!$this->hasPassedSinceTime()) {
+            return self::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN;
         }
-        elseif (!$this->hasTimeToUntilTime()) {
-            $validationStatus = Coupon::COUPON_VALIDATION_STATUS_EXPIRED;
+        if (!$this->hasTimeToUntilTime()) {
+            return self::COUPON_VALIDATION_STATUS_EXPIRED;
         }
-        else {
-            if ($this->hasTotalNumberFinished()) {
-                $validationStatus = Coupon::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED;
-            }
+        if ($this->hasTotalNumberFinished()) {
+            return self::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED;
         }
-        
-        return $validationStatus;
+    
+        return self::COUPON_VALIDATION_STATUS_OK;
     }
     
     /**
@@ -234,12 +231,7 @@ class Coupon extends BaseModel
      */
     public function isEnable(): bool
     {
-        if ($this->enable) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return $this->enable ? true : false;
     }
     
     /*
@@ -255,13 +247,8 @@ class Coupon extends BaseModel
      */
     public function hasPassedSinceTime(): bool
     {
-        if (!isset($this->validSince) || Carbon::now()
-                ->setTimezone("Asia/Tehran") >= $this->validSince) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return !isset($this->validSince) || Carbon::now()
+                ->setTimezone('Asia/Tehran') >= $this->validSince;
     }
     
     /**
@@ -271,13 +258,8 @@ class Coupon extends BaseModel
      */
     public function hasTimeToUntilTime(): bool
     {
-        if (!isset($this->validUntil) || Carbon::now()
-                ->setTimezone("Asia/Tehran") <= $this->validUntil) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return !isset($this->validUntil) || Carbon::now()
+                ->setTimezone('Asia/Tehran') <= $this->validUntil;
     }
     
     /**
@@ -287,23 +269,17 @@ class Coupon extends BaseModel
      */
     public function hasTotalNumberFinished(): bool
     {
-        if (isset($this->usageLimit) && $this->usageNumber >= $this->usageLimit) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return isset($this->usageLimit) && $this->usageNumber >= $this->usageLimit;
     }
     
     public function getCouponTypeAttribute()
     {
-        return $this->coupontype()
-            ->first()
-            ->setVisible([
-                'name',
-                'displayName',
-                'description',
-            ]);
+        return optional($this->coupontype()
+            ->first())->setVisible([
+            'name',
+            'displayName',
+            'description',
+        ]);
     }
     
     public function coupontype()
@@ -321,7 +297,7 @@ class Coupon extends BaseModel
     public function hasProduct(Product $product): bool
     {
         $flag = true;
-        if ($this->coupontype->id == config("constants.COUPON_TYPE_PARTIAL")) {
+        if ($this->coupontype->id == config('constants.COUPON_TYPE_PARTIAL')) {
             $couponProducts = $this->products;
             $flag           = $couponProducts->contains($product);
         }
@@ -341,8 +317,8 @@ class Coupon extends BaseModel
     
     public function getDiscountTypeAttribute()
     {
-        return $this->discounttype()
-            ->first()
+        return optional($this->discounttype()
+            ->first())
             ->setVisible([
                 'name',
                 'displayName',
@@ -352,6 +328,6 @@ class Coupon extends BaseModel
     
     public function discounttype()
     {
-        return $this->belongsTo("\App\Discounttype");
+        return $this->belongsTo('\App\Discounttype');
     }
 }

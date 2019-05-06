@@ -11,7 +11,7 @@ class EditContactRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.EDIT_CONTACT_ACCESS'))) {
+            ->can(config('constants.EDIT_CONTACT_ACCESS'))) {
             return true;
         }
 

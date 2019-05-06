@@ -165,7 +165,7 @@ trait ProductCommon
         }
         $key = "product:makeCostCollection:".md5($key);
         
-        return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($products) {
+        return Cache::remember($key, config("constants.CACHE_60"), function () use ($products) {
             $costCollection = collect();
             foreach ($products as $product) {
                 if ($product->producttype_id == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
@@ -226,7 +226,7 @@ trait ProductCommon
         }
         $key = "product:makeProductCollection:".$key;
         
-        return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($productsId) {
+        return Cache::remember($key, config("constants.CACHE_60"), function () use ($productsId) {
             if (isset($productsId)) {
                 $allProducts = Product::getProducts()
                     ->whereIn("id", $productsId)
@@ -255,7 +255,7 @@ trait ProductCommon
         }
         $key = "product:haveSameFamily:".$key;
         
-        return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($products) {
+        return Cache::remember($key, config("constants.CACHE_60"), function () use ($products) {
             $flag = true;
             foreach ($products as $key => $product) {
                 if (isset($products[$key + 1])) {

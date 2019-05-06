@@ -7,8 +7,8 @@ class Money
     /**
      * @var int amount stored internally in rials
      */
-    private $money ;
-
+    private $money;
+    
     /**
      * Money constructor.
      *
@@ -18,22 +18,22 @@ class Money
     {
         $this->money = $money;
     }
-
+    
     public static function fromRials($amount)
     {
-       return new static($amount);
+        return new static($amount);
     }
-
+    
     public static function fromTomans($amount)
     {
         return new static($amount * 10);
     }
-
+    
     public function tomans()
     {
         return $this->money / 10;
     }
-
+    
     public function rials()
     {
         return $this->money;

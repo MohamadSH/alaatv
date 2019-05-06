@@ -364,7 +364,7 @@ var CheckoutPaymentUi = function () {
     }
 
     return {
-        initUi:function () {
+        initUi: function () {
             lockDonateAjax = true;
             lockCouponAjax = true;
             refreshUiBasedOnPaymentType();

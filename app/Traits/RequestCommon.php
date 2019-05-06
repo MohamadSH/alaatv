@@ -30,15 +30,13 @@ trait RequestCommon
             if (!is_file($file)) {
                 $hasFile = false;
             }
-        }
-        else {
+        } else {
             $hasFile = false;
         }
         
         if ($hasFile) {
             return $file;
-        }
-        else {
+        } else {
             return $hasFile;
         }
     }
@@ -73,16 +71,17 @@ trait RequestCommon
             });
         }
     }
-
+    
     /**
-     * @param FormRequest $request
-     * @param $dependencyIndex
-     * @param $secondaryIndex
+     * @param  FormRequest  $request
+     * @param               $dependencyIndex
+     * @param               $secondaryIndex
      */
     private function checkOffsetDependency(FormRequest $request, $dependencyIndex, $secondaryIndex): void
     {
-        $dependencyValue =  $request->get($dependencyIndex);
-        if (!isset($dependencyValue))
+        $dependencyValue = $request->get($dependencyIndex);
+        if (!isset($dependencyValue)) {
             $request->offsetUnset($secondaryIndex);
+        }
     }
 }

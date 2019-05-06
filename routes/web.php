@@ -1,23 +1,11 @@
 <?php
 
 
-use App\PaymentModule\Money;
-use App\PaymentModule\Responses;
-use App\PaymentModule\OnlineGateWay;
-use App\PaymentModule\PaymentDriver;
 use App\Http\Controllers\Web\PaymentStatusController;
 use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
 use App\PaymentModule\Controllers\PaymentVerifierController;
+use App\PaymentModule\Controllers\RedirectAPIUserToPaymentRoute;
 
-Route::get('fake-pay', function () {
-    PaymentDriver::select($paymentMethod = 'mellat');
-    $url = route('verifyOnlinePayment', ['paymentMethod' => 'mellat', 'device' => 'asdca']);
-    $authorityCode = OnlineGateWay::generateAuthorityCode($url, Money::fromTomans(100) , '$description', time())
-        ->orFailWith([Responses::class, 'noResponseFromBankError']);
-    $redirectData = OnlineGateWay::generatePaymentPageUriObject($authorityCode);
-    
-    return view("order.checkout.gatewayRedirect", compact('redirectData'));
-});
 Route::get('embed/c/{content}', "Web\ContentController@embed");
 Route::get('/', 'Web\IndexPageController');
 Route::get('shop', 'Web\ShopPageController');
@@ -69,15 +57,16 @@ Route::group(['prefix' => 'checkout'], function () {
 
     Route::get('review', "Web\OrderController@checkoutReview")
         ->name('checkoutReview');
-
-    Route::get('payment', "Web\OrderController@checkoutPayment")->name('checkoutPayment');
+    
+    Route::get('payment', "Web\OrderController@checkoutPayment")
+        ->name('checkoutPayment');
 
     Route::any('verifyPayment/online/{paymentMethod}/{device}', [PaymentVerifierController::class, 'verify'])
         ->name('verifyOnlinePayment');
-
+    
     Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', [PaymentStatusController::class, 'show'])
         ->name('showOnlinePaymentStatus');
-
+    
     Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'Web\OfflinePaymentController@verifyPayment')
         ->name('verifyOfflinePayment');
 });
@@ -128,7 +117,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('getUnverifiedTransactions', 'Web\TransactionController@getUnverifiedTransactions');
     Route::any('paymentRedirect/{paymentMethod}/{device}', '\\'.RedirectUserToPaymentPage::class)
         ->name('redirectToBank');
-    
     Route::get('exitAdminInsertOrder', 'Web\OrderController@exitAdminInsertOrder');
     Route::post('exchangeOrderproduct/{order}', 'Web\OrderController@exchangeOrderproduct');
     Route::get('MBTI-Participation', "Web\MbtianswerController@create");
@@ -289,3 +277,5 @@ Route::view('testrtl', 'product.show_ali');
 
 Route::get("tree", "Web\TopicsTreeController@lernitoTree");
 Route::get("tree/getArrayString/{lnid}", "Web\TopicsTreeController@getTreeInPHPArrayString");
+Route::any('goToPaymentRoute/{paymentMethod}/{device}/', '\\'.RedirectAPIUserToPaymentRoute::class)
+    ->name('redirectToPaymentRoute');

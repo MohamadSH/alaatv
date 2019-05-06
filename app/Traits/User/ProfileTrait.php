@@ -8,9 +8,9 @@
 
 namespace App\Traits\User;
 
-use App\Afterloginformcontrol;
-use App\User;
 use Auth;
+use App\User;
+use App\Afterloginformcontrol;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 

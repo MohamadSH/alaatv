@@ -14,7 +14,7 @@ class AttacheUserBonRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.ATTACHE_USER_BON_ACCESS'))) {
+            ->can(config('constants.ATTACHE_USER_BON_ACCESS'))) {
             return true;
         }
     

@@ -41,7 +41,7 @@ abstract class SearchAbstract
         
         $this->dummyFilterCallBack = new DummyFilterCallBack();
         $this->cacheKey            = get_class($this).':';
-        $this->cacheTime           = Config::get("constants.CACHE_60");
+        $this->cacheTime           = config("constants.CACHE_60");
         $this->pageNum             = self::DEFAULT_PAGE_NUMBER;
         $this->model               = (new $this->model);
     }

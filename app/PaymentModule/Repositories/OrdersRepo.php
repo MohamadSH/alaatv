@@ -8,8 +8,9 @@ class OrdersRepo
 {
     public static function closeOrder(int $id)
     {
-        return Order::where('id', $id)->update([
-            'orderstatus_id' => config('constants.ORDER_STATUS_CLOSED')
-        ]);
+        return Order::where('id', $id)
+            ->update([
+                'orderstatus_id' => config('constants.ORDER_STATUS_CLOSED'),
+            ]);
     }
 }

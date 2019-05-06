@@ -119,6 +119,48 @@ class ContentController extends Controller
         ]);
     }
     
+    private function makeJsonForAndroidApp($items): array
+    {
+        $key = md5(collect($items)
+            ->pluck('id')
+            ->implode(','));
+        return Cache::remember($key, config('constants.CACHE_60'), function () use ($items) {
+            $response = [];
+        
+            /** @var Content $item */
+            foreach ($items as $content) {
+                $s_hd = $s_hq = $s_240 = null;
+            
+                foreach ($content->getVideos() as $source) {
+                    if (strcmp($source->res, '240p') === 0) {
+                        $s_240 = $source->link;
+                    
+                    } elseif (strcmp($source->res, '480p') === 0) {
+                        $s_hq = $source->link;
+                    } elseif (strcmp($source->res, '720p') === 0) {
+                        $s_hd = $source->link;
+                    }
+                }
+                $response[] = [
+                    'videoId'          => $content->id,
+                    'name'             => $content->displayName,
+                    'videoDescribe'    => $content->description,
+                    'url'              => $content->url,
+                    'videoLink480'     => $s_hq ?: $s_hd,
+                    'videoLink240'     => $s_240 ?: $s_hd,
+                    'videoviewcounter' => '0',
+                    'videoDuration'    => 0,
+                    'session'          => $content->order,
+                    'thumbnail'        => $content->thumbnail,
+                ];
+            }
+            $response[] = json_decode('{}', false);
+        
+            return $response;
+        });
+        
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -129,11 +171,11 @@ class ContentController extends Controller
      * @param  ContentsetSearch     $setSearch
      * @param  ProductSearch        $productSearch
      *
-     * @return Response
+     * @return mixed
      */
     public function index(ContentIndexRequest $request, ContentSearch $contentSearch,
         ContentsetSearch $setSearch,
-        ProductSearch $productSearch): Response
+        ProductSearch $productSearch)
     {
         $contentTypes = array_filter($request->get('contentType', Contenttype::List()));
         $contentOnly  = $request->get('contentOnly', false);
@@ -144,14 +186,19 @@ class ContentController extends Controller
         
         $result->offsetSet('set', !$contentOnly ? $setSearch->get($filters) : null);
         $result->offsetSet('product', !$contentOnly ? $productSearch->get($filters) : null);
-        
-        $pageName = "content-search";
-        
+    
+        $pageName = 'content-search';
+    
+        $isApp = (strstr($request->header('User-Agent'), 'Alaa') !== '') ? true : false;
+        if ($isApp) {
+            return response()->json($this->makeJsonForAndroidApp($result->get('video')
+                ->items()));
+        }
         $api  = response()->json([
             'result' => $result,
             'tags'   => empty($tags) ? null : $tags,
         ]);
-        $view = view("pages.content-search", compact("result", "contentTypes", 'tags', 'pageName'));
+        $view = view('pages.content-search', compact('result', 'contentTypes', 'tags', 'pageName'));
         return httpResponse($api, $view);
     }
     

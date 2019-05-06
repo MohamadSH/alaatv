@@ -9,11 +9,14 @@ class PaymentDriver
 {
     private static $map = [
         'zarinpal' => ZarinpalGateWay::class,
-        'mellat' => BehpardakhtGateWay::class,
+        'mellat'   => BehpardakhtGateWay::class,
     ];
+
+    private static $gates = ['zarinpal' => 1 , 'mellat' => 2 ,];
 
     public static function select($driver)
     {
         app()->bind(OnlineGatewayInterface::class, self::$map[$driver]);
+        config()->set('constants.PAYMENT_METHOD_ONLINE', self::$gates[$driver]);
     }
 }

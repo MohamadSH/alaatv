@@ -4,6 +4,8 @@
     These routes are loaded by the RouteServiceProvider within a group which is assigned the "api" middleware group.
 */
 
+use App\Http\Controllers\Api\GetPaymentRedirectEncryptedLink;
+
 Auth::routes(['verify' => true]);
 
 Route::post('uploadFile', 'Web\HomeController@uploadFile');
@@ -45,5 +47,8 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('review', 'Api\OrderController@checkoutReview')->name('api.checkout.review');
             Route::get('payment', 'Api\OrderController@checkoutPayment')->name('api.checkout.payment');
         });
+    
+        Route::any('getPaymentRedirectEncryptedLink', '\\'.GetPaymentRedirectEncryptedLink::class)
+            ->name('api.payment.getEncryptedLink');
     });
 });

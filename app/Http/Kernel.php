@@ -15,6 +15,7 @@ use App\Http\Middleware\CheckForMaintenanceMode;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Routing\Middleware\ThrottleRequests;
+use Illuminate\Routing\Middleware\ValidateSignature;
 use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
 use App\Http\Middleware\ModifyRequestInputMiddleware;
 use Illuminate\Routing\Middleware\SubstituteBindings;
@@ -42,7 +43,7 @@ class Kernel extends HttpKernel
         ConvertEmptyStringsToNull::class,
         Middleware\TrustProxies::class,
     ];
-    
+
     /**
      * The application's route middleware groups.
      *
@@ -59,7 +60,7 @@ class Kernel extends HttpKernel
             SubstituteBindings::class,
             CreateFreshApiToken::class,
         ],
-        
+
         'api' => [
             'throttle:120000,1',
             'bindings',
@@ -94,6 +95,7 @@ class Kernel extends HttpKernel
         'SubmitOrderCoupon'                         => Middleware\SubmitOrderCoupon::class,
         'OfflineVerifyPayment'                      => Middleware\OfflineVerifyPayment::class,
         'RemoveOrderCoupon'                         => RemoveOrderCoupon::class,
+        'signed'                                    => ValidateSignature::class,
     ];
     
     /**

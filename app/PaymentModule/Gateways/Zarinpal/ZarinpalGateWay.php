@@ -3,12 +3,13 @@
 namespace App\PaymentModule\Gateways\Zarinpal;
 
 use App\Classes\Nullable;
-//use App\Classes\Payment\{OnlineGatewayInterface, RedirectData};
-use App\PaymentModule\Gateways\OnlinePaymentVerificationResponseInterface;
-use App\PaymentModule\Gateways\OnlinePaymentRedirectionUriInterface;
 use App\PaymentModule\Money;
-use App\PaymentModule\OnlineGatewayInterface;
 use App\PaymentModule\RedirectData;
+use App\PaymentModule\OnlineGatewayInterface;
+
+//use App\Classes\Payment\{OnlineGatewayInterface, RedirectData};
+use App\PaymentModule\OnlinePaymentRedirectionUriInterface;
+use App\PaymentModule\OnlinePaymentVerificationResponseInterface;
 
 class ZarinpalGateWay implements OnlineGatewayInterface
 {

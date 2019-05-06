@@ -11,7 +11,7 @@ class InsertPermissionRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.INSERT_PERMISSION_ACCESS'))) {
+            ->can(config('constants.INSERT_PERMISSION_ACCESS'))) {
             return true;
         }
 

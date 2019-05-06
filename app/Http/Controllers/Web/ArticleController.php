@@ -27,12 +27,12 @@ class ArticleController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.Config::get('constants.LIST_ARTICLE_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_ARTICLE_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_ARTICLE_ACCESS'), ['only' => 'store']);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_ARTICLE_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.Config::get('constants.SHOW_ARTICLE_ACCESS'), ['only' => 'edit']);
-        $this->middleware('permission:'.Config::get('constants.EDIT_ARTICLE_ACCESS'), ['only' => 'update']);
+        $this->middleware('permission:'.config('constants.LIST_ARTICLE_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.config('constants.INSERT_ARTICLE_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:'.config('constants.INSERT_ARTICLE_ACCESS'), ['only' => 'store']);
+        $this->middleware('permission:'.config('constants.REMOVE_ARTICLE_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:'.config('constants.SHOW_ARTICLE_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:'.config('constants.EDIT_ARTICLE_ACCESS'), ['only' => 'update']);
         $this->middleware('auth', [
             'except' => [
                 'show',
@@ -72,7 +72,7 @@ class ArticleController extends Controller
             $file      = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-            if (Storage::disk(Config::get('constants.DISK8'))
+            if (Storage::disk(config('constants.DISK8'))
                 ->put($fileName, File::get($file))) {
                 $article->image = $fileName;
                 $img            = Image::make(route('image', [
@@ -82,13 +82,13 @@ class ArticleController extends Controller
                     'filename' => $fileName,
                 ]));
                 $img->resize(766, 249);
-                $img->save(Storage::disk(Config::get('constants.DISK8'))
+                $img->save(Storage::disk(config('constants.DISK8'))
                         ->getAdapter()
                         ->getPathPrefix().$fileName);
             }
         }
         else {
-            $article->image = Config::get('constants.ARTICLE_DEFAULT_IMAGE');
+            $article->image = config('constants.ARTICLE_DEFAULT_IMAGE');
         }
         
         if ($request->has("order")) {
@@ -164,9 +164,9 @@ class ArticleController extends Controller
             $file      = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-            if (Storage::disk(Config::get('constants.DISK8'))
+            if (Storage::disk(config('constants.DISK8'))
                 ->put($fileName, File::get($file))) {
-                Storage::disk(Config::get('constants.DISK8'))
+                Storage::disk(config('constants.DISK8'))
                     ->delete($oldImage);
                 $article->image = $fileName;
                 $img            = Image::make(route('image', [
@@ -176,7 +176,7 @@ class ArticleController extends Controller
                     'filename' => $fileName,
                 ]));
                 $img->resize(766, 249);
-                $img->save(Storage::disk(Config::get('constants.DISK8'))
+                $img->save(Storage::disk(config('constants.DISK8'))
                         ->getAdapter()
                         ->getPathPrefix().$fileName);
             }

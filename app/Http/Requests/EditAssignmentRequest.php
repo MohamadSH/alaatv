@@ -14,7 +14,7 @@ class EditAssignmentRequest extends FormRequest
     {
         if (Auth()
             ->user()
-            ->can(Config::get('constants.EDIT_ASSIGNMENT_ACCESS'))) {
+            ->can(config('constants.EDIT_ASSIGNMENT_ACCESS'))) {
             return true;
         }
 

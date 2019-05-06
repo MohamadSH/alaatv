@@ -18,9 +18,9 @@ class BelongingController extends Controller
     
     function __construct()
     {
-        $this->middleware('permission:'.Config::get('constants.LIST_BELONGING_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_BELONGING_ACCESS'), ['only' => 'store']);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_BELONGING_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:'.config('constants.LIST_BELONGING_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.config('constants.INSERT_BELONGING_ACCESS'), ['only' => 'store']);
+        $this->middleware('permission:'.config('constants.REMOVE_BELONGING_ACCESS'), ['only' => 'destroy']);
         
         $this->response = new Response();
     }
@@ -59,7 +59,7 @@ class BelongingController extends Controller
             $file      = $request->file('file');
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-            if (Storage::disk(Config::get('constants.DISK12'))
+            if (Storage::disk(config('constants.DISK12'))
                 ->put($fileName, File::get($file))) {
                 $belonging->file = $fileName;
             }

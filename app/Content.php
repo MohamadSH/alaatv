@@ -547,7 +547,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $key = "Content:File".$this->cacheKey();
         
         return Cache::tags('content')
-            ->remember($key, Config::get("constants.CACHE_60"), function () use ($value) {
+            ->remember($key, config("constants.CACHE_60"), function () use ($value) {
                 $fileCollection = collect(json_decode($value));
                 $fileCollection->transform(function ($item, $key) {
 //                dd($item);
@@ -603,7 +603,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $key     = "content:author".$content->cacheKey();
         
         return Cache::tags(["user"])
-            ->remember($key, Config::get("constants.CACHE_600"), function () use ($content) {
+            ->remember($key, config("constants.CACHE_600"), function () use ($content) {
                 
                 $visibleArray = [
                     'id',
@@ -688,7 +688,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $key     = "content:setMates:".$this->cacheKey();
         
         $setMates = Cache::tags(["content"])
-            ->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
+            ->remember($key, config("constants.CACHE_60"), function () use ($content) {
                 $contentSet     = $content->set;
                 $contentSetName = isset($contentSet) ? $contentSet->name : null;
                 if (isset($contentSet)) {
@@ -722,7 +722,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             $key = "content:getDisplayName".$this->cacheKey();
             $c   = $this;
             
-            return Cache::remember($key, Config::get("constants.CACHE_60"), function () use ($c) {
+            return Cache::remember($key, config("constants.CACHE_60"), function () use ($c) {
                 $displayName   = "";
                 $sessionNumber = $c->order;
                 if (isset($c->contenttype)) {
@@ -748,7 +748,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $key     = "content:getAddItems".$content->cacheKey();
         
         $adItems = Cache::tags(["content"])
-            ->remember($key, Config::get("constants.CACHE_60"), function () use ($content) {
+            ->remember($key, config("constants.CACHE_60"), function () use ($content) {
                 $adItems = collect();
                 $set     = $content->set ?: new Contentset();
                 if ($set->id != 199) {

@@ -224,7 +224,7 @@
                                     <hr>
 
                                     <button type = "button"
-                                            onclick="window.location.href='{{route('redirectToBank', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}';
+                                            onclick="window.location.href='{{route('redirectToBank', ['paymentMethod'=>'mellat', 'device'=>'web'])}}';
 
                                                     mApp.block('.btnSubmitOrderWraper', {
                                                     type: 'loader',
@@ -339,7 +339,7 @@
                                                                value="1"
                                                                @else
                                                                value="0"
-                                                               @endif>
+                                                                @endif>
                                                     </div>
                                                 </div>
                                             </div>
@@ -359,7 +359,7 @@
     <div id="invoiceInfo-totalCost" class="d-none">
         {{ $invoiceInfo['price']['final'] }}
     </div>
-    
+
     <input type="hidden" id="invoiceInfo-couponCode" value="@if(isset($coupon)){{ $coupon['code'] }}@endif">
     
     <input type="hidden" id="OrderController-submitCoupon" value="{{ action('Web\OrderController@submitCoupon') }}">

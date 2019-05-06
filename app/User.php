@@ -24,7 +24,6 @@ use Iatstuti\Database\Support\CascadeSoftDeletes;
 use App\Classes\Verification\MustVerifyMobileNumber;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Traits\User\{BonTrait,
-    DashboardTrait,
     TagTrait,
     TrackTrait,
     LotteryTrait,
@@ -32,7 +31,8 @@ use App\Traits\User\{BonTrait,
     PaymentTrait,
     ProfileTrait,
     TeacherTrait,
-    VouchersTrait};
+    VouchersTrait,
+    DashboardTrait};
 
 /**
  * App\User

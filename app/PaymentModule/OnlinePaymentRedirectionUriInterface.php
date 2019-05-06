@@ -1,6 +1,6 @@
 <?php
 
-namespace App\PaymentModule\Gateways;
+namespace App\PaymentModule;
 
 interface OnlinePaymentRedirectionUriInterface
 {

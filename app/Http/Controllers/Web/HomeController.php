@@ -24,7 +24,6 @@ use App\{Bon,
     Order,
     Coupon,
     Gender,
-    Content,
     Lottery,
     Product,
     Userbon,
@@ -59,7 +58,6 @@ use App\{Bon,
     Traits\RequestCommon,
     Http\Requests\Request,
     Traits\CharacterCommon,
-    Notifications\GiftGiven,
     Traits\APIRequestCommon,
     Events\FreeInternetAccept,
     Notifications\GeneralNotice,
@@ -119,22 +117,22 @@ class HomeController extends Controller
         ];
         //        }
         $this->middleware('auth', ['except' => $authException]);
-        $this->middleware('ability:'.Config::get("constants.ROLE_ADMIN").','.Config::get("constants.USER_ADMIN_PANEL_ACCESS"),
+        $this->middleware('ability:'.config("constants.ROLE_ADMIN").','.config("constants.USER_ADMIN_PANEL_ACCESS"),
             ['only' => 'admin']);
-        $this->middleware('permission:'.Config::get('constants.CONSULTANT_PANEL_ACCESS'),
+        $this->middleware('permission:'.config('constants.CONSULTANT_PANEL_ACCESS'),
             ['only' => 'consultantAdmin']);
-        $this->middleware('permission:'.Config::get("constants.PRODUCT_ADMIN_PANEL_ACCESS"),
+        $this->middleware('permission:'.config("constants.PRODUCT_ADMIN_PANEL_ACCESS"),
             ['only' => 'adminProduct']);
-        $this->middleware('permission:'.Config::get("constants.CONTENT_ADMIN_PANEL_ACCESS"),
+        $this->middleware('permission:'.config("constants.CONTENT_ADMIN_PANEL_ACCESS"),
             ['only' => 'adminContent']);
-        $this->middleware('permission:'.Config::get("constants.LIST_ORDER_ACCESS"), ['only' => 'adminOrder']);
-        $this->middleware('permission:'.Config::get("constants.SMS_ADMIN_PANEL_ACCESS"), ['only' => 'adminSMS']);
-        $this->middleware('permission:'.Config::get("constants.REPORT_ADMIN_PANEL_ACCESS"), ['only' => 'adminReport']);
-        $this->middleware('permission:'.Config::get("constants.LIST_EDUCATIONAL_CONTENT_ACCESS"),
+        $this->middleware('permission:'.config("constants.LIST_ORDER_ACCESS"), ['only' => 'adminOrder']);
+        $this->middleware('permission:'.config("constants.SMS_ADMIN_PANEL_ACCESS"), ['only' => 'adminSMS']);
+        $this->middleware('permission:'.config("constants.REPORT_ADMIN_PANEL_ACCESS"), ['only' => 'adminReport']);
+        $this->middleware('permission:'.config("constants.LIST_EDUCATIONAL_CONTENT_ACCESS"),
             ['only' => 'contentSetListTest']);
-        $this->middleware('ability:'.Config::get("constants.ROLE_ADMIN").','.Config::get("constants.TELEMARKETING_PANEL_ACCESS"),
+        $this->middleware('ability:'.config("constants.ROLE_ADMIN").','.config("constants.TELEMARKETING_PANEL_ACCESS"),
             ['only' => 'adminTeleMarketing']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_COUPON_ACCESS'),
+        $this->middleware('permission:'.config('constants.INSERT_COUPON_ACCESS'),
             ['only' => 'adminGenerateRandomCoupon']);
         $this->middleware('role:admin', [
             'only' => [
@@ -228,7 +226,7 @@ class HomeController extends Controller
             1 => 'فعال',
         ];
         
-        $orderstatuses = Orderstatus::whereNotIn('id', [Config::get("constants.ORDER_STATUS_OPEN")])
+        $orderstatuses = Orderstatus::whereNotIn('id', [config("constants.ORDER_STATUS_OPEN")])
             ->pluck('displayName', 'id');
         
         $paymentstatuses = Paymentstatus::pluck('displayName', 'id');
@@ -360,13 +358,13 @@ class HomeController extends Controller
     {
         $pageName = "admin";
         $user     = Auth::user();
-        if ($user->can(Config::get('constants.SHOW_OPENBYADMIN_ORDER'))) {
-            $orderstatuses = Orderstatus::whereNotIn('id', [Config::get("constants.ORDER_STATUS_OPEN")])
+        if ($user->can(config('constants.SHOW_OPENBYADMIN_ORDER'))) {
+            $orderstatuses = Orderstatus::whereNotIn('id', [config("constants.ORDER_STATUS_OPEN")])
                 ->pluck('displayName', 'id');
         } else {
             $orderstatuses = Orderstatus::whereNotIn('id', [
-                Config::get("constants.ORDER_STATUS_OPEN"),
-                Config::get("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
+                config("constants.ORDER_STATUS_OPEN"),
+                config("constants.ORDER_STATUS_OPEN_BY_ADMIN"),
             ])
                 ->pluck('displayName', 'id')
                 ->toArray();
@@ -383,8 +381,8 @@ class HomeController extends Controller
         
         $products = collect();
         if ($user->hasRole("onlineNoroozMarketing")) {
-//            $products = [Config::get("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ROOT")];
-//            $products = $this->makeProductCollection($products);
+            $products = [config("constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ROOT")];
+            $products = $this->makeProductCollection($products);
         } else {
             $products = $this->makeProductCollection();
         }
@@ -604,7 +602,7 @@ class HomeController extends Controller
             ]);
         }
         
-        //        Meta::set('title', substr("آلاء|پنل انتخاب رشته", 0, Config::get("constants.META_TITLE_LIMIT")));
+        //        Meta::set('title', substr("آلاء|پنل انتخاب رشته", 0, config("constants.META_TITLE_LIMIT")));
         //        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         
         return view("admin.consultant.consultantEntekhabReshte",
@@ -625,7 +623,7 @@ class HomeController extends Controller
             ->get()
             ->groupBy("user_id");
         
-        //        Meta::set('title', substr("آلاء|لیست انتخاب رشته", 0, Config::get("constants.META_TITLE_LIMIT")));
+        //        Meta::set('title', substr("آلاء|لیست انتخاب رشته", 0, config("constants.META_TITLE_LIMIT")));
         //        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
         
         return view("admin.consultant.consultantEntekhabReshteList", compact("usersurveyanswers"));
@@ -713,14 +711,14 @@ class HomeController extends Controller
         
         $smsCredit = (int) $this->medianaGetCredit();
         
-        $smsProviderNumber = Config::get('constants.SMS_PROVIDER_NUMBER');
+        $smsProviderNumber = config('constants.SMS_PROVIDER_NUMBER');
         
         $coupons = Coupon::pluck('name', 'id')
             ->toArray();
         $coupons = array_sort_recursive($coupons);
         //        Meta::set('title', substr("آلاء|پنل پیامک", 0, config("constants.META_TITLE_LIMIT")));
         //        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
-        
+    
         $products = Product::where('id', 240)
             ->get();
         
@@ -830,7 +828,7 @@ class HomeController extends Controller
             1 => 'فعال',
         ];
         
-        $orderstatuses = Orderstatus::whereNotIn('id', [Config::get("constants.ORDER_STATUS_OPEN")])
+        $orderstatuses = Orderstatus::whereNotIn('id', [config("constants.ORDER_STATUS_OPEN")])
             ->pluck('displayName', 'id');
         
         $paymentstatuses = Paymentstatus::pluck('displayName', 'id');
@@ -1031,10 +1029,10 @@ class HomeController extends Controller
         
         switch ($contentType) {
             case "عکس پروفایل":
-                $diskName = Config::get('constants.DISK1');
+                $diskName = config('constants.DISK1');
                 break;
             case "عکس محصول":
-                $diskName = Config::get('constants.DISK4');
+                $diskName = config('constants.DISK4');
                 break;
             case "تمرین":
                 // check if he has permission for downloading the assignment :
@@ -1042,28 +1040,28 @@ class HomeController extends Controller
                 //if(!Auth::user()->permissions->contains(Permission::all()->where("name", config('constants.DOWNLOAD_ASSIGNMENT_ACCESS'))->first()->id)) return redirect(action(("HomeController@error403"))) ;
                 //  checking permission through the user's role
                 //$user->hasRole('goldenUser');
-                $diskName = Config::get('constants.DISK2');
+                $diskName = config('constants.DISK2');
                 break;
             case "پاسخ تمرین":
-                $diskName = Config::get('constants.DISK3');
+                $diskName = config('constants.DISK3');
                 break;
             case "کاتالوگ محصول":
-                $diskName = Config::get('constants.DISK5');
+                $diskName = config('constants.DISK5');
                 break;
             case "سؤال مشاوره ای":
-                $diskName = Config::get('constants.DISK6');
+                $diskName = config('constants.DISK6');
                 break;
             case "تامبنیل مشاوره":
-                $diskName = Config::get('constants.DISK7');
+                $diskName = config('constants.DISK7');
                 break;
             case "عکس مقاله" :
-                $diskName = Config::get('constants.DISK8');
+                $diskName = config('constants.DISK8');
                 break;
             case "عکس اسلاید صفحه اصلی" :
-                $diskName = Config::get('constants.DISK9');
+                $diskName = config('constants.DISK9');
                 break;
             case "فایل سفارش" :
-                $diskName = Config::get('constants.DISK10');
+                $diskName = config('constants.DISK10');
                 break;
             case "فایل محصول" :
                 $productId = Input::get("pId");
@@ -1097,9 +1095,9 @@ class HomeController extends Controller
             case config('constants.DISK18') :
                 if (Storage::disk(config('constants.DISK18_CLOUD'))
                     ->exists($fileName)) {
-                    $diskName = Config::get('constants.DISK18_CLOUD');
+                    $diskName = config('constants.DISK18_CLOUD');
                 } else {
-                    $diskName = Config::get('constants.DISK18');
+                    $diskName = config('constants.DISK18');
                 }
                 break;
             case config('constants.DISK19'):
@@ -1107,7 +1105,7 @@ class HomeController extends Controller
                     ->exists($fileName)) {
                     $diskName = Config::  get('constants.DISK19_CLOUD');
                 } else {
-                    $diskName = Config::get('constants.DISK19');
+                    $diskName = config('constants.DISK19');
                 }
                 break;
             case config('constants.DISK20'):
@@ -1115,7 +1113,7 @@ class HomeController extends Controller
                     ->exists($fileName)) {
                     $diskName = Config::  get('constants.DISK20_CLOUD');
                 } else {
-                    $diskName = Config::get('constants.DISK20');
+                    $diskName = config('constants.DISK20');
                 }
                 break;
             default :
@@ -1667,7 +1665,1221 @@ class HomeController extends Controller
     //    {
     //        return view("pages.certificates");
     //    }
-
+    
+    public function adminBot()
+    {
+        if (!Input::has("bot")) {
+            dd("Please pass bot as input");
+        }
+        
+        $bot    = Input::get("bot");
+        $view   = "";
+        $params = [];
+        switch ($bot) {
+            case "wallet":
+                $view = "admin.bot.wallet";
+                break;
+            case "excel":
+                $view = "admin.bot.excel";
+                break;
+            default:
+                break;
+        }
+        $pageName = "adminBot";
+        if (strlen($view) > 0) {
+            return view($view, compact('pageName', 'params'));
+        } else {
+            abort(404);
+        }
+    }
+    
+    public function smsBot()
+    {
+        abort("403");
+    }
+    
+    public function bot(Request $request)
+    {
+        try {
+            if ($request->has("emptyorder")) {
+                $orders = Order::whereIn("orderstatus_id", [
+                    config("constants.ORDER_STATUS_CLOSED"),
+                    config("constants.ORDER_STATUS_POSTED"),
+                    config("constants.ORDER_STATUS_READY_TO_POST"),
+                ])
+                    ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
+                    ->whereDoesntHave("orderproducts", function ($q) {
+                        $q->whereNull("orderproducttype_id")
+                            ->orWhere("orderproducttype_id", config("constants.ORDER_PRODUCT_TYPE_DEFAULT"));
+                    })
+                    ->get();
+                dd($orders->pluck("id")
+                    ->toArray());
+            }
+            
+            if ($request->has("voucherbot")) {
+                $asiatechProduct      = config("constants.ASIATECH_FREE_ADSL");
+                $voucherPendingOrders = Order::where("orderstatus_id", config("constants.ORDER_STATUS_PENDING"))
+                    ->where("paymentstatus_id",
+                        config("constants.PAYMENT_STATUS_PAID"))
+                    ->whereHas("orderproducts", function (
+                        $q
+                    ) use ($asiatechProduct) {
+                        $q->where("product_id", $asiatechProduct);
+                    })
+                    ->orderBy("completed_at")
+                    ->get();
+                echo "<span style='color:blue'>Number of orders: ".$voucherPendingOrders->count()."</span>";
+                echo "<br>";
+                $counter     = 0;
+                $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
+                    ->timezone('Asia/Tehran');
+                foreach ($voucherPendingOrders as $voucherOrder) {
+                    $orderUser     = $voucherOrder->user;
+                    $unusedVoucher = Productvoucher::whereNull("user_id")
+                        ->where("enable", 1)
+                        ->where("expirationdatetime", ">",
+                            $nowDateTime)
+                        ->where("product_id", $asiatechProduct)
+                        ->get()
+                        ->first();
+                    if (isset($unusedVoucher)) {
+                        $voucherOrder->orderstatus_id = config("constants.ORDER_STATUS_CLOSED");
+                        if ($voucherOrder->update()) {
+                            $userVoucher = $orderUser->productvouchers()
+                                ->where("enable", 1)
+                                ->where("expirationdatetime", ">",
+                                    $nowDateTime)
+                                ->where("product_id", $asiatechProduct)
+                                ->get();
+                            
+                            if ($userVoucher->isEmpty()) {
+                                
+                                $unusedVoucher->user_id = $orderUser->id;
+                                if ($unusedVoucher->update()) {
+                                    
+                                    event(new FreeInternetAccept($orderUser));
+                                    $counter++;
+                                } else {
+                                    echo "<span style='color:red'>Error on giving voucher to user #".$orderUser->id."</span>";
+                                    echo "<br>";
+                                }
+                            } else {
+                                echo "<span style='color:orangered'>User  #".$orderUser->id." already has a voucher code</span>";
+                                echo "<br>";
+                            }
+                        } else {
+                            echo "<span style='color:red'>Error on updating order #".$voucherOrder->id." for user #".$orderUser->id."</span>";
+                            echo "<br>";
+                        }
+                    } else {
+                        echo "<span style='color:orangered'>Could not find voucher for user  #".$orderUser->id."</span>";
+                        echo "<br>";
+                    }
+                }
+                echo "<span style='color:green'>Number of processed orders: ".$counter."</span>";
+                echo "<br>";
+                dd("DONE!");
+            }
+            
+            if ($request->has("smsarabi")) {
+                $hamayeshTalai = [
+                    210,
+                    211,
+                    212,
+                    213,
+                    214,
+                    215,
+                    216,
+                    217,
+                    218,
+                    219,
+                    220,
+                    221,
+                    222,
+                ];
+                $users         = User::whereHas("orderproducts", function ($q) use ($hamayeshTalai) {
+                    $q->whereHas("order", function ($q) use ($hamayeshTalai) {
+                        $q->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
+                            ->whereIn("paymentstatus_id", [
+                                config("constants.PAYMENT_STATUS_PAID"),
+                            ]);
+                    })
+                        ->whereIn("product_id", [214]);
+                    //                        ->havingRaw('COUNT(*) > 0');
+                })
+                    ->whereDoesntHave("orderproducts", function ($q) use ($hamayeshTalai) {
+                        $q->whereHas("order", function ($q) use ($hamayeshTalai) {
+                            $q->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
+                                ->whereIn("paymentstatus_id", [
+                                    config("constants.PAYMENT_STATUS_PAID"),
+                                ]);
+                        })
+                            ->where("product_id", 223);
+                    })
+                    ->get();
+                
+                echo "Number of users:".$users->count();
+                dd("stop");
+                
+                foreach ($users as $user) {
+                    $message = "آلایی عزیز تا جمعه ظهر فرصت دارید تا حضور خود در همایش  حضوری عربی را اعلام کنید";
+                    $message .= "\n";
+                    $message .= "sanatisharif.ir/user/".$user->id;
+                    $user->notify(new GeneralNotice($message));
+                }
+                
+                dd("Done");
+            }
+            
+            if ($request->has("coupon")) {
+                $hamayeshTalai              = [
+                    210,
+                    211,
+                    212,
+                    213,
+                    214,
+                    215,
+                    216,
+                    217,
+                    218,
+                    219,
+                    220,
+                    221,
+                    222,
+                ];
+                $notIncludedUsers_Shimi     = [
+                    2,
+                    111,
+                    117,
+                    203,
+                    347,
+                    417,
+                    806,
+                    923,
+                    963,
+                    1132,
+                    1680,
+                    2150,
+                    2439,
+                    2501,
+                    3176,
+                    3194,
+                    3350,
+                    3778,
+                    3854,
+                    4058,
+                    4134,
+                    4273,
+                    4598,
+                    4994,
+                    5443,
+                    5543,
+                    5949,
+                    6159,
+                    6655,
+                    6712,
+                    7109,
+                    7200,
+                    7325,
+                    7467,
+                    7772,
+                    8151,
+                    8568,
+                    8934,
+                    9247,
+                    9895,
+                    9926,
+                    10127,
+                    10577,
+                    10690,
+                    11017,
+                    11412,
+                    11428,
+                    11513,
+                    11517,
+                    11569,
+                    11619,
+                    11688,
+                    11854,
+                    12173,
+                    12196,
+                    12347,
+                    12443,
+                    12492,
+                    12621,
+                    12672,
+                    12720,
+                    12907,
+                    12959,
+                    13004,
+                    13557,
+                    13583,
+                    13742,
+                    13928,
+                    14046,
+                    14371,
+                    14680,
+                    14870,
+                    15020,
+                    15028,
+                    15079,
+                    15136,
+                    15195,
+                    15330,
+                    15722,
+                    15774,
+                    15893,
+                    16667,
+                    16698,
+                    17671,
+                    18250,
+                    19010,
+                    19169,
+                    19384,
+                    19394,
+                    19588,
+                    20123,
+                    20191,
+                    20285,
+                    20403,
+                    20460,
+                    20534,
+                    20641,
+                    20643,
+                    20669,
+                    20865,
+                    21261,
+                    21292,
+                    21442,
+                    21468,
+                    21471,
+                    21513,
+                    21536,
+                    21663,
+                    21681,
+                    21792,
+                    21922,
+                    22126,
+                    22397,
+                    22419,
+                    22560,
+                    22597,
+                    22733,
+                    23281,
+                    23410,
+                    24019,
+                    24373,
+                    24463,
+                    24683,
+                    24902,
+                    25243,
+                    25276,
+                    25375,
+                    25436,
+                    26289,
+                    26860,
+                    27276,
+                    27387,
+                    27519,
+                    27588,
+                    27590,
+                    27757,
+                    27864,
+                    27886,
+                    27902,
+                    28038,
+                    28117,
+                    28143,
+                    28280,
+                    28340,
+                    28631,
+                    28898,
+                    28907,
+                    29041,
+                    29503,
+                    29740,
+                    29787,
+                    29972,
+                    30087,
+                    30093,
+                    30255,
+                    30367,
+                    30554,
+                    31028,
+                    31033,
+                    31334,
+                    31863,
+                    32573,
+                    32707,
+                    32819,
+                    33189,
+                    33198,
+                    33386,
+                    33666,
+                    33785,
+                    34617,
+                    34851,
+                    34913,
+                    34939,
+                    35468,
+                    35564,
+                    35800,
+                    36119,
+                    36235,
+                    36256,
+                    36753,
+                    36841,
+                    36921,
+                    36950,
+                    37789,
+                    38224,
+                    38368,
+                    38530,
+                    38584,
+                    38604,
+                    38683,
+                    39527,
+                    40743,
+                    42260,
+                    42491,
+                    42676,
+                    42747,
+                    42878,
+                    43381,
+                    44086,
+                    44328,
+                    44399,
+                    44872,
+                    46301,
+                    46357,
+                    46511,
+                    46567,
+                    46641,
+                    46736,
+                    47586,
+                    47612,
+                    47624,
+                    48050,
+                    48417,
+                    48693,
+                    49249,
+                    49543,
+                    50084,
+                    50883,
+                    51899,
+                    51969,
+                    52058,
+                    53232,
+                    54116,
+                    56841,
+                    57559,
+                    61798,
+                    62314,
+                    62449,
+                    63522,
+                    64092,
+                    64235,
+                    66573,
+                    67570,
+                    68263,
+                    68482,
+                    69806,
+                    70904,
+                    71801,
+                    73465,
+                    76536,
+                    78080,
+                    78813,
+                    80023,
+                    80349,
+                    81118,
+                    81753,
+                    82728,
+                    83913,
+                    85670,
+                    87430,
+                    88302,
+                    92617,
+                    94553,
+                    94766,
+                    95339,
+                    95588,
+                    96011,
+                    97934,
+                    98640,
+                    103379,
+                    103875,
+                    103961,
+                    105811,
+                    106239,
+                    106313,
+                    107562,
+                    107751,
+                    108011,
+                    108113,
+                    109148,
+                    109770,
+                    109952,
+                    112128,
+                    112816,
+                    113664,
+                    114751,
+                    116219,
+                    116809,
+                ];
+                $notIncludedUsers_Vafadaran = [
+                    100,
+                    272,
+                    282,
+                    502,
+                    589,
+                    751,
+                    1031,
+                    1281,
+                    1421,
+                    1565,
+                    1572,
+                    1695,
+                    1846,
+                    2143,
+                    2385,
+                    2661,
+                    3396,
+                    3538,
+                    3646,
+                    3738,
+                    3788,
+                    4051,
+                    4117,
+                    4197,
+                    4517,
+                    5009,
+                    5385,
+                    5877,
+                    6452,
+                    6767,
+                    6895,
+                    6896,
+                    7020,
+                    7037,
+                    7056,
+                    7192,
+                    7291,
+                    7442,
+                    7527,
+                    7942,
+                    8199,
+                    8681,
+                    9363,
+                    10244,
+                    10263,
+                    10343,
+                    11088,
+                    11133,
+                    11339,
+                    11440,
+                    11594,
+                    11623,
+                    11742,
+                    11797,
+                    11804,
+                    12155,
+                    12788,
+                    13313,
+                    13410,
+                    13436,
+                    13442,
+                    13448,
+                    13541,
+                    13724,
+                    13746,
+                    13752,
+                    14084,
+                    14807,
+                    14937,
+                    15603,
+                    15914,
+                    16114,
+                    16141,
+                    16291,
+                    16491,
+                    16779,
+                    17275,
+                    17500,
+                    17527,
+                    18344,
+                    18377,
+                    18663,
+                    18759,
+                    19481,
+                    19714,
+                    19736,
+                    20016,
+                    20150,
+                    20172,
+                    20381,
+                    20442,
+                    20501,
+                    20652,
+                    20666,
+                    20732,
+                    20753,
+                    20937,
+                    20953,
+                    21412,
+                    21431,
+                    21522,
+                    22275,
+                    22290,
+                    22391,
+                    22495,
+                    23130,
+                    23438,
+                    23600,
+                    23986,
+                    24223,
+                    24472,
+                    25457,
+                    25557,
+                    25572,
+                    25776,
+                    25806,
+                    26355,
+                    26621,
+                    27764,
+                    28269,
+                    28288,
+                    28371,
+                    28385,
+                    28397,
+                    28405,
+                    28488,
+                    28719,
+                    28865,
+                    29021,
+                    29050,
+                    29054,
+                    29194,
+                    29230,
+                    29334,
+                    29589,
+                    29737,
+                    30038,
+                    30129,
+                    30158,
+                    30318,
+                    30652,
+                    30857,
+                    30958,
+                    31508,
+                    32131,
+                    32274,
+                    32894,
+                    32906,
+                    32959,
+                    32987,
+                    33187,
+                    33255,
+                    33616,
+                    33680,
+                    33803,
+                    33817,
+                    33949,
+                    34018,
+                    34062,
+                    34188,
+                    34966,
+                    35004,
+                    35327,
+                    35652,
+                    35911,
+                    35929,
+                    35936,
+                    36264,
+                    36364,
+                    36444,
+                    36460,
+                    36524,
+                    36788,
+                    36793,
+                    36883,
+                    37006,
+                    37021,
+                    37058,
+                    37156,
+                    38868,
+                    38893,
+                    39022,
+                    39062,
+                    39075,
+                    40088,
+                    40189,
+                    40503,
+                    40958,
+                    41389,
+                    41448,
+                    41858,
+                    42848,
+                    43322,
+                    44436,
+                    46322,
+                    48191,
+                    49032,
+                    49314,
+                    50637,
+                    50671,
+                    51091,
+                    54884,
+                    56547,
+                    57493,
+                    57649,
+                    58317,
+                    59178,
+                    62602,
+                    62713,
+                    62903,
+                    62987,
+                    63530,
+                    66143,
+                    66485,
+                    68472,
+                    69136,
+                    71817,
+                    72386,
+                    72458,
+                    73399,
+                    75119,
+                    76888,
+                    77855,
+                    78596,
+                    78897,
+                    80328,
+                    80408,
+                    80973,
+                    82093,
+                    82744,
+                    82785,
+                    83048,
+                    83991,
+                    85557,
+                    86966,
+                    87086,
+                    87791,
+                    88977,
+                    90447,
+                    92857,
+                    92951,
+                    93432,
+                    93701,
+                    99623,
+                    99686,
+                    101628,
+                    107960,
+                    108174,
+                    110145,
+                    115132,
+                    118902,
+                    119386,
+                    125351,
+                ];
+                $smsNumber                  = config("constants.SMS_PROVIDER_DEFAULT_NUMBER");
+                $users                      = User::whereHas("orderproducts", function ($q) use ($hamayeshTalai) {
+                    $q->whereHas("order", function ($q) use ($hamayeshTalai) {
+                        $q->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
+                            ->whereIn("paymentstatus_id", [
+                                config("constants.PAYMENT_STATUS_PAID"),
+                            ]);
+                    })
+                        ->whereIn("product_id", $hamayeshTalai);
+                    //                        ->havingRaw('COUNT(*) > 0');
+                })
+                    ->whereDoesntHave("orderproducts", function ($q) use ($hamayeshTalai) {
+                        $q->whereHas("order", function ($q) use ($hamayeshTalai) {
+                            $q->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
+                                ->whereIn("paymentstatus_id", [
+                                    config("constants.PAYMENT_STATUS_PAID"),
+                                ]);
+                        })
+                            ->where("product_id", 210);
+                    })
+                    ->whereNotIn("id", $notIncludedUsers_Shimi)
+                    ->whereNotIn("id", $notIncludedUsers_Vafadaran)
+                    ->get();
+                
+                echo "number of users:".$users->count();
+                echo "<br>";
+                dd("stop");
+                $couponController = new CouponController();
+                $failedCounter    = 0;
+                $proccessed       = 0;
+                dump($users->pluck("id")
+                    ->toArray());
+                
+                foreach ($users as $user) {
+                    do {
+                        $couponCode = str_random(5);
+                    } while (\App\Coupon::where("code", $couponCode)
+                        ->get()
+                        ->isNotEmpty());
+                    
+                    /** Coupon Settings */
+                    $couponName        = "قرعه کشی وفاداران آلاء برای ".$user->getFullName();
+                    $couponDescription = "قرعه کشی وفاداران آلاء برای ".$user->getFullName();
+                    $validSinceDate    = "2018-06-11";
+                    $validUntilDate    = " 00:00:00";
+                    $validSinceTime    = "2018-06-15";
+                    $validUntilTime    = "12:00:00";
+                    $couponProducts    = \App\Product::whereNotIn("id", [
+                        179,
+                        180,
+                        182,
+                    ])
+                        ->get()
+                        ->pluck('id')
+                        ->toArray();
+                    $discount          = 55;
+                    /** Coupon Settings */
+                    
+                    $insertCouponRequest = new \App\Http\Requests\InsertCouponRequest();
+                    $insertCouponRequest->offsetSet("enable", 1);
+                    $insertCouponRequest->offsetSet("usageNumber", 0);
+                    $insertCouponRequest->offsetSet("limitStatus", 0);
+                    $insertCouponRequest->offsetSet("coupontype_id", 2);
+                    $insertCouponRequest->offsetSet("discounttype_id", 1);
+                    $insertCouponRequest->offsetSet("name", $couponName);
+                    $insertCouponRequest->offsetSet("description", $couponDescription);
+                    $insertCouponRequest->offsetSet("code", $couponCode);
+                    $insertCouponRequest->offsetSet("products", $couponProducts);
+                    $insertCouponRequest->offsetSet("discount", $discount);
+                    $insertCouponRequest->offsetSet("validSince", $validSinceDate);
+                    $insertCouponRequest->offsetSet("sinceTime", $validSinceTime);
+                    $insertCouponRequest->offsetSet("validSinceEnable", 1);
+                    $insertCouponRequest->offsetSet("validUntil", $validUntilDate);
+                    $insertCouponRequest->offsetSet("untilTime", $validUntilTime);
+                    $insertCouponRequest->offsetSet("validUntilEnable", 1);
+                    
+                    $storeCoupon = $couponController->store($insertCouponRequest);
+                    
+                    if ($storeCoupon->status() == 200) {
+                        
+                        $message = "شما در قرعه کشی وفاداران آلاء برنده یک کد تخفیف شدید.";
+                        $message .= "\n";
+                        $message .= "کد شما:";
+                        $message .= "\n";
+                        $message .= $couponCode;
+                        $message .= "\n";
+                        $message .= "مهلت استفاده از کد: تا پنجشنبه ساعت 11 شب";
+                        $message .= "\n";
+                        $message .= "به امید اینکه با کمک دیگر همایش های آلاء در کنکور بدرخشید و برنده iphonex در قرعه کشی عید فطر آلاء باشید.";
+                        $user->notify(new GeneralNotice($message));
+                        echo "<span style='color:green'>";
+                        echo "user ".$user->id." notfied";
+                        echo "</span>";
+                        echo "<br>";
+                        
+                        $proccessed++;
+                        
+                        //                    $openOrder = $userlottery->openOrders()->get()->first();
+                        //                    if (isset($openOrder)) {
+                        //                        session()->forget("order_id");
+                        //                        session()->put("order_id", $openOrder->id);
+                        //                        $attachCouponRequest = new \App\Http\Requests\SubmitCouponRequest();
+                        //                        $attachCouponRequest->offsetSet("coupon", $couponCode);
+                        //                        $orderController = new \App\Http\Controllers\OrderController();
+                        //                        $orderController->submitCoupon($attachCouponRequest);
+                        //                        session()->forget('couponMessageError');
+                        //                        session()->forget('couponMessageSuccess');
+                        //                    }
+                    } else {
+                        $failedCounter++;
+                    }
+                }
+                
+                dump("processed: ".$proccessed);
+                dump("failed: ".$failedCounter);
+                dd("coupons done");
+            }
+            
+            if ($request->has("tagfix")) {
+                $contentsetId = 159;
+                $contentset   = Contentset::where("id", $contentsetId)
+                    ->first();
+                
+                $tags = $contentset->tags->tags;
+                array_push($tags, "نادریان");
+                $bucket           = "contentset";
+                $tagsJson         = [
+                    "bucket" => $bucket,
+                    "tags"   => $tags,
+                ];
+                $contentset->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
+                
+                if ($contentset->update()) {
+                    $params = [
+                        "tags" => json_encode($contentset->tags->tags, JSON_UNESCAPED_UNICODE),
+                    ];
+                    if (isset($contentset->created_at) && strlen($contentset->created_at) > 0) {
+                        $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $contentset->created_at)->timestamp;
+                    }
+                    
+                    $response = $this->sendRequest(config("constants.TAG_API_URL")."id/$bucket/".$contentset->id, "PUT",
+                        $params);
+                } else {
+                    dump("Error on updating #".$contentset->id);
+                }
+                
+                $contents = $contentset->contents;
+                
+                foreach ($contents as $content) {
+                    $tags = $content->tags->tags;
+                    array_push($tags, "نادریان");
+                    $bucket        = "content";
+                    $tagsJson      = [
+                        "bucket" => $bucket,
+                        "tags"   => $tags,
+                    ];
+                    $content->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
+                    if ($content->update()) {
+                        $params = [
+                            "tags" => json_encode($content->tags->tags, JSON_UNESCAPED_UNICODE),
+                        ];
+                        if (isset($content->created_at) && strlen($content->created_at) > 0) {
+                            $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $content->created_at)->timestamp;
+                        }
+                        
+                        $response = $this->sendRequest(config("constants.TAG_API_URL")."id/$bucket/".$content->id,
+                            "PUT", $params);
+                    } else {
+                        dump("Error on updating #".$content->id);
+                    }
+                }
+                dd("Tags DONE!");
+            }
+        } catch (\Exception    $e) {
+            $message = "unexpected error";
+            
+            return $this->response->setStatusCode(503)
+                ->setContent([
+                    "message" => $message,
+                    "error"   => $e->getMessage(),
+                    "line"    => $e->getLine(),
+                    "file"    => $e->getFile(),
+                ]);
+        }
+        
+        /**
+         * Fixing contentset tags
+         *
+         * if(Input::has("id"))
+         * $contentsetId = Input::get("id");
+         * else
+         * dd("Wring inputs, Please pass id as input");
+         *
+         * if(!is_array($contentsetId))
+         * dd("The id input must be an array!");
+         * $contentsets = Contentset::whereIn("id" , $contentsetId)->get();
+         * dump("number of contentsets:".$contentsets->count());
+         * $contentCounter = 0;
+         * foreach ($contentsets as $contentset)
+         * {
+         * $baseTime = Carbon::createFromDate("2017" , "06" , "01" , "Asia/Tehran");
+         * $contents = $contentset->contents->sortBy("pivot.order");
+         * $contentCounter += $contents->count();
+         * foreach ($contents as $content)
+         * {
+         * $content->created_at = $baseTime;
+         * if($content->update())
+         * {
+         * if(isset($content->tags))
+         * {
+         * $params = [
+         * "tags"=> json_encode($content->tags->tags,JSON_UNESCAPED_UNICODE ) ,
+         * ];
+         * if(isset($content->created_at) && strlen($content->created_at) > 0 )
+         * $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
+         *
+         * $response =  $this->sendRequest(
+         * config("constants.AG_API_URL")."id/content/".$content->id ,
+         * "PUT",
+         * $params
+         * );
+         *
+         * if($response["statusCode"] == 200)
+         * {
+         * }
+         * else
+         * {
+         * dump("tag request for content id ".$content->id." failed. response : ".$response["statusCode"]);
+         * }
+         * }
+         * else
+         * {
+         * dump("content id ".$content->id."did not have ant tags!");
+         * }
+         * }
+         * else
+         * {
+         * dump("content id ".$content->id." was not updated");
+         * }
+         * $baseTime = $baseTime->addDay();
+         * }
+         *
+         * }
+         * dump("number of total processed contents: ".$contentCounter);
+         * dd("done!");
+         */
+        
+        /***
+         * $contents = Content::where("contenttype_id" , 8);
+         * $contentArray = $contents->pluck("id")->toArray();
+         * $sanatishRecords = Sanatisharifmerge::whereIn("content_id" , $contentArray)->get();
+         * $contents = $contents->get();
+         * $successCounter = 0 ;
+         * $failedCounter = 0 ;
+         * dump("number of contents: ".$contents->count());
+         * foreach ($contents as $content)
+         * {
+         * $myRecord =  $sanatishRecords->where("content_id" , $content->id)->first();
+         * if(isset($myRecord))
+         * if(isset($myRecord->videoEnable))
+         * {
+         * if($myRecord->isEnable)
+         * $content->enable = 1;
+         * else
+         * $content->enable = 0 ;
+         * if($content->update())
+         * $successCounter++;
+         * else
+         * $failedCounter++;
+         * }
+         *
+         *
+         * }
+         * dump("success counter: ".$successCounter);
+         * dump("fail counter: ".$failedCounter);
+         *
+         * dd("finish");
+         */
+        
+        /**
+         * $contents =  Content::where("id" , "<" , 158)->get();
+         * dump("number of contents: ".$contents->count());
+         * $successCounter= 0 ;
+         * $failedCounter = 0;
+         * foreach ($contents as $content)
+         * {
+         * $contenttype = $content->contenttypes()->whereDoesntHave("parents")->get()->first();
+         * $content->contenttype_id = $contenttype->id ;
+         * if($content->update())
+         * {
+         * $successCounter++;
+         * }
+         * else
+         * {
+         * $failedCounter++;
+         * dump("content for ".$content->id." was not saved.") ;
+         * }
+         * }
+         * dump("successful : ".$successCounter);
+         * dump("failed: ".$failedCounter) ;
+         * dd("finish");
+         **/
+        /**
+         * Giving gift to users
+         *
+         * $carbon = new Carbon("2018-02-20 00:00:00");
+         * $orderproducts = Orderproduct::whereIn("product_id" ,[ 100] )->whereHas("order" , function ($q) use ($carbon)
+         * {
+         * //           $q->where("orderstatus_id" , 1)->where("created_at" ,">" , $carbon);
+         * $q->where("orderstatus_id" , 2)->whereIn("paymentstatus_id" , [2,3])->where("completed_at" ,">" , $carbon);
+         * })->get();
+         * dump("تعداد سفارش ها" . $orderproducts->count());
+         * $users = array();
+         * $counter = 0;
+         * foreach ($orderproducts as $orderproduct)
+         * {
+         * $order = $orderproduct->order;
+         * if($order->orderproducts->where("product_id" , 107)->isNotEmpty()) continue ;
+         *
+         * $giftOrderproduct = new Orderproduct();
+         * $giftOrderproduct->orderproducttype_id = config("constants.ORDER_PRODUCT_GIFT");
+         * $giftOrderproduct->order_id = $order->id ;
+         * $giftOrderproduct->product_id = 107 ;
+         * $giftOrderproduct->cost = 24000 ;
+         * $giftOrderproduct->discountPercentage = 100 ;
+         * $giftOrderproduct->save() ;
+         *
+         * $giftOrderproduct->parents()->attach($orderproduct->id , ["relationtype_id"=>config("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
+         * $counter++;
+         * if(isset($order->user->id))
+         * array_push($users , $order->user->id);
+         * else
+         * array_push($users , 0);
+         * }
+         * dump($counter." done");
+         * dd($users);
+         */
+        /**
+         *  Converting Hamayesh with Poshtibani to without poshtibani
+         * if (!Auth::user()->hasRole("admin")) abort(404);
+         *
+         * $productsArray = [164, 160, 156, 152, 148, 144, 140, 136, 132, 128, 124, 120];
+         * $orders = Order::whereHas("orderproducts", function ($q) use ($productsArray) {
+         * $q->whereIn("product_id", $productsArray);
+         * })->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED"), Config::set("constants.ORDER_STATUS_POSTED")])->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID"), config("constants.PAYMENT_STATUS_INDEBTED")])->get();
+         *
+         *
+         * dump("Number of orders: ".$orders->count());
+         * $counter = 0;
+         * foreach ($orders as $order)
+         * {
+         * if($order->successfulTransactions->isEmpty()) continue ;
+         * $totalRefund = 0;
+         * foreach ($order->orderproducts->whereIn("product_id", $productsArray) as $orderproduct)
+         * {
+         * $orderproductTotalRefund = 0 ;
+         * $orderproductRefund = (int)((($orderproduct->cost / 88000) * 9000))  ;
+         * $orderproductRefundWithBon = $orderproductRefund * (1 - ($orderproduct->getTotalBonNumber() / 100)) ;
+         * if($order->couponDiscount>0 && $orderproduct->includedInCoupon)
+         * $orderproductTotalRefund += $orderproductRefundWithBon * (1 - ($order->couponDiscount / 100)) ;
+         * else
+         * $orderproductTotalRefund += $orderproductRefundWithBon ;
+         *
+         * $totalRefund += $orderproductTotalRefund ;
+         * $orderproduct->cost = $orderproduct->cost - $orderproductRefund ;
+         * switch ($orderproduct->product_id)
+         * {
+         * case 164:
+         * $orderproduct->product_id = 165 ;
+         * break;
+         * case 160:
+         * $orderproduct->product_id = 161 ;
+         * break;
+         * case 156:
+         * $orderproduct->product_id = 157 ;
+         * break;
+         * case 152:
+         * $orderproduct->product_id = 153 ;
+         * break;
+         * case 148:
+         * $orderproduct->product_id = 149 ;
+         * break;
+         * case 144:
+         * $orderproduct->product_id = 145 ;
+         * break;
+         * case 140:
+         * $orderproduct->product_id = 141 ;
+         * break;
+         * case 136:
+         * $orderproduct->product_id = 137 ;
+         * break;
+         * case 132:
+         * $orderproduct->product_id = 133 ;
+         * break;
+         * case 128:
+         * $orderproduct->product_id = 129 ;
+         * break;
+         * case 124:
+         * $orderproduct->product_id = 125 ;
+         * break;
+         * case 120:
+         * $orderproduct->product_id = 121 ;
+         * break;
+         * default:
+         * break;
+         * }
+         * if(!$orderproduct->update()) dump("orderproduct ".$orderproduct->id." wasn't saved");
+         * }
+         * $newOrder = Order::where("id" , $order->id)->get()->first();
+         * $orderCostArray = $newOrder->obtainOrderCost(true , false , "REOBTAIN");
+         * $newOrder->cost = $orderCostArray["rawCostWithDiscount"] ;
+         * $newOrder->costwithoutcoupon = $orderCostArray["rawCostWithoutDiscount"];
+         * $newOrder->update();
+         *
+         * if($totalRefund > 0 )
+         * {
+         * $transactionRequest =  new \App\Http\Requests\InsertTransactionRequest();
+         * $transactionRequest->offsetSet("comesFromAdmin" , true);
+         * $transactionRequest->offsetSet("order_id" , $order->id);
+         * $transactionRequest->offsetSet("cost" , -$totalRefund);
+         * $transactionRequest->offsetSet("managerComment" , "ثبت سیستمی بازگشت هزینه پشتیبانی همایش 1+5");
+         * $transactionRequest->offsetSet("destinationBankAccount_id" , 1);
+         * $transactionRequest->offsetSet("paymentmethod_id" , config("constants.PAYMENT_METHOD_ATM"));
+         * $transactionRequest->offsetSet("transactionstatus_id" ,  config("constants.TRANSACTION_STATUS_SUCCESSFUL"));
+         * $transactionController = new TransactionController();
+         * $transactionController->store($transactionRequest);
+         *
+         * if(session()->has("success")) {
+         * session()->forget("success");
+         * }elseif(session()->has("error")){
+         * dump("Transaction wasn't saved ,Order: ".$order->id);
+         * session()->forget("error");
+         * }
+         * $counter++;
+         * }
+         * }
+         * dump("Processed: ".$counter) ;
+         */
+        /**
+         *  Fixing complementary products
+         *
+         * $products = \App\Product::all();
+         * $counter = 0 ;
+         * foreach ($products as $product)
+         * {
+         * $orders = \App\Order::whereHas("orderproducts" , function ($q2) use ($product){
+         * $q2->where("product_id" , $product->id)->whereNull("orderproducttype_id");
+         * })->whereIn("orderstatus_id" , [config("constants.ORDER_STATUS_CLOSED") , config("constants.ORDER_STATUS_POSTED") , config("constants.ORDER_STATUS_READY_TO_POST")])
+         * ->whereIn("paymentstatus_id" , [config("constants.PAYMENT_STATUS_INDEBTED") , config("constants.PAYMENT_STATUS_PAID")])->get();
+         *
+         * dump("Number of orders: ".$orders->count());
+         * foreach ($orders as $order)
+         * {
+         * if ($product->hasGifts())
+         * {
+         * foreach ($product->gifts as $gift)
+         * {
+         * if($order->orderproducts->where("product_id" , $gift->id)->isEmpty())
+         * {
+         * $orderproduct = new \App\Orderproduct();
+         * $orderproduct->orderproducttype_id = 2;
+         * $orderproduct->order_id = $order->id;
+         * $orderproduct->product_id = $gift->id;
+         * $orderproduct->cost = $gift->basePrice;
+         * $orderproduct->discountPercentage = 100;
+         * if ($orderproduct->save()) $counter++;
+         * else dump("orderproduct was not saved! order: " . $order->id . " ,product: " . $gift->id);
+         * }
+         * }
+         * }
+         * //$parentsArray = $product->parents;
+         * $parentsArray = $product->$parentsCollection();
+         * if (!empty($parentsArray)) {
+         * foreach ($parentsArray as $parent) {
+         * foreach ($parent->gifts as $gift) {
+         * if($order->orderproducts->where("product_id" , $gift->id)->isEmpty())
+         * {
+         * $orderproduct = new \App\Orderproduct();
+         * $orderproduct->orderproducttype_id = 2;
+         * $orderproduct->order_id = $order->id;
+         * $orderproduct->product_id = $gift->id;
+         * $orderproduct->cost = $gift->basePrice;
+         * $orderproduct->discountPercentage = 100;
+         * if ($orderproduct->save()) $counter++;
+         * else dump("orderproduct was not saved! order: " . $order->id . " ,product: " . $gift->id);
+         * }
+         * }
+         * }
+         * }
+         * }
+         * }
+         * dump("Number of processed : ".$counter);
+         * dd("finish");
+         * */
+    }
+    
+    
     public function convertArray(array $input)
     {
         foreach ($input as $key => $value) {
@@ -1689,7 +2901,7 @@ class HomeController extends Controller
         //        return chr(255) . chr(254).mb_convert_encoding($result, 'UTF-16LE', 'UTF-8');
         //        return utf8_encode($result);
     }
-
+    
     public function registerUserAndGiveOrderproduct(Request $request)
     {
         try {
@@ -1873,7 +3085,7 @@ class HomeController extends Controller
                 ]);
         }
     }
-
+    
     /**
      * Showing create form for user's kunkoor result
      *

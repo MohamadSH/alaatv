@@ -19,12 +19,12 @@ class ArticlecategoryController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.Config::get('constants.LIST_ARTICLECATEGORY_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_ARTICLECATEGORY_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:'.Config::get('constants.INSERT_ARTICLECATEGORY_ACCESS'), ['only' => 'store']);
-        $this->middleware('permission:'.Config::get('constants.REMOVE_ARTICLECATEGORY_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.Config::get('constants.SHOW_ARTICLECATEGORY_ACCESS'), ['only' => 'edit']);
-        $this->middleware('permission:'.Config::get('constants.EDIT_ARTICLECATEGORY_ACCESS'), ['only' => 'update']);
+        $this->middleware('permission:'.config('constants.LIST_ARTICLECATEGORY_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.config('constants.INSERT_ARTICLECATEGORY_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:'.config('constants.INSERT_ARTICLECATEGORY_ACCESS'), ['only' => 'store']);
+        $this->middleware('permission:'.config('constants.REMOVE_ARTICLECATEGORY_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:'.config('constants.SHOW_ARTICLECATEGORY_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:'.config('constants.EDIT_ARTICLECATEGORY_ACCESS'), ['only' => 'update']);
         
         $this->response = new Response();
     }

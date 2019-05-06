@@ -43,28 +43,32 @@
                                         @if($result!=null)
                                             روش پرداخت
                                             <br>
-                                            @if($paymentMethod === 'zarinpal')
-                                                <span class="m-badge m-badge--info m-badge--wide">
+                                            <span class="m-badge m-badge--info m-badge--wide">
+                                                @if($paymentMethod === 'zarinpal')
                                                     درگاه زرین پال
-                                                </span>
-                                            @endif
+                                                @endif
+
+                                                @if($paymentMethod === 'mellat')
+                                                    درگاه به پرداخت ملت
+                                                @endif
+                                            </span>
+
                                             <hr>
                                             
                                             @if($status === 'successful')
                                                 کد پیگیری
                                                 <br>
-                                                {{--                                                @if($paymentMethod === 'zarinpal')--}}
-                                                @if(isset($result['zarinpalVerifyResult']['data']['RefID']))
+                                                @if(isset($result['RefID']))
                                                     <span class="m-badge m-badge--info m-badge--wide">
-                                                        {{ $result['zarinpalVerifyResult']['data']['RefID'] }}
+                                                        {{ $result['RefID'] }}
                                                     </span>
                                                 @endif
                                                 
-                                                @if($paymentMethod === 'zarinpal' && isset($result['zarinpalVerifyResult']['data']['cardPanMask']))
+                                                @if(isset($result['cardPanMask']))
                                                     <hr>
                                                     شماره کارت
                                                     <span class="m-badge m-badge--info m-badge--wide">
-                                                        {{ $result['zarinpalVerifyResult']['data']['cardPanMask'] }}
+                                                        {{ $result['cardPanMask'] }}
                                                     </span>
                                                 @endif
                                             @endif
@@ -73,13 +77,11 @@
                                         @endif
                                     </span>
                                 </a>
-                                <a href="#">
-                                    <img src="{{ asset('/acm/extra/Alaa-logo.gif') }}">
-                                </a>
+                                <a href="#"><img src="{{ asset('/acm/extra/Alaa-logo.gif') }}"></a>
                             </div>
                             <span class="m-invoice__desc">
 
-                                @if($paymentMethod === 'zarinpal' && isset($result['zarinpalVerifyResult']['message']))
+                                @if(isset($result['messages']))
                                     <div class="alert
                                         @if($status==='successful')
                                             alert-success
@@ -89,12 +91,13 @@
                                             alert-dismissible fade show" role="alert">
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         </button>
-                                            @foreach($result['zarinpalVerifyResult']['message'] as $message)
+                                            @foreach($result['messages'] as $message)
                                             {{ $message }}
                                             <br>
                                         @endforeach
                                     </div>
                                 @endif
+
                                 @if(isset($result['OrderSuccessPaymentResult']['saveOrder']) && $result['OrderSuccessPaymentResult']['saveOrder']!=1)
                                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
