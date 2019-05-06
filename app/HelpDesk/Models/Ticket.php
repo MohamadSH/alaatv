@@ -4,6 +4,8 @@ namespace App\HelpDesk\Models;
 
 use App\User;
 use App\BaseModel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Ticket extends BaseModel
 {
@@ -41,7 +43,7 @@ class Ticket extends BaseModel
     /**
      * Get Ticket status.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function status()
     {
@@ -51,7 +53,7 @@ class Ticket extends BaseModel
     /**
      * Get Ticket priority.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function priority()
     {
@@ -61,7 +63,7 @@ class Ticket extends BaseModel
     /**
      * Get Ticket category.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function category()
     {
@@ -71,7 +73,7 @@ class Ticket extends BaseModel
     /**
      * Get Ticket owner.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function user()
     {
@@ -81,7 +83,7 @@ class Ticket extends BaseModel
     /**
      * Get Ticket agent.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function agent()
     {
@@ -91,7 +93,7 @@ class Ticket extends BaseModel
     /**
      * Get Ticket comments.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function comments()
     {
