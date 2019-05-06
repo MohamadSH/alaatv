@@ -2,7 +2,7 @@
 
 namespace App\PaymentModule\Gateways\Behpardakht;
 
-use App\PaymentModule\Gateways\OnlinePaymentVerificationResponseInterface;
+use App\PaymentModule\OnlinePaymentVerificationResponseInterface;
 
 class VerificationResponse implements OnlinePaymentVerificationResponseInterface
 {
