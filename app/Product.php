@@ -207,6 +207,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'samplePhotos',
         'price',
         'sets',
+        'enable',
     ];
     
     protected $hidden = [
@@ -224,7 +225,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'validSince',
         'deleted_at',
         'validUntil',
-        'enable',
         'image',
         'pivot',
         'created_at',
@@ -669,7 +669,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         if ($this->strIsEmpty($value)) {
             $value = 0;
         }
-    
+
         self::shiftProductOrders($value);
     
         $this->attributes["order"] = $value;
@@ -1581,5 +1581,12 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
             ])
             ->withTimestamps()
             ->orderBy('order');
+    }
+
+    public function getEnableAttribute(){
+        if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS')))
+            return $this->enable;
+
+        return null;
     }
 }
