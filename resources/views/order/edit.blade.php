@@ -203,7 +203,10 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                
                                 @foreach($order->orderproducts as $orderproduct)
+{{--                                    {{ dd($orderproduct) }}--}}
+{{--                                    {{ dd($orderproduct->discountPercentage) }}--}}
                                     <tr class="odd gradeX">
                                         <td>
                                             @if($orderproduct->orderproducttype_id == config("constants.ORDER_PRODUCT_GIFT"))
@@ -245,11 +248,11 @@
                                             @if($orderproduct->product->isFree)
                                                 رایگان
                                             @else
-                                                {{number_format($orderproduct->obtainOrderproductCost(true)["final"])}}
+                                                {{number_format($orderproduct->price['final'])}}
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            {{number_format($orderproduct->cost)}}
+                                            {{number_format($orderproduct->price['base'])}}
                                         </td>
                                         <td class="text-center">
                                             {{$orderproduct->userbons->sum("pivot.usageNumber")}} بن
@@ -302,8 +305,8 @@
                                             data-type="warning" data-allow-outside-click="true"
                                             data-show-confirm-button="true" data-show-cancel-button="true"
                                             data-cancel-button-class="btn-danger" data-cancel-button-text="خیر"
-                                            data-confirm-button-text="بله" data-confirm-button-class="btn-info"
-                                            style="background: yellow-gold">ساختن سفارش از انتخاب شده ها
+                                            data-confirm-button-text="بله" data-confirm-button-class="btn-info">
+                                        ساختن سفارش از انتخاب شده ها
                                     </button>
                                     <button class="btn btn-primary m-btn m-btn--icon m-btn--wide"
                                             id="orderproductExchangeButton" data-toggle="modal"
@@ -540,6 +543,7 @@
                                 
                                 <thead>
                                 <tr>
+                                    <th></th>
                                     <th> روش پرداخت</th>
                                     <th> وضعیت تراکنش</th>
                                     <th> تراکنش والد</th>
@@ -556,29 +560,60 @@
                                 <tbody>
                                 @foreach($orderTransactions as $transaction)
                                     <tr id="{{$transaction->id}}">
-                                        <td>@if(isset($transaction->paymentmethod->displayName[0])){{$transaction->paymentmethod->displayName}} @else
-                                                <span class="m-badge m-badge--wide label-sm m-badge--danger"> ندارد </span> @endif
+                                        <td>
+                                            {{$transaction->id}}
                                         </td>
-                                        <td>@if(isset($transaction->transactionstatus->id)){{$transaction->transactionstatus->displayName}} @else
-                                                <span class="m-badge m-badge--wide label-sm m-badge--warning"> ندارد </span> @endif
+                                        <td>
+                                            @if(isset($transaction->paymentmethod->displayName[0]))
+                                                {{$transaction->paymentmethod->displayName}}
+                                            @else
+                                                <span class="m-badge m-badge--wide label-sm m-badge--danger"> ندارد </span>
+                                            @endif
                                         </td>
-                                        <td>@if($transaction->hasParents())
+                                        <td>
+                                            @if(isset($transaction->transactionstatus->id))
+                                                {{$transaction->transactionstatus->displayName}}
+                                            @else
+                                                <span class="m-badge m-badge--wide label-sm m-badge--warning"> ندارد </span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($transaction->hasParents())
                                                 <a target="_blank"
-                                                   href="{{action('Web\TransactionController@edit' , $transaction->getGrandParent())}}">رفتن
-                                                    به تراکنش</a> @else ندارد @endif
+                                                   href="{{action('Web\TransactionController@edit' , $transaction->getGrandParent())}}">
+                                                    رفتن به تراکنش
+                                                </a>
+                                            @else
+                                                ندارد
+                                            @endif
                                         </td>
-                                        <td id="transactionFullName_{{$transaction->id}}"
-                                            dir="ltr">@if(isset($transaction->cost)){{number_format($transaction->cost)}} @else
-                                                <span class="m-badge m-badge--wide label-sm m-badge--danger"> ندارد </span> @endif
+                                        <td id="transactionFullName_{{$transaction->id}}" dir="ltr">
+                                            @if(isset($transaction->cost))
+                                                {{number_format($transaction->cost)}}
+                                            @else
+                                                <span class="m-badge m-badge--wide label-sm m-badge--danger"> ندارد </span>
+                                            @endif
                                         </td>
-                                        <td style="text-align: center">@if(strlen($transaction->transactionID)>0){{$transaction->transactionID}} @else
-                                                <span class="m-badge m-badge--wide label-sm m-badge--info"> ندارد </span> @endif
+                                        <td style="text-align: center">
+                                            @if(strlen($transaction->transactionID)>0)
+                                                {{$transaction->transactionID}}
+                                            @else
+                                                <span class="m-badge m-badge--wide label-sm m-badge--info"> ندارد </span>
+                                            @endif
                                         </td>
-                                        <td style="text-align: center">@if(strlen($transaction->referenceNumber)>0){{$transaction->referenceNumber}} @else
-                                                <span class="m-badge m-badge--wide label-sm m-badge--info"> ندارد </span> @endif
+                                        <td style="text-align: center">
+                                            @if(strlen($transaction->referenceNumber)>0)
+                                                {{$transaction->referenceNumber}}
+                                            @else
+                                                <span class="m-badge m-badge--wide label-sm m-badge--info"> ندارد </span>
+                                            @endif
                                         </td>
-                                        <td style="text-align: center">@if(strlen($transaction->traceNumber)>0){{$transaction->traceNumber}} @else
-                                                <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span> @endif
+                                        <td style="text-align: center">
+                                            @if(strlen($transaction->traceNumber)>0)
+                                                {{$transaction->traceNumber}}
+                                            @else
+                                                <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span>
+                                            @endif
                                         </td>
                                         <td style="text-align: center">@if(strlen($transaction->paycheckNumber)>0){{$transaction->paycheckNumber}} @else
                                                 <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span> @endif
@@ -768,10 +803,11 @@
 
                 function saveRow(oTable, nRow) {
                     var jqInputs = $('input', nRow);
-                    var newData = [jqInputs.context.id];
+                    // var newData = [jqInputs.context.id];
+                    var newData = [];
                     if (jqInputs.length > 0) {
-                        var i;
-                        for (i = 0; i < jqInputs.length; i++) {
+                        let i = 0;
+                        for (; i < jqInputs.length; i++) {
                             newData.push(jqInputs[i].value);
                             oTable.fnUpdate(jqInputs[i].value, nRow, i, false);
                         }
@@ -885,6 +921,7 @@
                 });
 
                 table.on('click', '.edit', function (e) {
+                    console.log('edit clicked');
                     e.preventDefault();
                     nNew = false;
 
@@ -1092,6 +1129,7 @@
         }
 
         function updateRow(newData) {
+            console.log('newData: ', newData);
             var transaction_id = $("input[name=transaction_id]").val();
             $.ajax({
                 type: 'PUT',
@@ -1111,7 +1149,8 @@
                 error: function (result) {
                     $("#removeTransactionError").removeClass("d-none");
                     $("#removeTransactionError > span").html(result.responseText);
-                    // console.log(result);
+                    // console.log(JSON.parse(result.responseText));
+                    console.log(result.responseText);
                     // console.log(result.responseText);
                 }
             });
