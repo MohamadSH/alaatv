@@ -26,14 +26,14 @@ class InsertProductRequest extends FormRequest
         return [
             'name'            => 'required',
             'basePrice'       => 'required|numeric',
-            'discount'        => 'numeric',
-            'order'           => 'numeric',
-            'amount'          => 'required_if:amountLimit,1|numeric',
-            'image'           => 'image|mimes:jpeg,jpg,png',
-            'file'            => 'file',
+//            'discount'        => 'sometimes|numeric',
+//            'order'           => 'sometimes|numeric',
+            'amount'          => 'required_if:amountLimit,1',
+            'image'           => 'sometimes|image|mimes:jpeg,jpg,png',
+            'file'            => 'sometimes|file',
             'attributeset_id' => 'required|exists:attributesets,id',
-            'bonPlus'         => 'numeric',
-            'bonDiscount'     => 'numeric',
+//            'bonPlus'         => 'sometimes|numeric',
+//            'bonDiscount'     => 'sometimes|numeric',
             'producttype_id'  => 'required|exists:producttypes,id',
         ];
     }
