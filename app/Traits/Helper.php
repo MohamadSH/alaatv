@@ -54,6 +54,7 @@ trait Helper
             $from = $params["from"];
         } else {
             $from = config("services.medianaSMS.normal.from");
+
         }
         
         $param = [
