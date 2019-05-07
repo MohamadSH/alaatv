@@ -1,6 +1,5 @@
 @permission((config('constants.SMS_ADMIN_PANEL_ACCESS')))@extends('app',['pageName'=>$pageName])
 
-
 @section('page-css')
     <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css" rel = "stylesheet" type = "text/css"/>
     <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel = "stylesheet" type = "text/css"/>
