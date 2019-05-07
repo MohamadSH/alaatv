@@ -191,19 +191,20 @@ class OrderproductCollection extends Collection
     {
         return $this->whereIn("orderproducttype_id", $type);
     }
-    
+
     /**
      * Makes a ProductCollection having every orderprodcut's product
      *
      * @return ProductCollection
      */
-    public function getProducts()
-    {
+    public function getPurchasedProducts(){
         $products = new ProductCollection();
-        foreach ($this as $orderproduct) {
+        $orderproducts = $this->whereNotIn('product_id' , [180 , 182]);
+        foreach ($orderproducts as $orderproduct) {
             $products->push($orderproduct->product);
         }
-        
+
         return $products;
+
     }
 }
