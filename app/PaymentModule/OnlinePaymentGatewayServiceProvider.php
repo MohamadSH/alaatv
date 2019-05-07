@@ -8,8 +8,8 @@ use App\PaymentModule\Gateways\Zarinpal\ZarinpalGateWay;
 
 class OnlinePaymentGatewayServiceProvider extends ServiceProvider
 {
-    public function register()
+    public function boot()
     {
-        $this->app->singleton(OnlineGatewayInterface::class, ZarinpalGateWay::class);
+
     }
 }

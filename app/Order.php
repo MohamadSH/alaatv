@@ -751,7 +751,8 @@ class Order extends BaseModel
         $coupon              = $this->coupon;
         $notIncludedProducts = new  ProductCollection();
         if (isset($coupon)) {
-            foreach ($orderproducts->getProducts() as $product) {
+            /** @var OrderproductCollection $orderproducts */
+            foreach ($orderproducts->getPurchasedProducts() as $product) {
                 if (!$coupon->hasProduct($product)) {
                     $notIncludedProducts->push($product);
                 }

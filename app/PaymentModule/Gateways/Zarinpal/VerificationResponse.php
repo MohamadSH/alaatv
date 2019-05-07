@@ -58,13 +58,13 @@ class VerificationResponse implements OnlinePaymentVerificationResponseInterface
         return array_get($this->response, 'ExtraDetail.Transaction.CardPanHash');
     }
     
-    public function getMessages()
+    public function getMessages() : array
     {
         if ($this->isSuccessfulPayment()) {
             
             $message = ['پرداخت کاربر تایید شد.'];
             if ($this->hasBeenVerifiedBefore()) {
-                $message[] = $this->exceptions[101];
+                $message[] = ErrorMsgRepository::getMsg(101);
             }
             
             return $message;
@@ -77,8 +77,10 @@ class VerificationResponse implements OnlinePaymentVerificationResponseInterface
         $message = ['خطایی در پرداخت رخ داده است.'];
         
         if ($this->response['error']) {
-            $message[] = $this->exceptions[$this->response['error']];
+            $message[] = ErrorMsgRepository::getMsg($this->response['error']);
         }
+
+        return $message;
     }
     
     public function isSuccessfulPayment(): bool
@@ -102,6 +104,6 @@ class VerificationResponse implements OnlinePaymentVerificationResponseInterface
     
     public function isCanceled(): bool
     {
-        return $this->getStatus() === 'canceled';
+        return $this->getStatus() === 'error' and  $this->response['error'] = -21;
     }
 }

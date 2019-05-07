@@ -2,7 +2,8 @@
 
 namespace App\PaymentModule\Controllers;
 
-//use App\Classes\Payment\OnlineGateWay;
+use App\PaymentModule\OnlineGateWay;
+use App\PaymentModule\Repositories\OrdersRepo;
 use App\User;
 use App\Order;
 use App\Transaction;
@@ -12,10 +13,8 @@ use Illuminate\Http\Response;
 use App\PaymentModule\Responses;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
-use App\PaymentModule\OnlineGateWay;
 use App\PaymentModule\PaymentDriver;
 use App\Repositories\TransactionRepo;
-use App\PaymentModule\Repositories\OrdersRepo;
 use App\Http\Controllers\Web\TransactionController;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
@@ -60,16 +59,15 @@ class RedirectUserToPaymentPage extends Controller
 
         PaymentDriver::select($paymentMethod);
         $url           = $this->comeBackFromGateWayUrl($paymentMethod, $device);
+
+        OrdersRepo::closeOrder($order->id);
         $authorityCode = OnlineGateWay::generateAuthorityCode($url, $cost, $description, $order->id)
             ->orFailWith([Responses::class, 'noResponseFromBankError']);
-    
+
         TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id, $description)
             ->orRespondWith([Responses::class, 'editTransactionError']);
-        OrdersRepo::closeOrder($order->id);
 
-        $redirectData = OnlineGateWay::generatePaymentPageUriObject($authorityCode);
-
-        return view("order.checkout.gatewayRedirect", compact('redirectData'));
+        return view("order.checkout.gatewayRedirect", ['authority' => $authorityCode]);
     }
 
     /**
@@ -94,8 +92,7 @@ class RedirectUserToPaymentPage extends Controller
      */
     private function sendErrorResponse(string $msg, int $statusCode): JsonResponse
     {
-        $resp = response()->json(['message' => $msg], $statusCode);
-        throw new HttpResponseException($resp);
+        respondWith()->json(['message' => $msg], $statusCode);
     }
 
     /**

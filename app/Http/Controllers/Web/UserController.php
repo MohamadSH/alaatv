@@ -507,85 +507,108 @@ class UserController extends Controller
                 $users = $users->where('email', 'like', '%'.$email.'%');
             }
         }
-        
-        //sort by
-        
-        $items = $users->paginate(10, ['*'], 'orders');
-        /**
-         * For selling books
-         */
-        $hasPishtaz = [];
-        if (isset($orders)) {
-            foreach ($items as $user) {
-                if ($user->orders()
-                    ->whereIn("id", $orders->pluck("id")
-                        ->toArray())
-                    ->whereHas("orderproducts", function ($q) {
-                        $q->whereHas("attributevalues", function ($q2) {
-                            $q2->where("id", 48);
-                        });
-                    })
-                    ->get()
-                    ->isNotEmpty()) {
-                    array_push($hasPishtaz, $user->id);
-                }
-            }
-        }
-        
-        /**
-         * end
-         */
-        
-        $sortBy   = Input::get("sortBy");
-        $sortType = Input::get("sortType");
-        if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
-            if (strcmp($sortType, "desc") == 0) {
-                $items = $items->sortByDesc($sortBy);
-            }
-            else {
-                $items = $items->sortBy($sortBy);
-            }
-        }
-        
+
+
         $previousPath         = url()->previous();
-        $itemsId              = [];
-        $numberOfFatherPhones = 0;
-        $numberOfMotherPhones = 0;
-        $itemsIdCount         = 0;
-        $reportType           = "";
         if (strcmp($previousPath, action("Web\HomeController@adminSMS")) == 0 || $request->has('smsAdmin')) {
-            $uniqueUsers = $items->groupBy("nationalCode");
-            $items       = collect();
-            foreach ($uniqueUsers as $user) {
-                if ($user->where("mobileNumberVerification", 1)
-                    ->isNotEmpty()) {
-                    $items->push($user->where("mobileNumberVerification", 1)
-                        ->first());
+            $index                = "user.index2";
+
+            $items = $users->get();
+
+            /**
+             * end
+             */
+
+            $sortBy   = Input::get("sortBy");
+            $sortType = Input::get("sortType");
+            if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
+                if (strcmp($sortType, "desc") == 0) {
+                    $items = $items->sortByDesc($sortBy);
                 }
                 else {
-                    $items->push($user->first());
+                    $items = $items->sortBy($sortBy);
                 }
             }
-            $index                = "user.index2";
-            $itemsId              = $items->pluck("id");
-            $itemsIdCount         = $itemsId->count();
+
+            $uniqueUsers = $items->groupBy("nationalCode");
+            $uniqueItems       = collect();
+            foreach ($uniqueUsers as $user) {
+                if ($user->where("mobileNumberVerification", 1)->isNotEmpty())
+                    $uniqueItems->push($user->where("mobileNumberVerification", 1)->first());
+                else
+                    $uniqueItems->push($user->first());
+            }
+
+            $uniqueItemsId              = $uniqueItems->pluck("id");
+            $uniqueItemsIdCount         = $uniqueItemsId->count();
             $numberOfFatherPhones = Phone::whereIn('contact_id',
-                Contact::whereIn('user_id', $itemsId)
+                Contact::whereIn('user_id', $uniqueItemsId)
                     ->where('relative_id', 1)
                     ->pluck('id'))
                 ->where("phonetype_id", 1)
                 ->count();
             $numberOfMotherPhones = Phone::whereIn('contact_id',
-                Contact::whereIn('user_id', $itemsId)
+                Contact::whereIn('user_id', $uniqueItemsId)
                     ->where('relative_id', 2)
                     ->pluck('id'))
                 ->where("phonetype_id", 1)
                 ->count();
         }
         elseif (strcmp($previousPath, action("Web\HomeController@admin")) == 0 || $request->has('userAdmin')) {
+            $items = $users->paginate(10, ['*'], 'orders');
+
+            $sortBy   = Input::get("sortBy");
+            $sortType = Input::get("sortType");
+            if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
+                if (strcmp($sortType, "desc") == 0) {
+                    $items = $items->sortByDesc($sortBy);
+                }
+                else {
+                    $items = $items->sortBy($sortBy);
+                }
+            }
+
             return $items;
         }
         elseif (strcmp($previousPath, action("Web\HomeController@adminReport")) == 0 || $request->has('reportAdmin')) {
+            $reportType           = "";
+            $index = "admin.partials.getReportIndex";
+
+            $items = $users->get();
+
+            $sortBy   = Input::get("sortBy");
+            $sortType = Input::get("sortType");
+            if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
+                if (strcmp($sortType, "desc") == 0) {
+                    $items = $items->sortByDesc($sortBy);
+                }
+                else {
+                    $items = $items->sortBy($sortBy);
+                }
+            }
+
+
+
+            /** For selling books */
+            $hasPishtaz = [];
+            if (isset($orders)) {
+                foreach ($items as $user) {
+                    if ($user->orders()
+                        ->whereIn("id", $orders->pluck("id")
+                            ->toArray())
+                        ->whereHas("orderproducts", function ($q) {
+                            $q->whereHas("attributevalues", function ($q2) {
+                                $q2->where("id", 48);
+                            });
+                        })
+                        ->get()
+                        ->isNotEmpty()) {
+                        array_push($hasPishtaz, $user->id);
+                    }
+                }
+            }
+            /** end */
+
             $minCost = Input::get("minCost");
             if (isset($minCost[0])) {
                 foreach ($items as $key => $user) {
@@ -604,7 +627,6 @@ class UserController extends Controller
                     }
                 }
             }
-            $index = "admin.partials.getReportIndex";
             
             if (Input::has("lotteries")) {
                 $lotteryId = Input::get("lotteries");
@@ -627,21 +649,17 @@ class UserController extends Controller
                 ],
             ], Response::HTTP_OK);
         }
-        
-        return response($users->paginate(10), Response::HTTP_OK);
-        
+
         $result = [
             'index'                => View::make($index,
                 compact('items', 'products', 'paymentStatusesId', 'reportType', 'hasPishtaz', 'orders', 'seePaidCost',
-                    'lotteries'))
-                ->render(),
+                    'lotteries'))->render(),
             'products'             => (isset($products)) ? $products : [],
             'lotteries'            => (isset($lotteries)) ? $lotteries : [],
-            "allUsers"             => $itemsId,
-            "allUsersNumber"       => $itemsIdCount,
-            "allUsersNumber"       => $itemsIdCount,
-            "numberOfFatherPhones" => $numberOfFatherPhones,
-            "numberOfMotherPhones" => $numberOfMotherPhones,
+            "allUsers"             => $uniqueItemsId??[],
+            "allUsersNumber"       => $uniqueItemsIdCount??0,
+            "numberOfFatherPhones" => $numberOfFatherPhones??0,
+            "numberOfMotherPhones" => $numberOfMotherPhones??0,
         ];
         
         return response(json_encode($result), 200)->header('Content-Type', 'application/json');

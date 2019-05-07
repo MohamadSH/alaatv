@@ -53,7 +53,8 @@ trait Helper
         if (isset($params["from"])) {
             $from = $params["from"];
         } else {
-            $from = config("constants.SMS_PROVIDER_DEFAULT_NUMBER");
+            $from = config("services.medianaSMS.normal.from");
+
         }
         
         $param = [

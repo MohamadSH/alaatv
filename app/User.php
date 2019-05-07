@@ -32,7 +32,8 @@ use App\Traits\User\{BonTrait,
     ProfileTrait,
     TeacherTrait,
     VouchersTrait,
-    DashboardTrait};
+    DashboardTrait,
+    TaggableUserTrait};
 
 /**
  * App\User
@@ -295,7 +296,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     use CharacterCommon;
     use OrderCommon;
     
-    use DashboardTrait, MutatorTrait, TeacherTrait, LotteryTrait, PaymentTrait, BonTrait, VouchersTrait, TagTrait, ProfileTrait, TrackTrait;
+    use DashboardTrait, MutatorTrait, TeacherTrait, LotteryTrait, PaymentTrait, BonTrait, VouchersTrait, TaggableUserTrait, ProfileTrait, TrackTrait;
     
     /*
     |--------------------------------------------------------------------------

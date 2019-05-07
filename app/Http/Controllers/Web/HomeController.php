@@ -722,12 +722,12 @@ class HomeController extends Controller
         $products = Product::where('id', 240)
             ->get();
         
-        return view("admin.indexSMS",
-            compact("pageName", "majors", "userStatuses", "roles", "relatives", "orderstatuses", "paymentstatuses",
-                "genders", "gendersWithUnknown", "products",
-                "allRootProducts", "lockProfileStatus", "mobileNumberVerification", "sortBy", "sortType", "smsCredit",
-                "smsProviderNumber",
-                "numberOfFatherPhones", "numberOfMotherPhones", "coupons", "addressSpecialFilter", "heckoutStatuses"));
+        return view('admin.indexSMS',
+            compact('pageName', 'majors', 'userStatuses', 'roles', 'relatives', 'orderstatuses', 'paymentstatuses',
+                'genders', 'gendersWithUnknown', 'products',
+                'allRootProducts', 'lockProfileStatus', 'mobileNumberVerification', 'sortBy', 'sortType', 'smsCredit',
+                'smsProviderNumber',
+                'numberOfFatherPhones', 'numberOfMotherPhones', 'coupons', 'addressSpecialFilter', 'heckoutStatuses' , 'checkoutStatuses' ));
     }
     
     /**
