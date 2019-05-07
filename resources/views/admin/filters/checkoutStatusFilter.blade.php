@@ -9,9 +9,21 @@
     </div>
 
     <div class = "col-md-10">
-        {!! Form::select('checkoutStatuses[]', $checkoutStatuses, null, ['multiple' => 'multiple','class' => 'mt-multiselect btn btn-default a--full-width',
-                            'id' => (isset($dropdownId))?$dropdownId:'checkoutStatuses' , "data-label" => "left" , "data-width" => "100%" , "data-filter" => "true" ,
-                            "data-height" => "200" , "title" => "وضعیت تسویه" , "disabled"]) !!}
+        {!!
+            Form::select('checkoutStatuses[]',
+            $checkoutStatuses,null,
+            [
+                'multiple' => 'multiple',
+                'class' => 'mt-multiselect btn btn-default a--full-width',
+                'id' => (isset($dropdownId))?$dropdownId:'checkoutStatuses',
+                "data-label" => "left",
+                "data-width" => "100%",
+                "data-filter" => "true",
+                "data-height" => "200",
+                "title" => "وضعیت تسویه",
+                "disabled"
+            ])
+        !!}
 
     </div>
 </div>

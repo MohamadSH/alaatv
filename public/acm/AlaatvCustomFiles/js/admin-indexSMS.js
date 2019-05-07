@@ -31,7 +31,7 @@ $(document).on("click", "#filterButton", function (){
                 var newDataTable =$("#sms_table").DataTable();
                 newDataTable.destroy();
                 $('#sms_table > tbody').html(response.index);
-                if (App.isAngularJsApp() === false) {
+                if (mUtil.isAngularVersion() === false) {
                     TableDatatablesManaged.init();
                 }
                 if(response === null || response === "" ) {
@@ -109,7 +109,10 @@ $(document).on("click", ".sendSMS", function () {
 });
 
 $(document).on("click", "#sendSmsForm-submit", function (){
-    $('body').modalmanager('loading');
+    mApp.block('#smsConformation', {
+        type: "loader",
+        state: "success",
+    });
     $("#send-sms-loading").removeClass("d-none");
 
     //initializing form alerts
@@ -134,6 +137,8 @@ $(document).on("click", "#sendSmsForm-submit", function (){
             //The status for when action was successful
             200: function (response) {
                 $("#send-sms-loading").addClass("d-none");
+                $("#smsConformation").modal("hide");
+                mApp.unblock('#smsConformation');
                 // console.log(response);
                 // console.log(response.responseText);
                 var smsCredit = JSON.parse(parseInt(response));
@@ -151,7 +156,6 @@ $(document).on("click", "#sendSmsForm-submit", function (){
                     $("#smsCreditNumber_3").text(Math.floor(smsCredit / $("#smsCost_3").val())).number(true);
                 }
 
-                $("#sendSmsForm-close").trigger("click");
                 toastr.options = {
                     "closeButton": true,
                     "debug": false,
@@ -180,7 +184,6 @@ $(document).on("click", "#sendSmsForm-submit", function (){
             //The status for when form data is not valid
             422: function (response) {
                 $("#send-sms-loading").addClass("d-none");
-                $("#sendSmsForm-close").trigger("click");
                 var errors = $.parseJSON(response.responseText);
                 // console.log(errors);
                 $.each(errors, function(index, value) {
@@ -191,21 +194,29 @@ $(document).on("click", "#sendSmsForm-submit", function (){
                             break;
                     }
                 });
+                $("#smsConformation").modal("hide");
+                mApp.unblock('#smsConformation');
             },
             //The status for when there is error php code
             500: function (response) {
                 console.log(response);
                 console.log(response.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
+                $("#smsConformation").modal("hide");
+                mApp.unblock('#smsConformation');
             },
             //The status for when there is error php code
             503: function (response) {
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+                $("#smsConformation").modal("hide");
+                mApp.unblock('#smsConformation');
             },
 
             //The status for Unavailable For Legal Reasons
             451: function (response) {
                 toastr["error"]("کاربری انتخاب نشده است!", "پیام سیستم");
+                $("#smsConformation").modal("hide");
+                mApp.unblock('#smsConformation');
             }
 
         },
@@ -213,8 +224,7 @@ $(document).on("click", "#sendSmsForm-submit", function (){
         contentType: false,
         processData: false
     });
-    $modal.modal().hide();
-    $modal.modal('toggle');
+
 });
 
 $(document).ready(function () {
