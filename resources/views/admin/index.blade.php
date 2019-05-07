@@ -596,7 +596,17 @@
                 {"data": "email", "title": "ایمیل", "defaultContent": defaultContent},
                 {"data": "city", "title": "شهر", "defaultContent": defaultContent},
                 {"data": "province", "title": "استان", "defaultContent": defaultContent},
-                {"data": "mobile_verified_at", "title": "وضعیت شماره موبایل", "defaultContent": defaultContent},
+                {
+                    "data": null,
+                    "name": "mobile_verify_status",
+                    "title": "وضعیت شماره موبایل",
+                    "render": function ( data, type, row ) {
+                        if (row.mobile_verified_at === null) {
+                            return '<span class="m-badge m-badge--warning m-badge--wide m-badge--rounded">تایید نشده</span>';
+                        }
+                        return '<span class="m-badge m-badge--success m-badge--wide m-badge--rounded">تایید شده</span>';
+                    },
+                },
                 {"data": "postalCode", "title": "کد پستی", "defaultContent": defaultContent},
                 {"data": "address", "title": "آدرس", "defaultContent": defaultContent},
                 {"data": "school", "title": "مدرسه", "defaultContent": defaultContent},
