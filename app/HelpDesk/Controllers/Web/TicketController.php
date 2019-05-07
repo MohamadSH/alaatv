@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\HelpDesk\Controllers;
 
 use Illuminate\Http\Request;
 use App\HelpDesk\Models\Ticket;
+use App\Http\Controllers\Controller;
 
 class TicketController extends Controller
 {
