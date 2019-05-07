@@ -1046,6 +1046,7 @@
                 $('#transactionDeadlineAt').attr('disabled', false);
                 $('#transactionDeadlineAtAlt').attr('disabled', false);
                 $('#transactionCompletedAt').attr('disabled', true);
+                $('#transactionCompletedAtAlt').attr('disabled', true);
                 $('#paymentMethodName').attr('disabled', true);
                 $('input[name="referenceNumber"]').attr('disabled', true);
                 $('input[name="authority"]').attr('disabled', true);
@@ -1055,6 +1056,7 @@
                 $('#transactionDeadlineAt').attr('disabled', true);
                 $('#transactionDeadlineAtAlt').attr('disabled', true);
                 $('#transactionCompletedAt').attr('disabled', false);
+                $('#transactionCompletedAtAlt').attr('disabled', false);
                 $('#paymentMethodName').attr('disabled', false);
                 paymentMethodState($('#paymentMethodName'));
             }
@@ -1148,7 +1150,7 @@
                 },
                 success: function (result) {
                     $("#removeTransactionSuccess").removeClass("d-none");
-//                    location.reload();
+                   location.reload();
                 },
                 error: function (result) {
                     $("#removeTransactionError").removeClass("d-none");
