@@ -96,6 +96,7 @@
                     </div>
                 </div>
                 <div class = "m-portlet__body">
+                    <input type="hidden" id="contactUrl" value="/contact?user=">
                     <div class = "portlet box red">
                         <div class = "portlet-body" style = "display: block;">
                             <div class = "portlet box blue">
@@ -323,7 +324,8 @@
                     </div>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
 
             @permission((config('constants.LIST_PERMISSION_ACCESS')))
@@ -428,7 +430,8 @@
                     </div>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
 
             @role((config("constants.ROLE_ADMIN")))
@@ -545,7 +548,8 @@
                     </div>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endrole
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endrole
 
 
         </div>
@@ -663,6 +667,11 @@
                             '                    <li>\n' +
                             '                        <a class="sendSms" data-target="#smsModal" data-toggle="modal">\n' +
                             '                            <i class="fa fa-envelope" aria-hidden="true"></i> ارسال پیامک\n' +
+                            '                        </a>\n' +
+                            '                    </li>\n' +
+                            '                    <li>\n' +
+                            '                        <a href="'+$('#contactUrl').val()+row.id+'" target="_blank">\n' +
+                            '                            <i class="flaticon-book" aria-hidden="true"></i> دفترچه تلفن\n' +
                             '                        </a>\n' +
                             '                    </li>\n' +
                             '                </ul>\n' +
