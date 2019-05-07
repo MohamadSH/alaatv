@@ -2,6 +2,7 @@
 
 namespace App\HelpDesk\Providers;
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class HelpDeskServiceProvider extends ServiceProvider
@@ -15,6 +16,9 @@ class HelpDeskServiceProvider extends ServiceProvider
     
     public function boot()
     {
-        //
+        if (!Schema::hasTable('migrations')) {
+            // Database isn't installed yet.
+            return;
+        }
     }
 }
