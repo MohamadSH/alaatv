@@ -21,13 +21,12 @@ class InsertTransactionRequest extends FormRequest
             'order_id'             => 'required',
             'cost'                 => 'required|integer',
             'transactionstatus_id' => 'required|exists:transactionstatuses,id',
-            'paymentmethod_id'     => 'required|string|min:2',
-            'referenceNumber'      => 'sometimes|string|min:2',
-            'traceNumber'          => 'sometimes|string|min:2',
-            'authority'            => 'sometimes|string|min:2',
-            'paycheckNumber'       => 'sometimes|string|min:2',
-            'completed_at'         => 'sometimes|date_format:Y-m-d',
-            'deadline_at'          => 'sometimes|date_format:Y-m-d',
+            'referenceNumber'      => 'sometimes|nullable|string|min:2',
+            'traceNumber'          => 'sometimes|nullable|string|min:2',
+            'authority'            => 'sometimes|nullable|string|min:2',
+            'paycheckNumber'       => 'sometimes|nullable|string|min:2',
+            'completed_at'         => 'sometimes|date_format:Y-n-j',
+            'deadline_at'          => 'sometimes|date_format:Y-n-j',
         ];
 
         return $rules;
