@@ -2,6 +2,7 @@
 
 namespace App\PaymentModule\Gateways\Zarinpal;
 
+use App\PaymentModule\PaymentDriver;
 use Illuminate\Support\ServiceProvider;
 use Zarinpal\Zarinpal;
 
@@ -16,6 +17,8 @@ class ZarinpalServiceProvider extends ServiceProvider
         });
 
         $this->app['zarinpal.isSandBox'] = $this->isZarinpalSandboxOn();
+
+        PaymentDriver::addDriver('zarinpal', ZarinpalGateWay::class, 1);
     }
     
     /**
