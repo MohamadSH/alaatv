@@ -101,8 +101,8 @@ mix.babel(
 
 mix.babel(
     [
-        'public/assets/demo/demo12/custom/crud/forms/widgets/bootstrap-switch.js',
-        'public/assets/demo/demo12/custom/crud/forms/widgets/nouislider.js',
+        // 'public/assets/demo/demo12/custom/crud/forms/widgets/bootstrap-switch.js',
+        // 'public/assets/demo/demo12/custom/crud/forms/widgets/nouislider.js',
         'public/acm/AlaatvCustomFiles/js/UserCart.js',
         'public/acm/AlaatvCustomFiles/js/page-checkout-payment.js',
     ],
