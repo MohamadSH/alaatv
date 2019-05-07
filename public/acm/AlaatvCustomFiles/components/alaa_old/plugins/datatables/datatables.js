@@ -67,7 +67,7 @@
 		// Browser
 		factory( jQuery, window, document );
 	}
-}
+};
 (function( $, window, document, undefined ) {
 	"use strict";
 
@@ -4117,7 +4117,7 @@
 		var compat = function ( old, modern ) {
 			return json[old] !== undefined ? json[old] : json[modern];
 		};
-	
+
 		var data = _fnAjaxDataSrc( settings, json );
 		var draw            = compat( 'sEcho',                'draw' );
 		var recordsTotal    = compat( 'iTotalRecords',        'recordsTotal' );
@@ -4171,7 +4171,7 @@
 		if ( dataSrc === 'data' ) {
 			return json.aaData || json[dataSrc];
 		}
-	
+
 		return dataSrc !== "" ?
 			_fnGetObjectDataFn( dataSrc )( json ) :
 			json;
@@ -6422,7 +6422,7 @@
 	
 			_fnCallbackFire( settings, 'aoStateLoaded', 'stateLoaded', [settings, s] );
 			callback();
-		}
+		};
 	
 		if ( ! settings.oFeatures.bStateSave ) {
 			callback();

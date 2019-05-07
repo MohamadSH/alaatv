@@ -223,57 +223,57 @@ $(document).on("click", "#productForm-submit", function (){
 $(document).on("click", "#product-portlet .reload", function (){
     $("#product-portlet-loading").removeClass("d-none");
     $('#product_table > tbody').html("");
-    $.ajax({
-        type: "GET",
-        url: "/product",
-        // success: function (result) {
-        //     console.log(result);
-            // console.log(result.responseText);
-            // var newDataTable =$("#product_table").DataTable();
-            // newDataTable.destroy();
-            // $('#product_table > tbody').html(result);
-            // makeDataTable("product_table");
-            // $("#product-portlet-loading").addClass("d-none");
-        // },
-        // error: function (result) {
-        //     console.log(result);
-        //     console.log(result.responseText);
-        // }
-        statusCode: {
-            200:function (response) {
-                var newDataTable =$("#product_table").DataTable();
-                newDataTable.destroy();
-                $('#product_table > tbody').html(response);
-                makeDataTable("product_table");
-                $("#product-portlet-loading").addClass("d-none");
-                // console.log(response.statusCode);
-            },
-            //The status for when the user is not authorized for making the request
-            401:function (ressponse) {
-                location.reload();
-            },
-            403: function (response) {
-                window.location.replace("/403");
-            },
-            404: function (response) {
-                window.location.replace("/404");
-            },
-            //The status for when form data is not valid
-            422: function (response) {
-                //
-            },
-            //The status for when there is error php code
-            500: function (response) {
-                console.log(response.responseText);
-                toastr["error"]("خطای برنامه!", "پیام سیستم");
-            },
-            //The status for when there is error php code
-            503: function (response) {
-                toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
-            }
-        }
-    });
-
+    // $.ajax({
+    //     type: "GET",
+    //     url: "/product",
+    //     // success: function (result) {
+    //     //     console.log(result);
+    //         // console.log(result.responseText);
+    //         // var newDataTable =$("#product_table").DataTable();
+    //         // newDataTable.destroy();
+    //         // $('#product_table > tbody').html(result);
+    //         // makeDataTable("product_table");
+    //         // $("#product-portlet-loading").addClass("d-none");
+    //     // },
+    //     // error: function (result) {
+    //     //     console.log(result);
+    //     //     console.log(result.responseText);
+    //     // }
+    //     statusCode: {
+    //         200:function (response) {
+    //             var newDataTable =$("#product_table").DataTable();
+    //             newDataTable.destroy();
+    //             $('#product_table > tbody').html(response);
+    //             makeDataTable("product_table");
+    //             $("#product-portlet-loading").addClass("d-none");
+    //             // console.log(response.statusCode);
+    //         },
+    //         //The status for when the user is not authorized for making the request
+    //         401:function (ressponse) {
+    //             location.reload();
+    //         },
+    //         403: function (response) {
+    //             window.location.replace("/403");
+    //         },
+    //         404: function (response) {
+    //             window.location.replace("/404");
+    //         },
+    //         //The status for when form data is not valid
+    //         422: function (response) {
+    //             //
+    //         },
+    //         //The status for when there is error php code
+    //         500: function (response) {
+    //             console.log(response.responseText);
+    //             toastr["error"]("خطای برنامه!", "پیام سیستم");
+    //         },
+    //         //The status for when there is error php code
+    //         503: function (response) {
+    //             toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+    //         }
+    //     }
+    // });
+    makeDataTable_loadWithAjax_products();
     return false;
 });
 $(document).on("click", ".copyProduct", function (){
