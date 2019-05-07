@@ -96,6 +96,7 @@
                     </div>
                 </div>
                 <div class = "m-portlet__body">
+                    <input type="hidden" id="contactUrl" value="/contact?user=">
                     <div class = "portlet box red">
                         <div class = "portlet-body" style = "display: block;">
                             <div class = "portlet box blue">
@@ -323,7 +324,8 @@
                     </div>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
 
             @permission((config('constants.LIST_PERMISSION_ACCESS')))
@@ -428,7 +430,8 @@
                     </div>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
 
             @role((config("constants.ROLE_ADMIN")))
@@ -545,7 +548,8 @@
                     </div>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endrole
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endrole
 
 
         </div>
@@ -588,7 +592,7 @@
                     "data": "row_child",
                     "defaultContent": ""
                 },
-                {"data": "full_name", "title": "نام خانوادگی", "defaultContent": defaultContent},
+                {"data": "lastName", "title": "نام خانوادگی", "defaultContent": defaultContent},
                 {"data": "firstName", "title": "نام کوچک", "defaultContent": defaultContent},
                 {"data": "info.major.name", "title": "رشته", "defaultContent": defaultContent},
                 {"data": "nationalCode", "title": "کد ملی", "defaultContent": defaultContent},
@@ -596,7 +600,17 @@
                 {"data": "email", "title": "ایمیل", "defaultContent": defaultContent},
                 {"data": "city", "title": "شهر", "defaultContent": defaultContent},
                 {"data": "province", "title": "استان", "defaultContent": defaultContent},
-                {"data": "mobile_verified_at", "title": "وضعیت شماره موبایل", "defaultContent": defaultContent},
+                {
+                    "data": null,
+                    "name": "mobile_verify_status",
+                    "title": "وضعیت شماره موبایل",
+                    "render": function ( data, type, row ) {
+                        if (row.mobile_verified_at === null) {
+                            return '<span class="m-badge m-badge--warning m-badge--wide m-badge--rounded">تایید نشده</span>';
+                        }
+                        return '<span class="m-badge m-badge--success m-badge--wide m-badge--rounded">تایید شده</span>';
+                    },
+                },
                 {"data": "postalCode", "title": "کد پستی", "defaultContent": defaultContent},
                 {"data": "address", "title": "آدرس", "defaultContent": defaultContent},
                 {"data": "school", "title": "مدرسه", "defaultContent": defaultContent},
@@ -653,6 +667,11 @@
                             '                    <li>\n' +
                             '                        <a class="sendSms" data-target="#smsModal" data-toggle="modal">\n' +
                             '                            <i class="fa fa-envelope" aria-hidden="true"></i> ارسال پیامک\n' +
+                            '                        </a>\n' +
+                            '                    </li>\n' +
+                            '                    <li>\n' +
+                            '                        <a href="'+$('#contactUrl').val()+row.id+'" target="_blank">\n' +
+                            '                            <i class="flaticon-book" aria-hidden="true"></i> دفترچه تلفن\n' +
                             '                        </a>\n' +
                             '                    </li>\n' +
                             '                </ul>\n' +
