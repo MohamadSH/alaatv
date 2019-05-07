@@ -23,7 +23,10 @@ class Priority extends BaseModel
      */
     public    $timestamps = false;
     protected $table      = 'help_priorities';
-    protected $fillable   = ['name', 'color'];
+    protected $fillable   = [
+        'name',
+        'color',
+    ];
     
     /**
      * Get related tickets.

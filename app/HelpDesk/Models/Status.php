@@ -24,7 +24,10 @@ class Status extends BaseModel
     public    $timestamps = false;
     protected $table      = 'help_statuses';
     
-    protected $fillable = ['name', 'color'];
+    protected $fillable = [
+        'name',
+        'color',
+    ];
     
     /**
      * Get related tickets.

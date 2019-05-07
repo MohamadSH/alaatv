@@ -25,7 +25,10 @@ class Category extends BaseModel
      */
     public    $timestamps = false;
     protected $table      = 'help_categories';
-    protected $fillable   = ['name', 'color'];
+    protected $fillable   = [
+        'name',
+        'color',
+    ];
     
     /**
      * Get related tickets.
