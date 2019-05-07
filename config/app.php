@@ -88,6 +88,8 @@ return [
         App\PaymentModule\Gateways\Zarinpal\ZarinpalServiceProvider::class,
         App\PaymentModule\Gateways\Behpardakht\BehpardakhtServiceProvider::class,
 
+        App\HelpDesk\Providers\HelpDeskServiceProvider::class,
+
     ],
     /*
     |--------------------------------------------------------------------------
