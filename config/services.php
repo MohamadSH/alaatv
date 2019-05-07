@@ -55,7 +55,7 @@ return [
             'url'      => env('MEDIANA_PATTERN_API_URL', ''),
             'userName' => env('MEDIANA_USERNAME', 'demo'),
             'password' => env('MEDIANA_PASSWORD', 'demo'),
-            'from'     => env('SMS_PROVIDER_DEFAULT_NUMBER', ''),
+            'from'     => env('SMS_PROVIDER_DEFAULT_NUMBER', '+98100020400'),
         ],
 
     ],
