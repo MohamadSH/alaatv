@@ -242,7 +242,7 @@ class UserController extends Controller
         
         $orderProductEnable = Input::get("orderProductEnable");
         $productsId         = Input::get('orderProducts');
-        if (isset($orderProductEnable) || isset($productsId)) {
+        if (isset($orderProductEnable) && isset($productsId)) {
             if (in_array(-1, $productsId)) {
                 $users = $users->whereDoesntHave("orders", function ($q) {
                     $q->whereNotIn('orderstatus_id', [
@@ -643,6 +643,18 @@ class UserController extends Controller
             }
         }
         else {
+            $items = $users->get();
+
+            $sortBy   = Input::get("sortBy");
+            $sortType = Input::get("sortType");
+            if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
+                if (strcmp($sortType, "desc") == 0) {
+                    $items = $items->sortByDesc($sortBy);
+                }
+                else {
+                    $items = $items->sortBy($sortBy);
+                }
+            }
             return response([
                 "data" => [
                     "users" => $items,

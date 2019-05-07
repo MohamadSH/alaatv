@@ -452,12 +452,20 @@ class TransactionController extends Controller
                 'error' => $result['message'],
             ], $result['statusCode']);
         }
-        
+
         $result = $this->new($request->all());
-        
-        return response()->json([
-            'error' => $result['message'],
-        ], $result['statusCode']);
+
+        if($request->ajax() || $request->expectsJson())
+            return response()->json([
+                'error' => $result['message'],
+            ], $result['statusCode']);
+
+        if($result['statusCode'] == Response::HTTP_OK)
+            session()->flash('success' , $result['message']);
+        else
+            session()->flash('error' , $result['message']);
+
+        return redirect()->back();
     }
     
     /**

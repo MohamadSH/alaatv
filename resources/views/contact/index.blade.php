@@ -93,7 +93,7 @@
                                                     </a>
                                                 </div>
                                                 <div class = "col-md-1">
-                                                    {!! Form::open(['method' => 'DELETE' , 'action' => ['ContactController@destroy', $contact]]) !!}
+                                                    {!! Form::open(['method' => 'DELETE' , 'action' => ['Web\ContactController@destroy', $contact]]) !!}
                                                     <button class = "btn btn-danger" type = "submit">
                                                         <i class = "fa fa-remove"></i>
                                                         حذف
@@ -125,7 +125,7 @@
                             <span aria-hidden = "true">&times;</span>
                         </button>
                     </div>
-                    {!! Form::open(['method' => 'POST' , 'action' => 'ContactController@store']) !!}
+                    {!! Form::open(['method' => 'POST' , 'action' => 'Web\ContactController@store']) !!}
                     <div class = "modal-body">
                         {!! Form::hidden('user_id', $userId) !!}
                         <div class = "row">
