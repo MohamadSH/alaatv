@@ -89,7 +89,9 @@ return [
         Zarinpal\Laravel\ZarinpalServiceProvider::class,
         App\PaymentModule\Gateways\Zarinpal\ZarinpalServiceProvider::class,
         App\PaymentModule\Gateways\Behpardakht\BehpardakhtServiceProvider::class,
-        OnlinePaymentGatewayServiceProvider::class
+        OnlinePaymentGatewayServiceProvider::class,
+        App\HelpDesk\Providers\HelpDeskServiceProvider::class,
+
     ],
     /*
     |--------------------------------------------------------------------------
