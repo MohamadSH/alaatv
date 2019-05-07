@@ -588,7 +588,7 @@
                     "data": "row_child",
                     "defaultContent": ""
                 },
-                {"data": "full_name", "title": "نام خانوادگی", "defaultContent": defaultContent},
+                {"data": "lastName", "title": "نام خانوادگی", "defaultContent": defaultContent},
                 {"data": "firstName", "title": "نام کوچک", "defaultContent": defaultContent},
                 {"data": "info.major.name", "title": "رشته", "defaultContent": defaultContent},
                 {"data": "nationalCode", "title": "کد ملی", "defaultContent": defaultContent},
