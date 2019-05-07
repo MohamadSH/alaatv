@@ -19,6 +19,10 @@
             margin: 5px;
             border-radius: 15px;
         }
+        .Transaction_Total_Report {
+            font-size: 14px;
+            font-weight: bold;
+        }
     </style>
 @endsection
 
@@ -492,11 +496,11 @@
                         {!! Form::close() !!}
                     </div>
                     @permission((config('constants.SHOW_TRANSACTION_TOTAL_COST_ACCESS')))
-                    <span class="m-badge m-badge--success m-badge--wide m-badge--rounded">مجموع مبالغ تراکنشها : <span id="totalCost"></span>تومان</span>
+                    <span class="m-badge m-badge--success m-badge--wide m-badge--rounded Transaction_Total_Report">مجموع مبالغ تراکنشها : <span id="totalCost"></span>تومان</span>
                     @endpermission
                     @permission((config('constants.SHOW_TRANSACTION_TOTAL_FILTERED_COST_ACCESS')))
-                    <span class="m-badge m-badge--success m-badge--wide m-badge--rounded">مجموع مبالغ فیلتر شده ها : <span id="totalFilteredCost"></span> تومان</span>
-                    <span class="m-badge m-badge--success m-badge--wide m-badge--rounded">مجموع مبالغ آیتم های اضافه : <span id="totalFilteredExtraCost"></span> تومان</span><br>
+                    <span class="m-badge m-badge--success m-badge--wide m-badge--rounded Transaction_Total_Report">مجموع مبالغ فیلتر شده ها : <span id="totalFilteredCost"></span> تومان</span>
+                    <span class="m-badge m-badge--success m-badge--wide m-badge--rounded Transaction_Total_Report">مجموع مبالغ آیتم های اضافه : <span id="totalFilteredExtraCost"></span> تومان</span><br>
                     @endpermission
                     <a target="_blank" href="{{action("Web\TransactionController@getUnverifiedTransactions")}}" class="btn btn-lg m-btn--pill m-btn--air btn-danger active m--margin-10">لیست تراکنشهای ثبت نشده</a>
                     <div class="table-toolbar">
