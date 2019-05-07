@@ -7,7 +7,6 @@ use App\PaymentModule\Money;
 use App\PaymentModule\RedirectData;
 use App\PaymentModule\OnlineGatewayInterface;
 
-//use App\Classes\Payment\{OnlineGatewayInterface, RedirectData};
 use App\PaymentModule\OnlinePaymentRedirectionUriInterface;
 use App\PaymentModule\OnlinePaymentVerificationResponseInterface;
 
@@ -35,7 +34,7 @@ class ZarinpalGateWay implements OnlineGatewayInterface
     public function verifyPayment(Money $amount, $authority): OnlinePaymentVerificationResponseInterface
     {
         $result = app('zarinpal.client')->verify($amount->tomans(), $authority);
-        
+
         return VerificationResponse::instance($result);
     }
 }

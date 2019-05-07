@@ -4,8 +4,10 @@ namespace App\PaymentModule;
 
 class HtmlFormGenerator
 {
-    public static function generate($authorityCode)
+    public static function generate($authorityCode, $seconds= 4)
     {
+        $milli = (string) ($seconds * 1000);
+
         $redirectData = OnlineGateWay::generatePaymentPageUriObject($authorityCode);
         $T = "<form id='__alaa_gateway_form__' method='{$redirectData->getMethod()}' action='{$redirectData->getRedirectUrl()}'>";
 
@@ -28,7 +30,7 @@ class HtmlFormGenerator
             ready(function () {
                 setTimeout(function () {
                     document.getElementById('__alaa_gateway_form__').submit();
-                }, 4000);
+                },".$milli.");
             });
         </script>";
 
