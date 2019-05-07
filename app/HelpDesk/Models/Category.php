@@ -6,6 +6,16 @@ use App\User;
 use App\BaseModel;
 
 
+/**
+ * App\HelpDesk\Models\Category
+ *
+ * @property-read \App\Collection\UserCollection|\App\User[]                             $agents
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\HelpDesk\Models\Ticket[] $tickets
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Category newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Category newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Category query()
+ * @mixin \Eloquent
+ */
 class Category extends BaseModel
 {
     /**

@@ -7,6 +7,24 @@ use App\BaseModel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * App\HelpDesk\Models\Ticket
+ *
+ * @property-read \App\User                                                               $agent
+ * @property-read \App\HelpDesk\Models\Category                                           $category
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\HelpDesk\Models\Comment[] $comments
+ * @property-read \App\HelpDesk\Models\Priority                                           $priority
+ * @property-read \App\HelpDesk\Models\Status                                             $status
+ * @property-read \App\User                                                               $user
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket active()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket agentTickets($id)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket complete()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket userTickets($id)
+ * @mixin \Eloquent
+ */
 class Ticket extends BaseModel
 {
     protected $table = 'help_tickets';

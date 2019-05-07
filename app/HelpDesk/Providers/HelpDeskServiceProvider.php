@@ -9,8 +9,8 @@ class HelpDeskServiceProvider extends ServiceProvider
     
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/config.php', 'helpDesk');
-        $this->loadMigrationsFrom(__DIR__.'/Database/Migrations');
+        $this->mergeConfigFrom(dirname(__DIR__, 1).'/config.php', 'helpDesk');
+        $this->loadMigrationsFrom(dirname(__DIR__, 1).'/Database/Migrations');
         
     }
     
