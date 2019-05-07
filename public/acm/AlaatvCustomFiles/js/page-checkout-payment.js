@@ -18,6 +18,10 @@ var CheckoutPaymentUi = function () {
         return $('#invoiceInfo-couponCode').val();
     }
 
+    function setCouponCode(code) {
+        $('#invoiceInfo-couponCode').val(code);
+    }
+
     function refreshUiBasedOnPaymentType() {
         let selectedObject = $('input[type="radio"][name="radioPaymentType"]:checked');
         let radioPaymentType = selectedObject.val();
@@ -198,14 +202,14 @@ var CheckoutPaymentUi = function () {
         discountCodeValue.val('');
     }
     function refreshUiBasedOnHasntDiscountCodeStatus() {
-        $('#discountCodeValue').val(getCouponCode());
+        $('#discountCodeValue').val((getCouponCode()));
         if(!$('#hasntDiscountCode').prop('checked')) {
             setUiHasDiscountCode();
         } else {
-            setUiHasntDiscountCode();
-            if ($('#discountCodeValue').val().trim().length > 0) {
+            if (getCouponCode().trim().length > 0) {
                 detachCoupon(false);
             }
+            setUiHasntDiscountCode();
         }
     }
 
@@ -320,7 +324,7 @@ var CheckoutPaymentUi = function () {
 
                     setFinalCost(data.price.final);
                     PrintnotIncludedProductsInCoupon([]);
-
+                    setCouponCode('');
                     if (showMessage === true) {
                         toastr.success('کد تخفیف شما حذف شد.');
                     }
