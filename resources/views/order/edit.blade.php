@@ -543,7 +543,7 @@
                                 
                                 <thead>
                                 <tr>
-                                    <th></th>
+                                    <th class="d-none"></th>
                                     <th> روش پرداخت</th>
                                     <th> وضعیت تراکنش</th>
                                     <th> تراکنش والد</th>
@@ -560,7 +560,7 @@
                                 <tbody>
                                 @foreach($orderTransactions as $transaction)
                                     <tr id="{{$transaction->id}}">
-                                        <td>
+                                        <td class="d-none">
                                             {{$transaction->id}}
                                         </td>
                                         <td>
@@ -1073,21 +1073,25 @@
                 altField: '#transactionDeadlineAtAlt',
                 altFormat: "YYYY MM DD",
                 observer: true,
-                format: 'YYYY/MM/DD',
+                format: 'YYYY-MM-DD',
                 altFieldFormatter: function (unixDate) {
-                    var d = new Date(unixDate).toISOString();
-                    return d;
+                    // var d = new Date(unixDate).toISOString();
+                    let targetDatetime = new Date(unixDate);
+                    let formatted_date = targetDatetime.getFullYear() + "-" + (targetDatetime.getMonth() + 1) + "-" + targetDatetime.getDate();
+                    return formatted_date;
                 }
             });
 
             $("#transactionCompletedAt").persianDatepicker({
                 altField: '#transactionCompletedAtAlt',
-                altFormat: "YYYY MM DD",
+                altFormat: "YYYY-MM-DD",
                 observer: true,
                 format: 'YYYY/MM/DD',
                 altFieldFormatter: function (unixDate) {
-                    var d = new Date(unixDate).toISOString();
-                    return d;
+                    // var d = new Date(unixDate).toISOString();
+                    let targetDatetime = new Date(unixDate);
+                    let formatted_date = targetDatetime.getFullYear() + "-" + (targetDatetime.getMonth() + 1) + "-" + targetDatetime.getDate();
+                    return formatted_date;
                 }
             });
 
