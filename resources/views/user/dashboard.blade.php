@@ -63,7 +63,7 @@
                                 @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
                                     @if($userAsset->title === 'محصولات من')
                                         @foreach($userAsset->products as $productKey=>$product)
-                                            @if(count($product->sets)===0)
+                                            @if($product->sets->isEmpty())
                                                 <div class = "m-widget_head-owlcarousel-item carousel background-gradient" data-position = "{{ $productKey }}">
                                                     <a href="{{ $product->url }}" >
                                                         <img class = "a--owl-carousel-type-2-item-image" src = "{{ $product->photo }}">
@@ -71,7 +71,7 @@
                                                     <br>
                                                     <a href="{{ $product->url }}" target="_blank" class="m-link">{{ $product->name }}</a>
                                                 </div>
-                                            @elseif(count($product->sets)===1)
+                                            @elseif($product->sets->count()===1)
                                                 <div class = "m-widget_head-owlcarousel-item carousel background-gradient" data-position = "{{ $productKey }}">
                                                     <img class = "a--owl-carousel-type-2-item-image" src = "{{ $product->photo }}">
                                                     <br>
@@ -82,7 +82,7 @@
                                                             <i class = "flaticon-edit-1"></i>
                                                             جزوات
                                                         </button>
-                                                        @if(count($product->sets[0]->video) > 0)
+                                                        @if($product->sets->first()->getContents()->videos()->count() > 0)
                                                             <button type="button" class="btn btn-success btnViewVideo"
                                                                     data-content-type="video"
                                                                     data-content-url="{{ $product->sets[0]->contentUrl }}">

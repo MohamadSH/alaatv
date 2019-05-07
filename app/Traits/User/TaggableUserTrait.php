@@ -1,16 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sohrab
- * Date: 2019-02-15
- * Time: 17:15
- */
+
 
 namespace App\Traits\User;
 
+
 use App\Collection\ContentCollection;
 
-trait TagTrait
+trait TaggableUserTrait
 {
     public function getTaggableId()
     {
@@ -65,8 +61,7 @@ trait TagTrait
         if ($response["statusCode"] == 200) {
             $result = json_decode($response["result"]);
             $tags   = $result->data->tags;
-        }
-        else {
+        } else {
             $tags = [];
         }
         

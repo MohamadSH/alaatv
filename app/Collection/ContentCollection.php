@@ -20,17 +20,17 @@ class ContentCollection extends Collection
     
     public function videos()
     {
-        return $this->where("contenttype_id", Content::CONTENT_TYPE_VIDEO);
+        return $this->where('contenttype_id', Content::CONTENT_TYPE_VIDEO);
     }
     
     public function pamphlets()
     {
-        return $this->where("contenttype_id", Content::CONTENT_TYPE_PAMPHLET);
+        return $this->where('contenttype_id', Content::CONTENT_TYPE_PAMPHLET);
     }
     
     public function articles()
     {
-        return $this->where("contenttype_id", Content::CONTENT_TYPE_ARTICLE);
+        return $this->where('contenttype_id', Content::CONTENT_TYPE_ARTICLE);
     }
     
     public function flashcards()
@@ -40,9 +40,9 @@ class ContentCollection extends Collection
     
     public function onlyItemTypes(array $itemTypes)
     {
-        $result = new ContentCollection();
+        $result = new self();
         foreach ($itemTypes as $itemType) {
-            $filter = $itemType."s";
+            $filter = $itemType.'s';
             $result = $result->merge($this->$filter());
         }
         
@@ -58,10 +58,10 @@ class ContentCollection extends Collection
             
             $myContentType = optional($content->contenttype)->name;
             $result->push([
-                "content"   => $content,
-                "type"      => $myContentType,
-                "thumbnail" => $content->thumbnail,
-                "session"   => $content->session,
+                'content'   => $content,
+                'type'      => $myContentType,
+                'thumbnail' => $content->thumbnail,
+                'session'   => $content->session,
             ]);
         }
         

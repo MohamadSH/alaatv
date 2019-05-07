@@ -189,7 +189,8 @@ class ContentController extends Controller
     
         $pageName = 'content-search';
     
-        $isApp = (strstr($request->header('User-Agent'), 'Alaa') !== '') ? true : false;
+        $strstr = strstr($request->header('User-Agent'), 'Alaa');
+        $isApp  = ($strstr !== false && $strstr !== '') ? true : false;
         if ($isApp) {
             return response()->json($this->makeJsonForAndroidApp($result->get('video')
                 ->items()));
@@ -295,7 +296,7 @@ class ContentController extends Controller
     {
         $key = 'getContentInformation: '.$content->id;
         return Cache::tags('set')
-            ->remember($key, config("constants.CACHE_600"), function () use ($content) {
+            ->remember($key, config('constants.CACHE_600'), function () use ($content) {
                 $author = $content->authorName;
                 
                 [
@@ -303,13 +304,13 @@ class ContentController extends Controller
                     $contentSetName,
                 ] = $content->getSetMates();
                 $contentsWithSameSet  = $contentsWithSameSet->normalMates();
-                $videosWithSameSet    = optional($contentsWithSameSet)->whereIn("type", "video");
-                $pamphletsWithSameSet = optional($contentsWithSameSet)->whereIn("type", "pamphlet");
+                $videosWithSameSet    = optional($contentsWithSameSet)->whereIn('type', 'video');
+                $pamphletsWithSameSet = optional($contentsWithSameSet)->whereIn('type', 'pamphlet');
                 [
                     $videosWithSameSetL,
                     $videosWithSameSetR,
                 ] = optional($videosWithSameSet)->partition(function ($i) use ($content) {
-                    return $i["content"]->id < $content->id;
+                    return $i['content']->id < $content->id;
                 });
                 
                 return [
@@ -332,9 +333,9 @@ class ContentController extends Controller
         $tags           = optional($content->tags)->tags;
         $tags           = implode(",", isset($tags) ? $tags : []);
         $contentset     = $content->set;
-        
-        $result = compact("content", "rootContentTypes", "validSinceTime", "tags",
-            "contentset"//            "rootContentTypes"
+    
+        $result = compact('content', 'rootContentTypes', 'validSinceTime', 'tags',
+            'contentset'//            "rootContentTypes"
         );
         
         $view = view("content.edit", $result);
@@ -384,7 +385,7 @@ class ContentController extends Controller
      */
     private function storeFilesOfContent(Content $content, array $files): void
     {
-        $disk = $content->isFree ? config("constants.DISK_FREE_CONTENT") : config("constants.DISK_PRODUCT_CONTENT");
+        $disk = $content->isFree ? config('constants.DISK_FREE_CONTENT') : config('constants.DISK_PRODUCT_CONTENT');
         
         $fileCollection = collect();
         
@@ -397,16 +398,16 @@ class ContentController extends Controller
                 continue;
             }
             $fileCollection->push([
-                "uuid"     => Str::uuid()
+                'uuid'     => Str::uuid()
                     ->toString(),
-                "disk"     => $disk,
-                "url"      => null,
-                "fileName" => $fileName,
-                "size"     => null,
-                "caption"  => $caption,
-                "res"      => $res,
-                "type"     => $type,
-                "ext"      => pathinfo($fileName, PATHINFO_EXTENSION),
+                'disk'     => $disk,
+                'url'      => null,
+                'fileName' => $fileName,
+                'size'     => null,
+                'caption'  => $caption,
+                'res'      => $res,
+                'type'     => $type,
+                'ext'      => pathinfo($fileName, PATHINFO_EXTENSION),
             ]);
         }
         /** @var TYPE_NAME $content */
@@ -421,11 +422,11 @@ class ContentController extends Controller
      */
     public function basicStore(Request $request)
     {
-        $contentset_id  = $request->get("contentset_id");
-        $contenttype_id = $request->get("contenttype_id");
-        $name           = $request->get("name");
-        $order          = $request->get("order");
-        $fileName       = $request->get("fileName");
+        $contentset_id  = $request->get('contentset_id');
+        $contenttype_id = $request->get('contenttype_id');
+        $name           = $request->get('name');
+        $order          = $request->get('order');
+        $fileName       = $request->get('fileName');
         $dateNow        = Carbon::now();
         
         $contentset  = Contentset::FindOrFail($contentset_id);
@@ -434,7 +435,7 @@ class ContentController extends Controller
         if (isset($lastContent)) {
             $newContent = $lastContent->replicate();
         } else {
-            session()->put("error", trans('content.No previous content found'));
+            session()->put('error', trans('content.No previous content found'));
             
             return redirect()->back();
         }
@@ -465,7 +466,7 @@ class ContentController extends Controller
             
             return redirect(action("Web\ContentController@edit", $newContent->id));
         } else {
-            throw new Exception("replicate Error!".$contentset_id);
+            throw new Exception('replicate Error!'.$contentset_id);
         }
     }
     

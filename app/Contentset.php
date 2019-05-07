@@ -6,6 +6,7 @@ use App\Classes\Taggable;
 use Laravel\Scout\Searchable;
 use App\Traits\favorableTraits;
 use App\Collection\SetCollection;
+use App\Traits\Set\TaggableSetTrait;
 use App\Collection\ProductCollection;
 use Illuminate\Support\Facades\Cache;
 use App\Collection\ContentCollection;
@@ -62,6 +63,7 @@ class Contentset extends BaseModel implements Taggable
 {
     use favorableTraits;
     use Searchable;
+    use TaggableSetTrait;
     
     /**
      * @var array
@@ -346,46 +348,6 @@ class Contentset extends BaseModel implements Taggable
         ]);
     }
     
-    public function retrievingTags()
-    {
-        /**
-         *      Retrieving Tags
-         */
-        $response = $this->sendRequest(config("constants.TAG_API_URL")."id/contentset/".$this->id, "GET");
-        
-        if ($response["statusCode"] == 200) {
-            $result = json_decode($response["result"]);
-            $tags   = $result->data->tags;
-        } else {
-            $tags = [];
-        }
-        
-        return $tags;
-    }
-    
-    public function getTaggableTags()
-    {
-        return $this->tags->tags;
-    }
-    
-    public function getTaggableId(): int
-    {
-        return $this->id;
-    }
-    
-    public function getTaggableScore()
-    {
-        return !is_null($this->created_at) ? $this->created_at->timestamp : null;
-    }
-    
-    public function isTaggableActive(): bool
-    {
-        if ($this->isActive() && isset($this->tags) && !empty($this->tags->tags)) {
-            return true;
-        }
-        
-        return false;
-    }
     
     public function isActive()
     {

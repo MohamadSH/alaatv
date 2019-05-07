@@ -21,7 +21,7 @@ trait DashboardTrait
      */
     public function getDashboardBlocks(): ?BlockCollection
     {
-        $result = (new BlockCollection());
+        $result = new BlockCollection();
         $blocks = [
             'products' => $this->makeBlockForUserProducts(),
             'favored'  => $this->makeBlockForUserFavored(),
