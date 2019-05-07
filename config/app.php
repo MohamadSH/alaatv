@@ -1,5 +1,7 @@
 <?php
 
+use App\PaymentModule\OnlinePaymentGatewayServiceProvider;
+
 return [
 
     'name' => env('APP_NAME', 'Laravel'),
@@ -87,7 +89,7 @@ return [
         Zarinpal\Laravel\ZarinpalServiceProvider::class,
         App\PaymentModule\Gateways\Zarinpal\ZarinpalServiceProvider::class,
         App\PaymentModule\Gateways\Behpardakht\BehpardakhtServiceProvider::class,
-
+        OnlinePaymentGatewayServiceProvider::class
     ],
     /*
     |--------------------------------------------------------------------------

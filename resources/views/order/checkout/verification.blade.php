@@ -94,7 +94,7 @@
                                             @foreach($result['messages'] as $message)
                                             {{ $message }}
                                             <br>
-                                        @endforeach
+                                            @endforeach
                                     </div>
                                 @endif
 

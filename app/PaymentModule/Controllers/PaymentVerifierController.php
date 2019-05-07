@@ -53,8 +53,9 @@ class PaymentVerifierController extends Controller
 
         Request::session()->flash('verifyResult', [
             'messages' => $verificationResult->getMessages(),
-            'cardPanMask' => '',
-            'cardPanMask' => '',
+            'cardPanMask' => $verificationResult->getCardPanMask(),
+            'RefID' => $verificationResult->getRefId(),
+            'isCanceled' => $verificationResult->isCanceled(),
         ]);
         
         return redirect()->route('showOnlinePaymentStatus', [

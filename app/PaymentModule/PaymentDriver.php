@@ -12,7 +12,7 @@ class PaymentDriver
         'mellat'   => BehpardakhtGateWay::class,
     ];
 
-    private static $gates = ['zarinpal' => 1 , 'mellat' => 2 ,];
+    private static $gates = ['zarinpal' => 1 , 'mellat' => 4 ,];
 
     public static function select($driver)
     {

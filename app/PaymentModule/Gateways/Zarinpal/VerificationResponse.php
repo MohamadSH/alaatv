@@ -58,7 +58,7 @@ class VerificationResponse implements OnlinePaymentVerificationResponseInterface
         return array_get($this->response, 'ExtraDetail.Transaction.CardPanHash');
     }
     
-    public function getMessages()
+    public function getMessages() : array
     {
         if ($this->isSuccessfulPayment()) {
             
@@ -79,6 +79,8 @@ class VerificationResponse implements OnlinePaymentVerificationResponseInterface
         if ($this->response['error']) {
             $message[] = $this->exceptions[$this->response['error']];
         }
+
+        return $message;
     }
     
     public function isSuccessfulPayment(): bool
@@ -102,6 +104,6 @@ class VerificationResponse implements OnlinePaymentVerificationResponseInterface
     
     public function isCanceled(): bool
     {
-        return $this->getStatus() === 'canceled';
+        return $this->getStatus() === 'error' and  $this->response['error'] = -21;
     }
 }
