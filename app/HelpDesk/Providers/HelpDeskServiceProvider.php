@@ -11,7 +11,6 @@ class HelpDeskServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(dirname(__DIR__, 1).'/config.php', 'helpDesk');
         $this->loadMigrationsFrom(dirname(__DIR__, 1).'/Database/Migrations');
-        
     }
     
     public function boot()

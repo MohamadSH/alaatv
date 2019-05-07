@@ -520,11 +520,42 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     /**
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      *
+     * @param  string                                 $roleName
+     *
+     * @return mixed
+     */
+    public function scopeRoleName($query, string $roleName)
+    {
+        $query->whereHas('roles', function ($q) use ($roleName) {
+            $q->where('name', $roleName);
+        });
+    }
+    
+    /**
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     *
+     *
+     * @param  string                                 $permissionName
+     *
+     * @return mixed
+     */
+    public function scopePermissionName($query, string $permissionName)
+    {
+        $query->whereHas('permissions', function ($q) use ($permissionName) {
+            $q->where('name', $permissionName);
+        });
+    }
+    
+    
+    
+    /**
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     *
      * @return mixed
      */
     public function scopeActive($query)
     {
-        return $query->where("userstatus_id", config("constants.USER_STATUS_ACTIVE"));
+        return $query->where('userstatus_id', config('constants.USER_STATUS_ACTIVE'));
     }
     
     /*

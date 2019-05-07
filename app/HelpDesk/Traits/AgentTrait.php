@@ -4,110 +4,56 @@
 namespace App\HelpDesk\Traits;
 
 
+use App\HelpDesk\Models\Ticket;
+use App\HelpDesk\Models\Category;
+
 trait AgentTrait
 {
     
-    /**
-     * Check if user is agent.
-     *
-     * @return bool
-     */
-    public static function isAgent($id = null)
+    
+    public function scopeHelpAgents($query)
     {
-        // TODO: Implement isAgent() method.
+        return $query->roleName(config('helpDesk.ROLE_HELP_DESK_AGENT'));
+//        $query->permissionName('ticketit_agent');
     }
     
-    /**
-     * Check if user is admin.
-     *
-     * @return bool
-     */
-    public static function isAdmin()
+    public function scopeHelpAdmins($query)
     {
-        // TODO: Implement isAdmin() method.
+        return $query->roleName(config('helpDesk.ROLE_HELP_DESK_ADMIN'));
+    }
+    
+    public function isHelpAgent(): bool
+    {
+        return $this->hasRole(config('helpDesk.ROLE_HELP_DESK_AGENT'));
+    }
+    
+    public function isHelpAdmin(): bool
+    {
+        return $this->hasRole(config('helpDesk.ROLE_HELP_DESK_Admin'));
     }
     
     /**
      * Check if user is the assigned agent for a ticket.
      *
-     * @param  int  $id  ticket id
+     * @param  Ticket  $ticket
      *
      * @return bool
      */
-    public static function isAssignedAgent($id)
+    public function isAssignedAgent(Ticket $ticket): bool
     {
-        // TODO: Implement isAssignedAgent() method.
+        return ($ticket->agent_id === $this->id && $this->isHelpAdmin());
     }
     
     /**
      * Check if user is the owner for a ticket.
      *
-     * @param  int  $id  ticket id
+     * @param  Ticket  $ticket
      *
      * @return bool
      */
-    public static function isTicketOwner($id)
+    public function isTicketOwner(Ticket $ticket): bool
     {
-        // TODO: Implement isTicketOwner() method.
-    }
-    
-    /**
-     * list of all agents and returning collection.
-     *
-     * @param        $query
-     * @param  bool  $paginate
-     *
-     * @return bool
-     *
-     * @internal param int $cat_id
-     */
-    public function scopeAgents($query, $paginate = false)
-    {
-        // TODO: Implement scopeAgents() method.
-    }
-    
-    /**
-     * list of all admins and returning collection.
-     *
-     * @param        $query
-     * @param  bool  $paginate
-     *
-     * @return bool
-     *
-     * @internal param int $cat_id
-     */
-    public function scopeAdmins($query, $paginate = false)
-    {
-        // TODO: Implement scopeAdmins() method.
-    }
-    
-    /**
-     * list of all agents and returning collection.
-     *
-     * @param        $query
-     * @param  bool  $paginate
-     *
-     * @return bool
-     *
-     * @internal param int $cat_id
-     */
-    public function scopeUsers($query, $paginate = false)
-    {
-        // TODO: Implement scopeUsers() method.
-    }
-    
-    /**
-     * list of all agents and returning lists array of id and name.
-     *
-     * @param $query
-     *
-     * @return bool
-     *
-     * @internal param int $cat_id
-     */
-    public function scopeAgentsLists($query)
-    {
-        // TODO: Implement scopeAgentsLists() method.
+        return ($this->id === $ticket->user_id);
     }
     
     /**
@@ -115,79 +61,42 @@ trait AgentTrait
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function categories()
+    public function helpCategories()
     {
-        // TODO: Implement categories() method.
+        return $this->belongsToMany(Category::class, 'help_categories_users', 'user_id', 'category_id');
     }
     
-    /**
-     * Get related agent tickets (To be deprecated).
-     */
-    public function agentTickets($complete = false)
+    public function tickets()
     {
-        // TODO: Implement agentTickets() method.
+        return $this->hasMany(Ticket::class, 'user_id');
     }
     
-    /**
-     * Get related user tickets (To be deprecated).
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function userTickets($complete = false)
+    public function agentTickets()
     {
-        // TODO: Implement userTickets() method.
+        return $this->hasMany(Ticket::class, 'agent_id');
     }
     
-    public function tickets($complete = false)
+    public function closeTickets()
     {
-        // TODO: Implement tickets() method.
+        return $this->tickets()
+            ->close();
     }
     
-    /**
-     * Get related agent total tickets.
-     */
-    public function agentTotalTickets()
+    public function agentCloseTickets()
     {
-        // TODO: Implement agentTotalTickets() method.
+        return $this->agentTickets()
+            ->close();
     }
     
-    /**
-     * Get related agent Completed tickets.
-     */
-    public function agentCompleteTickets()
+    public function openTickets()
     {
-        // TODO: Implement agentCompleteTickets() method.
+        return $this->tickets()
+            ->open();
     }
     
-    /**
-     * Get related agent tickets.
-     */
     public function agentOpenTickets()
     {
-        // TODO: Implement agentOpenTickets() method.
-    }
-    
-    /**
-     * Get related user total tickets.
-     */
-    public function userTotalTickets()
-    {
-        // TODO: Implement userTotalTickets() method.
-    }
-    
-    /**
-     * Get related user Completed tickets.
-     */
-    public function userCompleteTickets()
-    {
-        // TODO: Implement userCompleteTickets() method.
-    }
-    
-    /**
-     * Get related user tickets.
-     */
-    public function userOpenTickets()
-    {
-        // TODO: Implement userOpenTickets() method.
+        return $this->agentTickets()
+            ->open();
     }
 }

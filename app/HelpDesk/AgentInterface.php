@@ -4,137 +4,34 @@
 namespace App\HelpDesk;
 
 
+use App\HelpDesk\Models\Ticket;
+
 interface AgentInterface
 {
-    /**
-     * Check if user is agent.
-     *
-     * @return bool
-     */
-    public static function isAgent($id = null);
+    public function scopeHelpAgents($query);
     
-    /**
-     * Check if user is admin.
-     *
-     * @return bool
-     */
-    public static function isAdmin();
+    public function scopeHelpAdmins($query);
     
-    /**
-     * Check if user is the assigned agent for a ticket.
-     *
-     * @param  int  $id  ticket id
-     *
-     * @return bool
-     */
-    public static function isAssignedAgent($id);
+    public function isHelpAgent(): bool;
     
-    /**
-     * Check if user is the owner for a ticket.
-     *
-     * @param  int  $id  ticket id
-     *
-     * @return bool
-     */
-    public static function isTicketOwner($id);
+    public function isHelpAdmin(): bool;
     
-    /**
-     * list of all agents and returning collection.
-     *
-     * @param        $query
-     * @param  bool  $paginate
-     *
-     * @return bool
-     *
-     * @internal param int $cat_id
-     */
-    public function scopeAgents($query, $paginate = false);
+    public function isAssignedAgent(Ticket $ticket): bool;
     
-    /**
-     * list of all admins and returning collection.
-     *
-     * @param        $query
-     * @param  bool  $paginate
-     *
-     * @return bool
-     *
-     * @internal param int $cat_id
-     */
-    public function scopeAdmins($query, $paginate = false);
+    public function isTicketOwner(Ticket $ticket): bool;
     
-    /**
-     * list of all agents and returning collection.
-     *
-     * @param        $query
-     * @param  bool  $paginate
-     *
-     * @return bool
-     *
-     * @internal param int $cat_id
-     */
-    public function scopeUsers($query, $paginate = false);
+    public function helpCategories();
     
-    /**
-     * list of all agents and returning lists array of id and name.
-     *
-     * @param $query
-     *
-     * @return bool
-     *
-     * @internal param int $cat_id
-     */
-    public function scopeAgentsLists($query);
+    public function tickets();
     
-    /**
-     * Get related categories.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function categories();
+    public function agentTickets();
     
-    /**
-     * Get related agent tickets (To be deprecated).
-     */
-    public function agentTickets($complete = false);
+    public function closeTickets();
     
-    /**
-     * Get related user tickets (To be deprecated).
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function userTickets($complete = false);
+    public function agentCloseTickets();
     
+    public function openTickets();
     
-    public function tickets($complete = false);
-    
-    /**
-     * Get related agent total tickets.
-     */
-    public function agentTotalTickets();
-    
-    /**
-     * Get related agent Completed tickets.
-     */
-    public function agentCompleteTickets();
-    
-    /**
-     * Get related agent tickets.
-     */
     public function agentOpenTickets();
-    
-    /**
-     * Get related user total tickets.
-     */
-    public function userTotalTickets();
-    
-    /**
-     * Get related user Completed tickets.
-     */
-    public function userCompleteTickets();
-    
-    /**
-     * Get related user tickets.
-     */
-    public function userOpenTickets();
     
 }

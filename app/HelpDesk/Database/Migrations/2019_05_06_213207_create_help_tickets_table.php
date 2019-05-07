@@ -74,8 +74,8 @@ class CreateHelpTicketsTable extends Migration
                 ->unsigned();
             $table->integer('category_id')
                 ->unsigned();
-            
-            $table->timestamp('completed_at')
+    
+            $table->timestamp('close_at')
                 ->nullable();
             $table->timestamps();
             $table->softDeletes();
