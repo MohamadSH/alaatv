@@ -3,26 +3,42 @@
 namespace App\HelpDesk\Models;
 
 use App\User;
+use Eloquent;
 use App\BaseModel;
+use Illuminate\Database\Eloquent\Builder;
+use App\HelpDesk\Collection\CommentCollection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\HelpDesk\Models\Comment
  *
- * @property-read \App\HelpDesk\Models\Ticket $ticket
- * @property-read \App\User                   $user
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Comment newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Comment newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Comment query()
- * @mixin \Eloquent
+ * @property-read Ticket $ticket
+ * @property-read User   $user
+ * @method static Builder|Comment newModelQuery()
+ * @method static Builder|Comment newQuery()
+ * @method static Builder|Comment query()
+ * @mixin Eloquent
  */
 class Comment extends BaseModel
 {
     protected $table = 'help_comments';
     
     /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array  $models
+     *
+     * @return CommentCollection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new CommentCollection($models);
+    }
+    
+    /**
      * Get related ticket.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function ticket()
     {
@@ -32,7 +48,7 @@ class Comment extends BaseModel
     /**
      * Get comment owner.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function user()
     {

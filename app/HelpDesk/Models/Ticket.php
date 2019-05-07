@@ -3,25 +3,29 @@
 namespace App\HelpDesk\Models;
 
 use App\User;
+use Eloquent;
 use App\BaseModel;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use App\HelpDesk\Collection\TicketCollection;
 
 /**
  * App\HelpDesk\Models\Ticket
  *
- * @property-read \App\User                                                               $agent
- * @property-read \App\HelpDesk\Models\Category                                           $category
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\HelpDesk\Models\Comment[] $comments
- * @property-read \App\HelpDesk\Models\Priority                                           $priority
- * @property-read \App\HelpDesk\Models\Status                                             $status
- * @property-read \App\User                                                               $user
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket agentTickets($id)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket close()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket open()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket userTickets($id)
- * @mixin \Eloquent
+ * @property-read User                 $agent
+ * @property-read Category             $category
+ * @property-read Collection|Comment[] $comments
+ * @property-read Priority             $priority
+ * @property-read Status               $status
+ * @property-read User                 $user
+ * @method static Builder|Ticket agentTickets($id)
+ * @method static Builder|Ticket close()
+ * @method static Builder|Ticket newModelQuery()
+ * @method static Builder|Ticket newQuery()
+ * @method static Builder|Ticket open()
+ * @method static Builder|Ticket query()
+ * @method static Builder|Ticket userTickets($id)
+ * @mixin Eloquent
  */
 class Ticket extends BaseModel
 {
@@ -32,6 +36,18 @@ class Ticket extends BaseModel
         'deleted_at',
         'close_at',
     ];
+    
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array  $models
+     *
+     * @return TicketCollection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new TicketCollection($models);
+    }
     
     public function isClose(): bool
     {
