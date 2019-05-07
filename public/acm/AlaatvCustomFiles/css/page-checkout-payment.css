@@ -73,8 +73,15 @@
     width: 100%;
 }
 
+/*media query*/
 @media (max-width: 1024px) {
     .m-portlet--creative.noHeadText > .m-portlet__body {
         padding-bottom: 2.2rem
+    }
+}
+
+@media (max-width: 767.98px) {
+    .notIncludedProductsInCoupon {
+        padding: 0 5px;
     }
 }

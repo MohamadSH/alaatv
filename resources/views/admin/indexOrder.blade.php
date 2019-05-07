@@ -745,9 +745,8 @@
     <script src="/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type="text/javascript"></script>
     <script type="text/javascript">
         @permission((config('constants.LIST_ORDER_ACCESS')));
-        function makeDataTable_loadWithAjax_orders() {
-
-            $("#order-portlet-loading").removeClass("d-none");
+        function makeDataTable_loadWithAjax_orders(dontLoadAjax) {
+            
             $('#order_table > tbody').html("");
             let defaultContent = "<span class=\"m-badge m-badge--wide label-sm m-badge--danger\"> درج نشده </span>";
             let columns = [
@@ -1222,7 +1221,14 @@
                 mApp.unblock('#order_table_wrapper');
                 return json.data;
             };
-            makeDataTable_loadWithAjax("order_table", "/order", columns, dataFilter, ajaxData, dataSrc);
+            let url = '/order';
+            if (dontLoadAjax) {
+                url = null;
+            } else {
+                $("#order-portlet-loading").removeClass("d-none");
+            }
+            let dataTable = makeDataTable_loadWithAjax("order_table", url, columns, dataFilter, ajaxData, dataSrc);
+            return dataTable;
         }
         @endpermission;
     </script>
@@ -1283,7 +1289,7 @@
             var newDataTable = $("#order_table").DataTable();
             newDataTable.destroy();
             // makeDataTable("order_table");
-            makeDataTable_loadWithAjax_orders();
+            makeDataTable_loadWithAjax_orders(true);
             $("#order-expand").trigger("click");
             $("#order_table > tbody .dataTables_empty").text("برای نمایش اطلاعات ابتدا فیلتر کنید").addClass("m--font-danger bold");
         @endpermission;

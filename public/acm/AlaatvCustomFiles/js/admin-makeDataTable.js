@@ -81,7 +81,7 @@ function makeDataTable(id) {
 function makeDataTable_loadWithAjax(id, url, columns, dataFilter, ajaxData, dataSrc) {
     var table = $('#'+id);
 
-    var oTable = table.dataTable({
+    let dataTableOptions = {
         // Internationalisation. For more info refer to http://datatables.net/manual/i18n
         "language": {
             "aria": {
@@ -145,18 +145,20 @@ function makeDataTable_loadWithAjax(id, url, columns, dataFilter, ajaxData, data
         // So when dropdowns used the scrollable div should be removed.
         //"dom": "<'row' <'col-md-12'T>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
 
-
-        "processing": true,
-        "serverSide": true,
-        "ajax": {
+        "columns": columns
+    };
+    if (url !== null) {
+        dataTableOptions.ajax = {
             "url": url,
             "data": ajaxData,
             'dataFilter': dataFilter,
             "dataSrc": dataSrc
-        },
-
-        "columns": columns
-    });
+        };
+        dataTableOptions.processing = true;
+        dataTableOptions.serverSide = true;
+    }
+    var dataTable = table.dataTable(dataTableOptions);
+    return dataTable;
 }
 
 function getNextPageParam(start, length) {
@@ -418,7 +420,7 @@ var TableDatatablesManaged = function () {
                 motherNumbers = 0;
             }
         })
-    }
+    };
 
 
     return {

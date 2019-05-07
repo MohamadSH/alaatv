@@ -86,3 +86,7 @@ select.form-control {
 .m-badge.m-badge--info a {
     color: white;
 }
+
+.form-control {
+    height: calc(1.25em + 1.7rem + 4px);
+}

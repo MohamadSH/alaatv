@@ -18,6 +18,10 @@ var CheckoutPaymentUi = function () {
         return $('#invoiceInfo-couponCode').val();
     }
 
+    function setCouponCode(code) {
+        $('#invoiceInfo-couponCode').val(code);
+    }
+
     function refreshUiBasedOnPaymentType() {
         let selectedObject = $('input[type="radio"][name="radioPaymentType"]:checked');
         let radioPaymentType = selectedObject.val();
@@ -198,12 +202,14 @@ var CheckoutPaymentUi = function () {
         discountCodeValue.val('');
     }
     function refreshUiBasedOnHasntDiscountCodeStatus() {
-        $('#discountCodeValue').val(getCouponCode());
+        $('#discountCodeValue').val((getCouponCode()));
         if(!$('#hasntDiscountCode').prop('checked')) {
             setUiHasDiscountCode();
         } else {
+            if (getCouponCode().trim().length > 0) {
+                detachCoupon(false);
+            }
             setUiHasntDiscountCode();
-            detachCoupon(false);
         }
     }
 
@@ -318,7 +324,7 @@ var CheckoutPaymentUi = function () {
 
                     setFinalCost(data.price.final);
                     PrintnotIncludedProductsInCoupon([]);
-
+                    setCouponCode('');
                     if (showMessage === true) {
                         toastr.success('کد تخفیف شما حذف شد.');
                     }
@@ -395,6 +401,16 @@ var CheckoutPaymentUi = function () {
 }();
 
 var lockDonateAjaxForSliderInit = true;
+
+function redirectToPaymentGateway() {
+    window.location.href= $('input[type="radio"][name="radioBankType"]:checked').val();
+
+    mApp.block('.btnSubmitOrderWraper', {
+        type: 'loader',
+        state: 'info',
+    });
+}
+
 jQuery(document).ready(function () {
     let n = document.getElementById('m_nouislider_1_input');
     let e = document.getElementById('m_nouislider_1');
@@ -418,24 +434,24 @@ jQuery(document).ready(function () {
     });
 
     $(document).on('switchChange.bootstrapSwitch', '#hasntDonate', function (e) {
-        console.log('switchChange.bootstrapSwitch');
         CheckoutPaymentUi.refreshUiBasedOnDonateStatus($('#m_nouislider_1_input').val());
     });
 
     noUiSlider.create(e, {
         start: [5],
-        connect: [!0, !1],
+        // connect: [!0, !1],
         step: 1,
         range: {min: [1], max: [50]},
         format: wNumb({decimals: 0})
     });
 
+
     e.noUiSlider.on('update', function (e, t) {
         n.value = e[t];
-        if (!lockDonateAjaxForSliderInit) {
-            CheckoutPaymentUi.refreshUiBasedOnDonateStatus(n.value);
-        }
-        lockDonateAjaxForSliderInit = false;
+        // if (!lockDonateAjaxForSliderInit) {
+        //     CheckoutPaymentUi.refreshUiBasedOnDonateStatus(n.value);
+        // }
+        // lockDonateAjaxForSliderInit = false;
     });
 
     n.addEventListener('change', function () {
