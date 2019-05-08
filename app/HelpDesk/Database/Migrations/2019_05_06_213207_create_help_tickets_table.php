@@ -117,7 +117,7 @@ class CreateHelpTicketsTable extends Migration
             
             $table->integer('user_id')
                 ->unsigned();
-            $table->bigIncrements('ticket_id')
+            $table->integer('ticket_id')
                 ->unsigned();
             
             $table->timestamps();
@@ -130,7 +130,7 @@ class CreateHelpTicketsTable extends Migration
             
             $table->integer('user_id')
                 ->unsigned();
-            $table->bigIncrements('ticket_id')
+            $table->integer('ticket_id')
                 ->unsigned();
             
             $table->timestamps();
