@@ -25,5 +25,10 @@ class HelpDeskServiceProvider extends ServiceProvider
         $this->publishes([
             dirname(__DIR__, 1).'/config.php' => config_path('helpDesk.php'),
         ], 'config');
+    
+        $this->loadViewsFrom(dirname(__DIR__, 1).'/Views', 'helpDesk');
+    
+        $this->loadRoutesFrom(dirname(__DIR__, 1).'/Route/web.php');
+        $this->loadRoutesFrom(dirname(__DIR__, 1).'/Route/api.php');
     }
 }

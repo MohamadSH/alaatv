@@ -13,28 +13,15 @@ class TicketController extends Controller
      */
     public function __construct()
     {
-    
+        $this->callMiddlewares();
     }
     
-    /**
-     * @param  Agent  $agent
-     *
-     * @return array
-     */
-    private function getAuthExceptionArray(): array
-    {
-        return [
-        
-        ];
-    }
     
     /**
      * @param $authException
      */
     private function callMiddlewares(): void
     {
-        $this->middleware('auth', ['except' => $this->getAuthExceptionArray()]);
-        
         /*$this->middleware('permission:'.config('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS'), [
             'only' => [
                 'store',
@@ -62,6 +49,13 @@ class TicketController extends Controller
 
     public function index()
     {
+        $tickets = Ticket::all();
+    
+        //User Tickets
+        //Agent Tickets
+        //All Tickets -> Admin
+    
+        return view('helpDesk::ticket.index', compact('tickets'));
     }
     
     public function create()
