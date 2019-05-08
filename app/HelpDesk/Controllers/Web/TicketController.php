@@ -9,83 +9,87 @@ use App\Http\Controllers\Controller;
 class TicketController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * TicketController constructor.
      */
+    public function __construct()
+    {
+    
+    }
+    
+    /**
+     * @param  Agent  $agent
+     *
+     * @return array
+     */
+    private function getAuthExceptionArray(): array
+    {
+        return [
+        
+        ];
+    }
+    
+    /**
+     * @param $authException
+     */
+    private function callMiddlewares(): void
+    {
+        $this->middleware('auth', ['except' => $this->getAuthExceptionArray()]);
+        
+        /*$this->middleware('permission:'.config('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS'), [
+            'only' => [
+                'store',
+                'create',
+                'create2',
+            ],
+        ]);
+        $this->middleware('permission:'.config('constants.EDIT_EDUCATIONAL_CONTENT'), [
+            'only' => [
+                'update',
+                'edit',
+            ],
+        ]);
+        $this->middleware('permission:'.config('constants.REMOVE_EDUCATIONAL_CONTENT_ACCESS'),
+            ['only' => 'destroy']);
+        
+        $this->middleware('convert:order|title', [
+            'only' => [
+                'store',
+                'update',
+            ],
+        ]);*/
+    }
+    
+
     public function index()
     {
-        //
     }
     
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
     }
     
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function store(Request $request)
     {
-        //
     }
     
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\HelpDesk\Models\Ticket  $ticket
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function show(Ticket $ticket)
     {
-        //
     }
     
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\HelpDesk\Models\Ticket  $ticket
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function edit(Ticket $ticket)
     {
-        //
     }
     
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request     $request
-     * @param  \App\HelpDesk\Models\Ticket  $ticket
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function update(Request $request, Ticket $ticket)
     {
-        //
     }
     
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\HelpDesk\Models\Ticket  $ticket
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy(Ticket $ticket)
     {
-        //
     }
 }
