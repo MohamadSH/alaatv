@@ -91,7 +91,7 @@ class RedirectUserToPaymentPage extends Controller
      */
     private function sendErrorResponse(string $msg, int $statusCode): JsonResponse
     {
-        respondWith()->json(['message' => $msg], $statusCode);
+        respondWith(response()->json(['message' => $msg], $statusCode));
     }
 
     /**
