@@ -49,6 +49,8 @@ use Illuminate\Support\Facades\Schema;
  */
 class Bon extends BaseModel
 {
+    const ALAA_BON = 1;
+
     /**
      * @var array
      */
