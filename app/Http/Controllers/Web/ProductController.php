@@ -143,18 +143,15 @@ class ProductController extends Controller
     public function store(InsertProductRequest $request)
     {
         $product = new Product();
-        
-        if ($this->strIsEmpty($request->get('bonPlus'))) {
+
+        $bonPlus = $request->get('bonPlus');
+        if ($this->strIsEmpty($bonPlus))
             $bonPlus = 0;
-        } else {
-            $bonPlus = $request->get('bonPlus');
-        }
-        
-        if ($this->strIsEmpty($request->get('bonDiscount'))) {
+
+        $bonDiscount = $request->get('bonDiscount');
+        if ($this->strIsEmpty($bonDiscount))
             $bonDiscount = 0;
-        } else {
-            $bonDiscount = $request->get('bonDiscount');
-        }
+
         $bonId = $request->get('bon_id');
         
         $this->fillProductFromRequest($request, $product);
@@ -183,9 +180,12 @@ class ProductController extends Controller
         $files     = $request->has("files") ? [$request->files] : [];
         $images    = $request->has("image") ? [$request->image] : [];
         $isFree    = $request->has("isFree");
-        
+
         $product->fill($inputData);
-        
+
+        if ($this->strIsEmpty($product->discount))
+            $product->discount  = 0;
+
         $product->isFree = $isFree;
         if (!$this->strIsEmpty($product->introVideo)) {
             $this->makeValidUrl($product->introVideo);
