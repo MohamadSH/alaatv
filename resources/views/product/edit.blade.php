@@ -52,48 +52,48 @@
                 <div class = "m-portlet__body">
                     <div class = "m-portlet__body-progress">Loading</div>
                     {!! Form::model($product,['files'=>true,'method' => 'PUT','action' => ['Web\ProductController@update',$product], 'class'=>'form-horizontal']) !!}
-                    {{--                            @include('product.form' )--}}
+                                                @include('product.form' )
                     {!! Form::close() !!}
                 </div>
             </div>
             <!-- END SAMPLE FORM PORTLET-->
         </div>
 
-        {{--<div class="col-md-6">--}}
-        {{--<div class="actions">--}}
-        {{--<div class="btn-group">--}}
-        {{--<a class="btn btn-sm btn-info dropdown-toggle" href="{{action("Web\ProductController@editAttributevalues", $product)}}" >اصلاح مقدار صفت ها--}}
-        {{--<i class="fa fa-angle-left"></i>--}}
-        {{--</a>--}}
-        {{--</div>--}}
-        {{--</div>--}}
-        {{--</div>--}}
-        @permission((config('constants.LIST_CONFIGURE_PRODUCT_ACCESS')))
-        {{--@if($product->hasChildren())--}}
-        <div class = "col-md-6 ">
-            {{--                @include('product.partials.configureTableForm')--}}
+       {{-- <div class="col-md-6">
+        <div class="actions">
+        <div class="btn-group">
+        <a class="btn btn-sm btn-info dropdown-toggle" href="{{action("Web\ProductController@editAttributevalues", $product)}}" >اصلاح مقدار صفت ها
+        <i class="fa fa-angle-left"></i>
+        </a>
         </div>
-        {{--@endif--}}
+        </div>
+        </div>--}}
+        @permission((config('constants.LIST_CONFIGURE_PRODUCT_ACCESS')))
+        @if($product->hasChildren())
+        <div class = "col-md-6 ">
+                            @include('product.partials.configureTableForm')
+        </div>
+        @endif
         @endpermission
 
         @permission((config('constants.LIST_PRODUCT_FILE_ACCESS')))
         <div class = "col-md-6">
-            {{--                @include('product.productFile.index')--}}
+                            @include('product.productFile.index')
         </div>
         @endpermission
 
         @permission((config('constants.LIST_PRODUCT_SAMPLE_PHOTO_ACCESS')))
         <div class = "col-md-6">
-            {{--                @include('product.samplePhoto.index')--}}
+                            @include('product.samplePhoto.index')
         </div>
         @endpermission
 
         <div class = "col-md-6">
-            {{--            @include("product.complimentary")--}}
+                        @include("product.complimentary")
         </div>
 
         <div class = "col-md-6">
-            {{--@include("product.gift")--}}
+            @include("product.gift")
         </div>
 
         <!--begin::Modal-->

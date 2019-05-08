@@ -1145,11 +1145,11 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function productFileTypesOrder(): collection
     {
         $defaultProductFileOrders = collect();
-        $productFileTypes         = Productfiletype::pluck('displayName', 'id')
+        $productFileTypes         = Productfiletype::pluck('name', 'id')
             ->toArray();
-        
+
         foreach ($productFileTypes as $key => $productFileType) {
-            $lastProductFile = $this->validProductfiles($key, 0)
+            $lastProductFile = $this->validProductfiles($productFileType, 0)
                 ->get()
                 ->first();
             if (isset($lastProductFile)) {

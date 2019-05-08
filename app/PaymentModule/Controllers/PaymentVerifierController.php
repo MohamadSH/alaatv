@@ -24,8 +24,8 @@ class PaymentVerifierController extends Controller
      */
     public function verify(string $paymentMethod, string $device)
     {
-        PaymentDriver::select($paymentMethod);
-        $authority = OnlineGateWay::getAuthorityValue();
+        $paymentClient = PaymentDriver::select($paymentMethod);
+        $authority = $paymentClient->getAuthorityValue();
 
         $transaction = TransactionRepo::getTransactionByAuthority($authority)
             ->orFailWith([Responses::class, 'transactionNotFoundError']);
@@ -34,7 +34,7 @@ class PaymentVerifierController extends Controller
         /**
          * @var OnlinePaymentVerificationResponseInterface $verificationResult
          */
-        $verificationResult = OnlineGateWay::verifyPayment($money, $authority);
+        $verificationResult = $paymentClient->verifyPayment($money, $authority);
         
         $transaction->order->detachUnusedCoupon();
         if ($verificationResult->isSuccessfulPayment()) {
