@@ -301,7 +301,7 @@ class ProductController extends Controller
         return view('product.show', compact('product'));
     }
     
-    public function edit($product)
+    public function edit(Product $product)
     {
         $bonName                  = config('constants.BON1');
         $amountLimit              = Product::AMOUNT_LIMIT;
