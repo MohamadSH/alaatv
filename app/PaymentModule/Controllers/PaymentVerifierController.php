@@ -2,15 +2,15 @@
 
 namespace  App\PaymentModule\Controllers;
 
-use AlaaTV\Gateways\Facades\OnlineGateWay;
-use AlaaTV\Gateways\Money;
-use AlaaTV\Gateways\PaymentDriver;
 use App\Order;
+use AlaaTV\Gateways\Money;
+use App\PaymentModule\Responses;
 use App\Traits\HandleOrderPayment;
 use Illuminate\Routing\Controller;
+use AlaaTV\Gateways\PaymentDriver;
 use App\Repositories\TransactionRepo;
+use AlaaTV\Gateways\Facades\OnlineGateWay;
 use Illuminate\Support\Facades\{Cache, Request};
-use App\PaymentModule\Responses;
 
 class PaymentVerifierController extends Controller
 {

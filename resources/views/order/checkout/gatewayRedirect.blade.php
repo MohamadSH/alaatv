@@ -215,7 +215,7 @@
         </div>
     </div>
 </div>
-{!! \App\PaymentModule\HtmlFormGenerator::generate($authority, 4) !!}
+{!! \AlaaTV\Gateways\HtmlFormGenerator::generate($authority, 4) !!}
 </body>
 </html>
 

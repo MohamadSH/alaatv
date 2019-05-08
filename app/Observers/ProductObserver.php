@@ -92,7 +92,29 @@ class ProductObserver
     
     public function saved(Product $product)
     {
+        self::shiftProductOrders($product->order);
+
         $this->sendTagsOfTaggableToApi($product, $this->tagging);
         Artisan::call('cache:clear');
     }
+
+    /**
+     *
+     *
+     * @param  int  $order
+     *
+     * @return void
+     */
+    public static function shiftProductOrders($order): void
+    {
+        $productsWithSameOrder = Product::getProducts(0, 0)
+            ->where("order", $order)
+            ->get();
+        foreach ($productsWithSameOrder as $productWithSameOrder) {
+            $productWithSameOrder->order = $productWithSameOrder->order + 1;
+            $productWithSameOrder->update();
+        }
+    }
+
+
 }
