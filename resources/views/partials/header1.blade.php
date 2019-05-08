@@ -63,40 +63,31 @@
                             <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left">
                                 <ul class="m-menu__subnav">
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="#" class="m-menu__link ">
-                                            <i class="m-menu__link-icon flaticon-diagram"></i>
+                                        <a href="{{ route('content.index', 'tags[]=دهم&tags[]=رشته_ریاضی') }}" class="m-menu__link ">
+                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
                                                     <span class="m-menu__link-text">رشته ریاضی</span>
-                                                    <span class="m-menu__link-badge">
-                                                        <span class="m-badge m-badge--success">1</span>
-                                                    </span>
                                                 </span>
                                             </span>
                                         </a>
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="#" class="m-menu__link ">
-                                            <i class="m-menu__link-icon flaticon-diagram"></i>
+                                        <a href="{{ route('content.index', 'tags[]=دهم&tags[]=رشته_تجربی') }}" class="m-menu__link ">
+                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
                                                     <span class="m-menu__link-text">رشته تجربی</span>
-                                                    <span class="m-menu__link-badge">
-                                                        <span class="m-badge m-badge--success">2</span>
-                                                    </span>
                                                 </span>
                                             </span>
                                         </a>
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="#" class="m-menu__link ">
-                                            <i class="m-menu__link-icon flaticon-diagram"></i>
+                                        <a href="{{ route('content.index', 'tags[]=دهم&tags[]=رشته_انسانی') }}" class="m-menu__link ">
+                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
                                                     <span class="m-menu__link-text">رشته انسانی</span>
-                                                    <span class="m-menu__link-badge">
-                                                        <span class="m-badge m-badge--success">3</span>
-                                                    </span>
                                                 </span>
                                             </span>
                                         </a>
@@ -114,40 +105,31 @@
                             <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left">
                                 <ul class="m-menu__subnav">
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="#" class="m-menu__link ">
-                                            <i class="m-menu__link-icon flaticon-diagram"></i>
+                                        <a href="{{ route('content.index', 'tags[]=یازدهم&tags[]=رشته_ریاضی') }}" class="m-menu__link ">
+                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
                                                     <span class="m-menu__link-text">رشته ریاضی</span>
-                                                    <span class="m-menu__link-badge">
-                                                        <span class="m-badge m-badge--success">1</span>
-                                                    </span>
                                                 </span>
                                             </span>
                                         </a>
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="#" class="m-menu__link ">
-                                            <i class="m-menu__link-icon flaticon-diagram"></i>
+                                        <a href="{{ route('content.index', 'tags[]=یازدهم&tags[]=رشته_تجربی') }}" class="m-menu__link ">
+                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
                                                     <span class="m-menu__link-text">رشته تجربی</span>
-                                                    <span class="m-menu__link-badge">
-                                                        <span class="m-badge m-badge--success">2</span>
-                                                    </span>
                                                 </span>
                                             </span>
                                         </a>
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="#" class="m-menu__link ">
-                                            <i class="m-menu__link-icon flaticon-diagram"></i>
+                                        <a href="{{ route('content.index', 'tags[]=یازدهم&tags[]=رشته_انسانی') }}" class="m-menu__link ">
+                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
                                                     <span class="m-menu__link-text">رشته انسانی</span>
-                                                    <span class="m-menu__link-badge">
-                                                        <span class="m-badge m-badge--success">3</span>
-                                                    </span>
                                                 </span>
                                             </span>
                                         </a>
@@ -172,40 +154,31 @@
                             <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left">
                                 <ul class="m-menu__subnav">
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="#" class="m-menu__link ">
-                                            <i class="m-menu__link-icon flaticon-diagram"></i>
+                                        <a href="{{ route('content.index', 'tags[]=کنکور&tags[]=رشته_ریاضی') }}" class="m-menu__link ">
+                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
                                                     <span class="m-menu__link-text">رشته ریاضی</span>
-                                                    <span class="m-menu__link-badge">
-                                                        <span class="m-badge m-badge--success">1</span>
-                                                    </span>
                                                 </span>
                                             </span>
                                         </a>
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="#" class="m-menu__link ">
-                                            <i class="m-menu__link-icon flaticon-diagram"></i>
+                                        <a href="{{ route('content.index', 'tags[]=کنکور&tags[]=رشته_تجربی') }}" class="m-menu__link ">
+                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
                                                     <span class="m-menu__link-text">رشته تجربی</span>
-                                                    <span class="m-menu__link-badge">
-                                                        <span class="m-badge m-badge--success">2</span>
-                                                    </span>
                                                 </span>
                                             </span>
                                         </a>
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="#" class="m-menu__link ">
-                                            <i class="m-menu__link-icon flaticon-diagram"></i>
+                                        <a href="{{ route('content.index', 'tags[]=کنکور&tags[]=رشته_انسانی') }}" class="m-menu__link ">
+                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
                                                     <span class="m-menu__link-text">رشته انسانی</span>
-                                                    <span class="m-menu__link-badge">
-                                                        <span class="m-badge m-badge--success">3</span>
-                                                    </span>
                                                 </span>
                                             </span>
                                         </a>
@@ -340,6 +313,7 @@
                                         </div>
                                     </div>
                                 </li>
+                                
                             @else
                                 <li class="a--login-item m-nav__item m-topbar__quick-actions m-topbar__quick-actions--img">
                                     <a href="{{ route("login") }}" class="m-nav__link">

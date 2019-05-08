@@ -27,7 +27,7 @@
     <!--end::Global Theme Styles -->
 
     @yield('page-css')
-
+    
     <link rel="shortcut icon" href="@if(isset($wSetting->site->favicon)) {{route('image', ['category'=>'11','w'=>'150' , 'h'=>'150' ,  'filename' =>  $wSetting->site->favicon ])}} @endif"/>
     <!--begin: csrf token -->
     <script>

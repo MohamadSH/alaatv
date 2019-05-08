@@ -177,3 +177,12 @@
     font-size: 1.1rem;
     line-height: 0;
 }
+
+
+.majorIcon {
+    width: 50px !important;
+    text-align: center;
+}
+.majorIcon img {
+    width: 40px;
+}

@@ -753,7 +753,7 @@
 
 @section('page-js')
     <script>
-        var orders = {!! $orders !!};
+        let orders = {!! json_encode($orders) !!};
     </script>
     <script src="{{ mix('/js/user-orders.js') }}"></script>
 @endsection
