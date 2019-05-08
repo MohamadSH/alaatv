@@ -2,21 +2,20 @@
 
 namespace App\PaymentModule\Controllers;
 
-use App\PaymentModule\OnlineGateWay;
-use App\PaymentModule\Repositories\OrdersRepo;
+use AlaaTV\Gateways\Money;
 use App\User;
 use App\Order;
 use App\Transaction;
-use App\PaymentModule\Money;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\PaymentModule\Responses;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
-use App\PaymentModule\PaymentDriver;
+use AlaaTV\Gateways\PaymentDriver;
 use App\Repositories\TransactionRepo;
+use AlaaTV\Gateways\Facades\OnlineGateWay;
+use App\PaymentModule\Repositories\OrdersRepo;
 use App\Http\Controllers\Web\TransactionController;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
 
 class RedirectUserToPaymentPage extends Controller
