@@ -676,30 +676,10 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         if ($this->strIsEmpty($value)) {
             $value = 0;
         }
-
-        self::shiftProductOrders($value);
     
         $this->attributes["order"] = $value;
     }
-    
-    /**
-     *
-     *
-     * @param  int  $order
-     *
-     * @return void
-     */
-    public static function shiftProductOrders($order): void
-    {
-        $productsWithSameOrder = self::getProducts(0, 0)
-            ->where("order", $order)
-            ->get();
-        foreach ($productsWithSameOrder as $productWithSameOrder) {
-            $productWithSameOrder->order = $productWithSameOrder->order + 1;
-            $productWithSameOrder->update();
-        }
-    }
-    
+
     public function producttype()
     {
         return $this->belongsTo('App\Producttype')
@@ -1591,24 +1571,23 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     }
 
     public function getEnableAttribute($value){
-        if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS')))
+        //ToDo
+//        if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS')))
             return $value;
-
-        return null;
     }
 
     public function getAttributeSetAttribute(){
         $product = $this;
         $key   = "product:attributeset:".$product->cacheKey();
         return Cache::tags(["product"])->remember($key, config("constants.CACHE_600"), function () use ($product) {
-                if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS')))
+            //ToDo
+//                if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS')))
                     return $product->attributeset()->first()->setVisible([
                         'name',
                         'description',
                         'order'
                     ]);
 
-                return null;
             });
     }
 
