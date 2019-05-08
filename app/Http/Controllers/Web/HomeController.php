@@ -94,7 +94,7 @@ class HomeController extends Controller
     public function __construct(Response $response, Websitesetting $setting)
     {
         $authException = [
-            'debug',
+//            'debug',
             'newDownload',
             'download',
             'telgramAgent',
@@ -109,7 +109,7 @@ class HomeController extends Controller
             'sendMail',
             'rules',
             'siteMapXML',
-            'uploadFile',
+//            'uploadFile',
             'search',
             'schoolRegisterLanding',
             'lernitoTree',
