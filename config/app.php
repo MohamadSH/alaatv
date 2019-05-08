@@ -84,11 +84,8 @@ return [
         App\Providers\ComposerServiceProvider::class,
         App\Providers\TagManagerProvider::class,
         App\Providers\InterfaceBindingProvider::class,
-
-//        Zarinpal\Laravel\ZarinpalServiceProvider::class,
-
-
-//        App\HelpDesk\Providers\HelpDeskServiceProvider::class,
+    
+        App\HelpDesk\Providers\HelpDeskServiceProvider::class,
 
     ],
     /*
