@@ -722,6 +722,9 @@ var MultiLevelSearch = function () {
                     .select2({closeOnSelect: true})
                     .on('select2:select', function (event) {
                         $('.a--multi-level-search select').select2("close");
+                    })
+                    .on('select2:close', function (event) {
+                        $('.a--multi-level-search select').select2("close");
                     });
                 selectorItem.fadeIn();
             } else {
@@ -729,6 +732,15 @@ var MultiLevelSearch = function () {
                 $('#' + select2Id)
                     .select2({closeOnSelect: true})
                     .on('select2:select', function (event) {
+                        $('.a--multi-level-search select').select2('destroy');
+                        $('.a--multi-level-search select').select2({closeOnSelect: true});
+                        $('.a--multi-level-search select').select2("close");
+                        $('.a--multi-level-search select').select2("close");
+                    })
+                    .on('select2:close', function (event) {
+                        $('.a--multi-level-search select').select2('destroy');
+                        $('.a--multi-level-search select').select2({closeOnSelect: true});
+                        $('.a--multi-level-search select').select2("close");
                         $('.a--multi-level-search select').select2("close");
                     });
                 selectorItem.fadeIn();
