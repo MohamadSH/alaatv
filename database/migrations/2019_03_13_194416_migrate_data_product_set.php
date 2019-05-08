@@ -424,7 +424,7 @@ class MigrateDataProductSet extends Migration
             $set               = Contentset::create([
                 'name'  => $product->name,
                 'photo' => $setImage,
-                'tags'  => (array) optional($product->grandParent->tags)->tags,
+                'tags'  => (array) optional(optional($product->grandParent)->tags)->tags,
             ]);
             $set->enable       = 1;
             $set->display      = 1;
@@ -480,7 +480,7 @@ class MigrateDataProductSet extends Migration
             'metaTitle'       => null,
             'metaDescription' => null,
             'metaKeywords'    => null,
-            'tags'            => (array) optional($product->grandParent->tags)->tags,
+            'tags'            => (array) optional(optional($product->grandParent)->tags)->tags,
             'author_id'       => $this->productAuthorLookupTable[$product->id] ?: null,
             'template_id'     => $productTypeContentTemplateLookupTable[$productFile->productfiletype_id],
             'contenttype_id'  => $productTypeContentTypeLookupTable[$productFile->productfiletype_id],
