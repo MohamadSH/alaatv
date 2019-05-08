@@ -297,14 +297,6 @@ class ProductController extends Controller
             return $this->response->setStatusCode(Response::HTTP_OK)
                 ->setContent($product);
         }
-
-        return $product;
-
-//        dd($product);
-//        return $product;
-//        return $product->type['type'];
-//        return $product->attributes->get('main');
-//        return $product->type->get('main');
         
         return view('product.show', compact('product'));
     }
