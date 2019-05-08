@@ -207,11 +207,18 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'samplePhotos',
         'price',
         'sets',
-        'enable',
+        'attributeSet',
+        'jalaliValidSince',
+        'jalaliValidUntil',
+        'jalaliCreatedAt',
+        'jalaliUpdatedAt',
+        'bonPlus',
+        'bonDiscount',
+        'editLink',
+        'removeLink',
     ];
     
     protected $hidden = [
-        'attributeset',
         'gifts',
         'basePrice',
         'discount',
@@ -219,7 +226,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'producttype_id',
         'attributeset_id',
         'file',
-        'slogan',
         'specialDescription',
         'producttype',
         'validSince',
@@ -231,6 +237,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'attributevalues',
         'grand',
         'productSet',
+        'attributeset'
     ];
     
     /**
@@ -241,7 +248,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     protected $touches = [
         'producttype',
         'attributeset',
-        //        'validProductfiles',
+//      'validProductfiles',
         'bons',
         'attributevalues',
         'gifts',
@@ -1583,9 +1590,101 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
             ->orderBy('order');
     }
 
-    public function getEnableAttribute(){
+    public function getEnableAttribute($value){
         if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS')))
-            return $this->enable;
+            return $value;
+
+        return null;
+    }
+
+    public function getAttributeSetAttribute(){
+        $product = $this;
+        $key   = "product:attributeset:".$product->cacheKey();
+        return Cache::tags(["product"])->remember($key, config("constants.CACHE_600"), function () use ($product) {
+                if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS')))
+                    return $product->attributeset()->first()->setVisible([
+                        'name',
+                        'description',
+                        'order'
+                    ]);
+
+                return null;
+            });
+    }
+
+    public function getJalaliValidSinceAttribute()
+    {
+        $product = $this;
+        $key   = "product:validSince:".$product->cacheKey();
+        return Cache::tags(["product"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($product) {
+                if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS')))
+                    return $this->convertDate($product->validSince, "toJalali");
+                return null;
+            });
+    }
+
+    public function getJalaliValidUntilAttribute()
+    {
+        $product = $this;
+        $key   = "product:validUntil:".$product->cacheKey();
+        return Cache::tags(["product"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($product) {
+                if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS')))
+                    return $this->convertDate($product->validUntil, "toJalali");
+                return null;
+            });
+    }
+
+    public function getJalaliCreatedAtAttribute()
+    {
+        $product = $this;
+        $key   = "product:created_at:".$product->cacheKey();
+        return Cache::tags(["product"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($product) {
+                if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS')))
+                    return $this->convertDate($product->created_at, "toJalali");
+                return null;
+            });
+    }
+
+    public function getJalaliUpdatedAtAttribute()
+    {
+        $product = $this;
+        $key   = "product:updated_at:".$product->cacheKey();
+        return Cache::tags(["product"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($product) {
+                    return $this->convertDate($product->updated_at, "toJalali");
+            });
+    }
+
+    public function getBonPlusAttribute(){
+        if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS')))
+            return $this->calculateBonPlus(Bon::ALAA_BON);
+
+        return null;
+    }
+
+    public function getBonDiscountAttribute(){
+        if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS')))
+            return $this->obtainBonDiscount(config('constants.BON1'));
+
+        return null;
+    }
+
+    public function getEditLinkAttribute()
+    {
+        if (hasAuthenticatedUserPermission(config('constants.EDIT_PRODUCT_ACCESS')))
+            return action('Web\ProductController@edit', $this->id);
+
+        return null;
+
+    }
+
+    public function getRemoveLinkAttribute()
+    {
+        if (hasAuthenticatedUserPermission(config('constants.REMOVE_PRODUCT_ACCESS')))
+            return action('Web\ProductController@destroy', $this->id);
 
         return null;
     }

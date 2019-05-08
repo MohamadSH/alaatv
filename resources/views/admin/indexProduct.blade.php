@@ -609,21 +609,19 @@
                 { "data": "amount" , "title": "تعداد موجود", "defaultContent": 'بدون محدودیت'},
                 { "data": "slogan" , "title": "اسلوگان", "defaultContent": defaultContent},
                 { "data": "order" , "title": "ترتیب", "defaultContent": defaultContent},
-                { "data": "attributeset.name" , "title": "دسته صفت ها", "defaultContent": defaultContent},
+                { "data": "attributeSet.name" , "title": "دسته صفت ها", "defaultContent": defaultContent},
                 { "data": "jalaliValidSince" , "title": "معتبر از", "defaultContent": defaultContent},
                 { "data": "jalaliValidUntill" , "title": "معتبر تا", "defaultContent": defaultContent},
                 { "data": "jalaliValidCreatedAt" , "title": "تاریخ ایجاد", "defaultContent": defaultContent},
                 { "data": "jalaliValidUpdatesAt" , "title": "تاریخ اصلاح", "defaultContent": defaultContent},
-                { "data": "jalaliValidUpdatesAt" , "title": "تعداد بن", "defaultContent": defaultContent},
-                { "data": "jalaliValidUpdatesAt" , "title": "تخفیف هر بن(٪)", "defaultContent": defaultContent},
+                { "data": "bonPlus" , "title": "تعداد بن", "defaultContent": defaultContent},
+                { "data": "bonDiscount" , "title": "تخفیف هر بن(٪)", "defaultContent": defaultContent},
                 {
                     "data": null,
                     "name": "functions",
                     "title": "عملیات",
                     defaultContent: '',
                     "render": function ( data, type, row ) {
-                        row.editLink = '#';
-                        row.removeLink = '#';
                         return '\n' +
                             '            <div class="btn-group">\n' +
                             '                <input type="hidden" name="removeLink" value="">\n' +

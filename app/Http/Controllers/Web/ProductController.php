@@ -298,6 +298,8 @@ class ProductController extends Controller
                 ->setContent($product);
         }
 
+        return $product;
+
 //        dd($product);
 //        return $product;
 //        return $product->type['type'];
