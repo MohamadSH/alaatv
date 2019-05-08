@@ -10,10 +10,12 @@ use App\Traits\DateTrait;
 use App\Traits\HasWallet;
 use App\Traits\OrderCommon;
 use App\Traits\CharacterCommon;
+use App\HelpDesk\AgentInterface;
 use App\Traits\APIRequestCommon;
 use App\Collection\UserCollection;
 use Kalnoy\Nestedset\QueryBuilder;
 use Laravel\Passport\HasApiTokens;
+use App\HelpDesk\Traits\AgentTrait;
 use App\Collection\ProductCollection;
 use Illuminate\Notifications\Notifiable;
 use Laratrust\Traits\LaratrustUserTrait;
@@ -24,7 +26,6 @@ use Iatstuti\Database\Support\CascadeSoftDeletes;
 use App\Classes\Verification\MustVerifyMobileNumber;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Traits\User\{BonTrait,
-    TagTrait,
     TrackTrait,
     LotteryTrait,
     MutatorTrait,
@@ -282,7 +283,7 @@ use App\Traits\User\{BonTrait,
  * @property string|null                                                        $lastServiceCall آخرین تماس کارمندان روابط عمومی با کاربر
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLastServiceCall($value)
  */
-class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail
+class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail, AgentInterface
 {
     use HasApiTokens;
     use MustVerifyMobileNumberTrait;
@@ -297,6 +298,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     use OrderCommon;
     
     use DashboardTrait, MutatorTrait, TeacherTrait, LotteryTrait, PaymentTrait, BonTrait, VouchersTrait, TaggableUserTrait, ProfileTrait, TrackTrait;
+    use AgentTrait;
     
     /*
     |--------------------------------------------------------------------------
@@ -518,11 +520,42 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     /**
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      *
+     * @param  string                                 $roleName
+     *
+     * @return mixed
+     */
+    public function scopeRoleName($query, string $roleName)
+    {
+        $query->whereHas('roles', function ($q) use ($roleName) {
+            $q->where('name', $roleName);
+        });
+    }
+    
+    /**
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     *
+     *
+     * @param  string                                 $permissionName
+     *
+     * @return mixed
+     */
+    public function scopePermissionName($query, string $permissionName)
+    {
+        $query->whereHas('permissions', function ($q) use ($permissionName) {
+            $q->where('name', $permissionName);
+        });
+    }
+    
+    
+    
+    /**
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     *
      * @return mixed
      */
     public function scopeActive($query)
     {
-        return $query->where("userstatus_id", config("constants.USER_STATUS_ACTIVE"));
+        return $query->where('userstatus_id', config('constants.USER_STATUS_ACTIVE'));
     }
     
     /*
