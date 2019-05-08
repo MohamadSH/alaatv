@@ -37,6 +37,12 @@ class Ticket extends BaseModel
         'close_at',
     ];
     
+    protected $fillable = [
+        'subject',
+        '',
+    ];
+    
+    
     /**
      * Create a new Eloquent Collection instance.
      *

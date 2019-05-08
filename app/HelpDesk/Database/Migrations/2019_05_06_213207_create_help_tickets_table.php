@@ -61,8 +61,6 @@ class CreateHelpTicketsTable extends Migration
             $table->string('subject');
             $table->longText('content')
                 ->nullable();
-            $table->longText('html')
-                ->nullable();
             
             $table->integer('status_id')
                 ->unsigned();
