@@ -6,6 +6,7 @@ use App\Coupon;
 use App\Product;
 use Carbon\Carbon;
 use App\Coupontype;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
 use App\Http\Requests\Request;
 use App\Http\Controllers\Controller;
@@ -200,7 +201,7 @@ class CouponController extends Controller
         ]);
     }
     
-    private function getValidUntil(EditCouponRequest $request)
+    private function getValidUntil(FormRequest $request)
     {
         if (!$request->has('validUntilEnable') || !$request->has('validUntil') || strlen($request->get('validUntil')) <= 0) {
             return null;
@@ -215,7 +216,7 @@ class CouponController extends Controller
         return $validUntil.' '.$untilTime;
     }
     
-    private function setValidSince(EditCouponRequest $request)
+    private function setValidSince(FormRequest $request)
     {
         if (!$request->has('validSinceEnable') || !$request->has('validSince') || strlen($request->get('validSince')) <= 0) {
             return null;

@@ -2,21 +2,19 @@
 
 namespace App\PaymentModule\Controllers;
 
-use App\PaymentModule\OnlineGateWay;
-use App\PaymentModule\Repositories\OrdersRepo;
+use AlaaTV\Gateways\Money;
 use App\User;
 use App\Order;
 use App\Transaction;
-use App\PaymentModule\Money;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\PaymentModule\Responses;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
-use App\PaymentModule\PaymentDriver;
+use AlaaTV\Gateways\PaymentDriver;
 use App\Repositories\TransactionRepo;
+use App\PaymentModule\Repositories\OrdersRepo;
 use App\Http\Controllers\Web\TransactionController;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
 
 class RedirectUserToPaymentPage extends Controller
@@ -57,11 +55,11 @@ class RedirectUserToPaymentPage extends Controller
         $this->shouldGoToOfflinePayment($cost->rials())
             ->thenRespondWith([Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order->id]);
 
-        PaymentDriver::select($paymentMethod);
-        $url           = $this->comeBackFromGateWayUrl($paymentMethod, $device);
+        $paymentClient = PaymentDriver::select($paymentMethod);
+        $url = $this->comeBackFromGateWayUrl($paymentMethod, $device);
 
         OrdersRepo::closeOrder($order->id);
-        $authorityCode = OnlineGateWay::generateAuthorityCode($url, $cost, $description, $order->id)
+        $authorityCode = nullable($paymentClient->generateAuthorityCode($url, $cost, $description, $order->id))
             ->orFailWith([Responses::class, 'noResponseFromBankError']);
 
         TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id, $description)
@@ -92,7 +90,7 @@ class RedirectUserToPaymentPage extends Controller
      */
     private function sendErrorResponse(string $msg, int $statusCode): JsonResponse
     {
-        respondWith()->json(['message' => $msg], $statusCode);
+        respondWith(response()->json(['message' => $msg], $statusCode));
     }
 
     /**

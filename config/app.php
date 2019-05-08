@@ -1,7 +1,5 @@
 <?php
 
-use App\PaymentModule\OnlinePaymentGatewayServiceProvider;
-
 return [
 
     'name' => env('APP_NAME', 'Laravel'),
@@ -86,10 +84,9 @@ return [
         App\Providers\ComposerServiceProvider::class,
         App\Providers\TagManagerProvider::class,
         App\Providers\InterfaceBindingProvider::class,
-        Zarinpal\Laravel\ZarinpalServiceProvider::class,
-        App\PaymentModule\Gateways\Zarinpal\ZarinpalServiceProvider::class,
-        App\PaymentModule\Gateways\Behpardakht\BehpardakhtServiceProvider::class,
-        OnlinePaymentGatewayServiceProvider::class
+    
+        App\HelpDesk\Providers\HelpDeskServiceProvider::class,
+
     ],
     /*
     |--------------------------------------------------------------------------

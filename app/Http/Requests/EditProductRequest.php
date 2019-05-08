@@ -26,9 +26,9 @@ class EditProductRequest extends FormRequest
         return [
             'name'            => 'required',
             'basePrice'       => 'required|numeric',
-            'order'           => 'numeric',
-            'discount'        => 'numeric',
-            'amount'          => 'required_if:amountLimit,1|numeric',
+//            'order'           => 'numeric',
+//            'discount'        => 'numeric',
+            'amount'          => 'required_if:amountLimit,1',
             'image'           => 'image|mimes:jpeg,jpg,png',
             'file'            => 'file',
             'attributeset_id' => 'required|exists:attributesets,id',

@@ -3,11 +3,14 @@
 namespace  App\PaymentModule\Controllers;
 
 use App\Order;
+use AlaaTV\Gateways\Money;
+use App\PaymentModule\Responses;
 use App\Traits\HandleOrderPayment;
 use Illuminate\Routing\Controller;
+use AlaaTV\Gateways\PaymentDriver;
 use App\Repositories\TransactionRepo;
+use AlaaTV\Gateways\Facades\OnlineGateWay;
 use Illuminate\Support\Facades\{Cache, Request};
-use App\PaymentModule\{Money, OnlinePaymentVerificationResponseInterface, Responses, OnlineGateWay, PaymentDriver};
 
 class PaymentVerifierController extends Controller
 {
@@ -21,8 +24,8 @@ class PaymentVerifierController extends Controller
      */
     public function verify(string $paymentMethod, string $device)
     {
-        PaymentDriver::select($paymentMethod);
-        $authority = OnlineGateWay::getAuthorityValue();
+        $paymentClient = PaymentDriver::select($paymentMethod);
+        $authority = $paymentClient->getAuthorityValue();
 
         $transaction = TransactionRepo::getTransactionByAuthority($authority)
             ->orFailWith([Responses::class, 'transactionNotFoundError']);
@@ -31,7 +34,7 @@ class PaymentVerifierController extends Controller
         /**
          * @var OnlinePaymentVerificationResponseInterface $verificationResult
          */
-        $verificationResult = OnlineGateWay::verifyPayment($money, $authority);
+        $verificationResult = $paymentClient->verifyPayment($money, $authority);
         
         $transaction->order->detachUnusedCoupon();
         if ($verificationResult->isSuccessfulPayment()) {
