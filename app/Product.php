@@ -676,30 +676,10 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         if ($this->strIsEmpty($value)) {
             $value = 0;
         }
-
-        self::shiftProductOrders($value);
     
         $this->attributes["order"] = $value;
     }
-    
-    /**
-     *
-     *
-     * @param  int  $order
-     *
-     * @return void
-     */
-    public static function shiftProductOrders($order): void
-    {
-        $productsWithSameOrder = self::getProducts(0, 0)
-            ->where("order", $order)
-            ->get();
-        foreach ($productsWithSameOrder as $productWithSameOrder) {
-            $productWithSameOrder->order = $productWithSameOrder->order + 1;
-            $productWithSameOrder->update();
-        }
-    }
-    
+
     public function producttype()
     {
         return $this->belongsTo('App\Producttype')
