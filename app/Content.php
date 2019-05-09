@@ -585,11 +585,12 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         if (isset($t)) {
             $link = new LinkGenerator($t);
         }
-        
-        if (is_null($link)) {
-            return null;
+    
+        $defaultImage = $this->contenttype_id === self::CONTENT_TYPE_VIDEO ? 'https://cdn.sanatisharif.ir/media/thumbnails/Alaa_Narenj.jpg' : null;
+        if ($link === null) {
+            return $defaultImage;
         }
-        return $link->getLinks();
+        return $link->getLinks() ?: $defaultImage;
     }
     
     /**

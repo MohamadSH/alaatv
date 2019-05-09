@@ -950,7 +950,7 @@ class HomeController extends Controller
             $mobiles           = $request->get("group-mobile");
             $mobileArray       = [];
             foreach ($mobiles as $mobile) {
-                array_push($mobileArray, $mobile["mobile"]);
+                $mobileArray[] = $mobile["mobile"];
             }
             $baseDataTime = Carbon::createFromTimeString("2018-05-03 00:00:00");
             $orders       = Order::whereHas("user", function ($q) use ($mobileArray, $baseDataTime) {
@@ -966,8 +966,8 @@ class HomeController extends Controller
                 ->get();
             $orders->load("orderproducts");
         }
-        
-        return view("admin.indexTeleMarketing", compact("orders", "marketingProducts"));
+    
+        return view('admin.indexTeleMarketing', compact("orders", "marketingProducts"));
     }
     
     /**
@@ -979,8 +979,9 @@ class HomeController extends Controller
      */
     public function newDownload($data, ContentRepositoryInterface $contentRepository)
     {
+        /** @var User $user */
         $user = getAuthenticatedUser();
-        if (is_null($data) || is_null($user)) {
+        if ($data === null || $user === null) {
             abort(403, 'Not authorized.');
         }
         try {
@@ -988,8 +989,8 @@ class HomeController extends Controller
         } catch (DecryptException $e) {
             abort(403, 'invalid Data!');
         }
-        $url       = $data["url"];
-        $contentId = $data["data"]["content_id"];
+        $url       = $data['url'];
+        $contentId = $data['data']['content_id'];
         $content   = $contentRepository->getContentById($contentId);
         if (!$user->hasContent($content)) {
             return redirect()

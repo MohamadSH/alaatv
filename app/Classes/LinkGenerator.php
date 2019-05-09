@@ -8,8 +8,8 @@
 
 namespace App\Classes;
 
-use App\Adapter\AlaaSftpAdapter;
 use App\File;
+use App\Adapter\AlaaSftpAdapter;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\FileNotFoundException;
@@ -155,7 +155,7 @@ class LinkGenerator
         if (isset($this->url)) {
             return $this->url;
         }
-        if (isset($this->disk) && isset($this->fileName)) {
+        if (isset($this->disk, $this->fileName)) {
             
             //            dd("here");
             $diskAdapter = Storage::disk($this->disk)
@@ -164,19 +164,17 @@ class LinkGenerator
             $url = $this->fetchUrl($diskAdapter, $this->fileName);
             if (isset($paid)) {
                 $data = encrypt([
-                    "url"  => $url,
-                    "data" => $paid,
+                    'url'  => $url,
+                    'data' => $paid,
                 ]);
                 
                 return action(self::DOWNLOAD_CONTROLLER_NAME, $data);
             }
-            else {
-                return $url;
-            }
+        
+            return $url;
         }
-        else {
-            throw new \Exception("DiskName and FileName should be set \n File uuid=".$this->uuid);
-        }
+    
+        throw new \Exception("DiskName and FileName should be set \n File uuid=".$this->uuid);
     }
     
     private function fetchUrl(AlaaSftpAdapter $diskAdapter, $fileName)
@@ -185,10 +183,10 @@ class LinkGenerator
             return $diskAdapter->getUrl($fileName);
         } catch (\Exception $exception) {
             Log::error(json_encode([
-                "message"  => "fetchUrl failed!",
-                "error"    => $exception->getMessage(),
-                "line"     => $exception->getLine(),
-                "file"     => $exception->getFile(),
+                'message'  => 'fetchUrl failed!',
+                'error'    => $exception->getMessage(),
+                'line'     => $exception->getLine(),
+                'file'     => $exception->getFile(),
                 'fileName' => $fileName,
             ], JSON_UNESCAPED_UNICODE));
             
@@ -207,12 +205,12 @@ class LinkGenerator
         try {
             $stream = $fs->readStream($f->fileName);
             $result = [
-                "read-stream" => $stream,
+                'read-stream' => $stream,
             ];
         } catch (FileNotFoundException $e) {
             $result = [
-                "read-stream" => null,
-                "exception"   => $e,
+                'read-stream' => null,
+                'exception'   => $e,
             ];
         }
         
