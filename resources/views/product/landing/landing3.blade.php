@@ -130,12 +130,12 @@
                                                 <em>مشترک</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',210) }}" data-role = "210" title = "همایش طلایی ادبیات کنکور دکتر سبطی">
+                                                <a href = "{{ action('Web\ProductController@show',210) }}" data-role = "210" title = "همایش طلایی ادبیات کنکور دکتر سبطی">
                                                     <img src = "/acm/extra/landing3/images/professors/G9.png" alt = "همایش طلایی ادبیات کنکور دکتر سبطی آلاء" title = "همایش طلایی ادبیات کنکور دکتر سبطی">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',210) }}" data-role = "210" title = "همایش طلایی ادبیات کنکور دکتر سبطی">
+                                                        <a href = "{{ action('Web\ProductController@show',210) }}" data-role = "210" title = "همایش طلایی ادبیات کنکور دکتر سبطی">
                                                             <h1>
                                                                 <span>ادبیات</span>
                                                                 <em>دکتر سبطی</em>
@@ -161,12 +161,12 @@
                                                 <em>مشترک</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',211) }}" data-role = "211" title = "همایش طلایی دین و زندگی کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',211) }}" data-role = "211" title = "همایش طلایی دین و زندگی کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/G10.png" alt = "همایش طلایی دین و زندگی کنکور آلاء" title = "همایش طلایی دین و زندگی کنکور">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',211) }}" data-role = "211" title = "همایش طلایی دین و زندگی کنکور">
+                                                        <a href = "{{ action('Web\ProductController@show',211) }}" data-role = "211" title = "همایش طلایی دین و زندگی کنکور">
                                                             <h1>
                                                                 <span>دینی</span>
                                                                 <em>کاغذی</em>
@@ -192,12 +192,12 @@
                                                 <em>مشترک</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',216) }}" data-role = "216" title = "همایش طلایی فیزیک کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',216) }}" data-role = "216" title = "همایش طلایی فیزیک کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/1.png" alt = "همایش طلایی فیزیک کنکور آلاء" title = "همایش طلایی فیزیک کنکور">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',216) }}" data-role = "216" title = "">
+                                                        <a href = "{{ action('Web\ProductController@show',216) }}" data-role = "216" title = "">
                                                             <h1>
                                                                 <span>فیزیک</span>
                                                                 <em>دکتر طلوعی</em>
@@ -223,12 +223,12 @@
                                                 <em>مشترک</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',217) }}" data-role = "217" title = "همایش طلایی شیمی کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',217) }}" data-role = "217" title = "همایش طلایی شیمی کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/G7.png" alt = "همایش طلایی شیمی کنکور آلاء" title = "همایش طلایی شیمی کنکور">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',217) }}" data-role = "217" title = "همایش طلایی شیمی کنکور">
+                                                        <a href = "{{ action('Web\ProductController@show',217) }}" data-role = "217" title = "همایش طلایی شیمی کنکور">
                                                             <h1>
                                                                 <span>شیمی</span>
                                                                 <em>صنیعی</em>
@@ -254,12 +254,12 @@
                                                 <em>مشترک</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',214) }}" data-role = "214" title = "همایش طلایی عربی کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',214) }}" data-role = "214" title = "همایش طلایی عربی کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/G2.png" alt = "همایش طلایی عربی کنکور آلاء" title = "همایش طلایی عربی کنکور">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',214) }}" data-role = "214" title = "همایش طلایی عربی کنکور">
+                                                        <a href = "{{ action('Web\ProductController@show',214) }}" data-role = "214" title = "همایش طلایی عربی کنکور">
                                                             <h1>
                                                                 <span>عربی</span>
                                                                 <em>ناصح زاده</em>
@@ -285,12 +285,12 @@
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',220) }}" data-role = "220" title = "همایش طلایی ریاضی تجربی کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',220) }}" data-role = "220" title = "همایش طلایی ریاضی تجربی کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/G3.png" alt = "همایش طلایی ریاضی تجربی کنکور آلاء" title = "همایش طلایی ریاضی تجربی کنکور">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',220) }}" data-role = "220" title = "همایش طلایی ریاضی تجربی کنکور">
+                                                        <a href = "{{ action('Web\ProductController@show',220) }}" data-role = "220" title = "همایش طلایی ریاضی تجربی کنکور">
                                                             <h1>
                                                                 <span>ریاضی</span>
                                                                 <em>نباخته</em>
@@ -316,12 +316,12 @@
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',219) }}" data-role = "219" title = "همایش طلایی ریاضی تجربی کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',219) }}" data-role = "219" title = "همایش طلایی ریاضی تجربی کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/G5.png" alt = "همایش طلایی ریاضی تجربی کنکور آلاء" title = "همایش طلایی ریاضی تجربی کنکور">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',219) }}" data-role = "219" title = "همایش طلایی ریاضی تجربی کنکور">
+                                                        <a href = "{{ action('Web\ProductController@show',219) }}" data-role = "219" title = "همایش طلایی ریاضی تجربی کنکور">
                                                             <h1>
                                                                 <span>ریاضی</span>
                                                                 <em>امینی</em>
@@ -347,12 +347,12 @@
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',213) }}" data-role = "213" title = "همایش طلایی زمین شناسی کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',213) }}" data-role = "213" title = "همایش طلایی زمین شناسی کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/G1.png" alt = "همایش طلایی زمین شناسی کنکور آلاء" title = "همایش طلایی زمین شناسی کنکور">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',213) }}" data-role = "213" title = "همایش طلایی زمین شناسی کنکور">
+                                                        <a href = "{{ action('Web\ProductController@show',213) }}" data-role = "213" title = "همایش طلایی زمین شناسی کنکور">
                                                             <h1>
                                                                 <span>زمین</span>
                                                                 <em>دکتر چلاجور</em>
@@ -378,12 +378,12 @@
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',212) }}" data-role = "212" title = "همایش طلایی زیست شناسی کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',212) }}" data-role = "212" title = "همایش طلایی زیست شناسی کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/G1.png" alt = "همایش طلایی زیست شناسی کنکور آلاء" title = "همایش طلایی زیست شناسی کنکور آلاء">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',212) }}" data-role = "212" title = "همایش طلایی زیست شناسی کنکور آلاء">
+                                                        <a href = "{{ action('Web\ProductController@show',212) }}" data-role = "212" title = "همایش طلایی زیست شناسی کنکور آلاء">
                                                             <h1>
                                                                 <span>زیست</span>
                                                                 <em>دکتر چلاجور</em>
@@ -409,12 +409,12 @@
                                                 <em>انسانی</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',222) }}" data-role = "222" title = "همایش طلایی ریاضی انسانی کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',222) }}" data-role = "222" title = "همایش طلایی ریاضی انسانی کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/G5.png" alt = "همایش طلایی ریاضی انسای کنکور آلاء" title = "همایش طلایی ریاضی انسانی کنکور">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',222) }}" data-role = "222" title = "همایش طلایی ریاضی انسانی کنکور">
+                                                        <a href = "{{ action('Web\ProductController@show',222) }}" data-role = "222" title = "همایش طلایی ریاضی انسانی کنکور">
                                                             <h1>
                                                                 <span>ریاضی</span>
                                                                 <em>امینی</em>
@@ -468,12 +468,12 @@
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',213) }}" data-role = "213" title = "همایش طلایی زمین شناسی کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',213) }}" data-role = "213" title = "همایش طلایی زمین شناسی کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/G1.png" alt = "همایش طلایی زمین شناسی کنکور آلاء" title = "همایش طلایی زمین شناسی کنکور">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',213) }}" data-role = "213" title = "همایش طلایی زمین شناسی کنکور">
+                                                        <a href = "{{ action('Web\ProductController@show',213) }}" data-role = "213" title = "همایش طلایی زمین شناسی کنکور">
                                                             <h1>
                                                                 <span>زمین</span>
                                                                 <em>دکتر چلاجور</em>
@@ -499,12 +499,12 @@
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',219) }}" data-role = "219" title = "همایش طلایی ریاضی تجربی کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',219) }}" data-role = "219" title = "همایش طلایی ریاضی تجربی کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/G5.png" alt = "همایش طلایی ریاضی تجربی کنکور آلاء" title = "همایش طلایی ریاضی تجربی کنکور">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',219) }}" data-role = "219" title = "همایش طلایی ریاضی تجربی کنکور">
+                                                        <a href = "{{ action('Web\ProductController@show',219) }}" data-role = "219" title = "همایش طلایی ریاضی تجربی کنکور">
                                                             <h1>
                                                                 <span>ریاضی</span>
                                                                 <em>امینی</em>
@@ -530,12 +530,12 @@
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',220) }}" data-role = "220" title = "همایش طلایی ریاضی تجربی کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',220) }}" data-role = "220" title = "همایش طلایی ریاضی تجربی کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/G3.png" alt = "همایش طلایی ریاضی تجربی کنکور آلاء" title = "همایش طلایی ریاضی تجربی کنکور">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',220) }}" data-role = "220" title = "همایش طلایی ریاضی تجربی کنکور">
+                                                        <a href = "{{ action('Web\ProductController@show',220) }}" data-role = "220" title = "همایش طلایی ریاضی تجربی کنکور">
                                                             <h1>
                                                                 <span>ریاضی</span>
                                                                 <em>نباخته</em>
@@ -561,12 +561,12 @@
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',212) }}" data-role = "212" title = "همایش طلایی زیست شناسی کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',212) }}" data-role = "212" title = "همایش طلایی زیست شناسی کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/G1.png" alt = "همایش طلایی زیست شناسی کنکور آلاء" title = "همایش طلایی زیست شناسی کنکور آلاء">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',212) }}" data-role = "212" title = "همایش طلایی زیست شناسی کنکور آلاء">
+                                                        <a href = "{{ action('Web\ProductController@show',212) }}" data-role = "212" title = "همایش طلایی زیست شناسی کنکور آلاء">
                                                             <h1>
                                                                 <span>زیست</span>
                                                                 <em>دکتر چلاجور</em>
@@ -592,12 +592,12 @@
                                                 <em>تجربی</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',221) }}" data-role = "221" title = "همایش طلایی زیست شناسی کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',221) }}" data-role = "221" title = "همایش طلایی زیست شناسی کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/G11.png" alt = "همایش طلایی زیست شناسی کنکور آلاء" title = "همایش طلایی زیست شناسی کنکور">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',221) }}" data-role = "221" title = "همایش طلایی زیست شناسی کنکور">
+                                                        <a href = "{{ action('Web\ProductController@show',221) }}" data-role = "221" title = "همایش طلایی زیست شناسی کنکور">
                                                             <h1>
                                                                 <span>ژنتیک</span>
                                                                 <em>احمد آل علی</em>
@@ -650,12 +650,12 @@
                                                 <em>ریاضی</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',218) }}" data-role = "218" title = "همایش طلایی دیفرانسیل کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',218) }}" data-role = "218" title = "همایش طلایی دیفرانسیل کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/G6.png" alt = "همایش طلایی دیفرانسیل کنکور آلاء" title = "همایش طلایی دیفرانسیل کنکور">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',218) }}" data-role = "218" title = "همایش طلایی دیفرانسیل کنکور">
+                                                        <a href = "{{ action('Web\ProductController@show',218) }}" data-role = "218" title = "همایش طلایی دیفرانسیل کنکور">
                                                             <h1>
                                                                 <span>دیفرانیل</span>
                                                                 <em>ثابتی</em>
@@ -681,12 +681,12 @@
                                                 <em>مشترک</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',214) }}" data-role = "214" title = "همایش طلایی عربی کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',214) }}" data-role = "214" title = "همایش طلایی عربی کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/G2.png" alt = "همایش طلایی عربی کنکور آلاء" title = "همایش طلایی عربی کنکور">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',214) }}" data-role = "214" title = "همایش طلایی عربی کنکور">
+                                                        <a href = "{{ action('Web\ProductController@show',214) }}" data-role = "214" title = "همایش طلایی عربی کنکور">
                                                             <h1>
                                                                 <span>عربی</span>
                                                                 <em>ناصح زاده</em>
@@ -712,12 +712,12 @@
                                                 <em>مشترک</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',217) }}" data-role = "217" title = "همایش طلایی شیمی کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',217) }}" data-role = "217" title = "همایش طلایی شیمی کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/G7.png" alt = "همایش طلایی شیمی کنکور آلاء" title = "همایش طلایی شیمی کنکور">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',217) }}" data-role = "217" title = "همایش طلایی شیمی کنکور">
+                                                        <a href = "{{ action('Web\ProductController@show',217) }}" data-role = "217" title = "همایش طلایی شیمی کنکور">
                                                             <h1>
                                                                 <span>شیمی</span>
                                                                 <em>صنیعی</em>
@@ -743,12 +743,12 @@
                                                 <em>مشترک</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',210) }}" data-role = "210" title = "همایش طلایی ادبیات کنکور دکتر سبطی">
+                                                <a href = "{{ action('Web\ProductController@show',210) }}" data-role = "210" title = "همایش طلایی ادبیات کنکور دکتر سبطی">
                                                     <img src = "/acm/extra/landing3/images/professors/G9.png" alt = "همایش طلایی ادبیات کنکور دکتر سبطی آلاء" title = "همایش طلایی ادبیات کنکور دکتر سبطی">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',210) }}" data-role = "210" title = "همایش طلایی ادبیات کنکور دکتر سبطی">
+                                                        <a href = "{{ action('Web\ProductController@show',210) }}" data-role = "210" title = "همایش طلایی ادبیات کنکور دکتر سبطی">
                                                             <h1>
                                                                 <span>ادبیات</span>
                                                                 <em>دکتر سبطی</em>
@@ -774,12 +774,12 @@
                                                 <em>مشترک</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',211) }}" data-role = "211" title = "همایش طلایی دین و زندگی کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',211) }}" data-role = "211" title = "همایش طلایی دین و زندگی کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/G10.png" alt = "همایش طلایی دین و زندگی کنکور آلاء" title = "همایش طلایی دین و زندگی کنکور">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',211) }}" data-role = "211" title = "همایش طلایی دین و زندگی کنکور">
+                                                        <a href = "{{ action('Web\ProductController@show',211) }}" data-role = "211" title = "همایش طلایی دین و زندگی کنکور">
                                                             <h1>
                                                                 <span>دینی</span>
                                                                 <em>کاغذی</em>
@@ -805,12 +805,12 @@
                                                 <em>مشترک</em>
                                             </bdi>
                                             <figure>
-                                                <a href = "{{ action('ProductController@show',216) }}" data-role = "216" title = "همایش طلایی فیزیک کنکور">
+                                                <a href = "{{ action('Web\ProductController@show',216) }}" data-role = "216" title = "همایش طلایی فیزیک کنکور">
                                                     <img src = "/acm/extra/landing3/images/professors/1.png" alt = "همایش طلایی فیزیک کنکور آلاء" title = "همایش طلایی فیزیک کنکور">
                                                 </a>
                                                 <figcaption>
                                                     <header>
-                                                        <a href = "{{ action('ProductController@show',216) }}" data-role = "216" title = "">
+                                                        <a href = "{{ action('Web\ProductController@show',216) }}" data-role = "216" title = "">
                                                             <h1>
                                                                 <span>فیزیک</span>
                                                                 <em>دکتر طلوعی</em>
@@ -844,7 +844,7 @@
 
     <footer class = "site-footer site-footer-lading" role = "contentinfo">
         <section class = "sec-dwon-sample">
-            <a href = "{{ action('ContentController@show',7884) }}" class = "down-sample" title = "دانلود نمونه فیلم">
+            <a href = "{{ action('Web\ContentController@show',7884) }}" class = "down-sample" title = "دانلود نمونه فیلم">
                         <span>
                            دانلود نمونه فیلم همایش
                         </span>
