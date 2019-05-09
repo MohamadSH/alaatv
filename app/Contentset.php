@@ -181,6 +181,7 @@ class Contentset extends BaseModel implements Taggable
     {
         return $query->where('display', 1);
     }
+    
     /*
     |--------------------------------------------------------------------------
     | Relations
@@ -192,6 +193,7 @@ class Contentset extends BaseModel implements Taggable
         return action('Web\ContentController@index', [
             'set'         => $this->id,
             'contentOnly' => true,
+            'free'        => [0, 1],
         ]);
     }
     

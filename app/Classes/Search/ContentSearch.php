@@ -28,6 +28,7 @@ class ContentSearch extends SearchAbstract
         'contentType',
         'createdAtSince',
         'createdAtTill',
+        'isFree',
     ];
     
     public function get(array ...$params)
@@ -92,7 +93,7 @@ class ContentSearch extends SearchAbstract
     {
         //ToDo: Active condition has conflict with admin
         $result = $query->active()
-            ->free()
+//            ->free()
             ->orderBy('created_at', 'desc')
             ->paginate($this->numberOfItemInEachPage, ['*'], $this->pageName, $this->pageNum);
         
