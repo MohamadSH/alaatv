@@ -2,7 +2,6 @@
 
 @section('page-css')
     <link href="{{ mix("/css/content-show.css") }}" rel="stylesheet">
-    <link href="{{ asset("/acm/AlaatvCustomFiles/css/page-content-show.css") }}" rel="stylesheet">
 @endsection
 
 @section('pageBar')
@@ -69,13 +68,15 @@
                             <video id="video-{{ $content->id }}"
                                    class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered" controls
                                    preload="auto" height='360' width="640" poster='{{ $content->thumbnail }}'>
-                                @foreach($content->getVideos() as $source)
-                                    <source src="{{ $source->link }}" type='video/mp4' res="{{ $source->res }}"
-                                            @if(strcmp( $source->res,"240p") == 0)
-                                                default
-                                            @endif
-                                            label="{{ $source->caption }}"/>
-                                @endforeach
+                                @if($user_can_see_content)
+                                    @foreach($content->getVideos() as $source)
+                                        <source src="{{ $source->link }}" type='video/mp4' res="{{ $source->res }}"
+                                                @if(strcmp( $source->res,"240p") == 0)
+                                                    default
+                                                @endif
+                                                label="{{ $source->caption }}"/>
+                                    @endforeach
+                                @endif
                                 <p class="vjs-no-js">@lang('content.javascript is disables! we need it to play a video')</p>
                             </video>
                             <div class="m--clearfix"></div>
@@ -153,41 +154,44 @@
                                 </div>
                                 <div class="m-separator m-separator--space m-separator--dashed"></div>
                             @endif
-                            <h3 class="m--regular-font-size-lg4 m--font-boldest2 m--font-focus">
-                                لینک های مستقیم دانلود این فیلم
-                            </h3>
-                            @if(isset($content->file) and $content->file->isNotEmpty())
-                                <div class="col-xl-4 text-justify">
-                                    
-                                    <p>
-                                        با IDM یا ADM و یا wget دانلود کنید.
-                                    </p>
+                            @if($user_can_see_content)
+                                <h3 class="m--regular-font-size-lg4 m--font-boldest2 m--font-focus">
+                                    لینک های مستقیم دانلود این فیلم
+                                </h3>
+                                @if(isset($content->file) and $content->file->isNotEmpty())
+                                    <div class="col-xl-4 text-justify">
+                
+                                        <p>
+                                            با IDM یا ADM و یا wget دانلود کنید.
+                                        </p>
                                     @foreach($content->file->get('video') as $file)
                                         <!--begin::m-widget4-->
-                                        <div class="m-widget4">
-                                            <div class="m-widget4__item">
-                                                <div class="m-widget4__img m-widget4__img--icon">
-                                                    <img src="/assets/app/media/img/files/mp4.svg" alt="mp4">
-                                                </div>
-                                                <div class="m-widget4__info">
-                                                    <a href="{{ $file->link }}?download=1" class="m-link">
+                                            <div class="m-widget4">
+                                                <div class="m-widget4__item">
+                                                    <div class="m-widget4__img m-widget4__img--icon">
+                                                        <img src="/assets/app/media/img/files/mp4.svg" alt="mp4">
+                                                    </div>
+                                                    <div class="m-widget4__info">
+                                                        <a href="{{ $file->link }}?download=1" class="m-link">
                                                 <span class="m-widget4__text">
                                                 دانلود فایل {{$file->caption}}{{ isset($file->size[0]) ? "(".$file->size. ")":""  }}
                                                 </span>
-                                                    </a>
+                                                        </a>
+                                                    </div>
+                                                    <div class="m-widget4__ext">
+                                                        <a href="{{ $file->link }}?download=1" class="m-widget4__icon">
+                                                            <i class="la la-download"></i>
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                                <div class="m-widget4__ext">
-                                                    <a href="{{ $file->link }}?download=1" class="m-widget4__icon">
-                                                        <i class="la la-download"></i>
-                                                    </a>
-                                                </div>
+                    
                                             </div>
-                                        
-                                        </div>
-                                        <!--end::Widget 4-->
-                                    @endforeach
-                                </div>
+                                            <!--end::Widget 4-->
+                                        @endforeach
+                                    </div>
+                                @endif
                             @endif
+                            
                             <div class="m-separator m-separator--space m-separator--dashed"></div>
                             @if(!empty($tags))
                                 @include("partials.search.tagLabel" , ["tags"=>$tags])
@@ -212,16 +216,18 @@
                                                 {{ $content->displayName  }}
                                             </h4>
                                             <div class="m-widget5__info">
-                                                <div class="btn-group m-btn-group" role="group" aria-label="...">
-                                                    @foreach($content->getPamphlets() as $file)
-                                                        <a href="{{ $file->link }}" target="_blank"
-                                                           title="دانلود مستقیم">
-                                                            <button type="button" class="btn btn-primary">
-                                                                دانلود {{ $file->caption }}
-                                                            </button>
-                                                        </a>
-                                                    @endforeach
-                                                </div>
+                                                @if($user_can_see_content)
+                                                    <div class="btn-group m-btn-group" role="group" aria-label="...">
+                                                        @foreach($content->getPamphlets() as $file)
+                                                            <a href="{{ $file->link }}" target="_blank"
+                                                               title="دانلود مستقیم">
+                                                                <button type="button" class="btn btn-primary">
+                                                                    دانلود {{ $file->caption }}
+                                                                </button>
+                                                            </a>
+                                                        @endforeach
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -236,6 +242,8 @@
                         </div>
                     </div>
                     <!--end::Portlet-->
+                    
+                    @if(isset($content->description[0]))
                     <!--begin::Portlet-->
                     <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
                         <div class="m-portlet__head">
@@ -255,15 +263,13 @@
                         <div class="m-portlet__body">
                             <div class="m-portlet__body-progress">Loading</div>
                             <div>
-                                @if(isset($content->description[0]))
-                                    {!! $content->description !!}
-                                @else
-                                    توضیحی برای این فایل ثبت نشده است.
-                                @endif
+                                {!! $content->description !!}
                             </div>
                         </div>
                     </div>
                     <!--end::Portlet-->
+                    @endif
+                    
                 @elseif(optional($content->template)->name == "article1")
                     <!--begin::Portlet-->
                     <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
