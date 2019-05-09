@@ -44,8 +44,12 @@ trait HandleOrderPayment
         $paymentstatus_id = (int) $order->totalPaidCost() < (int) $order->totalCost() ? config('constants.PAYMENT_STATUS_INDEBTED') : config('constants.PAYMENT_STATUS_PAID');
         
         $result['paymentstatus_id'] = $paymentstatus_id;
-        
-        $order->close($paymentstatus_id);
+
+        if($order->orderstatus_id == config('constants.ORDER_STATUS_OPEN'))
+            $order->close($paymentstatus_id);
+
+        $order->paymentstatus_id = $paymentstatus_id;  // saat 2:25 AM 3vom Ramedan
+
         $result['saveOrder'] = $order->updateWithoutTimestamp() ? 1 : 0;
         
         return $result;

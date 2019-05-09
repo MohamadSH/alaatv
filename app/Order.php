@@ -477,17 +477,10 @@ class Order extends BaseModel
     public function refreshCost()
     {
         $orderCost               = $this->obtainOrderCost(true);
+        /** @var OrderproductCollection $calculatedOrderproducts */
         $calculatedOrderproducts = $orderCost["calculatedOrderproducts"];
         $calculatedOrderproducts->updateCostValues();
-        
-        $calculatedOrderproducts = $orderCost["calculatedOrderproducts"];
-        /** @var Orderproduct $orderproduct */
-        foreach ($calculatedOrderproducts as $orderproduct) {
-            $newPriceInfo = $orderproduct->newPriceInfo;
-            $orderproduct->fillCostValues($newPriceInfo);
-            $orderproduct->updateWithoutTimestamp();
-        }
-        
+
         $this->cost              = $orderCost["rawCostWithDiscount"];
         $this->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
         $this->updateWithoutTimestamp();
@@ -664,6 +657,7 @@ class Order extends BaseModel
             Product::CUSTOM_DONATE_PRODUCT,
             Product::DONATE_PRODUCT_5_HEZAR,
         ]);
+
         foreach ($orderProducts as $orderProduct) {
             $donateCost += $orderProduct->cost;
         }
