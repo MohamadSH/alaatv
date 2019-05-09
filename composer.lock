@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "alaatv/mellat",
-            "version": "v1.1.3",
+            "version": "v1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alaatv/behpardakht-gateway-driver.git",
-                "reference": "2e9f73e083a232d360122f6afdc9f1b580399c4d"
+                "reference": "6a815549ddad1b1f78a80f9b672c95641ee1419f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alaatv/behpardakht-gateway-driver/zipball/2e9f73e083a232d360122f6afdc9f1b580399c4d",
-                "reference": "2e9f73e083a232d360122f6afdc9f1b580399c4d",
+                "url": "https://api.github.com/repos/alaatv/behpardakht-gateway-driver/zipball/6a815549ddad1b1f78a80f9b672c95641ee1419f",
+                "reference": "6a815549ddad1b1f78a80f9b672c95641ee1419f",
                 "shasum": ""
             },
             "require": {
@@ -39,7 +39,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "MIT"
+                "GPL-3.0"
             ],
             "authors": [
                 {
@@ -50,29 +50,34 @@
             "description": "Adds mellat driver for payments.",
             "homepage": "https://github.com/alaatv/behpardakht-gateway-driver",
             "keywords": [
+                "alaatv",
                 "laravel",
                 "laravel5",
                 "laravel5-package",
                 "php"
             ],
-            "time": "2019-05-08T07:59:17+00:00"
+            "time": "2019-05-08T13:01:38+00:00"
         },
         {
             "name": "alaatv/payment-gateways",
-            "version": "v1.0.6",
+            "version": "v1.07",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alaatv/laravel-iranian-online-payments.git",
-                "reference": "ec48a48033648cc0d14de797ac9fb3953ea18c29"
+                "reference": "d34ecc29691464fffa90a870061b801bb589f595"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alaatv/laravel-iranian-online-payments/zipball/ec48a48033648cc0d14de797ac9fb3953ea18c29",
-                "reference": "ec48a48033648cc0d14de797ac9fb3953ea18c29",
+                "url": "https://api.github.com/repos/alaatv/laravel-iranian-online-payments/zipball/d34ecc29691464fffa90a870061b801bb589f595",
+                "reference": "d34ecc29691464fffa90a870061b801bb589f595",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1.3"
+            },
+            "suggest": {
+                "alaatv/mellat": "mellat driver for payments.",
+                "alaatv/zarinpal": "zarinpal driver for payments."
             },
             "type": "library",
             "autoload": {
@@ -82,7 +87,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "MIT"
+                "GPL-3.0"
             ],
             "authors": [
                 {
@@ -93,25 +98,26 @@
             "description": "Iranian Online Payment Gateways",
             "homepage": "https://github.com/alaatv/laravel-iranian-online-payments",
             "keywords": [
+                "alaatv",
                 "laravel",
                 "laravel5",
                 "laravel5-package",
                 "php"
             ],
-            "time": "2019-05-08T08:01:10+00:00"
+            "time": "2019-05-08T10:10:54+00:00"
         },
         {
             "name": "alaatv/zarinpal",
-            "version": "v1.1.5",
+            "version": "v1.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alaatv/zarrinpal-gateway-driver.git",
-                "reference": "74938c7a920aefa3c4eac356cb1a454c1a36cbcf"
+                "reference": "2a31e739f95babe215e0b58027ce4220ef06d065"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alaatv/zarrinpal-gateway-driver/zipball/74938c7a920aefa3c4eac356cb1a454c1a36cbcf",
-                "reference": "74938c7a920aefa3c4eac356cb1a454c1a36cbcf",
+                "url": "https://api.github.com/repos/alaatv/zarrinpal-gateway-driver/zipball/2a31e739f95babe215e0b58027ce4220ef06d065",
+                "reference": "2a31e739f95babe215e0b58027ce4220ef06d065",
                 "shasum": ""
             },
             "require": {
@@ -134,7 +140,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "MIT"
+                "GPL-3.0"
             ],
             "authors": [
                 {
@@ -145,12 +151,13 @@
             "description": "Adds zarinpal driver for payments.",
             "homepage": "https://github.com/alaatv/zarinpal-gateway-driver",
             "keywords": [
+                "alaatv",
                 "laravel",
                 "laravel5",
                 "laravel5-package",
                 "php"
             ],
-            "time": "2019-05-08T09:21:40+00:00"
+            "time": "2019-05-08T13:04:41+00:00"
         },
         {
             "name": "algolia/algoliasearch-client-php",
