@@ -33,6 +33,7 @@ class OpenOrderRefinement extends Refinement
         }
         
         $this->order = $openOrder;
+        $this->orderUniqueId = $openOrder->id;
         $this->getOrderCost();
         $this->donateCost = $this->order->getDonateCost();
         if ($this->canDeductFromWallet()) {

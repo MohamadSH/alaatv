@@ -37,6 +37,8 @@ class RedirectUserToPaymentPage extends Controller
         $user = $data['user'];
         /** @var Order $order */
         $order = $data['order'];
+        /** @var Order $order */
+        $orderUniqueId = $data['orderUniqueId'];
         /** @var Money $cost */
         $cost = Money::fromTomans((int) $data['cost']);
         /** @var Transaction $transaction */
@@ -59,8 +61,10 @@ class RedirectUserToPaymentPage extends Controller
         $paymentClient = PaymentDriver::select($paymentMethod);
         $url = $this->comeBackFromGateWayUrl($paymentMethod, $device);
 
-        OrdersRepo::closeOrder($order->id);
-        $authorityCode = nullable($paymentClient->generateAuthorityCode($url, $cost, $description, $order->id))
+        if($this->shouldCloseOrder($order))
+            OrdersRepo::closeOrder($order->id);
+
+        $authorityCode = nullable($paymentClient->generateAuthorityCode($url, $cost, $description, $orderUniqueId))
             ->orFailWith([Responses::class, 'noResponseFromBankError']);
 
         TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id , $this->getGatewyId($paymentMethod), $description)
@@ -160,5 +164,14 @@ class RedirectUserToPaymentPage extends Controller
             ->orFailWith([Responses::class, 'sendErrorResponse'] , ['msg'   =>  'No DB record found for this gateway' , Response::HTTP_BAD_REQUEST]);
 
         return $myGateway->id;
+    }
+
+    /**
+     * @param Order $order
+     * @return bool
+     */
+    private function shouldCloseOrder(Order $order): bool
+    {
+        return $order->orderstatus_id == config('constants.ORDER_STATUS_OPEN');
     }
 }
