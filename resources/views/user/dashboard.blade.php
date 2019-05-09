@@ -2,6 +2,11 @@
 
 @section('page-css')
     <link href="{{ mix('/css/page-shop.css') }}" rel="stylesheet" type="text/css"/>
+    <style>
+        .contentModal .contentItem .itemThumbnail img {
+            min-width: 40px;
+        }
+    </style>
 @endsection
 
 @section('pageBar')
@@ -54,10 +59,9 @@
                             
                             <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">
                                 @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
-                                    @if($userAsset->title === 'محصولات من')
+{{--                                    @if($userAsset->title === 'محصولات من')--}}
                                         @foreach($userAsset->products as $productKey=>$product)
-{{--                                            {{ var_dump($product->sets) }}--}}
-                                            @if(count($product->sets)===0)
+                                            @if($product->sets->count()===0)
                                                 <div class="m-widget_head-owlcarousel-item carousel background-gradient"
                                                      data-position="{{ $productKey }}">
                                                     <a href="{{ $product->url }}">
@@ -69,7 +73,7 @@
                                                         {{ $product->name }}
                                                     </a>
                                                 </div>
-                                            @elseif(count($product->sets)===1)
+                                            @elseif($product->sets->count()===1)
                                                 <div class="m-widget_head-owlcarousel-item carousel background-gradient"
                                                      data-position="{{ $productKey }}">
                                                     <img class="a--owl-carousel-type-2-item-image"
@@ -77,22 +81,20 @@
                                                     <br>
                                                     {{ $product->name }}
                                                     <hr>
-                                                    <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
+                                                    <div class="m-btn-group m-btn-group--pill btn-group btn-group-sm"
                                                          role="group" aria-label="Small button group">
                                                         <button type="button" class="btn btn-warning btnViewPamphlet"
                                                                 data-content-type="pamphlet"
-                                                                data-content-url="{{ $product->sets[0]->contentUrl }}">
+                                                                data-content-url="{{ $product->sets->first()->contentUrl }}">
                                                             <i class="flaticon-edit-1"></i>
                                                             جزوات
                                                         </button>
-                                                        @if(count($product->sets[0]->video) > 0)
-                                                            <button type="button" class="btn btn-success btnViewVideo"
-                                                                    data-content-type="video"
-                                                                    data-content-url="{{ $product->sets[0]->contentUrl }}">
-                                                                <i class="la la-film"></i>
-                                                                فیلم ها
-                                                            </button>
-                                                        @endif
+                                                        <button type="button" class="btn btn-success btnViewVideo"
+                                                                data-content-type="video"
+                                                                data-content-url="{{ $product->sets->first()->contentUrl }}">
+                                                            <i class="la la-film"></i>
+                                                            فیلم ها
+                                                        </button>
                                                     </div>
                                                 </div>
                                             @else
@@ -100,7 +102,7 @@
                                                      data-position="{{ $productKey }}">
                                                     <a href="{{ $product->url }}">
                                                         <img class="a--owl-carousel-type-2-item-image"
-                                                             src="{{ $product->photo }}" alt="{{ $product->grandParent }}">
+                                                             src="{{ $product->photo }}" alt="{{ $product->name }}">
                                                     </a>
                                                     <br>
                                                     <a href="{{ $product->url }}" target="_blank"
@@ -112,7 +114,7 @@
                                                 </div>
                                             @endif
                                         @endforeach
-                                    @endif
+{{--                                    @endif--}}
                                 @endforeach
                             </div>
                             
@@ -612,9 +614,6 @@
                             </div>
                         </div>
                         
-                        <div class="col-12 waitingForLoadMoreInModal">
-                            <div class="m-loader m-loader--lg m-loader--info"></div>
-                        </div>
                         <div class="col-12 text-center">
                             <input type="hidden" id="pamphletContentNextPageUrl">
                             <button type="button"
@@ -632,7 +631,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel"
+    <div class="modal fade contentModal" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -666,10 +665,6 @@
                             </div>
                         </div>
                         
-                        <div class="col-12 waitingForLoadMoreInModal">
-                            <div class="m-loader m-loader--lg m-loader--info"></div>
-                        </div>
-                        
                         <div class="col-12 text-center">
                             <input type="hidden" id="videoContentNextPageUrl">
                             <button type="button"
@@ -693,4 +688,5 @@
 
 @section('page-js')
     <script src="{{ mix('/js/user-dashboard.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-user-dashboard.js') }}"></script>
 @endsection
