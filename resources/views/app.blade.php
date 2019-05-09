@@ -28,7 +28,15 @@
 
     @yield('page-css')
     
-    <link rel="shortcut icon" href="@if(isset($wSetting->site->favicon)) {{route('image', ['category'=>'11','w'=>'150' , 'h'=>'150' ,  'filename' =>  $wSetting->site->favicon ])}} @endif"/>
+    <style>
+        /*fix persian date picker show bug in modal*/
+        .datepicker-plot-area {
+            z-index: 1061;
+        }
+    </style>
+    
+    <link rel="shortcut icon"
+          href="@if(isset($wSetting->site->favicon)) {{route('image', ['category'=>'11','w'=>'150' , 'h'=>'150' ,  'filename' =>  $wSetting->site->favicon ])}} @endif"/>
     <!--begin: csrf token -->
     <script>
         window.Laravel = {!! json_encode([
@@ -61,7 +69,8 @@
 
 <!-- Google Tag Manager (noscript) -->
 <noscript>
-    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PNP8RDW" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PNP8RDW" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe>
 </noscript>
 <!-- End Google Tag Manager (noscript) -->
 
@@ -78,7 +87,7 @@
         @section("sidebar")
             @include("partials.sidebar")
         @show
-
+        
         <div class="m-grid__item m-grid__item--fluid m-wrapper">
             <div class="m-content">
                 @yield('pageBar')
@@ -88,7 +97,7 @@
 
         @section('right-aside')
             {{--<!-- BEGIN: Right Aside -->
-                <div class="m-grid__item m-aside-right">
+                <div class = "m-grid__item m-aside-right">
 
                     <div>
                         <h6 class="m-badge m-badge--warning m-badge--wide m-badge--rounded">ترافیک رایگان آلاء</h6>
@@ -96,7 +105,7 @@
                             دانلود آسیاتکی ها از سایت آلاء رایگان است.
                             <br>
                             اگر آسیاتک ندارید، از
-                            <a href="/v/asiatech" class="m-link m--font-boldest">اینجا</a>
+                            <a href = "/v/asiatech" class="m-link m--font-boldest">اینجا</a>
                             کد تخفیف
                             <span>
                                 100%
@@ -104,7 +113,7 @@
                             آسیاتک را <strong> رایگان </strong> دریافت کنید.
                         </p>
                     </div>
-                    <div class="m-separator m-separator--dashed m--space-10"></div>
+                    <div class = "m-separator m-separator--dashed m--space-10"></div>
                     <div>
                         <h6 class="m-badge m-badge--warning m-badge--wide m-badge--rounded"> کمک مالی به آلاء</h6>
                             <p class="mb-0 text-justify">
@@ -131,8 +140,8 @@
         @include("partials.footer1")
     @show
     @show
-    <input id="js-var-userIp" class="m--hide" type="hidden" value = '{{ $userIpAddress }}'>
-    <input id="js-var-userId" class="m--hide" type="hidden" value = '{{ optional(Auth::user())->id }}'>
+    <input id="js-var-userIp" class="m--hide" type="hidden" value='{{ $userIpAddress }}'>
+    <input id="js-var-userId" class="m--hide" type="hidden" value='{{ optional(Auth::user())->id }}'>
 </div>
 <!-- end:: Page -->
 
@@ -146,20 +155,20 @@
 <!-- end::Scroll Top -->
 {{--
 <!-- begin::Quick Nav -->
-<ul class="m-nav-sticky" style="margin-top: 30px;">
-    <li class="m-nav-sticky__item" data-toggle="m-tooltip" title="سبد خرید" data-placement="left">
-        <a href="https://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes" target="_blank">
-            <i class="la la-cart-arrow-down"></i>
+<ul class = "m-nav-sticky" style = "margin-top: 30px;">
+    <li class = "m-nav-sticky__item" data-toggle = "m-tooltip" title = "سبد خرید" data-placement = "left">
+        <a href = "https://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes" target = "_blank">
+            <i class = "la la-cart-arrow-down"></i>
         </a>
     </li>
-    <li class="m-nav-sticky__item" data-toggle="m-tooltip" title="Documentation" data-placement="left">
-        <a href="https://keenthemes.com/metronic/documentation.html" target="_blank">
-            <i class="la la-code-fork"></i>
+    <li class = "m-nav-sticky__item" data-toggle = "m-tooltip" title = "Documentation" data-placement = "left">
+        <a href = "https://keenthemes.com/metronic/documentation.html" target = "_blank">
+            <i class = "la la-code-fork"></i>
         </a>
     </li>
-    <li class="m-nav-sticky__item" data-toggle="m-tooltip" title="انجمن" data-placement="left">
-        <a href="https://keenthemes.com/forums/forum/support/metronic5/" target="_blank">
-            <i class="la la-life-ring"></i>
+    <li class = "m-nav-sticky__item" data-toggle = "m-tooltip" title = "انجمن" data-placement = "left">
+        <a href = "https://keenthemes.com/forums/forum/support/metronic5/" target = "_blank">
+            <i class = "la la-life-ring"></i>
         </a>
     </li>
 </ul>

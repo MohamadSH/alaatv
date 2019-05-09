@@ -891,8 +891,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 if ($parentsArray->isEmpty()) {
                     return false;
                 }
-                
-                return array_last($parentsArray);
+    
+                return $parentsArray->last();
     
             });
     }
@@ -1120,6 +1120,9 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         unset($array['order']);
         unset($array['producttype_id']);
         unset($array['attributeset_id']);
+        unset($array['redirectUrl']);
+        unset($array['tags']);
+        unset($array['page_view']);
         unset($array['created_at']);
         unset($array['updated_at']);
         unset($array['validSince']);
@@ -1381,7 +1384,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
             });
     }
     
-    public function getAllParents()
+    public function getAllParents(): Collection
     {
         $myProduct = $this;
         $key       = "product:getAllParents:".$myProduct->cacheKey();
@@ -1582,7 +1585,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return Cache::tags(["product"])->remember($key, config("constants.CACHE_600"), function () use ($product) {
             //ToDo
 //                if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS')))
-                    return $product->attributeset()->first()->setVisible([
+            return optional($product->attributeset()
+                ->first())->setVisible([
                         'name',
                         'description',
                         'order'
