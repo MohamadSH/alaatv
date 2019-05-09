@@ -163,3 +163,26 @@
     background-size: 100%;
     transition: background 0s;
 }
+
+.a--login-item .a--login-title {
+    text-align: center;
+    line-height: 0;
+    vertical-align: middle;
+    padding: 0;
+    color: #333;
+    display: table-cell;
+    height: 100%;
+    vertical-align: middle;
+    text-align: right;
+    font-size: 1.1rem;
+    line-height: 0;
+}
+
+
+.majorIcon {
+    width: 50px !important;
+    text-align: center;
+}
+.majorIcon img {
+    width: 40px;
+}

@@ -90,3 +90,12 @@ select.form-control {
 .form-control {
     height: calc(1.25em + 1.7rem + 4px);
 }
+
+.m-timeline-3 .m-timeline-3__item .m-timeline-3__item-time {
+    padding-top: 0;
+}
+
+/*fix persian date picker show bug in modal*/
+.datepicker-plot-area {
+    z-index: 1061;
+}
