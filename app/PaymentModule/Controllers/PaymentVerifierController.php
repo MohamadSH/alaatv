@@ -46,7 +46,7 @@ class PaymentVerifierController extends Controller
             $this->handleOrderSuccessPayment($transaction->order);
         } else {
             $this->handleOrderCanceledPayment($transaction->order);
-            $transaction->transactionstatus_id = config('constants.TRANSACTION_STATUS_UNSUCCESSFUL');
+            $this->handleOrderCanceledTransaction($transaction);
             $transaction->update();
         }
         /*
@@ -81,7 +81,17 @@ class PaymentVerifierController extends Controller
         }
         $order->refundWalletTransaction();
     }
-    
+
+    /**
+     * @param $transaction
+     */
+    private function handleOrderCanceledTransaction($transaction): void
+    {
+        if ($transaction->transactionstatus_id != config("constants.TRANSACTION_STATUS_UNPAID"))
+            //it is not an instalment payment
+            $transaction->transactionstatus_id = config('constants.TRANSACTION_STATUS_UNSUCCESSFUL');
+    }
+
     /*
      * private function handleWalletChargingCanceledPayment(Transaction $transaction)
     {

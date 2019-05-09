@@ -11,6 +11,7 @@ namespace App\Classes\Payment\RefinementRequest\Strategies;
 use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Order;
 use App\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Response;
 
 class TransactionRefinement extends Refinement
@@ -43,6 +44,7 @@ class TransactionRefinement extends Refinement
         }
         
         $this->order = $order;
+        $this->orderUniqueId = $order->id.Carbon::now()->timestamp;
         $this->user  = $this->order->user;
         $this->cost  = $this->transaction->cost;
         if ($this->canDeductFromWallet()) {

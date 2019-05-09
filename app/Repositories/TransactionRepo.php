@@ -15,13 +15,14 @@ class TransactionRepo
      *
      * @return \App\Classes\Util\Boolean
      */
-    public static function setAuthorityForTransaction(string $authority, $transactionId, string $description): \App\Classes\Util\Boolean
+    public static function setAuthorityForTransaction(string $authority, $transactionId, $gatewayId , string $description): \App\Classes\Util\Boolean
     {
         $data = [
             'destinationBankAccount_id' => 1,
             'authority'                 => $authority,
-            'transactiongateway_id'     => 1,
-            'paymentmethod_id'          => config('constants.PAYMENT_METHOD_ONLINE'),
+            'transactiongateway_id'     => $gatewayId,
+//            'paymentmethod_id'          => config('constants.PAYMENT_METHOD_ONLINE'),
+            'paymentmethod_id'          => 1, //ToDo : bug in Iman's package in PaymentDriver
             'description'               => $description,
         ];
         
@@ -50,7 +51,6 @@ class TransactionRepo
         
         self::setTimestamp($data, "deadline_at", $transaction);
         self::setTimestamp($data, "completed_at", $transaction);
-        
         
         return $transaction->update();
     }

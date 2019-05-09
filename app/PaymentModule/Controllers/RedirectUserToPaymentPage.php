@@ -3,6 +3,7 @@
 namespace App\PaymentModule\Controllers;
 
 use AlaaTV\Gateways\Money;
+use App\Repositories\TransactionGatewayRepo;
 use App\User;
 use App\Order;
 use App\Transaction;
@@ -36,6 +37,8 @@ class RedirectUserToPaymentPage extends Controller
         $user = $data['user'];
         /** @var Order $order */
         $order = $data['order'];
+        /** @var Order $order */
+        $orderUniqueId = $data['orderUniqueId'];
         /** @var Money $cost */
         $cost = Money::fromTomans((int) $data['cost']);
         /** @var Transaction $transaction */
@@ -58,11 +61,13 @@ class RedirectUserToPaymentPage extends Controller
         $paymentClient = PaymentDriver::select($paymentMethod);
         $url = $this->comeBackFromGateWayUrl($paymentMethod, $device);
 
-        OrdersRepo::closeOrder($order->id);
-        $authorityCode = nullable($paymentClient->generateAuthorityCode($url, $cost, $description, $order->id))
+        if($this->shouldCloseOrder($order))
+            OrdersRepo::closeOrder($order->id);
+
+        $authorityCode = nullable($paymentClient->generateAuthorityCode($url, $cost, $description, $orderUniqueId))
             ->orFailWith([Responses::class, 'noResponseFromBankError']);
 
-        TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id, $description)
+        TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id , $this->getGatewyId($paymentMethod), $description)
             ->orRespondWith([Responses::class, 'editTransactionError']);
 
         return view("order.checkout.gatewayRedirect", ['authority' => $authorityCode, 'paymentMethod' => $paymentMethod]);
@@ -152,5 +157,21 @@ class RedirectUserToPaymentPage extends Controller
     {
         return route('verifyOnlinePayment',
             ['paymentMethod' => $paymentMethod, 'device' => $device, '_token' => csrf_token()]);
+    }
+
+    private function getGatewyId(string $gateway){
+        $myGateway = TransactionGatewayRepo::getTransactionGatewayByName($gateway)
+            ->orFailWith([Responses::class, 'sendErrorResponse'] , ['msg'   =>  'No DB record found for this gateway' , Response::HTTP_BAD_REQUEST]);
+
+        return $myGateway->id;
+    }
+
+    /**
+     * @param Order $order
+     * @return bool
+     */
+    private function shouldCloseOrder(Order $order): bool
+    {
+        return $order->orderstatus_id == config('constants.ORDER_STATUS_OPEN');
     }
 }
