@@ -45,7 +45,7 @@
                             {{$debitCard->user->lastName}}
                         @endif
                     @endif
-                    - بانک {{$debitCard->bank->name}}
+                    - بانک {{ optional($debitCard->bank)->name}}
                 </div>
             @endif
 
