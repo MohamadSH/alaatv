@@ -208,12 +208,15 @@ abstract class Refinement
      */
     protected function canDeductFromWallet()
     {
-        if (isset($this->inputData['payByWallet']) && $this->inputData['payByWallet'] == true) {
+        return true;
+
+        //ToDo:  Option for choosing whether to pay from wallet or not
+/*        if (isset($this->inputData['payByWallet']) && $this->inputData['payByWallet'] == true) {
             return true;
         }
         else {
             return false;
-        }
+        }*/
     }
     
     protected function payByWallet(): void
