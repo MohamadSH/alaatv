@@ -692,9 +692,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 $contentSet     = $content->set;
                 $contentSetName = isset($contentSet) ? $contentSet->name : null;
                 if (isset($contentSet)) {
-                    $sameContents = $contentSet->contents()
-                        ->active()
-                        ->get()
+                    $sameContents = $contentSet->getContents()
                         ->sortBy("order")
                         ->load('contenttype');
                 } else {
