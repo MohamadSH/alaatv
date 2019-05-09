@@ -8,10 +8,10 @@
 
 namespace App\Classes\Search;
 
-use App\Classes\Search\{Filters\Tags, Tag\ContentTagManagerViaApi};
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use App\Classes\Search\{Filters\Tags, Tag\ContentTagManagerViaApi};
 
 class ContentSearch extends SearchAbstract
 {
@@ -32,8 +32,8 @@ class ContentSearch extends SearchAbstract
     
     public function get(array ...$params)
     {
-        $filters      = $this->getFromParams($params, "filters");
-        $contentTypes = $this->getFromParams($params, "contentTypes");
+        $filters      = $this->getFromParams($params, 'filters');
+        $contentTypes = $this->getFromParams($params, 'contentTypes');
         $items        = collect();
         foreach ($contentTypes as $contentType) {
             ${$contentType.'Result'} = $this->getFiltered($filters, ['contentType' => (array) $contentType]);
@@ -51,9 +51,9 @@ class ContentSearch extends SearchAbstract
     private function getFiltered(array ...$filters): ?LengthAwarePaginator
     {
         $filters     = array_merge(...$filters);
-        $contentType = array_get($filters, "contentType");
-        if (is_null($contentType)) {
-            throw new \InvalidArgumentException("filters[contentType] should be set.");
+        $contentType = array_get($filters, 'contentType');
+        if ($contentType === null) {
+            throw new \InvalidArgumentException('filters[contentType] should be set.');
         }
         
         return $this->setPageName($contentType[0].'Page')
@@ -92,7 +92,8 @@ class ContentSearch extends SearchAbstract
     {
         //ToDo: Active condition has conflict with admin
         $result = $query->active()
-            ->orderBy("created_at", "desc")
+            ->free()
+            ->orderBy('created_at', 'desc')
             ->paginate($this->numberOfItemInEachPage, ['*'], $this->pageName, $this->pageNum);
         
         return $result;
@@ -105,7 +106,7 @@ class ContentSearch extends SearchAbstract
      */
     protected function setupDecorator($decorator)
     {
-        $decorator = (new $decorator);
+        $decorator = new $decorator;
         if ($decorator instanceof Tags) {
             $decorator->setTagManager(new ContentTagManagerViaApi());
         }
