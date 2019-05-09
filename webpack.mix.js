@@ -271,7 +271,7 @@ mix.styles(
         'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
         'public/acm/videojs/plugins/seek-to-point.css',
 
-        // 'public/acm/AlaatvCustomFiles/css/page-content-show.css'
+        'public/acm/AlaatvCustomFiles/css/page-content-show.css'
     ],
     'public/css/content-show.css'
 );
