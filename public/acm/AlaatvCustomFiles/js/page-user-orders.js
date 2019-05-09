@@ -267,16 +267,15 @@ $(document).ready(function () {
         $('#onlinePaymentModal input[type="hidden"][name="transaction_id"]').val(transactionId);
         $('#onlinePaymentModal .orderCostReport').html(' مبلغ قابل پرداخت: ' + cost.toLocaleString('fa') + ' تومان ');
 
+        if (transactionId === '-') {
+            $('#onlinePaymentModal input[type="hidden"][name="order_id"]').prop("disabled", false);
+            $('#onlinePaymentModal input[type="hidden"][name="transaction_id"]').prop("disabled", true);
+        } else {
+            $('#onlinePaymentModal input[type="hidden"][name="transaction_id"]').prop("disabled", false);
+            $('#onlinePaymentModal input[type="hidden"][name="order_id"]').prop("disabled", true);
+        }
+
         $('#onlinePaymentModal').modal('show');
-        // if ($(this).attr('data-role')) {
-        //     var transaction_id = $(this).data("role");
-        //     $("input[name=transaction_id]").val(transaction_id).prop("disabled", false);
-        //     $("#orderCost").text($("#instalmentCost_" + transaction_id).text()).number(true).prepend("مبلغ قابل پرداخت: ").append(" تومان");
-        // } else {
-        //     $("input[name=transaction_id]").prop("disabled", true);
-        //     $("#orderCost").text($("#cost_" + order_id).text()).number(true).prepend("مبلغ قابل پرداخت: ").append(" تومان");
-        // }
-        // $("input[name=order_id]").val(order_id);
     });
 
     $(document).on('change', 'select[name="paymentMethod"]', function () {
