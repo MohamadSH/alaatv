@@ -979,8 +979,9 @@ class HomeController extends Controller
      */
     public function newDownload($data, ContentRepositoryInterface $contentRepository)
     {
+        /** @var User $user */
         $user = getAuthenticatedUser();
-        if (is_null($data) || is_null($user)) {
+        if ($data === null || $user === null) {
             abort(403, 'Not authorized.');
         }
         try {
@@ -988,8 +989,8 @@ class HomeController extends Controller
         } catch (DecryptException $e) {
             abort(403, 'invalid Data!');
         }
-        $url       = $data["url"];
-        $contentId = $data["data"]["content_id"];
+        $url       = $data['url'];
+        $contentId = $data['data']['content_id'];
         $content   = $contentRepository->getContentById($contentId);
         if (!$user->hasContent($content)) {
             return redirect()
