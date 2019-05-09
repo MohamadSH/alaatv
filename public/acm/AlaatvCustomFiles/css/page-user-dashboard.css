@@ -28,6 +28,10 @@
     display: none;
 }
 
+.contentModal .contentItem .itemThumbnail img {
+    min-width: 40px;
+}
+
 /*media query*/
 @media (max-width: 767.98px) {
     #pamphletModal .m-widget6 .m-widget6__head,

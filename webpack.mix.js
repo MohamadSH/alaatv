@@ -128,7 +128,7 @@ mix.babel(
 mix.babel(
     [
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-        // 'public/acm/AlaatvCustomFiles/js/page-user-dashboard.js',
+        'public/acm/AlaatvCustomFiles/js/page-user-dashboard.js',
     ],
     'public/js/user-dashboard.js'
 );

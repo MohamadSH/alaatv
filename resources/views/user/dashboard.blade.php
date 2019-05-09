@@ -1,12 +1,7 @@
 @extends('app' , ["pageName"=>$pageName])
 
 @section('page-css')
-    <link href="{{ mix('/css/page-shop.css') }}" rel="stylesheet" type="text/css"/>
-    <style>
-        .contentModal .contentItem .itemThumbnail img {
-            min-width: 40px;
-        }
-    </style>
+    <link href="{{ mix('/css/user-dashboard.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('pageBar')
@@ -688,5 +683,4 @@
 
 @section('page-js')
     <script src="{{ mix('/js/user-dashboard.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-user-dashboard.js') }}"></script>
 @endsection
