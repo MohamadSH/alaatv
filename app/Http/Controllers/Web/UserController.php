@@ -1005,7 +1005,7 @@ class UserController extends Controller
 
         $gateways = [];
         foreach ($gatewaysCollection as  $gateway){
-            $gateways[$gateway->displayName] = route('redirectToBank', ['paymentMethod'=> $gateway->name, 'device'=>'web']);
+            $gateways[route('redirectToBank', ['paymentMethod'=> $gateway->name, 'device'=>'web'])] = $gateway->displayName;
         }
 
         $key          = "user:orderCoupons:".$user->cacheKey().":Orders=".md5($orders->pluck("id")
@@ -1013,7 +1013,7 @@ class UserController extends Controller
         $orderCoupons = Cache::remember($key, config("constants.CACHE_60"), function () use ($orders) {
             return $orders->getCoupons();
         });
-        
+
         return view("user.ordersList",
             compact("orders", "gateways", "debitCard", "transactions", "instalments", "orderCoupons"));
     }

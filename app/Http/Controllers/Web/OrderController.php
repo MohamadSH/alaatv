@@ -1674,7 +1674,7 @@ class OrderController extends Controller
         } else {
             $donateOrder = Order::create([
                 'orderstatus_id'      =>  config('constants.ORDER_STATUS_OPEN_DONATE'),
-                'paymentstatus_id'    =>  config('constants.PAYMENT_STATUS_PAID'),
+                'paymentstatus_id'    =>  config('constants.PAYMENT_STATUS_UNPAID'),
                 'user_id'             =>  $user->id,
             ]);
         }
