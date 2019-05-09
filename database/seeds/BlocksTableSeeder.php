@@ -166,7 +166,7 @@ class BlocksTableSeeder extends Seeder
         $data = [
             [
                 'id'         => 10,
-                'title'      => 'پروژه تفتان آلاء',
+                'title'      => 'پروژه تفتان آلاء( کنکور نظام جدید)',
                 'tags'       => json_encode([
                     "محصول",
                     "نظام_آموزشی_جدید",
