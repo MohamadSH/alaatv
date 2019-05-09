@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Collection\OrderCollections;
 use App\User;
 use App\Order;
 use App\Coupon;
@@ -1664,46 +1665,36 @@ class OrderController extends Controller
      */
     public function donateOrder(DonateRequest $request, OrderproductController $orderproductController)
     {
-        $amount       = $request->get("amount");
+        $amount       = $request->get('amount');
         $user         = $request->user();
-        $donateOrders = $user->orders->where("orderstatus_id", config("constants.ORDER_STATUS_OPEN_DONATE"));
+        /** @var OrderCollections $donateOrders */
+        $donateOrders = $user->orders->where('orderstatus_id', config('constants.ORDER_STATUS_OPEN_DONATE'));
         if ($donateOrders->isNotEmpty()) {
             $donateOrder = $donateOrders->first();
         } else {
-            $donateOrder                   = new Order();
-            $donateOrder->orderstatus_id   = config("constants.ORDER_STATUS_OPEN_DONATE");
-            $donateOrder->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID");
-            $donateOrder->user_id          = $user->id;
-            if ($donateOrder->save()) {
-                $user = $user->fresh();
-            }
+            $donateOrder = Order::create([
+                'orderstatus_id'      =>  config('constants.ORDER_STATUS_OPEN_DONATE'),
+                'paymentstatus_id'    =>  config('constants.PAYMENT_STATUS_PAID'),
+                'user_id'             =>  $user->id,
+            ]);
         }
-        $request->offsetSet("mode", "donate");
-        $request->offsetSet("cost", $amount);
+
+        $request->offsetSet('mode', 'donate');
+        $request->offsetSet('cost', $amount);
         $product        = Product::FindOrFail(Product::CUSTOM_DONATE_PRODUCT);
         $response       = $this->addOrderproduct($request, $product, $orderproductController);
         $responseStatus = $response->getStatusCode();
-        $result         = json_decode($response->getContent());
-        
-        $donateOrder                    = $donateOrder->fresh();
-        $orderCost                      = $donateOrder->obtainOrderCost(true, false);
-        $donateOrder->cost              = $orderCost["rawCostWithDiscount"];
-        $donateOrder->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
-        $updateFlag                     = $donateOrder->updateWithoutTimestamp();
-        $cost                           = $donateOrder->totalCost();
-        
+
         if ($responseStatus == Response::HTTP_OK) {
-            if (isset($result->cost)) {
-                $cost = $result->cost;
-            }
-            if (isset($cost)) {
-                $parameters = [
-                    'order_id' => $donateOrder->id,
-                ];
-    
-                $this->sendRequest(route('redirectToBank', ['paymentMethod' => 'zarinpal', 'device' => 'web']), 'GET',
-                    $parameters);
-            }
+            $donateOrder                    = $donateOrder->fresh();
+            $orderCost                      = $donateOrder->obtainOrderCost(true, false);
+            $donateOrder->cost              = $orderCost['rawCostWithDiscount'];
+            $donateOrder->costwithoutcoupon = $orderCost['rawCostWithoutDiscount'];
+            $donateOrder->updateWithoutTimestamp();
+
+            $paymentRoute = route('redirectToBank', ['paymentMethod' => 'zarinpal', 'device' => 'web']);
+            $paymentRoute .= '?order_id='.$donateOrder->id ;
+            return redirect($paymentRoute);
         }
     
         return redirect()->back();

@@ -193,9 +193,9 @@ class TagController extends Controller
                     'Content-Type' => 'application/json; charset=UTF-8',
                     'charset'      => 'utf-8',
                 ];
-    
-                mb_convert_encoding($result, 'UTF-8', 'UTF-8');
-                
+
+                $this->convertToUtf8($result);
+
                 $response = response()->json([
                     'data' => $result,
                 ], 200, $header, JSON_UNESCAPED_UNICODE);
@@ -211,5 +211,14 @@ class TagController extends Controller
         $this->redis->flushDB(static function ($err, $result) {
             return $result;
         });
+    }
+
+    /**
+     * @param $result
+     */
+    private function convertToUtf8(&$result): void
+    {
+        if (is_string($result))
+            mb_convert_encoding($result, 'UTF-8', 'UTF-8');
     }
 }
