@@ -15,12 +15,12 @@ class TransactionRepo
      *
      * @return \App\Classes\Util\Boolean
      */
-    public static function setAuthorityForTransaction(string $authority, $transactionId, string $description): \App\Classes\Util\Boolean
+    public static function setAuthorityForTransaction(string $authority, $transactionId, $gatewayId , string $description): \App\Classes\Util\Boolean
     {
         $data = [
             'destinationBankAccount_id' => 1,
             'authority'                 => $authority,
-            'transactiongateway_id'     => 1,
+            'transactiongateway_id'     => $gatewayId,
             'paymentmethod_id'          => config('constants.PAYMENT_METHOD_ONLINE'),
             'description'               => $description,
         ];

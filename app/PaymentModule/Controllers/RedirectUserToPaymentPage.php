@@ -3,6 +3,7 @@
 namespace App\PaymentModule\Controllers;
 
 use AlaaTV\Gateways\Money;
+use App\Repositories\TransactionGatewayRepo;
 use App\User;
 use App\Order;
 use App\Transaction;
@@ -62,7 +63,7 @@ class RedirectUserToPaymentPage extends Controller
         $authorityCode = nullable($paymentClient->generateAuthorityCode($url, $cost, $description, $order->id))
             ->orFailWith([Responses::class, 'noResponseFromBankError']);
 
-        TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id, $description)
+        TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id , $this->getGatewyId($paymentMethod), $description)
             ->orRespondWith([Responses::class, 'editTransactionError']);
 
         return view("order.checkout.gatewayRedirect", ['authority' => $authorityCode, 'paymentMethod' => $paymentMethod]);
@@ -152,5 +153,12 @@ class RedirectUserToPaymentPage extends Controller
     {
         return route('verifyOnlinePayment',
             ['paymentMethod' => $paymentMethod, 'device' => $device, '_token' => csrf_token()]);
+    }
+
+    private function getGatewyId(string $gateway){
+        $myGateway = TransactionGatewayRepo::getTransactionGatewayByName($gateway)
+            ->orFailWith([Responses::class, 'sendErrorResponse'] , ['msg'   =>  'No DB record found for this gateway' , Response::HTTP_BAD_REQUEST]);
+
+        return $myGateway->id;
     }
 }
