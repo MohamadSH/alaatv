@@ -36,7 +36,7 @@ var Alaasearch = function () {
             '            </div>\n' +
             '        </div>\n' +
             '        <div class = "m-portlet__body">\n' +
-            '            <div class = "m-widget19">\n' +
+            '            <div class = "a-widget19 m-widget19">\n' +
             '                <div class = "m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" >\n' +
             '                    <img src = "' + widgetPic + '" alt = "' + widgetTitle + '"/>\n' +
             '                    <div class = "m-widget19__shadow"></div>\n' +
@@ -86,7 +86,7 @@ var Alaasearch = function () {
             </div> \
         </div> \
         <div class = \"m-portlet__body\"> \
-            <div class = \"m-widget19\"> \
+            <div class = \"a-widget19 m-widget19\"> \
                 <div class = \"m-widget19__pic m-portlet-fit--top m-portlet-fit--sides\" > \
                     <img src = \"' + widgetPic + '\" alt = \" ' + widgetTitle + '\"/> \
                     <div class = \"m-widget19__shadow\"></div> \
@@ -149,7 +149,7 @@ var Alaasearch = function () {
             </div> \
         </div> \
         <div class = \"m-portlet__body\"> \
-            <div class = \"m-widget19\"> \
+            <div class = \"a-widget19 m-widget19\"> \
                 <div class = \"m-widget19__pic m-portlet-fit--top m-portlet-fit--sides\" > \
                     <img src = \"'+ widgetPic +'\" alt = \" ' + widgetTitle +'\"/> \
                     <div class = \"m-widget19__shadow\"></div> \
