@@ -950,7 +950,7 @@ class HomeController extends Controller
             $mobiles           = $request->get("group-mobile");
             $mobileArray       = [];
             foreach ($mobiles as $mobile) {
-                array_push($mobileArray, $mobile["mobile"]);
+                $mobileArray[] = $mobile["mobile"];
             }
             $baseDataTime = Carbon::createFromTimeString("2018-05-03 00:00:00");
             $orders       = Order::whereHas("user", function ($q) use ($mobileArray, $baseDataTime) {
@@ -966,8 +966,8 @@ class HomeController extends Controller
                 ->get();
             $orders->load("orderproducts");
         }
-        
-        return view("admin.indexTeleMarketing", compact("orders", "marketingProducts"));
+    
+        return view('admin.indexTeleMarketing', compact("orders", "marketingProducts"));
     }
     
     /**
