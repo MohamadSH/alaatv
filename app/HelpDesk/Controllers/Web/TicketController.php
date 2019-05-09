@@ -5,6 +5,7 @@ namespace App\HelpDesk\Controllers;
 use Illuminate\Http\Request;
 use App\HelpDesk\Models\Ticket;
 use App\Http\Controllers\Controller;
+use App\HelpDesk\Repositories\AgentRepository;
 
 class TicketController extends Controller
 {
@@ -46,7 +47,7 @@ class TicketController extends Controller
         ]);*/
     }
     
-
+    
     public function index()
     {
         $tickets = Ticket::all();
@@ -63,8 +64,33 @@ class TicketController extends Controller
     }
     
     
-    public function store(Request $request)
+    /**
+     * @param  Request          $request
+     * @param  AgentRepository  $repository
+     *
+     * @return Ticket|\Illuminate\Database\Eloquent\Model
+     */
+    public function store(Request $request, AgentRepository $repository)
     {
+        $categoryId = $request->get('category_id');
+        $fillables  = [
+            'subject',
+            'content',
+            'priority_id',
+            'category_id',
+        ];
+        $ticket     = [
+            'status_id' => config('helpDesk.STATUS_OPEN'),
+            'user_id'   => $request->user()->id,
+            'agent_id'  => $repository->getActiveAgent($categoryId),
+        ];
+        foreach ($fillables as $key) {
+            $ticket += [
+                $key => $request->get($key),
+            ];
+        }
+        return Ticket::create($ticket);
+        
     }
     
     

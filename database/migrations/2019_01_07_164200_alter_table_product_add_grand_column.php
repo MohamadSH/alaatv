@@ -15,6 +15,9 @@ class AlterTableProductAddGrandColumn extends Migration
      */
     public function up()
     {
+        if (Schema::hasColumn('products', 'grand_id')) {
+            $this->down();
+        }
         Schema::table('products', function (Blueprint $table) {
             $table->unsignedInteger('grand_id')
                    ->nullable()

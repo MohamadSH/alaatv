@@ -88,7 +88,7 @@ class Productfile extends BaseModel
     
     public function set()
     {
-        return $this->belongsTo('\App\Contentset', 'contentset_id');
+        return $this->belongsTo(Contentset::class, 'contentset_id');
     }
     
     public function productfiletype()
