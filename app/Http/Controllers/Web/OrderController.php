@@ -1691,8 +1691,9 @@ class OrderController extends Controller
             $donateOrder->costwithoutcoupon = $orderCost['rawCostWithoutDiscount'];
             $donateOrder->updateWithoutTimestamp();
 
-
-            return redirect(route('redirectToBank', ['paymentMethod' => 'zarinpal', 'device' => 'web'].'?order_id='.$donateOrder->id));
+            $paymentRoute = route('redirectToBank', ['paymentMethod' => 'zarinpal', 'device' => 'web']);
+            $paymentRoute .= '?order_id='.$donateOrder->id ;
+            return redirect($paymentRoute);
         }
     
         return redirect()->back();
