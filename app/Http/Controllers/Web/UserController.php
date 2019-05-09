@@ -971,9 +971,9 @@ class UserController extends Controller
      */
     public function userOrders(Request $request)
     {
-        $debitCard = Bankaccount::all()
-            ->where("user_id", 2)
-            ->first();
+//        $debitCard = Bankaccount::all()
+//            ->where("user_id", 2)
+//            ->first();
         
         $user = $request->user();
         
