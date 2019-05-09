@@ -63,4 +63,9 @@ class OrderIdRefinement extends Refinement
             return false;
         }
     }
+
+    protected function getOrderCost(): void
+    {
+        $this->cost = $this->order->totalCost() - $this->order->totalPaidCost();
+    }
 }
