@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class = "m-portlet__body">
-            <div class = "m-widget19">
+            <div class = "a-widget19 m-widget19">
                 <div class = "m-widget19__pic m-portlet-fit--top m-portlet-fit--sides">
                     <img src = "{{ $widgetPic }}" alt = " {{ $widgetTitle }}"/>
                     <h4 class = "m-widget19__title m--font-light m--bg-brand m--padding-top-15 m--padding-right-25 a--opacity-7 a--full-width m--regular-font-size-lg2">

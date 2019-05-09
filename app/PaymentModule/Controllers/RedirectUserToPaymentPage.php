@@ -65,7 +65,7 @@ class RedirectUserToPaymentPage extends Controller
         TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id, $description)
             ->orRespondWith([Responses::class, 'editTransactionError']);
 
-        return view("order.checkout.gatewayRedirect", ['authority' => $authorityCode]);
+        return view("order.checkout.gatewayRedirect", ['authority' => $authorityCode, 'paymentMethod' => $paymentMethod]);
     }
 
     /**

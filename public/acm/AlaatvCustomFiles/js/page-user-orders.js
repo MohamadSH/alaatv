@@ -1,19 +1,3 @@
-var UserOrder = function () {
-
-    let orders = null;
-
-    function getOrderByKey() {
-
-    }
-
-
-    return {
-        refreshUi: function () {
-
-        },
-    };
-}();
-
 $(document).ready(function () {
 
     function getRefCode(transactionItem) {
@@ -188,10 +172,16 @@ $(document).ready(function () {
             if (successfulTransactionItem.cost < 0) {
                 amount += '<span class="m-badge m-badge--wide m-badge--metal">بازگشت هزینه</span>';
             }
+            let transactionType = '';
+            if (successfulTransactionItem.transactiongateway !== null) {
+                transactionType = successfulTransactionItem.paymentmethod.description + '(' + successfulTransactionItem.transactiongateway.displayName + ')';
+            } else {
+                transactionType = successfulTransactionItem.paymentmethod.description;
+            }
             successfulTransactionsHtml +=
                 '<tr>\n' +
                 '    <td>' + amount + '</td>\n' +
-                '    <td>' + successfulTransactionItem.paymentmethod.description + '</td>\n' +
+                '    <td>' + transactionType + '</td>\n' +
                 '    <td>' + refCode + '</td>\n' +
                 '    <td>' + completed_at + '</td>\n' +
                 '</tr>';
@@ -268,7 +258,6 @@ $(document).ready(function () {
         $('#orderDetailesModal').modal('show');
     });
 
-
     $(document).on('click', '.btnOnlinePayment', function () {
         var orderId = $(this).data('order-id');
         var transactionId = $(this).data('transaction-id');
@@ -290,5 +279,7 @@ $(document).ready(function () {
         // $("input[name=order_id]").val(order_id);
     });
 
-
+    $(document).on('change', 'select[name="paymentMethod"]', function () {
+        $('#onlinePaymentModalForm').attr('action', $(this).val());
+    });
 });

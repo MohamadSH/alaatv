@@ -36,7 +36,7 @@ var Alaasearch = function () {
             '            </div>\n' +
             '        </div>\n' +
             '        <div class = "m-portlet__body">\n' +
-            '            <div class = "m-widget19">\n' +
+            '            <div class = "a-widget19 m-widget19">\n' +
             '                <div class = "m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" >\n' +
             '                    <img src = "' + widgetPic + '" alt = "' + widgetTitle + '"/>\n' +
             '                    <div class = "m-widget19__shadow"></div>\n' +
@@ -86,7 +86,7 @@ var Alaasearch = function () {
             </div> \
         </div> \
         <div class = \"m-portlet__body\"> \
-            <div class = \"m-widget19\"> \
+            <div class = \"a-widget19 m-widget19\"> \
                 <div class = \"m-widget19__pic m-portlet-fit--top m-portlet-fit--sides\" > \
                     <img src = \"' + widgetPic + '\" alt = \" ' + widgetTitle + '\"/> \
                     <div class = \"m-widget19__shadow\"></div> \
@@ -149,7 +149,7 @@ var Alaasearch = function () {
             </div> \
         </div> \
         <div class = \"m-portlet__body\"> \
-            <div class = \"m-widget19\"> \
+            <div class = \"a-widget19 m-widget19\"> \
                 <div class = \"m-widget19__pic m-portlet-fit--top m-portlet-fit--sides\" > \
                     <img src = \"'+ widgetPic +'\" alt = \" ' + widgetTitle +'\"/> \
                     <div class = \"m-widget19__shadow\"></div> \
@@ -718,15 +718,34 @@ var MultiLevelSearch = function () {
                 }
                 selectorItem.find('.select2warper').remove();
                 selectorItem.append('<div class="col-12 col-sm-9 col-md-5 col-lg-4 select2warper"><div><select class="form-control select2" id="' + select2Id + '">' + select2Html + '</select></div></div>');
-                $('#' + select2Id).select2({width: 'resolve'});
+                $('#' + select2Id)
+                    .select2({closeOnSelect: true})
+                    .on('select2:select', function (event) {
+                        $('.a--multi-level-search select').select2("close");
+                    })
+                    .on('select2:close', function (event) {
+                        $('.a--multi-level-search select').select2("close");
+                    });
                 selectorItem.fadeIn();
             } else {
                 selectorItem.append('<div class="col-12 col-sm-9 col-md-5 col-lg-4 select2warper"><div><select class="form-control select2" id="' + select2Id + '">' + select2Html + '</select></div></div>');
-                $('#' + select2Id).select2({width: 'resolve'});
+                $('#' + select2Id)
+                    .select2({closeOnSelect: true})
+                    .on('select2:select', function (event) {
+                        $('.a--multi-level-search select').select2('destroy');
+                        $('.a--multi-level-search select').select2({closeOnSelect: true});
+                        $('.a--multi-level-search select').select2("close");
+                        $('.a--multi-level-search select').select2("close");
+                    })
+                    .on('select2:close', function (event) {
+                        $('.a--multi-level-search select').select2('destroy');
+                        $('.a--multi-level-search select').select2({closeOnSelect: true});
+                        $('.a--multi-level-search select').select2("close");
+                        $('.a--multi-level-search select').select2("close");
+                    });
                 selectorItem.fadeIn();
             }
         }
-
         refreshNavbar(selectorIndex);
     }
 
@@ -845,6 +864,7 @@ var MultiLevelSearch = function () {
         } else {
             showSelectorItem(parseInt(selectorOrder) + 1);
             if (getMaxOrder() >= (parseInt(selectorOrder) + 1)) {
+                console.log('if order: ', (parseInt(selectorOrder) + 1));
                 setActiveStep(parseInt(selectorOrder) + 1);
             }
         }
@@ -2150,8 +2170,8 @@ var CustomInitMultiLevelSearch = function () {
                 value: 'یازدهم'
             },
             {
-                name: 'کنکوری',
-                value: 'کنکوری'
+                name: 'کنکور',
+                value: 'کنکور'
             },
             {
                 name: 'اول دبیرستان',
@@ -2466,9 +2486,9 @@ var GetAjaxData = function () {
             success: function (data) {
                 if (typeof data === 'undefined' || data.error) {
 
-                    // let message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
+                    let message = '';
                     if (typeof data !== 'undefined') {
-                        let message = data.error.message;
+                        message = data.error.message;
                     }
 
                     toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
@@ -2512,16 +2532,22 @@ jQuery(document).ready(function () {
     Alaasearch.init(contentData);
 
     CustomInitMultiLevelSearch.initFilters();
+
     MultiLevelSearch.init({
         selectorId: 'contentSearchFilter'
     }, function (data) {
         GetAjaxData.refreshTags();
         GetAjaxData.getNewDataBaseOnTags();
-    }, function (data) {
+    },  function (data) {
         if (data.selectorOrder < 3) {
             GetAjaxData.refreshTags();
             CustomInitMultiLevelSearch.initFilters();
         }
+
+        $('.a--multi-level-search select').select2('destroy');
+        $('.a--multi-level-search select').select2({closeOnSelect: true});
+        $('.a--multi-level-search select').select2("close");
+        $('.a--multi-level-search select').select2("close");
     });
 
 });

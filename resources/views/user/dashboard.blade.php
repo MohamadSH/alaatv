@@ -1,7 +1,7 @@
 @extends('app' , ["pageName"=>$pageName])
 
 @section('page-css')
-    <link href="{{ mix('/css/page-shop.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ mix('/css/user-dashboard.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('pageBar')
@@ -26,561 +26,553 @@
     
     @include('systemMessage.flash')
     
-    {{--{{ $user }}--}}
-    
-    
-    {{--{{ dd($userAssetsCollection) }}--}}
-    {{--{{ dd($userAssetsCollection[0]->products[0]->name) }}--}}
-    
-{{--    <div class="row">--}}
-{{--        <div class="col">--}}
-{{--            <div class="m-portlet  m-portlet--bordered" id="owlCarouselMyProduct">--}}
-{{--                <div class="m-portlet__head">--}}
-{{--                    <div class="m-portlet__head-caption">--}}
-{{--                        <div class="m-portlet__head-title">--}}
-{{--                            <h3 class="m-portlet__head-text">--}}
-{{--                                محصولات من--}}
-{{--                            </h3>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <div class="m-portlet__head-tools">--}}
-{{--                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">--}}
-{{--                            <i class="fa flaticon-shapes"></i>--}}
-{{--                        </a>--}}
-{{--                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">--}}
-{{--                            <i class="flaticon-more-v4"></i>--}}
-{{--                        </a>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--                <div class="m-portlet__body m-portlet__body--no-padding">--}}
-{{--                    <!--begin::Widget 30-->--}}
-{{--                    <div class="m-widget30">--}}
-{{--                        --}}
-{{--                        <div class="m-widget_head">--}}
-{{--                            --}}
-{{--                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">--}}
-{{--                                @foreach($userAssetsCollection as $userAssetKey=>$userAsset)--}}
-{{--                                    @if($userAsset->title === 'محصولات من')--}}
-{{--                                        @foreach($userAsset->products as $productKey=>$product)--}}
-{{--                                            @if(count($product->sets)===0)--}}
-{{--                                                <div class="m-widget_head-owlcarousel-item carousel background-gradient"--}}
-{{--                                                     data-position="{{ $productKey }}">--}}
-{{--                                                    <a href="{{ $product->url }}">--}}
-{{--                                                        <img class="a--owl-carousel-type-2-item-image"--}}
-{{--                                                             src="{{ $product->photo }}">--}}
-{{--                                                    </a>--}}
-{{--                                                    <br>--}}
-{{--                                                    <a href="{{ $product->url }}" target="_blank" class="m-link">--}}
-{{--                                                        {{ $product->name }}--}}
-{{--                                                    </a>--}}
-{{--                                                </div>--}}
-{{--                                            @elseif(count($product->sets)===1)--}}
-{{--                                                <div class="m-widget_head-owlcarousel-item carousel background-gradient"--}}
-{{--                                                     data-position="{{ $productKey }}">--}}
-{{--                                                    <img class="a--owl-carousel-type-2-item-image"--}}
-{{--                                                         src="{{ $product->photo }}">--}}
-{{--                                                    <br>--}}
-{{--                                                    {{ $product->name }}--}}
-{{--                                                    <hr>--}}
-{{--                                                    <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"--}}
-{{--                                                         role="group" aria-label="Small button group">--}}
-{{--                                                        <button type="button" class="btn btn-warning btnViewPamphlet"--}}
-{{--                                                                data-content-type="pamphlet"--}}
-{{--                                                                data-content-url="{{ $product->sets[0]->contentUrl }}">--}}
-{{--                                                            <i class="flaticon-edit-1"></i>--}}
-{{--                                                            جزوات--}}
-{{--                                                        </button>--}}
-{{--                                                        @if(count($product->sets[0]->video) > 0)--}}
-{{--                                                            <button type="button" class="btn btn-success btnViewVideo"--}}
-{{--                                                                    data-content-type="video"--}}
-{{--                                                                    data-content-url="{{ $product->sets[0]->contentUrl }}">--}}
-{{--                                                                <i class="la la-film"></i>--}}
-{{--                                                                فیلم ها--}}
-{{--                                                            </button>--}}
-{{--                                                        @endif--}}
-{{--                                                    </div>--}}
-{{--                                                </div>--}}
-{{--                                            @else--}}
-{{--                                                <div class="m-widget_head-owlcarousel-item carousel"--}}
-{{--                                                     data-position="{{ $productKey }}">--}}
-{{--                                                    <a href="{{ $product->url }}">--}}
-{{--                                                        <img class="a--owl-carousel-type-2-item-image"--}}
-{{--                                                             src="{{ $product->photo }}">--}}
-{{--                                                    </a>--}}
-{{--                                                    <br>--}}
-{{--                                                    <a href="{{ $product->url }}" target="_blank"--}}
-{{--                                                       class="m-link">{{ $product->name }}</a>--}}
-{{--                                                    <hr>--}}
-{{--                                                    <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-type-2-show-detailes">--}}
-{{--                                                        <i class="flaticon-more-v6"></i>--}}
-{{--                                                    </a>--}}
-{{--                                                </div>--}}
-{{--                                            @endif--}}
-{{--                                        @endforeach--}}
-{{--                                    @endif--}}
-{{--                                @endforeach--}}
-{{--                            </div>--}}
-{{--                            --}}
-{{--                            @if(count($userAssetsCollection->filter(function ($value, $key) {return $value->title === 'محصولات من'; })->all())===0)--}}
-{{--                                <div class="alert alert-info" role="alert">--}}
-{{--                                    <strong> هنوز از آلاء خرید نکرده اید. </strong>--}}
-{{--                                    بعد از اینکه از آلاء خرید کنید، امکان مشاهده خریدهای شما در این قسمت فراهم می شود.--}}
-{{--                                </div>--}}
-{{--                            @endif--}}
-{{--                        --}}
-{{--                        </div>--}}
-{{--                        <div class="m-portlet a--owl-carousel-type-2-slide-detailes">--}}
-{{--                            <div class="m-portlet__head">--}}
-{{--                                <div class="m-portlet__head-caption">--}}
-{{--                                    <div class="m-portlet__head-title">--}}
-{{--                                        <h3 class="m-portlet__head-text">--}}
-{{--                                            مجموعه های محصول خریداری شده--}}
-{{--                                        </h3>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                                <div class="m-portlet__head-tools">--}}
-{{--                                    <a class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-type-2-hide-detailes">--}}
-{{--                                        <i class="la la-times"></i>--}}
-{{--                                    </a>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            --}}
-{{--                            @foreach($userAssetsCollection as $userAssetKey=>$userAsset)--}}
-{{--                                @if($userAsset->title === 'محصولات من')--}}
-{{--                                    @foreach($userAsset->products as $productKey=>$product)--}}
-{{--                                        @if(count($product->sets)>1)--}}
-{{--                                            <div class="m-portlet__body subCategoryWarper a--owl-carousel-type-2-slide-iteDetail-{{ $productKey }}">--}}
-{{--                                                <div class="row justify-content-center">--}}
-{{--                                                    @foreach($product->sets as $setKey=>$set)--}}
-{{--                                                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">--}}
-{{--                                                            <div class="subCategoryItem">--}}
-{{--                                                                <div class="subCategoryItem-title">--}}
-{{--                                                                    {{ $set->name }}--}}
-{{--                                                                </div>--}}
-{{--                                                                <hr>--}}
-{{--                                                                <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"--}}
-{{--                                                                     role="group" aria-label="Small button group">--}}
-{{--                                                                    <button type="button"--}}
-{{--                                                                            class="btn btn-warning btnViewPamphlet"--}}
-{{--                                                                            data-content-type="pamphlet"--}}
-{{--                                                                            data-content-url="{{ $set->contentUrl }}">--}}
-{{--                                                                        <i class="flaticon-edit-1"></i>--}}
-{{--                                                                        جزوات--}}
-{{--                                                                    </button>--}}
-{{--                                                                    <button type="button"--}}
-{{--                                                                            class="btn btn-success btnViewVideo"--}}
-{{--                                                                            data-content-type="video"--}}
-{{--                                                                            data-content-url="{{ $set->contentUrl }}">--}}
-{{--                                                                        <i class="la la-film"></i>--}}
-{{--                                                                        فیلم ها--}}
-{{--                                                                    </button>--}}
-{{--                                                                </div>--}}
-{{--                                                            </div>--}}
-{{--                                                        </div>--}}
-{{--                                                    @endforeach--}}
-{{--                                                </div>--}}
-{{--                                            </div>--}}
-{{--                                        @endif--}}
-{{--                                    @endforeach--}}
-{{--                                @endif--}}
-{{--                            @endforeach--}}
-{{--                        </div>--}}
-{{--                    --}}
-{{--                    </div>--}}
-{{--                    <!--end::Widget 30-->--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-    
-    
-    @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
-{{--        @if($userAsset->title === 'دسته های مورد علاقه من' || $userAsset->title === 'محتوای مورد علاقه من' || $userAsset->title === 'محصولات مورد علاقه من')--}}
-            <div class="row">
-                <div class="col">
-                    <div class="m-portlet  m-portlet--bordered">
-                        <div class="m-portlet__head">
-                            <div class="m-portlet__head-caption">
-                                <div class="m-portlet__head-title">
-                                    <h3 class="m-portlet__head-text">
-                                        <i class="flaticon-confetti m--margin-right-10"></i>
-                                        علاقه مندی های من
-                                    </h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="m-portlet__body m--padding-5">
-                            
-                            @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
-                                @if($userAsset->title === 'دسته های مورد علاقه من')
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="m-portlet  m-portlet--bordered" id="owlCarouselMyFavoritSet">
-                                                <div class="m-portlet__head">
-                                                    <div class="m-portlet__head-caption">
-                                                        <div class="m-portlet__head-title">
-                                                            <h3 class="m-portlet__head-text">
-                                                                دسته ها
-                                                            </h3>
-                                                        </div>
-                                                    </div>
-                                                    <div class="m-portlet__head-tools">
-                                                        <a href="#"
-                                                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
-                                                            <i class="fa flaticon-shapes"></i>
-                                                        </a>
-                                                        <a href="#"
-                                                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
-                                                            <i class="flaticon-more-v4"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="m-portlet__body m-portlet__body--no-padding">
-                                                    <!--begin::Widget 30-->
-                                                    <div class="m-widget30">
-                                                        
-                                                        <div class="m-widget_head">
-                                                            
-                                                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">
-                                                                
-                                                                
-                                                                @foreach($userAsset->sets as $setKey=>$set)
-                                                                    <div data-position="{{ $setKey }}"
-                                                                         class="m-widget_head-owlcarousel-item carousel">
-                                                                        {{ $set->name }}
-                                                                    </div>
-                                                                @endforeach
-                                                                {{----}}
-                                                                {{--<div data-position="0" class="m-widget_head-owlcarousel-item carousel">--}}
-                                                                {{--فیزیک--}}
-                                                                {{--</div>--}}
-                                                                {{--<div data-position="1" class="m-widget_head-owlcarousel-item carousel">--}}
-                                                                {{--فیزیک--}}
-                                                                {{--</div>--}}
-                                                                {{--<div data-position="2" class="m-widget_head-owlcarousel-item carousel">--}}
-                                                                {{--فیزیک--}}
-                                                                {{--</div>--}}
-                                                                {{--<div data-position="3" class="m-widget_head-owlcarousel-item carousel">--}}
-                                                                {{--فیزیک--}}
-                                                                {{--</div>--}}
-                                                                {{--<div data-position="4" class="m-widget_head-owlcarousel-item carousel">--}}
-                                                                {{--فیزیک--}}
-                                                                {{--</div>--}}
-                                                                {{--<div data-position="5" class="m-widget_head-owlcarousel-item carousel">--}}
-                                                                {{--فیزیک--}}
-                                                                {{--</div>--}}
-                                                                {{--<div data-position="6" class="m-widget_head-owlcarousel-item carousel">--}}
-                                                                {{--فیزیک--}}
-                                                                {{--</div>--}}
-                                                            
-                                                            </div>
-                                                        
-                                                        </div>
-                                                    
-                                                    </div>
-                                                    <!--end::Widget 30-->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                            @endforeach
-                            
-                            @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
-                                @if($userAsset->title === 'محتوای مورد علاقه من')
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="m-portlet  m-portlet--bordered"
-                                                 id="owlCarouselMyFavoritContent">
-                                                <div class="m-portlet__head">
-                                                    <div class="m-portlet__head-caption">
-                                                        <div class="m-portlet__head-title">
-                                                            <h3 class="m-portlet__head-text">
-                                                                محتوا
-                                                            </h3>
-                                                        </div>
-                                                    </div>
-                                                    <div class="m-portlet__head-tools">
-                                                        <a href="#"
-                                                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
-                                                            <i class="fa flaticon-shapes"></i>
-                                                        </a>
-                                                        <a href="#"
-                                                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
-                                                            <i class="flaticon-more-v4"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="m-portlet__body m-portlet__body--no-padding">
-                                                    <!--begin::Widget 30-->
-                                                    <div class="m-widget30">
-                                                        
-                                                        <div class="m-widget_head">
-                                                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myFavoriteContent">
-                                                                
-                                                                
-                                                                @foreach($userAsset->content as $contentKey=>$content)
-                                                                    <div data-position="{{ $contentKey }}"
-                                                                         class="m-widget_head-owlcarousel-item carousel">
-                                                                        <img class="a--owl-carousel-type-2-item-image"
-                                                                             src="{{ $content->photo }}">
-                                                                        {{ $content->name }}
-                                                                    </div>
-                                                                @endforeach
-                                                                
-                                                                {{--<div data-position="0" class="m-widget_head-owlcarousel-item carousel">--}}
-                                                                {{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product11.jpg">--}}
-                                                                {{--فیزیک--}}
-                                                                {{--</div>--}}
-                                                                {{--<div data-position="1" class="m-widget_head-owlcarousel-item carousel">--}}
-                                                                {{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product10.jpg">--}}
-                                                                {{--فیزیک--}}
-                                                                {{--</div>--}}
-                                                                {{--<div data-position="2" class="m-widget_head-owlcarousel-item carousel">--}}
-                                                                {{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product9.jpg">--}}
-                                                                {{--فیزیک--}}
-                                                                {{--</div>--}}
-                                                                {{--<div data-position="3" class="m-widget_head-owlcarousel-item carousel">--}}
-                                                                {{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product8.jpg">--}}
-                                                                {{--فیزیک--}}
-                                                                {{--</div>--}}
-                                                                {{--<div data-position="4" class="m-widget_head-owlcarousel-item carousel">--}}
-                                                                {{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product7.jpg">--}}
-                                                                {{--فیزیک--}}
-                                                                {{--</div>--}}
-                                                                {{--<div data-position="5" class="m-widget_head-owlcarousel-item carousel">--}}
-                                                                {{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product6.jpg">--}}
-                                                                {{--فیزیک--}}
-                                                                {{--</div>--}}
-                                                                {{--<div data-position="6" class="m-widget_head-owlcarousel-item carousel">--}}
-                                                                {{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product9.jpg">--}}
-                                                                {{--فیزیک--}}
-                                                                {{--</div>--}}
-                                                                {{--<div data-position="7" class="m-widget_head-owlcarousel-item carousel">--}}
-                                                                {{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product8.jpg">--}}
-                                                                {{--فیزیک--}}
-                                                                {{--</div>--}}
-                                                            </div>
-                                                        </div>
-                                                    
-                                                    </div>
-                                                    <!--end::Widget 30-->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                            @endforeach
-                            
-                            
-                            @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
-                                @if($userAsset->title === 'محصولات مورد علاقه من')
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="m-portlet  m-portlet--bordered"
-                                                 id="owlCarouselMyFavoritProducts">
-                                                <div class="m-portlet__head">
-                                                    <div class="m-portlet__head-caption">
-                                                        <div class="m-portlet__head-title">
-                                                            <h3 class="m-portlet__head-text">
-                                                                محصولات
-                                                            </h3>
-                                                        </div>
-                                                    </div>
-                                                    <div class="m-portlet__head-tools">
-                                                        <a href="#"
-                                                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
-                                                            <i class="fa flaticon-shapes"></i>
-                                                        </a>
-                                                        <a href="#"
-                                                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
-                                                            <i class="flaticon-more-v4"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="m-portlet__body m-portlet__body--no-padding">
-                                                    <!--begin::Widget 30-->
-                                                    <div class="m-widget30">
-                                                        
-                                                        <div class="m-widget_head">
-                                                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myFavoriteProducts">
-                                                                
-                                                                
-                                                                @foreach($userAsset->product as $productKey=>$product)
-                                                                    <div data-position="{{ $productKey }}"
-                                                                         class="m-widget_head-owlcarousel-item carousel">
-                                                                        <img class="a--owl-carousel-type-2-item-image"
-                                                                             src="{{ $product->photo }}">
-                                                                        {{ $product->name }}
-                                                                    </div>
-                                                                @endforeach
-                                                                
-                                                                {{--<div data-position="0" class="m-widget_head-owlcarousel-item carousel">--}}
-                                                                {{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product11.jpg">--}}
-                                                                {{--فیزیک--}}
-                                                                {{--</div>--}}
-                                                                {{--<div data-position="1" class="m-widget_head-owlcarousel-item carousel">--}}
-                                                                {{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product10.jpg">--}}
-                                                                {{--فیزیک--}}
-                                                                {{--</div>--}}
-                                                                {{--<div data-position="2" class="m-widget_head-owlcarousel-item carousel">--}}
-                                                                {{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product9.jpg">--}}
-                                                                {{--فیزیک--}}
-                                                                {{--</div>--}}
-                                                            </div>
-                                                        </div>
-                                                    
-                                                    </div>
-                                                    <!--end::Widget 30-->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                            @endforeach
-
-
-                            @if((array)$userAsset->products->count()>0)
-                                <!--begin::Widget 30-->
-                                <div class="m-widget30">
-        
-                                    <div class="m-widget_head">
-            
-                                        <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">
-                                            @foreach((array)$userAsset->products->all() as $productKey=>$product)
-                                                @if($product->sets->count()===0)
-                                                    <div class="m-widget_head-owlcarousel-item carousel background-gradient"
-                                                         data-position="{{ $productKey }}">
-                                                        <a href="{{ $product->url }}">
-                                                            <img class="a--owl-carousel-type-2-item-image"
-                                                                 src="{{ $product->photo }}">
-                                                        </a>
-                                                        <br>
-                                                        <a href="{{ $product->url }}" target="_blank" class="m-link">
-                                                            {{ $product->name }}
-                                                        </a>
-                                                    </div>
-                                                @elseif($product->sets->count()===1)
-                                                    <div class="m-widget_head-owlcarousel-item carousel background-gradient"
-                                                         data-position="{{ $productKey }}">
-                                                        <img class="a--owl-carousel-type-2-item-image"
-                                                             src="{{ $product->photo }}">
-                                                        <br>
-                                                        {{ $product->name }}
-                                                        <hr>
-                                                        <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
-                                                             role="group" aria-label="Small button group">
-                                                            <button type="button" class="btn btn-warning btnViewPamphlet"
-                                                                    data-content-type="pamphlet"
-                                                                    data-content-url="{{ $product->sets[0]->contentUrl }}">
-                                                                <i class="flaticon-edit-1"></i>
-                                                                جزوات
-                                                            </button>
-                                                            @if(count($product->sets[0]->video) > 0)
-                                                                <button type="button" class="btn btn-success btnViewVideo"
-                                                                        data-content-type="video"
-                                                                        data-content-url="{{ $product->sets[0]->contentUrl }}">
-                                                                    <i class="la la-film"></i>
-                                                                    فیلم ها
-                                                                </button>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                @else
-                                                    <div class="m-widget_head-owlcarousel-item carousel"
-                                                         data-position="{{ $productKey }}">
-                                                        <a href="{{ $product->url }}">
-                                                            <img class="a--owl-carousel-type-2-item-image"
-                                                                 src="{{ $product->photo }}">
-                                                        </a>
-                                                        <br>
-                                                        <a href="{{ $product->url }}" target="_blank"
-                                                           class="m-link">{{ $product->name }}</a>
-                                                        <hr>
-                                                        <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-type-2-show-detailes">
-                                                            <i class="flaticon-more-v6"></i>
-                                                        </a>
-                                                    </div>
-                                                @endif
-                                            @endforeach
-                                        </div>
-            
-                                        @if($userAssetsCollection->filter(function ($value, $key) {return $value->title === 'محصولات من'; })->count()===0)
-                                            <div class="alert alert-info" role="alert">
-                                                <strong> هنوز از آلاء خرید نکرده اید. </strong>
-                                                بعد از اینکه از آلاء خرید کنید، امکان مشاهده خریدهای شما در این قسمت فراهم می شود.
-                                            </div>
-                                        @endif
-        
-                                    </div>
-                                    <div class="m-portlet a--owl-carousel-type-2-slide-detailes">
-                                        <div class="m-portlet__head">
-                                            <div class="m-portlet__head-caption">
-                                                <div class="m-portlet__head-title">
-                                                    <h3 class="m-portlet__head-text">
-                                                        مجموعه های محصول خریداری شده
-                                                    </h3>
-                                                </div>
-                                            </div>
-                                            <div class="m-portlet__head-tools">
-                                                <a class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-type-2-hide-detailes">
-                                                    <i class="la la-times"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-            
-                                        @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
-                                            @if($userAsset->title === 'محصولات من')
-                                                @foreach($userAsset->products as $productKey=>$product)
-                                                    @if(count($product->sets)>1)
-                                                        <div class="m-portlet__body subCategoryWarper a--owl-carousel-type-2-slide-iteDetail-{{ $productKey }}">
-                                                            <div class="row justify-content-center">
-                                                                @foreach($product->sets as $setKey=>$set)
-                                                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                                                                        <div class="subCategoryItem">
-                                                                            <div class="subCategoryItem-title">
-                                                                                {{ $set->name }}
-                                                                            </div>
-                                                                            <hr>
-                                                                            <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
-                                                                                 role="group" aria-label="Small button group">
-                                                                                <button type="button"
-                                                                                        class="btn btn-warning btnViewPamphlet"
-                                                                                        data-content-type="pamphlet"
-                                                                                        data-content-url="{{ $set->contentUrl }}">
-                                                                                    <i class="flaticon-edit-1"></i>
-                                                                                    جزوات
-                                                                                </button>
-                                                                                <button type="button"
-                                                                                        class="btn btn-success btnViewVideo"
-                                                                                        data-content-type="video"
-                                                                                        data-content-url="{{ $set->contentUrl }}">
-                                                                                    <i class="la la-film"></i>
-                                                                                    فیلم ها
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                @endforeach
-                                                            </div>
-                                                        </div>
-                                                    @endif
-                                                @endforeach
-                                            @endif
-                                        @endforeach
-                                    </div>
-    
-                                </div>
-                                <!--end::Widget 30-->
-                            @endif
-                            
+    <div class="row">
+        <div class="col">
+            <div class="m-portlet  m-portlet--bordered" id="owlCarouselMyProduct">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                محصولات من
+                            </h3>
                         </div>
                     </div>
+                    <div class="m-portlet__head-tools">
+                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
+                            <i class="fa flaticon-shapes"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
+                            <i class="flaticon-more-v4"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="m-portlet__body m-portlet__body--no-padding">
+                    <!--begin::Widget 30-->
+                    <div class="m-widget30">
+                        
+                        <div class="m-widget_head">
+                            
+                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">
+                                @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
+{{--                                    @if($userAsset->title === 'محصولات من')--}}
+                                        @foreach($userAsset->products as $productKey=>$product)
+                                            @if($product->sets->count()===0)
+                                                <div class="m-widget_head-owlcarousel-item carousel background-gradient"
+                                                     data-position="{{ $productKey }}">
+                                                    <a href="{{ $product->url }}">
+                                                        <img class="a--owl-carousel-type-2-item-image"
+                                                             src="{{ $product->photo }}" alt="{{ $product->name }}">
+                                                    </a>
+                                                    <br>
+                                                    <a href="{{ $product->url }}" target="_blank" class="m-link">
+                                                        {{ $product->name }}
+                                                    </a>
+                                                </div>
+                                            @elseif($product->sets->count()===1)
+                                                <div class="m-widget_head-owlcarousel-item carousel background-gradient"
+                                                     data-position="{{ $productKey }}">
+                                                    <img class="a--owl-carousel-type-2-item-image"
+                                                         src="{{ $product->photo }}" alt="{{ $product->name }}">
+                                                    <br>
+                                                    {{ $product->name }}
+                                                    <hr>
+                                                    <div class="m-btn-group m-btn-group--pill btn-group btn-group-sm"
+                                                         role="group" aria-label="Small button group">
+                                                        <button type="button" class="btn btn-warning btnViewPamphlet"
+                                                                data-content-type="pamphlet"
+                                                                data-content-url="{{ $product->sets->first()->contentUrl }}">
+                                                            <i class="flaticon-edit-1"></i>
+                                                            جزوات
+                                                        </button>
+                                                        <button type="button" class="btn btn-success btnViewVideo"
+                                                                data-content-type="video"
+                                                                data-content-url="{{ $product->sets->first()->contentUrl }}">
+                                                            <i class="la la-film"></i>
+                                                            فیلم ها
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <div class="m-widget_head-owlcarousel-item carousel"
+                                                     data-position="{{ $productKey }}">
+                                                    <a href="{{ $product->url }}">
+                                                        <img class="a--owl-carousel-type-2-item-image"
+                                                             src="{{ $product->photo }}" alt="{{ $product->name }}">
+                                                    </a>
+                                                    <br>
+                                                    <a href="{{ $product->url }}" target="_blank"
+                                                       class="m-link">{{ $product->name }}</a>
+                                                    <hr>
+                                                    <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-type-2-show-detailes">
+                                                        <i class="flaticon-more-v6"></i>
+                                                    </a>
+                                                </div>
+                                            @endif
+                                        @endforeach
+{{--                                    @endif--}}
+                                @endforeach
+                            </div>
+                            
+                            @if(count($userAssetsCollection->filter(function ($value, $key) {return $value->title === 'محصولات من'; })->all())===0)
+                                <div class="alert alert-info" role="alert">
+                                    <strong> هنوز از آلاء خرید نکرده اید. </strong>
+                                    بعد از اینکه از آلاء خرید کنید، امکان مشاهده خریدهای شما در این قسمت فراهم می شود.
+                                </div>
+                            @endif
+                        
+                        </div>
+                        <div class="m-portlet a--owl-carousel-type-2-slide-detailes">
+                            <div class="m-portlet__head">
+                                <div class="m-portlet__head-caption">
+                                    <div class="m-portlet__head-title">
+                                        <h3 class="m-portlet__head-text">
+                                            مجموعه های محصول خریداری شده
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="m-portlet__head-tools">
+                                    <a class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-type-2-hide-detailes">
+                                        <i class="la la-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
+                                @if($userAsset->title === 'محصولات من')
+                                    @foreach($userAsset->products as $productKey=>$product)
+                                        @if(count($product->sets)>1)
+                                            <div class="m-portlet__body subCategoryWarper a--owl-carousel-type-2-slide-iteDetail-{{ $productKey }}">
+                                                <div class="row justify-content-center">
+                                                    @foreach($product->sets as $setKey=>$set)
+                                                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                                                            <div class="subCategoryItem">
+                                                                <div class="subCategoryItem-title">
+                                                                    {{ $set->name }}
+                                                                </div>
+                                                                <hr>
+                                                                <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
+                                                                     role="group" aria-label="Small button group">
+                                                                    <button type="button"
+                                                                            class="btn btn-warning btnViewPamphlet"
+                                                                            data-content-type="pamphlet"
+                                                                            data-content-url="{{ $set->contentUrl }}">
+                                                                        <i class="flaticon-edit-1"></i>
+                                                                        جزوات
+                                                                    </button>
+                                                                    <button type="button"
+                                                                            class="btn btn-success btnViewVideo"
+                                                                            data-content-type="video"
+                                                                            data-content-url="{{ $set->contentUrl }}">
+                                                                        <i class="la la-film"></i>
+                                                                        فیلم ها
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                @endif
+                            @endforeach
+                        </div>
+                    
+                    </div>
+                    <!--end::Widget 30-->
                 </div>
             </div>
-{{--        @endif--}}
-    @endforeach
+        </div>
+    </div>
     
+{{--    --}}
+{{--    @foreach($userAssetsCollection as $userAssetKey=>$userAsset)--}}
+{{--        @if($userAsset->title === 'دسته های مورد علاقه من' || $userAsset->title === 'محتوای مورد علاقه من' || $userAsset->title === 'محصولات مورد علاقه من')--}}
+{{--            <div class="row">--}}
+{{--                <div class="col">--}}
+{{--                    <div class="m-portlet  m-portlet--bordered">--}}
+{{--                        <div class="m-portlet__head">--}}
+{{--                            <div class="m-portlet__head-caption">--}}
+{{--                                <div class="m-portlet__head-title">--}}
+{{--                                    <h3 class="m-portlet__head-text">--}}
+{{--                                        <i class="flaticon-confetti m--margin-right-10"></i>--}}
+{{--                                        علاقه مندی های من--}}
+{{--                                    </h3>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                        <div class="m-portlet__body m--padding-5">--}}
+{{--                            --}}
+{{--                            @foreach($userAssetsCollection as $userAssetKey=>$userAsset)--}}
+{{--                                @if($userAsset->title === 'دسته های مورد علاقه من')--}}
+{{--                                    <div class="row">--}}
+{{--                                        <div class="col">--}}
+{{--                                            <div class="m-portlet  m-portlet--bordered" id="owlCarouselMyFavoritSet">--}}
+{{--                                                <div class="m-portlet__head">--}}
+{{--                                                    <div class="m-portlet__head-caption">--}}
+{{--                                                        <div class="m-portlet__head-title">--}}
+{{--                                                            <h3 class="m-portlet__head-text">--}}
+{{--                                                                دسته ها--}}
+{{--                                                            </h3>--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                    <div class="m-portlet__head-tools">--}}
+{{--                                                        <a href="#"--}}
+{{--                                                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">--}}
+{{--                                                            <i class="fa flaticon-shapes"></i>--}}
+{{--                                                        </a>--}}
+{{--                                                        <a href="#"--}}
+{{--                                                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">--}}
+{{--                                                            <i class="flaticon-more-v4"></i>--}}
+{{--                                                        </a>--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                                <div class="m-portlet__body m-portlet__body--no-padding">--}}
+{{--                                                    <!--begin::Widget 30-->--}}
+{{--                                                    <div class="m-widget30">--}}
+{{--                                                        --}}
+{{--                                                        <div class="m-widget_head">--}}
+{{--                                                            --}}
+{{--                                                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">--}}
+{{--                                                                --}}
+{{--                                                                --}}
+{{--                                                                @foreach($userAsset->sets as $setKey=>$set)--}}
+{{--                                                                    <div data-position="{{ $setKey }}"--}}
+{{--                                                                         class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                        {{ $set->name }}--}}
+{{--                                                                    </div>--}}
+{{--                                                                @endforeach--}}
+{{--                                                                --}}{{----}}
+{{--                                                                --}}{{--<div data-position="0" class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                --}}{{--فیزیک--}}
+{{--                                                                --}}{{--</div>--}}
+{{--                                                                --}}{{--<div data-position="1" class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                --}}{{--فیزیک--}}
+{{--                                                                --}}{{--</div>--}}
+{{--                                                                --}}{{--<div data-position="2" class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                --}}{{--فیزیک--}}
+{{--                                                                --}}{{--</div>--}}
+{{--                                                                --}}{{--<div data-position="3" class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                --}}{{--فیزیک--}}
+{{--                                                                --}}{{--</div>--}}
+{{--                                                                --}}{{--<div data-position="4" class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                --}}{{--فیزیک--}}
+{{--                                                                --}}{{--</div>--}}
+{{--                                                                --}}{{--<div data-position="5" class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                --}}{{--فیزیک--}}
+{{--                                                                --}}{{--</div>--}}
+{{--                                                                --}}{{--<div data-position="6" class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                --}}{{--فیزیک--}}
+{{--                                                                --}}{{--</div>--}}
+{{--                                                            --}}
+{{--                                                            </div>--}}
+{{--                                                        --}}
+{{--                                                        </div>--}}
+{{--                                                    --}}
+{{--                                                    </div>--}}
+{{--                                                    <!--end::Widget 30-->--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                @endif--}}
+{{--                            @endforeach--}}
+{{--                            --}}
+{{--                            @foreach($userAssetsCollection as $userAssetKey=>$userAsset)--}}
+{{--                                @if($userAsset->title === 'محتوای مورد علاقه من')--}}
+{{--                                    <div class="row">--}}
+{{--                                        <div class="col">--}}
+{{--                                            <div class="m-portlet  m-portlet--bordered"--}}
+{{--                                                 id="owlCarouselMyFavoritContent">--}}
+{{--                                                <div class="m-portlet__head">--}}
+{{--                                                    <div class="m-portlet__head-caption">--}}
+{{--                                                        <div class="m-portlet__head-title">--}}
+{{--                                                            <h3 class="m-portlet__head-text">--}}
+{{--                                                                محتوا--}}
+{{--                                                            </h3>--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                    <div class="m-portlet__head-tools">--}}
+{{--                                                        <a href="#"--}}
+{{--                                                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">--}}
+{{--                                                            <i class="fa flaticon-shapes"></i>--}}
+{{--                                                        </a>--}}
+{{--                                                        <a href="#"--}}
+{{--                                                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">--}}
+{{--                                                            <i class="flaticon-more-v4"></i>--}}
+{{--                                                        </a>--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                                <div class="m-portlet__body m-portlet__body--no-padding">--}}
+{{--                                                    <!--begin::Widget 30-->--}}
+{{--                                                    <div class="m-widget30">--}}
+{{--                                                        --}}
+{{--                                                        <div class="m-widget_head">--}}
+{{--                                                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myFavoriteContent">--}}
+{{--                                                                --}}
+{{--                                                                --}}
+{{--                                                                @foreach($userAsset->content as $contentKey=>$content)--}}
+{{--                                                                    <div data-position="{{ $contentKey }}"--}}
+{{--                                                                         class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                        <img class="a--owl-carousel-type-2-item-image"--}}
+{{--                                                                             src="{{ $content->photo }}" alt="{{ $product->name }}">--}}
+{{--                                                                        {{ $content->name }}--}}
+{{--                                                                    </div>--}}
+{{--                                                                @endforeach--}}
+{{--                                                                --}}
+{{--                                                                --}}{{--<div data-position="0" class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product11.jpg">--}}
+{{--                                                                --}}{{--فیزیک--}}
+{{--                                                                --}}{{--</div>--}}
+{{--                                                                --}}{{--<div data-position="1" class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product10.jpg">--}}
+{{--                                                                --}}{{--فیزیک--}}
+{{--                                                                --}}{{--</div>--}}
+{{--                                                                --}}{{--<div data-position="2" class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product9.jpg">--}}
+{{--                                                                --}}{{--فیزیک--}}
+{{--                                                                --}}{{--</div>--}}
+{{--                                                                --}}{{--<div data-position="3" class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product8.jpg">--}}
+{{--                                                                --}}{{--فیزیک--}}
+{{--                                                                --}}{{--</div>--}}
+{{--                                                                --}}{{--<div data-position="4" class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product7.jpg">--}}
+{{--                                                                --}}{{--فیزیک--}}
+{{--                                                                --}}{{--</div>--}}
+{{--                                                                --}}{{--<div data-position="5" class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product6.jpg">--}}
+{{--                                                                --}}{{--فیزیک--}}
+{{--                                                                --}}{{--</div>--}}
+{{--                                                                --}}{{--<div data-position="6" class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product9.jpg">--}}
+{{--                                                                --}}{{--فیزیک--}}
+{{--                                                                --}}{{--</div>--}}
+{{--                                                                --}}{{--<div data-position="7" class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product8.jpg">--}}
+{{--                                                                --}}{{--فیزیک--}}
+{{--                                                                --}}{{--</div>--}}
+{{--                                                            </div>--}}
+{{--                                                        </div>--}}
+{{--                                                    --}}
+{{--                                                    </div>--}}
+{{--                                                    <!--end::Widget 30-->--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                @endif--}}
+{{--                            @endforeach--}}
+{{--                            --}}
+{{--                            --}}
+{{--                            @foreach($userAssetsCollection as $userAssetKey=>$userAsset)--}}
+{{--                                @if($userAsset->title === 'محصولات مورد علاقه من')--}}
+{{--                                    <div class="row">--}}
+{{--                                        <div class="col">--}}
+{{--                                            <div class="m-portlet  m-portlet--bordered"--}}
+{{--                                                 id="owlCarouselMyFavoritProducts">--}}
+{{--                                                <div class="m-portlet__head">--}}
+{{--                                                    <div class="m-portlet__head-caption">--}}
+{{--                                                        <div class="m-portlet__head-title">--}}
+{{--                                                            <h3 class="m-portlet__head-text">--}}
+{{--                                                                محصولات--}}
+{{--                                                            </h3>--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                    <div class="m-portlet__head-tools">--}}
+{{--                                                        <a href="#"--}}
+{{--                                                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">--}}
+{{--                                                            <i class="fa flaticon-shapes"></i>--}}
+{{--                                                        </a>--}}
+{{--                                                        <a href="#"--}}
+{{--                                                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">--}}
+{{--                                                            <i class="flaticon-more-v4"></i>--}}
+{{--                                                        </a>--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                                <div class="m-portlet__body m-portlet__body--no-padding">--}}
+{{--                                                    <!--begin::Widget 30-->--}}
+{{--                                                    <div class="m-widget30">--}}
+{{--                                                        --}}
+{{--                                                        <div class="m-widget_head">--}}
+{{--                                                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myFavoriteProducts">--}}
+{{--                                                                --}}
+{{--                                                                --}}
+{{--                                                                @foreach($userAsset->product as $productKey=>$product)--}}
+{{--                                                                    <div data-position="{{ $productKey }}"--}}
+{{--                                                                         class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                        <img class="a--owl-carousel-type-2-item-image"--}}
+{{--                                                                             src="{{ $product->photo }}" alt="{{ $product->name }}">--}}
+{{--                                                                        {{ $product->name }}--}}
+{{--                                                                    </div>--}}
+{{--                                                                @endforeach--}}
+{{--                                                                --}}
+{{--                                                                --}}{{--<div data-position="0" class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product11.jpg">--}}
+{{--                                                                --}}{{--فیزیک--}}
+{{--                                                                --}}{{--</div>--}}
+{{--                                                                --}}{{--<div data-position="1" class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product10.jpg">--}}
+{{--                                                                --}}{{--فیزیک--}}
+{{--                                                                --}}{{--</div>--}}
+{{--                                                                --}}{{--<div data-position="2" class="m-widget_head-owlcarousel-item carousel">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product9.jpg">--}}
+{{--                                                                --}}{{--فیزیک--}}
+{{--                                                                --}}{{--</div>--}}
+{{--                                                            </div>--}}
+{{--                                                        </div>--}}
+{{--                                                    --}}
+{{--                                                    </div>--}}
+{{--                                                    <!--end::Widget 30-->--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                @endif--}}
+{{--                            @endforeach--}}
+
+
+{{--                            @if((array)$userAsset->products->count()>0)--}}
+{{--                                <!--begin::Widget 30-->--}}
+{{--                                <div class="m-widget30">--}}
+{{--        --}}
+{{--                                    <div class="m-widget_head">--}}
+{{--            --}}
+{{--                                        <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">--}}
+{{--                                            @foreach((array)$userAsset->products->all() as $productKey=>$product)--}}
+{{--                                                @if($product->sets->count()===0)--}}
+{{--                                                    <div class="m-widget_head-owlcarousel-item carousel background-gradient"--}}
+{{--                                                         data-position="{{ $productKey }}">--}}
+{{--                                                        <a href="{{ $product->url }}">--}}
+{{--                                                            <img class="a--owl-carousel-type-2-item-image"--}}
+{{--                                                                 src="{{ $product->photo }}" alt="{{ $product->name }}">--}}
+{{--                                                        </a>--}}
+{{--                                                        <br>--}}
+{{--                                                        <a href="{{ $product->url }}" target="_blank" class="m-link">--}}
+{{--                                                            {{ $product->name }}--}}
+{{--                                                        </a>--}}
+{{--                                                    </div>--}}
+{{--                                                @elseif($product->sets->count()===1)--}}
+{{--                                                    <div class="m-widget_head-owlcarousel-item carousel background-gradient"--}}
+{{--                                                         data-position="{{ $productKey }}">--}}
+{{--                                                        <img class="a--owl-carousel-type-2-item-image"--}}
+{{--                                                             src="{{ $product->photo }}" alt="{{ $product->name }}">--}}
+{{--                                                        <br>--}}
+{{--                                                        {{ $product->name }}--}}
+{{--                                                        <hr>--}}
+{{--                                                        <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"--}}
+{{--                                                             role="group" aria-label="Small button group">--}}
+{{--                                                            <button type="button" class="btn btn-warning btnViewPamphlet"--}}
+{{--                                                                    data-content-type="pamphlet"--}}
+{{--                                                                    data-content-url="{{ $product->sets[0]->contentUrl }}">--}}
+{{--                                                                <i class="flaticon-edit-1"></i>--}}
+{{--                                                                جزوات--}}
+{{--                                                            </button>--}}
+{{--                                                            @if(count($product->sets[0]->video) > 0)--}}
+{{--                                                                <button type="button" class="btn btn-success btnViewVideo"--}}
+{{--                                                                        data-content-type="video"--}}
+{{--                                                                        data-content-url="{{ $product->sets[0]->contentUrl }}">--}}
+{{--                                                                    <i class="la la-film"></i>--}}
+{{--                                                                    فیلم ها--}}
+{{--                                                                </button>--}}
+{{--                                                            @endif--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                @else--}}
+{{--                                                    <div class="m-widget_head-owlcarousel-item carousel"--}}
+{{--                                                         data-position="{{ $productKey }}">--}}
+{{--                                                        <a href="{{ $product->url }}">--}}
+{{--                                                            <img class="a--owl-carousel-type-2-item-image"--}}
+{{--                                                                 src="{{ $product->photo }}" alt="{{ $product->name }}">--}}
+{{--                                                        </a>--}}
+{{--                                                        <br>--}}
+{{--                                                        <a href="{{ $product->url }}" target="_blank"--}}
+{{--                                                           class="m-link">{{ $product->name }}</a>--}}
+{{--                                                        <hr>--}}
+{{--                                                        <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-type-2-show-detailes">--}}
+{{--                                                            <i class="flaticon-more-v6"></i>--}}
+{{--                                                        </a>--}}
+{{--                                                    </div>--}}
+{{--                                                @endif--}}
+{{--                                            @endforeach--}}
+{{--                                        </div>--}}
+{{--            --}}
+{{--                                        @if($userAssetsCollection->filter(function ($value, $key) {return $value->title === 'محصولات من'; })->count()===0)--}}
+{{--                                            <div class="alert alert-info" role="alert">--}}
+{{--                                                <strong> هنوز از آلاء خرید نکرده اید. </strong>--}}
+{{--                                                بعد از اینکه از آلاء خرید کنید، امکان مشاهده خریدهای شما در این قسمت فراهم می شود.--}}
+{{--                                            </div>--}}
+{{--                                        @endif--}}
+{{--        --}}
+{{--                                    </div>--}}
+{{--                                    <div class="m-portlet a--owl-carousel-type-2-slide-detailes">--}}
+{{--                                        <div class="m-portlet__head">--}}
+{{--                                            <div class="m-portlet__head-caption">--}}
+{{--                                                <div class="m-portlet__head-title">--}}
+{{--                                                    <h3 class="m-portlet__head-text">--}}
+{{--                                                        مجموعه های محصول خریداری شده--}}
+{{--                                                    </h3>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                            <div class="m-portlet__head-tools">--}}
+{{--                                                <a class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-type-2-hide-detailes">--}}
+{{--                                                    <i class="la la-times"></i>--}}
+{{--                                                </a>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--            --}}
+{{--                                        @foreach($userAssetsCollection as $userAssetKey=>$userAsset)--}}
+{{--                                            @if($userAsset->title === 'محصولات من')--}}
+{{--                                                @foreach($userAsset->products as $productKey=>$product)--}}
+{{--                                                    @if(count($product->sets)>1)--}}
+{{--                                                        <div class="m-portlet__body subCategoryWarper a--owl-carousel-type-2-slide-iteDetail-{{ $productKey }}">--}}
+{{--                                                            <div class="row justify-content-center">--}}
+{{--                                                                @foreach($product->sets as $setKey=>$set)--}}
+{{--                                                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">--}}
+{{--                                                                        <div class="subCategoryItem">--}}
+{{--                                                                            <div class="subCategoryItem-title">--}}
+{{--                                                                                {{ $set->name }}--}}
+{{--                                                                            </div>--}}
+{{--                                                                            <hr>--}}
+{{--                                                                            <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"--}}
+{{--                                                                                 role="group" aria-label="Small button group">--}}
+{{--                                                                                <button type="button"--}}
+{{--                                                                                        class="btn btn-warning btnViewPamphlet"--}}
+{{--                                                                                        data-content-type="pamphlet"--}}
+{{--                                                                                        data-content-url="{{ $set->contentUrl }}">--}}
+{{--                                                                                    <i class="flaticon-edit-1"></i>--}}
+{{--                                                                                    جزوات--}}
+{{--                                                                                </button>--}}
+{{--                                                                                <button type="button"--}}
+{{--                                                                                        class="btn btn-success btnViewVideo"--}}
+{{--                                                                                        data-content-type="video"--}}
+{{--                                                                                        data-content-url="{{ $set->contentUrl }}">--}}
+{{--                                                                                    <i class="la la-film"></i>--}}
+{{--                                                                                    فیلم ها--}}
+{{--                                                                                </button>--}}
+{{--                                                                            </div>--}}
+{{--                                                                        </div>--}}
+{{--                                                                    </div>--}}
+{{--                                                                @endforeach--}}
+{{--                                                            </div>--}}
+{{--                                                        </div>--}}
+{{--                                                    @endif--}}
+{{--                                                @endforeach--}}
+{{--                                            @endif--}}
+{{--                                        @endforeach--}}
+{{--                                    </div>--}}
+{{--    --}}
+{{--                                </div>--}}
+{{--                                <!--end::Widget 30-->--}}
+{{--                            @endif--}}
+{{--                            --}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        @endif--}}
+{{--    @endforeach--}}
+{{--    --}}
     
     <!--begin::Modal-->
     <div class="modal fade" id="pamphletModal" tabindex="-1" role="dialog" aria-labelledby="pamphletModalModalLabel"
@@ -612,61 +604,11 @@
                                     </div>
                                 </div>
                                 <div class="m-widget6__body">
-                                    <div class="m-widget6__item">
-                                        <span class="m-widget6__text">
-                                         جزوه یک
-                                        </span>
-                                        <span class="m-widget6__text">
-                                            <div class="m-btn-group m-btn-group--pill btn-group" role="group"
-                                                 aria-label="First group">
-                                                <a href="#" class="m-btn btn btn-success">
-                                                    <i class="la la-download"></i>
-                                                </a>
-                                                <a href="#" class="m-btn btn btn-info">
-                                                    <i class="la la-eye"></i>
-                                                </a>
-                                            </div>
-                                        </span>
-                                    </div>
-                                    <div class="m-widget6__item">
-                                        <span class="m-widget6__text">
-                                         جزوه یک
-                                        </span>
-                                        <span class="m-widget6__text">
-                                            <div class="m-btn-group m-btn-group--pill btn-group" role="group"
-                                                 aria-label="First group">
-                                                <button type="button" class="m-btn btn btn-success">
-                                                    <i class="la la-download"></i>
-                                                </button>
-                                                <button type="button" class="m-btn btn btn-info">
-                                                    <i class="la la-eye"></i>
-                                                </button>
-                                            </div>
-                                        </span>
-                                    </div>
-                                    <div class="m-widget6__item">
-                                        <span class="m-widget6__text">
-                                         جزوه یک
-                                        </span>
-                                        <span class="m-widget6__text">
-                                            <div class="m-btn-group m-btn-group--pill btn-group" role="group"
-                                                 aria-label="First group">
-                                                <button type="button" class="m-btn btn btn-success">
-                                                    <i class="la la-download"></i>
-                                                </button>
-                                                <button type="button" class="m-btn btn btn-info">
-                                                    <i class="la la-eye"></i>
-                                                </button>
-                                            </div>
-                                        </span>
-                                    </div>
+                                
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="col-12 waitingForLoadMoreInModal">
-                            <div class="m-loader m-loader--lg m-loader--info"></div>
-                        </div>
                         <div class="col-12 text-center">
                             <input type="hidden" id="pamphletContentNextPageUrl">
                             <button type="button"
@@ -684,7 +626,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel"
+    <div class="modal fade contentModal" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -713,140 +655,9 @@
                                     </div>
                                 </div>
                                 <div class="m-widget6__body">
-                                    <div class="m-widget6__item">
-                                        <span class="m-widget6__text">
-                                         فیلم یک
-                                        </span>
-                                        <span class="m-widget6__text">
-                                            <div class="m-btn-group m-btn-group--pill btn-group" role="group"
-                                                 aria-label="First group">
-                                                <button type="button" class="m-btn btn btn-success">
-                                                    <i class="la la-download"></i>
-                                                </button>
-                                                <button type="button" class="m-btn btn btn-info">
-                                                    <i class="la la-eye"></i>
-                                                </button>
-                                            </div>
-                                        </span>
-                                    </div>
-                                    <div class="m-widget6__item">
-                                        <span class="m-widget6__text">
-                                         فیلم یک
-                                        </span>
-                                        <span class="m-widget6__text">
-                                            <div class="m-btn-group m-btn-group--pill btn-group" role="group"
-                                                 aria-label="First group">
-                                                <button type="button" class="m-btn btn btn-success">
-                                                    <i class="la la-download"></i>
-                                                </button>
-                                                <button type="button" class="m-btn btn btn-info">
-                                                    <i class="la la-eye"></i>
-                                                </button>
-                                            </div>
-                                        </span>
-                                    </div>
-                                    <div class="m-widget6__item">
-                                        <span class="m-widget6__text">
-                                         فیلم یک
-                                        </span>
-                                        <span class="m-widget6__text">
-                                            <div class="m-btn-group m-btn-group--pill btn-group" role="group"
-                                                 aria-label="First group">
-                                                <button type="button" class="m-btn btn btn-success">
-                                                    <i class="la la-download"></i>
-                                                </button>
-                                                <button type="button" class="m-btn btn btn-info">
-                                                    <i class="la la-eye"></i>
-                                                </button>
-                                            </div>
-                                        </span>
-                                    </div>
-                                    <div class="m-widget6__item">
-                                        <span class="m-widget6__text">
-                                         فیلم یک
-                                        </span>
-                                        <span class="m-widget6__text">
-                                            <div class="m-btn-group m-btn-group--pill btn-group" role="group"
-                                                 aria-label="First group">
-                                                <button type="button" class="m-btn btn btn-success">
-                                                    <i class="la la-download"></i>
-                                                </button>
-                                                <button type="button" class="m-btn btn btn-info">
-                                                    <i class="la la-eye"></i>
-                                                </button>
-                                            </div>
-                                        </span>
-                                    </div>
-                                    <div class="m-widget6__item">
-                                        <span class="m-widget6__text">
-                                         فیلم یک
-                                        </span>
-                                        <span class="m-widget6__text">
-                                            <div class="m-btn-group m-btn-group--pill btn-group" role="group"
-                                                 aria-label="First group">
-                                                <button type="button" class="m-btn btn btn-success">
-                                                    <i class="la la-download"></i>
-                                                </button>
-                                                <button type="button" class="m-btn btn btn-info">
-                                                    <i class="la la-eye"></i>
-                                                </button>
-                                            </div>
-                                        </span>
-                                    </div>
-                                    <div class="m-widget6__item">
-                                        <span class="m-widget6__text">
-                                         فیلم یک
-                                        </span>
-                                        <span class="m-widget6__text">
-                                            <div class="m-btn-group m-btn-group--pill btn-group" role="group"
-                                                 aria-label="First group">
-                                                <button type="button" class="m-btn btn btn-success">
-                                                    <i class="la la-download"></i>
-                                                </button>
-                                                <button type="button" class="m-btn btn btn-info">
-                                                    <i class="la la-eye"></i>
-                                                </button>
-                                            </div>
-                                        </span>
-                                    </div>
-                                    <div class="m-widget6__item">
-                                        <span class="m-widget6__text">
-                                         فیلم یک
-                                        </span>
-                                        <span class="m-widget6__text">
-                                            <div class="m-btn-group m-btn-group--pill btn-group" role="group"
-                                                 aria-label="First group">
-                                                <button type="button" class="m-btn btn btn-success">
-                                                    <i class="la la-download"></i>
-                                                </button>
-                                                <button type="button" class="m-btn btn btn-info">
-                                                    <i class="la la-eye"></i>
-                                                </button>
-                                            </div>
-                                        </span>
-                                    </div>
-                                    <div class="m-widget6__item">
-                                        <span class="m-widget6__text">
-                                         فیلم یک
-                                        </span>
-                                        <span class="m-widget6__text">
-                                            <div class="m-btn-group m-btn-group--pill btn-group" role="group"
-                                                 aria-label="First group">
-                                                <button type="button" class="m-btn btn btn-success">
-                                                    <i class="la la-download"></i>
-                                                </button>
-                                                <button type="button" class="m-btn btn btn-info">
-                                                    <i class="la la-eye"></i>
-                                                </button>
-                                            </div>
-                                        </span>
-                                    </div>
+                                
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div class="col-12 waitingForLoadMoreInModal">
-                            <div class="m-loader m-loader--lg m-loader--info"></div>
                         </div>
                         
                         <div class="col-12 text-center">

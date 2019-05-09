@@ -256,7 +256,9 @@ Route::get("ctag", "Web\ContentController@retrieveTags");
 Route::resource('set', 'Web\SetController');
 Route::resource('product', 'Web\ProductController');
 
-Route::resource('c', 'Web\ContentController');
+Route::resource('c', 'Web\ContentController')->names([
+    'index' => 'content.index'
+]);;
 Route::resource("sanatisharifmerge", "Web\SanatisharifmergeController");
 Route::resource('article', 'Web\ArticleController');
 Route::resource('block', 'Web\BlockController');

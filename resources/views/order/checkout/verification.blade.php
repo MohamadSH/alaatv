@@ -4,11 +4,6 @@
 
 @endsection
 
-@section('page-css')
-    {{--<link href = "{{ mix('/css/checkout-review.css') }}" rel = "stylesheet" type = "text/css"/>--}}
-    {{--<link href = "{{ asset('/acm/AlaatvCustomFiles/components/step/step.css') }}" rel = "stylesheet" type = "text/css"/>--}}
-@endsection
-
 @section('pageBar')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -46,9 +41,7 @@
                                             <span class="m-badge m-badge--info m-badge--wide">
                                                 @if($paymentMethod === 'zarinpal')
                                                     درگاه زرین پال
-                                                @endif
-
-                                                @if($paymentMethod === 'mellat')
+                                                @elseif($paymentMethod === 'mellat')
                                                     درگاه به پرداخت ملت
                                                 @endif
                                             </span>
@@ -56,10 +49,10 @@
                                             <hr>
                                             
                                             @if($status === 'successful')
-                                                کد پیگیری
-                                                <br>
                                                 @if(isset($result['RefID']))
-                                                    <span class="m-badge m-badge--info m-badge--wide">
+                                                    کد پیگیری
+                                                    <br>
+                                                    <span class="m-badge m-badge--info m-badge--wide" dir="ltr">
                                                         {{ $result['RefID'] }}
                                                     </span>
                                                 @endif
@@ -67,7 +60,7 @@
                                                 @if(isset($result['cardPanMask']))
                                                     <hr>
                                                     شماره کارت
-                                                    <span class="m-badge m-badge--info m-badge--wide">
+                                                    <span class="m-badge m-badge--info m-badge--wide" dir="ltr">
                                                         {{ $result['cardPanMask'] }}
                                                     </span>
                                                 @endif
@@ -77,7 +70,7 @@
                                         @endif
                                     </span>
                                 </a>
-                                <a href="#"><img src="{{ asset('/acm/extra/Alaa-logo.gif') }}"></a>
+                                <a href="{{ asset('/') }}"><img src="{{ asset('/acm/extra/Alaa-logo.gif') }}" alt="آلاء"></a>
                             </div>
                             <span class="m-invoice__desc">
 
@@ -89,12 +82,11 @@
                                             alert-warning
                                         @endif
                                             alert-dismissible fade show" role="alert">
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        </button>
-                                            @foreach($result['messages'] as $message)
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+                                        @foreach($result['messages'] as $message)
                                             {{ $message }}
                                             <br>
-                                            @endforeach
+                                        @endforeach
                                     </div>
                                 @endif
 
@@ -123,11 +115,4 @@
         </div>
     </div>
 
-@endsection
-
-
-@section('page-js')
-    {{--<script src = "{{ mix('/js/checkout-review.js') }}"></script>--}}
-    {{--<script src="{{ asset('/acm/AlaatvCustomFiles/js/UserCart.js') }}"></script>--}}
-    {{--<script src = "{{ asset('/acm/AlaatvCustomFiles/js/page-checkout-review.js') }}"></script>--}}
 @endsection

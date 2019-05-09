@@ -8,24 +8,6 @@ var UserAssets = function () {
             return false;
         }
 
-        /*$(window).scroll(function () {
-            let $sensor = null;
-            let $nextPageUrl = null;
-            if (contentType === 'video') {
-                $sensor = $('#video-lastItemSensor');
-                $nextPageUrl = $('#videoContentNextPageUrl');
-            } else if (contentType === 'pamphlet') {
-                $sensor = $('#pamphlet-lastItemSensor');
-                $nextPageUrl = $('#pamphletContentNextPageUrl');
-            }
-
-            if (isScrolledIntoView($sensor)) {
-                if (!lcokLoadNextPage) {
-                    loadContents($nextPageUrl.val(), contentType, false);
-                }
-            }
-        });*/
-
         let modalId = '';
         if (contentType === 'video') {
             modalId = 'videoModal';
@@ -36,8 +18,6 @@ var UserAssets = function () {
         if (refresh) {
             $('#'+modalId+' .modal-body .m-widget6 .m-widget6__body').html('');
             $('#'+modalId).modal('show');
-        } else {
-            $('.waitingForLoadMoreInModal').fadeIn();
         }
 
         mApp.block('#'+modalId+' .modal-body', {
@@ -46,9 +26,16 @@ var UserAssets = function () {
             state: "success",
             message: "کمی صبر کنید..."
         });
+
+        // fix position of block in modal
         $('#'+modalId+' .modal-body .blockElement').css({
             'top': 'calc( 50% - 17px)',
             'left': 'calc( 50% - 81px)'
+        });
+
+        mApp.block('.btnLoadMoreInModal', {
+            type: "loader",
+            state: "success",
         });
 
         lcokLoadNextPage = true;
@@ -64,27 +51,19 @@ var UserAssets = function () {
                     let message = 'خطای سیستمی رخ داده است.';
                     $('#'+modalId+' .modal-body .m-widget6 .m-widget6__body').html(message);
                 } else {
-                    let contents = [];
-                    if (contentType === 'video') {
-                        contents = data.result.video;
-                    } else if (contentType === 'pamphlet') {
-                        contents = data.result.pamphlet;
-                    }
-
+                    // contentType: video-pamphlet
+                    let contents = data.result[contentType];
 
                     if (refresh) {
                         $('#' + modalId + ' .modal-body .m-widget6 .m-widget6__body').html(createList(contents, contentType));
                     } else {
                         $('#' + modalId + ' .modal-body .m-widget6 .m-widget6__body').append(createList(contents, contentType));
-                        $('.waitingForLoadMoreInModal').fadeOut();
                     }
                     let $nextPageUrl = null;
                     if (contentType === 'video') {
-                        $('#'+modalId+' .modal-body .m-widget6 .m-widget6__body').after('<div id="video-lastItemSensor"></div>');
                         $nextPageUrl = $('#videoContentNextPageUrl');
                         $nextPageUrl.val((data.result.video === null) ? '' : data.result.video.next_page_url);
                     } else if (contentType === 'pamphlet') {
-                        $('#'+modalId+' .modal-body .m-widget6 .m-widget6__body').after('<div id="pamphlet-lastItemSensor"></div>');
                         $nextPageUrl = $('#pamphletContentNextPageUrl');
                         $nextPageUrl.val((data.result.pamphlet === null) ? '' : data.result.pamphlet.next_page_url);
                     }
@@ -94,9 +73,9 @@ var UserAssets = function () {
                     } else {
                         $('.btnLoadMoreInModal').fadeIn();
                     }
-
                 }
                 mApp.unblock('#'+modalId+' .modal-body');
+                mApp.unblock('.btnLoadMoreInModal');
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 lcokLoadNextPage = false;
@@ -117,34 +96,30 @@ var UserAssets = function () {
                 continue;
             }
             let content = data.data[index];
-            let title = content.name;
-            let viewLink = content.url;
-            let thumbnail = content.thumbnail;
-            let downloadLinks = [];
-
-            for (let videoIndex in content.file.video) {
-                downloadLinks.push({
-                    title: content.file.video[videoIndex].caption,
-                    url: content.file.video[videoIndex].link
-                });
-            }
-
-            for (let videoIndex in content.file.pamphlet) {
-                downloadLinks.push({
-                    title: content.file.video[videoIndex].caption,
-                    url: content.file.video[videoIndex].link
-                });
-            }
-
-            if (contentType === 'video') {
-                $('#video-lastItemSensor').remove();
-                list += getRowVideoContent(title, viewLink, downloadLinks, thumbnail);
-            } else if (contentType === 'pamphlet') {
-                $('#pamphlet-lastItemSensor').remove();
-                list += getRowPamphletContent(title, viewLink, downloadLinks, thumbnail);
-            }
+            list += makeListItemBasedOnContentType(content, contentType);
         }
         return list;
+    }
+
+    function makeListItemBasedOnContentType(content, contentType) {
+        let listItem = '';
+        let title = content.name;
+        let viewLink = content.url;
+        let thumbnail = content.thumbnail;
+        let downloadLinks = [];
+        for (let index in content.file[contentType]) {
+            downloadLinks.push({
+                title: content.file[contentType][index].caption,
+                url: content.file[contentType][index].link
+            });
+        }
+
+        if (contentType === 'video') {
+            listItem = getRowVideoContent(title, viewLink, downloadLinks, thumbnail);
+        } else if (contentType === 'pamphlet') {
+            listItem = getRowPamphletContent(title, viewLink, downloadLinks, thumbnail);
+        }
+        return listItem;
     }
 
     function getRowVideoContent(title, viewLink, downloadLinks, thumbnail) {
@@ -157,30 +132,34 @@ var UserAssets = function () {
             let title = downloadLink.title;
             let url = downloadLink.url;
             downloadBtns +=
-                '                                                <a href="'+url+'" class="m-btn btn btn-success">\n' +
-                '                                                    <i class="la la-download"></i>\n' +title+
-                '                                                </a>\n';
+                '<a href="'+url+'" target="_blank" class="m-btn btn btn-success">\n' +
+                '    <i class="la la-download"></i>\n' +title+
+                '</a>\n';
+        }
+
+        if (thumbnail === null) {
+            thumbnail = '/assets/app/media/img/files/mp4.svg';
         }
 
         return '\n' +
-            '                                    <div class="m-widget6__item">\n' +
-            '                                        <span class="m-widget6__text">\n' +
-            '                                           <div class="a-widget6__thumbnail">\n' +
-            '                                               <a class="m-link" href="'+viewLink+'"><img src="'+thumbnail+'" alt=""></a>\n' +
-            '                                           </div>\n' +
-            '                                           <div class="a-widget6__title">\n' +
-            '                                               <a class="m-link" href="'+viewLink+'">'+title+'</a>\n' +
-            '                                           </div>\n' +
-            '                                        </span>\n' +
-            '                                        <span class="m-widget6__text">\n' +
-            '                                            <div class="m-btn-group m-btn-group--pill btn-group" role="group" aria-label="First group">\n' +
-            '                                                <a href="'+viewLink+'" class="m-btn btn btn-info">\n' +
-            '                                                    <i class="la la-eye"></i>\n' +
-            '                                                </a>\n' +
-                                                             downloadBtns+
-            '                                            </div>\n' +
-            '                                        </span>\n' +
-            '                                    </div>';
+            '<div class="m-widget6__item contentItem">\n' +
+            '    <span class="m-widget6__text">\n' +
+            '       <div class="a-widget6__thumbnail itemThumbnail">\n' +
+            '           <a class="m-link" target="_blank" href="'+viewLink+'"><img src="'+thumbnail+'" alt="'+title+'"></a>\n' +
+            '       </div>\n' +
+            '       <div class="a-widget6__title">\n' +
+            '           <a class="m-link" href="'+viewLink+'">'+title+'</a>\n' +
+            '       </div>\n' +
+            '    </span>\n' +
+            '    <span class="m-widget6__text">\n' +
+            '        <div class="m-btn-group m-btn-group--pill btn-group" role="group" aria-label="First group">\n' +
+            '            <a href="'+viewLink+'" target="_blank" class="m-btn btn btn-info">\n' +
+            '                <i class="la la-eye"></i>\n' +
+            '            </a>\n' +
+                            downloadBtns+
+            '        </div>\n' +
+            '    </span>\n' +
+            '</div>';
     }
 
     function getRowPamphletContent(title, viewLink, downloadLinks, thumbnail) {
@@ -193,29 +172,32 @@ var UserAssets = function () {
             let title = downloadLink.title;
             let url = downloadLink.url;
             downloadBtns +=
-                '                                                <a href="'+url+'" class="m-btn btn btn-success">\n' +
-                '                                                    <i class="la la-download"></i>\n' +title+
-                '                                                </a>\n';
+                '<a href="'+url+'" target="_blank" class="m-btn btn btn-success">\n' +
+                '    <i class="la la-download"></i>\n' +title+
+                '</a>\n';
+        }
+        if (thumbnail === null) {
+            thumbnail = '/assets/app/media/img/files/pdf.svg';
         }
         return '\n' +
-            '                                    <div class="m-widget6__item">\n' +
-            '                                        <span class="m-widget6__text">\n' +
-            '                                           <div class="a-widget6__thumbnail">\n' +
-            '                                               <a class="m-link" href="'+viewLink+'"><img src="'+thumbnail+'" alt=""></a>\n' +
-            '                                           </div>\n' +
-            '                                           <div class="a-widget6__title">\n' +
-            '                                               <a class="m-link" href="'+viewLink+'">'+title+'</a>\n' +
-            '                                           </div>\n' +
-            '                                        </span>\n' +
-            '                                        <span class="m-widget6__text">\n' +
-            '                                            <div class="m-btn-group m-btn-group--pill btn-group" role="group" aria-label="First group">\n' +
-            '                                                <a href="'+viewLink+'" class="m-btn btn btn-info">\n' +
-            '                                                    <i class="la la-eye"></i>\n' +
-            '                                                </a>\n' +
-                                                             downloadBtns+
-            '                                            </div>\n' +
-            '                                        </span>\n' +
-            '                                    </div>';
+            '<div class="m-widget6__item contentItem">\n' +
+            '    <span class="m-widget6__text">\n' +
+            '       <div class="a-widget6__thumbnail itemThumbnail">\n' +
+            '           <a class="m-link" target="_blank" href="'+viewLink+'"><img src="'+thumbnail+'" alt="'+title+'"></a>\n' +
+            '       </div>\n' +
+            '       <div class="a-widget6__title">\n' +
+            '           <a class="m-link" target="_blank" href="'+viewLink+'">'+title+'</a>\n' +
+            '       </div>\n' +
+            '    </span>\n' +
+            '    <span class="m-widget6__text">\n' +
+            '        <div class="m-btn-group m-btn-group--pill btn-group" role="group" aria-label="First group">\n' +
+            '            <a href="'+viewLink+'" target="_blank" class="m-btn btn btn-info">\n' +
+            '                <i class="la la-eye"></i>\n' +
+            '            </a>\n' +
+                         downloadBtns+
+            '        </div>\n' +
+            '    </span>\n' +
+            '</div>';
     }
 
     function isScrolledIntoView(elem) {
