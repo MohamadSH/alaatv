@@ -971,9 +971,9 @@ class UserController extends Controller
      */
     public function userOrders(Request $request)
     {
-        $debitCard = Bankaccount::all()
-            ->where("user_id", 2)
-            ->first();
+//        $debitCard = Bankaccount::all()
+//            ->where("user_id", 2)
+//            ->first();
         
         $user = $request->user();
         
@@ -999,11 +999,15 @@ class UserController extends Controller
                 ->sortBy("deadline_at");
         });
         
-        $gateways = Transactiongateway::enable()
+        $gatewaysCollection = Transactiongateway::enable()
             ->get()
-            ->sortBy("order")
-            ->pluck("displayName", "name");
-        
+            ->sortBy("order");
+
+        $gateways = [];
+        foreach ($gatewaysCollection as  $gateway){
+            $gateways[$gateway->displayName] = route('redirectToBank', ['paymentMethod'=> $gateway->name, 'device'=>'web']);
+        }
+
         $key          = "user:orderCoupons:".$user->cacheKey().":Orders=".md5($orders->pluck("id")
                 ->implode('-'));
         $orderCoupons = Cache::remember($key, config("constants.CACHE_60"), function () use ($orders) {
