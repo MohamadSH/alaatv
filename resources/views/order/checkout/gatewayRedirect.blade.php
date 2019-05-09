@@ -195,7 +195,12 @@
 <div class="container">
     <div class="row align-items-center m--margin-top-100">
         <div class="col align-self-center text-center">
-            <img src="{{ asset('acm/extra/payment/gateway/zarinpal.png') }}"
+            <img
+                    @if($paymentMethod==='zarinpal')
+                    src="{{ asset('acm/extra/payment/gateway/zarinpal.png') }}"
+                    @elseif($paymentMethod==='mellat')
+                    src="{{ asset('acm/extra/payment/gateway/mellat-logo.png') }}"
+                    @endif
                  class="img-responsive img-thumbnail rounded">
         </div>
         <div class="col align-self-center text-center">

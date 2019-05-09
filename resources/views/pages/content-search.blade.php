@@ -9,41 +9,34 @@
     {{--<link href="/acm/AlaatvCustomFiles/css/owl-carousel.css" rel="stylesheet" type="text/css"/>--}}
 
     <style>
-
+    
         .owl-carousel-fileTitle {
             margin: 0 -30px !important;
             padding: 5px 30px;
             background: #000000b3;
         }
-
+    
         .owl-carousel-fileTitle a {
             color: white;
             transition-property: all;
             transition-duration: 0.3s;
         }
-
+    
         .owl-carousel-fileTitle a:hover {
             color: #8bccfe;
         }
-
+    
         .owl-carousel-fileTitle a:hover::after {
             border-bottom: 1px solid #fff;
             opacity: 1;
         }
-
-
+    
+    
         .notFoundMessage .m-alert__icon i {
             font-size: 60px;
         }
-    </style>
-@endsection
 
-@section("pageBar")
-@endsection
 
-@section('content')
-
-    <style>
         .a--multi-level-search {
             display: none;
             margin-bottom: 20px;
@@ -115,70 +108,69 @@
             margin-bottom: 0;
         }
 
+        .a--multi-level-search .filterNavigationWarper {
+            /*background: #4c4c4c;*/
+            background: #ffffff;
+            display: table;
+            padding: 5px 20px;
+            border-radius: 1px;
+            margin: auto;
+            -webkit-box-shadow: 0px 5px 10px 2px rgba(196, 197, 214, 0.36) !important;
+            box-shadow: 0px 5px 10px 2px rgba(196, 197, 214, 0.36) !important;
+        }
+
+        .a--multi-level-search .filterNavigationWarper,
+        .a--multi-level-search .filterNavigationWarper .filterNavigationStep {
+            list-style: none;
+        }
+
+        .a--multi-level-search .filterNavigationWarper .filterNavigationStep {
+            margin: 10px 5px;
+            display: table-cell;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+        .a--multi-level-search .filterNavigationWarper .filterNavigationStep.active {
+            color: #36a3f7 !important;
+        }
+
+        .a--multi-level-search .filterNavigationWarper .filterNavigationStep.current {
+            color: #34bfa3 !important;
+        }
+
+        .a--multi-level-search .filterNavigationWarper .filterNavigationStep.deactive {
+            color: #ffb822 !important;
+        }
+
+        .a--multi-level-search .filterNavigationWarper .filterNavigationStep:after {
+            content: '\f111';
+            font: normal normal normal 16px/1 "LineAwesome";
+            font-size: 20px;
+            vertical-align: middle;
+            cursor: default;
+            margin-left: 15px;
+            margin-right: 5px;
+        }
+
+        .a--multi-level-search .filterNavigationWarper .filterNavigationStep:last-child:after {
+            content: '';
+        }
+
         .a--vw-Loading {
             text-align: center;
             padding: 10px;
         }
-
-
     </style>
+@endsection
 
+@section("pageBar")
+@endsection
+
+@section('content')
+    
     <div class = "row">
         <div class = "col a--multi-level-search" id = "contentSearchFilter">
-            <style>
-                .a--multi-level-search .filterNavigationWarper {
-                    /*background: #4c4c4c;*/
-                    background: #ffffff;
-                    display: table;
-                    padding: 5px 20px;
-                    border-radius: 1px;
-                    margin: auto;
-                    -webkit-box-shadow: 0px 5px 10px 2px rgba(196, 197, 214, 0.36) !important;
-                    box-shadow: 0px 5px 10px 2px rgba(196, 197, 214, 0.36) !important;
-                }
-
-                .a--multi-level-search .filterNavigationWarper,
-                .a--multi-level-search .filterNavigationWarper .filterNavigationStep {
-                    list-style: none;
-                }
-
-                .a--multi-level-search .filterNavigationWarper .filterNavigationStep {
-                    margin: 10px 5px;
-                    display: table-cell;
-                    vertical-align: middle;
-                    cursor: pointer;
-                }
-
-                .a--multi-level-search .filterNavigationWarper .filterNavigationStep.active {
-                    color: #36a3f7 !important;
-                }
-
-                .a--multi-level-search .filterNavigationWarper .filterNavigationStep.current {
-                    color: #34bfa3 !important;
-                }
-
-                .a--multi-level-search .filterNavigationWarper .filterNavigationStep.deactive {
-                    color: #ffb822 !important;
-                }
-
-                .a--multi-level-search .filterNavigationWarper .filterNavigationStep:after {
-                    content: '\f111';
-                    font: normal normal normal 16px/1 "LineAwesome";
-                    font-size: 20px;
-                    vertical-align: middle;
-                    cursor: default;
-                    margin-left: 15px;
-                    margin-right: 5px;
-                }
-
-                .a--multi-level-search .filterNavigationWarper .filterNavigationStep:last-child:after {
-                    content: '';
-                }
-
-                /*.a--multi-level-search .subItem[selected="selected"] {*/
-                /*background-color: #fd7e14;*/
-                /*}*/
-            </style>
 
             <div class = "row">
                 <div class = "col">
@@ -204,8 +196,7 @@
             @include("partials.search.tagLabel" , ["tags"=>$tags])
         </div>
     </div>
-
-
+    
     <div class = "row">
         <div class = "col notFoundMessage">
             <div class = "m-alert m-alert--icon m-alert--icon-solid m-alert--outline alert alert-warning alert-dismissible fade show" role = "alert">
@@ -311,9 +302,4 @@
 
     <script src = "{{ asset('/acm/AlaatvCustomFiles/js/page-content-search.js') }}"></script>
 
-    <script>
-        jQuery(document).ready(function () {
-
-        });
-    </script>
 @endsection

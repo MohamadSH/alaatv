@@ -125,7 +125,7 @@
                                     <div class="m-widget3__item">
                                         <div class="m-widget3__header">
                                             <div class="m-widget3__user-img">
-                                                <img class="m-widget3__img" src="{{ $content->author->photo }}" alt="">
+                                                <img class="m-widget3__img" src="{{ $content->author->photo }}" alt="{{ $author }}">
                                             </div>
                                             <div class="m-widget3__info">
                                                 <span class="m-widget3__username">
@@ -167,7 +167,7 @@
                                         <div class="m-widget4">
                                             <div class="m-widget4__item">
                                                 <div class="m-widget4__img m-widget4__img--icon">
-                                                    <img src="/assets/app/media/img/files/mp4.svg" alt="">
+                                                    <img src="/assets/app/media/img/files/mp4.svg" alt="mp4">
                                                 </div>
                                                 <div class="m-widget4__info">
                                                     <a href="{{ $file->link }}?download=1" class="m-link">
@@ -326,7 +326,7 @@
                                 <div class="m-widget4">
                                     <div class="m-widget4__item">
                                         <div class="m-widget4__img m-widget4__img--icon">
-                                            <img src="/assets/app/media/img/files/pdf.svg" alt="">
+                                            <img src="/assets/app/media/img/files/pdf.svg" alt="pdf">
                                         </div>
                                         <div class="m-widget4__info">
                                             <a href="{{ action("Web\ContentController@show" , $item["content"]) }}" class="m-link m--font-light">
@@ -419,37 +419,37 @@
     </div>
 
     @if($productsThatHaveThisContent->isNotEmpty())
-        <div class = "row">
-            <div class = "col">
-                <div class = "m-portlet  m-portlet--bordered" id = "owlCarouselParentProducts">
-                    <div class = "m-portlet__head">
-                        <div class = "m-portlet__head-caption">
-                            <div class = "m-portlet__head-title">
-                                <h3 class = "m-portlet__head-text">
+        <div class="row">
+            <div class="col">
+                <div class="m-portlet  m-portlet--bordered" id="owlCarouselParentProducts">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <h3 class="m-portlet__head-text">
                                     محصولاتی که شامل این محتوا هستند
                                 </h3>
                             </div>
                         </div>
-                        <div class = "m-portlet__head-tools">
-                            <a href = "#" class = "btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
-                                <i class = "fa flaticon-shapes"></i>
+                        <div class="m-portlet__head-tools">
+                            <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
+                                <i class="fa flaticon-shapes"></i>
                             </a>
-                            <a href = "#" class = "btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
-                                <i class = "flaticon-more-v4"></i>
+                            <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
+                                <i class="flaticon-more-v4"></i>
                             </a>
                         </div>
                     </div>
-                    <div class = "m-portlet__body m-portlet__body--no-padding">
+                    <div class="m-portlet__body m-portlet__body--no-padding">
                         <!--begin::Widget 30-->
-                        <div class = "m-widget30">
+                        <div class="m-widget30">
                         
-                            <div class = "m-widget_head">
+                            <div class="m-widget_head">
                             
-                                <div class = "m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 parentProducts">
+                                <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 parentProducts">
                                     @foreach($productsThatHaveThisContent as $productKey=>$product)
-                                        <div class = "m-widget_head-owlcarousel-item carousel background-gradient" data-position = "{{ $productKey }}">
+                                        <div class="m-widget_head-owlcarousel-item carousel background-gradient" data-position="{{ $productKey }}">
                                             <a href="{{ $product->url }}" >
-                                                <img class = "a--owl-carousel-type-2-item-image" src = "{{ $product->photo }}">
+                                                <img class="a--owl-carousel-type-2-item-image" src="{{ $product->photo }}" alt="{{ $product->name }}">
                                             </a>
                                             <br>
                                             <a href="{{ $product->url }}" target="_blank" class="m-link">{{ $product->name }}</a>
@@ -471,17 +471,19 @@
 @section('page-js')
     <script>
         var related_videos = [
-                @if(!is_null(min(13,$videosWithSameSet->count())))
+            @if(!is_null(min(13,$videosWithSameSet->count())))
                 @foreach($videosWithSameSet->random( min(13,$videosWithSameSet->count())) as $item)
-                @if($item["content"]->id != $content->id)
-            {
-                thumb: '{{(isset($item["thumbnail"]))?$item["thumbnail"]:""}}',
-                url: '{{action("Web\ContentController@show" , $item["content"])}}',
-                title: ' {{($item["content"]->display_name)}}',
-                duration: '20:00'
-            },
-            @endif
-            @endforeach
+                    @if($item["content"]->id != $content->id)
+                        {!!
+                            json_encode([
+                                'thumb' => (isset($item["thumbnail"]))?$item["thumbnail"]:"",
+                                'url' => action("Web\ContentController@show" , $item["content"]),
+                                'title' => ($item["content"]->display_name),
+                                'duration' => '20:00'
+                            ])
+                        !!},
+                    @endif
+                @endforeach
             @endif
         ];
     </script>

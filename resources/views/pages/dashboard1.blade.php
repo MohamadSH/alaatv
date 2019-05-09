@@ -4,6 +4,7 @@
 @endsection
 @section("content")
     @include("partials.slideShow1" ,["marginBottom"=>"25"])
+    
     <div class = "m--clearfix"></div>
     <!--begin:: Widgets/Stats-->
     <div class = "m-portlet ">
