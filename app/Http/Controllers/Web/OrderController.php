@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Collection\OrderCollections;
 use App\User;
 use App\Order;
 use App\Coupon;
@@ -1666,18 +1667,18 @@ class OrderController extends Controller
     {
         $amount       = $request->get('amount');
         $user         = $request->user();
+        /** @var OrderCollections $donateOrders */
         $donateOrders = $user->orders->where('orderstatus_id', config('constants.ORDER_STATUS_OPEN_DONATE'));
         if ($donateOrders->isNotEmpty()) {
             $donateOrder = $donateOrders->first();
         } else {
-            $donateOrder                   = new Order();
-            $donateOrder->orderstatus_id   = config('constants.ORDER_STATUS_OPEN_DONATE');
-            $donateOrder->paymentstatus_id = config('constants.PAYMENT_STATUS_PAID');
-            $donateOrder->user_id          = $user->id;
-            if ($donateOrder->save()) {
-                $user = $user->fresh();
-            }
+            $donateOrder = Order::create([
+                'orderstatus_id'      =>  config('constants.ORDER_STATUS_OPEN_DONATE'),
+                'paymentstatus_id'    =>  config('constants.PAYMENT_STATUS_PAID'),
+                'user_id'             =>  $user->id,
+            ]);
         }
+
         $request->offsetSet('mode', 'donate');
         $request->offsetSet('cost', $amount);
         $product        = Product::FindOrFail(Product::CUSTOM_DONATE_PRODUCT);
