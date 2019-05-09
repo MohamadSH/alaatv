@@ -41,7 +41,9 @@ class Ticket extends BaseModel
         'subject',
         'content',
         'priority_id',
+        'status_id',
         'user_id',
+        'agent_id',
         'category_id',
     ];
     
