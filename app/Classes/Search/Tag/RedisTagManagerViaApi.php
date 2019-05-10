@@ -8,9 +8,9 @@
 
 namespace App\Classes\Search;
 
-use App\Traits\APIRequestCommon;
-use Illuminate\Http\Response;
 use LogicException;
+use Illuminate\Http\Response;
+use App\Traits\APIRequestCommon;
 
 abstract class RedisTagManagerViaApi implements TaggingInterface
 {
@@ -32,7 +32,7 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
      */
     public function __construct()
     {
-        $this->apiUrl = config("constants.TAG_API_URL");
+        $this->apiUrl = config('constants.TAG_API_URL');
         if (!isset($this->bucket)) {
             throw new LogicException(get_class($this).' must have a $bucket');
         }
@@ -40,18 +40,18 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
     
     public function setTags($taggableId, array $tags, $score = 0)
     {
-        $url    = $this->apiUrl."id/".$this->bucket."/".$taggableId;
-        $method = "PUT";
+        $url    = $this->apiUrl.'id/'.$this->bucket.'/'.$taggableId;
+        $method = 'PUT';
         
         $params = [
-            "tags" => json_encode($tags, JSON_UNESCAPED_UNICODE),
+            'tags' => json_encode($tags, JSON_UNESCAPED_UNICODE),
         
         ];
         if (isset($score)) {
-            $params["score"] = $score;
+            $params['score'] = $score;
         }
         $response = $this->sendRequest($url, $method, $params);
-        if ($response["statusCode"] == Response::HTTP_OK) {
+        if ($response['statusCode'] == Response::HTTP_OK) {
             //TODO:// Redis Response
         }
     }
@@ -63,12 +63,12 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
      */
     public function getTags($taggableId): array
     {
-        $url      = $this->apiUrl."id/".$this->bucket."/".$taggableId;
-        $method   = "GET";
+        $url      = $this->apiUrl.'id/'.$this->bucket.'/'.$taggableId;
+        $method   = 'GET';
         $response = $this->sendRequest($url, $method);
-        
-        if ($response["statusCode"] == 200) {
-            $result = json_decode($response["result"]);
+    
+        if ($response['statusCode'] == 200) {
+            $result = json_decode($response['result']);
             $tags   = $result->data->tags;
         }
         else {
@@ -121,18 +121,17 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
      */
     public function getTaggable(array $tags): array
     {
-        $tags   = $this->getStrTags($tags);
-        $url    = $this->apiUrl."tags/".$this->bucket."?tags=".$tags."&".$this->getOptions();
-        $method = "GET";
-        
+        $tags     = $this->getStrTags($tags);
+        $url      = $this->apiUrl.'tags/'.$this->bucket.'?tags='.$tags.'&'.$this->getOptions();
+        $method   = 'GET';
         $response = $this->sendRequest($url, $method);
-        
-        if ($response["statusCode"] == 200) {
-            $result         = json_decode($response["result"]);
+    
+        if ($response['statusCode'] == 200) {
+            $result         = json_decode($response['result']);
             $total_items_db = $result->data->total_items_db;
             $arrayOfId      = [];
             foreach ($result->data->items as $item) {
-                array_push($arrayOfId, $item->id);
+                $arrayOfId[] = $item->id;
             }
             
             return [
@@ -149,7 +148,7 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
     
     protected function getStrTags(array $tags)
     {
-        $strTags = implode("\",\"", $tags);
+        $strTags = implode('","', $tags);
         $strTags = "[\"$strTags\"]";
         
         return $strTags;
@@ -157,9 +156,9 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
     
     protected function getOptions()
     {
-        $options = "withscores=".(int) $this->limit_WithScores;
-        $options .= "&limit=".(int) $this->limit_PerPage;
-        $options .= "&offset=".$this->getOffset();
+        $options = 'withscores='.(int) $this->limit_WithScores;
+        $options .= '&limit='.(int) $this->limit_PerPage;
+        $options .= '&offset='.$this->getOffset();
         
         return $options;
     }

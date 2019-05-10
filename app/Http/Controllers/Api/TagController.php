@@ -67,7 +67,7 @@ class TagController extends Controller
     {
         if (isset($err)) {
             $response = response()->json([
-                'error' => "msg",
+                'error' => 'msg',
             ], 410);
         }
         $header   = [
@@ -96,7 +96,7 @@ class TagController extends Controller
         $this->redis->get($bucket, $id, function ($err, $result) use (& $response) {
             if (isset($err)) {
                 $response = response()->json([
-                    'error' => "msg",
+                    'error' => 'msg',
                 ], 410);
             }
             $header   = [
@@ -170,10 +170,10 @@ class TagController extends Controller
      */
     public function index(Request $request, $bucket)
     {
-        $tags = $request->tags;
-        $tags = str_replace("\"", "", $tags);
-        $tags = explode(",", substr($tags, 1, -1));
-    
+        $tags       = $request->tags;
+        $tags       = $this->normalizeTags($tags);
+        $tags       = str_replace('"', '', $tags);
+        $tags       = explode(',', mb_substr($tags, 1, -1));
         $type       = $request->type ?? 'inter';
         $limit      = $request->limit ?? 100;
         $offset     = $request->offset ?? 0;
@@ -181,6 +181,7 @@ class TagController extends Controller
         $order      = $request->order ?? 'desc';
         
         $response = null;
+//                dd($tags);
         $this->redis->tags($bucket, $tags, $limit, $offset, $withscores, $order, $type,
             function ($err, $result) use (& $response) {
                 if (isset($err)) {
@@ -193,9 +194,9 @@ class TagController extends Controller
                     'Content-Type' => 'application/json; charset=UTF-8',
                     'charset'      => 'utf-8',
                 ];
-
+    
                 $this->convertToUtf8($result);
-
+    
                 $response = response()->json([
                     'data' => $result,
                 ], 200, $header, JSON_UNESCAPED_UNICODE);
@@ -212,13 +213,32 @@ class TagController extends Controller
             return $result;
         });
     }
-
+    
     /**
      * @param $result
      */
     private function convertToUtf8(&$result): void
     {
-        if (is_string($result))
+        if (is_string($result)) {
             mb_convert_encoding($result, 'UTF-8', 'UTF-8');
+        }
+    }
+    
+    /**
+     * @param $tags
+     *
+     * @return string
+     */
+    private function normalizeTags($tags): string
+    {
+        $lastCharacter  = mb_substr($tags, -1);
+        $firstCharacter = mb_substr($tags, 0, 1);
+        if ($firstCharacter !== '[') {
+            $tags = '['.$tags;
+        }
+        if ($lastCharacter !== ']') {
+            $tags .= ']';
+        }
+        return $tags;
     }
 }
