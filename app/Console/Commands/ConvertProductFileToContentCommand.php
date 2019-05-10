@@ -343,8 +343,9 @@ class ConvertProductFileToContentCommand extends Command
     
     private function migrateData(): void
     {
-        
-        $productFiles = Productfile::all();
+    
+        $productFiles = Productfile::orderBy('order')
+            ->get();
         $this->output->writeln('update product files....');
         $progress = new ProgressBar($this->output, $productFiles->count());
         
@@ -358,11 +359,18 @@ class ConvertProductFileToContentCommand extends Command
             tap($this->makeSetForProductFiles($files, $product), function (Contentset $set) use ($files) {
                 return $this->attachSetToProducts($set, $files->first()->file);
             });
-            
+    
+            $videoOrder    = 1;
+            $pamphletOrder = 1;
             /** @var Productfile $productFile */
             foreach ($files as $productFile) {
                 $productFile = $productFile->fresh();
-                $content     = $this->getAssosiatedProductFileContent($productFile, $product);
+                if ($productFile->productfiletype_id == 1) {
+                    $order = $pamphletOrder++;
+                } else {
+                    $order = $videoOrder++;
+                }
+                $content = $this->getAssosiatedProductFileContent($productFile, $product, $order);
                 $this->setFileForContentBasedOnProductFile($content, $productFile, true);
             }
             $progress->advance();
@@ -437,12 +445,14 @@ class ConvertProductFileToContentCommand extends Command
     }
     
     /**
-     * @param $productFile
-     * @param $product
+     * @param  Productfile  $productFile
+     * @param  Product      $product
+     *
+     * @param               $order
      *
      * @return \App\Content|\App\Content[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null
      */
-    private function getAssosiatedProductFileContent(Productfile $productFile, Product $product)
+    private function getAssosiatedProductFileContent(Productfile $productFile, Product $product, $order)
     {
         $set = $productFile->set;
         
@@ -462,10 +472,10 @@ class ConvertProductFileToContentCommand extends Command
         ];
         $content                               = Content::create([
             'name'            => $productFile->name,
-            'description'     => (isset($productFile) && strlen($productFile->description) > 1 ? $productFile->description : null),
+            'description'     => isset($productFile) && strlen($productFile->description) > 1 ? $productFile->description : null,
             'context'         => null,
             'file'            => null,
-            'order'           => $productFile->order,
+            'order'           => $order,
             'validSince'      => $productFile->validSince,
             'metaTitle'       => null,
             'metaDescription' => null,
