@@ -1344,11 +1344,7 @@ class HomeController extends Controller
      */
     public function sendMail(ContactUsFormRequest $request)
     {
-    
-        $this->setting = Websitesetting::where('version', 1)
-            ->get()
-            ->first();
-        $wSetting      = $this->setting->setting;
+        $wSetting      = $this->setting;
         
         //        try {
         //            $sent = Mail::send('emailLayouts.contactUs',
