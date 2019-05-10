@@ -398,7 +398,7 @@ class ConvertProductFileToContentCommand extends Command
                 'tags'  => (array) optional(optional($product->grandParent)->tags)->tags,
             ]);
             $set->enable   = 1;
-            $set->display  = 1;
+            $set->display  = 0;
             $setSaveResult = $set->save();
             if (!$setSaveResult) {
                 $this->output->writeln("\r\n"."Error\ ProductFile: ".$pFile->id);

@@ -376,6 +376,11 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             ->valid();
     }
     
+    public function scopeFree($query)
+    {
+        return $query->where('isFree', 1);
+    }
+    
     /**
      * Scope a query to only include Contents that will come soon.
      *
