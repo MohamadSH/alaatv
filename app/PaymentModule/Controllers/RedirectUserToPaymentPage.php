@@ -44,6 +44,7 @@ class RedirectUserToPaymentPage extends Controller
         /** @var Transaction $transaction */
         $transaction = $data['transaction'];
 
+
         if ($data['statusCode'] != Response::HTTP_OK) {
             $this->sendErrorResponse($data['message'], $data['statusCode']);
         }
@@ -70,8 +71,7 @@ class RedirectUserToPaymentPage extends Controller
         TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id , $this->getGatewyId($paymentMethod), $description)
             ->orRespondWith([Responses::class, 'editTransactionError']);
 
-        //ToDo
-//        $this->saveOrderInCookie($order);
+        $this->saveOrderInCookie($order);
 
         return view("order.checkout.gatewayRedirect", ['authority' => $authorityCode, 'paymentMethod' => $paymentMethod]);
     }
@@ -185,50 +185,54 @@ class RedirectUserToPaymentPage extends Controller
      */
     private function saveOrderInCookie(Order $order)
     {
+        //ToDo : komake mali
         $totalCookie = collect();
         $orderproducts = $order->orderproducts ;
 
-        foreach ($orderproducts as $orderproduct){
-            $extraAttributesIds = $orderproduct->attributevalues->pluck('id')->toArray() ;
+        foreach ($orderproducts as $orderproduct) {
+            $extraAttributesIds = $orderproduct->attributevalues->pluck('id')->toArray();
             $myProduct = $orderproduct->product;
 
-            $grandId = $myProduct->id;
-            $productsId = [];
-            if(isset($myProduct->grand_id))
-            {
-                $grandId = $myProduct->grand_id;
-                $productsId = [$myProduct->id];
-            }
-
-            $isAdded =  $totalCookie->where('product_id' , $grandId);
-
-            if($isAdded->isEmpty())
-            {
+            $grandProduct = $myProduct->grand;
+            if (is_null($grandProduct)) {
                 $totalCookie->push([
-                    'product_id'    =>  $grandId,
-                    'products'      =>  $productsId,
-                    'extraAttribute'=>  $extraAttributesIds
+                    'product_id' => $myProduct->id,
+                    'extraAttribute' => $extraAttributesIds
                 ]);
-            }
-            else{
-                if(isEmpty($productsId))
-                {
-                    $totalCookie->push([
-                        'product_id'    =>  $grandId,
-                        'products'      =>  $productsId,
-                        'extraAttribute'=>  $extraAttributesIds
-                    ]);
-                }
-                else
-                {
-                    $key           = $isAdded->keys()->last();
-                    $addedCookie   = $isAdded->first();
-                    $addedCookie['products'] =  array_merge_recursive($addedCookie['products'] , $productsId);
-                    $totalCookie->put($key, $addedCookie);
+            } else {
+                $grandType = $grandProduct->producttype_id;
+                if ($grandType == config('constants.PRODUCT_TYPE_SELECTABLE')) {
+                    $isAdded = $totalCookie->where('product_id', $grandProduct->id);
+                    if ($isAdded->isEmpty()) {
+                        $totalCookie->push([
+                            'product_id' => $grandProduct->id,
+                            'products' => [$myProduct->id],
+                            'extraAttribute' => $extraAttributesIds
+                        ]);
+                    } else {
+                        $key = $isAdded->keys()->last();
+                        $addedCookie = $isAdded->first();
+                        $addedCookie['products'] = array_merge_recursive($addedCookie['products'], [$myProduct->id]);
+                        $addedCookie['extraAttribute'] = array_merge_recursive($addedCookie['extraAttribute'], $extraAttributesIds);
+                        $totalCookie->put($key, $addedCookie);
+
+                    }
+                } elseif ($grandType == config('constants.PRODUCT_TYPE_CONFIGURABLE')) {
+                    $attributeValueIds = $myProduct->attributevalues()->whereHas('attribute', function ($q) {
+                        $q->where('attributetype_id', config('constants.ATTRIBUTE_TYPE_MAIN'));
+                    })->get()->pluck('id')->toArray();
+
+                    if(!empty($attributeValueIds))
+                        $totalCookie->push([
+                            'product_id' => $grandProduct->id,
+                            'attribute' => $attributeValueIds,
+                            'extraAttribute' => $extraAttributesIds,
+                        ]);
                 }
             }
         }
 
-        setcookie('cartItems', $_COOKIE["cartItems"], time() - 3600, '/');
+        if($totalCookie->isNotEmpty())
+            setcookie('cartItems', $totalCookie->toJson(), time() + 3600, '/');
     }
 }

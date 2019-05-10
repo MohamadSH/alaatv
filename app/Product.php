@@ -9,7 +9,7 @@ use Laravel\Scout\Searchable;
 use App\Collection\SetCollection;
 use Kalnoy\Nestedset\QueryBuilder;
 use App\Collection\ProductCollection;
-use Illuminate\Support\{Collection, Facades\Cache};
+use Illuminate\Support\{Collection, Facades\Auth, Facades\Cache};
 use App\Classes\{Taggable,
     Advertisable,
     SEO\SeoInterface,
@@ -473,21 +473,35 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         
         return url($value['path']);
     }
-    
+
     /**
-     * @param  User|null  $user
+     * @param User|null $user
      *
-     * @return null|string
+     * @return array
      */
-    public function getPriceTextAttribute(User $user = null): ?string
+    public function getPriceTextAttribute(User $user = null): array
     {
+        if(is_null($user) && Auth::check())
+            $user = Auth::user();
+
         if ($this->isFree) {
             return 'رایگان';
         }
-//Commented by Mohammad: The product might have default price
-//        if ($this->basePrice == 0)
-//            return 'تعیین قیمت: پس از انتخاب محصول';
-        return number_format($this->calculatePayablePrice($user)['cost']).' '.'تومان';
+
+        $costInfo   = $this->calculatePayablePrice($user);
+        if(is_null($costInfo['cost']))
+            $basePriceText = 'پس از انتخاب محصول';
+        else
+            $basePriceText  = number_format($costInfo['cost']).' تومان';
+
+        $finalPriceText = number_format($costInfo['customerPrice']).' تومان';
+        $customerDiscount = $costInfo['customerDiscount'];
+
+        return [
+                'basePriceText'     => $basePriceText,
+                'finalPriceText'    => $finalPriceText,
+                'discount'          => $customerDiscount
+            ];
     }
     
     public function calculatePayablePrice(User $user = null)
@@ -1287,8 +1301,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                             } else {
                                 $cost = $this->basePrice;
                             }
-                        } else {
-                            if ($this->producttype_id == config('constants.PRODUCT_TYPE_SELECTABLE')) {
+                        } elseif ($this->producttype_id == config('constants.PRODUCT_TYPE_SELECTABLE'))
+                        {
                                 $allChildren = $this->getAllChildren()
                                     ->where('pivot.isDefault', 1);
                                 if ($allChildren->isNotEmpty()) {
@@ -1297,15 +1311,16 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                                         /** @var Product $product */
                                         $cost += $product->obtainPrice();
                                     }
-                                } else {
-                                    if ($this->basePrice != 0) {
+                                } else if ($this->basePrice != 0) {
                                         $cost = $this->basePrice;
-                                    }
+                                }else{
+                                    $cost = null;
                                 }
-                            } else {
-                                $cost = $this->basePrice;
-                            }
+
+                        } else {
+                            $cost = $this->basePrice;
                         }
+
                     } else {
                         $grandParent            = $this->grandParent;
                         $grandParentProductType = $grandParent->producttype_id;
@@ -1322,27 +1337,25 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                                 if (isset($attributevalue->pivot->extraCost))
                                     $cost += $attributevalue->pivot->extraCost;
                             }*/
-                        } else {
-                            if ($grandParentProductType == config('constants.PRODUCT_TYPE_SELECTABLE')) {
-                                if ($this->basePrice == 0) {
-                                    $children = $this->children;
-                                    $cost     = 0;
-                                    foreach ($children as $child) {
-                                        $cost = $child->basePrice;
-                                    }
-                                } else {
-                                    $cost = $this->basePrice;
+                        }elseif ($grandParentProductType == config('constants.PRODUCT_TYPE_SELECTABLE')) {
+                            if ($this->basePrice == 0) {
+                                $children = $this->children;
+                                $cost     = 0;
+                                foreach ($children as $child) {
+                                    $cost = $child->basePrice;
                                 }
+                            } else {
+                                $cost = $this->basePrice;
                             }
+                        }else{
+                            $cost = 0;
                         }
                     }
+                }else{
+                    $cost = 0;
                 }
                 
-                if (isset($cost)) {
-                    return $cost;
-                } else {
-                    return null;
-                }
+                return $cost;
             });
     }
     

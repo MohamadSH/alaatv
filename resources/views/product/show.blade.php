@@ -292,9 +292,14 @@
                                     {{--دکمه افزودن به سبد خرید--}}
                                     @if($product->enable)
                                         <h5 class="m--font-danger">
-                                                    <span id="a_product-price">
-                                                        {{ $product->priceText }}
-                                                    </span>
+                                                <span id="a_product-price">
+                                                    @if($product->priceText['discount'] == 0 )
+                                                         {{ $product->priceText['basePriceText'] }}
+                                                    @else
+                                                        قیمت محصول: <strike>{{ $product->priceText['basePriceText'] }} </strike><br>
+                                                        قیمت برای مشتری:  {{ $product->priceText['finalPriceText'] }}
+                                                    @endif
+                                                </span>
                                             <span id="a_product-discount"></span>
                                         </h5>
 
