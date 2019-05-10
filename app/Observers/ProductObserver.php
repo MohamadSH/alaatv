@@ -92,6 +92,7 @@ class ProductObserver
     
     public function saved(Product $product)
     {
+        //todo
         self::shiftProductOrders($product->order);
 
         $this->sendTagsOfTaggableToApi($product, $this->tagging);

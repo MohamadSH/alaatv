@@ -20,7 +20,6 @@ use Kalnoy\Nestedset\QueryBuilder;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 use App\Collection\OrderproductCollection;
 use App\Http\Requests\InsertUserBonRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -203,7 +202,7 @@ class OrderproductController extends Controller
         }
         
         $report['data']['storedOrderproducts'] = $storedOrderproducts;
-        
+
         return $report;
     }
     
