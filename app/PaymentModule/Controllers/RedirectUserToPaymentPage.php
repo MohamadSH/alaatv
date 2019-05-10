@@ -70,6 +70,9 @@ class RedirectUserToPaymentPage extends Controller
         TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id , $this->getGatewyId($paymentMethod), $description)
             ->orRespondWith([Responses::class, 'editTransactionError']);
 
+        //ToDo
+//        $this->saveOrderInCookie($order);
+
         return view("order.checkout.gatewayRedirect", ['authority' => $authorityCode, 'paymentMethod' => $paymentMethod]);
     }
 
@@ -172,6 +175,60 @@ class RedirectUserToPaymentPage extends Controller
      */
     private function shouldCloseOrder(Order $order): bool
     {
-        return $order->orderstatus_id == config('constants.ORDER_STATUS_OPEN');
+        return in_array($order->orderstatus_id , Order::OPEN_ORDER_STATUSES);
+    }
+
+    /**
+     * Saves order in cookie
+     *
+     * @param Order $order
+     */
+    private function saveOrderInCookie(Order $order)
+    {
+        $totalCookie = collect();
+        $orderproducts = $order->orderproducts ;
+
+        foreach ($orderproducts as $orderproduct){
+            $extraAttributesIds = $orderproduct->attributevalues->pluck('id')->toArray() ;
+            $myProduct = $orderproduct->product;
+
+            $grandId = $myProduct->id;
+            $productsId = [];
+            if(isset($myProduct->grand_id))
+            {
+                $grandId = $myProduct->grand_id;
+                $productsId = [$myProduct->id];
+            }
+
+            $isAdded =  $totalCookie->where('product_id' , $grandId);
+
+            if($isAdded->isEmpty())
+            {
+                $totalCookie->push([
+                    'product_id'    =>  $grandId,
+                    'products'      =>  $productsId,
+                    'extraAttribute'=>  $extraAttributesIds
+                ]);
+            }
+            else{
+                if(isEmpty($productsId))
+                {
+                    $totalCookie->push([
+                        'product_id'    =>  $grandId,
+                        'products'      =>  $productsId,
+                        'extraAttribute'=>  $extraAttributesIds
+                    ]);
+                }
+                else
+                {
+                    $key           = $isAdded->keys()->last();
+                    $addedCookie   = $isAdded->first();
+                    $addedCookie['products'] =  array_merge_recursive($addedCookie['products'] , $productsId);
+                    $totalCookie->put($key, $addedCookie);
+                }
+            }
+        }
+
+        setcookie('cartItems', $_COOKIE["cartItems"], time() - 3600, '/');
     }
 }
