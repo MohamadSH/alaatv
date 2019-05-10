@@ -175,7 +175,7 @@ class RedirectUserToPaymentPage extends Controller
      */
     private function shouldCloseOrder(Order $order): bool
     {
-        return in_array($order->orderstatus_id , Order::OPEN_ORDER_STATUSES);
+        return $order->orderstatus_id == config('constants.ORDER_STATUS_OPEN');
     }
 
     /**
