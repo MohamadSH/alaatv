@@ -988,7 +988,6 @@ class UserController extends Controller
         $transactions = Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
             return $user->getShowableTransactions()
                 ->get()
-                ->sortByDesc("completed_at")
                 ->groupBy("order_id");
         });
         

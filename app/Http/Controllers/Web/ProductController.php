@@ -833,8 +833,9 @@ class ProductController extends Controller
      */
     public function landing1(Request $request)
     {
+        return redirect("/landing/6", 302);
+
         $url = $request->url();
-    
         $this->generateSeoMetaTags(new SeoDummyTags('آلاء| جمع بندی نیم سال اول',
             'همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف', $url,
             $url, route('image', [
@@ -875,15 +876,17 @@ class ProductController extends Controller
     
         return view("product.landing.landing1", compact('landingProducts', 'costCollection', 'withFilter'));
     }
-    
+
     /**
      * Products Special Landing Page
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function landing2()
+    public function landing2(Request $request)
     {
-        return redirect("/landing/4", 302);
+        return redirect()->route('landing.5', $request->all());
+
         $gheireHozoori = config('constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER');
         if (Input::has('utm_term')) {
             $utm_term = Input::get('utm_term');
@@ -925,6 +928,8 @@ class ProductController extends Controller
      */
     public function landing3(Request $request)
     {
+        return redirect()->route('landing.5', $request->all());
+
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags('آلاء | همایش های طلایی کنکور 97',
             'وقتی همه کنکوری ها گیج و سرگردانند، شما مرور کنید. چالشی ترین نکات کنکوری در همایش های آلاء', $url, $url,
@@ -947,7 +952,7 @@ class ProductController extends Controller
      */
     public function landing4(Request $request)
     {
-        return redirect()->route('landing.3', $request->all());
+        return redirect()->route('landing.5', $request->all());
         
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags('آلاء | همایش های طلایی کنکور 97',
@@ -1141,6 +1146,16 @@ class ProductController extends Controller
      */
     public function landing6(Request $request)
     {
+        $url = $request->url();
+        $this->generateSeoMetaTags(new SeoDummyTags('آلاء| جمع بندی نیم سال اول',
+            'همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف', $url,
+            $url, route('image', [
+                'category' => '11',
+                'w'        => '100',
+                'h'        => '100',
+                'filename' => $this->setting->site->siteLogo,
+            ]), '100', '100', null));
+
         $producIds = [
             271,
             270,

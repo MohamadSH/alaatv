@@ -45,10 +45,11 @@ trait HandleOrderPayment
         
         $result['paymentstatus_id'] = $paymentstatus_id;
 
-        if($order->orderstatus_id == config('constants.ORDER_STATUS_OPEN'))
-            $order->close($paymentstatus_id);
+//        uncomment if you don't close order before redirecting to gateway
+        if(in_array($order->orderstatus_id , Order::OPEN_ORDER_STATUSES))
+            $order->close();
 
-        $order->paymentstatus_id = $paymentstatus_id;  // saat 2:25 AM 3vom Ramedan
+        $order->paymentstatus_id = $paymentstatus_id;
 
         $result['saveOrder'] = $order->updateWithoutTimestamp() ? 1 : 0;
         
