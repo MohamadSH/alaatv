@@ -76,15 +76,30 @@ Route::group(['prefix' => 'orderproduct'], function () {
 });
 
 Route::group(['prefix' => 'landing'], function () {
-    Route::get('6', 'Web\ProductController@landing6');
-    Route::get('5', 'Web\ProductController@landing5');
-    Route::get('1', 'Web\ProductController@landing1');
-    Route::get('2', 'Web\ProductController@landing2');
+    Route::get('6' , [
+        'as'   => 'landing.6',
+        'uses' => 'Web\ProductController@landing6',
+    ]);
+    Route::get('5' , [
+        'as'   => 'landing.5',
+        'uses' => 'Web\ProductController@landing5',
+    ]);
+    Route::get('1' , [
+        'as'   => 'landing.1',
+        'uses' => 'Web\ProductController@landing1',
+    ]);
+    Route::get('2' , [
+        'as'   => 'landing.2',
+        'uses' => 'Web\ProductController@landing2',
+    ]);
     Route::get('3', [
         'as'   => 'landing.3',
         'uses' => 'Web\ProductController@landing3',
     ]);
-    Route::get('4', 'Web\ProductController@landing4');
+    Route::get('4',  [
+        'as'   => 'landing.4',
+        'uses' => 'Web\ProductController@landing4',
+    ]);
 });
 Route::group(['middleware' => 'auth'], function () {
     
