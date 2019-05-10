@@ -400,6 +400,7 @@ return [
     'PAYMENT_STATUS_UNPAID'                    => 1,
     'PAYMENT_STATUS_INDEBTED'                  => 2,
     'PAYMENT_STATUS_PAID'                      => 3,
+    'PAYMENT_STATUS_VERIFIED_INDEBTED'         => 4,
 
     //USER BON STATUSES CONSTANTS
     'USERBON_STATUS_ACTIVE'                    => 1,
