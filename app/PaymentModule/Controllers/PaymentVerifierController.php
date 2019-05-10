@@ -49,6 +49,9 @@ class PaymentVerifierController extends Controller
             $this->handleOrderCanceledTransaction($transaction);
             $transaction->update();
         }
+
+        setcookie('cartItems', $_COOKIE["cartItems"], time() - 3600, '/');
+
         /*
         if (isset($transaction->order_id)) {} else { if (isset($transaction->wallet_id)) { if ($result['status']) { $this->handleWalletChargingSuccessPayment($gatewayVerify['RefID'], $transaction, $gatewayVerify['cardPanMask']); } else { $this->handleWalletChargingCanceledPayment($transaction); } } } */
         
