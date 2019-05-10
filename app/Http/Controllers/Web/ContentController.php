@@ -258,7 +258,7 @@ class ContentController extends Controller
                 });
             
             if (request()->expectsJson()) {
-                return redirect($content->api_url['v1']);
+                return redirect()->to($content->api_url['v1']);
             }
         }
         $this->generateSeoMetaTags($content);

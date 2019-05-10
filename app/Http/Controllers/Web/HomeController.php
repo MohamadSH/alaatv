@@ -94,7 +94,7 @@ class HomeController extends Controller
     public function __construct(Response $response, Websitesetting $setting)
     {
         $authException = [
-//            'debug',
+            'debug',
             'newDownload',
             'download',
             'telgramAgent',
@@ -109,7 +109,7 @@ class HomeController extends Controller
             'sendMail',
             'rules',
             'siteMapXML',
-//            'uploadFile',
+            //            'uploadFile',
             'search',
             'schoolRegisterLanding',
             'lernitoTree',
@@ -976,8 +976,11 @@ class HomeController extends Controller
     {
         /** @var User $user */
         $user = $request->user('alaatv');
-        if ($data === null || $user === null) {
+        if ($user === null) {
             abort(403, 'Not authorized.');
+        }
+        if ($data === null) {
+            abort(403, 'Invalid Link');
         }
         try {
             $data = (array) decrypt($data);
