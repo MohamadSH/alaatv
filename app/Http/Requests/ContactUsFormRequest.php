@@ -23,19 +23,7 @@ class ContactUsFormRequest extends FormRequest
             'message'              => 'required',
             'g-recaptcha-response' => 'required|recaptcha',
         ];
-    
-        //        if($this->request->has("securityQuestion"))
-        //        {
-        //            $securityQuestion = $this->request->get("securityQuestion");
-        //            if($securityQuestion != "هفت")
-        //            {
-        //                $rules = array_add($rules , "g-recaptcha-response" , "required") ;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            $rules = array_add($rules , "g-recaptcha-response" , "required") ;
-        //        }
+
         return $rules;
     }
     

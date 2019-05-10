@@ -290,8 +290,6 @@ Route::group(['prefix' => 'mobile'], function () {
 Route::post("cd3b472d9ba631a73cb7b66ba513df53", "Web\CouponController@generateRandomCoupon");
 Route::view('uiTest', 'pages.certificates');
 
-Route::view('testrtl', 'product.show_ali');
-
 Route::get("tree", "Web\TopicsTreeController@lernitoTree");
 Route::get("tree/getArrayString/{lnid}", "Web\TopicsTreeController@getTreeInPHPArrayString");
 Route::any('goToPaymentRoute/{paymentMethod}/{device}/', '\\'.RedirectAPIUserToPaymentRoute::class)

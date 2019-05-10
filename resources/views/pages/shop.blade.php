@@ -140,7 +140,7 @@
                                                 </a>
                                                 <br>
                                                 <div class = "m--font-primary">
-                                                    <span>{{ $product->priceText }}</span>
+                                                    <span>{{ $product->priceText['basePriceText']  }}</span>
                                                 </div>
                                                 <br>
                                                 <a href="{{ $product->url }}" target="_blank" class="m-link">{{ $product->name }}</a>
@@ -176,7 +176,7 @@
 {{--                                'widgetTitle'      => $product->name,--}}
 {{--                                'widgetPic'        => $product->photo,--}}
 {{--                                'widgetLink'       => $product->url,--}}
-{{--                                'widgetPrice'      => $product->priceText,--}}
+{{--                                'widgetPrice'      => $product->priceText['basePriceText'] ,--}}
 {{--                                'widgetPriceLabel' => ($product->isFree || $product->basePrice == 0 ? 0 : 1)--}}
 {{--                                ])--}}
 {{--                        @endforeach--}}

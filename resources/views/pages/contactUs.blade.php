@@ -80,7 +80,7 @@
                     <div class = "form-group m-form__group row {{ $errors->has('g-recaptcha-response') ? ' has-danger' : '' }}">
                         <label for = "example-text-input" class = "col-3 col-form-label">ربات نیستم:</label>
                         <div class = "col-9">
-                            {{--{!! Recaptcha::render() !!}--}}
+                            {!! Recaptcha::render() !!}
                             @if ($errors->has('g-recaptcha-response'))
                                 <div class = "form-control-feedback">{{ $errors->first('g-recaptcha-response') }}</div>
                             @endif
