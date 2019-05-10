@@ -1348,7 +1348,7 @@ class HomeController extends Controller
         $this->setting = Websitesetting::where('version', 1)
             ->get()
             ->first();
-        $wSetting      = json_decode($this->setting->setting);
+        $wSetting      = $this->setting->setting;
         
         //        try {
         //            $sent = Mail::send('emailLayouts.contactUs',
