@@ -11,7 +11,7 @@
             </li>
             <li class="breadcrumb-item">
                 <i class="fa fa-chalkboard-teacher"></i>
-                <a class="m-link" href="{{ action("Web\ProductController@index") }}">محصولات آموزشی</a>
+                <a class="m-link" href="{{ action("Web\ShopPageController") }}">محصولات آموزشی</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
                 <a class="m-link" href="#"> {{ $product->name }} </a>

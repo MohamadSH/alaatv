@@ -102,10 +102,10 @@ class Productfile extends BaseModel
      */
     public function validSince_Jalali()
     {
-        $explodedDateTime = explode(" ", $this->validSince);
+        $explodedDateTime = explode(' ', $this->validSince);
         $explodedTime     = $explodedDateTime[1];
-        
-        return $this->convertDate($this->validSince, "toJalali")." ".$explodedTime;
+    
+        return $this->convertDate($this->validSince, 'toJalali').' '.$explodedTime;
     }
     
     /**
@@ -139,23 +139,23 @@ class Productfile extends BaseModel
      */
     public function getExternalLinkForProductFileByFileName($fileName, $productId): string
     {
-        $cloudFile = Productfile::where("file", $fileName)
-            ->whereIn("product_id", $productId)
+        $cloudFile = Productfile::where('file', $fileName)
+            ->whereIn('product_id', $productId)
             ->get()
             ->first()->cloudFile;
         //TODO: verify "$productFileLink = "http://".env("SFTP_HOST" , "").":8090/". $cloudFile;"
-        $productFileLink = config("constants.DOWNLOAD_HOST_PROTOCOL",
-                "https://").config('constants.DOWNLOAD_HOST_NAME').$cloudFile;
+        $productFileLink = config('constants.DOWNLOAD_HOST_PROTOCOL',
+                'https://').config('constants.DOWNLOAD_HOST_NAME').$cloudFile;
         $unixTime        = Carbon::today()
             ->addDays(2)->timestamp;
         $userIP          = request()->ip();
         //TODO: fix diffrent Ip
-        $ipArray    = explode(".", $userIP);
+        $ipArray    = explode('.', $userIP);
         $ipArray[3] = 0;
-        $userIP     = implode(".", $ipArray);
-        
-        $linkHash     = $this->generateSecurePathHash($unixTime, $userIP, "TakhteKhak", $cloudFile);
-        $externalLink = $productFileLink."?md5=".$linkHash."&expires=".$unixTime;
+        $userIP     = implode('.', $ipArray);
+    
+        $linkHash     = $this->generateSecurePathHash($unixTime, $userIP, 'TakhteKhak', $cloudFile);
+        $externalLink = $productFileLink.'?md5='.$linkHash.'&expires='.$unixTime;
         return $externalLink;
     }
 }
