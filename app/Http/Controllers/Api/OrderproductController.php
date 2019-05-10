@@ -45,7 +45,6 @@ class OrderproductController extends Controller
             $orderproducts = $result['data']['storedOrderproducts'];
         }
         
-        return response($orderproducts, Response::HTTP_OK);
         if ($orderproducts->isEmpty()) {
             $responseContent = [
                 'error' => [
