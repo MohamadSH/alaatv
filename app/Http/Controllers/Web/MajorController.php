@@ -12,30 +12,30 @@ class MajorController extends Controller
 {
     public function index()
     {
-        
-        $majors = Major::orderBy("name");
-        
-        $majotIds = Input::get("ids");
-        if (strcmp(gettype($majotIds), "string") == 0) {
+    
+        $majors = Major::orderBy('name');
+    
+        $majotIds = Input::get('ids');
+        if (strcmp(gettype($majotIds), 'string') == 0) {
             $majotIds = json_decode($majotIds);
         }
         if (isset($majotIds)) {
-            $majors = $majors->whereIn("id", $majotIds);
+            $majors = $majors->whereIn('id', $majotIds);
         }
-        
-        $majorCodes    = Input::get("majorCode");
-        $majorParentId = Input::get("majorParent");
+    
+        $majorCodes    = Input::get('majorCode');
+        $majorParentId = Input::get('majorParent');
         if (isset($majorCodes) && $majorParentId) {
-            $majors = $majors->whereHas("parents", function ($q) use ($majorCodes, $majorParentId) {
-                $q->where("major1_id", $majorParentId)
-                    ->whereIn("majorCode", $majorCodes);
+            $majors = $majors->whereHas('parents', function ($q) use ($majorCodes, $majorParentId) {
+                $q->where('major1_id', $majorParentId)
+                    ->whereIn('majorCode', $majorCodes);
             });
         }
-        
-        $parentIds = Input::get("parents");
+    
+        $parentIds = Input::get('parents');
         if (isset($parentIds)) {
-            $majors = $majors->whereHas("parents", function ($q) use ($parentIds) {
-                $q->whereIn("major1_id", $parentIds);
+            $majors = $majors->whereHas('parents', function ($q) use ($parentIds) {
+                $q->whereIn('major1_id', $parentIds);
             });
         }
         
@@ -44,7 +44,7 @@ class MajorController extends Controller
 
     public function store(InsertMajorRequest $request)
     {
-        $major = Major::where("name", "like", $request->get("name"))
+        $major = Major::where('name', 'like', $request->get('name'))
             ->get()
             ->first();
         $flag  = true;
@@ -58,35 +58,35 @@ class MajorController extends Controller
         }
         
         if ($flag) {
-            $parentMajorId = Input::get("parent");
+            $parentMajorId = Input::get('parent');
             if (!in_array($parentMajorId, [
                 1,
                 2,
                 3,
             ])) {
-                session()->put("error", "رشته والد باید ریاضی یا تجربی یا انسانی باشد");
+                session()->put('error', 'رشته والد باید ریاضی یا تجربی یا انسانی باشد');
                 
                 return redirect()->back();
             }
             if ($major->parents()
-                ->where("major1_id", $parentMajorId)
+                ->where('major1_id', $parentMajorId)
                 ->get()
                 ->isEmpty()) {
-                $majorCode = $request->get("majorCode");
+                $majorCode = $request->get('majorCode');
                 $major->parents()
                     ->attach($parentMajorId, [
-                        "relationtype_id" => 1,
-                        "majorCode"       => $majorCode,
+                        'relationtype_id' => 1,
+                        'majorCode'       => $majorCode,
                     ]);
-                session()->put("success", "رشته با موفقیت درج شد");
+                session()->put('success', 'رشته با موفقیت درج شد');
             }
             else {
                 $parentMajor = Major::FindOrFail($parentMajorId);
-                session()->put("warning", "این رشته برای ".$parentMajor->name." قبلا درج شده است");
+                session()->put('warning', 'این رشته برای '.$parentMajor->name.' قبلا درج شده است');
             }
         }
         else {
-            session()->put("success", "خطای پایگاه داده در درج رشته");
+            session()->put('success', 'خطای پایگاه داده در درج رشته');
         }
         
         return redirect()->back();
@@ -94,16 +94,16 @@ class MajorController extends Controller
 
     public function update(Request $request, $id)
     {
-        $parentMajorId = $request->get("parentMajorId");
+        $parentMajorId = $request->get('parentMajorId');
         $parentMajor   = Major::FindOrFail($parentMajorId);
-        $majorCodes    = $request->get("majorCodes");
+        $majorCodes    = $request->get('majorCodes');
         foreach ($majorCodes as $key => $majorCode) {
             if (strlen($majorCode) > 0) {
                 $parentMajor->children()
-                    ->updateExistingPivot($key, ["majorCode" => $majorCode]);
+                    ->updateExistingPivot($key, ['majorCode' => $majorCode]);
             }
         }
-        session()->put("success", "درج کدهای رشته ها با موفقیت انجام شد!");
+        session()->put('success', 'درج کدهای رشته ها با موفقیت انجام شد!');
         
         return redirect()->back();
     }
