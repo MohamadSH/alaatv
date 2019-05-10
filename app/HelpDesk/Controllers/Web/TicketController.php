@@ -4,17 +4,28 @@ namespace App\HelpDesk\Controllers;
 
 use Illuminate\Http\Request;
 use App\HelpDesk\Models\Ticket;
+use App\HelpDesk\Models\Priority;
+use App\HelpDesk\Models\Category;
 use App\Http\Controllers\Controller;
 use App\HelpDesk\Repositories\AgentRepository;
+use App\HelpDesk\Repositories\TicketRepository;
 
 class TicketController extends Controller
 {
     /**
-     * TicketController constructor.
+     * @var TicketRepository
      */
-    public function __construct()
+    private $repository;
+    
+    /**
+     * TicketController constructor.
+     *
+     * @param  TicketRepository  $repository
+     */
+    public function __construct(TicketRepository $repository)
     {
         $this->callMiddlewares();
+        $this->repository = $repository;
     }
     
     
@@ -50,17 +61,24 @@ class TicketController extends Controller
     
     public function index()
     {
-        $tickets = Ticket::all();
-    
+//        dump("here");
+        $userId = auth()->user()->id;
+//        dump("here");
+        $tickets = $this->repository->getUserTickets($userId);
+//        dump("here");
+        $categories = Category::all();
         //User Tickets
         //Agent Tickets
         //All Tickets -> Admin
-    
-        return view('helpDesk::ticket.index', compact('tickets'));
+//        dd(compact('tickets', 'categories'));
+        return view('helpDesk::ticket.index', compact('tickets', 'categories'));
     }
     
     public function create()
     {
+        $categories = Category::all();
+        $priorities = Priority::all();
+        return view('helpDesk::ticket.create', compact('categories', 'priorities'));
     }
     
     
@@ -74,33 +92,40 @@ class TicketController extends Controller
     {
         $categoryId = $request->get('category_id');
         $fillables  = [
-            'subject',
-            'content',
-            'priority_id',
-            'category_id',
+            'subject'     => 'subject',
+            'content'     => 'content',
+            'priority_id' => 'priority',
+            'category_id' => 'category',
         ];
         $ticket     = [
             'status_id' => config('helpDesk.STATUS_OPEN'),
             'user_id'   => $request->user()->id,
             'agent_id'  => $repository->getActiveAgent($categoryId),
         ];
-        foreach ($fillables as $key) {
+        foreach ($fillables as $key => $index) {
             $ticket += [
-                $key => $request->get($key),
+                $key => $request->get($index),
             ];
         }
-        return Ticket::create($ticket);
-        
+        $ticket = Ticket::create($ticket);
+        return redirect()
+            ->back()
+            ->with('status', "یک تیکت با شماره #$ticket->id ایجاد شد. ");
     }
     
     
     public function show(Ticket $ticket)
     {
+        $category = $ticket->category;
+        $user     = $ticket->user;
+        $agent    = $ticket->agent;
+        return view('helpDesk::ticket.show', compact('ticket', 'category', 'user', 'agent'));
     }
     
     
     public function edit(Ticket $ticket)
     {
+    
     }
     
     
