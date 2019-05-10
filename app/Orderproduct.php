@@ -2,12 +2,10 @@
 
 namespace App;
 
-use App\Classes\Checkout\Alaa\AlaaOrderproductGroupPriceCalculatorFromNewBase;
 use App\Classes\Checkout\Alaa\OrderproductCheckout;
 use App\Collection\OrderproductCollection;
 use App\Traits\ProductCommon;
 use Illuminate\Support\Facades\Cache;
-use mysql_xdevapi\Collection;
 
 /**
  * App\Orderproduct
@@ -485,7 +483,7 @@ class Orderproduct extends BaseModel
     {
         $orderproduct = $this;
         $key          = "orderproduct:grandProduct:".$orderproduct->cacheKey();
-        
+
         return Cache::tags(["orderproduct"])
             ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
                 return optional($this->product->grand)->setVisible([
@@ -502,7 +500,7 @@ class Orderproduct extends BaseModel
     public function getGrandIdAttribute()
     {
         $orderproduct = $this;
-        $key          = "orderproduct:grandProduct:".$orderproduct->cacheKey();
+        $key          = "orderproduct:grandProductId:".$orderproduct->cacheKey();
         
         return Cache::tags(["orderproduct"])
             ->remember($key, config("constants.CACHE_60"), function () use ($orderproduct) {
