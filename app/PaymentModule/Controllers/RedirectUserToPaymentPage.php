@@ -51,7 +51,7 @@ class RedirectUserToPaymentPage extends Controller
 
 
         if ($data['statusCode'] != Response::HTTP_OK) {
-            $this->sendErrorResponse($data['message'], $data['statusCode']);
+            $this->sendErrorResponse($data['message'] ?: '', $data['statusCode']);
         }
 
         /** @var string $description */
@@ -96,10 +96,11 @@ class RedirectUserToPaymentPage extends Controller
     }
 
     /**
-     * @param  string  $msg
-     * @param  int     $statusCode
+     * @param string $msg
+     * @param int $statusCode
      *
      * @return JsonResponse
+     * @throws \ImanGhafoori\Terminator\TerminateException
      */
     private function sendErrorResponse(string $msg, int $statusCode): JsonResponse
     {
