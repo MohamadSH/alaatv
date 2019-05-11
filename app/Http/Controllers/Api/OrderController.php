@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
-use App\Coupon;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\SubmitCouponRequest;
 use App\Order;
+use App\Coupon;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
+use App\Http\Requests\SubmitCouponRequest;
+use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
 
 class OrderController extends Controller
 {
@@ -132,7 +133,9 @@ class OrderController extends Controller
                 ],
             ];
         }
-        
+
+        Cache::tags('order')->flush();
+
         return response($response, Response::HTTP_OK);
     }
     

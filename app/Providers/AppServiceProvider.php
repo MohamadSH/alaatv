@@ -8,15 +8,15 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\{Auth, Schema, Storage, Validator};
 use App\{Content,
-    Observers\OrderproductObserver,
-    Orderproduct,
     Product,
     Contentset,
+    Orderproduct,
     Traits\UserCommon,
     Observers\SetObserver,
     Adapter\AlaaSftpAdapter,
     Observers\ProductObserver,
-    Observers\ContentObserver};
+    Observers\ContentObserver,
+    Observers\OrderproductObserver};
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,11 +29,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        Content::observe(ContentObserver::class);
-        Product::observe(ProductObserver::class);
-        Contentset::observe(SetObserver::class);
-        Orderproduct::observe(OrderproductObserver::class);
-
         Horizon::auth(function ($request) {
             return (Auth::check() && Auth::user()
                     ->hasRole("admin"));
@@ -57,6 +52,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Content::observe(ContentObserver::class);
+        Product::observe(ProductObserver::class);
+        Contentset::observe(SetObserver::class);
+        Orderproduct::observe(OrderproductObserver::class);
         $this->defineValidationRules();
     }
     
@@ -66,7 +65,7 @@ class AppServiceProvider extends ServiceProvider
          *  National code validation for registration form
          */
         Validator::extend('validate', function ($attribute, $value, $parameters, $validator) {
-            if (strcmp($parameters[0], "nationalCode") == 0) {
+            if (strcmp($parameters[0], 'nationalCode') == 0) {
                 return $this->validateNationalCode($value);
             }
             

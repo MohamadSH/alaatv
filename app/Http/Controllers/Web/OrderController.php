@@ -34,6 +34,7 @@ use App\Http\Requests\DonateRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Input;
 use App\Http\Requests\EditOrderRequest;
 use Illuminate\Support\Facades\Session;
@@ -952,6 +953,9 @@ class OrderController extends Controller
      */
     public function checkoutPayment(Request $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
+//        Cache::tags('order')->flush();
+//        Cache::tags('orderproduct')->flush();
+
         $this->generateCustomMeta([
             'title'       => 'آلاء|پرداخت',
             'url'         => $request->url(),
@@ -1226,6 +1230,8 @@ class OrderController extends Controller
                 ],
             ];
         }
+
+        Cache::tags('order')->flush();
         
         return response($response, Response::HTTP_OK);
     }

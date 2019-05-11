@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditUserRequest;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
 {
@@ -81,7 +82,9 @@ class UserController extends Controller
                 ],
             ];
         }
-        
+
+        Cache::tags('user')->flush();
+
         return response($response, Response::HTTP_OK);
     }
 

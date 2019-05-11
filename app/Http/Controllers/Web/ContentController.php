@@ -193,7 +193,7 @@ class ContentController extends Controller
         $strstr = strstr($request->header('User-Agent'), 'Alaa');
         $isApp  = ($strstr !== false && $strstr !== '') ? true : false;
         if ($isApp) {
-            return response()->json($this->makeJsonForAndroidApp($result->get('video')
+            return response()->json($this->makeJsonForAndroidApp(optional($result->get('video'))
                 ->items()));
         }
         $api  = response()->json([
