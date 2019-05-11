@@ -3,8 +3,8 @@
 namespace App\Observers;
 
 use App\Orderproduct;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Artisan;
 
 class OrderproductObserver
 {
@@ -61,6 +61,12 @@ class OrderproductObserver
     public function forceDeleted(Orderproduct $orderproduct)
     {
         //
+    }
+    
+    public function saving(Orderproduct $orderproduct)
+    {
+    
+    
     }
 
     public function saved(Orderproduct $orderproduct)
