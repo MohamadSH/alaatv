@@ -196,11 +196,11 @@
                                         </div>
                                         <div class="col-12 m--margin-top-20 text-center">
                                             <div class="form-group m-form__group">
-                                                <label for="bio">اگر توضیحی در مورد سفارش خود دارید اینجا
+                                                <label for="customerDescription">اگر توضیحی در مورد سفارش خود دارید اینجا
                                                     بنویسید:</label>
                                                 <div class="m-input-icon m-input-icon--left">
-                                                    <textarea id="bio" class="form-control m-input m-input--air"
-                                                              placeholder="توضیح شما..." rows="2" name="bio"
+                                                    <textarea id="customerDescription" class="form-control m-input m-input--air"
+                                                              placeholder="توضیح شما..." rows="2" name="customerDescription"
                                                               cols="50"></textarea>
                                                 </div>
                                             </div>
