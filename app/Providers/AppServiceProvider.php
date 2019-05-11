@@ -8,6 +8,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\{Auth, Schema, Storage, Validator};
 use App\{Content,
+    Observers\OrderproductObserver,
+    Orderproduct,
     Product,
     Contentset,
     Traits\UserCommon,
@@ -30,7 +32,8 @@ class AppServiceProvider extends ServiceProvider
         Content::observe(ContentObserver::class);
         Product::observe(ProductObserver::class);
         Contentset::observe(SetObserver::class);
-        
+        Orderproduct::observe(OrderproductObserver::class);
+
         Horizon::auth(function ($request) {
             return (Auth::check() && Auth::user()
                     ->hasRole("admin"));

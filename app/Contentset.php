@@ -73,6 +73,8 @@ class Contentset extends BaseModel implements Taggable
         'description',
         'tags',
         'photo',
+        'enable',
+        'display',
     ];
     
     protected $withCount = [
