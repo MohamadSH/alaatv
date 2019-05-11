@@ -1615,7 +1615,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getJalaliValidSinceAttribute()
     {
         $product = $this;
-        $key     = 'product:validSince:'.$product->cacheKey();
+        $key     = 'product:jalaliValidSince:'.$product->cacheKey();
         return Cache::tags(['product'])
             ->remember($key, config('constants.CACHE_600'), function () use ($product) {
                 if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS'))) {
@@ -1628,7 +1628,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getJalaliValidUntilAttribute()
     {
         $product = $this;
-        $key     = 'product:validUntil:'.$product->cacheKey();
+        $key     = 'product:jalaliValidUntil:'.$product->cacheKey();
         return Cache::tags(['product'])
             ->remember($key, config('constants.CACHE_600'), function () use ($product) {
                 if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS'))) {
@@ -1641,7 +1641,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getJalaliCreatedAtAttribute()
     {
         $product = $this;
-        $key     = 'product:created_at:'.$product->cacheKey();
+        $key     = 'product:jalaliCreatedAt:'.$product->cacheKey();
         return Cache::tags(['product'])
             ->remember($key, config('constants.CACHE_600'), function () use ($product) {
                 if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS'))) {
@@ -1654,7 +1654,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getJalaliUpdatedAtAttribute()
     {
         $product = $this;
-        $key     = 'product:updated_at:'.$product->cacheKey();
+        $key     = 'product:jalaliUpdatedAt:'.$product->cacheKey();
         return Cache::tags(['product'])
             ->remember($key, config('constants.CACHE_600'), function () use ($product) {
                 return $this->convertDate($product->updated_at, 'toJalali');

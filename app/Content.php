@@ -676,7 +676,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $file = $this->file;
         if (is_null($file)) {
-            return null;
+            return collect();
         }
         $video = $file->get('video');
         
