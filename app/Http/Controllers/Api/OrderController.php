@@ -10,6 +10,7 @@ use App\Order;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 
 class OrderController extends Controller
 {
@@ -32,6 +33,10 @@ class OrderController extends Controller
      */
     public function checkoutReview(Request $request)
     {
+        Cache::tags('bon')->flush();
+        Cache::tags('order')->flush();
+        Cache::tags('orderproduct')->flush();
+
         $user = $request->user('api');
         
         $order = $user->getOpenOrder();
@@ -54,6 +59,10 @@ class OrderController extends Controller
      */
     public function checkoutPayment(Request $request)
     {
+        Cache::tags('order')->flush();
+        Cache::tags('orderproduct')->flush();
+
+
         $user = $request->user('api');
         /** @var Order $order */
         $order = $user->getOpenOrder();
@@ -132,7 +141,9 @@ class OrderController extends Controller
                 ],
             ];
         }
-        
+
+        Cache::tags('order')->flush();
+
         return response($response, Response::HTTP_OK);
     }
     

@@ -721,7 +721,8 @@ class HomeController extends Controller
                 'genders', 'gendersWithUnknown', 'products',
                 'allRootProducts', 'lockProfileStatus', 'mobileNumberVerification', 'sortBy', 'sortType', 'smsCredit',
                 'smsProviderNumber',
-                'numberOfFatherPhones', 'numberOfMotherPhones', 'coupons', 'addressSpecialFilter', 'heckoutStatuses' , 'checkoutStatuses' ));
+                'numberOfFatherPhones', 'numberOfMotherPhones', 'coupons', 'addressSpecialFilter', 'heckoutStatuses',
+                'checkoutStatuses'));
     }
     
     /**
@@ -1024,7 +1025,8 @@ class HomeController extends Controller
     {
         $fileName    = $request->get('fileName');
         $contentType = $request->get('content');
-        $user        = Auth::user();
+        /** @var User $user */
+        $user = auth()->user();
         
         switch ($contentType) {
             case 'عکس پروفایل':
@@ -1065,8 +1067,8 @@ class HomeController extends Controller
             case 'فایل محصول' :
                 $productId = Input::get('pId');
                 $diskName  = config('constants.DISK13');
-        
-                if (!$user->can(config('constants.DOWNLOAD_PRODUCT_FILE'))) {
+    
+                if (isset($user) && !$user->can(config('constants.DOWNLOAD_PRODUCT_FILE'))) {
                     $products    = ProductRepository::getProductsThatHaveValidProductFileByFileNameRecursively($fileName);
                     $validOrders = $user->getOrdersThatHaveSpecificProduct($products);
                     
@@ -1133,88 +1135,74 @@ class HomeController extends Controller
         if (isset($downloadPriority) && strcmp($downloadPriority, 'cloudFirst') == 0) {
             if (isset($externalLink)) {
                 return redirect($externalLink);
-            } else {
-                if (Storage::disk($diskName)
-                    ->exists($fileName)) {
-                    $filePrefixPath = Storage::drive($diskName)
-                        ->getAdapter()
-                        ->getPathPrefix();
-                    if (isset($filePrefixPath)) {
-                        $fs     = Storage::disk($diskName)
-                            ->getDriver();
-                        $stream = $fs->readStream($fileName);
-                        
-                        return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
-                            fpassthru($stream);
-                        }, 200, [
-                            'Content-Type'        => $fs->getMimetype($fileName),
-                            'Content-Length'      => $fs->getSize($fileName),
-                            'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
-                        ]);
-                    } else {
-                        $fileHost = Storage::drive($diskName)
-                            ->getAdapter()
-                            ->getHost();
-                        if (isset($fileHost)) {
-                            $fileRoot = Storage::drive($diskName)
-                                ->getAdapter()
-                                ->getRoot();
-                            //TODO: verify "$fileRemotePath = "http://" . $fileHost . ":8090" . "/public" . explode("public", $fileRoot)[1];"
+            }
     
-                            $fileRemotePath = config('constants.DOWNLOAD_HOST_PROTOCOL').config('constants.DOWNLOAD_HOST_NAME').'/public'.explode('public',
-                                    $fileRoot)[1];
-                            
-                            return response()->redirectTo($fileRemotePath.$fileName);
-                        } else {
-                            $fs     = Storage::disk($diskName)
-                                ->getDriver();
-                            $stream = $fs->readStream($fileName);
-                            
-                            return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
-                                fpassthru($stream);
-                            }, 200, [
-                                'Content-Type'        => $fs->getMimetype($fileName),
-                                'Content-Length'      => $fs->getSize($fileName),
-                                'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
-                            ]);
-                        }
-                    }
-                    //
+            if (Storage::disk($diskName)
+                ->exists($fileName)) {
+                $filePrefixPath = Storage::drive($diskName)
+                    ->getAdapter()
+                    ->getPathPrefix();
+                if (isset($filePrefixPath)) {
+                    $fs     = Storage::disk($diskName)
+                        ->getDriver();
+                    $stream = $fs->readStream($fileName);
+            
+                    return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
+                        fpassthru($stream);
+                    }, 200, [
+                        'Content-Type'        => $fs->getMimetype($fileName),
+                        'Content-Length'      => $fs->getSize($fileName),
+                        'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
+                    ]);
                 }
+        
+                $fileHost = Storage::drive($diskName)
+                    ->getAdapter()
+                    ->getHost();
+                if (isset($fileHost)) {
+                    $fileRoot = Storage::drive($diskName)
+                        ->getAdapter()
+                        ->getRoot();
+                    //TODO: verify "$fileRemotePath = "http://" . $fileHost . ":8090" . "/public" . explode("public", $fileRoot)[1];"
+            
+                    $fileRemotePath = config('constants.DOWNLOAD_HOST_PROTOCOL').config('constants.DOWNLOAD_HOST_NAME').'/public'.explode('public',
+                            $fileRoot)[1];
+            
+                    return response()->redirectTo($fileRemotePath.$fileName);
+                }
+        
+                $fs     = Storage::disk($diskName)
+                    ->getDriver();
+                $stream = $fs->readStream($fileName);
+        
+                return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
+                    fpassthru($stream);
+                }, 200, [
+                    'Content-Type'        => $fs->getMimetype($fileName),
+                    'Content-Length'      => $fs->getSize($fileName),
+                    'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
+                ]);
+                //
             }
-        } else {
-            if (isset($diskName) && Storage::disk($diskName)
-                    ->exists($fileName)) {
-                $diskAdapter = Storage::disk($diskName)
-                    ->getAdapter();
-                $diskType    = class_basename($diskAdapter);
-                switch ($diskType) {
-                    case 'SftpAdapter' :
-                        if (isset($file)) {
-                            $url = $file->getUrl();
-                            if (isset($url[0])) {
-                                return response()->redirectTo($url);
-                            } else {
-                                $fs     = Storage::disk($diskName)
-                                    ->getDriver();
-                                $stream = $fs->readStream($fileName);
-                                
-                                return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
-                                    fpassthru($stream);
-                                }, 200, [
-                                    'Content-Type'        => $fs->getMimetype($fileName),
-                                    'Content-Length'      => $fs->getSize($fileName),
-                                    'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
-                                ]);
-                            }
+            abort(404);
+        }
+        if (isset($diskName) && Storage::disk($diskName)
+                ->exists($fileName)) {
+            $diskAdapter = Storage::disk($diskName)
+                ->getAdapter();
+            $diskType    = class_basename($diskAdapter);
+            switch ($diskType) {
+                case 'SftpAdapter' :
+                    if (isset($file)) {
+                        $url = $file->getUrl();
+                        if (isset($url[0])) {
+                            return response()->redirectTo($url);
                         }
-                        
-                        break;
-                    case 'Local' :
+                    
                         $fs     = Storage::disk($diskName)
                             ->getDriver();
                         $stream = $fs->readStream($fileName);
-                        
+                    
                         return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
                             fpassthru($stream);
                         }, 200, [
@@ -1222,17 +1210,33 @@ class HomeController extends Controller
                             'Content-Length'      => $fs->getSize($fileName),
                             'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
                         ]);
-                        break;
-                    default:
-                        break;
-                }
-            } else {
-                if (isset($externalLink)) {
-                    return redirect($externalLink);
-                }
+                    }
+                
+                    break;
+                case 'Local' :
+                    $fs     = Storage::disk($diskName)
+                        ->getDriver();
+                    $stream = $fs->readStream($fileName);
+                
+                    return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
+                        fpassthru($stream);
+                    }, 200, [
+                        'Content-Type'        => $fs->getMimetype($fileName),
+                        'Content-Length'      => $fs->getSize($fileName),
+                        'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
+                    ]);
+                    break;
+                default:
+                    break;
+            
             }
+            abort(404);
+        }
+        if (isset($externalLink)) {
+            return redirect($externalLink);
         }
         abort(404);
+
     }
     
     /**
@@ -1344,7 +1348,7 @@ class HomeController extends Controller
      */
     public function sendMail(ContactUsFormRequest $request)
     {
-        $wSetting      = $this->setting;
+        $wSetting = $this->setting;
         
         //        try {
         //            $sent = Mail::send('emailLayouts.contactUs',
@@ -1379,9 +1383,9 @@ class HomeController extends Controller
         //        }
         
         $email   = $request->get('email');
-        $name          = $request->get('fullName');
-        $phone         = $request->get('phone');
-        $comment       = $request->get('message');
+        $name    = $request->get('fullName');
+        $phone   = $request->get('phone');
+        $comment = $request->get('message');
         
         //create a boundary for the email. This
         $boundary = uniqid('sh');
