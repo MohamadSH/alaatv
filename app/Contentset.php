@@ -73,6 +73,8 @@ class Contentset extends BaseModel implements Taggable
         'description',
         'tags',
         'photo',
+        'enable',
+        'display',
     ];
     
     protected $withCount = [
@@ -177,6 +179,11 @@ class Contentset extends BaseModel implements Taggable
         return $query->where('enable', 1);
     }
     
+    public function scopeDisplay($query)
+    {
+        return $query->where('display', 1);
+    }
+    
     /*
     |--------------------------------------------------------------------------
     | Relations
@@ -188,6 +195,7 @@ class Contentset extends BaseModel implements Taggable
         return action('Web\ContentController@index', [
             'set'         => $this->id,
             'contentOnly' => true,
+            'free'        => [0, 1],
         ]);
     }
     

@@ -3,18 +3,18 @@
 namespace App\Classes;
 
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Redis;
 use Mockery\Exception;
+use Illuminate\Support\Facades\Redis;
 
 // https://github.com/smrchy/redis-tagging/blob/master/index.coffee
 
 class RedisTagging extends Singleton
 {
-    public const CONST_TYPE_INTER = "inter";
+    public const CONST_TYPE_INTER = 'inter';
     
-    public const CONST_ORDER_DESC = "desc";
+    public const CONST_ORDER_DESC = 'desc';
     
-    protected $prefix = "tagging";
+    protected $prefix = 'tagging';
     
     /**
      * Get all tags for an ID
@@ -27,30 +27,29 @@ class RedisTagging extends Singleton
      */
     public function get($bucket, $id, $cb)
     {
-        $redis = Redis::connection("redisDB");
+        $redis = Redis::connection('redisDB');
         if (!$this->validation($bucket)) {
             return [
-                "error" => "",
+                'error' => '',
             ];
         }
-        
-        $ns       = $this->prefix.":".$bucket;
-        $id_index = $ns.":ID:".$id;
+    
+        $ns       = $this->prefix.':'.$bucket;
+        $id_index = $ns.':ID:'.$id;
+
         try {
             $tags = $redis->sMembers($id_index);
         } catch (Exception $e) {
             $cb($e, [
-                "msg" => "Error!",
+                'msg' => 'Error!',
             ]);
-            
-            return;
         }
         
         $cb(null, [
-            "total_items" => count($tags),
-            "id"          => $id,
-            "bucket"      => $bucket,
-            "tags"        => $tags,
+            'total_items' => count($tags),
+            'id'          => $id,
+            'bucket'      => $bucket,
+            'tags'        => $tags,
         ]);
     }
     
@@ -91,24 +90,24 @@ class RedisTagging extends Singleton
      */
     public function set($bucket, $id, $tags, $score = 0, $cb)
     {
-        $redis = Redis::connection("redisDB");
+        $redis = Redis::connection('redisDB');
         if (!$this->validation($bucket)) {
             return false;
         }
-        
-        $ns       = $this->prefix.":".$bucket;
-        $id_index = $ns.":ID:".$id;
+    
+        $ns       = $this->prefix.':'.$bucket;
+        $id_index = $ns.':ID:'.$id;
         
         $this->delete($ns, $id);
         try {
             $redis->pipeline(function ($pipe) use ($tags, $score, $id, $id_index, $ns) {
                 foreach ($tags as $tag) {
-                    $pipe->zincrby($ns.":TagCount", 1, $tag);
+                    $pipe->zincrby($ns.':TagCount', 1, $tag);
                     $pipe->sAdd($id_index, $tag);
-                    $pipe->zAdd($ns.":TAGS:".$tag, $score, $id);
+                    $pipe->zAdd($ns.':TAGS:'.$tag, $score, $id);
                 }
                 if (count($tags) > 0) {
-                    $pipe->sAdd($ns.":IDs", $id);
+                    $pipe->sAdd($ns.':IDs', $id);
                 }
             });
         } catch (\Exception $e) {
@@ -119,23 +118,23 @@ class RedisTagging extends Singleton
     
     private function delete($ns, $id)
     {
-        $redis = Redis::connection("redisDB");
+        $redis = Redis::connection('redisDB');
         try {
-            $id_index = $ns.":ID:".$id;
+            $id_index = $ns.':ID:'.$id;
             $tags     = $redis->sMembers($id_index);
             
             $redis->pipeline(function ($pipe) use ($tags, $id, $id_index, $ns) {
                 # This ID already has tags. We will delete them first
                 foreach ($tags as $tag) {
-                    $pipe->zincrby($ns.":TagCount", -1, $tag);
-                    $pipe->zRem($ns.":TAGS:".$tag, $id);
+                    $pipe->zincrby($ns.':TagCount', -1, $tag);
+                    $pipe->zRem($ns.':TAGS:'.$tag, $id);
                 }
                 # Also delete the index for this ID
                 $pipe->delete($id_index);
                 # Delete the id in the IDS list
-                $pipe->sRem($ns.":IDs", $id);
+                $pipe->sRem($ns.':IDs', $id);
                 # Clean up the TAGCOUNT
-                $pipe->zremrangebyscore($ns.":TagCount", 0, 0);
+                $pipe->zremrangebyscore($ns.':TagCount', 0, 0);
             });
         } catch (\Exception $e) {
             return false;
@@ -154,34 +153,34 @@ class RedisTagging extends Singleton
      * @param  string  $type        *optional* Default ="desc"
      * @param          $cb
      */
-    public function tags($bucket, $tags, $limit = 100, $offset = 0, $withScores = 0, $order = "desc", $type = "inter", $cb)
+    public function tags($bucket, $tags, $limit = 100, $offset = 0, $withScores = 0, $order = 'desc', $type = 'inter', $cb)
     {
-        
-        $redis  = Redis::connection("redisDB");
-        $ns     = $this->prefix.":".$bucket;
-        $prefix = $ns.":TAGS:";
+    
+        $redis  = Redis::connection('redisDB');
+        $ns     = $this->prefix.':'.$bucket;
+        $prefix = $ns.':TAGS:';
         # The last element to get
         $lastElement = $offset + $limit - 1;
         
         $cTags = count($tags);
         if ($cTags == 0) {
             $cb(null, [
-                "total_items_result" => 0,
-                "total_items_db"     => 0,
-                "items"              => [],
-                "tags"               => $tags,
-                "limit"              => $limit,
-                "offset"             => $offset,
-                "withScores"         => $withScores,
-                "order"              => $order,
-                "type"               => $type,
+                'total_items_result' => 0,
+                'total_items_db'     => 0,
+                'items'              => [],
+                'tags'               => $tags,
+                'limit'              => $limit,
+                'offset'             => $offset,
+                'withScores'         => $withScores,
+                'order'              => $order,
+                'type'               => $type,
             ]);
             
             return;
         }
         else {
             if ($cTags > 1) {
-                $randKey = $ns.str_random(10)."_".Carbon::now()->micro;
+                $randKey = $ns.str_random(10).'_'.Carbon::now()->micro;
                 $keys    = [];
                 foreach ($tags as $tag) {
                     array_push($keys, $prefix.$tag);
@@ -195,7 +194,7 @@ class RedisTagging extends Singleton
                     }
                 } catch (Exception $e) {
                     $cb($e, [
-                        "msg" => "Error!",
+                        'msg' => 'Error!',
                     ]);
                     
                     return;
@@ -210,7 +209,7 @@ class RedisTagging extends Singleton
         }
         
         try {
-            $total_items_db = $redis->zCount($resultkey, "-inf", "+inf");
+            $total_items_db = $redis->zCount($resultkey, '-inf', '+inf');
             if (strcmp($order, self::CONST_ORDER_DESC) == 0) {
                 $tagsresult = $redis->zRevRange($resultkey, $offset, $lastElement, $withScores);
             }
@@ -220,7 +219,7 @@ class RedisTagging extends Singleton
         } catch (Exception $e) {
             $total_items_db = 0;
             $cb($e, [
-                "msg" => "Error!",
+                'msg' => 'Error!',
             ]);
             
             return;
@@ -235,9 +234,9 @@ class RedisTagging extends Singleton
         if ($withScores) {
             foreach ($tagsresult as $id => $score) {
                 $temp = [
-                    "bucket" => $bucket,
-                    "id"     => $id,
-                    "score"  => $score,
+                    'bucket' => $bucket,
+                    'id'     => $id,
+                    'score'  => $score,
                 
                 ];
                 array_push($result, $temp);
@@ -246,30 +245,30 @@ class RedisTagging extends Singleton
         else {
             foreach ($tagsresult as $id) {
                 $temp = [
-                    "bucket" => $bucket,
-                    "id"     => $id,
-                    "score"  => 0,
+                    'bucket' => $bucket,
+                    'id'     => $id,
+                    'score'  => 0,
                 ];
                 array_push($result, $temp);
             }
         }
         $cb(null, [
-            "total_items_result" => count($tagsresult),
-            "total_items_db"     => $total_items_db,
-            "items"              => $result,
-            "tags"               => $tags,
-            "limit"              => $limit,
-            "offset"             => $offset,
-            "withScores"         => $withScores,
-            "order"              => $order,
-            "type"               => $type,
+            'total_items_result' => count($tagsresult),
+            'total_items_db'     => $total_items_db,
+            'items'              => $result,
+            'tags'               => $tags,
+            'limit'              => $limit,
+            'offset'             => $offset,
+            'withScores'         => $withScores,
+            'order'              => $order,
+            'type'               => $type,
         ]);
     }
     
     public function flushDB($cb)
     {
-        $redis = Redis::connection("redisDB");
-        $redis->command("FLUSHDB");
+        $redis = Redis::connection('redisDB');
+        $redis->command('FLUSHDB');
         $cb(null, true);
     }
     
@@ -282,10 +281,10 @@ class RedisTagging extends Singleton
      */
     private function allIds($bucket, $cb)
     {
-        $redis = Redis::connection("redisDB");
-        $ns    = $this->prefix.":".$bucket;
+        $redis = Redis::connection('redisDB');
+        $ns    = $this->prefix.':'.$bucket;
         try {
-            $ids = $redis->sMembers($ns.":IDS");
+            $ids = $redis->sMembers($ns.':IDS');
         } catch (\Exception $e) {
             return [];
         }
@@ -302,20 +301,20 @@ class RedisTagging extends Singleton
      */
     private function topTags($bucket, $amount, $cb)
     {
-        $redis = Redis::connection("redisDB");
+        $redis = Redis::connection('redisDB');
         if (!$this->validation($bucket)) {
-            return ["error" => "bucket should not Equal to \" TAGS \" "];
+            return ['error' => 'bucket should not Equal to " TAGS " '];
         }
-        
-        $ns       = $this->prefix.":".$bucket;
+    
+        $ns       = $this->prefix.':'.$bucket;
         $amount   = $amount - 1;
-        $redisKey = $ns.":TagCount";
+        $redisKey = $ns.':TagCount';
         $num      = $redisKey->zCard($redisKey);
         $result   = $redis->zRevRange($redisKey, 0, $amount, true);
         
         $cb(null, [
-            "total_items" => $num,
-            "items"       => $result,
+            'total_items' => $num,
+            'items'       => $result,
         ]);
     }
     

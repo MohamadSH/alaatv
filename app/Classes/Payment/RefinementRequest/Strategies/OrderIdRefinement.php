@@ -10,6 +10,7 @@ namespace App\Classes\Payment\RefinementRequest\Strategies;
 
 use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Order;
+use Carbon\Carbon;
 use Illuminate\Http\Response;
 
 class OrderIdRefinement extends Refinement
@@ -26,6 +27,7 @@ class OrderIdRefinement extends Refinement
         $order   = $this->getOrder($orderId);
         if ($order !== false) {
             $this->order = $order;
+            $this->orderUniqueId = $order->id.Carbon::now()->timestamp;
             $this->user  = $this->order->user;
             $this->getOrderCost();
             // ToDo: if sent open order_id user can't use wallet
@@ -62,5 +64,10 @@ class OrderIdRefinement extends Refinement
         else {
             return false;
         }
+    }
+
+    protected function getOrderCost(): void
+    {
+        $this->cost = $this->order->totalCost() - $this->order->totalPaidCost();
     }
 }

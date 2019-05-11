@@ -30,7 +30,7 @@
                 'widgetTitle'      => $product->name,
                 'widgetPic'        => $product->photo,
                 'widgetLink'       => action("Web\ProductController@show", $product),
-                'widgetPrice'      => $product->priceText,
+                'widgetPrice'      => $product->priceText['basePriceText'] ,
                 'widgetPriceLabel' => ($product->isFree || $product->basePrice == 0 ? 0 : 1)
                 ])
             @endforeach

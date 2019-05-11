@@ -11,8 +11,8 @@
     <script src = "/acm/extra/donate/js/jquery-2.2.4.min.js"></script>
 
     <!--[if lt IE 9]>
-    <script type = 'text/javascript' src = 'aseets/js/html5shiv.js'></script>
-    <script type = 'text/javascript' src = 'aseets/js/respond.min.js'></script><![endif]-->
+    <script type = 'text/javascript' src = '/acm/extra/donate/js/html5shiv.js'></script>
+    <script type = 'text/javascript' src = '/acm/extra/donate/js/respond.min.js'></script><![endif]-->
 </head>
 <body>
 <div class = "wrapper site-wrap" id = "site_wrap">
@@ -325,7 +325,7 @@
 
                         },
                         beginAtZero: true,
-                        max: 1000000,
+                        max: 25000000,
                     },
 
                 }]

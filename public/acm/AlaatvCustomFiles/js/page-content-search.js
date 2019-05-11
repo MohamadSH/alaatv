@@ -208,7 +208,7 @@ var Alaasearch = function () {
         if (widgetThumbnail !== null && widgetThumbnail.length !== 0) {
             widgetThumbnail =
                 '                                                    <div class="m-widget4__img m-widget4__img--pic">\n' +
-                '                                                        <img src="{{ $content->thumbnail }}" alt="' + widgetTitle + '">\n' +
+                '                                                        <img src="' + widgetThumbnail + '" alt="' + widgetTitle + '">\n' +
                 '                                                    </div>\n';
         } else {
             widgetThumbnail = '';

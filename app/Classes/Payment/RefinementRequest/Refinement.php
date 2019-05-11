@@ -44,7 +44,12 @@ abstract class Refinement
      * @var Order $order
      */
     protected $order;
-    
+
+    /**
+     * @var Order $order
+     */
+    protected $orderUniqueId;
+
     /**
      * @var int $cost
      */
@@ -137,14 +142,15 @@ abstract class Refinement
     public function getData(): array
     {
         return [
-            'statusCode'  => $this->statusCode,
-            'message'     => $this->message,
-            'user'        => $this->user,
-            'order'       => $this->order,
-            'cost'        => $this->cost,
-            'donateCost'  => $this->donateCost,
-            'transaction' => $this->transaction,
-            'description' => $this->description,
+            'statusCode'   => $this->statusCode,
+            'message'      => $this->message,
+            'user'         => $this->user,
+            'order'        => $this->order,
+            'orderUniqueId'=> $this->orderUniqueId,
+            'cost'         => $this->cost,
+            'donateCost'   => $this->donateCost,
+            'transaction'  => $this->transaction,
+            'description'  => $this->description,
         ];
     }
     
@@ -202,12 +208,15 @@ abstract class Refinement
      */
     protected function canDeductFromWallet()
     {
-        if (isset($this->inputData['payByWallet']) && $this->inputData['payByWallet'] == true) {
+        return true;
+
+        //ToDo:  Option for choosing whether to pay from wallet or not
+/*        if (isset($this->inputData['payByWallet']) && $this->inputData['payByWallet'] == true) {
             return true;
         }
         else {
             return false;
-        }
+        }*/
     }
     
     protected function payByWallet(): void

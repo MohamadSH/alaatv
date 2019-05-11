@@ -2,11 +2,13 @@
 
 namespace App\HelpDesk\Models;
 
+
 use App\User;
 use Eloquent;
 use App\BaseModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use App\HelpDesk\Models\Category as Category;
 use App\HelpDesk\Collection\TicketCollection;
 
 /**
@@ -41,8 +43,18 @@ class Ticket extends BaseModel
         'subject',
         'content',
         'priority_id',
+        'status_id',
         'user_id',
+        'agent_id',
         'category_id',
+    ];
+    
+    protected $with = [
+        'comments',
+        'user',
+        'agent',
+        'status',
+        'priority',
     ];
     
     

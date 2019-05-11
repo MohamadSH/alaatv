@@ -46,9 +46,12 @@ class PaymentVerifierController extends Controller
             $this->handleOrderSuccessPayment($transaction->order);
         } else {
             $this->handleOrderCanceledPayment($transaction->order);
-            $transaction->transactionstatus_id = config('constants.TRANSACTION_STATUS_UNSUCCESSFUL');
+            $this->handleOrderCanceledTransaction($transaction);
             $transaction->update();
         }
+
+        setcookie('cartItems', $_COOKIE["cartItems"], time() - 3600, '/');
+
         /*
         if (isset($transaction->order_id)) {} else { if (isset($transaction->wallet_id)) { if ($result['status']) { $this->handleWalletChargingSuccessPayment($gatewayVerify['RefID'], $transaction, $gatewayVerify['cardPanMask']); } else { $this->handleWalletChargingCanceledPayment($transaction); } } } */
         
@@ -81,7 +84,17 @@ class PaymentVerifierController extends Controller
         }
         $order->refundWalletTransaction();
     }
-    
+
+    /**
+     * @param $transaction
+     */
+    private function handleOrderCanceledTransaction($transaction): void
+    {
+        if ($transaction->transactionstatus_id != config("constants.TRANSACTION_STATUS_UNPAID"))
+            //it is not an instalment payment
+            $transaction->transactionstatus_id = config('constants.TRANSACTION_STATUS_UNSUCCESSFUL');
+    }
+
     /*
      * private function handleWalletChargingCanceledPayment(Transaction $transaction)
     {

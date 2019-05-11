@@ -44,8 +44,13 @@ trait HandleOrderPayment
         $paymentstatus_id = (int) $order->totalPaidCost() < (int) $order->totalCost() ? config('constants.PAYMENT_STATUS_INDEBTED') : config('constants.PAYMENT_STATUS_PAID');
         
         $result['paymentstatus_id'] = $paymentstatus_id;
-        
-        $order->close($paymentstatus_id);
+
+//        uncomment if you don't close order before redirecting to gateway
+        if(in_array($order->orderstatus_id , Order::OPEN_ORDER_STATUSES))
+            $order->close();
+
+        $order->paymentstatus_id = $paymentstatus_id;
+
         $result['saveOrder'] = $order->updateWithoutTimestamp() ? 1 : 0;
         
         return $result;

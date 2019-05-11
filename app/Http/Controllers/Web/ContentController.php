@@ -177,11 +177,12 @@ class ContentController extends Controller
         ContentsetSearch $setSearch,
         ProductSearch $productSearch)
     {
+        $request->offsetSet('free', $request->get('free', [1]));
         $contentTypes = array_filter($request->get('contentType', Contenttype::List()));
         $contentOnly  = $request->get('contentOnly', false);
         $tags         = (array) $request->get('tags');
         $filters      = $request->all();
-        
+//        dd($filters);
         $result = $contentSearch->get(compact('filters', 'contentTypes'));
         
         $result->offsetSet('set', !$contentOnly ? $setSearch->get($filters) : null);
@@ -257,7 +258,7 @@ class ContentController extends Controller
                 });
             
             if (request()->expectsJson()) {
-                return $jsonResponse;
+                return redirect()->to($content->api_url['v1']);
             }
         }
         $this->generateSeoMetaTags($content);

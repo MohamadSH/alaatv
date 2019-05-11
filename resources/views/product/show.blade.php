@@ -11,7 +11,7 @@
             </li>
             <li class="breadcrumb-item">
                 <i class="fa fa-chalkboard-teacher"></i>
-                <a class="m-link" href="{{ action("Web\ProductController@index") }}">محصولات آموزشی</a>
+                <a class="m-link" href="{{ action("Web\ShopPageController") }}">محصولات آموزشی</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
                 <a class="m-link" href="#"> {{ $product->name }} </a>
@@ -292,9 +292,14 @@
                                     {{--دکمه افزودن به سبد خرید--}}
                                     @if($product->enable)
                                         <h5 class="m--font-danger">
-                                                    <span id="a_product-price">
-                                                        {{ $product->priceText }}
-                                                    </span>
+                                                <span id="a_product-price">
+                                                    @if($product->priceText['discount'] == 0 )
+                                                         {{ $product->priceText['basePriceText'] }}
+                                                    @else
+                                                        قیمت محصول: <strike>{{ $product->priceText['basePriceText'] }} </strike><br>
+                                                        قیمت برای مشتری:  {{ $product->priceText['finalPriceText'] }}
+                                                    @endif
+                                                </span>
                                             <span id="a_product-discount"></span>
                                         </h5>
 

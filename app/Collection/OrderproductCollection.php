@@ -69,11 +69,12 @@ class OrderproductCollection extends Collection
     
     public function updateCostValues()
     {
+        /** @var Orderproduct $orderproduct */
         foreach ($this as $orderproduct) {
             $newPriceInfo = $this->getNewPriceForItem($orderproduct);
-            
+
             $orderproduct->fillCostValues($newPriceInfo);
-            $orderproduct->update();
+            $orderproduct->updateWithoutTimestamp();
         }
     }
     

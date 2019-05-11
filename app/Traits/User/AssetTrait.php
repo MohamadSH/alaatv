@@ -65,6 +65,10 @@ trait AssetTrait
                         config("constants.ORDER_STATUS_POSTED"),
                         config("constants.ORDER_STATUS_READY_TO_POST"),
                     ])
+                    ->whereIn('orders.paymentstatus_id', [
+                        config("constants.PAYMENT_STATUS_PAID"),
+                        config("constants.PAYMENT_STATUS_VERIFIED_INDEBTED"),
+                    ])
                     ->whereNull('orders.deleted_at');
             })
             ->join('users', 'users.id', '=', 'orders.user_id')
@@ -72,6 +76,7 @@ trait AssetTrait
                 "products.*",
             ])
             ->where('users.id', '=', $this->getKey())
+            ->whereNotIn('products.id' , [Product::DONATE_PRODUCT_5_HEZAR , Product::CUSTOM_DONATE_PRODUCT])
             ->whereNull('products.deleted_at')
             ->distinct()
             ->get();

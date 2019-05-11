@@ -122,7 +122,7 @@ class SetController extends Controller
      *
      * @return void
      */
-    private function fillContentFromRequest(FormRequest $request, Contentset &$contentset): void
+    private function fillContentFromRequest(FormRequest $request, Contentset $contentset): void
     {
         $inputData = $request->all();
         $enabled   = $request->has("enable");

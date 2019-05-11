@@ -988,7 +988,6 @@ class UserController extends Controller
         $transactions = Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
             return $user->getShowableTransactions()
                 ->get()
-                ->sortByDesc("completed_at")
                 ->groupBy("order_id");
         });
         
@@ -1005,7 +1004,7 @@ class UserController extends Controller
 
         $gateways = [];
         foreach ($gatewaysCollection as  $gateway){
-            $gateways[$gateway->displayName] = route('redirectToBank', ['paymentMethod'=> $gateway->name, 'device'=>'web']);
+            $gateways[route('redirectToBank', ['paymentMethod'=> $gateway->name, 'device'=>'web'])] = $gateway->displayName;
         }
 
         $key          = "user:orderCoupons:".$user->cacheKey().":Orders=".md5($orders->pluck("id")
@@ -1013,7 +1012,7 @@ class UserController extends Controller
         $orderCoupons = Cache::remember($key, config("constants.CACHE_60"), function () use ($orders) {
             return $orders->getCoupons();
         });
-        
+
         return view("user.ordersList",
             compact("orders", "gateways", "debitCard", "transactions", "instalments", "orderCoupons"));
     }
@@ -1028,86 +1027,6 @@ class UserController extends Controller
     public function userProductFiles(Request $request)
     {
         return redirect()->route('web.user.dashboard', [$request->user()]);
-        
-        $sideBarMode = "closed";
-        $user        = $request->user();
-        $products    = $user->products();
-        
-        /** @var ProductCollection $products */
-        $key = "user:userProductFiles:".$user->cacheKey().":P=".md5($products->pluck("id")
-                ->implode('-'));
-        [
-            $videos,
-            $pamphlets,
-        ] = Cache::remember($key, config("constants.CACHE_60"), function () use ($products) {
-            /** @var ProductCollection $products */
-            $products->load('complimentaryproducts');
-            $products->load('children');
-            $products->load('validProductfiles');
-            $pamphlets = collect();
-            $videos    = collect();
-            foreach ($products as $product) {
-                
-                $parents = $product->getAllParents();
-                
-                $this->addVideoPamphlet($parents, $pamphlets, $videos);
-                
-                $childrenArray = $product->children;
-                $this->addVideoPamphlet($childrenArray, $pamphlets, $videos, "digChildren");
-                
-                $pamphletArray = [];
-                $videoArray    = [];
-                if ($pamphlets->has($product->id)) {
-                    $pamphletArray = $pamphlets->pull($product->id);
-                }
-                if ($videos->has($product->id)) {
-                    $videoArray = $videos->pull($product->id);
-                }
-                
-                foreach ($product->validProductfiles as $productfile) {
-                    if ($productfile->productfiletype_id == config("constants.PRODUCT_FILE_TYPE_PAMPHLET")) {
-                        array_push($pamphletArray, [
-                            "file"       => $productfile->file,
-                            "name"       => $productfile->name,
-                            "product_id" => $productfile->product_id,
-                        ]);
-                    }
-                    else {
-                        array_push($videoArray, [
-                            "file"       => $productfile->file,
-                            "name"       => $productfile->name,
-                            "product_id" => $productfile->product_id,
-                        ]);
-                    }
-                }
-                if (!empty($pamphletArray)) {
-                    $pamphlets->put($product->id, [
-                        "productName" => $product->name,
-                        "pamphlets"   => $pamphletArray,
-                    ]);
-                }
-                
-                if (!empty($videoArray)) {
-                    $videos->put($product->id, [
-                        "productName" => $product->name,
-                        "videos"      => $videoArray,
-                    ]);
-                }
-                $c = $product->complimentaryproducts;
-                $this->addVideoPamphlet($c, $pamphlets, $videos);
-            }
-            
-            return [
-                $videos,
-                $pamphlets,
-            ];
-        });
-        
-        $isEmptyProducts = $products->isEmpty();
-        $userCompletion  = (int) $user->completion();
-        
-        return view("user.assetsList",
-            compact('section', 'sideBarMode', 'isEmptyProducts', 'pamphlets', 'videos', 'user', 'userCompletion'));
     }
     
     /**

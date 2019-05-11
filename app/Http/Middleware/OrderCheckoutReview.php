@@ -49,7 +49,6 @@ class OrderCheckoutReview
         $openOrder = $user->getOpenOrder();
         $request->offsetSet("order_id", $openOrder->id);
 
-        // TODO: $_COOKIE should not be used.
         if (isset($_COOKIE["cartItems"])) {
             $cookieOrderproducts = json_decode($_COOKIE["cartItems"]);
             if ($this->validateCookieOrderproducts($cookieOrderproducts)) {

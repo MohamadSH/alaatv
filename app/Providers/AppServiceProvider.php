@@ -2,19 +2,21 @@
 
 namespace App\Providers;
 
-use App\{Adapter\AlaaSftpAdapter,
-    Content,
-    Contentset,
-    Observers\ContentObserver,
-    Observers\ProductObserver,
-    Observers\SetObserver,
-    Product,
-    Traits\UserCommon};
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\{Auth, Schema, Storage, Validator};
-use Illuminate\Support\ServiceProvider;
 use Laravel\Horizon\Horizon;
 use League\Flysystem\Filesystem;
+use Illuminate\Support\Collection;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\{Auth, Schema, Storage, Validator};
+use App\{Content,
+    Observers\OrderproductObserver,
+    Orderproduct,
+    Product,
+    Contentset,
+    Traits\UserCommon,
+    Observers\SetObserver,
+    Adapter\AlaaSftpAdapter,
+    Observers\ProductObserver,
+    Observers\ContentObserver};
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,7 +32,8 @@ class AppServiceProvider extends ServiceProvider
         Content::observe(ContentObserver::class);
         Product::observe(ProductObserver::class);
         Contentset::observe(SetObserver::class);
-        
+        Orderproduct::observe(OrderproductObserver::class);
+
         Horizon::auth(function ($request) {
             return (Auth::check() && Auth::user()
                     ->hasRole("admin"));
@@ -54,10 +57,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if ($this->app->environment() !== 'production') {
-            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
-            $this->app->register(TelescopeServiceProvider::class);
-        }
         $this->defineValidationRules();
     }
     

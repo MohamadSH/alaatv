@@ -3,6 +3,7 @@
 namespace App\PaymentModule\Controllers;
 
 use AlaaTV\Gateways\Money;
+use App\Repositories\TransactionGatewayRepo;
 use App\User;
 use App\Order;
 use App\Transaction;
@@ -36,10 +37,13 @@ class RedirectUserToPaymentPage extends Controller
         $user = $data['user'];
         /** @var Order $order */
         $order = $data['order'];
+        /** @var Order $order */
+        $orderUniqueId = $data['orderUniqueId'];
         /** @var Money $cost */
         $cost = Money::fromTomans((int) $data['cost']);
         /** @var Transaction $transaction */
         $transaction = $data['transaction'];
+
 
         if ($data['statusCode'] != Response::HTTP_OK) {
             $this->sendErrorResponse($data['message'], $data['statusCode']);
@@ -58,12 +62,16 @@ class RedirectUserToPaymentPage extends Controller
         $paymentClient = PaymentDriver::select($paymentMethod);
         $url = $this->comeBackFromGateWayUrl($paymentMethod, $device);
 
-        OrdersRepo::closeOrder($order->id);
-        $authorityCode = nullable($paymentClient->generateAuthorityCode($url, $cost, $description, $order->id))
+        if($this->shouldCloseOrder($order))
+            OrdersRepo::closeOrder($order->id);
+
+        $authorityCode = nullable($paymentClient->generateAuthorityCode($url, $cost, $description, $orderUniqueId))
             ->orFailWith([Responses::class, 'noResponseFromBankError']);
 
-        TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id, $description)
+        TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id , $this->getGatewyId($paymentMethod), $description)
             ->orRespondWith([Responses::class, 'editTransactionError']);
+
+        $this->saveOrderInCookie($order);
 
         return view("order.checkout.gatewayRedirect", ['authority' => $authorityCode, 'paymentMethod' => $paymentMethod]);
     }
@@ -152,5 +160,79 @@ class RedirectUserToPaymentPage extends Controller
     {
         return route('verifyOnlinePayment',
             ['paymentMethod' => $paymentMethod, 'device' => $device, '_token' => csrf_token()]);
+    }
+
+    private function getGatewyId(string $gateway){
+        $myGateway = TransactionGatewayRepo::getTransactionGatewayByName($gateway)
+            ->orFailWith([Responses::class, 'sendErrorResponse'] , ['msg'   =>  'No DB record found for this gateway' , Response::HTTP_BAD_REQUEST]);
+
+        return $myGateway->id;
+    }
+
+    /**
+     * @param Order $order
+     * @return bool
+     */
+    private function shouldCloseOrder(Order $order): bool
+    {
+        return $order->orderstatus_id == config('constants.ORDER_STATUS_OPEN');
+    }
+
+    /**
+     * Saves order in cookie
+     *
+     * @param Order $order
+     */
+    private function saveOrderInCookie(Order $order)
+    {
+        //ToDo : komake mali
+        $totalCookie = collect();
+        $orderproducts = $order->orderproducts ;
+
+        foreach ($orderproducts as $orderproduct) {
+            $extraAttributesIds = $orderproduct->attributevalues->pluck('id')->toArray();
+            $myProduct = $orderproduct->product;
+
+            $grandProduct = $myProduct->grand;
+            if (is_null($grandProduct)) {
+                $totalCookie->push([
+                    'product_id' => $myProduct->id,
+                    'extraAttribute' => $extraAttributesIds
+                ]);
+            } else {
+                $grandType = $grandProduct->producttype_id;
+                if ($grandType == config('constants.PRODUCT_TYPE_SELECTABLE')) {
+                    $isAdded = $totalCookie->where('product_id', $grandProduct->id);
+                    if ($isAdded->isEmpty()) {
+                        $totalCookie->push([
+                            'product_id' => $grandProduct->id,
+                            'products' => [$myProduct->id],
+                            'extraAttribute' => $extraAttributesIds
+                        ]);
+                    } else {
+                        $key = $isAdded->keys()->last();
+                        $addedCookie = $isAdded->first();
+                        $addedCookie['products'] = array_merge_recursive($addedCookie['products'], [$myProduct->id]);
+                        $addedCookie['extraAttribute'] = array_merge_recursive($addedCookie['extraAttribute'], $extraAttributesIds);
+                        $totalCookie->put($key, $addedCookie);
+
+                    }
+                } elseif ($grandType == config('constants.PRODUCT_TYPE_CONFIGURABLE')) {
+                    $attributeValueIds = $myProduct->attributevalues()->whereHas('attribute', function ($q) {
+                        $q->where('attributetype_id', config('constants.ATTRIBUTE_TYPE_MAIN'));
+                    })->get()->pluck('id')->toArray();
+
+                    if(!empty($attributeValueIds))
+                        $totalCookie->push([
+                            'product_id' => $grandProduct->id,
+                            'attribute' => $attributeValueIds,
+                            'extraAttribute' => $extraAttributesIds,
+                        ]);
+                }
+            }
+        }
+
+        if($totalCookie->isNotEmpty())
+            setcookie('cartItems', $totalCookie->toJson(), time() + 3600, '/');
     }
 }

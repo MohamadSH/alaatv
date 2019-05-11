@@ -477,17 +477,10 @@ class Order extends BaseModel
     public function refreshCost()
     {
         $orderCost               = $this->obtainOrderCost(true);
+        /** @var OrderproductCollection $calculatedOrderproducts */
         $calculatedOrderproducts = $orderCost["calculatedOrderproducts"];
         $calculatedOrderproducts->updateCostValues();
-        
-        $calculatedOrderproducts = $orderCost["calculatedOrderproducts"];
-        /** @var Orderproduct $orderproduct */
-        foreach ($calculatedOrderproducts as $orderproduct) {
-            $newPriceInfo = $orderproduct->newPriceInfo;
-            $orderproduct->fillCostValues($newPriceInfo);
-            $orderproduct->updateWithoutTimestamp();
-        }
-        
+
         $this->cost              = $orderCost["rawCostWithDiscount"];
         $this->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
         $this->updateWithoutTimestamp();
@@ -507,47 +500,40 @@ class Order extends BaseModel
      */
     public function obtainOrderCost($calculateOrderCost = false, $calculateOrderproductCost = true, $mode = "DEFAULT")
     {
-        $order = $this;
-        $key   = "order:debt:".$order->cacheKey();
-        
-        return Cache::tags(["order"])
-            ->remember($key, config("constants.CACHE_60"),
-                function () use ($order, $calculateOrderCost, $calculateOrderproductCost, $mode) {
-                    if ($calculateOrderCost) {
-                        $this->load('user', 'user.wallets', 'normalOrderproducts', 'normalOrderproducts.product',
-                            'normalOrderproducts.product.parents',
-                            'normalOrderproducts.userbons', 'normalOrderproducts.attributevalues',
-                            'normalOrderproducts.product.attributevalues');
-                        $orderproductsToCalculateFromBaseIds = [];
-                        if ($calculateOrderproductCost) {
-                            $orderproductsToCalculateFromBaseIds = $this->normalOrderproducts->pluck("id")
-                                ->toArray();
-                        }
-                        
-                        $reCheckIncludedOrderproductsInCoupon = false;
-                        if ($this->hasCoupon()) {
-                            $reCheckIncludedOrderproductsInCoupon = ($mode == 'REOBTAIN') ? false : true;
-                        }
-                        $alaaCashierFacade = new OrderCheckout($this, $orderproductsToCalculateFromBaseIds,
-                            $reCheckIncludedOrderproductsInCoupon);
-                    } else {
-                        $this->load('normalOrderproducts', 'normalOrderproducts.product',
-                            'normalOrderproducts.product.parents', 'normalOrderproducts.userbons',
-                            'normalOrderproducts.attributevalues', 'normalOrderproducts.product.attributevalues');
-                        $alaaCashierFacade = new ReObtainOrderFromRecords($this);
-                    }
-                    
-                    $priceInfo = $alaaCashierFacade->checkout();
-                    
-                    return [
-                        'sumOfOrderproductsRawCost' => $priceInfo['totalPriceInfo']['sumOfOrderproductsRawCost'],
-                        'rawCostWithDiscount'       => $priceInfo['totalPriceInfo']['totalRawPriceWhichHasDiscount'],
-                        'rawCostWithoutDiscount'    => $priceInfo['totalPriceInfo']['totalRawPriceWhichDoesntHaveDiscount'],
-                        'totalCost'                 => $priceInfo['totalPriceInfo']['finalPrice'],
-                        'payableAmountByWallet'     => $priceInfo['totalPriceInfo']['payableAmountByWallet'],
-                        'calculatedOrderproducts'   => $priceInfo['orderproductsInfo']['calculatedOrderproducts'],
-                    ];
-                });
+        if ($calculateOrderCost) {
+            $this->load('user', 'user.wallets', 'normalOrderproducts', 'normalOrderproducts.product',
+                'normalOrderproducts.product.parents',
+                'normalOrderproducts.userbons', 'normalOrderproducts.attributevalues',
+                'normalOrderproducts.product.attributevalues');
+            $orderproductsToCalculateFromBaseIds = [];
+            if ($calculateOrderproductCost) {
+                $orderproductsToCalculateFromBaseIds = $this->normalOrderproducts->pluck("id")
+                    ->toArray();
+            }
+
+            $reCheckIncludedOrderproductsInCoupon = false;
+            if ($this->hasCoupon()) {
+                $reCheckIncludedOrderproductsInCoupon = ($mode == 'REOBTAIN') ? false : true;
+            }
+            $alaaCashierFacade = new OrderCheckout($this, $orderproductsToCalculateFromBaseIds,
+                $reCheckIncludedOrderproductsInCoupon);
+        } else {
+            $this->load('normalOrderproducts', 'normalOrderproducts.product',
+                'normalOrderproducts.product.parents', 'normalOrderproducts.userbons',
+                'normalOrderproducts.attributevalues', 'normalOrderproducts.product.attributevalues');
+            $alaaCashierFacade = new ReObtainOrderFromRecords($this);
+        }
+
+        $priceInfo = $alaaCashierFacade->checkout();
+
+        return [
+            'sumOfOrderproductsRawCost' => $priceInfo['totalPriceInfo']['sumOfOrderproductsRawCost'],
+            'rawCostWithDiscount'       => $priceInfo['totalPriceInfo']['totalRawPriceWhichHasDiscount'],
+            'rawCostWithoutDiscount'    => $priceInfo['totalPriceInfo']['totalRawPriceWhichDoesntHaveDiscount'],
+            'totalCost'                 => $priceInfo['totalPriceInfo']['finalPrice'],
+            'payableAmountByWallet'     => $priceInfo['totalPriceInfo']['payableAmountByWallet'],
+            'calculatedOrderproducts'   => $priceInfo['orderproductsInfo']['calculatedOrderproducts'],
+        ];
     }
     
     /**
@@ -671,6 +657,7 @@ class Order extends BaseModel
             Product::CUSTOM_DONATE_PRODUCT,
             Product::DONATE_PRODUCT_5_HEZAR,
         ]);
+
         foreach ($orderProducts as $orderProduct) {
             $donateCost += $orderProduct->cost;
         }
@@ -695,14 +682,16 @@ class Order extends BaseModel
      *
      * @return void
      */
-    public function close($paymentStatus, int $orderStatus = null)
+    public function close($paymentStatus = null, int $orderStatus = null)
     {
         if (!isset($orderStatus)) {
+            // You can't put config() in method signature
             $orderStatus = config("constants.ORDER_STATUS_CLOSED");
         }
         
         $this->orderstatus_id   = $orderStatus;
-        $this->paymentstatus_id = $paymentStatus;
+        if(isset($paymentStatus))
+            $this->paymentstatus_id = $paymentStatus;
         $this->completed_at     = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
             ->timezone('Asia/Tehran');
     }
