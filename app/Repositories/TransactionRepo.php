@@ -83,14 +83,21 @@ class TransactionRepo
     public static function handleTransactionStatus(Transaction $transaction, string $refId, string $cardPanMask = null)
     {
         $bankAccountId = null;
-        
-        if (!is_null($cardPanMask)) {
-            $account = [
-                'accountNumber' => $cardPanMask,
-                'user_id'       => optional($transaction->order)->user->id,
-            ];
-            
-            $bankAccountId = Bankaccount::firstOrCreate($account)->id;
+
+        if (!is_null($cardPanMask))
+        {
+            $userId = optional($transaction->order)->user->id;
+            $bankAccount = Bankaccount::where('accountNumber' , $cardPanMask)->where('user_id' , $userId)->get();
+            if($bankAccount->isEmpty())
+            {
+                $account = [
+                    'accountNumber' => $cardPanMask,
+                    'user_id'       => $userId,
+                ];
+                $bankAccountId = Bankaccount::create($account)->id;
+            } else{
+                $bankAccountId = $bankAccount->first()->id;
+            }
         }
         
         self::changeTransactionStatusToSuccessful($transaction->id, $refId, $bankAccountId);
