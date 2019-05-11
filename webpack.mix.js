@@ -23,7 +23,7 @@ mix.styles(
 mix.copyDirectory('public/assets/vendors/base', 'public/css');
 // mix.copyDirectory('public/acm/webFonts/fonts','public/css/fonts');
 
-mix.scripts(
+mix.babel(
     [
         'public/assets/vendors/base/vendors.bundle.edited.js',
         'public/assets/demo/demo12/base/scripts.bundle.js',
