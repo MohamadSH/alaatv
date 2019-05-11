@@ -811,8 +811,6 @@ class OrderController extends Controller
      */
     public function checkoutReview(CheckoutReviewRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
-        Artisan::call('cache:clear');
-
         $this->generateCustomMeta([
             'title'       => 'آلاء|بازبینی سفارش',
             'url'         => $request->url(),

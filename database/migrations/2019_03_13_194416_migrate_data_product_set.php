@@ -52,6 +52,5 @@ class MigrateDataProductSet extends Migration
     {
         DB::table('contentset_product')
             ->truncate();
-        DB::beginTransaction();
     }
 }

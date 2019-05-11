@@ -346,20 +346,29 @@ class ConvertProductFileToContentCommand extends Command
     
         $productFiles = Productfile::orderBy('order')
             ->get();
-        $this->output->writeln('update product files....');
-        $progress = new ProgressBar($this->output, $productFiles->count());
-        
         $productFiles->load('product');
         $productFiles->load('productfiletype');
-        foreach ($productFiles->groupBy('product_id') as $productId => $files) {
+        $productFilesGroupedByProductId = $productFiles->groupBy('product_id');
+        
+        $this->output->writeln('update product files....');
+        $progress = new ProgressBar($this->output, $productFilesGroupedByProductId->count());
+    
+    
+        foreach ($productFilesGroupedByProductId as $productId => $files) {
             
             //get Product
             $product = Product::find($productId);
+        
+            /** @var Contentset $set */
+            $set = tap($this->makeSetForProductFiles($files, $product), function (Contentset $set) use ($files) {
             
-            tap($this->makeSetForProductFiles($files, $product), function (Contentset $set) use ($files) {
-                return $this->attachSetToProducts($set, $files->first()->file);
+                Productfile::whereIn('id', $files->modelKeys())
+                    ->update(['contentset_id' => $set->id]);
+            
+            
+                $this->attachSetToProducts($set, $files->first()->file);
             });
-    
+        
             $videoOrder    = 1;
             $pamphletOrder = 1;
             /** @var Productfile $productFile */
@@ -370,8 +379,31 @@ class ConvertProductFileToContentCommand extends Command
                 } else {
                     $order = $videoOrder++;
                 }
-                $content = $this->getAssosiatedProductFileContent($productFile, $product, $order);
-                $this->setFileForContentBasedOnProductFile($content, $productFile, true);
+                /** @var Content $content */
+                $content = tap($this->getAssosiatedProductFileContent($productFile, $product, $order, $set),
+                    function (Content $content) use ($productFile) {
+                        $productTypeContentTypeLookupTable = [
+                            '1' => 'pamphlet',
+                            '2' => 'video',
+                        ];
+            
+                        $files = collect();
+                        $url   = $productFile->cloudFile ?? $productFile->file;
+                        $files->push([
+                            'uuid'     => null,
+                            'disk'     => 'productFileSFTP',
+                            'url'      => null,
+                            'fileName' => parse_url($url)['path'],
+                            'size'     => null,
+                            'caption'  => $productFile->productfiletype_id == 2 ? 'کیفیت بالا' : 'جزوه',
+                            'res'      => $productFile->productfiletype_id == 2 ? '480p' : null,
+                            'type'     => $productTypeContentTypeLookupTable[$productFile->productfiletype_id],
+                            'ext'      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
+                        ]);
+            
+                        $content->file = $files;
+                        $content->updateWithoutTimestamp();
+                    });
             }
             $progress->advance();
         }
@@ -388,34 +420,25 @@ class ConvertProductFileToContentCommand extends Command
      */
     protected function makeSetForProductFiles($files, Product $product): Contentset
     {
-//        $this->output->writeln('makeSetForProductFiles');
         /** @var Productfile $pFile */
         $pFile = $files->first();
         $set   = $pFile->set;
         
         if ($set === null) {
-            $setImage      = isset($product->image[0]) ? route('image', [
+            $setImage = isset($product->image[0]) ? route('image', [
                 'category' => '4',
                 'w'        => '460',
                 'h'        => '259',
                 'filename' => $product->image,
             ]) : '/acm/image/460x259.png';
-            $set           = Contentset::create([
-                'name'  => $product->name,
-                'photo' => $setImage,
-                'tags'  => (array) optional(optional($product->grandParent)->tags)->tags,
+            $set      = Contentset::create([
+                'name'    => $product->name,
+                'photo'   => $setImage,
+                'tags'    => (array) optional(optional($product->grandParent)->tags)->tags,
+                'enable'  => 1,
+                'display' => 0,
             ]);
-            $set->enable   = 1;
-            $set->display  = 0;
-            $setSaveResult = $set->save();
-            if (!$setSaveResult) {
-                $this->output->writeln("\r\n"."Error\ ProductFile: ".$pFile->id);
-            }
         }
-        
-        Productfile::whereIn('id', $files->modelKeys())
-            ->update(['contentset_id' => $set->id]);
-        
         return $set;
     }
     
@@ -423,43 +446,27 @@ class ConvertProductFileToContentCommand extends Command
      * @param  \App\Contentset  $set
      * @param  string           $fileName
      *
-     * @return bool
      */
-    private function attachSetToProducts(Contentset $set, string $fileName): bool
+    private function attachSetToProducts(Contentset $set, string $fileName)
     {
         $products = ProductRepository::getProductsThatHaveValidProductFileByFileNameRecursively($fileName);
         $this->output->writeln('  -Count(products):'.$products->count());
-        
-        $progress = new ProgressBar($this->output, $products->count());
-        
         foreach ($products as $product) {
+    
             $product->sets()
                 ->syncWithoutDetaching($set, [
                     'order' => $set->id,
                 ]);
-            $progress->advance();
+    
         }
-        $progress->finish();
         $this->output->writeln('');
-        return true;
     }
     
-    /**
-     * @param  Productfile  $productFile
-     * @param  Product      $product
-     *
-     * @param               $order
-     *
-     * @return \App\Content|\App\Content[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null
-     */
-    private function getAssosiatedProductFileContent(Productfile $productFile, Product $product, $order)
+    private function getAssosiatedProductFileContent(Productfile $productFile, Product $product, $order, Contentset $set):
+    Content
     {
-        $set = $productFile->set;
-        
         if ($productFile->content_id != null) {
-            $content = $productFile->content;
-            $this->assosiateSetToContent($content, $set);
-            return $content;
+            return $this->assosiateSetToContent($productFile->content, $set);
         }
         //make content for each productFiles
         $productTypeContentTypeLookupTable     = [
@@ -492,11 +499,13 @@ class ConvertProductFileToContentCommand extends Command
             'updated_at' => $productFile->updated_at,
         ])
             ->save();
-        $this->assosiateSetToContent($content, $set);
+        $content = $this->assosiateSetToContent($content, $set);
+        
         $productFile->timestamps = false;
         $productFile->content_id = $content->id;
         $productFile->update();
         $productFile->timestamps = true;
+    
         return $content;
         
     }
@@ -505,44 +514,11 @@ class ConvertProductFileToContentCommand extends Command
      * @param  Content|null     $content
      * @param  Contentset|null  $set
      */
-    private function assosiateSetToContent(Content $content, Contentset $set): void
+    private function assosiateSetToContent(Content $content, Contentset $set): Content
     {
         $content->contentset_id = $set->id;
         $content->updateWithoutTimestamp();
-    }
-    
-    /**
-     * @param        $content
-     * @param        $productFile
-     * @param  bool  $force
-     */
-    private function setFileForContentBasedOnProductFile(Content $content, Productfile $productFile, $force = false): void
-    {
-//        $this->output->writeln('\r\n setFileForContentBasedOnProductFile');
-        //make content for each productFiles
-        $productTypeContentTypeLookupTable = [
-            '1' => "pamphlet",
-            '2' => "video",
-        ];
-        
-        if (is_null($content->file) || $force) {
-            $files = collect();
-            $url   = $productFile->cloudFile ?? $productFile->file;
-            $files->push([
-                "uuid"     => null,
-                "disk"     => "productFileSFTP",
-                "url"      => null,
-                "fileName" => parse_url($url)['path'],
-                "size"     => null,
-                "caption"  => $productFile->productfiletype_id == 2 ? 'کیفیت بالا' : 'جزوه',
-                "res"      => $productFile->productfiletype_id == 2 ? "480p" : null,
-                "type"     => $productTypeContentTypeLookupTable[$productFile->productfiletype_id],
-                "ext"      => pathinfo(parse_url($url)['path'], PATHINFO_EXTENSION),
-            ]);
-            $content->timestamps = false;
-            $content->file       = $files;
-            $content->update();
-            $content->timestamps = true;
-        }
+        $content->fresh();
+        return $content;
     }
 }
