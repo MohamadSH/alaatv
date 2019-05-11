@@ -358,7 +358,7 @@ trait ProfileTrait
     public function getJalaliUpdatedAtAttribute()
     {
         $user = $this;
-        $key   = "user:updated_at:".$user->cacheKey();
+        $key   = "user:jalaliUpdatedAt:".$user->cacheKey();
         return Cache::tags(["user"])
             ->remember($key, config("constants.CACHE_600"), function () use ($user) {
                 if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_ACCESS'))) {
@@ -374,7 +374,7 @@ trait ProfileTrait
     public function getJalaliCreatedAtAttribute()
     {
         $user = $this;
-        $key   = "user:created_at:".$user->cacheKey();
+        $key   = "user:jalaliCreatedAt:".$user->cacheKey();
         return Cache::tags(["user"])
             ->remember($key, config("constants.CACHE_600"), function () use ($user) {
                 if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_ACCESS'))) {
