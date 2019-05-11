@@ -22,7 +22,7 @@ class TransactionRepo
             'authority'                 => $authority,
             'transactiongateway_id'     => $gatewayId,
 //            'paymentmethod_id'          => config('constants.PAYMENT_METHOD_ONLINE'),
-            'paymentmethod_id'          => 1, //ToDo : bug in Iman's package in PaymentDriver
+            'paymentmethod_id'          => 1,
             'description'               => $description,
         ];
         

@@ -24,6 +24,10 @@ class PaymentVerifierController extends Controller
      */
     public function verify(string $paymentMethod, string $device)
     {
+        Cache::tags('bon')->flush();
+        Cache::tags('order')->flush();
+        Cache::tags('orderproduct')->flush();
+
         $paymentClient = PaymentDriver::select($paymentMethod);
         $authority = $paymentClient->getAuthorityValue();
 
@@ -55,18 +59,14 @@ class PaymentVerifierController extends Controller
         /*
         if (isset($transaction->order_id)) {} else { if (isset($transaction->wallet_id)) { if ($result['status']) { $this->handleWalletChargingSuccessPayment($gatewayVerify['RefID'], $transaction, $gatewayVerify['cardPanMask']); } else { $this->handleWalletChargingCanceledPayment($transaction); } } } */
 
-        Cache::tags('bon')->flush();
-        Cache::tags('order')->flush();
-        Cache::tags('orderproduct')->flush();
-
-
         Request::session()->flash('verifyResult', [
             'messages' => $verificationResult->getMessages(),
             'cardPanMask' => $verificationResult->getCardPanMask(),
             'RefID' => $verificationResult->getRefId(),
             'isCanceled' => $verificationResult->isCanceled(),
         ]);
-        
+
+
         return redirect()->route('showOnlinePaymentStatus', [
             'status'        => ($verificationResult->isSuccessfulPayment()) ? 'successful' : 'failed',
             'paymentMethod' => $paymentMethod,
@@ -83,7 +83,7 @@ class PaymentVerifierController extends Controller
     {
         if ($order->orderstatus_id == config("constants.ORDER_STATUS_OPEN")) {
             $order->close(config('constants.PAYMENT_STATUS_UNPAID'), config('constants.ORDER_STATUS_CANCELED'));
-            $order->updateWithoutTimestamp();
+            $order->update();
         }
         $order->refundWalletTransaction();
     }
