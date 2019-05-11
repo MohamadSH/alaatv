@@ -35,6 +35,10 @@ class OfflinePaymentController extends Controller
      */
     public function verifyPayment(Request $request, string $paymentMethod, string $device)
     {
+        Cache::tags('bon')->flush();
+        Cache::tags('order')->flush();
+        Cache::tags('orderproduct')->flush();
+
         $result = [];
         
         // We had middleware called OfflineVerifyPayment for this,
