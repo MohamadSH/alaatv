@@ -979,21 +979,21 @@ class UserController extends Controller
         $user = $request->user();
         
         $key    = "user:orders:".$user->cacheKey();
-        $orders = Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
+        $orders = Cache::tags('user')->remember($key, config("constants.CACHE_60"), function () use ($user) {
             return $user->closedOrders()
                 ->get()
                 ->sortByDesc("completed_at");
         });
         
         $key          = "user:transactions:".$user->cacheKey();
-        $transactions = Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
+        $transactions = Cache::tags('user')->remember($key, config("constants.CACHE_60"), function () use ($user) {
             return $user->getShowableTransactions()
                 ->get()
                 ->groupBy("order_id");
         });
         
         $key         = "user:instalments:".$user->cacheKey();
-        $instalments = Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
+        $instalments = Cache::tags('user')->remember($key, config("constants.CACHE_60"), function () use ($user) {
             return $user->getInstalments()
                 ->get()
                 ->sortBy("deadline_at");

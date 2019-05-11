@@ -1701,7 +1701,7 @@ class OrderController extends Controller
             $orderCost                      = $donateOrder->obtainOrderCost(true, false);
             $donateOrder->cost              = $orderCost['rawCostWithDiscount'];
             $donateOrder->costwithoutcoupon = $orderCost['rawCostWithoutDiscount'];
-            $donateOrder->updateWithoutTimestamp();
+            $donateOrder->update();
 
             $paymentRoute = route('redirectToBank', ['paymentMethod' => 'zarinpal', 'device' => 'web']);
             $paymentRoute .= '?order_id='.$donateOrder->id ;
@@ -1776,7 +1776,13 @@ class OrderController extends Controller
                     }
                     $data['withoutBon'] = true;
                     $result             = $orderproductController->new($data);
-                    
+                    /** @var OrderproductCollection $calculatedOrderproducts */
+                    $storedOrderproducts        = $result['data']['storedOrderproducts'];
+                    $newPrice = $storedOrderproducts->calculateGroupPrice();
+                    $storedOrderproducts->setNewPrices($newPrice['newPrices']);
+                    $storedOrderproducts->updateCostValues();
+
+
                     if ($result['status']) {
                         $resultCode = Response::HTTP_OK;
                         $resultText = 'Orderproduct added successfully';
