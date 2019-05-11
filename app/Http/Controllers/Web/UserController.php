@@ -904,6 +904,7 @@ class UserController extends Controller
 
     public function show(Request $request, User $user = null)
     {
+
         if ($user === null) {
             $user = $request->user();
         }
@@ -2101,7 +2102,9 @@ class UserController extends Controller
             $message = 'Database error on updating user';
             $status  = Response::HTTP_SERVICE_UNAVAILABLE;
         }
-        
+
+        Cache::tags('user')->flush();
+
         if ($request->expectsJson()) {
             if ($status == Response::HTTP_OK) {
                 $response = [

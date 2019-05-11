@@ -54,8 +54,11 @@ class PaymentVerifierController extends Controller
 
         /*
         if (isset($transaction->order_id)) {} else { if (isset($transaction->wallet_id)) { if ($result['status']) { $this->handleWalletChargingSuccessPayment($gatewayVerify['RefID'], $transaction, $gatewayVerify['cardPanMask']); } else { $this->handleWalletChargingCanceledPayment($transaction); } } } */
-        
+
         Cache::tags('bon')->flush();
+        Cache::tags('order')->flush();
+        Cache::tags('orderproduct')->flush();
+
 
         Request::session()->flash('verifyResult', [
             'messages' => $verificationResult->getMessages(),

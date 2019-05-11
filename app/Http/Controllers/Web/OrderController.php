@@ -812,6 +812,7 @@ class OrderController extends Controller
      */
     public function checkoutReview(CheckoutReviewRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
+        Cache::tags('bon')->flush();
         Cache::tags('order')->flush();
         Cache::tags('orderproduct')->flush();
 
@@ -1234,6 +1235,8 @@ class OrderController extends Controller
                 ],
             ];
         }
+
+        Cache::tags('order')->flush();
         
         return response($response, Response::HTTP_OK);
     }
