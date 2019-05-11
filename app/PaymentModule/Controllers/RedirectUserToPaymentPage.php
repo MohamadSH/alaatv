@@ -7,6 +7,7 @@ use App\Repositories\TransactionGatewayRepo;
 use App\User;
 use App\Order;
 use App\Transaction;
+use Cache;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\PaymentModule\Responses;
@@ -31,6 +32,10 @@ class RedirectUserToPaymentPage extends Controller
      */
     public function __invoke(string $paymentMethod, string $device, Request $request)
     {
+        Cache::tags('bon')->flush();
+        Cache::tags('order')->flush();
+        Cache::tags('orderproduct')->flush();
+
         $data = $this->getRefinementData($request->all(), $request->user());
 
         /** @var User $user */
