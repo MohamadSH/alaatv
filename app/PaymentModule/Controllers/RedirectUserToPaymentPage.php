@@ -18,6 +18,7 @@ use App\Repositories\TransactionRepo;
 use App\PaymentModule\Repositories\OrdersRepo;
 use App\Http\Controllers\Web\TransactionController;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
+use Illuminate\Support\Facades\Artisan;
 
 class RedirectUserToPaymentPage extends Controller
 {
@@ -32,6 +33,8 @@ class RedirectUserToPaymentPage extends Controller
      */
     public function __invoke(string $paymentMethod, string $device, Request $request)
     {
+        setcookie('cartItems', '', time() - 3600, '/');
+
         Cache::tags('bon')->flush();
         Cache::tags('order')->flush();
         Cache::tags('orderproduct')->flush();
@@ -49,9 +52,8 @@ class RedirectUserToPaymentPage extends Controller
         /** @var Transaction $transaction */
         $transaction = $data['transaction'];
 
-
         if ($data['statusCode'] != Response::HTTP_OK) {
-            $this->sendErrorResponse($data['message'], $data['statusCode']);
+            $this->sendErrorResponse($data['message'] ?: '', $data['statusCode'] ?: Response::HTTP_SERVICE_UNAVAILABLE );
         }
 
         /** @var string $description */
@@ -60,9 +62,9 @@ class RedirectUserToPaymentPage extends Controller
         if ($this->isPayingAnOrder($order)) {
             $order->customerDescription = $request->get('customerDescription');
         }
-    
+
         $this->shouldGoToOfflinePayment($cost->rials())
-            ->thenRespondWith([Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order->id]);
+            ->thenRespondWith([[Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order]]);
 
         $paymentClient = PaymentDriver::select($paymentMethod);
         $url = $this->comeBackFromGateWayUrl($paymentMethod, $device);
@@ -96,10 +98,11 @@ class RedirectUserToPaymentPage extends Controller
     }
 
     /**
-     * @param  string  $msg
-     * @param  int     $statusCode
+     * @param string $msg
+     * @param int $statusCode
      *
      * @return JsonResponse
+     * @throws \ImanGhafoori\Terminator\TerminateException
      */
     private function sendErrorResponse(string $msg, int $statusCode): JsonResponse
     {

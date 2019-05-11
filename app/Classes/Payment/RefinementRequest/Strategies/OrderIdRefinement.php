@@ -35,7 +35,21 @@ class OrderIdRefinement extends Refinement
             if ($this->canDeductFromWallet()) {
                 $this->payByWallet();
             }
-            $result            = $this->getNewTransaction();
+
+            if($this->cost > 0)
+            {
+                $result = $this->getNewTransaction();
+                $this->statusCode  = $result['statusCode'];
+                $this->message     = $result['message'];
+                $this->transaction = $result['transaction'];
+            }elseif($this->cost == 0){
+                $this->statusCode = Response::HTTP_OK;
+                $this->message = 'Zero cost';
+            }else{
+                $this->statusCode = Response::HTTP_BAD_REQUEST;
+                $this->message = 'Minus cost';
+            }
+
             $this->statusCode  = $result['statusCode'];
             $this->message     = $result['message'];
             $this->transaction = $result['transaction'];

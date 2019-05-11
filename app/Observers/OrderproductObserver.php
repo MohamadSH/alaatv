@@ -3,8 +3,8 @@
 namespace App\Observers;
 
 use App\Orderproduct;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class OrderproductObserver
 {
@@ -38,7 +38,8 @@ class OrderproductObserver
      */
     public function deleted(Orderproduct $orderproduct)
     {
-        Artisan::call('cache:clear');
+        Log::debug('in orderproductobserver deleted');
+
     }
 
     /**
@@ -62,11 +63,22 @@ class OrderproductObserver
     {
         //
     }
+    
+    public function saving(Orderproduct $orderproduct)
+    {
+    
+    
+    }
 
     public function saved(Orderproduct $orderproduct)
     {
         Log::debug('in orderproductobserver saved');
-        Artisan::call('cache:clear');
+        Cache::tags('bon')
+            ->flush();
+        Cache::tags('order')
+            ->flush();
+        Cache::tags('orderproduct')
+            ->flush();
     }
 
 }

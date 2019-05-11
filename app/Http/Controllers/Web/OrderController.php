@@ -27,7 +27,6 @@ use App\Traits\RequestCommon;
 use Illuminate\Http\Response;
 use App\Afterloginformcontrol;
 use App\Traits\APIRequestCommon;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Collection\OrderCollections;
 use App\Http\Controllers\Controller;
@@ -35,6 +34,7 @@ use App\Http\Requests\DonateRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Input;
 use App\Http\Requests\EditOrderRequest;
 use Illuminate\Support\Facades\Session;
@@ -812,11 +812,6 @@ class OrderController extends Controller
      */
     public function checkoutReview(CheckoutReviewRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
-        Cache::tags('bon')->flush();
-        Cache::tags('order')->flush();
-        Cache::tags('orderproduct')->flush();
-
-
         $this->generateCustomMeta([
             'title'       => 'آلاء|بازبینی سفارش',
             'url'         => $request->url(),
@@ -958,8 +953,8 @@ class OrderController extends Controller
      */
     public function checkoutPayment(Request $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
-        Cache::tags('order')->flush();
-        Cache::tags('orderproduct')->flush();
+//        Cache::tags('order')->flush();
+//        Cache::tags('orderproduct')->flush();
 
         $this->generateCustomMeta([
             'title'       => 'آلاء|پرداخت',
@@ -1701,7 +1696,7 @@ class OrderController extends Controller
             $orderCost                      = $donateOrder->obtainOrderCost(true, false);
             $donateOrder->cost              = $orderCost['rawCostWithDiscount'];
             $donateOrder->costwithoutcoupon = $orderCost['rawCostWithoutDiscount'];
-            $donateOrder->updateWithoutTimestamp();
+            $donateOrder->update();
 
             $paymentRoute = route('redirectToBank', ['paymentMethod' => 'zarinpal', 'device' => 'web']);
             $paymentRoute .= '?order_id='.$donateOrder->id ;
@@ -1776,7 +1771,13 @@ class OrderController extends Controller
                     }
                     $data['withoutBon'] = true;
                     $result             = $orderproductController->new($data);
-                    
+                    /** @var OrderproductCollection $calculatedOrderproducts */
+                    $storedOrderproducts        = $result['data']['storedOrderproducts'];
+                    $newPrice = $storedOrderproducts->calculateGroupPrice();
+                    $storedOrderproducts->setNewPrices($newPrice['newPrices']);
+                    $storedOrderproducts->updateCostValues();
+
+
                     if ($result['status']) {
                         $resultCode = Response::HTTP_OK;
                         $resultText = 'Orderproduct added successfully';

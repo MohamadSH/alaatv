@@ -249,20 +249,122 @@ mLayout = function() {
             the.showProgress();
 
             $.ajax({
-                url: 'inc/api/quick_search.php',
+                url: '/c?q=' + $('#m_quicksearch_input').val(),
                 data: {query: the.query},
-                dataType: 'html',
+                dataType: 'json',
                 success: function(res) {
                     the.hideProgress();
                     the.showResult(res);
+                    showResultForQuickSearch(res);
                 },
                 error: function(res) {
                     the.hideProgress();
-                    the.showError('Connection error. Pleae try again later.');
+                    the.showError('مشکلی پیش آمده است. لطفا بعدا امتحان کنید.');
                 }
             });
         });
     };
+
+    function showResultForQuickSearch(res) {
+        let maxRecordOfEachCategory = 3;
+        let article = res.result.article;
+        let pamphlet = res.result.pamphlet;
+        let product = res.result.product;
+        let set = res.result.set;
+        let video = res.result.video;
+
+        let html = '';
+
+        html += gteQuickSearchResultCategory('article', 'مقالات', article, maxRecordOfEachCategory);
+        html += gteQuickSearchResultCategory('pamphlet', 'جزوات', pamphlet, maxRecordOfEachCategory);
+        html += gteQuickSearchResultCategory('product', 'محصولات', product, maxRecordOfEachCategory);
+        html += gteQuickSearchResultCategory('set', 'دسته ها', set, maxRecordOfEachCategory);
+        html += gteQuickSearchResultCategory('video', 'ویدیوها', video, maxRecordOfEachCategory);
+
+        $('.m-dropdown__content').find('.a-dropdown__search-result').remove();
+        $('.m-dropdown__content').append('<dvi class="a-dropdown__search-result">'+html+'</dvi>');
+    }
+    function getQuickSearchResultItem(data) {
+        return '    <!--begin::Widget 14 Item-->\n' +
+            '    <div class="m-widget4__item">\n' +
+            '        <div class="m-widget4__img m-widget4__img--pic">\n' +
+            '            <img src="'+data.photo+'" alt="">\n' +
+            '        </div>\n' +
+            '        <div class="m-widget4__info">\n' +
+            '            <span class="m-widget4__title">\n' +
+            '                '+data.title+'\n' +
+            '            </span>' +
+            '            <br>\n' +
+            '            <span class="m-widget4__sub">\n' +
+            '                '+data.subtitle+'\n' +
+            '            </span>\n' +
+            '        </div>\n' +
+            '        <div class="m-widget4__ext">\n' +
+            '            <a href="'+data.link+'" class="m-btn m-btn--pill m-btn--hover-brand btn btn-sm btn-secondary">مشاهده</a>\n' +
+            '        </div>\n' +
+            '    </div>\n' +
+            '    <!--end::Widget 14 Item-->\n';
+    }
+
+    function gteQuickSearchResultCategory(categoryType, categoryName, data, maxRecordOfCategory) {
+        let html = '';
+        if (data !== null && data.total > 0) {
+            html += '<div class="kt-quick-search__category">'+categoryName+'</div>';
+            html += '<div class="m-widget4">';
+            for (let index in data.data) {
+                if(isNaN(index)) {
+                    continue;
+                }
+                if(index > maxRecordOfCategory) {
+                    break;
+                }
+                let dataItem = data[index];
+                let inputData = getInputDataForQuickSearchShowResult(categoryType, dataItem);
+                html += getQuickSearchResultItem(inputData);
+            }
+            html += '</div>';
+        }
+        return html;
+    }
+
+    function getInputDataForQuickSearchShowResult(categoryType, data) {
+        if (categoryType === 'video') {
+            return {
+                title: data.author.full_name,
+                subtitle: data.name,
+                photo: data.thumbnail,
+                link: data.url,
+            };
+        } else if (categoryType === 'set') {
+            return {
+                title: data.shortName,
+                subtitle: data.name,
+                photo: data.photo,
+                link: data.url,
+            };
+        } else if (categoryType === 'product') {
+            return {
+                title: data.name,
+                subtitle: '',
+                photo: data.photo,
+                link: data.url,
+            };
+        } else if (categoryType === 'pamphlet') {
+            return {
+                title: data.author.full_name,
+                subtitle: data.name,
+                photo: data.thumbnail,
+                link: data.url,
+            };
+        } else if (categoryType === 'article') {
+            return {
+                title: data.author.full_name,
+                subtitle: data.name,
+                photo: data.thumbnail,
+                link: data.url,
+            };
+        }
+    }
 
     //== Scrolltop
     var initScrollTop = function() {

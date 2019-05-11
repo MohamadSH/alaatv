@@ -605,9 +605,8 @@ class Order extends BaseModel
          * for reduce query
          */
         /*$walletTransactions = $this->suspendedTransactions*/
-        $walletTransactions = $this->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUSPENDED"))
-            ->where("paymentmethod_id",
-                config("constants.PAYMENT_METHOD_WALLET"));
+        $walletTransactions = $this->suspendedTransactions()->where("paymentmethod_id", config("constants.PAYMENT_METHOD_WALLET"))->get();
+
         foreach ($walletTransactions as $transaction) {
             /** @var Transaction $transaction */
             $transaction->transactionstatus_id = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
@@ -690,10 +689,10 @@ class Order extends BaseModel
         }
         
         $this->orderstatus_id   = $orderStatus;
+
         if(isset($paymentStatus))
             $this->paymentstatus_id = $paymentStatus;
-        $this->completed_at     = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-            ->timezone('Asia/Tehran');
+        $this->completed_at     = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
     }
     
     public function detachUnusedCoupon()
