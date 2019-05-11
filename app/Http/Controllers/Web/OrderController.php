@@ -1001,7 +1001,12 @@ class OrderController extends Controller
             
             $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
             //ToDo : no need to orderproducts
-            
+
+            $orderproducts = $invoiceInfo['items'];
+            /** @var OrderproductCollection $orderproducts */
+            if($orderproducts->isEmpty())
+                return redirect()->route("checkoutReview");
+
             $response = response([
                 'price'                       => $invoiceInfo['price'],
                 'credit'                      => $credit,
