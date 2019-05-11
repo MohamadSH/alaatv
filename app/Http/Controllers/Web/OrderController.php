@@ -27,6 +27,7 @@ use App\Traits\RequestCommon;
 use Illuminate\Http\Response;
 use App\Afterloginformcontrol;
 use App\Traits\APIRequestCommon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Collection\OrderCollections;
 use App\Http\Controllers\Controller;
@@ -811,6 +812,10 @@ class OrderController extends Controller
      */
     public function checkoutReview(CheckoutReviewRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
+        Cache::tags('order')->flush();
+        Cache::tags('orderproduct')->flush();
+
+
         $this->generateCustomMeta([
             'title'       => 'آلاء|بازبینی سفارش',
             'url'         => $request->url(),
@@ -952,6 +957,9 @@ class OrderController extends Controller
      */
     public function checkoutPayment(Request $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
+        Cache::tags('order')->flush();
+        Cache::tags('orderproduct')->flush();
+
         $this->generateCustomMeta([
             'title'       => 'آلاء|پرداخت',
             'url'         => $request->url(),
