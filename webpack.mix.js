@@ -56,6 +56,14 @@ mix.babel(
     'public/js/content-show.js'
 ).version();
 
+mix.babel(
+    [
+        'public/acm/AlaatvCustomFiles/components/MultiLevelSearch/js.js',
+        'public/acm/AlaatvCustomFiles/js/page-content-search.js'
+    ],
+    'public/js/content-search.js'
+).version();
+
 mix.scripts(
     [
         'public/acm/AlaatvCustomFiles/js/page-contactUs.js'
@@ -272,6 +280,14 @@ mix.styles(
         'public/acm/videojs/plugins/seek-to-point.css',
 
         'public/acm/AlaatvCustomFiles/css/page-content-show.css'
+    ],
+    'public/css/content-show.css'
+);
+
+mix.styles(
+    [
+        'public/acm/AlaatvCustomFiles/components/MultiLevelSearch/style.css',
+        'public/acm/AlaatvCustomFiles/css/page-content-search.css'
     ],
     'public/css/content-show.css'
 );
