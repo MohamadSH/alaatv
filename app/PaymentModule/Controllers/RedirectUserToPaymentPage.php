@@ -2,6 +2,7 @@
 
 namespace App\PaymentModule\Controllers;
 
+use App\Product;
 use Cache;
 use App\User;
 use App\Order;
@@ -202,7 +203,7 @@ class RedirectUserToPaymentPage extends Controller
     /**
      * @param $orderproducts
      */
-    private function handleOrders($orderproducts)
+    private function handleOrders(\Illuminate\Support\Collection $orderproducts)
     {
         $totalCookie = collect();
         foreach ($orderproducts as $orderproduct) {
@@ -237,7 +238,7 @@ class RedirectUserToPaymentPage extends Controller
      * @param $myProduct
      * @param $extraAttributesIds
      */
-    private function makeCookieForSelectableGrand(\Illuminate\Support\Collection $totalCookie, $grandProduct, $myProduct, $extraAttributesIds): void
+    private function makeCookieForSelectableGrand(\Illuminate\Support\Collection $totalCookie, Product $grandProduct, Product $myProduct, array $extraAttributesIds): void
     {
         $isAdded = $totalCookie->where('product_id', $grandProduct->id);
         if ($isAdded->isEmpty()) {
@@ -261,7 +262,7 @@ class RedirectUserToPaymentPage extends Controller
      * @param $grandProduct
      * @param $extraAttributesIds
      */
-    private function makeCookieForConfigurableGrand(\Illuminate\Support\Collection $totalCookie, $myProduct, $grandProduct, $extraAttributesIds): void
+    private function makeCookieForConfigurableGrand(\Illuminate\Support\Collection $totalCookie,Product $myProduct,Product $grandProduct, array $extraAttributesIds): void
     {
         $attributeValueIds = $this->getProductAttributes($myProduct);
 
@@ -278,7 +279,7 @@ class RedirectUserToPaymentPage extends Controller
      * @param $myProduct
      * @return mixed
      */
-    private function getProductAttributes($myProduct)
+    private function getProductAttributes(Product $myProduct)
     {
         return $myProduct->attributevalues()->whereHas('attribute', function ($q) {
             $q->where('attributetype_id', config('constants.ATTRIBUTE_TYPE_MAIN'));
