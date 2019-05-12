@@ -326,7 +326,9 @@
                         </div>
                     </div>
                     <div class="m-portlet__body">
-                        <div class="m-scrollable" data-scrollable="true" data-height="450" data-scrollbar-shown="true">
+                        <div
+{{--                                class="m-scrollable" data-scrollable="true" data-height="450" data-scrollbar-shown="true"--}}
+                        >
                             @foreach($pamphletsWithSameSet as  $item)
                                 <!--begin::m-widget4-->
                                 <div class="m-widget4">
