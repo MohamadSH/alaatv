@@ -144,12 +144,12 @@ class HomeController extends Controller
         $this->response = $response;
         $this->setting  = $setting->setting;
     }
-    
+
     public function test(Product $product)
     {
         return $product;
     }
-    
+
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
         return (array) optional($request->user('alaatv'))->id;
@@ -3319,7 +3319,12 @@ class HomeController extends Controller
         
         return view('admin.topicsTree.index', compact('mote2', 'treePathData', 'htmlPrint', 'lastUpdatedByLernito'));
     }
-    
+
+    public function contentSetListTest(Request $request, Contentset $set){
+        $contents = $set->contents->sortBy("pivot.order");
+        return view('listTest',compact('set','contents'));
+    }
+
     private function getLastUpdatedByLernito(): array
     {
         $Riazi                = new Riazi();

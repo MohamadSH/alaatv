@@ -245,6 +245,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get("donate", "Web\DonateController");
     Route::post("donateOrder", "Web\OrderController@donateOrder");
     Route::get('adminGenerateRandomCoupon', "Web\HomeController@adminGenerateRandomCoupon");
+
+    Route::get('cTest/{set}', "Web\HomeController@contentSetListTest");
 });
 
 Route::group(['prefix' => 'c'], function () {
