@@ -99,8 +99,7 @@ class Attributeset extends BaseModel
                 
                 return $item;
             });
-            
-            //            dd($result);
+
             return $result;
         });
     }

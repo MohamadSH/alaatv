@@ -246,15 +246,22 @@ mLayout = function() {
         //<div class="m-search-results m-search-results--skin-light"><span class="m-search-result__message">Something went wrong</div></div>
 
         quicksearch.on('search', function(the) {
+
+            if ($('#m_quicksearch_input').val().trim().length < 3) {
+                showDataOnQuickSearchResultPannel('');
+                return false;
+            }
+            showDataOnQuickSearchResultPannel('کمی صبر کنید ...');
             the.showProgress();
 
             $.ajax({
                 url: '/c?q=' + $('#m_quicksearch_input').val(),
-                data: {query: the.query},
+                data: {},
                 dataType: 'json',
                 success: function(res) {
                     the.hideProgress();
                     the.showResult(res);
+
                     showResultForQuickSearch(res);
                 },
                 error: function(res) {
@@ -263,7 +270,16 @@ mLayout = function() {
                 }
             });
         });
+
+        $(document).on('click', '#m_quicksearch_close', function () {
+            showDataOnQuickSearchResultPannel('');
+        });
     };
+
+    function showDataOnQuickSearchResultPannel(html) {
+        $('.a-quick-search .m-dropdown__content').html('');
+        $('.a-quick-search .m-dropdown__content').append('<dvi class="a-dropdown__search-result">'+html+'</dvi>');
+    }
 
     function showResultForQuickSearch(res) {
         let maxRecordOfEachCategory = 3;
@@ -280,10 +296,9 @@ mLayout = function() {
         html += gteQuickSearchResultCategory('product', 'محصولات', product, maxRecordOfEachCategory);
         html += gteQuickSearchResultCategory('set', 'دسته ها', set, maxRecordOfEachCategory);
         html += gteQuickSearchResultCategory('video', 'ویدیوها', video, maxRecordOfEachCategory);
-
-        $('.m-dropdown__content').find('.a-dropdown__search-result').remove();
-        $('.m-dropdown__content').append('<dvi class="a-dropdown__search-result">'+html+'</dvi>');
+        showDataOnQuickSearchResultPannel(html);
     }
+
     function getQuickSearchResultItem(data) {
         return '    <!--begin::Widget 14 Item-->\n' +
             '    <div class="m-widget4__item">\n' +
@@ -318,7 +333,7 @@ mLayout = function() {
                 if(index > maxRecordOfCategory) {
                     break;
                 }
-                let dataItem = data[index];
+                let dataItem = data.data[index];
                 let inputData = getInputDataForQuickSearchShowResult(categoryType, dataItem);
                 html += getQuickSearchResultItem(inputData);
             }
@@ -365,6 +380,9 @@ mLayout = function() {
             };
         }
     }
+
+
+
 
     //== Scrolltop
     var initScrollTop = function() {

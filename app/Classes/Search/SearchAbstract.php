@@ -10,7 +10,6 @@ namespace App\Classes\Search;
 
 use App\Classes\Search\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Config;
 use LogicException;
 
 abstract class SearchAbstract

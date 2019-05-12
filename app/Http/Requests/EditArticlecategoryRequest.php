@@ -12,7 +12,7 @@ class EditArticlecategoryRequest extends FormRequest
 
     public function authorize()
     {
-        if (Auth()
+        if (auth()
             ->user()
             ->can(config('constants.EDIT_ARTICLECATEGORY_ACCESS'))) {
             return true;

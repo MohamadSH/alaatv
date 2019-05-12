@@ -12,7 +12,7 @@ class EditProductRequest extends FormRequest
 
     public function authorize()
     {
-        if (Auth()
+        if (auth()
             ->user()
             ->can(config('constants.EDIT_PRODUCT_ACCESS'))) {
             return true;

@@ -176,6 +176,7 @@
 --}}
 <!--begin::Global Theme Bundle -->
 <script src="{{ mix('/js/all.js') }}" type="text/javascript"></script>
+
 <!--end::Global Theme Bundle -->
 <script>
     $(function () {

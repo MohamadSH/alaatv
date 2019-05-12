@@ -12,7 +12,7 @@ class InsertUserBonRequest extends FormRequest
 
     public function authorize()
     {
-        if (Auth()
+        if (auth()
             ->user()
             ->can(config('constants.INSERT_USER_BON_ACCESS'))) {
             return true;

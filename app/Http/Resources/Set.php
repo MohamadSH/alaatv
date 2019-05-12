@@ -21,11 +21,9 @@ class Set extends JsonResource
     public function toArray($request)
     {
         if (!($this->resource instanceof \App\Contentset)) {
-            
-            return [
-            
-            ];
+            return [];
         }
+
         return [
             'id'             => $this->id,
             'name'           => $this->name,

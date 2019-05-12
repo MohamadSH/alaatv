@@ -9,7 +9,7 @@ class EditAttributegroupRequest extends FormRequest
 {
     public function authorize()
     {
-        if (Auth()
+        if (auth()
             ->user()
             ->can(config('constants.EDIT_ATTRIBUTEGROUP_ACCESS'))) {
             return true;

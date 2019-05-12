@@ -1,0 +1,46 @@
+.ProductAndSetAndVideoWraper {
+    margin-top: -20px;
+}
+
+.owl-carousel-fileTitle {
+    margin: 0 -30px !important;
+    padding: 5px 30px;
+    background: #000000b3;
+}
+
+.owl-carousel-fileTitle a {
+    color: white;
+    transition-property: all;
+    transition-duration: 0.3s;
+}
+
+.owl-carousel-fileTitle a:hover {
+    color: #8bccfe;
+}
+
+.owl-carousel-fileTitle a:hover::after {
+    border-bottom: 1px solid #fff;
+    opacity: 1;
+}
+
+.notFoundMessage .m-alert__icon i {
+    font-size: 60px;
+}
+
+.a--owl-carousel-type-1 .m-widget19__header {
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.a--owl-carousel-type-1 .item .m-portlet > .m-portlet__body {
+    padding-bottom: 0px;
+}
+
+.a--owl-carousel-type-1 .item > .m-portlet {
+    margin-bottom: 0;
+}
+
+.a--vw-Loading {
+    text-align: center;
+    padding: 10px;
+}

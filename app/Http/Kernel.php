@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\CanAccessEmployeeTimeSheet;
 use App\Http\Middleware\CompleteInfo;
 use Laratrust\Middleware\LaratrustRole;
 use Illuminate\Auth\Middleware\Authorize;
@@ -96,6 +97,8 @@ class Kernel extends HttpKernel
         'OfflineVerifyPayment'                      => Middleware\OfflineVerifyPayment::class,
         'RemoveOrderCoupon'                         => RemoveOrderCoupon::class,
         'signed'                                    => ValidateSignature::class,
+        'CanAccessEmployeeTimeSheet'                => CanAccessEmployeeTimeSheet::class,
+
     ];
     
     /**

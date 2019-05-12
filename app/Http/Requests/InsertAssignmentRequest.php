@@ -12,7 +12,7 @@ class InsertAssignmentRequest extends FormRequest
 
     public function authorize()
     {
-        if (Auth()
+        if (auth()
             ->user()
             ->can(config('constants.INSERT_ASSIGNMENT_ACCESS'))) {
             return true;

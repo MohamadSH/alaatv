@@ -16,7 +16,6 @@ class OrderproductObserver
      */
     public function created(Orderproduct $orderproduct)
     {
-        Log::debug('in orderproductobserver craeted');
     }
 
     /**
@@ -72,7 +71,6 @@ class OrderproductObserver
 
     public function saved(Orderproduct $orderproduct)
     {
-        Log::debug('in orderproductobserver saved');
         Cache::tags('bon')
             ->flush();
         Cache::tags('order')
