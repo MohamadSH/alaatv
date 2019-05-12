@@ -33,8 +33,6 @@ class RedirectUserToPaymentPage extends Controller
      */
     public function __invoke(string $paymentMethod, string $device, Request $request)
     {
-        setcookie('cartItems', '', time() - 3600, '/');
-
         Cache::tags('bon')->flush();
         Cache::tags('order')->flush();
         Cache::tags('orderproduct')->flush();
@@ -193,8 +191,6 @@ class RedirectUserToPaymentPage extends Controller
      */
     private function saveOrderInCookie(Order $order)
     {
-        //ToDo : komake mali
-
         $orderproducts = $order->orderproducts ;
 
         $totalCookie = $this->handleOrders($orderproducts);
