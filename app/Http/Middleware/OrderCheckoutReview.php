@@ -58,7 +58,7 @@ class OrderCheckoutReview
                 }
             }
 
-            setcookie('cartItems', $_COOKIE["cartItems"], time() - 3600, '/');
+            setcookie('cartItems', '', time() - 3600, '/');
         }
 
         return $next($request);
