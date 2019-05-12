@@ -42,7 +42,7 @@
             <div class = "portlet light">
                 <div class = "portlet-body">
                     <div class = "row">
-                        {!! Form::model($employeetimesheet, ['method' => 'PUT','action' => ['EmployeetimesheetController@update',$employeetimesheet] , 'class'=>'form-horizontal' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
+                        {!! Form::model($employeetimesheet, ['method' => 'PUT','action' => ['Web\EmployeetimesheetController@update',$employeetimesheet] , 'class'=>'form-horizontal' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
                         @include('employeeTimeSheet.form')
                         {!! Form::close() !!}
                     </div>
