@@ -44,6 +44,7 @@ mix.scripts(
 mix.babel(
     [
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+
         'public/acm/videojs/video.min.js',
         'public/acm/videojs/plugins/pip/videojs.pip.min.js',
         'public/acm/videojs/nuevo.min.js',
@@ -51,6 +52,7 @@ mix.babel(
         'public/acm/videojs/plugins/videojs.hotkeys.min.js',
         'public/acm/videojs/plugins/seek-to-point.js',
         'public/acm/videojs/lang/fa.js',
+
         'public/acm/AlaatvCustomFiles/js/page-content-show.js'
     ],
     'public/js/content-show.js'
@@ -85,14 +87,16 @@ mix.babel(
         'node_modules/lightgallery/modules/lg-zoom.min.js',
         'node_modules/jquery-sticky/jquery.sticky.js',
         'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
+
         'public/acm/videojs/video.min.js',
         'public/acm/videojs/plugins/pip/videojs.pip.min.js',
         'public/acm/videojs/nuevo.min.js',
         'public/acm/videojs/plugins/videojs.p2p.min.js',
         'public/acm/videojs/plugins/videojs.hotkeys.min.js',
         'public/acm/videojs/plugins/seek-to-point.js',
-        'public/acm/AlaatvCustomFiles/js/UserCart.js',
         'public/acm/videojs/lang/fa.js',
+
+        'public/acm/AlaatvCustomFiles/js/UserCart.js',
         'public/acm/AlaatvCustomFiles/js/page-product-show.js',
     ],
     'public/js/product-show.js'
@@ -273,6 +277,7 @@ mix.styles(
         'node_modules/slick-carousel/slick/slick.css',
         'node_modules/slick-carousel/slick/slick-theme.css',
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
+
         'public/acm/videojs/skins/alaa-theme/videojs.css',
         'public/acm/videojs/skins/nuevo/videojs.rtl.css',
         'public/acm/videojs/plugins/pip/videojs.pip.min.css',
@@ -289,7 +294,7 @@ mix.styles(
         'public/acm/AlaatvCustomFiles/components/MultiLevelSearch/style.css',
         'public/acm/AlaatvCustomFiles/css/page-content-search.css'
     ],
-    'public/css/content-show.css'
+    'public/css/content-search.css'
 );
 
 mix.styles(

@@ -5,7 +5,7 @@
 
 
 @section('page-css')
-    <link href="{{ mix('/css/content-show.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ mix('/css/content-search.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section("pageBar")
