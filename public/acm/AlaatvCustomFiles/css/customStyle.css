@@ -209,6 +209,10 @@
 /*    margin-left: 0;*/
 /*}*/
 
+.a-major-menu__submenu {
+    width: 170px;
+}
+
 .majorIcon {
     width: 50px !important;
     text-align: center;
