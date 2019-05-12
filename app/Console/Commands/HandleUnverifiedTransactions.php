@@ -55,9 +55,6 @@ class HandleUnverifiedTransactions extends Command
             ->first();
         $data['merchantID'] = $transactiongateway->merchantNumber;
         $paymentClient = PaymentDriver::select($paymentMethod);
-
-        $notExistTransactions             = [];
-        $unverifiedTransactionsDueToError = [];
         
         $this->info('getting data from zarinpal ...');
         $result = $this->getUnverifiedTransactions();
@@ -69,6 +66,55 @@ class HandleUnverifiedTransactions extends Command
 
         $this->info('Untrusted transactions received.');
         $transactions = $result['Authorities'];
+        list($notExistTransactions, $unverifiedTransactionsDueToError) = $this->handleTransactions($transactions, $paymentClient);
+
+        if (count($unverifiedTransactionsDueToError) > 0) {
+            $this->info('Unverified Transactions Due To Error:');
+            $this->logError($unverifiedTransactionsDueToError);
+        }
+
+        if (count($notExistTransactions) == 0) {
+            return null;
+        }
+        $this->logError($notExistTransactions);
+
+        if ($this->confirm('The above transactions are not available. \n\rDo you wish to force verify?', true)) {
+            foreach ($notExistTransactions as $item) {
+                $gateWayVerify = $paymentClient->verifyPayment(Money::fromTomans($item['Amount']), $item['Authority']);
+            }
+        }
+    }
+    
+    private function getUnverifiedTransactions()
+    {
+        return (new Zarinpal(['merchantID' => $this->merchantNumber]))->getUnverifiedTransactions();
+    }
+
+    /**
+     * @param array $items
+     * @return mixed
+     */
+    private function logError(array $items)
+    {
+        foreach ($items as $item) {
+            $authority = $item['Authority'];
+            $amount = $item['Amount'];
+            $channel = $item['Channel'];
+            $cellPhone = $item['CellPhone'];
+            $date = $item['Date'];
+            $this->info('authority: {'.$authority.'} amount: {'.$amount.'} channel: {'.$channel.'} cellPhone: {'.$cellPhone.'} date: {'.$date.'}');
+        }
+    }
+
+    /**
+     * @param $transactions
+     * @param \AlaaTV\Gateways\Contracts\OnlineGateway $paymentClient
+     * @return array
+     */
+    private function handleTransactions($transactions, $paymentClient): array
+    {
+        $notExistTransactions = [];
+        $unverifiedTransactionsDueToError = [];
         foreach ($transactions as $transaction) {
 
             /*$result = [
@@ -88,52 +134,17 @@ class HandleUnverifiedTransactions extends Command
 
             if (is_null($transaction)) {
                 array_push($notExistTransactions, $transaction);
-            } else {
-                $transaction['Status'] = 'OK';
+                continue;
+            }
+            $transaction['Status'] = 'OK';
+            array_push($unverifiedTransactionsDueToError, $transaction);
+            $gateWayVerify = $paymentClient->verifyPayment(Money::fromTomans($transaction->cost), $authority);
+
+            if (!$gateWayVerify->isSuccessfulPayment()) {
                 array_push($unverifiedTransactionsDueToError, $transaction);
-                $gateWayVerify = $paymentClient->verifyPayment(Money::fromTomans($transaction->cost), $authority);
-
-                if (!$gateWayVerify->isSuccessfulPayment()) {
-                    array_push($unverifiedTransactionsDueToError, $transaction);
-                }
             }
         }
 
-        if (count($unverifiedTransactionsDueToError) > 0) {
-            $this->info('Unverified Transactions Due To Error:');
-            $this->logError($unverifiedTransactionsDueToError);
-        }
-
-        if (count($notExistTransactions) <= 0) {
-            return null;
-        }
-        $this->logError($notExistTransactions);
-
-        if ($this->confirm('The above transactions are not available. \n\rDo you wish to force verify?', true)) {
-            foreach ($notExistTransactions as $item) {
-                $gateWayVerify = $paymentClient->verifyPayment(Money::fromTomans($item['Amount']), $item['Authority']);
-            }
-        }
-    }
-    
-    private function getUnverifiedTransactions()
-    {
-        return (new Zarinpal(['merchantID' => $this->merchantNumber]))->getUnverifiedTransactions();
-    }
-
-    /**
-     * @param array $r
-     * @return mixed
-     */
-    private function logError(array $r)
-    {
-        foreach ($r as $item) {
-            $authority = $item['Authority'];
-            $amount = $item['Amount'];
-            $channel = $item['Channel'];
-            $cellPhone = $item['CellPhone'];
-            $date = $item['Date'];
-            $this->info('authority: {'.$authority.'} amount: {'.$amount.'} channel: {'.$channel.'} cellPhone: {'.$cellPhone.'} date: {'.$date.'}');
-        }
+        return [$notExistTransactions, $unverifiedTransactionsDueToError];
     }
 }
