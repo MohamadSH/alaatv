@@ -34,12 +34,6 @@ use App\Traits\{Helper,
 
 class ContentController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Traits
-    |--------------------------------------------------------------------------
-    */
-    
     use ProductCommon;
     use Helper;
     use FileCommon;
@@ -444,30 +438,32 @@ class ContentController extends Controller
         $contentset  = Contentset::FindOrFail($contentset_id);
         $lastContent = $contentset->getLastContent();
         
-        if (isset($lastContent)) {
-            $newContent = $lastContent->replicate();
-        } else {
+        if (!isset($lastContent)) {
             session()->put('error', trans('content.No previous content found'));
-            
+
             return redirect()->back();
         }
-        if ($newContent instanceof Content) {
-            $newContent->contenttype_id  = $contenttype_id;
-            $newContent->name            = $name;
-            $newContent->description     = null;
-            $newContent->metaTitle       = null;
+            $newContent = $lastContent->replicate();
+
+        if (!($newContent instanceof Content)) {
+            throw new Exception('replicate Error!'.$contentset_id);
+        }
+            $newContent->contenttype_id = $contenttype_id;
+            $newContent->name = $name;
+            $newContent->description = null;
+            $newContent->metaTitle = null;
             $newContent->metaDescription = null;
-            $newContent->enable          = 0;
-            $newContent->validSince      = $dateNow;
-            $newContent->created_at      = $dateNow;
-            $newContent->updated_at      = $dateNow;
-            
+            $newContent->enable = 0;
+            $newContent->validSince = $dateNow;
+            $newContent->created_at = $dateNow;
+            $newContent->updated_at = $dateNow;
+
             $files = $this->makeVideoFileArray($fileName, $contentset_id);
-            
-            $thumbnailUrl          = $this->makeThumbnailUrlFromFileName($fileName, $contentset_id);
+
+            $thumbnailUrl = $this->makeThumbnailUrlFromFileName($fileName, $contentset_id);
             $newContent->thumbnail = $this->makeThumbanilFile($thumbnailUrl);
             $this->storeFilesOfContent($newContent, $files);
-            
+
             $newContent->save();
             if (!isset($order)) {
                 //TODO://deprecate
@@ -475,11 +471,9 @@ class ContentController extends Controller
             }
             //TODO://deprecate
             $this->attachContentSetToContent($newContent, $contentset->id, $order);
-            
+
             return redirect(action("Web\ContentController@edit", $newContent->id));
-        } else {
-            throw new Exception('replicate Error!'.$contentset_id);
-        }
+
     }
     
     

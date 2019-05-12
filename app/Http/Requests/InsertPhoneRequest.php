@@ -12,7 +12,7 @@ class InsertPhoneRequest extends FormRequest
 
     public function authorize()
     {
-        if (Auth()
+        if (auth()
             ->user()
             ->can(config('constants.INSERT_CONTACT_ACCESS'))) {
             return true;

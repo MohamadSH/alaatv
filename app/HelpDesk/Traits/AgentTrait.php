@@ -9,8 +9,6 @@ use App\HelpDesk\Models\Category;
 
 trait AgentTrait
 {
-    
-    
     public function scopeHelpAgents($query)
     {
         return $query->roleName(config('helpDesk.ROLE_HELP_DESK_AGENT'));
