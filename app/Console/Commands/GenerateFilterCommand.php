@@ -27,7 +27,6 @@ class GenerateFilterCommand extends Command
      */
     public function handle()
     {
-        
         $filterName = $this->argument('name');
         $stub       = $this->compileTemplate($filterName);
         

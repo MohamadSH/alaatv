@@ -8,7 +8,7 @@ class EditRoleRequest extends FormRequest
 {
     public function authorize()
     {
-        if (Auth()
+        if (auth()
             ->user()
             ->hasRole('admin')) {
             return true;

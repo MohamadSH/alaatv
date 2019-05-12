@@ -12,7 +12,7 @@ class EditAssignmentRequest extends FormRequest
 
     public function authorize()
     {
-        if (Auth()
+        if (auth()
             ->user()
             ->can(config('constants.EDIT_ASSIGNMENT_ACCESS'))) {
             return true;

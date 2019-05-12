@@ -104,9 +104,9 @@ class RedirectUserToPaymentPage extends Controller
      * @return JsonResponse
      * @throws \ImanGhafoori\Terminator\TerminateException
      */
-    private function sendErrorResponse(string $msg, int $statusCode): JsonResponse
+    private function sendErrorResponse(string $msg, int $statusCode)
     {
-        respondWith(response()->json(['message' => $msg], $statusCode));
+        respondWith()->json(['message' => $msg], $statusCode);
     }
 
     /**
@@ -206,7 +206,7 @@ class RedirectUserToPaymentPage extends Controller
     /**
      * @param $orderproducts
      */
-    private function handleOrders($orderproducts): void
+    private function handleOrders($orderproducts)
     {
         $totalCookie = collect();
         foreach ($orderproducts as $orderproduct) {

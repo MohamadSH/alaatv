@@ -9,7 +9,7 @@ class EditPermissionRequest extends FormRequest
 {
     public function authorize()
     {
-        if (Auth()
+        if (auth()
             ->user()
             ->can(config('constants.EDIT_PERMISSION_ACCESS'))) {
             return true;

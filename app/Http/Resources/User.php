@@ -21,11 +21,9 @@ class User extends JsonResource
     public function toArray($request)
     {
         if (!($this->resource instanceof \App\User)) {
-            
-            return [
-            
-            ];
+            return [];
         }
+
         return [
             'id'        => $this->id,
             'firstName' => $this->firstName,

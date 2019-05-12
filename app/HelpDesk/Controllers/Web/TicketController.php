@@ -61,11 +61,8 @@ class TicketController extends Controller
     
     public function index()
     {
-//        dump("here");
         $userId = auth()->user()->id;
-//        dump("here");
         $tickets = $this->repository->getUserTickets($userId);
-//        dump("here");
         $categories = Category::all();
         //User Tickets
         //Agent Tickets
