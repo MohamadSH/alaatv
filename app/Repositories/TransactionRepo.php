@@ -80,7 +80,6 @@ class TransactionRepo
      */
     public static function handleTransactionStatus(Transaction $transaction, string $refId, string $cardPanMask = null)
     {
-        $cardPanMask =
         $user = optional($transaction->order)->user;
         $bankAccountId = null;
         if (!is_null($cardPanMask) && !is_null($user))
