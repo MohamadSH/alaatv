@@ -113,12 +113,12 @@
                         <input type="hidden" id="vertical-widget--js-var-next-page-article-url" value="{{ optional($result->get('article'))->nextPageUrl() }}">
                         <div class="tab-content">
                             <div class="m-portlet__body tab-pane m--padding-5 active" role="tabpanel" id="pamphlet-vertical-tabpanel">
-                                <div class="m-scrollable" data-scrollable="true" style="height: 500px">
+                                <div class="m-scrollable" data-scrollable="true" style="max-height: 995px">
                                     <div class="m-widget4" id="pamphlet-vertical-widget"></div>
                                 </div>
                             </div>
                             <div class="m-portlet__body tab-pane m--padding-5" role="tabpanel" id="article-vertical-tabpanel">
-                                <div class="m-scrollable" data-scrollable="true" style="height: 500px">
+                                <div class="m-scrollable" data-scrollable="true" style="max-height: 995px">
                                     <div class="m-widget4" id="article-vertical-widget"></div>
                                 </div>
                             </div>
@@ -156,8 +156,10 @@
 
     <script>
         var contentData = {!! json_encode($result) !!};
+        var tags = {!! json_encode($tags) !!};
     </script>
 
     <script src="{{ mix('/js/content-search.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-content-search.js') }}"></script>
 
 @endsection
