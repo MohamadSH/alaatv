@@ -160,6 +160,5 @@
     </script>
 
     <script src="{{ mix('/js/content-search.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-content-search.js') }}"></script>
 
 @endsection

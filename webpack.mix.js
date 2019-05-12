@@ -61,7 +61,7 @@ mix.babel(
 mix.babel(
     [
         'public/acm/AlaatvCustomFiles/components/MultiLevelSearch/js.js',
-        // 'public/acm/AlaatvCustomFiles/js/page-content-search.js'
+        'public/acm/AlaatvCustomFiles/js/page-content-search.js'
     ],
     'public/js/content-search.js'
 ).version();

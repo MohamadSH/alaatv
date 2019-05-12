@@ -2184,8 +2184,10 @@ var GetAjaxData = function () {
         $('#product-carousel-warper').fadeIn();
         $('#video-carousel-warper').fadeIn();
         $('#set-carousel-warper').fadeIn();
-        $('#pamphlet-vertical-tabpanel').fadeIn();
-        $('#article-vertical-tabpanel').fadeIn();
+        // $('#pamphlet-vertical-tabpanel').fadeIn();
+        $('#pamphlet-vertical-tabpanel').removeClass('d-none');
+        // $('#article-vertical-tabpanel').fadeIn();
+        $('#article-vertical-tabpanel').removeClass('d-none');
         $('#pamphlet-vertical-tab').fadeIn();
         $('#article-vertical-tab').fadeIn();
         $('.ProductAndSetAndVideoWraper').removeClass('col').addClass('col-12 col-md-9');
