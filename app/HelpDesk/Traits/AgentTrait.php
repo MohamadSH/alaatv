@@ -9,8 +9,6 @@ use App\HelpDesk\Models\Category;
 
 trait AgentTrait
 {
-    
-    
     public function scopeHelpAgents($query)
     {
         return $query->roleName(config('helpDesk.ROLE_HELP_DESK_AGENT'));
@@ -64,16 +62,6 @@ trait AgentTrait
     public function helpCategories()
     {
         return $this->belongsToMany(Category::class, 'help_categories_users', 'user_id', 'category_id');
-    }
-    
-    public function tickets()
-    {
-        return $this->hasMany(Ticket::class, 'user_id');
-    }
-    
-    public function agentTickets()
-    {
-        return $this->hasMany(Ticket::class, 'agent_id');
     }
     
     public function closeTickets()

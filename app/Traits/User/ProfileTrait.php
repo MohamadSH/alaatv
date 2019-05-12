@@ -32,22 +32,22 @@ trait ProfileTrait
     
     public function bloodtype()
     {
-        return $this->belongsTo("\App\Bloodtype");
+        return $this->defineBelongsTo("\App\Bloodtype");
     }
     
     public function grade()
     {
-        return $this->belongsTo("\App\Grade");
+        return $this->defineBelongsTo("\App\Grade");
     }
     
     public function major()
     {
-        return $this->belongsTo('App\Major');
+        return $this->defineBelongsTo('App\Major');
     }
     
     public function gender()
     {
-        return $this->belongsTo('App\Gender');
+        return $this->defineBelongsTo('App\Gender');
     }
     
     public function returnLockProfileItems()

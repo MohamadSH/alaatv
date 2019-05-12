@@ -669,60 +669,49 @@ class TransactionController extends Controller
     
     public function convertToDonate(Transaction $transaction)
     {
-        if ($transaction->cost < 0 && !isset($transaction->traceNumber)) {
-            $order                          = Order::FindOrFail($transaction->order->id);
-            $donateOrderproduct             = new Orderproduct();
-            $donateOrderproduct->order_id   = $order->id;
-            $donateOrderproduct->product_id = 182;
-            $donateOrderproduct->cost       = -$transaction->cost;
-            if ($donateOrderproduct->save()) {
-                if ($transaction->forceDelete()) {
-                    $newOrder                    = Order::where("id", $order->id)
-                        ->get()
-                        ->first();
-                    $orderCostArray              = $newOrder->obtainOrderCost(true, false, "REOBTAIN");
-                    $newOrder->cost              = $orderCostArray["rawCostWithDiscount"];
-                    $newOrder->costwithoutcoupon = $orderCostArray["rawCostWithoutDiscount"];
-                    if ($newOrder->update()) {
-                        return $this->response->setStatusCode(200)
-                            ->setContent(["message" => "عملیات تبدیل با موفقیت انجام شد."]);
-                    }
-                    else {
-                        return $this->response->setStatusCode(503)
-                            ->setContent(["message" => "خطا در بروز رسانی سفارش . لطفا سفارش را دستی اصلاح نمایید."]);
-                    }
-                }
-                else {
-                    return $this->response->setStatusCode(503)
-                        ->setContent(["message" => "خطا در بروز رسانی تراکنش . لطفا تراکنش را دستی اصلاح نمایید."]);
-                }
-            }
-            else {
-                return $this->response->setStatusCode(503)
-                    ->setContent(["message" => "خطا در ایجاد آیتم کمک مالی . لطفا دوباره اقدام نمایید."]);
-            }
+        if ($transaction->cost >= 0 || isset($transaction->traceNumber)) {
+            return $this->response->setStatusCode(503)->setContent(["message" => "این تراکنش بازگشت هزینه نمی باشد"]);
         }
-        else {
-            return $this->response->setStatusCode(503)
-                ->setContent(["message" => "این تراکنش بازگشت هزینه نمی باشد"]);
+
+        $order = Order::FindOrFail($transaction->order->id);
+        $donateOrderproduct = new Orderproduct();
+        $donateOrderproduct->order_id = $order->id;
+        $donateOrderproduct->product_id = 182;
+        $donateOrderproduct->cost = -$transaction->cost;
+
+        if (!$donateOrderproduct->save()) {
+            return $this->response->setStatusCode(503)->setContent(["message" => "خطا در ایجاد آیتم کمک مالی . لطفا دوباره اقدام نمایید."]);
+        }
+
+        if (!$transaction->forceDelete()) {
+            return $this->response->setStatusCode(503)->setContent(["message" => "خطا در بروز رسانی تراکنش . لطفا تراکنش را دستی اصلاح نمایید."]);
+        }
+
+        $newOrder = Order::where("id", $order->id)->get()->first();
+        $orderCostArray = $newOrder->obtainOrderCost(true, false, "REOBTAIN");
+        $newOrder->cost = $orderCostArray["rawCostWithDiscount"];
+        $newOrder->costwithoutcoupon = $orderCostArray["rawCostWithoutDiscount"];
+        if ($newOrder->update()) {
+            return $this->response->setStatusCode(200)->setContent(["message" => "عملیات تبدیل با موفقیت انجام شد."]);
+        } else {
+            return $this->response->setStatusCode(503)->setContent(["message" => "خطا در بروز رسانی سفارش . لطفا سفارش را دستی اصلاح نمایید."]);
         }
     }
     
     public function completeTransaction(\Illuminate\Http\Request $request, Transaction $transaction)
     {
-        if (!isset($transaction->traceNumber)) {
-            $transaction->traceNumber      = $request->get("traceNumber");
-            $transaction->paymentmethod_id = config("constants.PAYMENT_METHOD_ATM");
-            $transaction->managerComment   = $transaction->managerComment."شماره کارت مقصد: \n".$request->get("managerComment");
-            if ($transaction->update()) {
-                return $this->response->setStatusCode(200)
-                    ->setContent(["message" => "اطلاعات تراکنش با موفقیت ذخیره شد"]);
-            }
-            else {
-                return $this->response->setStatusCode(503)
-                    ->setContent(["message" => "خطا در ذخیره اطلاعات . لفطا مجددا اقدام نمایید"]);
-            }
+        if (isset($transaction->traceNumber)) {
+            return;
+        }
+
+        $transaction->traceNumber = $request->get("traceNumber");
+        $transaction->paymentmethod_id = config("constants.PAYMENT_METHOD_ATM");
+        $transaction->managerComment = $transaction->managerComment."شماره کارت مقصد: \n".$request->get("managerComment");
+        if ($transaction->update()) {
+            return $this->response->setStatusCode(200)->setContent(["message" => "اطلاعات تراکنش با موفقیت ذخیره شد"]);
+        } else {
+            return $this->response->setStatusCode(503)->setContent(["message" => "خطا در ذخیره اطلاعات . لفطا مجددا اقدام نمایید"]);
         }
     }
-    
+
 }

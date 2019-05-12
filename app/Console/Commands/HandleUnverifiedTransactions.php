@@ -2,12 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\Transaction;
+use Zarinpal\Zarinpal;
 use AlaaTV\Gateways\Money;
-use App\Transactiongateway;
 use App\Http\Requests\Request;
 use Illuminate\Console\Command;
 use AlaaTV\Gateways\PaymentDriver;
+use App\Repositories\TransactionRepo;
+use AlaaTV\Gateways\Contracts\OnlineGateway;
 
 class HandleUnverifiedTransactions extends Command
 {
@@ -50,10 +51,7 @@ class HandleUnverifiedTransactions extends Command
     {
         //ToDo : At this time this only works for Zarinpal
         $paymentMethod = 'zarinpal';
-        
-        $transactiongateway = Transactiongateway::where('name', $paymentMethod)
-            ->first();
-        $data['merchantID'] = $transactiongateway->merchantNumber;
+
         $paymentClient = PaymentDriver::select($paymentMethod);
         
         $this->info('getting data from zarinpal ...');
@@ -111,33 +109,23 @@ class HandleUnverifiedTransactions extends Command
      * @param \AlaaTV\Gateways\Contracts\OnlineGateway $paymentClient
      * @return array
      */
-    private function handleTransactions($transactions, $paymentClient): array
+    private function handleTransactions($transactions, OnlineGateway $paymentClient): array
     {
         $notExistTransactions = [];
         $unverifiedTransactionsDueToError = [];
         foreach ($transactions as $transaction) {
 
-            /*$result = [
-                'sendSMS' => false,
-                'Status' => 'error'
-            ];*/
-            $this->request->offsetSet('Authority', $transaction['Authority']);
-            $this->request->offsetSet('Status', 'OK');
-            /*$data = [
-                'request' => $this->request,
-                'result' => $result
-            ];*/
             $authority = $transaction['Authority'];
             $this->info($authority);
 
-            $transaction = Transaction::authority($authority)->first();
+            $transaction = TransactionRepo::getTransactionByAuthority($authority)->getValue(null);
 
             if (is_null($transaction)) {
                 array_push($notExistTransactions, $transaction);
                 continue;
             }
             $transaction['Status'] = 'OK';
-            array_push($unverifiedTransactionsDueToError, $transaction);
+
             $gateWayVerify = $paymentClient->verifyPayment(Money::fromTomans($transaction->cost), $authority);
 
             if (!$gateWayVerify->isSuccessfulPayment()) {

@@ -9,7 +9,7 @@ class EditAttributevalueRequest extends FormRequest
 {
     public function authorize()
     {
-        if (Auth()
+        if (auth()
             ->user()
             ->can(config('constants.EDIT_ATTRIBUTEVALUE_ACCESS'))) {
             return true;

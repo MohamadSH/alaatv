@@ -12,7 +12,7 @@ class InsertArticlecategoryRequest extends FormRequest
 
     public function authorize()
     {
-        if (Auth()
+        if (auth()
             ->user()
             ->can(config('constants.INSERT_ARTICLECATEGORY_ACCESS'))) {
             return true;

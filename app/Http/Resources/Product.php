@@ -21,11 +21,9 @@ class Product extends JsonResource
     public function toArray($request)
     {
         if (!($this->resource instanceof \App\Product)) {
-            
-            return [
-            
-            ];
+            return [];
         }
+
         if (isset($this->redirectUrl)) {
             return [
                 'id'           => $this->id,

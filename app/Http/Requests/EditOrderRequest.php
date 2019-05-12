@@ -15,7 +15,7 @@ class EditOrderRequest extends FormRequest
 
     public function authorize()
     {
-        if (Auth()
+        if (auth()
             ->user()
             ->can(config('constants.EDIT_ORDER_ACCESS'))) {
             return true;

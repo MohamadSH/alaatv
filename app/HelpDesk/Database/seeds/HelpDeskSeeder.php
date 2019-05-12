@@ -1,6 +1,6 @@
 <?php
 
-namespace App\HelpDesk\Database\Seeds;
+namespace App\HelpDesk\Database\seeds;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -81,7 +81,43 @@ class HelpDeskSeeder extends Seeder
                 'color' => '',
             ],
         ];
+
         DB::table('help_priorities')
             ->insert($priorities);
+
+        $tickets = [
+            [
+                'id' => 1,
+                'subject' => 'asdcad',
+                'content' => 'sdcsd',
+                'user_id' => 37191,
+                'agent_id' => 37189,
+                'category_id' => 1,
+                'priority_id' => 1,
+                'status_id' => 1,
+            ],
+            [
+                'id' => 2,
+                'subject' => 'saxas',
+                'content' => 'fyukfgu',
+                'user_id' => 37189,
+                'agent_id' => 37190,
+                'category_id' => 2,
+                'priority_id' => 2,
+                'status_id' => 2,
+            ],
+        ];
+        DB::table('help_tickets')->insert($tickets);
+
+        $data = [
+            ['user_id' => $uid = User::inRandomOrder()->first()->id, 'category_id' => 1],
+            ['user_id' => $uid, 'category_id' => 2],
+            ['user_id' => $uid, 'category_id' => 3],
+            ['user_id' => User::inRandomOrder()->first()->id, 'category_id' => 2],
+            ['user_id' => User::inRandomOrder()->first()->id, 'category_id' => 3],
+            ['user_id' => User::inRandomOrder()->first()->id, 'category_id' => 3],
+            ['user_id' => User::inRandomOrder()->first()->id, 'category_id' => 3],
+        ];
+        \DB::table('help_categories_users')->insert($data);
     }
 }
