@@ -398,9 +398,16 @@
                                         </div>
                                         <div class="a-widget5__section">
                                             <h4 class="a-widget5__title">
+    
+{{--                                                {{ $item["content"]->display_name }} {{ strlen($item["content"]->display_name) }}--}}
+    
                                                 <a class="m-link"
                                                    href="{{action("Web\ContentController@show" , $item["content"])}}">
-                                                    {{ $item["content"]->display_name }}
+                                                    @if(strlen(($item["content"]->display_name)) > 45)
+                                                        {!! mb_substr(($item["content"]->display_name), 0, 45, 'utf-8').' ...'  !!}
+                                                    @else
+                                                        {!! ($item["content"]->display_name)  !!}
+                                                    @endif
                                                 </a>
                                             </h4>
                                             <div class="a-widget5__info">

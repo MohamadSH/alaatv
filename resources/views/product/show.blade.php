@@ -160,9 +160,9 @@
                                                                         <i class="fa fa-check"></i>
                                                                     </div>
                                                                     <div class="m-widget4__info">
-                                                                                    <span class="m-widget4__text">
-                                                                                        {{ $informationItem->title . ': ' . $informationItem->data[0]->name }}
-                                                                                    </span>
+                                                                        <span class="m-widget4__text">
+                                                                            {{ $informationItem->title . ': ' . $informationItem->data[0]->name }}
+                                                                        </span>
                                                                     </div>
                                                                 </div>
                                                             @endforeach
