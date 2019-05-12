@@ -4,10 +4,10 @@ namespace App\Console\Commands;
 
 use App\Transaction;
 use AlaaTV\Gateways\Money;
-use App\Transactiongateway;
 use App\Http\Requests\Request;
 use Illuminate\Console\Command;
 use AlaaTV\Gateways\PaymentDriver;
+use Zarinpal\Zarinpal;
 
 class HandleUnverifiedTransactions extends Command
 {
@@ -51,9 +51,6 @@ class HandleUnverifiedTransactions extends Command
         //ToDo : At this time this only works for Zarinpal
         $paymentMethod = 'zarinpal';
         
-        $transactiongateway = Transactiongateway::where('name', $paymentMethod)
-            ->first();
-        $data['merchantID'] = $transactiongateway->merchantNumber;
         $paymentClient = PaymentDriver::select($paymentMethod);
         
         $this->info('getting data from zarinpal ...');
@@ -87,7 +84,7 @@ class HandleUnverifiedTransactions extends Command
     
     private function getUnverifiedTransactions()
     {
-        return (new Zarinpal(['merchantID' => $this->merchantNumber]))->getUnverifiedTransactions();
+        return (new Zarinpal(['merchantID' => config('Zarinpal.merchantID')]))->getUnverifiedTransactions();
     }
 
     /**
