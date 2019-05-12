@@ -1893,6 +1893,7 @@ var CustomInitMultiLevelSearch = function () {
     };
 
     let tags = null;
+    let tagsFromController = null;
 
     let selectedVlues = {
         maghta: filterData.maghta[0],
@@ -1920,7 +1921,7 @@ var CustomInitMultiLevelSearch = function () {
     }
 
     function getTags() {
-        url = new URL(window.location.href);
+        let url = new URL(window.location.href);
         tags = url.searchParams.getAll("tags[]");
         return tags;
     }
@@ -1933,7 +1934,14 @@ var CustomInitMultiLevelSearch = function () {
     function setSelectedMaghtaFromTags() {
         let selectedVal = filterData.maghta[0];
         let existInTags = false;
-        tags = getTags();
+
+        if (tagsFromController !== null) {
+            tags = tagsFromController;
+        } else {
+            tags = getTags();
+        }
+
+        console.log('tags: ', tags);
         for (let tagsIndex in tags) {
             for (let majorIndex in filterData.maghta) {
                 let item = filterData.maghta[majorIndex];
@@ -1958,7 +1966,13 @@ var CustomInitMultiLevelSearch = function () {
     function setSelectedMajorFromTags() {
         let selectedVal = filterData.major[0];
         let existInTags = false;
-        tags = getTags();
+
+        if (tagsFromController !== null) {
+            tags = tagsFromController;
+        } else {
+            tags = getTags();
+        }
+
         for (let tagsIndex in tags) {
             for (let majorIndex in filterData.major) {
                 let value = filterData.major[majorIndex].value;
@@ -1984,7 +1998,13 @@ var CustomInitMultiLevelSearch = function () {
         let selectedMajor = selectedVlues.major;
         let selectedLesson = filterData[selectedMajor.lessonKey][0];
         let existInTags = false;
-        tags = getTags();
+
+        if (tagsFromController !== null) {
+            tags = tagsFromController;
+        } else {
+            tags = getTags();
+        }
+
         for (let tagsIndex in tags) {
             for (let lessonIndex in filterData[selectedMajor.lessonKey]) {
                 let item = filterData[selectedMajor.lessonKey][lessonIndex];
@@ -2010,7 +2030,13 @@ var CustomInitMultiLevelSearch = function () {
         let selectedLesson = selectedVlues.lesson.value;
         let selectedTeacher = filterData.lessonTeacher[selectedLesson][0];
         let existInTags = false;
-        tags = getTags();
+
+        if (tagsFromController !== null) {
+            tags = tagsFromController;
+        } else {
+            tags = getTags();
+        }
+
         for (let tagsIndex in tags) {
             for (let teacherIndex in filterData.lessonTeacher[selectedLesson]) {
                 let item = filterData.lessonTeacher[selectedLesson][teacherIndex];
@@ -2100,11 +2126,13 @@ var CustomInitMultiLevelSearch = function () {
     }
 
     return {
-        initFilters: function () {
+        initFilters: function (inputTags) {
+            tagsFromController = inputTags;
             initMaghta();
             initMajor();
             initLessons();
             initTeacher();
+            tagsFromController = null;
         },
         checkEmptyField: function (string) {
             return checkEmptyField(string);
@@ -2229,7 +2257,7 @@ jQuery(document).ready(function () {
 
     Alaasearch.init(contentData);
 
-    CustomInitMultiLevelSearch.initFilters();
+    CustomInitMultiLevelSearch.initFilters(tags);
 
     MultiLevelSearch.init({
         selectorId: 'contentSearchFilter'
