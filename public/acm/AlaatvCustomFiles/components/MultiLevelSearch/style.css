@@ -8,6 +8,7 @@
 
 .a--multi-level-search .selectorItem {
     margin-top: 10px;
+    position: relative;
 }
 
 .a--multi-level-search .selectorItem .selectorItemTitle {
