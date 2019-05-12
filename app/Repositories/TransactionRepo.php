@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use Carbon\Carbon;
 use App\Transaction;
-use App\Bankaccount;
 
 class TransactionRepo
 {
@@ -81,24 +80,15 @@ class TransactionRepo
      */
     public static function handleTransactionStatus(Transaction $transaction, string $refId, string $cardPanMask = null)
     {
+        $cardPanMask =
+        $user = optional($transaction->order)->user;
         $bankAccountId = null;
-
-        if (!is_null($cardPanMask))
+        if (!is_null($cardPanMask) && !is_null($user))
         {
-            $userId = optional($transaction->order)->user->id;
-            $bankAccount = Bankaccount::where('accountNumber' , $cardPanMask)->where('user_id' , $userId)->get();
-            if($bankAccount->isEmpty())
-            {
-                $account = [
-                    'accountNumber' => $cardPanMask,
-                    'user_id'       => $userId,
-                ];
-                $bankAccountId = Bankaccount::create($account)->id;
-            } else{
-                $bankAccountId = $bankAccount->first()->id;
-            }
+            $parameters = ['user_id'=>$user->id , 'cardNumber'=>$cardPanMask];
+            $bankAccountId = BankaccountRepo::firstOrCreateBankAccount($parameters)->id;
         }
-        
+
         self::changeTransactionStatusToSuccessful($transaction->id, $refId, $bankAccountId);
     }
     
@@ -118,4 +108,6 @@ class TransactionRepo
         
         static::modify($data, (int) $id);
     }
+
+
 }
