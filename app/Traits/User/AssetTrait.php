@@ -80,7 +80,7 @@ trait AssetTrait
             ->whereNull('products.deleted_at')
             ->distinct()
             ->get();
-        
+
         return Product::hydrate($result->toArray());
     }
     
@@ -91,7 +91,7 @@ trait AssetTrait
      */
     private function getContentProductsId(Content $content): array
     {
-        return $content->products()
+        return $content->allProducts()
             ->pluck('id')
             ->toArray();
     }

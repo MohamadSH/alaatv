@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use Log;
 use SEO;
 use Auth;
 use Carbon\Carbon;

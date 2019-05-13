@@ -5,7 +5,7 @@
     <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>
     <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.css" rel = "stylesheet" type = "text/css"/>
     <link href = "/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/dropzone/basic.min.css" rel = "stylesheet" type = "text/css"/>
+{{--    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/dropzone/basic.min.css" rel = "stylesheet" type = "text/css"/>--}}
     <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css" rel = "stylesheet" type = "text/css"/>
     <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css" rel = "stylesheet" type = "text/css"/>
     <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel = "stylesheet" type = "text/css"/>
@@ -139,7 +139,7 @@
     <script src = "/acm/extra/persian-datepicker/lib/persian-date.js" type = "text/javascript"></script>
     <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type = "text/javascript"></script>
     <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.input-ip-address-control-1.0.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/dropzone/dropzone.min.js" type = "text/javascript"></script>
+{{--    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/dropzone/dropzone.min.js" type = "text/javascript"></script>--}}
     <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/js/jquery.multi-select.js" type = "text/javascript"></script>
     <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type = "text/javascript"></script>
     <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type = "text/javascript"></script>

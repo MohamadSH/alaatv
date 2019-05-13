@@ -625,7 +625,7 @@
                     "title": "نقش های کاربر",
                     defaultContent: '<span class="m-badge m-badge--metal m-badge--wide m-badge--rounded">ندارد</span>',
                     "render": function ( data, type, row ) {
-                        if (row.roles.length === 0) {
+                        if (row.roles  == null ||  row.roles.length === 0) {
                             return '<span class="m-badge m-badge--metal m-badge--wide m-badge--rounded">ندارد</span>';
                         }
 
@@ -652,7 +652,7 @@
                             '                <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> عملیات</button>\n' +
                             '                <ul class="dropdown-menu" role="menu" id="' + row.id + '">\n' +
                             '                    <li>\n' +
-                            '                        <a href="'+row.editLink+'">\n' +
+                            '                        <a target="_blank" href="'+row.editLink+'">\n' +
                             '                            <i class="flaticon-edit" aria-hidden="true"></i> ویرایش\n' +
                             '                        </a>\n' +
                             '                    </li>\n' +

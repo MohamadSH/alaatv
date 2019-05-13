@@ -60,42 +60,42 @@
                 </li>
             @endif
         </ul>
-        <div class = "row">
-            <div class = "col-md-12">
-                <select name = "fileQuality" class = "form-control">
-                    <option value = "">انتخاب کیفیت(در صورت وجود)</option>
-                    <option value = "HD_720p" data-role = "hd" data-action = "کیفیت عالی">کیفیت عالی</option>
-                    <option value = "hq" data-role = "hq" data-action = "کیفیت بالا">کیفیت بالا</option>
-                    <option value = "240p" data-role = "240p" data-action = "کیفیت متوسط">کیفیت متوسط</option>
-                    <option value = "thumbnail" data-role = "thumbnail" data-action = "تامبنیل">تامبنیل</option>
+{{--        <div class = "row">--}}
+{{--            <div class = "col-md-12">--}}
+{{--                <select name = "fileQuality" class = "form-control">--}}
+{{--                    <option value = "">انتخاب کیفیت(در صورت وجود)</option>--}}
+{{--                    <option value = "HD_720p" data-role = "hd" data-action = "کیفیت عالی">کیفیت عالی</option>--}}
+{{--                    <option value = "hq" data-role = "hq" data-action = "کیفیت بالا">کیفیت بالا</option>--}}
+{{--                    <option value = "240p" data-role = "240p" data-action = "کیفیت متوسط">کیفیت متوسط</option>--}}
+{{--                    <option value = "thumbnail" data-role = "thumbnail" data-action = "تامبنیل">تامبنیل</option>--}}
 
-                </select>
-                @if(isset($rootContentTypes))
-                    <select name = "contenttype" class = "form-control">
-                        <option value = "" selected>انتخاب نوع فایل</option>
-                        @foreach($rootContentTypes as $rootContentType)
-                            <option value = "{{$rootContentType->id}}" data-title = "{{$rootContentType->name}}">{{$rootContentType->displayName}}</option>
-                        @endforeach
-                    </select>
-                @endif
-            </div>
-        </div>
-        <div id = "my-awesome-dropzone" class = "dropzone dropzone-file-area needsclick dz-clickable">
-            <div class = "fallback">
-                <input name = "file" type = "file" multiple/>
-            </div>
-            <div class = "dropzone-previews"></div>
-            <div class = "dz-message needsclick">
-                <h5 class = "sbold text-justify" style = "line-height: normal">
-                    فایل های خود را اینجا بیندازید و یا بر روی این قسمت کلیک کنید.پس از بارگذاری فایل ها بر روی ذخیره اطلاعات کلیک کنید
-                </h5>
-                <span class = "needsclick">
-                    <span class = "m-badge m-badge--wide m-badge--info">توجه:</span>
-                    فرمت مجاز
-                    <label style = "color:red;">pdf</label>
-                </span>
-            </div>
-        </div>
+{{--                </select>--}}
+{{--                @if(isset($rootContentTypes))--}}
+{{--                    <select name = "contenttype" class = "form-control">--}}
+{{--                        <option value = "" selected>انتخاب نوع فایل</option>--}}
+{{--                        @foreach($rootContentTypes as $rootContentType)--}}
+{{--                            <option value = "{{$rootContentType->id}}" data-title = "{{$rootContentType->name}}">{{$rootContentType->displayName}}</option>--}}
+{{--                        @endforeach--}}
+{{--                    </select>--}}
+{{--                @endif--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--        <div id = "my-awesome-dropzone" class = "dropzone dropzone-file-area needsclick dz-clickable">--}}
+{{--            <div class = "fallback">--}}
+{{--                <input name = "file" type = "file" multiple/>--}}
+{{--            </div>--}}
+{{--            <div class = "dropzone-previews"></div>--}}
+{{--            <div class = "dz-message needsclick">--}}
+{{--                <h5 class = "sbold text-justify" style = "line-height: normal">--}}
+{{--                    فایل های خود را اینجا بیندازید و یا بر روی این قسمت کلیک کنید.پس از بارگذاری فایل ها بر روی ذخیره اطلاعات کلیک کنید--}}
+{{--                </h5>--}}
+{{--                <span class = "needsclick">--}}
+{{--                    <span class = "m-badge m-badge--wide m-badge--info">توجه:</span>--}}
+{{--                    فرمت مجاز--}}
+{{--                    <label style = "color:red;">pdf</label>--}}
+{{--                </span>--}}
+{{--            </div>--}}
+{{--        </div>--}}
     </div>
     <div class = "col-md-8">
         <div class = "form-group">
