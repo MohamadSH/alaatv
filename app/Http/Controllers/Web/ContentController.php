@@ -122,49 +122,42 @@ class ContentController extends Controller
 
         if(is_null($items))
         {
-            Log::debug('null items in makeJsonForAndroidApp');
-            return [];
+            $response = [];
+            $response[]  = json_decode('{}', false);
+            return $response;
         }
 
         return Cache::remember($key, config('constants.CACHE_60'), function () use ($items) {
             $response = [];
 
-            try{
+            /** @var Content $item */
+            foreach ($items as $content) {
+                $s_hd = $s_hq = $s_240 = null;
 
-                /** @var Content $item */
-                foreach ($items as $content) {
-                    $s_hd = $s_hq = $s_240 = null;
+                foreach ($content->getVideos() as $source) {
+                    if (strcmp($source->res, '240p') === 0) {
+                        $s_240 = $source->link;
 
-                    foreach ($content->getVideos() as $source) {
-                        if (strcmp($source->res, '240p') === 0) {
-                            $s_240 = $source->link;
-
-                        } elseif (strcmp($source->res, '480p') === 0) {
-                            $s_hq = $source->link;
-                        } elseif (strcmp($source->res, '720p') === 0) {
-                            $s_hd = $source->link;
-                        }
+                    } elseif (strcmp($source->res, '480p') === 0) {
+                        $s_hq = $source->link;
+                    } elseif (strcmp($source->res, '720p') === 0) {
+                        $s_hd = $source->link;
                     }
-                    $response[] = [
-                        'videoId'          => $content->id,
-                        'name'             => $content->displayName,
-                        'videoDescribe'    => $content->description,
-                        'url'              => $content->url,
-                        'videoLink480'     => $s_hq ?: $s_hd,
-                        'videoLink240'     => $s_240 ?: $s_hd,
-                        'videoviewcounter' => '0',
-                        'videoDuration'    => 0,
-                        'session'          => $content->order,
-                        'thumbnail'        => $content->thumbnail,
-                    ];
                 }
-
-            }catch (\Exception $e) {
-                Log::debug('error on items in makeJsonForAndroidApp: ');
-                Log::debug(typeOf($items));
-
-                Throw new \PHPUnit\Framework\Exception('Items is not valid' , Response::HTTP_BAD_REQUEST);
+                $response[] = [
+                    'videoId'          => $content->id,
+                    'name'             => $content->displayName,
+                    'videoDescribe'    => $content->description,
+                    'url'              => $content->url,
+                    'videoLink480'     => $s_hq ?: $s_hd,
+                    'videoLink240'     => $s_240 ?: $s_hd,
+                    'videoviewcounter' => '0',
+                    'videoDuration'    => 0,
+                    'session'          => $content->order,
+                    'thumbnail'        => $content->thumbnail,
+                ];
             }
+
 
             $response[] = json_decode('{}', false);
 
