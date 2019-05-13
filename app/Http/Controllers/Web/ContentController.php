@@ -119,6 +119,13 @@ class ContentController extends Controller
         $key = md5(collect($items)
             ->pluck('id')
             ->implode(','));
+
+        if(is_null($items))
+        {
+            Log::debug('null items in makeJsonForAndroidApp');
+            return [];
+        }
+
         return Cache::remember($key, config('constants.CACHE_60'), function () use ($items) {
             $response = [];
 
@@ -153,14 +160,14 @@ class ContentController extends Controller
                 }
 
             }catch (\Exception $e) {
-                Log::debug('error on items in makeJsonForAndroidApp: ' , $items);
+                Log::debug('error on items in makeJsonForAndroidApp: ');
                 Log::debug(typeOf($items));
 
                 Throw new \PHPUnit\Framework\Exception('Items is not valid' , Response::HTTP_BAD_REQUEST);
             }
 
             $response[] = json_decode('{}', false);
-        
+
             return $response;
         });
         
