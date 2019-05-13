@@ -74,7 +74,7 @@
 
                                     {{--ویژگی ها و دارای --}}
                                     <div class="row">
-                                        @if(optional(optional($product->attributes->get('information'))->where('control', 'simple'))->count()>0 || optional($product->attributes->get('main'))->where('control', 'simple')->count()>0)
+                                        @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count()>0 ||  optional(optional( optional($product->attributes)->get('main'))->where('control', 'simple'))->count()>0)
                                             <div class="col">
 
                                                 <div class="m-portlet m-portlet--bordered m-portlet--full-height">
@@ -90,8 +90,8 @@
                                                     <div class="m-portlet__body m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10">
                                                         <!--begin::m-widget4-->
                                                         <div class="m-widget4">
-
-                                                            @if(optional(optional($product->attributes->get('information'))->where('control', 'simple'))->count())
+    
+                                                            @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count())
                                                                 @foreach($product->attributes->get('information')->where('control', 'simple') as $key => $informationItem)
 
                                                                     <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5">
@@ -107,8 +107,8 @@
 
                                                                 @endforeach
                                                             @endif
-
-                                                            @if(optional($product->attributes->get('main')) != null && optional($product->attributes->get('main'))->where('control', 'simple'))
+    
+                                                            @if(optional($product->attributes)->get('main') != null && $product->attributes->get('main')->where('control', 'simple'))
                                                                 @foreach($product->attributes->get('main')->where('control', 'simple') as $key => $informationItem)
 
                                                                     <div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">
@@ -137,7 +137,7 @@
 
                                             </div>
                                         @endif
-                                        @if(optional(optional($product->attributes->get('information'))->where('control', 'checkBox'))->count())
+                                        @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'checkBox'))->count())
                                             <div class="col">
 
                                                 <div class="m-portlet m-portlet--bordered m-portlet--full-height">
@@ -176,7 +176,7 @@
                                     </div>
 
                                     {{--خدمات اضافی--}}
-                                    @if(optional($product->attributes->get('extra'))->count())
+                                    @if(optional(optional($product->attributes)->get('extra'))->count())
                                         <div class="m-portlet  m-portlet--creative m-portlet--bordered-semi">
                                             <div class="m-portlet__head">
                                                 <div class="m-portlet__head-caption col">
@@ -251,8 +251,8 @@
                                                 </div>
                                             </div>
                                             <div class="m-portlet__body">
-
-                                                @if(optional(optional($product->attributes->get('main'))->where('type', 'main'))->count()>0)
+    
+                                                @if(optional(optional(optional($product->attributes)->get('main'))->where('type', 'main'))->count()>0)
 
                                                     @if($product->attributes->get('main')->where('type', 'main')->where('control', 'dropDown')->count()>0)
                                                         @foreach($product->attributes->get('main')->where('type', 'main')->where('control', 'dropDown') as $index => $select)
