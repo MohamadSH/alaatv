@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-      "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-  "content-hash": "72da803168bed806cccfa1b9eb22ffe0",
+    "content-hash": "72da803168bed806cccfa1b9eb22ffe0",
     "packages": [
         {
             "name": "alaatv/mellat",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/alaatv/behpardakht-gateway-driver.git",
-              "reference": "cd8af18ab1a360d86a62ff3f698507e39f45c896"
+                "reference": "cd8af18ab1a360d86a62ff3f698507e39f45c896"
             },
             "dist": {
                 "type": "zip",
-              "url": "https://api.github.com/repos/alaatv/behpardakht-gateway-driver/zipball/cd8af18ab1a360d86a62ff3f698507e39f45c896",
-              "reference": "cd8af18ab1a360d86a62ff3f698507e39f45c896",
+                "url": "https://api.github.com/repos/alaatv/behpardakht-gateway-driver/zipball/cd8af18ab1a360d86a62ff3f698507e39f45c896",
+                "reference": "cd8af18ab1a360d86a62ff3f698507e39f45c896",
                 "shasum": ""
             },
             "require": {
@@ -60,16 +60,16 @@
         },
         {
             "name": "alaatv/payment-gateways",
-          "version": "v1.8.1",
+            "version": "v1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alaatv/laravel-iranian-online-payments.git",
-              "reference": "1684629afd632bd4658194236b9b91cd142e32c6"
+                "reference": "1684629afd632bd4658194236b9b91cd142e32c6"
             },
             "dist": {
                 "type": "zip",
-              "url": "https://api.github.com/repos/alaatv/laravel-iranian-online-payments/zipball/1684629afd632bd4658194236b9b91cd142e32c6",
-              "reference": "1684629afd632bd4658194236b9b91cd142e32c6",
+                "url": "https://api.github.com/repos/alaatv/laravel-iranian-online-payments/zipball/1684629afd632bd4658194236b9b91cd142e32c6",
+                "reference": "1684629afd632bd4658194236b9b91cd142e32c6",
                 "shasum": ""
             },
             "require": {
@@ -104,20 +104,20 @@
                 "laravel5-package",
                 "php"
             ],
-          "time": "2019-05-11T08:27:30+00:00"
+            "time": "2019-05-11T08:27:30+00:00"
         },
         {
             "name": "alaatv/zarinpal",
-          "version": "v1.1.7",
+            "version": "v1.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alaatv/zarrinpal-gateway-driver.git",
-              "reference": "a95ea2f4a748b9853d287f550f5d0601d795553c"
+                "reference": "a95ea2f4a748b9853d287f550f5d0601d795553c"
             },
             "dist": {
                 "type": "zip",
-              "url": "https://api.github.com/repos/alaatv/zarrinpal-gateway-driver/zipball/a95ea2f4a748b9853d287f550f5d0601d795553c",
-              "reference": "a95ea2f4a748b9853d287f550f5d0601d795553c",
+                "url": "https://api.github.com/repos/alaatv/zarrinpal-gateway-driver/zipball/a95ea2f4a748b9853d287f550f5d0601d795553c",
+                "reference": "a95ea2f4a748b9853d287f550f5d0601d795553c",
                 "shasum": ""
             },
             "require": {
@@ -157,7 +157,7 @@
                 "laravel5-package",
                 "php"
             ],
-          "time": "2019-05-11T08:25:14+00:00"
+            "time": "2019-05-11T08:25:14+00:00"
         },
         {
             "name": "algolia/algoliasearch-client-php",
@@ -297,16 +297,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-          "version": "3.93.7",
+            "version": "3.93.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-              "reference": "41fe205dae433d5cd7a48a4117d37a43a44ed0d2"
+                "reference": "41fe205dae433d5cd7a48a4117d37a43a44ed0d2"
             },
             "dist": {
                 "type": "zip",
-              "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/41fe205dae433d5cd7a48a4117d37a43a44ed0d2",
-              "reference": "41fe205dae433d5cd7a48a4117d37a43a44ed0d2",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/41fe205dae433d5cd7a48a4117d37a43a44ed0d2",
+                "reference": "41fe205dae433d5cd7a48a4117d37a43a44ed0d2",
                 "shasum": ""
             },
             "require": {
@@ -376,7 +376,7 @@
                 "s3",
                 "sdk"
             ],
-          "time": "2019-05-10T18:13:26+00:00"
+            "time": "2019-05-10T18:13:26+00:00"
         },
         {
             "name": "cakephp/chronos",
@@ -1815,26 +1815,26 @@
         },
         {
             "name": "imanghafoori/laravel-terminator",
-          "version": "v1.3.1",
+            "version": "v1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/imanghafoori1/laravel-terminator.git",
-              "reference": "3d532028f8d47e56e81ec817411e449c26ba17df"
+                "reference": "3d532028f8d47e56e81ec817411e449c26ba17df"
             },
             "dist": {
                 "type": "zip",
-              "url": "https://api.github.com/repos/imanghafoori1/laravel-terminator/zipball/3d532028f8d47e56e81ec817411e449c26ba17df",
-              "reference": "3d532028f8d47e56e81ec817411e449c26ba17df",
+                "url": "https://api.github.com/repos/imanghafoori1/laravel-terminator/zipball/3d532028f8d47e56e81ec817411e449c26ba17df",
+                "reference": "3d532028f8d47e56e81ec817411e449c26ba17df",
                 "shasum": ""
             },
             "require": {
                 "laravel/framework": "5.*",
                 "php": ">=7.0.0"
             },
-          "require-dev": {
-            "mockery/mockery": "^0.9.9",
-            "orchestra/testbench": "~3.0"
-          },
+            "require-dev": {
+                "mockery/mockery": "^0.9.9",
+                "orchestra/testbench": "~3.0"
+            },
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -1851,7 +1851,7 @@
             "authors": [
                 {
                     "name": "Iman Ghafoori",
-                  "email": "Imanghafoori1@gmail.com"
+                    "email": "Imanghafoori1@gmail.com"
                 }
             ],
             "description": "A minimal yet powerful package to give you opportunity to refactor your controllers.",
@@ -1862,7 +1862,7 @@
                 "laravel5-package",
                 "php"
             ],
-          "time": "2019-05-09T22:25:07+00:00"
+            "time": "2019-05-09T22:25:07+00:00"
         },
         {
             "name": "intervention/image",

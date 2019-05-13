@@ -37,8 +37,6 @@ class OrderproductObserver
      */
     public function deleted(Orderproduct $orderproduct)
     {
-        Log::debug('in orderproductobserver deleted');
-
     }
 
     /**

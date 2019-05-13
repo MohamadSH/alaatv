@@ -333,7 +333,7 @@ class ContentController extends Controller
         
     }
     
-    public function edit($content)
+    public function edit(Content $content)
     {
         $validSinceTime = optional($content->validSince)->format('H:i:s');
         $tags           = optional($content->tags)->tags;
