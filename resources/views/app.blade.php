@@ -189,7 +189,6 @@
             }
         });
     });
-    
 </script>
 @yield('page-js')
 </body>
