@@ -652,7 +652,7 @@
                             '                <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> عملیات</button>\n' +
                             '                <ul class="dropdown-menu" role="menu" id="' + row.id + '">\n' +
                             '                    <li>\n' +
-                            '                        <a href="'+row.editLink+'">\n' +
+                            '                        <a target="_blank" href="'+row.editLink+'">\n' +
                             '                            <i class="flaticon-edit" aria-hidden="true"></i> ویرایش\n' +
                             '                        </a>\n' +
                             '                    </li>\n' +
