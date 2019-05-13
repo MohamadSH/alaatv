@@ -625,7 +625,7 @@
                     "title": "نقش های کاربر",
                     defaultContent: '<span class="m-badge m-badge--metal m-badge--wide m-badge--rounded">ندارد</span>',
                     "render": function ( data, type, row ) {
-                        if (row.roles.length === 0) {
+                        if (row.roles  == null ||  row.roles.length === 0) {
                             return '<span class="m-badge m-badge--metal m-badge--wide m-badge--rounded">ندارد</span>';
                         }
 
