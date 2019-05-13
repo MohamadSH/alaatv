@@ -87,17 +87,13 @@ class AlaaSftpAdapter extends SftpAdapter
                 $connection = $this->getConnection();
                 if($connection instanceof \phpseclib\Net\SFTP)
                     dd($connection->stat($fileName));
-        //        $info = $connection->stat($path);
+                $info = $connection->stat($path);
                 dd($this->getMetadata($fileName));
         */
-        if ($this->has($fileName)) {
-            $prefixLink = str_replace($this->getOrgRoot(), $this->getDProtocol().$this->getDHost()."/",
-                $this->getRoot());
-            
-            return $prefixLink.$fileName;
-        }
-        
-        return "Not Exists!";
+        $prefixLink = str_replace($this->getOrgRoot(), $this->getDProtocol().$this->getDHost().'/',
+            $this->getRoot());
+    
+        return $prefixLink.$fileName;
     }
     
     /**
