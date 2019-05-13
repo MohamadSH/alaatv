@@ -609,18 +609,16 @@ class TransactionController extends Controller
     public function getUnverifiedTransactions()
     {
         try {
-            $zarinGate    = Transactiongateway::all()->where('name', 'zarinpal')->first();
-            $merchant     = $zarinGate->merchantNumber;
+            $merchant     = config('Zarinpal.merchantID');
 
             $zarinPal     = new Zarinpal($merchant);
             $result       = $zarinPal->getDriver()->unverifiedTransactions(['MerchantID'=>$merchant]);
-            dd($result);
+
             $transactions = collect();
-            if (!isset($result["error"])) {
-                $authorities = json_decode($result["Authorities"]);
-                
+            if ($result['Status'] == 'success') {
+                $authorities = $result["Authorities"];
                 foreach ($authorities as $authority) {
-                    $transaction = Transaction::where("authority", $authority->Authority)
+                    $transaction = Transaction::where("authority", $authority['Authority'])
                         ->first();
                     $firstName   = "";
                     $lastName    = "";
@@ -642,8 +640,8 @@ class TransactionController extends Controller
                         "firstName"  => $firstName,
                         "lastName"   => $lastName,
                         "mobile"     => $mobile,
-                        "authority"  => $authority->Authority,
-                        "amount"     => $authority->Amount,
+                        "authority"  => $transaction['Authority'],
+                        "amount"     => $transaction['Amount'],
                         "created_at" => $created_at,
                     ]);
                 }
