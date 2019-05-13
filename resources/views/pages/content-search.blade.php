@@ -23,14 +23,16 @@
                     </ol>
                 </div>
             </div>
+    
+            <div class="row justify-content-center selectorItem nezamSelector" data-select-order="0" data-select-title="نظام" data-select-display="grid"></div>
+            
+            <div class="row justify-content-center selectorItem maghtaSelector" data-select-order="1" data-select-title="مقطع" data-select-display="grid"></div>
 
-            <div class="row justify-content-center selectorItem maghtaSelector" data-select-order="0" data-select-title="مقطع" data-select-display="grid"></div>
+            <div class="row justify-content-center selectorItem majorSelector" data-select-order="2" data-select-title="رشته" data-select-display="grid"></div>
 
-            <div class="row justify-content-center selectorItem majorSelector" data-select-order="1" data-select-title="رشته" data-select-display="grid"></div>
+            <div class="row justify-content-center selectorItem lessonSelector" data-select-order="3" data-select-title="درس" data-select-display="select2"></div>
 
-            <div class="row justify-content-center selectorItem lessonSelector" data-select-order="2" data-select-title="درس" data-select-display="select2"></div>
-
-            <div class="row justify-content-center selectorItem teacherSelector" data-select-order="3" data-select-title="دبیر" data-select-display="select2"></div>
+            <div class="row justify-content-center selectorItem teacherSelector" data-select-order="4" data-select-title="دبیر" data-select-display="select2"></div>
 
         </div>
     </div>
