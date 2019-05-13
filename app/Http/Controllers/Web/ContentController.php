@@ -119,48 +119,48 @@ class ContentController extends Controller
         $key = md5(collect($items)
             ->pluck('id')
             ->implode(','));
+
+        if(is_null($items))
+        {
+            $response = [];
+            $response[]  = json_decode('{}', false);
+            return $response;
+        }
+
         return Cache::remember($key, config('constants.CACHE_60'), function () use ($items) {
             $response = [];
 
-            try{
+            /** @var Content $item */
+            foreach ($items as $content) {
+                $s_hd = $s_hq = $s_240 = null;
 
-                /** @var Content $item */
-                foreach ($items as $content) {
-                    $s_hd = $s_hq = $s_240 = null;
+                foreach ($content->getVideos() as $source) {
+                    if (strcmp($source->res, '240p') === 0) {
+                        $s_240 = $source->link;
 
-                    foreach ($content->getVideos() as $source) {
-                        if (strcmp($source->res, '240p') === 0) {
-                            $s_240 = $source->link;
-
-                        } elseif (strcmp($source->res, '480p') === 0) {
-                            $s_hq = $source->link;
-                        } elseif (strcmp($source->res, '720p') === 0) {
-                            $s_hd = $source->link;
-                        }
+                    } elseif (strcmp($source->res, '480p') === 0) {
+                        $s_hq = $source->link;
+                    } elseif (strcmp($source->res, '720p') === 0) {
+                        $s_hd = $source->link;
                     }
-                    $response[] = [
-                        'videoId'          => $content->id,
-                        'name'             => $content->displayName,
-                        'videoDescribe'    => $content->description,
-                        'url'              => $content->url,
-                        'videoLink480'     => $s_hq ?: $s_hd,
-                        'videoLink240'     => $s_240 ?: $s_hd,
-                        'videoviewcounter' => '0',
-                        'videoDuration'    => 0,
-                        'session'          => $content->order,
-                        'thumbnail'        => $content->thumbnail,
-                    ];
                 }
-
-            }catch (\Exception $e) {
-                Log::debug('error on items in makeJsonForAndroidApp: ' , $items);
-                Log::debug(typeOf($items));
-
-                Throw new \PHPUnit\Framework\Exception('Items is not valid' , Response::HTTP_BAD_REQUEST);
+                $response[] = [
+                    'videoId'          => $content->id,
+                    'name'             => $content->displayName,
+                    'videoDescribe'    => $content->description,
+                    'url'              => $content->url,
+                    'videoLink480'     => $s_hq ?: $s_hd,
+                    'videoLink240'     => $s_240 ?: $s_hd,
+                    'videoviewcounter' => '0',
+                    'videoDuration'    => 0,
+                    'session'          => $content->order,
+                    'thumbnail'        => $content->thumbnail,
+                ];
             }
 
+
             $response[] = json_decode('{}', false);
-        
+
             return $response;
         });
         
@@ -254,7 +254,7 @@ class ContentController extends Controller
         }
         $user_can_see_content        = $this->userCanSeeContent($request, $content, 'web');
         $message                     = null;
-        $productsThatHaveThisContent = $content->products() ?: new ProductCollection();
+        $productsThatHaveThisContent = $content->activeProducts() ?: new ProductCollection();
         if (!$user_can_see_content) {
     
             $jsonResponse = $this->getUserCanNotSeeContentJsonResponse($content, $productsThatHaveThisContent,
