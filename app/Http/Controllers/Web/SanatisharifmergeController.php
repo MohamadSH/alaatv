@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Contentset;
-use App\Http\Controllers\Controller;
-use App\Sanatisharifmerge;
-use App\Traits\CharacterCommon;
-use App\Traits\MetaCommon;
-use App\Traits\RequestCommon;
 use App\User;
 use Carbon\Carbon;
+use App\Contentset;
+use App\Sanatisharifmerge;
+use App\Traits\MetaCommon;
 use Illuminate\Http\Request;
+use App\Traits\RequestCommon;
 use Illuminate\Http\Response;
+use App\Traits\CharacterCommon;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Input;
 
@@ -639,19 +639,18 @@ class SanatisharifmergeController extends Controller
         ]);
         $this->response = new Response();
     }
-
+    
     public function store(Request $request)
     {
         $sanatisharifRecord = new Sanatisharifmerge();
         $sanatisharifRecord->fill($request->all());
         if ($sanatisharifRecord->save()) {
             return $this->response->setStatusCode(200);
-        }
-        else {
+        } else {
             return $this->response->setStatusCode(503);
         }
     }
-
+    
     /**
      *    METHODS FOR COPYING DATA IN TO TAKHTEKHAK TABLES
      */
@@ -728,15 +727,13 @@ class SanatisharifmergeController extends Controller
                     $response = $this->update($request, $sanatisharifRecord);
                     if ($response->getStatusCode() == 200) {
                         $successCoutner++;
-                    }
-                    else {
+                    } else {
                         if ($response->getStatusCode() == 503) {
                             dump("departmentlesson state wasn't saved. id: ".$sanatisharifRecord->departmentlessonid);
                             $failedCounter++;
                         }
                     }
-                }
-                else {
+                } else {
                     if ($response->getStatusCode() == 503) {
                         $failedCounter++;
                         dump("departmentlesson wasn't transferred. id: ".$sanatisharifRecord->departmentlessonid);
@@ -769,8 +766,7 @@ class SanatisharifmergeController extends Controller
         if (isset($depyear)) {
             $year_plus_remainder = (int) $depyear % 100 + 1;
             $yearLabel           = " ($year_plus_remainder-$depyear)";
-        }
-        else {
+        } else {
             $yearLabel = "";
         }
         
@@ -787,32 +783,28 @@ class SanatisharifmergeController extends Controller
     {
         if ($mod == 1) {
             $c = [];
-        }
-        else {
+        } else {
             $c = "";
         }
         switch ($deplessonid) {
             case 1 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 3 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 4 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -823,8 +815,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -835,8 +826,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -847,8 +837,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -858,8 +847,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -869,8 +857,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -880,24 +867,21 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 12 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 13 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -908,16 +892,14 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 20 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -928,8 +910,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -939,8 +920,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -950,8 +930,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -962,8 +941,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -973,8 +951,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -984,8 +961,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -995,24 +971,21 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 29 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 30 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1022,16 +995,14 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 32 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1041,8 +1012,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1051,16 +1021,14 @@ class SanatisharifmergeController extends Controller
             case 35 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 36 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1071,8 +1039,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1083,8 +1050,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1096,24 +1062,21 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 40 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 41 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1124,8 +1087,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1135,8 +1097,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1146,32 +1107,28 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 45 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 46 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 47 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1182,24 +1139,21 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 50 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 51 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1209,8 +1163,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1220,8 +1173,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1231,16 +1183,14 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 56 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1251,8 +1201,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1263,8 +1212,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1275,8 +1223,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1287,8 +1234,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1299,8 +1245,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1310,8 +1255,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1322,8 +1266,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1333,8 +1276,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1345,16 +1287,14 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 68 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1364,16 +1304,14 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 71 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1386,8 +1324,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1397,8 +1334,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1409,16 +1345,14 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 76 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1428,8 +1362,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1439,8 +1372,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1451,8 +1383,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1462,8 +1393,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1474,16 +1404,14 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 84 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1494,16 +1422,14 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 87 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1514,8 +1440,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1526,8 +1451,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1538,8 +1462,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1550,8 +1473,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1561,8 +1483,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1572,8 +1493,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1583,24 +1503,21 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 95 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 96 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1611,8 +1528,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1624,8 +1540,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1636,8 +1551,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1648,8 +1562,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1659,8 +1572,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1670,40 +1582,35 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 103 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 104 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 105 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 106 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1713,8 +1620,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1725,8 +1631,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1737,8 +1642,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1749,24 +1653,21 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 111 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 112 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1777,16 +1678,14 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 114 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1796,8 +1695,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1808,8 +1706,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1819,24 +1716,21 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 118 :
                 if ($mod == 1) {
                     $c = ["رشته_انسانی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 119 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1846,32 +1740,28 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 121 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 122 :
                 if ($mod == 1) {
                     $c = ["رشته_انسانی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 123 :
                 if ($mod == 1) {
                     $c = ["رشته_انسانی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1882,8 +1772,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1893,24 +1782,21 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 126 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 127 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1920,8 +1806,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1932,16 +1817,14 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 130 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1951,8 +1834,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -1963,40 +1845,35 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 133 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 134 :
                 if ($mod == 1) {
                     $c = ["رشته_انسانی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 135 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 136 :
                 if ($mod == 1) {
                     $c = ["رشته_انسانی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2006,8 +1883,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2018,16 +1894,14 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 139 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2037,8 +1911,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2048,8 +1921,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2060,8 +1932,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2071,8 +1942,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2082,8 +1952,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2094,8 +1963,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2106,8 +1974,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2118,8 +1985,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2129,48 +1995,42 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 149 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 150 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 151 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 152 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 153 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2180,8 +2040,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2192,24 +2051,21 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 156 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 157 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2219,8 +2075,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2230,40 +2085,35 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 160 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 162 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 163 :
                 if ($mod == 1) {
                     $c = ["رشته_انسانی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 164 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2273,16 +2123,14 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 166 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2292,8 +2140,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2304,32 +2151,28 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 169 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 170 :
                 if ($mod == 1) {
                     $c = ["رشته_انسانی"];
-                }
-                else {
+                } else {
                     $c = "آرایه های ادبی کنکور دکتر هامون سبطی";
                 }
                 break;
             case 171 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2339,8 +2182,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2350,8 +2192,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2362,8 +2203,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2374,24 +2214,21 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 177 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 178 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2401,16 +2238,14 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 180 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2420,8 +2255,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2431,16 +2265,14 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 184 :
                 if ($mod == 1) {
                     $c = ["رشته_انسانی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2451,16 +2283,14 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 186 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2470,24 +2300,21 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 188 :
                 if ($mod == 1) {
                     $c = ["رشته_ریاضی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 189 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2497,16 +2324,14 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 191 :
                 if ($mod == 1) {
                     $c = ["رشته_انسانی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2517,8 +2342,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2528,24 +2352,21 @@ class SanatisharifmergeController extends Controller
                         "رشته_ریاضی",
                         "رشته_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 194 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 195 :
                 if ($mod == 1) {
                     $c = ["رشته_تجربی"];
-                }
-                else {
+                } else {
                     $c = "زیست ترکیبی کنکور";
                 }
                 break;
@@ -2556,8 +2377,7 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2568,16 +2388,14 @@ class SanatisharifmergeController extends Controller
                         "رشته_تجربی",
                         "رشته_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             default:
                 if ($mod == 1) {
                     $c = [];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2590,8 +2408,7 @@ class SanatisharifmergeController extends Controller
     {
         if ($mod == 1) {
             $c = ["متوسطه2"];
-        }
-        else {
+        } else {
             $c = "";
         }
         switch ($depid) {
@@ -2604,8 +2421,7 @@ class SanatisharifmergeController extends Controller
                         "پایه",
                         "شبیه_ساز_کلاس_درس",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2618,8 +2434,7 @@ class SanatisharifmergeController extends Controller
                         "پایه",
                         "شبیه_ساز_کلاس_درس",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2632,8 +2447,7 @@ class SanatisharifmergeController extends Controller
                         "پایه",
                         "شبیه_ساز_کلاس_درس",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2646,8 +2460,7 @@ class SanatisharifmergeController extends Controller
                         "پیش",
                         "شبیه_ساز_کلاس_درس",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2661,8 +2474,7 @@ class SanatisharifmergeController extends Controller
                         "همایش",
                         "جمع_بندی",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2675,8 +2487,7 @@ class SanatisharifmergeController extends Controller
                         "پایه",
                         "امتحان_نهایی",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2688,8 +2499,7 @@ class SanatisharifmergeController extends Controller
                         "نظام_آموزشی_قدیم",
                         "پایه",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2702,8 +2512,7 @@ class SanatisharifmergeController extends Controller
                         "پیش",
                         "شبیه_ساز_کلاس_درس",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2724,8 +2533,7 @@ class SanatisharifmergeController extends Controller
                         "پیش",
                         "پایه",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2738,16 +2546,14 @@ class SanatisharifmergeController extends Controller
                         "پیش",
                         "شبیه_ساز_کلاس_درس",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 13 :
                 if ($mod == 1) {
                     $c = [];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2760,8 +2566,7 @@ class SanatisharifmergeController extends Controller
                         "پایه",
                         "صفر_تا_صد",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2775,8 +2580,7 @@ class SanatisharifmergeController extends Controller
                         "شبیه_ساز_کلاس_درس",
                         "پیش_آزمون",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2789,8 +2593,7 @@ class SanatisharifmergeController extends Controller
                         "پایه",
                         "شبیه_ساز_کلاس_درس",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2803,8 +2606,7 @@ class SanatisharifmergeController extends Controller
                         "پیش",
                         "نکته_و_تست",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2817,8 +2619,7 @@ class SanatisharifmergeController extends Controller
                         "پایه",
                         "صفر_تا_صد",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2832,8 +2633,7 @@ class SanatisharifmergeController extends Controller
                         "همایش",
                         "جمع_بندی",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2846,8 +2646,7 @@ class SanatisharifmergeController extends Controller
                         "پیش",
                         "شبیه_ساز_کلاس_درس",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2860,8 +2659,7 @@ class SanatisharifmergeController extends Controller
                         "پیش",
                         "شبیه_ساز_کلاس_درس",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2878,8 +2676,7 @@ class SanatisharifmergeController extends Controller
                         "پیش",
                         "پایه",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2891,8 +2688,7 @@ class SanatisharifmergeController extends Controller
                         "نظام_آموزشی_قدیم",
                         "پایه",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2905,8 +2701,7 @@ class SanatisharifmergeController extends Controller
                         "نظام_آموزشی_جدید",
                         "پایه",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2919,8 +2714,7 @@ class SanatisharifmergeController extends Controller
                         "پیش",
                         "نکته_و_تست",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2933,8 +2727,7 @@ class SanatisharifmergeController extends Controller
                         "پیش",
                         "صفر_تا_صد",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2946,8 +2739,7 @@ class SanatisharifmergeController extends Controller
                         "نظام_آموزشی_جدید",
                         "پایه",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2969,8 +2761,7 @@ class SanatisharifmergeController extends Controller
                         "پیش",
                         "پایه",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2983,8 +2774,7 @@ class SanatisharifmergeController extends Controller
                         "پیش",
                         "شب_کنکور",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -2997,8 +2787,7 @@ class SanatisharifmergeController extends Controller
                         "پایه",
                         "صفر_تا_صد",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3011,8 +2800,7 @@ class SanatisharifmergeController extends Controller
                         "پایه",
                         "صفر_تا_صد",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3026,16 +2814,14 @@ class SanatisharifmergeController extends Controller
                         "جمع_بندی",
                         "همایش",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 33 :
                 if ($mod == 1) {
                     $c = [];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3048,8 +2834,7 @@ class SanatisharifmergeController extends Controller
                         "پیش",
                         "تحلیل_آزمون",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3062,8 +2847,7 @@ class SanatisharifmergeController extends Controller
                         "پیش",
                         "همایش",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3075,8 +2859,7 @@ class SanatisharifmergeController extends Controller
                         "نظام_آموزشی_جدید",
                         "پایه",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3088,8 +2871,7 @@ class SanatisharifmergeController extends Controller
                         "نظام_آموزشی_جدید",
                         "پایه",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3110,8 +2892,7 @@ class SanatisharifmergeController extends Controller
                         "پایه",
                         "صفر_تا_صد",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3123,8 +2904,7 @@ class SanatisharifmergeController extends Controller
                         "نظام_آموزشی_جدید",
                         "پایه",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3137,8 +2917,7 @@ class SanatisharifmergeController extends Controller
                         "پایه",
                         "صفر_تا_صد",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3151,8 +2930,7 @@ class SanatisharifmergeController extends Controller
                         "پایه",
                         "صفر_تا_صد",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3164,8 +2942,7 @@ class SanatisharifmergeController extends Controller
                         "نظام_آموزشی_جدید",
                         "پایه",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3178,8 +2955,7 @@ class SanatisharifmergeController extends Controller
                         "پیش",
                         "نکته_و_تست",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3192,8 +2968,7 @@ class SanatisharifmergeController extends Controller
                         "پیش",
                         "نکته_و_تست",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3207,16 +2982,14 @@ class SanatisharifmergeController extends Controller
                         "جمع_بندی",
                         "همایش",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             default:
                 if ($mod == 1) {
                     $c = [];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3231,48 +3004,42 @@ class SanatisharifmergeController extends Controller
             $c = [
                 $this->make_slug($lessonname, "_"),
             ];
-        }
-        else {
+        } else {
             $c = "";
         }
         switch ($lessonid) {
             case 1 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 3 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 4 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 5 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 6 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3281,48 +3048,42 @@ class SanatisharifmergeController extends Controller
                     $c = [
                         "زبان_و_ادبیات_فارسی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 8 :
                 if ($mod == 1) {
                     $c = ["زبان_انگلیسی"];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 9 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 10 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 11 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 12 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3331,32 +3092,28 @@ class SanatisharifmergeController extends Controller
                     $c = array_merge($c, [
                         "ریاضی_پایه",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 14 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 15 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 16 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3365,8 +3122,7 @@ class SanatisharifmergeController extends Controller
                     $c = array_merge($c, [
                         "ریاضی_پایه",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3375,8 +3131,7 @@ class SanatisharifmergeController extends Controller
                     $c = array_merge($c, [
                         "ریاضی_پایه",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3385,16 +3140,14 @@ class SanatisharifmergeController extends Controller
                     $c = [
                         "فیزیک",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 23 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3405,8 +3158,7 @@ class SanatisharifmergeController extends Controller
                         "سوم_دبیرستان",
                         "چهارم_دبیرستان",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3415,8 +3167,7 @@ class SanatisharifmergeController extends Controller
                     $c = [
                         "فیزیک",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3425,16 +3176,14 @@ class SanatisharifmergeController extends Controller
                     $c = [
                         "فیزیک",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 27 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3446,8 +3195,7 @@ class SanatisharifmergeController extends Controller
                         "پایه",
                         "سوم_دبیرستان",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3456,72 +3204,63 @@ class SanatisharifmergeController extends Controller
                     $c = [
                         "ریاضی_تجربی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 30 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 31 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 32 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 33 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 34 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 35 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 38 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 39 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3530,32 +3269,28 @@ class SanatisharifmergeController extends Controller
                     $c = [
                         "ریاضی_پایه",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 41 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 42 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 43 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3564,8 +3299,7 @@ class SanatisharifmergeController extends Controller
                     $c = [
                         "زبان_و_ادبیات_فارسی_انسانی",
                     ];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3574,32 +3308,28 @@ class SanatisharifmergeController extends Controller
                     $c = array_merge($c, [
                         "زبان_و_ادبیات_فارسی",
                     ]);
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 46 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             case 47 :
                 if ($mod == 1) {
                     ;
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
             default:
                 if ($mod == 1) {
                     $c = [];
-                }
-                else {
+                } else {
                     $c = "";
                 }
                 break;
@@ -3749,15 +3479,13 @@ class SanatisharifmergeController extends Controller
             if ($userid == 0) {
                 $userfirstname = "";
                 $userlastname  = "";
-            }
-            else {
+            } else {
                 $user = $this->teachers->where("userid", $userid)
                     ->first();
                 if (isset($user)) {
                     $userfirstname = $user["userfirstname"];
                     $userlastname  = $user["userlastname"];
-                }
-                else {
+                } else {
                     dump("warning : teacher with userid ".$user." was not found!");
                 }
             }
@@ -3789,22 +3517,20 @@ class SanatisharifmergeController extends Controller
         if (isset($lastname) && strlen($lastname) > 0) {
             if (strlen($fullName) > 0) {
                 $fullName .= " ".$lastname;
-            }
-            else {
+            } else {
                 $fullName .= $firstname;
             }
         }
         
         return $fullName;
     }
-
+    
     public function update(Request $request, $sanatisharifmerge)
     {
         $sanatisharifmerge->fill($request->all());
         if ($sanatisharifmerge->update()) {
             return $this->response->setStatusCode(200);
-        }
-        else {
+        } else {
             return $this->response->setStatusCode(503);
         }
     }
@@ -3815,8 +3541,7 @@ class SanatisharifmergeController extends Controller
             if (!Input::has("t")) {
                 return $this->response->setStatusCode(422)
                     ->setContent(["message" => "Wrong inputs: Please pass parameter t. Available values: p , v"]);
-            }
-            else {
+            } else {
                 $contentType = Input::get("t");
             }
             
@@ -3885,20 +3610,17 @@ class SanatisharifmergeController extends Controller
                             dump("Videoid ".$sanatisharifRecord->videoid." skipped");
                             if (!$sanatisharifRecord->videoEnable && $sanatisharifRecord->videosession == 0) {
                                 $request->offsetSet("videoTransferred", 2);
-                            }
-                            else {
+                            } else {
                                 if (isset($sanatisharifRecord->videolinktakhtesefid)) {
                                     $request->offsetSet("videoTransferred", 4);
-                                }
-                                else {
+                                } else {
                                     $request->offsetSet("videoTransferred", 3);
                                 }
                             }
                             $response = $this->update($request, $sanatisharifRecord);
                             if ($response->getStatusCode() == 200) {
                                 $skippedCounter++;
-                            }
-                            else {
+                            } else {
                                 if ($response->getStatusCode() == 503) {
                                     $failCounter++;
                                     dump("Skipped status wasn't saved for video: ".$sanatisharifRecord->videoid);
@@ -3931,16 +3653,13 @@ class SanatisharifmergeController extends Controller
                             }
                             if (isset($sanatisharifRecord->thumbnail) && strlen($sanatisharifRecord->thumbnail) > 0) {
                                 $thumbnailFile = $sanatisharifRecord->thumbnail;
-                            }
-                            else {
+                            } else {
                                 if (isset($sanatisharifRecord->videolink) && strlen($sanatisharifRecord->videolink) > 0) {
                                     $filePath = $sanatisharifRecord->videolink;
-                                }
-                                else {
+                                } else {
                                     if (isset($sanatisharifRecord->videolinkhq) && strlen($sanatisharifRecord->videolinkhq) > 0) {
                                         $filePath = $sanatisharifRecord->videolinkhq;
-                                    }
-                                    else {
+                                    } else {
                                         if (isset($sanatisharifRecord->videolink240p) && strlen($sanatisharifRecord->videolink240p) > 0) {
                                             $filePath = $sanatisharifRecord->videolink240p;
                                         }
@@ -4021,8 +3740,7 @@ class SanatisharifmergeController extends Controller
                         $warningCounter++;
                         dump("warning could not find the teacher for ".$contentTypeLable." ".$sanatisharifRecord->$idColumn);
                         dump("teacher name: ".$sanatisharifRecord->teacherfirstname." ".$sanatisharifRecord->teacherlastname);
-                    }
-                    else {
+                    } else {
                         $storeContentReuest->offsetSet("author_id", $authorId);
                     }
                     
@@ -4064,8 +3782,7 @@ class SanatisharifmergeController extends Controller
                                 "isDefault" => 1,
                             ],
                         ]);
-                    }
-                    else {
+                    } else {
                         $warningCounter++;
                         dump("Warning contentset was not exist. id: ".$sanatisharifRecord->departmentlessonid);
                     }
@@ -4081,15 +3798,13 @@ class SanatisharifmergeController extends Controller
                         $response = $this->update($request, $sanatisharifRecord);
                         if ($response->getStatusCode() == 200) {
                             $successCounter++;
-                        }
-                        else {
+                        } else {
                             if ($response->getStatusCode() == 503) {
                                 $failCounter++;
                                 dump("failed Transferred status wasn't saved for $contentTypeLable: ".$sanatisharifRecord->$idColumn);
                             }
                         }
-                    }
-                    else {
+                    } else {
                         if ($response->getStatusCode() == 503) {
                             $failCounter++;
                             dump("failed $contentTypeLable wasn't transferred. id: ".$sanatisharifRecord->$idColumn);
@@ -4149,8 +3864,7 @@ class SanatisharifmergeController extends Controller
             if (isset($authorAccount)) {
                 $userId = $authorAccount->id;
             }
-        }
-        else {
+        } else {
             $userId = 0;
         }
         
@@ -4191,14 +3905,12 @@ class SanatisharifmergeController extends Controller
                     $tag3 = $this->makeName($tag3["firstname"], $tag3["lastname"]);
                     if (strlen($tag3) > 0) {
                         $tag3 = [$this->make_slug($tag3, "_")];
-                    }
-                    else {
+                    } else {
                         $tag3 = [];
                     }
                     $tag4 = $this->deplessonMultiplexer($oldContent->departmentlessonid, 1);
                 }
-            }
-            else {
+            } else {
                 if (isset($lId)) {
                     $oldContent = Sanatisharifmerge::where('lessonid', '=', $lId)
                         ->first();
@@ -4250,7 +3962,7 @@ class SanatisharifmergeController extends Controller
                     ->first();
                 if (isset($v)) {
                     if (isset($v->content)) {
-                        return action('ContentController@embed', $v->content);
+                        return action('Web\ContentController@embed', $v->content);
                     }
                 }
             }
