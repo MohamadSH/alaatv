@@ -2,11 +2,10 @@
 
 namespace App\Console\Commands;
 
+use AlaaTV\ZarinpalGatewayDriver\VerificationResponse;
 use App\Transaction;
 use AlaaTV\Gateways\Money;
-use App\Http\Requests\Request;
 use Illuminate\Console\Command;
-use AlaaTV\Gateways\PaymentDriver;
 use Zarinpal\Zarinpal;
 
 class HandleUnverifiedTransactions extends Command
@@ -24,21 +23,17 @@ class HandleUnverifiedTransactions extends Command
      * @var string
      */
     protected $description = 'Confirm Unverified Transactions';
-    
-    /**
-     * @var Request $request
-     */
-    private $request;
-    
+
+    private $gateway;
+
     /**
      * Create a new command instance.
      *
-     * @param  Request  $request
      */
-    public function __construct(Request $request)
+    public function __construct()
     {
         parent::__construct();
-        $this->request = $request;
+        $this->gateway = $this->getGatewayComposer();
     }
     
     /**
@@ -49,42 +44,47 @@ class HandleUnverifiedTransactions extends Command
     public function handle()
     {
         //ToDo : At this time this only works for Zarinpal
-        $paymentMethod = 'zarinpal';
-        
-        $paymentClient = PaymentDriver::select($paymentMethod);
-        
         $this->info('getting data from zarinpal ...');
         $result = $this->getUnverifiedTransactions();
 
         if ($result['Status'] != 'success') {
-            $this->info('There is a problem with receiving unverified transactions with Status: '.$result['Status']);
+            $this->info('Failed on receiving unverified transactions. Response status: '.$result['Status']);
             return null;
         }
 
-        $this->info('Untrusted transactions received.');
         $transactions = $result['Authorities'];
-        list($notExistTransactions, $unverifiedTransactionsDueToError) = $this->handleTransactions($transactions, $paymentClient);
+        $this->info( count($transactions).' unverified transactions were received');
+        $this->info('Verifying transactions started:');
+        list($notExistTransactions, $unverifiedTransactionsDueToError) = $this->handleTransactions($transactions);
+        $this->info('Verifying transactions finished');
 
         if (count($unverifiedTransactionsDueToError) > 0) {
-            $this->info('Unverified Transactions Due To Error:');
+            $this->info('Gateway did not verify these transactions:');
             $this->logError($unverifiedTransactionsDueToError);
         }
 
         if (count($notExistTransactions) == 0) {
             return null;
         }
+
+        $this->info('These transactions were not found on Database');
         $this->logError($notExistTransactions);
 
-        if ($this->confirm('The above transactions are not available. \n\rDo you wish to force verify?', true)) {
+        if ($this->confirm('Do you wish to force-verify these transactions?', true)) {
+            $unverifiedTransactions = [] ;
             foreach ($notExistTransactions as $item) {
-                $gateWayVerify = $paymentClient->verifyPayment(Money::fromTomans($item['Amount']), $item['Authority']);
+                $gateWayVerify = $this->verifyTransaction(Money::fromTomans($item['Amount']), $item['Authority']);
+                if (!$gateWayVerify->isSuccessfulPayment()) {
+                    array_push($unverifiedTransactions, $item);
+                }
+                $this->logError($unverifiedTransactions);
             }
         }
     }
     
     private function getUnverifiedTransactions()
     {
-        return (new Zarinpal(['merchantID' => config('Zarinpal.merchantID')]))->getUnverifiedTransactions();
+        return $this->gateway->getDriver()->unverifiedTransactions(['MerchantID'=>config('Zarinpal.merchantID')]);
     }
 
     /**
@@ -108,40 +108,49 @@ class HandleUnverifiedTransactions extends Command
      * @param \AlaaTV\Gateways\Contracts\OnlineGateway $paymentClient
      * @return array
      */
-    private function handleTransactions($transactions, $paymentClient): array
+    private function handleTransactions($transactions): array
     {
         $notExistTransactions = [];
         $unverifiedTransactionsDueToError = [];
-        foreach ($transactions as $transaction) {
+        foreach ($transactions as $item) {
 
-            /*$result = [
-                'sendSMS' => false,
-                'Status' => 'error'
-            ];*/
-            $this->request->offsetSet('Authority', $transaction['Authority']);
-            $this->request->offsetSet('Status', 'OK');
-            /*$data = [
-                'request' => $this->request,
-                'result' => $result
-            ];*/
-            $authority = $transaction['Authority'];
+            $authority = $item['Authority'];
             $this->info($authority);
 
             $transaction = Transaction::authority($authority)->first();
 
             if (is_null($transaction)) {
-                array_push($notExistTransactions, $transaction);
+                array_push($notExistTransactions, $item);
                 continue;
             }
-            $transaction['Status'] = 'OK';
-            array_push($unverifiedTransactionsDueToError, $transaction);
-            $gateWayVerify = $paymentClient->verifyPayment(Money::fromTomans($transaction->cost), $authority);
 
-            if (!$gateWayVerify->isSuccessfulPayment()) {
-                array_push($unverifiedTransactionsDueToError, $transaction);
+            $gateWayVerify = $this->verifyTransaction($transaction->cost, $authority);
+
+            if ($gateWayVerify->isSuccessfulPayment()) {
+                //ToDo : close order
+                continue;
             }
+
+            array_push($unverifiedTransactionsDueToError, $item);
         }
 
         return [$notExistTransactions, $unverifiedTransactionsDueToError];
+    }
+
+    public function getGatewayComposer(){
+        return new Zarinpal(config('Zarinpal.merchantID'));
+    }
+
+    /**
+     * @param $cost
+     * @param $authority
+     * @return \AlaaTV\Gateways\Contracts\OnlinePaymentVerificationResponseInterface
+     */
+    private function verifyTransaction($cost, $authority): \AlaaTV\Gateways\Contracts\OnlinePaymentVerificationResponseInterface
+    {
+        //ToDo : unComment
+//        $result = $this->gateway->verify(Money::fromTomans($cost), $authority);
+        $result['Status'] = 'success' ;
+        return VerificationResponse::instance($result);
     }
 }
