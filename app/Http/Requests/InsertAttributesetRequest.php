@@ -9,7 +9,7 @@ class InsertAttributesetRequest extends FormRequest
 {
     public function authorize()
     {
-        if (Auth()
+        if (auth()
             ->user()
             ->can(config('constants.INSERT_ATTRIBUTESET_ACCESS'))) {
             return true;

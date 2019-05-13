@@ -80,7 +80,6 @@ use Illuminate\Database\Eloquent as EloquentAlias;
  * @mixin Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property int                        $overtime_confirmation  تاییدیه اضافه کاری
  * @property-read mixed                 $obtain_work_and_shift_diff_in_hour
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet newQuery()

@@ -9,10 +9,11 @@ use Carbon\Carbon;
 use App\Contentset;
 use App\Contenttype;
 use App\Websitesetting;
+use http\Exception\InvalidArgumentException;
 use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\{Cache};
+use Illuminate\Support\Facades\{Cache, Log};
 use Illuminate\Routing\Redirector;
 use App\Http\Controllers\Controller;
 use App\Collection\ProductCollection;
@@ -33,12 +34,6 @@ use App\Traits\{Helper,
 
 class ContentController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Traits
-    |--------------------------------------------------------------------------
-    */
-    
     use ProductCommon;
     use Helper;
     use FileCommon;
@@ -126,34 +121,44 @@ class ContentController extends Controller
             ->implode(','));
         return Cache::remember($key, config('constants.CACHE_60'), function () use ($items) {
             $response = [];
-        
-            /** @var Content $item */
-            foreach ($items as $content) {
-                $s_hd = $s_hq = $s_240 = null;
-            
-                foreach ($content->getVideos() as $source) {
-                    if (strcmp($source->res, '240p') === 0) {
-                        $s_240 = $source->link;
-                    
-                    } elseif (strcmp($source->res, '480p') === 0) {
-                        $s_hq = $source->link;
-                    } elseif (strcmp($source->res, '720p') === 0) {
-                        $s_hd = $source->link;
+
+            try{
+
+                /** @var Content $item */
+                foreach ($items as $content) {
+                    $s_hd = $s_hq = $s_240 = null;
+
+                    foreach ($content->getVideos() as $source) {
+                        if (strcmp($source->res, '240p') === 0) {
+                            $s_240 = $source->link;
+
+                        } elseif (strcmp($source->res, '480p') === 0) {
+                            $s_hq = $source->link;
+                        } elseif (strcmp($source->res, '720p') === 0) {
+                            $s_hd = $source->link;
+                        }
                     }
+                    $response[] = [
+                        'videoId'          => $content->id,
+                        'name'             => $content->displayName,
+                        'videoDescribe'    => $content->description,
+                        'url'              => $content->url,
+                        'videoLink480'     => $s_hq ?: $s_hd,
+                        'videoLink240'     => $s_240 ?: $s_hd,
+                        'videoviewcounter' => '0',
+                        'videoDuration'    => 0,
+                        'session'          => $content->order,
+                        'thumbnail'        => $content->thumbnail,
+                    ];
                 }
-                $response[] = [
-                    'videoId'          => $content->id,
-                    'name'             => $content->displayName,
-                    'videoDescribe'    => $content->description,
-                    'url'              => $content->url,
-                    'videoLink480'     => $s_hq ?: $s_hd,
-                    'videoLink240'     => $s_240 ?: $s_hd,
-                    'videoviewcounter' => '0',
-                    'videoDuration'    => 0,
-                    'session'          => $content->order,
-                    'thumbnail'        => $content->thumbnail,
-                ];
+
+            }catch (\Exception $e) {
+                Log::debug('error on items in makeJsonForAndroidApp: ' , $items);
+                Log::debug(typeOf($items));
+
+                Throw new \PHPUnit\Framework\Exception('Items is not valid' , Response::HTTP_BAD_REQUEST);
             }
+
             $response[] = json_decode('{}', false);
         
             return $response;
@@ -328,7 +333,7 @@ class ContentController extends Controller
         
     }
     
-    public function edit($content)
+    public function edit(Content $content)
     {
         $validSinceTime = optional($content->validSince)->format('H:i:s');
         $tags           = optional($content->tags)->tags;
@@ -433,30 +438,32 @@ class ContentController extends Controller
         $contentset  = Contentset::FindOrFail($contentset_id);
         $lastContent = $contentset->getLastContent();
         
-        if (isset($lastContent)) {
-            $newContent = $lastContent->replicate();
-        } else {
+        if (!isset($lastContent)) {
             session()->put('error', trans('content.No previous content found'));
-            
+
             return redirect()->back();
         }
-        if ($newContent instanceof Content) {
-            $newContent->contenttype_id  = $contenttype_id;
-            $newContent->name            = $name;
-            $newContent->description     = null;
-            $newContent->metaTitle       = null;
+            $newContent = $lastContent->replicate();
+
+        if (!($newContent instanceof Content)) {
+            throw new Exception('replicate Error!'.$contentset_id);
+        }
+            $newContent->contenttype_id = $contenttype_id;
+            $newContent->name = $name;
+            $newContent->description = null;
+            $newContent->metaTitle = null;
             $newContent->metaDescription = null;
-            $newContent->enable          = 0;
-            $newContent->validSince      = $dateNow;
-            $newContent->created_at      = $dateNow;
-            $newContent->updated_at      = $dateNow;
-            
+            $newContent->enable = 0;
+            $newContent->validSince = $dateNow;
+            $newContent->created_at = $dateNow;
+            $newContent->updated_at = $dateNow;
+
             $files = $this->makeVideoFileArray($fileName, $contentset_id);
-            
-            $thumbnailUrl          = $this->makeThumbnailUrlFromFileName($fileName, $contentset_id);
+
+            $thumbnailUrl = $this->makeThumbnailUrlFromFileName($fileName, $contentset_id);
             $newContent->thumbnail = $this->makeThumbanilFile($thumbnailUrl);
             $this->storeFilesOfContent($newContent, $files);
-            
+
             $newContent->save();
             if (!isset($order)) {
                 //TODO://deprecate
@@ -464,11 +471,9 @@ class ContentController extends Controller
             }
             //TODO://deprecate
             $this->attachContentSetToContent($newContent, $contentset->id, $order);
-            
+
             return redirect(action("Web\ContentController@edit", $newContent->id));
-        } else {
-            throw new Exception('replicate Error!'.$contentset_id);
-        }
+
     }
     
     

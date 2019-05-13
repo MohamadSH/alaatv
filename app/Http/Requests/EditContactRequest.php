@@ -9,7 +9,7 @@ class EditContactRequest extends FormRequest
 {
     public function authorize()
     {
-        if (Auth()
+        if (auth()
             ->user()
             ->can(config('constants.EDIT_CONTACT_ACCESS'))) {
             return true;

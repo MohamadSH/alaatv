@@ -34,7 +34,7 @@
     "greggilbert/recaptcha": "^2.1",
     "guzzlehttp/guzzle": "^6.3",
     "iatstuti/laravel-cascade-soft-deletes": "^1.2",
-    "imanghafoori/laravel-terminator": "^1.03",
+    "imanghafoori/laravel-terminator": "1.*",
     "intervention/image": "^2.4",
     "intervention/imagecache": "^2.3",
     "jenssegers/agent": "^2.5",

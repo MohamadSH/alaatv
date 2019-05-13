@@ -54,19 +54,16 @@ class ContactController extends Controller
                 return $this->response->setStatusCode(200)
                     ->setContent(["contact" => $contact]);
             }
-            else {
-                session()->put("success", "مخاطب با موفقیت درج شد");
-            }
+
+            session()->put("success", "مخاطب با موفقیت درج شد");
+            return redirect(action("Web\ContactController@edit", $contact));
         }
-        else {
-            if ($request->has("isServiceRequest")) {
-                return $this->response->setStatusCode(503);
-            }
-            else {
-                session()->put("error", "خطای پایگاه داده.");
-            }
+
+        if ($request->has("isServiceRequest")) {
+            return $this->response->setStatusCode(503);
         }
-        
+        session()->put("error", "خطای پایگاه داده.");
+
         return redirect(action("Web\ContactController@edit", $contact));
     }
 
@@ -82,47 +79,49 @@ class ContactController extends Controller
     public function update(EditContactRequest $request, $contact)
     {
         $contact->fill($request->all());
-        if ($contact->update()) {
-            $flag = true;
-            foreach ($contact->phones as $key => $phone) {
-                $phoneUpdate                  = new PhoneController();
-                $phoneRequest                 = new EditPhoneRequest();
-                $phoneRequest["phoneNumber"]  = $request->get("phoneNumber")[$key];
-                $phoneRequest["phonetype_id"] = $request->get("phonetype_id")[$key];
-                $phoneRequest["priority"]     = $request->get("priority")[$key];
-                if (!$phoneUpdate->update($phoneRequest, $phone)) {
-                    $flag = false;
-                    break;
-                }
-            }
-            if ($flag) {
-                session()->put("success", "اطلاعات مخاطب با موفقیت اصلاح شد");
-            }
-            else {
-                session()->put("error", "خطای پایگاه داده.");
+
+        if (!$contact->update()) {
+            session()->put("error", "خطای پایگاه داده.");
+            return redirect()->back();
+        }
+
+        $flag = true;
+        foreach ($contact->phones as $key => $phone) {
+            $phoneUpdate = new PhoneController();
+            $phoneRequest = new EditPhoneRequest();
+            $phoneRequest["phoneNumber"] = $request->get("phoneNumber")[$key];
+            $phoneRequest["phonetype_id"] = $request->get("phonetype_id")[$key];
+            $phoneRequest["priority"] = $request->get("priority")[$key];
+            if (!$phoneUpdate->update($phoneRequest, $phone)) {
+                $flag = false;
+                break;
             }
         }
-        else {
+
+        if ($flag) {
+            session()->put("success", "اطلاعات مخاطب با موفقیت اصلاح شد");
+        } else {
             session()->put("error", "خطای پایگاه داده.");
         }
-        
+
         return redirect()->back();
     }
 
     public function destroy(Contact $contact)
     {
-        if ($contact->delete()) {
-            if (!$contact->phones->isEmpty()) {
-                foreach ($contact->phones as $phone) {
-                    $phone->delete();
-                }
-            }
-            session()->put("success", "مخاطب با موفقیت حذف شد");
-        }
-        else {
+        if (!$contact->delete()) {
             session()->put("error", "خطای پایگاه داده.");
+            return redirect()->back();
         }
-        
+
+        if (!$contact->phones->isEmpty()) {
+            foreach ($contact->phones as $phone) {
+                $phone->delete();
+            }
+        }
+
+        session()->put("success", "مخاطب با موفقیت حذف شد");
+
         return redirect()->back();
     }
 }

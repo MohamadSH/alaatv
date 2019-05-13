@@ -51,7 +51,7 @@ trait HandleOrderPayment
 
         $order->paymentstatus_id = $paymentstatus_id;
 
-        $result['saveOrder'] = $order->updateWithoutTimestamp() ? 1 : 0;
+        $result['saveOrder'] = $order->update() ? 1 : 0;
         
         return $result;
     }

@@ -26,7 +26,7 @@ class OpenOrderRefinement extends Refinement
         $openOrder->load('orderproducts');
         
         if (!$openOrder->orderproducts->isNotEmpty()) {
-            $this->message    = 'سبد خرید شما خالیست';
+            $this->message    = 'No items in your cart';
             $this->statusCode = Response::HTTP_BAD_REQUEST;
             
             return $this;
@@ -39,12 +39,20 @@ class OpenOrderRefinement extends Refinement
         if ($this->canDeductFromWallet()) {
             $this->payByWallet();
         }
-        $result = $this->getNewTransaction();
-        
-        $this->statusCode  = $result['statusCode'];
-        $this->message     = $result['message'];
-        $this->transaction = $result['transaction'];
-        
+        if($this->cost > 0)
+        {
+            $result = $this->getNewTransaction();
+            $this->statusCode  = $result['statusCode'];
+            $this->message     = $result['message'];
+            $this->transaction = $result['transaction'];
+        }elseif($this->cost == 0){
+            $this->statusCode = Response::HTTP_OK;
+            $this->message = 'Zero cost';
+        }else{
+            $this->statusCode = Response::HTTP_BAD_REQUEST;
+            $this->message = 'Minus cost';
+        }
+
         return $this;
     }
     

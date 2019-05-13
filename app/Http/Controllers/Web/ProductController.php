@@ -89,7 +89,6 @@ class ProductController extends Controller
                 'index',
                 'show',
                 'search',
-                'showPartial',
                 'landing1',
                 'landing2',
                 'landing3',

@@ -2,12 +2,12 @@
 
 namespace App\PaymentModule\Controllers;
 
-use AlaaTV\Gateways\Money;
-use App\Repositories\TransactionGatewayRepo;
+use App\Product;
+use Cache;
 use App\User;
 use App\Order;
 use App\Transaction;
-use Cache;
+use AlaaTV\Gateways\Money;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\PaymentModule\Responses;
@@ -15,9 +15,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use AlaaTV\Gateways\PaymentDriver;
 use App\Repositories\TransactionRepo;
+use App\Repositories\TransactionGatewayRepo;
 use App\PaymentModule\Repositories\OrdersRepo;
 use App\Http\Controllers\Web\TransactionController;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
+use Illuminate\Support\Facades\Artisan;
 
 class RedirectUserToPaymentPage extends Controller
 {
@@ -49,9 +51,8 @@ class RedirectUserToPaymentPage extends Controller
         /** @var Transaction $transaction */
         $transaction = $data['transaction'];
 
-
         if ($data['statusCode'] != Response::HTTP_OK) {
-            $this->sendErrorResponse($data['message'], $data['statusCode']);
+            $this->sendErrorResponse($data['message'] ?: '', $data['statusCode'] ?: Response::HTTP_SERVICE_UNAVAILABLE );
         }
 
         /** @var string $description */
@@ -60,9 +61,9 @@ class RedirectUserToPaymentPage extends Controller
         if ($this->isPayingAnOrder($order)) {
             $order->customerDescription = $request->get('customerDescription');
         }
-    
+
         $this->shouldGoToOfflinePayment($cost->rials())
-            ->thenRespondWith([Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order->id]);
+            ->thenRespondWith([[Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order]]);
 
         $paymentClient = PaymentDriver::select($paymentMethod);
         $url = $this->comeBackFromGateWayUrl($paymentMethod, $device);
@@ -96,14 +97,15 @@ class RedirectUserToPaymentPage extends Controller
     }
 
     /**
-     * @param  string  $msg
-     * @param  int     $statusCode
+     * @param string $msg
+     * @param int $statusCode
      *
      * @return JsonResponse
+     * @throws \ImanGhafoori\Terminator\TerminateException
      */
-    private function sendErrorResponse(string $msg, int $statusCode): JsonResponse
+    private function sendErrorResponse(string $msg, int $statusCode)
     {
-        respondWith(response()->json(['message' => $msg], $statusCode));
+        respondWith()->json(['message' => $msg], $statusCode);
     }
 
     /**
@@ -190,10 +192,20 @@ class RedirectUserToPaymentPage extends Controller
      */
     private function saveOrderInCookie(Order $order)
     {
-        //ToDo : komake mali
-        $totalCookie = collect();
         $orderproducts = $order->orderproducts ;
 
+        $totalCookie = $this->handleOrders($orderproducts);
+
+        if($totalCookie->isNotEmpty())
+            setcookie('cartItems', $totalCookie->toJson(), time() + 3600, '/');
+    }
+
+    /**
+     * @param $orderproducts
+     */
+    private function handleOrders(\Illuminate\Support\Collection $orderproducts)
+    {
+        $totalCookie = collect();
         foreach ($orderproducts as $orderproduct) {
             $extraAttributesIds = $orderproduct->attributevalues->pluck('id')->toArray();
             $myProduct = $orderproduct->product;
@@ -202,42 +214,75 @@ class RedirectUserToPaymentPage extends Controller
             if (is_null($grandProduct)) {
                 $totalCookie->push([
                     'product_id' => $myProduct->id,
+                    'products' => [],
                     'extraAttribute' => $extraAttributesIds
                 ]);
-            } else {
-                $grandType = $grandProduct->producttype_id;
-                if ($grandType == config('constants.PRODUCT_TYPE_SELECTABLE')) {
-                    $isAdded = $totalCookie->where('product_id', $grandProduct->id);
-                    if ($isAdded->isEmpty()) {
-                        $totalCookie->push([
-                            'product_id' => $grandProduct->id,
-                            'products' => [$myProduct->id],
-                            'extraAttribute' => $extraAttributesIds
-                        ]);
-                    } else {
-                        $key = $isAdded->keys()->last();
-                        $addedCookie = $isAdded->first();
-                        $addedCookie['products'] = array_merge_recursive($addedCookie['products'], [$myProduct->id]);
-                        $addedCookie['extraAttribute'] = array_merge_recursive($addedCookie['extraAttribute'], $extraAttributesIds);
-                        $totalCookie->put($key, $addedCookie);
-
-                    }
-                } elseif ($grandType == config('constants.PRODUCT_TYPE_CONFIGURABLE')) {
-                    $attributeValueIds = $myProduct->attributevalues()->whereHas('attribute', function ($q) {
-                        $q->where('attributetype_id', config('constants.ATTRIBUTE_TYPE_MAIN'));
-                    })->get()->pluck('id')->toArray();
-
-                    if(!empty($attributeValueIds))
-                        $totalCookie->push([
-                            'product_id' => $grandProduct->id,
-                            'attribute' => $attributeValueIds,
-                            'extraAttribute' => $extraAttributesIds,
-                        ]);
-                }
+                continue;
             }
+
+            $grandType = $grandProduct->producttype_id;
+            if ($grandType == config('constants.PRODUCT_TYPE_SELECTABLE')) {
+                $this->makeCookieForSelectableGrand($totalCookie, $grandProduct, $myProduct, $extraAttributesIds);
+            } elseif ($grandType == config('constants.PRODUCT_TYPE_CONFIGURABLE')) {
+                $this->makeCookieForConfigurableGrand($totalCookie, $myProduct, $grandProduct, $extraAttributesIds);
+            }
+
         }
 
-        if($totalCookie->isNotEmpty())
-            setcookie('cartItems', $totalCookie->toJson(), time() + 3600, '/');
+        return $totalCookie;
+    }
+
+    /**
+     * @param \Illuminate\Support\Collection $totalCookie
+     * @param $grandProduct
+     * @param $myProduct
+     * @param $extraAttributesIds
+     */
+    private function makeCookieForSelectableGrand(\Illuminate\Support\Collection $totalCookie, Product $grandProduct, Product $myProduct, array $extraAttributesIds): void
+    {
+        $isAdded = $totalCookie->where('product_id', $grandProduct->id);
+        if ($isAdded->isEmpty()) {
+            $totalCookie->push([
+                'product_id' => $grandProduct->id,
+                'products' => [$myProduct->id],
+                'extraAttribute' => $extraAttributesIds
+            ]);
+        } else {
+            $key = $isAdded->keys()->last();
+            $addedCookie = $isAdded->first();
+            $addedCookie['products'] = array_merge_recursive($addedCookie['products'], [$myProduct->id]);
+            $addedCookie['extraAttribute'] = array_merge_recursive($addedCookie['extraAttribute'], $extraAttributesIds);
+            $totalCookie->put($key, $addedCookie);
+        }
+    }
+
+    /**
+     * @param \Illuminate\Support\Collection $totalCookie
+     * @param $myProduct
+     * @param $grandProduct
+     * @param $extraAttributesIds
+     */
+    private function makeCookieForConfigurableGrand(\Illuminate\Support\Collection $totalCookie,Product $myProduct,Product $grandProduct, array $extraAttributesIds): void
+    {
+        $attributeValueIds = $this->getProductAttributes($myProduct);
+
+        if (!empty($attributeValueIds)) {
+            $totalCookie->push([
+                'product_id' => $grandProduct->id,
+                'attribute' => $attributeValueIds,
+                'extraAttribute' => $extraAttributesIds,
+            ]);
+        }
+    }
+
+    /**
+     * @param $myProduct
+     * @return mixed
+     */
+    private function getProductAttributes(Product $myProduct)
+    {
+        return $myProduct->attributevalues()->whereHas('attribute', function ($q) {
+            $q->where('attributetype_id', config('constants.ATTRIBUTE_TYPE_MAIN'));
+        })->get()->pluck('id')->toArray();
     }
 }

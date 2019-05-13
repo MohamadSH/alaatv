@@ -2,13 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Classes\Payment\Gateway\GatewayFactory;
-use App\Classes\Payment\Gateway\Zarinpal\Zarinpal;
-use App\Http\Requests\Request;
 use App\Transaction;
-use App\Transactiongateway;
+use AlaaTV\Gateways\Money;
+use App\Http\Requests\Request;
 use Illuminate\Console\Command;
-use Zarinpal\Zarinpal as ZarinpalComposer;
+use AlaaTV\Gateways\PaymentDriver;
+use Zarinpal\Zarinpal;
 
 class HandleUnverifiedTransactions extends Command
 {
@@ -52,100 +51,97 @@ class HandleUnverifiedTransactions extends Command
         //ToDo : At this time this only works for Zarinpal
         $paymentMethod = 'zarinpal';
         
-        $transactiongateway = Transactiongateway::where('name', $paymentMethod)
-            ->first();
-        $data['merchantID'] = $transactiongateway->merchantNumber;
-        
-        $gateWay = (new GatewayFactory())->setGateway($paymentMethod, $data);
-        
-        $notExistTransactions             = [];
-        $unverifiedTransactionsDueToError = [];
+        $paymentClient = PaymentDriver::select($paymentMethod);
         
         $this->info('getting data from zarinpal ...');
         $result = $this->getUnverifiedTransactions();
-        if ($result['Status'] == 'success') {
-            $this->info('Untrusted transactions received.');
-            $transactions = $result['Authorities'];
-            foreach ($transactions as $transaction) {
-                
-                /*$result = [
-                    'sendSMS' => false,
-                    'Status' => 'error'
-                ];*/
-                $this->request->offsetSet('Authority', $transaction['Authority']);
-                $this->request->offsetSet('Status', 'OK');
-                /*$data = [
-                    'request' => $this->request,
-                    'result' => $result
-                ];*/
-                $this->info($transaction['Authority']);
-                
-                $transaction = Transaction::authority($transaction['Authority'])
-                    ->first();
-                
-                if (!isset($transaction)) {
-                    array_push($notExistTransactions, $transaction);
-                }
-                else {
-                    $transaction['Status'] = 'OK';
-                    array_push($unverifiedTransactionsDueToError, $transaction);
-                    $gateWayVerify = $gateWay->verify($transaction->cost, $transaction);
-                    
-                    if ($gateWayVerify['Status'] == 'error') {
-                        array_push($unverifiedTransactionsDueToError, $transaction);
-                    }
-                }
-            }
-            
-            if (count($unverifiedTransactionsDueToError) > 0) {
-                $this->info('Unverified Transactions Due To Error:');
-                foreach ($unverifiedTransactionsDueToError as $item) {
-                    $authority = $item['Authority'];
-                    $amount    = $item['Amount'];
-                    $channel   = $item['Channel'];
-                    /*$callbackURL = $item['CallbackURL'];
-                    $referer = $item['Referer'];
-                    $email = $item['Email'];*/
-                    $cellPhone = $item['CellPhone'];
-                    $date      = $item['Date'];
-                    $this->info('authority: {'.$authority.'} amount: {'.$amount.'} channel: {'.$channel.'} cellPhone: {'.$cellPhone.'} date: {'.$date.'}');
-                }
-            }
-            
-            if (count($notExistTransactions) > 0) {
-                foreach ($notExistTransactions as $item) {
-                    $authority = $item['Authority'];
-                    $amount    = $item['Amount'];
-                    $channel   = $item['Channel'];
-                    /*$callbackURL = $item['CallbackURL'];
-                    $referer = $item['Referer'];
-                    $email = $item['Email'];*/
-                    $cellPhone = $item['CellPhone'];
-                    $date      = $item['Date'];
-                    $this->info('authority: {'.$authority.'} amount: {'.$amount.'} channel: {'.$channel.'} cellPhone: {'.$cellPhone.'} date: {'.$date.'}');
-                }
-                if ($this->confirm('The above transactions are not available. \n\rDo you wish to force verify?',
-                    true)) {
-                    foreach ($notExistTransactions as $item) {
-                        $zarinpal = new ZarinpalComposer($this->merchantNumber);
-                        $zarinpal->verify('OK', $item['Amount'], $item['Authority']);
-                    }
-                }
-            }
-        }
-        else {
+
+        if ($result['Status'] != 'success') {
             $this->info('There is a problem with receiving unverified transactions with Status: '.$result['Status']);
+            return null;
         }
-        
-        return null;
+
+        $this->info('Untrusted transactions received.');
+        $transactions = $result['Authorities'];
+        list($notExistTransactions, $unverifiedTransactionsDueToError) = $this->handleTransactions($transactions, $paymentClient);
+
+        if (count($unverifiedTransactionsDueToError) > 0) {
+            $this->info('Unverified Transactions Due To Error:');
+            $this->logError($unverifiedTransactionsDueToError);
+        }
+
+        if (count($notExistTransactions) == 0) {
+            return null;
+        }
+        $this->logError($notExistTransactions);
+
+        if ($this->confirm('The above transactions are not available. \n\rDo you wish to force verify?', true)) {
+            foreach ($notExistTransactions as $item) {
+                $gateWayVerify = $paymentClient->verifyPayment(Money::fromTomans($item['Amount']), $item['Authority']);
+            }
+        }
     }
     
     private function getUnverifiedTransactions()
     {
-        $data['merchantID'] = $this->merchantNumber;
-        $zarinpal           = new Zarinpal($data);
-        $result             = $zarinpal->getUnverifiedTransactions();
-        
-        return $result;
+        return (new Zarinpal(['merchantID' => config('Zarinpal.merchantID')]))->getUnverifiedTransactions();
+    }
+
+    /**
+     * @param array $items
+     * @return mixed
+     */
+    private function logError(array $items)
+    {
+        foreach ($items as $item) {
+            $authority = $item['Authority'];
+            $amount = $item['Amount'];
+            $channel = $item['Channel'];
+            $cellPhone = $item['CellPhone'];
+            $date = $item['Date'];
+            $this->info('authority: {'.$authority.'} amount: {'.$amount.'} channel: {'.$channel.'} cellPhone: {'.$cellPhone.'} date: {'.$date.'}');
+        }
+    }
+
+    /**
+     * @param $transactions
+     * @param \AlaaTV\Gateways\Contracts\OnlineGateway $paymentClient
+     * @return array
+     */
+    private function handleTransactions($transactions, $paymentClient): array
+    {
+        $notExistTransactions = [];
+        $unverifiedTransactionsDueToError = [];
+        foreach ($transactions as $transaction) {
+
+            /*$result = [
+                'sendSMS' => false,
+                'Status' => 'error'
+            ];*/
+            $this->request->offsetSet('Authority', $transaction['Authority']);
+            $this->request->offsetSet('Status', 'OK');
+            /*$data = [
+                'request' => $this->request,
+                'result' => $result
+            ];*/
+            $authority = $transaction['Authority'];
+            $this->info($authority);
+
+            $transaction = Transaction::authority($authority)->first();
+
+            if (is_null($transaction)) {
+                array_push($notExistTransactions, $transaction);
+                continue;
+            }
+            $transaction['Status'] = 'OK';
+            array_push($unverifiedTransactionsDueToError, $transaction);
+            $gateWayVerify = $paymentClient->verifyPayment(Money::fromTomans($transaction->cost), $authority);
+
+            if (!$gateWayVerify->isSuccessfulPayment()) {
+                array_push($unverifiedTransactionsDueToError, $transaction);
+            }
+        }
+
+        return [$notExistTransactions, $unverifiedTransactionsDueToError];
     }
 }

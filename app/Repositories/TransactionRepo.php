@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use Carbon\Carbon;
 use App\Transaction;
-use App\Bankaccount;
 
 class TransactionRepo
 {
@@ -21,8 +20,7 @@ class TransactionRepo
             'destinationBankAccount_id' => 1,
             'authority'                 => $authority,
             'transactiongateway_id'     => $gatewayId,
-//            'paymentmethod_id'          => config('constants.PAYMENT_METHOD_ONLINE'),
-            'paymentmethod_id'          => 1, //ToDo : bug in Iman's package in PaymentDriver
+            'paymentmethod_id'          => config('constants.PAYMENT_METHOD_ONLINE'),
             'description'               => $description,
         ];
         
@@ -82,17 +80,14 @@ class TransactionRepo
      */
     public static function handleTransactionStatus(Transaction $transaction, string $refId, string $cardPanMask = null)
     {
+        $user = optional($transaction->order)->user;
         $bankAccountId = null;
-        
-        if (!is_null($cardPanMask)) {
-            $account = [
-                'accountNumber' => $cardPanMask,
-                'user_id'       => optional($transaction->order)->user->id,
-            ];
-            
-            $bankAccountId = Bankaccount::firstOrCreate($account)->id;
+        if (!is_null($cardPanMask) && !is_null($user))
+        {
+            $parameters = ['user_id'=>$user->id , 'cardNumber'=>$cardPanMask];
+            $bankAccountId = BankaccountRepo::firstOrCreateBankAccount($parameters)->id;
         }
-        
+
         self::changeTransactionStatusToSuccessful($transaction->id, $refId, $bankAccountId);
     }
     
@@ -112,4 +107,6 @@ class TransactionRepo
         
         static::modify($data, (int) $id);
     }
+
+
 }

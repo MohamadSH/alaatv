@@ -74,7 +74,7 @@ class OrderproductCollection extends Collection
             $newPriceInfo = $this->getNewPriceForItem($orderproduct);
 
             $orderproduct->fillCostValues($newPriceInfo);
-            $orderproduct->updateWithoutTimestamp();
+            $orderproduct->update();
         }
     }
     
@@ -166,8 +166,8 @@ class OrderproductCollection extends Collection
      */
     public function calculateGroupPrice()
     {
-        $alaaGroupOrderproductCollection = new GroupOrderproductCheckout($this, $this->pluck("id")
-            ->toArray());
+        $alaaGroupOrderproductCollection = new GroupOrderproductCheckout($this, $this->pluck("id")->toArray());
+
         $priceInfo                       = $alaaGroupOrderproductCollection->checkout();
         $calculatedOrderproducts         = $priceInfo["orderproductsInfo"]["calculatedOrderproducts"];
         $newPrices                       = $calculatedOrderproducts->newPrices;

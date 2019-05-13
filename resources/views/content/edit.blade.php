@@ -74,10 +74,10 @@
                 </div>
                 <div class = "m-portlet__body">
 
-                    {!! Form::open(['method' => 'POST','action' => ['Web\EducationalContentController@basicStore'], 'class'=>'form-horizontal'  ,'accept-charset'=>'UTF-8']) !!}
+                    {!! Form::open(['method' => 'POST','action' => ['Web\ContentController@basicStore'], 'class'=>'form-horizontal'  ,'accept-charset'=>'UTF-8']) !!}
                     <div class = "row">
                         <div class = "col">
-                            {!! Form::hidden('educationalContentId',$educationalContent->id) !!}
+                            {!! Form::hidden('educationalContentId',$content->id) !!}
                             <div class = "col-md-6">
                                 {!! Form::text('newFileFullName', null, ['class' => 'form-control', 'placeholder'=>'نام فایل کامل ( با دات ام پی فر)', 'dir'=>'ltr']) !!}
                                 {!! Form::text('newContetnsetId', optional($contentset)->id, ['class' => 'form-control', 'placeholder'=>'شماره درس', 'dir'=>'ltr']) !!}

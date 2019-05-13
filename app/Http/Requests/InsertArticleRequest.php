@@ -12,7 +12,7 @@ class InsertArticleRequest extends FormRequest
 
     public function authorize()
     {
-        if (Auth()
+        if (auth()
             ->user()
             ->can(config('constants.INSERT_ARTICLE_ACCESS'))) {
             return true;
