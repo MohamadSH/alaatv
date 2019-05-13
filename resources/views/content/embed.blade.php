@@ -53,7 +53,7 @@
 
             shareTitle: '{{ $video->display_name }}',
             shareUrl: '{{action("Web\ContentController@show" , $video)}}',
-            shareEmbed: '<iframe src="{{action('ContentController@embed' , $video)}}" width="640" height="360" frameborder="0" allowfullscreen></iframe>'
+            shareEmbed: '<iframe src="{{action('Web\ContentController@embed' , $video)}}" width="640" height="360" frameborder="0" allowfullscreen></iframe>'
         });
     });
     player.on('resolutionchange', function () {
