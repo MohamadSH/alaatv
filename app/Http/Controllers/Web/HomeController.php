@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use Log;
 use SEO;
 use Auth;
 use Carbon\Carbon;
@@ -152,6 +153,27 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
+        $diskAdapter = Storage::disk('pamphletSftp')
+            ->getAdapter();
+        //            dd($diskAdapter);
+        $fileName = '910721A_20171018093108.pdf';
+
+        try {
+            $url =   $diskAdapter->getUrl($fileName);
+        } catch (\Exception $exception) {
+            Log::error(json_encode([
+                'message'  => 'fetchUrl failed!',
+                'error'    => $exception->getMessage(),
+                'line'     => $exception->getLine(),
+                'file'     => $exception->getFile(),
+                'fileName' => $fileName,
+            ], JSON_UNESCAPED_UNICODE));
+
+            return null;
+        }
+        dd($url);
+
+
         return (array) optional($request->user('alaatv'))->id;
     }
     
