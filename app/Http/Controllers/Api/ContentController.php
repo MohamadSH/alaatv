@@ -26,7 +26,7 @@ class ContentController extends Controller
             return response()->json($content, Response::HTTP_OK);
         }
     
-        $productsThatHaveThisContent = $content->products();
+        $productsThatHaveThisContent = $content->activeProducts();
     
         return $this->getUserCanNotSeeContentJsonResponse($content, $productsThatHaveThisContent, function ($msg) {
         });

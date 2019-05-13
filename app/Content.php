@@ -885,7 +885,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      *
      * @return \App\Collection\ProductCollection
      */
-    public function products(): ProductCollection
+    public function activeProducts(): ProductCollection
     {
         return Cache::tags(['content', 'product'])
             ->remember('products-of-content:'.$this->id, config('constants.CACHE_60'), function () {
@@ -917,7 +917,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      *
      * @return \App\Collection\ProductCollection
      */
-    public function allOfProducts(): ProductCollection
+    public function allProducts(): ProductCollection
     {
         return Cache::tags(['content', 'product'])
             ->remember('all-of-products-of-content:'.$this->id, config('constants.CACHE_60'), function () {

@@ -261,7 +261,7 @@ class ContentController extends Controller
         }
         $user_can_see_content        = $this->userCanSeeContent($request, $content, 'web');
         $message                     = null;
-        $productsThatHaveThisContent = $content->products() ?: new ProductCollection();
+        $productsThatHaveThisContent = $content->activeProducts() ?: new ProductCollection();
         if (!$user_can_see_content) {
     
             $jsonResponse = $this->getUserCanNotSeeContentJsonResponse($content, $productsThatHaveThisContent,

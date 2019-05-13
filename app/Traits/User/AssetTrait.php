@@ -91,7 +91,7 @@ trait AssetTrait
      */
     private function getContentProductsId(Content $content): array
     {
-        return $content->allOfProducts()
+        return $content->allProducts()
             ->pluck('id')
             ->toArray();
     }
