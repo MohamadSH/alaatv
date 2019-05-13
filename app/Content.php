@@ -885,7 +885,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      *
      * @return \App\Collection\ProductCollection
      */
-    public function products(): ProductCollection
+    public function activeProducts(): ProductCollection
     {
         return Cache::tags(['content', 'product'])
             ->remember('products-of-content:'.$this->id, config('constants.CACHE_60'), function () {
@@ -911,7 +911,40 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             });
         
     }
-    
+
+    /**
+     * every products that have this content.
+     *
+     * @return \App\Collection\ProductCollection
+     */
+    public function allProducts(): ProductCollection
+    {
+        return Cache::tags(['content', 'product'])
+            ->remember('all-of-products-of-content:'.$this->id, config('constants.CACHE_60'), function () {
+                return $this->set->getProducts(false)
+                    ->makeHidden([
+                        'shortDescription',
+                        'longDescription',
+                        'tags',
+                        'introVideo',
+                        'order',
+                        'page_view',
+                        'gift',
+                        'type',
+                        'attributes',
+                        'samplePhotos',
+                        'sets',
+                        'product_set',
+                        'children',
+                        'updated_at',
+                        'amount',
+
+                    ]);
+            });
+
+    }
+
+
     public function grades()
     {
         //ToDo : deprecated
