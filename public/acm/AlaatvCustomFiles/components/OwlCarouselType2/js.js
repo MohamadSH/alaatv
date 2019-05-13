@@ -203,5 +203,4 @@
     $.fn.OwlCarouselType2.owlCarouselOptions = null;
     $.fn.OwlCarouselType2.carouselElement = null;
 
-
 }(jQuery));

@@ -26,6 +26,7 @@ mix.copyDirectory('public/assets/vendors/base', 'public/css');
 mix.babel(
     [
         'public/assets/vendors/base/vendors.bundle.edited.js',
+        // 'public/assets/vendors/base/vendors.bundle.js',
         'public/assets/demo/demo12/base/scripts.bundle.js',
 
         // 'public/acm/cubeportfolio/js/jquery.cubeportfolio.min.js',
