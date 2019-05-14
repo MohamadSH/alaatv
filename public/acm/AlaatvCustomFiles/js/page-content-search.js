@@ -358,20 +358,13 @@ var Alaasearch = function () {
         if (owlType === 'product' || owlType === 'video' || owlType === 'set' || owlType === 'pamphlet' || owlType === 'article') {
             var perPage = typeof (owl.data("per-page")) === "number" ? owl.data("per-page") : 6;
 
-            // console.log('per page:' + perPage);
-            // console.log('nextPageUrl:' + nextPageUrl);
-            // console.log('event.property.name',event.property.name);
-            // console.log('event.property.value',event.property.value);
-            // console.log('event.relatedTarget.items().length - perPage',event.relatedTarget.items().length - perPage);
             if (nextPageUrl !== null && nextPageUrl.length !== 0
                 && event.namespace && event.property.name === 'position'
                 && event.property.value >= event.relatedTarget.items().length - perPage) {
                 lockAjax(owlType);
                 addLoadingItem(owl, owlType);
                 // load, add and update
-                // console.log("next page Url: " + nextPageUrl);
                 loadData(owl, nextPageUrl, owlType, callback);
-                // console.log([currentPage,lastPage,nextPage]);
             }
         } else if (owlType === 'pamphlet' || owlType === 'article') {
             lockAjax(owlType);
@@ -392,17 +385,13 @@ var Alaasearch = function () {
             let owlType = 'product';
             let nextPageUrl = $('#owl--js-var-next-page-product-carousel-url');
             let owl = $(this);
-            // console.log("productAjaxLock:" + productAjaxLock);
             if (!productAjaxLock && nextPageUrl.val() !== "null") {
                 load(event, nextPageUrl.val(), owl, owlType, function (newPageUrl) {
-                    // console.log("PRE:" + $('#owl--js-var-next-page-product-carousel-url').val());
                     if (newPageUrl === null) {
                         newPageUrl = '';
                     }
                     $('#owl--js-var-next-page-product-carousel-url').val(decodeURI(newPageUrl));
-                    // console.log("NEW:" + $('#owl--js-var-next-page-product-carousel-url').val());
                     unLockAjax(owlType);
-                    // console.log("productAjaxLock:" + productAjaxLock);
                 });
             }
         });
@@ -426,9 +415,7 @@ var Alaasearch = function () {
             if( !videoAjaxLock && nextPageUrl.val() !== "null") {
 
                 load(event, nextPageUrl.val(), owl, owlType,function (newPageUrl) {
-                    // console.log("PRE:" + nextPageUrl.val());
                     $('#owl--js-var-next-page-video-url').val(decodeURI(newPageUrl));
-                    // console.log("NEW:" + nextPageUrl.val());
                     unLockAjax(owlType);
                 });
             }
@@ -446,13 +433,9 @@ var Alaasearch = function () {
             var owlType = "set";
             var nextPageUrl = $('#owl--js-var-next-page-set-url');
             var owl = $(this);
-            // console.log("nextPageUrl:"+nextPageUrl.val());
             if( !setAjaxLock && nextPageUrl.val() !== "null") {
-                // console.log("se Ajax is not lock!");
                 load(event, nextPageUrl.val(), owl, owlType,function (newPageUrl) {
-                    // console.log("PRE:" + nextPageUrl.val());
                     $('#owl--js-var-next-page-set-url').val(decodeURI(newPageUrl));
-                    // console.log("NEW:" + nextPageUrl.val());
                     unLockAjax(owlType);
                 });
             }
@@ -579,7 +562,11 @@ var Alaasearch = function () {
         $('#contentSearchFilter').removeClass('lockActiveStep');
         if (!hasItem) {
             $('.notFoundMessage').fadeIn();
-            if ($('#contentSearchFilter .selectorItem[data-select-active="true"]').attr('data-select-order') !== 3) {
+            if (
+                typeof $('#contentSearchFilter .selectorItem[data-select-active="true"]').attr('data-select-order') !== 'undefined' &&
+                parseInt($('#contentSearchFilter .selectorItem[data-select-active="true"]').attr('data-select-order')) !== 4
+            ) {
+                console.log('order: ', $('#contentSearchFilter .selectorItem[data-select-active="true"]').attr('data-select-order'));
                 $('#contentSearchFilter').addClass('lockActiveStep');
             }
         } else {
@@ -1852,18 +1839,10 @@ var CustomInitMultiLevelSearch = function () {
                 lessonKey: 'ensaniLessons'
             }
         ],
-        "maghta": [
+        "maghtaGhadim": [
             {
                 name: 'همه مقاطع',
                 value: 'همه_مقاطع'
-            },
-            {
-                name: 'دهم',
-                value: 'دهم'
-            },
-            {
-                name: 'یازدهم',
-                value: 'یازدهم'
             },
             {
                 name: 'کنکور',
@@ -1889,6 +1868,40 @@ var CustomInitMultiLevelSearch = function () {
                 name: 'المپیاد',
                 value: 'المپیاد'
             }
+        ],
+        "maghtaJadid": [
+            {
+                name: 'همه مقاطع',
+                value: 'همه_مقاطع'
+            },
+            {
+                name: 'دهم',
+                value: 'دهم'
+            },
+            {
+                name: 'یازدهم',
+                value: 'یازدهم'
+            },
+            {
+                name: 'کنکور',
+                value: 'کنکور'
+            },
+            {
+                name: 'المپیاد',
+                value: 'المپیاد'
+            }
+        ],
+        "nezam": [
+            {
+                name: 'نظام قدیم',
+                value: 'نظام_آموزشی_قدیم',
+                maghtaKey: 'maghtaGhadim'
+            },
+            {
+                name: 'نظام جدید',
+                value: 'نظام_آموزشی_جدید',
+                maghtaKey: 'maghtaJadid'
+            }
         ]
     };
 
@@ -1896,7 +1909,8 @@ var CustomInitMultiLevelSearch = function () {
     let tagsFromController = null;
 
     let selectedVlues = {
-        maghta: filterData.maghta[0],
+        nezam: filterData.nezam[1],
+        maghta: filterData.maghtaJadid[0],
         major: filterData.major[0],
         lesson: filterData.allLessons[0],
         teacher: filterData.lessonTeacher.همه_دروس[0].value
@@ -1906,7 +1920,8 @@ var CustomInitMultiLevelSearch = function () {
         filterData.lessonTeacher.همه_دروس[0].value,
         filterData.allLessons[0].value,
         filterData.major[0].value,
-        filterData.maghta[0].value
+        filterData.maghtaGhadim[0].value,
+        filterData.maghtaJadid[0].value
     ];
 
     function addUnderLine(string) {
@@ -1931,31 +1946,65 @@ var CustomInitMultiLevelSearch = function () {
         $('.selectorItem.'+filterClass).attr('data-select-active', 'true');
     }
 
-    function setSelectedMaghtaFromTags() {
-        let selectedVal = filterData.maghta[0];
-        let existInTags = false;
-
-        if (tagsFromController !== null) {
+    function getTagsFromControllerOrUrl() {
+        let tags = [];
+        if (tagsFromController !== null && typeof tagsFromController !== 'undefined') {
             tags = tagsFromController;
         } else {
             tags = getTags();
         }
+        return tags;
+    }
 
-        console.log('tags: ', tags);
+    function setSelectedNezamFromTags() {
+        let selectedVal = filterData.nezam[1];
+        let existInTags = false;
+
+        let tags = getTagsFromControllerOrUrl();
+
         for (let tagsIndex in tags) {
-            for (let majorIndex in filterData.maghta) {
-                let item = filterData.maghta[majorIndex];
+            for (let nezamIndex in filterData.nezam) {
+                let item = filterData.nezam[nezamIndex];
                 if (item.value === tags[tagsIndex]) {
                     selectedVal = item;
+                    activeFilter('maghtaSelector');
+                    existInTags = true;
+                    break;
+                }
+            }
+        }
+        selectedVlues.nezam = selectedVal;
+        if (existInTags) {
+            let name = removeUnderLine(selectedVal.value);
+            $('.selectorItem.nezamSelector').attr('data-select-value', name);
+            return name;
+        } else {
+            return false;
+        }
+    }
+
+    function setSelectedMaghtaFromTags() {
+
+        let selectedNezam = selectedVlues.nezam;
+        let selectedMaghta = filterData[selectedNezam.maghtaKey][0];
+
+        let existInTags = false;
+        let tags = getTagsFromControllerOrUrl();
+
+        for (let tagsIndex in tags) {
+            for (let maghtaIndex in filterData[selectedNezam.maghtaKey]) {
+                let item = filterData[selectedNezam.maghtaKey][maghtaIndex];
+                if (item.value === tags[tagsIndex]) {
+                    selectedMaghta = item;
                     activeFilter('majorSelector');
                     existInTags = true;
                     break;
                 }
             }
         }
-        selectedVlues.maghta = selectedVal;
+        selectedVlues[selectedNezam.maghtaKey] = selectedMaghta;
         if (existInTags) {
-            let name = removeUnderLine(selectedVal.value);
+            let name = removeUnderLine(selectedMaghta.value);
             $('.selectorItem.maghtaSelector').attr('data-select-value', name);
             return name;
         } else {
@@ -1967,11 +2016,7 @@ var CustomInitMultiLevelSearch = function () {
         let selectedVal = filterData.major[0];
         let existInTags = false;
 
-        if (tagsFromController !== null) {
-            tags = tagsFromController;
-        } else {
-            tags = getTags();
-        }
+        let tags = getTagsFromControllerOrUrl();
 
         for (let tagsIndex in tags) {
             for (let majorIndex in filterData.major) {
@@ -1999,11 +2044,7 @@ var CustomInitMultiLevelSearch = function () {
         let selectedLesson = filterData[selectedMajor.lessonKey][0];
         let existInTags = false;
 
-        if (tagsFromController !== null) {
-            tags = tagsFromController;
-        } else {
-            tags = getTags();
-        }
+        let tags = getTagsFromControllerOrUrl();
 
         for (let tagsIndex in tags) {
             for (let lessonIndex in filterData[selectedMajor.lessonKey]) {
@@ -2031,11 +2072,7 @@ var CustomInitMultiLevelSearch = function () {
         let selectedTeacher = filterData.lessonTeacher[selectedLesson][0];
         let existInTags = false;
 
-        if (tagsFromController !== null) {
-            tags = tagsFromController;
-        } else {
-            tags = getTags();
-        }
+        let tags = getTagsFromControllerOrUrl();
 
         for (let tagsIndex in tags) {
             for (let teacherIndex in filterData.lessonTeacher[selectedLesson]) {
@@ -2058,59 +2095,87 @@ var CustomInitMultiLevelSearch = function () {
         }
     }
 
+    function initSelectorItem(selectorClass, selectedValue, filterDataArray) {
+        $(selectorClass).find('.subItem').remove();
+        appendSubItems(filterDataArray, selectorClass, selectedValue);
+        fadeOutSubItemsIfDisplayTypeIsSelect2(selectorClass, filterDataArray, selectedValue);
+    }
+
+    function initNezam() {
+        let selectorClass = '.nezamSelector';
+        let selectedValue = setSelectedNezamFromTags();
+        let filterDataArray = filterData.nezam;
+        initSelectorItem(selectorClass, selectedValue, filterDataArray);
+        setSelectedNezamFromTags();
+    }
+
     function initMaghta() {
-        let selectedVlue = setSelectedMaghtaFromTags();
-        $('.maghtaSelector').find('.subItem').remove();
-        for (let index in filterData.maghta) {
-            let name = filterData.maghta[index].value.replace('_', ' ');
-            if (selectedVlue === name) {
-                $('.maghtaSelector').append('<div class="col subItem" selected="selected">'+name+'</div>');
-            } else {
-                $('.maghtaSelector').append('<div class="col subItem">'+name+'</div>');
-            }
-        }
+        let selectorClass = '.maghtaSelector';
+        let selectedValue = setSelectedMaghtaFromTags();
+        let maghta = selectedVlues.nezam.maghtaKey;
+        let filterDataArray = filterData[maghta];
+        initSelectorItem(selectorClass, selectedValue, filterDataArray);
         setSelectedMaghtaFromTags();
     }
 
     function initMajor() {
-        let selectedVlue = setSelectedMajorFromTags();
-        $('.majorSelector').find('.subItem').remove();
-        for (let index in filterData.major) {
-            let name = filterData.major[index].value.replace('_', ' ');
-            if (selectedVlue === name) {
-                $('.majorSelector').append('<div class="col subItem" selected="selected">'+name+'</div>');
-            } else {
-                $('.majorSelector').append('<div class="col subItem">'+name+'</div>');
-            }
-        }
+        let selectorClass = '.majorSelector';
+        let selectedValue = setSelectedMajorFromTags();
+        let filterDataArray = filterData.major;
+        initSelectorItem(selectorClass, selectedValue, filterDataArray);
     }
 
     function initLessons() {
-        let selectedVlue = setSelectedLessonFromTags();
+        let selectorClass = '.lessonSelector';
+        let selectedValue = setSelectedLessonFromTags();
         let major = selectedVlues.major.lessonKey;
-        $('.lessonSelector').find('.subItem').remove();
-        for (let index in filterData[major]) {
-            let name = filterData[major][index].value.replace('_', ' ');
-            name = removeUnderLine(name);
-            if (selectedVlue === name) {
-                $('.lessonSelector').append('<div class="col subItem" selected="selected">'+name+'</div>');
-            } else {
-                $('.lessonSelector').append('<div class="col subItem">'+name+'</div>');
-            }
-        }
+        let filterDataArray = filterData[major];
+        initSelectorItem(selectorClass, selectedValue, filterDataArray);
     }
 
     function initTeacher() {
-        let selectedVlue = setSelectedTeacherFromTags();
+        let selectorClass = '.teacherSelector';
+        let selectedValue = setSelectedTeacherFromTags();
         let lesson = selectedVlues.lesson.value;
-        $('.teacherSelector').find('.subItem').remove();
-        for (let index in filterData.lessonTeacher[lesson]) {
-            let name = filterData.lessonTeacher[lesson][index].value.replace('_', ' ');
+        let filterDataArray = filterData.lessonTeacher[lesson];
+        initSelectorItem(selectorClass, selectedValue, filterDataArray);
+    }
+
+    function fadeOutSubItemsIfDisplayTypeIsSelect2(selectorClass, filterDataArray, selectedValue) {
+        let showType = getDisaplayType(selectorClass);
+        if (showType === 'select2') {
+            let selectorOrder = $(selectorClass).attr('data-select-order');
+            if (selectedValue === false) {
+                if ($('.filterNavigationStep[data-select-order="'+selectorOrder+'"]').hasClass('current')) {
+                    selectedValue = null;
+                } else {
+                    selectedValue = $(selectorClass).attr('data-select-value');
+                }
+            }
+            $(selectorClass).find('.subItem').fadeOut(0);
+            $(selectorClass).find('.form-control.select2').empty();
+            for (let index in filterDataArray) {
+                let name = filterDataArray[index].value;
+                name = removeUnderLine(name);
+                if (selectedValue === name) {
+                    $(selectorClass).find('.form-control.select2').append("<option value='"+name+"' selected>"+name+"</option>");
+                } else {
+                    $(selectorClass).find('.form-control.select2').append("<option value='"+name+"'>"+name+"</option>");
+                }
+            }
+        } else if (showType === 'grid') {
+            $(selectorClass).find('.subItem').fadeIn(0);
+        }
+    }
+
+    function appendSubItems(filterDataArray, selectorClass, selectedValue) {
+        for (let index in filterDataArray) {
+            let name = filterDataArray[index].value;
             name = removeUnderLine(name);
-            if (selectedVlue === name) {
-                $('.teacherSelector').append('<div class="col subItem" selected="selected">'+name+'</div>');
+            if (selectedValue === name) {
+                $(selectorClass).append('<div class="col subItem" selected="selected">'+name+'</div>');
             } else {
-                $('.teacherSelector').append('<div class="col subItem">'+name+'</div>');
+                $(selectorClass).append('<div class="col subItem">'+name+'</div>');
             }
         }
     }
@@ -2125,9 +2190,18 @@ var CustomInitMultiLevelSearch = function () {
         return addUnderLine(string);
     }
 
+    function getDisaplayType(selectorClass) {
+        let showType = $(selectorClass).data('select-display');
+        if (typeof showType === 'undefined') {
+            showType = 'grid';
+        }
+        return showType;
+    }
+
     return {
         initFilters: function (inputTags) {
             tagsFromController = inputTags;
+            initNezam();
             initMaghta();
             initMajor();
             initLessons();
@@ -2152,7 +2226,6 @@ var GetAjaxData = function () {
         $('.pageTags .m-list-badge__items').find('.m-list-badge__item').remove();
 
         let searchFilterData = MultiLevelSearch.getSelectedData();
-
         let url = document.location.href.split('?')[0];
         let tagsValue = '';
         for (let index in searchFilterData) {
@@ -2171,8 +2244,8 @@ var GetAjaxData = function () {
         }
 
         url += '?' + tagsValue;
-
         history.pushState('data to be passed', 'Title of the page', url);
+
         // The above will add a new entry to the history so you can press Back button to go to the previous state.
         // To change the URL in place without adding a new entry to history use
         // history.replaceState('data to be passed', 'Title of the page', '');
@@ -2184,8 +2257,10 @@ var GetAjaxData = function () {
         $('#product-carousel-warper').fadeIn();
         $('#video-carousel-warper').fadeIn();
         $('#set-carousel-warper').fadeIn();
-        $('#pamphlet-vertical-tabpanel').fadeIn();
-        $('#article-vertical-tabpanel').fadeIn();
+        // $('#pamphlet-vertical-tabpanel').fadeIn();
+        $('#pamphlet-vertical-tabpanel').removeClass('d-none');
+        // $('#article-vertical-tabpanel').fadeIn();
+        $('#article-vertical-tabpanel').removeClass('d-none');
         $('#pamphlet-vertical-tab').fadeIn();
         $('#article-vertical-tab').fadeIn();
         $('.ProductAndSetAndVideoWraper').removeClass('col').addClass('col-12 col-md-9');
@@ -2263,17 +2338,29 @@ jQuery(document).ready(function () {
         selectorId: 'contentSearchFilter'
     }, function (data) {
         GetAjaxData.refreshTags();
+        CustomInitMultiLevelSearch.initFilters();
         GetAjaxData.getNewDataBaseOnTags();
-    },  function (data) {
-        if (data.selectorOrder < 3) {
-            GetAjaxData.refreshTags();
-            CustomInitMultiLevelSearch.initFilters();
-        }
 
-        $('.a--multi-level-search select').select2('destroy');
-        $('.a--multi-level-search select').select2({closeOnSelect: true});
-        $('.a--multi-level-search select').select2("close");
-        $('.a--multi-level-search select').select2("close");
+        // GetAjaxData.refreshTags();
+        // GetAjaxData.getNewDataBaseOnTags();
+        // if (data.selectorOrder < 4) {
+        //     GetAjaxData.refreshTags();
+        //     CustomInitMultiLevelSearch.initFilters();
+        // }
+    },  function (data) {
+        GetAjaxData.refreshTags();
+        CustomInitMultiLevelSearch.initFilters();
+        // if (data.selectorOrder < 4) {
+        //     GetAjaxData.refreshTags();
+        //     CustomInitMultiLevelSearch.initFilters();
+        // }
+
+
+
+        // $('.a--multi-level-search select').select2('destroy');
+        // $('.a--multi-level-search select').select2({closeOnSelect: true});
+        // $('.a--multi-level-search select').select2("close");
+        // $('.a--multi-level-search select').select2("close");
     });
 
 });
