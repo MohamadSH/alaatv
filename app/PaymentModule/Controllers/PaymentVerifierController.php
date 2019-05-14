@@ -9,7 +9,6 @@ use App\Traits\HandleOrderPayment;
 use Illuminate\Routing\Controller;
 use AlaaTV\Gateways\PaymentDriver;
 use App\Repositories\TransactionRepo;
-use AlaaTV\Gateways\Facades\OnlineGateWay;
 use Illuminate\Support\Facades\{Cache, Request};
 
 class PaymentVerifierController extends Controller
