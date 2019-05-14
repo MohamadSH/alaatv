@@ -38,7 +38,7 @@
     @include("systemMessage.flash")
     <div class = "row">
         <div class = "col-md-12">
-            <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
+            <div class = "m-portlet m-portlet--mobile">
                 <div class = "m-portlet__body">
 
                     <div class = "row">
@@ -222,7 +222,6 @@
         </div>
     </div>
 @endsection
-
 
 @section('page-js')
     <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type = "text/javascript"></script>

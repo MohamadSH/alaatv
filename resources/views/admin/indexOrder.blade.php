@@ -450,6 +450,7 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         @include('admin.filters.paymentMethodFilter')
+                                        @include('admin.filters.paymentGatewayFilter')
                                     </div>
                                     <div class="col-md-3">
                                         @include("admin.filters.transactionType")
