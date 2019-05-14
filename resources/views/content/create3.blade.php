@@ -77,50 +77,50 @@
                         </div>
                         <div class = "col-md-6" id = "fileNameSection" style = "border: solid gray 0.5px; padding: 10px;">
                             <div class = "col-md-12">
-                                <div class = "mt-radio-list">
-                                    <label class = "mt-radio mt-radio-outline"> درج با اسم فایل
-                                        <input class = "modeRadio" type = "radio" value = "filename" name = "mode" checked/>
-                                        <span></span>
-                                    </label>
-                                </div>
+{{--                                <div class = "mt-radio-list">--}}
+{{--                                    <label class = "mt-radio mt-radio-outline"> درج با اسم فایل--}}
+{{--                                        <input class = "modeRadio" type = "radio" value = "filename" name = "mode" checked/>--}}
+{{--                                        <span></span>--}}
+{{--                                    </label>--}}
+{{--                                </div>--}}
                                 {!! Form::text('fileName', null, ['class' => 'form-control m-input m-input--air', 'placeholder'=>'نام کامل فایل', 'dir'=>'ltr']) !!}
                                 <span class = "help-block">
                                         <strong></strong>
                                     </span>
                             </div>
                         </div>
-                        <div class = "col-md-6" id = "fileLinkSection" style = "border: solid gray 0.5px; padding: 10px;">
-                            <div class = "col-md-12">
-                                <div class = "mt-radio-list">
-                                    <label class = "mt-radio mt-radio-outline"> درج با لینک
-                                        <input class = "modeRadio" type = "radio" value = "filelink" name = "mode"/>
-                                        <span></span>
-                                    </label>
-                                </div>
-                                {!! Form::text('hd', null, ['class' => 'form-control m-input m-input--air', 'placeholder'=>'لینک کیفیت HD', 'dir'=>'ltr']) !!}
-                                <span class = "help-block">
-                                        <strong></strong>
-                                    </span>
-                            </div>
-                            <div class = "col-md-12">
-                                {!! Form::text('hq', null, ['class' => 'form-control m-input m-input--air', 'placeholder'=>'لینک کیفیت hq', 'dir'=>'ltr']) !!}
-                                <span class = "help-block">
-                                        <strong></strong>
-                                    </span>
-                            </div>
-                            <div class = "col-md-12">
-                                {!! Form::text('240p', null, ['class' => 'form-control m-input m-input--air', 'placeholder'=>'لینک کیفیت 240p', 'dir'=>'ltr']) !!}
-                                <span class = "help-block">
-                                        <strong></strong>
-                                    </span>
-                            </div>
-                            <div class = "col-md-12">
-                                {!! Form::text('thumbnail', null, ['class' => 'form-control m-input m-input--air', 'placeholder'=>'لینک تامبنیل', 'dir'=>'ltr']) !!}
-                                <span class = "help-block">
-                                        <strong></strong>
-                                    </span>
-                            </div>
-                        </div>
+{{--                        <div class = "col-md-6" id = "fileLinkSection" style = "border: solid gray 0.5px; padding: 10px;">--}}
+{{--                            <div class = "col-md-12">--}}
+{{--                                <div class = "mt-radio-list">--}}
+{{--                                    <label class = "mt-radio mt-radio-outline"> درج با لینک--}}
+{{--                                        <input class = "modeRadio" type = "radio" value = "filelink" name = "mode"/>--}}
+{{--                                        <span></span>--}}
+{{--                                    </label>--}}
+{{--                                </div>--}}
+{{--                                {!! Form::text('hd', null, ['class' => 'form-control m-input m-input--air', 'placeholder'=>'لینک کیفیت HD', 'dir'=>'ltr']) !!}--}}
+{{--                                <span class = "help-block">--}}
+{{--                                        <strong></strong>--}}
+{{--                                    </span>--}}
+{{--                            </div>--}}
+{{--                            <div class = "col-md-12">--}}
+{{--                                {!! Form::text('hq', null, ['class' => 'form-control m-input m-input--air', 'placeholder'=>'لینک کیفیت hq', 'dir'=>'ltr']) !!}--}}
+{{--                                <span class = "help-block">--}}
+{{--                                        <strong></strong>--}}
+{{--                                    </span>--}}
+{{--                            </div>--}}
+{{--                            <div class = "col-md-12">--}}
+{{--                                {!! Form::text('240p', null, ['class' => 'form-control m-input m-input--air', 'placeholder'=>'لینک کیفیت 240p', 'dir'=>'ltr']) !!}--}}
+{{--                                <span class = "help-block">--}}
+{{--                                        <strong></strong>--}}
+{{--                                    </span>--}}
+{{--                            </div>--}}
+{{--                            <div class = "col-md-12">--}}
+{{--                                {!! Form::text('thumbnail', null, ['class' => 'form-control m-input m-input--air', 'placeholder'=>'لینک تامبنیل', 'dir'=>'ltr']) !!}--}}
+{{--                                <span class = "help-block">--}}
+{{--                                        <strong></strong>--}}
+{{--                                    </span>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
                         <div class = "col-md-12 text-center m--margin-top-10">
                             <input type = "submit" class = "btn btn-lg m-btn--pill m-btn--air m-btn m-btn--gradient-from-success m-btn--gradient-to-accent" value = "درج">
                         </div>
