@@ -38,7 +38,7 @@
                         </div>
                         <div class="input-group input-group-sm">
                             <span class="input-group-btn">
-                                <a target="_blank" href="{{action("Web\HomeController@download" , ["fileName"=>$file->uuid ])}}" class="btn blue-dark"><i class="fa fa-download"></i>
+                                <a target="_blank" href="{{action("Web\HomeController@download" , ["fileName"=>$file->uuid ])}}" class="btn m-btn--pill m-btn--air btn-primary"><i class="fa fa-download"></i>
                                 </a>
                             </span>
                             <span class="input-group-btn">
