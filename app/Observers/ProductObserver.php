@@ -93,7 +93,7 @@ class ProductObserver
     public function saved(Product $product)
     {
         //todo
-        self::shiftProductOrders($product->order);
+//        self::shiftProductOrders($product->order);
 
         $this->sendTagsOfTaggableToApi($product, $this->tagging);
         Artisan::call('cache:clear');
