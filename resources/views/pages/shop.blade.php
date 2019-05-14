@@ -141,15 +141,13 @@
                                                 <br>
                                                 <div class = "m--font-primary">
                                                     <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-{{--                                                        @if($product->price['final']!=$product->price['base'])--}}
-{{--                                                            <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($product->price['base']) }}</span>--}}
-{{--                                                        @endif--}}
-                                                        <span class="m-badge m-badge--warning a--productRealPrice">15,000</span>
+                                                        @if($product->price['final']!=$product->price['base'])
+                                                            <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($product->price['base']) }}</span>
+                                                        @endif
                                                         {{ number_format($product->price['final']) }} تومان
-{{--                                                        @if($product->price['final']!==$product->price['base'])--}}
-{{--                                                            <span class="m-badge m-badge--info a--productDiscount">{{ (1-($product->price['final']/$product->price['base']))*100 }}%</span>--}}
-{{--                                                        @endif--}}
-                                                        <span class="m-badge m-badge--info a--productDiscount">22%</span>
+                                                        @if($product->price['final']!==$product->price['base'])
+                                                            <span class="m-badge m-badge--info a--productDiscount">{{ (1-($product->price['final']/$product->price['base']))*100 }}%</span>
+                                                        @endif
                                                     </span>
                                                 </div>
                                                 <br>

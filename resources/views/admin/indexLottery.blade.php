@@ -99,7 +99,7 @@
                             <div class = "col-md-6">
                                 <div class = "btn-group">
                                     @if(isset($userlotteries) && $userlotteries->isEmpty())
-                                        <a href = "{{action("Web\LotteryController@holdLottery" , ["lottery"=>$lotteryName])}}" class = "btn btn-outline blue-dark" target = "_blank">
+                                        <a href = "{{action("Web\LotteryController@holdLottery" , ["lottery"=>$lotteryName])}}" class = "btn m-btn--pill m-btn--air btn-outline-primary" target = "_blank">
                                             برگزاری قرعه کشی
                                         </a>
                                     @else
