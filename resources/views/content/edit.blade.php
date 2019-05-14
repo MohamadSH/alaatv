@@ -22,6 +22,10 @@
         span.tag {
             direction: ltr;
         }
+        
+        #editForm .list-group .list-group-item .badge {
+            font-size: 1rem;
+        }
     </style>
 
 
@@ -148,12 +152,17 @@
     <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js" type = "text/javascript"></script>
     <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js" type = "text/javascript"></script>
     <script src = "/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/app.js" type = "text/javascript"></script>
     <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-input-mask.js" type = "text/javascript"></script>
     <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-bootstrap-multiselect.min.js" type = "text/javascript"></script>
     <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-extended-modals.min.js" type = "text/javascript"></script>
     <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type = "text/javascript"></script>
     <script src = "/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type = "text/javascript"></script>
     <script src = "/acm/AlaatvCustomFiles/js/admin-edit-educationalContent.js" type = "text/javascript"></script>
-    {{--<script src="/js/extraJS/edit-content.js" type="text/javascript"></script>--}}
+    <script type="text/javascript">
+        $("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput({
+            tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
+        });
+    </script>
 @endsection
 @endpermission
