@@ -982,7 +982,7 @@
                                 pendingTransactions += '<span class="bold m--font-danger">بدون مبلغ</span>';
                             }
                             pendingTransactions += '<br>';
-                            pendingTransactions += '<a target="_blank" href="#" class="btn btn-sm btn-xs blue-sharp btn-outline sbold m--margin-left-10">اصلاح</a>';
+                            pendingTransactions += '<a target="_blank" href="#" class="btn-sm btn m-btn--pill m-btn--air btn-primary sbold m--margin-left-10">اصلاح</a>';
                             
                             if (typeof pendingTransaction.transactionID !== 'undefined') {
                                 pendingTransactions += '  ,شماره تراکنش: ' + pendingTransaction.transactionID;

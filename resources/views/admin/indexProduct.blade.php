@@ -56,7 +56,7 @@
                         </div>
                     </div>
                     <div class="m-portlet__head-tools">
-                        <img class="d-nonr" id="product-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
+                        <img class="d-none" id="product-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
@@ -115,7 +115,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!--end::Modal-->@endpermission
+                                    <!--end::Modal-->
+                                    @endpermission
                                 </div>
                             </div>
                         </div>
@@ -138,7 +139,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
                                     <button type="submit" class="btn btn-primary" id="copy-product-loading-image">بله</button>
-                                    <img class="d-nonr" id="copy-product-loading-image" src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px" width="25px">
+                                    <img class="d-none" id="copy-product-loading-image" src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px" width="25px">
                                 </div>
                                 {!! Form::close() !!}
                             </div>
@@ -194,7 +195,7 @@
                         </div>
                     </div>
                     <div class="m-portlet__head-tools">
-                        <img class="d-nonr" id="coupon-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
+                        <img class="d-none" id="coupon-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
@@ -302,7 +303,7 @@
                         </div>
                     </div>
                     <div class="m-portlet__head-tools">
-                        <img class="d-nonr" id="attribute-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
+                        <img class="d-none" id="attribute-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
@@ -403,7 +404,7 @@
                         </div>
                     </div>
                     <div class="m-portlet__head-tools">
-                        <img class="d-nonr" id="attributeset-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
+                        <img class="d-none" id="attributeset-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
@@ -656,10 +657,9 @@
                 },
             ];
             let dataFilter = function(data){
-                console.log('data: ', data);
                 let json = jQuery.parseJSON( data );
-                json.recordsTotal = json.total;
-                json.recordsFiltered = json.total;
+                json.recordsTotal = json.result.total;
+                json.recordsFiltered = json.result.total;
                 // for (let index in json.data) {
                 //     if(!isNaN(index)) {
                 //         json.data[index]['full_name'] =
@@ -678,7 +678,7 @@
             };
             let dataSrc = function (json) {
                 console.log('json.result.data: ', json.result.data);
-                $("#order-portlet-loading").addClass("d-none");
+                $("#product-portlet-loading").addClass("d-none");
                 mApp.unblock('#product_table_wrapper');
                 return json.result.data;
             };
@@ -686,7 +686,7 @@
             if (dontLoadAjax) {
                 url = null;
             } else {
-                $("#order-portlet-loading").removeClass("d-none");
+                $("#product-portlet-loading").removeClass("d-none");
             }
             let dataTable = makeDataTable_loadWithAjax("product_table", url, columns, dataFilter, ajaxData, dataSrc);
             return dataTable;

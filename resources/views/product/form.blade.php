@@ -285,10 +285,11 @@
                     </div>
                 </div>
             </div>
+            @include('product.partials.tagsInput' )
             <div class = "form-actions">
                 <div class = "row">
                     <div class = "col-md-offset-3 col-md-9">
-                        {!! Form::submit('اصلاح', ['class' => 'btn dark' ] ) !!}
+                        {!! Form::submit('اصلاح', ['class' => 'btn m-btn--pill m-btn--air btn-primary' ] ) !!}
                     </div>
                 </div>
             </div>
@@ -388,10 +389,11 @@
                 </div>
             </div>
         </div>
+        @include('product.partials.tagsInput' )
         <div class = "form-actions">
             <div class = "row">
                 <div class = "col-md-offset-3 col-md-9">
-                    {!! Form::submit('اصلاح', ['class' => 'btn dark' ] ) !!}
+                    {!! Form::submit('اصلاح', ['class' => 'btn m-btn--pill m-btn--air btn-primary' ] ) !!}
                 </div>
             </div>
         </div>
