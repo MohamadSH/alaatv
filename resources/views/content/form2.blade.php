@@ -1,16 +1,16 @@
-<div class = "row">
-    <div class = "col-md-4">
-        <label class = "mt-checkbox mt-checkbox-outline">
-            <div class = "md-checkbox">
+<div class="row">
+    <div class="col-md-4">
+        <label class="mt-checkbox mt-checkbox-outline">
+            <div class="md-checkbox">
                 @if($content->enable)
                     {!! Form::checkbox('enable', '1', null,  ['value' => '1' , 'id' => 'checkbox_enable' , 'class'=>'md-check' , 'checked']) !!}
                 @else
                     {!! Form::checkbox('enable', '1', null,  ['value' => '1' , 'id' => 'checkbox_enable' , 'class'=>'md-check' ]) !!}
                 @endif
-                <label for = "checkbox_enable">
+                <label for="checkbox_enable">
                     <span></span>
-                    <span class = "check"></span>
-                    <span class = "box"></span>
+                    <span class="check"></span>
+                    <span class="box"></span>
                     فعال بودن محتوا
                     <span></span>
                 </label>
@@ -26,29 +26,29 @@
         {{--@endforeach--}}
         {{--</select>--}}
         {{--{!! Form::select("contenttypes[]", $childContentTypes , null, ['class' => 'form-control', 'id'=>'childContentTypes' , 'placeholder' => 'انتخاب زیر شاخه' ]) !!}--}}
-        <ul class = "list-group margin-top-20 text-center">
-            <li class = "list-group-item bold" style = "font-size: small">فایل های موجود
+        <ul class="list-group margin-top-20 text-center">
+            <li class="list-group-item bold" style="font-size: small">فایل های موجود
             </li>
             @if($content->files->isNotEmpty())
                 @foreach($content->files as $file)
-                    <li class = "list-group-item" style = "font-size: small">
-                        <div class = "row margin-bottom-5">
-                            <span class = "badge badge-danger" dir = "ltr"> {{basename($file->name, "." . pathinfo($file->name, PATHINFO_EXTENSION)) }}
+                    <li class="list-group-item" style="font-size: small">
+                        <div class="row margin-bottom-5">
+                            <span class="badge badge-danger" dir="ltr"> {{basename($file->name, "." . pathinfo($file->name, PATHINFO_EXTENSION)) }}
                             </span>
                         </div>
-                        <div class = "input-group input-group-sm">
-                            <span class = "input-group-btn">
-                                <a target = "_blank" href = "{{action("Web\HomeController@download" , ["fileName"=>$file->uuid ])}}" class = "btn blue-dark"><i class = "fa fa-download"></i>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-btn">
+                                <a target="_blank" href="{{action("Web\HomeController@download" , ["fileName"=>$file->uuid ])}}" class="btn blue-dark"><i class="fa fa-download"></i>
                                 </a>
                             </span>
-                            <span class = "input-group-btn">
-                                <a class = "btn btn-icon-only btn-outline red removeFile" data-target = "#deleteFileConfirmationModal" data-toggle = "modal" data-id = "{{$file->id}}" data-to = "{{$content->id}}">
-                                    <i class = "fa fa-times"></i>
+                            <span class="input-group-btn">
+                                <a class="btn btn-icon-only btn-outline red removeFile" data-target="#deleteFileConfirmationModal" data-toggle="modal" data-id="{{$file->id}}" data-to="{{$content->id}}">
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </span>
-                            <input type = "text" value = "@if(isset($file->pivot->caption[0])){{$file->pivot->caption}}@endif" id = "caption_{{$file->id}}" class = "form-control" maxlength = "50" placeholder = "کپشن">
-                            <span class = "input-group-btn">
-                                <button type = "button" class = "btn blue fileCaptionSubmit" id = "captionSubmit_{{$file->id}}" data-to = "{{$content->id}}">ذخیره کپشن
+                            <input type="text" value="@if(isset($file->pivot->caption[0])){{$file->pivot->caption}}@endif" id="caption_{{$file->id}}" class="form-control" maxlength="50" placeholder="کپشن">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn blue fileCaptionSubmit" id="captionSubmit_{{$file->id}}" data-to="{{$content->id}}">ذخیره کپشن
                                 </button>
                             </span>
                         </div>
@@ -56,53 +56,53 @@
                     </li>
                 @endforeach
             @else
-                <li class = "list-group-item text-center m--font-danger " style = "font-size: small">فایلی درج نشده است
+                <li class="list-group-item text-center m--font-danger " style="font-size: small">فایلی درج نشده است
                 </li>
             @endif
         </ul>
-{{--        <div class = "row">--}}
-{{--            <div class = "col-md-12">--}}
-{{--                <select name = "fileQuality" class = "form-control">--}}
-{{--                    <option value = "">انتخاب کیفیت(در صورت وجود)</option>--}}
-{{--                    <option value = "HD_720p" data-role = "hd" data-action = "کیفیت عالی">کیفیت عالی</option>--}}
-{{--                    <option value = "hq" data-role = "hq" data-action = "کیفیت بالا">کیفیت بالا</option>--}}
-{{--                    <option value = "240p" data-role = "240p" data-action = "کیفیت متوسط">کیفیت متوسط</option>--}}
-{{--                    <option value = "thumbnail" data-role = "thumbnail" data-action = "تامبنیل">تامبنیل</option>--}}
+{{--        <div class="row">--}}
+{{--            <div class="col-md-12">--}}
+{{--                <select name="fileQuality" class="form-control">--}}
+{{--                    <option value="">انتخاب کیفیت(در صورت وجود)</option>--}}
+{{--                    <option value="HD_720p" data-role="hd" data-action="کیفیت عالی">کیفیت عالی</option>--}}
+{{--                    <option value="hq" data-role="hq" data-action="کیفیت بالا">کیفیت بالا</option>--}}
+{{--                    <option value="240p" data-role="240p" data-action="کیفیت متوسط">کیفیت متوسط</option>--}}
+{{--                    <option value="thumbnail" data-role="thumbnail" data-action="تامبنیل">تامبنیل</option>--}}
 
 {{--                </select>--}}
 {{--                @if(isset($rootContentTypes))--}}
-{{--                    <select name = "contenttype" class = "form-control">--}}
-{{--                        <option value = "" selected>انتخاب نوع فایل</option>--}}
+{{--                    <select name="contenttype" class="form-control">--}}
+{{--                        <option value="" selected>انتخاب نوع فایل</option>--}}
 {{--                        @foreach($rootContentTypes as $rootContentType)--}}
-{{--                            <option value = "{{$rootContentType->id}}" data-title = "{{$rootContentType->name}}">{{$rootContentType->displayName}}</option>--}}
+{{--                            <option value="{{$rootContentType->id}}" data-title="{{$rootContentType->name}}">{{$rootContentType->displayName}}</option>--}}
 {{--                        @endforeach--}}
 {{--                    </select>--}}
 {{--                @endif--}}
 {{--            </div>--}}
 {{--        </div>--}}
-{{--        <div id = "my-awesome-dropzone" class = "dropzone dropzone-file-area needsclick dz-clickable">--}}
-{{--            <div class = "fallback">--}}
-{{--                <input name = "file" type = "file" multiple/>--}}
+{{--        <div id="my-awesome-dropzone" class="dropzone dropzone-file-area needsclick dz-clickable">--}}
+{{--            <div class="fallback">--}}
+{{--                <input name="file" type="file" multiple/>--}}
 {{--            </div>--}}
-{{--            <div class = "dropzone-previews"></div>--}}
-{{--            <div class = "dz-message needsclick">--}}
-{{--                <h5 class = "sbold text-justify" style = "line-height: normal">--}}
+{{--            <div class="dropzone-previews"></div>--}}
+{{--            <div class="dz-message needsclick">--}}
+{{--                <h5 class="sbold text-justify" style="line-height: normal">--}}
 {{--                    فایل های خود را اینجا بیندازید و یا بر روی این قسمت کلیک کنید.پس از بارگذاری فایل ها بر روی ذخیره اطلاعات کلیک کنید--}}
 {{--                </h5>--}}
-{{--                <span class = "needsclick">--}}
-{{--                    <span class = "m-badge m-badge--wide m-badge--info">توجه:</span>--}}
+{{--                <span class="needsclick">--}}
+{{--                    <span class="m-badge m-badge--wide m-badge--info">توجه:</span>--}}
 {{--                    فرمت مجاز--}}
-{{--                    <label style = "color:red;">pdf</label>--}}
+{{--                    <label style="color:red;">pdf</label>--}}
 {{--                </span>--}}
 {{--            </div>--}}
 {{--        </div>--}}
     </div>
-    <div class = "col-md-8">
-        <div class = "form-group">
-            <div class = "row">
-                <label class = " col-md-4 control-label" for = "validSinceDate">نمایان شدن برای کاربران</label>
-                <div class = "col-md-3">
-                    <input type = "text" name = "validSinceDate" class = "form-control" value = "@if(isset($content->validSince)){{$content->validSince}}@endif" dir = "ltr">
+    <div class="col-md-8">
+        <div class="form-group">
+            <div class="row">
+                <label class=" col-md-4 control-label" for="validSinceDate">نمایان شدن برای کاربران</label>
+                <div class="col-md-3">
+                    <input type="text" name="validSinceDate" class="form-control" value="@if(isset($content->validSince)){{$content->validSince}}@endif" dir="ltr">
                     {{--<input  type="text" class="form-control" id="validSinceDate" value="@if(isset($content->validSince)){{$content->validSince}}@endif"  dir="ltr">--}}
                     {{--<input name="validSinceDate" id="validSinceDateAlt"  type="text" class="form-control hidden">--}}
                 </div>
@@ -111,51 +111,51 @@
                 {{--</div>--}}
             </div>
         </div>
-        <div class = "form-group">
-            <div class = "row">
-                <label class = " col-md-4 control-label" for = "created_at">تاریخ درج</label>
-                <div class = "col-md-3">
-                    <input type = "text" name = "created_at" class = "form-control" value = "@if(isset($educationalContent->created_at)){{$educationalContent->created_at}}@endif" dir = "ltr">
+        <div class="form-group">
+            <div class="row">
+                <label class=" col-md-4 control-label" for="created_at">تاریخ درج</label>
+                <div class="col-md-3">
+                    <input type="text" name="created_at" class="form-control" value="@if(isset($educationalContent->created_at)){{$educationalContent->created_at}}@endif" dir="ltr">
                 </div>
             </div>
         </div>
-        <div class = "form-group">
-            <div class = "row">
-                <label class = "col-md-2 control-label" for = "name">نام :
-                    <span class = "required"> * </span>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-2 control-label" for="name">نام :
+                    <span class="required"> * </span>
                 </label>
-                <div class = "col-md-9">
+                <div class="col-md-9">
                     {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'name', 'maxlength'=>'100' ]) !!}
-                    <span class = "help-block">
+                    <span class="help-block">
                                                    <strong></strong>
                                            </span>
                 </div>
             </div>
         </div>
-        <div class = "form-group">
-            <div class = "row">
-                <label class = "col-md-2 control-label" for = "description">توضیح:
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-2 control-label" for="description">توضیح:
                 </label>
-                <div class = "col-md-9">
+                <div class="col-md-9">
                     {!! Form::textarea('description', null, ['class' => 'form-control', 'id' => 'descriptionSummerNote', 'rows' => '5' ]) !!}
                 </div>
             </div>
         </div>
-        <div class = "form-group">
-            <div class = "row">
-                <label class = "col-md-2 control-label" for = "tags">
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-2 control-label" for="tags">
                     تگ ها :
                 </label>
-                <div class = "col-md-9">
-                    <input name = "tags" type = "text" class = "form-control input-large" value = "{{$tags}}" data-role = "tagsinput">
+                <div class="col-md-9">
+                    <input name="tags" type="text" class="form-control input-large" value="{{$tags}}" data-role="tagsinput">
                 </div>
             </div>
         </div>
-        <div class = "form-group">
-            <div class = "row">
-                <div class = "col-md-12 text-center">
-                    <button type = "submit" class = "btn btn-success">
-                        <i class = "fa fa-check"></i>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fa fa-check"></i>
                         ذخیره اطلاعات
                     </button>
                 </div>
