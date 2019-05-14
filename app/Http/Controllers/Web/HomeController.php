@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\{File, Input, Route, Config, Storage};
 use App\{Bon,
     Http\Requests\InsertCouponRequest,
     Role,
+    Transactiongateway,
     User,
     Event,
     Major,
@@ -491,12 +492,8 @@ class HomeController extends Controller
             'بدون آدرس ها',
             'آدرس دارها',
         ];
-    
-    
-        $paymentGateways = [
-            'zarinpar' => 'زرین پال',
-            'mellat' => 'ملت'
-        ];
+
+        $paymentGateways = Transactiongateway::enable()->get()->pluck('displayName' , 'id');
         
         return view('admin.indexOrder',
             compact('pageName', 'orderstatuses', 'products', 'paymentMethods', 'majors', 'paymentstatuses', 'sortBy',
