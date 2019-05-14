@@ -9,11 +9,10 @@ use Carbon\Carbon;
 use App\Contentset;
 use App\Contenttype;
 use App\Websitesetting;
-use http\Exception\InvalidArgumentException;
 use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\{Cache, Log};
+use Illuminate\Support\Facades\{Cache};
 use Illuminate\Routing\Redirector;
 use App\Http\Controllers\Controller;
 use App\Collection\ProductCollection;
@@ -119,8 +118,8 @@ class ContentController extends Controller
         $key = md5(collect($items)
             ->pluck('id')
             ->implode(','));
-
-        if(is_null($items))
+    
+        if ($items === null)
         {
             $response = [];
             $response[]  = json_decode('{}', false);
@@ -187,7 +186,13 @@ class ContentController extends Controller
         $contentOnly  = $request->get('contentOnly', false);
         $tags         = (array) $request->get('tags');
         $filters      = $request->all();
-//        dd($filters);
+    
+        $strstr = strstr($request->header('User-Agent'), 'Alaa');
+        $isApp  = ($strstr !== false && $strstr !== '') ? true : false;
+        if ($isApp) {
+            $contentSearch->setNumberOfItemInEachPage(200);
+        }
+        
         $result = $contentSearch->get(compact('filters', 'contentTypes'));
         
         $result->offsetSet('set', !$contentOnly ? $setSearch->get($filters) : null);
@@ -195,8 +200,7 @@ class ContentController extends Controller
     
         $pageName = 'content-search';
     
-        $strstr = strstr($request->header('User-Agent'), 'Alaa');
-        $isApp  = ($strstr !== false && $strstr !== '') ? true : false;
+    
         if ($isApp) {
             return response()->json($this->makeJsonForAndroidApp(optional($result->get('video'))
                 ->items()));
@@ -211,7 +215,7 @@ class ContentController extends Controller
     
     public function embed(Request $request, Content $content)
     {
-        $url = action('ContentController@show', $content);
+        $url = action('Web\ContentController@show', $content);
         $this->generateSeoMetaTags($content);
         if ($content->contenttype_id !== Content::CONTENT_TYPE_VIDEO) {
             return redirect($url, Response::HTTP_MOVED_PERMANENTLY);
