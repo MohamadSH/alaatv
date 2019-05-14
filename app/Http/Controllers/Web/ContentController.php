@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Educationalcontent;
 use App\User;
 use Exception;
 use App\Content;
@@ -244,8 +245,9 @@ class ContentController extends Controller
     
     public function create2()
     {
-        $contenttypes = Contenttype::getRootContentType()
-            ->pluck('displayName', 'id');
+//        $contenttypes = Contenttype::getRootContentType()
+//            ->pluck('displayName', 'id');
+        $contenttypes = [ 8 => 'فیلم'];
         
         $view = view("content.create3", compact("contenttypes"));
         return httpResponse(null, $view);
@@ -347,7 +349,7 @@ class ContentController extends Controller
         $result = compact('content', 'rootContentTypes', 'validSinceTime', 'tags',
             'contentset'//            "rootContentTypes"
         );
-        
+
         $view = view("content.edit", $result);
         return httpResponse(null, $view);
     }
@@ -432,6 +434,55 @@ class ContentController extends Controller
      */
     public function basicStore(Request $request)
     {
+        if($request->has("newContetnsetId"))
+        {
+            $educationalContentId =  $request->get("educationalContentId");
+            $newContetnsetId = $request->get("newContetnsetId");
+            $newFileFullName = $request->get("newFileFullName") ;
+
+            $educationalContent = Content::FindOrFail($educationalContentId);
+            $currentContentset = $educationalContent->set;
+
+            if($newContetnsetId != $currentContentset->id)
+            {
+                $educationalContent->contentset_id = $newContetnsetId;
+            }
+
+            if(isset($newFileFullName[0]))
+            {
+                // ToDo : Deprecated
+//                $basePath = "https://cdn.sanatisharif.ir/media/";
+//                $files = $educationalContent->file;
+//                foreach ($files as $file)
+//                {
+//                    $fileLabel = $file->pivot->label;
+//                    switch ($fileLabel)
+//                    {
+//                        case "thumbnail":
+//                            $thumbnailFullName = pathinfo($newFileFullName , PATHINFO_FILENAME);
+//                            $file->name = $basePath . "thumbnails/".$newContetnsetId . "/" . $thumbnailFullName . ".jpg";
+//                            break;
+//                        case "240p":
+//                            $file->name = $basePath . $newContetnsetId ."/240p/" . $newFileFullName;
+//                            break;
+//                        case "hq":
+//                            $file->name = $basePath . $newContetnsetId ."/hq/" . $newFileFullName;
+//                            break;
+//                        case "hd":
+//                            $file->name = $basePath . $newContetnsetId ."/HD_720p/" . $newFileFullName;
+//                            break;
+//                        default:
+//                            break;
+//                    }
+//                    $file->update();
+//                }
+            }
+
+            Cache::tags('content')->flush();
+            session()->put('success', 'تغییر نام با موفقیت انجام شد');
+            return redirect()->back();
+        }
+
         $contentset_id  = $request->get('contentset_id');
         $contenttype_id = $request->get('contenttype_id');
         $name           = $request->get('name');
@@ -447,36 +498,38 @@ class ContentController extends Controller
 
             return redirect()->back();
         }
-            $newContent = $lastContent->replicate();
+        $newContent = $lastContent->replicate();
 
         if (!($newContent instanceof Content)) {
             throw new Exception('replicate Error!'.$contentset_id);
         }
-            $newContent->contenttype_id = $contenttype_id;
-            $newContent->name = $name;
-            $newContent->description = null;
-            $newContent->metaTitle = null;
-            $newContent->metaDescription = null;
-            $newContent->enable = 0;
-            $newContent->validSince = $dateNow;
-            $newContent->created_at = $dateNow;
-            $newContent->updated_at = $dateNow;
 
-            $files = $this->makeVideoFileArray($fileName, $contentset_id);
+        if (!isset($order)) {
+            $lastOrder = $lastContent->order;
+            $order = $lastOrder + 1;
+        }
 
-            $thumbnailUrl = $this->makeThumbnailUrlFromFileName($fileName, $contentset_id);
-            $newContent->thumbnail = $this->makeThumbanilFile($thumbnailUrl);
-            $this->storeFilesOfContent($newContent, $files);
+        $newContent->contenttype_id = $contenttype_id;
+        $newContent->contentset_id = $contentset->id;
+        $newContent->name = $name;
+        $newContent->order = $order;
+        $newContent->description = null;
+        $newContent->metaTitle = null;
+        $newContent->metaDescription = null;
+        $newContent->enable = 0;
+        $newContent->validSince = $dateNow;
+        $newContent->created_at = $dateNow;
+        $newContent->updated_at = $dateNow;
 
-            $newContent->save();
-            if (!isset($order)) {
-                //TODO://deprecate
-                $order = $lastContent->pivot->order + 1;
-            }
-            //TODO://deprecate
-            $this->attachContentSetToContent($newContent, $contentset->id, $order);
+        $files = $this->makeVideoFileArray($fileName, $contentset_id);
 
-            return redirect(action("Web\ContentController@edit", $newContent->id));
+        $thumbnailUrl = $this->makeThumbnailUrlFromFileName($fileName, $contentset_id);
+        $newContent->thumbnail = $this->makeThumbanilFile($thumbnailUrl);
+        $this->storeFilesOfContent($newContent, $files);
+
+        $newContent->save();
+
+        return redirect(action("Web\ContentController@edit", $newContent->id));
 
     }
     
