@@ -38,8 +38,8 @@
                         </div>
                         <div class="input-group input-group-sm">
                             <span class="input-group-btn">
-                                <a target="_blank" href="{{$file->link}}" class="btn blue-dark"><i class="fa fa-download"></i>
-                                </a>
+
+                                <a target="_blank" href="{{$file->link}}" class="btn blue-dark"><i class="fa fa-download"></i>                                </a>
                             </span>
 
 {{--                            <span class="input-group-btn">--}}
