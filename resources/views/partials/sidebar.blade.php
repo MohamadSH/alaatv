@@ -119,7 +119,7 @@
                                 </span>
                                 </li>
                                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                                    <a target = "_blank" href = "{{ action("Web\HomeController@adminBot" , ["bot"=>"wallet"]) }}" class = "m-menu__link ">
+                                    <a target = "_blank" href = "{{ action("Web\BotsController@adminBot" , ["bot"=>"wallet"]) }}" class = "m-menu__link ">
                                         <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
@@ -127,7 +127,7 @@
                                     </a>
                                 </li>
                                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                                    <a target = "_blank" href = "{{ action("Web\HomeController@adminBot" , ["bot"=>"excel"]) }}" class = "m-menu__link ">
+                                    <a target = "_blank" href = "{{ action("Web\BotsController@adminBot" , ["bot"=>"excel"]) }}" class = "m-menu__link ">
                                         <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
@@ -135,7 +135,7 @@
                                     </a>
                                 </li>
                                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                                    <a target = "_blank" href = "{{action("Web\HomeController@bot" , ["voucherbot"=>1])}}" class = "m-menu__link ">
+                                    <a target = "_blank" href = "{{action("Web\BotsController@bot" , ["voucherbot"=>1])}}" class = "m-menu__link ">
                                         <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>

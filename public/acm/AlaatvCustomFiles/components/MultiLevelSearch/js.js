@@ -51,6 +51,7 @@ var MultiLevelSearch = function () {
         } else if (showType === 'select2') {
             let selectorSubitems = getSelectorSubitems(selectorIndex);
             selectorSubitems.fadeOut(0);
+
             let select2Html = '';
             let select2Id = 'MultiLevelSearch-select2-' + selectorId + '-' + selectorIndex;
 
@@ -75,18 +76,21 @@ var MultiLevelSearch = function () {
                     oldSelect2.select2('destroy');
                 }
                 selectorItem.find('.select2warper').remove();
-                selectorItem.append('<div class="col-12 col-sm-9 col-md-5 col-lg-4 select2warper"><div><select class="form-control select2" id="' + select2Id + '">' + select2Html + '</select></div></div>');
+                selectorItem.append('<div class="col-12 col-sm-9 col-md-7 col-lg-6 select2warper"><div><select class="form-control select2" id="' + select2Id + '">' + select2Html + '</select></div></div>');
                 $('#' + select2Id)
                     .select2({closeOnSelect: true})
                     .on('select2:select', function (event) {
                         $('.a--multi-level-search select').select2("close");
                     })
                     .on('select2:close', function (event) {
+                        $('.a--multi-level-search select').select2('destroy');
+                        $('.a--multi-level-search select').select2({closeOnSelect: true});
+                        $('.a--multi-level-search select').select2("close");
                         $('.a--multi-level-search select').select2("close");
                     });
                 selectorItem.fadeIn();
             } else {
-                selectorItem.append('<div class="col-12 col-sm-9 col-md-5 col-lg-4 select2warper"><div><select class="form-control select2" id="' + select2Id + '">' + select2Html + '</select></div></div>');
+                selectorItem.append('<div class="col-12 col-sm-9 col-md-7 col-lg-6 select2warper"><div><select class="form-control select2" id="' + select2Id + '">' + select2Html + '</select></div></div>');
                 $('#' + select2Id)
                     .select2({closeOnSelect: true})
                     .on('select2:select', function (event) {
@@ -258,7 +262,14 @@ var MultiLevelSearch = function () {
             let selectValue = $(selectorItem).attr('data-select-value');
             let selectActive = $(selectorItem).attr('data-select-active');
             let selectedText = null;
-            if(typeof selectValue !== 'undefined' && typeof selectActive !== 'undefined' && selectActive !== 'true') {
+            if(
+                typeof selectValue !== 'undefined' &&
+                typeof selectActive !== 'undefined' &&
+                (
+                    selectActive !== 'true' ||
+                    getMaxOrder() === order
+                )
+            ) {
                 selectedText = selectValue;
             }
 

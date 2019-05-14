@@ -113,7 +113,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('contentAdmin', 'Web\HomeController@adminContent');
     Route::get('ordersAdmin', 'Web\HomeController@adminOrder');
     Route::get('smsAdmin', 'Web\HomeController@adminSMS');
-    Route::get('botAdmin', 'Web\HomeController@adminBot');
+    Route::get('botAdmin', 'Web\BotsController@adminBot');
     Route::get('siteConfigAdmin', 'Web\HomeController@adminSiteConfig');
     Route::get('slideShowAdmin', 'Web\HomeController@adminSlideShow');
     Route::get('report', 'Web\HomeController@adminReport');
@@ -139,11 +139,11 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::get('holdlottery', "Web\LotteryController@holdLottery");
     Route::get('givePrize', "Web\LotteryController@givePrizes");
-    Route::get('smsbot', "Web\HomeController@smsBot");
-    Route::get("bot", "Web\HomeController@bot");
-    Route::get("pointBot", "Web\HomeController@pointBot");
-    Route::post("walletBot", "Web\HomeController@walletBot");
-    Route::post("excelBot", "Web\HomeController@excelBot");
+    Route::get('smsbot', "Web\BotsController@smsBot");
+    Route::get("bot", "Web\BotsController@bot");
+    Route::get("pointBot", "Web\BotsController@pointBot");
+    Route::post("walletBot", "Web\BotsController@walletBot");
+    Route::post("excelBot", "Web\BotsController@excelBot");
     Route::post("registerUserAndGiveOrderproduct", "Web\HomeController@registerUserAndGiveOrderproduct");
     Route::get("specialAddUser", "Web\HomeController@specialAddUser");
     Route::get("v/asiatech", "Web\UserController@voucherRequest");
@@ -240,7 +240,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get("copypamphletfromremote", "Web\RemoteDataCopyController@copyPamphlet");
     Route::get("copydepartmentlessontotakhtekhak", "Web\SanatisharifmergeController@copyDepartmentlesson");
     Route::get("copycontenttotakhtekhak", "Web\SanatisharifmergeController@copyContent");
-    Route::get("tagbot", "Web\HomeController@tagbot");
+    Route::get("tagbot", "Web\BotsController@tagbot");
     
     Route::get("donate", "Web\DonateController");
     Route::post("donateOrder", "Web\OrderController@donateOrder");

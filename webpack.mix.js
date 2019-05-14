@@ -26,6 +26,7 @@ mix.copyDirectory('public/assets/vendors/base', 'public/css');
 mix.babel(
     [
         'public/assets/vendors/base/vendors.bundle.edited.js',
+        // 'public/assets/vendors/base/vendors.bundle.js',
         'public/assets/demo/demo12/base/scripts.bundle.js',
 
         // 'public/acm/cubeportfolio/js/jquery.cubeportfolio.min.js',
@@ -61,7 +62,7 @@ mix.babel(
 mix.babel(
     [
         'public/acm/AlaatvCustomFiles/components/MultiLevelSearch/js.js',
-        // 'public/acm/AlaatvCustomFiles/js/page-content-search.js'
+        'public/acm/AlaatvCustomFiles/js/page-content-search.js'
     ],
     'public/js/content-search.js'
 ).version();
