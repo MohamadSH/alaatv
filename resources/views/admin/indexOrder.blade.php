@@ -1212,12 +1212,12 @@
                     state: "info",
                 });
                 data.orders = getNextPageParam(data.start, data.length);
+                delete data.columns;
                 let $form = $("#filterOrderForm");
                 let formData = getFormData($form);
                 // let formData = $form.serializeArray();
                 /* Merge defaults and options, without modifying defaults */
                 data = $.extend({}, data, formData);
-                console.log('settings: ', data);
                 return data;
             };
             let dataSrc = function (json) {

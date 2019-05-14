@@ -1203,8 +1203,22 @@
             namespace: !1, handler: function (t) {
                 var i, o, r = z.get(this, e);
                 if (1 & t.isTrigger && this[e]) {
-                    if (r) (b.event.special[e] || {}).delegateType && t.stopPropagation(); else if (r = a.call(arguments), z.set(this, e, r), i = n(this, e), this[e](), r !== (o = z.get(this, e)) || i ? z.set(this, e, !1) : o = void 0, r !== o) return t.stopImmediatePropagation(), t.preventDefault(), o
-                } else r && (z.set(this, e, b.event.trigger(b.extend(r.shift(), b.Event.prototype), r, this)), t.stopImmediatePropagation())
+
+                    if (r) (b.event.special[e] || {}).delegateType && t.stopPropagation();
+                    else if (
+                        r = a.call(arguments),
+                            z.set(this, e, r),
+                            i = n(this, e),
+                            this[e](),
+                            r !== (o = z.get(this, e)) || i ? z.set(this, e, !1) : o = void 0
+                            , r !== o
+                    )
+                        return t.stopImmediatePropagation(), t.preventDefault(), o
+                } else r && (
+                        z.set(
+                            this, e, b.event.trigger(b.extend((typeof r.shift !== 'undefined')?r.shift():null, b.Event.prototype), r, this)
+                        ) , t.stopImmediatePropagation()
+                )
             }
         })) : b.event.add(t, e, Ft)
     }

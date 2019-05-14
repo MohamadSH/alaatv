@@ -711,11 +711,11 @@
                     state: "info",
                 });
                 data.orders = getNextPageParam(data.start, data.length);
+                delete data.columns;
                 let $form = $("#filterUserForm");
                 let formData = getFormData($form);
                 /* Merge data and formData, without modifying data */
                 data = $.extend({}, data, formData);
-                // console.log('settings: ', data);
                 return data;
             };
             let dataSrc = function (json) {

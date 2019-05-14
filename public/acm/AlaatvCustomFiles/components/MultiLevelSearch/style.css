@@ -123,3 +123,8 @@
 .a--multi-level-search .filterNavigationWarper .filterNavigationStep:last-child:after {
     content: '';
 }
+
+.select2-dropdown {
+    position: absolute !important;
+    z-index: 90 !important;
+}

@@ -1,7 +1,7 @@
 @extends('app' , ["pageName"=>$pageName])
 
 @section('page-css')
-    <link href = "{{ mix('/css/user-dashboard.css') }}" rel = "stylesheet" type = "text/css"/>
+    <link href = "{{ mix('/css/page-shop.css') }}" rel = "stylesheet" type = "text/css"/>
 @endsection
 @section('pageBar')
     <nav aria-label = "breadcrumb">
@@ -140,7 +140,17 @@
                                                 </a>
                                                 <br>
                                                 <div class = "m--font-primary">
-                                                    <span>{{ $product->priceText['basePriceText']  }}</span>
+                                                    <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
+{{--                                                        @if($product->price['final']!=$product->price['base'])--}}
+{{--                                                            <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($product->price['base']) }}</span>--}}
+{{--                                                        @endif--}}
+                                                        <span class="m-badge m-badge--warning a--productRealPrice">15,000</span>
+                                                        {{ number_format($product->price['final']) }} تومان
+{{--                                                        @if($product->price['final']!==$product->price['base'])--}}
+{{--                                                            <span class="m-badge m-badge--info a--productDiscount">{{ (1-($product->price['final']/$product->price['base']))*100 }}%</span>--}}
+{{--                                                        @endif--}}
+                                                        <span class="m-badge m-badge--info a--productDiscount">22%</span>
+                                                    </span>
                                                 </div>
                                                 <br>
                                                 <a href="{{ $product->url }}" target="_blank" class="m-link">{{ $product->name }}</a>

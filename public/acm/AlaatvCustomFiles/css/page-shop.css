@@ -1,0 +1,10 @@
+
+.a--productPrice {
+    font-size: 1.3rem !important;
+}
+.a--productPrice .a--productRealPrice {
+    font-size: 1rem !important;
+}
+.a--productPrice .a--productDiscount {
+    font-size: 1rem !important;
+}
