@@ -8,6 +8,7 @@
     {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>--}}
     <link href = "/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel = "stylesheet" type = "text/css"/>
     <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr-rtl.min.css" rel = "stylesheet" type = "text/css"/>
+    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel = "stylesheet" type = "text/css"/>
 @endsection
 
 @section('pageBar')
@@ -52,7 +53,7 @@
                 <div class = "m-portlet__body">
                     <div class = "m-portlet__body-progress">Loading</div>
                     {!! Form::model($product,['files'=>true,'method' => 'PUT','action' => ['Web\ProductController@update',$product], 'class'=>'form-horizontal']) !!}
-                                                @include('product.form' )
+                        @include('product.form' )
                     {!! Form::close() !!}
                 </div>
             </div>
@@ -71,25 +72,25 @@
         @permission((config('constants.LIST_CONFIGURE_PRODUCT_ACCESS')))
         @if($product->hasChildren())
         <div class = "col-md-6 ">
-                            @include('product.partials.configureTableForm')
+            @include('product.partials.configureTableForm')
         </div>
         @endif
         @endpermission
 
         @permission((config('constants.LIST_PRODUCT_FILE_ACCESS')))
         <div class = "col-md-6">
-                            @include('product.productFile.index')
+            @include('product.productFile.index')
         </div>
         @endpermission
 
         @permission((config('constants.LIST_PRODUCT_SAMPLE_PHOTO_ACCESS')))
         <div class = "col-md-6">
-                            @include('product.samplePhoto.index')
+            @include('product.samplePhoto.index')
         </div>
         @endpermission
 
         <div class = "col-md-6">
-                        @include("product.complimentary")
+            @include("product.complimentary")
         </div>
 
         <div class = "col-md-6">
@@ -134,8 +135,12 @@
     <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js" type = "text/javascript"></script>
     <script src = "/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type = "text/javascript"></script>
     <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type = "text/javascript"></script>
-
+    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js" type = "text/javascript"></script>
     <script>
+
+        $("input.productTags").tagsinput({
+            tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
+        });
         /**
          * Start up jquery
          */
@@ -157,6 +162,7 @@
             $('#productShortDescriptionSummerNote').summernote({height: 300});
             $('#productLongDescriptionSummerNote').summernote({height: 300});
             $('#productSpecialDescriptionSummerNote').summernote({height: 300});
+
 
         });
 
