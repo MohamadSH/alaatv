@@ -21,6 +21,8 @@ trait HandleOrderPayment
     protected function handleOrderSuccessPayment(Order $order): array
     {
         $order->closeWalletPendingTransactions();
+
+        $order = $order->fresh();
         
         $updateOrderPaymentStatusResult = $this->updateOrderPaymentStatus($order);
         
