@@ -55,7 +55,7 @@ class AttributevalueController extends Controller
             session()->put("error", "خطای پایگاه داده.");
         }
         
-        return redirect(action('AttributeController@edit', $attribute));
+        return redirect(action('Web\AttributeController@edit', $attribute));
     }
 
     public function destroy(Attributevalue $attributevalue)

@@ -133,7 +133,7 @@ class UserController extends Controller
         $user = User::where('techCode', $request->techCode)
             ->first();
         if (isset($user)) {
-            return action('UserController@show', $user);
+            return action('Web\UserController@show', $user);
         }
         
         return 0;
@@ -233,7 +233,7 @@ class UserController extends Controller
             $productUrls = [];
             $baseUrl     = url("/");
             foreach ($productsId as $productId) {
-                array_push($productUrls, str_replace($baseUrl, "", action("ProductController@show", $productId)));
+                array_push($productUrls, str_replace($baseUrl, "", action("Web\ProductController@show", $productId)));
             }
             $users = $users->whereHas('seensitepages', function ($q) use ($productUrls) {
                 $q->whereIn("url", $productUrls);

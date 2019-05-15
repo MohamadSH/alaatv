@@ -90,7 +90,7 @@ class ConsultationController extends Controller
 
     public function show($consultation)
     {
-        return redirect(action('ConsultationController@edit', $consultation));
+        return redirect(action('Web\ConsultationController@edit', $consultation));
     }
 
     public function edit($consultation)
