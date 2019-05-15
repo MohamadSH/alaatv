@@ -71,7 +71,7 @@
                         </div>
                     </div>
                     <div class = "m-portlet__head-tools">
-                        <a class = "btn btn-sm btn-primary m-btn--air" href = "{{action("Web\HomeController@admin")}}"> بازگشت
+                        <a class = "btn btn-sm btn-primary m-btn--air" href = "{{action("Web\AdminController@admin")}}"> بازگشت
                             <i class = "fa fa-angle-left"></i>
                         </a>
                     </div>

@@ -15,7 +15,7 @@
                 <i class = "fa fa-angle-left"></i>
             </li>
             <li>
-                <a href = "{{action("Web\HomeController@admin")}}">پنل مدیریتی</a>
+                <a href = "{{action("Web\AdminController@admin")}}">پنل مدیریتی</a>
                 <i class = "fa fa-angle-left"></i>
             </li>
             <li>
@@ -39,7 +39,7 @@
                     </div>
                     <div class = "actions">
                         <div class = "btn-group">
-                            <a class = "btn btn-sm dark dropdown-toggle" href = "{{action("Web\HomeController@adminContent")}}">
+                            <a class = "btn btn-sm dark dropdown-toggle" href = "{{action("Web\AdminController@adminContent")}}">
                                 بازگشت
                                 <i class = "fa fa-angle-left"></i>
                             </a>

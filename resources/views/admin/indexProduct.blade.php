@@ -121,12 +121,11 @@
                             </div>
                         </div>
                     </div>
-                    @permission((config('constants.REMOVE_PRODUCT_ACCESS')))
+                    @permission((config('constants.COPY_PRODUCT_ACCESS')))
                     <!--begin::Modal-->
                     <div class="modal fade" id="copyProductModal" tabindex="-1" role="dialog" aria-labelledby="copyProductModalModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
-                                {!! Form::open(['class'=>'form-horizontal copyProductForm']) !!}
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="copyProductModalModalLabel"></h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -134,18 +133,84 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <h4 class="modal-title">آیا مطمئن هستید؟</h4>
+                                    <h4 class="modal-title">آیا برای کپی مطمئن هستید؟</h4>
+                                    <input type="hidden" id="productIdForCopy" value="">
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
-                                    <button type="submit" class="btn btn-primary" id="copy-product-loading-image">بله</button>
+                                    <button type="button" class="btn btn-primary" onclick="copyProductInModal()">بله</button>
                                     <img class="d-none" id="copy-product-loading-image" src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px" width="25px">
                                 </div>
-                                {!! Form::close() !!}
                             </div>
                         </div>
                     </div>
-                    <!--end::Modal-->@endpermission
+                    <!--end::Modal-->
+                    @endpermission
+    
+    
+                    @permission((config('constants.REMOVE_PRODUCT_ACCESS')))
+                    <!--begin::Modal-->
+                    <div class="modal fade" id="removeProductModal" tabindex="-1" role="dialog" aria-labelledby="removeProductModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="removeProductModalLabel"></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <h4 class="modal-title">آیا مطمئن هستید؟</h4>
+                                    <input type="hidden" id="product-removeLink" value="removeLink">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                                    <button type="submit" class="btn btn-primary btnRemoveProductInModal" onclick="removeProduct()">بله</button>
+                                    <img class="d-none" id="remove-product-loading-image" src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px" width="25px">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Modal-->
+                    @endpermission
+                    
+                    <!--begin::Modal-->
+                    <div class="modal fade" id="showProductPhotoInModal" tabindex="-1" role="dialog" aria-labelledby="showProductPhotoInModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="showProductPhotoInModalLabel"></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <img src="" alt="" class="a--full-width">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Modal-->
+    
+    
+                    <!--begin::Modal-->
+                    <div class="modal fade" id="static-longDescription" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Modal-->
+            
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="product_table">
                         <thead>
                         <tr>
@@ -178,7 +243,8 @@
                     </table>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
             @permission((config('constants.LIST_COUPON_ACCESS')))
             <!-- BEGIN COUPON TABLE PORTLET-->
@@ -236,16 +302,13 @@
                                         <div class="modal-dialog modal-lg" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="copyProductModalModalLabel">افزودن کپن جدید</h5>
+                                                    <h5 class="modal-title" id="copyProductModalModalLabel"></h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
-                                                {!! Form::open(['method' => 'POST','action' => ['Web\CouponController@store'], 'class'=>'nobottommargin' , 'id'=>'couponForm']) !!}
                                                 <div class="modal-body">
-                                                    <div class="row">
-                                                        @include('coupon.form')
-                                                    </div>
+                                                
                                                 </div>
                                                 {!! Form::close() !!}
                                                 <div class="modal-footer">
@@ -545,7 +608,7 @@
                     "title": "عکس",
                     defaultContent: defaultContent,
                     "render": function ( data, type, row ) {
-                        return '<img alt = "عکس محصول '+row.name+'" style="width: 60px ;height: 60px" src="'+row.url+'"/>';
+                        return '<img data-product-name="'+row.name+'" alt = "عکس محصول '+row.name+'" src="'+row.photo+'" class="a--full-width imgShowProductPhoto"/>';
                     },
                 },
                 {
@@ -575,23 +638,11 @@
                     "data": null,
                     "name": "longDescription",
                     "title": " توضیحات اجمالی",
-                    defaultContent: defaultContent,
                     "render": function ( data, type, row ) {
-                        return '<button class="btn m-btn--pill m-btn--air btn-info" data-target="#static-longDescription-'+row.id+'" data-toggle="modal">نمایش</button>' +
-                            "<!--begin::Modal-->\n" +
-                            "<div class=\"modal fade\" id=\"static-longDescription-"+row.id+"\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">\n" +
-                            "    <div class=\"modal-dialog modal-lg\" role=\"document\">\n" +
-                            "        <div class=\"modal-content\">\n" +
-                            "            <div class=\"modal-body\">\n" +
-                            "                <p>"+row.longDescription+"</p>\n" +
-                            "            </div>\n" +
-                            "            <div class=\"modal-footer\">\n" +
-                            "                <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">بستن</button>\n" +
-                            "            </div>\n" +
-                            "        </div>\n" +
-                            "    </div>\n" +
-                            "</div>\n" +
-                            "<!--end::Modal-->";
+                        if (row.longDescription === null) {
+                            return defaultContent;
+                        }
+                        return '<button class="btn m-btn--pill m-btn--air btn-info btnLongDescription" onclick="showLongDescription(' + "'" + row.longDescription + "'" + ')" > '+ 'نمایش' +' </button>';
                     },
                 },
                 { "data": "type.hint" , "title": "نوع", "defaultContent": defaultContent},
@@ -623,20 +674,28 @@
                     "title": "عملیات",
                     defaultContent: '',
                     "render": function ( data, type, row ) {
-                        return '\n' +
-                            '            <div class="btn-group">\n' +
-                            '                <input type="hidden" name="removeLink" value="">\n' +
-                            '                <a target="_blank" class="btn btn-success" href="'+row.editLink+'">\n' +
-                            '                    <i class="fa fa-pencil"></i> اصلاح \n' +
-                            '                </a>\n' +
-                            '                <a class="btn btn-danger deleteOrder" data-target="#deleteOrderConfirmationModal" data-toggle="modal" remove-link="'+row.removeLink+'" data-product-name="'+row.name+'">\n' +
-                            '                    <i class="fa fa-remove" aria-hidden="true"></i> حذف \n' +
-                            '                </a>\n' +
-                            '                <a class="btn btn-info sendSms" data-target="#sendSmsModal" data-toggle="modal">\n' +
-                            '                    <i class="fa fa-envelope" aria-hidden="true"></i> کپی از محصول\n' +
-                            '                </a>\n' +
-                            '                <div id="ajax-modal" class="modal fade" tabindex="-1"></div>\n' +
-                            '            </div>';
+                        let html = '<div class="btn-group">\n';
+                        @permission((config('constants.SHOW_PRODUCT_ACCESS')))
+                        html +=
+                            '    <a target="_blank" class="btn btn-success" href="' + row.editLink + '">\n' +
+                            '        <i class="fa fa-pencil"></i> اصلاح \n' +
+                            '    </a>\n';
+                        @endpermission
+                        @permission((config('constants.REMOVE_PRODUCT_ACCESS')))
+                        html +=
+                            '    <a class="btn btn-danger btnDeleteOrder" remove-link="' + row.removeLink + '" data-product-name="' + row.name + '">\n' +
+                            '        <i class="fa fa-remove" aria-hidden="true"></i> حذف \n' +
+                            '    </a>\n';
+                        @endpermission
+                        @permission((config('constants.COPY_PRODUCT_ACCESS')))
+                        html +=
+                            '    <a class="btn btn-info copyProduct" onclick="showCopyProductModal(' + row.id + ', ' + "'" + row.name + "'" + ')">\n' +
+                            '        <i class="fa fa-envelope" aria-hidden="true"></i> کپی از محصول\n' +
+                            '    </a>\n';
+                        @endpermission
+                        html += '</div>';
+                        
+                        return html;
                     },
                     // function ( api, rowIdx, columns ) {
                     //     return 'hi';
@@ -674,6 +733,7 @@
                     state: "info",
                 });
                 data.productPage = getNextPageParam(data.start, data.length);
+                delete data.columns;
                 return data;
             };
             let dataSrc = function (json) {
@@ -702,8 +762,37 @@
         /**
          * Start up jquery
          */
+        function showLongDescription(longDescription) {
+            $('#static-longDescription .modal-body').html(longDescription);
+            $('#static-longDescription').modal('show');
+        }
+        function showCopyProductModal(productId, productName) {
+            $('#productIdForCopy').val(productId);
+            $('#copyProductModalModalLabel').html(productName);
+            $('#copyProductModal').modal('show');
+        }
+        
         jQuery(document).ready(function () {
 
+            $(document).on('click', '.imgShowProductPhoto', function () {
+               let src = $(this).attr('src');
+               let alt = $(this).attr('src');
+               let name = $(this).data('product-name');
+               $('#showProductPhotoInModalLabel').html(name);
+               $('#showProductPhotoInModal .modal-body img').attr('src', src);
+               $('#showProductPhotoInModal .modal-body img').attr('alt', alt);
+               $('#showProductPhotoInModal').modal('show');
+            });
+
+            $(document).on('click', '.btnDeleteOrder', function (e) {
+                e.preventDefault();
+                let removeLink = $(this).attr('remove-link');
+                let name = $(this).data('product-name');
+
+               $('#removeProductModalLabel').html(name);
+               $('#product-removeLink').val(removeLink);
+               $('#removeProductModal').modal('show');
+            });
             /*
              validdSince
              */

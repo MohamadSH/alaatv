@@ -25,7 +25,7 @@
         <div class = "col-md-12">
             <!-- BEGIN Portlet PORTLET-->
             <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
-                {!! Form::open(['method' => 'POST', 'action' => 'Web\HomeController@registerUserAndGiveOrderproduct']) !!}
+                {!! Form::open(['method' => 'POST', 'action' => 'Web\AdminController@registerUserAndGiveOrderproduct']) !!}
                 <div class = "m-portlet__body">
                     <div class = "row">
                         <div class = "col-md-6">

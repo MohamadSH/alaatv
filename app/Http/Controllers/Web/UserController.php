@@ -510,7 +510,7 @@ class UserController extends Controller
 
 
         $previousPath         = url()->previous();
-        if (strcmp($previousPath, action("Web\HomeController@adminSMS")) == 0 || $request->has('smsAdmin')) {
+        if (strcmp($previousPath, action("Web\AdminController@adminSMS")) == 0 || $request->has('smsAdmin')) {
             $index                = "user.index2";
 
             $items = $users->get();
@@ -554,7 +554,7 @@ class UserController extends Controller
                 ->where("phonetype_id", 1)
                 ->count();
         }
-        elseif (strcmp($previousPath, action("Web\HomeController@admin")) == 0 || $request->has('userAdmin')) {
+        elseif (strcmp($previousPath, action("Web\AdminController@admin")) == 0 || $request->has('userAdmin')) {
             $items = $users->paginate(10, ['*'], 'orders');
 
             $sortBy   = Input::get("sortBy");
@@ -570,7 +570,7 @@ class UserController extends Controller
 
             return $items;
         }
-        elseif (strcmp($previousPath, action("Web\HomeController@adminReport")) == 0 || $request->has('reportAdmin')) {
+        elseif (strcmp($previousPath, action("Web\AdminController@adminReport")) == 0 || $request->has('reportAdmin')) {
             $reportType           = "";
             $index = "admin.partials.getReportIndex";
 

@@ -19,13 +19,13 @@
                 <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item" aria-current = "page">
-                <a class = "m-link" href = "{{action("Web\HomeController@adminProduct")}}">پنل مدیریتی محصولات</a>
+                <a class = "m-link" href = "{{action("Web\AdminController@adminProduct")}}">پنل مدیریتی محصولات</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
                 <a class = "m-link" href = "#">اصلاح اطلاعات محصول</a>
             </li>
             <li class = "breadcrumb-item" aria-current = "page">
-                <a class = "m-link" href = "@if($product->hasParents()) {{action("Web\ProductController@edit" , $product->parents->first())}} @else{{action("Web\HomeController@adminProduct")}}@endif">
+                <a class = "m-link" href = "@if($product->hasParents()) {{action("Web\ProductController@edit" , $product->parents->first())}} @else{{action("Web\AdminController@adminProduct")}}@endif">
                     بازگشت
                 </a>
             </li>

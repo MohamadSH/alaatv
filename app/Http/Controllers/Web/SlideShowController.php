@@ -110,11 +110,11 @@ class SlideShowController extends Controller
         switch ($slideWebsitePage) {
             case "/home":
                 $slideDisk   = 9;
-                $previousUrl = action("Web\HomeController@adminSlideShow");
+                $previousUrl = action("Web\AdminController@adminSlideShow");
                 break;
             //            case "/لیست-مقالات":
             //                $slideDisk = 13 ;
-            //                $previousUrl = action("Web\HomeController@adminArticleSlideShow");
+            //                $previousUrl = action("Web\AdminController@adminArticleSlideShow");
             //                break;
             default:
                 break;

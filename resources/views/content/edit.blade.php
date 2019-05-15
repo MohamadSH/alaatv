@@ -39,7 +39,7 @@
                 <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item" aria-current = "page">
-                <a class = "m-link" href = "{{action("Web\HomeController@adminContent")}}">پنل مدیریتی</a>
+                <a class = "m-link" href = "{{action("Web\AdminController@adminContent")}}">پنل مدیریتی</a>
             </li>
             <li class = "breadcrumb-item" aria-current = "page">
                 <a class = "m-link" href = "#">

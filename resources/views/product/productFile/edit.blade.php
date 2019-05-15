@@ -13,7 +13,7 @@
                 <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item " aria-current = "page">
-                <a class = "m-link" href = "{{action("Web\HomeController@adminProduct")}}">پنل مدیریتی محصولات</a>
+                <a class = "m-link" href = "{{action("Web\AdminController@adminProduct")}}">پنل مدیریتی محصولات</a>
             </li>
             <li class = "breadcrumb-item" aria-current = "page">
                 <a class = "m-link" href = "{{action("Web\ProductController@edit" , $productFile->product_id)}}">

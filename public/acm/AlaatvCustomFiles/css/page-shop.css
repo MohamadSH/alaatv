@@ -1,4 +1,3 @@
-
 .a--productPrice {
     font-size: 1.3rem !important;
 }
@@ -7,4 +6,16 @@
 }
 .a--productPrice .a--productDiscount {
     font-size: 1rem !important;
+}
+.shopBlock .m-widget30 .m-widget_head {
+    margin-bottom: 0;
+}
+.m-widget_head-owlcarousel-item {
+    padding-bottom: 0;
+}
+.m-widget_head-owlcarousel-item {
+    padding-bottom: 0 !important;
+}
+.a--owl-carousel-type-2-gridViewWarper .gridItem .m-widget_head-owlcarousel-item {
+    margin: 1rem -10px !important;
 }
