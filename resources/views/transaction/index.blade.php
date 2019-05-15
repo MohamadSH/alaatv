@@ -1,4 +1,4 @@
-@permission((Config::get('constants.LIST_TRANSACTION_ACCESS')))
+@permission((config('constants.LIST_TRANSACTION_ACCESS')))
 @foreach($transactions as $transaction)
     <tr id="{{$transaction->id}}">
         <th></th>
@@ -18,7 +18,7 @@
             @if(isset($transaction->order->user)) @if(!isset($transaction->order->user->mobile) )
                 <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @else {{$transaction->order->user->mobile}} @endif @endif
         </td>
-        @permission((Config::get('constants.SHOW_TRANSACTION_TOTAL_COST_ACCESS')))
+        @permission((config('constants.SHOW_TRANSACTION_TOTAL_COST_ACCESS')))
         <td>
             @if(isset($transaction->order->cost) || isset($transaction->order->costwithoutcoupon)){{number_format($transaction->order->totalCost())}} @else
                 <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span>  @endif
@@ -28,7 +28,8 @@
                 <span dir="ltr">{{number_format($transaction->cost)}}</span> @else
                 <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span>  @endif
         </td>
-        @endpermission @permission((Config::get('constants.SHOW_TRANSACTION_TOTAL_FILTERED_COST_ACCESS')))
+        @endpermission
+        @permission((config('constants.SHOW_TRANSACTION_TOTAL_FILTERED_COST_ACCESS')))
         <td>
             @if(isset($transactionOrderproductCost[$transaction->id]))
                 <span dir="ltr">{{number_format( $transactionOrderproductCost[$transaction->id]["cost"]  )}}</span>@else
@@ -49,23 +50,42 @@
             @endif
         </td>
         <td>
-            @if(isset($transaction->paymentmethod)) {{$transaction->paymentmethod->displayName}} @else
-                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif
+            @if(isset($transaction->transactiongateway))
+                {{ $transaction->transactiongateway->displayName }}
+            @else
+                <span class="m-badge m-badge--wide label-sm m-badge--info">بدون درگاه</span>
+            @endif
         </td>
         <td>
-            @if(isset($transaction->created_at) && strlen($transaction->created_at) > 0){{ $transaction->CreatedAt_Jalali() }}@else
-                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif
+            @if(isset($transaction->paymentmethod))
+                {{$transaction->paymentmethod->displayName}}
+            @else
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span>
+            @endif
         </td>
         <td>
-            @if(isset($transaction->deadline_at) && strlen($transaction->deadline_at) > 0){{ $transaction->DeadlineAt_Jalali() }}@else
-                <span class="m-badge m-badge--wide label-sm m-badge--metal"> ندارد </span> @endif
+            @if(isset($transaction->created_at) && strlen($transaction->created_at) > 0)
+                {{ $transaction->CreatedAt_Jalali() }}
+            @else
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span>
+            @endif
         </td>
         <td>
-            @if(isset($transaction->completed_at) && strlen($transaction->completed_at) > 0){{ $transaction->CompletedAt_Jalali() }}@else
-                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif
+            @if(isset($transaction->deadline_at) && strlen($transaction->deadline_at) > 0)
+                {{ $transaction->DeadlineAt_Jalali() }}
+            @else
+                <span class="m-badge m-badge--wide label-sm m-badge--metal"> ندارد </span>
+            @endif
         </td>
         <td>
-            @permission((Config::get('constants.EDIT_TRANSACTION_ACCESS')))
+            @if(isset($transaction->completed_at) && strlen($transaction->completed_at) > 0)
+                {{ $transaction->CompletedAt_Jalali() }}
+            @else
+                <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span>
+            @endif
+        </td>
+        <td>
+            @permission((config('constants.EDIT_TRANSACTION_ACCESS')))
             <a target="_blank" class="btn btn-success"
                href="{{action("Web\TransactionController@edit" , $transaction)}}">
                 <i class="fa fa-pencil"></i>
@@ -96,13 +116,13 @@
         <td>
             <div class="btn-group">
                 @if(isset($transaction->order->id))
-                    @permission((Config::get('constants.SHOW_ORDER_ACCESS')))
+                    @permission((config('constants.SHOW_ORDER_ACCESS')))
                     <a target="_blank" class="btn btn-success" href="{{action("Web\OrderController@edit" , $transaction->order)}}">
                         <i class="fa fa-pencil"></i>
                         اصلاح سفارش
                     </a>
                     @endpermission
-                    @permission((Config::get('constants.REMOVE_ORDER_ACCESS')))
+                    @permission((config('constants.REMOVE_ORDER_ACCESS')))
                     <a class="deleteOrder btn btn-danger" data-target="#deleteOrderConfirmationModal" data-toggle="modal">
                         <i class="fa fa-remove" aria-hidden="true"></i> حذف سفارش
                     </a>

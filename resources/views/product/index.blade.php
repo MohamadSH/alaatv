@@ -171,14 +171,16 @@
                             اصلاح
                         </a>
                     </li>
-                    @endpermission @permission((config('constants.REMOVE_PRODUCT_ACCESS')))
+                    @endpermission
+                    @permission((config('constants.REMOVE_PRODUCT_ACCESS')))
                     <li>
                         <a data-target = "#static-{{$item->id}}" data-toggle = "modal">
                             <i class = "fa fa-remove"></i>
                             حذف
                         </a>
                     </li>
-                    @endpermission @permission((config('constants.COPY_PRODUCT_ACCESS')))
+                    @endpermission
+                    @permission((config('constants.COPY_PRODUCT_ACCESS')))
                     <li>
                         <a class = "copyProduct" data-action = "{{action("Web\ProductController@copy" , $item)}}" data-target = "#copyProductModal" data-toggle = "modal">
                             <i class = "fa fa-files-o"></i>
@@ -189,9 +191,9 @@
 
                 </ul>
                 <div id = "ajax-modal" class = "modal fade" tabindex = "-1"></div>
-                <!-- static -->@permission((config('constants.REMOVE_PRODUCT_ACCESS')))
-
-
+                <!-- static -->
+                
+                @permission((config('constants.REMOVE_PRODUCT_ACCESS')))
                 <!--begin::Modal-->
                 <div class = "modal fade" id = "static-{{$item->id}}" tabindex = "-1" role = "dialog" aria-hidden = "true">
                     <div class = "modal-dialog" role = "document">
@@ -207,7 +209,6 @@
                     </div>
                 </div>
                 <!--end::Modal-->
-
                 @endpermission
             </div>
         </td>
