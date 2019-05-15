@@ -170,9 +170,6 @@
                                                                     <li class="m-portlet__nav-item">
                                                                         <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-expand"></i></a>
                                                                     </li>
-                                                                    <li class="m-portlet__nav-item">
-                                                                        <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-close"></i></a>
-                                                                    </li>
                                                                 </ul>
                                                             </div>
                                                         </div>
@@ -298,9 +295,42 @@
                             </div>
                         </div>
                         <div class="m-portlet__body">
-                            <div class="m-portlet__body-progress">Loading</div>
                             <div>
-                                {!! $content->description !!}
+
+                                @if(strlen($content->description) > 50)
+                                    <!--begin::Portlet-->
+                                    <div class="m-portlet m-portlet--collapsed m-portlet--head-sm m-portlet--info m-portlet--head-solid-bg" m-portlet="true">
+                                        <div class="m-portlet__head">
+                                            <div class="m-portlet__head-caption">
+                                                <div class="m-portlet__head-title">
+                                                                    <span class="m-portlet__head-icon">
+                                                                        <i class="flaticon-exclamation"></i>
+                                                                    </span>
+                                                    <h3 class="m-portlet__head-text">
+                                                        توضیحات
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="m-portlet__head-tools">
+                                                <ul class="m-portlet__nav">
+                                                    <li class="m-portlet__nav-item">
+                                                        <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-angle-down"></i></a>
+                                                    </li>
+                                                    <li class="m-portlet__nav-item">
+                                                        <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-expand"></i></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="m-portlet__body">
+                                            {!! $content->description !!}
+                                        </div>
+                                    </div>
+                                    <!--end::Portlet-->
+                                @else
+                                    {!! $content->description !!}
+                                @endif
+                                
                             </div>
                         </div>
                     </div>
