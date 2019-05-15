@@ -25,6 +25,12 @@ use App\{Assignmentstatus,
     Product,
     Producttype,
     Role,
+    Traits\APIRequestCommon,
+    Traits\CharacterCommon,
+    Traits\Helper,
+    Traits\ProductCommon,
+    Traits\RequestCommon,
+    Traits\UserCommon,
     Transactiongateway,
     Transactionstatus,
     User,
@@ -46,6 +52,13 @@ use Illuminate\View\View;
 
 class AdminController extends Controller
 {
+    use Helper;
+    use APIRequestCommon;
+    use ProductCommon;
+    use CharacterCommon;
+    use UserCommon;
+    use RequestCommon;
+
     public function __construct()
     {
         $this->middleware('ability:'.config('constants.ROLE_ADMIN').','.config('constants.USER_ADMIN_PANEL_ACCESS'),
@@ -428,8 +441,6 @@ class AdminController extends Controller
      */
     public function adminSMS()
     {
-        $pageName = 'admin';
-
         $userStatuses       = Userstatus::pluck('name', 'id');
         $majors             = Major::pluck('name', 'id');
         $genders            = Gender::pluck('name', 'id');
@@ -487,11 +498,6 @@ class AdminController extends Controller
         $coupons = Coupon::pluck('name', 'id')
             ->toArray();
         $coupons = array_sort_recursive($coupons);
-        //        Meta::set('title', substr("آلاء|پنل پیامک", 0, config("constants.META_TITLE_LIMIT")));
-        //        Meta::set('image', route('image', ['category' => '11', 'w' => '100', 'h' => '100', 'filename' => $this->setting->site->siteLogo]));
-
-        $products = Product::where('id', 240)
-            ->get();
 
         return view('admin.indexSMS',
             compact('pageName', 'majors', 'userStatuses', 'roles', 'relatives', 'orderstatuses', 'paymentstatuses',
