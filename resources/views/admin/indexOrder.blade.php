@@ -550,6 +550,7 @@
                         </div>
                     </div>
                     <!--end::Modal-->
+                    
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%"
                            id="transaction_table">
                         <thead>
