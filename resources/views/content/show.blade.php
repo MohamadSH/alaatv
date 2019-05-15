@@ -151,11 +151,8 @@
                                                 @if(strlen($content->description) > 2000)
                                                     <div class="a--summarize-text">
                                                         <div class="a--summarize-text-toggleBtn">
-                                                            <button class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air">
-                                                                <span>
-                                                                    <i class="flaticon-exclamation"></i>
-                                                                    <span>مشاهده کامل توضیحات</span>
-                                                                </span>
+                                                            <button class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
+                                                                <i class="la la-angle-double-down"></i>
                                                             </button>
                                                         </div>
                                                         <div class="a--summarize-text-content">
@@ -284,11 +281,8 @@
                                 @if(strlen($content->description) > 2000)
                                     <div class="a--summarize-text">
                                         <div class="a--summarize-text-toggleBtn">
-                                            <button class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air">
-                                                                <span>
-                                                                    <i class="flaticon-exclamation"></i>
-                                                                    <span>مشاهده کامل توضیحات</span>
-                                                                </span>
+                                            <button class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
+                                                <i class="la la-angle-double-down"></i>
                                             </button>
                                         </div>
                                         <div class="a--summarize-text-content">
