@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Web;
 
 use App\Bon;
-use App\Http\Controllers\Controller;
-use App\Notifications\InvoicePaid;
-use App\Order;
 use App\User;
+use App\Order;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Artisan;
+use App\Notifications\InvoicePaid;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Request as RequestFcade;
 
 class OfflinePaymentController extends Controller
 {
@@ -61,7 +61,16 @@ class OfflinePaymentController extends Controller
         Cache::tags('user')->flush();
         Cache::tags('order')->flush();
         Cache::tags('orderproduct')->flush();
-
+    
+        RequestFcade::session()
+            ->flash('verifyResult', [
+                'messages'    => [
+                    'سفارش شما با موفقیت ثبت شد',
+                ],
+                'cardPanMask' => null,
+                'RefID'       => null,
+                'isCanceled'  => false,
+            ]);
         return redirect()->route('showOnlinePaymentStatus', [
             'status'        => 'successful',
             'paymentMethod' => $paymentMethod,
