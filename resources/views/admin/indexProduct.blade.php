@@ -195,6 +195,23 @@
                         </div>
                     </div>
                     <!--end::Modal-->
+    
+    
+                    <!--begin::Modal-->
+                    <div class="modal fade" id="static-longDescription" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Modal-->
+            
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="product_table">
                         <thead>
                         <tr>
@@ -625,23 +642,11 @@
                     "data": null,
                     "name": "longDescription",
                     "title": " توضیحات اجمالی",
-                    defaultContent: defaultContent,
                     "render": function ( data, type, row ) {
-                        return '<button class="btn m-btn--pill m-btn--air btn-info" data-target="#static-longDescription-'+row.id+'" data-toggle="modal">نمایش</button>' +
-                            "<!--begin::Modal-->\n" +
-                            "<div class=\"modal fade\" id=\"static-longDescription-"+row.id+"\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">\n" +
-                            "    <div class=\"modal-dialog modal-lg\" role=\"document\">\n" +
-                            "        <div class=\"modal-content\">\n" +
-                            "            <div class=\"modal-body\">\n" +
-                            "                <p>"+row.longDescription+"</p>\n" +
-                            "            </div>\n" +
-                            "            <div class=\"modal-footer\">\n" +
-                            "                <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">بستن</button>\n" +
-                            "            </div>\n" +
-                            "        </div>\n" +
-                            "    </div>\n" +
-                            "</div>\n" +
-                            "<!--end::Modal-->";
+                        if (row.longDescription === null) {
+                            return defaultContent;
+                        }
+                        return '<button class="btn m-btn--pill m-btn--air btn-info btnLongDescription" onclick="showLongDescription(' + "'" + row.longDescription + "'" + ')" > '+ 'نمایش' +' </button>';
                     },
                 },
                 { "data": "type.hint" , "title": "نوع", "defaultContent": defaultContent},
@@ -688,7 +693,7 @@
                         @endpermission
                         @permission((config('constants.COPY_PRODUCT_ACCESS')))
                         html +=
-                            '    <a class="copyProduct" >\n' +
+                            '    <a class="btn btn-info copyProduct" >\n' +
                             '        <i class="fa fa-envelope" aria-hidden="true"></i> کپی از محصول\n' +
                             '    </a>\n';
                         @endpermission
@@ -761,6 +766,11 @@
         /**
          * Start up jquery
          */
+        function showLongDescription(longDescription) {
+            $('#static-longDescription .modal-body').html(longDescription);
+            $('#static-longDescription').modal('show');
+        }
+        
         jQuery(document).ready(function () {
 
             $(document).on('click', '.imgShowProductPhoto', function () {
