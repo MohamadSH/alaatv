@@ -24,6 +24,15 @@
 @endsection
 
 @section("content")
+    @if(isset($error))
+        <div class = "row">
+            <div class = "col">
+                <span style="color:red">
+                    خطا در دریافت تراکنش ها
+                </span>
+            </div>
+        </div>
+    @endif
     <div class = "row">
         <div class = "col">
 
