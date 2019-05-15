@@ -268,7 +268,7 @@
                                         <div class = "form-group {{ $errors->has('photo') ? ' has-error' : '' }}">
                                             <div class = "fileinput fileinput-new" data-provides = "fileinput">
                                                 <div class = "fileinput-new thumbnail" style = "width: 200px; height: 150px;">
-                                                    <img @if(isset($user->photo)) src = "{{ route('image', ['category'=>'1','w'=>'140' , 'h'=>'140' ,  'filename' =>  $user->photo ]) }}" @endif  alt = "عکس پروفایل"/>
+                                                    <img src = "{{ $user->photo }}"  alt = "عکس پروفایل"/>
                                                 </div>
                                                 <div class = "fileinput-preview fileinput-exists thumbnail" style = "max-width: 200px; max-height: 150px;"></div>
                                                 @if( $completionPercentage < 100)

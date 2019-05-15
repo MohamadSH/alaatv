@@ -39,7 +39,7 @@
                             <div class="row">
                                 <div class="col-lg-3">
                                     <div class="m--margin-bottom-45">
-                                        <img src="{{ route('image', ['category'=>'4','w'=>'338' , 'h'=>'338' ,  'filename' =>  $product->image ]) }}" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid m--marginless"/>
+                                        <img src="{{$product->photo}}" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid m--marginless"/>
                                         @if(isset($product->bons->first()->pivot->bonPlus))
                                             <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-success alert-dismissible fade show" role="alert">
                                                 <div class="m-alert__icon">

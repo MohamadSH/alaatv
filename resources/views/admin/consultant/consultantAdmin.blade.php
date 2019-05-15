@@ -37,7 +37,7 @@
                 <div class = "portlet light profile-sidebar-portlet ">
                     <!-- SIDEBAR USERPIC -->
                     <div class = "profile-userpic">
-                        <img @if(isset(Auth::user()->photo))  src = "{{ route('image', ['category'=>'1','w'=>'150' , 'h'=>'150' ,  'filename' => Auth::user()->photo ]) }}" @endif class = "img-responsive" alt = "عکس پروفایل">
+                        <img @if(isset(Auth::user()->photo))  src = "{{ Auth::user()->photo}}" @endif class = "img-responsive" alt = "عکس پروفایل">
                     </div>
                     <!-- END SIDEBAR USERPIC -->
                     <!-- SIDEBAR USER TITLE -->
