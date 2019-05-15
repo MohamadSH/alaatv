@@ -302,13 +302,16 @@
                                         <div class="modal-dialog modal-lg" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="copyProductModalModalLabel"></h5>
+                                                    <h5 class="modal-title" id="copyProductModalModalLabel">افزودن کپن جدید</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
+                                                {!! Form::open(['method' => 'POST','action' => ['Web\CouponController@store'], 'class'=>'nobottommargin' , 'id'=>'couponForm']) !!}
                                                 <div class="modal-body">
-                                                
+                                                    <div class="row">
+                                                        @include('coupon.form')
+                                                    </div>
                                                 </div>
                                                 {!! Form::close() !!}
                                                 <div class="modal-footer">
@@ -318,7 +321,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!--end::Modal-->@endpermission
+                                    <!--end::Modal-->
+                                    @endpermission
                                 </div>
                             </div>
                         </div>
