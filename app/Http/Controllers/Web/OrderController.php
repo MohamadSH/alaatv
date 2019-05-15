@@ -676,7 +676,7 @@ class OrderController extends Controller
                 }
             }
     
-            $file = $this->requestHasFile($request, 'file');
+            $file = $this->getRequestFile($request->all(), 'file');
             if ($file !== false) {
                 $extension = $file->getClientOriginalExtension();
                 $fileName  = basename($file->getClientOriginalName(), '.'.$extension).'_'.date('YmdHis').'.'.$extension;
