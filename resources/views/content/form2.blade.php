@@ -29,33 +29,63 @@
         <ul class="list-group margin-top-20 text-center">
             <li class="list-group-item bold" style="font-size: small">فایل های موجود
             </li>
-            @if($content->file->isNotEmpty() and $content->file->isNotEmpty())
-                @foreach($content->file->get('video') as $file)
-                    <li class="list-group-item" style="font-size: small">
-                        <div class="row margin-bottom-5">
-                            <span class="badge badge-danger" dir="ltr"> {{basename($file->link, "." . pathinfo($file->link, PATHINFO_EXTENSION)) }}</span>
-                            <span class="badge badge-info" dir="ltr">{{$file->caption}} </span>
-                        </div>
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-btn">
+            @if(isset($content->file) and $content->file->isNotEmpty())
+                @if(!is_null($content->file->get('video')))
+                    @foreach($content->file->get('video') as $file)
+                        <li class="list-group-item" style="font-size: small">
+                            <div class="row margin-bottom-5">
+                                <span class="badge badge-danger" dir="ltr"> {{basename($file->link, "." . pathinfo($file->link, PATHINFO_EXTENSION)) }}</span>
+                                <span class="badge badge-info" dir="ltr">{{$file->caption}} </span>
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-btn">
+    
+                                    <a target="_blank" href="{{$file->link}}" class="btn blue-dark"><i class="fa fa-download"></i>                                </a>
+                                </span>
+    
+    {{--                            <span class="input-group-btn">--}}
+    {{--                                <a class="btn btn-icon-only btn-outline red removeFile" data-target="#deleteFileConfirmationModal" data-toggle="modal" data-id="{{$file->id}}" data-to="{{$content->id}}">--}}
+    {{--                                    <i class="fa fa-times"></i>--}}
+    {{--                                </a>--}}
+    {{--                            </span>--}}
+    {{--                            <input type="text" value="@if(isset($file->pivot->caption[0])){{$file->pivot->caption}}@endif" id="caption_{{$file->id}}" class="form-control" maxlength="50" placeholder="کپشن">--}}
+    {{--                            <span class="input-group-btn">--}}
+    {{--                                <button type="button" class="btn blue fileCaptionSubmit" id="captionSubmit_{{$file->id}}" data-to="{{$content->id}}">ذخیره کپشن--}}
+    {{--                                </button>--}}
+    {{--                            </span>--}}
+                            </div>
+                            <!-- /input-group -->
+                        </li>
+                    @endforeach
+                @endif
+                    @if(!is_null($content->file->get('pamphlet')))
+                        @foreach($content->file->get('pamphlet') as $file)
+                            <li class="list-group-item" style="font-size: small">
+                                <div class="row margin-bottom-5">
+                                    <span class="badge badge-danger" dir="ltr"> {{basename($file->link, "." . pathinfo($file->link, PATHINFO_EXTENSION)) }}</span>
+                                    <span class="badge badge-info" dir="ltr">{{$file->caption}} </span>
+                                </div>
+                                <div class="input-group input-group-sm">
+                                <span class="input-group-btn">
 
-                                <a target="_blank" href="{{$file->link}}" class="btn blue-dark"><i class="fa fa-download"></i>                                </a>
-                            </span>
+                                    <a target="_blank" href="{{$file->link}}" class="btn blue-dark"><i class="fa fa-download"></i>                                </a>
+                                </span>
 
-{{--                            <span class="input-group-btn">--}}
-{{--                                <a class="btn btn-icon-only btn-outline red removeFile" data-target="#deleteFileConfirmationModal" data-toggle="modal" data-id="{{$file->id}}" data-to="{{$content->id}}">--}}
-{{--                                    <i class="fa fa-times"></i>--}}
-{{--                                </a>--}}
-{{--                            </span>--}}
-{{--                            <input type="text" value="@if(isset($file->pivot->caption[0])){{$file->pivot->caption}}@endif" id="caption_{{$file->id}}" class="form-control" maxlength="50" placeholder="کپشن">--}}
-{{--                            <span class="input-group-btn">--}}
-{{--                                <button type="button" class="btn blue fileCaptionSubmit" id="captionSubmit_{{$file->id}}" data-to="{{$content->id}}">ذخیره کپشن--}}
-{{--                                </button>--}}
-{{--                            </span>--}}
-                        </div>
-                        <!-- /input-group -->
-                    </li>
-                @endforeach
+                                    {{--                            <span class="input-group-btn">--}}
+                                    {{--                                <a class="btn btn-icon-only btn-outline red removeFile" data-target="#deleteFileConfirmationModal" data-toggle="modal" data-id="{{$file->id}}" data-to="{{$content->id}}">--}}
+                                    {{--                                    <i class="fa fa-times"></i>--}}
+                                    {{--                                </a>--}}
+                                    {{--                            </span>--}}
+                                    {{--                            <input type="text" value="@if(isset($file->pivot->caption[0])){{$file->pivot->caption}}@endif" id="caption_{{$file->id}}" class="form-control" maxlength="50" placeholder="کپشن">--}}
+                                    {{--                            <span class="input-group-btn">--}}
+                                    {{--                                <button type="button" class="btn blue fileCaptionSubmit" id="captionSubmit_{{$file->id}}" data-to="{{$content->id}}">ذخیره کپشن--}}
+                                    {{--                                </button>--}}
+                                    {{--                            </span>--}}
+                                </div>
+                                <!-- /input-group -->
+                            </li>
+                        @endforeach
+                    @endif
             @else
                 <li class="list-group-item text-center m--font-danger " style="font-size: small">فایلی درج نشده است
                 </li>
