@@ -517,10 +517,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if (isset($value[0])) {
             return Purify::clean($value, self::$purifyNullConfig);
-        } else {
-            return Purify::clean(mb_substr($this->display_name, 0, config('constants.META_TITLE_LIMIT'), 'utf-8'),
-                self::$purifyNullConfig);
         }
+    
+        return Purify::clean(mb_substr($this->display_name, 0, config('constants.META_TITLE_LIMIT'), 'utf-8'),
+            self::$purifyNullConfig);
     }
     
     /**
@@ -534,10 +534,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if (isset($value[0])) {
             return Purify::clean($value, self::$purifyNullConfig);
-        } else {
-            return Purify::clean(mb_substr($this->description, 0, config('constants.META_DESCRIPTION_LIMIT'), 'utf-8'),
-                self::$purifyNullConfig);
         }
+    
+        return Purify::clean(mb_substr($this->description, 0, config('constants.META_DESCRIPTION_LIMIT'), 'utf-8'),
+            self::$purifyNullConfig);
     }
     
     /**
@@ -675,7 +675,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getVideos(): Collection
     {
         $file = $this->file;
-        if (is_null($file)) {
+        if ($file === null) {
             return collect();
         }
         $video = $file->get('video');
