@@ -10,7 +10,7 @@
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
                 <i class = "flaticon-home-2 m--padding-right-5"></i>
-                <a class = "m-link" href = "{{action("Web\HomeController@admin")}}">مدیریت کاربران</a>
+                <a class = "m-link" href = "{{action("Web\AdminController@admin")}}">مدیریت کاربران</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
                 <a class = "m-link" href = "#">دفترچه تلفن</a>
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class = "m-portlet__head-tools">
-                        <a class = "btn m-btn--air btn-primary" href = "{{action("Web\HomeController@admin")}}"> بازگشت
+                        <a class = "btn m-btn--air btn-primary" href = "{{action("Web\AdminController@admin")}}"> بازگشت
                             <i class = "fa fa-angle-left"></i>
                         </a>
                     </div>

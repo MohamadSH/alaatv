@@ -23,7 +23,7 @@
                 <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item">
-                <a class = "m-link" href = "{{action("Web\HomeController@admin")}}">پنل مدیریتی</a>
+                <a class = "m-link" href = "{{action("Web\AdminController@admin")}}">پنل مدیریتی</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
                 <a class = "m-link" href = "#"> اصلاح اطلاعات تراکنش</a>
@@ -74,7 +74,7 @@
                         </div>
                     </div>
                     <div class = "m-portlet__head-tools">
-                        <a class = "btn btn-sm btn-primary m-btn--air" href = "{{action("Web\HomeController@adminOrder")}}">
+                        <a class = "btn btn-sm btn-primary m-btn--air" href = "{{action("Web\AdminController@adminOrder")}}">
                             بازگشت
                             <i class = "fa fa-angle-left"></i>
                         </a>
