@@ -12,7 +12,7 @@
                 <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item" aria-current = "page">
-                <a class = "m-link" href = "{{action("Web\HomeController@admin")}}">پنل مدیریتی</a>
+                <a class = "m-link" href = "{{action("Web\AdminController@admin")}}">پنل مدیریتی</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
                 <a class = "m-link" href = "#">اصلاح اطلاعات دسترسی</a>
@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div class = "m-portlet__head-tools">
-                        <a class = "btn m-btn--air btn-primary" href = "{{action("Web\HomeController@admin")}}"> بازگشت
+                        <a class = "btn m-btn--air btn-primary" href = "{{action("Web\AdminController@admin")}}"> بازگشت
                             <i class = "fa fa-angle-left"></i>
                         </a>
                     </div>

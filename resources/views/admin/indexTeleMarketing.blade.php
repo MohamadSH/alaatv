@@ -15,7 +15,7 @@
 
         <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
             <div class = "m-portlet__body">
-                {!! Form::open(['method'=>'GET' , 'action'=>'Web\HomeController@adminTeleMarketing']) !!}
+                {!! Form::open(['method'=>'GET' , 'action'=>'Web\AdminController@adminTeleMarketing']) !!}
                 <div class = "row">
                     <div class = "col-lg-12">
                         <div class = "form-group mt-repeater">
