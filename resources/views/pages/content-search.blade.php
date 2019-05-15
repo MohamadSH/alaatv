@@ -6,16 +6,6 @@
 
 @section('page-css')
     <link href="{{ mix('/css/content-search.css') }}" rel="stylesheet" type="text/css"/>
-    <style>
-        /*@media only screen and (max-width: 600px) and (min-width: 400px)  {*/
-        /*    .ProductAndSetAndVideoWraper {*/
-        /*        max-width: 75%;*/
-        /*    }*/
-        /*    .PamphletAndArticleWraper {*/
-        /*        max-width: 25%;*/
-        /*    }*/
-        /*}*/
-    </style>
 @endsection
 
 @section("pageBar")
