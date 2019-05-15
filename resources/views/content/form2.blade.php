@@ -116,7 +116,7 @@
             <div class="row">
                 <label class=" col-md-4 control-label" for="created_at">تاریخ درج</label>
                 <div class="col-md-3">
-                    <input type="text" name="created_at" class="form-control" value="@if(isset($educationalContent->created_at)){{$educationalContent->created_at}}@endif" dir="ltr">
+                    <input type="text" name="created_at" class="form-control" value="@if(isset($content->created_at)){{$content->created_at}}@endif" dir="ltr">
                 </div>
             </div>
         </div>

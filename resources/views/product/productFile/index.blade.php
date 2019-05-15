@@ -16,18 +16,19 @@
                         <i class="fa fa-plus-circle"></i>
                         آپلود فایل
                     </a>
-                    <a class="btn m-btn--pill m-btn--air btn-primary dropdown-toggle" data-toggle="modal" data-target="#createProductFile" href="#createProductFile">
+                    <a class="btn m-btn--pill m-btn--air btn-primary"
+                            data-toggle="modal" href="#createProductFile" data-target="#createProductFile">
                         <i class="fa fa-plus-circle"></i>
                         درج فایل با لینک
                     </a>
     
     
                     <!--begin::Modal-->
-                    <div class="modal fade" id="createProductFile" tabindex="-1" role="dialog" aria-labelledby="responsive-productModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="createProductFile" tabindex="-1" role="dialog" aria-labelledby="createProductFileModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="responsive-productModalLabel">افزودن فایل جدید</h5>
+                                    <h5 class="modal-title" id="createProductFileModalLabel">افزودن فایل جدید</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
