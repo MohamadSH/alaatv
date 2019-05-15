@@ -20,7 +20,7 @@ var $modal = $('#ajax-modal');
 /**
  * Product Admin Ajax
  */
-function removeProduct(url){
+function removeProduct(){
     toastr.options = {
         "closeButton": true,
         "debug": false,
@@ -35,17 +35,22 @@ function removeProduct(url){
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
     };
+    $('#remove-product-loading-image').removeClass('d-none');
     $.ajax({
         type: 'POST',
-        url: url,
+        url: $('#product-removeLink').val(),
         data:{_method: 'delete'},
         success: function (result) {
             // console.log(result);
             // console.log(result.responseText);
             toastr["success"]("محصول با موفقیت حذف شد!", "پیام سیستم");
+            $('#remove-product-loading-image').addClass('d-none');
             $("#product-portlet .reload").trigger("click");
+            $('#removeProductModal').modal('hide');
         },
         error: function (result) {
+            $('#remove-product-loading-image').addClass('d-none');
+            $('#removeProductModal').modal('hide');
             // console.log(result);
             // console.log(result.responseText);
         }
