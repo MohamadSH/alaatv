@@ -568,6 +568,7 @@
                             <th class="all"> مبلغ آیتم افزوده</th>
                             @endpermission
                             <th class="all"> کد تراکنش</th>
+                            <th class="none">درگاه پرداخت</th>
                             <th class="all"> نحوه پرداخت</th>
                             <th class="none"> تاریخ ثبت :</th>
                             <th class="none"> مهلت پرداخت :</th>
