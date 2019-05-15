@@ -43,9 +43,11 @@
                                                     درگاه زرین پال
                                                 @elseif($paymentMethod === 'mellat')
                                                     درگاه به پرداخت ملت
+                                                @elseif($paymentMethod === 'wallet')
+                                                    کیف پول
                                                 @endif
                                             </span>
-
+        
                                             <hr>
                                             
                                             @if($status === 'successful')
@@ -70,7 +72,8 @@
                                         @endif
                                     </span>
                                 </a>
-                                <a href="{{ asset('/') }}"><img src="{{ asset('/acm/extra/Alaa-logo.gif') }}" alt="آلاء"></a>
+                                <a href="{{ asset('/') }}"><img src="{{ asset('/acm/extra/Alaa-logo.gif') }}"
+                                                                alt="آلاء"></a>
                             </div>
                             <span class="m-invoice__desc">
 
@@ -82,14 +85,15 @@
                                             alert-warning
                                         @endif
                                             alert-dismissible fade show" role="alert">
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+                                        <button type="button" class="close" data-dismiss="alert"
+                                                aria-label="Close"></button>
                                         @foreach($result['messages'] as $message)
                                             {{ $message }}
                                             <br>
                                         @endforeach
                                     </div>
                                 @endif
-
+    
                                 @if(isset($result['OrderSuccessPaymentResult']['saveOrder']) && $result['OrderSuccessPaymentResult']['saveOrder']!=1)
                                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">

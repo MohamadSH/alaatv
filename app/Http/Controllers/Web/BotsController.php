@@ -1806,6 +1806,7 @@ class BotsController extends Controller
     
     public function excelBot(Request $request)
     {
+        dd('This method is not working . Please check it out.');
         $fileName = "list_arabi_hozouri.xlsx";
         $myReader = new Reader();
         $myWriter = new Writer();

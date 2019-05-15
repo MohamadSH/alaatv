@@ -12,7 +12,7 @@
         <ul class = "page-breadcrumb">
             <li>
                 <i class = "icon-home"></i>
-                <a href = "{{action("Web\HomeController@admin")}}">پنل مدیریتی</a>
+                <a href = "{{action("Web\AdminController@admin")}}">پنل مدیریتی</a>
                 <i class = "fa fa-angle-left"></i>
             </li>
             <li>

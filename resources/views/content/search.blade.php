@@ -127,7 +127,7 @@
                     <div class = "col-md-4">
                         <div class = "col-item">
                             <div class = "photo">
-                                <img src = "{{ route('image', ['category'=>'4' , 'w'=>'254' , 'h'=>'254', 'filename' =>  $product->image ]) }}" class = "img-responsive" alt = "عکس محصول@if(isset($product[0])) {{$product->name}} @endif"/>
+                                <img src = "{{ $product->photo }}" class = "img-responsive" alt = "عکس محصول@if(isset($product[0])) {{$product->name}} @endif"/>
                             </div>
                             <div class = "info">
                                 <div class = "row">

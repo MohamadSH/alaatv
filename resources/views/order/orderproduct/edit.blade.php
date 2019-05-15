@@ -21,7 +21,7 @@
                 <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item" aria-current = "page">
-                <a class = "m-link" href = "{{action("Web\HomeController@adminOrder")}}">پنل مدیریتی</a>
+                <a class = "m-link" href = "{{action("Web\AdminController@adminOrder")}}">پنل مدیریتی</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
                 <a class = "m-link" href = "#">اصلاح محصول سفارش</a>

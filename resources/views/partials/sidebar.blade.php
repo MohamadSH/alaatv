@@ -119,7 +119,7 @@
                                 </span>
                                 </li>
                                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                                    <a target = "_blank" href = "{{ action("Web\HomeController@adminBot" , ["bot"=>"wallet"]) }}" class = "m-menu__link ">
+                                    <a target = "_blank" href = "{{ action("Web\BotsController@adminBot" , ["bot"=>"wallet"]) }}" class = "m-menu__link ">
                                         <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
@@ -127,7 +127,7 @@
                                     </a>
                                 </li>
                                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                                    <a target = "_blank" href = "{{ action("Web\HomeController@adminBot" , ["bot"=>"excel"]) }}" class = "m-menu__link ">
+                                    <a target = "_blank" href = "{{ action("Web\BotsController@adminBot" , ["bot"=>"excel"]) }}" class = "m-menu__link ">
                                         <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
@@ -135,7 +135,7 @@
                                     </a>
                                 </li>
                                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                                    <a target = "_blank" href = "{{action("Web\HomeController@bot" , ["voucherbot"=>1])}}" class = "m-menu__link ">
+                                    <a target = "_blank" href = "{{action("Web\BotsController@bot" , ["voucherbot"=>1])}}" class = "m-menu__link ">
                                         <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
@@ -149,7 +149,7 @@
     
                     @ability(config('constants.ROLE_ADMIN'),config('constants.TELEMARKETING_PANEL_ACCESS'))
                     <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                        <a href = "{{action("Web\HomeController@adminTeleMarketing")}}" class = "m-menu__link ">
+                        <a href = "{{action("Web\AdminController@adminTeleMarketing")}}" class = "m-menu__link ">
                             <span class = "m-menu__item-here"></span>
                             <i class = "m-menu__link-icon flaticon-graphic"></i>
                             <span class = "m-menu__link-text">تله مارکتینگ</span>
@@ -175,7 +175,7 @@
                                 </span>
                                 </li>
                                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                                    <a target = "_blank" href = "{{ action("Web\HomeController@adminLottery" , ["lottery"=>"hamyeshDey"]) }}" class = "m-menu__link ">
+                                    <a target = "_blank" href = "{{ action("Web\AdminController@adminLottery" , ["lottery"=>"hamyeshDey"]) }}" class = "m-menu__link ">
                                         <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
@@ -183,7 +183,7 @@
                                     </a>
                                 </li>
                                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                                    <a target = "_blank" href = "{{ action("Web\HomeController@adminLottery" , ["lottery"=>"hamyeshTalai"]) }}" class = "m-menu__link ">
+                                    <a target = "_blank" href = "{{ action("Web\AdminController@adminLottery" , ["lottery"=>"hamyeshTalai"]) }}" class = "m-menu__link ">
                                         <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
@@ -191,7 +191,7 @@
                                     </a>
                                 </li>
                                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                                    <a target = "_blank" href = "{{ action("Web\HomeController@adminLottery" , ["lottery"=>"eideFetr"]) }}" class = "m-menu__link ">
+                                    <a target = "_blank" href = "{{ action("Web\AdminController@adminLottery" , ["lottery"=>"eideFetr"]) }}" class = "m-menu__link ">
                                         <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
@@ -221,7 +221,7 @@
                                 </li>
                                 @permission((config('constants.SHOW_SITE_CONFIG_ACCESS')))
                                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                                    <a href = "{{ action("Web\HomeController@adminSiteConfig") }}" class = "m-menu__link ">
+                                    <a href = "{{ action("Web\AdminController@adminSiteConfig") }}" class = "m-menu__link ">
                                         <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
@@ -230,7 +230,7 @@
                                 </li>
                                 @endpermission @permission((config('constants.LIST_SLIDESHOW_ACCESS')))
                                 <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                                    <a href = "{{ action("Web\HomeController@adminSlideShow") }}" class = "m-menu__link ">
+                                    <a href = "{{ action("Web\AdminController@adminSlideShow") }}" class = "m-menu__link ">
                                         <i class = "m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
@@ -254,14 +254,14 @@
     
                     @ability(config('constants.ROLE_ADMIN'),config('constants.USER_ADMIN_PANEL_ACCESS'))
                     <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                        <a href = "{{ action("Web\HomeController@admin") }}" class = "m-menu__link ">
+                        <a href = "{{ action("Web\AdminController@admin") }}" class = "m-menu__link ">
                             <span class = "m-menu__item-here"></span>
                             <i class = "m-menu__link-icon flaticon-network"></i>
                             <span class = "m-menu__link-text">کاربران</span>
                         </a>
                     </li>
                     <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                        <a href = "{{ action("Web\HomeController@specialAddUser") }}" class = "m-menu__link ">
+                        <a href = "{{ action("Web\AdminController@specialAddUser") }}" class = "m-menu__link ">
                             <span class = "m-menu__item-here"></span>
                             <i class = "m-menu__link-icon flaticon-network"></i>
                             <span class = "m-menu__link-text">درج کاربر با سفارش</span>
@@ -270,7 +270,7 @@
                     @endability
                     @permission((config('constants.ORDER_ADMIN_PANEL_ACCESS')))
                     <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                        <a href = "{{ action("Web\HomeController@adminOrder") }}" class = "m-menu__link ">
+                        <a href = "{{ action("Web\AdminController@adminOrder") }}" class = "m-menu__link ">
                             <span class = "m-menu__item-here"></span>
                             <i class = "m-menu__link-icon flaticon-network"></i>
                             <span class = "m-menu__link-text"> سفارش ها</span>
@@ -280,7 +280,7 @@
     
                     @permission((config('constants.PRODUCT_ADMIN_PANEL_ACCESS')))
                     <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                        <a href = "{{ action("Web\HomeController@adminProduct") }}" class = "m-menu__link ">
+                        <a href = "{{ action("Web\AdminController@adminProduct") }}" class = "m-menu__link ">
                             <span class = "m-menu__item-here"></span>
                             <i class = "m-menu__link-icon flaticon-technology"></i>
                             <span class = "m-menu__link-text">محصولات</span>
@@ -290,7 +290,7 @@
     
                     @permission((config('constants.CONTENT_ADMIN_PANEL_ACCESS')))
                     <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                        <a href = "{{ action("Web\HomeController@adminContent") }}" class = "m-menu__link ">
+                        <a href = "{{ action("Web\AdminController@adminContent") }}" class = "m-menu__link ">
                             <span class = "m-menu__item-here"></span>
                             <i class = "m-menu__link-icon flaticon-technology"></i>
                             <span class = "m-menu__link-text">محتوا</span>
@@ -300,7 +300,7 @@
     
                     @permission((config('constants.SMS_ADMIN_PANEL_ACCESS')))
                     <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                        <a href = "{{ action("Web\HomeController@adminSMS") }}" class = "m-menu__link ">
+                        <a href = "{{ action("Web\AdminController@adminSMS") }}" class = "m-menu__link ">
                             <span class = "m-menu__item-here"></span>
                             <i class = "m-menu__link-icon flaticon-technology"></i>
                             <span class = "m-menu__link-text">ارسال پیامک</span>
@@ -310,7 +310,7 @@
     
                     @permission((config('constants.REPORT_ADMIN_PANEL_ACCESS')))
                     <li class = "m-menu__item " aria-haspopup = "true" m-menu-link-redirect = "1">
-                        <a href = "{{ action("Web\HomeController@adminReport") }}" class = "m-menu__link ">
+                        <a href = "{{ action("Web\AdminController@adminReport") }}" class = "m-menu__link ">
                             <span class = "m-menu__item-here"></span>
                             <i class = "m-menu__link-icon flaticon-technology"></i>
                             <span class = "m-menu__link-text">گزارش</span>

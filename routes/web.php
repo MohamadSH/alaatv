@@ -104,22 +104,22 @@ Route::group(['prefix' => 'landing'], function () {
 Route::group(['middleware' => 'auth'], function () {
     
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
-    Route::get('usersAdmin', 'Web\HomeController@admin');
-    Route::get('consultantPanel', 'Web\HomeController@consultantAdmin');
+    Route::get('usersAdmin', 'Web\AdminController@admin');
+    Route::get('consultantPanel', 'Web\AdminController@consultantAdmin');
     Route::get('consultantEntekhabReshtePanel', 'Web\HomeController@consultantEntekhabReshte');
     Route::get('consultantEntekhabReshteList', 'Web\HomeController@consultantEntekhabReshteList');
     Route::post('consultantStoreEntekhabReshte', 'Web\HomeController@consultantStoreEntekhabReshte');
-    Route::get('productAdmin', 'Web\HomeController@adminProduct');
-    Route::get('contentAdmin', 'Web\HomeController@adminContent');
-    Route::get('ordersAdmin', 'Web\HomeController@adminOrder');
-    Route::get('smsAdmin', 'Web\HomeController@adminSMS');
-    Route::get('botAdmin', 'Web\HomeController@adminBot');
-    Route::get('siteConfigAdmin', 'Web\HomeController@adminSiteConfig');
-    Route::get('slideShowAdmin', 'Web\HomeController@adminSlideShow');
-    Route::get('report', 'Web\HomeController@adminReport');
-    Route::get('majorAdminPanel', 'Web\HomeController@adminMajor');
-    Route::get('lotteryAdminPanel', 'Web\HomeController@adminLottery');
-    Route::get('teleMarketingAdminPanel', 'Web\HomeController@adminTeleMarketing');
+    Route::get('productAdmin', 'Web\AdminController@adminProduct');
+    Route::get('contentAdmin', 'Web\AdminController@adminContent');
+    Route::get('ordersAdmin', 'Web\AdminController@adminOrder');
+    Route::get('smsAdmin', 'Web\AdminController@adminSMS');
+    Route::get('botAdmin', 'Web\BotsController@adminBot');
+    Route::get('siteConfigAdmin', 'Web\AdminController@adminSiteConfig');
+    Route::get('slideShowAdmin', 'Web\AdminController@adminSlideShow');
+    Route::get('report', 'Web\AdminController@adminReport');
+    Route::get('majorAdminPanel', 'Web\AdminController@adminMajor');
+    Route::get('lotteryAdminPanel', 'Web\AdminController@adminLottery');
+    Route::get('teleMarketingAdminPanel', 'Web\AdminController@adminTeleMarketing');
     Route::post('adminSendSMS', 'Web\HomeController@sendSMS');
     Route::get('asset', 'Web\UserController@userProductFiles');
     Route::get('complete-register', 'Web\UserController@completeRegister')
@@ -139,13 +139,13 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::get('holdlottery', "Web\LotteryController@holdLottery");
     Route::get('givePrize', "Web\LotteryController@givePrizes");
-    Route::get('smsbot', "Web\HomeController@smsBot");
-    Route::get("bot", "Web\HomeController@bot");
-    Route::get("pointBot", "Web\HomeController@pointBot");
-    Route::post("walletBot", "Web\HomeController@walletBot");
-    Route::post("excelBot", "Web\HomeController@excelBot");
-    Route::post("registerUserAndGiveOrderproduct", "Web\HomeController@registerUserAndGiveOrderproduct");
-    Route::get("specialAddUser", "Web\HomeController@specialAddUser");
+    Route::get('smsbot', "Web\BotsController@smsBot");
+    Route::get("bot", "Web\BotsController@bot");
+    Route::get("pointBot", "Web\BotsController@pointBot");
+    Route::post("walletBot", "Web\BotsController@walletBot");
+    Route::post("excelBot", "Web\BotsController@excelBot");
+    Route::post("registerUserAndGiveOrderproduct", "Web\AdminController@registerUserAndGiveOrderproduct");
+    Route::get("specialAddUser", "Web\AdminController@specialAddUser");
     Route::get("v/asiatech", "Web\UserController@voucherRequest");
     Route::put("v", "Web\UserController@submitVoucherRequest");
     
@@ -240,11 +240,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get("copypamphletfromremote", "Web\RemoteDataCopyController@copyPamphlet");
     Route::get("copydepartmentlessontotakhtekhak", "Web\SanatisharifmergeController@copyDepartmentlesson");
     Route::get("copycontenttotakhtekhak", "Web\SanatisharifmergeController@copyContent");
-    Route::get("tagbot", "Web\HomeController@tagbot");
+    Route::get("tagbot", "Web\BotsController@tagbot");
     
     Route::get("donate", "Web\DonateController");
     Route::post("donateOrder", "Web\OrderController@donateOrder");
-    Route::get('adminGenerateRandomCoupon', "Web\HomeController@adminGenerateRandomCoupon");
+    Route::get('adminGenerateRandomCoupon', "Web\AdminController@adminGenerateRandomCoupon");
 
     Route::get('cTest/{set}', "Web\HomeController@contentSetListTest");
 });

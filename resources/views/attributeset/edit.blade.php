@@ -17,7 +17,7 @@
                 <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item" aria-current = "page">
-                <a class = "m-link" href = "{{action("Web\HomeController@adminProduct")}}">پنل مدیریت محصولات</a>
+                <a class = "m-link" href = "{{action("Web\AdminController@adminProduct")}}">پنل مدیریت محصولات</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
                 <a class = "m-link" href = "#">اصلاح اطلاعات دسته صفت</a>
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <div class = "m-portlet__head-tools">
-                        <a class = "btn btn-primary m-btn m-btn--icon m-btn--wide" href = "{{action("Web\HomeController@adminProduct")}}">
+                        <a class = "btn btn-primary m-btn m-btn--icon m-btn--wide" href = "{{action("Web\AdminController@adminProduct")}}">
                             بازگشت
                             <i class = "fa fa-angle-left"></i>
                         </a>

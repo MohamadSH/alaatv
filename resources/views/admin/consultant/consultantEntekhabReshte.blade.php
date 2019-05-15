@@ -54,7 +54,7 @@
                 <div class = "portlet-body">
                     <div class = "row">
                         <div class = "col-md-2">
-                            <img width = "100%" height = "100%" alt = "عکس دانش آموز" src = "{{ route('image', ['category'=>'1','w'=>'100' , 'h'=>'100' ,  'filename' =>  $user->photo ]) }}">
+                            <img width = "100%" height = "100%" alt = "عکس دانش آموز" src = "{{$user->photo }}">
                         </div>
                         <div class = "col-md-8 profile-info">
                             <h3 class = "m--font-info sbold uppercase">@if(isset($user->firstName) || isset($user->lastName)) @if(isset($user->firstName)) {{$user->firstName}} @endif @if(isset($user->lastName)) {{$user->lastName}} @endif @else

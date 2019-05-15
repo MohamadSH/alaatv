@@ -20,7 +20,7 @@
         <td>
             <div class = "mt-element-overlay">
                 <div class = "mt-overlay-1">
-                    <img alt = "عکس محصول @if(isset($item->name[0])) {{$item->name}} @endif" class = "timeline-badge-userpic" style = "width: 60px ;height: 60px" src = "{{ route('image', ['category'=>'4','w'=>'60' , 'h'=>'60' ,  'filename' =>  $item->image ]) }}"/>
+                    <img alt = "عکس محصول @if(isset($item->name[0])) {{$item->name}} @endif" class = "timeline-badge-userpic" style = "width: 60px ;height: 60px" src = "{{ $item->photo}}"/>
                     <div class = "mt-overlay">
                         <ul class = "mt-info">
                             <li>
@@ -45,7 +45,7 @@
                 </div>
                 <div class = "modal-body">
                     <div class = "row" style = "text-align: center;">
-                        <img alt = "عکس محصول @if(isset($item->name[0])) {{$item->name}} @endif" style = "width: 80%" src = "{{ route('image', ['category'=>'4','w'=>'608' , 'h'=>'608' ,  'filename' =>  $item->image ]) }}"/>
+                        <img alt = "عکس محصول @if(isset($item->name[0])) {{$item->name}} @endif" style = "width: 80%" src = "{{ $item->photo }}"/>
                     </div>
                 </div>
                 <div class = "modal-footer">

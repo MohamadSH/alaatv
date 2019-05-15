@@ -176,7 +176,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'metaTitle',
         'metaDescription',
         'metaKeywords',
-        'tags',
+//        'tags',
         'author_id',
         'template_id',
         'contenttype_id',
@@ -224,9 +224,9 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public static function videoFileCaptionTable(): array
     {
         return [
-            "240p" => "کیفیت متوسط",
-            "480p" => "کیفیت بالا",
-            "720p" => "کیفیت عالی",
+            '240p' => 'کیفیت متوسط',
+            '480p' => 'کیفیت بالا',
+            '720p' => 'کیفیت عالی',
         ];
     }
     
@@ -412,10 +412,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     
     public function getPreviousContent()
     {
-        $key = "Content:previousContent".$this->cacheKey();
+        $key = 'Content:previousContent'.$this->cacheKey();
         
         return Cache::tags('content')
-            ->remember($key, config("constants.CACHE_600"), function () {
+            ->remember($key, config('constants.CACHE_600'), function () {
                 $previousContentOrder = $this->order - 1;
                 $set                  = $this->set;
                 if (isset($set)) {
@@ -436,10 +436,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     
     public function getNextContent()
     {
-        $key = "Content:nextContent".$this->cacheKey();
+        $key = 'Content:nextContent'.$this->cacheKey();
         
         return Cache::tags('content')
-            ->remember($key, config("constants.CACHE_600"), function () {
+            ->remember($key, config('constants.CACHE_600'), function () {
                 $nextContentOrder = $this->order + 1;
                 $set              = $this->set;
                 if (isset($set)) {
@@ -517,10 +517,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if (isset($value[0])) {
             return Purify::clean($value, self::$purifyNullConfig);
-        } else {
-            return Purify::clean(mb_substr($this->display_name, 0, config("constants.META_TITLE_LIMIT"), "utf-8"),
-                self::$purifyNullConfig);
         }
+    
+        return Purify::clean(mb_substr($this->display_name, 0, config('constants.META_TITLE_LIMIT'), 'utf-8'),
+            self::$purifyNullConfig);
     }
     
     /**
@@ -534,10 +534,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         if (isset($value[0])) {
             return Purify::clean($value, self::$purifyNullConfig);
-        } else {
-            return Purify::clean(mb_substr($this->description, 0, config("constants.META_DESCRIPTION_LIMIT"), "utf-8"),
-                self::$purifyNullConfig);
         }
+    
+        return Purify::clean(mb_substr($this->description, 0, config('constants.META_DESCRIPTION_LIMIT'), 'utf-8'),
+            self::$purifyNullConfig);
     }
     
     /**
@@ -549,16 +549,16 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function getFileAttribute($value): ?Collection
     {
-        $key = "Content:File".$this->cacheKey();
+        $key = 'Content:File'.$this->cacheKey();
         
         return Cache::tags('content')
-            ->remember($key, config("constants.CACHE_60"), function () use ($value) {
+            ->remember($key, config('constants.CACHE_60'), function () use ($value) {
                 $fileCollection = collect(json_decode($value));
                 $fileCollection->transform(function ($item, $key) {
 //                dd($item);
                     $l          = new LinkGenerator($item);
                     $item->link = $this->isFree ? $l->getLinks() : $l->getLinks([
-                        "content_id" => $this->id,
+                        'content_id' => $this->id,
                     ]);
                     unset($item->url);
                     unset($item->disk);
@@ -606,10 +606,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getAuthorAttribute(): User
     {
         $content = $this;
-        $key     = "content:author".$content->cacheKey();
-        
-        return Cache::tags(["user"])
-            ->remember($key, config("constants.CACHE_600"), function () use ($content) {
+        $key     = 'content:author'.$content->cacheKey();
+    
+        return Cache::tags(['user'])
+            ->remember($key, config('constants.CACHE_600'), function () use ($content) {
                 
                 $visibleArray = [
                     'id',
@@ -675,7 +675,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getVideos(): Collection
     {
         $file = $this->file;
-        if (is_null($file)) {
+        if ($file === null) {
             return collect();
         }
         $video = $file->get('video');
@@ -691,15 +691,15 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getSetMates()
     {
         $content = $this;
-        $key     = "content:setMates:".$this->cacheKey();
-        
-        $setMates = Cache::tags(["content"])
-            ->remember($key, config("constants.CACHE_60"), function () use ($content) {
+        $key     = 'content:setMates:'.$this->cacheKey();
+    
+        $setMates = Cache::tags(['content'])
+            ->remember($key, config('constants.CACHE_60'), function () use ($content) {
                 $contentSet     = $content->set;
                 $contentSetName = isset($contentSet) ? $contentSet->name : null;
                 if (isset($contentSet)) {
                     $sameContents = $contentSet->getContents()
-                        ->sortBy("order")
+                        ->sortBy('order')
                         ->load('contenttype');
                 } else {
                     $sameContents = new ContentCollection([]);
@@ -723,16 +723,16 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getDisplayNameAttribute(): string
     {
         try {
-            $key = "content:getDisplayName".$this->cacheKey();
+            $key = 'content:getDisplayName'.$this->cacheKey();
             $c   = $this;
-            
-            return Cache::remember($key, config("constants.CACHE_60"), function () use ($c) {
-                $displayName   = "";
+    
+            return Cache::remember($key, config('constants.CACHE_60'), function () use ($c) {
+                $displayName   = '';
                 $sessionNumber = $c->order;
                 if (isset($c->contenttype)) {
-                    $displayName .= $c->contenttype->displayName." ";
+                    $displayName .= $c->contenttype->displayName.' ';
                 }
-                $displayName .= (isset($sessionNumber) && $sessionNumber > -1 ? "جلسه ".$sessionNumber." - " : "")." ".(isset($c->name) ? $c->name : $c->user->name);
+                $displayName .= (isset($sessionNumber) && $sessionNumber > -1 ? 'جلسه '.$sessionNumber.' - ' : '').' '.(isset($c->name) ? $c->name : $c->user->name);
                 
                 return $displayName;
             });
@@ -749,17 +749,17 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getAddItems(): Collection
     {
         $content = $this;
-        $key     = "content:getAddItems".$content->cacheKey();
-        
-        $adItems = Cache::tags(["content"])
-            ->remember($key, config("constants.CACHE_60"), function () use ($content) {
+        $key     = 'content:getAddItems'.$content->cacheKey();
+    
+        $adItems = Cache::tags(['content'])
+            ->remember($key, config('constants.CACHE_60'), function () use ($content) {
                 $adItems = collect();
                 $set     = $content->set ?: new Contentset();
                 if ($set->id != 199) {
                     $adItems = Contentset::findOrFail(199)
                         ->contents()
-                        ->where("enable", 1)
-                        ->orderBy("order")
+                        ->where('enable', 1)
+                        ->orderBy('order')
                         ->get();
                 }
                 
@@ -781,26 +781,26 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $videoDirectUrl = $videoDirectUrl->first();
         $videoDirectUrl = isset($videoDirectUrl) ? $videoDirectUrl->link : null;
         return [
-            'title'                => $this->metaTitle,
-            'description'          => $this->metaDescription,
-            'url'                  => action('ContentController@show', $this),
-            'canonical'            => action('ContentController@show', $this),
-            'site'                 => 'آلاء',
-            'imageUrl'             => $this->thumbnail,
-            'imageWidth'           => '1280',
-            'imageHeight'          => '720',
-            'seoMod'               => SeoMetaTagsGenerator::SEO_MOD_VIDEO_TAGS,
-            'playerUrl'            => action('ContentController@embed', $this),
-            'playerWidth'          => '854',
-            'playerHeight'         => '480',
-            'videoDirectUrl'       => $videoDirectUrl,
-            'videoActorName'       => $this->authorName,
-            'videoActorRole'       => 'دبیر',
-            'videoDirector'        => 'آلاء',
-            'videoWriter'          => 'آلاء',
-            'videoDuration'        => $this->duration,
-            'videoReleaseDate'     => $this->validSince,
-            'tags'                 => $this->tags,
+            'title'            => $this->metaTitle,
+            'description'      => $this->metaDescription,
+            'url'              => action('ContentController@show', $this),
+            'canonical'        => action('ContentController@show', $this),
+            'site'             => 'آلاء',
+            'imageUrl'         => $this->thumbnail,
+            'imageWidth'       => '1280',
+            'imageHeight'      => '720',
+            'seoMod'           => SeoMetaTagsGenerator::SEO_MOD_VIDEO_TAGS,
+            'playerUrl'        => action('Web\ContentController@embed', $this),
+            'playerWidth'      => '854',
+            'playerHeight'     => '480',
+            'videoDirectUrl'   => $videoDirectUrl,
+            'videoActorName'   => $this->authorName,
+            'videoActorRole'   => 'دبیر',
+            'videoDirector'    => 'آلاء',
+            'videoWriter'      => 'آلاء',
+            'videoDuration'    => $this->duration,
+            'videoReleaseDate' => $this->validSince,
+            'tags'             => $this->tags,
             'videoWidth'           => '854',
             'videoHeight'          => '480',
             'videoType'            => 'video/mp4',
@@ -823,10 +823,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function validSince_Jalali(): string
     {
-        $explodedDateTime = explode(" ", $this->validSince);
+        $explodedDateTime = explode(' ', $this->validSince);
         $explodedTime     = $explodedDateTime[1];
-        
-        return $this->convertDate($this->validSince, "toJalali")." ".$explodedTime;
+    
+        return $this->convertDate($this->validSince, 'toJalali').' '.$explodedTime;
     }
     
     /**
@@ -872,8 +872,8 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $tags = null;
         if (!empty($value)) {
             $tags = json_encode([
-                "bucket" => "content",
-                "tags"   => $value,
+                'bucket' => 'content',
+                'tags'   => $value,
             ], JSON_UNESCAPED_UNICODE);
         }
         
@@ -966,14 +966,14 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function files()
     {
         return $this->belongsToMany('App\File', 'educationalcontent_file', 'content_id', 'file_id')
-            ->withPivot("caption", "label");
+            ->withPivot('caption', 'label');
     }
     
     public function contentsets()
     {
         //ToDo : deprecated
-        return $this->belongsToMany("\App\Contentset", "contentset_educationalcontent", "edc_id", "contentset_id")
-            ->withPivot("order", "isDefault");
+        return $this->belongsToMany("\App\Contentset", 'contentset_educationalcontent', 'edc_id', 'contentset_id')
+            ->withPivot('order', 'isDefault');
     }
     
     public function template()
@@ -990,7 +990,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     
     public function user()
     {
-        return $this->belongsTo("\App\User", "author_id", "id")
+        return $this->belongsTo("\App\User", 'author_id', 'id')
             ->withDefault();
     }
     
@@ -1033,7 +1033,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $content = $this;
         $files   = collect();
         switch ($content->template->name) {
-            case "video1":
+            case 'video1':
                 $file = $content->files->where('pivot.label', 'hd')
                     ->first();
                 if (isset($file)) {
@@ -1045,7 +1045,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     
                     $files->push([
                         'uuid'     => $file->uuid,
-                        'disk'     => "alaaCdnSFTP",
+                        'disk'     => 'alaaCdnSFTP',
                         'url'      => $url,
                         'fileName' => parse_url($url)['path'],
                         'size'     => $size,
@@ -1106,7 +1106,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 $url = $file->name;
                 if (isset($url)) {
                     $size = null;
-                    $type = "thumbnail";
+                    $type = 'thumbnail';
                     
                     $this->thumbnail = [
                         'uuid'     => $file->uuid,
@@ -1147,7 +1147,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     ]);
                 }
                 break;
-            case "article" :
+            case 'article' :
                 break;
             default:
                 break;

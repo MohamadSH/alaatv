@@ -444,7 +444,7 @@
                                             </h4>
                                             <div class="a-widget5__info">
                                                 <div class="content-description">
-                                                    {!! str_limit($item["content"]->description, 100, ' ...') !!}
+                                                    {!! str_limit(clearHtml($item["content"]->description), 100, ' ...') !!}
                                                 </div>
                                             </div>
                                         </div>

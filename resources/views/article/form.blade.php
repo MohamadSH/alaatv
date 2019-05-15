@@ -6,7 +6,7 @@
         <div class = "actions btn-set">
             <button type = "submit" class = "btn btn-success">
                 <i class = "fa fa-check"></i> @if(isset($article))اصلاح@elseذخیره@endif </button>
-            <a href = "{{action("Web\HomeController@adminContent")}}" type = "button" name = "back" class = "btn btn-dark btn-secondary-outline">
+            <a href = "{{action("Web\AdminController@adminContent")}}" type = "button" name = "back" class = "btn btn-dark btn-secondary-outline">
                 <i class = "fa fa-angle-left"></i>
                 بازگشت
             </a>

@@ -41,33 +41,38 @@ class TransactionController extends Controller
         //        $this->middleware('permission:'.config('constants.INSERT_TRANSACTION_ACCESS'),['only'=>'store']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
             $transactions = Transaction::orderBy('created_at', 'Desc');
             
-            $createdSinceDate  = Input::get('createdSinceDate');
-            $createdTillDate   = Input::get('createdTillDate');
-            $createdTimeEnable = Input::get('createdTimeEnable');
+            $createdSinceDate  = $request->get('createdSinceDate');
+            $createdTillDate   = $request->get('createdTillDate');
+            $createdTimeEnable = $request->get('createdTimeEnable');
             if (strlen($createdSinceDate) > 0 && strlen($createdTillDate) > 0 && isset($createdTimeEnable)) {
                 $transactions = $this->timeFilterQuery($transactions, $createdSinceDate, $createdTillDate,
                     'completed_at');
             }
             
-            $deadlineSinceDate  = Input::get('DeadlineSinceDate');
-            $deadlineTillDate   = Input::get('DeadlineTillDate');
-            $deadlineTimeEnable = Input::get('DeadlineTimeEnable');
+            $deadlineSinceDate  = $request->get('DeadlineSinceDate');
+            $deadlineTillDate   = $request->get('DeadlineTillDate');
+            $deadlineTimeEnable = $request->get('DeadlineTimeEnable');
             if (strlen($deadlineSinceDate) > 0 && strlen($deadlineTillDate) > 0 && isset($deadlineTimeEnable)) {
                 $transactions = $this->timeFilterQuery($transactions, $deadlineSinceDate, $deadlineTillDate,
                     'deadline_at');
             }
             
-            if (Input::has('transactionStatus')) {
-                $transactionStatusFilter = Input::get('transactionStatus');
+            if ($request->has('transactionStatus')) {
+                $transactionStatusFilter = $request->get('transactionStatus');
                 $transactions            = $transactions->where("transactionstatus_id", $transactionStatusFilter);
             }
-            
-            $transactionCode = trim(Input::get("transactionCode"));
+
+            $transactionGatewayFilter = $request->get('transactiongateway_id');
+            if (isset($transactionGatewayFilter)) {
+                $transactions            = $transactions->where("transactiongateway_id", $transactionGatewayFilter);
+            }
+
+            $transactionCode = trim($request->get("transactionCode"));
             if (isset($transactionCode[0])) {
                 $transactions = $transactions->where(function ($q) use ($transactionCode) {
                     $q->where("traceNumber", "like", "%".$transactionCode."%")
@@ -79,14 +84,14 @@ class TransactionController extends Controller
                 });
             }
             
-            $transactionManagerComment = Input::get("transactionManagerComment");
+            $transactionManagerComment = $request->get("transactionManagerComment");
             if (isset($transactionManagerComment[0])) {
                 $transactions = $transactions->where(function ($q) use ($transactionManagerComment) {
                     $q->where("managerComment", "like", "%".$transactionManagerComment."%");
                 });
             }
             
-            $firstName = trim(Input::get('firstName'));
+            $firstName = trim($request->get('firstName'));
             if (isset($firstName) && strlen($firstName) > 0) {
                 $transactions = $transactions->whereHas("order", function ($query) use ($firstName) {
                     $query->whereHas('user', function ($q) use ($firstName) {
@@ -95,7 +100,7 @@ class TransactionController extends Controller
                 });
             }
             
-            $lastName = trim(Input::get('lastName'));
+            $lastName = trim($request->get('lastName'));
             if (isset($lastName) && strlen($lastName) > 0) {
                 $transactions = $transactions->whereHas("order", function ($query) use ($lastName) {
                     $query->whereHas('user', function ($q) use ($lastName) {
@@ -104,7 +109,7 @@ class TransactionController extends Controller
                 });
             }
             
-            $nationalCode = trim(Input::get('nationalCode'));
+            $nationalCode = trim($request->get('nationalCode'));
             if (isset($nationalCode) && strlen($nationalCode) > 0) {
                 $transactions = $transactions->whereHas("order", function ($query) use ($nationalCode) {
                     $query->whereHas('user', function ($q) use ($nationalCode) {
@@ -113,7 +118,7 @@ class TransactionController extends Controller
                 });
             }
             
-            $mobile = trim(Input::get('mobile'));
+            $mobile = trim($request->get('mobile'));
             if (isset($mobile) && strlen($mobile) > 0) {
                 $transactions = $transactions->whereHas("order", function ($query) use ($mobile) {
                     $query->whereHas('user', function ($q) use ($mobile) {
@@ -122,7 +127,7 @@ class TransactionController extends Controller
                 });
             }
             
-            $productsId                            = Input::get('products');
+            $productsId                            = $request->get('products');
             $transactionOrderproductCost           = collect();
             $transactionOrderproductTotalCost      = 0;
             $transactionOrderproductTotalExtraCost = 0;
@@ -141,8 +146,8 @@ class TransactionController extends Controller
                         }
                     }
                 }
-                if (Input::has("checkoutStatusEnable")) {
-                    $checkoutStatuses = Input::get("checkoutStatuses");
+                if ($request->has("checkoutStatusEnable")) {
+                    $checkoutStatuses = $request->get("checkoutStatuses");
                     if (in_array(0, $checkoutStatuses)) {
                         $transactions = $transactions->whereIn('order_id',
                             Orderproduct::whereNull("checkoutstatus_id")
@@ -162,8 +167,8 @@ class TransactionController extends Controller
                 }
             }
             else {
-                if (Input::has("checkoutStatusEnable")) {
-                    $checkoutStatuses = Input::get("checkoutStatuses");
+                if ($request->has("checkoutStatusEnable")) {
+                    $checkoutStatuses = $request->get("checkoutStatuses");
                     if (in_array(0, $checkoutStatuses)) {
                         $transactions = $transactions->whereIn('order_id', Orderproduct::whereNull("checkoutstatus_id")
                             ->pluck('order_id'));
@@ -176,7 +181,7 @@ class TransactionController extends Controller
                 }
             }
             
-            $extraAttributevaluesId = Input::get('extraAttributes');
+            $extraAttributevaluesId = $request->get('extraAttributes');
             if (isset($extraAttributevaluesId)) {
                 $transactions = $transactions->whereIn('order_id',
                     Orderproduct::whereHas("attributevalues", function ($q) use ($extraAttributevaluesId) {
@@ -186,27 +191,27 @@ class TransactionController extends Controller
             }
             
             //        if(isset($paymentMethodsId) && !in_array(0, $paymentMethodsId)){
-            if (Input::has('paymentMethods')) {
-                $paymentMethodsId = Input::get('paymentMethods');
+            if ($request->has('paymentMethods')) {
+                $paymentMethodsId = $request->get('paymentMethods');
                 $transactions     = $transactions->whereIn('paymentmethod_id', $paymentMethodsId);
             }
             
-            if (Input::has('orderStatuses')) {
-                $orderStatusesId = Input::get('orderStatuses');
+            if ($request->has('orderStatuses')) {
+                $orderStatusesId = $request->get('orderStatuses');
                 //            $orders = Order::orderStatusFilter($orders, $orderStatusesId);
                 $transactions = $transactions->whereHas("order", function ($q) use ($orderStatusesId) {
                     $q->whereIn("orderstatus_id", $orderStatusesId);
                 });
             }
             
-            if (Input::has('paymentStatuses')) {
-                $paymentStatusesId = Input::get('paymentStatuses');
+            if ($request->has('paymentStatuses')) {
+                $paymentStatusesId = $request->get('paymentStatuses');
                 $transactions      = $transactions->whereHas("order", function ($q) use ($paymentStatusesId) {
                     $q->whereIn("paymentstatus_id", $paymentStatusesId);
                 });
             }
             
-            $transactionType = Input::get("transactionType");
+            $transactionType = $request->get("transactionType");
             if (isset($transactionType) && strlen($transactionType) > 0) {
                 if ($transactionType == 0) {
                     $transactions = $transactions->where("cost", ">", 0);
@@ -223,8 +228,8 @@ class TransactionController extends Controller
             if (isset($productsId) && !in_array(0, $productsId)) {
                 $checkedOrderproducts = [];
                 foreach ($transactions as $transaction) {
-                    if (Input::has("checkoutStatusEnable")) {
-                        $checkoutStatuses = Input::get("checkoutStatuses");
+                    if ($request->has("checkoutStatusEnable")) {
+                        $checkoutStatuses = $request->get("checkoutStatuses");
                         if (in_array(0, $checkoutStatuses)) {
                             $transactionOrderproducts = $transaction->order->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
                                 ->where(function ($q
