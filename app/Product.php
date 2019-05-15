@@ -338,6 +338,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return Product::find([
             225,
             226,
+            294,
+            295
         ]);
     }
     
