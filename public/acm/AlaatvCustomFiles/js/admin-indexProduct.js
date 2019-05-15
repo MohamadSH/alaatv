@@ -287,13 +287,11 @@ $(document).on("click", "#product-portlet .reload", function (){
     makeDataTable_loadWithAjax_products();
     return false;
 });
-$(document).on("click", ".copyProduct", function (){
-    $(".copyProductForm").attr("action" , $(this).data("action"));
 
-});
-$(document).on("submit", ".copyProductForm", function (e){
-    e.preventDefault();
-    url = $(this).attr("action");
+function copyProductInModal() {
+    let productId = $('#productIdForCopy').val();
+    let url = 'product/'+productId+'/copy';
+
     toastr.options = {
         "closeButton": true,
         "debug": false,
@@ -352,7 +350,7 @@ $(document).on("submit", ".copyProductForm", function (e){
         // contentType: false,
         processData: false
     });
-});
+}
 
 
 /**

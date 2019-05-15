@@ -121,12 +121,11 @@
                             </div>
                         </div>
                     </div>
-                    @permission((config('constants.REMOVE_PRODUCT_ACCESS')))
+                    @permission((config('constants.COPY_PRODUCT_ACCESS')))
                     <!--begin::Modal-->
                     <div class="modal fade" id="copyProductModal" tabindex="-1" role="dialog" aria-labelledby="copyProductModalModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
-                                {!! Form::open(['class'=>'form-horizontal copyProductForm']) !!}
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="copyProductModalModalLabel"></h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -134,14 +133,14 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <h4 class="modal-title">آیا مطمئن هستید؟</h4>
+                                    <h4 class="modal-title">آیا برای کپی مطمئن هستید؟</h4>
+                                    <input type="hidden" id="productIdForCopy" value="">
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
-                                    <button type="submit" class="btn btn-primary" id="copy-product-loading-image">بله</button>
+                                    <button type="button" class="btn btn-primary" onclick="copyProductInModal()">بله</button>
                                     <img class="d-none" id="copy-product-loading-image" src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px" width="25px">
                                 </div>
-                                {!! Form::close() !!}
                             </div>
                         </div>
                     </div>
@@ -303,16 +302,13 @@
                                         <div class="modal-dialog modal-lg" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="copyProductModalModalLabel">افزودن کپن جدید</h5>
+                                                    <h5 class="modal-title" id="copyProductModalModalLabel"></h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
-                                                {!! Form::open(['method' => 'POST','action' => ['Web\CouponController@store'], 'class'=>'nobottommargin' , 'id'=>'couponForm']) !!}
                                                 <div class="modal-body">
-                                                    <div class="row">
-                                                        @include('coupon.form')
-                                                    </div>
+                                                
                                                 </div>
                                                 {!! Form::close() !!}
                                                 <div class="modal-footer">
@@ -693,7 +689,7 @@
                         @endpermission
                         @permission((config('constants.COPY_PRODUCT_ACCESS')))
                         html +=
-                            '    <a class="btn btn-info copyProduct" >\n' +
+                            '    <a class="btn btn-info copyProduct" onclick="showCopyProductModal(' + row.id + ', ' + "'" + row.name + "'" + ')">\n' +
                             '        <i class="fa fa-envelope" aria-hidden="true"></i> کپی از محصول\n' +
                             '    </a>\n';
                         @endpermission
@@ -769,6 +765,11 @@
         function showLongDescription(longDescription) {
             $('#static-longDescription .modal-body').html(longDescription);
             $('#static-longDescription').modal('show');
+        }
+        function showCopyProductModal(productId, productName) {
+            $('#productIdForCopy').val(productId);
+            $('#copyProductModalModalLabel').html(productName);
+            $('#copyProductModal').modal('show');
         }
         
         jQuery(document).ready(function () {
