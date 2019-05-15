@@ -148,39 +148,17 @@
                                         <div class="m-widget3__body">
                                             <div class="m-widget3__text">
                                                 
-                                                @if(strlen($content->description) > 50)
-                                                    <!--begin::Portlet-->
-                                                    <div class="m-portlet m-portlet--collapsed m-portlet--head-sm m-portlet--info m-portlet--head-solid-bg" m-portlet="true">
-                                                        <div class="m-portlet__head">
-                                                            <div class="m-portlet__head-caption">
-                                                                <div class="m-portlet__head-title">
-                                                                    <span class="m-portlet__head-icon">
-                                                                        <i class="flaticon-exclamation"></i>
-                                                                    </span>
-                                                                    <h3 class="m-portlet__head-text">
-                                                                        توضیحات
-                                                                    </h3>
-                                                                </div>
-                                                            </div>
-                                                            <div class="m-portlet__head-tools">
-                                                                <ul class="m-portlet__nav">
-                                                                    <li class="m-portlet__nav-item">
-                                                                        <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-angle-down"></i></a>
-                                                                    </li>
-                                                                    <li class="m-portlet__nav-item">
-                                                                        <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-expand"></i></a>
-                                                                    </li>
-                                                                    <li class="m-portlet__nav-item">
-                                                                        <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-close"></i></a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
+                                                @if(strlen($content->description) > 2000)
+                                                    <div class="a--summarize-text">
+                                                        <div class="a--summarize-text-toggleBtn">
+                                                            <button class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
+                                                                <i class="la la-angle-double-down"></i>
+                                                            </button>
                                                         </div>
-                                                        <div class="m-portlet__body">
+                                                        <div class="a--summarize-text-content">
                                                             {!! $content->description !!}
                                                         </div>
                                                     </div>
-                                                    <!--end::Portlet-->
                                                 @else
                                                         {!! $content->description !!}
                                                 @endif
@@ -298,9 +276,23 @@
                             </div>
                         </div>
                         <div class="m-portlet__body">
-                            <div class="m-portlet__body-progress">Loading</div>
                             <div>
-                                {!! $content->description !!}
+    
+                                @if(strlen($content->description) > 2000)
+                                    <div class="a--summarize-text">
+                                        <div class="a--summarize-text-toggleBtn">
+                                            <button class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
+                                                <i class="la la-angle-double-down"></i>
+                                            </button>
+                                        </div>
+                                        <div class="a--summarize-text-content">
+                                            {!! $content->description !!}
+                                        </div>
+                                    </div>
+                                @else
+                                    {!! $content->description !!}
+                                @endif
+                                
                             </div>
                         </div>
                     </div>
