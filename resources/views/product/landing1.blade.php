@@ -205,7 +205,7 @@
                             <a href = "{{action("Web\ProductController@show" , $product["product"]->id)}}" class = "cbp-caption" data-title = "{{$product["product"]->name}}" rel = "nofollow">
                                 <div class = "cbp-caption-defaultWrap">
                                     @if(isset($product["product"]->image[0]))
-                                        <img src = "{{ route('image', ['category'=>'4','w'=>'256' , 'h'=>'256' ,  'filename' =>  $product["product"]->image ]) }}" alt = "عکس محصول@if(isset($product["product"]->name[0])) {{$product["product"]->name}} @endif">
+                                        <img src = "{{ $product["product"]->photo}}" alt = "عکس محصول@if(isset($product["product"]->name[0])) {{$product["product"]->name}} @endif">
                                 </div>@endif
                                 <div class = "cbp-caption-activeWrap">
                                     <div class = "cbp-l-caption-alignLeft">

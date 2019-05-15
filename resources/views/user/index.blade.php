@@ -27,7 +27,7 @@
         {{--<td>--}}
         {{--<div class="mt-element-overlay">--}}
         {{--<div class="mt-overlay-1">--}}
-        {{--<img alt="عکس پروفایل" class="timeline-badge-userpic" style="width: 60px ;height: 60px" src="{{ route('image', [ 'category'=>'1','w'=>'60' , 'h'=>'60' , 'filename' =>  $item->photo ]) }}" />--}}
+        {{--<img alt="عکس پروفایل" class="timeline-badge-userpic" style="width: 60px ;height: 60px" src="{{ $user->photo }}" />--}}
         {{--<div class="mt-overlay">--}}
         {{--<ul class="mt-info">--}}
         {{--<li>--}}
@@ -52,7 +52,7 @@
         {{--</div>--}}
         {{--<div class="modal-body">--}}
         {{--<div class="row" style="text-align: center;">--}}
-        {{--<img alt="عکس پروفایل"  style="width: 80%"  src="{{ route('image', ['category'=>'1','w'=>'608' , 'h'=>'608' ,  'filename' =>  $item->photo ]) }}"/>--}}
+        {{--<img alt="عکس پروفایل"  style="width: 80%"  src="{{ $item->photo }}"/>--}}
         {{--</div>--}}
         {{--</div>--}}
         {{--<div class="modal-footer">--}}
