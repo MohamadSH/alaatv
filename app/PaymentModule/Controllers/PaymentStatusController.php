@@ -20,7 +20,7 @@ class PaymentStatusController extends Controller
         $result = Request::session()->pull('verifyResult');
         
         if ($result != null) {
-            return view("order.checkout.verification", compact('status', 'paymentMethod', 'device', 'result'));
+            return view('order.checkout.verification', compact('status', 'paymentMethod', 'device', 'result'));
         }
 
         return redirect()->action('Web\UserController@userOrders');

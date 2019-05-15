@@ -209,6 +209,7 @@ $(document).on("click", "#productForm-submit", function (){
 
                     }
                 });
+                toastr["error"]("خطای کاربر!", "اطلاعات وارد شده صحیح نیست.");
                 mApp.unblock('#productForm-submit');
                 $('#responsive-product').modal('hide');
             },

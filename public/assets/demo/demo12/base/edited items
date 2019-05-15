@@ -1,0 +1,4 @@
+r.expand() in 
+mUtil.addEvent(o, "click", function (t) {
+    t.preventDefault(), r.fullscreen(), r.expand()
+})

@@ -147,7 +147,44 @@
                                         </div>
                                         <div class="m-widget3__body">
                                             <div class="m-widget3__text">
-                                                {!! $content->description !!}
+                                                
+                                                @if(strlen($content->description) > 50)
+                                                    <!--begin::Portlet-->
+                                                    <div class="m-portlet m-portlet--collapsed m-portlet--head-sm m-portlet--info m-portlet--head-solid-bg" m-portlet="true">
+                                                        <div class="m-portlet__head">
+                                                            <div class="m-portlet__head-caption">
+                                                                <div class="m-portlet__head-title">
+                                                                    <span class="m-portlet__head-icon">
+                                                                        <i class="flaticon-exclamation"></i>
+                                                                    </span>
+                                                                    <h3 class="m-portlet__head-text">
+                                                                        توضیحات
+                                                                    </h3>
+                                                                </div>
+                                                            </div>
+                                                            <div class="m-portlet__head-tools">
+                                                                <ul class="m-portlet__nav">
+                                                                    <li class="m-portlet__nav-item">
+                                                                        <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-angle-down"></i></a>
+                                                                    </li>
+                                                                    <li class="m-portlet__nav-item">
+                                                                        <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-expand"></i></a>
+                                                                    </li>
+                                                                    <li class="m-portlet__nav-item">
+                                                                        <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-close"></i></a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                        <div class="m-portlet__body">
+                                                            {!! $content->description !!}
+                                                        </div>
+                                                    </div>
+                                                    <!--end::Portlet-->
+                                                @else
+                                                        {!! $content->description !!}
+                                                @endif
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -389,7 +426,7 @@
                         <div class="a-widget5">
                             @foreach($videosWithSameSet as $item)
                                 <div class="a-widget5__item" id="playlistItem_{{ $item["content"]->id }}">
-                                    <div class="a-widget5__content  {{ $item["content"]->id == $content->id ? 'm--bg-primary' : '' }}">
+                                    <div class="a-widget5__content  {{ $item["content"]->id == $content->id ? 'm--bg-info' : '' }}">
                                         <div class="a-widget5__pic">
                                             <a class="m-link"
                                                href="{{action("Web\ContentController@show" , $item["content"])}}">
@@ -400,21 +437,14 @@
                                         </div>
                                         <div class="a-widget5__section">
                                             <h4 class="a-widget5__title">
-    
-{{--                                                {{ $item["content"]->display_name }} {{ strlen($item["content"]->display_name) }}--}}
-    
                                                 <a class="m-link"
                                                    href="{{action("Web\ContentController@show" , $item["content"])}}">
-                                                    @if(strlen(($item["content"]->display_name)) > 45)
-                                                        {!! mb_substr(($item["content"]->display_name), 0, 45, 'utf-8').' ...'  !!}
-                                                    @else
-                                                        {!! ($item["content"]->display_name)  !!}
-                                                    @endif
+                                                    {!! str_limit($item["content"]->display_name, 45, ' ...') !!}
                                                 </a>
                                             </h4>
                                             <div class="a-widget5__info">
                                                 <div class="content-description">
-                                                    {!! $item["content"]->description !!}
+                                                    {!! str_limit($item["content"]->description, 100, ' ...') !!}
                                                 </div>
                                             </div>
                                         </div>

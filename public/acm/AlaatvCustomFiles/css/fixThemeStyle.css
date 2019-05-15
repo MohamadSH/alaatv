@@ -95,6 +95,11 @@ select.form-control {
     padding-top: 0;
 }
 
+.m-portlet.m-portlet--fullscreen {
+    position: fixed;
+    z-index: 120;
+}
+
 /*fix persian date picker show bug in modal*/
 .datepicker-plot-area {
     z-index: 1061;
