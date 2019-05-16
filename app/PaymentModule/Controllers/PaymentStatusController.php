@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
 
 class PaymentStatusController extends Controller
@@ -17,6 +18,11 @@ class PaymentStatusController extends Controller
      */
     public function show(string $status, string $paymentMethod, string $device)
     {
+        Cache::tags('bon')->flush();
+        Cache::tags('order')->flush();
+        Cache::tags('orderproduct')->flush();
+
+
         $result = Request::session()->pull('verifyResult');
         
         if ($result != null) {

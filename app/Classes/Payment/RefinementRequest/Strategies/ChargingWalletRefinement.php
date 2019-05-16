@@ -33,15 +33,11 @@ class ChargingWalletRefinement extends Refinement
         }elseif($this->cost == 0){
             $this->statusCode = Response::HTTP_OK;
             $this->message = 'Zero cost';
+            $this->transaction = null;
         }else{
             $this->statusCode = Response::HTTP_BAD_REQUEST;
-            $this->message = 'Minus cost';
+            $this->message = 'Cost cant be minus';
         }
-        $this->statusCode  = $result['statusCode'];
-        $this->message     = $result['message'];
-        $this->transaction = $result['transaction'];
-        $this->statusCode  = Response::HTTP_OK;
-        
         return $this;
     }
 }
