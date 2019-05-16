@@ -159,3 +159,7 @@
     min-height: 40px;
     justify-content: space-around;
 }
+
+.a--owl-carousel-type-2 .owl-dots {
+    display: none;
+}

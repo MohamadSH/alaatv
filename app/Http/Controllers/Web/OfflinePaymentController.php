@@ -39,6 +39,7 @@ class OfflinePaymentController extends Controller
         Cache::tags('orderproduct')->flush();
 
         $user = $request->user();
+        $customerDescription = session()->get('customerDescription');
 
         // We had middleware called OfflineVerifyPayment for this,
         //but after reconsidering about queries in middleware I put the code in here
@@ -55,12 +56,9 @@ class OfflinePaymentController extends Controller
             return response($check["text"] , $check["httpStatusCode"]);
 
         
-        if (!$this->processVerification($order, $paymentMethod))
+        if (!$this->processVerification($order, $paymentMethod , $customerDescription))
             return response( ["message" => "Invalid inputs"] , Response::HTTP_BAD_REQUEST);
 
-        Cache::tags('user')->flush();
-        Cache::tags('order')->flush();
-        Cache::tags('orderproduct')->flush();
     
         RequestFcade::session()
             ->flash('verifyResult', [
@@ -141,11 +139,10 @@ class OfflinePaymentController extends Controller
     /**
      * @param Order $order
      * @param string $paymentMethod
-     *
      * @param string $customerDescription
      * @return bool
      */
-    private function processVerification(Order $order, string $paymentMethod): bool
+    private function processVerification(Order $order, string $paymentMethod , string $customerDescription=null): bool
     {
         $done = true;
         switch ($paymentMethod) {
@@ -192,8 +189,15 @@ class OfflinePaymentController extends Controller
                         /** End */
 
                         $order->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID");
+                        if(strlen($customerDescription)>0)
+                        {
+                            $order->customerDescription = $customerDescription;
+                        }
+
                         if ($order->update())
+                        {
                             $order->user->notify(new InvoicePaid($order));
+                        }
 
                     }
                 }

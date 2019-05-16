@@ -49,6 +49,10 @@
     align-items: center;
 }
 
+.a--owl-carousel-type-1 .owl-item .m-portlet {
+    margin-bottom: 0;
+}
+
 /*media query*/
 @media (max-width: 767.98px) {
     .a--owl-carousel-type-1 .owl-prev,

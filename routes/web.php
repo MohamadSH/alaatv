@@ -76,6 +76,10 @@ Route::group(['prefix' => 'orderproduct'], function () {
 });
 
 Route::group(['prefix' => 'landing'], function () {
+    Route::get('7' , [
+        'as'   => 'landing.7',
+        'uses' => 'Web\ProductController@landing7',
+    ]);
     Route::get('6' , [
         'as'   => 'landing.6',
         'uses' => 'Web\ProductController@landing6',

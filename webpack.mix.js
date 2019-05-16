@@ -249,6 +249,21 @@ mix.babel(
     'public/js/page-shop.js'
 );
 
+mix.babel(
+    [
+        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+        'public/acm/AlaatvCustomFiles/js/page-landing7.js',
+    ],
+    'public/js/page-landing7.js'
+);
+
+mix.babel(
+    [
+        'public/acm/AlaatvCustomFiles/js/page-homePage.js',
+    ],
+    'public/js/page-homePage.js'
+);
+
 mix.styles(
     [
         'node_modules/persian-datepicker/dist/css/persian-datepicker.min.css',
@@ -312,4 +327,14 @@ mix.styles(
         'public/acm/AlaatvCustomFiles/css/page-shop.css',
     ],
     'public/css/page-shop.css'
+).version();
+
+mix.styles(
+    [
+        'node_modules/slick-carousel/slick/slick.css',
+        'node_modules/slick-carousel/slick/slick-theme.css',
+        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
+        'public/acm/AlaatvCustomFiles/css/page-landing7.css',
+    ],
+    'public/css/page-landing7.css'
 ).version();

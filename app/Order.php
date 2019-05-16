@@ -819,10 +819,10 @@ class Order extends BaseModel
     public function getPaymentstatusAttribute()
     {
         $order = $this;
-        $key   = "order:paymentstatus:".$order->cacheKey();
+        $key   = 'order:paymentstatus:'.$order->cacheKey();
         
-        return Cache::tags(["order"])
-            ->remember($key, config("constants.CACHE_10"), function () use ($order) {
+        return Cache::tags(['order'])
+            ->remember($key, config('constants.CACHE_10'), function () use ($order) {
                 return optional($order->paymentstatus()
                     ->first())->setVisible([
                     'name',
