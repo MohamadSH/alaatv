@@ -79,17 +79,17 @@
     
                             <div class="row alaaMaghtaLogoWraper">
                                 <div class="col col-md-4">
-                                    <a href="#konkoor1">
+                                    <a href="#landing7-scroll-konkoor1">
                                         <img src="{{ asset('/assets/extra/landing7/80.png') }}" class="a--full-width alaaMaghtaLogo">
                                     </a>
                                 </div>
                                 <div class="col col-md-4">
-                                    <a href="#taftan">
+                                    <a href="#landing7-scroll-taftan">
                                         <img src="{{ asset('/assets/extra/landing7/60.png') }}" class="a--full-width alaaMaghtaLogo">
                                     </a>
                                 </div>
                                 <div class="col col-md-4">
-                                    <a href="/#konkoor2">
+                                    <a href="/#landing7-scroll-konkoor2">
                                         <img src="{{ asset('/assets/extra/landing7/33.png') }}" class="a--full-width alaaMaghtaLogo">
                                     </a>
                                 </div>
@@ -100,7 +100,7 @@
                                 @if($block->products->count() > 0)
             
             
-                                    <div class="row shopBlock blockId-{{ $block->id }} {{ $block->class }}" id="{{ $block->class }}">
+                                    <div class="row shopBlock blockId-{{ $block->id }} {{ $block->class }}" id="landing7-scroll-{{ $block->class }}">
                                         <div class="col">
                                             <div class="m-portlet  m-portlet--bordered OwlCarouselType2-shopPage" id="owlCarousel_{{ $block->id }}">
                                                 <div class="m-portlet__head">
