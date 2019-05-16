@@ -1690,25 +1690,35 @@ class OrderController extends Controller
             ]);
         }
 
-        $request->offsetSet('mode', 'donate');
-        $request->offsetSet('cost', $amount);
-        $product        = Product::FindOrFail(Product::CUSTOM_DONATE_PRODUCT);
-        $response       = $this->addOrderproduct($request, $product, $orderproductController);
-        $responseStatus = $response->getStatusCode();
+        $donateProduct        = Product::FindOrFail(Product::CUSTOM_DONATE_PRODUCT);
 
-        if ($responseStatus == Response::HTTP_OK) {
-            $donateOrder                    = $donateOrder->fresh();
-            $orderCost                      = $donateOrder->obtainOrderCost(true, false);
-            $donateOrder->cost              = $orderCost['rawCostWithDiscount'];
-            $donateOrder->costwithoutcoupon = $orderCost['rawCostWithoutDiscount'];
-            $donateOrder->update();
+        $oldOrderproducts = $donateOrder->orderproducts(config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
+            ->where('product_id', $donateProduct->id)
+            ->get();
 
-            $paymentRoute = route('redirectToBank', ['paymentMethod' => 'zarinpal', 'device' => 'web']);
-            $paymentRoute .= '?order_id='.$donateOrder->id ;
-            return redirect($paymentRoute);
+        if($oldOrderproducts->isNotEmpty())
+        {
+            $oldOrderproduct = $oldOrderproducts->first();
+            $oldOrderproduct->cost = $amount;
+            $oldOrderproduct->update();
+        }else{
+            $donateOrderproduct = Orderproduct::Create([
+                                'order_id'  =>  $donateOrder->id,
+                                'product_id' => $donateProduct->id,
+                                'cost'  =>  $amount,
+                                'orderproducttype_id'  =>  config('constants.ORDER_PRODUCT_TYPE_DEFAULT'),
+                        ]);
         }
-    
-        return redirect()->back();
+
+        $donateOrder                    = $donateOrder->fresh();
+        $orderCost                      = $donateOrder->obtainOrderCost(true, false);
+        $donateOrder->cost              = $orderCost['rawCostWithDiscount'];
+        $donateOrder->costwithoutcoupon = $orderCost['rawCostWithoutDiscount'];
+        $donateOrder->update();
+
+        $paymentRoute = route('redirectToBank', ['paymentMethod' => 'zarinpal', 'device' => 'web']);
+        $paymentRoute .= '?order_id='.$donateOrder->id ;
+        return redirect($paymentRoute);
     }
     
     /**
@@ -1723,77 +1733,56 @@ class OrderController extends Controller
     public function addOrderproduct(Request $request, Product $product, OrderproductController $orderproductController)
     {
         try {
+            /** @var User $user */
             $user = $request->user();
-            if ($request->has('cost')) {
-                $cost = $request->get('cost');
-            }
-    
-            $orderMode = '';
-            if ($request->has('mode')) {
-                $orderMode = $request->get('mode');
-            }
+            $openOrder = $user->getOpenOrder();
             
-            switch ($orderMode) {
-                case 'normal':
-                    $openOrder = $user->getOpenOrder();
-                    break;
-                case 'donate':
-                    $openOrder = Order::where('user_id', $user->id)
-                        ->where('orderstatus_id', config()->get('constants.ORDER_STATUS_OPEN_DONATE'))
-                        ->first();
-                    break;
-                default:
-                    break;
+            $restorableProducts = [
+                Product::CUSTOM_DONATE_PRODUCT,
+                Product::DONATE_PRODUCT_5_HEZAR,
+            ];
+            $createFlag         = true;
+            $resultCode = Response::HTTP_NO_CONTENT;
+            if (in_array($product->id, $restorableProducts)) {
+                /** @var OrderproductCollection $oldOrderproduct */
+                $oldOrderproduct = $openOrder->orderproducts(config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
+                    ->whereIn('product_id',
+                        $restorableProducts)
+                    ->onlyTrashed()
+                    ->get();
+                if ($oldOrderproduct->isNotEmpty()) {
+                    $deletedOrderproduct = $oldOrderproduct->first();
+                    $deletedOrderproduct->restore();
+                    $resultCode = Response::HTTP_OK;
+                    $resultText = 'An old Orderproduct with the same data restored successfully';
+                    $createFlag = false;
+                }
             }
-            
-            if (isset($openOrder)) {
-                $restorableProducts = [
-                    Product::CUSTOM_DONATE_PRODUCT,
-                    Product::DONATE_PRODUCT_5_HEZAR,
-                ];
-                $createFlag         = true;
-                if (in_array($product->id, $restorableProducts)) {
-                    $oldOrderproduct = $openOrder->orderproducts(config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
-                        ->whereIn('product_id',
-                            $restorableProducts)
-                        ->onlyTrashed()
-                        ->get();
-                    if ($oldOrderproduct->isNotEmpty()) {
-                        $deletedOrderproduct = $oldOrderproduct->first();
-                        $deletedOrderproduct->restore();
-                        $resultCode = Response::HTTP_OK;
-                        $resultText = 'An old Orderproduct with the same data restored successfully';
-                        $createFlag = false;
-                    }
-                }
-                
-                if ($createFlag) {
-                    $data               = [];
-                    $data['product_id'] = $product->id;
-                    $data['order_id']   = $openOrder->id;
-                    if (isset($cost)) {
-                        $data['cost'] = $cost;
-                    }
-                    $data['withoutBon'] = true;
-                    $result             = $orderproductController->new($data);
-                    /** @var OrderproductCollection $calculatedOrderproducts */
-                    $storedOrderproducts        = $result['data']['storedOrderproducts'];
-                    $newPrice = $storedOrderproducts->calculateGroupPrice();
-                    $storedOrderproducts->setNewPrices($newPrice['newPrices']);
-                    $storedOrderproducts->updateCostValues();
 
-
-                    if ($result['status']) {
-                        $resultCode = Response::HTTP_OK;
-                        $resultText = 'Orderproduct added successfully';
-                    } else {
-                        $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
-                        $resultText = $result['message'];
-                    }
+            if ($createFlag) {
+                $data               = [];
+                $data['product_id'] = $product->id;
+                $data['order_id']   = $openOrder->id;
+                $data['withoutBon'] = true;
+                $result             = $orderproductController->new($data);
+                if(!$result['status'])
+                {
+                    dd('Could not add donate to order.');
                 }
-            } else {
-                $resultCode = Response::HTTP_BAD_REQUEST;
-                $resultText = 'No open order found';
+
+                /** @var OrderproductCollection $storedOrderproducts */
+                $storedOrderproducts        = $result['data']['storedOrderproducts'];
+                $newPrice = $storedOrderproducts->calculateGroupPrice();
+                $storedOrderproducts->setNewPrices($newPrice['newPrices']);
+                $storedOrderproducts->updateCostValues();
+
+                if ($result['status']) {
+                    $resultCode = Response::HTTP_OK;
+                    $resultText = 'Orderproduct added successfully';
+                } else {
+                    $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
+                    $resultText = $result['message'];
+                }
             }
             
             if ($resultCode == Response::HTTP_OK) {
