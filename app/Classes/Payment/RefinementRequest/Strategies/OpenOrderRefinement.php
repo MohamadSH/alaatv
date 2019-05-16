@@ -48,9 +48,10 @@ class OpenOrderRefinement extends Refinement
         }elseif($this->cost == 0){
             $this->statusCode = Response::HTTP_OK;
             $this->message = 'Zero cost';
+            $this->transaction = null;
         }else{
             $this->statusCode = Response::HTTP_BAD_REQUEST;
-            $this->message = 'Minus cost';
+            $this->message = 'Cost cant be minus';
         }
 
         return $this;
