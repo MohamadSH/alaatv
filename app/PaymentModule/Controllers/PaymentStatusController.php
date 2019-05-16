@@ -20,6 +20,7 @@ class PaymentStatusController extends Controller
     {
         Cache::tags('bon')->flush();
         Cache::tags('order')->flush();
+        Cache::tags('user')->flush();
         Cache::tags('orderproduct')->flush();
 
 
