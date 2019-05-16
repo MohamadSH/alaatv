@@ -148,7 +148,7 @@ class HandleUnverifiedTransactions extends Command
      */
     private function verifyTransaction($cost, $authority): \AlaaTV\Gateways\Contracts\OnlinePaymentVerificationResponseInterface
     {
-        //ToDo : unComment
+        //ToDo : Bug with Money::fromTomansx
 //        $result = $this->gateway->verify(Money::fromTomans($cost), $authority);
         $result['Status'] = 'success' ;
         return VerificationResponse::instance($result);
