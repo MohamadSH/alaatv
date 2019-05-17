@@ -450,6 +450,7 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         @include('admin.filters.paymentMethodFilter')
+                                        @include('admin.filters.paymentGatewayFilter')
                                     </div>
                                     <div class="col-md-3">
                                         @include("admin.filters.transactionType")
@@ -549,6 +550,7 @@
                         </div>
                     </div>
                     <!--end::Modal-->
+                    
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%"
                            id="transaction_table">
                         <thead>
@@ -566,6 +568,7 @@
                             <th class="all"> مبلغ آیتم افزوده</th>
                             @endpermission
                             <th class="all"> کد تراکنش</th>
+                            <th class="none">درگاه پرداخت</th>
                             <th class="all"> نحوه پرداخت</th>
                             <th class="none"> تاریخ ثبت :</th>
                             <th class="none"> مهلت پرداخت :</th>
@@ -981,7 +984,7 @@
                                 pendingTransactions += '<span class="bold m--font-danger">بدون مبلغ</span>';
                             }
                             pendingTransactions += '<br>';
-                            pendingTransactions += '<a target="_blank" href="#" class="btn btn-sm btn-xs blue-sharp btn-outline sbold m--margin-left-10">اصلاح</a>';
+                            pendingTransactions += '<a target="_blank" href="#" class="btn-sm btn m-btn--pill m-btn--air btn-primary sbold m--margin-left-10">اصلاح</a>';
                             
                             if (typeof pendingTransaction.transactionID !== 'undefined') {
                                 pendingTransactions += '  ,شماره تراکنش: ' + pendingTransaction.transactionID;
@@ -1212,12 +1215,12 @@
                     state: "info",
                 });
                 data.orders = getNextPageParam(data.start, data.length);
+                delete data.columns;
                 let $form = $("#filterOrderForm");
                 let formData = getFormData($form);
                 // let formData = $form.serializeArray();
                 /* Merge defaults and options, without modifying defaults */
                 data = $.extend({}, data, formData);
-                console.log('settings: ', data);
                 return data;
             };
             let dataSrc = function (json) {

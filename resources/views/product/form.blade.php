@@ -66,7 +66,7 @@
                     <div class = "col-md-9">
                         <div class = "fileinput fileinput-new" data-provides = "fileinput">
                             <div class = "fileinput-new thumbnail" style = "width: 200px; height: 150px;">
-                                <img src = "{{ route('image', [ 'category'=>'4','w'=>'140' , 'h'=>'140' , 'filename' =>  $product->image ]) }}" {{--alt="عکس خدمت" onerror="this.src='http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image';"/> </div>--}}@if(strlen($product->name)>0) alt = "{{$product->name}}" @else alt = "عکس محصول" @endif/>
+                                <img src = "{{ $product->photo }}" {{--alt="عکس خدمت" onerror="this.src='http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image';"/> </div>--}}@if(strlen($product->name)>0) alt = "{{$product->name}}" @else alt = "عکس محصول" @endif/>
                             </div>
                             <div class = "fileinput-preview fileinput-exists thumbnail" style = "max-width: 200px; max-height: 150px;"></div>
                             <div>
@@ -285,10 +285,11 @@
                     </div>
                 </div>
             </div>
+            @include('product.partials.tagsInput' )
             <div class = "form-actions">
                 <div class = "row">
                     <div class = "col-md-offset-3 col-md-9">
-                        {!! Form::submit('اصلاح', ['class' => 'btn dark' ] ) !!}
+                        {!! Form::submit('اصلاح', ['class' => 'btn m-btn--pill m-btn--air btn-primary' ] ) !!}
                     </div>
                 </div>
             </div>
@@ -327,7 +328,7 @@
                 <div class = "col-md-9">
                     <div class = "fileinput fileinput-new" data-provides = "fileinput">
                         <div class = "fileinput-new thumbnail" style = "width: 200px; height: 150px;">
-                            <img src = "{{ route('image', [ 'category'=>'4','w'=>'140' , 'h'=>'140' , 'filename' =>  $product->image ]) }}" {{--alt="عکس خدمت" onerror="this.src='http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image';"/> </div>--}}@if(strlen($product->name)>0) alt = "{{$product->name}}" @else  alt = "عکس محصول" @endif/>
+                            <img src = "{{ $product->photo }}" {{--alt="عکس خدمت" onerror="this.src='http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image';"/> </div>--}}@if(strlen($product->name)>0) alt = "{{$product->name}}" @else  alt = "عکس محصول" @endif/>
                         </div>
                         <div class = "fileinput-preview fileinput-exists thumbnail" style = "max-width: 200px; max-height: 150px;"></div>
                         <div>
@@ -388,10 +389,11 @@
                 </div>
             </div>
         </div>
+        @include('product.partials.tagsInput' )
         <div class = "form-actions">
             <div class = "row">
                 <div class = "col-md-offset-3 col-md-9">
-                    {!! Form::submit('اصلاح', ['class' => 'btn dark' ] ) !!}
+                    {!! Form::submit('اصلاح', ['class' => 'btn m-btn--pill m-btn--air btn-primary' ] ) !!}
                 </div>
             </div>
         </div>

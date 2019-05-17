@@ -124,7 +124,7 @@ trait PaymentTrait
         $user = $this;
         $key  = "user:closeOrders:".$user->cacheKey();
         
-        return Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
+        return Cache::tags(['order' , 'user'])->remember($key, config("constants.CACHE_10"), function () use ($user) {
             return $this->closedOrders()
                 ->orderBy('completed_at', 'desc')
                 ->paginate(10, ['*'], 'orders');

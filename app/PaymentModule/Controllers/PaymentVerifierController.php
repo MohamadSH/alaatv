@@ -9,7 +9,6 @@ use App\Traits\HandleOrderPayment;
 use Illuminate\Routing\Controller;
 use AlaaTV\Gateways\PaymentDriver;
 use App\Repositories\TransactionRepo;
-use AlaaTV\Gateways\Facades\OnlineGateWay;
 use Illuminate\Support\Facades\{Cache, Request};
 
 class PaymentVerifierController extends Controller
@@ -54,7 +53,7 @@ class PaymentVerifierController extends Controller
             $transaction->update();
         }
 
-        setcookie('cartItems', $_COOKIE["cartItems"], time() - 3600, '/');
+        setcookie('cartItems', '', time() - 3600, '/');
 
         /*
         if (isset($transaction->order_id)) {} else { if (isset($transaction->wallet_id)) { if ($result['status']) { $this->handleWalletChargingSuccessPayment($gatewayVerify['RefID'], $transaction, $gatewayVerify['cardPanMask']); } else { $this->handleWalletChargingCanceledPayment($transaction); } } } */

@@ -819,10 +819,10 @@ class Order extends BaseModel
     public function getPaymentstatusAttribute()
     {
         $order = $this;
-        $key   = "order:paymentstatus:".$order->cacheKey();
+        $key   = 'order:paymentstatus:'.$order->cacheKey();
         
-        return Cache::tags(["order"])
-            ->remember($key, config("constants.CACHE_10"), function () use ($order) {
+        return Cache::tags(['order'])
+            ->remember($key, config('constants.CACHE_10'), function () use ($order) {
                 return optional($order->paymentstatus()
                     ->first())->setVisible([
                     'name',
@@ -1257,9 +1257,10 @@ class Order extends BaseModel
         $key   = "order:jalaliUpdatedAt:".$order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if (hasAuthenticatedUserPermission(config('constants.SHOW_ORDER_ACCESS'))) {
-                    return $this->convertDate($order->updated_at, "toJalali");
-                }
+                if(isset($order->updated_at))
+                    if (hasAuthenticatedUserPermission(config('constants.SHOW_ORDER_ACCESS'))) {
+                        return $this->convertDate($order->updated_at, "toJalali");
+                    }
                 
                 return null;
             });
@@ -1272,9 +1273,10 @@ class Order extends BaseModel
         $key   = "order:jalaliCreatedAt:".$order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if (hasAuthenticatedUserPermission(config('constants.SHOW_ORDER_ACCESS'))) {
-                    return $this->convertDate($order->created_at, "toJalali");
-                }
+                if(isset($order->created_at))
+                    if (hasAuthenticatedUserPermission(config('constants.SHOW_ORDER_ACCESS'))) {
+                        return $this->convertDate($order->created_at, "toJalali");
+                    }
                 
                 return null;
             });
@@ -1287,9 +1289,10 @@ class Order extends BaseModel
         $key   = "order:jalaliCompletedAt:".$order->cacheKey();
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                if (hasAuthenticatedUserPermission(config('constants.SHOW_ORDER_ACCESS'))) {
-                    return $this->convertDate($order->completed_at, "toJalali");
-                }
+                if(isset($order->completed_at))
+                    if (hasAuthenticatedUserPermission(config('constants.SHOW_ORDER_ACCESS'))) {
+                        return $this->convertDate($order->completed_at, "toJalali");
+                    }
                 
                 return null;
             });

@@ -24,7 +24,7 @@
             @if(isset($user))
                 <li>
                     <i class = "fa fa-cogs"></i>
-                    <a href = "{{action("Web\HomeController@admin")}}">مدیریت کاربران</a>
+                    <a href = "{{action("Web\AdminController@admin")}}">مدیریت کاربران</a>
                     <i class = "fa fa-angle-left"></i>
                 </li>
             @endif

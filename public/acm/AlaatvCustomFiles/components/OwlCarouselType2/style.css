@@ -145,3 +145,21 @@
     -ms-transform: scale(1.13);
     transform: scale(1.13);
 }
+
+.a--owl-carousel-type-2 .carousel .a--owl-carousel-type-2-item-title,
+.a--owl-carousel-type-2 .carousel .a--owl-carousel-type-2-item-subtitle {
+    position: relative;
+    bottom: 15px;
+    padding: 0 15px;
+}
+
+.a--owl-carousel-type-2 .carousel .a--owl-carousel-type-2-item-subtitle {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    justify-content: space-around;
+}
+
+.a--owl-carousel-type-2 .owl-dots {
+    display: none;
+}

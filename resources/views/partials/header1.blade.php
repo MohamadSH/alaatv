@@ -60,13 +60,14 @@
                                 <i class="m-menu__hor-arrow la la-angle-down"></i>
                                 <i class="m-menu__ver-arrow la la-angle-right"></i>
                             </a>
-                            <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left">
+                            <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left a-major-menu__submenu">
                                 <ul class="m-menu__subnav">
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
                                         <a href="{{ route('content.index', 'tags[]=دهم&tags[]=رشته_ریاضی') }}" class="m-menu__link ">
-                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>
+{{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
+                                                    <i class="fa fa-less-than m--margin-right-10"></i>
                                                     <span class="m-menu__link-text">رشته ریاضی</span>
                                                 </span>
                                             </span>
@@ -74,9 +75,10 @@
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
                                         <a href="{{ route('content.index', 'tags[]=دهم&tags[]=رشته_تجربی') }}" class="m-menu__link ">
-                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>
+{{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
+                                                    <i class="fa fa-less-than m--margin-right-10"></i>
                                                     <span class="m-menu__link-text">رشته تجربی</span>
                                                 </span>
                                             </span>
@@ -84,9 +86,10 @@
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
                                         <a href="{{ route('content.index', 'tags[]=دهم&tags[]=رشته_انسانی') }}" class="m-menu__link ">
-                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>
+{{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
+                                                    <i class="fa fa-less-than m--margin-right-10"></i>
                                                     <span class="m-menu__link-text">رشته انسانی</span>
                                                 </span>
                                             </span>
@@ -102,13 +105,14 @@
                                 <i class="m-menu__hor-arrow la la-angle-down"></i>
                                 <i class="m-menu__ver-arrow la la-angle-right"></i>
                             </a>
-                            <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left">
+                            <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left a-major-menu__submenu">
                                 <ul class="m-menu__subnav">
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
                                         <a href="{{ route('content.index', 'tags[]=یازدهم&tags[]=رشته_ریاضی') }}" class="m-menu__link ">
-                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>
+{{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
+                                                    <i class="fa fa-less-than m--margin-right-10"></i>
                                                     <span class="m-menu__link-text">رشته ریاضی</span>
                                                 </span>
                                             </span>
@@ -116,9 +120,10 @@
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
                                         <a href="{{ route('content.index', 'tags[]=یازدهم&tags[]=رشته_تجربی') }}" class="m-menu__link ">
-                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>
+{{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
+                                                    <i class="fa fa-less-than m--margin-right-10"></i>
                                                     <span class="m-menu__link-text">رشته تجربی</span>
                                                 </span>
                                             </span>
@@ -126,9 +131,10 @@
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
                                         <a href="{{ route('content.index', 'tags[]=یازدهم&tags[]=رشته_انسانی') }}" class="m-menu__link ">
-                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>
+{{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
+                                                    <i class="fa fa-less-than m--margin-right-10"></i>
                                                     <span class="m-menu__link-text">رشته انسانی</span>
                                                 </span>
                                             </span>
@@ -138,7 +144,7 @@
                             </div>
                         </li>
                         <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
-                            <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم و جزوه دهم آلاء">
+                            <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم و جزوه کنکور آلاء">
                                 <i class="m-menu__link-icon flaticon-medal"></i>
                                 <span class="m-menu__link-title">
                                     <span class="m-menu__link-wrap">
@@ -151,13 +157,14 @@
                                 <i class="m-menu__hor-arrow la la-angle-down"></i>
                                 <i class="m-menu__ver-arrow la la-angle-right"></i>
                             </a>
-                            <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left">
+                            <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left a-major-menu__submenu">
                                 <ul class="m-menu__subnav">
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
                                         <a href="{{ route('content.index', 'tags[]=کنکور&tags[]=رشته_ریاضی') }}" class="m-menu__link ">
-                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>
+{{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
+                                                    <i class="fa fa-less-than m--margin-right-10"></i>
                                                     <span class="m-menu__link-text">رشته ریاضی</span>
                                                 </span>
                                             </span>
@@ -165,9 +172,10 @@
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
                                         <a href="{{ route('content.index', 'tags[]=کنکور&tags[]=رشته_تجربی') }}" class="m-menu__link ">
-                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>
+{{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
+                                                    <i class="fa fa-less-than m--margin-right-10"></i>
                                                     <span class="m-menu__link-text">رشته تجربی</span>
                                                 </span>
                                             </span>
@@ -175,9 +183,10 @@
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
                                         <a href="{{ route('content.index', 'tags[]=کنکور&tags[]=رشته_انسانی') }}" class="m-menu__link ">
-                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>
+{{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
+                                                    <i class="fa fa-less-than m--margin-right-10"></i>
                                                     <span class="m-menu__link-text">رشته انسانی</span>
                                                 </span>
                                             </span>
@@ -198,7 +207,7 @@
                                 <a href="#" class="m-nav__link m-dropdown__toggle">
                                     <span class="m-nav__link-icon"><span class="m-nav__link-icon-wrapper"><i class="flaticon-search-1"></i></span></span>
                                 </a>
-                                <div class="m-dropdown__wrapper">
+                                <div class="m-dropdown__wrapper a-quick-search">
                                     <span class="m-dropdown__arrow m-dropdown__arrow--center"></span>
                                     <div class="m-dropdown__inner ">
                                         <div class="m-dropdown__header">

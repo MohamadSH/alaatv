@@ -131,7 +131,7 @@
                                             @foreach( $landingProducts as $product)
                                                 <div class = "col-12 col-sm-6 col-md-4 col-lg-3 m--padding-left-5 m--padding-right-5 m--margin-top-5 a--imageWithCaption @foreach ($product["majors"] as $major) {{ $major }} @endforeach">
                                                     @if(isset($product["product"]->image[0]))
-                                                        <img src = "{{ route('image', ['category'=>'4','w'=>'256' , 'h'=>'256' ,  'filename' =>  $product["product"]->image ]) }}" alt = "عکس محصول@if(isset($product["product"]->name[0])) {{$product["product"]->name}} @endif" class = "img-thumbnail">
+                                                        <img src = "{{$product["product"]->photo}}" alt = "عکس محصول@if(isset($product["product"]->name[0])) {{$product["product"]->name}} @endif" class = "img-thumbnail">
                                                     @endif
                                                     <a href = "{{$product["product"]->url ?? '#'}}">
                                                         <div class = "a--imageCaptionWarper">

@@ -25,7 +25,7 @@
                 <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item " aria-current = "page">
-                <a class = "m-link" href = "{{action("Web\HomeController@adminProduct")}}">پنل مدیریتی محصولات</a>
+                <a class = "m-link" href = "{{action("Web\AdminController@adminProduct")}}">پنل مدیریتی محصولات</a>
             </li>
             <li class = "breadcrumb-item" aria-current = "page">
                 <a class = "m-link" href = "{{action("Web\ProductController@edit" , $product)}}">اصلاح محصول {{$product->name}} </a>
@@ -114,7 +114,7 @@
             previewTemplate: '<div class="row"><div class="portlet light">\n' +
                 '<div class="portlet-body">\n' +
                 '<div class="row">\n ' +
-                '<form method="POST" action="{{action('ProductfileController@store')}}" accept-charset="UTF-8" class="productInformationForm form-horizontal" enctype="multipart/form-data">\n' +
+                '<form method="POST" action="{{action('Web\ProductfileController@store')}}" accept-charset="UTF-8" class="productInformationForm form-horizontal" enctype="multipart/form-data">\n' +
                 "<input name='_token' type='hidden' value='{{csrf_token()}}'>\n" +
                 "<div class=\"col-md-2\">" +
                 '<div class="input-group">\n' +
@@ -232,22 +232,20 @@
                     var orderInput = file.previewElement.querySelector('input[name="order"]');
                     orderInput.setAttribute("id", "order_" + myDropzone.files.length);
                     // Create the remove button
-                    var removeButton = Dropzone.createElement("<a href="
-                    javascript:;
-                    " class="
-                    btn
-                    red
-                    btn - sm
-                    btn - block
-                    " style="
-                    border - radius
+                    var removeButton = Dropzone.createElement("<a href=";
+                    javascript:
+                    " class=";
+                    btn;
+                    red;
+                    btn - sm;
+                    btn - block;
+                    " style=";
+                    border - radius;
                 :
-                    18
+                    18;
                     px;
-                    ">Remove</a>"
+                    ">Remove</a>";
                 )
-                    ;
-
                     // Capture the Dropzone instance as closure.
                     var _this = this;
 
@@ -267,15 +265,14 @@
                     file.previewElement.querySelector('.dz-file-preview').appendChild(removeButton);
 
                     var productId = $("#products option:selected").val();
-                    var productHidden = Dropzone.createElement("<input type="
-                    hidden
-                    " name="
-                    product_id
-                    " value="
-                    " + productId + "
-                    ">"
+                    var productHidden = Dropzone.createElement("<input type=";
+                    hidden;
+                    " name=";
+                    product_id;
+                    " value=";
+                    " + productId + ";
+                    ">";
                 )
-                    ;
                     file.previewElement.querySelector('.form-horizontal').appendChild(productHidden);
                 });
 
@@ -332,12 +329,11 @@
                         var cloudFileHidden = Dropzone.createElement("<input type='hidden' name='cloudFile' value='/paid/{{$product->id}}/" + response.prefix + response.fileName + "'>");
                         files.previewElement.querySelector('.form-horizontal').appendChild(cloudFileHidden);
                     } else {
-                        $("#my-awesome-dropzone").append("<span class="
-                        m--
-                        font - danger
-                        ">" + "خطا در آپلود فایل " + files.name + "</span></br>"
+                        $("#my-awesome-dropzone").append("<span class=";
+                        m--;
+                        font - danger;
+                        ">" + "خطا در آپلود فایل " + files.name + "</span></br>";
                     )
-                        ;
                     }
 
 //                    if (typeof(response.sessionData) != "undefined" && response.sessionData != null)
@@ -353,12 +349,11 @@
 //                        });
                 });
                 this.on("error", function (files, response) {
-                    $("#my-awesome-dropzone").append("<span class="
-                    m--
-                    font - danger
-                    " >" + response.message + " " + files.name + "</span></br>"
+                    $("#my-awesome-dropzone").append("<span class=";
+                    m--;
+                    font - danger;
+                    " >" + response.message + " " + files.name + "</span></br>";
                 )
-                    ;
                     // Gets triggered when there was an error sending the files.
                     // Maybe show form again, and notify user of error
                 });
@@ -367,9 +362,9 @@
 
         $(document).on('submit', '.productInformationForm', function (e) {
             e.preventDefault();
-            var loadingImage = "<img src = " / acm / extra / loading - arrow.gif
-            " style="
-            height: 20
+            var loadingImage = "<img src = " / acm / extra / loading - arrow.gif;
+            " style=";
+            20;
             px;
             ">";
             var form = $(this);

@@ -2,6 +2,7 @@
 
 namespace App\PaymentModule\Controllers;
 
+use App\Product;
 use Cache;
 use App\User;
 use App\Order;
@@ -33,13 +34,15 @@ class RedirectUserToPaymentPage extends Controller
      */
     public function __invoke(string $paymentMethod, string $device, Request $request)
     {
-        setcookie('cartItems', '', time() - 3600, '/');
-
         Cache::tags('bon')->flush();
         Cache::tags('order')->flush();
         Cache::tags('orderproduct')->flush();
 
         $data = $this->getRefinementData($request->all(), $request->user());
+
+        if ($data['statusCode'] != Response::HTTP_OK) {
+            $this->sendErrorResponse($data['message'] ?: '', $data['statusCode'] ?: Response::HTTP_SERVICE_UNAVAILABLE );
+        }
 
         /** @var User $user */
         $user = $data['user'];
@@ -52,25 +55,22 @@ class RedirectUserToPaymentPage extends Controller
         /** @var Transaction $transaction */
         $transaction = $data['transaction'];
 
-        if ($data['statusCode'] != Response::HTTP_OK) {
-            $this->sendErrorResponse($data['message'] ?: '', $data['statusCode'] ?: Response::HTTP_SERVICE_UNAVAILABLE );
-        }
+        $customerDescription = $request->get('customerDescription');
+
+        $this->shouldGoToOfflinePayment($cost->rials())
+            ->thenRespondWith([[Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order,$customerDescription]]);
 
         /** @var string $description */
         $description = $this->getTransactionDescription($data['description'], $user->mobile, $order);
 
-        if ($this->isPayingAnOrder($order)) {
-            $order->customerDescription = $request->get('customerDescription');
-        }
-
-        $this->shouldGoToOfflinePayment($cost->rials())
-            ->thenRespondWith([[Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order]]);
-
         $paymentClient = PaymentDriver::select($paymentMethod);
         $url = $this->comeBackFromGateWayUrl($paymentMethod, $device);
 
-        if($this->shouldCloseOrder($order))
-            OrdersRepo::closeOrder($order->id);
+
+        if ($this->shouldCloseOrder($order))
+        {
+            OrdersRepo::closeOrder($order->id, ['customerDescription' => $customerDescription]);
+        }
 
         $authorityCode = nullable($paymentClient->generateAuthorityCode($url, $cost, $description, $orderUniqueId))
             ->orFailWith([Responses::class, 'noResponseFromBankError']);
@@ -139,16 +139,6 @@ class RedirectUserToPaymentPage extends Controller
     }
     
     /**
-     * @param  Order  $order
-     *
-     * @return bool
-     */
-    private function isPayingAnOrder($order): bool
-    {
-        return isset($order);
-    }
-    
-    /**
      * @param  int  $cost
      *
      * @return Boolean
@@ -193,8 +183,6 @@ class RedirectUserToPaymentPage extends Controller
      */
     private function saveOrderInCookie(Order $order)
     {
-        //ToDo : komake mali
-
         $orderproducts = $order->orderproducts ;
 
         $totalCookie = $this->handleOrders($orderproducts);
@@ -241,7 +229,7 @@ class RedirectUserToPaymentPage extends Controller
      * @param $myProduct
      * @param $extraAttributesIds
      */
-    private function makeCookieForSelectableGrand(\Illuminate\Support\Collection $totalCookie, $grandProduct, $myProduct, $extraAttributesIds): void
+    private function makeCookieForSelectableGrand(\Illuminate\Support\Collection $totalCookie, Product $grandProduct, Product $myProduct, array $extraAttributesIds): void
     {
         $isAdded = $totalCookie->where('product_id', $grandProduct->id);
         if ($isAdded->isEmpty()) {
@@ -265,7 +253,7 @@ class RedirectUserToPaymentPage extends Controller
      * @param $grandProduct
      * @param $extraAttributesIds
      */
-    private function makeCookieForConfigurableGrand(\Illuminate\Support\Collection $totalCookie, $myProduct, $grandProduct, $extraAttributesIds): void
+    private function makeCookieForConfigurableGrand(\Illuminate\Support\Collection $totalCookie,Product $myProduct,Product $grandProduct, array $extraAttributesIds): void
     {
         $attributeValueIds = $this->getProductAttributes($myProduct);
 
@@ -282,7 +270,7 @@ class RedirectUserToPaymentPage extends Controller
      * @param $myProduct
      * @return mixed
      */
-    private function getProductAttributes($myProduct)
+    private function getProductAttributes(Product $myProduct)
     {
         return $myProduct->attributevalues()->whereHas('attribute', function ($q) {
             $q->where('attributetype_id', config('constants.ATTRIBUTE_TYPE_MAIN'));

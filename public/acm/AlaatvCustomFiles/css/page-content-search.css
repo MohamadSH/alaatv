@@ -1,0 +1,99 @@
+.ProductAndSetAndVideoWraper {
+    margin-top: -20px;
+}
+
+.owl-carousel-fileTitle {
+    margin: 0 0 !important;
+    padding: 5px 30px;
+    background: #0000007d;
+}
+
+.owl-carousel-fileTitle a {
+    color: white;
+    transition-property: all;
+    transition-duration: 0.3s;
+}
+
+.owl-carousel-fileTitle a:hover {
+    color: #8bccfe;
+}
+
+.owl-carousel-fileTitle a:hover::after {
+    border-bottom: 1px solid #fff;
+    opacity: 1;
+}
+
+.notFoundMessage .m-alert__icon i {
+    font-size: 60px;
+}
+
+.a--owl-carousel-type-1 .m-widget19__header {
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+.a--owl-carousel-type-1 .item .m-portlet > .m-portlet__body {
+    padding-bottom: 0px;
+}
+
+.a--owl-carousel-type-1 .item > .m-portlet {
+    margin-bottom: 0;
+}
+
+.a--vw-Loading {
+    text-align: center;
+    padding: 10px;
+}
+
+#product-carousel .m-widget19 .m-widget19__content .m-widget19__header {
+    width: 100%;
+    text-align: center;
+    margin: 0;
+}
+#product-carousel .m-widget19 .m-widget19__content .m-widget19__header .m-badge {
+    margin-right: 0;
+}
+.m-widget19 .m-widget19__content .m-widget19__header {
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+.m-widget19__pic .btnViewMore {
+    position: absolute;
+    z-index: 2;
+    bottom: 10px;
+    right: 10px;
+    background-color: #00a3b699;
+    border: solid 1px white;
+    transition: all 0.5s;
+}
+.m-widget19 .m-widget19__content {
+    margin-right: -2.2rem;
+    margin-left: -2.2rem;
+}
+.m-widget19__pic .btnViewMore:hover {
+    transform:scale(1.1, 1.1);
+    box-shadow: 0px 0px 10px 5px #00A3B6 !important;
+}
+.ProductAndSetAndVideoWraper,
+.PamphletAndArticleWraper {
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+@media only screen and (min-width: 1190px)  {
+    .ProductAndSetAndVideoWraper {
+        max-width: 75%;
+    }
+    .PamphletAndArticleWraper {
+        max-width: 25%;
+    }
+}
+@media only screen and (max-width: 1189px)  {
+    .ProductAndSetAndVideoWraper {
+        max-width: 100%;
+    }
+    .PamphletAndArticleWraper {
+        max-width: 100%;
+    }
+}

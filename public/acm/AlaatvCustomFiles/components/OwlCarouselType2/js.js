@@ -1,13 +1,13 @@
 (function ($) { //an IIFE so safely alias jQuery to $
 
     $.fn.OwlCarouselType2 = function (customOptions) {  //Add the function
-        $.fn.OwlCarouselType2.owlCarouselOptions = $.extend({}, $.fn.OwlCarouselType2.owlCarouseldefaultOptions, customOptions);
+        $.fn.OwlCarouselType2.owlCarouselOptions = $.extend(true, {}, $.fn.OwlCarouselType2.owlCarouseldefaultOptions, customOptions);
 
         return this.each(function () { //Loop over each element in the set and return them to keep the chain alive.
             let $this = $(this);
             $.fn.OwlCarouselType2.carouselElement = $this;
             let countOfChild = $this.find('.carousel').length;
-            $this.find('.a--owl-carousel-type-2').owlCarousel($.fn.OwlCarouselType2.owlCarouselOptions);
+            $this.find('.a--owl-carousel-type-2').owlCarousel($.fn.OwlCarouselType2.owlCarouselOptions.OwlCarousel);
 
             $.fn.OwlCarouselType2.showAlaaOwlCarouselItemDetail();
 
@@ -53,7 +53,7 @@
 
                 $this.find('.detailesWarperPointerStyle').html('');
 
-                $this.find('.a--owl-carousel-type-2').owlCarousel($.fn.OwlCarouselType2.owlCarouselOptions);
+                $this.find('.a--owl-carousel-type-2').owlCarousel($.fn.OwlCarouselType2.owlCarouselOptions.OwlCarousel);
                 $.fn.OwlCarouselType2.getGridViewWarper($this).fadeOut(0);
                 $this.find('.a--owl-carousel-type-2').fadeIn();
 
@@ -121,9 +121,11 @@
                 });
             });
 
-            if (countOfChild < 5) {
+            if (countOfChild < $.fn.OwlCarouselType2.owlCarouselOptions.childCountHideOwlCarousel) {
                 $.fn.OwlCarouselType2.switchToGridView($this);
                 $this.find('.btn-viewOwlCarousel').fadeOut();
+            } else if ($.fn.OwlCarouselType2.owlCarouselOptions.defaultView === 'grid') {
+                $.fn.OwlCarouselType2.switchToGridView($this);
             }
         });
     };
@@ -143,7 +145,7 @@
         $.fn.OwlCarouselType2.getGridViewWarper($OwlCarouselType2).html('');
         $OwlCarouselType2.find('.a--owl-carousel-type-2').owlCarousel('destroy');
         $OwlCarouselType2.find('.carousel').each(function () {
-            $.fn.OwlCarouselType2.getGridViewWarper($OwlCarouselType2).append('<div class="col-12 col-sm-6 col-md-3">' + $(this)[0].outerHTML + '</div>');
+            $.fn.OwlCarouselType2.getGridViewWarper($OwlCarouselType2).append('<div class="'+$.fn.OwlCarouselType2.owlCarouselOptions.grid.columnClass+'">' + $(this)[0].outerHTML + '</div>');
         });
         $OwlCarouselType2.find('.a--owl-carousel-type-2').fadeOut();
         $.fn.OwlCarouselType2.getGridViewWarper($OwlCarouselType2).fadeIn();
@@ -175,33 +177,39 @@
     };
 
     $.fn.OwlCarouselType2.owlCarouseldefaultOptions = {
-        center: true,
-        rtl: true,
-        loop: true,
-        nav: true,
-        margin: 10,
-        responsive: {
-            0: {
-                items: 1
+        OwlCarousel: {
+            center: true,
+            rtl: true,
+            loop: true,
+            nav: true,
+            margin: 10,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                400: {
+                    items: 2
+                },
+                600: {
+                    items: 3
+                },
+                800: {
+                    items: 4
+                },
+                1000: {
+                    items: 5
+                }
             },
-            400: {
-                items: 2
-            },
-            600: {
-                items: 3
-            },
-            800: {
-                items: 4
-            },
-            1000: {
-                items: 5
-            }
+            // onDragged: this.callback,
+            onTranslated: $.fn.OwlCarouselType2.showAlaaOwlCarouselItemDetail
         },
-        // onDragged: this.callback,
-        onTranslated: $.fn.OwlCarouselType2.showAlaaOwlCarouselItemDetail
+        grid: {
+            columnClass: 'col-12 col-sm-6 col-md-3'
+        },
+        defaultView: 'OwlCarousel', // or grid
+        childCountHideOwlCarousel: 5
     };
     $.fn.OwlCarouselType2.owlCarouselOptions = null;
     $.fn.OwlCarouselType2.carouselElement = null;
-
 
 }(jQuery));

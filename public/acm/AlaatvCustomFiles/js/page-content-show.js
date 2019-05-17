@@ -6,6 +6,7 @@ var SnippetContentShow = function(){
         var contentDisplayName = $('#js-var-contentDName').val();
         var player = null;
         if ($('#video-' + contentId).length > 0) {
+
             player = videojs('video-' + contentId, {language: 'fa'});
             player.nuevo({
                 // logotitle:"آموزش مجازی آلاء",
@@ -50,7 +51,7 @@ var SnippetContentShow = function(){
                 // overlay: "//domain.com/overlay.html" //(undefined) - overlay URL to display html on each pause event example: https://www.nuevolab.com/videojs/tryit/overlay
 
             });
-
+            console.log('player: ', player);
             player.hotkeys({
                 enableVolumeScroll: false,
                 volumeStep: 0.1,

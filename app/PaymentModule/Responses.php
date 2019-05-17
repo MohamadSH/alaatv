@@ -3,7 +3,9 @@
 namespace App\PaymentModule;
 
 use App\Order;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 
 class Responses
 {
@@ -37,15 +39,20 @@ class Responses
     {
         return self::sendErrorResponse('تراکنشی متناظر با شماره تراکنش ارسالی یافت نشد.', Response::HTTP_BAD_REQUEST);
     }
-    
+
     /**
-     * @param  string  $device
-     * @param  Order   $order
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param string $device
+     * @param Order $order
+     * @param string $customerDescription
+     * @return RedirectResponse|Redirector
      */
-    public static function sendToOfflinePaymentProcess(string $device, $order)
+    public static function sendToOfflinePaymentProcess(string $device, Order $order , string $customerDescription=null)
     {
+        //It is not best practice to send $customerDescription in request body because it is a GET request
+        // I have to either update order before going to verifyOfflinePayment (which costs an extra query)
+        // or put $customerDescription in Session
+        session()->flash('customerDescription' , $customerDescription);
+
         return redirect()->route('verifyOfflinePayment', [
             'device'        => $device,
             'paymentMethod' => 'wallet',

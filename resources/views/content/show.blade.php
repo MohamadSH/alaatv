@@ -147,7 +147,22 @@
                                         </div>
                                         <div class="m-widget3__body">
                                             <div class="m-widget3__text">
-                                                {!! $content->description !!}
+                                                
+                                                @if(strlen($content->description) > 2000)
+                                                    <div class="a--summarize-text">
+                                                        <div class="a--summarize-text-toggleBtn">
+                                                            <button class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
+                                                                <i class="la la-angle-double-down"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="a--summarize-text-content">
+                                                            {!! $content->description !!}
+                                                        </div>
+                                                    </div>
+                                                @else
+                                                        {!! $content->description !!}
+                                                @endif
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -261,9 +276,23 @@
                             </div>
                         </div>
                         <div class="m-portlet__body">
-                            <div class="m-portlet__body-progress">Loading</div>
                             <div>
-                                {!! $content->description !!}
+    
+                                @if(strlen($content->description) > 2000)
+                                    <div class="a--summarize-text">
+                                        <div class="a--summarize-text-toggleBtn">
+                                            <button class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
+                                                <i class="la la-angle-double-down"></i>
+                                            </button>
+                                        </div>
+                                        <div class="a--summarize-text-content">
+                                            {!! $content->description !!}
+                                        </div>
+                                    </div>
+                                @else
+                                    {!! $content->description !!}
+                                @endif
+                                
                             </div>
                         </div>
                     </div>
@@ -326,7 +355,9 @@
                         </div>
                     </div>
                     <div class="m-portlet__body">
-                        <div class="m-scrollable" data-scrollable="true" data-height="450" data-scrollbar-shown="true">
+                        <div
+{{--                                class="m-scrollable" data-scrollable="true" data-height="450" data-scrollbar-shown="true"--}}
+                        >
                             @foreach($pamphletsWithSameSet as  $item)
                                 <!--begin::m-widget4-->
                                 <div class="m-widget4">
@@ -387,7 +418,7 @@
                         <div class="a-widget5">
                             @foreach($videosWithSameSet as $item)
                                 <div class="a-widget5__item" id="playlistItem_{{ $item["content"]->id }}">
-                                    <div class="a-widget5__content  {{ $item["content"]->id == $content->id ? 'm--bg-primary' : '' }}">
+                                    <div class="a-widget5__content  {{ $item["content"]->id == $content->id ? 'm--bg-info' : '' }}">
                                         <div class="a-widget5__pic">
                                             <a class="m-link"
                                                href="{{action("Web\ContentController@show" , $item["content"])}}">
@@ -400,12 +431,12 @@
                                             <h4 class="a-widget5__title">
                                                 <a class="m-link"
                                                    href="{{action("Web\ContentController@show" , $item["content"])}}">
-                                                    {{ $item["content"]->display_name }}
+                                                    {!! str_limit($item["content"]->display_name, 45, ' ...') !!}
                                                 </a>
                                             </h4>
                                             <div class="a-widget5__info">
                                                 <div class="content-description">
-                                                    {!! $item["content"]->description !!}
+                                                    {!! str_limit(clearHtml($item["content"]->description), 100, ' ...') !!}
                                                 </div>
                                             </div>
                                         </div>

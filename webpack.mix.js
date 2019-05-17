@@ -25,8 +25,10 @@ mix.copyDirectory('public/assets/vendors/base', 'public/css');
 
 mix.babel(
     [
+        // 'public/assets/vendors/base/vendors.bundle.js',
         'public/assets/vendors/base/vendors.bundle.edited.js',
-        'public/assets/demo/demo12/base/scripts.bundle.js',
+        // 'public/assets/demo/demo12/base/scripts.bundle.js',
+        'public/assets/demo/demo12/base/scripts.bundle.edited.js',
 
         // 'public/acm/cubeportfolio/js/jquery.cubeportfolio.min.js',
 
@@ -44,6 +46,7 @@ mix.scripts(
 mix.babel(
     [
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+
         'public/acm/videojs/video.min.js',
         'public/acm/videojs/plugins/pip/videojs.pip.min.js',
         'public/acm/videojs/nuevo.min.js',
@@ -51,9 +54,20 @@ mix.babel(
         'public/acm/videojs/plugins/videojs.hotkeys.min.js',
         'public/acm/videojs/plugins/seek-to-point.js',
         'public/acm/videojs/lang/fa.js',
+
+        'public/acm/AlaatvCustomFiles/components/summarizeText/js.js',
+
         'public/acm/AlaatvCustomFiles/js/page-content-show.js'
     ],
     'public/js/content-show.js'
+).version();
+
+mix.babel(
+    [
+        'public/acm/AlaatvCustomFiles/components/MultiLevelSearch/js.js',
+        'public/acm/AlaatvCustomFiles/js/page-content-search.js'
+    ],
+    'public/js/content-search.js'
 ).version();
 
 mix.scripts(
@@ -77,14 +91,16 @@ mix.babel(
         'node_modules/lightgallery/modules/lg-zoom.min.js',
         'node_modules/jquery-sticky/jquery.sticky.js',
         'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
+
         'public/acm/videojs/video.min.js',
         'public/acm/videojs/plugins/pip/videojs.pip.min.js',
         'public/acm/videojs/nuevo.min.js',
         'public/acm/videojs/plugins/videojs.p2p.min.js',
         'public/acm/videojs/plugins/videojs.hotkeys.min.js',
         'public/acm/videojs/plugins/seek-to-point.js',
-        'public/acm/AlaatvCustomFiles/js/UserCart.js',
         'public/acm/videojs/lang/fa.js',
+
+        'public/acm/AlaatvCustomFiles/js/UserCart.js',
         'public/acm/AlaatvCustomFiles/js/page-product-show.js',
     ],
     'public/js/product-show.js'
@@ -228,8 +244,24 @@ mix.babel(
 mix.babel(
     [
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+        'public/acm/AlaatvCustomFiles/js/page-shop.js',
     ],
     'public/js/page-shop.js'
+);
+
+mix.babel(
+    [
+        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+        'public/acm/AlaatvCustomFiles/js/page-landing7.js',
+    ],
+    'public/js/page-landing7.js'
+);
+
+mix.babel(
+    [
+        'public/acm/AlaatvCustomFiles/js/page-homePage.js',
+    ],
+    'public/js/page-homePage.js'
 );
 
 mix.styles(
@@ -265,15 +297,26 @@ mix.styles(
         'node_modules/slick-carousel/slick/slick.css',
         'node_modules/slick-carousel/slick/slick-theme.css',
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
+
         'public/acm/videojs/skins/alaa-theme/videojs.css',
         'public/acm/videojs/skins/nuevo/videojs.rtl.css',
         'public/acm/videojs/plugins/pip/videojs.pip.min.css',
         'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
         'public/acm/videojs/plugins/seek-to-point.css',
 
+        'public/acm/AlaatvCustomFiles/components/summarizeText/style.css',
+
         'public/acm/AlaatvCustomFiles/css/page-content-show.css'
     ],
     'public/css/content-show.css'
+);
+
+mix.styles(
+    [
+        'public/acm/AlaatvCustomFiles/components/MultiLevelSearch/style.css',
+        'public/acm/AlaatvCustomFiles/css/page-content-search.css'
+    ],
+    'public/css/content-search.css'
 );
 
 mix.styles(
@@ -284,4 +327,14 @@ mix.styles(
         'public/acm/AlaatvCustomFiles/css/page-shop.css',
     ],
     'public/css/page-shop.css'
+).version();
+
+mix.styles(
+    [
+        'node_modules/slick-carousel/slick/slick.css',
+        'node_modules/slick-carousel/slick/slick-theme.css',
+        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
+        'public/acm/AlaatvCustomFiles/css/page-landing7.css',
+    ],
+    'public/css/page-landing7.css'
 ).version();

@@ -42,23 +42,24 @@ var ProductSwitch = function () {
         let items = $("input[name='products[]'].product.hasParent_"+parentId);
         report.counter++;
         for (let index in items) {
-            if(!isNaN(index)) {
-                let defaultValue = items[index].defaultValue;
-                let thisCheckBox = $("input[name='products[]'][value='" + defaultValue + "'].product");
-                let hasChildren = thisCheckBox.hasClass('hasChildren');
-                let thisExist = thisCheckBox.length;
-                let thisIsChecked = thisCheckBox.prop('checked');
-                if (thisExist > 0 && thisIsChecked !== true) {
-                    report.allChildIsChecked = false;
-                }
-                if (thisIsChecked === true) {
-                    report.allChildIsNotChecked = false;
-                }
-                if (hasChildren) {
-                    report = checkChildProduct(defaultValue, report);
-                } else {
-                    report.allChildIsNotChecked = false;
-                }
+            if(isNaN(index)) {
+               continue;
+            }
+            let defaultValue = items[index].defaultValue;
+            let thisCheckBox = $("input[name='products[]'][value='" + defaultValue + "'].product");
+            let hasChildren = thisCheckBox.hasClass('hasChildren');
+            let thisExist = thisCheckBox.length;
+            let thisIsChecked = thisCheckBox.prop('checked');
+            if (thisExist > 0 && thisIsChecked !== true) {
+                report.allChildIsChecked = false;
+            }
+            if (thisIsChecked === true) {
+                report.allChildIsNotChecked = false;
+            }
+            if (hasChildren) {
+                report = checkChildProduct(defaultValue, report);
+            } else {
+                report.allChildIsNotChecked = false;
             }
         }
         return report;
@@ -85,9 +86,22 @@ var ProductSwitch = function () {
         callback();
     }
 
+    function checkChildrenOfParentOnInit() {
+        let items = $("input[name='products[]'].product.hasChildren:checked");
+        for (let index in items) {
+            if(isNaN(index)) {
+                continue;
+            }
+            console.log(items[index].defaultValue);
+            changeChildCheckStatus(items[index].defaultValue, true);
+        }
+    }
+
     return {
         init:function () {
-            return getChildLevel();
+            let childLevel = getChildLevel();
+            checkChildrenOfParentOnInit();
+            return childLevel;
         },
         updateSelectedProductsStatus: function (childLevel, callback) {
             updateSelectedProductsStatus(childLevel, callback);

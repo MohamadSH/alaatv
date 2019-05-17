@@ -8,7 +8,7 @@
                 <i class = "fa fa-angle-left"></i>
             </li>
             <li>
-                <a href = "{{action("Web\HomeController@adminProduct")}}">پنل مدیریتی محصولات</a>
+                <a href = "{{action("Web\AdminController@adminProduct")}}">پنل مدیریتی محصولات</a>
                 <i class = "fa fa-angle-left"></i>
             </li>
             <li>

@@ -42,7 +42,7 @@
 
                 <ul class = "list-unstyled profile-nav">
                     <li>
-                        <img @if(strlen($user->photo)>0) src = "{{ route('image', ['category'=>'1','w'=>'246' , 'h'=>'267' ,  'filename' => $user->photo ]) }}" @endif class = "img-responsive pic-bordered" alt = "عکس پروفایل"/>
+                        <img @if(strlen($user->photo)>0) src = "{{ $user->photo}}" @endif class = "img-responsive pic-bordered" alt = "عکس پروفایل"/>
                     </li>
                     <li style = "text-align: center">
                         <a class = "font-green sbold uppercase" href = "javascript:">@if(isset($user->id)) @if(isset($user->firstName) && strlen($user->firstName)>0 || isset($user->lastName) && strlen($user->lastName)>0) @if(isset($user->firstName) && strlen($user->firstName)>0) {{ $user->firstName}} @endif @if(isset($user->lastName) && strlen($user->lastName)>0) {{$user->lastName}} @endif @else

@@ -216,6 +216,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'bonDiscount',
         'editLink',
         'removeLink',
+        'children'
     ];
     
     protected $hidden = [
@@ -337,6 +338,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return Product::find([
             225,
             226,
+            294,
+            295
         ]);
     }
     
@@ -575,8 +578,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return [
             'title'       => $this->name,
             'description' => $this->shortDescription,
-            'url'         => action('ProductController@show', $this),
-            'canonical'   => action('ProductController@show', $this),
+            'url'         => action('Web\ProductController@show', $this),
+            'canonical'   => action('Web\ProductController@show', $this),
             'site'        => 'آلاء',
             'imageUrl'    => $this->image,
             'imageWidth'  => '338',
@@ -1696,5 +1699,15 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         }
         
         return null;
+    }
+
+    public function getChildrenAttribute(){
+        $product = $this;
+        $key     = 'product:children:'.$product->cacheKey();
+        return Cache::tags(['product'])
+            ->remember($key, config('constants.CACHE_600'), function () use ($product) {
+                return $this->children()->get();
+            });
+
     }
 }

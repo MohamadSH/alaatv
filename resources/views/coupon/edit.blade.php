@@ -16,7 +16,7 @@
                 <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item">
-                <a class = "m-link" href = "{{action("Web\HomeController@adminProduct")}}">
+                <a class = "m-link" href = "{{action("Web\AdminController@adminProduct")}}">
                     پنل مدیریتی محصولات
                 </a>
             </li>
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class = "m-portlet__head-tools">
-                        <a class = "btn btn-sm btn-primary m-btn--air" href = "{{action("Web\HomeController@adminProduct")}}">
+                        <a class = "btn btn-sm btn-primary m-btn--air" href = "{{action("Web\AdminController@adminProduct")}}">
                             بازگشت
                             <i class = "fa fa-angle-left"></i>
                         </a>

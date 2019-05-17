@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Web;
 
+use Exception;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use SEO;
 use Illuminate\Foundation\Http\{FormRequest};
 use App\Http\Controllers\Controller;
 use Illuminate\Http\{Request, Response};
 use Illuminate\Support\{Facades\File, Facades\Input, Facades\Storage};
-use App\{Bon,
+use App\{Block,
+    Bon,
     Product,
     Attribute,
     Attributeset,
@@ -89,7 +92,6 @@ class ProductController extends Controller
                 'index',
                 'show',
                 'search',
-                'showPartial',
                 'landing1',
                 'landing2',
                 'landing3',
@@ -137,8 +139,8 @@ class ProductController extends Controller
      *
      * @param  InsertProductRequest  $request
      *
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @return Response
+     * @throws FileNotFoundException
      */
     public function store(InsertProductRequest $request)
     {
@@ -172,7 +174,7 @@ class ProductController extends Controller
      * @param  Product      $product
      *
      * @return void
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     private function fillProductFromRequest(FormRequest $request, Product $product): void
     {
@@ -206,7 +208,7 @@ class ProductController extends Controller
      * @param  array    $files
      *
      * @return array
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     private function storeCatalogOfProduct(Product $product, array $files): array
     {
@@ -232,7 +234,7 @@ class ProductController extends Controller
      * @param  array    $files
      *
      * @return array
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     private function storeImageOfProduct(Product $product, array $files): array
     {
@@ -344,12 +346,23 @@ class ProductController extends Controller
         if ($productPhotos->isNotEmpty()) {
             $defaultProductPhotoOrder = $productPhotos->first()->order + 1;
         }
+        
+        $tags = [
+            'تگ شماره یک',
+            'تگ شماره دو',
+            'تگ شماره سه',
+            'تگ شماره چهار',
+            'تگ شماره پنج',
+            'تگ شماره شش'
+        ];
+    
+        $tags = implode(',', $tags);
     
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
                 'attributesets', 'bons', 'productFiles',
                 'productFileTypes', 'defaultProductFileOrders', 'products', 'producttype', 'productPhotos',
-                'defaultProductPhotoOrder'));
+                'defaultProductPhotoOrder', 'tags'));
     }
     
     public function update(EditProductRequest $request, Product $product)
@@ -390,11 +403,11 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Request       $request
-     * @param  \app\Product  $product
+     * @param  Request  $request
+     * @param  Product  $product
      *
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
+     * @return Response
+     * @throws Exception
      */
     public function destroy(Request $request, Product $product)
     {
@@ -425,7 +438,7 @@ class ProductController extends Controller
      *
      * @param  Request  $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function search(Request $request)
     {
@@ -435,10 +448,10 @@ class ProductController extends Controller
     /**
      * enable or disable children of product
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \app\Product              $product
+     * @param  Request  $request
+     * @param  Product  $product
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function childProductEnable(Request $request, $product)
     {
@@ -488,9 +501,9 @@ class ProductController extends Controller
     /**
      * Show the form for configure the specified resource.
      *
-     * @param  \app\Product  $product
+     * @param  Product  $product
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function createConfiguration(Product $product)
     {
@@ -523,10 +536,10 @@ class ProductController extends Controller
     /**
      * make children for product
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \app\Product              $product
+     * @param  Request  $request
+     * @param  Product  $product
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function makeConfiguration(Request $request, $product)
     {
@@ -644,9 +657,9 @@ class ProductController extends Controller
     /**
      * Show the form for setting pivots for attributevalues
      *
-     * @param  \app\Product  $product
+     * @param  Product  $product
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function editAttributevalues(Product $product)
     {
@@ -685,10 +698,10 @@ class ProductController extends Controller
     /**
      * set pivot for attributevalues
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \app\Product              $product
+     * @param  Request  $request
+     * @param  Product  $product
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function updateAttributevalues(Request $request, Product $product)
     {
@@ -735,10 +748,10 @@ class ProductController extends Controller
     /**
      * Attach a complimentary product to a product
      *
-     * @param  \App\Product                                       $product
-     * @param  \App\Http\Requests\AddComplimentaryProductRequest  $request
+     * @param  Product                         $product
+     * @param  AddComplimentaryProductRequest  $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function addComplimentary(AddComplimentaryProductRequest $request, Product $product)
     {
@@ -758,10 +771,10 @@ class ProductController extends Controller
     /**
      * Detach a complimentary product to a product
      *
-     * @param  \App\Product              $complimentary
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Product  $complimentary
+     * @param  Request  $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function removeComplimentary(Request $request, Product $complimentary)
     {
@@ -776,10 +789,10 @@ class ProductController extends Controller
     /**
      * Attach a gift product to a product
      *
-     * @param  \App\Product              $product
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Product  $product
+     * @param  Request  $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function addGift(Request $request, Product $product)
     {
@@ -799,11 +812,11 @@ class ProductController extends Controller
     /**
      * Detach a gift product to a product
      *
-     * @param  \App\Product              $product
-     * @param  \App\Product              $gift
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Product  $product
+     * @param  Product  $gift
+     * @param  Request  $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function removeGift(Request $request, Product $product)
     {
@@ -829,7 +842,7 @@ class ProductController extends Controller
      *
      * @param  Request  $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function landing1(Request $request)
     {
@@ -881,7 +894,8 @@ class ProductController extends Controller
      * Products Special Landing Page
      *
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     *
+     * @return Response
      */
     public function landing2(Request $request)
     {
@@ -924,7 +938,7 @@ class ProductController extends Controller
      *
      * @param  Request  $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function landing3(Request $request)
     {
@@ -948,7 +962,7 @@ class ProductController extends Controller
      *
      * @param  Request  $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function landing4(Request $request)
     {
@@ -972,7 +986,7 @@ class ProductController extends Controller
      *
      * @param  Request  $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function landing5(Request $request)
     {
@@ -1142,7 +1156,7 @@ class ProductController extends Controller
      *
      * @param  Request  $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function landing6(Request $request)
     {
@@ -1199,11 +1213,35 @@ class ProductController extends Controller
     }
     
     /**
+     * Products Special Landing Page
+     *
+     * @param  Request  $request
+     *
+     * @return Response
+     */
+    public function landing7(Request $request)
+    {
+        $url = $request->url();
+        $this->generateSeoMetaTags(new SeoDummyTags('آلاء| جمع بندی نیم سال اول',
+            'همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف', $url,
+            $url, route('image', [
+                'category' => '11',
+                'w'        => '100',
+                'h'        => '100',
+                'filename' => $this->setting->site->siteLogo,
+            ]), '100', '100', null));
+    
+        $blocks = Block::getShopBlocks();
+        
+        return view('product.landing.landing7', compact('landingProducts', 'costCollection', 'withFilter', 'blocks'));
+    }
+    
+    /**
      * Copy a product completely
      *
-     * @param  \App\Product  $product
+     * @param  Product  $product
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function copy(Product $product)
     {

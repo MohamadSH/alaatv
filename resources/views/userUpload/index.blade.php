@@ -4,7 +4,7 @@
         <div class = "item">
             <div class = "item-head">
                 <div class = "item-details">
-                    <img class = "item-pic" @if(strlen($question->user->photo)>0) src = "{{ route('image', ['category'=>'1','w'=>'30' , 'h'=>'30' ,  'filename' => $question->user->photo ]) }}" alt = "عکس پروفایل" @endif>
+                    <img class = "item-pic" @if(strlen($question->user->photo)>0) src = "{{ $question->user->photo}}" alt = "عکس پروفایل" @endif>
                     <a href = "{{action("Web\UseruploadController@show" , $question)}}" class = "item-name primary-link">@if(isset($question->user->id)) @if(isset($question->user->firstName) && strlen($question->user->firstName)>0 || isset($question->user->lastName) && strlen($question->user->lastName)>0) @if(isset($question->user->firstName) && strlen($question->user->firstName)>0) {{ $question->user->firstName}} @endif @if(isset($question->user->lastName) && strlen($question->user->lastName)>0) {{$question->user->lastName}} @endif @else
                             <span class = "m-badge m-badge--wide label-sm m-badge--danger"> کاربر ناشناس </span> @endif @endif
                     </a>

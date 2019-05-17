@@ -20,7 +20,7 @@ var $modal = $('#ajax-modal');
 /**
  * Product Admin Ajax
  */
-function removeProduct(url){
+function removeProduct(){
     toastr.options = {
         "closeButton": true,
         "debug": false,
@@ -35,17 +35,22 @@ function removeProduct(url){
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
     };
+    $('#remove-product-loading-image').removeClass('d-none');
     $.ajax({
         type: 'POST',
-        url: url,
+        url: $('#product-removeLink').val(),
         data:{_method: 'delete'},
         success: function (result) {
             // console.log(result);
             // console.log(result.responseText);
             toastr["success"]("محصول با موفقیت حذف شد!", "پیام سیستم");
+            $('#remove-product-loading-image').addClass('d-none');
             $("#product-portlet .reload").trigger("click");
+            $('#removeProductModal').modal('hide');
         },
         error: function (result) {
+            $('#remove-product-loading-image').addClass('d-none');
+            $('#removeProductModal').modal('hide');
             // console.log(result);
             // console.log(result.responseText);
         }
@@ -53,9 +58,11 @@ function removeProduct(url){
 }
 $(document).on("click", "#productForm-submit", function (){
 
-    $('body').modalmanager('loading');
+    mApp.block('#productForm-submit', {
+        type: "loader",
+        state: "info",
+    });
     var el = $(this);
-
 
     //initializing form alerts
     $("#productName").parent().removeClass("has-error");
@@ -128,6 +135,8 @@ $(document).on("click", "#productForm-submit", function (){
                 $("#productShortDescriptionSummerNote").summernote('reset');
                 $("#productLongDescriptionSummerNote").summernote('reset');
                 $('#productForm')[0].reset();
+                mApp.unblock('#productForm-submit');
+                $('#responsive-product').modal('hide');
             },
             //The status for when the user is not authorized for making the request
             403: function (response) {
@@ -200,25 +209,28 @@ $(document).on("click", "#productForm-submit", function (){
 
                     }
                 });
+                toastr["error"]("خطای کاربر!", "اطلاعات وارد شده صحیح نیست.");
+                mApp.unblock('#productForm-submit');
+                $('#responsive-product').modal('hide');
             },
             //The status for when there is error php code
             500: function (response) {
                 console.log(response.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
+                mApp.unblock('#productForm-submit');
+                $('#responsive-product').modal('hide');
             },
             //The status for when there is error php code
             503: function (response) {
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+                mApp.unblock('#productForm-submit');
+                $('#responsive-product').modal('hide');
             }
         },
         cache: false,
         contentType: false,
         processData: false
     });
-
-    $modal.modal().hide();
-    $modal.modal('toggle');
-
 });
 $(document).on("click", "#product-portlet .reload", function (){
     $("#product-portlet-loading").removeClass("d-none");
@@ -276,13 +288,11 @@ $(document).on("click", "#product-portlet .reload", function (){
     makeDataTable_loadWithAjax_products();
     return false;
 });
-$(document).on("click", ".copyProduct", function (){
-    $(".copyProductForm").attr("action" , $(this).data("action"));
 
-});
-$(document).on("submit", ".copyProductForm", function (e){
-    e.preventDefault();
-    url = $(this).attr("action");
+function copyProductInModal() {
+    let productId = $('#productIdForCopy').val();
+    let url = 'product/'+productId+'/copy';
+
     toastr.options = {
         "closeButton": true,
         "debug": false,
@@ -341,7 +351,7 @@ $(document).on("submit", ".copyProductForm", function (e){
         // contentType: false,
         processData: false
     });
-});
+}
 
 
 /**
@@ -380,7 +390,12 @@ function removeCoupon(url){
     });
 }
 $(document).on("click", "#couponForm-submit", function (){
-    $('body').modalmanager('loading');
+
+    mApp.block('#couponForm-submit', {
+        type: "loader",
+        state: "info",
+    });
+
     var el = $(this);
 
     //initializing form alerts
@@ -438,8 +453,8 @@ $(document).on("click", "#couponForm-submit", function (){
                 $("#coupon-portlet .reload").trigger("click");
                 $('#couponForm')[0].reset();
                 toastr["success"]("درج کپن با موفقیت انجام شد!", "پیام سیستم");
-                console.log(response);
-                console.log(response.responseText);
+                mApp.unblock('#couponForm-submit');
+                $('#responsive-coupon').modal('hide');
             },
             //The status for when the user is not authorized for making the request
             403: function (response) {
@@ -492,24 +507,28 @@ $(document).on("click", "#couponForm-submit", function (){
                             break;
                     }
                 });
+                mApp.unblock('#couponForm-submit');
+                $('#responsive-coupon').modal('hide');
             },
             //The status for when there is error php code
             500: function (response) {
                 console.log(response);
                 console.log(response.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
+                mApp.unblock('#couponForm-submit');
+                $('#responsive-coupon').modal('hide');
             },
             //The status for when there is error php code
             503: function (response) {
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+                mApp.unblock('#couponForm-submit');
+                $('#responsive-coupon').modal('hide');
             }
         },
         cache: false,
         contentType: false,
         processData: false
     });
-    $modal.modal().hide();
-    $modal.modal('toggle');
 });
 $(document).on("click", "#coupon-portlet .reload", function (){
     $("#coupon-portlet-loading").removeClass("d-none");

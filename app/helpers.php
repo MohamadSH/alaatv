@@ -34,3 +34,9 @@ if (!function_exists('hasAuthenticatedUserPermission')) {
                 ->can($permission));
     }
 }
+if (!function_exists('clearHtml')) {
+    function clearHtml($value): string
+    {
+        return Purify::clean($value, ['HTML.Allowed' => '']);
+    }
+}

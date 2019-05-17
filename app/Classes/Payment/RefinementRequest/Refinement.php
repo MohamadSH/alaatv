@@ -178,28 +178,25 @@ abstract class Refinement
     /**
      * @param  bool  $deposit
      *
-     * @return array|null
+     * @return array
      */
     protected function getNewTransaction($deposit = true)
     {
-        $result = null;
-        if ($this->cost > 0) {
-            if ($deposit) {
-                $data['cost'] = $this->cost;
-            }
-            else {
-                $data['cost'] = ($this->cost * (-1));
-            }
-            
-            $data['description']               = $this->description;
-            $data['order_id']                  = (isset($this->order)) ? $this->order->id : null;
-            $data['wallet_id']                 = (isset($this->walletId)) ? $this->walletId : null;
-            $data['destinationBankAccount_id'] = 1; // ToDo: Hard Code
-            $data['paymentmethod_id']          = config('constants.PAYMENT_METHOD_ONLINE');
-            $data['transactionstatus_id']      = config('constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY');
-            $result                            = $this->transactionController->new($data);
+        if ($deposit) {
+            $data['cost'] = $this->cost;
         }
-        
+        else {
+            $data['cost'] = ($this->cost * (-1));
+        }
+
+        $data['description']               = $this->description;
+        $data['order_id']                  = (isset($this->order)) ? $this->order->id : null;
+        $data['wallet_id']                 = (isset($this->walletId)) ? $this->walletId : null;
+        $data['destinationBankAccount_id'] = 1; // ToDo: Hard Code
+        $data['paymentmethod_id']          = config('constants.PAYMENT_METHOD_ONLINE');
+        $data['transactionstatus_id']      = config('constants.TRANSACTION_STATUS_TRANSFERRED_TO_PAY');
+        $result                            = $this->transactionController->new($data);
+
         return $result;
     }
     

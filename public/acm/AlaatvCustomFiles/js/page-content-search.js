@@ -7,37 +7,33 @@ var Alaasearch = function () {
 
     function getProductCarouselItem(data) {
         let widgetActionLink = data.url;
-        let widgetActionName = 'مشاهده و خرید';
+        let widgetActionName = '<i class="flaticon-bag"></i>' + ' / ' + '<i class="fa fa-eye"></i>';
         let widgetPic = data.photo;
         let widgetTitle = data.name;
         let price = data.price;
-        let priceHtml = '';
+        let priceHtml = '<span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">';
         if (price.base !== price.final) {
-            priceHtml =
-                '                                <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">\n' +
-                '                                    <span class = "m-badge m-badge--warning a--productRealPrice">' + price.base.toLocaleString('fa') + '</span>\n' +
-                '                                    ' + price.final.toLocaleString('fa') + ' تومان \n' +
-                '                                    <span class = "m-badge m-badge--info a--productDiscount">' + ((1 - (price.final / price.base)) * 100) + '%</span>\n' +
-                '                                </span>';
-        } else {
-            priceHtml =
-                '                                <span class = "m-widget6__text m--align-right m--font-boldest m--font-primary">\n' +
-                '                                    ' + price.final.toLocaleString('fa') + ' تومان \n' +
-                '                                </span>';
+            priceHtml += '    <span class = "m-badge m-badge--warning a--productRealPrice">' + price.base.toLocaleString('fa') + '</span>\n';
         }
+        priceHtml += '    ' + price.final.toLocaleString('fa') + ' تومان \n';
+        if (price.base !== price.final) {
+            priceHtml += '    <span class = "m-badge m-badge--info a--productDiscount">' + ((1 - Math.round(price.final / price.base)) * 100) + '%</span>\n';
+        }
+        priceHtml += '</span>';
+
         return '<div class = "item">\n' +
             '    <!--begin:: Widgets/Blog-->\n' +
             '    <div class = "m-portlet m-portlet--bordered-semi m-portlet--rounded-force">\n' +
-            '        <div class = "m-portlet__head m-portlet__head--fit">\n' +
-            '            <div class = "m-portlet__head-caption">\n' +
-            '                <div class = "m-portlet__head-action">\n' +
-            '                    <a href="' + widgetActionLink + '" class = "btn btn-sm m-btn--pill btn-brand">' + widgetActionName + '</a>\n' +
-            '                </div>\n' +
-            '            </div>\n' +
-            '        </div>\n' +
+            '   <div class="m-portlet__head m-portlet__head--fit"> \
+                    <div class="m-portlet__head-caption"> \
+                        <div class="m-portlet__head-action"> \
+                        </div> \
+                    </div> \
+                </div> ' +
             '        <div class = "m-portlet__body">\n' +
             '            <div class = "a-widget19 m-widget19">\n' +
             '                <div class = "m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" >\n' +
+            '                    <a href="' + widgetActionLink + '" class = "btn btn-sm m-btn--pill btn-brand btnViewMore">' + widgetActionName + '</a>\n' +
             '                    <img src = "' + widgetPic + '" alt = "' + widgetTitle + '"/>\n' +
             '                    <div class = "m-widget19__shadow"></div>\n' +
             '                </div>\n' +
@@ -65,7 +61,7 @@ var Alaasearch = function () {
     function getVideoCarouselItem(data) {
 
         let widgetActionLink = data.url;
-        let widgetActionName = 'پخش / دانلود';
+        let widgetActionName = '<i class="fa fa-play"></i>' + ' / ' + '<i class="fa fa-cloud-download-alt"></i>';
         let widgetPic = (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail : data.photo;
         let widgetTitle = data.name;
         let widgetAuthor = {
@@ -81,13 +77,13 @@ var Alaasearch = function () {
         <div class = \"m-portlet__head m-portlet__head--fit\"> \
             <div class = \"m-portlet__head-caption\"> \
                 <div class = \"m-portlet__head-action\"> \
-                    <a href=\"' + widgetActionLink + '\" class = \"btn btn-sm m-btn--pill btn-brand\">' + widgetActionName + '</a> \
                 </div> \
             </div> \
         </div> \
         <div class = \"m-portlet__body\"> \
             <div class = \"a-widget19 m-widget19\"> \
                 <div class = \"m-widget19__pic m-portlet-fit--top m-portlet-fit--sides\" > \
+                    <a href=\"' + widgetActionLink + '\" class = \"btn btn-sm m-btn--pill btn-brand btnViewMore\">' + widgetActionName + '</a> \
                     <img src = \"' + widgetPic + '\" alt = \" ' + widgetTitle + '\"/> \
                     <div class = \"m-widget19__shadow\"></div> \
                 </div> \
@@ -144,13 +140,13 @@ var Alaasearch = function () {
         <div class = \"m-portlet__head m-portlet__head--fit\"> \
             <div class = \"m-portlet__head-caption\"> \
                 <div class = \"m-portlet__head-action\"> \
-                    <a href=\"' + widgetActionLink +'\" class = \"btn btn-sm m-btn--pill btn-brand\">' + widgetActionName + '</a> \
                 </div> \
             </div> \
         </div> \
         <div class = \"m-portlet__body\"> \
             <div class = \"a-widget19 m-widget19\"> \
                 <div class = \"m-widget19__pic m-portlet-fit--top m-portlet-fit--sides\" > \
+                    <a href=\"' + widgetActionLink +'\" class = \"btn btn-sm m-btn--pill btn-brand btnViewMore\">' + widgetActionName + '</a> \
                     <img src = \"'+ widgetPic +'\" alt = \" ' + widgetTitle +'\"/> \
                     <div class = \"m-widget19__shadow\"></div> \
                 </div> \
@@ -207,32 +203,32 @@ var Alaasearch = function () {
         };
         if (widgetThumbnail !== null && widgetThumbnail.length !== 0) {
             widgetThumbnail =
-                '                                                    <div class="m-widget4__img m-widget4__img--pic">\n' +
-                '                                                        <img src="' + widgetThumbnail + '" alt="' + widgetTitle + '">\n' +
-                '                                                    </div>\n';
+                '<div class="m-widget4__img m-widget4__img--pic">\n' +
+                '    <img src="' + widgetThumbnail + '" alt="' + widgetTitle + '">\n' +
+                '</div>\n';
         } else {
             widgetThumbnail = '';
         }
         return '\n' +
-            '                                            <div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">\n' +
-            '                                                <div class="m-widget4__img m-widget4__img--pic">\n' +
-            '                                                    <img src="' + widgetAuthor.photo + '" alt="">\n' +
-            '                                                </div>\n' +
-            '                                                <div class="m-widget4__info">\n' +
-            '                                                        <span class="m-widget4__title">\n' +
-            '                                                            <a href="' + widgetActionLink + '" class="m-link">\n' +
-            '                                                                ' + widgetTitle + '\n' +
-            '                                                            </a>\n' +
-            '                                                        </span>\n' +
-            '                                                    <br>\n' +
-            '                                                    <span class="m-widget4__sub">\n' +
-            '                                                            <a href="' + widgetActionLink + '" class="m-link">\n' +
-            '                                                                ' + widgetAuthor.full_name + '\n' +
-            '                                                            </a>\n' +
-            '                                                        </span>\n' +
-            '                                                </div>\n' +
+            '<div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">\n' +
+            '    <div class="m-widget4__img m-widget4__img--pic">\n' +
+            '        <img src="' + widgetAuthor.photo + '" alt="">\n' +
+            '    </div>\n' +
+            '    <div class="m-widget4__info">\n' +
+            '            <span class="m-widget4__title">\n' +
+            '                <a href="' + widgetActionLink + '" class="m-link">\n' +
+            '                    ' + widgetTitle + '\n' +
+            '                </a>\n' +
+            '            </span>\n' +
+            '        <br>\n' +
+            '        <span class="m-widget4__sub">\n' +
+            '                <a href="' + widgetActionLink + '" class="m-link">\n' +
+            '                    ' + widgetAuthor.full_name + '\n' +
+            '                </a>\n' +
+            '            </span>\n' +
+            '    </div>\n' +
             widgetThumbnail +
-            '                                            </div>';
+            '</div>';
     }
 
     function makeWidgetFromJsonResponse(data, type) {
@@ -358,20 +354,13 @@ var Alaasearch = function () {
         if (owlType === 'product' || owlType === 'video' || owlType === 'set' || owlType === 'pamphlet' || owlType === 'article') {
             var perPage = typeof (owl.data("per-page")) === "number" ? owl.data("per-page") : 6;
 
-            // console.log('per page:' + perPage);
-            // console.log('nextPageUrl:' + nextPageUrl);
-            // console.log('event.property.name',event.property.name);
-            // console.log('event.property.value',event.property.value);
-            // console.log('event.relatedTarget.items().length - perPage',event.relatedTarget.items().length - perPage);
             if (nextPageUrl !== null && nextPageUrl.length !== 0
                 && event.namespace && event.property.name === 'position'
                 && event.property.value >= event.relatedTarget.items().length - perPage) {
                 lockAjax(owlType);
                 addLoadingItem(owl, owlType);
                 // load, add and update
-                // console.log("next page Url: " + nextPageUrl);
                 loadData(owl, nextPageUrl, owlType, callback);
-                // console.log([currentPage,lastPage,nextPage]);
             }
         } else if (owlType === 'pamphlet' || owlType === 'article') {
             lockAjax(owlType);
@@ -392,17 +381,13 @@ var Alaasearch = function () {
             let owlType = 'product';
             let nextPageUrl = $('#owl--js-var-next-page-product-carousel-url');
             let owl = $(this);
-            // console.log("productAjaxLock:" + productAjaxLock);
             if (!productAjaxLock && nextPageUrl.val() !== "null") {
                 load(event, nextPageUrl.val(), owl, owlType, function (newPageUrl) {
-                    // console.log("PRE:" + $('#owl--js-var-next-page-product-carousel-url').val());
                     if (newPageUrl === null) {
                         newPageUrl = '';
                     }
                     $('#owl--js-var-next-page-product-carousel-url').val(decodeURI(newPageUrl));
-                    // console.log("NEW:" + $('#owl--js-var-next-page-product-carousel-url').val());
                     unLockAjax(owlType);
-                    // console.log("productAjaxLock:" + productAjaxLock);
                 });
             }
         });
@@ -426,9 +411,7 @@ var Alaasearch = function () {
             if( !videoAjaxLock && nextPageUrl.val() !== "null") {
 
                 load(event, nextPageUrl.val(), owl, owlType,function (newPageUrl) {
-                    // console.log("PRE:" + nextPageUrl.val());
                     $('#owl--js-var-next-page-video-url').val(decodeURI(newPageUrl));
-                    // console.log("NEW:" + nextPageUrl.val());
                     unLockAjax(owlType);
                 });
             }
@@ -446,13 +429,9 @@ var Alaasearch = function () {
             var owlType = "set";
             var nextPageUrl = $('#owl--js-var-next-page-set-url');
             var owl = $(this);
-            // console.log("nextPageUrl:"+nextPageUrl.val());
             if( !setAjaxLock && nextPageUrl.val() !== "null") {
-                // console.log("se Ajax is not lock!");
                 load(event, nextPageUrl.val(), owl, owlType,function (newPageUrl) {
-                    // console.log("PRE:" + nextPageUrl.val());
                     $('#owl--js-var-next-page-set-url').val(decodeURI(newPageUrl));
-                    // console.log("NEW:" + nextPageUrl.val());
                     unLockAjax(owlType);
                 });
             }
@@ -576,8 +555,16 @@ var Alaasearch = function () {
             $('.PamphletAndArticleWraper').removeClass('d-none').addClass('d-none');
         }
 
+        $('#contentSearchFilter').removeClass('lockActiveStep');
         if (!hasItem) {
             $('.notFoundMessage').fadeIn();
+            if (
+                typeof $('#contentSearchFilter .selectorItem[data-select-active="true"]').attr('data-select-order') !== 'undefined' &&
+                parseInt($('#contentSearchFilter .selectorItem[data-select-active="true"]').attr('data-select-order')) !== 4
+            ) {
+                console.log('order: ', $('#contentSearchFilter .selectorItem[data-select-active="true"]').attr('data-select-order'));
+                $('#contentSearchFilter').addClass('lockActiveStep');
+            }
         } else {
             $('.notFoundMessage').fadeOut();
         }
@@ -638,314 +625,6 @@ var Alaasearch = function () {
             $('#article-vertical-widget').html('');
         },
     }
-}();
-
-var MultiLevelSearch = function () {
-
-    let selectorItems = [];
-    let selectorId = '';
-
-    function getSelectorItems(MultiLevelSearchSelectorId) {
-        selectorId = MultiLevelSearchSelectorId;
-        selectorItems = $('#' + selectorId + ' .selectorItem');
-        return selectorItems;
-    }
-
-    function getSelectorItem(selectorIndex) {
-        return $('#' + selectorId + ' .selectorItem[data-select-order="' + selectorIndex + '"]');
-    }
-
-    function getSelectorSubitems(selectorIndex) {
-        return $('#' + selectorId + ' .selectorItem[data-select-order="' + selectorIndex + '"] .subItem');
-    }
-
-    function showSelectorItem(selectorIndex) {
-
-        let selectorItem = getSelectorItem(selectorIndex);
-
-        if (selectorItem.length === 0) {
-            refreshNavbar(selectorIndex);
-            return false;
-        }
-
-        selectorItems.fadeOut(0);
-
-        let title = selectorItem.data('select-title');
-        let showType = selectorItem.data('select-display');
-        if (typeof showType === 'undefined') {
-            if (getSelectorSubitems(selectorIndex).length > 10) {
-                showType = 'select2';
-            } else {
-                showType = 'grid';
-            }
-            selectorItem.attr('data-select-display', showType);
-        }
-
-        if (showType === 'grid') {
-            if (selectorItem.find('.selectorItemTitle').length > 0) {
-                selectorItem.find('.selectorItemTitle').html(title);
-            } else {
-                selectorItem.prepend('<div class="col-12 selectorItemTitle">' + title + '</div>');
-            }
-            if (selectorItem.length > 0) {
-                selectorItem.fadeIn();
-            }
-        } else if (showType === 'select2') {
-            let selectorSubitems = getSelectorSubitems(selectorIndex);
-            selectorSubitems.fadeOut(0);
-            let select2Html = '';
-            let select2Id = 'MultiLevelSearch-select2-' + selectorId + '-' + selectorIndex;
-
-            if (selectorItem.find('.selectorItemTitle').length > 0) {
-                selectorItem.find('.selectorItemTitle').html(title);
-            } else {
-                selectorItem.prepend('<div class="col-12 selectorItemTitle">' + title + '</div>');
-            }
-
-            for (let index in selectorSubitems) {
-                if (!isNaN(index)) {
-                    let selected = '';
-                    if ($(selectorSubitems[index]).attr('selected') === 'selected') {
-                        selected = 'selected="selected"';
-                    }
-                    select2Html += '<option value="' + selectorSubitems[index].innerHTML + '" '+selected+'>' + selectorSubitems[index].innerHTML + '</option>';
-                }
-            }
-            if (selectorItem.find('.form-control.select2').length > 0) {
-                let oldSelect2 = $('#' + select2Id);
-                if (!oldSelect2.data('select2')) {
-                    oldSelect2.select2('destroy');
-                }
-                selectorItem.find('.select2warper').remove();
-                selectorItem.append('<div class="col-12 col-sm-9 col-md-5 col-lg-4 select2warper"><div><select class="form-control select2" id="' + select2Id + '">' + select2Html + '</select></div></div>');
-                $('#' + select2Id)
-                    .select2({closeOnSelect: true})
-                    .on('select2:select', function (event) {
-                        $('.a--multi-level-search select').select2("close");
-                    })
-                    .on('select2:close', function (event) {
-                        $('.a--multi-level-search select').select2("close");
-                    });
-                selectorItem.fadeIn();
-            } else {
-                selectorItem.append('<div class="col-12 col-sm-9 col-md-5 col-lg-4 select2warper"><div><select class="form-control select2" id="' + select2Id + '">' + select2Html + '</select></div></div>');
-                $('#' + select2Id)
-                    .select2({closeOnSelect: true})
-                    .on('select2:select', function (event) {
-                        $('.a--multi-level-search select').select2('destroy');
-                        $('.a--multi-level-search select').select2({closeOnSelect: true});
-                        $('.a--multi-level-search select').select2("close");
-                        $('.a--multi-level-search select').select2("close");
-                    })
-                    .on('select2:close', function (event) {
-                        $('.a--multi-level-search select').select2('destroy');
-                        $('.a--multi-level-search select').select2({closeOnSelect: true});
-                        $('.a--multi-level-search select').select2("close");
-                        $('.a--multi-level-search select').select2("close");
-                    });
-                selectorItem.fadeIn();
-            }
-        }
-        refreshNavbar(selectorIndex);
-    }
-
-    function setValueOfSelector(selectorIndex, value) {
-        getSelectorItem(selectorIndex).attr('data-select-value', value);
-    }
-
-    function getValueOfSelector(selectorIndex) {
-        let value = getSelectorItem(selectorIndex).attr('data-select-value');
-        return (typeof value !== 'undefined') ? value : null;
-    }
-
-    function getActiveStepOrder() {
-        if ($('#' + selectorId + ' .selectorItem[data-select-active="true"]').length > 0) {
-            return parseInt($('#' + selectorId + ' .selectorItem[data-select-active="true"]').data('select-order'));
-        } else {
-            return 0;
-        }
-    }
-
-    function setActiveStep(selectorIndex) {
-        $('#' + selectorId + ' .selectorItem').attr('data-select-active', 'false');
-        getSelectorItem(selectorIndex).attr('data-select-active', 'true');
-    }
-
-    function getMaxOrder() {
-        let maxOrder = 0;
-        for (let index in selectorItems) {
-            if (!isNaN(index)) {
-                let order = parseInt($(selectorItems[index]).data('select-order'));
-                if (maxOrder < order) {
-                    maxOrder = order;
-                }
-            }
-        }
-        return maxOrder;
-    }
-
-    function refreshNavbar(selectorIndex) {
-        let filterNavigationWarper = $('#' + selectorId + ' .filterNavigationWarper');
-        filterNavigationWarper.html('');
-
-        selectorItems = $('#' + selectorId + ' .selectorItem');
-        for (let index in selectorItems) {
-            if (!isNaN(index)) {
-
-                let title = $(selectorItems[index]).data('select-title');
-                let order = $(selectorItems[index]).data('select-order');
-                let activeString = 'deactive';
-                if (parseInt(order) < parseInt(selectorIndex)) {
-                    activeString = 'active';
-                } else if (parseInt(order) === parseInt(selectorIndex)) {
-                    activeString = 'current';
-                } else {
-                    setValueOfSelector(order, '');
-                }
-
-                let selectedText = '';
-                if (activeString === 'deactive') {
-                    $(selectorItems[index]).attr('data-select-value', '');
-                }
-                selectedText = getValueOfSelector(order);
-
-                // filterNavigationWarper.append('<div class="col ' + activeString + ' filterNavigationStep" data-select-order="' + order + '"><div class="filterStepText">' + title + '</div><div class="filterStepSelectedText">'+selectedText+'</div></div>');
-
-                if (selectedText === null || selectedText.trim().length === 0) {
-                    selectedText = '(' + 'انتخاب ' + title + ')';
-                }
-                filterNavigationWarper.append('<li class="filterNavigationStep ' + activeString + '" data-select-order="' + order + '">' + selectedText + '</li>');
-            }
-        }
-    }
-
-    function refreshNavbar1(selectorIndex) {
-        let filterNavigationWarper = $('#' + selectorId + ' .filterNavigationWarper');
-        filterNavigationWarper.html('');
-
-        selectorItems = $('#' + selectorId + ' .selectorItem');
-        for (let index in selectorItems) {
-            if (!isNaN(index)) {
-
-                let title = $(selectorItems[index]).data('select-title');
-                let order = $(selectorItems[index]).data('select-order');
-                let activeString = 'deactive';
-                if (parseInt(order) < parseInt(selectorIndex)) {
-                    activeString = 'active';
-                } else if (parseInt(order) === parseInt(selectorIndex)) {
-                    activeString = 'current';
-                } else {
-                    setValueOfSelector(order, '');
-                }
-
-                let selectedText = '';
-                if (activeString === 'deactive') {
-                    $(selectorItems[index]).attr('data-select-value', '');
-                }
-                selectedText = getValueOfSelector(order);
-
-                // filterNavigationWarper.append('<div class="col ' + activeString + ' filterNavigationStep" data-select-order="' + order + '"><div class="filterStepText">' + title + '</div><div class="filterStepSelectedText">'+selectedText+'</div></div>');
-
-                if (selectedText === null || selectedText.trim().length === 0) {
-                    selectedText = '(' + title + ')';
-                }
-                filterNavigationWarper.append('<div class="col ' + activeString + ' filterNavigationStep" data-select-order="' + order + '"><div class="filterStepText">' + selectedText + '</div></div>');
-            }
-        }
-    }
-
-    function onChangeFilter(selectorOrder, initOptions) {
-        if (
-            typeof (initOptions.selector) !== 'undefined' &&
-            typeof (initOptions.selector[selectorOrder]) !== 'undefined' &&
-            typeof (initOptions.selector[selectorOrder].ajax) !== 'undefined' &&
-            initOptions.selector[selectorOrder].ajax !== null) {
-            // ajax load ...
-        } else {
-            showSelectorItem(parseInt(selectorOrder) + 1);
-            if (getMaxOrder() >= (parseInt(selectorOrder) + 1)) {
-                console.log('if order: ', (parseInt(selectorOrder) + 1));
-                setActiveStep(parseInt(selectorOrder) + 1);
-            }
-        }
-    }
-
-    function onFilterNavCliked(selectorOrder, initOptions) {
-        if (
-            typeof (initOptions.selector) !== 'undefined' &&
-            typeof (initOptions.selector[selectorOrder]) !== 'undefined' &&
-            typeof (initOptions.selector[selectorOrder].ajax) !== 'undefined' &&
-            initOptions.selector[selectorOrder].ajax !== null) {
-            // ajax load ...
-        } else {
-            if (selectorOrder < getActiveStepOrder()) {
-                showSelectorItem(parseInt(selectorOrder));
-                setActiveStep(selectorOrder);
-            }
-        }
-    }
-
-    function getSelectedData() {
-        let data = [];
-        selectorItems = $('#' + selectorId + ' .selectorItem');
-        for (let index in selectorItems) {
-            if (!isNaN(index)) {
-                let title = $(selectorItems[index]).data('select-title');
-                let order = $(selectorItems[index]).data('select-order');
-                let selectedText = (typeof ($(selectorItems[index]).attr('data-select-value')) !== 'undefined') ? $(selectorItems[index]).attr('data-select-value') : null;
-                data.push({
-                    title: title,
-                    order: order,
-                    selectedText: selectedText
-                });
-            }
-        }
-        return data;
-    }
-
-    return {
-        init: function (initOptions, onChangeCallback, beforeChangeFilterCallback) {
-            let multiSelector = $('#' + initOptions.selectorId);
-            multiSelector.fadeOut(0);
-            getSelectorItems(initOptions.selectorId);
-            showSelectorItem(getActiveStepOrder());
-            $(document).on('click', '#' + initOptions.selectorId + ' .selectorItem .subItem', function () {
-                let parent = $(this).parents('.selectorItem');
-                let selectorOrder = parent.data('select-order');
-                parent.attr('data-select-value', $(this).html());
-                let data = {
-                    selectorOrder: selectorOrder,
-                    selectorType: 'grid'
-                };
-                beforeChangeFilterCallback(data);
-                onChangeFilter(selectorOrder, initOptions);
-                onChangeCallback(data);
-            });
-            $(document).on('change', '#' + initOptions.selectorId + ' .selectorItem .select2', function () {
-                let parent = $(this).parents('.selectorItem');
-                let selectorOrder = parent.data('select-order');
-                parent.attr('data-select-value', $(this).select2('data')[0].text.trim());
-                // parent.attr('data-select-value', $(this).find(':selected').text.trim());
-                let data = {
-                    selectorOrder: selectorOrder,
-                    selectorType: 'select2'
-                };
-                beforeChangeFilterCallback(data);
-                onChangeFilter(selectorOrder, initOptions);
-                onChangeCallback(data);
-            });
-            $(document).on('click', '#' + initOptions.selectorId + ' .filterNavigationStep', function () {
-                // let selectorOrder = $(this).parents('.filterNavigationStep').data('select-order');
-                let selectorOrder = $(this).data('select-order');
-                onFilterNavCliked(selectorOrder, initOptions);
-                onChangeCallback('click on filterNavigationStep');
-            });
-            multiSelector.fadeIn();
-        },
-        getSelectedData: function () {
-            return getSelectedData();
-        }
-    };
 }();
 
 var CustomInitMultiLevelSearch = function () {
@@ -2156,18 +1835,10 @@ var CustomInitMultiLevelSearch = function () {
                 lessonKey: 'ensaniLessons'
             }
         ],
-        "maghta": [
+        "maghtaGhadim": [
             {
                 name: 'همه مقاطع',
                 value: 'همه_مقاطع'
-            },
-            {
-                name: 'دهم',
-                value: 'دهم'
-            },
-            {
-                name: 'یازدهم',
-                value: 'یازدهم'
             },
             {
                 name: 'کنکور',
@@ -2193,13 +1864,49 @@ var CustomInitMultiLevelSearch = function () {
                 name: 'المپیاد',
                 value: 'المپیاد'
             }
+        ],
+        "maghtaJadid": [
+            {
+                name: 'همه مقاطع',
+                value: 'همه_مقاطع'
+            },
+            {
+                name: 'دهم',
+                value: 'دهم'
+            },
+            {
+                name: 'یازدهم',
+                value: 'یازدهم'
+            },
+            {
+                name: 'کنکور',
+                value: 'کنکور'
+            },
+            {
+                name: 'المپیاد',
+                value: 'المپیاد'
+            }
+        ],
+        "nezam": [
+            {
+                name: 'نظام قدیم',
+                value: 'نظام_آموزشی_قدیم',
+                maghtaKey: 'maghtaGhadim'
+            },
+            {
+                name: 'نظام جدید',
+                value: 'نظام_آموزشی_جدید',
+                maghtaKey: 'maghtaJadid'
+            }
         ]
     };
 
     let tags = null;
+    let tagsFromController = null;
 
     let selectedVlues = {
-        maghta: filterData.maghta[0],
+        nezam: filterData.nezam[1],
+        maghta: filterData.maghtaJadid[0],
         major: filterData.major[0],
         lesson: filterData.allLessons[0],
         teacher: filterData.lessonTeacher.همه_دروس[0].value
@@ -2209,10 +1916,14 @@ var CustomInitMultiLevelSearch = function () {
         filterData.lessonTeacher.همه_دروس[0].value,
         filterData.allLessons[0].value,
         filterData.major[0].value,
-        filterData.maghta[0].value
+        filterData.maghtaGhadim[0].value,
+        filterData.maghtaJadid[0].value
     ];
 
     function addUnderLine(string) {
+        if (typeof string === 'undefined' || string === null) {
+            return '';
+        }
         return string.replace(/ /g, '_');
     }
 
@@ -2221,7 +1932,7 @@ var CustomInitMultiLevelSearch = function () {
     }
 
     function getTags() {
-        url = new URL(window.location.href);
+        let url = new URL(window.location.href);
         tags = url.searchParams.getAll("tags[]");
         return tags;
     }
@@ -2231,24 +1942,65 @@ var CustomInitMultiLevelSearch = function () {
         $('.selectorItem.'+filterClass).attr('data-select-active', 'true');
     }
 
-    function setSelectedMaghtaFromTags() {
-        let selectedVal = filterData.maghta[0];
+    function getTagsFromControllerOrUrl() {
+        let tags = [];
+        if (tagsFromController !== null && typeof tagsFromController !== 'undefined') {
+            tags = tagsFromController;
+        } else {
+            tags = getTags();
+        }
+        return tags;
+    }
+
+    function setSelectedNezamFromTags() {
+        let selectedVal = filterData.nezam[1];
         let existInTags = false;
-        tags = getTags();
+
+        let tags = getTagsFromControllerOrUrl();
+
         for (let tagsIndex in tags) {
-            for (let majorIndex in filterData.maghta) {
-                let item = filterData.maghta[majorIndex];
+            for (let nezamIndex in filterData.nezam) {
+                let item = filterData.nezam[nezamIndex];
                 if (item.value === tags[tagsIndex]) {
                     selectedVal = item;
+                    activeFilter('maghtaSelector');
+                    existInTags = true;
+                    break;
+                }
+            }
+        }
+        selectedVlues.nezam = selectedVal;
+        if (existInTags) {
+            let name = removeUnderLine(selectedVal.value);
+            $('.selectorItem.nezamSelector').attr('data-select-value', name);
+            return name;
+        } else {
+            return false;
+        }
+    }
+
+    function setSelectedMaghtaFromTags() {
+
+        let selectedNezam = selectedVlues.nezam;
+        let selectedMaghta = filterData[selectedNezam.maghtaKey][0];
+
+        let existInTags = false;
+        let tags = getTagsFromControllerOrUrl();
+
+        for (let tagsIndex in tags) {
+            for (let maghtaIndex in filterData[selectedNezam.maghtaKey]) {
+                let item = filterData[selectedNezam.maghtaKey][maghtaIndex];
+                if (item.value === tags[tagsIndex]) {
+                    selectedMaghta = item;
                     activeFilter('majorSelector');
                     existInTags = true;
                     break;
                 }
             }
         }
-        selectedVlues.maghta = selectedVal;
+        selectedVlues[selectedNezam.maghtaKey] = selectedMaghta;
         if (existInTags) {
-            let name = removeUnderLine(selectedVal.value);
+            let name = removeUnderLine(selectedMaghta.value);
             $('.selectorItem.maghtaSelector').attr('data-select-value', name);
             return name;
         } else {
@@ -2259,7 +2011,9 @@ var CustomInitMultiLevelSearch = function () {
     function setSelectedMajorFromTags() {
         let selectedVal = filterData.major[0];
         let existInTags = false;
-        tags = getTags();
+
+        let tags = getTagsFromControllerOrUrl();
+
         for (let tagsIndex in tags) {
             for (let majorIndex in filterData.major) {
                 let value = filterData.major[majorIndex].value;
@@ -2285,7 +2039,9 @@ var CustomInitMultiLevelSearch = function () {
         let selectedMajor = selectedVlues.major;
         let selectedLesson = filterData[selectedMajor.lessonKey][0];
         let existInTags = false;
-        tags = getTags();
+
+        let tags = getTagsFromControllerOrUrl();
+
         for (let tagsIndex in tags) {
             for (let lessonIndex in filterData[selectedMajor.lessonKey]) {
                 let item = filterData[selectedMajor.lessonKey][lessonIndex];
@@ -2311,7 +2067,9 @@ var CustomInitMultiLevelSearch = function () {
         let selectedLesson = selectedVlues.lesson.value;
         let selectedTeacher = filterData.lessonTeacher[selectedLesson][0];
         let existInTags = false;
-        tags = getTags();
+
+        let tags = getTagsFromControllerOrUrl();
+
         for (let tagsIndex in tags) {
             for (let teacherIndex in filterData.lessonTeacher[selectedLesson]) {
                 let item = filterData.lessonTeacher[selectedLesson][teacherIndex];
@@ -2333,59 +2091,87 @@ var CustomInitMultiLevelSearch = function () {
         }
     }
 
+    function initSelectorItem(selectorClass, selectedValue, filterDataArray) {
+        $(selectorClass).find('.subItem').remove();
+        appendSubItems(filterDataArray, selectorClass, selectedValue);
+        fadeOutSubItemsIfDisplayTypeIsSelect2(selectorClass, filterDataArray, selectedValue);
+    }
+
+    function initNezam() {
+        let selectorClass = '.nezamSelector';
+        let selectedValue = setSelectedNezamFromTags();
+        let filterDataArray = filterData.nezam;
+        initSelectorItem(selectorClass, selectedValue, filterDataArray);
+        setSelectedNezamFromTags();
+    }
+
     function initMaghta() {
-        let selectedVlue = setSelectedMaghtaFromTags();
-        $('.maghtaSelector').find('.subItem').remove();
-        for (let index in filterData.maghta) {
-            let name = filterData.maghta[index].value.replace('_', ' ');
-            if (selectedVlue === name) {
-                $('.maghtaSelector').append('<div class="col subItem" selected="selected">'+name+'</div>');
-            } else {
-                $('.maghtaSelector').append('<div class="col subItem">'+name+'</div>');
-            }
-        }
+        let selectorClass = '.maghtaSelector';
+        let selectedValue = setSelectedMaghtaFromTags();
+        let maghta = selectedVlues.nezam.maghtaKey;
+        let filterDataArray = filterData[maghta];
+        initSelectorItem(selectorClass, selectedValue, filterDataArray);
         setSelectedMaghtaFromTags();
     }
 
     function initMajor() {
-        let selectedVlue = setSelectedMajorFromTags();
-        $('.majorSelector').find('.subItem').remove();
-        for (let index in filterData.major) {
-            let name = filterData.major[index].value.replace('_', ' ');
-            if (selectedVlue === name) {
-                $('.majorSelector').append('<div class="col subItem" selected="selected">'+name+'</div>');
-            } else {
-                $('.majorSelector').append('<div class="col subItem">'+name+'</div>');
-            }
-        }
+        let selectorClass = '.majorSelector';
+        let selectedValue = setSelectedMajorFromTags();
+        let filterDataArray = filterData.major;
+        initSelectorItem(selectorClass, selectedValue, filterDataArray);
     }
 
     function initLessons() {
-        let selectedVlue = setSelectedLessonFromTags();
+        let selectorClass = '.lessonSelector';
+        let selectedValue = setSelectedLessonFromTags();
         let major = selectedVlues.major.lessonKey;
-        $('.lessonSelector').find('.subItem').remove();
-        for (let index in filterData[major]) {
-            let name = filterData[major][index].value.replace('_', ' ');
-            name = removeUnderLine(name);
-            if (selectedVlue === name) {
-                $('.lessonSelector').append('<div class="col subItem" selected="selected">'+name+'</div>');
-            } else {
-                $('.lessonSelector').append('<div class="col subItem">'+name+'</div>');
-            }
-        }
+        let filterDataArray = filterData[major];
+        initSelectorItem(selectorClass, selectedValue, filterDataArray);
     }
 
     function initTeacher() {
-        let selectedVlue = setSelectedTeacherFromTags();
+        let selectorClass = '.teacherSelector';
+        let selectedValue = setSelectedTeacherFromTags();
         let lesson = selectedVlues.lesson.value;
-        $('.teacherSelector').find('.subItem').remove();
-        for (let index in filterData.lessonTeacher[lesson]) {
-            let name = filterData.lessonTeacher[lesson][index].value.replace('_', ' ');
+        let filterDataArray = filterData.lessonTeacher[lesson];
+        initSelectorItem(selectorClass, selectedValue, filterDataArray);
+    }
+
+    function fadeOutSubItemsIfDisplayTypeIsSelect2(selectorClass, filterDataArray, selectedValue) {
+        let showType = getDisaplayType(selectorClass);
+        if (showType === 'select2') {
+            let selectorOrder = $(selectorClass).attr('data-select-order');
+            if (selectedValue === false) {
+                if ($('.filterNavigationStep[data-select-order="'+selectorOrder+'"]').hasClass('current')) {
+                    selectedValue = null;
+                } else {
+                    selectedValue = $(selectorClass).attr('data-select-value');
+                }
+            }
+            $(selectorClass).find('.subItem').fadeOut(0);
+            $(selectorClass).find('.form-control.select2').empty();
+            for (let index in filterDataArray) {
+                let name = filterDataArray[index].value;
+                name = removeUnderLine(name);
+                if (selectedValue === name) {
+                    $(selectorClass).find('.form-control.select2').append("<option value='"+name+"' selected>"+name+"</option>");
+                } else {
+                    $(selectorClass).find('.form-control.select2').append("<option value='"+name+"'>"+name+"</option>");
+                }
+            }
+        } else if (showType === 'grid') {
+            $(selectorClass).find('.subItem').fadeIn(0);
+        }
+    }
+
+    function appendSubItems(filterDataArray, selectorClass, selectedValue) {
+        for (let index in filterDataArray) {
+            let name = filterDataArray[index].value;
             name = removeUnderLine(name);
-            if (selectedVlue === name) {
-                $('.teacherSelector').append('<div class="col subItem" selected="selected">'+name+'</div>');
+            if (selectedValue === name) {
+                $(selectorClass).append('<div class="col subItem" selected="selected">'+name+'</div>');
             } else {
-                $('.teacherSelector').append('<div class="col subItem">'+name+'</div>');
+                $(selectorClass).append('<div class="col subItem">'+name+'</div>');
             }
         }
     }
@@ -2400,12 +2186,23 @@ var CustomInitMultiLevelSearch = function () {
         return addUnderLine(string);
     }
 
+    function getDisaplayType(selectorClass) {
+        let showType = $(selectorClass).data('select-display');
+        if (typeof showType === 'undefined') {
+            showType = 'grid';
+        }
+        return showType;
+    }
+
     return {
-        initFilters: function () {
+        initFilters: function (inputTags) {
+            tagsFromController = inputTags;
+            initNezam();
             initMaghta();
             initMajor();
             initLessons();
             initTeacher();
+            tagsFromController = null;
         },
         checkEmptyField: function (string) {
             return checkEmptyField(string);
@@ -2425,7 +2222,6 @@ var GetAjaxData = function () {
         $('.pageTags .m-list-badge__items').find('.m-list-badge__item').remove();
 
         let searchFilterData = MultiLevelSearch.getSelectedData();
-
         let url = document.location.href.split('?')[0];
         let tagsValue = '';
         for (let index in searchFilterData) {
@@ -2444,8 +2240,8 @@ var GetAjaxData = function () {
         }
 
         url += '?' + tagsValue;
-
         history.pushState('data to be passed', 'Title of the page', url);
+
         // The above will add a new entry to the history so you can press Back button to go to the previous state.
         // To change the URL in place without adding a new entry to history use
         // history.replaceState('data to be passed', 'Title of the page', '');
@@ -2457,8 +2253,10 @@ var GetAjaxData = function () {
         $('#product-carousel-warper').fadeIn();
         $('#video-carousel-warper').fadeIn();
         $('#set-carousel-warper').fadeIn();
-        $('#pamphlet-vertical-tabpanel').fadeIn();
-        $('#article-vertical-tabpanel').fadeIn();
+        // $('#pamphlet-vertical-tabpanel').fadeIn();
+        $('#pamphlet-vertical-tabpanel').removeClass('d-none');
+        // $('#article-vertical-tabpanel').fadeIn();
+        $('#article-vertical-tabpanel').removeClass('d-none');
         $('#pamphlet-vertical-tab').fadeIn();
         $('#article-vertical-tab').fadeIn();
         $('.ProductAndSetAndVideoWraper').removeClass('col').addClass('col-12 col-md-9');
@@ -2526,28 +2324,75 @@ var GetAjaxData = function () {
     };
 }();
 
-
 jQuery(document).ready(function () {
+
+    var owl = jQuery('.a--owl-carousel-type-1');
+    owl.each(function () {
+        $(this).owlCarousel({
+            stagePadding: 0,
+            loop: false,
+            rtl:true,
+            nav: true,
+            dots: false,
+            margin:10,
+            mouseDrag: true,
+            touchDrag: true,
+            pullDrag: true,
+            responsiveClass:true,
+            responsive:{
+                0:{
+                    items:1,
+                },
+                400:{
+                    items:2,
+                },
+                600:{
+                    items:3,
+                },
+                800:{
+                    items:4,
+                },
+                1190:{
+                    items:3
+                },
+                1400:{
+                    items:4
+                }
+            }
+        });
+    });
 
     Alaasearch.init(contentData);
 
-    CustomInitMultiLevelSearch.initFilters();
+    CustomInitMultiLevelSearch.initFilters(tags);
 
     MultiLevelSearch.init({
         selectorId: 'contentSearchFilter'
     }, function (data) {
         GetAjaxData.refreshTags();
+        CustomInitMultiLevelSearch.initFilters();
         GetAjaxData.getNewDataBaseOnTags();
-    },  function (data) {
-        if (data.selectorOrder < 3) {
-            GetAjaxData.refreshTags();
-            CustomInitMultiLevelSearch.initFilters();
-        }
 
-        $('.a--multi-level-search select').select2('destroy');
-        $('.a--multi-level-search select').select2({closeOnSelect: true});
-        $('.a--multi-level-search select').select2("close");
-        $('.a--multi-level-search select').select2("close");
+        // GetAjaxData.refreshTags();
+        // GetAjaxData.getNewDataBaseOnTags();
+        // if (data.selectorOrder < 4) {
+        //     GetAjaxData.refreshTags();
+        //     CustomInitMultiLevelSearch.initFilters();
+        // }
+    },  function (data) {
+        GetAjaxData.refreshTags();
+        CustomInitMultiLevelSearch.initFilters();
+        // if (data.selectorOrder < 4) {
+        //     GetAjaxData.refreshTags();
+        //     CustomInitMultiLevelSearch.initFilters();
+        // }
+
+
+
+        // $('.a--multi-level-search select').select2('destroy');
+        // $('.a--multi-level-search select').select2({closeOnSelect: true});
+        // $('.a--multi-level-search select').select2("close");
+        // $('.a--multi-level-search select').select2("close");
     });
 
 });
