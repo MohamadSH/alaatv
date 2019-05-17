@@ -9,7 +9,7 @@
             <div class="m-portlet m-portlet--head-overlay m-portlet--full-height  m-portlet--rounded-force">
     
                 <div>
-                    <img src="{{ asset('/assets/extra/landing7/landing7.jpg') }}" class="a--full-width">
+                    <img src="https://cdn.sanatiasharif.ir/upload/landing/sslide-5.jpg" class="a--full-width">
                 </div>
                 <div class="m-portlet__body">
                     <div class="m-widget27 m-portlet-fit--sides">
