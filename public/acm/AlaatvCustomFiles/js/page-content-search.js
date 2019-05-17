@@ -63,6 +63,7 @@ var Alaasearch = function () {
         let widgetActionLink = data.url;
         let widgetActionName = '<i class="fa fa-play"></i>' + ' / ' + '<i class="fa fa-cloud-download-alt"></i>';
         let widgetPic = (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail : data.photo;
+        widgetPic += '?w=640&h=360';
         let widgetTitle = data.name;
         let widgetAuthor = {
             photo: (typeof (data.author.photo) === 'undefined' || data.author.photo == null) ? null : data.author.photo,
@@ -125,6 +126,7 @@ var Alaasearch = function () {
         let widgetActionLink = data.url;
         let widgetActionName = 'نمایش این دوره';
         let widgetPic = (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail : data.photo;
+        widgetPic += '?w=460&h=259';
         let widgetTitle = data.name;
         let widgetAuthor = {
             photo : data.author.photo,
