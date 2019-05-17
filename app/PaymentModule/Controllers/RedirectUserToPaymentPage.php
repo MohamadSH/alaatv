@@ -194,7 +194,7 @@ class RedirectUserToPaymentPage extends Controller
     /**
      * @param $orderproducts
      */
-    private function handleOrders(\Illuminate\Support\Collection $orderproducts)
+    private function handleOrders($orderproducts)
     {
         $totalCookie = collect();
         foreach ($orderproducts as $orderproduct) {

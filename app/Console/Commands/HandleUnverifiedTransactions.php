@@ -2,11 +2,13 @@
 
 namespace App\Console\Commands;
 
-use AlaaTV\ZarinpalGatewayDriver\VerificationResponse;
-use App\Transaction;
-use AlaaTV\Gateways\Money;
-use Illuminate\Console\Command;
 use Zarinpal\Zarinpal;
+use AlaaTV\Gateways\Money;
+use App\Http\Requests\Request;
+use Illuminate\Console\Command;
+use AlaaTV\Gateways\PaymentDriver;
+use App\Repositories\TransactionRepo;
+use AlaaTV\Gateways\Contracts\OnlineGateway;
 
 class HandleUnverifiedTransactions extends Command
 {
@@ -44,6 +46,10 @@ class HandleUnverifiedTransactions extends Command
     public function handle()
     {
         //ToDo : At this time this only works for Zarinpal
+        $paymentMethod = 'zarinpal';
+
+        $paymentClient = PaymentDriver::select($paymentMethod);
+
         $this->info('getting data from zarinpal ...');
         $result = $this->getUnverifiedTransactions();
 
@@ -108,23 +114,26 @@ class HandleUnverifiedTransactions extends Command
      * @param \AlaaTV\Gateways\Contracts\OnlineGateway $paymentClient
      * @return array
      */
-    private function handleTransactions($transactions): array
+    private function handleTransactions($transactions, OnlineGateway $paymentClient): array
     {
         $notExistTransactions = [];
         $unverifiedTransactionsDueToError = [];
-        foreach ($transactions as $item) {
+        foreach ($transactions as $transaction) {
 
-            $authority = $item['Authority'];
+            $authority = $transaction['Authority'];
+
             $this->info($authority);
 
-            $transaction = Transaction::authority($authority)->first();
+            $transaction = TransactionRepo::getTransactionByAuthority($authority)->getValue(null);
 
             if (is_null($transaction)) {
                 array_push($notExistTransactions, $item);
                 continue;
             }
+            $transaction['Status'] = 'OK';
 
-            $gateWayVerify = $this->verifyTransaction($transaction->cost, $authority);
+            $gateWayVerify = $paymentClient->verifyPayment(Money::fromTomans($transaction->cost), $authority);
+
 
             if ($gateWayVerify->isSuccessfulPayment()) {
                 //ToDo : close order

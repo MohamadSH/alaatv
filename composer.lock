@@ -4,11 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "72da803168bed806cccfa1b9eb22ffe0",
+    "content-hash": "952a5d7e59a6f923aae42d8dacf33f1f",
     "packages": [
         {
             "name": "alaatv/mellat",
-            "version": "V1.1.5",
+            "version": "v1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alaatv/behpardakht-gateway-driver.git",
@@ -56,7 +56,7 @@
                 "laravel5-package",
                 "php"
             ],
-            "time": "2019-05-08T13:01:38+00:00"
+            "time": "2019-05-11T08:25:40+00:00"
         },
         {
             "name": "alaatv/payment-gateways",
@@ -1814,6 +1814,81 @@
             "time": "2018-11-01T04:34:30+00:00"
         },
         {
+            "name": "imanghafoori/laravel-heyman",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/imanghafoori1/laravel-heyman.git",
+                "reference": "1f0fcd63e7c71fe621d3b26d4f1d960b71ed0218"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/imanghafoori1/laravel-heyman/zipball/1f0fcd63e7c71fe621d3b26d4f1d960b71ed0218",
+                "reference": "1f0fcd63e7c71fe621d3b26d4f1d960b71ed0218",
+                "shasum": ""
+            },
+            "require": {
+                "imanghafoori/laravel-terminator": "*",
+                "laravel/framework": "~5.1",
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "barryvdh/laravel-debugbar": "^2.3",
+                "imanghafoori/laravel-makesure": "^1.0",
+                "mockery/mockery": "^0.9.9",
+                "orchestra/database": "@dev",
+                "orchestra/testbench": "~3.0"
+            },
+            "suggest": {
+                "imanghafoori/laravel-anypass": " Allows you login with any password in local environment.",
+                "imanghafoori/laravel-decorator": "Allows you to easily apply the decorator pattern in a laravel app.",
+                "imanghafoori/laravel-masterpass": "You can easily set a master password without code change.",
+                "imanghafoori/laravel-terminator": "Gives you opportunity to refactor your controllers.",
+                "imanghafoori/laravel-widgetize": "Gives you a better structure and caching opportunity for your web pages."
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Imanghafoori\\HeyMan\\HeyManServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Imanghafoori\\HeyMan\\": "src"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Iman Ghafoori",
+                    "email": "imanghafoori1@gmail.com"
+                }
+            ],
+            "description": "A package to help you write expressive defensive code in a functional manner",
+            "homepage": "https://github.com/imanghafoori1/laravel-HeyMan",
+            "keywords": [
+                "eloquent-validation",
+                "laravel",
+                "laravel-acl",
+                "laravel-authorization",
+                "laravel-permission",
+                "laravel-roles",
+                "laravel-validation",
+                "laravel5",
+                "laravel5-package",
+                "php"
+            ],
+            "time": "2019-04-17T13:30:27+00:00"
+        },
+        {
             "name": "imanghafoori/laravel-terminator",
             "version": "v1.3.1",
             "source": {
@@ -3001,7 +3076,7 @@
                 {
                     "name": "Luís Otávio Cobucci Oblonczyk",
                     "email": "lcobucci@gmail.com",
-                    "role": "developer"
+                    "role": "Developer"
                 }
             ],
             "description": "A simple library to work with JSON Web Token and JSON Web Signature",
@@ -8818,7 +8893,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "imanghafoori/laravel-heyman": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
