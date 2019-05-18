@@ -32,6 +32,7 @@ use App\{Bon,
     Traits\APIRequestCommon,
     Events\FreeInternetAccept,
     Notifications\GeneralNotice};
+use Zarinpal\Zarinpal;
 
 //use Jenssegers\Agent\Agent;
 
@@ -2865,5 +2866,17 @@ class BotsController extends Controller
                     "line"                                   => $e->getLine(),
                 ]);
         }
+    }
+
+    public function ZarinpalVerifyPaymentBot(Request $request){
+        $authority = $request->get('authority');
+        $cost = $request->get('cost');
+
+        if(is_null($authority) || is_null($cost))
+            dd('Please provide authority and cost');
+
+        $zarinpal = new Zarinpal(config('Zarinpal.merchantID'));
+        $result = $zarinpal->verify($cost, $authority);
+        dd($result);
     }
 }
