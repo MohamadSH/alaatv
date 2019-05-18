@@ -19,7 +19,7 @@ use App\Repositories\TransactionGatewayRepo;
 use App\PaymentModule\Repositories\OrdersRepo;
 use App\Http\Controllers\Web\TransactionController;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Artisan;
 
 class RedirectUserToPaymentPage extends Controller
 {
@@ -193,9 +193,8 @@ class RedirectUserToPaymentPage extends Controller
 
     /**
      * @param $orderproducts
-     * @return Collection
      */
-    private function handleOrders(Collection $orderproducts)
+    private function handleOrders(\Illuminate\Support\Collection $orderproducts)
     {
         $totalCookie = collect();
         foreach ($orderproducts as $orderproduct) {

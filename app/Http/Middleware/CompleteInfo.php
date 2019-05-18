@@ -24,10 +24,10 @@ class CompleteInfo
 
         if (in_array($request->fullUrl(), [route('checkoutReview'), route('checkoutPayment')])) {
             return redirect()->route("checkoutCompleteInfo");
+        } else {
+            session()->put("redirectTo", $request->fullUrl());
+
+            return redirect()->route("completeRegister");
         }
-        session()->put("redirectTo", $request->fullUrl());
-
-        return redirect()->route("completeRegister");
-
     }
 }

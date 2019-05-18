@@ -479,8 +479,7 @@ class ContentController extends Controller
             }
 
             Cache::tags('content')->flush();
-//            session()->put('success', 'تغییر نام با موفقیت انجام شد');
-            session()->put('error', 'این قابلیت در حال حاضر غیر فعال می باشد');
+            session()->put('success', 'تغییر نام با موفقیت انجام شد');
             return redirect()->back();
         }
 
@@ -492,8 +491,8 @@ class ContentController extends Controller
         $dateNow        = Carbon::now();
         
         $contentset  = Contentset::FindOrFail($contentset_id);
-        $lastContent = $contentset->contents2()->where("contenttype_id" , $contenttype_id)->get()->sortByDesc("order")->first();
-
+        $lastContent = $contentset->getLastContent();
+        
         if (!isset($lastContent)) {
             session()->put('error', trans('content.No previous content found'));
 
@@ -510,6 +509,8 @@ class ContentController extends Controller
             $order = $lastOrder + 1;
         }
 
+        $newContent->contenttype_id = $contenttype_id;
+        $newContent->contentset_id = $contentset->id;
         $newContent->name = $name;
         $newContent->order = $order;
         $newContent->description = null;

@@ -9,7 +9,7 @@ class AttachExtraAttributesRequest extends FormRequest
 
     public function authorize()
     {
-        $user = auth()->user();
+        $user = Auth()->user();
         if ($user) {
             return true;
         }

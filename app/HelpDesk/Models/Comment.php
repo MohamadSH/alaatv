@@ -21,8 +21,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Comment extends BaseModel
 {
-    use DynamicRelations;
-
     protected $table = 'help_comments';
     
     /**
@@ -35,5 +33,25 @@ class Comment extends BaseModel
     public function newCollection(array $models = [])
     {
         return new CommentCollection($models);
+    }
+    
+    /**
+     * Get related ticket.
+     *
+     * @return BelongsTo
+     */
+    public function ticket()
+    {
+        return $this->belongsTo(Ticket::class, 'ticket_id');
+    }
+    
+    /**
+     * Get comment owner.
+     *
+     * @return BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

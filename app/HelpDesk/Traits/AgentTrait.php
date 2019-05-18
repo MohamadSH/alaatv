@@ -64,6 +64,16 @@ trait AgentTrait
         return $this->belongsToMany(Category::class, 'help_categories_users', 'user_id', 'category_id');
     }
     
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'user_id');
+    }
+    
+    public function agentTickets()
+    {
+        return $this->hasMany(Ticket::class, 'agent_id');
+    }
+    
     public function closeTickets()
     {
         return $this->tickets()
