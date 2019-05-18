@@ -55,17 +55,15 @@
                                 موسسه غیرتجاری آلاء
                             </span>
                             @else
-                                @if($price['base']!==$price['final'])
-                                    <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
+                                <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
+                                    @if($price['base']!==$price['final'])
                                         <span class = "m-badge m-badge--warning a--productRealPrice">{{ number_format($price['base']) }}</span>
-                                        {{ number_format($price['final']) }} تومان
+                                    @endIf
+                                    {{ number_format($price['final']) }} تومان
+                                    @if($price['base']!==$price['final'])
                                         <span class = "m-badge m-badge--info a--productDiscount">{{ (1-($price['final']/$price['base']))*100 }}%</span>
-                                    </span>
-                                @else
-                                    <span class = "m-widget6__text m--align-right m--font-boldest m--font-primary">
-                                        {{ number_format($price['final']) }} تومان
-                                    </span>
-                                @endIf
+                                    @endIf
+                                </span>
                             @endif
                         </div>
                         @if($type=='set')

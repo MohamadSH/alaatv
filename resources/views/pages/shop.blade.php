@@ -105,7 +105,7 @@
         @if($block->products->count() > 0)
     
     
-            <div class="row shopBlock blockId-{{ $block->id }} {{ $block->class }}">
+            <div class="row shopBlock blockId-{{ $block->id }} {{ $block->class }}" id="{{ $block->class }}">
                 <div class="col">
                     <div class="m-portlet  m-portlet--bordered OwlCarouselType2-shopPage" id="owlCarousel_{{ $block->id }}">
                         <div class="m-portlet__head">
@@ -145,7 +145,7 @@
                                                         @endif
                                                         {{ number_format($product->price['final']) }} تومان
                                                         @if($product->price['final']!==$product->price['base'])
-                                                            <span class="m-badge m-badge--info a--productDiscount">{{ (1-($product->price['final']/$product->price['base']))*100 }}%</span>
+                                                            <span class="m-badge m-badge--info a--productDiscount">{{ round((1-($product->price['final']/$product->price['base']))*100) }}%</span>
                                                         @endif
                                                     </span>
                                                 </div>

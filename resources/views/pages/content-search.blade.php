@@ -57,7 +57,7 @@
     <div class="row">
         <div class="ProductAndSetAndVideoWraper
             @if(optional($result->get('pamphlet'))->isNotEmpty() || optional($result->get('article'))->isNotEmpty())
-                col-12 col-md-9
+            
             @else
                 col
             @endif">
@@ -88,7 +88,7 @@
 
         </div>
 
-        <div class="col-12 col-md-3 PamphletAndArticleWraper
+        <div class="PamphletAndArticleWraper
             @if(optional($result->get('pamphlet'))->isEmpty() && optional($result->get('article'))->isEmpty())
                 d-none
             @endif">
@@ -158,12 +158,9 @@
     
 @endsection
 @section('page-js')
-
     <script>
         var contentData = {!! json_encode($result) !!};
         var tags = {!! json_encode($tags) !!};
     </script>
-
     <script src="{{ mix('/js/content-search.js') }}"></script>
-
 @endsection
