@@ -2,8 +2,8 @@
 
 use App\HelpDesk\Controllers\TicketController;
 use App\HelpDesk\Controllers\Web\CommentsController;
-use Imanghafoori\HeyMan\Facades\HeyMan;
-Heyman::whenYouHitRouteName('ticket.toggleIsOpen')->thisValueShouldAllow(false)->otherwise()->response()->json('sdcssd');
+//use Imanghafoori\HeyMan\Facades\HeyMan;
+//Heyman::whenYouHitRouteName('ticket.toggleIsOpen')->thisValueShouldAllow(false)->otherwise()->response()->json('sdcssd');
 
 Route::group(['middleware' => ['web', 'auth'], 'prefix' => 'h'], function () {
 
