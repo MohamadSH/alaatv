@@ -17,7 +17,7 @@ var Alaasearch = function () {
         }
         priceHtml += '    ' + price.final.toLocaleString('fa') + ' تومان \n';
         if (price.base !== price.final) {
-            priceHtml += '    <span class = "m-badge m-badge--info a--productDiscount">' + ((1 - Math.round(price.final / price.base)) * 100) + '%</span>\n';
+            priceHtml += '    <span class = "m-badge m-badge--info a--productDiscount">' + Math.round((1 - (price.final / price.base)) * 100) + '%</span>\n';
         }
         priceHtml += '</span>';
 
