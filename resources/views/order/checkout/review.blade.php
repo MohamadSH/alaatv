@@ -130,7 +130,7 @@
                                                                     @endif
                                                                     {{ number_format($simpleOrderProductItem['price']['final']+$simpleOrderProductItem['price']['extraCost']) }} تومان
                                                                     @if($simpleOrderProductItem['price']['final']!==$simpleOrderProductItem['price']['base'])
-                                                                        <span class="m-badge m-badge--info a--productDiscount">{{ (1-($simpleOrderProductItem['price']['final']/$simpleOrderProductItem['price']['base']))*100 }}%</span>
+                                                                        <span class="m-badge m-badge--info a--productDiscount">{{ round((1-($simpleOrderProductItem['price']['final']/$simpleOrderProductItem['price']['base']))*100) }}%</span>
                                                                     @endif
                                                                 </span>
                                                             </span>
