@@ -504,6 +504,7 @@ var Alaasearch = function () {
     function loadAjaxContent(contentData) {
         let hasPamphletOrArticle = false;
         let hasItem = false;
+        let hasPamphlet = false;
         if (typeof contentData.product !== 'undefined' && contentData.product !== null && contentData.product.total>0) {
             initProduct(contentData.product);
             $('#product-carousel-warper').fadeIn();
@@ -526,6 +527,7 @@ var Alaasearch = function () {
             $('#set-carousel-warper').fadeOut();
         }
         if (typeof contentData.pamphlet !== 'undefined' && contentData.pamphlet !== null && contentData.pamphlet.total>0) {
+            hasPamphlet = true;
             initPamphlet(contentData.pamphlet);
             // $('#pamphlet-vertical-tabpanel').fadeIn();
             $('#pamphlet-vertical-tab').fadeIn();
@@ -540,7 +542,9 @@ var Alaasearch = function () {
             initArticle(contentData.article);
             // $('#article-vertical-tabpanel').fadeIn();
             $('#article-vertical-tab').fadeIn();
-            $('#article-vertical-tab a').trigger('click');
+            if (!hasPamphlet) {
+                $('#article-vertical-tab a').trigger('click');
+            }
             hasPamphletOrArticle = true;
             hasItem = true;
         } else {
