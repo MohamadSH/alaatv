@@ -288,12 +288,15 @@
                                                                             </table>
                                                                         </div>
                                                                         <div class="col-12">
-                                                                            <div class="alert alert-success"
-                                                                                 role="alert">
+                                                                            <div class="alert alert-success" role="alert">
                                                                                 <table class="table table-sm m-table orderDiscountInfoInModal">
                                                                                     <tbody>
                                                                                     </tbody>
                                                                                 </table>
+                                                                            </div>
+                                                                            
+                                                                            <div class="alert alert-success customerDescription customerDescriptionInModal" role="alert">
+                                                                            
                                                                             </div>
 
                                                                         </div>
