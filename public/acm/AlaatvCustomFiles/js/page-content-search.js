@@ -264,6 +264,7 @@ var Alaasearch = function () {
     }
     function ajaxSetup() {
         $.ajaxSetup({
+            cache: false,
             headers: {
                 'X-CSRF-TOKEN': window.Laravel.csrfToken,
             }
@@ -2325,6 +2326,9 @@ var GetAjaxData = function () {
 }();
 
 jQuery(document).ready(function () {
+
+
+    $.ajaxSetup({ cache: false });
 
     var owl = jQuery('.a--owl-carousel-type-1');
     owl.each(function () {
