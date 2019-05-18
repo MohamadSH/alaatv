@@ -402,7 +402,7 @@
                     <div class="priceReport">
                         <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
                             @if(isset($invoiceInfo['price']['base']) && isset($invoiceInfo['price']['final']) && $invoiceInfo['price']['base']>$invoiceInfo['price']['final'])
-                                <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($invoiceInfo['price']['final']) }}</span>
+                                <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($invoiceInfo['price']['base']) }}</span>
                                 <span class="m-badge m-badge--info a--productDiscount">{{ round((1-($invoiceInfo['price']['final']/$invoiceInfo['price']['base']))*100) }}%</span>
                             @endif
                             @if(isset($invoiceInfo['price']['final']))
