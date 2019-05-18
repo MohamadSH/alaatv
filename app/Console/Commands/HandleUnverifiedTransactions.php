@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use AlaaTV\ZarinpalGatewayDriver\VerificationResponse;
-use App\Repositories\TransactionRepo;
+use App\Transaction;
 use AlaaTV\Gateways\Money;
 use Illuminate\Console\Command;
 use Zarinpal\Zarinpal;
@@ -16,7 +16,7 @@ class HandleUnverifiedTransactions extends Command
      * @var string
      */
     protected $signature = 'alaaTv:unverifiedTransactions:handle';
-
+    
     /**
      * The console command description.
      *
@@ -35,7 +35,7 @@ class HandleUnverifiedTransactions extends Command
         parent::__construct();
         $this->gateway = $this->getGatewayComposer();
     }
-
+    
     /**
      * Execute the console command.
      *
@@ -81,7 +81,7 @@ class HandleUnverifiedTransactions extends Command
             }
         }
     }
-
+    
     private function getUnverifiedTransactions()
     {
         return $this->gateway->getDriver()->unverifiedTransactions(['MerchantID'=>config('Zarinpal.merchantID')]);
@@ -117,7 +117,7 @@ class HandleUnverifiedTransactions extends Command
             $authority = $item['Authority'];
             $this->info($authority);
 
-            $transaction = TransactionRepo::getTransactionByAuthority($authority)->getValue(null);
+            $transaction = Transaction::authority($authority)->first();
 
             if (is_null($transaction)) {
                 array_push($notExistTransactions, $item);

@@ -7,25 +7,25 @@ use App\HelpDesk\Models\Ticket;
 use App\HelpDesk\Models\Priority;
 use App\HelpDesk\Models\Category;
 use App\Http\Controllers\Controller;
-use App\HelpDesk\Repositories\TicketRepo;
 use App\HelpDesk\Repositories\AgentRepository;
+use App\HelpDesk\Repositories\TicketRepository;
 
 class TicketController extends Controller
 {
     /**
-     * @var TicketRepo
+     * @var TicketRepository
      */
-    private $ticketRepo;
+    private $repository;
     
     /**
      * TicketController constructor.
      *
-     * @param  TicketRepo  $repository
+     * @param  TicketRepository  $repository
      */
-    public function __construct(TicketRepo $repository)
+    public function __construct(TicketRepository $repository)
     {
         $this->callMiddlewares();
-        $this->ticketRepo = $repository;
+        $this->repository = $repository;
     }
     
     
@@ -62,47 +62,55 @@ class TicketController extends Controller
     public function index()
     {
         $userId = auth()->user()->id;
-        $tickets = $this->ticketRepo->getUserTickets($userId);
+        $tickets = $this->repository->getUserTickets($userId);
         $categories = Category::all();
-        // User Tickets
-        // Agent Tickets
-        // All Tickets -> Admin
+        //User Tickets
+        //Agent Tickets
+        //All Tickets -> Admin
+//        dd(compact('tickets', 'categories'));
         return view('helpDesk::ticket.index', compact('tickets', 'categories'));
     }
     
-    public function createForm()
+    public function create()
     {
         $categories = Category::all();
         $priorities = Priority::all();
         return view('helpDesk::ticket.create', compact('categories', 'priorities'));
     }
-
+    
+    
     /**
      * @param  Request          $request
      * @param  AgentRepository  $repository
      *
      * @return Ticket|\Illuminate\Database\Eloquent\Model
      */
-    public function store()
+    public function store(Request $request, AgentRepository $repository)
     {
-        $categoryId = request('category_id');
-
-        $ticket = [
-            'status_id' => config('helpDesk.STATUS_OPEN'),
-            'user_id' => auth()->id(),
-            'agent_id' => resolve(AgentRepository::class)->getActiveAgent($categoryId),
+        $categoryId = $request->get('category_id');
+        $fillables  = [
+            'subject'     => 'subject',
+            'content'     => 'content',
+            'priority_id' => 'priority',
+            'category_id' => 'category',
         ];
-
-        $data = request()->only(['subject', 'content', 'priority_id', 'category_id',]);
-
-        $ticket = Ticket::create($ticket + $data);
-
-
+        $ticket     = [
+            'status_id' => config('helpDesk.STATUS_OPEN'),
+            'user_id'   => $request->user()->id,
+            'agent_id'  => $repository->getActiveAgent($categoryId),
+        ];
+        foreach ($fillables as $key => $index) {
+            $ticket += [
+                $key => $request->get($index),
+            ];
+        }
+        $ticket = Ticket::create($ticket);
         return redirect()
             ->back()
             ->with('status', "یک تیکت با شماره #$ticket->id ایجاد شد. ");
     }
-
+    
+    
     public function show(Ticket $ticket)
     {
         $category = $ticket->category;
@@ -110,12 +118,20 @@ class TicketController extends Controller
         $agent    = $ticket->agent;
         return view('helpDesk::ticket.show', compact('ticket', 'category', 'user', 'agent'));
     }
-
-    public function toggleIsOpen($ticket_id)
+    
+    
+    public function edit(Ticket $ticket)
     {
-        return $result = resolve(TicketRepo::class)->toggleOpenClose($ticket_id);
-        // validate request. $id exists.
-        // log event.
-        // notify agent and user.
+    
+    }
+    
+    
+    public function update(Request $request, Ticket $ticket)
+    {
+    }
+    
+    
+    public function destroy(Ticket $ticket)
+    {
     }
 }

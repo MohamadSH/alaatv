@@ -150,7 +150,7 @@ trait ContentControllerResponseTrait
         return [
             "uuid"     => Str::uuid()
                 ->toString(),
-            "disk"     => config('constants.DISK_FREE_CONTENT'),
+            "disk"     => "alaaCdnSFTP",
             "url"      => $thumbnailUrl,
             "fileName" => parse_url($thumbnailUrl)['path'],
             "size"     => null,

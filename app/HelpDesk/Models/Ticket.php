@@ -2,6 +2,7 @@
 
 namespace App\HelpDesk\Models;
 
+
 use App\User;
 use Eloquent;
 use App\BaseModel;
@@ -30,10 +31,7 @@ use App\HelpDesk\Collection\TicketCollection;
  */
 class Ticket extends BaseModel
 {
-    use DynamicRelations;
-
     protected $table = 'help_tickets';
-
     protected $dates = [
         'created_at',
         'updated_at',
@@ -85,6 +83,36 @@ class Ticket extends BaseModel
     public function scopeOpen($query)
     {
         return $query->whereNull('close_at');
+    }
+    
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'status_id');
+    }
+    
+    public function priority()
+    {
+        return $this->belongsTo(Priority::class, 'priority_id');
+    }
+    
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    
+    public function agent()
+    {
+        return $this->belongsTo(User::class, 'agent_id');
+    }
+    
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'ticket_id');
     }
     
     public function scopeUserTickets($query, $id)

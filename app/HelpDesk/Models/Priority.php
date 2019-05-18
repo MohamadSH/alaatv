@@ -4,6 +4,7 @@ namespace App\HelpDesk\Models;
 
 use App\BaseModel;
 
+
 /**
  * App\HelpDesk\Models\Priority
  *
@@ -15,19 +16,25 @@ use App\BaseModel;
  */
 class Priority extends BaseModel
 {
-    use DynamicRelations;
-
     /**
      * Indicates that this model should not be timestamped.
      *
      * @var bool
      */
-    public $timestamps = false;
-
-    protected $table = 'help_priorities';
-
-    protected $fillable = [
+    public    $timestamps = false;
+    protected $table      = 'help_priorities';
+    protected $fillable   = [
         'name',
         'color',
     ];
+    
+    /**
+     * Get related tickets.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'priority_id');
+    }
 }
