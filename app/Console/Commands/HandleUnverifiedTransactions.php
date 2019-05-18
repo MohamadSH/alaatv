@@ -2,13 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Zarinpal\Zarinpal;
-use AlaaTV\Gateways\Money;
-use App\Http\Requests\Request;
-use Illuminate\Console\Command;
-use AlaaTV\Gateways\PaymentDriver;
+use AlaaTV\ZarinpalGatewayDriver\VerificationResponse;
 use App\Repositories\TransactionRepo;
-use AlaaTV\Gateways\Contracts\OnlineGateway;
+use AlaaTV\Gateways\Money;
+use Illuminate\Console\Command;
+use Zarinpal\Zarinpal;
 
 class HandleUnverifiedTransactions extends Command
 {
@@ -18,7 +16,7 @@ class HandleUnverifiedTransactions extends Command
      * @var string
      */
     protected $signature = 'alaaTv:unverifiedTransactions:handle';
-    
+
     /**
      * The console command description.
      *
@@ -37,7 +35,7 @@ class HandleUnverifiedTransactions extends Command
         parent::__construct();
         $this->gateway = $this->getGatewayComposer();
     }
-    
+
     /**
      * Execute the console command.
      *
@@ -46,10 +44,6 @@ class HandleUnverifiedTransactions extends Command
     public function handle()
     {
         //ToDo : At this time this only works for Zarinpal
-        $paymentMethod = 'zarinpal';
-
-        $paymentClient = PaymentDriver::select($paymentMethod);
-
         $this->info('getting data from zarinpal ...');
         $result = $this->getUnverifiedTransactions();
 
@@ -87,7 +81,7 @@ class HandleUnverifiedTransactions extends Command
             }
         }
     }
-    
+
     private function getUnverifiedTransactions()
     {
         return $this->gateway->getDriver()->unverifiedTransactions(['MerchantID'=>config('Zarinpal.merchantID')]);
@@ -114,14 +108,13 @@ class HandleUnverifiedTransactions extends Command
      * @param \AlaaTV\Gateways\Contracts\OnlineGateway $paymentClient
      * @return array
      */
-    private function handleTransactions($transactions, OnlineGateway $paymentClient): array
+    private function handleTransactions($transactions): array
     {
         $notExistTransactions = [];
         $unverifiedTransactionsDueToError = [];
-        foreach ($transactions as $transaction) {
+        foreach ($transactions as $item) {
 
-            $authority = $transaction['Authority'];
-
+            $authority = $item['Authority'];
             $this->info($authority);
 
             $transaction = TransactionRepo::getTransactionByAuthority($authority)->getValue(null);
@@ -130,10 +123,8 @@ class HandleUnverifiedTransactions extends Command
                 array_push($notExistTransactions, $item);
                 continue;
             }
-            $transaction['Status'] = 'OK';
 
-            $gateWayVerify = $paymentClient->verifyPayment(Money::fromTomans($transaction->cost), $authority);
-
+            $gateWayVerify = $this->verifyTransaction($transaction->cost, $authority);
 
             if ($gateWayVerify->isSuccessfulPayment()) {
                 //ToDo : close order
