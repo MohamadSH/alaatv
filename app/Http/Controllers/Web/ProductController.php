@@ -9,7 +9,8 @@ use Illuminate\Foundation\Http\{FormRequest};
 use App\Http\Controllers\Controller;
 use Illuminate\Http\{Request, Response};
 use Illuminate\Support\{Facades\File, Facades\Input, Facades\Storage};
-use App\{Bon,
+use App\{Block,
+    Bon,
     Product,
     Attribute,
     Attributeset,
@@ -1209,6 +1210,30 @@ class ProductController extends Controller
         $costCollection = $this->makeCostCollection($products);
     
         return view('product.landing.landing1', compact('landingProducts', 'costCollection', 'withFilter'));
+    }
+    
+    /**
+     * Products Special Landing Page
+     *
+     * @param  Request  $request
+     *
+     * @return Response
+     */
+    public function landing7(Request $request)
+    {
+        $url = $request->url();
+        $this->generateSeoMetaTags(new SeoDummyTags('آلاء| جمع بندی نیم سال اول',
+            'همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف', $url,
+            $url, route('image', [
+                'category' => '11',
+                'w'        => '100',
+                'h'        => '100',
+                'filename' => $this->setting->site->siteLogo,
+            ]), '100', '100', null));
+    
+        $blocks = Block::getShopBlocks();
+        
+        return view('product.landing.landing7', compact('landingProducts', 'costCollection', 'withFilter', 'blocks'));
     }
     
     /**

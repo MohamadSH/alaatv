@@ -7,37 +7,33 @@ var Alaasearch = function () {
 
     function getProductCarouselItem(data) {
         let widgetActionLink = data.url;
-        let widgetActionName = 'مشاهده و خرید';
+        let widgetActionName = '<i class="flaticon-bag"></i>' + ' / ' + '<i class="fa fa-eye"></i>';
         let widgetPic = data.photo;
         let widgetTitle = data.name;
         let price = data.price;
-        let priceHtml = '';
+        let priceHtml = '<span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">';
         if (price.base !== price.final) {
-            priceHtml =
-                '                                <span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">\n' +
-                '                                    <span class = "m-badge m-badge--warning a--productRealPrice">' + price.base.toLocaleString('fa') + '</span>\n' +
-                '                                    ' + price.final.toLocaleString('fa') + ' تومان \n' +
-                '                                    <span class = "m-badge m-badge--info a--productDiscount">' + ((1 - (price.final / price.base)) * 100) + '%</span>\n' +
-                '                                </span>';
-        } else {
-            priceHtml =
-                '                                <span class = "m-widget6__text m--align-right m--font-boldest m--font-primary">\n' +
-                '                                    ' + price.final.toLocaleString('fa') + ' تومان \n' +
-                '                                </span>';
+            priceHtml += '    <span class = "m-badge m-badge--warning a--productRealPrice">' + price.base.toLocaleString('fa') + '</span>\n';
         }
+        priceHtml += '    ' + price.final.toLocaleString('fa') + ' تومان \n';
+        if (price.base !== price.final) {
+            priceHtml += '    <span class = "m-badge m-badge--info a--productDiscount">' + ((1 - Math.round(price.final / price.base)) * 100) + '%</span>\n';
+        }
+        priceHtml += '</span>';
+
         return '<div class = "item">\n' +
             '    <!--begin:: Widgets/Blog-->\n' +
             '    <div class = "m-portlet m-portlet--bordered-semi m-portlet--rounded-force">\n' +
-            '        <div class = "m-portlet__head m-portlet__head--fit">\n' +
-            '            <div class = "m-portlet__head-caption">\n' +
-            '                <div class = "m-portlet__head-action">\n' +
-            '                    <a href="' + widgetActionLink + '" class = "btn btn-sm m-btn--pill btn-brand">' + widgetActionName + '</a>\n' +
-            '                </div>\n' +
-            '            </div>\n' +
-            '        </div>\n' +
+            '   <div class="m-portlet__head m-portlet__head--fit"> \
+                    <div class="m-portlet__head-caption"> \
+                        <div class="m-portlet__head-action"> \
+                        </div> \
+                    </div> \
+                </div> ' +
             '        <div class = "m-portlet__body">\n' +
             '            <div class = "a-widget19 m-widget19">\n' +
             '                <div class = "m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" >\n' +
+            '                    <a href="' + widgetActionLink + '" class = "btn btn-sm m-btn--pill btn-brand btnViewMore">' + widgetActionName + '</a>\n' +
             '                    <img src = "' + widgetPic + '" alt = "' + widgetTitle + '"/>\n' +
             '                    <div class = "m-widget19__shadow"></div>\n' +
             '                </div>\n' +
@@ -65,7 +61,7 @@ var Alaasearch = function () {
     function getVideoCarouselItem(data) {
 
         let widgetActionLink = data.url;
-        let widgetActionName = 'پخش / دانلود';
+        let widgetActionName = '<i class="fa fa-play"></i>' + ' / ' + '<i class="fa fa-cloud-download-alt"></i>';
         let widgetPic = (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail : data.photo;
         let widgetTitle = data.name;
         let widgetAuthor = {
@@ -81,13 +77,13 @@ var Alaasearch = function () {
         <div class = \"m-portlet__head m-portlet__head--fit\"> \
             <div class = \"m-portlet__head-caption\"> \
                 <div class = \"m-portlet__head-action\"> \
-                    <a href=\"' + widgetActionLink + '\" class = \"btn btn-sm m-btn--pill btn-brand\">' + widgetActionName + '</a> \
                 </div> \
             </div> \
         </div> \
         <div class = \"m-portlet__body\"> \
             <div class = \"a-widget19 m-widget19\"> \
                 <div class = \"m-widget19__pic m-portlet-fit--top m-portlet-fit--sides\" > \
+                    <a href=\"' + widgetActionLink + '\" class = \"btn btn-sm m-btn--pill btn-brand btnViewMore\">' + widgetActionName + '</a> \
                     <img src = \"' + widgetPic + '\" alt = \" ' + widgetTitle + '\"/> \
                     <div class = \"m-widget19__shadow\"></div> \
                 </div> \
@@ -144,13 +140,13 @@ var Alaasearch = function () {
         <div class = \"m-portlet__head m-portlet__head--fit\"> \
             <div class = \"m-portlet__head-caption\"> \
                 <div class = \"m-portlet__head-action\"> \
-                    <a href=\"' + widgetActionLink +'\" class = \"btn btn-sm m-btn--pill btn-brand\">' + widgetActionName + '</a> \
                 </div> \
             </div> \
         </div> \
         <div class = \"m-portlet__body\"> \
             <div class = \"a-widget19 m-widget19\"> \
                 <div class = \"m-widget19__pic m-portlet-fit--top m-portlet-fit--sides\" > \
+                    <a href=\"' + widgetActionLink +'\" class = \"btn btn-sm m-btn--pill btn-brand btnViewMore\">' + widgetActionName + '</a> \
                     <img src = \"'+ widgetPic +'\" alt = \" ' + widgetTitle +'\"/> \
                     <div class = \"m-widget19__shadow\"></div> \
                 </div> \
@@ -207,32 +203,32 @@ var Alaasearch = function () {
         };
         if (widgetThumbnail !== null && widgetThumbnail.length !== 0) {
             widgetThumbnail =
-                '                                                    <div class="m-widget4__img m-widget4__img--pic">\n' +
-                '                                                        <img src="' + widgetThumbnail + '" alt="' + widgetTitle + '">\n' +
-                '                                                    </div>\n';
+                '<div class="m-widget4__img m-widget4__img--pic">\n' +
+                '    <img src="' + widgetThumbnail + '" alt="' + widgetTitle + '">\n' +
+                '</div>\n';
         } else {
             widgetThumbnail = '';
         }
         return '\n' +
-            '                                            <div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">\n' +
-            '                                                <div class="m-widget4__img m-widget4__img--pic">\n' +
-            '                                                    <img src="' + widgetAuthor.photo + '" alt="">\n' +
-            '                                                </div>\n' +
-            '                                                <div class="m-widget4__info">\n' +
-            '                                                        <span class="m-widget4__title">\n' +
-            '                                                            <a href="' + widgetActionLink + '" class="m-link">\n' +
-            '                                                                ' + widgetTitle + '\n' +
-            '                                                            </a>\n' +
-            '                                                        </span>\n' +
-            '                                                    <br>\n' +
-            '                                                    <span class="m-widget4__sub">\n' +
-            '                                                            <a href="' + widgetActionLink + '" class="m-link">\n' +
-            '                                                                ' + widgetAuthor.full_name + '\n' +
-            '                                                            </a>\n' +
-            '                                                        </span>\n' +
-            '                                                </div>\n' +
+            '<div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">\n' +
+            '    <div class="m-widget4__img m-widget4__img--pic">\n' +
+            '        <img src="' + widgetAuthor.photo + '" alt="">\n' +
+            '    </div>\n' +
+            '    <div class="m-widget4__info">\n' +
+            '            <span class="m-widget4__title">\n' +
+            '                <a href="' + widgetActionLink + '" class="m-link">\n' +
+            '                    ' + widgetTitle + '\n' +
+            '                </a>\n' +
+            '            </span>\n' +
+            '        <br>\n' +
+            '        <span class="m-widget4__sub">\n' +
+            '                <a href="' + widgetActionLink + '" class="m-link">\n' +
+            '                    ' + widgetAuthor.full_name + '\n' +
+            '                </a>\n' +
+            '            </span>\n' +
+            '    </div>\n' +
             widgetThumbnail +
-            '                                            </div>';
+            '</div>';
     }
 
     function makeWidgetFromJsonResponse(data, type) {
@@ -2329,6 +2325,42 @@ var GetAjaxData = function () {
 }();
 
 jQuery(document).ready(function () {
+
+    var owl = jQuery('.a--owl-carousel-type-1');
+    owl.each(function () {
+        $(this).owlCarousel({
+            stagePadding: 0,
+            loop: false,
+            rtl:true,
+            nav: true,
+            dots: false,
+            margin:10,
+            mouseDrag: true,
+            touchDrag: true,
+            pullDrag: true,
+            responsiveClass:true,
+            responsive:{
+                0:{
+                    items:1,
+                },
+                400:{
+                    items:2,
+                },
+                600:{
+                    items:3,
+                },
+                800:{
+                    items:4,
+                },
+                1190:{
+                    items:3
+                },
+                1400:{
+                    items:4
+                }
+            }
+        });
+    });
 
     Alaasearch.init(contentData);
 
