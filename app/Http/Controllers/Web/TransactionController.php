@@ -624,12 +624,12 @@ class TransactionController extends Controller
                 $authorities = $result["Authorities"];
                 foreach ($authorities as $authority) {
                     /** @var Transaction $transaction */
-                    $transaction = Transaction::where("authority", $authority['Authority'])->get()->first();
+                    $transaction = TransactionRepo::getTransactionByAuthority($authority['Authority'])->getValue(null);;
                     $firstName   = "";
                     $lastName    = "";
                     $mobile      = "";
                     $jalaliCreatedAt  = "";
-                    if (isset($transaction)) {
+                    if (!is_null($transaction)) {
                         $jalaliCreatedAt = $transaction->jalali_created_at;
                         $user       = $transaction->order->user;
                         if (isset($user)) {
