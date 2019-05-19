@@ -220,6 +220,12 @@ abstract class Refinement
     {
         $deductibleCostFromWallet = $this->cost - $this->donateCost;
         $remainedCost             = $deductibleCostFromWallet;
+        if($deductibleCostFromWallet == 0)
+        {
+            $this->paidFromWalletCost = 0;
+            return ;
+        }
+
         $walletPayResult          = $this->payOrderCostByWallet($this->user, $this->order, $deductibleCostFromWallet);
         if ($walletPayResult['result']) {
             $remainedCost = $walletPayResult['cost'];
