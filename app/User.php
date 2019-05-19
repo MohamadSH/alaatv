@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\HelpDesk\Models\DynamicRelations;
 use Hash;
 use Carbon\Carbon;
 use App\Traits\Helper;
@@ -283,8 +284,12 @@ use App\Traits\User\{BonTrait,
  * @property string|null                                                        $lastServiceCall آخرین تماس کارمندان روابط عمومی با کاربر
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLastServiceCall($value)
  */
-class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail, AgentInterface
+class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail
 {
+    use DynamicRelations {
+        __call as macroCall;
+    }
+
     use HasApiTokens;
     use MustVerifyMobileNumberTrait;
     use Helper;
@@ -457,7 +462,12 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'wallets',
         'userbons'
     ];
-    
+
+    public function __call($method, $parameters)
+    {
+        return $this->macroCall($method, $parameters);
+    }
+
     public static function getNullInstant($visibleArray = [])
     {
         $user = new User();
@@ -545,8 +555,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
             $q->where('name', $permissionName);
         });
     }
-    
-    
     
     /**
      * @param  \Illuminate\Database\Eloquent\Builder  $query
@@ -661,7 +669,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     
     public function userstatus()
     {
-        return $this->belongsTo('App\Userstatus');
+        return $this->defineBelongsTo('App\Userstatus');
     }
 
 }

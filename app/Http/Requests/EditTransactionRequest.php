@@ -22,7 +22,7 @@ class EditTransactionRequest extends FormRequest
             'referenceNumber' => 'unique:transactions,referenceNumber,'.$transaction->id.',id,deleted_at,NULL|numeric|nullable',
             'traceNumber'     => 'unique:transactions,traceNumber,'.$transaction->id.',id,deleted_at,NULL|numeric|nullable',
             'transactionID'   => 'unique:transactions,transactionID,'.$transaction->id.',id,deleted_at,NULL|numeric|nullable',
-            'authority'       => 'unique:transactions,authority,'.$transaction->id.',id,deleted_at,NULL|numeric|nullable',
+            'authority'       => 'unique:transactions,authority,'.$transaction->id.',id,deleted_at,NULL|nullable',
             'paycheckNumber'  => 'unique:transactions,paycheckNumber,'.$transaction->id.',id,deleted_at,NULL|nullable',
         ];
 
