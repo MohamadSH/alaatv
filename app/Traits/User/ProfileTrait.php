@@ -29,25 +29,25 @@ trait ProfileTrait
     {
         return self::$beProtected;
     }
-    
+
     public function bloodtype()
     {
-        return $this->defineBelongsTo("\App\Bloodtype");
+        return $this->belongsTo("\App\Bloodtype");
     }
-    
+
     public function grade()
     {
-        return $this->defineBelongsTo("\App\Grade");
+        return $this->belongsTo("\App\Grade");
     }
-    
+
     public function major()
     {
-        return $this->defineBelongsTo('App\Major');
+        return $this->belongsTo('App\Major');
     }
-    
+
     public function gender()
     {
-        return $this->defineBelongsTo('App\Gender');
+        return $this->belongsTo('App\Gender');
     }
     
     public function returnLockProfileItems()

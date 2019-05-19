@@ -78,22 +78,20 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  Request          $request
-     * @param  AgentRepository  $repository
-     *
+     * @param Request $request
      * @return Ticket|\Illuminate\Database\Eloquent\Model
      */
-    public function store()
+    public function store(Request $request)
     {
         $categoryId = request('category_id');
 
         $ticket = [
             'status_id' => config('helpDesk.STATUS_OPEN'),
-            'user_id' => auth()->id(),
+            'user_id' => $request->user()->id(),
             'agent_id' => resolve(AgentRepository::class)->getActiveAgent($categoryId),
         ];
 
-        $data = request()->only(['subject', 'content', 'priority_id', 'category_id',]);
+        $data = $request->only(['subject', 'content', 'priority_id', 'category_id',]);
 
         $ticket = Ticket::create($ticket + $data);
 
