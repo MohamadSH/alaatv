@@ -32,22 +32,22 @@ trait ProfileTrait
     
     public function bloodtype()
     {
-        return $this->belongsTo("\App\Bloodtype");
+        return $this->defineBelongsTo("\App\Bloodtype");
     }
     
     public function grade()
     {
-        return $this->belongsTo("\App\Grade");
+        return $this->defineBelongsTo("\App\Grade");
     }
     
     public function major()
     {
-        return $this->belongsTo('App\Major');
+        return $this->defineBelongsTo('App\Major');
     }
     
     public function gender()
     {
-        return $this->belongsTo('App\Gender');
+        return $this->defineBelongsTo('App\Gender');
     }
     
     public function returnLockProfileItems()
@@ -361,10 +361,11 @@ trait ProfileTrait
         $key   = "user:jalaliUpdatedAt:".$user->cacheKey();
         return Cache::tags(["user"])
             ->remember($key, config("constants.CACHE_600"), function () use ($user) {
-                if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_ACCESS'))) {
-                    /** @var User $user */
-                    return $this->convertDate($user->updated_at, "toJalali");
-                }
+                if(isset($user->updated_at))
+                    if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_ACCESS'))) {
+                        /** @var User $user */
+                        return $this->convertDate($user->updated_at, "toJalali");
+                    }
 
                 return null;
             });
@@ -377,10 +378,11 @@ trait ProfileTrait
         $key   = "user:jalaliCreatedAt:".$user->cacheKey();
         return Cache::tags(["user"])
             ->remember($key, config("constants.CACHE_600"), function () use ($user) {
-                if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_ACCESS'))) {
-                    /** @var User $user */
-                    return $this->convertDate($user->created_at, "toJalali");
-                }
+                if(isset($user->created_at))
+                    if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_ACCESS'))) {
+                        /** @var User $user */
+                        return $this->convertDate($user->created_at, "toJalali");
+                    }
 
                 return null;
             });

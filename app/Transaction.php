@@ -87,6 +87,7 @@ use App\Collection\TransactionCollection;
  * @property-read mixed                                                       $jalali_deadline_at
  * @property-read mixed                                                       $transaction_gateway
  * @property-read mixed                                                       $cache_cooldown_seconds
+ * @property mixed jalali_created_at
  */
 class Transaction extends BaseModel
 {
@@ -332,7 +333,10 @@ class Transaction extends BaseModel
         $key         = "transaction:jalaliCompletedAt:".$transaction->cacheKey();
         return Cache::tags(["transaction"])
             ->remember($key, config("constants.CACHE_600"), function () use ($transaction) {
-                return $this->convertDate($transaction->completed_at, "toJalali");
+                if(isset($transaction->completed_at))
+                    return $this->convertDate($transaction->completed_at, "toJalali");
+
+                return null;
             });
     }
     
@@ -342,7 +346,23 @@ class Transaction extends BaseModel
         $key         = "transaction:jalaliDeadlineAt:".$transaction->cacheKey();
         return Cache::tags(["transaction"])
             ->remember($key, config("constants.CACHE_600"), function () use ($transaction) {
-                return $this->convertDate($transaction->deadline_at, "toJalali");
+                if(isset($transaction->deadline_at))
+                    return $this->convertDate($transaction->deadline_at, "toJalali");
+
+                return null;
+            });
+    }
+
+    public function getJalaliCreatedAtAttribute()
+    {
+        $transaction = $this;
+        $key         = "transaction:jalaliCreatedAt:".$transaction->cacheKey();
+        return Cache::tags(["transaction"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($transaction) {
+                if(isset($transaction->created_at))
+                    return $this->convertDate($transaction->created_at, "toJalali");
+
+                return null;
             });
     }
 

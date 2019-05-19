@@ -338,6 +338,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return Product::find([
             225,
             226,
+            294,
+            295
         ]);
     }
     
@@ -576,8 +578,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return [
             'title'       => $this->name,
             'description' => $this->shortDescription,
-            'url'         => action('ProductController@show', $this),
-            'canonical'   => action('ProductController@show', $this),
+            'url'         => action('Web\ProductController@show', $this),
+            'canonical'   => action('Web\ProductController@show', $this),
             'site'        => 'آلاء',
             'imageUrl'    => $this->image,
             'imageWidth'  => '338',

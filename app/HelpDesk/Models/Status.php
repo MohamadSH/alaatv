@@ -2,7 +2,6 @@
 
 namespace App\HelpDesk\Models;
 
-
 use App\BaseModel;
 
 /**
@@ -16,26 +15,19 @@ use App\BaseModel;
  */
 class Status extends BaseModel
 {
+    use DynamicRelations;
+
     /**
      * Indicates that this model should not be timestamped.
      *
      * @var bool
      */
-    public    $timestamps = false;
-    protected $table      = 'help_statuses';
-    
+    public $timestamps = false;
+
+    protected $table = 'help_statuses';
+
     protected $fillable = [
         'name',
         'color',
     ];
-    
-    /**
-     * Get related tickets.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function tickets()
-    {
-        return $this->hasMany(Ticket::class, 'status_id');
-    }
 }

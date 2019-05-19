@@ -623,14 +623,14 @@ class TransactionController extends Controller
             if ($result['Status'] == 'success') {
                 $authorities = $result["Authorities"];
                 foreach ($authorities as $authority) {
-                    $transaction = Transaction::where("authority", $authority['Authority'])
-                        ->first();
+                    /** @var Transaction $transaction */
+                    $transaction = TransactionRepo::getTransactionByAuthority($authority['Authority'])->getValue(null);;
                     $firstName   = "";
                     $lastName    = "";
                     $mobile      = "";
-                    $created_at  = "";
-                    if (isset($transaction)) {
-                        $created_at = $transaction->created_at;
+                    $jalaliCreatedAt  = "";
+                    if (!is_null($transaction)) {
+                        $jalaliCreatedAt = $transaction->jalali_created_at;
                         $user       = $transaction->order->user;
                         if (isset($user)) {
                             $userId    = $user->id;
@@ -645,9 +645,9 @@ class TransactionController extends Controller
                         "firstName"  => $firstName,
                         "lastName"   => $lastName,
                         "mobile"     => $mobile,
-                        "authority"  => $transaction['Authority'],
-                        "amount"     => $transaction['Amount'],
-                        "created_at" => $created_at,
+                        "authority"  => $authority['Authority'],
+                        "amount"     => $authority['Amount'],
+                        "created_at" => $jalaliCreatedAt,
                     ]);
                 }
             }

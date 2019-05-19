@@ -102,26 +102,25 @@
                     <div class = "m-portlet__head-caption">
                         <div class = "m-portlet__head-title">
                             <h3 class = "m-portlet__head-text">
-                                حذف فایل
                             </h3>
                         </div>
                     </div>
                 </div>
                 <div class = "m-portlet__body">
 
-                    <div id = "deleteFileConfirmationModal" class = "modal fade" tabindex = "-1" data-backdrop = "static" data-keyboard = "false">
-                        <div class = "modal-header">حذف فایل</div>
-                        <div class = "modal-body">
-                            <p> آیا مطمئن هستید؟</p>
-                            {!! Form::hidden('file_id', null) !!}
-                            {!! Form::hidden('content_id', null) !!}
-                        </div>
-                        <div class = "modal-footer">
-                            <button type = "button" data-dismiss = "modal" class = "btn btn-outline dark">خیر</button>
-                            <button type = "button" data-dismiss = "modal" class = "btn green" id = "removeFileSubmit">بله
-                            </button>
-                        </div>
-                    </div>
+{{--                    <div id = "deleteFileConfirmationModal" class = "modal fade" tabindex = "-1" data-backdrop = "static" data-keyboard = "false">--}}
+{{--                        <div class = "modal-header">حذف فایل</div>--}}
+{{--                        <div class = "modal-body">--}}
+{{--                            <p> آیا مطمئن هستید؟</p>--}}
+{{--                            {!! Form::hidden('file_id', null) !!}--}}
+{{--                            {!! Form::hidden('content_id', null) !!}--}}
+{{--                        </div>--}}
+{{--                        <div class = "modal-footer">--}}
+{{--                            <button type = "button" data-dismiss = "modal" class = "btn btn-outline dark">خیر</button>--}}
+{{--                            <button type = "button" data-dismiss = "modal" class = "btn green" id = "removeFileSubmit">بله--}}
+{{--                            </button>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                     {!! Form::model($content , ['files'=>true,'method' => 'PUT','action' => ['Web\ContentController@update',$content], 'class'=>'form-horizontal' , 'id'=>'editForm' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
                     @if(isset($contentset))
                         {!! Form::hidden('contentset', $contentset->id) !!}

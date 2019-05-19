@@ -3934,7 +3934,7 @@ class SanatisharifmergeController extends Controller
                     ->first();
                 if (isset($v)) {
                     if (isset($v->content)) {
-                        return action('ContentController@show', $v->content);
+                        return action('Web\ContentController@show', $v->content);
                     }
                 }
             }

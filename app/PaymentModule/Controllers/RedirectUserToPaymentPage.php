@@ -19,7 +19,7 @@ use App\Repositories\TransactionGatewayRepo;
 use App\PaymentModule\Repositories\OrdersRepo;
 use App\Http\Controllers\Web\TransactionController;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Collection;
 
 class RedirectUserToPaymentPage extends Controller
 {
@@ -40,6 +40,10 @@ class RedirectUserToPaymentPage extends Controller
 
         $data = $this->getRefinementData($request->all(), $request->user());
 
+        if ($data['statusCode'] != Response::HTTP_OK) {
+            $this->sendErrorResponse($data['message'] ?: '', $data['statusCode'] ?: Response::HTTP_SERVICE_UNAVAILABLE );
+        }
+
         /** @var User $user */
         $user = $data['user'];
         /** @var Order $order */
@@ -51,25 +55,22 @@ class RedirectUserToPaymentPage extends Controller
         /** @var Transaction $transaction */
         $transaction = $data['transaction'];
 
-        if ($data['statusCode'] != Response::HTTP_OK) {
-            $this->sendErrorResponse($data['message'] ?: '', $data['statusCode'] ?: Response::HTTP_SERVICE_UNAVAILABLE );
-        }
+        $customerDescription = $request->get('customerDescription');
+
+        $this->shouldGoToOfflinePayment($cost->rials())
+            ->thenRespondWith([[Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order,$customerDescription]]);
 
         /** @var string $description */
         $description = $this->getTransactionDescription($data['description'], $user->mobile, $order);
 
-        if ($this->isPayingAnOrder($order)) {
-            $order->customerDescription = $request->get('customerDescription');
-        }
-
-        $this->shouldGoToOfflinePayment($cost->rials())
-            ->thenRespondWith([[Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order]]);
-
         $paymentClient = PaymentDriver::select($paymentMethod);
         $url = $this->comeBackFromGateWayUrl($paymentMethod, $device);
 
-        if($this->shouldCloseOrder($order))
-            OrdersRepo::closeOrder($order->id);
+
+        if ($this->shouldCloseOrder($order))
+        {
+            OrdersRepo::closeOrder($order->id, ['customerDescription' => $customerDescription]);
+        }
 
         $authorityCode = nullable($paymentClient->generateAuthorityCode($url, $cost, $description, $orderUniqueId))
             ->orFailWith([Responses::class, 'noResponseFromBankError']);
@@ -138,16 +139,6 @@ class RedirectUserToPaymentPage extends Controller
     }
     
     /**
-     * @param  Order  $order
-     *
-     * @return bool
-     */
-    private function isPayingAnOrder($order): bool
-    {
-        return isset($order);
-    }
-    
-    /**
      * @param  int  $cost
      *
      * @return Boolean
@@ -202,8 +193,9 @@ class RedirectUserToPaymentPage extends Controller
 
     /**
      * @param $orderproducts
+     * @return Collection
      */
-    private function handleOrders(\Illuminate\Support\Collection $orderproducts)
+    private function handleOrders(Collection $orderproducts)
     {
         $totalCookie = collect();
         foreach ($orderproducts as $orderproduct) {
