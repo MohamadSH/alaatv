@@ -1,4 +1,6 @@
-@permission((config('constants.SHOW_ORDER_ACCESS')))@extends("app",["pageName"=>"admin"])
+@permission((config('constants.SHOW_ORDER_ACCESS')))
+
+@extends("app",["pageName"=>"admin"])
 
 @section('page-css')
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-sweetalert/sweetalert.css" rel="stylesheet"
@@ -345,8 +347,9 @@
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <div class="row">
-                                                                        <label class="col-md-4 control-label ">محصول
-                                                                            جدید</label>
+                                                                        <label class="col-md-4 control-label ">
+                                                                            محصول جدید
+                                                                        </label>
                                                                         <div class="col-md-8">
                                                                             @include("admin.filters.productsFilter" , [ "listType"=>"childSelect" , "selectType"=>"searchable", "name"=>"exchange-a[".$orderproduct->id."][orderproductExchangeNewProduct]" , "class"=>"orderproductExchangeNewProductSelect" , "dataRole"=>$orderproduct->id , "defaultValue"=>["value"=>0 , "caption"=>"انتخاب کنید"]])
                                                                         </div>
@@ -742,7 +745,7 @@
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>--}}
     <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jQueryNumberFormat/jquery.number.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/app.js" type="text/javascript"></script>
@@ -765,6 +768,20 @@
     
     
     <script type="text/javascript">
+
+        $('select.select2')
+            .select2({closeOnSelect: true})
+            .on('select2:select', function (event) {
+                $('select.select2').select2("close");
+            })
+            .on('select2:close', function (event) {
+                $('select.select2').select2('destroy');
+                $('select.select2').select2({closeOnSelect: true});
+                $('select.select2').select2("close");
+                $('select.select2').select2("close");
+            });
+        
+        
         var TableDatatablesEditable = function () {
 
             var handleTable = function () {

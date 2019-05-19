@@ -161,9 +161,6 @@
     <script>
         var contentData = {!! json_encode($result) !!};
         var tags = {!! json_encode($tags) !!};
-        // $(document).ready(function() {
-        //     $.ajaxSetup({ cache: false });
-        // });
     </script>
     <script src="{{ mix('/js/content-search.js') }}"></script>
 @endsection

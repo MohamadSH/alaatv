@@ -236,7 +236,9 @@
                                         <a href="{{ action("Web\UserController@userOrders") }}" class="m-nav__link">
                                             <span class="m-nav__link-icon">
                                                 <span class="m-nav__link-icon-wrapper">{{ $bonName }}</span>
-                                                <span class="m-nav__link-badge m-badge  m-badge--accent">{{ Auth::user()->userHasBon() }}</span>
+                                                @if(Auth::user()->userHasBon() > 0)
+                                                <span class="m-nav__link-badge m-badge m-badge--accent">{{ Auth::user()->userHasBon() }}</span>
+                                                @endif
                                             </span>
                                         </a>
                                     </li>
@@ -245,7 +247,9 @@
                                     <a href="{{ action("Web\UserController@userOrders") }}" class="m-nav__link">
                                         <span class="m-nav__link-icon">
                                             <span class="m-nav__link-icon-wrapper"><i class="flaticon-coins"></i></span>
+                                            @if(Auth::user()->getTotalWalletBalance() > 0)
                                             <span class="m-nav__link-badge m-badge  m-badge--accent">{{ number_format(Auth::user()->getTotalWalletBalance()) }}</span>
+                                            @endif
                                         </span>
                                     </a>
                                 </li>
