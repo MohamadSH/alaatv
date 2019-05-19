@@ -2,7 +2,8 @@
 
 namespace App;
 
-use App\HelpDesk\Models\DynamicRelations;
+use App\HelpDesk\Models\Category;
+use App\HelpDesk\Models\Ticket;
 use Hash;
 use Carbon\Carbon;
 use App\Traits\Helper;
@@ -284,12 +285,8 @@ use App\Traits\User\{BonTrait,
  * @property string|null                                                        $lastServiceCall آخرین تماس کارمندان روابط عمومی با کاربر
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLastServiceCall($value)
  */
-class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail
+class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail , AgentInterface
 {
-    use DynamicRelations {
-        __call as macroCall;
-    }
-
     use HasApiTokens;
     use MustVerifyMobileNumberTrait;
     use Helper;
@@ -301,16 +298,16 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     use APIRequestCommon;
     use CharacterCommon;
     use OrderCommon;
-    
+
     use DashboardTrait, MutatorTrait, TeacherTrait, LotteryTrait, PaymentTrait, BonTrait, VouchersTrait, TaggableUserTrait, ProfileTrait, TrackTrait;
     use AgentTrait;
-    
+
     /*
     |--------------------------------------------------------------------------
     | Properties
     |--------------------------------------------------------------------------
     */
-    
+
     protected $appends = [
         'info',
         'full_name',
@@ -322,7 +319,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'editLink',
         'removeLink',
     ];
-    
+
     protected $cascadeDeletes = [
         'orders',
         'userbons',
@@ -332,7 +329,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'mbtianswers',
         //        'favorables',
     ];
-    
+
     /**      * The attributes that should be mutated to dates.        */
     protected $dates = [
         'created_at',
@@ -341,7 +338,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'birthdate',
         'email_verified_at',
     ];
-    
+
     protected $lockProfileColumns = [
         'province',
         'city',
@@ -352,7 +349,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'major_id',
         'email',
     ];
-    
+
     //columns being used for locking user's profile
     protected $completeInfoColumns = [
         'photo',
@@ -370,14 +367,14 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'medicalCondition',
         'diet',
     ];
-    
+
     protected $medicalInfoColumns = [
         'bloodtype_id',
         'allergy',
         'medicalCondition',
         'diet',
     ];
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -414,7 +411,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'techCode',
         'mobile_verified_code',
     ];
-    
+
     protected $fillableByPublic = [
         'province',
         'city',
@@ -436,7 +433,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'medicalCondition',
         'diet',
     ];
-    
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -463,11 +460,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'userbons'
     ];
 
-    public function __call($method, $parameters)
-    {
-        return $this->macroCall($method, $parameters);
-    }
-
     public static function getNullInstant($visibleArray = [])
     {
         $user = new User();
@@ -476,11 +468,11 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         }
         return $user;
     }
-    
+
     public function getAppToken()
     {
         $tokenResult = $this->createToken('Alaa App.');
-        
+
         return [
             'access_token'     => $tokenResult->accessToken,
             'token_type'       => 'Bearer',
@@ -488,12 +480,12 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
                 ->toDateTimeString(),
         ];
     }
-    
+
     public function routeNotificationForPhoneNumber()
     {
         return ltrim($this->mobile, '0');
     }
-    
+
     /**
      * Create a new Eloquent Collection instance.
      *
@@ -505,14 +497,14 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     {
         return new UserCollection($models);
     }
-    
-    
+
+
     /*
     |--------------------------------------------------------------------------
     | scope methods
     |--------------------------------------------------------------------------
     */
-    
+
     /**
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  array                                  $roles
@@ -526,7 +518,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
             $q->whereIn("id", $roles);
         });
     }
-    
+
     /**
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      *
@@ -540,7 +532,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
             $q->where('name', $roleName);
         });
     }
-    
+
     /**
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      *
@@ -555,7 +547,9 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
             $q->where('name', $permissionName);
         });
     }
-    
+
+
+
     /**
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      *
@@ -565,43 +559,43 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     {
         return $query->where('userstatus_id', config('constants.USER_STATUS_ACTIVE'));
     }
-    
+
     /*
     |--------------------------------------------------------------------------
     | relations
     |--------------------------------------------------------------------------
     */
-    
+
     public function useruploads()
     {
         return $this->hasMany('\App\Userupload');
     }
-    
+
     public function contacts()
     {
         return $this->hasMany('\App\Contact');
     }
-    
+
     public function mbtianswers()
     {
         return $this->hasMany('\App\Mbtianswer');
     }
-    
+
     public function usersurveyanswers()
     {
         return $this->hasMany('\App\Usersurveyanswer');
     }
-    
+
     public function eventresults()
     {
         return $this->hasMany('\App\Eventresult');
     }
-    
+
     public function firebasetokens()
     {
         return $this->hasMany('App\Firebasetoken');
     }
-    
+
     /**
      * Compares user's password with a new password
      *
@@ -617,10 +611,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         } else {
             $result = false;
         }
-        
+
         return $result;
     }
-    
+
     /**
      * @param $newPassword
      */
@@ -628,14 +622,14 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     {
         $this->fill(['password' => bcrypt($newPassword)]);
     }
-    
+
     public function getOpenOrder(): Order
     {
         $openOrder = $this->firstOrCreateOpenOrder($this);
-        
+
         return $openOrder;
     }
-    
+
     /**
      * @param $products
      *
@@ -658,18 +652,32 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
             ->get();
         return $validOrders;
     }
-    
+
     public function cacheKey()
     {
         $key  = $this->getKey();
         $time = isset($this->update_at) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-        
+
         return sprintf("%s:%s-%s", $this->getTable(), $key, $time);
     }
-    
+
+    /**
+     * Get userstatus that belongs to
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function userstatus()
     {
-        return $this->defineBelongsTo('App\Userstatus');
+        return $this->belongsTo(Userstatus::class);
     }
 
+    /**
+     * Get related help categories
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function helpCategories()
+    {
+        return $this->belongsToMany(Category::class, 'help_categories_users',  'user_id','category_id');
+    }
 }
