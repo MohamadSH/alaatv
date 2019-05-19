@@ -92,6 +92,17 @@ $(document).ready(function () {
             hideAllDiscountInfo = false;
         }
 
+        $('#orderDetailesModal .customerDescriptionInModal').fadeOut();
+        $('#orderDetailesModal .customerDescriptionInModal').html('');
+        if (
+            orders[index].customerDescription !== null &&
+            orders[index].customerDescription.length > 0
+        ) {
+            $('#orderDetailesModal .customerDescriptionInModal').html(orders[index].customerDescription);
+            $('#orderDetailesModal .customerDescriptionInModal').fadeIn();
+        }
+
+
         if (hideAllDiscountInfo) {
             $('.orderDiscountInfoInModal').parent('.alert-success').fadeOut();
         } else {

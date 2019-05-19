@@ -402,18 +402,12 @@ var CheckoutPaymentUi = function () {
 
 var lockDonateAjaxForSliderInit = true;
 
-function redirectToPaymentGateway() {
-    window.location.href= $('input[type="radio"][name="radioBankType"]:checked').val();
-
-    mApp.block('.btnSubmitOrderWraper', {
-        type: 'loader',
-        state: 'info',
-    });
-}
-
 jQuery(document).ready(function () {
     let n = document.getElementById('m_nouislider_1_input');
     let e = document.getElementById('m_nouislider_1');
+
+    let action = $('input[type="radio"][name="radioBankType"]:checked').val();
+    $('#frmGotoGateway').attr('action', action);
 
     CheckoutPaymentUi.initUi();
 
@@ -435,6 +429,11 @@ jQuery(document).ready(function () {
 
     $(document).on('switchChange.bootstrapSwitch', '#hasntDonate', function (e) {
         CheckoutPaymentUi.refreshUiBasedOnDonateStatus($('#m_nouislider_1_input').val());
+    });
+
+    $(document).on('change', 'input[type="radio"][name="radioBankType"]', function (e) {
+        let action = $('input[type="radio"][name="radioBankType"]:checked').val();
+        $('#frmGotoGateway').attr('action', action);
     });
 
     noUiSlider.create(e, {
