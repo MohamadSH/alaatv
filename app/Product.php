@@ -171,8 +171,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     ];
     
     public const ENABLE_STATUS = [
-        'نامحدود',
-        'محدود',
+        'غیرفعال',
+        'فعال',
     ];
     
     protected $fillable = [
@@ -339,7 +339,9 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
             225,
             226,
             294,
-            295
+            295,
+            329,
+            330
         ]);
     }
     

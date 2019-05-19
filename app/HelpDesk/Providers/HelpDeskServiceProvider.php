@@ -29,10 +29,10 @@ class HelpDeskServiceProvider extends ServiceProvider
             dirname(__DIR__, 1).'/config.php' => config_path('helpDesk.php'),
         ], 'config');
         
-        $this->loadViewsFrom(dirname(__DIR__, 1).'/Views', 'helpDesk');
+        $this->loadViewsFrom(dirname(__DIR__, 1).'/views', 'helpDesk');
         
-        $this->loadRoutesFrom(dirname(__DIR__, 1).'/Route/web.php');
-        $this->loadRoutesFrom(dirname(__DIR__, 1).'/Route/api.php');
+        $this->loadRoutesFrom(dirname(__DIR__, 1).'/route/web.php');
+        $this->loadRoutesFrom(dirname(__DIR__, 1).'/route/api.php');
         
         $this->modelBinding();
     }
@@ -43,10 +43,9 @@ class HelpDeskServiceProvider extends ServiceProvider
             $key = 'ticket:'.$value;
             
             return Cache::remember($key, config('constants.CACHE_60'), function () use ($value) {
-                $t = Ticket::where('id', $value)
-                    ->first();
-                return $t ?? abort(404);
+                return Ticket::where('id', $value)->first() ?: abort(404);
             });
         });
     }
+
 }

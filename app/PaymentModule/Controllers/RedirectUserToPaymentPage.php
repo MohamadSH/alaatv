@@ -19,7 +19,7 @@ use App\Repositories\TransactionGatewayRepo;
 use App\PaymentModule\Repositories\OrdersRepo;
 use App\Http\Controllers\Web\TransactionController;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Collection;
 
 class RedirectUserToPaymentPage extends Controller
 {
@@ -66,19 +66,17 @@ class RedirectUserToPaymentPage extends Controller
         $paymentClient = PaymentDriver::select($paymentMethod);
         $url = $this->comeBackFromGateWayUrl($paymentMethod, $device);
 
-
-        if ($this->shouldCloseOrder($order))
-        {
-            OrdersRepo::closeOrder($order->id, ['customerDescription' => $customerDescription]);
-        }
-
         $authorityCode = nullable($paymentClient->generateAuthorityCode($url, $cost, $description, $orderUniqueId))
             ->orFailWith([Responses::class, 'noResponseFromBankError']);
 
         TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id , $this->getGatewyId($paymentMethod), $description)
             ->orRespondWith([Responses::class, 'editTransactionError']);
 
-        $this->saveOrderInCookie($order);
+        if ($this->shouldCloseOrder($order))
+        {
+            OrdersRepo::closeOrder($order->id, ['customerDescription' => $customerDescription]);
+            $this->saveOrderInCookie($order);
+        }
 
         return view("order.checkout.gatewayRedirect", ['authority' => $authorityCode, 'paymentMethod' => $paymentMethod]);
     }
@@ -193,8 +191,9 @@ class RedirectUserToPaymentPage extends Controller
 
     /**
      * @param $orderproducts
+     * @return Collection
      */
-    private function handleOrders(\Illuminate\Support\Collection $orderproducts)
+    private function handleOrders(Collection $orderproducts)
     {
         $totalCookie = collect();
         foreach ($orderproducts as $orderproduct) {

@@ -6,16 +6,11 @@ use App\Attribute;
 use App\Attributevalue;
 use App\Bon;
 use App\User;
-use App\Wallet;
 use App\Product;
 use App\Userbon;
-//use Illuminate\Contracts\Session\Session;
-use Session;
-use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 use App\Traits\OrderCommon;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 //use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class OrderProductTest extends TestCase

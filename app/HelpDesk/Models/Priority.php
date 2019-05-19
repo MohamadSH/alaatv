@@ -27,7 +27,7 @@ class Priority extends BaseModel
         'name',
         'color',
     ];
-    
+
     /**
      * Get related tickets.
      *

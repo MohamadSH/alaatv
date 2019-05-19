@@ -1674,7 +1674,7 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function donateOrder(DonateRequest $request, OrderproductController $orderproductController)
+    public function donateOrder(DonateRequest $request)
     {
         $amount       = $request->get('amount');
         $user         = $request->user();
@@ -1737,17 +1737,13 @@ class OrderController extends Controller
             $user = $request->user();
             $openOrder = $user->getOpenOrder();
             
-            $restorableProducts = [
-                Product::CUSTOM_DONATE_PRODUCT,
-                Product::DONATE_PRODUCT_5_HEZAR,
-            ];
+            $donate_5_hezar = Product::DONATE_PRODUCT_5_HEZAR;
             $createFlag         = true;
             $resultCode = Response::HTTP_NO_CONTENT;
-            if (in_array($product->id, $restorableProducts)) {
+            if ($product->id== $donate_5_hezar) {
                 /** @var OrderproductCollection $oldOrderproduct */
                 $oldOrderproduct = $openOrder->orderproducts(config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
-                    ->whereIn('product_id',
-                        $restorableProducts)
+                    ->where('product_id', $donate_5_hezar)
                     ->onlyTrashed()
                     ->get();
                 if ($oldOrderproduct->isNotEmpty()) {

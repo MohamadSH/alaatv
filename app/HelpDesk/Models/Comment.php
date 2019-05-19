@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Comment extends BaseModel
 {
     protected $table = 'help_comments';
-    
+
     /**
      * Create a new Eloquent Collection instance.
      *
@@ -34,7 +34,7 @@ class Comment extends BaseModel
     {
         return new CommentCollection($models);
     }
-    
+
     /**
      * Get related ticket.
      *
@@ -44,7 +44,7 @@ class Comment extends BaseModel
     {
         return $this->belongsTo(Ticket::class, 'ticket_id');
     }
-    
+
     /**
      * Get comment owner.
      *

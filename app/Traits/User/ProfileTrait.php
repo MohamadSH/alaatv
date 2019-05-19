@@ -29,22 +29,22 @@ trait ProfileTrait
     {
         return self::$beProtected;
     }
-    
+
     public function bloodtype()
     {
         return $this->belongsTo("\App\Bloodtype");
     }
-    
+
     public function grade()
     {
         return $this->belongsTo("\App\Grade");
     }
-    
+
     public function major()
     {
         return $this->belongsTo('App\Major');
     }
-    
+
     public function gender()
     {
         return $this->belongsTo('App\Gender');

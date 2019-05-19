@@ -29,7 +29,7 @@ class Category extends BaseModel
         'name',
         'color',
     ];
-    
+
     /**
      * Get related tickets.
      *
@@ -39,7 +39,7 @@ class Category extends BaseModel
     {
         return $this->hasMany(Ticket::class, 'category_id');
     }
-    
+
     /**
      * Get related agents.
      *
