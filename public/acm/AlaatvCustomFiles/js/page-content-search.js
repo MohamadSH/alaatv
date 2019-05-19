@@ -3,6 +3,7 @@ var Alaasearch = function () {
     var productAjaxLock = 0;
     var videoAjaxLock = 0;
     var setAjaxLock = 0;
+    var articleAjaxLock = 0;
     var pamphletAjaxLock = 0;
 
     function getProductCarouselItem(data) {
@@ -63,7 +64,6 @@ var Alaasearch = function () {
         let widgetActionLink = data.url;
         let widgetActionName = '<i class="fa fa-play"></i>' + ' / ' + '<i class="fa fa-cloud-download-alt"></i>';
         let widgetPic = (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail : data.photo;
-        widgetPic += '?w=640&h=360';
         let widgetTitle = data.name;
         let widgetAuthor = {
             photo: (typeof (data.author.photo) === 'undefined' || data.author.photo == null) ? null : data.author.photo,
@@ -126,7 +126,6 @@ var Alaasearch = function () {
         let widgetActionLink = data.url;
         let widgetActionName = 'نمایش این دوره';
         let widgetPic = (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail : data.photo;
-        widgetPic += '?w=460&h=259';
         let widgetTitle = data.name;
         let widgetAuthor = {
             photo : data.author.photo,
@@ -287,8 +286,10 @@ var Alaasearch = function () {
 
                         if (type === 'product' || type === 'video' || type === 'set') {
                             addContentToOwl(owl, response.result[type].data, type);
-                        } else if (type === 'pamphlet' || type === 'article') {
-                            addContentToVerticalWidget(owl, response.result[type].data, type);
+                        } else if (type === 'pamphlet') {
+                            loadPamphletFromJson(response.result[type]);
+                        } else if (type === 'article') {
+                            loadArticleFromJson(response.result[type]);
                         }
 
                         // responseMessage = response.responseText;
@@ -327,7 +328,7 @@ var Alaasearch = function () {
                 pamphletAjaxLock = 1;
                 break;
             case 'article':
-                pamphletAjaxLock = 1;
+                articleAjaxLock = 1;
                 break;
         }
     }
@@ -346,7 +347,7 @@ var Alaasearch = function () {
                 pamphletAjaxLock = 0;
                 break;
             case 'article':
-                pamphletAjaxLock = 0;
+                articleAjaxLock = 0;
                 break;
         }
     }
@@ -354,21 +355,28 @@ var Alaasearch = function () {
     function load(event, nextPageUrl, owl, owlType, callback) {
 
 
-        if (owlType === 'product' || owlType === 'video' || owlType === 'set' || owlType === 'pamphlet' || owlType === 'article') {
+        if (owlType === 'product' || owlType === 'video' || owlType === 'set') {
             var perPage = typeof (owl.data("per-page")) === "number" ? owl.data("per-page") : 6;
 
-            if (nextPageUrl !== null && nextPageUrl.length !== 0
+            if (
+                nextPageUrl !== null && nextPageUrl.length !== 0
                 && event.namespace && event.property.name === 'position'
-                && event.property.value >= event.relatedTarget.items().length - perPage) {
+                && event.property.value >= event.relatedTarget.items().length - perPage
+            ) {
                 lockAjax(owlType);
                 addLoadingItem(owl, owlType);
                 // load, add and update
                 loadData(owl, nextPageUrl, owlType, callback);
             }
         } else if (owlType === 'pamphlet' || owlType === 'article') {
-            lockAjax(owlType);
-            addLoadingItem(owl, owlType);
-            loadData(owl, nextPageUrl, owlType, callback);
+
+            if (
+                nextPageUrl !== null && nextPageUrl.length !== 0
+            ) {
+                lockAjax(owlType);
+                addLoadingItem(owl, owlType);
+                loadData(owl, nextPageUrl, owlType, callback);
+            }
         }
 
     }
@@ -445,62 +453,103 @@ var Alaasearch = function () {
         if (data === null) {
             return false;
         }
-        $('#pamphlet-vertical-widget').find('.pamphlet-lastITemSensor').remove();
+
+        // $('.pamphlet-lastITemSensor').remove();
+        $('.pamphlet-wraperShowMore').remove();
         addContentToVerticalWidget($('#pamphlet-vertical-widget'), data.data, 'pamphlet');
+        // $('#pamphlet-vertical-widget').append('<div class="pamphlet-lastITemSensor"></div>');
+        if (data.next_page_url !== null) {
+            $('#pamphlet-vertical-widget').append('<div class="pamphlet-wraperShowMore text-center"><button class="btn m-btn--pill m-btn--air btn-primary pamphlet-btnShowMore">نمایش بیشتر</button></div>');
+        }
         $('#vertical-widget--js-var-next-page-pamphlet-url').val(decodeURI(data.next_page_url));
-        $('#pamphlet-vertical-widget').append('<div class="pamphlet-lastITemSensor"></div>');
     }
 
     function initPamphlet(data) {
         loadPamphletFromJson(data);
 
-        $(window).scroll(function () {
-            if (isScrolledIntoView($('.pamphlet-lastITemSensor'))) {
+        $(document).on('click', '.pamphlet-btnShowMore', function (e) {
+            $('.pamphlet-btnShowMore').fadeOut();
+            let vwType = 'pamphlet';
+            let nextPageUrl = $('#vertical-widget--js-var-next-page-pamphlet-url');
+            let vw = $('#pamphlet-vertical-widget');
 
-                let vwType = 'pamphlet';
-                let nextPageUrl = $('#vertical-widget--js-var-next-page-pamphlet-url');
-                let vw = $('#pamphlet-vertical-widget');
-
-                if (!pamphletAjaxLock && nextPageUrl.val() !== "null") {
-                    load(event, nextPageUrl.val(), vw, vwType, function (newPageUrl) {
-                        $('#vertical-widget--js-var-next-page-pamphlet-url').val(decodeURI(newPageUrl));
-                        unLockAjax(vwType);
-                    });
-                }
-
+            if (!pamphletAjaxLock && nextPageUrl.val() !== "null") {
+                load(event, nextPageUrl.val(), vw, vwType, function (newPageUrl) {
+                    $('#vertical-widget--js-var-next-page-pamphlet-url').val(decodeURI(newPageUrl));
+                    unLockAjax(vwType);
+                    $('.pamphlet-btnShowMore').fadeOut(0);
+                    $('.pamphlet-btnShowMore').fadeIn();
+                });
             }
         });
+
+        // $(window).scroll(function () {
+        //     if (isScrolledIntoView($('.pamphlet-lastITemSensor'))) {
+        //
+        //         let vwType = 'pamphlet';
+        //         let nextPageUrl = $('#vertical-widget--js-var-next-page-pamphlet-url');
+        //         let vw = $('#pamphlet-vertical-widget');
+        //
+        //         if (!pamphletAjaxLock && nextPageUrl.val() !== "null") {
+        //             load(event, nextPageUrl.val(), vw, vwType, function (newPageUrl) {
+        //                 $('#vertical-widget--js-var-next-page-pamphlet-url').val(decodeURI(newPageUrl));
+        //                 unLockAjax(vwType);
+        //             });
+        //         }
+        //
+        //     }
+        // });
     }
 
     function loadArticleFromJson(data) {
         if (data === null) {
             return false;
         }
-        $('#pamphlet-vertical-widget').find('.article-lastITemSensor').remove();
+        // $('#pamphlet-vertical-widget').find('.article-lastITemSensor').remove();
+        $('.article-wraperShowMore').remove();
         addContentToVerticalWidget($('#article-vertical-widget'), data.data, 'article');
+        if (data.next_page_url !== null) {
+            $('#article-vertical-widget').append('<div class="article-wraperShowMore text-center"><button class="btn m-btn--pill m-btn--air btn-primary article-btnShowMore">نمایش بیشتر</button></div>');
+        }
         $('#vertical-widget--js-var-next-page-article-url').val(decodeURI(data.next_page_url));
-        $('#pamphlet-vertical-widget').append('<div class="article-lastITemSensor"></div>');
+        // $('#pamphlet-vertical-widget').append('<div class="article-lastITemSensor"></div>');
     }
 
     function initArticle(data) {
         loadArticleFromJson(data);
 
-        $(window).scroll(function () {
-            if (isScrolledIntoView($('.article-lastITemSensor'))) {
 
-                let vwType = 'pamphlet';
-                let nextPageUrl = $('#vertical-widget--js-var-next-page-article-url');
-                let vw = $('#article-vertical-widget');
-
-                if (!pamphletAjaxLock && nextPageUrl.val() !== "null") {
-                    load(event, nextPageUrl.val(), vw, vwType, function (newPageUrl) {
-                        $('#vertical-widget--js-var-next-page-article-url').val(decodeURI(newPageUrl));
-                        unLockAjax(vwType);
-                    });
-                }
-
+        $(document).on('click', '.article-btnShowMore', function (e) {
+            $('.article-btnShowMore').fadeOut();
+            let vwType = 'pamphlet';
+            let nextPageUrl = $('#vertical-widget--js-var-next-page-article-url');
+            let vw = $('#article-vertical-widget');
+            if (!articleAjaxLock && nextPageUrl.val() !== "null") {
+                load(event, nextPageUrl.val(), vw, vwType, function (newPageUrl) {
+                    $('#vertical-widget--js-var-next-page-article-url').val(decodeURI(newPageUrl));
+                    unLockAjax(vwType);
+                    $('.article-btnShowMore').fadeOut(0);
+                    $('.article-btnShowMore').fadeIn();
+                });
             }
         });
+
+        // $(window).scroll(function () {
+        //     if (isScrolledIntoView($('.article-lastITemSensor'))) {
+        //
+        //         let vwType = 'pamphlet';
+        //         let nextPageUrl = $('#vertical-widget--js-var-next-page-article-url');
+        //         let vw = $('#article-vertical-widget');
+        //
+        //         if (!articleAjaxLock && nextPageUrl.val() !== "null") {
+        //             load(event, nextPageUrl.val(), vw, vwType, function (newPageUrl) {
+        //                 $('#vertical-widget--js-var-next-page-article-url').val(decodeURI(newPageUrl));
+        //                 unLockAjax(vwType);
+        //             });
+        //         }
+        //
+        //     }
+        // });
     }
 
     function loadAjaxContent(contentData) {
@@ -569,7 +618,6 @@ var Alaasearch = function () {
                 typeof $('#contentSearchFilter .selectorItem[data-select-active="true"]').attr('data-select-order') !== 'undefined' &&
                 parseInt($('#contentSearchFilter .selectorItem[data-select-active="true"]').attr('data-select-order')) !== 4
             ) {
-                console.log('order: ', $('#contentSearchFilter .selectorItem[data-select-active="true"]').attr('data-select-order'));
                 $('#contentSearchFilter').addClass('lockActiveStep');
             }
         } else {
@@ -2332,7 +2380,6 @@ var GetAjaxData = function () {
 }();
 
 jQuery(document).ready(function () {
-
 
     $.ajaxSetup({ cache: false });
 
