@@ -2,6 +2,7 @@
 
 namespace  App\PaymentModule\Controllers;
 
+use AlaaTV\Gateways\Contracts\OnlinePaymentVerificationResponseInterface;
 use App\Order;
 use AlaaTV\Gateways\Money;
 use App\PaymentModule\Responses;
