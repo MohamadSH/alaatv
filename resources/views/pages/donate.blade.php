@@ -25,16 +25,18 @@
 
         <img class="hearts" src="{{ asset('/acm/extra/donate/images/hearts.png') }}" alt="hearts">
 
-        {!! Form::open(['method'=>'POST' , 'action'=>'Web\OrderController@donateOrder' , 'class'=>'donation-form']) !!}
-        <p>با کمک های شما عزیزان مجموعه آلا به راحتی بر روی کیفیت خدمات کار می کند</p>
-
-        <div class="textfield">
-            <input type="text" placeholder="مبلغ مورد نظر شما" name="amount" id="amount">
-            <span class="suffix">تومان</span>
-        </div><!-- .textfield -->
-
-        <button id="btnDonationNow">همین الان کمک می کنم</button>
-        {!! Form::close() !!}
+{{--        {!! Form::open(['method'=>'POST' , 'action'=>'Web\OrderController@donateOrder' , 'class'=>'donation-form']) !!}--}}
+        <div class="donation-form">
+            <p>با کمک های شما عزیزان مجموعه آلا به راحتی بر روی کیفیت خدمات کار می کند</p>
+    
+            <div class="textfield">
+                <input type="text" placeholder="مبلغ مورد نظر شما" name="amount" id="amount">
+                <span class="suffix">تومان</span>
+            </div><!-- .textfield -->
+    
+            <button id="btnDonationNow">همین الان کمک می کنم</button>
+        </div>
+{{--        {!! Form::close() !!}--}}
 
     </div><!-- .hero -->
 
@@ -249,161 +251,33 @@
 
 <script>
     var MONTHS = {!! $chartData->pluck("month")->toJson() !!};
-    
-    var config = {
-        type: 'line',
-        data: {
-            labels: MONTHS,
-            datasets: [{
-                label: 'مجموع دونیت ها',
-                backgroundColor: '#49aaed',
-                borderColor: '#49aaed',
-                data: [
-                    @foreach($chartData as $chartDatum)
-                    {{$chartDatum["totalIncome"]}},
-                    @endforeach
-                ],
-                fill: false,
-            }, {
-                label: 'مجموع هزینه ها',
-                fill: false,
-                backgroundColor: '#ff597c',
-                borderColor: '#ff597c',
-                data: [
-                    @foreach($chartData as $chartDatum)
-                    {{$chartDatum["totalSpend"]}},
-                    // 25000000,
-                    @endforeach
-                ],
-            }]
-        },
-        options: {
-            elements: {
-                line: {
-                    tension: 0
-                }
-            },
-            responsive: true,
-            title: {
-                display: false,
-                text: 'مجموع دونیت ها / مجموع هزینه ها'
-            },
-            tooltips: {
-                mode: 'index',
-                intersect: false,
-                callbacks: {
-                    label: function (tooltipItem, data) {
-                        return tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    },
-                },
-            },
-            hover: {
-                mode: 'nearest',
-                intersect: true
-            },
-            scales: {
-                xAxes: [{
-                    display: true,
-                    scaleLabel: {
-                        display: true,
-                        labelString: ''
-                    }
-                }],
-                yAxes: [{
-                    display: true,
-                    scaleLabel: {
-                        display: true,
-                        labelString: ''
-                    },
-                    ticks: {
-                        callback: function (label, index, labels) {
-                            var amount = label / 1000000;
-                            if (amount < 1) {
-                                amount = amount * 1000;
-                                return amount + " هزار تومان";
-                            }
-                            return amount + " میلیون تومان";
-
-                        },
-                        beginAtZero: true,
-                        max: 25000000,
-                    },
-
-                }]
-            }
+    var configBackendDatasets = [
+        {
+            label: 'مجموع دونیت ها',
+            backgroundColor: '#49aaed',
+            borderColor: '#49aaed',
+            data: [
+                @foreach($chartData as $chartDatum)
+                {{$chartDatum["totalIncome"]}},
+                @endforeach
+            ],
+            fill: false,
+        }, {
+            label: 'مجموع هزینه ها',
+            fill: false,
+            backgroundColor: '#ff597c',
+            borderColor: '#ff597c',
+            data: [
+                @foreach($chartData as $chartDatum)
+                {{$chartDatum["totalSpend"]}},
+                // 25000000,
+                @endforeach
+            ],
         }
-    };
-    
-    var config2 = {
-        type: 'pie',
-        data: {
-            datasets: [{
-                data: [
-                    40,
-                    4,
-                    15,
-                    19,
-                    22,
-                    18,
-                ],
-                backgroundColor: [
-                    '#c7c7c7',
-                    '#dadada',
-                    '#2ae58b',
-                    '#39e4ce',
-                    '#ffd555',
-                    '#ff839c',
-                ],
-                label: 'دونیت ها بر اساس استان'
-            }],
-            labels: [
-                'فارس',
-                'تهران',
-                'اصفهان',
-                'یزد',
-                'هرمزگان',
-                'بوشهر'
-            ]
-        },
-        options: {
-            responsive: true,
-            legend: {display: false}
-        }
-    };
-
-    window.onload = function () {
-        var ctx = document.getElementById('monthlychart').getContext('2d');
-        window.myLine = new Chart(ctx, config);
-
-        var ctxx = document.getElementById('provincecharts').getContext('2d');
-        window.myPie = new Chart(ctxx, config2);
-    };
-    
-    $(document).ready(function () {
-        $(document).on('click', '#btnDonationNow', function (e) {
-            let amount = $('#amount').val();
-
-            $.ajax({
-                type: 'POST',
-                url : '/api/v1/donate',
-                data: data,
-                dataType: 'json',
-
-                success: function (data) {
-                    if (data.url) {
-                        window.location = data.url;
-                    } else {
-                        alert('مشکلی پیش آمده است. مجددا سعی کنید.');
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert('مشکلی پیش آمده است. مجددا سعی کنید.');
-                }
-
-            });
-        });
-    });
+    ];
 </script>
+
+<script src="{{ asset('/acm/AlaatvCustomFiles/js/page-donate.js') }}"></script>
 
 </body>
 
