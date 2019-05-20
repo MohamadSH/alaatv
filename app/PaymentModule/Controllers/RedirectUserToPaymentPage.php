@@ -66,19 +66,17 @@ class RedirectUserToPaymentPage extends Controller
         $paymentClient = PaymentDriver::select($paymentMethod);
         $url = $this->comeBackFromGateWayUrl($paymentMethod, $device);
 
-
-        if ($this->shouldCloseOrder($order))
-        {
-            OrdersRepo::closeOrder($order->id, ['customerDescription' => $customerDescription]);
-        }
-
         $authorityCode = nullable($paymentClient->generateAuthorityCode($url, $cost, $description, $orderUniqueId))
-            ->orFailWith([Responses::class, 'noResponseFromBankError']);
+            ->orFailWith([Responses::class, 'noResponseFromBankError'] );
 
         TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id , $this->getGatewyId($paymentMethod), $description)
             ->orRespondWith([Responses::class, 'editTransactionError']);
 
-        $this->saveOrderInCookie($order);
+        if ($this->shouldCloseOrder($order))
+        {
+            OrdersRepo::closeOrder($order->id, ['customerDescription' => $customerDescription]);
+            $this->saveOrderInCookie($order);
+        }
 
         return view("order.checkout.gatewayRedirect", ['authority' => $authorityCode, 'paymentMethod' => $paymentMethod]);
     }

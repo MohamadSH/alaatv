@@ -876,8 +876,7 @@ class UserController extends Controller
         if ($authenticatedUser->can($moderatorPermission)) {
             $user->fill($inputData);
             $hasMobileVerifiedAt = in_array('mobileNumberVerification', $inputData);
-            //Shahrokhi: false barmigardanad dar soodati li agar mrghdar ra dar khorooji chap konid dar array vojood darad!
-//            $hasPassword         = in_array('password', $inputData);
+            // Checks both if $inputData has password index and it is not null
             $hasPassword = isset($inputData['password']);
 
             if ($hasMobileVerifiedAt) {
@@ -888,7 +887,7 @@ class UserController extends Controller
             if ($hasPassword) {
                 $user->password = bcrypt($inputData['password']);
             }
-    
+
             $user->lockProfile = array_get($inputData, 'lockProfile',
                 (isset($user->lockProfile) ? $user->lockProfile : 0));
         }
@@ -2124,6 +2123,7 @@ class UserController extends Controller
             return response($response, Response::HTTP_OK);
         }
         else {
+            session()->flash('success' , $message);
             return redirect()->back();
         }
     }

@@ -339,7 +339,9 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
             225,
             226,
             294,
-            295
+            295,
+            329,
+            330
         ]);
     }
     
@@ -695,6 +697,26 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         }
     
         $this->attributes['order'] = $value;
+    }
+
+    /**
+     * Set the content's tag.
+     *
+     * @param  array  $value
+     *
+     * @return void
+     */
+    public function setTagsAttribute(array $value = null)
+    {
+        $tags = null;
+        if (!empty($value)) {
+            $tags = json_encode([
+                'bucket' => 'content',
+                'tags'   => $value,
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        $this->attributes['tags'] = $tags;
     }
     
     public function producttype()

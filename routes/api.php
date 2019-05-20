@@ -5,6 +5,7 @@
 */
 
 use App\Http\Controllers\Api\GetPaymentRedirectEncryptedLink;
+use App\Http\Controllers\Api\OrderController;
 
 Auth::routes(['verify' => true]);
 
@@ -30,6 +31,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('product/{product}', 'Api\ProductController@show');
     Route::get('set/{set}', 'Api\SetController@show');
     Route::post('getPrice/{product}', 'Api\ProductController@refreshPrice');
+    Route::post('donate', [OrderController::class, 'donateOrder']);
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('user', 'Api\UserController');

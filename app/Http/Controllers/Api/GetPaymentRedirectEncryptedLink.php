@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
 
@@ -19,9 +21,10 @@ class GetPaymentRedirectEncryptedLink extends Controller
     {
         $paymentMethod = $request->get('paymentMethod', 'zarinpal');
         $device        = $request->get('device', 'android');
+        $orderId       = $request->get('order_id');
         $user          = $request->user();
         
-        $encryptedPostfix = $this->getEncryptedPostfix($user);
+        $encryptedPostfix = $this->getEncryptedPostfix($user , $orderId);
         
         $redirectTo = $this->getEncryptedUrl($paymentMethod, $device, $encryptedPostfix);
         
@@ -29,23 +32,29 @@ class GetPaymentRedirectEncryptedLink extends Controller
             'url' => $redirectTo,
         ]);
     }
-    
+
     /**
-     * @param $user
+     * @param User $user
      *
+     * @param int|null $orderId
      * @return string
      */
-    private function getEncryptedPostfix($user): string
+    private function getEncryptedPostfix(User $user , $orderId): string
     {
-        return encrypt([
-            'user_id' => $user->id,
-        ]);
+        $toEncrypt = ['user_id' => $user->id,];
+
+        if(isset($orderId))
+        {
+            $toEncrypt = Arr::add($toEncrypt , 'order_id' , $orderId);
+        }
+
+        return encrypt($toEncrypt);
     }
-    
+
     /**
-     * @param  string  $paymentMethod
-     * @param  string  $device
-     * @param  string  $encryptedPostfix
+     * @param string $paymentMethod
+     * @param string $device
+     * @param string $encryptedPostfix
      *
      * @return string
      */
@@ -56,7 +65,7 @@ class GetPaymentRedirectEncryptedLink extends Controller
             'device'         => $device,
             'encryptionData' => $encryptedPostfix,
         ];
-        
+
         return URL::temporarySignedRoute(
             'redirectToPaymentRoute',
             3600,

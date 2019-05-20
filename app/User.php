@@ -3,7 +3,6 @@
 namespace App;
 
 use App\HelpDesk\Models\Category;
-use App\HelpDesk\Models\Ticket;
 use Hash;
 use Carbon\Carbon;
 use App\Traits\Helper;
@@ -403,7 +402,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'diet',
         'firstName',
         'lastName',
-        'password',
         'nationalCode',
         'nameSlug',
         'mobile',
