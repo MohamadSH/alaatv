@@ -174,10 +174,32 @@ trait ContentControllerResponseTrait
         $file->res     = $res;
         $file->caption = Content::videoFileCaptionTable()[$res];
         $file->type    = "video";
-        
+        $file->url     = null;
+        $file->size    = null;
+        $file->disk    = config('constants.DISK_FREE_CONTENT');
+
+
         return $file;
     }
-    
+
+    /**
+     * @param $filename
+     * @return stdClass
+     */
+    private function makePamphletFileStdClass($filename): stdClass
+    {
+        $file          = new stdClass();
+        $file->name    = $filename;
+        $file->res     = null;
+        $file->caption = 'فایل';
+        $file->url     = null;
+        $file->size    = null;
+        $file->type    = "pamphlet";
+        $file->disk    = config('constants.DISK19_CLOUD');
+
+        return $file;
+    }
+
     /**
      * @param $fileName
      * @param $contentset_id
@@ -210,6 +232,13 @@ trait ContentControllerResponseTrait
         
         return $files;
     }
-    
+
+    public function makePamphletFileArray($fileName): array
+    {
+        $files   = [];
+        $files[] = $this->makePamphletFileStdClass($fileName);
+        return $files;
+    }
+
     
 }
