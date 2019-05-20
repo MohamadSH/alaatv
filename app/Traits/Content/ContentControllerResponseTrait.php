@@ -76,7 +76,7 @@ trait ContentControllerResponseTrait
         $content->fill($inputData);
         $content->validSince = $this->getValidSinceDateTime($time, $validSince);
         $content->enable     = $enabled ? 1 : 0;
-        $content->tags       = $this->getTagsArrayFromTagString($tagString);
+        $content->tags       = convertTagStringToArray($tagString);
         
         if (isset($files)) {
             $this->storeFilesOfContent($content, $files);
@@ -110,19 +110,6 @@ trait ContentControllerResponseTrait
         }
         
         return null;
-    }
-    
-    /**
-     * @param $tagString
-     *
-     * @return array
-     */
-    protected function getTagsArrayFromTagString($tagString): array
-    {
-        $tags = explode(",", $tagString);
-        $tags = array_filter($tags);
-        
-        return $tags;
     }
     
     protected function getUserCanNotSeeContentJsonResponse(Content $content, ProductCollection $productsThatHaveThisContent, callable $callback): JsonResponse
