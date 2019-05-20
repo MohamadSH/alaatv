@@ -150,21 +150,26 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="m-portlet__body m--padding-top-5 m--padding-bottom-5">
+                                                    <div class="m-portlet__body m--padding-5">
                                                         <!--begin::m-widget4-->
                                                         <div class="m-widget4">
-
+                                                            
                                                             @foreach($product->attributes->get('information')->where('control', 'checkBox') as $key => $informationItem)
-                                                                <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10">
-                                                                    <div class="m-widget4__img m-widget4__img--icon">
-                                                                        <i class="fa fa-check"></i>
-                                                                    </div>
-                                                                    <div class="m-widget4__info">
-                                                                        <span class="m-widget4__text">
-                                                                            {{ $informationItem->title . ': ' . $informationItem->data[0]->name }}
-                                                                        </span>
-                                                                    </div>
+                                                                <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10 a--full-width">
+                                                                    {{ $informationItem->title }} :
                                                                 </div>
+                                                                @foreach($informationItem->data as $key => $informationItemData)
+                                                                    <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10">
+                                                                        <div class="m-widget4__img m-widget4__img--icon">
+                                                                            <i class="fa fa-check"></i>
+                                                                        </div>
+                                                                        <div class="m-widget4__info">
+                                                                            <span class="m-widget4__text">
+                                                                                {{ $informationItemData->name }}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
                                                             @endforeach
 
                                                         </div>
