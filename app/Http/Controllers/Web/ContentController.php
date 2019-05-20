@@ -247,7 +247,7 @@ class ContentController extends Controller
     {
 //        $contenttypes = Contenttype::getRootContentType()
 //            ->pluck('displayName', 'id');
-        $contenttypes = [ 8 => 'فیلم'];
+        $contenttypes = [ 8 => 'فیلم' , 1 =>    'جزوه'];
         
         $view = view("content.create3", compact("contenttypes"));
         return httpResponse(null, $view);
@@ -397,15 +397,17 @@ class ContentController extends Controller
      */
     private function storeFilesOfContent(Content $content, array $files): void
     {
-        $disk = $content->isFree ? config('constants.DISK_FREE_CONTENT') : config('constants.DISK_PRODUCT_CONTENT');
-        
         $fileCollection = collect();
         
         foreach ($files as $key => $file) {
+            $fileDisk     = isset($file->disk) ? $file->disk : null;
+            $disk = $content->isFree ? $fileDisk : config('constants.DISK_PRODUCT_CONTENT');
             $fileName = isset($file->name) ? $file->name : null;
             $caption  = isset($file->caption) ? $file->caption : null;
             $res      = isset($file->res) ? $file->res : null;
             $type     = isset($file->type) ? $file->type : null;
+            $url     = isset($file->url) ? $file->url : null;
+            $size     = isset($file->size) ? $file->size : null;
             if ($this->strIsEmpty($fileName)) {
                 continue;
             }
@@ -413,16 +415,16 @@ class ContentController extends Controller
                 'uuid'     => Str::uuid()
                     ->toString(),
                 'disk'     => $disk,
-                'url'      => null,
+                'url'      => $url,
                 'fileName' => $fileName,
-                'size'     => null,
+                'size'     => $size,
                 'caption'  => $caption,
                 'res'      => $res,
                 'type'     => $type,
                 'ext'      => pathinfo($fileName, PATHINFO_EXTENSION),
             ]);
         }
-        /** @var TYPE_NAME $content */
+        /** @var Content $content */
         $content->file = $fileCollection;
     }
     
@@ -436,6 +438,9 @@ class ContentController extends Controller
     {
         if($request->has("newContetnsetId"))
         {
+            session()->put('error', 'این قابلیت در حال حاضر غیر فعال می باشد');
+            return redirect()->back();
+
             $educationalContentId =  $request->get("educationalContentId");
             $newContetnsetId = $request->get("newContetnsetId");
             $newFileFullName = $request->get("newFileFullName") ;
@@ -479,8 +484,7 @@ class ContentController extends Controller
             }
 
             Cache::tags('content')->flush();
-//            session()->put('success', 'تغییر نام با موفقیت انجام شد');
-            session()->put('error', 'این قابلیت در حال حاضر غیر فعال می باشد');
+            session()->put('success', 'تغییر نام با موفقیت انجام شد');
             return redirect()->back();
         }
 
@@ -520,16 +524,28 @@ class ContentController extends Controller
         $newContent->created_at = $dateNow;
         $newContent->updated_at = $dateNow;
 
-        $files = $this->makeVideoFileArray($fileName, $contentset_id);
+        if($contenttype_id == config('constants.CONTENT_TYPE_VIDEO'))
+        {
+            $files = $this->makeVideoFileArray($fileName, $contentset_id);
+            $thumbnailUrl = $this->makeThumbnailUrlFromFileName($fileName, $contentset_id);
+            $newContent->thumbnail = $this->makeThumbanilFile($thumbnailUrl);
+        }
+        elseif($contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET'))
+        {
+            $newContent->thumbnail = null;
+            $files = $this->makePamphletFileArray($fileName);
+        }
 
-        $thumbnailUrl = $this->makeThumbnailUrlFromFileName($fileName, $contentset_id);
-        $newContent->thumbnail = $this->makeThumbanilFile($thumbnailUrl);
-        $this->storeFilesOfContent($newContent, $files);
+        if (!empty($files)) {
+            $this->storeFilesOfContent($newContent, $files);
+            $newContent->save();
 
-        $newContent->save();
+            return redirect(action("Web\ContentController@edit", $newContent->id));
 
-        return redirect(action("Web\ContentController@edit", $newContent->id));
+        }
 
+        session()->flash('error' , 'Empty files array');
+        return redirect()->back();
     }
     
     
