@@ -39,7 +39,8 @@ class PaymentVerifierController extends Controller
          * @var OnlinePaymentVerificationResponseInterface $verificationResult
          */
         $verificationResult = $paymentClient->verifyPayment($money, $authority);
-        
+        $responseMessages = $verificationResult->getMessages();
+
         $transaction->order->detachUnusedCoupon();
         if ($verificationResult->isSuccessfulPayment()) {
             TransactionRepo::handleTransactionStatus(
@@ -48,10 +49,12 @@ class PaymentVerifierController extends Controller
                 $verificationResult->getCardPanMask()
             );
             $this->handleOrderSuccessPayment($transaction->order);
+
         } else {
             $this->handleOrderCanceledPayment($transaction->order);
             $this->handleOrderCanceledTransaction($transaction);
             $transaction->update();
+            $responseMessages[]= 'یک سفارش پرداخت نشده به لیست سفارش های شما افزوده شده است که می توانید با رفتن به صفحه سفارش های من آن را پرداخت کنید';
         }
 
         setcookie('cartItems', '', time() - 3600, '/');
@@ -60,7 +63,7 @@ class PaymentVerifierController extends Controller
         if (isset($transaction->order_id)) {} else { if (isset($transaction->wallet_id)) { if ($result['status']) { $this->handleWalletChargingSuccessPayment($gatewayVerify['RefID'], $transaction, $gatewayVerify['cardPanMask']); } else { $this->handleWalletChargingCanceledPayment($transaction); } } } */
 
         Request::session()->flash('verifyResult', [
-            'messages' => $verificationResult->getMessages(),
+            'messages' => $responseMessages,
             'cardPanMask' => $verificationResult->getCardPanMask(),
             'RefID' => $verificationResult->getRefId(),
             'isCanceled' => $verificationResult->isCanceled(),
