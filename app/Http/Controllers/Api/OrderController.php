@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Collection\OrderCollections;
+use App\Http\Controllers\Web\OrderproductController;
+use App\Http\Requests\DonateRequest;
 use App\Order;
 use App\Coupon;
+use App\Orderproduct;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -323,5 +327,66 @@ class OrderController extends Controller
         }
         
         return response($response, Response::HTTP_OK);
+    }
+
+    /**
+     * Makes a donate request
+     *
+     * @param  \App\Http\Requests\DonateRequest  $request
+     * @param  OrderproductController            $orderproductController
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function donateOrder(DonateRequest $request)
+    {
+        // todo : use alaatv gaurd
+        $user = $request->user('api');
+        if (!isset($user)) {
+            $user = $request->user();
+        }
+
+        if ($user === null) {
+            abort(403, 'Not authorized.');
+        }
+        $amount       = $request->get('amount');
+        /** @var OrderCollections $donateOrders */
+        $donateOrders = $user->orders->where('orderstatus_id', config('constants.ORDER_STATUS_OPEN_DONATE'));
+        if ($donateOrders->isNotEmpty()) {
+            $donateOrder = $donateOrders->first();
+        } else {
+            $donateOrder = Order::create([
+                'orderstatus_id'      =>  config('constants.ORDER_STATUS_OPEN_DONATE'),
+                'paymentstatus_id'    =>  config('constants.PAYMENT_STATUS_UNPAID'),
+                'user_id'             =>  $user->id,
+            ]);
+        }
+
+        $donateProduct        = Product::FindOrFail(Product::CUSTOM_DONATE_PRODUCT);
+
+        $oldOrderproducts = $donateOrder->orderproducts(config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
+            ->where('product_id', $donateProduct->id)
+            ->get();
+
+        if($oldOrderproducts->isNotEmpty())
+        {
+            $oldOrderproduct = $oldOrderproducts->first();
+            $oldOrderproduct->cost = $amount;
+            $oldOrderproduct->update();
+        }else{
+            $donateOrderproduct = Orderproduct::Create([
+                'order_id'  =>  $donateOrder->id,
+                'product_id' => $donateProduct->id,
+                'cost'  =>  $amount,
+                'orderproducttype_id'  =>  config('constants.ORDER_PRODUCT_TYPE_DEFAULT'),
+            ]);
+        }
+
+        $donateOrder                    = $donateOrder->fresh();
+        $orderCost                      = $donateOrder->obtainOrderCost(true, false);
+        $donateOrder->cost              = $orderCost['rawCostWithDiscount'];
+        $donateOrder->costwithoutcoupon = $orderCost['rawCostWithoutDiscount'];
+        $donateOrder->update();
+
+        return redirect()->route('api.payment.getEncryptedLink' , ['order_id'  =>  $donateOrder->id]);
     }
 }

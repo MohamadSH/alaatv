@@ -76,7 +76,7 @@ trait ContentControllerResponseTrait
         $content->fill($inputData);
         $content->validSince = $this->getValidSinceDateTime($time, $validSince);
         $content->enable     = $enabled ? 1 : 0;
-        $content->tags       = $this->getTagsArrayFromTagString($tagString);
+        $content->tags       = convertTagStringToArray($tagString);
         
         if (isset($files)) {
             $this->storeFilesOfContent($content, $files);
@@ -110,19 +110,6 @@ trait ContentControllerResponseTrait
         }
         
         return null;
-    }
-    
-    /**
-     * @param $tagString
-     *
-     * @return array
-     */
-    protected function getTagsArrayFromTagString($tagString): array
-    {
-        $tags = explode(",", $tagString);
-        $tags = array_filter($tags);
-        
-        return $tags;
     }
     
     protected function getUserCanNotSeeContentJsonResponse(Content $content, ProductCollection $productsThatHaveThisContent, callable $callback): JsonResponse
@@ -174,10 +161,32 @@ trait ContentControllerResponseTrait
         $file->res     = $res;
         $file->caption = Content::videoFileCaptionTable()[$res];
         $file->type    = "video";
-        
+        $file->url     = null;
+        $file->size    = null;
+        $file->disk    = config('constants.DISK_FREE_CONTENT');
+
+
         return $file;
     }
-    
+
+    /**
+     * @param $filename
+     * @return stdClass
+     */
+    private function makePamphletFileStdClass($filename): stdClass
+    {
+        $file          = new stdClass();
+        $file->name    = $filename;
+        $file->res     = null;
+        $file->caption = 'فایل';
+        $file->url     = null;
+        $file->size    = null;
+        $file->type    = "pamphlet";
+        $file->disk    = config('constants.DISK19_CLOUD');
+
+        return $file;
+    }
+
     /**
      * @param $fileName
      * @param $contentset_id
@@ -210,6 +219,13 @@ trait ContentControllerResponseTrait
         
         return $files;
     }
-    
+
+    public function makePamphletFileArray($fileName): array
+    {
+        $files   = [];
+        $files[] = $this->makePamphletFileStdClass($fileName);
+        return $files;
+    }
+
     
 }
