@@ -58,7 +58,11 @@ class ProductController extends Controller
         $selectedSubProductIds = $request->get("products");
         $extraAttributeValues  = $request->get("extraAttributeValues");
 
-        $user = $request->user('alaatv');
+        // todo : use alaatv gaurd
+        $user = $request->user('api');
+        if (!isset($user)) {
+            $user = $request->user();
+        }
 
         $key = "product:refreshPrice:".$grandProduct->cacheKey()."-user\\".(isset($user) && !is_null($user) ? $user->cacheKey() : "")."-mainAttributeValues\\".(isset($mainAttributeValues) ? implode("",
                 $mainAttributeValues) : "-")."-subProducts\\".(isset($selectedSubProductIds) ? implode("",
