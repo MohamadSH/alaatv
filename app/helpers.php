@@ -40,3 +40,13 @@ if (!function_exists('clearHtml')) {
         return Purify::clean($value, ['HTML.Allowed' => '']);
     }
 }
+if (!function_exists('convertTagStringToArray')) {
+    function convertTagStringToArray($tagString): array
+    {
+        $tags = explode(",", $tagString);
+        $tags = array_filter($tags);
+
+        return $tags;
+    }
+
+}
