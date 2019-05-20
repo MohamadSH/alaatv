@@ -438,7 +438,7 @@ class ContentController extends Controller
     {
         if($request->has("newContetnsetId"))
         {
-            session()->put('error', 'این قابلیت در حال حاضر غیر فعال می باشد');
+            session()->flash('error', 'این قابلیت در حال حاضر غیر فعال می باشد');
             return redirect()->back();
 
             $educationalContentId =  $request->get("educationalContentId");
@@ -484,7 +484,7 @@ class ContentController extends Controller
             }
 
             Cache::tags('content')->flush();
-            session()->put('success', 'تغییر نام با موفقیت انجام شد');
+            session()->flash('success', 'تغییر نام با موفقیت انجام شد');
             return redirect()->back();
         }
 
@@ -499,7 +499,7 @@ class ContentController extends Controller
         $lastContent = $contentset->contents2()->where("contenttype_id" , $contenttype_id)->get()->sortByDesc("order")->first();
 
         if (!isset($lastContent)) {
-            session()->put('error', trans('content.No previous content found'));
+            session()->flash('error', trans('content.No previous content found'));
 
             return redirect()->back();
         }
