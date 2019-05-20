@@ -182,8 +182,12 @@ class ProductController extends Controller
         $files     = $request->has("files") ? [$request->files] : [];
         $images    = $request->has("image") ? [$request->image] : [];
         $isFree    = $request->has("isFree");
+        $tagString = $request->get("tags");
 
         $product->fill($inputData);
+
+        if(strlen($tagString)>0)
+            $product->tags       = convertTagStringToArray($tagString);
 
         if ($this->strIsEmpty($product->discount))
             $product->discount  = 0;
@@ -346,18 +350,10 @@ class ProductController extends Controller
         if ($productPhotos->isNotEmpty()) {
             $defaultProductPhotoOrder = $productPhotos->first()->order + 1;
         }
-        
-        $tags = [
-            'تگ شماره یک',
-            'تگ شماره دو',
-            'تگ شماره سه',
-            'تگ شماره چهار',
-            'تگ شماره پنج',
-            'تگ شماره شش'
-        ];
-    
-        $tags = implode(',', $tags);
-    
+
+        $tags           = optional($product->tags)->tags;
+        $tags           = implode(",", isset($tags) ? $tags : []);
+
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
                 'attributesets', 'bons', 'productFiles',
@@ -390,7 +386,7 @@ class ProductController extends Controller
         if ($bonPlus || $bonDiscount) {
             $this->attachBonToProduct($product, $bonId, $bonDiscount, $bonPlus);
         }
-        
+
         if ($product->update()) {
             session()->put('success', 'اصلاح محصول با موفقیت انجام شد');
         } else {
@@ -1363,4 +1359,5 @@ class ProductController extends Controller
         return response()->json(['message' => 'خطا در کپی از اطلاعات پایه ای محصول . لطفا دوباره اقدام نمایید'],
             Response::HTTP_SERVICE_UNAVAILABLE);
     }
+
 }

@@ -926,6 +926,12 @@
                             } else {
                                 successfulTransactions += '<span class="m-badge m-badge--wide m-badge--danger">- نحوه پرداخت نامشخص</span>';
                             }
+                            if (
+                                typeof successfulTransaction.transactiongateway !== 'undefined' &&
+                                successfulTransaction.transactiongateway !== null
+                            ) {
+                                successfulTransactions += '<span class="m-badge m-badge--wide m-badge--info">'+successfulTransaction.transactiongateway.displayName+'</span>';
+                            }
                             successfulTransactions += '- مبلغ: ';
                             if (successfulTransaction.cost >= 0) {
                                 successfulTransactions += successfulTransaction.cost.toLocaleString('fa');
@@ -978,6 +984,12 @@
                                 pendingTransactions += pendingTransaction.paymentmethod.displayName;
                             }
 
+                            if (
+                                typeof pendingTransaction.transactiongateway !== 'undefined' &&
+                                pendingTransaction.transactiongateway !== null
+                            ) {
+                                pendingTransactions += '<span class="m-badge m-badge--wide m-badge--info">'+pendingTransaction.transactiongateway.displayName+'</span>';
+                            }
                             if (typeof pendingTransaction.cost !== 'undefined') {
                                 pendingTransactions += ' ,مبلغ:  ' + pendingTransaction.cost.toLocaleString('fa');
                             } else {

@@ -67,7 +67,7 @@ class RedirectUserToPaymentPage extends Controller
         $url = $this->comeBackFromGateWayUrl($paymentMethod, $device);
 
         $authorityCode = nullable($paymentClient->generateAuthorityCode($url, $cost, $description, $orderUniqueId))
-            ->orFailWith([Responses::class, 'noResponseFromBankError']);
+            ->orFailWith([Responses::class, 'noResponseFromBankError'] );
 
         TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id , $this->getGatewyId($paymentMethod), $description)
             ->orRespondWith([Responses::class, 'editTransactionError']);

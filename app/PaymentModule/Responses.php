@@ -9,9 +9,9 @@ use Illuminate\Routing\Redirector;
 
 class Responses
 {
-    public static function noResponseFromBankError($msg = '')
+    public static function noResponseFromBankError()
     {
-        return self::sendErrorResponse($msg, Response::HTTP_SERVICE_UNAVAILABLE);
+        return self::sendErrorResponse('No response from bank', Response::HTTP_SERVICE_UNAVAILABLE);
     }
     
     /**

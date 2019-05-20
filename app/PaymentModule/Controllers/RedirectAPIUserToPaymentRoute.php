@@ -32,13 +32,20 @@ class RedirectAPIUserToPaymentRoute extends Controller
         $decryptedData = $this->getDecryptedData($request->encryptionData);
 
         $userId = Arr::get($decryptedData, 'user_id');
-        //ToDo : check with Iman
+        $orderId= Arr::get($decryptedData, 'order_id');
+
         $user = $this->getUser($userId)
             ->orFailWith([Response::class, 'sendErrorResponse', ['User not found', Response::HTTP_BAD_REQUEST]]);
 
         Auth::login($user);
 
-        return redirect(route('redirectToBank', ['paymentMethod' => $paymentMethod, 'device' => $device]));
+        $parameters = ['paymentMethod' => $paymentMethod, 'device' => $device];
+        if(isset($orderId))
+        {
+            $parameters = Arr::add($parameters, 'order_id', $orderId);
+        }
+
+        return redirect(route('redirectToBank', $parameters));
     }
 
     private function getDecryptedData(string $encryptedData)
