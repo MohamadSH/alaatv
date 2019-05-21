@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Order;
 use App\Product;
+use App\Repositories\TransactionGatewayRepo;
 use Carbon\Carbon;
 use App\Transaction;
 use App\Orderproduct;
@@ -518,10 +519,12 @@ class TransactionController extends Controller
             $completedAt = Carbon::parse($transaction->completed_at)
                 ->format('Y-m-d');
         }
+
+        $transactionGateways = TransactionGatewayRepo::getTransactionGateways(['enable'=>1])->pluck('displayName' , 'id');
         
         return view("transaction.edit",
             compact('transaction', 'transactionPaymentmethods', 'transactionStatuses', '$transactionStatuses',
-                'deadlineAt', 'completedAt'));
+                'deadlineAt', 'completedAt' , 'transactionGateways'));
     }
 
     public function limitedUpdate(Request $request, Transaction $transaction)
