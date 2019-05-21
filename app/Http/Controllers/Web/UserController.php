@@ -12,6 +12,7 @@ use Kalnoy\Nestedset\QueryBuilder;
 use App\Http\Controllers\Controller;
 use Illuminate\{Http\Request,
     Http\Response,
+    Support\Arr,
     Support\Collection,
     Support\Facades\DB,
     Support\Facades\View,
@@ -874,18 +875,20 @@ class UserController extends Controller
     private function fillContentFromRequest(array $inputData, User $authenticatedUser, string $moderatorPermission, User &$user): void
     {
         if ($authenticatedUser->can($moderatorPermission)) {
-            $user->fill($inputData);
-            $hasMobileVerifiedAt = in_array('mobileNumberVerification', $inputData);
             // Checks both if $inputData has password index and it is not null
             $hasPassword = isset($inputData['password']);
+
+            if ($hasPassword) {
+                $user->password = bcrypt($inputData['password']);
+            }
+
+            Arr::pull($inputData , 'password') ;
+            $user->fill($inputData);
+            $hasMobileVerifiedAt = in_array('mobileNumberVerification', $inputData);
 
             if ($hasMobileVerifiedAt) {
                 $user->mobile_verified_at = ($inputData['mobileNumberVerification'] == '1') ? Carbon::now()
                     ->setTimezone('Asia/Tehran') : null;
-            }
-
-            if ($hasPassword) {
-                $user->password = bcrypt($inputData['password']);
             }
 
             $user->lockProfile = array_get($inputData, 'lockProfile',
