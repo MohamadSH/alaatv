@@ -1,7 +1,9 @@
 @extends("app" , ["pageName"=>$pageName])
 
-@section('right-aside')
+@section('page-css')
+    <link href="{{ mix('/css/page-dashboard1.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
+
 @section("content")
     @include("partials.slideShow1" ,["marginBottom"=>"25"])
     
@@ -9,73 +11,81 @@
     <!--begin:: Widgets/Stats-->
     <div class="m-portlet ">
         <div class="m-portlet__body  m-portlet__body--no-padding">
-            <div class="row m-row--no-padding m-row--col-separator-xl">
-                <div class="col-xs-3 col-md-3 col-lg-3 col-xl-3 m--bg-warning">
+            <div class="row m-row--no-padding m-row--col-separator-xl shopNavItems">
+                <div class="col-xs-3 col-md-3 col-lg-3 col-xl-3 m--bg-warning shopNavItem">
                     <a target="_self" onclick="$('html,body').animate({scrollTop: $('.konkoor1').offset().top - 100},'slow');" href="#konkoor1">
                         <!--begin::Total Profit-->
                         <div class="m-widget24 m--align-center">
                             <div class="m-widget24__item">
-                                <h2 class="m-widget24__title">
-                                    کنکور نظام قدیم
-                                </h2>
+                                <button class="btn m-btn m-btn--pill m-btn--air" type="button">
+                                    <h2 class="m-widget24__title">
+                                        کنکور نظام قدیم
+                                    </h2>
+                                </button>
                                 <br>
-                                <span class="m-widget24__desc m--font-light">
-				            آلاء
-				            </span>
+                                <span class="m--font-light">
+                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20">
+				                </span>
                                 <div class="m--space-10"></div>
                             </div>
                         </div>
                         <!--end::Total Profit-->
                     </a>
                 </div>
-                <div class="col-xs-3 col-md-3 col-lg-3 col-xl-3 m--bg-accent">
+                <div class="col-xs-3 col-md-3 col-lg-3 col-xl-3 m--bg-accent shopNavItem">
                     <a target="_self" onclick="$('html,body').animate({scrollTop: $('.konkoor2').offset().top - 100},'slow');" href="#konkoor2">
                         <!--begin::Total Profit-->
                         <div class="m-widget24 m--align-center">
                             <div class="m-widget24__item">
-                                <h2 class="m-widget24__title">
-                                    کنکور نظام جدید
-                                </h2>
+                                <button class="btn m-btn m-btn--pill m-btn--air" type="button">
+                                    <h2 class="m-widget24__title">
+                                        کنکور نظام جدید
+                                    </h2>
+                                </button>
                                 <br>
-                                <span class="m-widget24__desc m--font-light">
-				            آلاء
-				            </span>
+                                <span class="m--font-light">
+                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20">
+				                </span>
                                 <div class="m--space-10"></div>
                             </div>
                         </div>
                         <!--end::Total Profit-->
                     </a>
                 </div>
-                <div class="col-xs-3 col-md-3 col-lg-3 col-xl-3 m--bg-success">
+                <div class="col-xs-3 col-md-3 col-lg-3 col-xl-3 m--bg-success shopNavItem">
                     <a target="_self" onclick="$('html,body').animate({scrollTop: $('.yazdahom').offset().top - 100},'slow');" href="#yazdahom">
                         <!--begin::Total Profit-->
                         <div class="m-widget24 m--align-center">
                             <div class="m-widget24__item">
-                                <h2 class="m-widget24__title">
-                                    پایه یازدهم
-                                </h2>
+                                <button class="btn m-btn m-btn--pill m-btn--air" type="button">
+                                    <h2 class="m-widget24__title">
+                                        پایه یازدهم
+                                    </h2>
+                                </button>
                                 <br>
-                                <span class="m-widget24__desc m--font-light">
-				            آلاء
-				            </span>
+                                <span class="m--font-light">
+                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20">
+				                </span>
                                 <div class="m--space-10"></div>
                             </div>
                         </div>
                         <!--end::Total Profit-->
                     </a>
                 </div>
-                <div class="col-xs-3 col-md-3 col-lg-3 col-xl-3 m--bg-fill-info">
+                <div class="col-xs-3 col-md-3 col-lg-3 col-xl-3 m--bg-info shopNavItem">
                     <a target="_self" onclick="$('html,body').animate({scrollTop: $('.dahom').offset().top - 100},'slow');" href="#dahom">
                         <!--begin::Total Profit-->
                         <div class="m-widget24 m--align-center">
                             <div class="m-widget24__item">
-                                <h2 class="m-widget24__title">
-                                    پایه دهم
-                                </h2>
+                                <button class="btn m-btn m-btn--pill m-btn--air" type="button">
+                                    <h2 class="m-widget24__title">
+                                        پایه دهم
+                                    </h2>
+                                </button>
                                 <br>
-                                <span class="m-widget24__desc m--font-light">
-				            آلاء
-				            </span>
+                                <span class="m--font-light">
+                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20">
+				                </span>
                                 <div class="m--space-10"></div>
                             </div>
                         </div>
