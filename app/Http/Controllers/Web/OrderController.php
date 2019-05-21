@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Repositories\TransactionGatewayRepo;
 use App\User;
 use App\Order;
 use App\Coupon;
@@ -569,11 +570,13 @@ class OrderController extends Controller
     
         $products = $this->makeProductCollection();
 
+        $transactionGateways = TransactionGatewayRepo::getTransactionGateways(['enable'=>1])->pluck('displayName' , 'id');
+
         return view('order.edit',
             compact('order', 'orderstatuses', 'paymentstatuses', 'coupons', 'orderTransactions', 'transactionstatuses',
                 'productBon',
                 'transactionPaymentmethods', 'transactionStatuses', 'products', 'orderArchivedTransactions',
-                'offlineTransactionPaymentMethods'));
+                'offlineTransactionPaymentMethods' , 'transactionGateways'));
     }
     
     /**
@@ -1665,13 +1668,11 @@ class OrderController extends Controller
             return redirect()->back();
         }
     }
-    
+
     /**
      * Makes a donate request
      *
-     * @param  \App\Http\Requests\DonateRequest  $request
-     * @param  OrderproductController            $orderproductController
-     *
+     * @param \App\Http\Requests\DonateRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function donateOrder(DonateRequest $request)
