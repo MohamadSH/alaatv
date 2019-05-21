@@ -125,7 +125,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('lotteryAdminPanel', 'Web\AdminController@adminLottery');
     Route::get('teleMarketingAdminPanel', 'Web\AdminController@adminTeleMarketing');
     Route::post('adminSendSMS', 'Web\HomeController@sendSMS');
-    Route::get('asset', 'Web\UserController@userProductFiles');
+    Route::get('asset', 'Web\UserController@userProductFiles')->name('user.asset');
     Route::get('complete-register', 'Web\UserController@completeRegister')
         ->name('completeRegister');
     Route::get('survey', 'Web\UserController@showSurvey');

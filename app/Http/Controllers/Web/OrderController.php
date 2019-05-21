@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Repositories\TransactionGatewayRepo;
 use App\User;
 use App\Order;
 use App\Coupon;
@@ -569,11 +570,13 @@ class OrderController extends Controller
     
         $products = $this->makeProductCollection();
 
+        $transactionGateways = TransactionGatewayRepo::getTransactionGateways(['enable'=>1])->pluck('displayName' , 'id');
+
         return view('order.edit',
             compact('order', 'orderstatuses', 'paymentstatuses', 'coupons', 'orderTransactions', 'transactionstatuses',
                 'productBon',
                 'transactionPaymentmethods', 'transactionStatuses', 'products', 'orderArchivedTransactions',
-                'offlineTransactionPaymentMethods'));
+                'offlineTransactionPaymentMethods' , 'transactionGateways'));
     }
     
     /**
@@ -1665,62 +1668,7 @@ class OrderController extends Controller
             return redirect()->back();
         }
     }
-    
-    /**
-     * Makes a donate request
-     *
-     * @param  \App\Http\Requests\DonateRequest  $request
-     * @param  OrderproductController            $orderproductController
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function donateOrder(DonateRequest $request)
-    {
-        $amount       = $request->get('amount');
-        $user         = $request->user();
-        /** @var OrderCollections $donateOrders */
-        $donateOrders = $user->orders->where('orderstatus_id', config('constants.ORDER_STATUS_OPEN_DONATE'));
-        if ($donateOrders->isNotEmpty()) {
-            $donateOrder = $donateOrders->first();
-        } else {
-            $donateOrder = Order::create([
-                'orderstatus_id'      =>  config('constants.ORDER_STATUS_OPEN_DONATE'),
-                'paymentstatus_id'    =>  config('constants.PAYMENT_STATUS_UNPAID'),
-                'user_id'             =>  $user->id,
-            ]);
-        }
 
-        $donateProduct        = Product::FindOrFail(Product::CUSTOM_DONATE_PRODUCT);
-
-        $oldOrderproducts = $donateOrder->orderproducts(config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
-            ->where('product_id', $donateProduct->id)
-            ->get();
-
-        if($oldOrderproducts->isNotEmpty())
-        {
-            $oldOrderproduct = $oldOrderproducts->first();
-            $oldOrderproduct->cost = $amount;
-            $oldOrderproduct->update();
-        }else{
-            $donateOrderproduct = Orderproduct::Create([
-                                'order_id'  =>  $donateOrder->id,
-                                'product_id' => $donateProduct->id,
-                                'cost'  =>  $amount,
-                                'orderproducttype_id'  =>  config('constants.ORDER_PRODUCT_TYPE_DEFAULT'),
-                        ]);
-        }
-
-        $donateOrder                    = $donateOrder->fresh();
-        $orderCost                      = $donateOrder->obtainOrderCost(true, false);
-        $donateOrder->cost              = $orderCost['rawCostWithDiscount'];
-        $donateOrder->costwithoutcoupon = $orderCost['rawCostWithoutDiscount'];
-        $donateOrder->update();
-
-        $paymentRoute = route('redirectToBank', ['paymentMethod' => 'zarinpal', 'device' => 'web']);
-        $paymentRoute .= '?order_id='.$donateOrder->id ;
-        return redirect($paymentRoute);
-    }
-    
     /**
      * Adds a product to intended order
      *

@@ -84,20 +84,50 @@
     </div>
 @endif
 <div class="row static-info margin-top-20">
-    <div class="col form-group {{ $errors->has('paymentmethod_id') ? ' has-error' : '' }} {{ $errors->has('paymentMethodName') ? ' has-error' : '' }}">
+    <div class="col form-group {{ ($errors->has('paymentmethod_id') || $errors->has('paymentMethodName')) ? ' has-error' : '' }}">
         <div class="row">
-            <label class="col-md-3 control-label" for="{{(isset($name["paymentmethod"]))?$name["paymentmethod"]:'paymentmethod_id'}}">روش پرداخت:</label>
+            <label class="col-md-3 control-label" for="{{(isset($name["paymentmethod"]))?$name["paymentmethod"]:'paymentmethod_id'}}">
+                روش پرداخت:
+            </label>
             <div class="col-md-6">
                 {!! Form::select( (isset($name["paymentmethod"]))?$name["paymentmethod"]:'paymentmethod_id',$transactionPaymentmethods,old((isset($name["paymentmethod"]))?$name["paymentmethod"]:'paymentmethod_id'),[ 'class' => (isset($class["paymentmethod"]))?'form-control '.$class["paymentmethod"]:'form-control' , 'id' => (isset($id["paymentmethod"]))?$id["paymentmethod"]:'' , 'placeholder'=>'نامشخص']) !!}
                 @if ($errors->has('paymentMethodName'))
                     <span class="help-block">
-                        <strong>{{ $errors->first('paymentMethodName') }}</strong>
-                </span>
+                            <strong>{{ $errors->first('paymentMethodName') }}</strong>
+                    </span>
                 @endif
                 @if ($errors->has('paymentmethod_id'))
                     <span class="help-block">
-                    <strong>{{ $errors->first('paymentmethod_id') }}</strong>
-                </span>
+                        <strong>{{ $errors->first('paymentmethod_id') }}</strong>
+                    </span>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row static-info margin-top-20">
+    <div class="col form-group {{ $errors->has('transactiongateway_id') ? ' has-error' : '' }}">
+        <div class="row">
+            <label class="col-md-3 control-label" for="{{(isset($name["transactionGateways"]))?$name["transactionGateways"]:'transactiongateway_id'}}">
+                انتخاب درگاه:
+            </label>
+            <div class="col-md-6">
+                {!!
+                    Form::select(
+                        (isset($name["transactionGateways"]))?$name["transactionGateways"]:'transactiongateway_id',
+                        $transactionGateways,
+                        old((isset($name["transactionGateways"]))?$name["transactionGateways"]:'transactiongateway_id'),
+                        [
+                            'class' => (isset($class["transactionGateways"]))?'form-control '.$class["transactionGateways"]:'form-control',
+                            'id' => (isset($id["transactionGateways"]))?$id["transactionGateways"]:'transactiongateway_id',
+                            'placeholder'=>'نامشخص'
+                        ]
+                    )
+                !!}
+                @if ($errors->has('transactiongateway_id'))
+                    <span class="help-block">
+                            <strong>{{ $errors->first('transactiongateway_id') }}</strong>
+                    </span>
                 @endif
             </div>
         </div>
