@@ -93,40 +93,80 @@
     
                                                             @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count())
                                                                 @foreach($product->attributes->get('information')->where('control', 'simple') as $key => $informationItem)
-
-                                                                    <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5">
-                                                                        <div class="m-widget4__img m-widget4__img--icon">
-                                                                            <i class="flaticon-like m--font-info"></i>
+                                                                    @if(count($informationItem->data) > 1)
+                                                                        <div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">
+                                                                            <div class="m-widget4__img m-widget4__img--icon">
+                                                                                <i class="flaticon-like m--font-info"></i>
+                                                                            </div>
+                                                                            <div class="m-widget4__info">
+                                                                                <span class="m-widget4__text">
+                                                                                    {{ $informationItem->title }}:
+                                                                                </span>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="m-widget4__info">
-                                                                            <span class="m-widget4__text">
-                                                                                {{ $informationItem->title . ': ' . $informationItem->data[0]->name }}
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
+                                                                    @endif
+                                                                    @foreach($informationItem->data as $key => $informationItemData)
 
+                                                                        <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5">
+                                                                            <div class="m-widget4__img m-widget4__img--icon">
+                                                                                @if(count($informationItem->data) === 1)
+                                                                                    <i class="flaticon-like m--font-info"></i>
+                                                                                @else
+                                                                                    <i class="flaticon-interface-5 m--font-info"></i>
+                                                                                @endif
+                                                                            </div>
+                                                                            <div class="m-widget4__info">
+                                                                                <span class="m-widget4__text">
+                                                                                    @if(count($informationItem->data) > 1)
+                                                                                       {{ $informationItemData->name }}
+                                                                                    @else
+                                                                                        {{ $informationItem->title }}: {{ $informationItemData->name }}
+                                                                                    @endif
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+            
+                                                                    @endforeach
                                                                 @endforeach
                                                             @endif
     
                                                             @if(optional($product->attributes)->get('main') != null && $product->attributes->get('main')->where('control', 'simple'))
                                                                 @foreach($product->attributes->get('main')->where('control', 'simple') as $key => $informationItem)
-
-                                                                    <div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">
-                                                                        <div class="m-widget4__img m-widget4__img--icon">
-                                                                            <i class="flaticon-like m--font-warning"></i>
+                                                                    @if(count($informationItem->data) > 1)
+                                                                        <div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">
+                                                                            <div class="m-widget4__img m-widget4__img--icon">
+                                                                                <i class="flaticon-like m--font-warning"></i>
+                                                                            </div>
+                                                                            <div class="m-widget4__info">
+                                                                                <span class="m-widget4__text">
+                                                                                    {{ $informationItem->title }}:
+                                                                                </span>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="m-widget4__info">
-                                                                            <span class="m-widget4__text">
-                                                                                {{ $informationItem->title . ': ' . $informationItem->data[0]->name }}
-                                                                            </span>
-                                                                        </div>
-
-                                                                        @foreach($informationItem->data as $k => $info)
-                                                                            @if(isset($info->id))
-                                                                                <input type="hidden" value="{{ $info->id }}" name="attribute[]">
+                                                                    @endif
+                                                                    @foreach($informationItem->data as $key => $informationItemData)
+                                                                        <div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">
+                                                                            <div class="m-widget4__img m-widget4__img--icon">
+                                                                                @if(count($informationItem->data) === 1)
+                                                                                    <i class="flaticon-like m--font-warning"></i>
+                                                                                @else
+                                                                                    <i class="flaticon-interface-5 m--font-warning"></i>
+                                                                                @endif
+                                                                            </div>
+                                                                            <div class="m-widget4__info">
+                                                                                <span class="m-widget4__text">
+                                                                                    @if(count($informationItem->data) > 1)
+                                                                                        {{ $informationItemData->name }}
+                                                                                    @else
+                                                                                        {{ $informationItem->title }}: {{ $informationItemData->name }}
+                                                                                    @endif
+                                                                                </span>
+                                                                            </div>
+                                                                            @if(isset($informationItemData->id))
+                                                                                <input type="hidden" value="{{ $informationItemData->id }}" name="attribute[]">
                                                                             @endif
-                                                                        @endforeach
-                                                                    </div>
+                                                                        </div>
+                                                                    @endforeach
                                                                 @endforeach
                                                             @endif
 
@@ -150,21 +190,32 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="m-portlet__body m--padding-top-5 m--padding-bottom-5">
+                                                    <div class="m-portlet__body m--padding-5">
                                                         <!--begin::m-widget4-->
                                                         <div class="m-widget4">
-
+                                                            
                                                             @foreach($product->attributes->get('information')->where('control', 'checkBox') as $key => $informationItem)
-                                                                <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10">
-                                                                    <div class="m-widget4__img m-widget4__img--icon">
-                                                                        <i class="fa fa-check"></i>
+                                                                @if(count($informationItem->data) > 1)
+                                                                    <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10 a--full-width m--font-boldest">
+                                                                        {{ $informationItem->title }}
                                                                     </div>
-                                                                    <div class="m-widget4__info">
-                                                                        <span class="m-widget4__text">
-                                                                            {{ $informationItem->title . ': ' . $informationItem->data[0]->name }}
-                                                                        </span>
+                                                                @endif
+                                                                @foreach($informationItem->data as $key => $informationItemData)
+                                                                    <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10">
+                                                                        <div class="m-widget4__img m-widget4__img--icon">
+                                                                            <i class="fa fa-check"></i>
+                                                                        </div>
+                                                                        <div class="m-widget4__info">
+                                                                            <span class="m-widget4__text">
+                                                                                @if(count($informationItem->data) > 1)
+                                                                                    {{ $informationItemData->name }}
+                                                                                @else
+                                                                                    {{ $informationItem->title }}: {{ $informationItemData->name }}
+                                                                                @endif
+                                                                            </span>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
+                                                                @endforeach
                                                             @endforeach
 
                                                         </div>
@@ -271,13 +322,13 @@
 
                                                     @if($product->attributes->get('main')->where('type', 'main')->where('control', 'checkBox')->count()>0)
                                                         @foreach($product->attributes->get('main')->where('type', 'main')->where('control', 'checkBox') as $index => $select)
-
-                                                            <label class="m-checkbox m-checkbox--air m-checkbox--state-success">
-                                                                <input type="checkbox" name="attribute[]" value="{{ $select->data[0]->id }}" class="attribute">
-                                                                {{ $select->data[0]->name }}
-                                                                <span></span>
-                                                            </label>
-
+                                                            @foreach($select->data as $selectData)
+                                                                <label class="m-checkbox m-checkbox--air m-checkbox--state-success">
+                                                                    <input type="checkbox" name="attribute[]" value="{{ $selectData->id }}" class="attribute">
+                                                                    {{ $selectData->name }}
+                                                                    <span></span>
+                                                                </label>
+                                                            @endforeach
                                                         @endforeach
                                                     @endif
 
@@ -463,9 +514,9 @@
                     <div class="tab-content">
                         <div class="tab-pane active show" id="productInformation">
                             {!! $product->shortDescription !!}
-                            @if( isset($product->longDescription[0] ) )
+                            @if( isset($product->longDescription) && strlen($product->longDescription) > 0 )
                                 <div>
-                                    {!!   $product->longDescription !!}
+                                    {!! $product->longDescription !!}
                                 </div>
                             @endif
                         </div>
