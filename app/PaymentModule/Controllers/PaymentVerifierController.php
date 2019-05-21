@@ -49,7 +49,7 @@ class PaymentVerifierController extends Controller
                 $verificationResult->getCardPanMask()
             );
             $this->handleOrderSuccessPayment($transaction->order);
-            $assetLink = '<a href="'.route('user.asset').'"></a>';
+            $assetLink = '<a href="'.route('user.asset').'">دانلودهای من</a>';
             $responseMessages[]= 'برای دانلود محصولاتی که خریده اید به صفحه روبرو بروید: '.$assetLink;
             $responseMessages[]= 'توجه کنید که محصولات پیش خرید شده در تاریخ مقرر شده برای دانلود قرار داده می شوند';
         } else {
