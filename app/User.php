@@ -408,6 +408,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'userstatus_id',
         'techCode',
         'mobile_verified_code',
+        'password' //For registering user
     ];
 
     protected $fillableByPublic = [
