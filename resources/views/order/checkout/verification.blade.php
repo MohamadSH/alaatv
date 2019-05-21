@@ -88,7 +88,7 @@
                                         <button type="button" class="close" data-dismiss="alert"
                                                 aria-label="Close"></button>
                                         @foreach($result['messages'] as $message)
-                                            {{ $message }}
+                                            {!!  $message !!}
                                             <br>
                                         @endforeach
                                     </div>
