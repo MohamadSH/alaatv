@@ -1,5 +1,31 @@
 <div class="row">
     <div class="col-md-4">
+    
+        <label class="mt-checkbox mt-checkbox-outline">
+            <div class="md-checkbox">
+                {!!
+                    Form::checkbox(
+                        'isFree',
+                        $content->isFree,
+                        null,
+                        [
+                            'value' => '1',
+                            'id' => 'checkbox_isFree_enable',
+                            'class'=>'md-check',
+                            ($content->isFree)?'checked':''
+                        ]
+                    )
+                !!}
+                <label for="checkbox_isFree_enable">
+                    <span></span>
+                    <span class="check"></span>
+                    <span class="box"></span>
+                    رایگان
+                    <span></span>
+                </label>
+            </div>
+        </label>
+        <br>
         <label class="mt-checkbox mt-checkbox-outline">
             <div class="md-checkbox">
                 @if($content->enable)

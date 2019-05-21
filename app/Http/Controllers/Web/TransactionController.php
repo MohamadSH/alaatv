@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Order;
 use App\Product;
+use App\Repositories\TransactionGatewayRepo;
 use Carbon\Carbon;
 use App\Transaction;
 use App\Orderproduct;
@@ -518,10 +519,12 @@ class TransactionController extends Controller
             $completedAt = Carbon::parse($transaction->completed_at)
                 ->format('Y-m-d');
         }
+
+        $transactionGateways = TransactionGatewayRepo::getTransactionGateways(['enable'=>1])->pluck('displayName' , 'id');
         
         return view("transaction.edit",
             compact('transaction', 'transactionPaymentmethods', 'transactionStatuses', '$transactionStatuses',
-                'deadlineAt', 'completedAt'));
+                'deadlineAt', 'completedAt' , 'transactionGateways'));
     }
 
     public function limitedUpdate(Request $request, Transaction $transaction)
@@ -625,13 +628,14 @@ class TransactionController extends Controller
                 foreach ($authorities as $authority) {
                     /** @var Transaction $transaction */
                     $transaction = TransactionRepo::getTransactionByAuthority($authority['Authority'])->getValue(null);;
+                    $userId= null;
                     $firstName   = "";
                     $lastName    = "";
                     $mobile      = "";
                     $jalaliCreatedAt  = "";
                     if (!is_null($transaction)) {
                         $jalaliCreatedAt = $transaction->jalali_created_at;
-                        $user       = $transaction->order->user;
+                        $user       = optional($transaction->order)->user;
                         if (isset($user)) {
                             $userId    = $user->id;
                             $firstName = $user->firstName;
@@ -641,7 +645,7 @@ class TransactionController extends Controller
                     }
                     
                     $transactions->push([
-                        "userId"     => (isset($userId)) ? $userId : null,
+                        "userId"     => $userId,
                         "firstName"  => $firstName,
                         "lastName"   => $lastName,
                         "mobile"     => $mobile,

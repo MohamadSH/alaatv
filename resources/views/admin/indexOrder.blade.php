@@ -23,6 +23,19 @@
             font-size: 14px;
             font-weight: bold;
         }
+
+        .multiselect-native-select, .mt-multiselect {
+            width: 100%;
+        }
+        #filterOrderForm .form-group {
+            border-top: solid 1px #cecece;
+            padding-top: 10px;
+        }
+        #filterOrderForm .form-group:first-child {
+            border: none;
+            padding-top: 0;
+        }
+        
     </style>
 @endsection
 
@@ -41,19 +54,6 @@
 @endsection
 
 @section('content')
-    <style>
-        .multiselect-native-select, .mt-multiselect {
-            width: 100%;
-        }
-        #filterOrderForm .form-group {
-            border-top: solid 1px #cecece;
-            padding-top: 10px;
-        }
-        #filterOrderForm .form-group:first-child {
-            border: none;
-            padding-top: 0;
-        }
-    </style>
     <div class="row">
         {{--Ajax modal loaded after inserting content--}}
         <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
@@ -568,8 +568,8 @@
                             <th class="all"> مبلغ آیتم افزوده</th>
                             @endpermission
                             <th class="all"> کد تراکنش</th>
-                            <th class="none">درگاه پرداخت</th>
-                            <th class="all"> نحوه پرداخت</th>
+                            <th class="all">درگاه پرداخت</th>
+                            <th class="none"> نحوه پرداخت</th>
                             <th class="none"> تاریخ ثبت :</th>
                             <th class="none"> مهلت پرداخت :</th>
                             <th class="none"> تاریخ پرداخت :</th>

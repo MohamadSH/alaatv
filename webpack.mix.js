@@ -338,3 +338,10 @@ mix.styles(
     ],
     'public/css/page-landing7.css'
 ).version();
+
+mix.styles(
+    [
+        'public/acm/AlaatvCustomFiles/css/page-dashboard1.css',
+    ],
+    'public/css/page-dashboard1.css'
+).version();
