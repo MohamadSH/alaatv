@@ -29,6 +29,23 @@
     </div>
     <div class = "form-group">
         <div class = "row">
+            <label class = "col-md-4 control-label">صفحه اسلایدشو</label>
+            <div class = "col-md-6">
+                {!! Form::select(
+                    'websitepage_id',
+                    $websitePages,
+                    null,
+                    [
+                        "class" => "form-control",
+                        "placeholder" => "صفحه اسلایدشو"
+                    ])
+                !!}
+                <span class = "help-block"></span>
+            </div>
+        </div>
+    </div>
+    <div class = "form-group">
+        <div class = "row">
             <label class = "col-md-4 control-label">ترتیب</label>
             <div class = "col-md-6">
                 {!! Form::text('order' , null, ['class' => 'form-control', 'placeholder'=>'ترتیب قرار گرفتن در بین اسلایدها']) !!}

@@ -524,9 +524,16 @@ class AdminController extends Controller
         $slideContentName   = 'عکس اسلاید صفحه اصلی';
         $sideBarMode        = 'closed';
         $section            = 'slideShow';
-
+    
+        $websitePages = [
+            'صفحه یک',
+            'صفحه دو',
+            'صفحه سه',
+            'صفحه چهار'
+        ];
+        
         return view('admin.siteConfiguration.slideShow',
-            compact('slides', 'sideBarMode', 'section', 'slideDisk', 'slideContentName', 'slideWebsitepageId'));
+            compact('slides', 'sideBarMode', 'section', 'slideDisk', 'slideContentName', 'slideWebsitepageId', 'websitePages'));
     }
 
     /**

@@ -120,8 +120,16 @@ class SlideShowController extends Controller
                 break;
         }
         $slideWebsitepageId = $slide->websitepage->id;
+    
+    
+        $websitePages = [
+            'صفحه یک',
+            'صفحه دو',
+            'صفحه سه',
+            'صفحه چهار'
+        ];
         
-        return view("slideShow.edit", compact('slide', 'slideDisk', 'slideWebsitepageId', 'previousUrl'));
+        return view("slideShow.edit", compact('slide', 'slideDisk', 'slideWebsitepageId', 'previousUrl', 'websitePages'));
     }
 
     public function update(Request $request, $slide)
