@@ -156,9 +156,9 @@ var ProductShowPage = function () {
                         let response_costForCustomer = parseInt(response.cost.final);
 
                         if (response_costForCustomer < response_cost) {
-                            $('#a_product-price').html('قیمت محصول: <strike>' + response_cost + '</strike> تومان <br>قیمت برای مشتری: ' + response_costForCustomer + ' تومان ');
+                            $('#a_product-price').html('قیمت محصول: <del>' + response_cost.toLocaleString('fa') + '</del> تومان <br>قیمت برای مشتری: ' + response_costForCustomer.toLocaleString('fa') + ' تومان ');
                         } else {
-                            $('#a_product-price').html('قیمت محصول: ' + response_costForCustomer + ' تومان ');
+                            $('#a_product-price').html('قیمت محصول: ' + response_costForCustomer.toLocaleString('fa') + ' تومان ');
                         }
                     } else {
 

@@ -282,14 +282,14 @@ mLayout = function() {
     }
 
     function showResultForQuickSearch(res) {
-        let maxRecordOfEachCategory = 3;
-        let article = res.result.article;
-        let pamphlet = res.result.pamphlet;
-        let product = res.result.product;
-        let set = res.result.set;
-        let video = res.result.video;
+        var maxRecordOfEachCategory = 3;
+        var article = res.result.article;
+        var pamphlet = res.result.pamphlet;
+        var product = res.result.product;
+        var set = res.result.set;
+        var video = res.result.video;
 
-        let html = '';
+        var html = '';
 
         html += gteQuickSearchResultCategory('article', 'مقالات', article, maxRecordOfEachCategory);
         html += gteQuickSearchResultCategory('pamphlet', 'جزوات', pamphlet, maxRecordOfEachCategory);
@@ -322,19 +322,19 @@ mLayout = function() {
     }
 
     function gteQuickSearchResultCategory(categoryType, categoryName, data, maxRecordOfCategory) {
-        let html = '';
+        var html = '';
         if (data !== null && data.total > 0) {
             html += '<div class="kt-quick-search__category">'+categoryName+'</div>';
             html += '<div class="m-widget4">';
-            for (let index in data.data) {
+            for (var index in data.data) {
                 if(isNaN(index)) {
                     continue;
                 }
                 if(index > maxRecordOfCategory) {
                     break;
                 }
-                let dataItem = data.data[index];
-                let inputData = getInputDataForQuickSearchShowResult(categoryType, dataItem);
+                var dataItem = data.data[index];
+                var inputData = getInputDataForQuickSearchShowResult(categoryType, dataItem);
                 html += getQuickSearchResultItem(inputData);
             }
             html += '</div>';
