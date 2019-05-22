@@ -57,21 +57,20 @@ trait ContentControllerResponseTrait
     {
         return $content->isFree || optional($request->user($gard))->hasContent($content);
     }
-    
+
     /**
-     * @param  FormRequest  $request
-     * @param  Content      $content
+     * @param array $inputData
+     * @param Content $content
      *
      * @return void
      */
-    protected function fillContentFromRequest(FormRequest $request, Content $content): void
+    protected function fillContentFromRequest(array $inputData, Content $content): void
     {
-        $inputData  = $request->all();
-        $time       = $request->get("validSinceTime");
-        $validSince = $request->get("validSinceDate");
-        $enabled    = $request->has("enable");
-        $tagString  = $request->get("tags");
-        $files      = json_decode($request->get("files"));
+        $time       = array_get($inputData , 'validSinceTime');//ToDo
+        $validSince = array_get($inputData , 'validSinceDate');
+        $enabled    = Arr::has($inputData , 'enable');
+        $tagString  = array_get($inputData , 'tags');
+        $files      = json_decode(array_get($inputData , 'files'));
         
         $content->fill($inputData);
         $content->validSince = $this->getValidSinceDateTime($time, $validSince);

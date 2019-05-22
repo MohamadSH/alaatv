@@ -356,27 +356,27 @@ class ContentController extends Controller
     
     public function store(InsertContentRequest $request)
     {
-        //TODO:// validate Data Format in Requests
-        /* files
-         {
-            {
-                fileName --> required
-                caption
-                res
-                type
-                res
-            },
-            {
-                        fileName
-                caption
-                res
-                type
-                res
-            }
-        }
-        */
+        $contenttype_id = $request->get('contenttype_id');
+        $fileName =       $request->get('fileName');
+        $contentset_id=   $request->get('contentset_id');
+
         $content = new Content();
-        $this->fillContentFromRequest($request, $content);
+
+        if($contenttype_id == config('constants.CONTENT_TYPE_VIDEO'))
+        {
+            $files = $this->makeVideoFileArray($fileName, $contentset_id);
+            $thumbnailUrl = $this->makeThumbnailUrlFromFileName($fileName, $contentset_id);
+            $content->thumbnail = $this->makeThumbanilFile($thumbnailUrl);
+        }
+        elseif($contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET'))
+        {
+            $files = $this->makePamphletFileArray($fileName);
+            $content->thumbnail = null;
+        }
+
+        $request->offsetSet('files', isset($files)?$files:[]);
+
+        $this->fillContentFromRequest($request->all(), $content);
         
         if ($content->save()) {
             $api = response()->json([
@@ -401,7 +401,7 @@ class ContentController extends Controller
         
         foreach ($files as $key => $file) {
             $fileDisk     = isset($file->disk) ? $file->disk : null;
-            $disk = $content->isFree ? $fileDisk : config('constants.DISK_PRODUCT_CONTENT');
+            $disk        = $content->isFree ? $fileDisk : config('constants.DISK_PRODUCT_CONTENT');
             $fileName = isset($file->name) ? $file->name : null;
             $caption  = isset($file->caption) ? $file->caption : null;
             $res      = isset($file->res) ? $file->res : null;
@@ -412,8 +412,7 @@ class ContentController extends Controller
                 continue;
             }
             $fileCollection->push([
-                'uuid'     => Str::uuid()
-                    ->toString(),
+                'uuid'     => Str::uuid()->toString(),
                 'disk'     => $disk,
                 'url'      => $url,
                 'fileName' => $fileName,

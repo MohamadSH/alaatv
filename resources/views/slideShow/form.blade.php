@@ -1,4 +1,3 @@
-{!! Form::hidden('websitepage_id',$slideWebsitepageId) !!}
 <div class = "form-body">
     <div class = "form-group">
         <div class = "row">
@@ -29,6 +28,22 @@
     </div>
     <div class = "form-group">
         <div class = "row">
+            <label class = "col-md-4 control-label">صفحه اسلایدشو</label>
+            <div class = "col-md-6">
+                {!! Form::select(
+                    'websitepage_id',
+                    $websitePages,
+                    null,
+                    [
+                        "class" => "form-control",
+                    ])
+                !!}
+                <span class = "help-block"></span>
+            </div>
+        </div>
+    </div>
+    <div class = "form-group">
+        <div class = "row">
             <label class = "col-md-4 control-label">ترتیب</label>
             <div class = "col-md-6">
                 {!! Form::text('order' , null, ['class' => 'form-control', 'placeholder'=>'ترتیب قرار گرفتن در بین اسلایدها']) !!}
@@ -43,7 +58,7 @@
                 <div class = "fileinput fileinput-new" data-provides = "fileinput">
                     @if(isset($slide->photo))
                         <div class = "fileinput-new thumbnail">
-                            <img src = "{{ route('image', [ 'category'=>$slideDisk,'w'=>'140' , 'h'=>'140' , 'filename' =>  $slide->photo ]) }}" {{--alt="عکس خدمت" onerror="this.src='http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image';"/> </div>--}}alt = "عکس محصول @if(isset($slide->title[0])) {{$slide->title}} @endif"/>
+                            <img style="width:100%" src = "{{ route('image', [ 'category'=>$slideDisk,'w'=>'140' , 'h'=>'140' , 'filename' =>  $slide->photo ]) }}" {{--alt="عکس خدمت" onerror="this.src='http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image';"/> </div>--}}alt = "عکس محصول @if(isset($slide->title[0])) {{$slide->title}} @endif"/>
                         </div>
                     @endif
                     <div class = "input-group input-large ">

@@ -82,7 +82,7 @@ class EditUserRequest extends FormRequest
                                     ->where('deleted_at', null);
                             }),
                     ],
-                    'password'      => 'sometimes|nullable|min:6|confirmed',
+                    'password'      => 'sometimes|nullable|min:10|confirmed',
                     'userstatus_id' => 'required|exists:userstatuses,id',
                     'photo'         => 'sometimes|nullable'.self::PHOTO_RULE,
                     'postalCode'    => 'sometimes|nullable|numeric',
