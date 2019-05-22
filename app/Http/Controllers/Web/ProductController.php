@@ -11,6 +11,7 @@ use Illuminate\Http\{Request, Response};
 use Illuminate\Support\{Facades\File, Facades\Input, Facades\Storage};
 use App\{Block,
     Bon,
+    Collection\BlockCollection,
     Product,
     Attribute,
     Attributeset,
@@ -1226,9 +1227,16 @@ class ProductController extends Controller
                 'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-    
-        $blocks = Block::getShopBlocks();
-        
+
+        $blocks = new BlockCollection();
+        $blocksIdArray = [16,7,10,6];
+        foreach ($blocksIdArray as $blockId)
+        {
+            $block = Block::find($blockId);
+            if(isset($block))
+                $blocks->push($block);
+        }
+
         return view('product.landing.landing7', compact('landingProducts', 'costCollection', 'withFilter', 'blocks'));
     }
     

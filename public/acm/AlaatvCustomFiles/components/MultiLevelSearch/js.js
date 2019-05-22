@@ -1,7 +1,7 @@
 var MultiLevelSearch = function () {
 
-    let selectorItems = [];
-    let selectorId = '';
+    var selectorItems = [];
+    var selectorId = '';
 
     function getSelectorItems(MultiLevelSearchSelectorId) {
         selectorId = MultiLevelSearchSelectorId;
@@ -19,7 +19,7 @@ var MultiLevelSearch = function () {
 
     function showSelectorItem(selectorIndex) {
 
-        let selectorItem = getSelectorItem(selectorIndex);
+        var selectorItem = getSelectorItem(selectorIndex);
 
         if (selectorItem.length === 0) {
             refreshNavbar(selectorIndex);
@@ -28,8 +28,8 @@ var MultiLevelSearch = function () {
 
         selectorItems.fadeOut(0);
 
-        let title = selectorItem.data('select-title');
-        let showType = selectorItem.data('select-display');
+        var title = selectorItem.data('select-title');
+        var showType = selectorItem.data('select-display');
         if (typeof showType === 'undefined') {
             if (getSelectorSubitems(selectorIndex).length > 10) {
                 showType = 'select2';
@@ -49,11 +49,11 @@ var MultiLevelSearch = function () {
                 selectorItem.fadeIn();
             }
         } else if (showType === 'select2') {
-            let selectorSubitems = getSelectorSubitems(selectorIndex);
+            var selectorSubitems = getSelectorSubitems(selectorIndex);
             selectorSubitems.fadeOut(0);
 
-            let select2Html = '';
-            let select2Id = 'MultiLevelSearch-select2-' + selectorId + '-' + selectorIndex;
+            var select2Html = '';
+            var select2Id = 'MultiLevelSearch-select2-' + selectorId + '-' + selectorIndex;
 
             if (selectorItem.find('.selectorItemTitle').length > 0) {
                 selectorItem.find('.selectorItemTitle').html(title);
@@ -61,9 +61,9 @@ var MultiLevelSearch = function () {
                 selectorItem.prepend('<div class="col-12 selectorItemTitle">' + title + '</div>');
             }
 
-            for (let index in selectorSubitems) {
+            for (var index in selectorSubitems) {
                 if (!isNaN(index)) {
-                    let selected = '';
+                    var selected = '';
                     if ($(selectorSubitems[index]).attr('selected') === 'selected') {
                         selected = 'selected="selected"';
                     }
@@ -71,7 +71,7 @@ var MultiLevelSearch = function () {
                 }
             }
             if (selectorItem.find('.form-control.select2').length > 0) {
-                let oldSelect2 = $('#' + select2Id);
+                var oldSelect2 = $('#' + select2Id);
                 if (!oldSelect2.data('select2')) {
                     oldSelect2.select2('destroy');
                 }
@@ -116,7 +116,7 @@ var MultiLevelSearch = function () {
     }
 
     function getValueOfSelector(selectorIndex) {
-        let value = getSelectorItem(selectorIndex).attr('data-select-value');
+        var value = getSelectorItem(selectorIndex).attr('data-select-value');
         return (typeof value !== 'undefined') ? value : null;
     }
 
@@ -134,10 +134,10 @@ var MultiLevelSearch = function () {
     }
 
     function getMaxOrder() {
-        let maxOrder = 0;
-        for (let index in selectorItems) {
+        var maxOrder = 0;
+        for (var index in selectorItems) {
             if (!isNaN(index)) {
-                let order = parseInt($(selectorItems[index]).data('select-order'));
+                var order = parseInt($(selectorItems[index]).data('select-order'));
                 if (maxOrder < order) {
                     maxOrder = order;
                 }
@@ -147,16 +147,16 @@ var MultiLevelSearch = function () {
     }
 
     function refreshNavbar(selectorIndex) {
-        let filterNavigationWarper = $('#' + selectorId + ' .filterNavigationWarper');
+        var filterNavigationWarper = $('#' + selectorId + ' .filterNavigationWarper');
         filterNavigationWarper.html('');
 
         selectorItems = $('#' + selectorId + ' .selectorItem');
-        for (let index in selectorItems) {
+        for (var index in selectorItems) {
             if (!isNaN(index)) {
 
-                let title = $(selectorItems[index]).data('select-title');
-                let order = $(selectorItems[index]).data('select-order');
-                let activeString = 'deactive';
+                var title = $(selectorItems[index]).data('select-title');
+                var order = $(selectorItems[index]).data('select-order');
+                var activeString = 'deactive';
                 if (parseInt(order) < parseInt(selectorIndex)) {
                     activeString = 'active';
                 } else if (parseInt(order) === parseInt(selectorIndex)) {
@@ -165,7 +165,7 @@ var MultiLevelSearch = function () {
                     setValueOfSelector(order, '');
                 }
 
-                let selectedText = '';
+                var selectedText = '';
                 if (activeString === 'deactive') {
                     $(selectorItems[index]).attr('data-select-value', '');
                 }
@@ -185,16 +185,16 @@ var MultiLevelSearch = function () {
     }
 
     function refreshNavbar1(selectorIndex) {
-        let filterNavigationWarper = $('#' + selectorId + ' .filterNavigationWarper');
+        var filterNavigationWarper = $('#' + selectorId + ' .filterNavigationWarper');
         filterNavigationWarper.html('');
 
         selectorItems = $('#' + selectorId + ' .selectorItem');
-        for (let index in selectorItems) {
+        for (var index in selectorItems) {
             if (!isNaN(index)) {
 
-                let title = $(selectorItems[index]).data('select-title');
-                let order = $(selectorItems[index]).data('select-order');
-                let activeString = 'deactive';
+                var title = $(selectorItems[index]).data('select-title');
+                var order = $(selectorItems[index]).data('select-order');
+                var activeString = 'deactive';
                 if (parseInt(order) < parseInt(selectorIndex)) {
                     activeString = 'active';
                 } else if (parseInt(order) === parseInt(selectorIndex)) {
@@ -203,7 +203,7 @@ var MultiLevelSearch = function () {
                     setValueOfSelector(order, '');
                 }
 
-                let selectedText = '';
+                var selectedText = '';
                 if (activeString === 'deactive') {
                     $(selectorItems[index]).attr('data-select-value', '');
                 }
@@ -250,18 +250,18 @@ var MultiLevelSearch = function () {
     }
 
     function getSelectedData() {
-        let data = [];
+        var data = [];
         selectorItems = $('#' + selectorId + ' .selectorItem');
-        for (let index in selectorItems) {
+        for (var index in selectorItems) {
             if (isNaN(index)) {
                 continue;
             }
-            let selectorItem = selectorItems[index];
-            let title = $(selectorItem).data('select-title');
-            let order = $(selectorItem).data('select-order');
-            let selectValue = $(selectorItem).attr('data-select-value');
-            let selectActive = $(selectorItem).attr('data-select-active');
-            let selectedText = null;
+            var selectorItem = selectorItems[index];
+            var title = $(selectorItem).data('select-title');
+            var order = $(selectorItem).data('select-order');
+            var selectValue = $(selectorItem).attr('data-select-value');
+            var selectActive = $(selectorItem).attr('data-select-active');
+            var selectedText = null;
             if(
                 typeof selectValue !== 'undefined' &&
                 typeof selectActive !== 'undefined' &&
@@ -284,15 +284,15 @@ var MultiLevelSearch = function () {
 
     return {
         init: function (initOptions, onChangeCallback, beforeChangeFilterCallback) {
-            let multiSelector = $('#' + initOptions.selectorId);
+            var multiSelector = $('#' + initOptions.selectorId);
             multiSelector.fadeOut(0);
             getSelectorItems(initOptions.selectorId);
             showSelectorItem(getActiveStepOrder());
             $(document).on('click', '#' + initOptions.selectorId + ' .selectorItem .subItem', function () {
-                let parent = $(this).parents('.selectorItem');
-                let selectorOrder = parent.data('select-order');
+                var parent = $(this).parents('.selectorItem');
+                var selectorOrder = parent.data('select-order');
                 parent.attr('data-select-value', $(this).html());
-                let data = {
+                var data = {
                     selectorOrder: selectorOrder,
                     selectorType: 'grid'
                 };
@@ -301,11 +301,11 @@ var MultiLevelSearch = function () {
                 onChangeCallback(data);
             });
             $(document).on('change', '#' + initOptions.selectorId + ' .selectorItem .select2', function () {
-                let parent = $(this).parents('.selectorItem');
-                let selectorOrder = parent.data('select-order');
+                var parent = $(this).parents('.selectorItem');
+                var selectorOrder = parent.data('select-order');
                 parent.attr('data-select-value', $(this).select2('data')[0].text.trim());
                 // parent.attr('data-select-value', $(this).find(':selected').text.trim());
-                let data = {
+                var data = {
                     selectorOrder: selectorOrder,
                     selectorType: 'select2'
                 };
@@ -314,8 +314,8 @@ var MultiLevelSearch = function () {
                 onChangeCallback(data);
             });
             $(document).on('click', '#' + initOptions.selectorId + ' .filterNavigationStep', function () {
-                // let selectorOrder = $(this).parents('.filterNavigationStep').data('select-order');
-                let selectorOrder = $(this).data('select-order');
+                // var selectorOrder = $(this).parents('.filterNavigationStep').data('select-order');
+                var selectorOrder = $(this).data('select-order');
                 onFilterNavCliked(selectorOrder, initOptions);
                 onChangeCallback('click on filterNavigationStep');
             });

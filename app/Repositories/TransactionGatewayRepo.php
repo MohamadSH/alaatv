@@ -37,7 +37,7 @@ class TransactionGatewayRepo
     private static function filter(array $filters, Builder $transactions): void
     {
         foreach ($filters as $key => $filter) {
-            $transactions->where($key, $filters);
+            $transactions->where($key, $filter);
         }
     }
 }

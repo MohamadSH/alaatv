@@ -118,7 +118,7 @@ class Block extends BaseModel
      */
     protected static function getOfferBlock(): Block
     {
-        return self::getDummyBlock(true, 'محصولات شگفت انگیز', Product::getProductsHaveBestOffer());
+        return self::getDummyBlock(true, 'الماس و جزوات', Product::getProductsHaveBestOffer());
     }
     
     public static function getDummyBlock(
