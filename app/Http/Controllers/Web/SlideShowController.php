@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\WebsitePageRepo;
 use App\Slideshow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -36,22 +37,6 @@ class SlideShowController extends Controller
 
     public function store(Request $request)
     {
-        //        $websitepage = "";
-        //        if($request->has("websitepage_id"))
-        //            $websitepage = Websitepage::all()->where("id" , $request->get("websitepage_id"))->first()->url;
-        //
-        //        switch ($websitepage)
-        //        {
-        //            case "/home":
-        //                $diskName = config('constants.DISK9');
-        //                break;
-        //            case "/لیست-مقالات":
-        //                $diskName = config('constants.DISK13');
-        //                break;
-        //            default :
-        //                $diskName = config('constants.DISK9');
-        //                break;
-        //        }
         $slide = new Slideshow();
         $slide->fill($request->all());
         
@@ -76,7 +61,8 @@ class SlideShowController extends Controller
             $file      = $request->file('photo');
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-            
+
+            //ToDo: changing shop's slide show disk
             if (Storage::disk(config('constants.DISK9'))
                 ->put($fileName, File::get($file))) {
                 $slide->photo = $fileName;
@@ -106,55 +92,31 @@ class SlideShowController extends Controller
 
     public function edit($slide)
     {
-        $slideWebsitePage = $slide->websitepage->url;
-        switch ($slideWebsitePage) {
-            case "/home":
-                $slideDisk   = 9;
-                $previousUrl = action("Web\AdminController@adminSlideShow");
-                break;
-            //            case "/لیست-مقالات":
-            //                $slideDisk = 13 ;
-            //                $previousUrl = action("Web\AdminController@adminArticleSlideShow");
-            //                break;
-            default:
-                break;
-        }
+        $previousUrl = action("Web\AdminController@adminSlideShow");
         $slideWebsitepageId = $slide->websitepage->id;
-    
-    
-        $websitePages = [
-            'صفحه یک',
-            'صفحه دو',
-            'صفحه سه',
-            'صفحه چهار'
-        ];
+        $slideDisk          = 9;
+        $websitePages = WebsitePageRepo::getWebsitePages(
+            ['url' => [
+                '/home',
+                '/shop',
+            ]]
+        )->pluck('displayName' , 'id');
         
         return view("slideShow.edit", compact('slide', 'slideDisk', 'slideWebsitepageId', 'previousUrl', 'websitePages'));
     }
 
-    public function update(Request $request, $slide)
+    /**
+     * @param Request $request
+     * @param Slideshow $slide
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    public function update(Request $request, Slideshow $slide)
     {
-        //        $websitepage = "";
-        //        if($request->has("websitepage_id"))
-        //            $websitepage = Websitepage::all()->where("id" , $request->get("websitepage_id"))->first()->url;
-        //
-        //        switch ($websitepage)
-        //        {
-        //            case "/home":
-        //                $diskName = config('constants.DISK9');
-        //                break;
-        //            case "/لیست-مقالات":
-        //                $diskName = config('constants.DISK13');
-        //                break;
-        //            default :
-        //                $diskName = config('constants.DISK9');
-        //                break;
-        //        }
         
         $oldPhoto = $slide->photo;
-        
         $slide->fill($request->all());
-        
+
         if (strlen($slide->order) == 0) {
             $slide->order = 0;
         }
@@ -198,6 +160,7 @@ class SlideShowController extends Controller
         
         if ($slide->update()) {
             session()->put('success', 'اسلاید با موفقیت اصلاح شد!');
+            session()->put('warning', 'کش را پاک کنید');
         }
         else {
             session()->put('error', 'خطای پایگاه داده!');

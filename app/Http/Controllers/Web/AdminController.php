@@ -24,6 +24,7 @@ use App\{Assignmentstatus,
     Permission,
     Product,
     Producttype,
+    Repositories\WebsitePageRepo,
     Role,
     Traits\APIRequestCommon,
     Traits\CharacterCommon,
@@ -511,29 +512,23 @@ class AdminController extends Controller
     /**
      * Admin panel for adjusting site configuration
      */
-    public function adminSlideShow()
+    public function adminSlideShow(Request $request , SlideShowController $slideShowController)
     {
 
-        $slideController    = new SlideShowController();
-        $slideWebsitepageId = $websitePageId = Websitepage::all()
-            ->where('url', '/home')
-            ->first()->id;
-        $slides             = $slideController->index()
-            ->where('websitepage_id', $slideWebsitepageId);
+        $slides             = $slideShowController->index();
         $slideDisk          = 9;
-        $slideContentName   = 'عکس اسلاید صفحه اصلی';
-        $sideBarMode        = 'closed';
         $section            = 'slideShow';
-    
-        $websitePages = [
-            'صفحه یک',
-            'صفحه دو',
-            'صفحه سه',
-            'صفحه چهار'
-        ];
-        
+
+        $websitePages = WebsitePageRepo::getWebsitePages(
+            ['url' => [
+                '/home',
+                '/shop',
+            ]]
+        )->pluck('displayName' , 'id');
+
+
         return view('admin.siteConfiguration.slideShow',
-            compact('slides', 'sideBarMode', 'section', 'slideDisk', 'slideContentName', 'slideWebsitepageId', 'websitePages'));
+            compact('slides', 'section', 'slideDisk', 'websitePages'));
     }
 
     /**
