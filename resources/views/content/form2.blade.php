@@ -12,9 +12,9 @@
                             'value' => '1',
                             'id' => 'checkbox_isFree_enable',
                             'class'=>'md-check',
-                            ($content->isFree)?'checked':'',
-                            'disabled'
-                        ]
+                            'disabled',
+                            ($content->isFree)?'checked':''
+            ]
                     )
                 !!}
                 <label for="checkbox_isFree_enable">
