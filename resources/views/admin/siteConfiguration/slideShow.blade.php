@@ -104,7 +104,7 @@
                 <div class = "m-portlet__body">
     
     
-                    <div class = "form-group">
+                    {{--<div class = "form-group">
                         <div class = "row">
                             <label class = "col-md-3 control-label">صفحه اسلایدشو</label>
                             <div class = "col-md-6">
@@ -121,7 +121,7 @@
                                 <span class = "help-block"></span>
                             </div>
                         </div>
-                    </div>
+                    </div>--}}
                     
                     <div class = "custom-alerts alert alert-success fade in display-hide" id = "successMessage">
                         <button type = "button" class = "close" data-dismiss = "alert" aria-hidden = "true"></button>

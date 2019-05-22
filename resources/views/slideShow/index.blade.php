@@ -40,51 +40,9 @@
                              class="timeline-badge-userpic"
                              style="width: 60px ;height: 60px"
                              src="{{ route('image', ['category'=>$slideDisk,'w'=>'60' , 'h'=>'60' ,  'filename' =>  $slide->photo ]) }}"/>
-                        <div class="mt-overlay">
-                            <ul class="mt-info">
-                                <li>
-                                    <a class="btn default btn-outline" data-toggle="modal" href="#profileimage-{{$slide->id}}">
-                                        <i class="icon-magnifier"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a target="_blank" class="btn default btn-outline" href="{{action("Web\HomeController@download" , ["content"=>$slideContentName,"fileName"=>$slide->photo ])}}">
-                                        <i class="icon-link"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
                     </div>
                 </div>
-                <!-- image Modal -->
-                <div class="modal fade" id="profileimage-{{$slide->id}}" tabindex="-1" role="basic" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">نمایش عکس اسلاید</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="row" style="text-align: center;">
-                                    <img alt="عکس اسلاید @if(isset($slide->title[0])) {{$slide->title}} @endif" style="width: 80%" src="{{ route('image', ['category'=>$slideDisk,'w'=>'608' , 'h'=>'608' ,  'filename' =>  $slide->photo ]) }}"/>
-                                </div>
-                                <div class="modal-footer">
-                                    <div class="form-actions">
-                                        <div class="row">
-                                            <div class="col-md-offset-3 col-md-9">
-                                                <button type="button" class="dark btn btn-outline" data-dismiss="modal">
-                                                    بستن
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
             @else
                 <span class="m-badge m-badge--wide label-sm m-badge--warning"> ندارد </span>
             @endif
