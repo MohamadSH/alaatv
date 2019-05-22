@@ -1,7 +1,9 @@
 @extends('app')
+
 @section('page-css')
     <link href="{{ mix('/css/product-show.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
+
 @section('pageBar')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -19,6 +21,7 @@
         </ol>
     </nav>
 @endsection
+
 @section('content')
 
     <div class="row">
@@ -374,11 +377,15 @@
                                 <div class="col-lg-4">
 
                                     <div class="m-portlet m-portlet--bordered-semi m-portlet--rounded-force m--margin-bottom-45 videoPlayerPortlet @if(!isset($product->introVideo)) m--hide @endif">
-                                        <div class="m-portlet__head m-portlet__head--fit"></div>
-                                        <div class="m-portlet__body m--padding-bottom-5">
-                                            <div class="m-widget19">
-                                                <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides">
-
+                                        <div class="m-portlet__body">
+                                            <div class="m-widget19 a--nuevo-alaa-theme a--media-parent">
+                                                <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides a--video-wraper">
+                                                    
+                                                    @if( $product->introVideo )
+                                                        <input type="hidden" name="introVideo"
+                                                               value="{{ $product->introVideo }}">
+                                                    @endif
+                                                    
                                                     <video
                                                             id="videoPlayer"
                                                             class="
@@ -527,85 +534,7 @@
         </div>
     </div>
 @endsection
+
 @section('page-js')
     <script src="{{ mix('/js/product-show.js') }}"></script>
-    <script>
-
-        var player = videojs('videoPlayer', {language: 'fa'});
-
-        jQuery(document).ready(function () {
-        
-            @if( $product->introVideo )
-            player.src([
-                {type: "video/mp4", src: "{{ $product->introVideo }}"}
-            ]);
-            @endif
-
-            player.nuevo({
-                // logotitle:"آموزش مجازی آلاء",
-                // logo:"https://sanatisharif.ir/image/11/135/67/logo-150x22_20180430222256.png",
-                logocontrolbar: '/acm/extra/Alaa-logo.gif',
-                // logoposition:"RT", // logo position (LT - top left, RT - top right)
-                logourl: '//sanatisharif.ir',
-                // related: related_videos,
-                // shareUrl:"https://www.nuevolab.com/videojs/",
-                // shareTitle: "Nuevo plugin for VideoJs Player",
-                // slideImage:"//cdn.nuevolab.com/media/sprite.jpg",
-
-                // videoInfo: true,
-                // infoSize: 18,
-                // infoIcon: "https://sanatisharif.ir/image/11/150/150/favicon_32_20180819090313.png",
-
-                closeallow: false,
-                mute: true,
-                rateMenu: true,
-                resume: true, // (false) enable/disable resume option to start video playback from last time position it was left
-                // theaterButton: true,
-                timetooltip: true,
-                mousedisplay: true,
-                endAction: 'related', // (undefined) If defined (share/related) either sharing panel or related panel will display when video ends.
-                container: "inline",
-
-
-                // limit: 20,
-                // limiturl: "http://localdev.alaatv.com/videojs/examples/basic.html",
-                // limitimage : "//cdn.nuevolab.com/media/limit.png", // limitimage or limitmessage
-                // limitmessage: "اگه می خوای بقیه اش رو ببینی باید پول بدی :)",
-
-
-                // overlay: "//domain.com/overlay.html" //(undefined) - overlay URL to display html on each pause event example: https://www.nuevolab.com/videojs/tryit/overlay
-
-            });
-
-            player.hotkeys({
-                volumeStep: 0.1,
-                seekStep: 5,
-                alwaysCaptureHotkeys: true
-            });
-
-            player.pic2pic();
-
-            // player.on('mode',function(event,mode) {
-            //     console.log('mode: ', mode);
-            //     let width = '100%';
-            //     if(mode=='large') {
-            //         // $('.productDetailesColumns .column1').addClass('order-2');
-            //         // $('.productDetailesColumns .column2').addClass('order-3');
-            //         $('.productDetailesColumns .column3').addClass('order-first');
-            //         $('.productDetailesColumns .column3').removeClass('col-lg-4');
-            //         $('.productDetailesColumns .column3').addClass('col-lg-12');
-            //         $('.productDetailesColumns .column3 .videoPlayerPortlet').css({'width':'60%'});
-            //     } else {
-            //         // $('.productDetailesColumns .column1').removeClass('order-2');
-            //         // $('.productDetailesColumns .column2').removeClass('order-3');
-            //         $('.productDetailesColumns .column3').removeClass('order-first');
-            //         $('.productDetailesColumns .column3').removeClass('col-lg-12');
-            //         $('.productDetailesColumns .column3').addClass('col-lg-4');
-            //         $('.productDetailesColumns .column3 .videoPlayerPortlet').css({'width':'100%'});
-            //     }
-            // });
-
-        });
-
-    </script>
 @endsection

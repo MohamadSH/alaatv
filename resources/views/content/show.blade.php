@@ -27,7 +27,6 @@
     <input id="js-var-contentEmbedUrl" class="m--hide" type="hidden" value='{{action("Web\ContentController@embed" , $content)}}'>
 @endsection
 
-
 @section('content')
     <div class="row">
         
@@ -62,23 +61,24 @@
             @if(isset($content->template))
                 @if(optional($content->template)->name == "video1")
                     <!--begin::Portlet-->
-                    <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
-                        <div class="m-portlet__body">
-                            <div class="m-portlet__body-progress">Loading</div>
-                            <video id="video-{{ $content->id }}"
-                                   class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered" controls
-                                   preload="auto" height='360' width="640" poster='{{ $content->thumbnail }}'>
-                                @if($user_can_see_content)
-                                    @foreach($content->getVideos() as $source)
-                                        <source src="{{ $source->link }}" type='video/mp4' res="{{ $source->res }}"
-                                                @if(strcmp( $source->res,"240p") == 0)
+                    <div class="m-portlet m-portlet--mobile">
+                        <div class="m-portlet__body a--nuevo-alaa-theme a--media-parent">
+                            <div class="a--video-wraper">
+                                <video id="video-{{ $content->id }}"
+                                       class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered" controls
+                                       preload="auto" height='360' width="640" poster='{{ $content->thumbnail }}'>
+                                    @if($user_can_see_content)
+                                        @foreach($content->getVideos() as $source)
+                                            <source src="{{ $source->link }}" type='video/mp4' res="{{ $source->res }}"
+                                                    @if(strcmp( $source->res,"240p") == 0)
                                                     default
-                                                @endif
-                                                label="{{ $source->caption }}"/>
-                                    @endforeach
-                                @endif
-                                <p class="vjs-no-js">@lang('content.javascript is disables! we need it to play a video')</p>
-                            </video>
+                                                    @endif
+                                                    label="{{ $source->caption }}"/>
+                                        @endforeach
+                                    @endif
+                                    <p class="vjs-no-js">@lang('content.javascript is disables! we need it to play a video')</p>
+                                </video>
+                            </div>
                             <div class="m--clearfix"></div>
                             <div class="m--margin-top-10">
                                 @if(isset($videosWithSameSet) and $videosWithSameSet->isNotEmpty())
@@ -356,6 +356,7 @@
                     </div>
                     <div class="m-portlet__body">
                         <div
+                                style="min-height: 900px;"
 {{--                                class="m-scrollable" data-scrollable="true" data-height="450" data-scrollbar-shown="true"--}}
                         >
                             @foreach($pamphletsWithSameSet as  $item)
