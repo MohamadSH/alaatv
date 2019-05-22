@@ -108,6 +108,12 @@ window.onload = function () {
 };
 
 $(document).ready(function () {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     $(document).on('click', '#btnDonationNow', function (e) {
         let amount = $('#amount').val();
 
@@ -118,18 +124,35 @@ $(document).ready(function () {
                 amount: amount
             },
             dataType: 'json',
-
-            success: function (data) {
-                if (data.url) {
-                    window.location = data.url;
-                } else {
-                    alert('مشکلی پیش آمده است. مجددا سعی کنید.');
+            statusCode: {
+                //The status for when action was successful
+                200: function (data) {
+                    if (data.url) {
+                        window.location = data.url;
+                    } else {
+                        alert('مشکلی پیش آمده است. مجددا سعی کنید.');
+                    }
+                },
+                //The status for when the user is not authorized for making the request
+                403: function (response) {
+                    alert('درخواست شما غیرمجاز می باشد');
+                },
+                404: function (response) {
+                    //
+                },
+                //The status for when form data is not valid
+                422: function (response) {
+                    alert('اطلاعات وارد شده اشتباه می باشد');
+                },
+                //The status for when there is error php code
+                500: function (response) {
+                    alert('خطای کد');
+                },
+                //The status for when there is error php code
+                503: function (response) {
+                    alert('خطای غیر منتظره');
                 }
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert('مشکلی پیش آمده است. مجددا سعی کنید.');
-            }
-
         });
     });
 });

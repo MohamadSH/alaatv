@@ -29,6 +29,7 @@ class ContentSearch extends SearchAbstract
         'createdAtSince',
         'createdAtTill',
         'isFree',
+        'free'
     ];
     
     public function get(array ...$params)

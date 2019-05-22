@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="Designer" content="Developed by Am!n">
+    <meta name="Designer" content="Alaa">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     
     {!! SEO::generate(true) !!}
 

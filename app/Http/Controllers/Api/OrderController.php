@@ -339,12 +339,7 @@ class OrderController extends Controller
      */
     public function donateOrder(DonateRequest $request)
     {
-        // todo : use alaatv gaurd
-        $user = $request->user('api');
-        if (!isset($user)) {
-            $user = $request->user();
-        }
-
+        $user = $request->user('alaatv');
         if ($user === null) {
             abort(403, 'Not authorized.');
         }
