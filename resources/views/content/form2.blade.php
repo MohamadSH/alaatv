@@ -12,7 +12,8 @@
                             'value' => '1',
                             'id' => 'checkbox_isFree_enable',
                             'class'=>'md-check',
-                            ($content->isFree)?'checked':''
+                            ($content->isFree)?'checked':'',
+                            'disabled'
                         ]
                     )
                 !!}
