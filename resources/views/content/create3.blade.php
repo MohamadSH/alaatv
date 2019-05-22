@@ -49,7 +49,7 @@
                                             نمایش اطلاعات آخرین محتوا
                                         </button>
                                     </div>
-                                    <input type="text" name="lastContentId" id="lastContentId" class="form-control m-input m-input--air" placeholder="شماره درس" dir="ltr">
+                                    <input type="text" name="setId" id="setId" class="form-control m-input m-input--air" placeholder="شماره درس" dir="ltr">
                                 </div>
                             </div>
                         </div>
@@ -195,7 +195,12 @@
         });
 
         $(document).on('click', '.btnShowLastContentData', function () {
-            var lastContentId = $('#lastContentId').val();
+            var setId = $('#setId').val();
+            getLasContentOfSet(setId, initLastContentData);
+        });
+        
+        
+        function getLasContentOfSet(setId, callback) {
 
             mApp.block('#frmCreateNewContent', {
                 overlayColor: "#000000",
@@ -206,42 +211,57 @@
             
             $.ajax({
                 type: 'GET',
-                url: '/api/v1/c/'+lastContentId,
+                url: '/set/'+setId,
+                data: {},
+                dataType: 'json',
+                success: function (data) {
+                    if (typeof data.url !== 'undefined') {
+                        getContentData(data.url, callback)
+                    } else {
+                        mApp.unblock('#frmCreateNewContent');
+                        toastr.error('خطای سیستمی رخ داده است.');
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    mApp.unblock('#frmCreateNewContent');
+                    toastr.error('خطای سیستمی رخ داده است.');
+                }
+            });
+        }
+
+        function getContentData(contentUrl, callback) {
+
+            $.ajax({
+                type: 'GET',
+                url: contentUrl,
                 data: {},
                 dataType: 'json',
                 success: function (data) {
                     mApp.unblock('#frmCreateNewContent');
-                    if (typeof data.id !== 'undefined') {
-                        $('#contenttypes').val(data.contenttype_id);
-                        $('#order').val(data.order+1);
-                        $('#name').val(data.name);
-                        $('#descriptionSummerNote').summernote('code', data.description);
-                        $("input[data-role=tagsinput]").tagsinput('destroy');
-                        $("input[data-role=tagsinput]").val(data.tags.tags.join());
-                        $("input[data-role=tagsinput]").tagsinput({
-                            tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
-                        });
+                    if (typeof data.url !== 'undefined') {
+                        callback(data);
                     } else {
                         toastr.error('خطای سیستمی رخ داده است.');
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     mApp.unblock('#frmCreateNewContent');
-                    var message = '';
-                    // if (jqXHR.status === 403) {
-                    //     message = 'کد وارد شده اشتباه است.';
-                    // } else if (jqXHR.status === 422) {
-                    //     message = 'کد را وارد نکرده اید.';
-                    // } else {
-                    //     message = 'خطای سیستمی رخ داده است.';
-                    // }
-
-                    message = 'خطای سیستمی رخ داده است.';
-                    toastr.error(message);
-                    stopWaiting();
+                    toastr.error('خطای سیستمی رخ داده است.');
                 }
             });
-        });
+        }
+        
+        function initLastContentData(data) {
+            $('#contenttypes').val(data.contenttype_id);
+            $('#order').val(data.order+1);
+            $('#name').val(data.name);
+            $('#descriptionSummerNote').summernote('code', data.description);
+            $("input[data-role=tagsinput]").tagsinput('destroy');
+            $("input[data-role=tagsinput]").val(data.tags.tags.join());
+            $("input[data-role=tagsinput]").tagsinput({
+                tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
+            });
+        }
         
         
     </script>
