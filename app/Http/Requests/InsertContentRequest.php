@@ -9,7 +9,6 @@ class InsertContentRequest extends FormRequest
 {
     public function authorize()
     {
-
         return true;
     }
 
@@ -21,13 +20,12 @@ class InsertContentRequest extends FormRequest
      */
     public function rules()
     {
-        //        dd($this->request->get('files'));
-        //TODO:// contenttypes,id exists on contentType
         return [
-            'order'          => 'numeric',
+            'order'          => 'required|numeric',
             'name'           => 'required',
             'contenttype_id' => 'required',
-            'files'          => [new FilesArray],
+            'contentset_id' => 'required',
+            'fileName'       => 'required',
         ];
     }
 }
