@@ -6,11 +6,11 @@
         .sideItems .m-widget24__title {
             font-size: 30px !important;
         }
-
+        
         .sideItems .m-widget24__desc {
             font-size: 15px !important;
         }
-
+        
         .sideItems .flaticon-pie-chart {
             font-size: 30px !important;
         }
@@ -50,7 +50,7 @@
                             </div>
                         </div>
                         <div class="m-widget27__container">
-
+                            
                             <div class="container-fluid m--padding-right-40 m--padding-left-40">
                                 <div class="row">
                                     <div class="col-md-3 order-2 order-sm-2 order-md-1 order-lg-1 sideItems">
@@ -132,7 +132,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-9 order-1 order-sm-1 order-md-2 order-lg-2">
-
+                                        
                                         <div class="row justify-content-center">
                                             @foreach( $landingProducts as $product)
                                                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 m--padding-left-5 m--padding-right-5 m--margin-top-5 a--imageWithCaption @foreach ($product["majors"] as $major) {{ $major }} @endforeach">
@@ -167,17 +167,17 @@
                                                 </div>
                                             @endforeach
                                         </div>
-
+                                    
                                     </div>
                                 </div>
                             </div>
-
-
+                        
+                        
                         </div>
                     </div>
                 </div>
             </div>
-
+        
         </div>
     </div>
 @endsection

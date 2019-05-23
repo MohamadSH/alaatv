@@ -56,7 +56,7 @@
                 <div class = "m-portlet__head m-portlet__head--fit-">
                     <div class = "m-portlet__head-caption">
                         <div class = "m-portlet__head-title">
-                            <h3 class = "m-portlet__head-text m--font-light">
+                            <h3 class = "m-portlet__head-text m--font-light d-none">
                                 ...
                             </h3>
                         </div>
