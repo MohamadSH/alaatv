@@ -23,8 +23,8 @@ class InsertContentRequest extends FormRequest
         return [
             'order'          => 'required|numeric',
             'name'           => 'required',
-            'contenttype_id' => 'required',
-            'contentset_id' => 'required',
+            'contenttype_id' => 'required|exists:contenttypes,id',
+            'contentset_id' =>  'required|exists:contentsets,id',
             'fileName'       => 'required',
         ];
     }

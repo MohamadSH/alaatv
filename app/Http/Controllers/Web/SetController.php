@@ -143,7 +143,7 @@ class SetController extends Controller
             return response()->json($set);
         }
         
-        $contents = $set->getContents();
+        $contents = $set->getActiveContents();
         
         return view('listTest', compact('set', 'contents'));
     }

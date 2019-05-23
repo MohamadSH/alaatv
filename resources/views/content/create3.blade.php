@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="m-portlet__body">
-                    
+                    {!! Form::open(['method' => 'POST', 'action' => 'Web\ContentController@store', 'id' => 'frmCreateNewContent']) !!}
                     <div class="row">
                         <div class="col-md-8 mx-auto">
                             <div class="form-group m-form__group">
@@ -49,17 +49,14 @@
                                             نمایش اطلاعات آخرین محتوا
                                         </button>
                                     </div>
-                                    <input type="text" name="setId" id="setId" class="form-control m-input m-input--air" placeholder="شماره درس" dir="ltr">
+                                    <input type="text" name="contentset_id" id="setId" class="form-control m-input m-input--air" placeholder="شماره درس" dir="ltr">
                                 </div>
                             </div>
                         </div>
                     </div>
                     
                     <hr>
-    
-    
-                    {!! Form::open(['method' => 'POST', 'action' => 'Web\ContentController@basicStore', 'id' => 'frmCreateNewContent']) !!}
-    
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
