@@ -74,6 +74,7 @@
                                                     'value' => '1',
                                                     'id' => 'checkbox_isFree_enable',
                                                     'class'=>'md-check',
+                                                    'checked'
                                                 ]
                                             )
                                         !!}
@@ -134,9 +135,21 @@
                 
                                 <div class="form-group">
                                     <div class="row">
-                                        <label class="col-md-4 control-label" for="contenttypes">ترتیب</label>
+                                        <label class="col-md-4 control-label" for="order">ترتیب</label>
                                         <div class="col-md-8">
                                             {!! Form::text('order', (isset($lastContent)?($lastContent->order+1):null), ['class' => 'form-control m-input m-input--air', 'placeholder'=>'ترتیب' , 'id'=>'order', 'dir'=>'ltr']) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-md-4 control-label" for="author_id">آیدی دبیر</label>
+                                        <div class="col-md-8">
+                                            {!! Form::text('author_id', (isset($lastContent)?($lastContent->author_id):null), ['class' => 'form-control m-input m-input--air', 'placeholder'=>'آی دی دبیر' , 'id'=>'author_id', 'dir'=>'ltr']) !!}
                                         </div>
                                     </div>
                                 </div>
@@ -265,9 +278,12 @@
             $('#contenttypes').val(data.contenttype_id);
             $('#order').val(data.order+1);
             $('#name').val(data.name);
+            $('#author_id').val(data.author.id);
             $('#descriptionSummerNote').summernote('code', data.description);
             $("input[data-role=tagsinput]").tagsinput('destroy');
-            $("input[data-role=tagsinput]").val(data.tags.tags.join());
+            if (typeof data.tags !== 'undefined' && data.tags !== null) {
+                $("input[data-role=tagsinput]").val(data.tags.tags.join());
+            }
             $("input[data-role=tagsinput]").tagsinput({
                 tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
             });
