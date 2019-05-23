@@ -266,7 +266,6 @@ Route::group(['prefix' => 'c'], function () {
     Route::get('{c}/favored', 'Web\FavorableController@getUsersThatFavoredThisFavorable');
     Route::post('{c}/favored', 'Web\FavorableController@markFavorableFavorite');
     
-    Route::post('basicStore', 'Web\ContentController@basicStore');
     Route::group(['prefix' => '{c}/attach'], function () {
         Route::post('set/{set}', 'Web\ContentController@attachContentToContentSet');
         Route::put('set/{set}', 'Web\ContentController@updateContentSetPivots');

@@ -68,6 +68,7 @@
                                                     'value' => '1',
                                                     'id' => 'checkbox_isFree_enable',
                                                     'class'=>'md-check',
+                                                    'checked'
                                                 ]
                                             )
                                         !!}
@@ -272,7 +273,9 @@
             $('#author_id').val(data.author.id);
             $('#descriptionSummerNote').summernote('code', data.description);
             $("input[data-role=tagsinput]").tagsinput('destroy');
-            $("input[data-role=tagsinput]").val(data.tags.tags.join());
+            if (typeof data.tags !== 'undefined' && data.tags !== null) {
+                $("input[data-role=tagsinput]").val(data.tags.tags.join());
+            }
             $("input[data-role=tagsinput]").tagsinput({
                 tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
             });
