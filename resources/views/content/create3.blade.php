@@ -36,31 +36,62 @@
                         </div>
                     </div>
                 </div>
-                <div class = "m-portlet__body">
-                    {!! Form::open(['method' => 'POST', 'action' => 'Web\ContentController@basicStore']) !!}
-                    <div class = "row">
-                        <div class = "col-md-6">
-                            {!! Form::text('contentset_id', null, ['class' => 'form-control m-input m-input--air', 'placeholder'=>'شماره درس', 'dir'=>'ltr']) !!}
-                            <span class = "help-block">
-                                    <strong></strong>
-                                </span>
+                <div class="m-portlet__body">
+                    {!! Form::open(['method' => 'POST', 'action' => 'Web\ContentController@store', 'id' => 'frmCreateNewContent']) !!}
+                    <div class="row">
+                        <div class="col-md-8 mx-auto">
+                            <div class="form-group m-form__group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-success btnShowLastContentData" type="button">
+                                            نمایش اطلاعات آخرین محتوا
+                                        </button>
+                                    </div>
+                                    <input type="text" name="contentset_id" id="setId" class="form-control m-input m-input--air" placeholder="شماره درس" dir="ltr">
+                                </div>
+                            </div>
                         </div>
-                        <div class = "col-md-6">
-                            {!! Form::select('contenttype_id', $contenttypes, null,['class' => 'form-control m-input m-input--air']) !!}
-                            <span class = "help-block">
-                                    <strong></strong>
-                                </span>
-                        </div>
-                        <div class = "col-md-6">
-                            <div class = "form-group m-form__group">
-                                <div class = "input-group">
-                                    <div class = "input-group-prepend">
-                                            <span class = "input-group-text">
-                                                <label class = "m-checkbox m-checkbox--single m-checkbox--state m-checkbox--state-success">
-                                                    <input type = "checkbox" checked = "" id = "orderCheckbox">
-                                                    <span></span>
-                                                </label>
-                                            </span>
+                    </div>
+                    
+                    <hr>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-md-4 control-label" for="validSinceDate">تاریخ نمایان شدن</label>
+                                        <div class="col-md-8">
+                                            <input id="validSinceDate" type="text" class="form-control">
+                                            <input name="validSinceDate" id="validSinceDateAlt" type="text" class="form-control d-none">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-md-4 control-label" for="validSinceDate">نام فایل کامل</label>
+                                        <div class="col-md-8">
+                                            {!! Form::text('fileName', null, ['class' => 'form-control', 'placeholder'=>'( با دات ام پی فر)', 'dir'=>'ltr']) !!}
+                                        </div>
+                                    </div>
+                                </div>
+            
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-md-4 control-label" for="contenttypes">نوع محتوا</label>
+                                        <div class="col-md-8">
+                                            {!! Form::select('contenttype_id', $contenttypes, null,['class' => 'form-control m-input m-input--air', 'id' => 'contenttypes']) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-md-4 control-label" for="contenttypes">ترتیب</label>
+                                        <div class="col-md-8">
+                                            {!! Form::text('order', null, ['class' => 'form-control m-input m-input--air', 'placeholder'=>'ترتیب' , 'id'=>'order', 'dir'=>'ltr']) !!}
+                                        </div>
                                     </div>
                                     {!! Form::text('order', null, ['class' => 'form-control m-input m-input--air', 'placeholder'=>'ترتیب' , 'id'=>'order' , 'disabled', 'dir'=>'ltr']) !!}
                                 </div>

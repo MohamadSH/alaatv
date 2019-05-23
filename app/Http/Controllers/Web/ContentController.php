@@ -243,13 +243,22 @@ class ContentController extends Controller
         return httpResponse(null, $view);
     }
     
-    public function create2()
+    public function create2(Request $request)
     {
 //        $contenttypes = Contenttype::getRootContentType()
 //            ->pluck('displayName', 'id');
         $contenttypes = [ 8 => 'فیلم' , 1 =>    'جزوه'];
-        
-        $view = view("content.create3", compact("contenttypes"));
+
+        $setId = $request->get('set');
+        $set = Contentset::find($setId);
+        if(isset($set))
+        {
+            $lastContent = $set->getLastContent();
+        }elseif(isset($setId)){
+            session()->flash('error' , 'ست مورد نظر شما یافت نشد');
+        }
+
+        $view = view("content.create3", compact('contenttypes' , 'lastContent'));
         return httpResponse(null, $view);
     }
     
@@ -356,37 +365,53 @@ class ContentController extends Controller
     
     public function store(InsertContentRequest $request)
     {
-        $contenttype_id = $request->get('contenttype_id');
+        $contenttypeId = $request->get('contenttype_id');
         $fileName =       $request->get('fileName');
-        $contentset_id=   $request->get('contentset_id');
+        $contentsetId=   $request->get('contentset_id');
+        $isFree = $request->get('isFree' , 0);
 
-        $content = new Content();
-
-        if($contenttype_id == config('constants.CONTENT_TYPE_VIDEO'))
+        if($isFree)
         {
-            $files = $this->makeVideoFileArray($fileName, $contentset_id);
-            $thumbnailUrl = $this->makeThumbnailUrlFromFileName($fileName, $contentset_id);
-            $content->thumbnail = $this->makeThumbanilFile($thumbnailUrl);
-        }
-        elseif($contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET'))
-        {
-            $files = $this->makePamphletFileArray($fileName);
-            $content->thumbnail = null;
-        }
+            [$files , $thumbnail] = $this->makeFreeContentFiles($contenttypeId, $fileName, $contentsetId);
+        }else{
+            $contentset = Contentset::find($contentsetId);
+            $productId = $contentset->products->first()->id;
+            if(!isset($productId))
+                return response()->json(['No product found for this set'], Response::HTTP_BAD_REQUEST);
 
-        $request->offsetSet('files', isset($files)?$files:[]);
+            [$files , $thumbnail] = $this->makePaidContentFiles($contenttypeId, $fileName , $productId);
+        }
+        
+        $content = new Content([
+            'thumbnail' => $thumbnail
+        ]);
+
+        $request->offsetSet('files', $files);
 
         $this->fillContentFromRequest($request->all(), $content);
-        
+
+        $done = false;
         if ($content->save()) {
-            $api = response()->json([
-                "id" => $content->id,
-            ]);
-            return httpResponse($api, null);
+            $done = true;
         }
-        
-        $api1 = response()->json([], Response::HTTP_SERVICE_UNAVAILABLE);
-        return httpResponse($api1, null);
+
+        if($request->expectsJson())
+        {
+            if($done)
+            {
+                $api = response()->json([
+                    'id' => $content->id,
+                ]);
+                return httpResponse($api, null);
+
+            }
+            $api1 = response()->json([], Response::HTTP_SERVICE_UNAVAILABLE);
+            return httpResponse($api1, null);
+
+        }
+//        Cache::tags('content')->flush();
+        session()->flash('success' , 'محتوا با موفقیت درج شد. '.'<a href="'.action('Web\ContentController@edit' , $content).'">اصلاح محتوا</a>');
+        return redirect()->back();
     }
     
     
@@ -400,13 +425,12 @@ class ContentController extends Controller
         $fileCollection = collect();
         
         foreach ($files as $key => $file) {
-            $fileDisk     = isset($file->disk) ? $file->disk : null;
-            $disk        = $content->isFree ? $fileDisk : config('constants.DISK_PRODUCT_CONTENT');
+            $disk     = isset($file->disk) ? $file->disk : null;
             $fileName = isset($file->name) ? $file->name : null;
             $caption  = isset($file->caption) ? $file->caption : null;
             $res      = isset($file->res) ? $file->res : null;
             $type     = isset($file->type) ? $file->type : null;
-            $url     = isset($file->url) ? $file->url : null;
+            $url      = isset($file->url) ? $file->url : null;
             $size     = isset($file->size) ? $file->size : null;
             if ($this->strIsEmpty($fileName)) {
                 continue;
@@ -525,7 +549,7 @@ class ContentController extends Controller
 
         if($contenttype_id == config('constants.CONTENT_TYPE_VIDEO'))
         {
-            $files = $this->makeVideoFileArray($fileName, $contentset_id);
+            $files = $this->makeFreeVideoFileArray($fileName , '' , $contentset_id);
             $thumbnailUrl = $this->makeThumbnailUrlFromFileName($fileName, $contentset_id);
             $newContent->thumbnail = $this->makeThumbanilFile($thumbnailUrl);
         }
@@ -546,13 +570,17 @@ class ContentController extends Controller
         session()->flash('error' , 'Empty files array');
         return redirect()->back();
     }
-    
-    
-    public function update(EditContentRequest $request, $content)
+
+
+    /**
+     * @param EditContentRequest $request
+     * @param Content $content
+     * @return RedirectResponse
+     */
+    public function update(EditContentRequest $request, Content $content)
     {
-        $this->fillContentFromRequest($request, $content);
+        $this->fillContentFromRequest($request->all(), $content);
         
-        //TODO:// update default contentset
         if ($content->update()) {
             session()->put('success', 'اصلاح محتوا با موفقیت انجام شد');
         } else {
@@ -585,6 +613,91 @@ class ContentController extends Controller
     {
         return redirect('/c', Response::HTTP_MOVED_PERMANENTLY);
     }
-    
-    
+
+    /**
+     * @param int $contenttypeId
+     * @param int $isFree
+     * @param string $fileName
+     * @param int $contentsetId
+     * @param int $productId
+     * @return array
+     */
+    private function makeFreeContentFiles(int $contenttypeId, string $fileName, int $contentsetId): array
+    {
+        $thumbnail = null;
+        $files = [];
+        if ($contenttypeId == config('constants.CONTENT_TYPE_VIDEO')) {
+            list($files, $thumbnail) = $this->makeVideoFilesForFreeContent($fileName, $contentsetId);
+        } elseif ($contenttypeId == config('constants.CONTENT_TYPE_PAMPHLET')) {
+            $files = $this->makePamphletFilesForFreeContent($fileName);
+        }
+        return [$files , $thumbnail];
+    }
+
+    /**
+     * @param int $contenttypeId
+     * @param int $isFree
+     * @param string $fileName
+     * @param int $contentsetId
+     * @param int $productId
+     * @return array
+     */
+    private function makePaidContentFiles(int $contenttypeId,  string $fileName, int $productId): array
+    {
+        $thumbnail = null;
+        $files = [];
+        if ($contenttypeId == config('constants.CONTENT_TYPE_VIDEO')) {
+            list($files, $thumbnail) = $this->makeVideoFilesForPaidContent($fileName, $productId);
+        } elseif ($contenttypeId == config('constants.CONTENT_TYPE_PAMPHLET')) {
+            $files = $this->makePahmphletFilesForPaidContent($fileName, $productId);
+        }
+        return [$files , $thumbnail];
+    }
+
+    /**
+     * @param string $fileName
+     * @param int $productId
+     * @return array
+     */
+    private function makeVideoFilesForPaidContent(string $fileName, int $productId): array
+    {
+        $files = $this->makePaidVideoFileArray($fileName, config('constants.DISK_PRODUCT_CONTENT'), $productId);
+        return $files;
+    }
+
+    /**
+     * @param string $fileName
+     * @param int $contentsetId
+     * @return array
+     */
+    private function makeVideoFilesForFreeContent(string $fileName, int $contentsetId): array
+    {
+        $files = $this->makeFreeVideoFileArray($fileName, config('constants.DISK_FREE_CONTENT'), $contentsetId);
+        $thumbnailUrl = $this->makeThumbnailUrlFromFileName($fileName, $contentsetId);
+        $thumbnail = $this->makeThumbanilFile($thumbnailUrl);
+        return array($files, $thumbnail);
+    }
+
+    /**
+     * @param string $fileName
+     * @param int $productId
+     * @return array
+     */
+    private function makePahmphletFilesForPaidContent(string $fileName, int $productId): array
+    {
+        $files = $this->makePaidPamphletFileArray($fileName, config('constants.DISK_PRODUCT_CONTENT'), $productId);
+        return $files;
+    }
+
+    /**
+     * @param string $fileName
+     * @return array
+     */
+    private function makePamphletFilesForFreeContent(string $fileName): array
+    {
+        $files = $this->makeFreePamphletFileArray($fileName, config('constants.DISK19_CLOUD'));
+        return $files;
+    }
+
+
 }
