@@ -152,4 +152,9 @@ class SetController extends Controller
 //        dd($set);
         return view('set.edit', compact('set'));
     }
+
+    public function indexContent (\App\Http\Requests\Request $request, Contentset $set){
+        $contents = $set->contents2->sortBy("order");
+        return view('listTest',compact('set','contents'));
+    }
 }

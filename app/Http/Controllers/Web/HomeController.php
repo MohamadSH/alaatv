@@ -1188,8 +1188,6 @@ class HomeController extends Controller
     }
 
     public function contentSetListTest(Request $request, Contentset $set){
-        $contents = $set->contents2->sortBy("order");
-        return view('listTest',compact('set','contents'));
     }
 
     private function getLastUpdatedByLernito(): array
