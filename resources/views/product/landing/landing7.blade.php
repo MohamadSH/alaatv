@@ -79,17 +79,17 @@
     
                             <div class="row alaaMaghtaLogoWraper">
                                 <div class="col col-md-4">
-                                    <a href="#landing7-scroll-konkoor1">
+                                    <a href="konkoor98" class="btnScroll">
                                         <img src="{{ asset('/assets/extra/landing7/80.png') }}" class="a--full-width alaaMaghtaLogo">
                                     </a>
                                 </div>
                                 <div class="col col-md-4">
-                                    <a href="#landing7-scroll-taftan">
+                                    <a href="taftan" class="btnScroll">
                                         <img src="{{ asset('/assets/extra/landing7/60.png') }}" class="a--full-width alaaMaghtaLogo">
                                     </a>
                                 </div>
                                 <div class="col col-md-4">
-                                    <a href="/#landing7-scroll-konkoor2">
+                                    <a href="konkoor2" class="btnScroll">
                                         <img src="{{ asset('/assets/extra/landing7/33.png') }}" class="a--full-width alaaMaghtaLogo">
                                     </a>
                                 </div>
@@ -98,9 +98,8 @@
     
                             @foreach($blocks as $block)
                                 @if($block->products->count() > 0)
-            
-            
-                                    <div class="row shopBlock blockId-{{ $block->id }} {{ $block->class }}" id="landing7-scroll-{{ $block->class }}">
+                                    
+                                    <div class="row shopBlock blockId-{{ $block->id }} {{ $block->class }}" >
                                         <div class="col">
                                             <div class="m-portlet  m-portlet--bordered OwlCarouselType2-shopPage" id="owlCarousel_{{ $block->id }}">
                                                 <div class="m-portlet__head">
@@ -156,38 +155,7 @@
                                             </div>
                                         </div>
                                     </div>
-            
-            
-                                    {{--            --}}
-                                    {{--            <div class="row {{ $block->class }}">--}}
-            
-                                    {{--                <div class="col-12">--}}
-                                    {{--                    <div class="a--devider-with-title">--}}
-                                    {{--                        <div class="a--devider-title">--}}
-                                    {{--                            <a href="{{ $block->url }}" class="m-link m-link--primary">--}}
-                                    {{--                                {{ $block->title }}--}}
-                                    {{--                            </a>--}}
-                                    {{--                        </div>--}}
-                                    {{--                    </div>--}}
-                                    {{--                </div>--}}
-                                    {{--                <div class="col-12">--}}
-                                    {{--                    <div class="a--owl-carousel-type-1 owl-carousel owl-theme">--}}
-                                    {{--                        @foreach($block->products as $product)--}}
-                                    {{--                            @include('partials.widgets.product2',[--}}
-                                    {{--                                'widgetTitle'      => $product->name,--}}
-                                    {{--                                'widgetPic'        => $product->photo,--}}
-                                    {{--                                'widgetLink'       => $product->url,--}}
-                                    {{--                                'widgetPrice'      => $product->priceText['basePriceText'] ,--}}
-                                    {{--                                'widgetPriceLabel' => ($product->isFree || $product->basePrice == 0 ? 0 : 1)--}}
-                                    {{--                                ])--}}
-                                    {{--                        @endforeach--}}
-                                    {{--                    </div>--}}
-                                    {{--                </div>--}}
-                                    {{--            </div>--}}
-            
-                                    {{--@foreach($section["ads"] as $image => $link)
-                                        @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
-                                    @endforeach--}}
+                                    
                                 @endif
                             @endforeach
                             
@@ -201,4 +169,15 @@
 @endsection
 @section('page-js')
     <script src="{{ mix('/js/page-shop.js') }}"></script>
+    <script>
+        $(document).on('click', '.btnScroll', function (e) {
+            e.preventDefault();
+            let blockId = $(this).attr('href');
+            if ($('.' + blockId).length > 0) {
+                $([document.documentElement, document.body]).animate({
+                    scrollTop: $('.'+blockId).offset().top - 75
+                }, 500);
+            }
+        });
+    </script>
 @endsection
