@@ -1273,6 +1273,7 @@ class ProductController extends Controller
             326,
             328
         ];
+
         
         $productIds = $producIds;
 //        $productIds = config("constants.HAMAYESH_PRODUCT");
