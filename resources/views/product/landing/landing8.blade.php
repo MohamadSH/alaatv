@@ -32,6 +32,9 @@
         .m-widget27 .m-widget27__pic::before {
             background: none;
         }
+        .m-portlet.m-portlet--creative.m-portlet--first {
+            border: solid 1px #aeaeae4d;
+        }
     </style>
 @endsection
 @section('content')
@@ -121,7 +124,7 @@
                                                     <div class="m-portlet__head-title">
                                                         <h2 class="m-portlet__head-label m-portlet__head-label--info">
                                                             <span>
-                                                                همایش های طلایی آلاء
+                                                                مسیر موفقیت
                                                             </span>
                                                         </h2>
                                                     </div>
@@ -130,14 +133,16 @@
                                             <div class="m-portlet__body">
     
                                                 <span class="m-badge m-badge--danger m-badge--dot"></span>
-                                                هنوز خودتون رو توی بزرگراه رقابت کنکور نمی بینید
+                                                هنوز خودتون رو توی بزرگراه رقابت کنکور نمی بینید؟
                                                 <br>
                                                 <span class="m-badge m-badge--danger m-badge--dot"></span>
-                                                ویا در مسیر هستید اما سرعت مناسبی ندارید
+                                                ویا در مسیر هستید اما سرعت مناسبی ندارید؟
                                                 <br>
                                                 <span class="m-badge m-badge--danger m-badge--dot"></span>
-                                                و یا نیاز به یک جمع بندی تمام کننده دارید
-
+                                                و یا نیاز به یک جمع بندی تمام کننده دارید؟
+                                                <br>
+                                                <br>
+                                                <span style="padding: 5px;background: #ff9a17;color: white;font-weight: bold;">این همایش مناسب شماست</span>
                                             </div>
                                         </div>
                                         
