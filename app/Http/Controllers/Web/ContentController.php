@@ -254,6 +254,9 @@ class ContentController extends Controller
         if(isset($set))
         {
             $lastContent = $set->getLastContent();
+            if($request->expectsJson())
+                return response()->json($lastContent);
+
         }elseif(isset($setId)){
             session()->flash('error' , 'ست مورد نظر شما یافت نشد');
         }
@@ -368,7 +371,7 @@ class ContentController extends Controller
         $contenttypeId = $request->get('contenttype_id');
         $fileName =       $request->get('fileName');
         $contentsetId=   $request->get('contentset_id');
-        $isFree = $request->get('isFree' , 0);
+        $isFree = $request->get('isFree' , 1);
 
         if($isFree)
         {
