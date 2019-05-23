@@ -1262,13 +1262,16 @@ class ProductController extends Controller
             ]), '100', '100', null));
         
         $producIds = [
-            271,
-            270,
-            269,
-            268,
-            267,
-            266,
-            265,
+            298,
+            302,
+            306,
+            308,
+            312,
+            316,
+            318,
+            322,
+            326,
+            328
         ];
         
         $productIds = $producIds;
