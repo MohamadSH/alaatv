@@ -151,20 +151,21 @@ trait ContentControllerResponseTrait
     }
 
     /**
-     * @param $filename
-     * @param $disk
-     * @param $res
+     * @param string $filename
+     * @param string $disk
+     * @param string $res
      *
+     * @param null $url
      * @return stdClass
      */
-    private function makeVideoFileStdClass(string $filename,string $disk, string $res): stdClass
+    private function makeVideoFileStdClass(string $filename,string $disk, string $res , $url=null): stdClass
     {
         $file          = new stdClass();
         $file->name    = $filename;
         $file->res     = $res;
         $file->caption = Content::videoFileCaptionTable()[$res];
         $file->type    = "video";
-        $file->url     = null;
+        $file->url     = $url;
         $file->size    = null;
         $file->disk    = $disk;
 
@@ -216,9 +217,19 @@ trait ContentControllerResponseTrait
     public function makeFreeVideoFileArray(string $fileName , string $disk, int $contentsetId): array
     {
         $fileUrl = [
-            "720p" => "/media/".$contentsetId."/HD_720p/".$fileName,
-            "480p" => "/media/".$contentsetId."/hq/".$fileName,
-            "240p" => "/media/".$contentsetId."/240p/".$fileName,
+            '720p' => [
+                //ToDo : Hard Code!
+                'url' => 'https://cdn.sanatisharif.ir'.'/media/'.$contentsetId.'/HD_720p/'.$fileName,
+                'partialPath'=> '/media/'.$contentsetId.'/HD_720p/'.$fileName,
+            ],
+            '480p' => [
+                'url' => 'https://cdn.sanatisharif.ir'.'/media/'.$contentsetId.'/hq/'.$fileName,
+                'partialPath'=> '/media/'.$contentsetId.'/hq/'.$fileName,
+            ],
+            '240p' => [
+                'url' => 'https://cdn.sanatisharif.ir'.'/media/'.$contentsetId.'/240p/'.$fileName,
+                'partialPath'=> '/media/'.$contentsetId.'/240p/'.$fileName,
+            ]
         ];
 
         $files = $this->makeFilesArray($fileUrl , $disk);
@@ -235,9 +246,18 @@ trait ContentControllerResponseTrait
     public function makePaidVideoFileArray(string $fileName , string $disk , int $productId): array
     {
         $fileUrl = [
-            "720p" => "/paid/".$productId."/video/HD_720p/".$fileName,
-            "480p" => "/paid/".$productId."/video/hq/".$fileName,
-            "240p" => "/paid/".$productId."/video/240p/".$fileName,
+            '720p' => [
+                'partialPath' =>'/paid/'.$productId.'/video/HD_720p/'.$fileName,
+                'url'   => null,
+                ],
+            '480p' => [
+                'partialPath' =>'/paid/'.$productId.'/video/hq/'.$fileName,
+                'url'   => null,
+                ],
+            '240p' => [
+                'partialPath' =>'/paid/'.$productId.'/video/240p/'.$fileName,
+                'url'   => null,
+                ]
         ];
 
         $files = $this->makeFilesArray($fileUrl , $disk);
@@ -277,7 +297,7 @@ trait ContentControllerResponseTrait
     {
         $files = [];
         foreach ($fileUrl as $key => $url) {
-            $files[] = $this->makeVideoFileStdClass($url, $disk, $key);
+            $files[] = $this->makeVideoFileStdClass($url['partialPath'], $disk, $key , $url['url']);
         }
         return $files;
     }
