@@ -66,18 +66,21 @@ trait ContentControllerResponseTrait
      */
     protected function fillContentFromRequest(array $inputData, Content $content): void
     {
-        $time       = array_get($inputData , 'validSinceTime');//ToDo
-        $validSince = array_get($inputData , 'validSinceDate');
+        $validSinceDateTime = array_get($inputData , 'validSinceDate');
         $enabled    = Arr::has($inputData , 'enable');
+        $isFree    = Arr::has($inputData , 'isFree');
         $tagString  = array_get($inputData , 'tags');
-        $files      = json_decode(array_get($inputData , 'files'));
+        $files      = array_get($inputData , 'files' , []);
         
         $content->fill($inputData);
-        $content->validSince = $this->getValidSinceDateTime($time, $validSince);
+        //ToDo : keep time in $validSinceDateTime
+//        $content->validSince = $validSinceDateTime;
+        $content->validSince = explode(' ', $validSinceDateTime)[0];
         $content->enable     = $enabled ? 1 : 0;
+        $content->isFree     = $isFree ? 1 : 0;
         $content->tags       = convertTagStringToArray($tagString);
-        
-        if (isset($files)) {
+        if(!empty($files))
+        {
             $this->storeFilesOfContent($content, $files);
         }
     }
@@ -146,53 +149,56 @@ trait ContentControllerResponseTrait
             "ext"      => pathinfo(parse_url($thumbnailUrl)['path'], PATHINFO_EXTENSION),
         ];
     }
-    
+
     /**
-     * @param $filename
-     * @param $res
+     * @param string $filename
+     * @param string $disk
+     * @param string $res
      *
+     * @param null $url
      * @return stdClass
      */
-    private function makeVideoFileStdClass($filename, $res): stdClass
+    private function makeVideoFileStdClass(string $filename,string $disk, string $res , $url=null): stdClass
     {
         $file          = new stdClass();
         $file->name    = $filename;
         $file->res     = $res;
         $file->caption = Content::videoFileCaptionTable()[$res];
         $file->type    = "video";
-        $file->url     = null;
+        $file->url     = $url;
         $file->size    = null;
-        $file->disk    = config('constants.DISK_FREE_CONTENT');
+        $file->disk    = $disk;
 
 
         return $file;
     }
 
     /**
-     * @param $filename
+     * @param string $filename
+     * @param string $disk
      * @return stdClass
      */
-    private function makePamphletFileStdClass($filename): stdClass
+    private function makePamphletFileStdClass(string $filename , string $disk): stdClass
     {
         $file          = new stdClass();
         $file->name    = $filename;
         $file->res     = null;
-        $file->caption = 'فایل';
+        $file->caption = Content::pamphletFileCaption();
         $file->url     = null;
         $file->size    = null;
         $file->type    = "pamphlet";
-        $file->disk    = config('constants.DISK19_CLOUD');
+        $file->disk    = $disk;
 
         return $file;
     }
 
     /**
-     * @param $fileName
-     * @param $contentset_id
+     * @param string $fileName
+     * @param int $contentset_id
      *
      * @return string
      */
-    private function makeThumbnailUrlFromFileName($fileName, $contentset_id): string
+    private function makeThumbnailUrlFromFileName(string $fileName, int $contentset_id): string
     {
         $baseUrl = "https://cdn.sanatisharif.ir/media/";
         //thumbnail
@@ -201,30 +207,100 @@ trait ContentControllerResponseTrait
         
         return $thumbnailUrl;
     }
-    
-    public function makeVideoFileArray($fileName, $contentset_id): array
+
+    /**
+     * @param string $fileName
+     * @param string $disk
+     * @param int $contentsetId
+     * @return array
+     */
+    public function makeFreeVideoFileArray(string $fileName , string $disk, int $contentsetId): array
     {
         $fileUrl = [
-            "720p" => "/media/".$contentset_id."/HD_720p/".$fileName,
-            "480p" => "/media/".$contentset_id."/hq/".$fileName,
-            "240p" => "/media/".$contentset_id."/240p/".$fileName,
+            '720p' => [
+                //ToDo : Hard Code!
+                'url' => 'https://cdn.sanatisharif.ir'.'/media/'.$contentsetId.'/HD_720p/'.$fileName,
+                'partialPath'=> '/media/'.$contentsetId.'/HD_720p/'.$fileName,
+            ],
+            '480p' => [
+                'url' => 'https://cdn.sanatisharif.ir'.'/media/'.$contentsetId.'/hq/'.$fileName,
+                'partialPath'=> '/media/'.$contentsetId.'/hq/'.$fileName,
+            ],
+            '240p' => [
+                'url' => 'https://cdn.sanatisharif.ir'.'/media/'.$contentsetId.'/240p/'.$fileName,
+                'partialPath'=> '/media/'.$contentsetId.'/240p/'.$fileName,
+            ]
         ];
-        $files   = [];
-        $files[] = $this->makeVideoFileStdClass($fileUrl["240p"], "240p");
-        
-        $files[] = $this->makeVideoFileStdClass($fileUrl["480p"], "480p");
-        
-        $files[] = $this->makeVideoFileStdClass($fileUrl["720p"], "720p");
-        
+
+        $files = $this->makeFilesArray($fileUrl , $disk);
+
         return $files;
     }
 
-    public function makePamphletFileArray($fileName): array
+    /**
+     * @param string $fileName
+     * @param string $disk
+     * @param int $productId
+     * @return array
+     */
+    public function makePaidVideoFileArray(string $fileName , string $disk , int $productId): array
     {
-        $files   = [];
-        $files[] = $this->makePamphletFileStdClass($fileName);
+        $fileUrl = [
+            '720p' => [
+                'partialPath' =>'/paid/'.$productId.'/video/HD_720p/'.$fileName,
+                'url'   => null,
+                ],
+            '480p' => [
+                'partialPath' =>'/paid/'.$productId.'/video/hq/'.$fileName,
+                'url'   => null,
+                ],
+            '240p' => [
+                'partialPath' =>'/paid/'.$productId.'/video/240p/'.$fileName,
+                'url'   => null,
+                ]
+        ];
+
+        $files = $this->makeFilesArray($fileUrl , $disk);
+
         return $files;
     }
 
-    
+    /**
+     * @param string $fileName
+     * @param string $disk
+     * @return array
+     */
+    public function makeFreePamphletFileArray(string $fileName , string $disk): array
+    {
+        $files[] = $this->makePamphletFileStdClass($fileName , $disk);
+        return $files;
+    }
+
+    /**
+     * @param string $fileName
+     * @param string $disk
+     * @param int $productId
+     * @return array
+     */
+    public function makePaidPamphletFileArray(string $fileName , string $disk, int $productId): array
+    {
+        $files[] = $this->makePamphletFileStdClass("/paid/".$productId."/".$fileName , $disk);
+        return $files;
+    }
+
+    /**
+     * @param array $fileUrl
+     * @param string $disk
+     * @return array
+     */
+    private function makeFilesArray(array $fileUrl , string $disk): array
+    {
+        $files = [];
+        foreach ($fileUrl as $key => $url) {
+            $files[] = $this->makeVideoFileStdClass($url['partialPath'], $disk, $key , $url['url']);
+        }
+        return $files;
+    }
+
+
 }

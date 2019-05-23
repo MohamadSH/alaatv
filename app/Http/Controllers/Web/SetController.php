@@ -70,7 +70,7 @@ class SetController extends Controller
      * @param  ContentsetIndexRequest  $request
      * @param  ContentsetSearch        $setSearch
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index(ContentsetIndexRequest $request, ContentsetSearch $setSearch)
     {
@@ -143,9 +143,18 @@ class SetController extends Controller
             return response()->json($set);
         }
         
-        $contents = $set->getContents();
+        $contents = $set->getActiveContents();
         
         return view('listTest', compact('set', 'contents'));
     }
 
+    public function edit(Contentset $set) {
+//        dd($set);
+        return view('set.edit', compact('set'));
     }
+
+    public function indexContent (\App\Http\Requests\Request $request, Contentset $set){
+        $contents = $set->contents2->sortBy("order");
+        return view('listTest',compact('set','contents'));
+    }
+}

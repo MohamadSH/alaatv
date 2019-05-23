@@ -509,137 +509,146 @@
                                             </div>
                                             <!--end::Modal-->
                                             
-                                            
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <table class="table table-striped table-hover table-bordered" id="sample_editable_1">
-    
-                                <!--begin::Modal-->
-                                <div class="modal fade" id="deleteTransactionConfirmationModal" tabindex="-1" role="dialog"
-                                     aria-labelledby="orderproductExchangeModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="orderproductExchangeModalLabel">
-                                                    حذف تراکنش
-                                                    <span id="deleteTransactionFullName"></span>
-                                                </h5>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p> آیا مطمئن هستید؟</p>
-                                                {!! Form::hidden('transaction_id', null) !!}
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
-                                                <button type="submit" class="btn btn-primary" onclick="removeTransaction()">بله</button>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover table-bordered" id="sample_editable_1">
+        
+                                    <!--begin::Modal-->
+                                    <div class="modal fade" id="deleteTransactionConfirmationModal" tabindex="-1" role="dialog"
+                                         aria-labelledby="orderproductExchangeModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="orderproductExchangeModalLabel">
+                                                        حذف تراکنش
+                                                        <span id="deleteTransactionFullName"></span>
+                                                    </h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p> آیا مطمئن هستید؟</p>
+                                                    {!! Form::hidden('transaction_id', null) !!}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                                                    <button type="submit" class="btn btn-primary" onclick="removeTransaction()">بله</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <!--end::Modal-->
-                                
-                                <thead>
-                                <tr>
-                                    <th class="d-none"></th>
-                                    <th> روش پرداخت</th>
-                                    <th> وضعیت تراکنش</th>
-                                    <th> تراکنش والد</th>
-                                    <th> مبلغ(تومان)</th>
-                                    <th> شماره تراکنش</th>
-                                    <th> شماره مرجع</th>
-                                    <th> شماره پیگیری</th>
-                                    <th> شماره چک</th>
-                                    <th> توضیح مدیریتی</th>
-                                    <th> اصلاح</th>
-                                    <th> حذف</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($orderTransactions as $transaction)
-                                    <tr id="{{$transaction->id}}">
-                                        <td class="d-none">
-                                            {{$transaction->id}}
-                                        </td>
-                                        <td>
-                                            @if(isset($transaction->paymentmethod->displayName[0]))
-                                                {{$transaction->paymentmethod->displayName}}
-                                            @else
-                                                <span class="m-badge m-badge--wide label-sm m-badge--danger"> ندارد </span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if(isset($transaction->transactionstatus->id))
-                                                {{$transaction->transactionstatus->displayName}}
-                                            @else
-                                                <span class="m-badge m-badge--wide label-sm m-badge--warning"> ندارد </span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if($transaction->hasParents())
-                                                <a target="_blank"
-                                                   href="{{action('Web\TransactionController@edit' , $transaction->getGrandParent())}}">
-                                                    رفتن به تراکنش
-                                                </a>
-                                            @else
-                                                ندارد
-                                            @endif
-                                        </td>
-                                        <td id="transactionFullName_{{$transaction->id}}" dir="ltr">
-                                            @if(isset($transaction->cost))
-                                                {{number_format($transaction->cost)}}
-                                            @else
-                                                <span class="m-badge m-badge--wide label-sm m-badge--danger"> ندارد </span>
-                                            @endif
-                                        </td>
-                                        <td style="text-align: center">
-                                            @if(strlen($transaction->transactionID)>0)
-                                                {{$transaction->transactionID}}
-                                            @else
-                                                <span class="m-badge m-badge--wide label-sm m-badge--info"> ندارد </span>
-                                            @endif
-                                        </td>
-                                        <td style="text-align: center">
-                                            @if(strlen($transaction->referenceNumber)>0)
-                                                {{$transaction->referenceNumber}}
-                                            @else
-                                                <span class="m-badge m-badge--wide label-sm m-badge--info"> ندارد </span>
-                                            @endif
-                                        </td>
-                                        <td style="text-align: center">
-                                            @if(strlen($transaction->traceNumber)>0)
-                                                {{$transaction->traceNumber}}
-                                            @else
-                                                <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span>
-                                            @endif
-                                        </td>
-                                        <td style="text-align: center">@if(strlen($transaction->paycheckNumber)>0){{$transaction->paycheckNumber}} @else
-                                                <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span> @endif
-                                        </td>
-                                        <td style="text-align: center">@if(strlen($transaction->managerComment)>0){{$transaction->managerComment}} @else
-                                                <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span> @endif
-                                        </td>
-                                        <td style="text-align: center">
-                                            <a class="edit" href="javascript:">
-                                                <i class="flaticon-edit m--font-success" aria-hidden="true"></i>
-                                            </a>
-                                        </td>
-                                        <td style="text-align: center">
-                                            <a class="deleteTransaction"
-                                               data-target="#deleteTransactionConfirmationModal" data-toggle="modal">
-                                                <i class="fa fa-trash fa-lg m--font-danger" aria-hidden="true"></i>
-                                            </a>
-                                            <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
-                                        </td>
+                                    <!--end::Modal-->
+        
+                                    <thead>
+                                    <tr>
+                                        <th class="d-none"></th>
+                                        <th> روش پرداخت</th>
+                                        <th>درگاه</th>
+                                        <th> وضعیت تراکنش</th>
+                                        <th> تراکنش والد</th>
+                                        <th> مبلغ(تومان)</th>
+                                        <th> شماره تراکنش</th>
+                                        <th> شماره مرجع</th>
+                                        <th> شماره پیگیری</th>
+                                        <th> شماره چک</th>
+                                        <th> توضیح مدیریتی</th>
+                                        <th> اصلاح</th>
+                                        <th> حذف</th>
                                     </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($orderTransactions as $transaction)
+                                        <tr id="{{$transaction->id}}">
+                                            <td class="d-none">
+                                                {{$transaction->id}}
+                                            </td>
+                                            <td>
+                                                @if(isset($transaction->paymentmethod->displayName[0]))
+                                                    {{$transaction->paymentmethod->displayName}}
+                                                @else
+                                                    <span class="m-badge m-badge--wide label-sm m-badge--danger"> ندارد </span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if(isset($transaction->transactiongateway))
+                                                    {{ $transaction->transactiongateway->displayName }}
+                                                @else
+                                                    <span class="m-badge m-badge--wide label-sm m-badge--info">بدون درگاه</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if(isset($transaction->transactionstatus->id))
+                                                    {{$transaction->transactionstatus->displayName}}
+                                                @else
+                                                    <span class="m-badge m-badge--wide label-sm m-badge--warning"> ندارد </span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($transaction->hasParents())
+                                                    <a target="_blank"
+                                                       href="{{action('Web\TransactionController@edit' , $transaction->getGrandParent())}}">
+                                                        رفتن به تراکنش
+                                                    </a>
+                                                @else
+                                                    ندارد
+                                                @endif
+                                            </td>
+                                            <td id="transactionFullName_{{$transaction->id}}" dir="ltr">
+                                                @if(isset($transaction->cost))
+                                                    {{number_format($transaction->cost)}}
+                                                @else
+                                                    <span class="m-badge m-badge--wide label-sm m-badge--danger"> ندارد </span>
+                                                @endif
+                                            </td>
+                                            <td style="text-align: center">
+                                                @if(strlen($transaction->transactionID)>0)
+                                                    {{$transaction->transactionID}}
+                                                @else
+                                                    <span class="m-badge m-badge--wide label-sm m-badge--info"> ندارد </span>
+                                                @endif
+                                            </td>
+                                            <td style="text-align: center">
+                                                @if(strlen($transaction->referenceNumber)>0)
+                                                    {{$transaction->referenceNumber}}
+                                                @else
+                                                    <span class="m-badge m-badge--wide label-sm m-badge--info"> ندارد </span>
+                                                @endif
+                                            </td>
+                                            <td style="text-align: center">
+                                                @if(strlen($transaction->traceNumber)>0)
+                                                    {{$transaction->traceNumber}}
+                                                @else
+                                                    <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span>
+                                                @endif
+                                            </td>
+                                            <td style="text-align: center">@if(strlen($transaction->paycheckNumber)>0){{$transaction->paycheckNumber}} @else
+                                                    <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span> @endif
+                                            </td>
+                                            <td style="text-align: center">@if(strlen($transaction->managerComment)>0){{$transaction->managerComment}} @else
+                                                    <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span> @endif
+                                            </td>
+                                            <td style="text-align: center">
+                                                <a class="edit" href="javascript:">
+                                                    <i class="flaticon-edit m--font-success" aria-hidden="true"></i>
+                                                </a>
+                                            </td>
+                                            <td style="text-align: center">
+                                                <a class="deleteTransaction"
+                                                   data-target="#deleteTransactionConfirmationModal" data-toggle="modal">
+                                                    <i class="fa fa-trash fa-lg m--font-danger" aria-hidden="true"></i>
+                                                </a>
+                                                <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="tab-pane" id="portlet_tab4" role="tabpanel">
                             
@@ -1075,7 +1084,11 @@
                 $('#transactionCompletedAt').attr('disabled', false);
                 $('#transactionCompletedAtAlt').attr('disabled', false);
                 $('#paymentMethodName').attr('disabled', false);
-                paymentMethodState($('#paymentMethodName'));
+                // paymentMethodState($('#paymentMethodName'));
+                $('input[name="referenceNumber"]').attr('disabled', false);
+                $('input[name="authority"]').attr('disabled', false);
+                $('input[name="traceNumber"]').attr('disabled', false);
+                $('input[name="paycheckNumber"]').attr('disabled', false);
             }
         }
 
@@ -1114,7 +1127,7 @@
                 }
             });
 
-            paymentMethodState($('#paymentMethodName'));
+            // paymentMethodState($('#paymentMethodName'));
             transactionStatusState($("#transactionstatus_id"));
 
         });
@@ -1189,7 +1202,7 @@
 
         $(document).on("change", ".paymentMethodName", function () {
 
-            paymentMethodState($(this));
+            // paymentMethodState($(this));
         });
 
         $(document).on("change", "#transactionstatus_id", function () {

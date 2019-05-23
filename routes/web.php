@@ -76,6 +76,10 @@ Route::group(['prefix' => 'orderproduct'], function () {
 });
 
 Route::group(['prefix' => 'landing'], function () {
+    Route::get('8' , [
+        'as'   => 'landing.8',
+        'uses' => 'Web\ProductController@landing8',
+    ]);
     Route::get('7' , [
         'as'   => 'landing.7',
         'uses' => 'Web\ProductController@landing7',
@@ -251,7 +255,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post("donateOrder", "Web\OrderController@donateOrder");
     Route::get('adminGenerateRandomCoupon', "Web\AdminController@adminGenerateRandomCoupon");
 
-    Route::get('cTest/{set}', "Web\HomeController@contentSetListTest");
+    Route::get('cTest/{set}', "Web\SetController@indexContent");
 });
 
 Route::group(['prefix' => 'c'], function () {
@@ -262,7 +266,6 @@ Route::group(['prefix' => 'c'], function () {
     Route::get('{c}/favored', 'Web\FavorableController@getUsersThatFavoredThisFavorable');
     Route::post('{c}/favored', 'Web\FavorableController@markFavorableFavorite');
     
-    Route::post('basicStore', 'Web\ContentController@basicStore');
     Route::group(['prefix' => '{c}/attach'], function () {
         Route::post('set/{set}', 'Web\ContentController@attachContentToContentSet');
         Route::put('set/{set}', 'Web\ContentController@updateContentSetPivots');

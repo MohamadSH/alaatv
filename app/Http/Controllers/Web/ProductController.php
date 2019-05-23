@@ -99,6 +99,8 @@ class ProductController extends Controller
                 'landing4',
                 'landing5',
                 'landing6',
+                'landing7',
+                'landing8',
             ],
         ]);
     }
@@ -1238,6 +1240,71 @@ class ProductController extends Controller
         }
 
         return view('product.landing.landing7', compact('landingProducts', 'costCollection', 'withFilter', 'blocks'));
+    }
+    
+    /**
+     * Products Special Landing Page
+     *
+     * @param  Request  $request
+     *
+     * @return Response
+     */
+    public function landing8(Request $request)
+    {
+        $url = $request->url();
+        $this->generateSeoMetaTags(new SeoDummyTags('آلاء| جمع بندی نیم سال اول',
+            'همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف', $url,
+            $url, route('image', [
+                'category' => '11',
+                'w'        => '100',
+                'h'        => '100',
+                'filename' => $this->setting->site->siteLogo,
+            ]), '100', '100', null));
+        
+        $producIds = [
+            298,
+            302,
+            306,
+            308,
+            312,
+            316,
+            318,
+            322,
+            326,
+            328
+        ];
+
+        
+        $productIds = $producIds;
+//        $productIds = config("constants.HAMAYESH_PRODUCT");
+        $products = Product::whereIn('id', $productIds)
+            ->orderBy('order')
+            ->where('enable', 1)
+            ->get();
+        
+        $attribute  = Attribute::where('name', 'major')
+            ->get()
+            ->first();
+        $withFilter = true;
+        
+        $landingProducts = collect();
+        foreach ($products as $product) {
+            $majors = [];
+            if (isset($attribute)) {
+                $majors = $product->attributevalues->where('attribute_id', $attribute->id)
+                    ->pluck('name')
+                    ->toArray();
+            }
+            
+            $landingProducts->push([
+                'product' => $product,
+                'majors'  => $majors,
+            ]);
+        }
+        
+        $costCollection = $this->makeCostCollection($products);
+        
+        return view('product.landing.landing8', compact('landingProducts', 'costCollection', 'withFilter'));
     }
     
     /**

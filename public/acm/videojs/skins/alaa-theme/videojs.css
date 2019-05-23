@@ -613,9 +613,9 @@ body.vjs-full-window {
     -moz-transition: all .2s ease 0s;
     -o-transition: all .2s ease 0s;
     -ms-transition: all .2s ease 0s;
-    margin-left: 10px;
-    margin-right: 10px;
-    max-width: calc(100% - 20px) !important;
+    margin-left: 2%;
+    margin-right: 2%;
+    max-width: calc(100% - 4%) !important;
 }
 
 .video-js .vjs-progress-control .vjs-load-progress {
@@ -779,11 +779,14 @@ body.vjs-full-window {
 }
 
 .video-js .vjs-replay-button:before {
-    content: "\f116";
+    content: " ";
     padding-bottom: 5px;
-    font-family: nuevo;
-    font-size: 70px;
     display: block;
+    /*background-image: url(/acm/videojs/skins/alaa-theme/img/pp.png);*/
+    /*background-repeat: no-repeat;*/
+    /*background-size: cover;*/
+    height: 95px;
+    line-height: 86px;
 }
 
 .vjs-playing .vjs-big-play-button,
@@ -2744,7 +2747,7 @@ clearfix::before {
     }
 
     .video-js .vjs-control-bar .vjs-progress-control {
-        display: none;
+        /*display: none;*/
     }
 
     .video-js .vjs-grid .vjs-grid-box .vjs-grid-item label {
@@ -2786,4 +2789,22 @@ clearfix::before {
 
 .vjs-fullscreen-control, .vjs-logo-bar, .vjs-cog-menu-button, .vjs-quality-button {
     float: right;
+}
+
+.a--nuevo-alaa-theme.a--media-parent {
+    width: 100%;
+    position: relative;
+    padding-top: 56.25%;
+    height: auto;
+    margin-top: 15px;
+}
+.a--nuevo-alaa-theme.a--media-parent .a--video-wraper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    max-height: none !important;
+    min-height: 0 !important;
+    max-width: 100%;
+    width: 100%;
 }

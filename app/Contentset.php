@@ -279,30 +279,43 @@ class Contentset extends BaseModel implements Taggable
     
     public function getUrlAttribute($value): string
     {
-//        return action("Web\ContentsetController@show",$this);
-        $content   = $this->getLastContent();
+        $content   = $this->getLastActiveContent();
         $contentId = !is_null($content) ? $content->id : null;
         
         return isset($contentId) ? action("Web\ContentController@show", $contentId) : "";
     }
     
-    public function getLastContent(): Content
+    public function getLastActiveContent(): Content
     {
-        $key = "ContentSet:getLastContent".$this->cacheKey();
+        $key = "ContentSet:getLastActiveContent".$this->cacheKey();
         
         return Cache::tags('set')
             ->remember($key, config("constants.CACHE_300"), function () {
                 
-                $r = $this->getContents();
+                $r = $this->getActiveContents();
                 
                 return $r->sortByDesc("order")
                     ->first() ?: new Content();
             });
     }
-    
-    public function getContents(): ContentCollection
+
+    public function getLastContent(): Content
     {
-        $key = "ContentSet:getContents".$this->cacheKey();
+        $key = "ContentSet:getLastContent".$this->cacheKey();
+
+        return Cache::tags('set')
+            ->remember($key, config("constants.CACHE_300"), function () {
+
+                $r = $this->getContents();
+
+                return $r->sortByDesc("order")
+                    ->first() ?: new Content();
+            });
+    }
+
+    public function getActiveContents(): ContentCollection
+    {
+        $key = "ContentSet:getActiveContents".$this->cacheKey();
         
         return Cache::tags('set')
             ->remember($key, config("constants.CACHE_300"), function () {
@@ -317,7 +330,23 @@ class Contentset extends BaseModel implements Taggable
                 
             });
     }
-    
+
+    public function getContents(): ContentCollection
+    {
+        $key = "ContentSet:getContents".$this->cacheKey();
+
+        return Cache::tags('set')
+            ->remember($key, config("constants.CACHE_300"), function () {
+
+                $oldContentCollection = $this->contents()
+                    ->get() ?: new ContentCollection();
+                $newContentCollection = $this->contents2()
+                    ->get() ?: new ContentCollection();
+                return $oldContentCollection->merge($newContentCollection);
+
+            });
+    }
+
     public function contents()
     {
         return $this->belongsToMany("\App\Content", "contentset_educationalcontent", "contentset_id", "edc_id")
@@ -343,7 +372,7 @@ class Contentset extends BaseModel implements Taggable
      */
     public function getAuthorAttribute($value): User
     {
-        $content = $this->getLastContent();
+        $content = $this->getLastActiveContent();
         
         $author = $content->author;
         
