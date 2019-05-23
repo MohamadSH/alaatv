@@ -375,21 +375,22 @@ class ContentController extends Controller
         $fileName =       $request->get('fileName');
         $contentsetId=   $request->get('contentset_id');
         $isFree = $request->has('isFree');
+        $content = new Content();
 
         if($isFree)
         {
             [$files , $thumbnail] = $this->makeFreeContentFiles($contenttypeId, $fileName, $contentsetId);
+            if(isset($thumbnail))
+                $content->thumbnail = $thumbnail;
         }else{
             $contentset = Contentset::find($contentsetId);
             $productId = optional($contentset->products->first())->id;
             if(!isset($productId))
                 return response()->json(['No product found for this set'], Response::HTTP_BAD_REQUEST);
 
-            [$files , $thumbnail] = $this->makePaidContentFiles($contenttypeId, $fileName , $productId);
+            $files = $this->makePaidContentFiles($contenttypeId, $fileName , $productId);
         }
 
-        $content = new Content();
-        $content->thumbnail = $thumbnail;
 
         $request->offsetSet('files', $files);
 
@@ -510,7 +511,7 @@ class ContentController extends Controller
         $thumbnail = null;
         $files = [];
         if ($contenttypeId == config('constants.CONTENT_TYPE_VIDEO')) {
-            list($files, $thumbnail) = $this->makeVideoFilesForFreeContent($fileName, $contentsetId);
+            [$files, $thumbnail] = $this->makeVideoFilesForFreeContent($fileName, $contentsetId);
         } elseif ($contenttypeId == config('constants.CONTENT_TYPE_PAMPHLET')) {
             $files = $this->makePamphletFilesForFreeContent($fileName);
         }
@@ -527,14 +528,13 @@ class ContentController extends Controller
      */
     private function makePaidContentFiles(int $contenttypeId,  string $fileName, int $productId): array
     {
-        $thumbnail = null;
         $files = [];
         if ($contenttypeId == config('constants.CONTENT_TYPE_VIDEO')) {
-            list($files, $thumbnail) = $this->makeVideoFilesForPaidContent($fileName, $productId);
+            $files = $this->makeVideoFilesForPaidContent($fileName, $productId);
         } elseif ($contenttypeId == config('constants.CONTENT_TYPE_PAMPHLET')) {
             $files = $this->makePahmphletFilesForPaidContent($fileName, $productId);
         }
-        return [$files , $thumbnail];
+        return $files;
     }
 
     /**

@@ -68,6 +68,7 @@ trait ContentControllerResponseTrait
     {
         $validSinceDateTime = array_get($inputData , 'validSinceDate');
         $enabled    = Arr::has($inputData , 'enable');
+        $isFree    = Arr::has($inputData , 'isFree');
         $tagString  = array_get($inputData , 'tags');
         $files      = array_get($inputData , 'files' , []);
         
@@ -76,6 +77,7 @@ trait ContentControllerResponseTrait
 //        $content->validSince = $validSinceDateTime;
         $content->validSince = explode(' ', $validSinceDateTime)[0];
         $content->enable     = $enabled ? 1 : 0;
+        $content->isFree     = $isFree ? 1 : 0;
         $content->tags       = convertTagStringToArray($tagString);
         if(!empty($files))
         {
