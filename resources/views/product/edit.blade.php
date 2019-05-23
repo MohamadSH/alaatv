@@ -69,13 +69,57 @@
         </div>
         </div>
         </div>--}}
-        @permission((config('constants.LIST_CONFIGURE_PRODUCT_ACCESS')))
-            @if($product->hasChildren())
-                <div class="col-md-6 ">
-                    @include('product.partials.configureTableForm')
+        <div class="col-md-6 ">
+            @if(isset( $product->sets ) && $product->sets->count() > 0)
+                <div class="m-portlet m-portlet--mobile">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <h3 class="m-portlet__head-text">
+                                    @if($product->producttype->id == config("constants.PRODUCT_TYPE_CONFIGURABLE"))
+                                        پیکربندی محصول ٬
+                                    @endif
+                                    <a href="{{action("Web\ProductController@show" , $product)}}">{{$product->name}}</a>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-portlet__body">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th class="text-center">نام</th>
+                                <th class="text-center">مشاهده</th>
+                                <th class="text-center">ویرایش</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($product->sets as $set)
+                                <tr>
+                                    <td>{{ $set->name }}</td>
+                                    <td>
+                                        <a href="{{ action('Web\SetController@show', $set->id) }}" class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
+                                            <i class="flaticon-medical"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="{{ action('Web\SetController@indexContent', $set->id) }}" class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
+                                            <i class="flaticon-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             @endif
+        @permission((config('constants.LIST_CONFIGURE_PRODUCT_ACCESS')))
+            @if($product->hasChildren())
+                @include('product.partials.configureTableForm')
+            @endif
         @endpermission
+        </div>
 
         @permission((config('constants.LIST_PRODUCT_FILE_ACCESS')))
             <div class="col-md-12">
@@ -93,7 +137,6 @@
                             </div>
                         </div>
                         <div class="m-portlet__head-tools">
-                            <img class="d-none" id="product-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
                             <ul class="m-portlet__nav">
                                 <li class="m-portlet__nav-item">
                                     <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
@@ -137,12 +180,11 @@
                                 <i class="fa fa-cogs"></i>
                             </span>
                                 <h3 class="m-portlet__head-text">
-                                    فایل های محصول
+                                    نمونه عکسهای محصول
                                 </h3>
                             </div>
                         </div>
                         <div class="m-portlet__head-tools">
-                            <img class="d-none" id="product-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
                             <ul class="m-portlet__nav">
                                 <li class="m-portlet__nav-item">
                                     <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
@@ -175,12 +217,96 @@
             </div>
         @endpermission
 
-        <div class="col-md-6">
-            @include("product.complimentary")
+        <div class="col-md-12">
+            <!-- BEGIN PRODUCT TABLE PORTLET-->
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--primary m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="productComplimentary-portlet">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-cogs"></i>
+                            </span>
+                            <h3 class="m-portlet__head-text">
+                                محصولات دوست
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="m-portlet__head-tools">
+                        <ul class="m-portlet__nav">
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
+                                    <i class="la la-refresh"></i>
+                                </a>
+                            </li>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-angle-down"></i>
+                                </a>
+                            </li>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="product-expand">
+                                    <i class="la la-expand"></i>
+                                </a>
+                            </li>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-close"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="m-portlet__body">
+                    @include("product.complimentary")
+                </div>
+            </div>
+            <!-- END SAMPLE TABLE PORTLET-->
         </div>
 
-        <div class="col-md-6">
-            @include("product.gift")
+        <div class="col-md-12">
+            <!-- BEGIN PRODUCT TABLE PORTLET-->
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="productGift-portlet">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-cogs"></i>
+                            </span>
+                            <h3 class="m-portlet__head-text">
+                                محصولات هدیه
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="m-portlet__head-tools">
+                        <ul class="m-portlet__nav">
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
+                                    <i class="la la-refresh"></i>
+                                </a>
+                            </li>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-angle-down"></i>
+                                </a>
+                            </li>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="product-expand">
+                                    <i class="la la-expand"></i>
+                                </a>
+                            </li>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-close"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="m-portlet__body">
+                    @include("product.gift")
+                </div>
+            </div>
+            <!-- END SAMPLE TABLE PORTLET-->
         </div>
 
         <!--begin::Modal-->
