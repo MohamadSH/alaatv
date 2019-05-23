@@ -59,17 +59,30 @@
                                                 <div class="m-widget24">
                                                     <div class="m-widget24__item">
                                                         <h4 class="m-widget24__title m--font-info">
-                                                            ۵ + ۱
+                                                            
                                                         </h4>
                                                         <span class="m-widget24__stats m--font-info">
                                                             <img src="/assets/extra/landing1/img/like.png" style="height: 40px;">
                                                         </span>
                                                         <br>
                                                         <span class="m-widget24__desc">
-                                                            هر درس
+                                                            همایش طلایی آلاء
                                                         </span>
                                                         <div class="m--space-10"></div>
-                                                        5 ساعت جمع بندی و نکته و تست داریم و 1 ساعت تست های پلاس مخصوص پزشکا و مهندسا
+    
+                                                        <span class="m-badge m-badge--danger m-badge--dot"></span>
+                                                        جمع بندی حداقل 80 درصد مباحث کنکور
+                                                        <br>
+                                                        <span class="m-badge m-badge--danger m-badge--dot"></span>
+                                                        حل تست های فراوان آموزشی و نکته دار
+                                                        <br>
+                                                        <span class="m-badge m-badge--danger m-badge--dot"></span>
+                                                        پیش بینی و بررسی تست های احتمالی کنکور
+                                                        <br>
+                                                        <span class="m-badge m-badge--danger m-badge--dot"></span>
+                                                        یک منبع کامل و مورد اعتماد
+                                                        
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
