@@ -229,7 +229,12 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             '720p' => 'کیفیت عالی',
         ];
     }
-    
+
+    public static function pamphletFileCaption(): string
+    {
+        return 'جزوه';
+    }
+
     /**
      * Get the index name for the model.
      *
@@ -698,7 +703,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 $contentSet     = $content->set;
                 $contentSetName = isset($contentSet) ? $contentSet->name : null;
                 if (isset($contentSet)) {
-                    $sameContents = $contentSet->getContents()
+                    $sameContents = $contentSet->getActiveContents()
                         ->sortBy('order')
                         ->load('contenttype');
                 } else {

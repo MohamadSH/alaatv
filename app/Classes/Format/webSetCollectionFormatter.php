@@ -38,7 +38,7 @@ class webSetCollectionFormatter implements SetCollectionFormatter
     {
         return Cache::tags(['content', 'set'])
             ->remember('format-set:'.$set->id, config('constants.CACHE_60'), function () use ($set) {
-                $content = $set->getLastContent();
+                $content = $set->getLastActiveContent();
                 $lesson  = [
                     "displayName"   => $set->shortName,
                     "author"        => $content->author,
