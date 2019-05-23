@@ -199,6 +199,7 @@
                 success: function (data) {
                     if (typeof data.url !== 'undefined') {
                         callback(data);
+                        mApp.unblock('#frmCreateNewContent');
                     } else {
                         mApp.unblock('#frmCreateNewContent');
                         toastr.error('خطای سیستمی رخ داده است.');
