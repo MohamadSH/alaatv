@@ -720,8 +720,6 @@
                     </table>
                 </div>
             </div>
-            
-            <!-- END SAMPLE TABLE PORTLET-->
             @endpermission
 
         </div>
