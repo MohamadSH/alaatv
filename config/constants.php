@@ -167,6 +167,7 @@ return [
     'TELEMARKETING_PANEL_ACCESS'                  => 'telemarketingPanel',
     'INSERT_ORDERPRODUCT_ACCESS'                  => 'insertOrderproduct',
     'SHOW_USER_TOTAL_BON_NUMBER'                  => 'showUserTotalBonNumber',
+    'INSERT_ACTIVE_CONTENT'                       => 'insertActiveContent',
 
 
     //Technician
