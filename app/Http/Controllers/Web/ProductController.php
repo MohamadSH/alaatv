@@ -99,6 +99,8 @@ class ProductController extends Controller
                 'landing4',
                 'landing5',
                 'landing6',
+                'landing7',
+                'landing8',
             ],
         ]);
     }
