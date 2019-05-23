@@ -20,6 +20,18 @@
         .m-portlet.m-portlet--bordered.m-portlet--unair.portlet--lastPart .m-widget24__title {
             font-size: 1.5em !important;
         }
+
+
+        .m-portlet--creative .m-portlet__head-caption {
+            width: 100%;
+            text-align: center;
+        }
+        .m-portlet--creative .m-portlet__head {
+            height: 0px !important;
+        }
+        .m-widget27 .m-widget27__pic::before {
+            background: none;
+        }
     </style>
 @endsection
 @section('content')
@@ -41,7 +53,7 @@
                         <div class="m-widget27__pic">
                             <img src="/acm/extra/landing1/img/rally.jpg" alt="">
                             <h3 class="m-widget27__title m--font-light">
-                                سبقت در پیچ اول رالی کنکور
+                            
                             </h3>
                             <div class="m-widget27__btn">
                                 <button type="button" class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--bolder d-none">
@@ -50,15 +62,6 @@
                             </div>
                         </div>
                         <div class="m-widget27__container">
-                            <style>
-                                .m-portlet--creative .m-portlet__head-caption {
-                                    width: 100%;
-                                    text-align: center;
-                                }
-                                .m-portlet--creative .m-portlet__head {
-                                    height: 0px !important;
-                                }
-                            </style>
                             <div class="container-fluid m--padding-right-40 m--padding-left-40">
                                 <div class="row">
                                     <div class="col-md-4 order-2 order-sm-2 order-md-1 order-lg-1 sideItems">

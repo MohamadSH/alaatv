@@ -51,6 +51,12 @@
                                         </div>
                                         <input type="text" name="contentset_id" id="setId" class="form-control m-input m-input--air" placeholder="شماره درس" dir="ltr">
                                     </div>
+                                    <div class="lastContentName">
+                                        @if(isset($lastContent))
+                                            نام دسته:
+                                            {{ $lastContent->set->name }}
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -231,6 +237,7 @@
                 state: "success",
                 message: "کمی صبر کنید..."
             });
+            $('.lastContentName').html('');
 
             $.ajax({
                 type: 'GET',
@@ -238,8 +245,9 @@
                 data: {},
                 dataType: 'json',
                 success: function (data) {
-                    if (typeof data.url !== 'undefined') {
-                        callback(data);
+                    if (typeof data.lastContent !== 'undefined') {
+                        callback(data.lastContent);
+                        $('.lastContentName').html(data.set.name);
                         mApp.unblock('#frmCreateNewContent');
                     } else {
                         mApp.unblock('#frmCreateNewContent');
