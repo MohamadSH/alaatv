@@ -76,7 +76,7 @@ trait AssetTrait
                 "products.*",
             ])
             ->where('users.id', '=', $this->getKey())
-            ->whereNotIn('products.id' , [Product::DONATE_PRODUCT_5_HEZAR , Product::CUSTOM_DONATE_PRODUCT])
+            ->whereNotIn('products.id' , [Product::DONATE_PRODUCT_5_HEZAR , Product::CUSTOM_DONATE_PRODUCT , Product::ASIATECH_PRODUCT ])
             ->whereNull('products.deleted_at')
             ->distinct()
             ->get();
