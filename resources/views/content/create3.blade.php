@@ -56,6 +56,47 @@
                         </div>
                         <hr>
                         <div class="row">
+                            <div class="col-12">
+                                <label class="mt-checkbox mt-checkbox-outline">
+                                    <div class="md-checkbox">
+                                        {!!
+                                            Form::checkbox(
+                                                'isFree',
+                                                1,
+                                                null,
+                                                [
+                                                    'value' => '1',
+                                                    'id' => 'checkbox_isFree_enable',
+                                                    'class'=>'md-check',
+                                                ]
+                                            )
+                                        !!}
+                                        <label for="checkbox_isFree_enable">
+                                            <span></span>
+                                            <span class="check"></span>
+                                            <span class="box"></span>
+                                            رایگان
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </label>
+                            </div>
+                            @permission((config('constants.INSERT_ACTIVE_CONTENT')))
+                                <div class="col-12">
+                                    <label class="mt-checkbox mt-checkbox-outline">
+                                        <div class="md-checkbox">
+                                            {!! Form::checkbox('enable', '1', null,  ['value' => '1' , 'id' => 'checkbox_enable' , 'class'=>'md-check' , 'checked']) !!}
+                                            <label for="checkbox_enable">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span>
+                                                فعال بودن محتوا
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </label>
+                                </div>
+                            @endpermission
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <div class="row">

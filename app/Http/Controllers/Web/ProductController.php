@@ -1298,7 +1298,7 @@ class ProductController extends Controller
         
         $costCollection = $this->makeCostCollection($products);
         
-        return view('product.landing.landing1', compact('landingProducts', 'costCollection', 'withFilter'));
+        return view('product.landing.landing8', compact('landingProducts', 'costCollection', 'withFilter'));
     }
     
     /**

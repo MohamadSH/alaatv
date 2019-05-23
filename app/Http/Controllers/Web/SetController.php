@@ -70,7 +70,7 @@ class SetController extends Controller
      * @param  ContentsetIndexRequest  $request
      * @param  ContentsetSearch        $setSearch
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index(ContentsetIndexRequest $request, ContentsetSearch $setSearch)
     {
@@ -148,4 +148,8 @@ class SetController extends Controller
         return view('listTest', compact('set', 'contents'));
     }
 
+    public function edit(Contentset $set) {
+//        dd($set);
+        return view('set.edit', compact('set'));
     }
+}
