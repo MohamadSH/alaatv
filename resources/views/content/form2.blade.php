@@ -14,7 +14,7 @@
                             'class'=>'md-check',
                             'disabled',
                             ($content->isFree)?'checked':''
-            ]
+                        ]
                     )
                 !!}
                 <label for="checkbox_isFree_enable">
