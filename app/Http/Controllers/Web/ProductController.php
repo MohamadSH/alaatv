@@ -1233,6 +1233,67 @@ class ProductController extends Controller
     }
     
     /**
+     * Products Special Landing Page
+     *
+     * @param  Request  $request
+     *
+     * @return Response
+     */
+    public function landing8(Request $request)
+    {
+        $url = $request->url();
+        $this->generateSeoMetaTags(new SeoDummyTags('آلاء| جمع بندی نیم سال اول',
+            'همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف', $url,
+            $url, route('image', [
+                'category' => '11',
+                'w'        => '100',
+                'h'        => '100',
+                'filename' => $this->setting->site->siteLogo,
+            ]), '100', '100', null));
+        
+        $producIds = [
+            271,
+            270,
+            269,
+            268,
+            267,
+            266,
+            265,
+        ];
+        
+        $productIds = $producIds;
+//        $productIds = config("constants.HAMAYESH_PRODUCT");
+        $products = Product::whereIn('id', $productIds)
+            ->orderBy('order')
+            ->where('enable', 1)
+            ->get();
+        
+        $attribute  = Attribute::where('name', 'major')
+            ->get()
+            ->first();
+        $withFilter = true;
+        
+        $landingProducts = collect();
+        foreach ($products as $product) {
+            $majors = [];
+            if (isset($attribute)) {
+                $majors = $product->attributevalues->where('attribute_id', $attribute->id)
+                    ->pluck('name')
+                    ->toArray();
+            }
+            
+            $landingProducts->push([
+                'product' => $product,
+                'majors'  => $majors,
+            ]);
+        }
+        
+        $costCollection = $this->makeCostCollection($products);
+        
+        return view('product.landing.landing1', compact('landingProducts', 'costCollection', 'withFilter'));
+    }
+    
+    /**
      * Copy a product completely
      *
      * @param  Product  $product
