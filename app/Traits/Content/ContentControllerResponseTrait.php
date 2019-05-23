@@ -69,14 +69,18 @@ trait ContentControllerResponseTrait
         $validSinceDateTime = array_get($inputData , 'validSinceDate');
         $enabled    = Arr::has($inputData , 'enable');
         $tagString  = array_get($inputData , 'tags');
-        $files      = array_get($inputData , 'files');
+        $files      = array_get($inputData , 'files' , []);
         
         $content->fill($inputData);
-        $content->validSince = $validSinceDateTime;
+        //ToDo : keep time in $validSinceDateTime
+//        $content->validSince = $validSinceDateTime;
+        $content->validSince = explode(' ', $validSinceDateTime)[0];
         $content->enable     = $enabled ? 1 : 0;
         $content->tags       = convertTagStringToArray($tagString);
-        
-        $this->storeFilesOfContent($content, $files);
+        if(!empty($files))
+        {
+            $this->storeFilesOfContent($content, $files);
+        }
     }
     
     /**

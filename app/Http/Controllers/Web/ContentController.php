@@ -384,10 +384,9 @@ class ContentController extends Controller
 
             [$files , $thumbnail] = $this->makePaidContentFiles($contenttypeId, $fileName , $productId);
         }
-        
-        $content = new Content([
-            'thumbnail' => $thumbnail
-        ]);
+
+        $content = new Content();
+        $content->thumbnail = $thumbnail;
 
         $request->offsetSet('files', $files);
 
