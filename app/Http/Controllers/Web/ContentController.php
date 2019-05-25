@@ -255,7 +255,10 @@ class ContentController extends Controller
         {
             $lastContent = $set->getLastContent();
             if($request->expectsJson())
-                return response()->json($lastContent);
+                return response()->json([
+                    'lastContent' => $lastContent,
+                    'set'       => $set
+                ]);
 
         }elseif(isset($setId)){
             session()->flash('error' , 'ست مورد نظر شما یافت نشد');
@@ -371,23 +374,23 @@ class ContentController extends Controller
         $contenttypeId = $request->get('contenttype_id');
         $fileName =       $request->get('fileName');
         $contentsetId=   $request->get('contentset_id');
-        $isFree = $request->get('isFree' , 1);
+        $isFree = $request->has('isFree');
+        $content = new Content();
 
         if($isFree)
         {
             [$files , $thumbnail] = $this->makeFreeContentFiles($contenttypeId, $fileName, $contentsetId);
+            if(isset($thumbnail))
+                $content->thumbnail = $thumbnail;
         }else{
             $contentset = Contentset::find($contentsetId);
-            $productId = $contentset->products->first()->id;
+            $productId = optional($contentset->products->first())->id;
             if(!isset($productId))
                 return response()->json(['No product found for this set'], Response::HTTP_BAD_REQUEST);
 
-            [$files , $thumbnail] = $this->makePaidContentFiles($contenttypeId, $fileName , $productId);
+            $files = $this->makePaidContentFiles($contenttypeId, $fileName , $productId);
         }
-        
-        $content = new Content([
-            'thumbnail' => $thumbnail
-        ]);
+
 
         $request->offsetSet('files', $files);
 
@@ -416,8 +419,7 @@ class ContentController extends Controller
         session()->flash('success' , 'محتوا با موفقیت درج شد. '.'<a href="'.action('Web\ContentController@edit' , $content).'">اصلاح محتوا</a>');
         return redirect()->back();
     }
-    
-    
+
     /**
      * @param  Content  $content
      *
@@ -454,127 +456,6 @@ class ContentController extends Controller
         $content->file = $fileCollection;
     }
     
-    /**
-     * @param  Request  $request
-     *
-     * @return RedirectResponse|Redirector
-     * @throws Exception
-     */
-    public function basicStore(Request $request)
-    {
-        if($request->has("newContetnsetId"))
-        {
-            session()->flash('error', 'این قابلیت در حال حاضر غیر فعال می باشد');
-            return redirect()->back();
-
-            $educationalContentId =  $request->get("educationalContentId");
-            $newContetnsetId = $request->get("newContetnsetId");
-            $newFileFullName = $request->get("newFileFullName") ;
-
-            $educationalContent = Content::FindOrFail($educationalContentId);
-            $currentContentset = $educationalContent->set;
-
-            if($newContetnsetId != $currentContentset->id)
-            {
-                $educationalContent->contentset_id = $newContetnsetId;
-            }
-
-            if(isset($newFileFullName[0]))
-            {
-                // ToDo : Deprecated
-//                $basePath = "https://cdn.sanatisharif.ir/media/";
-//                $files = $educationalContent->file;
-//                foreach ($files as $file)
-//                {
-//                    $fileLabel = $file->pivot->label;
-//                    switch ($fileLabel)
-//                    {
-//                        case "thumbnail":
-//                            $thumbnailFullName = pathinfo($newFileFullName , PATHINFO_FILENAME);
-//                            $file->name = $basePath . "thumbnails/".$newContetnsetId . "/" . $thumbnailFullName . ".jpg";
-//                            break;
-//                        case "240p":
-//                            $file->name = $basePath . $newContetnsetId ."/240p/" . $newFileFullName;
-//                            break;
-//                        case "hq":
-//                            $file->name = $basePath . $newContetnsetId ."/hq/" . $newFileFullName;
-//                            break;
-//                        case "hd":
-//                            $file->name = $basePath . $newContetnsetId ."/HD_720p/" . $newFileFullName;
-//                            break;
-//                        default:
-//                            break;
-//                    }
-//                    $file->update();
-//                }
-            }
-
-            Cache::tags('content')->flush();
-            session()->flash('success', 'تغییر نام با موفقیت انجام شد');
-            return redirect()->back();
-        }
-
-        $contentset_id  = $request->get('contentset_id');
-        $contenttype_id = $request->get('contenttype_id');
-        $name           = $request->get('name');
-        $order          = $request->get('order');
-        $fileName       = $request->get('fileName');
-        $dateNow        = Carbon::now();
-        
-        $contentset  = Contentset::FindOrFail($contentset_id);
-        $lastContent = $contentset->contents2()->where("contenttype_id" , $contenttype_id)->get()->sortByDesc("order")->first();
-
-        if (!isset($lastContent)) {
-            session()->flash('error', trans('content.No previous content found'));
-
-            return redirect()->back();
-        }
-        $newContent = $lastContent->replicate();
-
-        if (!($newContent instanceof Content)) {
-            throw new Exception('replicate Error!'.$contentset_id);
-        }
-
-        if (!isset($order)) {
-            $lastOrder = $lastContent->order;
-            $order = $lastOrder + 1;
-        }
-
-        $newContent->name = $name;
-        $newContent->order = $order;
-        $newContent->description = null;
-        $newContent->metaTitle = null;
-        $newContent->metaDescription = null;
-        $newContent->enable = 0;
-        $newContent->validSince = $dateNow;
-        $newContent->created_at = $dateNow;
-        $newContent->updated_at = $dateNow;
-
-        if($contenttype_id == config('constants.CONTENT_TYPE_VIDEO'))
-        {
-            $files = $this->makeFreeVideoFileArray($fileName , '' , $contentset_id);
-            $thumbnailUrl = $this->makeThumbnailUrlFromFileName($fileName, $contentset_id);
-            $newContent->thumbnail = $this->makeThumbanilFile($thumbnailUrl);
-        }
-        elseif($contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET'))
-        {
-            $newContent->thumbnail = null;
-            $files = $this->makePamphletFileArray($fileName);
-        }
-
-        if (!empty($files)) {
-            $this->storeFilesOfContent($newContent, $files);
-            $newContent->save();
-
-            return redirect(action("Web\ContentController@edit", $newContent->id));
-
-        }
-
-        session()->flash('error' , 'Empty files array');
-        return redirect()->back();
-    }
-
-
     /**
      * @param EditContentRequest $request
      * @param Content $content
@@ -630,7 +511,7 @@ class ContentController extends Controller
         $thumbnail = null;
         $files = [];
         if ($contenttypeId == config('constants.CONTENT_TYPE_VIDEO')) {
-            list($files, $thumbnail) = $this->makeVideoFilesForFreeContent($fileName, $contentsetId);
+            [$files, $thumbnail] = $this->makeVideoFilesForFreeContent($fileName, $contentsetId);
         } elseif ($contenttypeId == config('constants.CONTENT_TYPE_PAMPHLET')) {
             $files = $this->makePamphletFilesForFreeContent($fileName);
         }
@@ -647,14 +528,13 @@ class ContentController extends Controller
      */
     private function makePaidContentFiles(int $contenttypeId,  string $fileName, int $productId): array
     {
-        $thumbnail = null;
         $files = [];
         if ($contenttypeId == config('constants.CONTENT_TYPE_VIDEO')) {
-            list($files, $thumbnail) = $this->makeVideoFilesForPaidContent($fileName, $productId);
+            $files = $this->makeVideoFilesForPaidContent($fileName, $productId);
         } elseif ($contenttypeId == config('constants.CONTENT_TYPE_PAMPHLET')) {
             $files = $this->makePahmphletFilesForPaidContent($fileName, $productId);
         }
-        return [$files , $thumbnail];
+        return $files;
     }
 
     /**

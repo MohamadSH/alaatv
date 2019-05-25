@@ -99,6 +99,8 @@ class ProductController extends Controller
                 'landing4',
                 'landing5',
                 'landing6',
+                'landing7',
+                'landing8',
             ],
         ]);
     }
@@ -1260,14 +1262,18 @@ class ProductController extends Controller
             ]), '100', '100', null));
         
         $producIds = [
-            271,
-            270,
-            269,
-            268,
-            267,
-            266,
-            265,
+            298,
+            302,
+            306,
+            308,
+            312,
+            316,
+            318,
+            322,
+            326,
+            328
         ];
+
         
         $productIds = $producIds;
 //        $productIds = config("constants.HAMAYESH_PRODUCT");

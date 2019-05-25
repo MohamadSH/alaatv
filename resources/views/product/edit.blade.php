@@ -98,12 +98,12 @@
                                     <tr>
                                         <td>{{ $set->name }}</td>
                                         <td>
-                                            <a href="{{ action('Web\SetController@show', $set->id) }}" class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
+                                            <a target="_blank" href="{{ action('Web\SetController@indexContent', $set->id) }}" class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
                                                 <i class="flaticon-medical"></i>
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="{{ action('Web\SetController@indexContent', $set->id) }}" class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
+                                            <a target="_blank" href="{{ action('Web\SetController@edit', $set->id) }}" class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
                                                 <i class="flaticon-edit"></i>
                                             </a>
                                         </td>

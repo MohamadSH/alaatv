@@ -164,7 +164,9 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public const DONATE_PRODUCT_5_HEZAR = 180;
     
     public const CUSTOM_DONATE_PRODUCT = 182;
-    
+
+    public const ASIATECH_PRODUCT = 224;
+
     public const AMOUNT_LIMIT = [
         'نامحدود',
         'محدود',
