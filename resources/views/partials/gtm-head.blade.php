@@ -15,3 +15,4 @@
     })(window, document, 'script', 'dataLayer', 'GTM-PNP8RDW');
 </script>
 <!-- End Google Tag Manager -->
+<link rel="manifest" href="/manifest.json">

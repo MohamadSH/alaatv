@@ -14,19 +14,6 @@ class AlaaOrderproductPriceCalculator extends OrderproductPriceCalculator
 {
     public function getPrice()
     {
-//        $priceInfo =  [
-//            ///////////////Details///////////////////////
-//            "cost"                            => $price,
-//            "extraCost"                       => $orderProductExtraPrice,
-//            "productDiscount"                 => $productDiscountValue,
-//            "productDiscountPercentage"       => $productDiscountPercentage,
-//            'bonDiscount'                     => $totalBonDiscountPercentage,
-//            "productDiscountAmount"           => (int)$productDiscountAmount,
-//            ////////////////////Total///////////////////////
-//            'customerCost'                    => $customerPrice,
-//            'totalCost'                       => $totalPrice
-//        ];
-        
         $priceInfo = $this->getOrderproductPrice();
         
         return $priceInfo;
