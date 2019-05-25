@@ -45,7 +45,13 @@
             line-height: 135px;
         }
 
-        .lastSection .lastSectionItem .text {
+
+
+
+        .a--imageWithCaption {
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
         }
     </style>
 @endsection
