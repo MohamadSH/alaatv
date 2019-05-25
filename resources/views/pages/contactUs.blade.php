@@ -175,7 +175,7 @@
                                 @endif
                             </ul>
                             <hr>
-                            <h5>ارتباط با ادمین</h5>
+                            <h5>ارتباط با ادمین (امور مالی)</h5>
                             <ul class = "list-inline ">
                                 @if(isset($wSetting->socialNetwork->telegram->channel->admin) && strlen($wSetting->socialNetwork->telegram->channel->admin) > 0)
                                     <li class = "list-inline-item">
