@@ -162,19 +162,18 @@
                                                                     {{$product["product"]->name ?? '--'}}
                                                                 </div>
                                                                 <div class="a--imageCaptionDescription">
-                                                                    ثبت نام در همایش
+                                                                    <button type="button" class="btn btn-sm m-btn--pill m-btn--air btn-accent m--margin-bottom-10">
+                                                                        ثبت نام در همایش
+                                                                    </button>
                                                                     <br>
                                                                     @if($product["product"]->isFree)
-                                                                        <div class="cbp-l-caption-desc  bold m--font-danger product-potfolio-free">رایگان
-                                                                        </div>
+                                                                        <div class="cbp-l-caption-desc  bold m--font-danger product-potfolio-free">رایگان</div>
                                                                     @elseif($product["product"]->basePrice == 0)
-                                                                        <div class="cbp-l-caption-desc  bold m--font-info product-potfolio-no-cost">قیمت: پس از انتخاب محصول
-                                                                        </div>
-                                                                    @elseif($costCollection[$product["product"]->id]["productDiscount"]+$costCollection[$product["product"]->id]["bonDiscount"]>0)
-                                                                        <div class="cbp-l-caption-desc  bold m--font-danger product-potfolio-real-cost">@if(isset($costCollection[$product["product"]->id]["cost"])){{number_format($costCollection[$product["product"]->id]["cost"])}}تومان@endif</div>
-                                                                        <div class="cbp-l-caption-desc  bold font-green product-potfolio-discount-cost">فقط @if(Auth::check()) {{number_format((1 - ($costCollection[$product["product"]->id]["bonDiscount"] / 100)) * ((1 - ($costCollection[$product["product"]->id]["productDiscount"] / 100)) * $costCollection[$product["product"]->id]["cost"]))}} @else @if(isset($costCollection[$product["product"]->id]["cost"])){{number_format(((1-($costCollection[$product["product"]->id]["productDiscount"]/100))*$costCollection[$product["product"]->id]["cost"]))}}تومان@endif @endif</div>
+                                                                        <div class="cbp-l-caption-desc  bold m--font-info product-potfolio-no-cost">قیمت: پس از انتخاب محصول</div>
+                                                                    @elseif($product["product"]->price['discount'] > 0)
+                                                                        @include('product.partials.price',['price' => $product["product"]->price])
                                                                     @else
-                                                                        <div class="cbp-l-caption-desc bold font-green product-potfolio-no-discount">@if(isset($costCollection[$product["product"]->id]["cost"])){{number_format($costCollection[$product["product"]->id]["cost"])}}تومان@endif </div>
+                                                                        @include('product.partials.price',['price' => $product["product"]->price])
                                                                     @endif
                                                                 </div>
                                                             </div>
