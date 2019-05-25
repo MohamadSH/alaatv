@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="fa" direction="rtl" style="direction: rtl">
     <head>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-        <link href="{{ mix('/css/all.css') }}" rel="stylesheet" type="text/css"/>
+        @include('partials.html-head')
         
         <style>
             .redirectBackground {
@@ -19,10 +16,11 @@
             }
         </style>
         
-        @include('partials.gtm')
     </head>
     <body>
 
+        @include('partials.gtm-body')
+    
         <div class="redirectBackground">
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid" viewBox="0 0 1920 1280">
                 <g transform=""><defs>
