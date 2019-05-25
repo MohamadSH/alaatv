@@ -55,10 +55,10 @@
                                                                     data-action="{{action("Web\OrderproductController@destroy",$simpleOrderProductItem->id)}}"
                                                                     data-productid="{{ $simpleOrderProductItem->product->id }}"
                                                                     class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 btnRemoveOrderproduct">
-                                                        <span>
-                                                            <i class="flaticon-circle"></i>
-                                                            <span>حذف</span>
-                                                        </span>
+                                                                    <span>
+                                                                        <i class="flaticon-circle"></i>
+                                                                        <span>حذف</span>
+                                                                    </span>
                                                             </button>
                                                         </div>
                                                         <div class="m-widget5__pic">

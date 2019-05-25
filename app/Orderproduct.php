@@ -191,7 +191,7 @@ class Orderproduct extends BaseModel
             ->where("relationtype_id", config("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD"));
     }
     
-    public function getExtraCost($extraAttributevaluesId = null)
+    public function getExtraCost($extraAttributevaluesId = null):int
     {
         $key = "Orderproduct:getExtraCost:".$this->cacheKey()."\\".(isset($extraAttributevaluesId) ? implode(".",
                 $extraAttributevaluesId) : "-");
@@ -208,7 +208,7 @@ class Orderproduct extends BaseModel
                 $extraCost += $attributevalue->pivot->extraCost;
             }
             
-            return $extraCost;
+            return (int)$extraCost;
         });
     }
     
