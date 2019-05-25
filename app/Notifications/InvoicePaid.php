@@ -104,7 +104,7 @@ class InvoicePaid extends Notification implements ShouldQueue
     {
         return [
             'code'                   => $this->invoice->id,
-            "https://goo.gl/jme5VU " => "https://goo.gl/jme5VU",
+            "https://goo.gl/jme5VU " => "https://goo.gl/jme5VU"."\n"."https://alaatv.com/asset",
         ];
     }
 }
