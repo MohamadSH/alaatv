@@ -7,8 +7,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- begin::seo meta tags -->
-{!! SEO::generate(true) !!}
-<!-- end:: seo meta tags -->
+    {!! SEO::generate(true) !!}
+    <!-- end:: seo meta tags -->
 
     <!--begin::Web font -->
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
@@ -33,10 +33,17 @@
         .datepicker-plot-area {
             z-index: 1061;
         }
+
+
+        /*update css nuevo-alaa-theme*/
+        .a--nuevo-alaa-theme.a--media-parent {
+            padding-top: 56.25% !important;
+        }
     </style>
     
-    <link rel="shortcut icon"
-          href="@if(isset($wSetting->site->favicon)) {{route('image', ['category'=>'11','w'=>'150' , 'h'=>'150' ,  'filename' =>  $wSetting->site->favicon ])}} @endif"/>
+    @if(isset($wSetting->site->favicon))
+        <link rel="shortcut icon" href="{{route('image', ['category'=>'11','w'=>'150' , 'h'=>'150' ,  'filename' =>  $wSetting->site->favicon ])}}"/>
+    @endif
     <!--begin: csrf token -->
     <script>
         window.Laravel = {!! json_encode([
@@ -44,23 +51,7 @@
             ]) !!};
     </script>
     <!--end: csrf token -->
-    <!--begin Google Tag Manager -->
-    <script>
-        (function (w, d, s, l, i) {
-            w[l] = w[l] || [];
-            w[l].push({
-                'gtm.start':
-                    new Date().getTime(), event: 'gtm.js'
-            });
-            var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
-            j.async = true;
-            j.src =
-                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-            f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-PNP8RDW');
-    </script>
-    <!-- End Google Tag Manager -->
+    @include('partials.gtm')
 </head>
 <!-- end::Head -->
 
