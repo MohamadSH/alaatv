@@ -3,6 +3,7 @@
     
         <label class="mt-checkbox mt-checkbox-outline">
             <div class="md-checkbox">
+                @if(Auth::user()->can('constants.CHANGE_TO_PAID_CONTENT'))
                 {!!
                     Form::checkbox(
                         'isFree',
@@ -12,11 +13,29 @@
                             'value' => '1',
                             'id' => 'checkbox_isFree_enable',
                             'class'=>'md-check',
-                            'disabled',
                             ($content->isFree)?'checked':''
                         ]
                     )
                 !!}
+                @else
+                    {!!
+                        Form::checkbox(
+                            'isFree',
+                            $content->isFree,
+                            null,
+                            [
+                                'value' => '1',
+                                'id' => 'checkbox_isFree_enable',
+                                'class'=>'md-check',
+                                'disabled',
+                                ($content->isFree)?'checked':''
+                            ]
+                        )
+                    !!}
+                    @if($content->isFree)
+                        <input type="hidden" name="isFree" value="1">
+                    @endif
+                @endif
                 <label for="checkbox_isFree_enable">
                     <span></span>
                     <span class="check"></span>
