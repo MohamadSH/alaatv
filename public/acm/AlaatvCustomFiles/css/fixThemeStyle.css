@@ -68,13 +68,6 @@ select.form-control {
     white-space: nowrap;
 }
 
-/*media query*/
-@media (max-width: 767.98px) {
-    .m-portlet__body {
-        padding: 5px !important;
-    }
-}
-
 .m-header--fixed-mobile .m-topbar {
     top: -60px;
 }
@@ -103,4 +96,11 @@ select.form-control {
 /*fix persian date picker show bug in modal*/
 .datepicker-plot-area {
     z-index: 1061;
+}
+
+/*media query*/
+@media (max-width: 767.98px) {
+    .m-portlet__body {
+        padding: 5px !important;
+    }
 }
