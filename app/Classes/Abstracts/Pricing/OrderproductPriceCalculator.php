@@ -134,7 +134,7 @@ abstract class OrderproductPriceCalculator
             ///////////////Details///////////////////////
             "cost"                      => $price,
             "extraCost"                 => $orderProductExtraPrice,
-            "productDiscount"           => $productDiscountValue,
+            "productDiscount"           => (int)$productDiscountValue,
             "productDiscountPercentage" => $productDiscountPercentage,
             'bonDiscount'               => $totalBonDiscountValue,
             'bonDiscountPercentage'     => $totalBonDiscountPercentage,
