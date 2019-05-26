@@ -1,7 +1,7 @@
-
 .a--imageWithCaption {
     cursor: pointer;
     overflow: hidden;
+    position: relative;
 }
 
 .a--imageWithCaption img {
@@ -20,6 +20,7 @@
     opacity: 0;
     -webkit-transition: opacity .35s ease-out;
     transition: opacity .35s ease-out;
+    padding: 5px;
 }
 
 .a--imageWithCaption .a--imageCaptionWarper .a--imageCaptionContent {
