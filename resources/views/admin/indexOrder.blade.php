@@ -1,4 +1,5 @@
 @permission((config('constants.LIST_ORDER_ACCESS')))
+
 @extends('app',['pageName'=>$pageName])
 
 @section('page-css')
