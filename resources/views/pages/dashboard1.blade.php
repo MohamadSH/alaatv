@@ -12,7 +12,7 @@
     <div class="m-portlet ">
         <div class="m-portlet__body  m-portlet__body--no-padding">
             <div class="row m-row--no-padding m-row--col-separator-xl shopNavItems">
-                <div class="col-xs-3 col-md-3 col-lg-3 col-xl-3 m--bg-warning shopNavItem">
+                <div class="col-6 col-md-3 m--bg-warning shopNavItem">
                     <a target="_self" onclick="$('html,body').animate({scrollTop: $('.konkoor1').offset().top - 100},'slow');" href="#konkoor1">
                         <!--begin::Total Profit-->
                         <div class="m-widget24 m--align-center">
@@ -32,7 +32,7 @@
                         <!--end::Total Profit-->
                     </a>
                 </div>
-                <div class="col-xs-3 col-md-3 col-lg-3 col-xl-3 m--bg-accent shopNavItem">
+                <div class="col-6 col-md-3 m--bg-accent shopNavItem">
                     <a target="_self" onclick="$('html,body').animate({scrollTop: $('.konkoor2').offset().top - 100},'slow');" href="#konkoor2">
                         <!--begin::Total Profit-->
                         <div class="m-widget24 m--align-center">
@@ -52,7 +52,7 @@
                         <!--end::Total Profit-->
                     </a>
                 </div>
-                <div class="col-xs-3 col-md-3 col-lg-3 col-xl-3 m--bg-success shopNavItem">
+                <div class="col-6 col-md-3 m--bg-success shopNavItem">
                     <a target="_self" onclick="$('html,body').animate({scrollTop: $('.yazdahom').offset().top - 100},'slow');" href="#yazdahom">
                         <!--begin::Total Profit-->
                         <div class="m-widget24 m--align-center">
@@ -72,7 +72,7 @@
                         <!--end::Total Profit-->
                     </a>
                 </div>
-                <div class="col-xs-3 col-md-3 col-lg-3 col-xl-3 m--bg-info shopNavItem">
+                <div class="col-6 col-md-3 m--bg-info shopNavItem">
                     <a target="_self" onclick="$('html,body').animate({scrollTop: $('.dahom').offset().top - 100},'slow');" href="#dahom">
                         <!--begin::Total Profit-->
                         <div class="m-widget24 m--align-center">
