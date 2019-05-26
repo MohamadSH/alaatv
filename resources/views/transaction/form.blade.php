@@ -170,6 +170,21 @@
 <div class="row static-info margin-top-20">
     <div class="col form-group {{ $errors->has('referenceNumber') ? ' has-error' : '' }}">
         <div class="row">
+            <label class="col-md-3 control-label" for="referenceNumber">شماره تراکنش(آنلاین): </label>
+            <div class="col-md-6">
+                {!! Form::text('transactionId',old('transactionId'),['class' => 'form-control', 'dir'=>'ltr' ]) !!}
+                @if ($errors->has('transactionId'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('transactionId') }}</strong>
+                    </span>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row static-info margin-top-20">
+    <div class="col form-group {{ $errors->has('referenceNumber') ? ' has-error' : '' }}">
+        <div class="row">
             <label class="col-md-3 control-label" for="referenceNumber">شماره مرجع:</label>
             <div class="col-md-6">
                 {!! Form::text('referenceNumber',old('referenceNumber'),['class' => 'form-control', 'dir'=>'ltr' ]) !!}
