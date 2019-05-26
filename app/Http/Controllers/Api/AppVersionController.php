@@ -11,7 +11,7 @@ class AppVersionController extends Controller
     {
         return response()->json([
             'android' => [
-                'last_version' => 50,
+                'last_version' => 51,
                 'type'         => [
                     'code' => 1,
                     'hint' => 'force',
