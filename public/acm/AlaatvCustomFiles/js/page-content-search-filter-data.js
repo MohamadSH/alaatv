@@ -1248,6 +1248,10 @@ var contentSearchFilterData = {
             value: 'یازدهم'
         },
         {
+            name: 'دوازدهم',
+            value: 'دوازدهم'
+        },
+        {
             name: 'کنکور',
             value: 'کنکور'
         },

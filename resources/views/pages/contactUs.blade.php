@@ -1,16 +1,7 @@
 @extends('app' , ["pageName"=>"contactUs"])
 
 @section('page-css')
-    <style>
-        /*media query*/
-        @media (max-width: 767.98px) {
-            .m-portlet .m-portlet-fit--sides {
-                margin-right: -0.4rem;
-                margin-left: -0.4rem;
-                margin-top: -0.4rem;
-            }
-        }
-    </style>
+    <link href="{{ mix('/css/page-contactUs.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('pageBar')

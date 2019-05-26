@@ -1,29 +1,3 @@
-
-<style>
-    .certificates-row {
-        margin-right: -30px;
-        margin-left: -30px;
-    }
-    .certificates-col {
-        padding: 0;
-    }
-    .certificates-items {
-        position: absolute;
-        top: 50px;
-        left: 0;
-        width: 100%;
-        height: auto;
-    }
-    .certificates-items img {
-        max-width: 130px;
-        cursor: pointer;
-        transition: all 0.5s;
-    }
-    .certificates-items img:hover {
-        transform: scale(1.1);
-    }
-</style>
-
 <div class="row certificates-row">
     <div class="col-12 certificates-col">
         <div class="certificates-svg">

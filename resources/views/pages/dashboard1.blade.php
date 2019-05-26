@@ -135,26 +135,6 @@
     @include("partials.certificates")
 @endsection
 
-
 @section('page-js')
     <script src="{{ mix('/js/page-homePage.js') }}"></script>
-    <script>
-
-        $('.alaaAlert').slideUp();
-        $('.hightschoolAlert').slideUp();
-        $(document).on('click', '.certificatesLogo', function(){
-            let logoName = $(this).data('name');
-            console.log(logoName);
-            if (logoName === 'alaa') {
-                $('.hightschoolAlert').fadeOut(0);
-                $('.alaaAlert').slideDown();
-            } else if (logoName === 'sharif-school') {
-                $('.alaaAlert').fadeOut(0);
-                $('.hightschoolAlert').slideDown();
-            } else {
-                $('.alaaAlert').fadeOut(0);
-                $('.hightschoolAlert').fadeOut(0);
-            }
-        });
-    </script>
 @endsection
