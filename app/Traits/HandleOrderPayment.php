@@ -18,7 +18,7 @@ trait HandleOrderPayment
      *
      * @return array
      */
-    protected function handleOrderSuccessPayment(Order $order): array
+    protected function handleOrderSuccessPayment(Order $order): void
     {
         $order->closeWalletPendingTransactions();
 
@@ -28,11 +28,8 @@ trait HandleOrderPayment
         
         /** Attaching user bons for this order */
         if ($updateOrderPaymentStatusResult['paymentstatus_id'] == config('constants.PAYMENT_STATUS_PAID')) {
-            $givesOrderBonsToUserResult     = $this->givesOrderBonsToUser($order);
-            $updateOrderPaymentStatusResult = array_merge($updateOrderPaymentStatusResult, $givesOrderBonsToUserResult);
+            $this->givesOrderBonsToUser($order);
         }
-        
-        return $updateOrderPaymentStatusResult;
     }
     
     /**
@@ -42,7 +39,6 @@ trait HandleOrderPayment
      */
     protected function updateOrderPaymentStatus(Order $order): array
     {
-        $result           = [];
         $paymentstatus_id = (int) $order->totalPaidCost() < (int) $order->totalCost() ? config('constants.PAYMENT_STATUS_INDEBTED') : config('constants.PAYMENT_STATUS_PAID');
         
         $result['paymentstatus_id'] = $paymentstatus_id;
@@ -52,8 +48,7 @@ trait HandleOrderPayment
             $order->close();
 
         $order->paymentstatus_id = $paymentstatus_id;
-
-        $result['saveOrder'] = $order->update() ? 1 : 0;
+        $order->update();
         
         return $result;
     }
@@ -63,27 +58,17 @@ trait HandleOrderPayment
      *
      * @return array
      */
-    private function givesOrderBonsToUser(Order $order): array
+    private function givesOrderBonsToUser(Order $order): void
     {
-        $result  = [];
         $bonName = config('constants.BON1');
         $bon     = Bon::ofName($bonName)
             ->first();
         
         if (!isset($bon)) {
-            return $result;
+            return;
         }
         
         list($givenBonNumber, $failedBonNumber) = $order->giveUserBons($bonName);
         
-        $result['saveBon'] = $givenBonNumber;
-        
-        if ($givenBonNumber == 0) {
-            $result['saveBon'] = $failedBonNumber > 0 ? -1 : 0;
-        }
-        
-        $result['bonName'] = $bon->displayName;
-        
-        return $result;
     }
 }

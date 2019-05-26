@@ -99,7 +99,7 @@ class TransactionRepo
     private static function changeTransactionStatusToSuccessful($id, string $transactionID, int $bankAccountId = null)
     {
         $data = [
-            'completed_at'              => Carbon::now(),
+            'completed_at'              => Carbon::now()->setTimezone('Asia/Tehran'),
             'transactionID'             => $transactionID,
             'destinationBankAccount_id' => $bankAccountId,
             'transactionstatus_id'      => config("constants.TRANSACTION_STATUS_SUCCESSFUL"),
