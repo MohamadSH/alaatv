@@ -1,14 +1,7 @@
-@extends("app",["pageName"=> $pageName ])
-
-@section('right-aside')
-@endsection
-
+@extends('app',['pageName'=> $pageName ])
 
 @section('page-css')
     <link href="{{ mix('/css/content-search.css') }}" rel="stylesheet" type="text/css"/>
-@endsection
-
-@section("pageBar")
 @endsection
 
 @section('content')
@@ -157,6 +150,7 @@
     </style>
     
 @endsection
+
 @section('page-js')
     <script>
         var contentData = {!! json_encode($result) !!};

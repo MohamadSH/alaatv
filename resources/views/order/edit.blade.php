@@ -78,10 +78,16 @@
                                     تراکنش های سفارش
                                 </a>
                             </li>
+                            <li class="nav-item m-tabs__item">
+                                <a class="nav-link m-tabs__link" data-toggle="tab" href="#portlet_tab4" role="tab">
+                                    <i class="flaticon-coins"></i>
+                                    کل تراکنش های سفارش
+                                </a>
+                            </li>
                             
                             @if($orderArchivedTransactions->isNotEmpty())
                                 <li class="nav-item m-tabs__item">
-                                    <a class="nav-link m-tabs__link" data-toggle="tab" href="#portlet_tab4" role="tab">
+                                    <a class="nav-link m-tabs__link" data-toggle="tab" href="#portlet_tab5" role="tab">
                                         <i class="flaticon-piggy-bank"></i>
                                         تراکنش های موفق بایگانی شده
                                     </a>
@@ -459,13 +465,11 @@
                             </ul>
                         </div>
                         <div class="tab-pane" id="portlet_tab3" role="tabpanel">
-                            <div class="alert alert-success alert-dismissible fade show d-none" role="alert"
-                                 id="removeTransactionSuccess">
+                            <div class="alert alert-success alert-dismissible fade show removeTransactionSuccess d-none" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
                                 تراکنش با موفقیت اصلاح شد
                             </div>
-                            <div class="alert alert-danger alert-dismissible fade show d-none" role="alert"
-                                 id="removeTransactionError">
+                            <div class="alert alert-danger alert-dismissible fade show removeTransactionError d-none" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
                                 <span></span>
                             </div>
@@ -474,92 +478,34 @@
                                     <div class="col-md-6">
                                         <div class="btn-group">
                                             {{--@permission((config('constants.INSERT_USER_ACCESS')))--}}
-                                            <a class="btn m-btn--air btn-info m--margin-bottom-10" id="insertTransaction-button"
+                                            <a class="btn m-btn--air btn-info m--margin-bottom-10 insertTransaction-button"
                                                data-toggle="modal" href="#responsive-transaction">
                                                 <i class="fa fa-plus"></i>
                                                 افزودن تراکنش
                                             </a>
-    
-                                            <!--begin::Modal-->
-                                            <div class="modal fade" id="responsive-transaction" tabindex="-1" role="dialog"
-                                                 aria-labelledby="orderproductExchangeModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-lg" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="orderproductExchangeModalLabel">
-                                                                افزودن تراکنش جدید
-                                                            </h5>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\TransactionController@store'], 'class'=>'nobottommargin' ]) !!}
-                                                        <div class="modal-body">
-                                                            @include('transaction.form' , ["class"=>["paymentmethod"=>"paymentMethodName"] , "name"=>["paymentmethod"=>"paymentMethodName"] , "id"=>["paymentmethod"=>"paymentMethodName"]])
-                                                            {{--<span class="help-block m--font-info">( دقت شود از میان اطلاعات شماره مرجع ، شماره پیگیری و شماره چک که اطلاعات بانکی یک تراکنش محسوب می شوند ، تمامی آنها برای هر تراکنش وجود ندارد و نیاز به وارد نمودن همه ی آنها نیست)</span>--}}
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="userForm-close">بستن</button>
-                                                            <button type="submit" class="btn btn-primary">ذخیره</button>
-                                                        </div>
-                                                        {!! Form::close() !!}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--end::Modal-->
-                                            
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover table-bordered" id="sample_editable_1">
-        
-                                    <!--begin::Modal-->
-                                    <div class="modal fade" id="deleteTransactionConfirmationModal" tabindex="-1" role="dialog"
-                                         aria-labelledby="orderproductExchangeModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="orderproductExchangeModalLabel">
-                                                        حذف تراکنش
-                                                        <span id="deleteTransactionFullName"></span>
-                                                    </h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p> آیا مطمئن هستید؟</p>
-                                                    {!! Form::hidden('transaction_id', null) !!}
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
-                                                    <button type="submit" class="btn btn-primary" onclick="removeTransaction()">بله</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--end::Modal-->
-        
+                                    
                                     <thead>
-                                    <tr>
-                                        <th class="d-none"></th>
-                                        <th> روش پرداخت</th>
-                                        <th>درگاه</th>
-                                        <th> وضعیت تراکنش</th>
-                                        <th> تراکنش والد</th>
-                                        <th> مبلغ(تومان)</th>
-                                        <th> شماره تراکنش</th>
-                                        <th> شماره مرجع</th>
-                                        <th> شماره پیگیری</th>
-                                        <th> شماره چک</th>
-                                        <th> توضیح مدیریتی</th>
-                                        <th> اصلاح</th>
-                                        <th> حذف</th>
-                                    </tr>
+                                        <tr>
+                                            <th class="d-none"></th>
+                                            <th> روش پرداخت</th>
+                                            <th>درگاه</th>
+                                            <th> وضعیت تراکنش</th>
+                                            <th> تراکنش والد</th>
+                                            <th> مبلغ(تومان)</th>
+                                            <th> شماره تراکنش</th>
+                                            <th> شماره مرجع</th>
+                                            <th> شماره پیگیری</th>
+                                            <th> شماره چک</th>
+                                            <th> توضیح مدیریتی</th>
+                                            <th> اصلاح</th>
+                                            <th> حذف</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                     @foreach($orderTransactions as $transaction)
@@ -651,6 +597,137 @@
                             </div>
                         </div>
                         <div class="tab-pane" id="portlet_tab4" role="tabpanel">
+                            <div class="alert alert-success alert-dismissible fade show removeTransactionSuccess d-none" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+                                تراکنش با موفقیت اصلاح شد
+                            </div>
+                            <div class="alert alert-danger alert-dismissible fade show removeTransactionError d-none" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+                                <span></span>
+                            </div>
+                            <div class="table-toolbar">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="btn-group">
+                                            {{--@permission((config('constants.INSERT_USER_ACCESS')))--}}
+                                            <a class="btn m-btn--air btn-info m--margin-bottom-10 insertTransaction-button"
+                                               data-toggle="modal" href="#responsive-transaction">
+                                                <i class="fa fa-plus"></i>
+                                                افزودن تراکنش
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover table-bordered" id="sample_editable_2">
+                                    <thead>
+                                        <tr>
+                                            <th class="d-none"></th>
+                                            <th> روش پرداخت</th>
+                                            <th>درگاه</th>
+                                            <th> وضعیت تراکنش</th>
+                                            <th> تراکنش والد</th>
+                                            <th> مبلغ(تومان)</th>
+                                            <th> شماره تراکنش</th>
+                                            <th> شماره مرجع</th>
+                                            <th> شماره پیگیری</th>
+                                            <th> شماره چک</th>
+                                            <th> توضیح مدیریتی</th>
+                                            <th> اصلاح</th>
+                                            <th> حذف</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($totalTransactions as $transaction)
+                                            <tr id="{{$transaction->id}}">
+                                                <td class="d-none">
+                                                    {{$transaction->id}}
+                                                </td>
+                                                <td>
+                                                    @if(isset($transaction->paymentmethod->displayName[0]))
+                                                        {{$transaction->paymentmethod->displayName}}
+                                                    @else
+                                                        <span class="m-badge m-badge--wide label-sm m-badge--danger"> ندارد </span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if(isset($transaction->transactiongateway))
+                                                        {{ $transaction->transactiongateway->displayName }}
+                                                    @else
+                                                        <span class="m-badge m-badge--wide label-sm m-badge--info">بدون درگاه</span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if(isset($transaction->transactionstatus->id))
+                                                        {{$transaction->transactionstatus->displayName}}
+                                                    @else
+                                                        <span class="m-badge m-badge--wide label-sm m-badge--warning"> ندارد </span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if($transaction->hasParents())
+                                                        <a target="_blank"
+                                                           href="{{action('Web\TransactionController@edit' , $transaction->getGrandParent())}}">
+                                                            رفتن به تراکنش
+                                                        </a>
+                                                    @else
+                                                        ندارد
+                                                    @endif
+                                                </td>
+                                                <td id="transactionFullName_{{$transaction->id}}" dir="ltr">
+                                                    @if(isset($transaction->cost))
+                                                        {{number_format($transaction->cost)}}
+                                                    @else
+                                                        <span class="m-badge m-badge--wide label-sm m-badge--danger"> ندارد </span>
+                                                    @endif
+                                                </td>
+                                                <td style="text-align: center">
+                                                    @if(strlen($transaction->transactionID)>0)
+                                                        {{$transaction->transactionID}}
+                                                    @else
+                                                        <span class="m-badge m-badge--wide label-sm m-badge--info"> ندارد </span>
+                                                    @endif
+                                                </td>
+                                                <td style="text-align: center">
+                                                    @if(strlen($transaction->referenceNumber)>0)
+                                                        {{$transaction->referenceNumber}}
+                                                    @else
+                                                        <span class="m-badge m-badge--wide label-sm m-badge--info"> ندارد </span>
+                                                    @endif
+                                                </td>
+                                                <td style="text-align: center">
+                                                    @if(strlen($transaction->traceNumber)>0)
+                                                        {{$transaction->traceNumber}}
+                                                    @else
+                                                        <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span>
+                                                    @endif
+                                                </td>
+                                                <td style="text-align: center">@if(strlen($transaction->paycheckNumber)>0){{$transaction->paycheckNumber}} @else
+                                                        <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span> @endif
+                                                </td>
+                                                <td style="text-align: center">@if(strlen($transaction->managerComment)>0){{$transaction->managerComment}} @else
+                                                        <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span> @endif
+                                                </td>
+                                                <td style="text-align: center">
+                                                    <a class="edit" href="javascript:">
+                                                        <i class="flaticon-edit m--font-success" aria-hidden="true"></i>
+                                                    </a>
+                                                </td>
+                                                <td style="text-align: center">
+                                                    <a class="deleteTransaction"
+                                                       data-target="#deleteTransactionConfirmationModal" data-toggle="modal">
+                                                        <i class="fa fa-trash fa-lg m--font-danger" aria-hidden="true"></i>
+                                                    </a>
+                                                    <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="portlet_tab5" role="tabpanel">
                             
                             @if($orderArchivedTransactions->isNotEmpty())
                                 <table class="table table-striped table-hover table-bordered" id="">
@@ -734,6 +811,66 @@
                         
                         </div>
                     </div>
+    
+    
+                    <!--begin::Modal-->
+                    <div class="modal fade" id="responsive-transaction" tabindex="-1" role="dialog"
+                         aria-labelledby="orderproductExchangeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="orderproductExchangeModalLabel">
+                                        افزودن تراکنش جدید
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\TransactionController@store'], 'class'=>'nobottommargin' ]) !!}
+                                <div class="modal-body">
+                                    @include('transaction.form' , ["class"=>["paymentmethod"=>"paymentMethodName"] , "name"=>["paymentmethod"=>"paymentMethodName"] , "id"=>["paymentmethod"=>"paymentMethodName"]])
+                                    {{--<span class="help-block m--font-info">( دقت شود از میان اطلاعات شماره مرجع ، شماره پیگیری و شماره چک که اطلاعات بانکی یک تراکنش محسوب می شوند ، تمامی آنها برای هر تراکنش وجود ندارد و نیاز به وارد نمودن همه ی آنها نیست)</span>--}}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="userForm-close">بستن</button>
+                                    <button type="submit" class="btn btn-primary">ذخیره</button>
+                                </div>
+                                {!! Form::close() !!}
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Modal-->
+    
+                    <!--begin::Modal-->
+                    <div class="modal fade" id="deleteTransactionConfirmationModal" tabindex="-1" role="dialog"
+                         aria-labelledby="orderproductExchangeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="orderproductExchangeModalLabel">
+                                        حذف تراکنش
+                                        <span id="deleteTransactionFullName"></span>
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p> آیا مطمئن هستید؟</p>
+                                    {!! Form::hidden('transaction_id', null) !!}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                                    <button type="submit" class="btn btn-primary" onclick="removeTransaction()">بله</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Modal-->
+
+                    
                 </div>
             </div>
         
@@ -855,8 +992,9 @@
                 }
 
                 var table = $('#sample_editable_1');
+                var table_totalTransaction = $('#sample_editable_2');
 
-                var oTable = table.dataTable({
+                let datatableConfig = {
 
                     // Uncomment below line("dom" parameter) to fix the dropdown overflow issue in the datatable cells. The default datatable layout
                     // setup uses scrollable div(table-scrollable) with overflow:auto to enable vertical scroll(see: assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js).
@@ -889,12 +1027,15 @@
                     "order": [
                         [0, "asc"]
                     ] // set first column as a default sort by asc
-                });
-
-                var tableWrapper = $("#sample_editable_1_wrapper");
+                };
+                var oTable = table.dataTable(datatableConfig);
+                var oTable_totalTransaction = table_totalTransaction.dataTable(datatableConfig);
 
                 var nEditing = null;
                 var nNew = false;
+
+                var nEditing_totalTransaction = null;
+                var nNew_totalTransaction = false;
 
                 $('#sample_editable_1_new').click(function (e) {
                     e.preventDefault();
@@ -968,6 +1109,57 @@
                         /* No edit in progress - let's start one */
                         editRow(oTable, nRow);
                         nEditing = nRow;
+                    }
+                });
+                
+                table_totalTransaction.on('click', '.delete', function (e) {
+                    
+                    console.log('hji');
+                    e.preventDefault();
+
+                    if (confirm("آیا از حذف سطر مطمئن هستید ?") == false) {
+                        return;
+                    }
+
+                    var nRow = $(this).parents('tr')[0];
+                    oTable_totalTransaction.fnDeleteRow(nRow);
+                    alert("سطر حذف شد ! حال باید آن را از پایگاه داده حذف کنید");
+                });
+
+                table_totalTransaction.on('click', '.cancel', function (e) {
+                    e.preventDefault();
+                    if (nNew) {
+                        oTable_totalTransaction.fnDeleteRow(nEditing_totalTransaction);
+                        nEditing_totalTransaction = null;
+                        nNew = false;
+                    } else {
+                        restoreRow(oTable_totalTransaction, nEditing_totalTransaction);
+                        nEditing_totalTransaction = null;
+                    }
+                });
+
+                table_totalTransaction.on('click', '.edit', function (e) {
+                    console.log('edit clicked');
+                    e.preventDefault();
+                    nNew_totalTransaction = false;
+
+                    /* Get the row as a parent of the link that was clicked on */
+                    var nRow = $(this).parents('tr')[0];
+
+                    if (nEditing_totalTransaction !== null && nEditing_totalTransaction != nRow) {
+                        /* Currently editing - but not this row - restore the old before continuing to edit mode */
+                        restoreRow(oTable_totalTransaction, nEditing_totalTransaction);
+                        editRow(oTable_totalTransaction, nRow);
+                        nEditing_totalTransaction = nRow;
+                    } else if (nEditing_totalTransaction == nRow && this.innerHTML == "ذخیره") {
+                        /* Editing this row and want to save it */
+                        saveRow(oTable_totalTransaction, nEditing_totalTransaction);
+                        nEditing_totalTransaction = null;
+//                        alert("اصلاح انجام شد! حال باید پایگاه داده را اصلاح کنید");
+                    } else {
+                        /* No edit in progress - let's start one */
+                        editRow(oTable_totalTransaction, nRow);
+                        nEditing_totalTransaction = nRow;
                     }
                 });
             };
@@ -1098,7 +1290,7 @@
             SweetAlert.init();
             
             @if(strcmp(Session::pull("validationFailed") , "insertTransaction")==0 && !$errors->isEmpty())
-            $("#insertTransaction-button").trigger("click");
+            $(".insertTransaction-button").trigger("click");
             @endif
 
             $("#transactionDeadlineAt").persianDatepicker({
@@ -1171,20 +1363,20 @@
                 type: 'PUT',
                 url: '/transaction/' + newData[0],
                 data: {
-                    cost: newData[4],
-                    transactionID: newData[5],
-                    referenceNumber: newData[6],
-                    traceNumber: newData[7],
-                    paycheckNumber: newData[8],
-                    managerComment: newData[9]
+                    cost: newData[5],
+                    transactionID: newData[6],
+                    referenceNumber: newData[7],
+                    traceNumber: newData[8],
+                    paycheckNumber: newData[9],
+                    managerComment: newData[10]
                 },
                 success: function (result) {
-                    $("#removeTransactionSuccess").removeClass("d-none");
+                    $(".removeTransactionSuccess").removeClass("d-none");
                    location.reload();
                 },
                 error: function (result) {
-                    $("#removeTransactionError").removeClass("d-none");
-                    $("#removeTransactionError > span").html(result.responseText);
+                    $(".removeTransactionError").removeClass("d-none");
+                    $(".removeTransactionError > span").html(result.responseText);
                     // console.log(JSON.parse(result.responseText));
                     console.log(result.responseText);
                     // console.log(result.responseText);

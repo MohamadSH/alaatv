@@ -1068,12 +1068,16 @@ var GetAjaxData = function () {
         }
 
         url += '?' + tagsValue;
-        window.history.pushState('data to be passed', 'Title of the page', url);
+        window.addEventListener('popstate', function(event) {
+            console.log('popstate fired!');
+        });
 
-        return tagsValue;
+        // window.history.pushState('data to be passed', 'Title of the page', url);
         // The above will add a new entry to the history so you can press Back button to go to the previous state.
         // To change the URL in place without adding a new entry to history use
-        // history.replaceState('data to be passed', 'Title of the page', '');
+        history.replaceState('data to be passed', 'Title of the page', url);
+
+        return tagsValue;
     }
 
     function runWaiting() {

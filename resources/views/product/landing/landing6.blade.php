@@ -44,15 +44,7 @@
             height: 135px;
             line-height: 135px;
         }
-
-
-
-
-        .a--imageWithCaption {
-            cursor: pointer;
-            overflow: hidden;
-            position: relative;
-        }
+        
     </style>
 @endsection
 @section('content')
