@@ -25,19 +25,6 @@
 
 @yield('page-css')
 
-<style>
-    /*fix persian date picker show bug in modal*/
-    .datepicker-plot-area {
-        z-index: 1061;
-    }
-    
-    
-    /*update css nuevo-alaa-theme*/
-    .a--nuevo-alaa-theme.a--media-parent {
-        padding-top: 56.25% !important;
-    }
-</style>
-
 @if(isset($wSetting->site->favicon))
     <link rel="shortcut icon" href="{{route('image', ['category'=>'11','w'=>'150' , 'h'=>'150' ,  'filename' =>  $wSetting->site->favicon ])}}"/>
 @endif

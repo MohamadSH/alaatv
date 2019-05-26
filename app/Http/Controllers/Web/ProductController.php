@@ -1010,17 +1010,16 @@ class ProductController extends Controller
             ]);
         
         $product_ids = [
-            242,
-            240,
-            238,
-            236,
-            230,
-            234,
-            232,
-            222,
-            210,
-            213,
+            334,
+            335,
+            336,
+            337,
+            338,
+            339,
+            340,
         ];
+
+
         $products    = Product::whereIn('id', $product_ids)
             ->orderBy('order')
             ->enable()
@@ -1028,14 +1027,13 @@ class ProductController extends Controller
 //        $costCollection = $this->makeCostCollection($products);
         
         $reshteIdArray = [
-            
-            242 => 'riazi',
-            240 => 'riazi',
-            238 => 'riazi',
-            236 => 'riazi',
-            230 => 'tajrobi',
-            234 => 'tajrobi',
-            232 => 'tajrobi',
+            334 => 'riazi',
+            335 => 'riazi',
+            336 => 'riazi',
+            337 => 'riazi',
+            340 => 'tajrobi',
+            338 => 'tajrobi',
+            339 => 'tajrobi',
             222 => 'tajrobi',
             210 => 'tajrobi',
             213 => 'tajrobi',
@@ -1066,84 +1064,10 @@ class ProductController extends Controller
                     'filename' => $value->image,
                 ]),
                 'name'              => $value->name,
-                //                'link'              => action('Web\ProductController@show', $value->id)
-                'link'              => null,
+                'link'              => action('Web\ProductController@show', $value->id)
+//                'link'              => null,
             ];
         }
-        
-        $products = [
-            [
-                'type'  => 'riazi',
-                'price' => '-',
-                'image' => 'http://192.168.4.2:9070/image/4/256/256/p10_20181119064116.jpg',
-                'name'  => 'ریاضیات رشته ریاضی کنکور نظام قدیم',
-                'link'  => action('Web\ProductController@show', 242),
-            ],
-            [
-                'type'  => 'riazi',
-                'price' => '-',
-                'image' => 'http://192.168.4.2:9070/image/4/256/256/p6%20%282%29_20181119064128.jpg',
-                'name'  => 'ریاضی تجربی کنکور نظام قدیم',
-                'link'  => action('Web\ProductController@show', 240),
-            ],
-            [
-                'type'  => 'riazi',
-                'price' => '-',
-                'image' => 'http://192.168.4.2:9070/image/4/256/256/p8_20181119115159.jpg',
-                'name'  => 'دین و زندگی کنکور نظام قدیم',
-                'link'  => action('Web\ProductController@show', 238),
-            ],
-            [
-                'type'  => 'riazi',
-                'price' => '-',
-                'image' => 'http://192.168.4.2:9070/image/4/256/256/p7_20181119115215.jpg',
-                'name'  => 'عربی کنکور نظام قدیم',
-                'link'  => action('Web\ProductController@show', 236),
-            ],
-            [
-                'type'  => 'tajrobi',
-                'price' => '-',
-                'image' => 'http://192.168.4.2:9070/image/4/256/256/p2_20181118125322.jpg',
-                'name'  => 'شیمی کنکور نظام قدیم',
-                'link'  => action('Web\ProductController@show', 230),
-            ],
-            [
-                'type'  => 'tajrobi',
-                'price' => '-',
-                'image' => 'http://192.168.4.2:9070/image/4/256/256/p5_20181119115230.jpg',
-                'name'  => 'زیست کنکور نظام قدیم',
-                'link'  => action('Web\ProductController@show', 234),
-            ],
-            [
-                'type'  => 'tajrobi',
-                'price' => '-',
-                'image' => 'http://192.168.4.2:9070/image/4/256/256/p4_20181118125640.jpg',
-                'name'  => 'فیزیک کنکور نظام قدیم',
-                'link'  => action('Web\ProductController@show', 232),
-            ],
-            [
-                'type'  => 'tajrobi',
-                'price' => '49,000',
-                'image' => 'http://192.168.4.2:9070/image/4/256/256/p-14_20180506124007.jpg',
-                'name'  => 'همایش طلایی ریاضی انسانی کنکور',
-                'link'  => action('Web\ProductController@show', 222),
-            ],
-            [
-                'type'  => 'tajrobi',
-                'price' => '49,000',
-                'image' => 'http://192.168.4.2:9070/image/4/256/256/p-10_20180428111412.jpg',
-                'name'  => 'همایش طلایی ادبیات کنکور',
-                'link'  => action('Web\ProductController@show', 210),
-            ],
-            [
-                'type'  => 'tajrobi',
-                'price' => '49,000',
-                'image' => 'http://192.168.4.2:9070/image/4/256/256/p-12_20180428111303.jpg',
-                'name'  => 'همایش طلایی زمین شناسی کنکور',
-                'link'  => action('Web\ProductController@show', 213),
-            ],
-        
-        ];
         
         $products = $productsDataForView;
         
@@ -1159,6 +1083,8 @@ class ProductController extends Controller
      */
     public function landing6(Request $request)
     {
+        return redirect()->route('landing.7', $request->all());
+
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags('آلاء| جمع بندی نیم سال اول',
             'همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف', $url,

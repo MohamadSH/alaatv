@@ -18,7 +18,7 @@
             max-width: 100%;
             min-width: 100%;
         }
-
+        
         .multiselect-native-select, .mt-multiselect {
             width: 100%;
         }
@@ -53,10 +53,7 @@
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
-                                اصلاح اطلاعات
-                                <a class="m-link" href="{{action("Web\SetController@show" , $set)}}">{{$set->name}}</a>
-                                 (تعداد محتوا: {{ $set->contents_count }})
-                                
+                                ثبت سته محتوای جدید
                             </h3>
                         </div>
                     </div>
@@ -69,7 +66,7 @@
                                 <div class="mt-checkbox-list">
                                     <label class="mt-checkbox mt-checkbox-outline">
                                         فعال
-                                        <input type="checkbox" value="1" name="isFree" @if($set->enable) checked @endif />
+                                        <input type="checkbox" value="1" name="isFree" checked/>
                                         <span></span>
                                     </label>
                                 </div>
@@ -78,7 +75,7 @@
                                 <div class="mt-checkbox-list">
                                     <label class="mt-checkbox mt-checkbox-outline">
                                         قابل نمایش برای کاربران
-                                        <input type="checkbox" value="1" name="isFree" @if($set->display) checked @endif />
+                                        <input type="checkbox" value="1" name="isFree" checked/>
                                         <span></span>
                                     </label>
                                 </div>
@@ -90,7 +87,7 @@
                         <div class="row">
                             <label class="col-md-2 control-label" for="name">نام</label>
                             <div class="col-md-10">
-                                {!! Form::text('name', $set->name, ['class' => 'form-control', 'id' => 'name' ]) !!}
+                                {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'name' ]) !!}
                                 @if ($errors->has('name'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('name') }}</strong>
@@ -104,7 +101,7 @@
                         <div class="row">
                             <label class="col-md-2 control-label" for="name">نام کوتاه</label>
                             <div class="col-md-10">
-                                {!! Form::text('small_name', $set->small_name, ['class' => 'form-control', 'id' => 'name' ]) !!}
+                                {!! Form::text('small_name', null, ['class' => 'form-control', 'id' => 'name' ]) !!}
                                 @if ($errors->has('small_name'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('small_name') }}</strong>
@@ -118,7 +115,7 @@
                         <div class="row">
                             <label class="col-md-2 control-label" for="shortDescription">توضیحات</label>
                             <div class="col-md-10">
-                                {!! Form::textarea('description', $set->description, ['class' => 'form-control', 'id' => 'productShortDescriptionSummerNote' ]) !!}
+                                {!! Form::textarea('description', null, ['class' => 'form-control', 'id' => 'productShortDescriptionSummerNote' ]) !!}
                                 @if ($errors->has('description'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('description') }}</strong>
@@ -134,7 +131,7 @@
                             <div class="col-md-9">
                                 <div class="fileinput fileinput-new" data-provides="fileinput">
                                     <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
-                                        <img src="{{ $set->photo }}" class="a--full-width" @if(strlen($set->name)>0) alt="{{$set->name}}" @else  alt="عکس محصول" @endif/>
+                                        <img src="" class="a--full-width" alt="عکس محصول"/>
                                     </div>
                                     <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
                                     <div>
@@ -154,77 +151,36 @@
                             </div>
                         </div>
                     </div>
-                    
+    
+    
                     <div class="form-group">
                         <div class="row">
                             <label class="col-md-2 control-label" for="tags">
                                 تگ ها :
                             </label>
                             <div class="col-md-9">
-                                <input name="tags" type="text" class="form-control input-large setTags" value="@if(isset($set->tags)){{ implode(',',$set->tags->tags) }}@endif" data-role="tagsinput">
+                                <input name="tags" type="text" class="form-control input-large setTags" value="" data-role="tagsinput">
                             </div>
                         </div>
                     </div>
-                    
-                    <div>
     
+    
+                    <div>
+        
                         <div class="m-divider m--margin-top-50">
                             <span></span>
-                            <span>افزودن محصول جدید به این دسته محتوا</span>
+                            <span>انتخاب محصول برای این دسته محتوا</span>
                             <span></span>
                         </div>
-    
+        
                         @include('admin.filters.productsFilter', [
                             "id" => "setProduct",
                             'everyProduct'=>false,
                             'title'=>'انتخاب محصول'
                         ])
-                        
-                        <div class="text-center m--margin-top-30">
-                            <button type="button" class="btn m-btn--pill m-btn--air btn-primary btnAttachProductToSet">
-                                افزودن
-                            </button>
-                        </div>
-                        
+    
                     </div>
                     
-                    <div>
-                        <div class="m-divider m--margin-top-50">
-                            <span></span>
-                            <span>محصولات این دسته محتوا</span>
-                            <span></span>
-                        </div>
-                        <table class="table table-striped table-bordered table-hover dt-responsive" id="productTable" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>ردیف</th>
-                                    <th>تصویر</th>
-                                    <th>نام</th>
-                                    <th>ویرایش</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($setProducts as $key=>$product)
-                                    <tr>
-                                        <td>{{ ($key+1) }}</td>
-                                        <td><img src="{{ $product->photo }}" alt="تصویر محصول {{ $product->name }}" width="100"></td>
-                                        <td>
-                                            <a href="{{ action('Web\ProductController@show', $product) }}" class="m-link" target="_blank">
-                                                {{ $product->name }}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a href="{{ action('Web\ProductController@edit', $product) }}" target="_blank">
-                                                <button type="button" class="btn m-btn--pill m-btn--air btn-warning">
-                                                    ویرایش
-                                                </button>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
             </div>
             <!-- END SAMPLE FORM PORTLET-->
@@ -281,11 +237,6 @@
             $('#productShortDescriptionSummerNote').summernote({height: 300});
 
             makeDataTable('productTable');
-
-            $(document).on('click', '.btnAttachProductToSet', function(){
-                let setProduct = $('#setProduct').val();
-                alert('ابتدا مقادیر سلکت شده به بک اند فرستاده می شوند سپس صفحه رفرش می شود.');
-            });
 
         });
     </script>

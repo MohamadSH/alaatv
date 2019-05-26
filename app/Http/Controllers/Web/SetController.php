@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Web;
 
 use App\Contentset;
+use App\Product;
+use App\Traits\ProductCommon;
 use App\Websitesetting;
 use App\Traits\MetaCommon;
 use Illuminate\Http\Request;
@@ -23,6 +25,7 @@ class SetController extends Controller
     |--------------------------------------------------------------------------
     */
     
+    use ProductCommon;
     use RequestCommon;
     use MetaCommon;
     
@@ -149,10 +152,22 @@ class SetController extends Controller
     }
 
     public function edit(Contentset $set) {
-//        dd($set);
-        return view('set.edit', compact('set'));
+        $setProducts = $set->products;
+        $products = $this->makeProductCollection();
+        return view('set.edit', compact('set', 'setProducts', 'products'));
     }
-
+    
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        $products = $this->makeProductCollection();
+        return view('set.create', compact('products'));
+    }
+    
     public function indexContent (\App\Http\Requests\Request $request, Contentset $set){
         $contents = $set->contents2->sortBy("order");
         return view('listTest',compact('set','contents'));
