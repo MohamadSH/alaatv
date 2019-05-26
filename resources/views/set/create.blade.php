@@ -1,6 +1,8 @@
 @permission((config('constants.SHOW_PRODUCT_ACCESS')))@extends('app',['pageName'=>'admin'])
 
 @section('page-css')
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
@@ -9,10 +11,16 @@
     <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css" rel="stylesheet" type="text/css"/>
     <style>
         .fileinput img {
             max-width: 100%;
             min-width: 100%;
+        }
+        
+        .multiselect-native-select, .mt-multiselect {
+            width: 100%;
         }
     </style>
 @endsection
@@ -40,12 +48,12 @@
     <div class="row">
         <div class="col-md-12">
             <!-- BEGIN SAMPLE FORM PORTLET-->
-            <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
+            <div class="m-portlet">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
-                                ثبت سته محتوا جدید
+                                ثبت سته محتوای جدید
                             </h3>
                         </div>
                     </div>
@@ -155,8 +163,23 @@
                             </div>
                         </div>
                     </div>
-                    
-                    
+    
+    
+                    <div>
+        
+                        <div class="m-divider m--margin-top-50">
+                            <span></span>
+                            <span>انتخاب محصول برای این دسته محتوا</span>
+                            <span></span>
+                        </div>
+        
+                        @include('admin.filters.productsFilter', [
+                            "id" => "setProduct",
+                            'everyProduct'=>false,
+                            'title'=>'انتخاب محصول'
+                        ])
+    
+                    </div>
                     
                 </div>
             </div>
@@ -168,6 +191,9 @@
 @endsection
 
 @section('page-js')
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
@@ -177,11 +203,14 @@
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
     <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
-    <script src="public/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js" type="text/javascript"></script>
     <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-bootstrap-multiselect.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/js/admin-makeDataTable.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type="text/javascript"></script>
     <script>
 
         $("input.setTags").tagsinput({
@@ -206,17 +235,11 @@
             });
 
             $('#productShortDescriptionSummerNote').summernote({height: 300});
-            $('#productLongDescriptionSummerNote').summernote({height: 300});
-            $('#productSpecialDescriptionSummerNote').summernote({height: 300});
 
+            makeDataTable('productTable');
 
-        });
-
-        $(document).on("change", "#productFileTypeSelect", function () {
-            var lastOrder = $("#lastProductFileOrder_" + $(this).val()).val();
-            $("#productFileOrder").val(lastOrder);
         });
     </script>
-    <script src="public/acm/AlaatvCustomFiles/js/admin-product.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/js/admin-product.js" type="text/javascript"></script>
 @endsection
 @endpermission

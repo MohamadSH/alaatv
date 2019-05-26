@@ -1,5 +1,4 @@
 @permission((config('constants.LIST_ORDER_ACCESS')))
-
 @extends('app',['pageName'=>$pageName])
 
 @section('page-css')
@@ -749,6 +748,7 @@
 
     <script src="/acm/AlaatvCustomFiles/js/admin-makeDataTable.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type="text/javascript"></script>
+    
     <script type="text/javascript">
         @permission((config('constants.LIST_ORDER_ACCESS')));
         function makeDataTable_loadWithAjax_orders(dontLoadAjax) {

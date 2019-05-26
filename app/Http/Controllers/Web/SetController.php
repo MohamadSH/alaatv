@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Web;
 
 use App\Contentset;
+use App\Product;
+use App\Traits\ProductCommon;
 use App\Websitesetting;
 use App\Traits\MetaCommon;
 use Illuminate\Http\Request;
@@ -23,6 +25,7 @@ class SetController extends Controller
     |--------------------------------------------------------------------------
     */
     
+    use ProductCommon;
     use RequestCommon;
     use MetaCommon;
     
@@ -149,7 +152,9 @@ class SetController extends Controller
     }
 
     public function edit(Contentset $set) {
-        return view('set.edit', compact('set'));
+        $setProducts = $set->products;
+        $products = $this->makeProductCollection();
+        return view('set.edit', compact('set', 'setProducts', 'products'));
     }
     
     /**
@@ -159,7 +164,8 @@ class SetController extends Controller
      */
     public function create()
     {
-        return view('set.create');
+        $products = $this->makeProductCollection();
+        return view('set.create', compact('products'));
     }
     
     public function indexContent (\App\Http\Requests\Request $request, Contentset $set){
