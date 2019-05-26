@@ -20,8 +20,19 @@ class FirebasetokenController extends Controller
      *
      * @return \Illuminate\Contracts\Routing\ResponseFactory|Response
      */
-    public function store(InsertFireBaseTokenRequest $request, User $user = null)
+    public function store(InsertFireBaseTokenRequest $request, User $user )
     {
+        $token = $request->get('token');
+        $tokens = Firebasetoken::where('token' , $token)->where('user_id' , $user->id)->get();
+        if($tokens->isNotEmpty())
+        {
+            $responseContent = [
+                'message' => 'Token saved successfully',
+            ];
+            return response($responseContent, Response::HTTP_OK);
+        }
+
+
         $fireBaseToken = new Firebasetoken();
         $fireBaseToken->fill($request->all());
         $fireBaseToken->user_id = $user->id;
