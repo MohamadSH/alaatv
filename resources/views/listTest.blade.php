@@ -14,19 +14,23 @@
             
             <div class="m-portlet m-portlet--tabs productDetailes">
                 <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="flaticon-list-2"></i>
+                            </span>
+                            <h3 class="m-portlet__head-text">
+                                تعداد فیلم های درج شده {{ $contents->count() }}
+                            </h3>
+                        </div>
+                    </div>
                     <div class="m-portlet__head-tools">
-                        <ul class="nav nav-tabs m-tabs m-tabs-line m-tabs-line--brand  m-tabs-line--right m-tabs-line-danger" role="tablist">
-                            <li class="nav-item m-tabs__item">
-                                <a class="nav-link m-tabs__link active show" data-toggle="tab" href="#productInformation" role="tab" aria-selected="true">
-                                    <i class="flaticon-information"></i>
-                                    <h5>
-                                        تعداد فیلم های درج شده {{ $contents->count() }}
-                                    </h5>
-                                </a>
-                            </li>
-                        </ul>
+                        <a href="{{ action('Web\ContentController@create2', ['set'=>$set->id]) }}">
+                            <button type="button" class="btn m-btn--pill m-btn--air btn-primary">افزودن محتوا</button>
+                        </a>
                     </div>
                 </div>
+                
                 <div class="m-portlet__body">
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover">
