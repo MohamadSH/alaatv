@@ -149,10 +149,19 @@ class SetController extends Controller
     }
 
     public function edit(Contentset $set) {
-//        dd($set);
         return view('set.edit', compact('set'));
     }
-
+    
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        return view('set.create');
+    }
+    
     public function indexContent (\App\Http\Requests\Request $request, Contentset $set){
         $contents = $set->contents2->sortBy("order");
         return view('listTest',compact('set','contents'));
