@@ -306,8 +306,17 @@ class ProductController extends Controller
             return $this->response->setStatusCode(Response::HTTP_OK)
                 ->setContent($product);
         }
-        
-        return view('product.show', compact('product'));
+
+        $block = $product->block
+                        ->loadMissing([
+                            'contents',
+                            'sets',
+                            'products',
+                            'banners',
+                        ]);
+
+
+        return view('product.show', compact('product' , 'block'));
     }
     
     public function edit(Product $product)
