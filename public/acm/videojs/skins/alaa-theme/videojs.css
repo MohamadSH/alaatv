@@ -2794,10 +2794,11 @@ clearfix::before {
 .a--nuevo-alaa-theme.a--media-parent {
     width: 100%;
     position: relative;
-    padding-top: 56.25%;
+    padding-top: 56.25% !important;
     height: auto;
     margin-top: 15px;
 }
+
 .a--nuevo-alaa-theme.a--media-parent .a--video-wraper {
     position: absolute;
     top: 0;

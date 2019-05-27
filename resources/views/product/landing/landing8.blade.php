@@ -35,16 +35,7 @@
         .m-portlet.m-portlet--creative.m-portlet--first {
             border: solid 1px #aeaeae4d;
         }
-
-
-
-
-
-        .a--imageWithCaption {
-            cursor: pointer;
-            overflow: hidden;
-            position: relative;
-        }
+        
     </style>
 @endsection
 @section('content')

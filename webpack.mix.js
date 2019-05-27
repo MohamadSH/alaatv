@@ -167,6 +167,14 @@ mix.styles(
     'public/css/user-orders.css'
 ).version();
 
+
+mix.styles(
+    [
+        'public/acm/AlaatvCustomFiles/css/page-contactUs.css',
+    ],
+    'public/css/page-contactUs.css'
+).version();
+
 mix.styles(
     [
         'node_modules/lightgallery/src/css/lightgallery.css',
@@ -342,6 +350,7 @@ mix.styles(
 
 mix.styles(
     [
+        'public/acm/AlaatvCustomFiles/css/certificates.css',
         'public/acm/AlaatvCustomFiles/css/page-dashboard1.css',
     ],
     'public/css/page-dashboard1.css'

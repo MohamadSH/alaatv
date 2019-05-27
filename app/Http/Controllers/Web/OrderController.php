@@ -22,6 +22,10 @@ use App\Traits\MetaCommon;
 use App\Transactionstatus;
 use App\Transactiongateway;
 use App\Ordermanagercomment;
+use Exception;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
@@ -571,22 +575,24 @@ class OrderController extends Controller
         $products = $this->makeProductCollection();
 
         $transactionGateways = TransactionGatewayRepo::getTransactionGateways(['enable'=>1])->pluck('displayName' , 'id');
-
+    
+        $totalTransactions = $order->transactions;
+        
         return view('order.edit',
             compact('order', 'orderstatuses', 'paymentstatuses', 'coupons', 'orderTransactions', 'transactionstatuses',
                 'productBon',
                 'transactionPaymentmethods', 'transactionStatuses', 'products', 'orderArchivedTransactions',
-                'offlineTransactionPaymentMethods' , 'transactionGateways'));
+                'offlineTransactionPaymentMethods' , 'transactionGateways', 'totalTransactions'));
     }
     
     /**
      * Update the specified resource in storage.
      *
      * @param  \app\Http\Requests\EditOrderRequest  $request
-     * @param  \App\Order                           $order
+     * @param  Order                                $order
      *
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @return Response
+     * @throws FileNotFoundException
      */
     public function update(EditOrderRequest $request, Order $order)
     {
@@ -757,7 +763,7 @@ class OrderController extends Controller
      *
      * @param
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function checkoutAuth()
     {
@@ -773,7 +779,7 @@ class OrderController extends Controller
      *
      * @param
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function checkoutCompleteInfo()
     {
@@ -810,8 +816,8 @@ class OrderController extends Controller
      *
      * @param  AlaaInvoiceGenerator   $invoiceGenerator
      *
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
+     * @return Response
+     * @throws Exception
      */
     public function checkoutReview(CheckoutReviewRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
@@ -905,7 +911,7 @@ class OrderController extends Controller
      *
      * @param  Request  $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function checkoutInvoice(Request $request)
     {
@@ -951,8 +957,8 @@ class OrderController extends Controller
      *
      * @param  AlaaInvoiceGenerator  $invoiceGenerator
      *
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
+     * @return Response
+     * @throws Exception
      */
     public function checkoutPayment(Request $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
@@ -1030,8 +1036,8 @@ class OrderController extends Controller
     /**
      * Makes a copy from an order
      *
-     * @param  Order                     $order
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Order    $order
+     * @param  Request  $request
      *
      * @return Response
      */
@@ -1103,12 +1109,12 @@ class OrderController extends Controller
     /**
      * Submits a coupon for the order
      *
-     * @param  \App\Http\Requests\SubmitCouponRequest  $request
+     * @param  SubmitCouponRequest   $request
      *
-     * @param  AlaaInvoiceGenerator                    $invoiceGenerator
+     * @param  AlaaInvoiceGenerator  $invoiceGenerator
      *
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
+     * @return Response
+     * @throws Exception
      */
     public function submitCoupon(SubmitCouponRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
@@ -1251,8 +1257,8 @@ class OrderController extends Controller
      *
      * @param  AlaaInvoiceGenerator  $invoiceGenerator
      *
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
+     * @return Response
+     * @throws Exception
      */
     public function removeCoupon(Request $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
@@ -1325,7 +1331,7 @@ class OrderController extends Controller
             if (isset($orderproduct)) {
                 try {
                     $orderproductController->destroy($orderproduct);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     return response()->json([
                         'error' => $e->getMessage(),
                         'line'  => $e->getLine(),
@@ -1375,7 +1381,7 @@ class OrderController extends Controller
     /**
      * Detach orderproducts from their order
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      *
      * @return Response
      */
@@ -1478,7 +1484,7 @@ class OrderController extends Controller
                         $newTransaction->order_id              = $newOrder->id;
                         $newTransaction->save();
                         
-                        $newTransaction2                            = new \App\Transaction();
+                        $newTransaction2                            = new Transaction();
                         $newTransaction2->cost                      = $transaction->cost - $newCost;
                         $newTransaction2->destinationBankAccount_id = $transaction->destinationBankAccount_id;
                         $newTransaction2->paymentmethod_id          = $transaction->paymentmethod_id;
@@ -1557,11 +1563,11 @@ class OrderController extends Controller
     /**
      * Exchange some order products
      *
-     * @param  Order                     $order
-     * @param  \Illuminate\Http\Request  $request
-     * @param  TransactionController     $transactionController
+     * @param  Order                  $order
+     * @param  Request                $request
+     * @param  TransactionController  $transactionController
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function exchangeOrderproduct(Order $order, Request $request, TransactionController $transactionController)
     {
@@ -1676,7 +1682,7 @@ class OrderController extends Controller
      * @param  Product                 $product
      * @param  OrderproductController  $orderproductController
      *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|Response
+     * @return ResponseFactory|Response
      */
     public function addOrderproduct(Request $request, Product $product, OrderproductController $orderproductController)
     {
@@ -1741,7 +1747,7 @@ class OrderController extends Controller
             }
             
             return response($response, Response::HTTP_OK);
-        } catch (\Exception    $e) {
+        } catch (Exception    $e) {
             return response()->json([
                 'error' => $e->getMessage(),
                 'line'  => $e->getLine(),
