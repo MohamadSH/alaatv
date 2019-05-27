@@ -139,6 +139,7 @@ use App\Traits\{ProductCommon,
  * @property-read mixed                                                          $redirect_url
  * @property-read \App\Collection\SetCollection|\App\Contentset[]                $sets
  * @property-read mixed                                                          $cache_cooldown_seconds
+ * @property mixed block
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product main()
  */
 class Product extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
@@ -760,6 +761,11 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function coupons()
     {
         return $this->belongsToMany(Coupon::class);
+    }
+
+    public function block()
+    {
+        return $this->belongsTo(Block::class);
     }
     
     /*
