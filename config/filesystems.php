@@ -150,7 +150,7 @@ return [
             'username'   => env('SFTP_USERNAME', ''),
             'password'   => env('SFTP_PASSSWORD', ''),
             'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root'       => "/alaa_media/dl/",
+            'root'       => '/alaa_media/dl/',
             'timeout'    => env('SFTP_TIMEOUT', '10'),
             'prefix'     => null,
             'dHost'      => "paid.sanatisharif.ir",
@@ -216,11 +216,11 @@ return [
             'username'   => env('SFTP_USERNAME', ''),
             'password'   => env('SFTP_PASSSWORD', ''),
             'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root'       => env('SFTP_ROOT', ''),
+            'root'       => '/alaa_media/dl/',
             'timeout'    => env('SFTP_TIMEOUT', '10'),
 
-            'dHost'     => "dl.takhtekhak.com/",
-            'dProtocol' => "https://",
+            'dHost'     => 'paid.sanatisharif.ir',
+            'dProtocol' => 'https://',
             'prefix'    => '/public/c/pamphlet/',
 
         ],
