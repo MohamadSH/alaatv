@@ -33,7 +33,10 @@ class AlterTableProductsAddBlockid extends Migration
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('block_id');
+            if (Schema::hasColumn('products', 'block_id')) {
+                $table->dropForeign('products_block_id_foreign');
+                $table->dropColumn('block_id');
+            }
         });
     }
 }
