@@ -55,11 +55,6 @@ class UserController extends Controller
         
         if ($user->update()) {
             
-            //ToDo : place in UserObserver
-            if ($request->has('roles')) {
-                $this->attachRoles($request->get('roles'), $authenticatedUser, $user);
-            }
-            
             $message = 'User profile updated successfully';
             $status  = Response::HTTP_OK;
         }

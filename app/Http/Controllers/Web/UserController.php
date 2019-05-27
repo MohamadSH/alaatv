@@ -849,8 +849,9 @@ class UserController extends Controller
             $user->lockHisProfile();
         }
         
-        if (in_array("roles", $data)) {
-            $this->attachRoles($data["roles"], $authenticatedUser, $user);
+        if (in_array("roles", $data) && $authenticatedUser->can(config('constants.INSET_USER_ROLE')))
+        {
+            $this->syncRoles($data["roles"], $user);
         }
         
         $resultText = 'User save successfully';
@@ -2091,10 +2092,9 @@ class UserController extends Controller
         }
         
         if ($user->update()) {
-            
-            //ToDo : place in UserObserver
-            if ($request->has('roles')) {
-                $this->attachRoles($request->get('roles'), $authenticatedUser, $user);
+
+            if ($request->has('roles') && $authenticatedUser->can(config('constants.INSET_USER_ROLE'))) {
+                $this->syncRoles($request->get('roles'), $user);
             }
             
             $message = 'اطلاعات با موفقیت اصلاح شد';
