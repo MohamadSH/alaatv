@@ -1151,7 +1151,7 @@ class ProductController extends Controller
     {
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags('از پایه تا کنکور با آلاء',
-            'از پایه تا کنکور با همایش های دانلودی آلا<', $url,
+            'از پایه تا کنکور با همایش های دانلودی آلا', $url,
             $url, route('image', [
                 'category' => '11',
                 'w'        => '100',
