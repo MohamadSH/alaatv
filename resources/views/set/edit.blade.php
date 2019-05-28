@@ -48,16 +48,19 @@
     <div class="row">
         <div class="col-md-12">
             <!-- BEGIN SAMPLE FORM PORTLET-->
+            {!! Form::open(['files'=>true,'method'=>'PUT' , 'action'=>['Web\SetController@update' , $set] ]) !!}
             <div class="m-portlet">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
                                 اصلاح اطلاعات
-                                <a class="m-link" href="{{action("Web\SetController@show" , $set)}}">{{$set->name}}</a>
+                                <a class="m-link" href="{{action("Web\SetController@indexContent" , $set)}}">{{$set->name}}</a>
                                  (تعداد محتوا: {{ $set->contents_count }})
                                 
                             </h3>
+
+                            <input class="btn btn-primary" type="submit" value="اصلاح">
                         </div>
                     </div>
                 </div>
@@ -69,7 +72,7 @@
                                 <div class="mt-checkbox-list">
                                     <label class="mt-checkbox mt-checkbox-outline">
                                         فعال
-                                        <input type="checkbox" value="1" name="isFree" @if($set->enable) checked @endif />
+                                        <input type="checkbox" value="1" name="enable" @if($set->enable) checked @endif />
                                         <span></span>
                                     </label>
                                 </div>
@@ -78,7 +81,7 @@
                                 <div class="mt-checkbox-list">
                                     <label class="mt-checkbox mt-checkbox-outline">
                                         قابل نمایش برای کاربران
-                                        <input type="checkbox" value="1" name="isFree" @if($set->display) checked @endif />
+                                        <input type="checkbox" value="1" name="display" @if($set->display) checked @endif />
                                         <span></span>
                                     </label>
                                 </div>
@@ -128,7 +131,7 @@
                         </div>
                     </div>
     
-                    <div class="form-group {{ $errors->has('image') ? ' has-error' : '' }}">
+                    <div class="form-group {{ $errors->has('photo') ? ' has-error' : '' }}">
                         <div class="row">
                             <label class="control-label col-md-3">عکس</label>
                             <div class="col-md-9">
@@ -141,14 +144,14 @@
                                         <span class="btn m-btn--pill m-btn--air btn-warning default btn-file">
                                             <span class="fileinput-new"> تغییر عکس </span>
                                             <span class="fileinput-exists"> تغییر </span>
-                                            <input type="file" name="image">
+                                            <input type="file" name="photo">
                                         </span>
                                         <a href="javascript:" class="btn m-btn--pill m-btn--air btn-danger fileinput-exists" data-dismiss="fileinput"> حذف</a>
                                     </div>
                                 </div>
-                                @if ($errors->has('image'))
+                                @if ($errors->has('photo'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('image') }}</strong>
+                                        <strong>{{ $errors->first('photo') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -179,12 +182,6 @@
                             'everyProduct'=>false,
                             'title'=>'انتخاب محصول'
                         ])
-                        
-                        <div class="text-center m--margin-top-30">
-                            <button type="button" class="btn m-btn--pill m-btn--air btn-primary btnAttachProductToSet">
-                                افزودن
-                            </button>
-                        </div>
                         
                     </div>
                     
@@ -227,6 +224,7 @@
                     </div>
                 </div>
             </div>
+            {!! Form::close() !!}
             <!-- END SAMPLE FORM PORTLET-->
         </div>
 
