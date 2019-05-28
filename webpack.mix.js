@@ -136,6 +136,13 @@ mix.babel(
 
 mix.babel(
     [
+        'node_modules/highcharts/highcharts.js'
+    ],
+    'public/js/user-profile-salesReport.js'
+).version();
+
+mix.babel(
+    [
         'node_modules/persian-date/dist/persian-date.js',
         'public/acm/AlaatvCustomFiles/js/page-user-orders.js'
     ],
@@ -158,6 +165,13 @@ mix.styles(
         'public/acm/AlaatvCustomFiles/css/page-user-profile.css',
     ],
     'public/css/user-profile.css'
+).version();
+
+mix.styles(
+    [
+        'node_modules/highcharts/css/highcharts.css',
+    ],
+    'public/css/user-profile-salesReport.css'
 ).version();
 
 mix.styles(
