@@ -307,13 +307,7 @@ class ProductController extends Controller
                 ->setContent($product);
         }
 
-        $block = $product->block
-                        ->loadMissing([
-                            'contents',
-                            'sets',
-                            'products',
-                            'banners',
-                        ]);
+        $block = optional($product)->block;
 
 
         return view('product.show', compact('product' , 'block'));
