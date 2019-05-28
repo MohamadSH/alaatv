@@ -36,12 +36,11 @@ class ProductSearch extends SearchAbstract
         $this->pageNum = $this->setPageNum($filters);
 //        dd($this->pageNum);
         $key = $this->makeCacheKey($filters);
-        
+
         return Cache::tags([
             'product',
             'search',
-        ])
-            ->remember($key, $this->cacheTime, function () use ($filters) {
+        ])->remember($key, $this->cacheTime, function () use ($filters) {
                 $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
 
 //                        dd($this->getResults($query));
@@ -56,9 +55,10 @@ class ProductSearch extends SearchAbstract
      */
     protected function getResults(Builder $query)
     {
-        $result = $query//            Conflict with admin panel
-        ->active()
-            ->doesntHave('parents')
+        $result = $query
+//            Conflict with admin panel
+            ->active()
+            ->whereNull('grand_id')
             ->whereNull('deleted_at')
             ->orderBy("created_at", "desc")
             ->paginate($this->numberOfItemInEachPage, ['*'],

@@ -232,20 +232,13 @@ trait UserCommon
      * @param  User   $staffUser
      * @param  User   $user
      */
-    protected function attachRoles(array $newRoleIds, User $staffUser, User $user): void
+    protected function syncRoles(array $newRoleIds, User $user): void
     {
-        if ($staffUser->can(config('constants.INSET_USER_ROLE'))) {
-            $oldRolesIds = $user->roles->pluck("id")
-                ->toArray();
-            $totalRoles  = array_merge($oldRolesIds, $newRoleIds);
-            /** snippet for checking system roles idea */
-            /*$this->checkGivenRoles($totalRoles, $staffUser);
-            if (!empty($newRoleIds)) {
-                $user->roles()
-                     ->sync($newRoleIds);
-            }*/
-            $user->roles()
-                ->attach($totalRoles);
+        $oldRolesIds = $user->roles->pluck("id")->toArray();
+        if(!empty($oldRolesIds))
+        {
+            $user->roles()->detach($oldRolesIds);
         }
+        $user->roles()->attach($newRoleIds);
     }
 }

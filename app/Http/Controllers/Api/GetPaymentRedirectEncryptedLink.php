@@ -19,7 +19,7 @@ class GetPaymentRedirectEncryptedLink extends Controller
      */
     public function __invoke(Request $request)
     {
-        $paymentMethod = $request->get('paymentMethod', 'zarinpal');
+        $paymentMethod = $request->get('paymentMethod', 'mellat');
         $device        = $request->get('device', 'android');
         $orderId       = $request->get('order_id');
         $user          = $request->user();

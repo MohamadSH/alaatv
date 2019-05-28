@@ -84,7 +84,7 @@ class PaymentVerifierController extends Controller
      *
      * @return array
      */
-    private function handleOrderCanceledPayment(Order $order)
+    private function handleOrderCanceledPayment(Order $order):void
     {
         if ($order->orderstatus_id == config("constants.ORDER_STATUS_OPEN")) {
             $order->close(config('constants.PAYMENT_STATUS_UNPAID'), config('constants.ORDER_STATUS_CANCELED'));

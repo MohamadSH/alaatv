@@ -263,7 +263,7 @@ class OrderproductController extends Controller
     
     public function edit($orderproduct)
     {
-//        $products                = $this->makeProductCollection();
+        $products                = $this->makeProductCollection();
         $extraSelectCollection   = collect();
         $extraCheckboxCollection = collect();
         $attributeSet            = $orderproduct->product->attributeset;

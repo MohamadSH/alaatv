@@ -104,6 +104,7 @@ class OrderproductCollection extends Collection
      */
     public function reCheckOrderproducs(): void
     {
+        /** @var Orderproduct $orderproduct */
         foreach ($this as $orderproduct) {
             if (!$orderproduct->isPurchasable()) {
                 $orderproduct->delete();
