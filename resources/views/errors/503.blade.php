@@ -1,53 +1,3 @@
-{{--<!DOCTYPE html>--}}
-{{--<html>--}}
-{{--<head>--}}
-{{--    <title>Be right back.</title>--}}
-{{--    <link href = "/acm/extra/fonts/IRANSans/css/fontiran.css" rel = "stylesheet" type = "text/css"/>--}}
-{{--    <link href = "/acm/extra/fonts/IRANSans/css/style.css" rel = "stylesheet" type = "text/css"/>--}}
-{{--    --}}{{--<link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">--}}
-
-{{--    <style>--}}
-{{--        html, body {--}}
-{{--            height: 100%;--}}
-{{--        }--}}
-
-{{--        body {--}}
-{{--            margin: 0;--}}
-{{--            padding: 0;--}}
-{{--            width: 100%;--}}
-{{--            color: #B0BEC5;--}}
-{{--            display: table;--}}
-{{--            font-weight: 100;--}}
-{{--            font-family: 'Lato', sans-serif;--}}
-{{--        }--}}
-
-{{--        .container {--}}
-{{--            text-align: center;--}}
-{{--            display: table-cell;--}}
-{{--            vertical-align: middle;--}}
-{{--        }--}}
-
-{{--        .content {--}}
-{{--            text-align: center;--}}
-{{--            display: inline-block;--}}
-{{--        }--}}
-
-{{--        .title {--}}
-{{--            font-size: 72px;--}}
-{{--            margin-bottom: 40px;--}}
-{{--        }--}}
-{{--    </style>--}}
-{{--</head>--}}
-{{--<body>--}}
-{{--<div class = "container">--}}
-{{--    <div class = "content">--}}
-{{--        <div class = "title" dir = "rtl">سایت در حال بروز رسانی می باشد . از شکیبایی شما متشکریم!</div>--}}
-{{--    </div>--}}
-{{--</div>--}}
-{{--</body>--}}
-{{--</html>--}}
-
-
 <!DOCTYPE html>
 <html lang="fa" direction="rtl" style="direction: rtl">
     <!-- begin::Head -->
@@ -65,11 +15,30 @@
             }
             body {
                 font-family: IRANSans;
-                display: flex;
                 justify-content: center;
-                align-items: center;
+                align-items: stretch;
                 background: #4dbbe9;
                 color: white;
+                flex-wrap: wrap;
+            }
+            body, .img, .message {
+                display: flex;
+            }
+            .message {
+                padding: 10px;
+            }
+            .img {
+                align-items: center;
+            }
+            .img img {
+                max-width: 100%;
+                min-width: 100%;
+                height: auto;
+             }
+            @media only screen and (min-width: 893px)  {
+                .message {
+                    align-items: flex-start;
+                }
             }
         </style>
     </head>
@@ -82,12 +51,15 @@
             <img src="{{ asset('/acm/extra/wesite-under-Construction.png') }}" alt="wesite-under-Construction" >
         </div>
         <div class="message">
-            <h1 class="m-error_description m--font-light">
-                سایت در حال بروز رسانی می باشد.
-            </h1>
-            <h3>
-                از شکیبایی شما متشکریم!
-            </h3>
+            <div>
+                <h1 class="m-error_description m--font-light">
+                    سایت در حال بروز رسانی می باشد.
+                </h1>
+                <br>
+                <h3>
+                    از شکیبایی شما متشکریم!
+                </h3>
+            </div>
         </div>
         <!-- end:: Page -->
     </body>
