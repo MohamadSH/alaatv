@@ -70,8 +70,8 @@ class Contentset extends BaseModel implements Taggable
      */
     protected $fillable = [
         'name',
+        'small_name',
         'description',
-        'tags',
         'photo',
         'enable',
         'display',

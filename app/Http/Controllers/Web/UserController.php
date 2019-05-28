@@ -2115,7 +2115,7 @@ class UserController extends Controller
         
         if ($user->update()) {
 
-            if ($request->has('roles') && $authenticatedUser->can(config('constants.INSET_USER_ROLE'))) {
+            if ($authenticatedUser->can(config('constants.INSET_USER_ROLE'))) {
                 $this->syncRoles($request->get('roles'), $user);
             }
             

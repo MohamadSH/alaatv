@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Web;
 
 use App\Contentset;
-use App\Product;
 use App\Traits\ProductCommon;
 use App\Websitesetting;
 use App\Traits\MetaCommon;
@@ -16,6 +15,7 @@ use App\Classes\Search\ContentsetSearch;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Requests\ContentsetIndexRequest;
 use App\Http\Requests\InsertContentsetRequest;
+use Illuminate\Support\Arr;
 
 class SetController extends Controller
 {
@@ -34,13 +34,11 @@ class SetController extends Controller
     | Properties
     |--------------------------------------------------------------------------
     */
-    protected $response;
     
     protected $setting;
     
-    public function __construct(Response $response, Websitesetting $setting)
+    public function __construct(Websitesetting $setting)
     {
-        $this->response = $response;
         $this->setting  = $setting->setting;
         $authException  = $this->getAuthExceptionArray();
         $this->callMiddlewares($authException);
@@ -65,6 +63,37 @@ class SetController extends Controller
     private function callMiddlewares($authException): void
     {
         $this->middleware('auth', ['except' => $authException]);
+        $this->middleware('permission:'.config('constants.REMOVE_CONTENT_SET_ACCESS'), [
+            'only' => [
+                'destroy',
+            ],
+        ]);
+        $this->middleware('permission:'.config('constants.EDIT_CONTENT_SET_ACCESS'), [
+            'only' => [
+                'update',
+            ],
+        ]);
+
+        $this->middleware('permission:'.config('constants.INSERT_CONTENT_SET_ACCESS'), [
+            'only' => [
+                'store',
+            ],
+        ]);
+
+        $this->middleware('permission:'.config('constants.LIST_CONTENT_SET_ACCESS'), [
+            'only' => [
+//                'index',
+            ],
+        ]);
+
+        $this->middleware('permission:'.config('constants.SHOW_CONTENT_SET_ACCESS'), [
+            'only' => [
+                'edit',
+//                'show',
+            ],
+        ]);
+
+
     }
     
     /**
@@ -109,35 +138,63 @@ class SetController extends Controller
     public function store(InsertContentsetRequest $request)
     {
         $contentSet = new Contentset();
-        $this->fillContentFromRequest($request, $contentSet);
-        
+        $this->fillContentFromRequest($request->all(), $contentSet);
+
         if ($contentSet->save()) {
-            return $this->response->setStatusCode(Response::HTTP_OK);
+            
+            if($request->has('products'))
+            {
+                $this->syncProducts($request->get('products') , $contentSet);
+            }
+            
+            session()->put('success' , 'دسته با موفقیت درج شد');
+            return redirect()->back();
         }
         else {
-            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
+            session()->put('error' , 'خطای پایگاه داده');
+            return redirect()->back();
         }
     }
-    
+
+    public function update(Request $request , Contentset $contentSet)
+    {
+        $this->fillContentFromRequest($request->all(), $contentSet);
+
+        if ($contentSet->update()) {
+
+            $this->syncProducts($request->get('products') , $contentSet);
+
+            session()->put('success' , 'دسته با موفقیت اصلاح شد');
+            return redirect()->back();
+        }
+        else {
+            session()->put('error' , 'خطای پایگاه داده');
+            return redirect()->back();
+        }
+    }
+
     /**
-     * @param  FormRequest  $request
+     * @param  FormRequest  $inputData
      * @param  Contentset   $contentset
      *
      * @return void
      */
-    private function fillContentFromRequest(FormRequest $request, Contentset $contentset): void
+    private function fillContentFromRequest(array $inputData, Contentset $contentset): void
     {
-        $inputData = $request->all();
-        $enabled   = $request->has("enable");
-        $display   = $request->has("display");
-        
+        $enabled   = Arr::has($inputData,'enable');
+        $display   = Arr::has($inputData,'display');
+        $tagString  = Arr::get($inputData , 'tags');
+
         $contentset->fill($inputData);
-        if ($request->has("id")) {
-            $contentset->id = $request->id;
-        }
-        
+        $contentset->tags       = convertTagStringToArray($tagString);
+
         $contentset->enable  = $enabled ? 1 : 0;
         $contentset->display = $display ? 1 : 0;
+
+        if(Arr::has($inputData , 'photo'))
+        {
+            $this->storePhotoOfSet($contentset , Arr::get($inputData , 'photo'));
+        }
     }
 
     public function show(Request $request, Contentset $set)
@@ -169,7 +226,19 @@ class SetController extends Controller
     }
     
     public function indexContent (\App\Http\Requests\Request $request, Contentset $set){
-        $contents = $set->contents2->sortBy("order");
+        $contents = $set->contents2->sortBy('order');
         return view('listTest',compact('set','contents'));
+    }
+    
+    private function syncProducts(array $products , Contentset $contentset){
+        $contentset->products()->sync($products);
+    }
+
+    private function storePhotoOfSet(Contentset $contentSet, $file): void
+    {
+        $serverUrl = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.DOWNLOAD_SERVER_NAME');
+        $partialPath = '/upload/contentset/lesson/';
+
+        $contentSet->photo = $serverUrl.$partialPath.$file->getClientOriginalName();
     }
 }
