@@ -136,7 +136,10 @@ mix.babel(
 
 mix.babel(
     [
-        'node_modules/highcharts/highcharts.js'
+        'node_modules/highcharts/highcharts.js',
+        'node_modules/highcharts/modules/map.js',
+        'node_modules/highcharts/modules/networkgraph.js',
+        'public/acm/AlaatvCustomFiles/js/iran.geo-map.js'
     ],
     'public/js/user-profile-salesReport.js'
 ).version();
