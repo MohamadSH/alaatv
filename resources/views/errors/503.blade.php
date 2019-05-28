@@ -25,6 +25,7 @@
                 display: flex;
             }
             .message {
+                align-items: center;
                 padding: 10px;
             }
             .img {
@@ -35,7 +36,7 @@
                 min-width: 100%;
                 height: auto;
              }
-            @media only screen and (min-width: 893px)  {
+            @media only screen and (max-width: 893px)  {
                 .message {
                     align-items: flex-start;
                 }
