@@ -490,49 +490,51 @@
             {!! $product->specialDescription !!}
         </div>
     @endif
-    <div class="row">
-        <div class="col">
-
-            <div class="m-portlet m-portlet--tabs productDetailes">
-                <div class="m-portlet__head">
-                    <div class="m-portlet__head-tools">
-                        <ul class="nav nav-tabs m-tabs m-tabs-line m-tabs-line--brand  m-tabs-line--right m-tabs-line-danger" role="tablist">
-                            <li class="nav-item m-tabs__item">
-                                <a class="nav-link m-tabs__link active show" data-toggle="tab" href="#productInformation" role="tab" aria-selected="true">
-                                    <i class="flaticon-information"></i>
-                                    <h5>بررسی محصول {{ $product->name }}</h5>
-                                </a>
-                            </li>
-                        </ul>
+    
+    @if(mb_strlen(trim(strip_tags($product->shortDescription))) > 0 || mb_strlen(trim(strip_tags($product->longDescription))) > 0)
+        <div class="row">
+            <div class="col">
+                <div class="m-portlet m-portlet--tabs productDetailes">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-tools">
+                            <ul class="nav nav-tabs m-tabs m-tabs-line m-tabs-line--brand  m-tabs-line--right m-tabs-line-danger" role="tablist">
+                                <li class="nav-item m-tabs__item">
+                                    <a class="nav-link m-tabs__link active show" data-toggle="tab" href="#productInformation" role="tab" aria-selected="true">
+                                        <i class="flaticon-information"></i>
+                                        <h5>بررسی محصول {{ $product->name }}</h5>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <button class="btn m-btn--pill m-btn--air btn-primary btn-lg m-btn--icon btnAddToCart">
+                                    <span>
+                                        <i class="flaticon-bag"></i>
+                                        <i class="fas fa-sync-alt fa-spin m--hide"></i>
+                                        <span>افزودن به سبد خرید</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="m-portlet__head-caption">
-                        <div class="m-portlet__head-title">
-                            <button class="btn m-btn--pill m-btn--air btn-primary btn-lg m-btn--icon btnAddToCart">
-                                <span>
-                                    <i class="flaticon-bag"></i>
-                                    <i class="fas fa-sync-alt fa-spin m--hide"></i>
-                                    <span>افزودن به سبد خرید</span>
-                                </span>
-                            </button>
+                    <div class="m-portlet__body">
+                        <div class="tab-content">
+                            <div class="tab-pane active show" id="productInformation">
+                                {!! $product->shortDescription !!}
+                                @if( isset($product->longDescription) && strlen($product->longDescription) > 0 )
+                                    <div>
+                                        {!! $product->longDescription !!}
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="m-portlet__body">
-                    <div class="tab-content">
-                        <div class="tab-pane active show" id="productInformation">
-                            {!! $product->shortDescription !!}
-                            @if( isset($product->longDescription) && strlen($product->longDescription) > 0 )
-                                <div>
-                                    {!! $product->longDescription !!}
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
+    
             </div>
-
         </div>
-    </div>
+    @endif
 @endsection
 
 @section('page-js')
