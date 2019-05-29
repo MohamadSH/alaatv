@@ -732,10 +732,10 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      *
      * @return void
      */
-//    public function setThumbnailAttribute(Collection $input = null)
-//    {
-//        $this->attributes['thumbnail'] = optional($input)->toJson(JSON_UNESCAPED_UNICODE);
-//    }
+    public function setIntroVideoAttribute(Collection $input = null)
+    {
+        $this->attributes['introVideo'] = optional($input)->toJson(JSON_UNESCAPED_UNICODE);
+    }
 
 
     public function producttype()
