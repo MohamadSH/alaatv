@@ -101,56 +101,6 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        $transactionIds = [
-//            476186, anjam shod
-            484022,
-            481764,
-            484528,
-            474562,
-            490774,
-            473082,
-            480766,
-            473520,
-            486676,
-            482542,
-            478846,
-            482550,
-//            484104, anjan shod
-            487270,
-            487358,
-            487464,
-            490540,
-            490648,
-//            492476 , anjan shod
-        ];
-
-        $transactions = \App\Transaction::whereIn('id' , $transactionIds)->get();
-        $orderproductCounter = 0;
-        foreach ($transactions as $transaction){
-            /** @var \App\Order $order */
-            $order = $transaction->order;
-            $walletTransactions = $order->transactions()
-                                        ->where('paymentmethod_id' , config('constants.PAYMENT_METHOD_WALLET'))
-                                        ->whereIn('transactionstatus_id' , [config('constants.TRANSACTION_STATUS_SUCCESSFUL') , config('constants.TRANSACTION_STATUS_SUSPENDED')] )
-                                        ->get();
-
-            if($walletTransactions->isNotEmpty()){
-                dump('the order of this transaction has wallet transactions: '. $transaction->id);
-                continue;
-            }
-
-            $orderproduct = \App\Orderproduct::Create([
-                'order_id'   => $order->id,
-                'product_id' => 328,
-                'cost'  =>  $transaction->cost,
-                'orderproducttype_id'   => config('constants.ORDER_PRODUCT_TYPE_DEFAULT'),
-            ]);
-
-            dump('created orderproduct: '.$orderproduct->id);
-            $orderproductCounter++;
-        }
-
-        dd('Done!');
         return (array) optional($request->user('alaatv'))->id;
     }
     
