@@ -45,127 +45,129 @@
 @section('content')
     @include("systemMessage.flash")
 
+
     <div class="row">
         <div class="col-md-12">
             <!-- BEGIN SAMPLE FORM PORTLET-->
+            {!! Form::open(['method'=>'POST' , 'action'=>'Web\SetController@store' ]) !!}
             <div class="m-portlet">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
-                                ثبت سته محتوای جدید
+                                ثبت دسته محتوای جدید
                             </h3>
+                            <input class="btn btn-primary" type="submit" value="ذخیره">
                         </div>
                     </div>
                 </div>
                 <div class="m-portlet__body">
-    
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mt-checkbox-list">
-                                    <label class="mt-checkbox mt-checkbox-outline">
-                                        فعال
-                                        <input type="checkbox" value="1" name="isFree" checked/>
-                                        <span></span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mt-checkbox-list">
-                                    <label class="mt-checkbox mt-checkbox-outline">
-                                        قابل نمایش برای کاربران
-                                        <input type="checkbox" value="1" name="isFree" checked/>
-                                        <span></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-md-2 control-label" for="name">نام</label>
-                            <div class="col-md-10">
-                                {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'name' ]) !!}
-                                @if ($errors->has('name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-    
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-md-2 control-label" for="name">نام کوتاه</label>
-                            <div class="col-md-10">
-                                {!! Form::text('small_name', null, ['class' => 'form-control', 'id' => 'name' ]) !!}
-                                @if ($errors->has('small_name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('small_name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-    
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-md-2 control-label" for="shortDescription">توضیحات</label>
-                            <div class="col-md-10">
-                                {!! Form::textarea('description', null, ['class' => 'form-control', 'id' => 'productShortDescriptionSummerNote' ]) !!}
-                                @if ($errors->has('description'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('description') }}</strong>
-                                     </span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-    
-                    <div class="form-group {{ $errors->has('image') ? ' has-error' : '' }}">
-                        <div class="row">
-                            <label class="control-label col-md-3">عکس</label>
-                            <div class="col-md-9">
-                                <div class="fileinput fileinput-new" data-provides="fileinput">
-                                    <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
-                                        <img src="" class="a--full-width" alt="عکس محصول"/>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mt-checkbox-list">
+                                        <label class="mt-checkbox mt-checkbox-outline">
+                                            فعال
+                                            <input type="checkbox" value="1" name="enable" checked/>
+                                            <span></span>
+                                        </label>
                                     </div>
-                                    <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
-                                    <div>
-                                        <span class="btn m-btn--pill m-btn--air btn-warning default btn-file">
-                                            <span class="fileinput-new"> تغییر عکس </span>
-                                            <span class="fileinput-exists"> تغییر </span>
-                                            <input type="file" name="image">
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mt-checkbox-list">
+                                        <label class="mt-checkbox mt-checkbox-outline">
+                                            قابل نمایش برای کاربران
+                                            <input type="checkbox" value="1" name="display" checked/>
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-md-2 control-label" for="name">نام</label>
+                                <div class="col-md-10">
+                                    {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'name' ]) !!}
+                                    @if ($errors->has('name'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('name') }}</strong>
                                         </span>
-                                        <a href="javascript:" class="btn m-btn--pill m-btn--air btn-danger fileinput-exists" data-dismiss="fileinput"> حذف</a>
-                                    </div>
+                                    @endif
                                 </div>
-                                @if ($errors->has('image'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('image') }}</strong>
-                                    </span>
-                                @endif
                             </div>
                         </div>
-                    </div>
-    
-    
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-md-2 control-label" for="tags">
-                                تگ ها :
-                            </label>
-                            <div class="col-md-9">
-                                <input name="tags" type="text" class="form-control input-large setTags" value="" data-role="tagsinput">
+
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-md-2 control-label" for="name">نام کوتاه</label>
+                                <div class="col-md-10">
+                                    {!! Form::text('small_name', null, ['class' => 'form-control', 'id' => 'name' ]) !!}
+                                    @if ($errors->has('small_name'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('small_name') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
                             </div>
                         </div>
-                    </div>
-    
-    
-                    <div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-md-2 control-label" for="shortDescription">توضیحات</label>
+                                <div class="col-md-10">
+                                    {!! Form::textarea('description', null, ['class' => 'form-control', 'id' => 'productShortDescriptionSummerNote' ]) !!}
+                                    @if ($errors->has('description'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('description') }}</strong>
+                                         </span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group {{ $errors->has('photo') ? ' has-error' : '' }}">
+                            <div class="row">
+                                <label class="control-label col-md-3">عکس</label>
+                                <div class="col-md-9">
+                                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                        <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                                            <img src="" class="a--full-width" alt="عکس محصول"/>
+                                        </div>
+                                        <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+                                        <div>
+                                            <span class="btn m-btn--pill m-btn--air btn-warning default btn-file">
+                                                <span class="fileinput-new"> تغییر عکس </span>
+                                                <span class="fileinput-exists"> تغییر </span>
+                                                <input type="file" name="photo">
+                                            </span>
+                                            <a href="javascript:" class="btn m-btn--pill m-btn--air btn-danger fileinput-exists" data-dismiss="fileinput"> حذف</a>
+                                        </div>
+                                    </div>
+                                    @if ($errors->has('photo'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('photo') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-md-2 control-label" for="tags">
+                                    تگ ها :
+                                </label>
+                                <div class="col-md-9">
+                                    <input name="tags" type="text" class="form-control input-large setTags" value="" data-role="tagsinput">
+                                </div>
+                            </div>
+                        </div>
+
+                <div>
         
                         <div class="m-divider m--margin-top-50">
                             <span></span>
@@ -183,6 +185,7 @@
                     
                 </div>
             </div>
+            {!! Form::close() !!}
             <!-- END SAMPLE FORM PORTLET-->
         </div>
 
@@ -235,8 +238,6 @@
             });
 
             $('#productShortDescriptionSummerNote').summernote({height: 300});
-
-            makeDataTable('productTable');
 
         });
     </script>

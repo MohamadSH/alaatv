@@ -216,18 +216,19 @@ trait ContentControllerResponseTrait
      */
     public function makeFreeVideoFileArray(string $fileName , string $disk, int $contentsetId): array
     {
+        $serverUrl = config('constants.DOWNLOAD_SERVER_PROTOCOL').'cdn.sanatisharif.ir';
         $fileUrl = [
             '720p' => [
                 //ToDo : Hard Code!
-                'url' => 'https://cdn.sanatisharif.ir'.'/media/'.$contentsetId.'/HD_720p/'.$fileName,
+                'url' => $serverUrl.'/media/'.$contentsetId.'/HD_720p/'.$fileName,
                 'partialPath'=> '/media/'.$contentsetId.'/HD_720p/'.$fileName,
             ],
             '480p' => [
-                'url' => 'https://cdn.sanatisharif.ir'.'/media/'.$contentsetId.'/hq/'.$fileName,
+                'url' => $serverUrl.'/media/'.$contentsetId.'/hq/'.$fileName,
                 'partialPath'=> '/media/'.$contentsetId.'/hq/'.$fileName,
             ],
             '240p' => [
-                'url' => 'https://cdn.sanatisharif.ir'.'/media/'.$contentsetId.'/240p/'.$fileName,
+                'url' => $serverUrl.'/media/'.$contentsetId.'/240p/'.$fileName,
                 'partialPath'=> '/media/'.$contentsetId.'/240p/'.$fileName,
             ]
         ];

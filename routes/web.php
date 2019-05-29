@@ -255,7 +255,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post("donateOrder", "Web\OrderController@donateOrder");
     Route::get('adminGenerateRandomCoupon', "Web\AdminController@adminGenerateRandomCoupon");
 
-    Route::get('cTest/{set}', "Web\SetController@indexContent");
+    Route::get('listContents/{set}', "Web\SetController@indexContent");
+    Route::resource('set', 'Web\SetController');
 });
 
 Route::group(['prefix' => 'c'], function () {
@@ -278,7 +279,6 @@ Route::group(['prefix' => 'product'], function () {
 });
 
 Route::get("ctag", "Web\ContentController@retrieveTags");
-Route::resource('set', 'Web\SetController');
 Route::resource('product', 'Web\ProductController');
 
 Route::resource('c', 'Web\ContentController')->names([
