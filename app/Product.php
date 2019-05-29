@@ -724,7 +724,20 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
         $this->attributes['tags'] = $tags;
     }
-    
+
+    /**
+     * Set the product's thumbnail.
+     *
+     * @param  Collection  $input
+     *
+     * @return void
+     */
+    public function setThumbnailAttribute(Collection $input = null)
+    {
+        $this->attributes['thumbnail'] = optional($input)->toJson(JSON_UNESCAPED_UNICODE);
+    }
+
+
     public function producttype()
     {
         return $this->belongsTo(Producttype::class)
