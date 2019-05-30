@@ -1,0 +1,56 @@
+@if(isset($block) && $block !== null)
+    <div class="row @if(isset($blockCustomClass)) {{ $blockCustomClass }} @endif blockId-{{ $block->id }} {{ $block->class }}"
+         @if(isset($blockCustomId))
+            id="{{ $blockCustomId }}"
+         @else
+            id="{{ $block->class }}"
+         @endif>
+        <div class="col">
+            <div class="m-portlet  m-portlet--bordered OwlCarouselType2-shopPage" id="owlCarousel_{{ $block->id }}">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                <a href="{{ $block->url }}" class="m-link">
+                                    @if(isset($blockTitle))
+                                        {{ $blockTitle }}
+                                    @else
+                                        {{ $block->title }}
+                                    @endif
+                                </a>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="m-portlet__head-tools">
+                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewGrid">
+                            <i class="fa flaticon-shapes"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
+                            <i class="flaticon-more-v4"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="m-portlet__body m-portlet__body--no-padding">
+                    <!--begin::Widget 30-->
+                    <div class="m-widget30">
+                        <div class="m-widget_head">
+                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
+                                @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
+                                    @foreach($block->products as $productKey=>$product)
+                                        @include('product.partials.Block.product')
+                                    @endforeach
+                                @endif
+                                @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->contents))
+                                    @foreach($block->contents as $contentKey=>$content)
+                                        @include('product.partials.Block.content')
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Widget 30-->
+                </div>
+            </div>
+        </div>
+    </div>
+@endif

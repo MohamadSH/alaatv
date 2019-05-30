@@ -1,7 +1,7 @@
 @extends("app" , ["pageName"=>$pageName])
 
 @section('page-css')
-    <link href="{{ mix('/css/page-dashboard1.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ mix('/css/page-homePage.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section("content")
@@ -98,33 +98,40 @@
     <!--end:: Widgets/Stats-->
     @foreach($sections as $section)
         @if($section['lessons']->count() > 0)
-            <div class="row {{$section["class"]}}">
-                <div class="col-12">
-                    <div class="a--devider-with-title">
-                        <div class="a--devider-title">
-                            <a href="{{ urldecode(action("Web\ContentController@index" , ["tags" => $section["tags"]])) }}" class="m-link m-link--primary">
-                                {{$section["descriptiveName"]}}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="a--owl-carousel-type-1 owl-carousel owl-theme">
-                        @foreach($section["lessons"] as $lesson)
-                            @include('partials.widgets.set1',[
-                            'widgetActionName' => $section["descriptiveName"].'/ نمایش همه',
-                            'widgetActionLink' => $section["url"],
-                            'widgetTitle'      => $lesson["displayName"],
-                            'widgetPic'        => (isset($lesson["pic"]) && strlen($lesson["pic"])>0 ?  $lesson["pic"]."?w=253&h=142" : 'https://via.placeholder.com/235x142'),
-                            'widgetAuthor' => $lesson["author"],
-                            'widgetLink'       => (isset($lesson["content_id"]) && $lesson["content_id"]>0 ? action("Web\ContentController@show", $lesson["content_id"]):""),
-                            'widgetCount' => $lesson["content_count"],
-                            'widgetScroll' => 1
-                            ])
-                        @endforeach
-                    </div>
-                </div>
-            </div>
+            @include('product.partials.owl-carousel.contentSet.widget1', [
+                'contentCustomClass'=>$section["class"].' a--content-carousel-1 dasboardLessons',
+                'contentCustomId'=>'sectionId-'.$section["class"],
+                'contentTitle'=>$section["descriptiveName"],
+                'contentUrl'=>urldecode(action("Web\ContentController@index" , ["tags" => $section["tags"]])),
+                'contentSets'=>$section["lessons"]
+            ])
+{{--            <div class="row {{$section["class"]}}">--}}
+{{--                <div class="col-12">--}}
+{{--                    <div class="a--devider-with-title">--}}
+{{--                        <div class="a--devider-title">--}}
+{{--                            <a href="{{ urldecode(action("Web\ContentController@index" , ["tags" => $section["tags"]])) }}" class="m-link m-link--primary">--}}
+{{--                                {{$section["descriptiveName"]}}--}}
+{{--                            </a>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                <div class="col-12">--}}
+{{--                    <div class="a--owl-carousel-type-1 owl-carousel owl-theme">--}}
+{{--                        @foreach($section["lessons"] as $lesson)--}}
+{{--                            @include('partials.widgets.set1',[--}}
+{{--                            'widgetActionName' => $section["descriptiveName"].'/ نمایش همه',--}}
+{{--                            'widgetActionLink' => $section["url"],--}}
+{{--                            'widgetTitle'      => $lesson["displayName"],--}}
+{{--                            'widgetPic'        => (isset($lesson["pic"]) && strlen($lesson["pic"])>0 ?  $lesson["pic"]."?w=253&h=142" : 'https://via.placeholder.com/235x142'),--}}
+{{--                            'widgetAuthor' => $lesson["author"],--}}
+{{--                            'widgetLink'       => (isset($lesson["content_id"]) && $lesson["content_id"]>0 ? action("Web\ContentController@show", $lesson["content_id"]):""),--}}
+{{--                            'widgetCount' => $lesson["content_count"],--}}
+{{--                            'widgetScroll' => 1--}}
+{{--                            ])--}}
+{{--                        @endforeach--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
 
             @foreach($section["ads"] as $image => $link)
                 @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])
@@ -136,5 +143,14 @@
 @endsection
 
 @section('page-js')
+    <script>
+        var sections = [
+        @foreach($sections as $section)
+            @if($section['lessons']->count() > 0)
+                    '{{ $section["class"] }}',
+            @endif
+        @endforeach
+        ];
+    </script>
     <script src="{{ mix('/js/page-homePage.js') }}"></script>
 @endsection

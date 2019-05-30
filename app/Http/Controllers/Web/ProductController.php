@@ -5,10 +5,9 @@ namespace App\Http\Controllers\Web;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use SEO;
-use Illuminate\Foundation\Http\{FormRequest};
 use App\Http\Controllers\Controller;
 use Illuminate\Http\{Request, Response};
-use Illuminate\Support\{Facades\File, Facades\Input, Facades\Storage};
+use Illuminate\Support\{Arr, Collection, Facades\File, Facades\Input, Facades\Storage};
 use App\{Block,
     Bon,
     Collection\BlockCollection,
@@ -159,7 +158,7 @@ class ProductController extends Controller
 
         $bonId = $request->get('bon_id');
         
-        $this->fillProductFromRequest($request, $product);
+        $this->fillProductFromRequest($request->all(), $product);
         
         if ($product->save()) {
             if ($bonPlus || $bonDiscount) {
@@ -173,19 +172,18 @@ class ProductController extends Controller
     }
     
     /**
-     * @param  FormRequest  $request
+     * @param  array  $inputData
      * @param  Product      $product
      *
      * @return void
      * @throws FileNotFoundException
      */
-    private function fillProductFromRequest(FormRequest $request, Product $product): void
+    private function fillProductFromRequest(array $inputData, Product $product): void
     {
-        $inputData = $request->all();
-        $files     = $request->has("files") ? [$request->files] : [];
-        $images    = $request->has("image") ? [$request->image] : [];
-        $isFree    = $request->has("isFree");
-        $tagString = $request->get("tags");
+        $files     = Arr::has($inputData , 'files') ? [Arr::get($inputData,'files')] : [];
+        $images    = Arr::has($inputData , 'image') ? [Arr::get($inputData,'image')] : [];
+        $isFree    = Arr::has($inputData , 'isFree');
+        $tagString = Arr::get($inputData,'tags');
 
         $product->fill($inputData);
 
@@ -196,9 +194,11 @@ class ProductController extends Controller
             $product->discount  = 0;
 
         $product->isFree = $isFree;
-        if (!$this->strIsEmpty($product->introVideo)) {
-            $this->makeValidUrl($product->introVideo);
+
+        if(Arr::has($inputData , 'introVideo')){
+            $product->intro_videos = $this->storeIntroVideo(Arr::get($inputData, 'introVideo') , Arr::get($inputData, 'thumbnail'));
         }
+
         //Storing product's catalog
         $storeFileResult = $this->storeCatalogOfProduct($product, $files);
         //ToDo : delete the file if it is an update
@@ -383,7 +383,7 @@ class ProductController extends Controller
         }
         $childrenPriceEqualizer = $request->has("changeChildrenPrice");
         
-        $this->fillProductFromRequest($request, $product);
+        $this->fillProductFromRequest($request->all(), $product);
         
         if ($childrenPriceEqualizer) {
             $product->equalizingChildrenPrice();
@@ -1150,8 +1150,8 @@ class ProductController extends Controller
     public function landing7(Request $request)
     {
         $url = $request->url();
-        $this->generateSeoMetaTags(new SeoDummyTags('آلاء| جمع بندی نیم سال اول',
-            'همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف', $url,
+        $this->generateSeoMetaTags(new SeoDummyTags('از پایه تا کنکور با آلاء',
+            'از پایه تا کنکور با همایش های دانلودی آلا', $url,
             $url, route('image', [
                 'category' => '11',
                 'w'        => '100',
@@ -1181,8 +1181,8 @@ class ProductController extends Controller
     public function landing8(Request $request)
     {
         $url = $request->url();
-        $this->generateSeoMetaTags(new SeoDummyTags('آلاء| جمع بندی نیم سال اول',
-            'همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف', $url,
+        $this->generateSeoMetaTags(new SeoDummyTags('همایش های دانلودی آلاء',
+            'همایش های دانلودی آلاء، 80% کنکور', $url,
             $url, route('image', [
                 'category' => '11',
                 'w'        => '100',
@@ -1364,4 +1364,30 @@ class ProductController extends Controller
             Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
+    /**
+     * @param string $videoLink
+     * @param string $thumbnailLink
+     * @return Collection
+     */
+    private function storeIntroVideo(string $videoLink , string $thumbnailLink): Collection
+    {
+        $videoUrl = $videoLink;
+        $videoPath = parse_url($videoUrl)['path'];
+        $videoExtension = pathinfo($videoPath, PATHINFO_EXTENSION);
+        $hqVideo = $this->makeIntroVideoFileStdClass(config('constants.DISK_FREE_CONTENT'), $videoUrl, $videoPath, $videoExtension, null, 'کیفیت بالا', '480p');
+        $videos = $this->mekeIntroVideosArray($hqVideo);
+
+        $thumbnailUrl = $thumbnailLink;
+        $thumbnailPath = parse_url($thumbnailUrl)['path'];
+        $thumbnailExtension = pathinfo($thumbnailPath, PATHINFO_EXTENSION);
+        $thumbnail = $this->makeVideoFileThumbnailStdClass(config('constants.DISK_FREE_CONTENT'), $thumbnailUrl, $thumbnailPath, $thumbnailExtension);
+
+        $introVideos = collect();
+        $introVideos->push([
+            'video' => $videos,
+            'thumbnail' => $thumbnail,
+        ]);
+
+        return $introVideos;
+    }
 }

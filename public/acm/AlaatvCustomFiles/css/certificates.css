@@ -20,3 +20,6 @@
 .certificates-items img:hover {
     transform: scale(1.1);
 }
+.certificates-items .row {
+    margin: 0;
+}

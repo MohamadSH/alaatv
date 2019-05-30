@@ -107,19 +107,4 @@ trait CharacterCommon
         
         return $string;
     }
-    
-    /**
-     * @param  string  $string
-     * @param  string  $protocol
-     *
-     * @return string
-     */
-    public function makeValidUrl($string, $protocol = "https"): string
-    {
-        if (!preg_match("/^http:\/\//", $string) && !preg_match("/^https:\/\//", $string)) {
-            $string = $protocol."://".$string;
-        }
-        
-        return $string;
-    }
 }

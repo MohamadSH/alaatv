@@ -1,4 +1,3 @@
-
 $('.OwlCarouselType2-shopPage').each(function(){
     let id = $(this).attr('id');
     $('#'+id).OwlCarouselType2({
