@@ -4,8 +4,8 @@
     These routes are loaded by the RouteServiceProvider within a group which is assigned the "api" middleware group.
 */
 
-use App\Http\Controllers\Api\GetPaymentRedirectEncryptedLink;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\GetPaymentRedirectEncryptedLink;
 
 Auth::routes(['verify' => true]);
 
@@ -34,6 +34,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('donate', [OrderController::class, 'donateOrder']);
 
     Route::group(['middleware' => 'auth:api'], function () {
+        Route::any('user/auth2/profile', 'Api\UserController@getAuth2Profile');
         Route::resource('user', 'Api\UserController');
         Route::resource('orderproduct', 'Api\OrderproductController');
         Route::post('transaction', 'Api\ZarinpalTransactionController');
