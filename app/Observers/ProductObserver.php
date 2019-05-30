@@ -95,7 +95,7 @@ class ProductObserver
         //todo
 //        self::shiftProductOrders($product->order);
 
-        $this->sendTagsOfTaggableToApi($product, $this->tagging);
+//        $this->sendTagsOfTaggableToApi($product, $this->tagging);
         Artisan::call('cache:clear');
     }
 

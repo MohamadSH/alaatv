@@ -220,7 +220,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'editLink',
         'removeLink',
         'children',
-//        mohamad
 //        'introVideo',
     ];
     
@@ -1761,7 +1760,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     }
 
-    // mohamad
 //    public function getIntroVideoAttribute(){
 //        $intro = $this->intro_videos;
 //        if(is_null($intro))
