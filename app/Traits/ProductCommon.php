@@ -4,7 +4,7 @@ use App\Product;
 use App\Productfiletype;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
 
 trait ProductCommon
 {
@@ -275,4 +275,69 @@ trait ProductCommon
             return $flag;
         });
     }
+
+    /**
+     * @param \Illuminate\Config\Repository $videoDisk
+     * @param $videoUrl
+     * @param $videoPath
+     * @param $size
+     * @param string $caption
+     * @param string $res
+     * @param $videoExtension
+     * @return array
+     */
+    protected function makeIntroVideoFileStdClass(string $videoDisk, string $videoUrl, string $videoPath, string $videoExtension=null, $size=null, string $caption=null, string $res=null): array
+    {
+        $hqVideo = [
+            'uuid' => Str::uuid()->toString(),
+            'disk' => $videoDisk,
+            'url' => $videoUrl,
+            'fileName' => $videoPath,
+            'size' => $size,
+            'caption' => $caption,
+            'res' => $res,
+            'type' => 'video',
+            'ext' => $videoExtension,
+        ];
+        return $hqVideo;
+    }
+
+    /**
+     * @param \Illuminate\Config\Repository $thumbnailDisk
+     * @param $thumbnailUrl
+     * @param $thumbnailPath
+     * @param $size
+     * @param $caption
+     * @param $res
+     * @param $thumbnailExtension
+     * @return array
+     */
+    protected function makeVideoFileThumbnailStdClass(string $thumbnailDisk, string $thumbnailUrl, string $thumbnailPath, string $thumbnailExtension=null, $size=null, $caption=null, string $res=null): array
+    {
+        $thumbnail = [
+            'uuid' => Str::uuid()->toString(),
+            'disk' => $thumbnailDisk,
+            'url' => $thumbnailUrl,
+            'fileName' => $thumbnailPath,
+            'size' => $size,
+            'caption' => $caption,
+            'res' => $res,
+            'type' => 'thumbnail',
+            'ext' => $thumbnailExtension,
+        ];
+        return $thumbnail;
+    }
+
+    /**
+     * @param array $hqVideo
+     * @return array
+     */
+    protected function mekeIntroVideosArray(array $hqVideo): array
+    {
+        $video = [
+            $hqVideo
+        ];
+        return $video;
+    }
+
 }
