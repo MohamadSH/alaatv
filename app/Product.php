@@ -220,8 +220,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'editLink',
         'removeLink',
         'children',
-//        mohamad
-//        'introVideo',
+        'introVideo',
     ];
     
     protected $hidden = [
@@ -1761,39 +1760,38 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     }
 
-    // mohamad
-//    public function getIntroVideoAttribute(){
-//        $intro = $this->intro_videos;
-//        if(is_null($intro))
-//            return null;
-//
-//        $intro = json_decode($intro);
-//
-//        if(!isset($intro[0]) || !isset($intro[0]->video))
-//            return null;
-//
-//        $videos = $intro[0]->video;
-//
-//        if( !isset($videos[0]) || !isset($videos[0]->url))
-//            return null;
-//
-//        return $videos[0]->url;
-//    }
-//
-//    public function getIntroVideoThumbnailAttribute(){
-//        $intro = $this->intro_videos;
-//        if(is_null($intro))
-//            return null;
-//
-//        $intro = json_decode($intro);
-//        if(!isset($intro[0]) || !isset($intro[0]->thumbnail))
-//            return null;
-//
-//        $thumbnail = $intro[0]->thumbnail;
-//
-//        if(!isset($thumbnail->url))
-//            return null;
-//
-//        return $thumbnail->url;
-//    }
+    public function getIntroVideoAttribute(){
+        $intro = $this->intro_videos;
+        if(is_null($intro))
+            return null;
+
+        $intro = json_decode($intro);
+
+        if(!isset($intro[0]) || !isset($intro[0]->video))
+            return null;
+
+        $videos = $intro[0]->video;
+
+        if( !isset($videos[0]) || !isset($videos[0]->url))
+            return null;
+
+        return $videos[0]->url;
+    }
+
+    public function getIntroVideoThumbnailAttribute(){
+        $intro = $this->intro_videos;
+        if(is_null($intro))
+            return null;
+
+        $intro = json_decode($intro);
+        if(!isset($intro[0]) || !isset($intro[0]->thumbnail))
+            return null;
+
+        $thumbnail = $intro[0]->thumbnail;
+
+        if(!isset($thumbnail->url))
+            return null;
+
+        return $thumbnail->url;
+    }
 }
