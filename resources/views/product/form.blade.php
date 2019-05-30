@@ -94,10 +94,24 @@
                 <div class="row">
                     <label class="col-md-3 control-label" for="slogan">لینک فیلم معرفی</label>
                     <div class="col-md-9">
-                        {!! Form::text('introVideo', null, ['class' => 'form-control', 'id' => 'introVideo' , 'dir' => 'ltr' ]) !!}
+                        {!! Form::text('introVideo', optional($product->introVideo[0])->url , ['class' => 'form-control', 'id' => 'introVideo' , 'dir' => 'ltr' ]) !!}
                         @if ($errors->has('introVideo'))
                             <span class="help-block">
                             <strong>{{ $errors->first('introVideo') }}</strong>
+                        </span>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="form-group {{ $errors->has('thumbnail') ? ' has-error' : '' }}">
+                <div class="row">
+                    <label class="col-md-3 control-label" for="slogan">تامبنیل کلیپ معرفی</label>
+                    <div class="col-md-9">
+                        {!! Form::text('thumbnail', optional($product->introVideo[0])->thumbnail , ['class' => 'form-control', 'id' => 'thumbnail' , 'dir' => 'ltr' ]) !!}
+                        @if ($errors->has('thumbnail'))
+                            <span class="help-block">
+                            <strong>{{ $errors->first('thumbnail') }}</strong>
                         </span>
                         @endif
                     </div>
@@ -514,7 +528,14 @@
                 </span>
             </p>
         </div>
-
+        <div class="col-md-6">
+            <p>
+                {!! Form::text('thumbnail', null, ['class' => 'form-control', 'id' => 'productThumbnail', 'placeholder'=>'تامبنیل کلیپ معرفی' , 'dir'=>'ltr']) !!}
+                <span class="help-block" id="productThumbnailAlert">
+                    <strong></strong>
+                </span>
+            </p>
+        </div>
         <div class="col-md-6">
             <div class="fileinput fileinput-new" id="productFile-div" data-provides="fileinput">
                 <div class="input-group input-large ">
