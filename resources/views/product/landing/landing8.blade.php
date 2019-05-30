@@ -35,7 +35,18 @@
         .m-portlet.m-portlet--creative.m-portlet--first {
             border: solid 1px #aeaeae4d;
         }
-        
+        .m-widget27 .m-widget27__pic > img {
+            width: 100%;
+            height: auto;
+        }
+        /*media query*/
+        @media only screen and (max-width: 767px) {
+            .m-portlet .m-portlet-fit--sides {
+                margin-right: -0.4rem;
+                margin-left: -0.4rem;
+                margin-top: -0.4rem;
+            }
+        }
     </style>
 @endsection
 @section('content')
@@ -66,7 +77,7 @@
                             </div>
                         </div>
                         <div class="m-widget27__container">
-                            <div class="container-fluid m--padding-right-40 m--padding-left-40">
+                            <div class="container-fluid">
                                 <div class="row">
                                     <div class="col-md-4 order-2 order-sm-2 order-md-1 order-lg-1 sideItems">
                                         

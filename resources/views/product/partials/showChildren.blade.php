@@ -1,7 +1,7 @@
 @if(count($product->children)>0)
     <li class="m-nav__item  m-nav__item--active position-relative">
         {{--@if(isset($product->pivot->control_id) && ( $product->pivot->control_id ==  config("constants.CONTROL_SWITCH") || $product->pivot->control_id == Config::get("constants.CONTROL_GROUPED_CHECKBOX") ))--}}
-        <span class="m-switch m-switch--icon {{ $colors[$color] }} float-left a--font-line-height-10 m--padding-right-5 parentCheckBox">
+        <span class="m-switch m-switch--sm m-switch--icon {{ $colors[$color] }} float-left a--font-line-height-10 m--padding-right-5 parentCheckBox">
             <label class="m--marginless">
                 <input name="products[]"
                        value="{{ $product->id }}"
@@ -23,7 +23,7 @@
                     <span class="m-nav__link-text">
                         @if(!count($product->children)>0)
                             {{--@if(isset($product->pivot->control_id) && ( $product->pivot->control_id ==  config("constants.CONTROL_SWITCH") || $product->pivot->control_id == Config::get("constants.CONTROL_GROUPED_CHECKBOX") ))--}}
-                            <span class="m-switch m-switch--icon {{ $colors[$color] }} float-left a--font-line-height-10 m--padding-right-5">
+                            <span class="m-switch m-switch--sm m-switch--icon {{ $colors[$color] }} float-left a--font-line-height-10 m--padding-right-5">
                                     <label class="m--marginless">
                                         <input name="products[]"
                                                value="{{ $product->id }}"
@@ -57,7 +57,7 @@
                         <div class="m--clearfix"></div>
 
                         @if(isset($product->introVideo))
-                            <button type="button" class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger btnShowVideoLink" data-videosrc="{{ $product->introVideo }}" data-videotitle="{{ $product->name }}" data-videodes="{{ $product->shortDescription }}">
+                            <button type="button" class="btn btn-sm m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger btnShowVideoLink" data-videosrc="{{ $product->introVideo }}" data-videotitle="{{ $product->name }}" data-videodes="{{ $product->shortDescription }}">
                                 <span>
                                     <i class="fa fa-play-circle"></i>
                                     <span>نمایش کلیپ معرفی</span>

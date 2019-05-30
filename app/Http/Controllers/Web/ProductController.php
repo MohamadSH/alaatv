@@ -1150,8 +1150,8 @@ class ProductController extends Controller
     public function landing7(Request $request)
     {
         $url = $request->url();
-        $this->generateSeoMetaTags(new SeoDummyTags('آلاء| جمع بندی نیم سال اول',
-            'همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف', $url,
+        $this->generateSeoMetaTags(new SeoDummyTags('از پایه تا کنکور با آلاء',
+            'از پایه تا کنکور با همایش های دانلودی آلا', $url,
             $url, route('image', [
                 'category' => '11',
                 'w'        => '100',
@@ -1181,8 +1181,8 @@ class ProductController extends Controller
     public function landing8(Request $request)
     {
         $url = $request->url();
-        $this->generateSeoMetaTags(new SeoDummyTags('آلاء| جمع بندی نیم سال اول',
-            'همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف', $url,
+        $this->generateSeoMetaTags(new SeoDummyTags('همایش های دانلودی آلاء',
+            'همایش های دانلودی آلاء، 80% کنکور', $url,
             $url, route('image', [
                 'category' => '11',
                 'w'        => '100',

@@ -10,7 +10,10 @@ use Jenssegers\Agent\Agent;
 use PHPUnit\Framework\Exception;
 use Kalnoy\Nestedset\QueryBuilder;
 use App\Http\Controllers\Controller;
-use Illuminate\{Http\Request,
+use Illuminate\{Contracts\Routing\ResponseFactory,
+    Contracts\View\Factory,
+    Http\RedirectResponse,
+    Http\Request,
     Http\Response,
     Support\Arr,
     Support\Collection,
@@ -19,9 +22,19 @@ use Illuminate\{Http\Request,
     Support\Facades\Input,
     Support\Facades\Route,
     Support\Facades\Cache,
-    Contracts\Filesystem\FileNotFoundException};
+    Contracts\Filesystem\FileNotFoundException,
+    Validation\ValidationException};
 use App\{Bon,
+    Contacttype,
+    Http\Requests\EditOrderRequest,
+    Http\Requests\InsertContactRequest,
+    Http\Requests\InsertEmployeeTimeSheet,
+    Http\Requests\InsertEventResultRequest,
+    Http\Requests\InsertPhoneRequest,
+    Phonetype,
+    Relative,
     Role,
+    Survey,
     User,
     Event,
     Grade,
@@ -905,6 +918,15 @@ class UserController extends Controller
         }
     }
 
+    public function salesReport(Request $request) {
+    
+        $limitStatus = [1, 5, 10, 30, 50, 100, 200, 500, 1000];
+        $coupontype = ['نوع یک', 'نوع دو'];
+        $products = ['محصول یک', 'محصول دو'];
+        
+        return view("user.salesReport", compact('limitStatus', 'coupontype', 'products'));
+    }
+    
     public function show(Request $request, User $user = null)
     {
 
@@ -1154,11 +1176,11 @@ class UserController extends Controller
     /**
      * @param                                  $questions
      * @param                                  $event
-     * @param  \App\Survey                     $survey
-     * @param  \Illuminate\Support\Collection  $answersData
-     * @param  \Illuminate\Support\Collection  $questionsData
+     * @param  Survey                     $survey
+     * @param  Collection                      $answersData
+     * @param  Collection                      $questionsData
      */
-    private function getQuestionsAndAnswerData($questions, $event, \App\Survey $survey, Collection &$answersData, Collection &$questionsData): void
+    private function getQuestionsAndAnswerData($questions, $event, Survey $survey, Collection &$answersData, Collection &$questionsData): void
     {
         foreach ($questions as $question) {
             $requestBaseUrl = $question->dataSourceUrl;
@@ -1175,12 +1197,12 @@ class UserController extends Controller
     
     /**
      * @param                                  $event
-     * @param  \App\Survey                     $survey
-     * @param  \Illuminate\Support\Collection  $answersData
+     * @param  Survey                     $survey
+     * @param  Collection                      $answersData
      * @param                                  $question
      * @param                                  $requestBaseUrl
      */
-    private function getRawAnswer($event, \App\Survey $survey, Collection &$answersData, $question, $requestBaseUrl): void
+    private function getRawAnswer($event, Survey $survey, Collection &$answersData, $question, $requestBaseUrl): void
     {
         $requestUrl    = action("Web\UserSurveyAnswerController@index");
         $requestUrl    .= "?event_id[]=".$event->id."&survey_id[]=".$survey->id."&question_id[]=".$question->id;
@@ -1209,7 +1231,7 @@ class UserController extends Controller
     }
     
     /**
-     * @param  \Illuminate\Support\Collection  $questionsData
+     * @param  Collection                      $questionsData
      * @param                                  $question
      * @param                                  $requestBaseUrl
      */
@@ -1224,7 +1246,7 @@ class UserController extends Controller
     }
     
     /**
-     * @param  \Illuminate\Support\Collection  $questionsData
+     * @param  Collection                      $questionsData
      * @param                                  $question
      * @param                                  $requestBaseUrl
      */
@@ -1254,7 +1276,7 @@ class UserController extends Controller
     /**
      * @param $userMajor
      *
-     * @return array|\Illuminate\Support\Collection
+     * @return array|Collection
      */
     private function getUserMajors($userMajor)
     {
@@ -1273,7 +1295,7 @@ class UserController extends Controller
     }
     
     /**
-     * @param  \Illuminate\Support\Collection  $questionsData
+     * @param  Collection                      $questionsData
      * @param                                  $question
      * @param                                  $requestBaseUrl
      */
@@ -1339,7 +1361,7 @@ class UserController extends Controller
      *
      * @param  User  $user
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|\Illuminate\View\View
      */
     public function information(User $user)
     {
@@ -1392,13 +1414,13 @@ class UserController extends Controller
             $userProduct = $grandParent->name;
         }
         
-        $simpleContact   = \App\Contacttype::where("name", "simple")
+        $simpleContact   = Contacttype::where("name", "simple")
             ->get()
             ->first();
-        $mobilePhoneType = \App\Phonetype::where("name", "mobile")
+        $mobilePhoneType = Phonetype::where("name", "mobile")
             ->get()
             ->first();
-        $parents         = \App\Relative::whereIn("name", [
+        $parents         = Relative::whereIn("name", [
             "father",
             "mother",
         ])
@@ -1526,7 +1548,7 @@ class UserController extends Controller
     /**
      * Send system generated password to the user that does not belong to anyone
      *
-     * @param  \App\Http\Requests\PasswordRecoveryRequest  $request
+     * @param  PasswordRecoveryRequest  $request
      *
      * @return Response
      */
@@ -1661,9 +1683,9 @@ class UserController extends Controller
     /**
      * Storing user's work time (for employees)
      *
-     * @param  Request                                                $request
-     * @param  \App\Http\Controllers\Web\EmployeetimesheetController  $employeetimesheetController
-     * @param  \App\Http\Controllers\Web\HomeController               $homeController
+     * @param  Request                      $request
+     * @param  EmployeetimesheetController  $employeetimesheetController
+     * @param  HomeController               $homeController
      *
      * @return Response
      */
@@ -1701,7 +1723,7 @@ class UserController extends Controller
         
         $request->offsetSet('modifier_id', $userId);
         $request->offsetSet('serverSide', true);
-        $insertRequest  = new \App\Http\Requests\InsertEmployeeTimeSheet($request->all());
+        $insertRequest  = new InsertEmployeeTimeSheet($request->all());
         $userTimeSheets = Employeetimesheet::where('date', Carbon::today('Asia/Tehran'))
             ->where('user_id', Auth::user()->id)
             ->get();
@@ -1859,7 +1881,7 @@ class UserController extends Controller
      * @param  int     $httpStatus
      * @param  string  $message
      *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return ResponseFactory|Response
      */
     private function makeResponseForRemoveFromLotteryMethod(int $httpStatus, string $message)
     {
@@ -1871,17 +1893,17 @@ class UserController extends Controller
     /**
      * Store the complentary information of specified resource in storage.
      *
-     * @param  User                      $user
+     * @param  User               $user
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  UserController            $userController
-     * @param  PhoneController           $phoneController
-     * @param  ContactController         $contactController
-     * @param  OrderController           $orderController
+     * @param  Request            $request
+     * @param  UserController     $userController
+     * @param  PhoneController    $phoneController
+     * @param  ContactController  $contactController
+     * @param  OrderController    $orderController
      *
      * @return Response
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws FileNotFoundException
+     * @throws ValidationException
      */
     public function completeInformation(
         User $user,
@@ -1965,10 +1987,10 @@ class UserController extends Controller
         /**
          * Parent's basic info
          **/
-        $simpleContact   = \App\Contacttype::where("name", "simple")
+        $simpleContact   = Contacttype::where("name", "simple")
             ->get()
             ->first();
-        $mobilePhoneType = \App\Phonetype::where("name", "mobile")
+        $mobilePhoneType = Phonetype::where("name", "mobile")
             ->get()
             ->first();
         $parentsNumber   = $request->get("parentMobiles");
@@ -1977,13 +1999,13 @@ class UserController extends Controller
             if (strlen(preg_replace('/\s+/', '', $mobile)) == 0) {
                 continue;
             }
-            $parent         = \App\Relative::where("name", $relative)
+            $parent         = Relative::where("name", $relative)
                 ->get()
                 ->first();
             $parentContacts = $user->contacts->where("relative_id", $parent->id)
                 ->where("contacttype_id", $simpleContact->id);
             if ($parentContacts->isEmpty()) {
-                $storeContactRequest = new \App\Http\Requests\InsertContactRequest();
+                $storeContactRequest = new InsertContactRequest();
                 $storeContactRequest->offsetSet("name", $relative);
                 $storeContactRequest->offsetSet("user_id", $user->id);
                 $storeContactRequest->offsetSet("contacttype_id", $simpleContact->id);
@@ -2007,7 +2029,7 @@ class UserController extends Controller
             $parentMobiles = $parentContact->phones->where("phonetype_id", $mobilePhoneType->id)
                 ->sortBy("priority");
             if ($parentMobiles->isEmpty()) {
-                $storePhoneRequest = new \App\Http\Requests\InsertPhoneRequest();
+                $storePhoneRequest = new InsertPhoneRequest();
                 $storePhoneRequest->offsetSet("phoneNumber", $mobile);
                 $storePhoneRequest->offsetSet("contact_id", $parentContact->id);
                 $storePhoneRequest->offsetSet("phonetype_id", $mobilePhoneType->id);
@@ -2021,7 +2043,7 @@ class UserController extends Controller
             }
         }
         
-        $updateOrderRequest = new \App\Http\Requests\EditOrderRequest();
+        $updateOrderRequest = new EditOrderRequest();
         if ($request->hasFile("file")) {
             $updateOrderRequest->offsetSet("file", $request->file("file"));
         }
@@ -2134,11 +2156,11 @@ class UserController extends Controller
     /**
      * Register student for sanati sharif highschool
      *
-     * @param  \App\Http\Requests\RegisterForSanatiSharifHighSchoolRequest  $request
-     * @param  EventresultController                                        $eventResultController
+     * @param  RegisterForSanatiSharifHighSchoolRequest  $request
+     * @param  EventresultController                     $eventResultController
      *
      * @return Response
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     public function registerForSanatiSharifHighSchool(RegisterForSanatiSharifHighSchoolRequest $request, EventresultController $eventResultController)
     {
@@ -2212,7 +2234,7 @@ class UserController extends Controller
             return redirect()->back();
         }
         else {
-            $evenResultRequest = new \App\Http\Requests\InsertEventResultRequest();
+            $evenResultRequest = new InsertEventResultRequest();
             $evenResultRequest->offsetSet("user_id", $user->id);
             $evenResultRequest->offsetSet("event_id", $event->id);
             $evenResultRequest->offsetSet("participationCodeHash", $request->get("score"));
@@ -2323,10 +2345,10 @@ class UserController extends Controller
     /**
      * Submit user request for voucher request
      *
-     * @param  \App\Http\Requests\InsertVoucherRequest InsertVoucherRequest
+     * @param  InsertVoucherRequest InsertVoucherRequest
      *
      * @return Response
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     public function submitVoucherRequest(InsertVoucherRequest $request)
     {
@@ -2421,7 +2443,7 @@ class UserController extends Controller
     /**
      * @param $message
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     private function sessionPutAndRedirectBack($message)
     {
@@ -2446,7 +2468,7 @@ class UserController extends Controller
     }
     
     /**
-     * @param  \App\User  $user
+     * @param  User       $user
      * @param             $newRole
      *
      * @return bool
