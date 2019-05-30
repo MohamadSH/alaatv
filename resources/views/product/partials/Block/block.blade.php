@@ -1,4 +1,4 @@
-@if(isset($block))
+@if(isset($block) && $block !== null)
     <div class="row @if(isset($blockCustomClass)) {{ $blockCustomClass }} @endif blockId-{{ $block->id }} {{ $block->class }}"
          @if(isset($blockCustomId))
             id="{{ $blockCustomId }}"
