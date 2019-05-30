@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\HelpDesk\Models\Category;
 use Hash;
 use Carbon\Carbon;
 use App\Traits\Helper;
@@ -13,6 +12,7 @@ use App\Traits\OrderCommon;
 use App\Traits\CharacterCommon;
 use App\HelpDesk\AgentInterface;
 use App\Traits\APIRequestCommon;
+use App\HelpDesk\Models\Category;
 use App\Collection\UserCollection;
 use Kalnoy\Nestedset\QueryBuilder;
 use Laravel\Passport\HasApiTokens;
@@ -514,7 +514,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     {
         return $query->whereHas('roles', function ($q) use ($roles) {
             /** @var QueryBuilder $q */
-            $q->whereIn("id", $roles);
+            $q->whereIn('id', $roles);
         });
     }
 
@@ -567,32 +567,32 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
 
     public function useruploads()
     {
-        return $this->hasMany('\App\Userupload');
+        return $this->hasMany(Userupload::class);
     }
 
     public function contacts()
     {
-        return $this->hasMany('\App\Contact');
+        return $this->hasMany(Contact::class);
     }
 
     public function mbtianswers()
     {
-        return $this->hasMany('\App\Mbtianswer');
+        return $this->hasMany(Mbtianswer::class);
     }
 
     public function usersurveyanswers()
     {
-        return $this->hasMany('\App\Usersurveyanswer');
+        return $this->hasMany(Usersurveyanswer::class);
     }
 
     public function eventresults()
     {
-        return $this->hasMany('\App\Eventresult');
+        return $this->hasMany(Eventresult::class);
     }
 
     public function firebasetokens()
     {
-        return $this->hasMany('App\Firebasetoken');
+        return $this->hasMany(Firebasetoken::class);
     }
 
     /**
@@ -638,26 +638,26 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     {
         $validOrders = $this->orders()
             ->whereHas('orderproducts', function ($q) use ($products) {
-                $q->whereIn("product_id", $products->pluck("id"));
+                $q->whereIn('product_id', $products->pluck('id'));
             })
-            ->whereIn("orderstatus_id", [
-                config("constants.ORDER_STATUS_CLOSED"),
-                config("constants.ORDER_STATUS_POSTED"),
-                config("constants.ORDER_STATUS_READY_TO_POST"),
+            ->whereIn('orderstatus_id', [
+                config('constants.ORDER_STATUS_CLOSED'),
+                config('constants.ORDER_STATUS_POSTED'),
+                config('constants.ORDER_STATUS_READY_TO_POST'),
             ])
-            ->whereIn("paymentstatus_id", [
-                config("constants.PAYMENT_STATUS_PAID"),
+            ->whereIn('paymentstatus_id', [
+                config('constants.PAYMENT_STATUS_PAID'),
             ])
             ->get();
         return $validOrders;
     }
-
+    
     public function cacheKey()
     {
         $key  = $this->getKey();
-        $time = isset($this->update_at) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-
-        return sprintf("%s:%s-%s", $this->getTable(), $key, $time);
+        $time = (optional($this->updated_at)->timestamp ?: optional($this->created_at)->timestamp) ?: 0;
+    
+        return sprintf('%s:%s-%s', $this->getTable(), $key, $time);
     }
 
     /**

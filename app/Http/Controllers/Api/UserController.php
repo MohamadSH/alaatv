@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 use App\Traits\RequestCommon;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\EditUserRequest;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
 {
@@ -152,5 +152,16 @@ class UserController extends Controller
         });
 
         return response()->json($product);*/
+    }
+    
+    public function getAuth2Profile(Request $request)
+    {
+        $user = $request->user();
+        return response()->json([
+            'id'    => $user->id,
+            'name'  => $user->fullName,
+            'email' => md5($user->mobile).'@sanatisharif.ir',
+        
+        ]);
     }
 }

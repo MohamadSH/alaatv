@@ -10,6 +10,10 @@ namespace App\Traits\User;
 
 use Auth;
 use App\User;
+use App\Major;
+use App\Grade;
+use App\Gender;
+use App\Bloodtype;
 use App\Afterloginformcontrol;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
@@ -19,7 +23,7 @@ trait ProfileTrait
     use WalletTrait;
     
     private static $beProtected = [
-        "roles",
+        'roles',
     ];
     
     /**
@@ -32,22 +36,22 @@ trait ProfileTrait
 
     public function bloodtype()
     {
-        return $this->belongsTo("\App\Bloodtype");
+        return $this->belongsTo(Bloodtype::class);
     }
 
     public function grade()
     {
-        return $this->belongsTo("\App\Grade");
+        return $this->belongsTo(Grade::class);
     }
 
     public function major()
     {
-        return $this->belongsTo('App\Major');
+        return $this->belongsTo(Major::class);
     }
 
     public function gender()
     {
-        return $this->belongsTo('App\Gender');
+        return $this->belongsTo(Gender::class);
     }
     
     public function returnLockProfileItems()
@@ -75,7 +79,7 @@ trait ProfileTrait
             'completion',
             'wallet',
         ])
-            ->remember($this->cacheKey(), config("constants.CACHE_600"), function () {
+            ->remember($this->cacheKey(), config('constants.CACHE_600'), function () {
                 return [
                     'major'      => $this->getMajor(),
                     'grade'      => $this->getGrade(),
@@ -165,50 +169,50 @@ trait ProfileTrait
      *
      * @return float|int
      */
-    public function completion($type = "full", $columns = [])
+    public function completion($type = 'full', $columns = [])
     {
-        $tableColumns = Schema::getColumnListing("users");
+        $tableColumns = Schema::getColumnListing('users');
         switch ($type) {
-            case "full":
+            case 'full':
                 $importantColumns = [
-                    "firstName",
-                    "lastName",
-                    "mobile",
-                    "nationalCode",
-                    "province",
-                    "city",
-                    "address",
-                    "postalCode",
-                    "gender_id",
-                    "mobile_verified_at",
+                    'firstName',
+                    'lastName',
+                    'mobile',
+                    'nationalCode',
+                    'province',
+                    'city',
+                    'address',
+                    'postalCode',
+                    'gender_id',
+                    'mobile_verified_at',
                 ];
                 break;
-            case "fullAddress":
+            case 'fullAddress':
                 $importantColumns = [
-                    "firstName",
-                    "lastName",
-                    "mobile",
-                    "nationalCode",
-                    "province",
-                    "city",
-                    "address",
+                    'firstName',
+                    'lastName',
+                    'mobile',
+                    'nationalCode',
+                    'province',
+                    'city',
+                    'address',
                 ];
                 break;
-            case "lockProfile":
+            case 'lockProfile':
                 $customColumns    = $this->lockProfileColumns;
                 $importantColumns = array_unique(array_merge($customColumns, Afterloginformcontrol::getFormFields()
                     ->pluck('name', 'id')
                     ->toArray()));
                 break;
-            case "afterLoginForm" :
+            case 'afterLoginForm' :
                 $importantColumns = Afterloginformcontrol::getFormFields()
                     ->pluck('name', 'id')
                     ->toArray();
                 break;
-            case "completeInfo":
+            case 'completeInfo':
                 $importantColumns = $this->completeInfoColumns;
                 break;
-            case "custom":
+            case 'custom':
                 $importantColumns = $columns;
                 break;
             default:
@@ -221,7 +225,7 @@ trait ProfileTrait
         if ($numberOfColumns > 0) {
             foreach ($tableColumns as $tableColumn) {
                 if (in_array($tableColumn, $importantColumns)) {
-                    if (strcmp($tableColumn, "photo") == 0 && strcmp(Auth::user()->photo,
+                    if (strcmp($tableColumn, 'photo') == 0 && strcmp(Auth::user()->photo,
                             config('constants.PROFILE_DEFAULT_IMAGE')) == 0) {
                         $unsetColumns++;
                     }
@@ -245,11 +249,11 @@ trait ProfileTrait
      */
     public function Birthdate_Jalali()
     {
-        $explodedDateTime = explode(" ", $this->birthdate);
+        $explodedDateTime = explode(' ', $this->birthdate);
         $explodedDate     = $explodedDateTime[0];
         
         //        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($explodedDate, "toJalali");
+        return $this->convertDate($explodedDate, 'toJalali');
     }
     
     /**
@@ -298,11 +302,11 @@ trait ProfileTrait
     public function getUserStatusAttribute()
     {
         $user = $this;
-        $key  = "user:userstatus".$user->cacheKey();
-        return \Cache::tags(["user"])
-            ->remember($key, config("constants.CACHE_600"), function () use ($user) {
-                return $this->userstatus()
-                    ->first()
+        $key  = 'user:userstatus'.$user->cacheKey();
+        return \Cache::tags(['user'])
+            ->remember($key, config('constants.CACHE_600'), function () use ($user) {
+                return optional($this->userstatus()
+                    ->first())
                     ->setVisible([
                         'name',
                         'displayName',
@@ -333,9 +337,9 @@ trait ProfileTrait
 
     public function getRolesAttribute($value){
         $user = $this;
-        $key  = "user:roles".$user->cacheKey();
-        return \Cache::tags(["user"])
-            ->remember($key, config("constants.CACHE_600"), function () use ($user) {
+        $key  = 'user:roles'.$user->cacheKey();
+        return \Cache::tags(['user'])
+            ->remember($key, config('constants.CACHE_600'), function () use ($user) {
                 if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_ROLE')))
                     return $this->roles()->get();
 
@@ -345,9 +349,9 @@ trait ProfileTrait
 
     public function getTotalBonNumberAttribute($value){
         $user = $this;
-        $key  = "user:totalBonNumber".$user->cacheKey();
-        return \Cache::tags(["user"])
-            ->remember($key, config("constants.CACHE_600"), function () use ($user) {
+        $key  = 'user:totalBonNumber'.$user->cacheKey();
+        return \Cache::tags(['user'])
+            ->remember($key, config('constants.CACHE_600'), function () use ($user) {
                 if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_TOTAL_BON_NUMBER')))
                     return $this->userHasBon();
 
@@ -358,13 +362,13 @@ trait ProfileTrait
     public function getJalaliUpdatedAtAttribute()
     {
         $user = $this;
-        $key   = "user:jalaliUpdatedAt:".$user->cacheKey();
-        return Cache::tags(["user"])
-            ->remember($key, config("constants.CACHE_600"), function () use ($user) {
+        $key  = 'user:jalaliUpdatedAt:'.$user->cacheKey();
+        return Cache::tags(['user'])
+            ->remember($key, config('constants.CACHE_600'), function () use ($user) {
                 if(isset($user->updated_at))
                     if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_ACCESS'))) {
                         /** @var User $user */
-                        return $this->convertDate($user->updated_at, "toJalali");
+                        return $this->convertDate($user->updated_at, 'toJalali');
                     }
 
                 return null;
@@ -375,13 +379,13 @@ trait ProfileTrait
     public function getJalaliCreatedAtAttribute()
     {
         $user = $this;
-        $key   = "user:jalaliCreatedAt:".$user->cacheKey();
-        return Cache::tags(["user"])
-            ->remember($key, config("constants.CACHE_600"), function () use ($user) {
+        $key  = 'user:jalaliCreatedAt:'.$user->cacheKey();
+        return Cache::tags(['user'])
+            ->remember($key, config('constants.CACHE_600'), function () use ($user) {
                 if(isset($user->created_at))
                     if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_ACCESS'))) {
                         /** @var User $user */
-                        return $this->convertDate($user->created_at, "toJalali");
+                        return $this->convertDate($user->created_at, 'toJalali');
                     }
 
                 return null;
