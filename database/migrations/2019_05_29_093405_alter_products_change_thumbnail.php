@@ -55,7 +55,7 @@ class AlterProductsChangeThumbnail extends Migration
             $thumbnail =$this->makeVideoFileThumbnailStdClass(config('constants.DISK_FREE_CONTENT'), $thumbnailUrl, $thumbnailPath, 'jpg');
 
             $introVideos->push([
-                'url'       =>  $video,
+                'video'       =>  $video,
                 'thumbnail' =>  $thumbnail,
             ]);
 

@@ -1384,7 +1384,7 @@ class ProductController extends Controller
 
         $introVideos = collect();
         $introVideos->push([
-            'url' => $videos,
+            'video' => $videos,
             'thumbnail' => $thumbnail,
         ]);
 
