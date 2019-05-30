@@ -90,7 +90,8 @@ mix.babel(
         'node_modules/lightgallery/modules/lg-share.min.js',
         'node_modules/lightgallery/modules/lg-video.min.js',
         'node_modules/lightgallery/modules/lg-zoom.min.js',
-        'node_modules/jquery-sticky/jquery.sticky.js',
+        // 'node_modules/jquery-sticky/jquery.sticky.js',
+
         'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
 
         'public/acm/videojs/video.min.js',
@@ -102,6 +103,11 @@ mix.babel(
         'public/acm/videojs/lang/fa.js',
 
         'public/acm/AlaatvCustomFiles/js/UserCart.js',
+
+        'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
+
+        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+
         'public/acm/AlaatvCustomFiles/js/page-product-show.js',
     ],
     'public/js/product-show.js'
@@ -136,6 +142,16 @@ mix.babel(
 
 mix.babel(
     [
+        'node_modules/highcharts/highcharts.js',
+        'node_modules/highcharts/modules/map.js',
+        'node_modules/highcharts/modules/networkgraph.js',
+        'public/acm/AlaatvCustomFiles/js/iran.geo-map.js'
+    ],
+    'public/js/user-profile-salesReport.js'
+).version();
+
+mix.babel(
+    [
         'node_modules/persian-date/dist/persian-date.js',
         'public/acm/AlaatvCustomFiles/js/page-user-orders.js'
     ],
@@ -162,6 +178,13 @@ mix.styles(
 
 mix.styles(
     [
+        'node_modules/highcharts/css/highcharts.css',
+    ],
+    'public/css/user-profile-salesReport.css'
+).version();
+
+mix.styles(
+    [
         'public/acm/AlaatvCustomFiles/css/page-user-orders.css',
     ],
     'public/css/user-orders.css'
@@ -183,6 +206,7 @@ mix.styles(
         'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
         'public/acm/videojs/plugins/seek-to-point.css',
         'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
+        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
         'public/acm/AlaatvCustomFiles/css/page-product-show.css',
     ],
     'public/css/product-show.css'
@@ -253,6 +277,7 @@ mix.babel(
 mix.babel(
     [
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+        'public/acm/AlaatvCustomFiles/js/certificates.js',
         'public/acm/AlaatvCustomFiles/js/page-shop.js',
     ],
     'public/js/page-shop.js'
@@ -268,6 +293,9 @@ mix.babel(
 
 mix.babel(
     [
+        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+        'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
+        'public/acm/AlaatvCustomFiles/js/certificates.js',
         'public/acm/AlaatvCustomFiles/js/page-homePage.js',
     ],
     'public/js/page-homePage.js'
@@ -333,6 +361,7 @@ mix.styles(
         'node_modules/slick-carousel/slick/slick.css',
         'node_modules/slick-carousel/slick/slick-theme.css',
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
+        'public/acm/AlaatvCustomFiles/css/certificates.css',
         'public/acm/AlaatvCustomFiles/css/page-shop.css',
     ],
     'public/css/page-shop.css'
@@ -350,8 +379,9 @@ mix.styles(
 
 mix.styles(
     [
+        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
         'public/acm/AlaatvCustomFiles/css/certificates.css',
-        'public/acm/AlaatvCustomFiles/css/page-dashboard1.css',
+        'public/acm/AlaatvCustomFiles/css/page-homePage.css',
     ],
-    'public/css/page-dashboard1.css'
+    'public/css/page-homePage.css'
 ).version();

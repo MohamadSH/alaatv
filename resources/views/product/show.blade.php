@@ -2,6 +2,18 @@
 
 @section('page-css')
     <link href="{{ mix('/css/product-show.css') }}" rel="stylesheet" type="text/css"/>
+    <style>
+
+        #Block-sampleVideo .m-widget_head-owlcarousel-item {
+            background: white;
+            box-shadow: none !important;
+        }
+        
+        .is-sticky .productPamphletTitle {
+            background: white;
+            opacity: 0.85;
+        }
+    </style>
 @endsection
 
 @section('pageBar')
@@ -23,7 +35,8 @@
 @endsection
 
 @section('content')
-
+    
+    
     <div class="row">
         <div class="col">
             @include('systemMessage.flash')
@@ -42,7 +55,7 @@
                             <div class="row">
                                 <div class="col-lg-3">
                                     <div class="m--margin-bottom-45">
-                                        <img src="{{$product->photo}}" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid m--marginless"/>
+                                        <img src="{{$product->photo}}" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid m--marginless a--full-width"/>
                                         @if(isset($product->bons->first()->pivot->bonPlus))
                                             <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-success alert-dismissible fade show" role="alert">
                                                 <div class="m-alert__icon">
@@ -63,14 +76,6 @@
                                             </div>
                                         @endif
                                     </div>
-
-                                    {{--نمونه جزوه--}}
-                                    @include('product.partials.pamphlet')
-
-                                    {{--@if(isset($product->introVideo) || $product->gift->isNotEmpty())--}}
-                                        {{--نمونه جزوه--}}
-                                        {{--@include('product.partials.pamphlet')--}}
-                                    {{--@endif--}}
 
                                 </div>
                                 <div class="col">
@@ -468,11 +473,6 @@
                                             </div>
                                         </div>
                                     @endif
-
-                                    {{--@if(!isset($product->introVideo) && $product->gift->isEmpty())--}}
-                                        {{--نمونه جزوه--}}
-                                        {{--@include('product.partials.pamphlet')--}}
-                                    {{--@endif--}}
                                 </div>
                             </div>
                             <!--end::Preview-->
@@ -484,57 +484,87 @@
             <!--end::Portlet-->
         </div>
     </div>
-
+    
+    @include('product.partials.Block.block', [
+        'blockTitle'=>'نمونه فیلم ها',
+        'blockType'=>'content',
+        'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
+        'blockCustomId'=>'Block-sampleVideo'
+        ])
+    
+    {{--نمونه جزوه--}}
+    @include('product.partials.pamphlet')
+    
     @if(isset($product->specialDescription))
         <div class="row">
             {!! $product->specialDescription !!}
         </div>
     @endif
-    <div class="row">
-        <div class="col">
-
-            <div class="m-portlet m-portlet--tabs productDetailes">
-                <div class="m-portlet__head">
-                    <div class="m-portlet__head-tools">
-                        <ul class="nav nav-tabs m-tabs m-tabs-line m-tabs-line--brand  m-tabs-line--right m-tabs-line-danger" role="tablist">
-                            <li class="nav-item m-tabs__item">
-                                <a class="nav-link m-tabs__link active show" data-toggle="tab" href="#productInformation" role="tab" aria-selected="true">
-                                    <i class="flaticon-information"></i>
-                                    <h5>بررسی محصول {{ $product->name }}</h5>
-                                </a>
-                            </li>
-                        </ul>
+    
+    @if(mb_strlen(trim(strip_tags($product->shortDescription))) > 0 || mb_strlen(trim(strip_tags($product->longDescription))) > 0)
+        <div class="row">
+            <div class="col">
+                <div class="m-portlet m-portlet--tabs productDetailes">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <h3 class="m-portlet__head-text">
+                                    بررسی محصول
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="m-portlet__head-tools">
+                            <ul class="m-portlet__nav">
+                                <li class="m-portlet__nav-item">
+                                    <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                        
+                                        <button class="btn m-btn--pill m-btn--air btn-primary btn-sm m-btn--icon btnAddToCart">
+                                            <span>
+                                                <i class="flaticon-bag"></i>
+                                                <i class="fas fa-sync-alt fa-spin m--hide"></i>
+                                                <span>افزودن به سبد خرید</span>
+                                            </span>
+                                        </button>
+                                        
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="m-portlet__head-caption">
-                        <div class="m-portlet__head-title">
-                            <button class="btn m-btn--pill m-btn--air btn-primary btn-lg m-btn--icon btnAddToCart">
-                                <span>
-                                    <i class="flaticon-bag"></i>
-                                    <i class="fas fa-sync-alt fa-spin m--hide"></i>
-                                    <span>افزودن به سبد خرید</span>
-                                </span>
-                            </button>
+                    <div class="m-portlet__body">
+                        <div class="tab-content">
+                            <div class="tab-pane active show" id="productInformation">
+                                {!! $product->shortDescription !!}
+                                @if( isset($product->longDescription) && strlen($product->longDescription) > 0 )
+                                    <div>
+                                        {!! $product->longDescription !!}
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="m-portlet__body">
-                    <div class="tab-content">
-                        <div class="tab-pane active show" id="productInformation">
-                            {!! $product->shortDescription !!}
-                            @if( isset($product->longDescription) && strlen($product->longDescription) > 0 )
-                                <div>
-                                    {!! $product->longDescription !!}
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
+    
             </div>
-
         </div>
-    </div>
+    @endif
+
+    @include('product.partials.Block.block', [
+        'blockTitle'=>'محصولات مرتبط',
+        'blockType'=>'product',
+        'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock relatedProduct',
+        'blockCustomId'=>'Block-relatedProduct'
+        ])
+    
 @endsection
 
 @section('page-js')
     <script src="{{ mix('/js/product-show.js') }}"></script>
+    <script>
+        $('.productPamphletWarper .productPamphletTitle').sticky({
+            container: '.productPamphletWarper',
+            topSpacing: $('#m_header').height(),
+            zIndex: 99
+        });
+    </script>
 @endsection

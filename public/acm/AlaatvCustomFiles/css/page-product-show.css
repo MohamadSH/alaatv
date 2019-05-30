@@ -14,13 +14,17 @@
     text-align: center;
 }
 
+.m-portlet__head {
+    background: white;
+}
+
 .productDetailes .m-portlet__head {
     background: white;
-    z-index: 40 !important;
+    z-index: 40;
 }
 
 .productPamphletWarper .productPamphletBody {
-    height: 200px; overflow: hidden;
+    overflow: hidden;
 }
 
 #a_product-price .m-loader.m-loader--success {
@@ -67,6 +71,76 @@
 }
 .videoPlayerPortlet .m-widget19 .m-widget19__content {
     margin-bottom: 0;
+}
+
+
+/*narrow selectable switch panel*/
+.m-nav.m-nav--active-bg .m-nav__item > .m-nav__link {
+    padding: 0;
+}
+.parentCheckBox {
+    top: 0px;
+    right: 6px;
+}
+.m-nav .m-nav__item > .m-nav__link .m-nav__link-title > .m-nav__link-wrap .m-nav__link-text {
+    padding-left: 1.1rem;
+}
+.m-nav.m-nav--active-bg .m-nav__item.m-nav__item--active > .m-nav__link {
+    background-color: #ffb659;
+    padding-right: 45px !important;
+}
+.m-nav .m-nav__item > .m-nav__link .m-nav__link-title > .m-nav__link-wrap .m-nav__link-text {
+    padding-left: 1.6rem;
+}
+.m-nav .m-nav__item > .m-nav__link .m-nav__link-arrow::before {
+    left: 20px;
+    position: relative;
+}
+.m-nav.m-nav--active-bg .m-nav__item.m-nav__item--active > .m-nav__link.collapsed {
+    background-color: #ffdbac;
+}
+/*narrow selectable switch panel*/
+
+.is-sticky .m-portlet__head {
+    opacity: 0.85;
+}
+
+.m-portlet__head-text {
+    position: relative;
+    padding-right: 17px !important;
+}
+.m-portlet__head-text::after {
+    content: ' ';
+    position: absolute;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    background: red;
+    top: calc( 50% - 5px);
+}
+
+.productPamphletWarper.m-portlet{
+    background: transparent;
+    box-shadow: none;
+    border: none;
+}
+.productPamphletWarper {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+.productPamphletWarper .productPamphletTitle {
+    height: 45px;
+    padding-right: 2.2rem;
+}
+.productPamphletWarper .productPamphletTitle h3 {
+    font-size: 18px;
+    height: 45px;
+    line-height: 45px;
+}
+
+.productPamphletWarper > .m-portlet__body {
+    padding-right: 0;
+    padding-left: 0;
 }
 
 /*media query*/

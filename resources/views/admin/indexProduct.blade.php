@@ -213,29 +213,29 @@
             
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="product_table">
                         <thead>
-                        <tr>
-                            <th></th>
-                            <th class="all"> نام کالا</th>
-                            <th class="all">قیمت پایه</th>
-                            <th class="desktop">تخفیف</th>
-                            <th class="min-tablet">عکس</th>
-                            <th class="desktop"> توضیحات کوتاه</th>
-                            <th class="none"> توضیحات اجمالی</th>
-                            <th class="desktop">نوع</th>
-                            <th class="desktop">فعال/غیر فعال</th>
-                            <th class="none">تعداد موجود</th>
-{{--                            <th class="none">کاتالوگ</th>--}}
-                            <th class="none">اسلوگان</th>
-                            <th class="none">ترتیب</th>
-                            <th class="none">دسته صفت ها</th>
-                            <th class="none">معتبر از</th>
-                            <th class="none">معتبر تا</th>
-                            <th class="none">تاریخ ایجاد</th>
-                            <th class="none">تاریخ اصلاح</th>
-                            <th class="none">تعداد بن</th>
-                            <th class="none">تخفیف هر بن(٪)</th>
-                            <th class="all">عملیات</th>
-                        </tr>
+                            <tr>
+                                <th></th>
+                                <th class="all"> نام کالا</th>
+                                <th class="all">قیمت پایه</th>
+                                <th class="desktop">تخفیف</th>
+                                <th class="min-tablet">عکس</th>
+                                <th class="desktop"> توضیحات کوتاه</th>
+                                <th class="none"> توضیحات اجمالی</th>
+                                <th class="desktop">نوع</th>
+                                <th class="desktop">فعال/غیر فعال</th>
+                                <th class="none">تعداد موجود</th>
+    {{--                            <th class="none">کاتالوگ</th>--}}
+                                <th class="none">اسلوگان</th>
+                                <th class="none">ترتیب</th>
+                                <th class="none">دسته صفت ها</th>
+                                <th class="none">معتبر از</th>
+                                <th class="none">معتبر تا</th>
+                                <th class="none">تاریخ ایجاد</th>
+                                <th class="none">تاریخ اصلاح</th>
+                                <th class="none">تعداد بن</th>
+                                <th class="none">تخفیف هر بن(٪)</th>
+                                <th class="all">عملیات</th>
+                            </tr>
                         </thead>
                         <tbody>
                         {{--Loading by ajax--}}
