@@ -38,3 +38,11 @@
 .shopNavItems .m-widget24 .m-widget24__item .m-widget24__title {
     color: inherit;
 }
+
+.a--owl-carousel-type-2 .owl-item.active.center .carousel {
+    -moz-transform: none;
+    -webkit-transform: none;
+    -o-transform: none;
+    -ms-transform: none;
+    transform: none;
+}

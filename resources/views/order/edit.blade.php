@@ -703,14 +703,22 @@
                                                         <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span>
                                                     @endif
                                                 </td>
-                                                <td style="text-align: center">@if(strlen($transaction->paycheckNumber)>0){{$transaction->paycheckNumber}} @else
-                                                        <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span> @endif
-                                                </td>
-                                                <td style="text-align: center">@if(strlen($transaction->managerComment)>0){{$transaction->managerComment}} @else
-                                                        <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span> @endif
+                                                <td style="text-align: center">
+                                                    @if(strlen($transaction->paycheckNumber)>0)
+                                                        {{$transaction->paycheckNumber}}
+                                                    @else
+                                                        <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span>
+                                                    @endif
                                                 </td>
                                                 <td style="text-align: center">
-                                                    <a class="edit" href="javascript:">
+                                                    @if(strlen($transaction->managerComment)>0)
+                                                        {{$transaction->managerComment}}
+                                                    @else
+                                                        <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span>
+                                                    @endif
+                                                </td>
+                                                <td style="text-align: center">
+                                                    <a href="{{ action('Web\TransactionController@edit', $transaction) }}" target="_blank">
                                                         <i class="flaticon-edit m--font-success" aria-hidden="true"></i>
                                                     </a>
                                                 </td>
@@ -1125,43 +1133,7 @@
                     oTable_totalTransaction.fnDeleteRow(nRow);
                     alert("سطر حذف شد ! حال باید آن را از پایگاه داده حذف کنید");
                 });
-
-                table_totalTransaction.on('click', '.cancel', function (e) {
-                    e.preventDefault();
-                    if (nNew) {
-                        oTable_totalTransaction.fnDeleteRow(nEditing_totalTransaction);
-                        nEditing_totalTransaction = null;
-                        nNew = false;
-                    } else {
-                        restoreRow(oTable_totalTransaction, nEditing_totalTransaction);
-                        nEditing_totalTransaction = null;
-                    }
-                });
-
-                table_totalTransaction.on('click', '.edit', function (e) {
-                    console.log('edit clicked');
-                    e.preventDefault();
-                    nNew_totalTransaction = false;
-
-                    /* Get the row as a parent of the link that was clicked on */
-                    var nRow = $(this).parents('tr')[0];
-
-                    if (nEditing_totalTransaction !== null && nEditing_totalTransaction != nRow) {
-                        /* Currently editing - but not this row - restore the old before continuing to edit mode */
-                        restoreRow(oTable_totalTransaction, nEditing_totalTransaction);
-                        editRow(oTable_totalTransaction, nRow);
-                        nEditing_totalTransaction = nRow;
-                    } else if (nEditing_totalTransaction == nRow && this.innerHTML == "ذخیره") {
-                        /* Editing this row and want to save it */
-                        saveRow(oTable_totalTransaction, nEditing_totalTransaction);
-                        nEditing_totalTransaction = null;
-//                        alert("اصلاح انجام شد! حال باید پایگاه داده را اصلاح کنید");
-                    } else {
-                        /* No edit in progress - let's start one */
-                        editRow(oTable_totalTransaction, nRow);
-                        nEditing_totalTransaction = nRow;
-                    }
-                });
+                
             };
 
             return {

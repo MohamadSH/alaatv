@@ -1,46 +1,35 @@
-var owl = jQuery('.a--owl-carousel-type-1');
-owl.each(function () {
-    $(this).owlCarousel({
-        stagePadding: 0,
-        loop: false,
-        rtl:true,
-        nav: true,
-        dots: false,
-        margin:10,
-        mouseDrag: true,
-        touchDrag: true,
-        pullDrag: true,
-        responsiveClass: true,
+
+$('.dasboardLessons').OwlCarouselType2({
+    OwlCarousel: {
         responsive: {
             0: {
-                items: 1,
+                items: 1
+            },
+            400: {
+                items: 2
             },
             600: {
-                items: 3,
-            },
-            1200: {
                 items: 3
             },
-            1600: {
+            800: {
+                items: 4
+            },
+            1000: {
                 items: 4
             }
         }
-    });
+    },
+    grid: {
+        columnClass: 'col-12 col-sm-6 col-md-3 gridItem'
+    },
+    defaultView: 'OwlCarousel', // OwlCarousel or grid
+    childCountHideOwlCarousel: 4
 });
 
-$('.alaaAlert').fadeOut(0);
-$('.hightschoolAlert').fadeOut(0);
-$(document).on('click', '.certificatesLogo', function(){
-    let logoName = $(this).data('name');
-    console.log(logoName);
-    if (logoName === 'alaa') {
-        $('.hightschoolAlert').fadeOut(0);
-        $('.alaaAlert').slideDown();
-    } else if (logoName === 'sharif-school') {
-        $('.alaaAlert').fadeOut(0);
-        $('.hightschoolAlert').slideDown();
-    } else {
-        $('.alaaAlert').fadeOut(0);
-        $('.hightschoolAlert').fadeOut(0);
-    }
-});
+for (let section in sections) {
+    $('.'+sections[section]+'.dasboardLessons .a--owl-carousel-head').sticky({
+        container: '.'+sections[section]+'.dasboardLessons > .col > .m-portlet',
+        topSpacing: $('#m_header').height(),
+        zIndex: 99
+    });
+}

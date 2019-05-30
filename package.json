@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "axios": "^0.18",
-    "bootstrap": "^4.2.1",
+    "bootstrap": "^4.3.1",
     "cross-env": "^5.1",
     "jquery": "^3.4.0",
     "laravel-mix": "^4.0.15",
@@ -24,6 +24,7 @@
     "bootstrap-multiselect": "^0.9.13-1",
     "bootstrap-tagsinput": "^0.7.1",
     "gulp": "^4.0.1",
+    "highcharts": "^7.1.1",
     "icheck": "^1.0.2",
     "jquery-multiselect": "^1.0.0",
     "jquery-sticky": "^1.0.4",

@@ -293,7 +293,20 @@ jQuery(document).ready(function() {
 
     $("#lightgallery").lightGallery();
 
+    $('.sampleVideo .m-portlet__head').sticky({
+        container: '.sampleVideo',
+        topSpacing: $('#m_header').height(),
+        zIndex: 99
+    });
+
     $('.productDetailes .m-portlet__head').sticky({
+        container: '.productDetailes',
+        topSpacing: $('#m_header').height(),
+        zIndex: 99
+    });
+
+    $('.relatedProduct .m-portlet__head').sticky({
+        container: '.relatedProduct',
         topSpacing: $('#m_header').height(),
         zIndex: 99
     });
@@ -438,6 +451,32 @@ jQuery(document).ready(function() {
         ProductShowPage.refreshPrice([] , productsState , []);
     });
 
+    $('.productShowBlock').OwlCarouselType2({
+        OwlCarousel: {
+            responsive: {
+                0: {
+                    items: 1
+                },
+                400: {
+                    items: 2
+                },
+                600: {
+                    items: 3
+                },
+                800: {
+                    items: 4
+                },
+                1000: {
+                    items: 5
+                }
+            }
+        },
+        grid: {
+            columnClass: 'col-12 col-sm-6 col-md-2 gridItem'
+        },
+        defaultView: 'OwlCarousel', // OwlCarousel or grid
+        childCountHideOwlCarousel: 4
+    });
 
     var player = videojs('videoPlayer', {language: 'fa'});
 

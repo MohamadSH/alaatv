@@ -192,7 +192,7 @@ var Alaasearch = function () {
 </div>';
     }
 
-    function getSetPamphletItem(data) {
+    function getPamphletItem(data) {
 
         var widgetActionLink = data.url;
         var widgetTitle = data.name;
@@ -232,6 +232,7 @@ var Alaasearch = function () {
             '</div>';
     }
 
+
     function makeWidgetFromJsonResponse(data, type) {
         switch (type) {
             case 'product':
@@ -241,9 +242,9 @@ var Alaasearch = function () {
             case 'set':
                 return getSetCarouselItem(data);
             case 'pamphlet':
-                return getSetPamphletItem(data);
+                return getPamphletItem(data);
             case 'article':
-                return getSetPamphletItem(data);
+                return getPamphletItem(data);
         }
     }
 
