@@ -620,7 +620,7 @@ class HomeController extends Controller
     
     function siteMapXML()
     {
-        return redirect(action('SitemapController@index'), 301);
+        return redirect(action('Web\SitemapController@index'), 301);
     }
     
     /**
