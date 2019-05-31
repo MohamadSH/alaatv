@@ -13,7 +13,7 @@
     height: auto;
 }
 .certificates-items img {
-    max-width: 130px;
+    max-width: 50%;
     cursor: pointer;
     transition: all 0.5s;
 }

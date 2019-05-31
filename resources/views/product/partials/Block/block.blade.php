@@ -1,4 +1,13 @@
-@if(isset($block) && $block !== null)
+@if(
+    isset($block) && $block !== null &&
+    (
+        isset($blockType) &&
+        (
+            ($blockType === 'content' && isset($block->contents) && $block->contents->count() > 0) ||
+            ($blockType === 'product' && isset($block->products) && $block->products->count() > 0)
+        )
+    )
+)
     <div class="row @if(isset($blockCustomClass)) {{ $blockCustomClass }} @endif blockId-{{ $block->id }} {{ $block->class }}"
          @if(isset($blockCustomId))
             id="{{ $blockCustomId }}"

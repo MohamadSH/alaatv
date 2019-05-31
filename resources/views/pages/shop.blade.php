@@ -125,5 +125,15 @@
 
 @section('page-js')
     <script src="{{ mix('/js/page-shop.js') }}"></script>
+    <script>
+        $( window ).resize(function() {
+            initCertificatesItemsHeight();
+        });
+        function initCertificatesItemsHeight() {
+            var calcTop = ($('.certificates-col').height()/2)-($('.certificates-items').height()/2);
+            console.log('calcTop: ', calcTop);
+            $('.certificates-items').css({'position':'absolute', 'top':calcTop+'px'});
+        }
+    </script>
 @endsection
 
