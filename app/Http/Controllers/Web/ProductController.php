@@ -195,11 +195,9 @@ class ProductController extends Controller
 
         $product->isFree = $isFree;
 
-        if(Arr::has($inputData , 'introVideo')){
-            $product->intro_videos = $this->storeIntroVideo(Arr::get($inputData, 'introVideo') , Arr::get($inputData, 'thumbnail'));
-        }
-
-        //Storing product's catalog
+        $product->intro_videos = $this->setIntroVideos(Arr::get($inputData, 'introVideo'), Arr::get($inputData, 'introVideoThumbnail'));
+        
+            //Storing product's catalog
         $storeFileResult = $this->storeCatalogOfProduct($product, $files);
         //ToDo : delete the file if it is an update
         
@@ -1365,23 +1363,32 @@ class ProductController extends Controller
     }
 
     /**
-     * @param string $videoLink
-     * @param string $thumbnailLink
+     * @param $introVideo
+     * @param $introVideoThumbnail
      * @return Collection
      */
-    private function storeIntroVideo(string $videoLink , string $thumbnailLink): Collection
+    private function setIntroVideos($introVideo, $introVideoThumbnail)
     {
-        $videoUrl = $videoLink;
-        $videoPath = parse_url($videoUrl)['path'];
-        $videoExtension = pathinfo($videoPath, PATHINFO_EXTENSION);
-        $hqVideo = $this->makeIntroVideoFileStdClass(config('constants.DISK_FREE_CONTENT'), $videoUrl, $videoPath, $videoExtension, null, 'کیفیت بالا', '480p');
-        $videos = $this->mekeIntroVideosArray($hqVideo);
+        $videos = null;
+        if (isset($introVideo)) {
+            $videos = $this->makeIntroVideos($introVideo);
+        }
 
-        $thumbnailUrl = $thumbnailLink;
-        $thumbnailPath = parse_url($thumbnailUrl)['path'];
-        $thumbnailExtension = pathinfo($thumbnailPath, PATHINFO_EXTENSION);
-        $thumbnail = $this->makeVideoFileThumbnailStdClass(config('constants.DISK_FREE_CONTENT'), $thumbnailUrl, $thumbnailPath, $thumbnailExtension);
+        $thumbnail = null;
+        if (isset($introVideoThumbnail)) {
+            $thumbnail = $this->makeIntroVideoThumbnail($introVideoThumbnail);
+        }
 
+        return $this->makeIntroVideoCollection($videos, $thumbnail);
+    }
+    
+    /**
+     * @param array $videos
+     * @param array $thumbnail
+     * @return Collection
+     */
+    private function makeIntroVideoCollection(array $videos=null , array $thumbnail=null): Collection
+    {
         $introVideos = collect();
         $introVideos->push([
             'video' => $videos,
@@ -1389,5 +1396,32 @@ class ProductController extends Controller
         ]);
 
         return $introVideos;
+    }
+
+    /**
+     * @param string $thumbnailLink
+     * @return array
+     */
+    private function makeIntroVideoThumbnail(string $thumbnailLink): array
+    {
+        $thumbnailUrl = $thumbnailLink;
+        $thumbnailPath = parse_url($thumbnailUrl)['path'];
+        $thumbnailExtension = pathinfo($thumbnailPath, PATHINFO_EXTENSION);
+        $thumbnail = $this->makeVideoFileThumbnailStdClass(config('constants.DISK_FREE_CONTENT'), $thumbnailUrl, $thumbnailPath, $thumbnailExtension);
+        return $thumbnail;
+    }
+
+    /**
+     * @param string $videoLink
+     * @return array
+     */
+    private function makeIntroVideos(string $videoLink): array
+    {
+        $videoUrl = $videoLink;
+        $videoPath = parse_url($videoUrl)['path'];
+        $videoExtension = pathinfo($videoPath, PATHINFO_EXTENSION);
+        $hqVideo = $this->makeIntroVideoFileStdClass(config('constants.DISK_FREE_CONTENT'), $videoUrl, $videoPath, $videoExtension, null, 'کیفیت بالا', '480p');
+        $videos = $this->mekeIntroVideosArray($hqVideo);
+        return $videos;
     }
 }
