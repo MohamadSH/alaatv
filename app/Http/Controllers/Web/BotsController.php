@@ -958,6 +958,32 @@ class BotsController extends Controller
                 }
                 dd("Tags DONE!");
             }
+
+            if($request->has('ghesdibug')){
+                $orders = Order::where('paymentstatus_id', config('constants.PAYMENT_STATUS_INDEBTED'));
+
+                $since = $request->get('since');
+                if(isset($since))
+                    $orders->where('completed_at' , '>=' , $since.' 00:00:00');
+
+                $till = $request->get('till');
+                if(isset($till))
+                    $orders->where('completed_at' , '<=' , $till.' 23:59:59');
+
+                $orders = $orders->get();
+                dump('Found '.$orders->count().' orders');
+                foreach ($orders as $order){
+                    if($order->totalCost() != $order->totalPaidCost())
+                    {
+                        $orderLink = action('Web\OrderController@edit' , $order);
+                        echo('<a target="_blank" href="'.$orderLink.'">'.$order->id.'</a>');
+                        echo('<br>');
+                    }
+                }
+                
+                dd('Done!');
+
+            }
         } catch (\Exception    $e) {
             $message = "unexpected error";
             
