@@ -10,6 +10,7 @@ namespace App\Traits;
 
 use App\Bon;
 use App\Order;
+use Illuminate\Support\Facades\Cache;
 
 trait HandleOrderPayment
 {
@@ -21,7 +22,12 @@ trait HandleOrderPayment
     protected function handleOrderSuccessPayment(Order $order): void
     {
         $order->closeWalletPendingTransactions();
-        
+
+        //refreshing order after closing it's wallet transactions
+        // issue #1763
+        Cache::tags('Order:'.$order->id)->flush();
+        $order = Order::Find($order->id);
+
         $updateOrderPaymentStatusResult = $this->updateOrderPaymentStatus($order);
         
         /** Attaching user bons for this order */

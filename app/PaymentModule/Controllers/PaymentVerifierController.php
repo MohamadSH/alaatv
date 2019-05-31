@@ -49,8 +49,7 @@ class PaymentVerifierController extends Controller
                 $verificationResult->getCardPanMask()
             );
             //Fresh the order
-            $myOrder = Order::Find($transaction->order->id);
-            $this->handleOrderSuccessPayment($myOrder);
+            $this->handleOrderSuccessPayment($transaction->order);
             $assetLink = '<a href="'.route('user.asset').'">دانلودهای من</a>';
             $responseMessages[]= 'برای دانلود محصولاتی که خریده اید به صفحه روبرو بروید: '.$assetLink;
             $responseMessages[]= 'توجه کنید که محصولات پیش خرید شده در تاریخ مقرر شده برای دانلود قرار داده می شوند';
