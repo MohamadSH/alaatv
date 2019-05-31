@@ -1,6 +1,7 @@
 @if(
     isset($block) && $block !== null &&
     (
+        (!isset($blockType)) ||
         isset($blockType) &&
         (
             ($blockType === 'content' && isset($block->contents) && $block->contents->count() > 0) ||

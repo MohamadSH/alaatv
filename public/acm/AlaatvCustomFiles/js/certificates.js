@@ -19,7 +19,9 @@ $( window ).resize(function() {
 });
 function initCertificatesItemsHeight() {
     var calcTop = ($('.certificates-col').height()/2)-($('.certificates-items').height()/2);
-    console.log('calcTop: ', calcTop);
     $('.certificates-items').css({'position':'absolute', 'top':calcTop+'px'});
 }
-initCertificatesItemsHeight();
+
+$(document).ready(function () {
+    initCertificatesItemsHeight();
+});
