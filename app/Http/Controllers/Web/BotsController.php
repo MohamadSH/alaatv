@@ -960,7 +960,10 @@ class BotsController extends Controller
             }
 
             if($request->has('ghesdibug')){
-                $orders = Order::where('paymentstatus_id', config('constants.PAYMENT_STATUS_INDEBTED'));
+                $orders = Order::where('paymentstatus_id', config('constants.PAYMENT_STATUS_INDEBTED'))
+                                ->whereDoesntHave('orderproducts' , function ($q){
+                                    $q->where('product_id' , Product::CUSTOM_DONATE_PRODUCT);
+                                });
 
                 $since = $request->get('since');
                 if(isset($since))
@@ -989,6 +992,30 @@ class BotsController extends Controller
                 }
                 dd('Done!');
 
+            }
+
+            if($request->has('fixzerodonate')){
+                $orders = Order::where('paymentstatus_id' , config('constants.PAYMENT_STATUS_INDEBTED'))
+                                ->where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'))
+                                ->where('costWithoutcoupon' , 0)
+                                ->whereHas('orderproducts' , function ($q){
+                                    $q->where('product_id' , Product::CUSTOM_DONATE_PRODUCT);
+                                })
+                                ->get();
+
+                dump('Found total '.$orders->count().' fake donate orders');
+                $counter = 0;
+                foreach ($orders as $order) {
+                    if($order->totalPaidCost() == 0)
+                    {
+                        $counter++;
+                        $orderLink = action('Web\OrderController@edit' , $order);
+                        echo $counter.' - ';
+                        echo('<a target="_blank" href="'.$orderLink.'">'.$order->id.'</a>');
+                        echo('<br>');
+                    }
+                }
+                dd('Done!');
             }
         } catch (\Exception    $e) {
             $message = "unexpected error";
