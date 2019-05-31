@@ -72,6 +72,8 @@
     <script src="/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type="text/javascript"></script>
     <script>
 
+        var selectedProducts = {!! json_encode($setProducts->pluck('id')) !!};
+        
         $("input.setTags").tagsinput({
             tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
         });
@@ -79,19 +81,6 @@
          * Start up jquery
          */
         jQuery(document).ready(function () {
-            /*
-             validdSince
-             */
-            $("#productFileValidSince").persianDatepicker({
-                altField: '#productFileValidSinceAlt',
-                altFormat: "YYYY MM DD",
-                observer: true,
-                format: 'YYYY/MM/DD',
-                altFieldFormatter: function (unixDate) {
-                    var d = new Date(unixDate).toISOString();
-                    return d;
-                }
-            });
 
             $('#productShortDescriptionSummerNote').summernote({height: 300});
 
@@ -105,5 +94,15 @@
         });
     </script>
     <script src="/acm/AlaatvCustomFiles/js/admin-product.js" type="text/javascript"></script>
+    <script>
+
+        jQuery(document).ready(function () {
+
+            for(index in selectedProducts) {
+                var productId = selectedProducts[index];
+                $('.multiselect-container li input[type="checkbox"][value="'+productId+'"]').prop('checked', true);
+            }
+        });
+    </script>
 @endsection
 @endpermission

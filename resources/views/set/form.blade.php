@@ -22,6 +22,15 @@
                         </h3>
                     </div>
                 </div>
+                <div class="m-portlet__head-tools">
+                    <button type="submit" class="btn m-btn--pill m-btn--air btn-warning">
+                        @if($editForm)
+                            اصلاح
+                        @else
+                            ثبت
+                        @endif
+                    </button>
+                </div>
             </div>
             <div class="m-portlet__body">
                 <div class="form-group">
@@ -138,7 +147,7 @@
                         <span>افزودن محصول جدید به این دسته محتوا</span>
                         <span></span>
                     </div>
-        
+    
                     @include('admin.filters.productsFilter', [
                         "id" => "setProduct",
                         'everyProduct'=>false,
