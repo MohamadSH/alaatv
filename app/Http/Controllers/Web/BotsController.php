@@ -971,16 +971,22 @@ class BotsController extends Controller
                     $orders->where('completed_at' , '<=' , $till.' 23:59:59');
 
                 $orders = $orders->get();
-                dump('Found '.$orders->count().' orders');
+                dump('Found total '.$orders->count().' indebted orders');
+                $counter = 0;
                 foreach ($orders as $order){
                     if($order->totalCost() == $order->totalPaidCost())
                     {
+                        $counter++;
                         $orderLink = action('Web\OrderController@edit' , $order);
+                        echo $counter.' - ';
                         echo('<a target="_blank" href="'.$orderLink.'">'.$order->id.'</a>');
                         echo('<br>');
                     }
                 }
-                
+                if($counter == 0 )
+                {
+                    dump('No corrupted orders found');
+                }
                 dd('Done!');
 
             }
