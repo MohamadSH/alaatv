@@ -48,7 +48,9 @@ class PaymentVerifierController extends Controller
                 $verificationResult->getRefId(),
                 $verificationResult->getCardPanMask()
             );
-            $this->handleOrderSuccessPayment($transaction->order);
+            //Fresh the order
+            $myOrder = Order::Find($transaction->order->id);
+            $this->handleOrderSuccessPayment($myOrder);
             $assetLink = '<a href="'.route('user.asset').'">دانلودهای من</a>';
             $responseMessages[]= 'برای دانلود محصولاتی که خریده اید به صفحه روبرو بروید: '.$assetLink;
             $responseMessages[]= 'توجه کنید که محصولات پیش خرید شده در تاریخ مقرر شده برای دانلود قرار داده می شوند';
@@ -99,7 +101,7 @@ class PaymentVerifierController extends Controller
     private function handleOrderCanceledTransaction($transaction): void
     {
         if ($transaction->transactionstatus_id != config("constants.TRANSACTION_STATUS_UNPAID"))
-            //it is not an instalment payment
+            //if it is not the payment for an instalment
             $transaction->transactionstatus_id = config('constants.TRANSACTION_STATUS_UNSUCCESSFUL');
     }
 
