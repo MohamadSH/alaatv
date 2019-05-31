@@ -17,7 +17,8 @@ trait ProductCommon
     {
         $key = "product:validProductfiles:pamphlet|video".$product->cacheKey();
         
-        return Cache::remember($key, config("constants.CACHE_60"), function () use ($product) {
+        return Cache::tags(['product'])
+        ->remember($key, config("constants.CACHE_60"), function () use ($product) {
             $productfiletypes   = Productfiletype::all();
             $allFilesCollection = collect();
             foreach ($productfiletypes as $productfiletype) {
@@ -56,7 +57,7 @@ trait ProductCommon
         $key = "product:productExtraCostFromAttributes:Product"."\\".$product->cacheKey()."\\extraAttributeValues:".(isset($extraAttributeValues) ? implode("",
                 $extraAttributeValues) : "-");
         
-        return Cache::tags('bon')
+        return (int)Cache::tags(['product'])->tags('bon')
             ->remember($key, config("constants.CACHE_60"), function () use ($product, $extraAttributeValues) {
                 $totalExtraCost = 0;
                 foreach ($extraAttributeValues as $attributevalueId) {
@@ -165,7 +166,8 @@ trait ProductCommon
         }
         $key = "product:makeCostCollection:".md5($key);
         
-        return Cache::remember($key, config("constants.CACHE_60"), function () use ($products) {
+        return Cache::tags(['product'])
+        ->remember($key, config("constants.CACHE_60"), function () use ($products) {
             $costCollection = collect();
             foreach ($products as $product) {
                 if ($product->producttype_id == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
@@ -226,7 +228,8 @@ trait ProductCommon
         }
         $key = "product:makeProductCollection:".$key;
         
-        return Cache::remember($key, config("constants.CACHE_60"), function () use ($productsId) {
+        return Cache::tags(['product'])
+        ->remember($key, config("constants.CACHE_60"), function () use ($productsId) {
             if (isset($productsId)) {
                 $allProducts = Product::getProducts()
                     ->whereIn("id", $productsId)
@@ -255,7 +258,8 @@ trait ProductCommon
         }
         $key = "product:haveSameFamily:".$key;
         
-        return Cache::remember($key, config("constants.CACHE_60"), function () use ($products) {
+        return Cache::tags(['product'])
+        ->remember($key, config("constants.CACHE_60"), function () use ($products) {
             $flag = true;
             foreach ($products as $key => $product) {
                 if (isset($products[$key + 1])) {

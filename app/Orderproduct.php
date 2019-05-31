@@ -196,7 +196,8 @@ class Orderproduct extends BaseModel
         $key = "Orderproduct:getExtraCost:".$this->cacheKey()."\\".(isset($extraAttributevaluesId) ? implode(".",
                 $extraAttributevaluesId) : "-");
         
-        return Cache::remember($key, config("constants.CACHE_60"), function () use ($extraAttributevaluesId) {
+        return (int)Cache::tags(["orderproduct"])
+        ->remember($key, config("constants.CACHE_60"), function () use ($extraAttributevaluesId) {
             $extraCost = 0;
             if (isset($extraAttributevaluesId)) {
                 $extraAttributevalues = $this->attributevalues->whereIn("id", $extraAttributevaluesId);

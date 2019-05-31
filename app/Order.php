@@ -878,7 +878,7 @@ class Order extends BaseModel
     
     public function totalCost()
     {
-        return $this->obtainOrderCost()["totalCost"];
+        return (int)$this->obtainOrderCost()["totalCost"];
     }
     
     /**
@@ -929,7 +929,7 @@ class Order extends BaseModel
         $order = $this;
         $key   = "order:totalPaidCost:".$order->cacheKey();
         
-        return Cache::tags(["order"])
+        return (int)Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_60"), function () use ($order) {
                 $totalPaidCost          = 0;
                 $successfulTransactions = $order->successfulTransactions;
@@ -947,7 +947,7 @@ class Order extends BaseModel
         $order = $this;
         $key   = "order:totalRefund:".$order->cacheKey();
         
-        return Cache::tags(["order"])
+        return (int)Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_60"), function () use ($order) {
                 $totalRefund            = 0;
                 $successfulTransactions = $order->successfulTransactions;
@@ -1137,7 +1137,7 @@ class Order extends BaseModel
     {
         $order = $this;
         $key   = "order:debt:".$order->cacheKey();
-        return Cache::tags(["order"])
+        return (int)Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_60"), function () use ($order) {
                 if ($this->orderstatus_id == config("constants.ORDER_STATUS_REFUNDED")) {
                     return -($this->totalPaidCost() + $this->totalRefund());
@@ -1158,7 +1158,7 @@ class Order extends BaseModel
         $order = $this;
         $key   = "order:usedBonSum:".$order->cacheKey();
         
-        return Cache::tags(["order"])
+        return (int)Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
                 $bonSum = 0;
                 if (isset($this->orderproducts)) {
@@ -1182,7 +1182,7 @@ class Order extends BaseModel
         $order = $this;
         $key   = "order:addedBonSum:".$order->cacheKey();
         
-        return Cache::tags(["order"])
+        return (int)Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
                 $bonSum = 0;
                 if (isset($intendedUser)) {
