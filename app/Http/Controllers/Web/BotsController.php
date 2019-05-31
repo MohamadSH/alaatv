@@ -973,7 +973,7 @@ class BotsController extends Controller
                 $orders = $orders->get();
                 dump('Found '.$orders->count().' orders');
                 foreach ($orders as $order){
-                    if($order->totalCost() != $order->totalPaidCost())
+                    if($order->totalCost() == $order->totalPaidCost())
                     {
                         $orderLink = action('Web\OrderController@edit' , $order);
                         echo('<a target="_blank" href="'.$orderLink.'">'.$order->id.'</a>');
