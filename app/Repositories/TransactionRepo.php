@@ -104,6 +104,7 @@ class TransactionRepo
             'destinationBankAccount_id' => $bankAccountId,
 //            'transactionstatus_id'      => config("constants.TRANSACTION_STATUS_SUCCESSFUL"),
         // Commented temporary to see if this caused Mellat bug or not
+        // issue #1760
             'transactionstatus_id'      => 3,
         ];
         
