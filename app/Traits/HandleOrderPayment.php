@@ -21,8 +21,6 @@ trait HandleOrderPayment
     protected function handleOrderSuccessPayment(Order $order): void
     {
         $order->closeWalletPendingTransactions();
-
-        $order = $order->fresh();
         
         $updateOrderPaymentStatusResult = $this->updateOrderPaymentStatus($order);
         
@@ -39,7 +37,7 @@ trait HandleOrderPayment
      */
     protected function updateOrderPaymentStatus(Order $order): array
     {
-        $paymentstatus_id = (int) $order->totalPaidCost() < (int) $order->totalCost() ? config('constants.PAYMENT_STATUS_INDEBTED') : config('constants.PAYMENT_STATUS_PAID');
+        $paymentstatus_id = $order->totalPaidCost() < $order->totalCost() ? config('constants.PAYMENT_STATUS_INDEBTED') : config('constants.PAYMENT_STATUS_PAID');
         
         $result['paymentstatus_id'] = $paymentstatus_id;
 

@@ -117,7 +117,7 @@ trait ProductBonTrait
     {
         $key = "product:bonPlus:".$bonId.$this->cacheKey();
         
-        return Cache::tags(["product"])
+        return (int)Cache::tags(["product"])
             ->remember($key, config("constants.CACHE_600"), function () use ($bonId) {
                 $bonPlus = 0;
                 $bonPlus += $this->bons->where("id", $bonId)

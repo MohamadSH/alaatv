@@ -1455,7 +1455,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $myProduct = $this;
         $key       = 'product:getAllParents:'.$myProduct->cacheKey();
     
-        return Cache::remember($key, config('constants.CACHE_600'), function () use ($myProduct) {
+        return Cache::tags(['product'])
+            ->remember($key, config('constants.CACHE_600'), function () use ($myProduct) {
             $parents = collect();
             while ($myProduct->hasParents()) {
                 $myparent = $myProduct->parents->first();

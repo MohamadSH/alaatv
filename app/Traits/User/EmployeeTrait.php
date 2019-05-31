@@ -10,6 +10,7 @@ namespace App\Traits\User;
 
 use App\Collection\UserCollection;
 use App\User;
+use Cache;
 
 trait EmployeeTrait
 {

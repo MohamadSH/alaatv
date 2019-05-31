@@ -1526,7 +1526,7 @@ class OrderController extends Controller
                  * End
                  */
                 
-                if ($newOrder->totalPaidCost() >= (int) $newOrder->totalCost()) {
+                if ($newOrder->totalPaidCost() >=  $newOrder->totalCost()) {
                     $newOrder->paymentstatus_id = config('constants.PAYMENT_STATUS_PAID');
                     $newOrder->update();
                 }
