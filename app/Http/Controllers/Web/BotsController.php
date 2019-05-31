@@ -1017,6 +1017,39 @@ class BotsController extends Controller
                 }
                 dd('Done!');
             }
+
+            if($request->has('checkorderproducts')){
+                $orders = Order::where('paymentstatus_id' , config('constants.PAYMENT_STATUS_PAID'))
+                                ->where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'));
+
+                $since = $request->get('since');
+                if(isset($since))
+                    $orders->where('completed_at' , '>=' , $since.' 00:00:00');
+
+                $till = $request->get('till');
+                if(isset($till))
+                    $orders->where('completed_at' , '<=' , $till.' 23:59:59');
+
+                $orders = $orders->get();
+                dump('Found total '.$orders->count().' orders');
+                $counter = 0;
+                foreach ($orders as $order){
+                    if($order->obtainOrderCost(true , false)['totalCost'] <  $order->totalPaidCost())
+                    {
+                        $counter++;
+                        $orderLink = action('Web\OrderController@edit' , $order);
+                        echo $counter.' - ';
+                        echo('<a target="_blank" href="'.$orderLink.'">'.$order->id.'</a>');
+                        echo('<br>');
+                    }
+                }
+                if($counter == 0 )
+                {
+                    dump('No corrupted orders found');
+                }
+                dd('Done!');
+
+            }
         } catch (\Exception    $e) {
             $message = "unexpected error";
             
