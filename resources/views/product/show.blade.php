@@ -401,7 +401,7 @@
                                                             controls
                                                             {{-- preload="auto"--}}
                                                             preload="none"
-                                                            poster = 'https://cdn.sanatisharif.ir/media/204/240p/204054ssnv.jpg'>
+                                                            poster = '@if(isset($product->introVideoThumbnail)) {{$product->introVideoThumbnail}} @else https://cdn.sanatisharif.ir/media/204/240p/204054ssnv.jpg @endif'>
     
                                                         {{--                                                        <source--}}
                                                         {{--                                                                src="{{$product->introVideo}}"--}}

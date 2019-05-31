@@ -140,6 +140,7 @@ use App\Traits\{ProductCommon,
  * @property-read \App\Collection\SetCollection|\App\Contentset[]                $sets
  * @property-read mixed                                                          $cache_cooldown_seconds
  * @property mixed block
+ * @property \Illuminate\Support\Collection intro_videos
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product main()
  */
 class Product extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
@@ -194,7 +195,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'discount',
         'amount',
         'attributeset_id',
-        'introVideo',
         'isFree',
         'specialDescription',
         'redirectUrl',
@@ -219,7 +219,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'bonDiscount',
         'editLink',
         'removeLink',
-        'children'
+        'children',
+        'introVideo',
     ];
     
     protected $hidden = [
@@ -242,6 +243,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'grand',
         'productSet',
         'attributeset',
+        'intro_videos',
+        'block_id'
     ];
     
     /**
@@ -724,7 +727,20 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
         $this->attributes['tags'] = $tags;
     }
-    
+
+    /**
+     * Set the product's thumbnail.
+     *
+     * @param  Collection  $input
+     *
+     * @return void
+     */
+    public function setIntroVideosAttribute(Collection $input = null)
+    {
+        $this->attributes['intro_videos'] = optional($input)->toJson(JSON_UNESCAPED_UNICODE);
+    }
+
+
     public function producttype()
     {
         return $this->belongsTo(Producttype::class)
@@ -1742,5 +1758,40 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 return $this->children()->get();
             });
 
+    }
+
+    public function getIntroVideoAttribute(){
+        $intro = $this->intro_videos;
+        if(is_null($intro))
+            return null;
+
+        $intro = json_decode($intro);
+
+        if(!isset($intro[0]) || !isset($intro[0]->video))
+            return null;
+
+        $videos = $intro[0]->video;
+
+        if( !isset($videos[0]) || !isset($videos[0]->url))
+            return null;
+
+        return $videos[0]->url;
+    }
+
+    public function getIntroVideoThumbnailAttribute(){
+        $intro = $this->intro_videos;
+        if(is_null($intro))
+            return null;
+
+        $intro = json_decode($intro);
+        if(!isset($intro[0]) || !isset($intro[0]->thumbnail))
+            return null;
+
+        $thumbnail = $intro[0]->thumbnail;
+
+        if(!isset($thumbnail->url))
+            return null;
+
+        return $thumbnail->url;
     }
 }

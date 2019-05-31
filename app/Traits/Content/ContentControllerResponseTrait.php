@@ -216,7 +216,7 @@ trait ContentControllerResponseTrait
      */
     public function makeFreeVideoFileArray(string $fileName , string $disk, int $contentsetId): array
     {
-        $serverUrl = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.DOWNLOAD_SERVER_NAME');
+        $serverUrl = config('constants.DOWNLOAD_SERVER_PROTOCOL').'cdn.sanatisharif.ir';
         $fileUrl = [
             '720p' => [
                 //ToDo : Hard Code!

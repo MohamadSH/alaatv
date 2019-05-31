@@ -22,7 +22,6 @@ use App\{
     Major,
     Product,
     Question,
-    Contentset,
     Eventresult,
     Productfile,
     Traits\Helper,
@@ -69,7 +68,7 @@ class HomeController extends Controller
 
 
         $authException = [
-            'debug',
+//            'debug',
             'newDownload',
             'download',
             'telgramAgent',
@@ -84,7 +83,7 @@ class HomeController extends Controller
             'sendMail',
             'rules',
             'siteMapXML',
-            //            'uploadFile',
+//            'uploadFile',
             'search',
             'schoolRegisterLanding',
             'lernitoTree',
@@ -92,8 +91,7 @@ class HomeController extends Controller
         ];
         //        }
         $this->middleware('auth', ['except' => $authException]);
-        $this->middleware('permission:'.config('constants.LIST_EDUCATIONAL_CONTENT_ACCESS'),
-            ['only' => 'contentSetListTest']);
+        $this->middleware('role:admin', ['only' => 'debug']);
     }
 
     public function test(Product $product)
@@ -1185,9 +1183,6 @@ class HomeController extends Controller
         $htmlPrint .= '</ul>';
         
         return view('admin.topicsTree.index', compact('mote2', 'treePathData', 'htmlPrint', 'lastUpdatedByLernito'));
-    }
-
-    public function contentSetListTest(Request $request, Contentset $set){
     }
 
     private function getLastUpdatedByLernito(): array
