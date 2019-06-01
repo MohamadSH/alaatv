@@ -959,7 +959,7 @@ class BotsController extends Controller
                 dd("Tags DONE!");
             }
 
-            if($request->has('ghesdibug')){
+            if($request->has('checkghesdi')){
                 $orders = Order::where('paymentstatus_id', config('constants.PAYMENT_STATUS_INDEBTED'))
                                 ->whereDoesntHave('orderproducts' , function ($q){
                                     $q->where('product_id' , Product::CUSTOM_DONATE_PRODUCT);
@@ -994,7 +994,7 @@ class BotsController extends Controller
 
             }
 
-            if($request->has('fixzerodonate')){
+            if($request->has('fakedonates')){
                 $orders = Order::where('paymentstatus_id' , config('constants.PAYMENT_STATUS_INDEBTED'))
                                 ->where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'))
                                 ->where('costWithoutcoupon' , 0)
@@ -1049,6 +1049,29 @@ class BotsController extends Controller
                 }
                 dd('Done!');
 
+            }
+
+            if($request->has('checktransactions')){
+                $transactions = Transaction::whereNotNull('transactionID')
+                                            ->where('transactionstatus_id' , config('constants.TRANSACTION_STATUS_UNSUCCESSFUL'));
+
+                $transactions = $transactions->get();
+                $totalCount = $transactions->count();
+                if($totalCount == 0 )
+                {
+                    dd('No corrupted transactions found');
+                }
+
+                dump('Found total '.$totalCount.' transactions');
+                $counter = 0;
+                foreach ($transactions as $transaction) {
+                    $counter++;
+                    $transactionLink = action('Web\TransactionController@edit' , $transaction);
+                    echo $counter.' - ';
+                    echo('<a target="_blank" href="'.$transactionLink.'">'.$transaction->id.'</a>');
+                    echo('<br>');
+                }
+                dd('Done!');
             }
         } catch (\Exception    $e) {
             $message = "unexpected error";
