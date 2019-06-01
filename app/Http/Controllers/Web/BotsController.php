@@ -1073,6 +1073,37 @@ class BotsController extends Controller
                 }
                 dd('Done!');
             }
+
+            if($request->has('checkmellat')){
+                $transactionId = $request->get('id');
+                if(!isset($transactionId)) {
+                    dd('Please provide transaction id');
+                }
+
+                $transaction = Transaction::find($transactionId);
+                if(!isset($transaction)){
+                    dd('Transaction not found');
+                }
+
+                $client = new \SoapClient('https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl');
+
+                $parameters = [
+                    'terminalId'      => config('behpardakht.terminalId'),
+                    'userName'        => config('behpardakht.username'),
+                    'userPassword'    => config('behpardakht.password'),
+                    'orderId'         => $transaction->order_id,
+                    'saleOrderId'     => $transaction->order_id,
+                    'saleReferenceId' => $transaction->transactionID,
+                ];
+
+
+                try {
+                    return $client->bpInquiryRequest($parameters);
+                } catch (\SoapFault $e) {
+                    throw $e;
+                }
+            }
+
         } catch (\Exception    $e) {
             $message = "unexpected error";
             
