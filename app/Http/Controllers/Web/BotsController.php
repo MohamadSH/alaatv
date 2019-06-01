@@ -1038,10 +1038,17 @@ class BotsController extends Controller
                 dump('Found total '.$orders->count().' orders');
                 $counter = 0;
                 foreach ($orders as $order){
+                    $orderTotalCost = $order->obtainOrderCost(true , false)['totalCost'];
+                    if($order->couponDiscount > 0)
+                    {
+                        $orderTotalCost =  (1 - ($order->couponDiscount/100) ) * $orderTotalCost ;
+                    }elseif($order->couponDiscountAmount > 0 ){
+                        $orderTotalCost =  $orderTotalCost - $order->couponDiscountAmount ;
+                    }
                     if($mode == 'paid_more'){
-                        $condition = $order->obtainOrderCost(true , false)['totalCost'] <  $order->totalPaidCost();
+                        $condition = ( ($orderTotalCost <  $order->totalPaidCost()) &&  ( $order->totalPaidCost() - $orderTotalCost ) > 5 );
                     }else{
-                        $condition = $order->obtainOrderCost(true , false)['totalCost'] >  $order->totalPaidCost();
+                        $condition = $orderTotalCost >  $order->totalPaidCost();
                     }
                     if($condition)
                     {
