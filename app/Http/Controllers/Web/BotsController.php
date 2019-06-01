@@ -1107,7 +1107,7 @@ class BotsController extends Controller
 
 
                 try {
-                    return $client->bpInquiryRequest($parameters);
+                    dd($client->bpInquiryRequest($parameters));
                 } catch (\SoapFault $e) {
                     throw $e;
                 }
