@@ -1019,6 +1019,10 @@ class BotsController extends Controller
             }
 
             if($request->has('checkorderproducts')){
+                $mode = 'paid_more';
+                if($request->has('notpaid')){
+                    $mode = 'not_paid';
+                }
                 $orders = Order::where('paymentstatus_id' , config('constants.PAYMENT_STATUS_PAID'))
                                 ->where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'));
 
@@ -1034,7 +1038,12 @@ class BotsController extends Controller
                 dump('Found total '.$orders->count().' orders');
                 $counter = 0;
                 foreach ($orders as $order){
-                    if($order->obtainOrderCost(true , false)['totalCost'] <  $order->totalPaidCost())
+                    if($mode == 'paid_more'){
+                        $condition = $order->obtainOrderCost(true , false)['totalCost'] <  $order->totalPaidCost();
+                    }else{
+                        $condition = $order->obtainOrderCost(true , false)['totalCost'] >  $order->totalPaidCost();
+                    }
+                    if($condition)
                     {
                         $counter++;
                         $orderLink = action('Web\OrderController@edit' , $order);
