@@ -861,8 +861,8 @@ class UserController extends Controller
         if ($user->checkUserProfileForLocking()) {
             $user->lockHisProfile();
         }
-        
-        if (in_array("roles", $data) && $authenticatedUser->can(config('constants.INSET_USER_ROLE')))
+
+        if (in_array("roles", $data) && isset($data["roles"]) && $authenticatedUser->can(config('constants.INSET_USER_ROLE')))
         {
             $this->syncRoles($data["roles"], $user);
         }
@@ -2115,8 +2115,9 @@ class UserController extends Controller
         
         if ($user->update()) {
 
-            if ($authenticatedUser->can(config('constants.INSET_USER_ROLE'))) {
-                $this->syncRoles($request->get('roles'), $user);
+            $roles = $request->get('roles');
+            if (isset($roles) && $authenticatedUser->can(config('constants.INSET_USER_ROLE'))) {
+                $this->syncRoles($roles, $user);
             }
             
             $message = 'اطلاعات با موفقیت اصلاح شد';
