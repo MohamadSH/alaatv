@@ -115,7 +115,6 @@
             @include('product.partials.Block.block', [
                     'blockCustomClass'=>'shopBlock a--owl-carousel-type-2'
                 ])
-            
         @endif
     @endforeach
     

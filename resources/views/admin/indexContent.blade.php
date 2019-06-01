@@ -44,7 +44,6 @@
             {{--</div>--}}
 
             @permission((config('constants.LIST_EDUCATIONAL_CONTENT_ACCESS')))
-
             <!--begin::Portlet-->
             <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="content-portlet">
                 <div class="m-portlet__head">
@@ -178,7 +177,8 @@
                     </table>
                 </div>
             </div>
-            <!--end::Portlet-->@endpermission
+            <!--end::Portlet-->
+            @endpermission
 
             @permission((config('constants.LIST_ASSIGNMENT_ACCESS')))
             <!-- BEGIN ASSIGNMENT TABLE PORTLET-->
@@ -285,7 +285,8 @@
                     </table>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
             @permission((config('constants.LIST_CONSULTATION_ACCESS')))
             <!-- BEGIN CONSULTATION TABLE PORTLET-->
@@ -389,7 +390,8 @@
                     </table>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
             @permission((config('constants.LIST_QUESTION_ACCESS')))
             <!-- BEGIN QUESTION TABLE PORTLET-->
@@ -459,7 +461,8 @@
                     </table>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
             @permission((config('constants.LIST_MBTIANSWER_ACCESS')))
             <!-- BEGIN QUESTION TABLE PORTLET-->
@@ -530,7 +533,8 @@
                     </table>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
             @permission((config('constants.LIST_EVENTRESULT_ACCESS')))
             <!-- BEGIN QUESTION TABLE PORTLET-->
@@ -696,7 +700,8 @@
                     </table>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
             @permission((config('constants.LIST_SHARIF_REGISTER_ACCESS')))
             <!-- BEGIN QUESTION TABLE PORTLET-->
@@ -781,7 +786,8 @@
                     </table>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
             {{--@permission((config('constants.LIST_ARTICLE_ACCESS')))--}}
             {{--<!-- BEGIN ASSIGNMENT TABLE PORTLET-->--}}
