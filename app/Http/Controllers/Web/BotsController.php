@@ -1039,16 +1039,10 @@ class BotsController extends Controller
                 $counter = 0;
                 foreach ($orders as $order){
                     $orderTotalCost = (int)$order->obtainOrderCost(true , false)['totalCost'];
-                    if($order->couponDiscount > 0)
-                    {
-                        $orderTotalCost =  (1 - ($order->couponDiscount/100) ) * $orderTotalCost ;
-                    }elseif($order->couponDiscountAmount > 0 ){
-                        $orderTotalCost =  $orderTotalCost - $order->couponDiscountAmount ;
-                    }
                     if($mode == 'paid_more'){
                         $condition = (( $order->totalPaidCost() - $orderTotalCost ) > 5)?true:false ;
                     }else{
-                        $condition = (( $order->totalPaidCost() - $orderTotalCost ) > 0)?true:false ;
+                        $condition = ( $orderTotalCost > $order->totalPaidCost() )?true:false ;
                     }
                     if($condition)
                     {
