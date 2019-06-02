@@ -49,7 +49,9 @@
                                                     <a href="{{ action('Web\ContentController@show', $contentSet['content_id']) }}" class="btn btn-sm m-btn--pill btn-brand btnViewMore">
                                                         <i class="fa fa-play"></i> / <i class="fa fa-cloud-download-alt"></i>
                                                     </a>
-                                                    <img src="{{ $contentSet['pic'] }}?w=253&h=142" alt="{{ $contentSet['displayName'] }}"/>
+                                                    <a href="{{ action('Web\ContentController@show', $contentSet['content_id']) }}">
+                                                        <img src="{{ $contentSet['pic'] }}?w=253&h=142" alt="{{ $contentSet['displayName'] }}"/>
+                                                    </a>
                                                     <div class="m-widget19__shadow"></div>
                                                 </div>
                                                 <div class="m-widget19__content">

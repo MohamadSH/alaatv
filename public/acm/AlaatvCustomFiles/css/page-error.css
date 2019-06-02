@@ -1,0 +1,19 @@
+.m-body .m-content {
+    padding: 30px 0;
+}
+.errorPage {
+    position: relative;
+}
+.errorPage .background {
+    padding: 0;
+}
+.errorPage .background svg {
+    max-width: 100%;
+}
+.errorPage .message {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    width: 100%;
+    text-align: center;
+}
