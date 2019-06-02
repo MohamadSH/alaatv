@@ -71,6 +71,13 @@ mix.babel(
     'public/js/content-search.js'
 ).version();
 
+mix.babel(
+    [
+        'public/acm/AlaatvCustomFiles/js/page-error.js'
+    ],
+    'public/js/page-error.js'
+).version();
+
 mix.scripts(
     [
         'public/acm/AlaatvCustomFiles/js/page-contactUs.js'
@@ -189,6 +196,13 @@ mix.styles(
         'public/acm/AlaatvCustomFiles/css/page-user-orders.css',
     ],
     'public/css/user-orders.css'
+).version();
+
+mix.styles(
+    [
+        'public/acm/AlaatvCustomFiles/css/page-error.css',
+    ],
+    'public/css/page-error.css'
 ).version();
 
 
