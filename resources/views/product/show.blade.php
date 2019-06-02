@@ -500,7 +500,7 @@
 
     {{--نمونه فیلم--}}
     @include('product.partials.Block.block', [
-        'blockTitle'=>$productInfoNavSampleVideo,
+        'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo']),
         'blockUrlDisable'=>true,
         'blockType'=>'content',
         'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
@@ -565,7 +565,7 @@
     @endif
 
     @include('product.partials.Block.block', [
-        'blockTitle'=>$productInfoNavRelatedProduct,
+        'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'relatedProduct']),
         'blockUrlDisable'=>true,
         'blockType'=>'product',
         'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock relatedProduct',
