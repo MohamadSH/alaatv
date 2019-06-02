@@ -37,6 +37,7 @@ public/phpinfo.php
 public/test.php
 
 public/js/all.js
+public/js/login.js
 public/js/page-shop.js
 public/js/contactUs.js
 public/js/user-orders.js

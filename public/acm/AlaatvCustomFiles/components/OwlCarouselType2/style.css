@@ -43,7 +43,7 @@
 }
 
 .a--owl-carousel-type-2 .carousel,
-.a--owl-carousel-type-2 .m-widget30 .m-widget_head .m-widget_head-owlcarousel-items .m-widget_head-owlcarousel-item {
+.a--owl-carousel-type-2 .owl-stage-outer .owl-stage .owl-item .m-widget_head-owlcarousel-item {
     -webkit-box-shadow: 0 1px 15px 1px rgba(55, 41, 84, 0.3) !important;
     box-shadow: 0 1px 15px 1px rgba(55, 41, 84, 0.3) !important;
     margin-top: 45px;

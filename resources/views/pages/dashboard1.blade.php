@@ -98,7 +98,7 @@
     <!--end:: Widgets/Stats-->
     @foreach($sections as $section)
         @if($section['lessons']->count() > 0)
-            @include('product.partials.owl-carousel.contentSet.widget1', [
+            @include('product.partials.owl-carousel.widget1', [
                 'contentCustomClass'=>$section["class"].' a--content-carousel-1 dasboardLessons',
                 'contentCustomId'=>'sectionId-'.$section["class"],
                 'contentTitle'=>$section["descriptiveName"],

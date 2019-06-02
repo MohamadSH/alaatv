@@ -25,6 +25,54 @@ let mapGeoJSON = {
   "features": [
     {
       "type": "Feature",
+      "id": "IR.unknown",
+      "properties": {
+        "hc-group": "admin1",
+        "hc-key": "ir-un",
+        "hc-a2": "UN",
+        "labelrank": "4",
+        "hasc": "IR.UN",
+        "alt-name": "unknown|unknown",
+        "woe-id": "2000000",
+        "subregion": null,
+        "fips": "IR15",
+        "postal-code": "UN",
+        "name": "نا مشخص",
+        "country": "Iran",
+        "type-en": "Province",
+        "region": null,
+        "longitude": "48.7558",
+        "woe-name": "Unknown",
+        "latitude": "31.3484",
+        "woe-label": "Unknown, IR, Iran",
+        "type": "Ostan"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1500,
+              3000
+            ],
+            [
+              1500,
+              1
+            ],
+            [
+              -1000,
+              -1
+            ],
+            [
+              -1000,
+              3000
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
       "id": "IR.5428",
       "properties": {
         "hc-group": "admin1",
