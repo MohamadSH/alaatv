@@ -45,68 +45,7 @@ class DonateController extends Controller
     {
         /** INITIAL VALUES    */
         
-        $monthToPeriodConvert = collect([
-            [
-                "month"       => "مهر",
-                "periodBegin" => "2018-09-23",
-                "periodEnd"   => "2018-10-23",
-            ],
-            [
-                "month"       => "آبان",
-                "periodBegin" => "2018-10-23",
-                "periodEnd"   => "2018-11-22",
-            ],
-            [
-                "month"       => "آذر",
-                "periodBegin" => "2018-11-22",
-                "periodEnd"   => "2018-12-22",
-            ],
-            [
-                "month"       => "دی",
-                "periodBegin" => "2018-12-22",
-                "periodEnd"   => "2019-01-21",
-            ],
-            [
-                "month"       => "بهمن",
-                "periodBegin" => "2019-01-21",
-                "periodEnd"   => "2019-02-20",
-            ],
-            [
-                "month"       => "اسفند",
-                "periodBegin" => "2019-02-20",
-                "periodEnd"   => "2019-03-21",
-            ],
-            [
-                "month"       => "فروردین",
-                "periodBegin" => "2019-03-21",
-                "periodEnd"   => "2019-04-21",
-            ],
-            [
-                "month"       => "اردیبهشت",
-                "periodBegin" => "2019-04-21",
-                "periodEnd"   => "2019-05-22",
-            ],
-            [
-                "month"       => "خرداد",
-                "periodBegin" => "2019-05-22",
-                "periodEnd"   => "2019-06-22",
-            ],
-            [
-                "month"       => "تیر",
-                "periodBegin" => "2019-06-22",
-                "periodEnd"   => "2019-07-23",
-            ],
-            [
-                "month"       => "مرداد",
-                "periodBegin" => "2019-07-23",
-                "periodEnd"   => "2019-08-23",
-            ],
-            [
-                "month"       => "شهریور",
-                "periodBegin" => "2019-08-23",
-                "periodEnd"   => "2019-09-23",
-            ],
-        ]);
+        $monthToPeriodConvert = collect(config('constants.JALALI_CALENDER'));
         $firstMonth           = $monthToPeriodConvert->first()["month"];
         $MONTH_SPEND          = 25000000;
         $LATEST_WEEK_NUMBER   = 3;
@@ -121,15 +60,7 @@ class DonateController extends Controller
         array_push($donateProductArray, Product::CUSTOM_DONATE_PRODUCT);
         $orders = $this->repo_getOrders($donateProductArray);
 
-        $currentGregorianDate     = Carbon::now()
-            ->timezone('Asia/Tehran');
-        $delimiter                = "/";
-        $currentJalaliDate        = $this->gregorian_to_jalali($currentGregorianDate->year,
-            $currentGregorianDate->month, $currentGregorianDate->day, $delimiter);
-        $currentJalaliDateSplit   = explode($delimiter, $currentJalaliDate);
-        $currentJalaliYear        = $currentJalaliDateSplit[0];
-        $currentJalaliMonth       = $currentJalaliDateSplit[1];
-        $currentJalaliDay         = $currentJalaliDateSplit[2];
+        list($currentJalaliYear, $currentJalaliMonth, $currentJalaliDay) = $this->todayJalaliSplittedDate();
         $currentJalaliMonthString = $this->convertToJalaliMonth($currentJalaliMonth);
         $currentJalaliMonthDays   = $this->getJalaliMonthDays($currentJalaliMonthString);
         
@@ -161,8 +92,7 @@ class DonateController extends Controller
         /** END **/
         
         /** CURRENT MONTH MAXIMUM DONATES **/
-        $today            = $monthToPeriodConvert->where("month", $currentJalaliMonthString)
-            ->first();
+        $today            = $monthToPeriodConvert->where("month", $currentJalaliMonthString)->first();
         $today            = $today["periodBegin"];
         $today            = explode("-", $today);
         $todayYear        = $today[0];
@@ -191,52 +121,8 @@ class DonateController extends Controller
         /** END **/
         
         /** DONATES CHART **/
-        $allMonths = [
-            "مهر",
-            "آبان",
-            "آذر",
-            "دی",
-            "بهمن",
-            "اسفند",
-            "فروردین",
-            "اردیبهشت",
-            "خرداد",
-            "تیر",
-            "مرداد",
-            "شهریور",
-        ];
-        $allDays   = [
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10",
-            "11",
-            "12",
-            "13",
-            "14",
-            "15",
-            "16",
-            "17",
-            "18",
-            "19",
-            "20",
-            "21",
-            "22",
-            "23",
-            "24",
-            "25",
-            "26",
-            "27",
-            "28",
-            "29",
-            "30",
-        ];
+        $allMonths = config('constants.JALALI_ALL_MONTHS');
+        $allDays   = config('constants.ALL_DAYS_OF_MONTH');
         
         $chartData   = collect();
         $totalSpend  = 0;
@@ -245,8 +131,7 @@ class DonateController extends Controller
         if ($currentJalaliMonthString == $firstMonth) {
             $currentDayKey = array_search($currentJalaliDay, $allDays);
             $days          = array_splice($allDays, 0, $currentDayKey + 1);
-            $date          = $monthToPeriodConvert->where("month", $currentJalaliMonthString)
-                ->first();
+            $date          = $monthToPeriodConvert->where("month", $currentJalaliMonthString)->first();
             foreach ($days as $day) {
                 $mehrGregorianMonth = Carbon::createFromFormat("Y-m-d", $date["periodBegin"])
                     ->setTimezone("Asia/Tehran")->month;

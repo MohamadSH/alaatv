@@ -85,20 +85,22 @@
                                                 فروش امروز:
                                             </h4><br>
                                             <span class="m-widget24__desc">
-                                                124000 تومان
+                                                {{number_format($todaySum)}}
+                                                 تومان
                                             </span>
                                             <span class="m-widget24__stats m--font-danger">
-                                                تعداد: 5
+                                                تعداد:
+                                                {{$todayCount}}
                                             </span>
                                             <div class="m--space-10"></div>
                                             <div class="progress m-progress--sm">
-                                                <div class="progress-bar m--bg-danger" role="progressbar" style="width: 69%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="progress-bar m--bg-danger" role="progressbar" style="width: {{$todayRate}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                             <span class="m-widget24__change">
                                                 نسبت به دیگران
                                             </span>
                                             <span class="m-widget24__number">
-                                                69%
+                                                {{$todayRate}}
                                             </span>
                                         </div>
                                     </div>
@@ -114,20 +116,22 @@
                                                 فروش هفته:
                                             </h4><br>
                                             <span class="m-widget24__desc">
-                                                370500 تومان
+                                                {{number_format($thisWeekSum)}}
+                                                تومان
                                             </span>
                                             <span class="m-widget24__stats m--font-info">
-                                                تعداد: 15
+                                                تعداد:
+                                                {{$thisWeekCount}}
                                             </span>
                                             <div class="m--space-10"></div>
                                             <div class="progress m-progress--sm">
-                                                <div class="progress-bar m--bg-info" role="progressbar" style="width: 69%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="progress-bar m--bg-info" role="progressbar" style="width: {{$thisWeekRate}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                             <span class="m-widget24__change">
                                                 نسبت به دیگران
                                             </span>
                                             <span class="m-widget24__number">
-                                                69%
+                                                {{$thisWeekRate}}
                                             </span>
                                         </div>
                                     </div>
@@ -143,20 +147,22 @@
                                                 فروش این ماه:
                                             </h4><br>
                                             <span class="m-widget24__desc">
-                                                842540 تومان
+                                                {{number_format($thisMonthSum)}}
+                                                تومان
                                             </span>
                                             <span class="m-widget24__stats m--font-success">
-                                                تعداد: 45
+                                                تعداد
+                                                {{$thisMonthCount}}
                                             </span>
                                             <div class="m--space-10"></div>
                                             <div class="progress m-progress--sm">
-                                                <div class="progress-bar m--bg-success" role="progressbar" style="width: 90%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="progress-bar m--bg-success" role="progressbar" style="width: {{$thisMonthRate}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                             <span class="m-widget24__change">
                                                 نسبت به دیگران
                                             </span>
                                             <span class="m-widget24__number">
-                                                90%
+                                                {{$thisMonthRate}}
                                             </span>
                                         </div>
                                     </div>
@@ -172,11 +178,14 @@
                                                 فروش کل:
                                             </h4><br>
                                             <span class="m-widget24__desc">
-                                                12530400 تومان
+                                                {{number_format($allTimeSum)}}
+                                                تومان
                                             </span>
                                             <span class="m-widget24__stats m--font-brand">
-                                                تعداد: 750
+                                                تعداد
+                                                {{$allTimeCount}}
                                             </span>
+{{--
                                             <div class="m--space-10"></div>
                                             <div class="progress m-progress--sm">
                                                 <div class="progress-bar m--bg-brand" role="progressbar" style="width: 78%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
@@ -187,6 +196,7 @@
                                             <span class="m-widget24__number">
                                                 78%
                                             </span>
+--}}
                                         </div>
                                     </div>
                     
@@ -202,7 +212,7 @@
             </div>
             
             <!--begin::Portlet-->
-            <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="produc-portlet">
+            {{--<div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="produc-portlet">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
@@ -293,11 +303,11 @@
                     </div>
                     
                 </div>
-            </div>
+            </div>--}}
             <!--end::Portlet-->
             
             <!--begin::Portlet-->
-            <div class="m-portlet m-portlet--head-solid-bg m-portlet--info m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="bone-portlet">
+            {{--<div class="m-portlet m-portlet--head-solid-bg m-portlet--info m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="bone-portlet">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
@@ -365,11 +375,11 @@
                     
                     
                 </div>
-            </div>
+            </div>--}}
             <!--end::Portlet-->
     
             <!--begin::Portlet-->
-            <div class="m-portlet m-portlet--head-solid-bg m-portlet--primary m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="createbone-portlet">
+            {{--<div class="m-portlet m-portlet--head-solid-bg m-portlet--primary m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="createbone-portlet">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
@@ -477,7 +487,7 @@
 
 
                 </div>
-            </div>
+            </div>--}}
             <!--end::Portlet-->
             
         </div>
@@ -539,38 +549,38 @@
 
         var data = [
             ['ir-5428', 0],
-            ['ir-hg', 1],
-            ['ir-bs', 2],
-            ['ir-kb', 3],
-            ['ir-fa', 4],
-            ['ir-es', 5],
-            ['ir-sm', 6],
-            ['ir-go', 7],
-            ['ir-mn', 8],
-            ['ir-th', 9],
-            ['ir-mk', 10],
-            ['ir-ya', 11],
-            ['ir-cm', 12],
-            ['ir-kz', 13],
-            ['ir-lo', 14],
-            ['ir-il', 15],
-            ['ir-ar', 16],
-            ['ir-qm', 17],
-            ['ir-hd', 18],
-            ['ir-za', 19],
-            ['ir-qz', 20],
-            ['ir-wa', 21],
-            ['ir-ea', 22],
-            ['ir-bk', 23],
-            ['ir-gi', 24],
-            ['ir-kd', 25],
-            ['ir-kj', 26],
-            ['ir-kv', 27],
-            ['ir-ks', 28],
-            ['ir-sb', 29],
-            ['ir-ke', 30],
-            ['ir-al', 31],
-            ['ir-un', 40]
+            ['ir-hg', 0],
+            ['ir-bs', 0],
+            ['ir-kb', 0],
+            ['ir-fa', 0],
+            ['ir-es', 0],
+            ['ir-sm', 0],
+            ['ir-go', 0],
+            ['ir-mn', 0],
+            ['ir-th', 0],
+            ['ir-mk', 0],
+            ['ir-ya', 0],
+            ['ir-cm', 0],
+            ['ir-kz', 0],
+            ['ir-lo', 0],
+            ['ir-il', 0],
+            ['ir-ar', 0],
+            ['ir-qm', 0],
+            ['ir-hd', 0],
+            ['ir-za', 0],
+            ['ir-qz', 0],
+            ['ir-wa', 0],
+            ['ir-ea', 0],
+            ['ir-bk', 0],
+            ['ir-gi', 0],
+            ['ir-kd', 0],
+            ['ir-kj', 0],
+            ['ir-kv', 0],
+            ['ir-ks', 0],
+            ['ir-sb', 0],
+            ['ir-ke', 0],
+            ['ir-al', 0],
+            ['ir-un', {{$allTimeSum}}]
         ];
 
         // Create the chart

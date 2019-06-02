@@ -520,7 +520,7 @@ class TransactionController extends Controller
                 ->format('Y-m-d');
         }
 
-        $transactionGateways = TransactionGatewayRepo::getTransactionGateways(['enable'=>1])->pluck('displayName' , 'id');
+        $transactionGateways = TransactionGatewayRepo::getTransactionGateways(['enable'=>1])->get()->pluck('displayName' , 'id');
         
         return view("transaction.edit",
             compact('transaction', 'transactionPaymentmethods', 'transactionStatuses', '$transactionStatuses',
