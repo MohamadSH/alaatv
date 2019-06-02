@@ -500,23 +500,7 @@
 
     {{--نمونه فیلم--}}
     @include('product.partials.Block.block', [
-        'blockTitle'=>'
-            <span class="productInfoNav productInfoNav-sampleVideo this" data-tid="Block-sampleVideo">
-                <span class="redSquare"></span>
-                نمونه فیلم ها
-            </span>
-            <span class="productInfoNav productInfoNav-samplePamphlet" data-tid="productPamphletWarper">
-                <span class="redSquare"></span>
-                نمونه جزوه
-            </span>
-            <span class="productInfoNav productInfoNav-detailes" data-tid="productDetailes">
-                <span class="redSquare"></span>
-                 بررسی محصول
-            </span>
-            <span class="productInfoNav productInfoNav-relatedProduct" data-tid="Block-relatedProduct">
-                <span class="redSquare"></span>
-                 محصولات مرتبط
-            </span>',
+        'blockTitle'=>$productInfoNavSampleVideo,
         'blockUrlDisable'=>true,
         'blockType'=>'content',
         'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
@@ -540,22 +524,7 @@
                         <div class="m-portlet__head-caption">
                             <div class="m-portlet__head-title">
                                 <h3 class="m-portlet__head-text">
-                                    <span class="productInfoNav productInfoNav-sampleVideo" data-tid="Block-sampleVideo">
-                                        <span class="redSquare"></span>
-                                        نمونه فیلم ها
-                                    </span>
-                                    <span class="productInfoNav productInfoNav-samplePamphlet" data-tid="productPamphletWarper">
-                                        <span class="redSquare"></span>
-                                        نمونه جزوه
-                                    </span>
-                                    <span class="productInfoNav productInfoNav-detailes this" data-tid="productDetailes">
-                                        <span class="redSquare"></span>
-                                         بررسی محصول
-                                    </span>
-                                    <span class="productInfoNav productInfoNav-relatedProduct" data-tid="Block-relatedProduct">
-                                        <span class="redSquare"></span>
-                                         محصولات مرتبط
-                                    </span>
+                                    @include('product.partials.productInfoNav', ['targetId'=>'productDetailes'])
                                 </h3>
                             </div>
                         </div>
@@ -596,23 +565,7 @@
     @endif
 
     @include('product.partials.Block.block', [
-        'blockTitle'=>'
-            <span class="productInfoNav productInfoNav-sampleVideo" data-tid="Block-sampleVideo">
-                <span class="redSquare"></span>
-                نمونه فیلم ها
-            </span>
-            <span class="productInfoNav productInfoNav-samplePamphlet" data-tid="productPamphletWarper">
-                <span class="redSquare"></span>
-                نمونه جزوه
-            </span>
-            <span class="productInfoNav productInfoNav-detailes" data-tid="productDetailes">
-                <span class="redSquare"></span>
-                 بررسی محصول
-            </span>
-            <span class="productInfoNav productInfoNav-relatedProduct this" data-tid="Block-relatedProduct">
-                <span class="redSquare"></span>
-                 محصولات مرتبط
-            </span>',
+        'blockTitle'=>$productInfoNavRelatedProduct,
         'blockUrlDisable'=>true,
         'blockType'=>'product',
         'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock relatedProduct',

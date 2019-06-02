@@ -538,7 +538,7 @@
 
             @permission((config('constants.LIST_EVENTRESULT_ACCESS')))
             <!-- BEGIN QUESTION TABLE PORTLET-->
-            <div class="m-portlet m-portlet--head-solid-bg m-portlet--danger m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="konkur96-portlet">
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--danger m-portlet--collapsed m-portlet--head-sm eventResult-portlet" m-portlet="true" id="konkur96-portlet">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
@@ -551,7 +551,7 @@
                         </div>
                     </div>
                     <div class="m-portlet__head-tools">
-                        <img class="d-none" id="mbtiAnswer-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" style="width: 50px;">
+                        <img class="d-none" id="konkurResult96-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" style="width: 50px;">
                         <ul class="m-portlet__nav">
                             @permission((config('constants.LIST_EVENTRESULT_ACCESS')))
                             <li class="m-portlet__nav-item">
@@ -620,7 +620,7 @@
             <!-- END SAMPLE TABLE PORTLET-->
 
             <!-- BEGIN QUESTION TABLE PORTLET-->
-            <div class="m-portlet m-portlet--head-solid-bg m-portlet--brand m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="konkur97-portlet">
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--brand m-portlet--collapsed m-portlet--head-sm eventResult-portlet" m-portlet="true" id="konkur97-portlet">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
@@ -705,7 +705,7 @@
 
             @permission((config('constants.LIST_SHARIF_REGISTER_ACCESS')))
             <!-- BEGIN QUESTION TABLE PORTLET-->
-            <div class="m-portlet m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="schoolRegister-portlet">
+            <div class="m-portlet m-portlet--collapsed m-portlet--head-sm eventResult-portlet" m-portlet="true" id="schoolRegister-portlet">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">

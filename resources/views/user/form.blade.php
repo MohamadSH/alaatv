@@ -692,10 +692,11 @@
                 @endif
             </div>
         </div>
-        @permission((Config::get('constants.INSET_USER_ROLE')))
+        @permission((config('constants.INSET_USER_ROLE')))
         <div class = "form-group {{ $errors->has('permissions') ? ' has-error' : '' }}">
             <label class = "col-md-3 control-label" for = "roles">نقش ها</label>
             <div class = "col-md-9">
+                {!! Form::hidden('roles[]' ,null) !!}
                 {!! Form::select('roles[]',$roles,$userRoles,['multiple' => 'multiple','class' => 'multi-select', 'id' => 'user_role' ]) !!}
                 @if ($errors->has('roles'))
                     <span class = "help-block">
@@ -931,10 +932,11 @@
                 </div>
             </div>
         </div>
-        @permission((Config::get('constants.INSET_USER_ROLE')))
+        @permission((config('constants.INSET_USER_ROLE')))
         <div class = "col-md-12">
             <p>
                 <label class = "control-label">نقش ها</label>
+                {!! Form::hidden('roles[]' ,null) !!}
                 {!! Form::select('roles[]', $roles ,null,['multiple' => 'multiple','class' => 'multi-select', 'id' => 'user_role']) !!}
                 <span class = "help-block" id = "roleAlert">
                         <strong></strong>
