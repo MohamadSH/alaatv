@@ -320,19 +320,30 @@
 
                 @endability
 
-                @ability(config("constants.EMPLOYEE_ROLE"),config("constants.LIST_EMPLOPYEE_WORK_SHEET"),config("constants.INSERT_EMPLOPYEE_WORK_SHEET"))
+                @permission((config('constants.ALAA_FAMILTY')))
                 <li class="m-menu__section ">
                     <h4 class="m-menu__section-text">خانواده آلاء</h4>
                     <i class="m-menu__section-icon flaticon-more-v2"></i>
                 </li>
-                <li class="m-menu__item  @if(isset($pageName) && strcmp($pageName , "time-staff")==0) m-menu__item--active @endif" aria-haspopup="true" m-menu-link-redirect="1">
-                    <a href="{{ action("Web\EmployeetimesheetController@create") }}" class="m-menu__link ">
-                        <span class="m-menu__item-here"></span>
-                        <i class="m-menu__link-icon flaticon-clock"></i>
-                        <span class="m-menu__link-text">ثبت ساعت کار</span>
-                    </a>
-                </li>
-                @endability
+                    @ability(config("constants.EMPLOYEE_ROLE"),config("constants.LIST_EMPLOPYEE_WORK_SHEET"),config("constants.INSERT_EMPLOPYEE_WORK_SHEET"))
+                    <li class="m-menu__item  @if(isset($pageName) && strcmp($pageName , "time-staff")==0) m-menu__item--active @endif" aria-haspopup="true" m-menu-link-redirect="1">
+                        <a href="{{ action("Web\EmployeetimesheetController@create") }}" class="m-menu__link ">
+                            <span class="m-menu__item-here"></span>
+                            <i class="m-menu__link-icon flaticon-clock"></i>
+                            <span class="m-menu__link-text">ثبت ساعت کار</span>
+                        </a>
+                    </li>
+                    @endability
+                    @role((config("constants.ROLE_TEACHER")))
+                    <li class="m-menu__item" aria-haspopup="true" m-menu-link-redirect="1">
+                        <a href="{{ action("Web\SalesReportController") }}" class="m-menu__link ">
+                            <span class="m-menu__item-here"></span>
+                            <i class="m-menu__link-icon flaticon-clock"></i>
+                            <span class="m-menu__link-text">گزارش فروش</span>
+                        </a>
+                    </li>
+                    @endability
+                @endpermission
             @endif
         </ul>
     </div>

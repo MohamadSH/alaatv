@@ -101,7 +101,8 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        $user = User::find(37196);
+        $user = User::find(37222);
+        $talai98Ids = [306,316,322,318,302,326,312,298,308,328,342];
         $setIds = \App\Content::select('educationalcontents.contentset_id')
                                 ->where('author_id' , $user->id)
                                 ->where('isFree' , 0)
@@ -110,12 +111,12 @@ class HomeController extends Controller
                                 ->pluck('contentset_id')
                                 ->toArray();
 
-        $products = Product::whereHas('sets' , function ($q) use ($setIds){
+        $productIds = Product::whereHas('sets' , function ($q) use ($setIds){
             $q->whereIn('contentset_id' , $setIds)
                 ->whereNotNull('grand_id');
         })->get()->pluck('name')->toArray();
-
-        dd($products);
+        $intendedProductIds = array_intersect($talai98Ids, $productIds);
+        dd($intendedProductIds);
         return (array) optional($request->user('alaatv'))->id;
     }
     

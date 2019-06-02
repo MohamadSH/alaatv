@@ -19,7 +19,7 @@ class SalesReportController extends Controller
      */
     public function __construct()
     {
-
+        $this->middleware('permission:'.config('constants.SHOW_SALES_REPORT'));
     }
 
 
@@ -38,29 +38,47 @@ class SalesReportController extends Controller
 
         $setIds = $this->getArray( $this->getContentsetsOfUser($user->id) , 'contentset_id') ;
 
+        $talai98Ids = [306,316,322,318,302,326,312,298,308,328,342];
         $productIds = $this->getArray( $this->getProductsOfUser($setIds) , 'id') ;
+        $intendedProductIds = array_intersect($talai98Ids, $productIds);
 
-        $allTimeOrderproducts = $this->getPurchasedOrderproducts($productIds);
-        $allTimeCount         =         $this->countOrderproducts($allTimeOrderproducts);
+        $allTimeOrderproducts = $this->getPurchasedOrderproducts($intendedProductIds);
+        $allTimeCount         = $this->countOrderproducts($allTimeOrderproducts);
         $allTimeSum           = $this->calculateTotalPrice($allTimeOrderproducts);
 
         /** Today */
-        $todayOrderproducts = $this->getTodayPurchases($allTimeOrderproducts);
-        $todayCount         =         $this->countOrderproducts($todayOrderproducts);
-        $todaySum           = $this->calculateTotalPrice($todayOrderproducts);
+        $todayOrderproducts   = $this->getTodayPurchases($allTimeOrderproducts);
+        $todayCount           = $this->countOrderproducts($todayOrderproducts);
+        $todaySum             = $this->calculateTotalPrice($todayOrderproducts);
+        $todayOveralOrderproducts = $this->getTodayPurchasedOrderproducts();
+        $todayOveralSum             = $this->calculateTotalPrice($todayOveralOrderproducts);
+        $todayRate = 0;
+        if($todayOveralSum != 0)
+            $todayRate = $todaySum/$todayOveralSum;
 
         /** This week */
         $thisWeekOrderproducts  = $this->getThisWeekPurchases($allTimeOrderproducts);
-        $thisWeekCount          =         $this->countOrderproducts($thisWeekOrderproducts);
+        $thisWeekCount          = $this->countOrderproducts($thisWeekOrderproducts);
         $thisWeekSum            = $this->calculateTotalPrice($thisWeekOrderproducts);
+        $thisWeekOveralOrderproducts   = $this->getThisWeekPurchasedOrderproducts();
+        $thisWeekOveralSum             = $this->calculateTotalPrice($thisWeekOveralOrderproducts);
+        $thisWeekRate = 0;
+        if($thisWeekOveralSum != 0)
+            $thisWeekRate = $thisWeekSum / $thisWeekOveralSum;
 
         /** This month */
         $thisMonthOrderproducts = $this->getThisMonthPurchases($allTimeOrderproducts);
         $thisMonthCount         =         $this->countOrderproducts($thisMonthOrderproducts);
         $thisMonthSum           = $this->calculateTotalPrice($thisMonthOrderproducts);
+        $thisMonthOveralOrderproducts   = $this->getThisMonthPurchasedOrderproducts();
+        $thisMonthOveralSum             = $this->calculateTotalPrice($thisMonthOveralOrderproducts);
+        $thisMonthRate = 0;
+        if($thisMonthOveralSum != 0)
+            $thisMonthRate = $thisMonthSum / $thisMonthOveralSum;
 
         return view("user.salesReport", compact('limitStatus', 'coupontype', 'products' ,
-            'allTimeCount' , 'allTimeSum' , 'thisMonthCount' , 'thisMonthSum' , 'thisWeekCount' , 'thisWeekSum' , 'todayCount' , 'todaySum'));
+            'allTimeCount' , 'allTimeSum' , 'thisMonthCount' , 'thisMonthSum' , 'thisWeekCount' , 'thisWeekSum' , 'todayCount' , 'todaySum',
+            'todayRate' , 'thisWeekRate' , 'thisMonthRate'));
 
     }
 
@@ -88,9 +106,7 @@ class SalesReportController extends Controller
      */
     private function getTodayPurchases(Collection $allTimeOrderproducts): Collection
     {
-        $today = Carbon::today()->format('Y-m-d');
-        $sinceDateTime = $this->makeSinceDateTime($today);
-        $tillDateTime = $this->makeTillDateTime($today);
+        list($sinceDateTime, $tillDateTime) = $this->getTodayTimePeriod();
         return $this->filterOrderproductsByCompletionDate($allTimeOrderproducts, $sinceDateTime, $tillDateTime);
     }
 
@@ -100,9 +116,7 @@ class SalesReportController extends Controller
      */
     private function getThisWeekPurchases(Collection $allTimeOrderproducts): Collection
     {
-        list($firstDayOfWeekDate, $endDayOfWeekDate) = $this->getThisWeekDate();
-        $sinceDateTime = $this->makeSinceDateTime($firstDayOfWeekDate);
-        $tillDateTime = $this->makeTillDateTime($endDayOfWeekDate);
+        list($sinceDateTime, $tillDateTime) = $this->getThisWeekTimePeriod();
         return $this->filterOrderproductsByCompletionDate($allTimeOrderproducts, $sinceDateTime, $tillDateTime);
     }
 
@@ -112,11 +126,8 @@ class SalesReportController extends Controller
      */
     private function getThisMonthPurchases(Collection $allTimeOrderproducts): Collection
     {
-        list($firstDayDate, $lastDayDate) = $this->getThisMonthDate();
-        $sinceDateTime = $this->makeSinceDateTime($firstDayDate);
-        $tillDateTime = $this->makeTillDateTime($lastDayDate);
-        $thisMonthOrderproducts = $this->filterOrderproductsByCompletionDate($allTimeOrderproducts, $sinceDateTime, $tillDateTime);
-        return $thisMonthOrderproducts;
+        list($sinceDateTime, $tillDateTime) = $this->getThisMonthTimePeriod();
+        return $this->filterOrderproductsByCompletionDate($allTimeOrderproducts, $sinceDateTime, $tillDateTime);
     }
 
     /**
@@ -155,6 +166,33 @@ class SalesReportController extends Controller
                                             $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
                                                 ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
                                         })->get()->load('order');
+    }
+
+    /**
+     * @return Collection
+     */
+    private function getTodayPurchasedOrderproducts():Collection
+    {
+        list($sinceDateTime, $tillDateTime) = $this->getTodayTimePeriod();
+        return $this->getOrderproductsByTimePeriod($sinceDateTime, $tillDateTime);
+    }
+
+    /**
+     * @return Collection
+     */
+    private function getThisWeekPurchasedOrderproducts():Collection
+    {
+        list($sinceDateTime, $tillDateTime) = $this->getThisWeekTimePeriod();
+        return $this->getOrderproductsByTimePeriod($sinceDateTime, $tillDateTime);
+    }
+
+    /**
+     * @return Collection
+     */
+    private function getThisMonthPurchasedOrderproducts():Collection
+    {
+        list($sinceDateTime, $tillDateTime) = $this->getThisMonthTimePeriod();
+        return $this->getOrderproductsByTimePeriod($sinceDateTime, $tillDateTime);
     }
 
     /**
@@ -216,5 +254,54 @@ class SalesReportController extends Controller
             $sum += $price['final'];
         }
         return $sum;
+    }
+
+    /**
+     * @return array
+     */
+    private function getTodayTimePeriod(): array
+    {
+        $today = Carbon::today()->format('Y-m-d');
+        $sinceDateTime = $this->makeSinceDateTime($today);
+        $tillDateTime = $this->makeTillDateTime($today);
+        return array($sinceDateTime, $tillDateTime);
+    }
+
+    /**
+     * @return array
+     */
+    private function getThisWeekTimePeriod(): array
+    {
+        list($firstDayOfWeekDate, $endDayOfWeekDate) = $this->getThisWeekDate();
+        $sinceDateTime = $this->makeSinceDateTime($firstDayOfWeekDate);
+        $tillDateTime = $this->makeTillDateTime($endDayOfWeekDate);
+        return array($sinceDateTime, $tillDateTime);
+    }
+
+    /**
+     * @return array
+     */
+    private function getThisMonthTimePeriod(): array
+    {
+        list($firstDayDate, $lastDayDate) = $this->getThisMonthDate();
+        $sinceDateTime = $this->makeSinceDateTime($firstDayDate);
+        $tillDateTime = $this->makeTillDateTime($lastDayDate);
+        return array($sinceDateTime, $tillDateTime);
+    }
+
+    /**
+     * @param $sinceDateTime
+     * @param $tillDateTime
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    private function getOrderproductsByTimePeriod($sinceDateTime, $tillDateTime)
+    {
+        return Orderproduct::where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
+            ->whereHas('order', function ($q) use ($sinceDateTime, $tillDateTime) {
+                $q->where('completed_at', '>=', $sinceDateTime)
+                    ->where('completed_at', '<=', $tillDateTime)
+                    ->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
+                    ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
+            })->get();
     }
 }
