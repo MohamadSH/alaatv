@@ -46,7 +46,7 @@ class HomeController extends Controller
     use CharacterCommon;
     use UserCommon;
     use RequestCommon;
-    
+
     private static $TAG = HomeController::class;
     
     /**
@@ -101,6 +101,21 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
+        $user = User::find(37196);
+        $setIds = \App\Content::select('educationalcontents.contentset_id')
+                                ->where('author_id' , $user->id)
+                                ->where('isFree' , 0)
+                                ->groupby('contentset_id')
+                                ->get()
+                                ->pluck('contentset_id')
+                                ->toArray();
+
+        $products = Product::whereHas('sets' , function ($q) use ($setIds){
+            $q->whereIn('contentset_id' , $setIds)
+                ->whereNotNull('grand_id');
+        })->get()->pluck('name')->toArray();
+
+        dd($products);
         return (array) optional($request->user('alaatv'))->id;
     }
     

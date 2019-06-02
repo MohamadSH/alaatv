@@ -917,15 +917,6 @@ class UserController extends Controller
             $this->storePhotoOfUser($user, $file);
         }
     }
-
-    public function salesReport(Request $request) {
-    
-        $limitStatus = [1, 5, 10, 30, 50, 100, 200, 500, 1000];
-        $coupontype = ['نوع یک', 'نوع دو'];
-        $products = ['محصول یک', 'محصول دو'];
-        
-        return view("user.salesReport", compact('limitStatus', 'coupontype', 'products'));
-    }
     
     public function show(Request $request, User $user = null)
     {
