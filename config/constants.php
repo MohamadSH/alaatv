@@ -13,7 +13,8 @@ return [
     'ROLE_TECH'                                   => 'tech',
     'EMPLOYEE_ROLE'                               => 'employee',
     'ROLE_EMPLOYEE'                               => 6,
-    'ROLE_TEACHER'                                => 10,
+    'ROLE_TEACHER'                                => 'teacher',
+    'ROLE_TEACHER_ID'                             => 10,
     'BOOK_POST_MAN_ROLE'                          => 'bookPostMan',
     'SHARIF_SCHOOL_REGISTER'                      => 'sharifSchoolRegister',
 
@@ -26,6 +27,7 @@ return [
     'SMS_ADMIN_PANEL_ACCESS'                      => 'smsAdminPanel',
     'ORDER_ADMIN_PANEL_ACCESS'                    => 'orderAdminPanel',
     'SITE_CONFIG_ADMIN_PANEL_ACCESS'              => 'siteConfigAdminPanel',
+    'ALAA_FAMILTY'                                => 'alaaFamily',
     'LIST_ASSIGNMENT_ACCESS'                      => 'listAssignment',
     'INSERT_ASSIGNMENT_ACCESS'                    => 'insertAssignment',
     'EDIT_ASSIGNMENT_ACCESS'                      => 'editAssignment',
@@ -174,6 +176,7 @@ return [
     'INSERT_CONTENT_SET_ACCESS'                   => 'insertContentset',
     'EDIT_CONTENT_SET_ACCESS'                     => 'editContentset',
     'REMOVE_CONTENT_SET_ACCESS'                   => 'removeContentset',
+    'SHOW_SALES_REPORT'                           => 'showSalesReport',
 
 
     //Technician
