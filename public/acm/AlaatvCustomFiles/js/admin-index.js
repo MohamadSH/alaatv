@@ -254,6 +254,38 @@ $(document).on("click", "#userForm-submit", function (){
     });
 });
 
+
+/**
+ * Event Result Admin Ajax
+ */
+$(document).on("click", ".eventResult-portlet .reload", function (){
+    var identifier = $(this).data("role");
+    console.log(identifier);
+    var formData = $("#filter"+identifier+"Form").serialize();
+    $("#"+identifier+"-portlet-loading").removeClass("hidden");
+    $('#'+identifier+'_table > tbody').html("");
+    $.ajax({
+        type: "GET",
+        url: "/eventresult",
+        data : formData ,
+        success: function (result) {
+            // console.log(result);
+            // console.log(result.responseText);
+            var newDataTable =$("#"+identifier+"_table").DataTable();
+            newDataTable.destroy();
+            $('#'+identifier+'_table > tbody').html(result);
+            makeDataTable(identifier+"_table");
+            $("#"+identifier+"-portlet-loading").addClass("hidden");
+        },
+        error: function (result) {
+            // console.log(result);
+            // console.log(result.responseText);
+        }
+    });
+
+    return false;
+});
+
 var userAjax;
 $(document).on("click", "#user-portlet .reload", function (){
     $("#user-portlet-loading").removeClass("d-none");

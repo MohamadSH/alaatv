@@ -307,7 +307,6 @@ class ProductController extends Controller
 
         $block = optional($product)->block;
 
-
         return view('product.show', compact('product' , 'block'));
     }
     

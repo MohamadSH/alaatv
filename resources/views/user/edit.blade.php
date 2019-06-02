@@ -2,7 +2,6 @@
 
 @extends('app' , ['pageName' => 'admin'])
 
-
 @section('page-css')
     <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>
     <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css" rel = "stylesheet" type = "text/css"/>
@@ -13,7 +12,6 @@
         }
     </style>
 @endsection
-
 
 @section('pageBar')
     <nav aria-label = "breadcrumb">
