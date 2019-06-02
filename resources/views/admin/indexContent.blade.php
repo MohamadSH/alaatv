@@ -1,41 +1,41 @@
 @permission((config('constants.CONTENT_ADMIN_PANEL_ACCESS')))@extends('app',['pageName'=>$pageName])
 
 @section('page-css')
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel = "stylesheet" type = "text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel="stylesheet" type="text/css"/>
     {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>--}}
     {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>--}}
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr-rtl.min.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/jplayer/dist/skin/blue.monday/css/jplayer.blue.monday.min.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/extra/persian-datepicker/dist/css/persian-datepicker-1.1.3.min.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css" rel = "stylesheet" type = "text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jplayer/dist/skin/blue.monday/css/jplayer.blue.monday.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-1.1.3.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('pageBar')
-    <nav aria-label = "breadcrumb">
-        <ol class = "breadcrumb">
-            <li class = "breadcrumb-item">
-                <i class = "flaticon-home-2 m--padding-right-5"></i>
-                <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <i class="flaticon-home-2 m--padding-right-5"></i>
+                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
-            <li class = "breadcrumb-item active" aria-current = "page">
-                <a class = "m-link" href = "#">پنل مدیریت محتوا</a>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a class="m-link" href="#">پنل مدیریت محتوا</a>
             </li>
         </ol>
     </nav>
 @endsection
 
 @section('content')
-    <div class = "row">
+    <div class="row">
         {{--Ajax modal loaded after inserting content--}}
-        <div id = "ajax-modal" class = "modal fade" tabindex = "-1"></div>
+        <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
     {{--Ajax modal for panel startup --}}
 
     <!-- /.modal -->
-        <div class = "col-12">
+        <div class="col-12">
 
             {{--<div class="note note-info">--}}
             {{--<h4 class="block"><strong>توجه!</strong></h4>--}}
@@ -44,48 +44,47 @@
             {{--</div>--}}
 
             @permission((config('constants.LIST_EDUCATIONAL_CONTENT_ACCESS')))
-
             <!--begin::Portlet-->
-            <div class = "m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet = "true" id = "content-portlet">
-                <div class = "m-portlet__head">
-                    <div class = "m-portlet__head-caption">
-                        <div class = "m-portlet__head-title">
-                            <span class = "m-portlet__head-icon">
-                                <i class = "fa fa-cogs"></i>
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="content-portlet">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-cogs"></i>
                             </span>
-                            <h3 class = "m-portlet__head-text">
+                            <h3 class="m-portlet__head-text">
                                 مدیریت محتوای آموزشی
                             </h3>
                         </div>
                     </div>
-                    <div class = "m-portlet__head-tools">
-                        <img class = "d-none" id = "content-portlet-loading" src = "{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt = "loading" style = "width: 50px;">
-                        <ul class = "m-portlet__nav">
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "reload" class = "m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class = "la la-refresh"></i>
+                    <div class="m-portlet__head-tools">
+                        <img class="d-none" id="content-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
+                        <ul class="m-portlet__nav">
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
+                                    <i class="la la-refresh"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "toggle" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-angle-down"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-angle-down"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "fullscreen" class = "m-portlet__nav-link m-portlet__nav-link--icon" id = "content-expand">
-                                    <i class = "la la-expand"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="content-expand">
+                                    <i class="la la-expand"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "remove" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-close"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-close"></i>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class = "m-portlet__body">
-                    <div class = "portlet box blue" style = "background: #e7ecf1">
+                <div class="m-portlet__body">
+                    <div class="portlet box blue" style="background: #e7ecf1">
                         {{--<div class="portlet-title">--}}
                         {{--<div class="caption "><h3 class="bold">--}}
                         {{--<i class="fa fa-filter"></i>فیلتر جدول</h3></div>--}}
@@ -95,77 +94,81 @@
                                 border-bottom-color: #bfbfbf !important;
                             }
                         </style>
-                        <div class = "portlet-body form" style = "border-top: #3598dc solid 1px">
+                        <div class="portlet-body form" style="border-top: #3598dc solid 1px">
                             {!! Form::open(['method' => 'GET','action' => ['Web\ContentController@index'],'class'=>'form-horizontal form-row-seperated' , 'id' => 'filterContentForm']) !!}
-                            <div class = "form-body m--padding-15" style = "background: #e7ecf1">
-                                <div class = "form-group">
-                                    <div class = "row">
-                                        <label class = "col-md-2 bold control-label">تاریخ درج :</label>
-                                        <div class = "col-md-10">
-                                            <div class = "row">
+                            <div class="form-body m--padding-15" style="background: #e7ecf1">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-md-2 bold control-label">تاریخ درج :</label>
+                                        <div class="col-md-10">
+                                            <div class="row">
                                                 {{--<label class="control-label" style="float: right;"><label class="mt-checkbox mt-checkbox-outline">--}}
                                                 {{--<input type="checkbox" id="contentCreatedTimeEnable" value="1" name="createdTimeEnable" checked >--}}
                                                 {{--<span class="bg-grey-cararra"></span>--}}
                                                 {{--</label>--}}
                                                 {{--</label>--}}
-                                                <label class = "control-label" style = " float: right;">از تاریخ</label>
-                                                <div class = "col-md-3 col-xs-12">
-                                                    <input id = "contentCreatedSince" type = "text" class = "form-control">
-                                                    <input name = "createdAtSince" id = "contentCreatedSinceAlt" type = "text" class = "form-control d-none">
+                                                <label class="control-label" style=" float: right;">از تاریخ</label>
+                                                <div class="col-md-3 col-xs-12">
+                                                    <input id="contentCreatedSince" type="text" class="form-control">
+                                                    <input name="createdAtSince" id="contentCreatedSinceAlt" type="text" class="form-control d-none">
                                                 </div>
-                                                <label class = "control-label" style = "float: right;">تا تاریخ</label>
-                                                <div class = "col-md-3 col-xs-12">
-                                                    <input id = "contentCreatedTill" type = "text" class = "form-control">
-                                                    <input name = "createdAtTill" id = "contentCreatedTillAlt" type = "text" class = "form-control d-none">
+                                                <label class="control-label" style="float: right;">تا تاریخ</label>
+                                                <div class="col-md-3 col-xs-12">
+                                                    <input id="contentCreatedTill" type="text" class="form-control">
+                                                    <input name="createdAtTill" id="contentCreatedTillAlt" type="text" class="form-control d-none">
                                                 </div>
                                             </div>
                                             {{--                                            @include('admin.filters.timeFilter.createdAt' , ["id" => "content" , "default" => true])--}}
                                         </div>
                                     </div>
                                 </div>
-                                <div class = "form-group">
-                                    <div class = "col-md-12">
-                                        <a href = "javascript:" class = "btn btn-lg bg-font-dark reload" style = "background: #489fff">فیلتر</a>
-                                        <img class = "d-none" id = "userBon-portlet-loading" src = "{{config('constants.FILTER_LOADING_GIF')}}" width = "5%">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <a href="javascript:" class="btn btn-lg bg-font-dark reload" style="background: #489fff">فیلتر</a>
+                                        <img class="d-none" id="userBon-portlet-loading" src="{{config('constants.FILTER_LOADING_GIF')}}" width="5%">
                                     </div>
                                 </div>
                             </div>
                             {!! Form::close() !!}
                         </div>
                     </div>
-                    <div class = "table-toolbar">
-                        <div class = "row">
-                            <div class = "col-md-6">
+                    <div class="table-toolbar">
+                        <div class="row">
+                            <div class="col-md-6">
 
-                                <div class = "btn-group">
+                                <div class="btn-group">
                                     @permission((config('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS')))
                                     {{--                                        <a  class="btn btn-outline red" target="_blank" href="{{action("Web\ContentController@create2")}}"><i class="fa fa-plus"></i> افزودن محتوا </a>--}}
-                                    <a class = "btn btn-outline red" target = "_blank" href = "{{action("Web\ContentController@create2")}}">
-                                        <i class = "fa fa-plus"></i>
+                                    <a class="btn m-btn--pill m-btn--air btn-outline-danger" target="_blank" href="{{action("Web\ContentController@create2")}}">
+                                        <i class="fa fa-plus"></i>
                                         افزودن محتوا
                                     </a>
-                                    <a class = "btn btn-outline red-flamingo" target = "_blank" href = "{{action("Web\ContentController@create")}}">
-                                        <i class = "fa fa-plus"></i>
+                                    <a class="btn m-btn--pill m-btn--air btn-outline-danger" target="_blank" href="{{action("Web\ContentController@create")}}">
+                                        <i class="fa fa-plus"></i>
                                         آپلود محتوا
+                                    </a>
+                                    <a class="btn m-btn--pill m-btn--air btn-outline-danger" target="_blank" href="{{action("Web\SetController@create")}}">
+                                        <i class="fa fa-plus"></i>
+                                        دسته محتوای جدید
                                     </a>
                                     @endpermission
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <table class = "table table-striped table-bordered table-hover dt-responsive " width = "100%" id = "content_table">
+                    <table class="table table-striped table-bordered table-hover dt-responsive " width="100%" id="content_table">
                         <thead>
                         <tr>
                             <th></th>
-                            <th class = "all"> نام</th>
-                            <th class = "desktop"> فعال/غیرفعال</th>
-                            <th class = "desktop "> نوع محتوا</th>
-                            <th class = "none"> فایل ها</th>
-                            <th class = "desktop"> توضیح</th>
-                            <th class = "none"> زمان نمایان شدن</th>
-                            <th class = "none"> زمان درج</th>
-                            <th class = "none"> زمان اصلاح</th>
-                            <th class = "all"> عملیات</th>
+                            <th class="all"> نام</th>
+                            <th class="desktop"> فعال/غیرفعال</th>
+                            <th class="desktop "> نوع محتوا</th>
+                            <th class="none"> فایل ها</th>
+                            <th class="desktop"> توضیح</th>
+                            <th class="none"> زمان نمایان شدن</th>
+                            <th class="none"> زمان درج</th>
+                            <th class="none"> زمان اصلاح</th>
+                            <th class="all"> عملیات</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -174,81 +177,82 @@
                     </table>
                 </div>
             </div>
-            <!--end::Portlet-->@endpermission
+            <!--end::Portlet-->
+            @endpermission
 
             @permission((config('constants.LIST_ASSIGNMENT_ACCESS')))
             <!-- BEGIN ASSIGNMENT TABLE PORTLET-->
-            <div class = "m-portlet m-portlet--head-solid-bg m-portlet--info m-portlet--collapsed m-portlet--head-sm" m-portlet = "true" id = "assignment-portlet">
-                <div class = "m-portlet__head">
-                    <div class = "m-portlet__head-caption">
-                        <div class = "m-portlet__head-title">
-                            <span class = "m-portlet__head-icon">
-                                <i class = "fa fa-cogs"></i>
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--info m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="assignment-portlet">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-cogs"></i>
                             </span>
-                            <h3 class = "m-portlet__head-text">
+                            <h3 class="m-portlet__head-text">
                                 مدیریت تمرین ها
                             </h3>
                         </div>
                     </div>
-                    <div class = "m-portlet__head-tools">
-                        <img class = "d-none" id = "assignment-portlet-loading" src = "{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt = "loading" style = "width: 50px;">
-                        <ul class = "m-portlet__nav">
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "reload" class = "m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class = "la la-refresh"></i>
+                    <div class="m-portlet__head-tools">
+                        <img class="d-none" id="assignment-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
+                        <ul class="m-portlet__nav">
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
+                                    <i class="la la-refresh"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "toggle" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-angle-down"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-angle-down"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "fullscreen" class = "m-portlet__nav-link m-portlet__nav-link--icon" id = "assignment-expand">
-                                    <i class = "la la-expand"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="assignment-expand">
+                                    <i class="la la-expand"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "remove" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-close"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-close"></i>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class = "m-portlet__body">
-                    <div class = "table-toolbar">
-                        <div class = "row">
-                            <div class = "col-md-6">
+                <div class="m-portlet__body">
+                    <div class="table-toolbar">
+                        <div class="row">
+                            <div class="col-md-6">
 
-                                <div class = "btn-group">
+                                <div class="btn-group">
                                     @permission((config('constants.INSERT_ASSIGNMENT_ACCESS')))
-                                    <a id = "sample_editable_1_new" class = "btn btn-outline purple" data-toggle = "modal" href = "#responsive-assignment" data-target = "#responsive-assignment">
-                                        <i class = "fa fa-plus"></i>
+                                    <a id="sample_editable_1_new" class="btn btn-outline purple" data-toggle="modal" href="#responsive-assignment" data-target="#responsive-assignment">
+                                        <i class="fa fa-plus"></i>
                                         افزودن تمرین
                                     </a>
 
 
                                     <!--begin::Modal-->
-                                    <div class = "modal fade" id = "responsive-assignment" tabindex = "-1" role = "dialog" aria-labelledby = "responsive-assignmentModalLabel" aria-hidden = "true">
-                                        <div class = "modal-dialog modal-lg" role = "document">
-                                            <div class = "modal-content">
-                                                <div class = "modal-header">
-                                                    <h5 class = "modal-title" id = "responsive-assignmentModalLabel">افزودن تمرین جدید</h5>
-                                                    <button type = "button" class = "close" data-dismiss = "modal" aria-label = "Close">
-                                                        <span aria-hidden = "true">&times;</span>
+                                    <div class="modal fade" id="responsive-assignment" tabindex="-1" role="dialog" aria-labelledby="responsive-assignmentModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="responsive-assignmentModalLabel">افزودن تمرین جدید</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
                                                 {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\AssignmentController@store'], 'class'=>'nobottommargin' , 'id'=>'assignmentForm']) !!}
-                                                <div class = "modal-body">
-                                                    <div class = "row">
+                                                <div class="modal-body">
+                                                    <div class="row">
                                                         @include('assignment.form')
                                                     </div>
                                                 </div>
                                                 {!! Form::close() !!}
-                                                <div class = "modal-footer">
-                                                    <button type = "button" class = "btn btn-secondary" data-dismiss = "modal" id = "assignmentForm-close">بستن</button>
-                                                    <button type = "button" class = "btn btn-primary" id = "assignmentForm-submit">ذخیره</button>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="assignmentForm-close">بستن</button>
+                                                    <button type="button" class="btn btn-primary" id="assignmentForm-submit">ذخیره</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -258,21 +262,21 @@
                             </div>
                         </div>
                     </div>
-                    <table class = "table table-striped table-bordered table-hover dt-responsive " width = "100%" id = "assignment_table">
+                    <table class="table table-striped table-bordered table-hover dt-responsive " width="100%" id="assignment_table">
                         <thead>
                         <tr>
                             <th></th>
-                            <th class = "all"> نام</th>
-                            <th class = "desktop"> توضیح</th>
-                            <th class = "none"> رشته</th>
-                            <th class = "none"> تعداد سؤالات</th>
-                            <th class = "none"> سؤالات</th>
-                            <th class = "none"> پاسخ</th>
-                            <th class = "none"> تحلیل آزمون</th>
-                            <th class = "min-tablet"> وضعیت</th>
-                            <th class = "none"> زمان درج</th>
-                            <th class = "none"> زمان اصلاح</th>
-                            <th class = "all"> عملیات</th>
+                            <th class="all"> نام</th>
+                            <th class="desktop"> توضیح</th>
+                            <th class="none"> رشته</th>
+                            <th class="none"> تعداد سؤالات</th>
+                            <th class="none"> سؤالات</th>
+                            <th class="none"> پاسخ</th>
+                            <th class="none"> تحلیل آزمون</th>
+                            <th class="min-tablet"> وضعیت</th>
+                            <th class="none"> زمان درج</th>
+                            <th class="none"> زمان اصلاح</th>
+                            <th class="all"> عملیات</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -281,79 +285,80 @@
                     </table>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
             @permission((config('constants.LIST_CONSULTATION_ACCESS')))
             <!-- BEGIN CONSULTATION TABLE PORTLET-->
-            <div class = "m-portlet m-portlet--head-solid-bg m-portlet--primary m-portlet--collapsed m-portlet--head-sm" m-portlet = "true" id = "consultation-portlet">
-                <div class = "m-portlet__head">
-                    <div class = "m-portlet__head-caption">
-                        <div class = "m-portlet__head-title">
-                            <span class = "m-portlet__head-icon">
-                                <i class = "fa fa-cogs"></i>
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--primary m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="consultation-portlet">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-cogs"></i>
                             </span>
-                            <h3 class = "m-portlet__head-text">
+                            <h3 class="m-portlet__head-text">
                                 مدیریت مشاوره ها
                             </h3>
                         </div>
                     </div>
-                    <div class = "m-portlet__head-tools">
-                        <img class = "d-none" id = "consultation-portlet-loading" src = "{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt = "loading" style = "width: 50px;">
-                        <ul class = "m-portlet__nav">
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "reload" class = "m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class = "la la-refresh"></i>
+                    <div class="m-portlet__head-tools">
+                        <img class="d-none" id="consultation-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" alt="loading" style="width: 50px;">
+                        <ul class="m-portlet__nav">
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
+                                    <i class="la la-refresh"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "toggle" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-angle-down"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-angle-down"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "fullscreen" class = "m-portlet__nav-link m-portlet__nav-link--icon" id = "consultation-expand">
-                                    <i class = "la la-expand"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="consultation-expand">
+                                    <i class="la la-expand"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "remove" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-close"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-close"></i>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class = "m-portlet__body">
-                    <div class = "table-toolbar">
-                        <div class = "row">
-                            <div class = "col-md-6">
-                                <div class = "btn-group">
+                <div class="m-portlet__body">
+                    <div class="table-toolbar">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="btn-group">
                                     @permission((config('constants.INSERT_CONSULTATION_ACCESS')))
-                                    <a id = "sample_editable_2_new" class = "btn btn-outline blue" data-toggle = "modal" href = "#responsive-consultation" data-target = "#responsive-consultation">
-                                        <i class = "fa fa-plus"></i>
+                                    <a id="sample_editable_2_new" class="btn btn-outline blue" data-toggle="modal" href="#responsive-consultation" data-target="#responsive-consultation">
+                                        <i class="fa fa-plus"></i>
                                         افزودن مشاوره
                                     </a>
 
                                     <!--begin::Modal-->
-                                    <div class = "modal fade" id = "responsive-consultation" tabindex = "-1" role = "dialog" aria-labelledby = "responsive-consultationModalLabel" aria-hidden = "true">
-                                        <div class = "modal-dialog modal-lg" role = "document">
-                                            <div class = "modal-content">
-                                                <div class = "modal-header">
-                                                    <h5 class = "modal-title" id = "responsive-consultationModalLabel">افزودن مشاوره جدید</h5>
-                                                    <button type = "button" class = "close" data-dismiss = "modal" aria-label = "Close">
-                                                        <span aria-hidden = "true">&times;</span>
+                                    <div class="modal fade" id="responsive-consultation" tabindex="-1" role="dialog" aria-labelledby="responsive-consultationModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="responsive-consultationModalLabel">افزودن مشاوره جدید</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
                                                 {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\ConsultationController@store'], 'class'=>'nobottommargin' , 'id'=>'consultationForm']) !!}
-                                                <div class = "modal-body">
-                                                    <div class = "row">
+                                                <div class="modal-body">
+                                                    <div class="row">
                                                         @include('consultation.form')
                                                     </div>
                                                 </div>
                                                 {!! Form::close() !!}
-                                                <div class = "modal-footer">
-                                                    <button type = "button" class = "btn btn-secondary" data-dismiss = "modal" id = "consultationForm-close">بستن</button>
-                                                    <button type = "button" class = "btn btn-primary" id = "consultationForm-submit">ذخیره</button>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="consultationForm-close">بستن</button>
+                                                    <button type="button" class="btn btn-primary" id="consultationForm-submit">ذخیره</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -363,20 +368,20 @@
                             </div>
                         </div>
                     </div>
-                    <table class = "table table-striped table-bordered table-hover dt-responsive" width = "100%" id = "consultation_table">
+                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="consultation_table">
                         <thead>
                         <tr>
                             <th></th>
-                            <th class = "all"> نام</th>
-                            <th class = "desktop"> تامبنیل</th>
-                            <th class = "desktop"> توضیح</th>
-                            <th class = "none"> رشته</th>
-                            <th class = "none"> فیلم</th>
-                            <th class = "none"> متن</th>
-                            <th class = "min-tablet"> وضعیت</th>
-                            <th class = "none"> زمان درج</th>
-                            <th class = "none"> زمان اصلاح</th>
-                            <th class = "all"> عملیات</th>
+                            <th class="all"> نام</th>
+                            <th class="desktop"> تامبنیل</th>
+                            <th class="desktop"> توضیح</th>
+                            <th class="none"> رشته</th>
+                            <th class="none"> فیلم</th>
+                            <th class="none"> متن</th>
+                            <th class="min-tablet"> وضعیت</th>
+                            <th class="none"> زمان درج</th>
+                            <th class="none"> زمان اصلاح</th>
+                            <th class="all"> عملیات</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -385,68 +390,69 @@
                     </table>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
             @permission((config('constants.LIST_QUESTION_ACCESS')))
             <!-- BEGIN QUESTION TABLE PORTLET-->
-            <div class = "m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--collapsed m-portlet--head-sm" m-portlet = "true" id = "question-portlet">
-                <div class = "m-portlet__head">
-                    <div class = "m-portlet__head-caption">
-                        <div class = "m-portlet__head-title">
-                            <span class = "m-portlet__head-icon">
-                                <i class = "fa fa-cogs"></i>
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="question-portlet">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-cogs"></i>
                             </span>
-                            <h3 class = "m-portlet__head-text">
+                            <h3 class="m-portlet__head-text">
                                 مدیریت سؤالات مشاوره ای
                             </h3>
                         </div>
                     </div>
-                    <div class = "m-portlet__head-tools">
-                        <img class = "d-none" id = "question-portlet-loading" src = "{{config('constants.ADMIN_LOADING_BAR_GIF')}}" style = "width: 50px;">
-                        <ul class = "m-portlet__nav">
+                    <div class="m-portlet__head-tools">
+                        <img class="d-none" id="question-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" style="width: 50px;">
+                        <ul class="m-portlet__nav">
                             @permission((config('constants.LIST_QUESTION_ACCESS')))
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "reload" class = "m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class = "la la-refresh"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
+                                    <i class="la la-refresh"></i>
                                 </a>
                             </li>
                             @endpermission
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "toggle" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-angle-down"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-angle-down"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "fullscreen" class = "m-portlet__nav-link m-portlet__nav-link--icon" id = "question-expand">
-                                    <i class = "la la-expand"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="question-expand">
+                                    <i class="la la-expand"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "remove" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-close"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-close"></i>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class = "m-portlet__body">
-                    <div class = "table-toolbar">
-                        <div class = "row">
-                            <div class = "col-md-6">
-                                <div class = "btn-group"></div>
+                <div class="m-portlet__body">
+                    <div class="table-toolbar">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="btn-group"></div>
                             </div>
                         </div>
                     </div>
-                    <table class = "table table-striped table-bordered table-hover dt-responsive" width = "100%" id = "question_table">
+                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="question_table">
                         <thead>
                         <tr>
                             <th></th>
-                            <th class = "all"> دانش آموز</th>
-                            <th class = "min-tablet">عنوان سؤال</th>
-                            <th class = "all"> پخش</th>
-                            <th class = "min-tablet"> دانلود</th>
-                            <th class = "desktop"> وضعیت</th>
-                            <th class = "desktop"> تاریخ پرسش</th>
+                            <th class="all"> دانش آموز</th>
+                            <th class="min-tablet">عنوان سؤال</th>
+                            <th class="all"> پخش</th>
+                            <th class="min-tablet"> دانلود</th>
+                            <th class="desktop"> وضعیت</th>
+                            <th class="desktop"> تاریخ پرسش</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -455,69 +461,70 @@
                     </table>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
             @permission((config('constants.LIST_MBTIANSWER_ACCESS')))
             <!-- BEGIN QUESTION TABLE PORTLET-->
-            <div class = "m-portlet m-portlet--head-solid-bg m-portlet--warning m-portlet--collapsed m-portlet--head-sm" m-portlet = "true" id = "mbtiAnswer-portlet">
-                <div class = "m-portlet__head">
-                    <div class = "m-portlet__head-caption">
-                        <div class = "m-portlet__head-title">
-                            <span class = "m-portlet__head-icon">
-                                <i class = "fa fa-cogs"></i>
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--warning m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="mbtiAnswer-portlet">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-cogs"></i>
                             </span>
-                            <h3 class = "m-portlet__head-text">
+                            <h3 class="m-portlet__head-text">
                                 لیست پاسخنامه های MBTI
                             </h3>
                         </div>
                     </div>
-                    <div class = "m-portlet__head-tools">
-                        <img class = "d-none" id = "mbtiAnswer-portlet-loading" src = "{{config('constants.ADMIN_LOADING_BAR_GIF')}}" style = "width: 50px;">
-                        <ul class = "m-portlet__nav">
+                    <div class="m-portlet__head-tools">
+                        <img class="d-none" id="mbtiAnswer-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" style="width: 50px;">
+                        <ul class="m-portlet__nav">
                             @permission((config('constants.LIST_MBTIANSWER_ACCESS')))
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "reload" class = "m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class = "la la-refresh"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
+                                    <i class="la la-refresh"></i>
                                 </a>
                             </li>
                             @endpermission
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "toggle" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-angle-down"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-angle-down"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "fullscreen" class = "m-portlet__nav-link m-portlet__nav-link--icon" id = "mbtiAnswer-expand">
-                                    <i class = "la la-expand"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="mbtiAnswer-expand">
+                                    <i class="la la-expand"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "remove" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-close"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-close"></i>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class = "m-portlet__body">
-                    <div class = "table-toolbar">
-                        <div class = "row">
-                            <div class = "col-md-6">
-                                <div class = "btn-group"></div>
+                <div class="m-portlet__body">
+                    <div class="table-toolbar">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="btn-group"></div>
                             </div>
                         </div>
                     </div>
-                    <table class = "table table-striped table-bordered table-hover dt-responsive" width = "100%" id = "mbtiAnswer_table">
+                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="mbtiAnswer_table">
                         <thead>
                         <tr>
                             <th></th>
-                            <th class = "all"> دانش آموز</th>
-                            <th class = "all"> شماره تماس</th>
-                            <th class = "min-tablet"> شهر</th>
-                            <th class = "min-tablet"> اردو</th>
-                            <th class = "none"> وضعیت سفارش</th>
-                            <th class = "desktop">عملیات</th>
-                            <th class = "desktop"> تاریخ ثبت</th>
+                            <th class="all"> دانش آموز</th>
+                            <th class="all"> شماره تماس</th>
+                            <th class="min-tablet"> شهر</th>
+                            <th class="min-tablet"> اردو</th>
+                            <th class="none"> وضعیت سفارش</th>
+                            <th class="desktop">عملیات</th>
+                            <th class="desktop"> تاریخ ثبت</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -526,81 +533,82 @@
                     </table>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
             @permission((config('constants.LIST_EVENTRESULT_ACCESS')))
             <!-- BEGIN QUESTION TABLE PORTLET-->
-            <div class = "m-portlet m-portlet--head-solid-bg m-portlet--danger m-portlet--collapsed m-portlet--head-sm" m-portlet = "true" id = "konkur96-portlet">
-                <div class = "m-portlet__head">
-                    <div class = "m-portlet__head-caption">
-                        <div class = "m-portlet__head-title">
-                            <span class = "m-portlet__head-icon">
-                                <i class = "fa fa-cogs"></i>
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--danger m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="konkur96-portlet">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-cogs"></i>
                             </span>
-                            <h3 class = "m-portlet__head-text">
+                            <h3 class="m-portlet__head-text">
                                 لیست نتایج کنکور 96
                             </h3>
                         </div>
                     </div>
-                    <div class = "m-portlet__head-tools">
-                        <img class = "d-none" id = "mbtiAnswer-portlet-loading" src = "{{config('constants.ADMIN_LOADING_BAR_GIF')}}" style = "width: 50px;">
-                        <ul class = "m-portlet__nav">
+                    <div class="m-portlet__head-tools">
+                        <img class="d-none" id="mbtiAnswer-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" style="width: 50px;">
+                        <ul class="m-portlet__nav">
                             @permission((config('constants.LIST_EVENTRESULT_ACCESS')))
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "reload" class = "m-portlet__nav-link m-portlet__nav-link--icon reload" data-role = "konkurResult96">
-                                    <i class = "la la-refresh"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload" data-role="konkurResult96">
+                                    <i class="la la-refresh"></i>
                                 </a>
                             </li>
                             @endpermission
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "toggle" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-angle-down"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-angle-down"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "fullscreen" class = "m-portlet__nav-link m-portlet__nav-link--icon" id = "konkurResult96-expand">
-                                    <i class = "la la-expand"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="konkurResult96-expand">
+                                    <i class="la la-expand"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "remove" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-close"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-close"></i>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class = "m-portlet__body">
-                    <div class = "portlet box blue d-none">
+                <div class="m-portlet__body">
+                    <div class="portlet box blue d-none">
                         <style>
                             .form .form-row-seperated .form-group {
                                 border-bottom-color: #bfbfbf !important;
                             }
                         </style>
-                        <div class = "portlet-body form" style = "border-top: #3598dc solid 1px">
+                        <div class="portlet-body form" style="border-top: #3598dc solid 1px">
                             {!! Form::open(['class'=>'form-horizontal form-row-seperated' , 'id' => 'filterkonkurResult96Form']) !!}
-                            <input type = "hidden" name = "event_id[]" value = "1">
+                            <input type="hidden" name="event_id[]" value="1">
                             {!! Form::close() !!}
                         </div>
                     </div>
-                    <div class = "table-toolbar">
-                        <div class = "row">
-                            <div class = "col-md-6">
-                                <div class = "btn-group"></div>
+                    <div class="table-toolbar">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="btn-group"></div>
                             </div>
                         </div>
                     </div>
-                    <table class = "table table-striped table-bordered table-hover dt-responsive" width = "100%" id = "konkurResult96_table">
+                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="konkurResult96_table">
                         <thead>
                         <tr>
                             <th></th>
-                            <th class = "all"> دانش آموز</th>
-                            <th class = "min-tablet"> شماره تماس</th>
-                            <th class = "min-tablet"> شهر</th>
-                            <th class = "min-tablet"> فایل کارنامه</th>
-                            <th class = "all"> رتبه</th>
-                            <th class = "min-tablet"> نظر</th>
-                            <th class = "min-tablet"> تاریخ درج</th>
+                            <th class="all"> دانش آموز</th>
+                            <th class="min-tablet"> شماره تماس</th>
+                            <th class="min-tablet"> شهر</th>
+                            <th class="min-tablet"> فایل کارنامه</th>
+                            <th class="all"> رتبه</th>
+                            <th class="min-tablet"> نظر</th>
+                            <th class="min-tablet"> تاریخ درج</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -612,78 +620,78 @@
             <!-- END SAMPLE TABLE PORTLET-->
 
             <!-- BEGIN QUESTION TABLE PORTLET-->
-            <div class = "m-portlet m-portlet--head-solid-bg m-portlet--brand m-portlet--collapsed m-portlet--head-sm" m-portlet = "true" id = "konkur97-portlet">
-                <div class = "m-portlet__head">
-                    <div class = "m-portlet__head-caption">
-                        <div class = "m-portlet__head-title">
-                            <span class = "m-portlet__head-icon">
-                                <i class = "fa fa-cogs"></i>
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--brand m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="konkur97-portlet">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-cogs"></i>
                             </span>
-                            <h3 class = "m-portlet__head-text">
+                            <h3 class="m-portlet__head-text">
                                 لیست نتایج کنکور 97
                             </h3>
                         </div>
                     </div>
-                    <div class = "m-portlet__head-tools">
-                        <img class = "d-none" id = "konkurResult97-portlet-loading" src = "{{config('constants.ADMIN_LOADING_BAR_GIF')}}" style = "width: 50px;">
-                        <ul class = "m-portlet__nav">
+                    <div class="m-portlet__head-tools">
+                        <img class="d-none" id="konkurResult97-portlet-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" style="width: 50px;">
+                        <ul class="m-portlet__nav">
                             @permission((config('constants.LIST_EVENTRESULT_ACCESS')))
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "reload" class = "m-portlet__nav-link m-portlet__nav-link--icon reload" data-role = "konkurResult97">
-                                    <i class = "la la-refresh"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload" data-role="konkurResult97">
+                                    <i class="la la-refresh"></i>
                                 </a>
                             </li>
                             @endpermission
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "toggle" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-angle-down"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-angle-down"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "fullscreen" class = "m-portlet__nav-link m-portlet__nav-link--icon" id = "konkurResult97-expand">
-                                    <i class = "la la-expand"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="konkurResult97-expand">
+                                    <i class="la la-expand"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "remove" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-close"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-close"></i>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class = "m-portlet__body">
-                    <div class = "portlet box blue d-none">
+                <div class="m-portlet__body">
+                    <div class="portlet box blue d-none">
                         <style>
                             .form .form-row-seperated .form-group {
                                 border-bottom-color: #bfbfbf !important;
                             }
                         </style>
-                        <div class = "portlet-body form" style = "border-top: #3598dc solid 1px">
+                        <div class="portlet-body form" style="border-top: #3598dc solid 1px">
                             {!! Form::open(['class'=>'form-horizontal form-row-seperated' , 'id' => 'filterkonkurResult97Form']) !!}
-                            <input type = "hidden" name = "event_id[]" value = "3">
+                            <input type="hidden" name="event_id[]" value="3">
                             {!! Form::close() !!}
                         </div>
                     </div>
-                    <div class = "table-toolbar">
-                        <div class = "row">
-                            <div class = "col-md-6">
-                                <div class = "btn-group"></div>
+                    <div class="table-toolbar">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="btn-group"></div>
                             </div>
                         </div>
                     </div>
-                    <table class = "table table-striped table-bordered table-hover dt-responsive" width = "100%" id = "konkurResult97_table">
+                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="konkurResult97_table">
                         <thead>
                         <tr>
                             <th></th>
-                            <th class = "all"> دانش آموز</th>
-                            <th class = "min-tablet"> شماره تماس</th>
-                            <th class = "min-tablet"> شهر</th>
-                            <th class = "min-tablet"> فایل کارنامه</th>
-                            <th class = "all"> رتبه</th>
-                            <th class = "min-tablet"> وضعیت</th>
-                            <th class = "min-tablet"> نظر</th>
-                            <th class = "min-tablet"> تاریخ درج</th>
+                            <th class="all"> دانش آموز</th>
+                            <th class="min-tablet"> شماره تماس</th>
+                            <th class="min-tablet"> شهر</th>
+                            <th class="min-tablet"> فایل کارنامه</th>
+                            <th class="all"> رتبه</th>
+                            <th class="min-tablet"> وضعیت</th>
+                            <th class="min-tablet"> نظر</th>
+                            <th class="min-tablet"> تاریخ درج</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -692,83 +700,84 @@
                     </table>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
             @permission((config('constants.LIST_SHARIF_REGISTER_ACCESS')))
             <!-- BEGIN QUESTION TABLE PORTLET-->
-            <div class = "m-portlet m-portlet--collapsed m-portlet--head-sm" m-portlet = "true" id = "schoolRegister-portlet">
-                <div class = "m-portlet__head">
-                    <div class = "m-portlet__head-caption">
-                        <div class = "m-portlet__head-title">
-                            <span class = "m-portlet__head-icon">
-                                <i class = "fa fa-cogs"></i>
+            <div class="m-portlet m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="schoolRegister-portlet">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-cogs"></i>
                             </span>
-                            <h3 class = "m-portlet__head-text">
+                            <h3 class="m-portlet__head-text">
                                 لیست پیش ثبت نام شریف
                             </h3>
                         </div>
                     </div>
-                    <div class = "m-portlet__head-tools">
-                        <img class = "d-none" id = "sharifRegisterResult-loading" src = "{{config('constants.ADMIN_LOADING_BAR_GIF')}}" style = "width: 50px;">
-                        <ul class = "m-portlet__nav">
+                    <div class="m-portlet__head-tools">
+                        <img class="d-none" id="sharifRegisterResult-loading" src="{{config('constants.ADMIN_LOADING_BAR_GIF')}}" style="width: 50px;">
+                        <ul class="m-portlet__nav">
                             @permission((config('constants.LIST_SHARIF_REGISTER_ACCESS')))
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "reload" class = "m-portlet__nav-link m-portlet__nav-link--icon reload" data-role = "sharifRegisterResult">
-                                    <i class = "la la-refresh"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload" data-role="sharifRegisterResult">
+                                    <i class="la la-refresh"></i>
                                 </a>
                             </li>
                             @endpermission
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "toggle" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-angle-down"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-angle-down"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "fullscreen" class = "m-portlet__nav-link m-portlet__nav-link--icon" id = "sharifRegisterResult-expand">
-                                    <i class = "la la-expand"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="sharifRegisterResult-expand">
+                                    <i class="la la-expand"></i>
                                 </a>
                             </li>
-                            <li class = "m-portlet__nav-item">
-                                <a href = "#" m-portlet-tool = "remove" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-close"></i>
+                            <li class="m-portlet__nav-item">
+                                <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <i class="la la-close"></i>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class = "m-portlet__body">
-                    <div class = "portlet box blue d-none">
+                <div class="m-portlet__body">
+                    <div class="portlet box blue d-none">
                         <style>
                             .form .form-row-seperated .form-group {
                                 border-bottom-color: #bfbfbf !important;
                             }
                         </style>
-                        <div class = "portlet-body form" style = "border-top: #3598dc solid 1px">
+                        <div class="portlet-body form" style="border-top: #3598dc solid 1px">
                             {!! Form::open(['class'=>'form-horizontal form-row-seperated' , 'id' => 'filtersharifRegisterResultForm']) !!}
-                            <input type = "hidden" name = "event_id[]" value = "2">
+                            <input type="hidden" name="event_id[]" value="2">
                             {!! Form::close() !!}
                         </div>
                     </div>
-                    <div class = "table-toolbar">
-                        <div class = "row">
-                            <div class = "col-md-6">
-                                <div class = "btn-group"></div>
+                    <div class="table-toolbar">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="btn-group"></div>
                             </div>
                         </div>
                     </div>
-                    <table class = "table table-striped table-bordered table-hover dt-responsive" width = "100%" id = "sharifRegisterResult_table">
+                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="sharifRegisterResult_table">
                         <thead>
                         <tr>
                             <th></th>
-                            <th class = "all"> نام خانوادگی</th>
-                            <th class = "all"> نام</th>
-                            <th class = "all"> استان</th>
-                            <th class = "all"> شهر</th>
-                            <th class = "min-tablet"> شماره تماس</th>
-                            <th class = "min-tablet">رشته</th>
-                            <th class = "all"> پایه</th>
-                            <th class = "all"> معدل</th>
-                            <th class = "min-tablet"> تاریخ ثبت نام</th>
+                            <th class="all"> نام خانوادگی</th>
+                            <th class="all"> نام</th>
+                            <th class="all"> استان</th>
+                            <th class="all"> شهر</th>
+                            <th class="min-tablet"> شماره تماس</th>
+                            <th class="min-tablet">رشته</th>
+                            <th class="all"> پایه</th>
+                            <th class="all"> معدل</th>
+                            <th class="min-tablet"> تاریخ ثبت نام</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -777,7 +786,8 @@
                     </table>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
             {{--@permission((config('constants.LIST_ARTICLE_ACCESS')))--}}
             {{--<!-- BEGIN ASSIGNMENT TABLE PORTLET-->--}}
@@ -902,27 +912,27 @@
 @endsection
 
 @section('page-js')
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type = "text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
     {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>--}}
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/js/jquery.multi-select.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type = "text/javascript"></script>
-    <script src = "/acm/extra/persian-datepicker/lib/persian-date-1.0.5.js" type = "text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
+    <script src="/acm/extra/persian-datepicker/lib/persian-date-1.0.5.js" type="text/javascript"></script>
     {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-extended-modals.min.js" type="text/javascript"></script>--}}
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js" type = "text/javascript"></script>
-    <script src = "/acm/extra/persian-datepicker/dist/js/persian-datepicker-1.1.3.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/js/admin-indexContent.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/js/admin-makeDataTable.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/jplayer/dist/jplayer/jquery.jplayer.min.js" type = "text/javascript"></script>
-    <script type = "text/javascript">
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js" type="text/javascript"></script>
+    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-1.1.3.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/js/admin-indexContent.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/js/admin-makeDataTable.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jplayer/dist/jplayer/jquery.jplayer.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
         /**
          * Start up jquery
          */

@@ -598,7 +598,12 @@ function removePermission(url){
     });
 }
 $(document).on("click", "#permissionForm-submit", function (){
-    $('body').modalmanager('loading');
+
+    mApp.block('#responsive-permission', {
+        type: "loader",
+        state: "success",
+    });
+
     var el = $(this);
 
     //initializing form alerts
@@ -637,6 +642,8 @@ $(document).on("click", "#permissionForm-submit", function (){
                 };
                 $("#permission-portlet .reload").trigger("click");
                 $('#permissionForm')[0].reset();
+                $('#responsive-permission').modal('hide');
+                mApp.unblock('#responsive-permission');
                 toastr["success"]("درج دسترسی با موفقیت انجام شد!", "پیام سیستم");
                 // console.log(result);
                 // console.log(result.responseText);
@@ -669,22 +676,28 @@ $(document).on("click", "#permissionForm-submit", function (){
 
                     }
                 });
+                $('#responsive-permission').modal('hide');
+                mApp.unblock('#responsive-permission');
             },
             //The status for when there is error php code
             500: function (response) {
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
+                $('#responsive-permission').modal('hide');
+                mApp.unblock('#responsive-permission');
             },
             //The status for when there is error php code
             503: function (response) {
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+                $('#responsive-permission').modal('hide');
+                mApp.unblock('#responsive-permission');
             }
         },
         cache: false,
         contentType: false,
         processData: false
     });
-    $modal.modal().hide();
-    $modal.modal('toggle');
+    $('#responsive-permission').modal('hide');
+    mApp.unblock('#responsive-permission');
 });
 $(document).on("click", "#permission-portlet .reload", function (){
     $("#permission-portlet-loading").removeClass("d-none");

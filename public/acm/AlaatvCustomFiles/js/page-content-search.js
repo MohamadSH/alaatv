@@ -1167,6 +1167,8 @@ var GetAjaxData = function () {
     };
 }();
 
+$('.notFoundMessage').fadeOut(0);
+
 jQuery(document).ready(function () {
 
     $.ajaxSetup({ cache: false });

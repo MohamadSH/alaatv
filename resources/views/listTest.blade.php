@@ -28,6 +28,9 @@
                         <a href="{{ action('Web\ContentController@create2', ['set'=>$set->id]) }}">
                             <button type="button" class="btn m-btn--pill m-btn--air btn-primary">افزودن محتوا</button>
                         </a>
+                        <a href="{{ action('Web\SetController@edit', ['set'=>$set->id]) }}">
+                            <button type="button" class="btn m-btn--pill m-btn--air btn-warning">ویرایش</button>
+                        </a>
                     </div>
                 </div>
                 

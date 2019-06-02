@@ -71,6 +71,13 @@ mix.babel(
     'public/js/content-search.js'
 ).version();
 
+mix.babel(
+    [
+        'public/acm/AlaatvCustomFiles/js/page-error.js'
+    ],
+    'public/js/page-error.js'
+).version();
+
 mix.scripts(
     [
         'public/acm/AlaatvCustomFiles/js/page-contactUs.js'
@@ -144,8 +151,9 @@ mix.babel(
     [
         'node_modules/highcharts/highcharts.js',
         'node_modules/highcharts/modules/map.js',
+        'node_modules/highcharts/modules/drilldown.js',
         'node_modules/highcharts/modules/networkgraph.js',
-        'public/acm/AlaatvCustomFiles/js/iran.geo-map.js'
+        // 'public/acm/AlaatvCustomFiles/js/iran.geo-map.js'
     ],
     'public/js/user-profile-salesReport.js'
 ).version();
@@ -188,6 +196,13 @@ mix.styles(
         'public/acm/AlaatvCustomFiles/css/page-user-orders.css',
     ],
     'public/css/user-orders.css'
+).version();
+
+mix.styles(
+    [
+        'public/acm/AlaatvCustomFiles/css/page-error.css',
+    ],
+    'public/css/page-error.css'
 ).version();
 
 

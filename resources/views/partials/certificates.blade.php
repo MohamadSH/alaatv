@@ -25,7 +25,7 @@
         <div class="certificates-items">
             <div class="row">
                 <div class="col text-center">
-                    <img src="{{ asset('/acm/extra/Alaa-logo.gif') }}" class="img-fluid m--img-centered certificatesLogo" alt="فیلم کنکور آلاء" data-name="alaa"/>
+                    <img src="{{ asset('/acm/extra/Alaa-logo.png') }}" class="img-fluid m--img-centered certificatesLogo" alt="فیلم کنکور آلاء" data-name="alaa"/>
                 </div>
                 <div class="col text-center">
                     <img src="{{ asset('/acm/extra/sharif-school-logo.png') }}" class="img-fluid m--img-centered certificatesLogo" alt="دبیرستان دانشگاه شریف آلاء" data-name="sharif-school"/>

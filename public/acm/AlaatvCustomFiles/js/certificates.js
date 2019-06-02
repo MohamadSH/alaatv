@@ -14,3 +14,14 @@ $(document).on('click', '.certificatesLogo', function(){
         $('.hightschoolAlert').fadeOut(0);
     }
 });
+$( window ).resize(function() {
+    initCertificatesItemsHeight();
+});
+function initCertificatesItemsHeight() {
+    var calcTop = ($('.certificates-col').height()/2)-($('.certificates-items').height()/2);
+    $('.certificates-items').css({'position':'absolute', 'top':calcTop+'px'});
+}
+
+$(document).ready(function () {
+    initCertificatesItemsHeight();
+});
