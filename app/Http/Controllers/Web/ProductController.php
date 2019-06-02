@@ -308,9 +308,11 @@ class ProductController extends Controller
         }
 
         $block = optional($product)->block;
+        $productInfoNavSampleVideo = view('product.partials.productInfoNav', ['targetId'=>'sampleVideo']);
+        $productInfoNavRelatedProduct = view('product.partials.productInfoNav', ['targetId'=>'relatedProduct']);
 
 
-        return view('product.show', compact('product' , 'block'));
+        return view('product.show', compact('product' , 'block', 'productInfoNavSampleVideo', 'productInfoNavRelatedProduct'));
     }
     
     public function edit(Product $product)
