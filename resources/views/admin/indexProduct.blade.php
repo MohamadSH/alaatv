@@ -646,7 +646,7 @@
                         if (row.longDescription === null) {
                             return defaultContent;
                         }
-                        return '<button class="btn m-btn--pill m-btn--air btn-info btnLongDescription" onclick="showLongDescription(' + "'" + row.longDescription + "'" + ')" > '+ 'نمایش' +' </button>';
+                        return '<div class="d-none" id="txtLongDescription-'+row.id+'">'+row.longDescription+'</div><button class="btn m-btn--pill m-btn--air btn-info btnLongDescription" onclick="showLongDescription(' + "'" + row.id + "'" + ')" > '+ 'نمایش' +' </button>';
                     },
                 },
                 { "data": "type.hint" , "title": "نوع", "defaultContent": defaultContent},
@@ -766,8 +766,9 @@
         /**
          * Start up jquery
          */
-        function showLongDescription(longDescription) {
-            $('#static-longDescription .modal-body').html(longDescription);
+        function showLongDescription(LongDescriptionId) {
+            let txtLongDescription = $('#txtLongDescription-'+LongDescriptionId).html();
+            $('#static-longDescription .modal-body').html(txtLongDescription);
             $('#static-longDescription').modal('show');
         }
         function showCopyProductModal(productId, productName) {
