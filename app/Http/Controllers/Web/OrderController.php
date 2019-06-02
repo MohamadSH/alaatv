@@ -574,7 +574,7 @@ class OrderController extends Controller
     
         $products = $this->makeProductCollection();
 
-        $transactionGateways = TransactionGatewayRepo::getTransactionGateways(['enable'=>1])->pluck('displayName' , 'id');
+        $transactionGateways = TransactionGatewayRepo::getTransactionGateways(['enable'=>1])->get()->pluck('displayName' , 'id');
     
         $totalTransactions = $order->transactions;
         
