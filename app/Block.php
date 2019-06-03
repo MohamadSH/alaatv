@@ -58,9 +58,9 @@ class Block extends BaseModel
     public static $BLOCK_TYPE_OFFER = 3;
     
     protected static $actionLookupTable = [
-        "1" => "Web\ContentController@index",
-        "2" => "Web\ProductController@index",
-        "3" => null,
+        '1' => 'Web\ContentController@index',
+        '2' => 'Web\ProductController@index',
+        '3' => null,
     ];
     
     protected $isOfferBlock = false;
@@ -242,7 +242,7 @@ class Block extends BaseModel
     private function makeUrl($action, $input = null)
     {
         if ($input) {
-            return urldecode(action($action, ["tags" => $input]));
+            return urldecode(action($action, ['tags' => $input]));
         } else {
             return urldecode(action($action));
         }
@@ -292,7 +292,7 @@ class Block extends BaseModel
     public function contents()
     {
         return $this->morphedByMany('App\Content', 'blockable')
-            ->withTimestamps();
+            ->withTimestamps()->withPivot(['order']);
     }
     
     public function sets()
@@ -311,5 +311,46 @@ class Block extends BaseModel
     {
         return $this->morphedByMany('App\Slideshow', 'blockable')
             ->withTimestamps();
+    }
+
+    public function getContentsAttribute(){
+        $block = $this;
+        $key   = 'block:contents:'.$block->cacheKey();
+
+        return Cache::tags(['block'])
+            ->remember($key, config('constants.CACHE_60'), function () use ($block) {
+                return $this->contents()->get()->sortBy('pivot.order');
+            });
+
+    }
+
+    public function getProductsAttribute(){
+        $block = $this;
+        $key   = 'block:products:'.$block->cacheKey();
+
+        return Cache::tags(['block'])
+            ->remember($key, config('constants.60'), function () use ($block) {
+                return $this->products()->get()->sortBy('pivot.order');
+            });
+    }
+
+    public function getSetsAttribute(){
+        $block = $this;
+        $key   = 'block:sets:'.$block->cacheKey();
+
+        return Cache::tags(['block'])
+            ->remember($key, config('constants.60'), function () use ($block) {
+                return $this->sets()->get()->sortBy('pivot.order');
+            });
+    }
+
+    public function getBannersAttribute(){
+        $block = $this;
+        $key   = 'block:banners:'.$block->cacheKey();
+
+        return Cache::tags(['block'])
+            ->remember($key, config('constants.60'), function () use ($block) {
+                return $this->banners()->get()->sortBy('pivot.order');
+            });
     }
 }

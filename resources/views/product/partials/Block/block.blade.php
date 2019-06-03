@@ -50,12 +50,12 @@
                         <div class="m-widget_head">
                             <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
                                 @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
-                                    @foreach($block->products->sortBy('pivot.order') as $productKey=>$product)
+                                    @foreach($block->products as $productKey=>$product)
                                         @include('product.partials.Block.product')
                                     @endforeach
                                 @endif
                                 @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->contents))
-                                    @foreach($block->contents->sortBy('pivot.order') as $contentKey=>$content)
+                                    @foreach($block->contents as $contentKey=>$content)
                                         @include('product.partials.Block.content')
                                     @endforeach
                                 @endif
