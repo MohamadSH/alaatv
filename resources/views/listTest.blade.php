@@ -20,7 +20,7 @@
                                 <i class="flaticon-list-2"></i>
                             </span>
                             <h3 class="m-portlet__head-text">
-                                تعداد فیلم های درج شده {{ $contents->count() }}
+                                تعداد فیلم های درج شده {{ optional($contents)->count() }}
                             </h3>
                         </div>
                     </div>
