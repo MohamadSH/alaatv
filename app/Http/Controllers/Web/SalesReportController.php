@@ -33,9 +33,9 @@ class SalesReportController extends Controller
     public function __invoke(Request $request)
     {
         $limitStatus = [1, 5, 10, 30, 50, 100, 200, 500, 1000];
-        $coupontype = ['نوع یک', 'نوع دو'];
-        $products = ['محصول یک', 'محصول دو'];
-        $talai98Ids = [306,316,322,318,302,326,312,298,308,328,342];
+        $coupontype  = ['نوع یک', 'نوع دو'];
+        $products    = ['محصول یک', 'محصول دو'];
+        $talai98Ids  = [306,316,322,318,302,326,312,298,308,328,342];
 
         /** @var User $user */
 //        dump('start allTime' , Carbon::now());
@@ -80,7 +80,7 @@ class SalesReportController extends Controller
         $todayOveralSum             = $this->calculateTotalPrice($todayOveralOrderproducts);
         $todayRate = 0;
         if($todayOveralSum != 0)
-            $todayRate = $todaySum/$todayOveralSum;
+            $todayRate = (int)(($todaySum/$todayOveralSum)*100);
 
 //        dump('stop before this week', Carbon::now());
         /** This week */
@@ -91,7 +91,7 @@ class SalesReportController extends Controller
         $thisWeekOveralSum              = $this->calculateTotalPrice($thisWeekOveralOrderproducts);
         $thisWeekRate = 0;
         if($thisWeekOveralSum != 0)
-            $thisWeekRate = $thisWeekSum / $thisWeekOveralSum;
+            $thisWeekRate = (int)(($thisWeekSum / $thisWeekOveralSum)*100);
 
 //        dump('stop before this moonth', Carbon::now());
         /** This month */
@@ -101,7 +101,7 @@ class SalesReportController extends Controller
         $thisMonthOveralSum             = $this->calculateTotalPrice($thisMonthAllOrderproducts);
         $thisMonthRate = 0;
         if($thisMonthOveralSum != 0)
-            $thisMonthRate = $thisMonthSum / $thisMonthOveralSum;
+            $thisMonthRate = (int)(($thisMonthSum / $thisMonthOveralSum)*100);
 
         return view("user.salesReport", compact('limitStatus', 'coupontype', 'products' ,
             'allTimeCount' , 'allTimeSum' , 'thisMonthCount' , 'thisMonthSum' , 'thisWeekCount' , 'thisWeekSum' , 'todayCount' , 'todaySum',
