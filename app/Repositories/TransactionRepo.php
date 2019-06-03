@@ -102,7 +102,10 @@ class TransactionRepo
             'completed_at'              => Carbon::now()->setTimezone('Asia/Tehran'),
             'transactionID'             => $transactionID,
             'destinationBankAccount_id' => $bankAccountId,
-            'transactionstatus_id'      => config("constants.TRANSACTION_STATUS_SUCCESSFUL"),
+//            'transactionstatus_id'      => config("constants.TRANSACTION_STATUS_SUCCESSFUL"),
+        // Commented temporary to see if this caused Mellat bug or not
+        // issue #1760
+            'transactionstatus_id'      => 3,
         ];
         
         static::modify($data, (int) $id);

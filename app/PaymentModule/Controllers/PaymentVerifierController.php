@@ -99,7 +99,7 @@ class PaymentVerifierController extends Controller
     private function handleOrderCanceledTransaction($transaction): void
     {
         if ($transaction->transactionstatus_id != config("constants.TRANSACTION_STATUS_UNPAID"))
-            //it is not an instalment payment
+            //if it is not the payment for an instalment
             $transaction->transactionstatus_id = config('constants.TRANSACTION_STATUS_UNSUCCESSFUL');
     }
 

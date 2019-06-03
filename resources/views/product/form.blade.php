@@ -94,7 +94,7 @@
                 <div class="row">
                     <label class="col-md-3 control-label" for="slogan">لینک فیلم معرفی</label>
                     <div class="col-md-9">
-                        {!! Form::text('introVideo', optional($product->introVideo[0])->url , ['class' => 'form-control', 'id' => 'introVideo' , 'dir' => 'ltr' ]) !!}
+                        {!! Form::text('introVideo', null , ['class' => 'form-control', 'id' => 'introVideo' , 'dir' => 'ltr' ]) !!}
                         @if ($errors->has('introVideo'))
                             <span class="form-control-feedback">
                             <strong>{{ $errors->first('introVideo') }}</strong>
@@ -104,14 +104,14 @@
                 </div>
             </div>
             <br>
-            <div class="form-group {{ $errors->has('thumbnail') ? ' has-danger' : '' }}">
+            <div class="form-group {{ $errors->has('introVideoThumbnail') ? ' has-error' : '' }}">
                 <div class="row">
                     <label class="col-md-3 control-label" for="slogan">تامبنیل کلیپ معرفی</label>
                     <div class="col-md-9">
-                        {!! Form::text('thumbnail', optional($product->introVideo[0])->thumbnail , ['class' => 'form-control', 'id' => 'thumbnail' , 'dir' => 'ltr' ]) !!}
-                        @if ($errors->has('thumbnail'))
-                            <span class="form-control-feedback">
-                            <strong>{{ $errors->first('thumbnail') }}</strong>
+                        {!! Form::text('introVideoThumbnail', null, ['class' => 'form-control', 'id' => 'introVideoThumbnail' , 'dir' => 'ltr' ]) !!}
+                        @if ($errors->has('introVideoThumbnail'))
+                            <span class="help-block">
+                            <strong>{{ $errors->first('introVideoThumbnail') }}</strong>
                         </span>
                         @endif
                     </div>
@@ -530,8 +530,8 @@
         </div>
         <div class="col-md-6">
             <p>
-                {!! Form::text('thumbnail', null, ['class' => 'form-control', 'id' => 'productThumbnail', 'placeholder'=>'تامبنیل کلیپ معرفی' , 'dir'=>'ltr']) !!}
-                <span class="form-control-feedback" id="productThumbnailAlert">
+                {!! Form::text('introVideoThumbnail', null, ['class' => 'form-control', 'id' => 'productIntroVideoThumbnail', 'placeholder'=>'تامبنیل کلیپ معرفی' , 'dir'=>'ltr']) !!}
+                <span class="help-block" id="productIntroVideoThumbnailAlert">
                     <strong></strong>
                 </span>
             </p>

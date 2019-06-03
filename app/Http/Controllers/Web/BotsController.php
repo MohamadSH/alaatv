@@ -958,6 +958,162 @@ class BotsController extends Controller
                 }
                 dd("Tags DONE!");
             }
+
+            if($request->has('checkghesdi')){
+                $orders = Order::where('paymentstatus_id', config('constants.PAYMENT_STATUS_INDEBTED'))
+                                ->whereDoesntHave('orderproducts' , function ($q){
+                                    $q->where('product_id' , Product::CUSTOM_DONATE_PRODUCT);
+                                });
+
+                $since = $request->get('since');
+                if(isset($since))
+                    $orders->where('completed_at' , '>=' , $since.' 00:00:00');
+
+                $till = $request->get('till');
+                if(isset($till))
+                    $orders->where('completed_at' , '<=' , $till.' 23:59:59');
+
+                $orders = $orders->get();
+                dump('Found total '.$orders->count().' indebted orders');
+                $counter = 0;
+                foreach ($orders as $order){
+                    if($order->totalCost() == $order->totalPaidCost())
+                    {
+                        $counter++;
+                        $orderLink = action('Web\OrderController@edit' , $order);
+                        echo $counter.' - ';
+                        echo('<a target="_blank" href="'.$orderLink.'">'.$order->id.'</a>');
+                        echo('<br>');
+                    }
+                }
+                if($counter == 0 )
+                {
+                    dump('No corrupted orders found');
+                }
+                dd('Done!');
+
+            }
+
+            if($request->has('fakedonates')){
+                $orders = Order::where('paymentstatus_id' , config('constants.PAYMENT_STATUS_INDEBTED'))
+                                ->where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'))
+                                ->where('costWithoutcoupon' , 0)
+                                ->whereHas('orderproducts' , function ($q){
+                                    $q->where('product_id' , Product::CUSTOM_DONATE_PRODUCT);
+                                })
+                                ->get();
+
+                dump('Found total '.$orders->count().' fake donate orders');
+                $counter = 0;
+                foreach ($orders as $order) {
+                    if($order->totalPaidCost() == 0)
+                    {
+                        $counter++;
+                        $orderLink = action('Web\OrderController@edit' , $order);
+                        echo $counter.' - ';
+                        echo('<a target="_blank" href="'.$orderLink.'">'.$order->id.'</a>');
+                        echo('<br>');
+                    }
+                }
+                dd('Done!');
+            }
+
+            if($request->has('checkorderproducts')){
+                $mode = 'paid_more';
+                if($request->has('notpaid')){
+                    $mode = 'not_paid';
+                }
+                $orders = Order::where('paymentstatus_id' , config('constants.PAYMENT_STATUS_PAID'))
+                                ->where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'));
+
+                $since = $request->get('since');
+                if(isset($since))
+                    $orders->where('completed_at' , '>=' , $since.' 00:00:00');
+
+                $till = $request->get('till');
+                if(isset($till))
+                    $orders->where('completed_at' , '<=' , $till.' 23:59:59');
+
+                $orders = $orders->get();
+                dump('Found total '.$orders->count().' orders');
+                $counter = 0;
+                foreach ($orders as $order){
+                    $orderTotalCost = (int)$order->obtainOrderCost(true , false)['totalCost'];
+                    if($mode == 'paid_more'){
+                        $condition = (( $order->totalPaidCost() - $orderTotalCost ) > 5)?true:false ;
+                    }else{
+                        $condition = ( $orderTotalCost > $order->totalPaidCost() )?true:false ;
+                    }
+                    if($condition)
+                    {
+                        $counter++;
+                        $orderLink = action('Web\OrderController@edit' , $order);
+                        echo $counter.' - ';
+                        echo('<a target="_blank" href="'.$orderLink.'">'.$order->id.'</a>');
+                        echo('<br>');
+                    }
+                }
+                if($counter == 0 )
+                {
+                    dump('No corrupted orders found');
+                }
+                dd('Done!');
+
+            }
+
+            if($request->has('checktransactions')){
+                $transactions = Transaction::whereNotNull('transactionID')
+                                            ->where('transactionstatus_id' , config('constants.TRANSACTION_STATUS_UNSUCCESSFUL'));
+
+                $transactions = $transactions->get();
+                $totalCount = $transactions->count();
+                if($totalCount == 0 )
+                {
+                    dd('No corrupted transactions found');
+                }
+
+                dump('Found total '.$totalCount.' transactions');
+                $counter = 0;
+                foreach ($transactions as $transaction) {
+                    $counter++;
+                    $transactionLink = action('Web\TransactionController@edit' , $transaction);
+                    echo $counter.' - ';
+                    echo('<a target="_blank" href="'.$transactionLink.'">'.$transaction->id.'</a>');
+                    echo('<br>');
+                }
+                dd('Done!');
+            }
+
+            if($request->has('checkmellat')){
+                $transactionId = $request->get('id');
+                if(!isset($transactionId)) {
+                    dd('Please provide transaction id');
+                }
+
+                $transaction = Transaction::find($transactionId);
+                if(!isset($transaction)){
+                    dd('Transaction not found');
+                }
+
+                $client = new \SoapClient('https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl');
+
+                $parameters = [
+                    'terminalId'      => config('behpardakht.terminalId'),
+                    'userName'        => config('behpardakht.username'),
+                    'userPassword'    => config('behpardakht.password'),
+                    'orderId'         => $transaction->order_id,
+                    'saleOrderId'     => $transaction->order_id,
+                    'saleReferenceId' => $transaction->transactionID,
+                ];
+
+
+                try {
+                    dd($client->bpInquiryRequest($parameters));
+                } catch (\SoapFault $e) {
+                    throw $e;
+                }
+            }
+
         } catch (\Exception    $e) {
             $message = "unexpected error";
             

@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use Carbon\Carbon;
+
 trait DateTrait
 {
     /**
@@ -390,4 +392,20 @@ trait DateTrait
         
         return $pointedYear;
     }
+
+    /**
+     * @return array
+     */
+    protected function todayJalaliSplittedDate(): array
+    {
+        $currentGregorianDate = Carbon::now()->timezone('Asia/Tehran');
+        $delimiter = "/";
+        $currentJalaliDate = $this->gregorian_to_jalali($currentGregorianDate->year, $currentGregorianDate->month, $currentGregorianDate->day, $delimiter);
+        $currentJalaliDateSplit = explode($delimiter, $currentJalaliDate);
+        $currentJalaliYear = $currentJalaliDateSplit[0];
+        $currentJalaliMonth = $currentJalaliDateSplit[1];
+        $currentJalaliDay = $currentJalaliDateSplit[2];
+        return [$currentJalaliYear, $currentJalaliMonth, $currentJalaliDay];
+    }
+
 }

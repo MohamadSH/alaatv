@@ -10,6 +10,7 @@ namespace App\Traits;
 
 use App\Bon;
 use App\Order;
+use Illuminate\Support\Facades\Cache;
 
 trait HandleOrderPayment
 {
@@ -22,8 +23,11 @@ trait HandleOrderPayment
     {
         $order->closeWalletPendingTransactions();
 
-        $order = $order->fresh();
-        
+        //refreshing order after closing it's wallet transactions
+        // issue #1763
+        Cache::tags('Order:'.$order->id)->flush();
+        $order = Order::Find($order->id);
+
         $updateOrderPaymentStatusResult = $this->updateOrderPaymentStatus($order);
         
         /** Attaching user bons for this order */
@@ -39,7 +43,7 @@ trait HandleOrderPayment
      */
     protected function updateOrderPaymentStatus(Order $order): array
     {
-        $paymentstatus_id = (int) $order->totalPaidCost() < (int) $order->totalCost() ? config('constants.PAYMENT_STATUS_INDEBTED') : config('constants.PAYMENT_STATUS_PAID');
+        $paymentstatus_id = $order->totalPaidCost() < $order->totalCost() ? config('constants.PAYMENT_STATUS_INDEBTED') : config('constants.PAYMENT_STATUS_PAID');
         
         $result['paymentstatus_id'] = $paymentstatus_id;
 

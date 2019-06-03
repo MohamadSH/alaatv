@@ -46,7 +46,7 @@ class HomeController extends Controller
     use CharacterCommon;
     use UserCommon;
     use RequestCommon;
-    
+
     private static $TAG = HomeController::class;
     
     /**
@@ -101,6 +101,22 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
+        $user = User::find(37222);
+        $talai98Ids = [306,316,322,318,302,326,312,298,308,328,342];
+        $setIds = \App\Content::select('educationalcontents.contentset_id')
+                                ->where('author_id' , $user->id)
+                                ->where('isFree' , 0)
+                                ->groupby('contentset_id')
+                                ->get()
+                                ->pluck('contentset_id')
+                                ->toArray();
+
+        $productIds = Product::whereHas('sets' , function ($q) use ($setIds){
+            $q->whereIn('contentset_id' , $setIds)
+                ->whereNotNull('grand_id');
+        })->get()->pluck('name')->toArray();
+        $intendedProductIds = array_intersect($talai98Ids, $productIds);
+        dd($intendedProductIds);
         return (array) optional($request->user('alaatv'))->id;
     }
     
@@ -620,7 +636,7 @@ class HomeController extends Controller
     
     function siteMapXML()
     {
-        return redirect(action('SitemapController@index'), 301);
+        return redirect(action('Web\SitemapController@index'), 301);
     }
     
     /**

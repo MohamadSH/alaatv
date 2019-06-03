@@ -22,12 +22,12 @@ class TransactionGatewayRepo
 
     /**
      * @param array $filters
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Transactiongateway|Builder
      */
-    public static function getTransactionGateways(array $filters = []):Collection{
+    public static function getTransactionGateways(array $filters = []){
         $transactions = Transactiongateway::query();
         self::filter($filters, $transactions);
-        return $transactions->get();
+        return $transactions;
     }
 
     /**
