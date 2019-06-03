@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Web;
 
 use App\Contentset;
-use App\Traits\ProductCommon;
 use App\Websitesetting;
 use App\Traits\MetaCommon;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
 use Illuminate\Http\Response;
 use App\Classes\SEO\SeoDummyTags;
@@ -15,7 +16,6 @@ use App\Classes\Search\ContentsetSearch;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Requests\ContentsetIndexRequest;
 use App\Http\Requests\InsertContentsetRequest;
-use Illuminate\Support\Arr;
 
 class SetController extends Controller
 {
@@ -236,7 +236,7 @@ class SetController extends Controller
     }
     
     public function indexContent (\App\Http\Requests\Request $request, Contentset $set){
-        $contents = $set->contents2->sortBy('order');
+        $contents = optional($set->contents2)->sortBy('order');
         return view('listTest',compact('set','contents'));
     }
     
