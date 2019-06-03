@@ -284,7 +284,7 @@
     
     
                                                             @if($orderProductItemChild->userbons->count() > 0)
-                                                                <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">
+                                                                <span class="m-badge m-badge--info m-badge--wide m-badge--rounded m--margin-top-5">
                                                                     <i class="flaticon-interface-9"></i>
                                                                     تعداد بن مصرفی:
                                                                     {{ $orderProductItemChild->userbons->count() }}
@@ -340,7 +340,7 @@
                                                 سود شما از خرید :
                                             </h3>
                                             <span class="m-widget1__desc">
-                                            شما در مجموع {{ round((1-($invoiceInfo['price']['final']/$invoiceInfo['price']['base']))*100) }}% تخفیف گرفته اید
+                                            شما در مجموع {{ round((1-($invoiceInfo['price']['final']/$invoiceInfo['price']['base']))*100, 2) }}% تخفیف گرفته اید
                                         </span>
                                         </div>
                                         <div class="col m--align-right">
