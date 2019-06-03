@@ -236,7 +236,7 @@ class SetController extends Controller
     }
     
     public function indexContent (\App\Http\Requests\Request $request, Contentset $set){
-        $contents = optional($set->contents2)->sortBy('order');
+        $contents = optional($set->contents)->sortBy('order');
         return view('listTest',compact('set','contents'));
     }
     
