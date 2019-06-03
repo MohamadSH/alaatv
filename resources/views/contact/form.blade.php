@@ -6,29 +6,29 @@
                     <div class = "col-xs-12">
                         <h4 class = "bold" style = "border-bottom:solid 1px;padding-bottom: 5px">اطلاعات مخاطب</h4>
                         <div class = "list-head-title-container">
-                            <div class = "form-group {{ $errors->has('name') ? ' has-error' : '' }}">
+                            <div class = "form-group {{ $errors->has('name') ? ' has-danger' : '' }}">
                                 <label class = "col-md-3 control-label" for = "name">نام مخاطب</label>
                                 <div class = "col-md-9">
                                     {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'name' ]) !!}
                                     @if ($errors->has('name'))
-                                        <span class = "help-block">
+                                        <span class="form-control-feedback">
                                             <strong>{{ $errors->first('name') }}</strong>
                                         </span>
                                     @endif
                                 </div>
                             </div>
-                            <div class = "form-group {{ $errors->has('contacttype_id') ? ' has-error' : '' }}">
+                            <div class = "form-group {{ $errors->has('contacttype_id') ? ' has-danger' : '' }}">
                                 <label class = "col-md-3 control-label" for = "contacttype_id">نوع مخاطب</label>
                                 <div class = "col-md-9">
                                     {!! Form::select('contacttype_id', $contacttypes , null, ['class' => 'form-control', 'id' => 'contacttype_id' ]) !!}
                                 </div>
                                 @if ($errors->has('contacttype_id'))
-                                    <span class = "help-block">
+                                    <span class="form-control-feedback">
                                             <strong>{{ $errors->first('contacttype_id') }}</strong>
                                         </span>
                                 @endif
                             </div>
-                            <div class = "form-group {{ $errors->has('relative_id') ? ' has-error' : '' }}">
+                            <div class = "form-group {{ $errors->has('relative_id') ? ' has-danger' : '' }}">
                                 <label class = "col-md-3 control-label" for = "relative_id">نسبت مخاطب</label>
                                 <div class = "col-md-9">
                                     {{--{!! Form::select('relative_id', $relatives , null, ['class' => 'form-control', 'id' => 'relative_id', 'placeholder' => 'سایر']) !!}--}}
@@ -37,7 +37,7 @@
                                     </text>
                                 </div>
                                 @if ($errors->has('relative'))
-                                    <span class = "help-block">
+                                    <span class="form-control-feedback">
                                             <strong>{{ $errors->first('relative') }}</strong>
                                         </span>
                                 @endif
@@ -62,34 +62,34 @@
                         @foreach($contact->phones->sortBy("priority")->sortBy("phonetype_id" ) as $key=>$phone)
                             <li class = "mt-list-item">
                                 <div class = "form-body">
-                                    <div class = "form-group {{ $errors->has('phoneNumber.'.$key) ? ' has-error' : '' }}">
+                                    <div class = "form-group {{ $errors->has('phoneNumber.'.$key) ? ' has-danger' : '' }}">
                                         <label class = "col-md-3 control-label" for = "phoneNumber">شماره</label>
                                         <div class = "col-md-6">
                                             {!! Form::text('phoneNumber[]', $phone->phoneNumber, ['class' => 'form-control', 'dir' => 'ltr']) !!}
                                             @if ($errors->has('phoneNumber.'.$key))
-                                                <span class = "help-block">
+                                                <span class="form-control-feedback">
                                             <strong>{{ $errors->first('phoneNumber.'.$key) }}</strong>
                                         </span>
                                             @endif
                                         </div>
                                     </div>
-                                    <div class = "form-group {{ $errors->has('phonetype_id.'.$key) ? ' has-error' : '' }}">
+                                    <div class = "form-group {{ $errors->has('phonetype_id.'.$key) ? ' has-danger' : '' }}">
                                         <label class = "col-md-3 control-label" for = "phonetype_id">نوع</label>
                                         <div class = "col-md-6">
                                             {!! Form::select('phonetype_id[]', $phonetypes, $phone->phonetype->id, ['class' => 'form-control' ]) !!}
                                             @if ($errors->has('phonetype_id.'.$key))
-                                                <span class = "help-block">
+                                                <span class="form-control-feedback">
                                             <strong>{{ $errors->first('phonetype_id.'.$key) }}</strong>
                                         </span>
                                             @endif
                                         </div>
                                     </div>
-                                    <div class = "form-group {{ $errors->has('priority.'.$key) ? ' has-error' : '' }}">
+                                    <div class = "form-group {{ $errors->has('priority.'.$key) ? ' has-danger' : '' }}">
                                         <label class = "col-md-3 control-label" for = "priority">الویت در بین {{$phone->phonetype->displayName}} ها</label>
                                         <div class = "col-md-6">
                                             {!! Form::text('priority[]', $phone->priority, ['class' => 'form-control' , 'dir' => 'ltr']) !!}
                                             @if ($errors->has('priority.'.$key))
-                                                <span class = "help-block">
+                                                <span class="form-control-feedback">
                                             <strong>{{ $errors->first('priority.'.$key) }}</strong>
                                         </span>
                                             @endif

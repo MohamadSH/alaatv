@@ -164,7 +164,7 @@
                                         </label>
                                         <div class="col-md-10">
                                             {!! Form::text('name', (isset($lastContent)?$lastContent->name:null), ['class' => 'form-control', 'id' => 'name', 'maxlength'=>'100' ]) !!}
-                                            <span class="help-block">
+                                            <span class="form-control-feedback">
                                                    <strong></strong>
                                                </span>
                                         </div>

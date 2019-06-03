@@ -310,7 +310,7 @@
                                         {!! Form::open(['method' => 'POST', 'action' => 'Web\HomeController@sendSMS' , 'class'=>'nobottommargin' , 'id'=>'sendSmsForm']) !!}
                                         {!! Form::hidden('users', null, ['id' => 'users']) !!}
                                         {!! Form::textarea('message', null, ['class' => 'form-control' , 'id' => 'smsMessage', 'placeholder' => 'متن پیامک']) !!}
-                                        <span class="help-block" id="smsMessageAlert">
+                                        <span class="form-control-feedback" id="smsMessageAlert">
                                                         <strong></strong>
                                                     </span>
                                         {!! Form::close() !!}

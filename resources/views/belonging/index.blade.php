@@ -68,11 +68,11 @@
                                             {!! Form::open(['files'=>true,'method' => 'POST', 'action' => 'BelongingController@store' , 'class'=>'nobottommargin' ]) !!}
                                             <div class = "modal-body">
                                                 {!! Form::text('name', null,['class' => 'form-control' , 'id' => 'userBelongingName', 'placeholder' => 'نام اسناد فنی']) !!}
-                                                <span class = "help-block" id = "userBelongingNameAlert">
+                                                <span class="form-control-feedback" id = "userBelongingNameAlert">
                                                         <strong></strong>
                                                 </span>
                                                 {{--{!! Form::text('description', null,['class' => 'form-control' , 'id' => 'userBelongingDescription', 'placeholder' => 'توضیحات اسناد فنی']) !!}--}}
-                                                {{--<span class="help-block" id="userBelongingDescriptionAlert">--}}
+                                                {{--<span class="form-control-feedback" id="userBelongingDescriptionAlert">--}}
                                                 {{--<strong></strong>--}}
                                                 {{--</span>--}}
                                                 <div class = "fileinput fileinput-new" id = "thumbnail-div" data-provides = "fileinput">

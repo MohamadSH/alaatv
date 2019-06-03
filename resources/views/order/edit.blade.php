@@ -457,7 +457,7 @@
                             </div>
                             <hr>
                             <h4 class="bold">آیتم های افزوده سفارش</h4>
-                            <span class="help-block m--font-danger"> قیمت این آیتم ها به قیمت کل سبد اضافه می شود</span>
+                            <span class="form-control-feedback m--font-danger"> قیمت این آیتم ها به قیمت کل سبد اضافه می شود</span>
                             <ul>
                                 @foreach($order->orderproducts as $orderproduct)
                                     @if($orderproduct->attributevalues->where("pivot.extraCost" , ">" , "0")->isNotEmpty())
@@ -1047,7 +1047,7 @@
                             </div>
                             <hr>
                             <h4 class="bold">آیتم های افزوده سفارش</h4>
-                            <span class="help-block m--font-danger"> قیمت این آیتم ها به قیمت کل سبد اضافه می شود</span>
+                            <span class="form-control-feedback m--font-danger"> قیمت این آیتم ها به قیمت کل سبد اضافه می شود</span>
                             <ul>
                                 @foreach($order->orderproducts as $orderproduct)
                                     @if($orderproduct->attributevalues->where("pivot.extraCost" , ">" , "0")->isNotEmpty())
@@ -1163,7 +1163,7 @@
                                 {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\TransactionController@store'], 'class'=>'nobottommargin' ]) !!}
                                 <div class="modal-body">
                                     @include('transaction.form' , ["class"=>["paymentmethod"=>"paymentMethodName"] , "name"=>["paymentmethod"=>"paymentMethodName"] , "id"=>["paymentmethod"=>"paymentMethodName"]])
-                                    {{--<span class="help-block m--font-info">( دقت شود از میان اطلاعات شماره مرجع ، شماره پیگیری و شماره چک که اطلاعات بانکی یک تراکنش محسوب می شوند ، تمامی آنها برای هر تراکنش وجود ندارد و نیاز به وارد نمودن همه ی آنها نیست)</span>--}}
+                                    {{--<span class="form-control-feedback m--font-info">( دقت شود از میان اطلاعات شماره مرجع ، شماره پیگیری و شماره چک که اطلاعات بانکی یک تراکنش محسوب می شوند ، تمامی آنها برای هر تراکنش وجود ندارد و نیاز به وارد نمودن همه ی آنها نیست)</span>--}}
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal" id="userForm-close">بستن</button>

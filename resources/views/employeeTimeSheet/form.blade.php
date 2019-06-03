@@ -5,21 +5,21 @@
                 @if(Auth::user()->can(config('constants.INSERT_EMPLOPYEE_WORK_SHEET')))
                     {{--<label class=" col-md-4 control-label" for="date">انتخاب کارمند</label>--}}
                     @if(!isset($employeetimesheet))
-                        <div class = "col-md-2 {{ $errors->has('user_id') ? ' has-error' : '' }}">
+                        <div class = "col-md-2 {{ $errors->has('user_id') ? ' has-danger' : '' }}">
                             {!! Form::select("user_id" , $employees, null , ["class" => "form-control" , "placeholder" => "انتخاب کارمند"]) !!}
                             @if ($errors->has('user_id'))
-                                <span class = "help-block">
+                                <span class="form-control-feedback">
                                 <strong>{{ $errors->first('user_id') }}</strong>
                             </span>
                             @endif
                         </div>
                     @endif
                     {{--<label class=" col-md-2 control-label" for="date">انتخاب تاریخ</label>--}}
-                    <div class = "col-md-2 {{ $errors->has('date') ? ' has-error' : '' }}">
+                    <div class = "col-md-2 {{ $errors->has('date') ? ' has-danger' : '' }}">
                         <input type = "text" class = "form-control text-center" id = "date" value = "@if(isset($employeetimesheet->date)){{$employeetimesheet->getOriginal("date")}}@endif" dir = "ltr">
                         {!! Form::text('date', null, ['class' => 'form-control d-none', 'id' => 'dateAlt'  ]) !!}
                         @if ($errors->has('date'))
-                            <span class = "help-block">
+                            <span class="form-control-feedback">
                                 <strong>{{ $errors->first('date') }}</strong>
                             </span>
                         @endif

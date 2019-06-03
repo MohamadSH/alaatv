@@ -14,11 +14,11 @@
 
 
         {!! Form::open(["method" => "PUT" , "action" => ["Web\ProductController@addComplimentary" , $product]]) !!}
-        <div class = "form-inline {{ $errors->has('complimentaryproducts') ? ' has-error' : '' }}">
+        <div class = "form-inline {{ $errors->has('complimentaryproducts') ? ' has-danger' : '' }}">
             @include("admin.filters.productsFilter" , [ "listType"=>"childSelect","name"=>"complimentaryproducts" , "defaultValue"=>["value"=>0 , "caption"=>"انتخاب کنید"]])
             {!! Form::submit("افزودن", ['class' => 'btn red-mint']) !!}
             @if ($errors->has('complimentaryproducts'))
-                <span class = "help-block">
+                <span class="form-control-feedback">
                     <strong>{{ $errors->first('complimentaryproducts') }}</strong>
                 </span>
             @endif

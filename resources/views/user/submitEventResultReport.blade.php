@@ -88,29 +88,29 @@
                                         <div class = "row">
                                             <div class = "col-md-12">
                                                 <div class = "col-md-6">
-                                                    <div class = "form-group {{ $errors->has('rank') ? ' has-error' : '' }}">
+                                                    <div class = "form-group {{ $errors->has('rank') ? ' has-danger' : '' }}">
                                                         <div class = "input-icon">
                                                             <i class = "fa fa-pencil" aria-hidden = "true"></i>
                                                             <input id = "rank" class = "form-control placeholder-no-fix" type = "text" value = "{{old("rank")}}" name = "rank" placeholder = "رتبه شما(الزامی)"/>
 
                                                         </div>
                                                         @if ($errors->has('rank'))
-                                                            <span class = "help-block">
+                                                            <span class="form-control-feedback">
                                                                     <strong>{{ $errors->first('rank') }}</strong>
                                                                 </span>
                                                         @endif
                                                     </div>
                                                 </div>
                                                 <div class = "col-md-6">
-                                                    <div class = "form-group {{ $errors->has('participationCode') ? ' has-error' : '' }}">
+                                                    <div class = "form-group {{ $errors->has('participationCode') ? ' has-danger' : '' }}">
                                                         {{--<label for="participationCode" class="control-label">شماره داوطلبی شما</label>--}}
                                                         <div class = "input-icon">
                                                             <i class = "fa fa-pencil" aria-hidden = "true"></i>
                                                             <input id = "participationCode" class = "form-control placeholder-no-fix" type = "text" value = "{{old("participationCode")}}" name = "participationCode" placeholder = "شماره داوطلبی شما"/>
-                                                            <span class = "help-block">شماره داوطلبی شما به صورت رمز شده ذخیره می شود و فقط مدیر سایت می تواند آن را مشاهده کند(حتی شما هم نمی بینید)</span>
+                                                            <span class="form-control-feedback">شماره داوطلبی شما به صورت رمز شده ذخیره می شود و فقط مدیر سایت می تواند آن را مشاهده کند(حتی شما هم نمی بینید)</span>
                                                         </div>
                                                         @if ($errors->has('participationCode'))
-                                                            <span class = "help-block">
+                                                            <span class="form-control-feedback">
                                                                     <strong>{{ $errors->first('participationCode') }}</strong>
                                                                 </span>
                                                         @endif
@@ -120,7 +120,7 @@
                                             <div class = "col-md-12">
                                                 <div class = "col-md-6">
                                                     <label class = "control-label" for = "reportFile">فایل کارنامه(الزامی)</label>
-                                                    <div class = "form-group {{ $errors->has('reportFile') ? ' has-error' : '' }}">
+                                                    <div class = "form-group {{ $errors->has('reportFile') ? ' has-danger' : '' }}">
 
                                                         <div class = "fileinput fileinput-new" data-provides = "fileinput">
                                                             <div class = "input-group input-large ">
@@ -136,7 +136,7 @@
                                                             </div>
                                                         </div>
                                                         @if ($errors->has('reportFile'))
-                                                            <span class = "help-block">
+                                                            <span class="form-control-feedback">
                                                                         <strong>{{ $errors->first('reportFile') }}</strong>
                                                                     </span>
                                                         @endif
@@ -174,7 +174,7 @@
                                             <div class = "row">
                                                 @if(!isset(Auth::user()->firstName))
                                                     <div class = "col-md-6">
-                                                        <div class = "form-group {{ $errors->has('firstName') ? ' has-error' : '' }}">
+                                                        <div class = "form-group {{ $errors->has('firstName') ? ' has-danger' : '' }}">
                                                             <label for = "firstName" class = "control-label">نام:
                                                                 <span class = "required" aria-required = "true"> * </span>
                                                             </label>
@@ -183,7 +183,7 @@
                                                                 <input id = "firstName" class = "form-control placeholder-no-fix" type = "text" value = "{{old("firstName")}}" name = "firstName"/>
                                                             </div>
                                                             @if ($errors->has('firstName'))
-                                                                <span class = "help-block">
+                                                                <span class="form-control-feedback">
                                                                         <strong>{{ $errors->first('firstName') }}</strong>
                                                                     </span>
                                                             @endif
@@ -192,7 +192,7 @@
                                                 @endif
                                                 @if(!isset(Auth::user()->lastName))
                                                     <div class = "col-md-6">
-                                                        <div class = "form-group {{ $errors->has('lastName') ? ' has-error' : '' }}">
+                                                        <div class = "form-group {{ $errors->has('lastName') ? ' has-danger' : '' }}">
                                                             <label for = "firstName" class = "control-label">نام خانوادگی:
                                                                 <span class = "required" aria-required = "true"> * </span>
                                                             </label>
@@ -201,7 +201,7 @@
                                                                 <input id = "lastName" class = "form-control placeholder-no-fix" type = "text" value = "{{old("lastName")}}" name = "lastName"/>
                                                             </div>
                                                             @if ($errors->has('lastName'))
-                                                                <span class = "help-block">
+                                                                <span class="form-control-feedback">
                                                                         <strong>{{ $errors->first('lastName') }}</strong>
                                                                      </span>
                                                             @endif
@@ -212,7 +212,7 @@
                                             <div class = "row">
                                                 @if(!isset(Auth::user()->major->id))
                                                     <div class = "col-md-6">
-                                                        <div class = "form-group {{ $errors->has('major_id') ? ' has-error' : '' }}">
+                                                        <div class = "form-group {{ $errors->has('major_id') ? ' has-danger' : '' }}">
                                                             <label for = "major_id" class = "control-label">رشته:
                                                                 <span class = "required" aria-required = "true"> * </span>
                                                             </label>
@@ -220,7 +220,7 @@
                                                                 {!! Form::select('major_id',$majors,null,['class' => 'form-control', 'id' => 'major_id']) !!}
                                                             </div>
                                                             @if ($errors->has('major_id'))
-                                                                <span class = "help-block">
+                                                                <span class="form-control-feedback">
                                                                      <strong>{{ $errors->first('major_id') }}</strong>
                                                                  </span>
                                                             @endif

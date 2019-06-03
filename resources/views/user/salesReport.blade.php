@@ -417,7 +417,7 @@
                     <div class="col-md-8 col-md-offset-2">
                         <p>
                             {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'couponName' , 'placeholder'=>'نام کپن']) !!}
-                            <span class="help-block" id="couponNameAlert">
+                            <span class="form-control-feedback" id="couponNameAlert">
                                 <strong></strong>
                             </span>
                         </p>
@@ -428,7 +428,7 @@
                     <div class="col-md-8 col-md-offset-2">
                         <p>
                             {!! Form::select('discount', [1,2,3,4,5,6,7,8,9,10], ['class' => 'form-control', 'id' => 'couponDiscount'  , 'placeholder'=>'میزان تخفیف کپن (%)']) !!}
-                            <span class="help-block" id="couponDiscountAlert">
+                            <span class="form-control-feedback" id="couponDiscountAlert">
                                 <strong></strong>
                             </span>
                         </p>
@@ -438,13 +438,13 @@
                                 <strong id="">محصولاتی که مشمول کپن می شوند</strong>
                             </div>
                             {!! Form::select('coupontype_id',$coupontype, null, ['class' => 'form-control', 'id' => 'coupontypeId']) !!}
-                            <span class="help-block" id="coupontypeIdAlert">
+                            <span class="form-control-feedback" id="coupontypeIdAlert">
                                     <strong></strong>
                                 </span>
                         </div>
                         <div>
                             {!! Form::select('products[]',$products, null,['multiple' => 'multiple','class' => 'multi-select', 'id' => 'coupon_product']) !!}
-                            <span class="help-block" id="couponProductAlert">
+                            <span class="form-control-feedback" id="couponProductAlert">
                                     <strong></strong>
                                 </span>
                             <div class="clearfix margin-top-10">
@@ -454,7 +454,7 @@
                         </div>
                         <div>
                             {!! Form::textarea('description', null, ['class' => 'form-control', 'id' => 'couponDescription'  , 'placeholder'=>'توضیح درباره کپن']) !!}
-                            <span class="help-block" id="couponDescriptionAlert">
+                            <span class="form-control-feedback" id="couponDescriptionAlert">
                                 <strong></strong>
                             </span>
                         </div>
@@ -468,7 +468,7 @@
                             <div class="col-md-12">
                                 <input id="couponValidUntil" type="text" class="form-control" dir="ltr" disabled="disabled">
                                 <input name="validUntil" id="couponValidUntilAlt" type="text" class="form-control d-none">
-                                <span class="help-block" id="couponValidUntilAltAlert">
+                                <span class="form-control-feedback" id="couponValidUntilAltAlert">
                                     <strong></strong>
                                 </span>
                             </div>
