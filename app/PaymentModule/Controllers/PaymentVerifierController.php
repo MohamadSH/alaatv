@@ -7,6 +7,7 @@ use App\Order;
 use AlaaTV\Gateways\Money;
 use App\PaymentModule\Responses;
 use App\Traits\HandleOrderPayment;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
 use AlaaTV\Gateways\PaymentDriver;
 use App\Repositories\TransactionRepo;
@@ -20,7 +21,7 @@ class PaymentVerifierController extends Controller
      * @param  string  $paymentMethod
      * @param  string  $device
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function verify(string $paymentMethod, string $device)
     {
@@ -49,14 +50,21 @@ class PaymentVerifierController extends Controller
                 $verificationResult->getCardPanMask()
             );
             $this->handleOrderSuccessPayment($transaction->order);
-            $assetLink = '<a href="'.route('user.asset').'">دانلودهای من</a>';
+            $assetLink = '
+            <a href="'.route('user.asset').'" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">
+                دانلودهای من
+            </a>';
             $responseMessages[]= 'برای دانلود محصولاتی که خریده اید به صفحه روبرو بروید: '.$assetLink;
             $responseMessages[]= 'توجه کنید که محصولات پیش خرید شده در تاریخ مقرر شده برای دانلود قرار داده می شوند';
         } else {
             $this->handleOrderCanceledPayment($transaction->order);
             $this->handleOrderCanceledTransaction($transaction);
             $transaction->update();
-            $responseMessages[]= 'یک سفارش پرداخت نشده به لیست سفارش های شما افزوده شده است که می توانید با رفتن به صفحه سفارش های من آن را پرداخت کنید';
+            $myOrdersPage = '
+            <a href="'.action('Web\UserController@userOrders').'" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">
+                سفارش های من
+            </a>';
+            $responseMessages[]= 'یک سفارش پرداخت نشده به لیست سفارش های شما افزوده شده است که می توانید با رفتن به صفحه '.$myOrdersPage.' آن را پرداخت کنید';
         }
 
         setcookie('cartItems', '', time() - 3600, '/');
@@ -80,7 +88,7 @@ class PaymentVerifierController extends Controller
     }
     
     /**
-     * @param  \App\Order  $order
+     * @param  Order  $order
      *
      * @return array
      */
