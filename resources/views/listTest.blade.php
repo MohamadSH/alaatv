@@ -20,7 +20,7 @@
                                 <i class="flaticon-list-2"></i>
                             </span>
                             <h3 class="m-portlet__head-text">
-                                تعداد فیلم های درج شده {{ $contents->count() }}
+                                تعداد فیلم های درج شده {{ optional($contents)->count() }}
                             </h3>
                         </div>
                     </div>
@@ -50,26 +50,29 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($contents as $content )
-                                <tr>
-                                    <td>
-                                        <a target="_blank" href="{{action("Web\ContentController@edit" , $content->id)}}">{{ $content->id }}</a>
-                                    </td>
-                                    <td>
-                                        <img src="{{ $content->thumbnail }}" class="img-responsive a--full-width"/>
-                                    </td>
-                                    <td> {{ $content->order }}</td>
-                                    <td> {{ $content->name }}</td>
-                                    <td>{!!   $content->description !!}</td>
-                                    <td>{{ $content->enable }}</td>
-                                    <td>{{ $content->validSince }}</td>
-                                    @if($content->template_id == 1)
-                                        <td>فیلم</td>
-                                    @else
-                                        <td>جزوه</td>
-                                    @endif
-                                </tr>
-                            @endforeach
+                            @if(isset($contents))
+                                @foreach($contents as $content )
+                                    <tr>
+                                        <td>
+                                            <a target="_blank"
+                                               href="{{action("Web\ContentController@edit" , $content->id)}}">{{ $content->id }}</a>
+                                        </td>
+                                        <td>
+                                            <img src="{{ $content->thumbnail }}" class="img-responsive a--full-width"/>
+                                        </td>
+                                        <td> {{ $content->order }}</td>
+                                        <td> {{ $content->name }}</td>
+                                        <td>{!!   $content->description !!}</td>
+                                        <td>{{ $content->enable }}</td>
+                                        <td>{{ $content->validSince }}</td>
+                                        @if($content->template_id == 1)
+                                            <td>فیلم</td>
+                                        @else
+                                            <td>جزوه</td>
+                                        @endif
+                                    </tr>
+                                @endforeach
+                            @endif
                             </tbody>
                         </table>
                     </div>
