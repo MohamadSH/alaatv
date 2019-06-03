@@ -46,6 +46,7 @@ public/js/product-show.js
 public/js/user-profile.js
 public/js/content-show.js
 public/js/user-dashboard.js
+public/js/content-search.js
 public/js/checkout-review.js
 public/js/checkout-payment.js
 public/js/landing5-alljs.min.js
@@ -57,11 +58,14 @@ public/css/page-error.css
 public/css/content-show.css
 public/css/user-profile.css
 public/css/product-show.css
+public/css/page-homePage.css
+public/css/page-contactUs.css
 public/css/user-dashboard.css
 public/css/checkout-review.css
 public/css/page-dashboard1.css
 public/css/checkout-payment.css
 public/css/landing5-allcss.min.css
 public/css/admin-content-create.css
-public/js/content-search.js
+public/css/user-profile-salesReport.css
+
 public/.well-known/
