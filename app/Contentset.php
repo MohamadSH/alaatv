@@ -320,10 +320,10 @@ class Contentset extends BaseModel implements Taggable
         return Cache::tags('set')
             ->remember($key, config("constants.CACHE_300"), function () {
                 
-                $oldContentCollection = $this->contents()
+                $oldContentCollection = $this->oldContents()
                     ->active()
                     ->get() ?: new ContentCollection();
-                $newContentCollection = $this->contents2()
+                $newContentCollection = $this->contents()
                     ->active()
                     ->get() ?: new ContentCollection();
                 return $oldContentCollection->merge($newContentCollection);
@@ -338,22 +338,22 @@ class Contentset extends BaseModel implements Taggable
         return Cache::tags('set')
             ->remember($key, config("constants.CACHE_300"), function () {
 
-                $oldContentCollection = $this->contents()
+                $oldContentCollection = $this->oldContents()
                     ->get() ?: new ContentCollection();
-                $newContentCollection = $this->contents2()
+                $newContentCollection = $this->contents()
                     ->get() ?: new ContentCollection();
                 return $oldContentCollection->merge($newContentCollection);
 
             });
     }
 
-    public function contents()
+    public function oldContents()
     {
         return $this->belongsToMany("\App\Content", "contentset_educationalcontent", "contentset_id", "edc_id")
             ->withPivot("order", "isDefault");
     }
     
-    public function contents2()
+    public function contents()
     {
         return $this->hasMany('\App\Content');
     }
