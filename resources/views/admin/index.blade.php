@@ -195,7 +195,7 @@
                                                 {!! Form::open(['method' => 'POST', 'action' => 'Web\HomeController@sendSMS' , 'class'=>'nobottommargin' , 'id'=>'sendSmsForm']) !!}
                                                 {!! Form::hidden('users', null, ['id' => 'users']) !!}
                                                 {!! Form::textarea('message', null, ['class' => 'form-control' , 'id' => 'smsMessage', 'placeholder' => 'متن پیامک']) !!}
-                                                <span class="help-block" id="smsMessageAlert">
+                                                <span class="form-control-feedback" id="smsMessageAlert">
                                                         <strong></strong>
                                                 </span>
                                                 {!! Form::close() !!}
@@ -268,7 +268,7 @@
                                             <div class="modal-body">
                                                 {!! Form::open(['method' => 'POST', 'action' => 'Web\UserbonController@store' , 'class'=>'nobottommargin' , 'id'=>'userAttachBonForm']) !!}
                                                 {!! Form::text('totalNumber', null,['class' => 'form-control' , 'id' => 'userBonNumber', 'placeholder' => 'تعداد بن']) !!}
-                                                <span class="help-block" id="userBonNumberAlert">
+                                                <span class="form-control-feedback" id="userBonNumberAlert">
                                                         <strong></strong>
                                                     </span>
                                                 {!! Form::hidden('user_id', null) !!}

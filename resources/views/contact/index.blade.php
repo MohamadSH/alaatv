@@ -130,20 +130,20 @@
                         {!! Form::hidden('user_id', $userId) !!}
                         <div class = "row">
                             <div class = "col-md-6">
-                                <p class = "{{ $errors->has('name') ? ' has-error' : '' }}">
+                                <p class = "{{ $errors->has('name') ? ' has-danger' : '' }}">
                                     {!! Form::text('name', old('name'), ['class' => 'form-control', 'id' => 'phoneNumber'  , 'placeholder'=>'نام مخاطب']) !!}
                                     @if ($errors->has('name'))
-                                        <span class = "help-block">
+                                        <span class="form-control-feedback">
                                             <strong>{{ $errors->first('name')}}</strong>
                                         </span>
                                     @endif
                                 </p>
                             </div>
                             <div class = "col-md-6">
-                                <p class = "{{ $errors->has('contacttype_id') ? ' has-error' : '' }}">
+                                <p class = "{{ $errors->has('contacttype_id') ? ' has-danger' : '' }}">
                                     {!! Form::select('contacttype_id', array_prepend($contacttypes->toArray(), 'نوع مخاطب'), null, ['class' => 'form-control', 'id' => 'contacttype_id'  ]) !!}
                                     @if ($errors->has('contacttype_id'))
-                                        <span class = "help-block">
+                                        <span class="form-control-feedback">
                                             <strong>{{ $errors->first('contacttype_id')}}</strong>
                                         </span>
                                     @endif
@@ -152,10 +152,10 @@
                         </div>
                         <div class = "row">
                             <div class = "col-md-6">
-                                <p class = "{{ $errors->has('relative_id') ? ' has-error' : '' }}">
+                                <p class = "{{ $errors->has('relative_id') ? ' has-danger' : '' }}">
                                     {!! Form::select('relative_id', array_prepend($relatives->toArray(),'نسبت مخاطب نامشخص'), null, ['class' => 'form-control', 'id' => 'relative_id' ]) !!}
                                     @if ($errors->has('relative_id'))
-                                        <span class = "help-block">
+                                        <span class="form-control-feedback">
                                             <strong>{{ $errors->first('relative_id')}}</strong>
                                         </span>
                                     @endif

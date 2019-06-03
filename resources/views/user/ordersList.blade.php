@@ -662,13 +662,13 @@
         {!! Form::hidden('paymentmethod_id', config("constants.PAYMENT_METHOD_ATM")) !!}
         <div class="modal-body">
             <div class="row static-info margin-top-20">
-                <div class="form-group {{ $errors->has('cost') ? ' has-error' : '' }}">
+                <div class="form-group {{ $errors->has('cost') ? ' has-danger' : '' }}">
                     <label class="col-md-4 control-label" for="cost">مبلغ واریز شده(تومان):</label>
                     <div class="col-md-7">
                         {!! Form::text('cost',old('cost'),['class' => 'form-control' , 'id'=>"ATMTransactionCost" , 'dir'=>'ltr' ]) !!}
                         <text class="form-control-static m--font-info" id="ATMTransactionCost-static"></text>
                         @if ($errors->has('cost'))
-                            <span class="help-block">
+                            <span class="form-control-feedback">
                                 <strong>{{ $errors->first('cost') }}</strong>
                             </span>
                         @endif
@@ -683,7 +683,7 @@
             </div>
             <div class="mt-radio-list">
                 <div class="row static-info margin-top-20">
-                    <div class="form-group {{ $errors->has('referenceNumber') ? ' has-error' : '' }}">
+                    <div class="form-group {{ $errors->has('referenceNumber') ? ' has-danger' : '' }}">
                         <div class="col-md-4">
                             <label class="mt-radio mt-radio-outline control-label">
                                 شماره مرجع/ارجاع:
@@ -694,7 +694,7 @@
                         <div class="col-md-7">
                             {!! Form::text('referenceNumber',old('referenceNumber'),['class' => 'form-control', 'dir'=>'ltr' ]) !!}
                             @if ($errors->has('referenceNumber'))
-                                <span class="help-block">
+                                <span class="form-control-feedback">
                                                                     <strong>{{ $errors->first('referenceNumber') }}</strong>
                                                                 </span>
                             @endif
@@ -702,7 +702,7 @@
                     </div>
                 </div>
                 <div class="row static-info margin-top-20">
-                    <div class="form-group {{ $errors->has('traceNumber') ? ' has-error' : '' }}">
+                    <div class="form-group {{ $errors->has('traceNumber') ? ' has-danger' : '' }}">
                         <div class="col-md-4">
                             <label class="mt-radio mt-radio-outline control-label">
                                 شماره پیگیری:
@@ -713,7 +713,7 @@
                         <div class="col-md-7">
                             {!! Form::text('traceNumber',old('traceNumber'),['class' => 'form-control' , 'disabled'=>'true', 'dir'=>'ltr' ]) !!}
                             @if ($errors->has('traceNumber'))
-                                <span class="help-block">
+                                <span class="form-control-feedback">
                                                                 <strong>{{ $errors->first('traceNumber') }}</strong>
                                                             </span>
                             @endif

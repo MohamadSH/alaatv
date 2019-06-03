@@ -83,7 +83,7 @@
                         <div class="col-md-12">
                             {!! Form::open(['method' => 'POST', 'action' => 'Web\HomeController@sendSMS' , 'class'=>'' , 'id'=>'sendSmsForm']) !!}
                             {!! Form::textarea('message', null, ['class' => 'form-control' , 'id' => 'smsMessage', 'placeholder' => 'متن پیامک' , 'rows' => 3]) !!}
-                            <span class="help-block" id="smsMessageAlert">
+                            <span class="form-control-feedback" id="smsMessageAlert">
                                     <strong></strong>
                                 </span>
                             <br>
@@ -133,7 +133,7 @@
                                 {!! Form::hidden('numberOfFatherPhones', "0" , ['id' => 'numberOfFatherPhones']) !!}
                                 {!! Form::hidden('numberOfMotherPhones', "0" , ['id' => 'numberOfMotherPhones']) !!}
                                 <div class="col-md-12">
-                                    <span class="help-block bold m--font-danger">توجه پیامک به تمامی شماره موبایلهای ثبت شده برای پدر یا مادر ارسال خواهد شد</span>
+                                    <span class="form-control-feedback bold m--font-danger">توجه پیامک به تمامی شماره موبایلهای ثبت شده برای پدر یا مادر ارسال خواهد شد</span>
                                 </div>
                             </div>
                         </div>

@@ -6,39 +6,39 @@
                 وارد کردن اطلاعات زیر الزامیست:
             </h4>
         </div>
-        <div class = "form-group {{ $errors->has('name') ? ' has-error' : '' }}">
+        <div class = "form-group {{ $errors->has('name') ? ' has-danger' : '' }}">
             <div class = "row">
                 <label class = "col-md-3 control-label" for = "name">نام صفت</label>
                 <div class = "col-md-9">
                     {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'name' ]) !!}
                     @if ($errors->has('name'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                         <strong>{{ $errors->first('name') }}</strong>
                     </span>
                     @endif
                 </div>
             </div>
         </div>
-        <div class = "form-group {{ $errors->has('displayName') ? ' has-error' : '' }}">
+        <div class = "form-group {{ $errors->has('displayName') ? ' has-danger' : '' }}">
             <div class = "row">
                 <label class = "col-md-3 control-label" for = "displayName">نام قابل نمایش</label>
                 <div class = "col-md-9">
                     {!! Form::text('displayName', null, ['class' => 'form-control', 'id' => 'displayName' ]) !!}
                     @if ($errors->has('displayName'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                         <strong>{{ $errors->first('displayName') }}</strong>
                     </span>
                     @endif
                 </div>
             </div>
         </div>
-        <div class = "form-group {{ $errors->has('attributecontrol_id') ? ' has-error' : '' }}">
+        <div class = "form-group {{ $errors->has('attributecontrol_id') ? ' has-danger' : '' }}">
             <div class = "row">
                 <label class = "col-md-3 control-label" for = "attributecontrol_id">نوع کنترل صفت</label>
                 <div class = "col-md-9">
                     {!! Form::select('attributecontrol_id',$attributecontrols,null,['class' => 'form-control', 'id' => 'attributecontrol_id' , 'placeholder' => 'نوع کنترل صفت را مشخص کنید']) !!}
                     @if ($errors->has('attributecontrol_id'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                         <strong>{{ $errors->first('attributecontrol_id') }}</strong>
                     </span>
                     @endif
@@ -51,13 +51,13 @@
                 وارد کردن اطلاعات زیر اختیاری می باشد:
             </h4>
         </div>
-        <div class = "form-group {{ $errors->has('description') ? ' has-error' : '' }}">
+        <div class = "form-group {{ $errors->has('description') ? ' has-danger' : '' }}">
             <div class = "row">
                 <label class = "col-md-3 control-label" for = "description">توضیح صفت</label>
                 <div class = "col-md-9">
                     {!! Form::textarea('description', null, ['class' => 'form-control', 'id' => 'description']) !!}
                     @if ($errors->has('description'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                         <strong>{{ $errors->first('description') }}</strong>
                     </span>
                     @endif
@@ -79,19 +79,19 @@
     <div class = "col-md-8 col-md-offset-2">
         <p>
             {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'attributeName' , 'placeholder'=>'نام صفت']) !!}
-            <span class = "help-block" id = "attributeNameAlert">
+            <span class="form-control-feedback" id = "attributeNameAlert">
                 <strong></strong>
             </span>
         </p>
         <p>
             {!! Form::text('displayName', null, ['class' => 'form-control', 'id' => 'attributeDisplayName'  , 'placeholder'=>'نام قابل نمایش']) !!}
-            <span class = "help-block" id = "attributeDisplayNameAlert">
+            <span class="form-control-feedback" id = "attributeDisplayNameAlert">
                 <strong></strong>
             </span>
         </p>
         <p>
             {!! Form::select('attributecontrol_id',$attributecontrols,null,['class' => 'form-control', 'id' => 'attributeControlID' , 'placeholder' => 'نوع کنترل صفت را مشخص کنید ' ])!!}
-            <span class = "help-block" id = "attributeControlIDAlert">
+            <span class="form-control-feedback" id = "attributeControlIDAlert">
                 <strong></strong>
             </span>
         </p>
@@ -103,7 +103,7 @@
         <br>
         <p>
             {!! Form::textarea('description', null, ['class' => 'form-control', 'id' => 'attributeDescription'  , 'placeholder'=>'توضیح درباره صفت']) !!}
-            <span class = "help-block" id = "attributeDescriptionAlert">
+            <span class="form-control-feedback" id = "attributeDescriptionAlert">
                 <strong></strong>
             </span>
         </p>
