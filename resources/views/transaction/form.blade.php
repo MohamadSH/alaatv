@@ -16,6 +16,16 @@
                     </div>
                 </div>
             </div>
+            <div class="row static-info margin-top-20">
+                <div class="col form-group">
+                    <div class="row">
+                        <label class="col-md-3 control-label" for="cost">لینک اصلاح سفارش</label>
+                        <div class="col-md-6">
+                            <a target="_blank" href="{{action('OrderController@edit' , $order)}}">کلیک کنید</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         @else
             {!! Form::hidden('order_id',$transaction->order->id) !!}
         @endif

@@ -41,7 +41,7 @@
                 <a class="m-link" href="{{action("Web\AdminController@adminOrder")}}">پنل مدیریت سفارش ها</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
-                <a class="m-link" href="{{action("Web\UserController@edit" , $order->user)}}">
+                <a target="_blank" class="m-link" href="{{action("Web\UserController@edit" , $order->user)}}">
                     اصلاح اطلاعات سفارش {{$order->user->firstName}} {{$order->user->lastName}}
                 </a>
             </li>
