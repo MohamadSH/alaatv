@@ -230,15 +230,6 @@
                                                                 @endif
                                                             </span>
                                                         </div>
-    
-    
-                                                        @if($simpleOrderProductItem->userbons->count() > 0)
-                                                            <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">
-                                                                <i class="flaticon-interface-9"></i>
-                                                                تعداد بن مصرفی:
-                                                                {{ $simpleOrderProductItem->userbons->count() }}
-                                                            </span>
-                                                        @endif
                                                         
                                                     </div>
                                                     <div class="m-widget5__content">
@@ -290,6 +281,16 @@
                                                             </div>
                                                             
                                                             <div class="clearfix"></div>
+    
+    
+                                                            @if($orderProductItemChild->userbons->count() > 0)
+                                                                <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">
+                                                                    <i class="flaticon-interface-9"></i>
+                                                                    تعداد بن مصرفی:
+                                                                    {{ $orderProductItemChild->userbons->count() }}
+                                                                </span>
+                                                            @endif
+                                                            
                                                         </div>
                                                     @endforeach
                                                 </div>
