@@ -862,10 +862,14 @@ class UserController extends Controller
             $user->lockHisProfile();
         }
 
-//        if (in_array("roles", $data) && isset($data["roles"]) && $authenticatedUser->can(config('constants.INSET_USER_ROLE')))
-//        {
-//            $this->syncRoles($data["roles"], $user);
-//        }
+        if (in_array("roles", $data) && isset($data["roles"]) && $authenticatedUser->can(config('constants.INSET_USER_ROLE')))
+        {
+            $roles = $data['roles'];
+            if(is_null($roles))
+                $roles = [];
+
+            $this->syncRoles($data["roles"], $user);
+        }
         
         $resultText = 'User save successfully';
         $resultCode = Response::HTTP_OK;
@@ -2106,10 +2110,13 @@ class UserController extends Controller
         
         if ($user->update()) {
 
-//            $roles = $request->get('roles');
-//            if (isset($roles) && $authenticatedUser->can(config('constants.INSET_USER_ROLE'))) {
-//                $this->syncRoles($roles, $user);
-//            }
+            if ($request->has('roles') && $authenticatedUser->can(config('constants.INSET_USER_ROLE'))) {
+                $roles = $request->get('roles');
+                if(is_null($roles))
+                    $roles=[];
+
+                $this->syncRoles($roles, $user);
+            }
             
             $message = 'اطلاعات با موفقیت اصلاح شد';
             $status  = Response::HTTP_OK;
