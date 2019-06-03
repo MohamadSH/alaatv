@@ -1,26 +1,26 @@
-<div class = "form-group {{ $errors->has('title') ? ' has-error' : '' }} col-md-12">
+<div class = "form-group {{ $errors->has('title') ? ' has-danger' : '' }} col-md-12">
     <label class = "col-md-3 control-label" for = "productPhotoTitle">عنوان</label>
     <div class = "col-md-9">
         {!! Form::text('title', old('title') , ['class' => 'form-control' , 'id'=>'productPhotoTitle']) !!}
         @if ($errors->has('title'))
-            <span class = "help-block">
+            <span class="form-control-feedback">
             <strong>{{ $errors->first('title') }}</strong>
         </span>
         @endif
     </div>
 </div>
-<div class = "form-group {{ $errors->has('order') ? ' has-error' : '' }} col-md-12">
+<div class = "form-group {{ $errors->has('order') ? ' has-danger' : '' }} col-md-12">
     <label class = "col-md-3 control-label" for = "productPhotoOrder">ترتیب</label>
     <div class = "col-md-9">
         {!! Form::text('order', (isset($defaultProductPhotoOrder))?$defaultProductPhotoOrder : old('order'), ['class' => 'form-control' , 'id'=>'productPhotoOrder' , 'dir'=>'ltr']) !!}
         @if ($errors->has('order'))
-            <span class = "help-block">
+            <span class="form-control-feedback">
             <strong>{{ $errors->first('order') }}</strong>
         </span>
         @endif
     </div>
 </div>
-<div class = "form-group {{ $errors->has('file') ? ' has-error' : '' }} col-md-12">
+<div class = "form-group {{ $errors->has('file') ? ' has-danger' : '' }} col-md-12">
     <label class = "col-md-3 control-label" for = "productPhoto">عکس</label>
     <div class = "col-md-9">
         <div class = "fileinput fileinput-new" data-provides = "fileinput">
@@ -39,24 +39,24 @@
             </div>
         </div>
         @if ($errors->has('file'))
-            <span class = "help-block">
+            <span class="form-control-feedback">
             <strong>{{ $errors->first('file') }}</strong>
         </span>
         @endif
     </div>
 </div>
-<div class = "form-group {{ $errors->has('description') ? ' has-error' : '' }} col-md-12">
+<div class = "form-group {{ $errors->has('description') ? ' has-danger' : '' }} col-md-12">
     <label class = "col-md-3 control-label" for = "productPhotoDescription">توضیح کوتاه</label>
     <div class = "col-md-9">
         {!! Form::text('description', old('description') , ['class' => 'form-control' , 'id'=>'productPhotoDescription']) !!}
         @if ($errors->has('description'))
-            <span class = "help-block">
+            <span class="form-control-feedback">
             <strong>{{ $errors->first('description') }}</strong>
         </span>
         @endif
     </div>
 </div>
-<div class = "form-group {{ $errors->has('enable') ? ' has-error' : '' }} col-md-12">
+<div class = "form-group {{ $errors->has('enable') ? ' has-danger' : '' }} col-md-12">
     <label class = "col-md-3"></label>
     <div class = "col-md-9">
         <div class = "mt-checkbox-list">

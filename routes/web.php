@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\Web\PaymentStatusController;
+use App\Http\Controllers\Web\SalesReportController;
 use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
 use App\PaymentModule\Controllers\PaymentVerifierController;
 use App\PaymentModule\Controllers\RedirectAPIUserToPaymentRoute;
@@ -165,7 +166,7 @@ Route::group(['middleware' => 'auth'], function () {
         
         Route::get('{user}/dashboard', 'Web\DashboardPageController')
             ->name('web.user.dashboard');
-        Route::get('profile/sales-report', 'Web\UserController@salesReport');
+        Route::get('sales-report', '\\'.SalesReportController::class);
         Route::get('profile', 'Web\UserController@show');
         Route::post('profile', 'Web\UserController@update')
             ->name('web.authenticatedUser.profile.update');

@@ -1,46 +1,46 @@
 @if(!isset($productFile))
     {!! Form::hidden("product_id" , $product->id) !!}
 @endif
-<div class = "form-group {{ $errors->has('name') ? ' has-error' : '' }} col-md-12">
+<div class = "form-group {{ $errors->has('name') ? ' has-danger' : '' }} col-md-12">
     <div class = "row">
         <label class = "col-md-3 control-label" for = "productFileName">نام فایل</label>
         <div class = "col-md-9">
             {!! Form::text('name', old('name') , ['class' => 'form-control' , 'id'=>'productFileName']) !!}
             @if ($errors->has('name'))
-                <span class = "help-block">
+                <span class="form-control-feedback">
                 <strong>{{ $errors->first('name') }}</strong>
             </span>
             @endif
         </div>
     </div>
 </div>
-<div class = "form-group {{ $errors->has('productfiletype_id') ? ' has-error' : '' }} col-md-12">
+<div class = "form-group {{ $errors->has('productfiletype_id') ? ' has-danger' : '' }} col-md-12">
     <div class = "row">
         <label class = "col-md-3 control-label" for = "productfileType_id">نوع فایل</label>
         <div class = "col-md-9">
             {!! Form::select('productfiletype_id' , $productFileTypes, null, ['class' => 'form-control' , 'id'=>'productFileTypeSelect'  ]) !!}
             @if ($errors->has('productfiletype_id'))
-                <span class = "help-block">
+                <span class="form-control-feedback">
                 <strong>{{ $errors->first('productfiletype_id') }}</strong>
             </span>
             @endif
         </div>
     </div>
 </div>
-<div class = "form-group {{ $errors->has('order') ? ' has-error' : '' }} col-md-12">
+<div class = "form-group {{ $errors->has('order') ? ' has-danger' : '' }} col-md-12">
     <div class = "row">
         <label class = "col-md-3 control-label" for = "productFileOrder">ترتیب فایل</label>
         <div class = "col-md-9">
             {!! Form::text('order', old('order'), ['class' => 'form-control' , 'id'=>'productFileOrder' , 'dir'=>'ltr']) !!}
             @if ($errors->has('order'))
-                <span class = "help-block">
+                <span class="form-control-feedback">
                 <strong>{{ $errors->first('order') }}</strong>
             </span>
             @endif
         </div>
     </div>
 </div>
-<div class = "form-group {{ $errors->has('file') ? ' has-error' : '' }} col-md-12">
+<div class = "form-group {{ $errors->has('file') ? ' has-danger' : '' }} col-md-12">
     <div class = "row">
         <label class = "col-md-3 control-label" for = "productFile">فایل</label>
         <div class = "col-md-9">
@@ -60,40 +60,40 @@
                 </div>
             </div>
             @if ($errors->has('file'))
-                <span class = "help-block">
+                <span class="form-control-feedback">
                     <strong>{{ $errors->first('file') }}</strong>
                 </span>
             @endif
         </div>
     </div>
 </div>
-<div class = "form-group {{ $errors->has('cloudFile') ? ' has-error' : '' }} col-md-12">
+<div class = "form-group {{ $errors->has('cloudFile') ? ' has-danger' : '' }} col-md-12">
     <div class = "row">
         <label class = "col-md-3 control-label" for = "cloudFile">لینک خارجی فایل</label>
         <div class = "col-md-9">
             {!! Form::text('cloudFile', old('cloudFile'), ['class' => 'form-control' , 'dir' => 'ltr']) !!}
             @if ($errors->has('cloudFile'))
-                <span class = "help-block">
+                <span class="form-control-feedback">
                     <strong>{{ $errors->first('cloudFile') }}</strong>
                 </span>
             @endif
         </div>
     </div>
 </div>
-<div class = "form-group {{ $errors->has('description') ? ' has-error' : '' }} col-md-12">
+<div class = "form-group {{ $errors->has('description') ? ' has-danger' : '' }} col-md-12">
     <div class = "row">
         <label class = "col-md-3 control-label" for = "productFileDescription">توضیح</label>
         <div class = "col-md-9">
             {!! Form::textarea('description', old('description'), ['class' => 'form-control' , 'id'=>'productFileDescription' , 'rows'=>'3']) !!}
             @if ($errors->has('description'))
-                <span class = "help-block">
+                <span class="form-control-feedback">
                     <strong>{{ $errors->first('description') }}</strong>
                 </span>
             @endif
         </div>
     </div>
 </div>
-<div class = "form-group {{ $errors->has('validSinceDate') ? ' has-error' : '' }} col-md-12">
+<div class = "form-group {{ $errors->has('validSinceDate') ? ' has-danger' : '' }} col-md-12">
     <div class = "row">
         <label class = " col-md-3 control-label" for = "productFileValidSince">تاریخ نمایان شدن(برای کاربر)</label>
         <div class = "col-md-9">
@@ -103,7 +103,7 @@
     </div>
 </div>
 <br>
-<div class = "form-group {{ $errors->has('time') ? ' has-error' : '' }} col-md-12">
+<div class = "form-group {{ $errors->has('time') ? ' has-danger' : '' }} col-md-12">
     <div class = "row">
         <label class = "col-md-3 control-label" for = "productFileValidSinceTime">ساعت</label>
         <div class = "col-md-9">
@@ -111,7 +111,7 @@
         </div>
     </div>
 </div>
-<div class = "form-group {{ $errors->has('enable') ? ' has-error' : '' }} col-md-12">
+<div class = "form-group {{ $errors->has('enable') ? ' has-danger' : '' }} col-md-12">
     <div class = "row">
         <label class = "col-md-3"></label>
         <div class = "col-md-9">

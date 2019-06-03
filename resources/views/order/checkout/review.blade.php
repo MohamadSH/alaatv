@@ -46,7 +46,7 @@
                             <div class="m-widget5 a--userCartList-items">
                                 @if(isset($invoiceInfo['items']))
                                     @foreach($invoiceInfo['items'] as $key=>$orderProductItem)
-                                        @if($orderProductItem['grand']==null)
+                                        @if($orderProductItem['grand']===null)
                                             @foreach($orderProductItem['orderproducts'] as $key=>$simpleOrderProductItem)
                                                 <div class="m-widget5__item orderproductWithoutChildWarper">
                                                     <div class="m-widget5__content">
@@ -70,7 +70,7 @@
                                                             </a>
                                                         </div>
                                                         <div class="m-widget5__section">
-                                                            <div class=" d-none d-md-block d-lg-block d-xl-block">
+                                                            <div class="d-none d-sm-block d-md-block d-lg-block d-xl-block">
                                                                 <h4 class="m-widget5__title">
                                                                     <a class="m-link" target="_blank"
                                                                        href="{{ $simpleOrderProductItem->product->url }}">
@@ -120,6 +120,13 @@
                                                                 @endif
                                                             </span>
                                                         </div>
+                                                        @if($simpleOrderProductItem->userbons->count() > 0)
+                                                            <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">
+                                                                <i class="flaticon-interface-9"></i>
+                                                                تعداد بن مصرفی:
+                                                                {{ $simpleOrderProductItem->userbons->count() }}
+                                                            </span>
+                                                        @endif
                                                     </div>
                                                     <div class="m-widget5__content">
                                                         <div class="m-widget5__stats1">
@@ -223,7 +230,7 @@
                                                                 @endif
                                                             </span>
                                                         </div>
-                                                    
+                                                        
                                                     </div>
                                                     <div class="m-widget5__content">
                                                         <div class="m-widget5__stats1">
@@ -274,6 +281,16 @@
                                                             </div>
                                                             
                                                             <div class="clearfix"></div>
+    
+    
+                                                            @if($orderProductItemChild->userbons->count() > 0)
+                                                                <span class="m-badge m-badge--info m-badge--wide m-badge--rounded m--margin-top-5">
+                                                                    <i class="flaticon-interface-9"></i>
+                                                                    تعداد بن مصرفی:
+                                                                    {{ $orderProductItemChild->userbons->count() }}
+                                                                </span>
+                                                            @endif
+                                                            
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -323,7 +340,7 @@
                                                 سود شما از خرید :
                                             </h3>
                                             <span class="m-widget1__desc">
-                                            شما در مجموع {{ round((1-($invoiceInfo['price']['final']/$invoiceInfo['price']['base']))*100) }}% تخفیف گرفته اید
+                                            شما در مجموع {{ round((1-($invoiceInfo['price']['final']/$invoiceInfo['price']['base']))*100, 2) }}% تخفیف گرفته اید
                                         </span>
                                         </div>
                                         <div class="col m--align-right">

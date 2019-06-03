@@ -574,7 +574,7 @@ class OrderController extends Controller
     
         $products = $this->makeProductCollection();
 
-        $transactionGateways = TransactionGatewayRepo::getTransactionGateways(['enable'=>1])->pluck('displayName' , 'id');
+        $transactionGateways = TransactionGatewayRepo::getTransactionGateways(['enable'=>1])->get()->pluck('displayName' , 'id');
     
         $totalTransactions = $order->transactions;
         
@@ -596,7 +596,6 @@ class OrderController extends Controller
      */
     public function update(EditOrderRequest $request, Order $order)
     {
-        $oldOrderStatus = $order->orderstatus_id;
         $user           = $request->user();
         
         if (isset($order->coupon->id)) {

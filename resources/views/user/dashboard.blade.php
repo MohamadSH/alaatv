@@ -76,7 +76,7 @@
                                                     <br>
                                                     {{ $product->name }}
                                                     <hr>
-                                                    <div class="m-btn-group m-btn-group--pill btn-group btn-group-sm"
+                                                    <div class="m-btn-group m-btn-group--pill btn-group btn-group-sm m--margin-bottom-5"
                                                          role="group" aria-label="Small button group">
                                                         <button type="button" class="btn btn-warning btnViewPamphlet"
                                                                 data-content-type="pamphlet"
@@ -95,15 +95,13 @@
                                             @else
                                                 <div class="m-widget_head-owlcarousel-item carousel"
                                                      data-position="{{ $productKey }}">
-                                                    <a href="{{ $product->url }}">
-                                                        <img class="a--owl-carousel-type-2-item-image"
-                                                             src="{{ $product->photo }}" alt="{{ $product->name }}">
-                                                    </a>
+                                                    <img class="a--owl-carousel-type-2-item-image"
+                                                         src="{{ $product->photo }}" alt="{{ $product->name }}">
                                                     <br>
                                                     <a href="{{ $product->url }}" target="_blank"
                                                        class="m-link">{{ $product->name }}</a>
                                                     <hr>
-                                                    <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-type-2-show-detailes">
+                                                    <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-type-2-show-detailes m--margin-bottom-5">
                                                         <i class="flaticon-more-v6"></i>
                                                     </a>
                                                 </div>

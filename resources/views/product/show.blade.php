@@ -3,16 +3,30 @@
 @section('page-css')
     <link href="{{ mix('/css/product-show.css') }}" rel="stylesheet" type="text/css"/>
     <style>
-
-        #Block-sampleVideo .m-widget_head-owlcarousel-item {
-            background: white;
-            box-shadow: none !important;
+        @if(!isset($block) || !isset($block->contents) || $block->contents->count() === 0)
+            .productInfoNav-sampleVideo {
+            display: none !important;
         }
+        @endif
+        @if(!isset($product->samplePhotos) || $product->samplePhotos->count() === 0)
+            .productInfoNav-samplePamphlet {
+            display: none !important;
+        }
+        @endif
         
-        .is-sticky .productPamphletTitle {
-            background: white;
-            opacity: 0.85;
+        @if(
+            mb_strlen(trim(strip_tags($product->shortDescription))) === 0 &&
+            mb_strlen(trim(strip_tags($product->longDescription))) === 0
+        )
+            .productInfoNav-detailes {
+            display: none !important;
         }
+        @endif
+        @if(!isset($block) || !isset($block->products) || $block->products->count() === 0)
+            .productInfoNav-relatedProduct {
+            display: none !important;
+        }
+        @endif
     </style>
 @endsection
 
@@ -35,7 +49,6 @@
 @endsection
 
 @section('content')
-    
     
     <div class="row">
         <div class="col">
@@ -484,9 +497,11 @@
             <!--end::Portlet-->
         </div>
     </div>
-    
+
+    {{--نمونه فیلم--}}
     @include('product.partials.Block.block', [
-        'blockTitle'=>'نمونه فیلم ها',
+        'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo']),
+        'blockUrlDisable'=>true,
         'blockType'=>'content',
         'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
         'blockCustomId'=>'Block-sampleVideo'
@@ -503,13 +518,13 @@
     
     @if(mb_strlen(trim(strip_tags($product->shortDescription))) > 0 || mb_strlen(trim(strip_tags($product->longDescription))) > 0)
         <div class="row">
-            <div class="col">
-                <div class="m-portlet m-portlet--tabs productDetailes">
+            <div class="col m--margin-bottom-25">
+                <div class="m-portlet m-portlet--tabs productDetailes" id="productDetailes">
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">
                             <div class="m-portlet__head-title">
                                 <h3 class="m-portlet__head-text">
-                                    بررسی محصول
+                                    @include('product.partials.productInfoNav', ['targetId'=>'productDetailes'])
                                 </h3>
                             </div>
                         </div>
@@ -550,7 +565,8 @@
     @endif
 
     @include('product.partials.Block.block', [
-        'blockTitle'=>'محصولات مرتبط',
+        'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'relatedProduct']),
+        'blockUrlDisable'=>true,
         'blockType'=>'product',
         'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock relatedProduct',
         'blockCustomId'=>'Block-relatedProduct'
@@ -560,11 +576,4 @@
 
 @section('page-js')
     <script src="{{ mix('/js/product-show.js') }}"></script>
-    <script>
-        $('.productPamphletWarper .productPamphletTitle').sticky({
-            container: '.productPamphletWarper',
-            topSpacing: $('#m_header').height(),
-            zIndex: 99
-        });
-    </script>
 @endsection

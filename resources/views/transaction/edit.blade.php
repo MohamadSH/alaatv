@@ -62,12 +62,14 @@
                                 @if(!isset($transaction->order->user->firstName) && !isset($transaction->order->user->lastName))
                                 کاربر ناشناس
                                 @else
+                                    <a target="_blank" href="{{action('Web\UserController@edit' , $transaction->order->user)}}">
                                     @if(isset($transaction->order->user->firstName))
                                         {{$transaction->order->user->firstName}}
                                     @endif
                                     @if(isset($transaction->order->user->lastName))
                                         {{$transaction->order->user->lastName}}
                                     @endif
+                                    </a>
                                 @endif
 
                             </h2>

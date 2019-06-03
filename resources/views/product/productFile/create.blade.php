@@ -154,7 +154,7 @@
                 '                </label>\n' +
                 '                <div class="col-md-9">\n' +
                 '                    <input type="text" name="name"  class="form-control"  maxlength="100" >\n' +
-                '                       <span class="help-block">\n' +
+                '                       <span class="form-control-feedback">\n' +
                 '                           <strong></strong>\n' +
                 '                   </span>' +
                 '                </div>\n' +
@@ -187,11 +187,11 @@
             init: function () {
                 this.on("addedfile", function (file) {
                     // file.previewElement.querySelector('[type="submit"]').disabled=true;
-                    $("#products").parent("div .col-md-2").removeClass("has-error");
+                    $("#products").parent("div .col-md-2").removeClass("has-danger");
 
 
                     if ($("#products option:selected").val().length === 0) {
-                        $("#products").parent("div .col-md-2").addClass("has-error");
+                        $("#products").parent("div .col-md-2").addClass("has-danger");
                         this.removeFile(file);
                     }
 
@@ -233,7 +233,6 @@
                     orderInput.setAttribute("id", "order_" + myDropzone.files.length);
                     // Create the remove button
                     var removeButton = Dropzone.createElement("<a href=";
-                    javascript:
                     " class=";
                     btn;
                     red;

@@ -13,7 +13,8 @@ return [
     'ROLE_TECH'                                   => 'tech',
     'EMPLOYEE_ROLE'                               => 'employee',
     'ROLE_EMPLOYEE'                               => 6,
-    'ROLE_TEACHER'                                => 10,
+    'ROLE_TEACHER'                                => 'teacher',
+    'ROLE_TEACHER_ID'                             => 10,
     'BOOK_POST_MAN_ROLE'                          => 'bookPostMan',
     'SHARIF_SCHOOL_REGISTER'                      => 'sharifSchoolRegister',
 
@@ -26,6 +27,7 @@ return [
     'SMS_ADMIN_PANEL_ACCESS'                      => 'smsAdminPanel',
     'ORDER_ADMIN_PANEL_ACCESS'                    => 'orderAdminPanel',
     'SITE_CONFIG_ADMIN_PANEL_ACCESS'              => 'siteConfigAdminPanel',
+    'ALAA_FAMILTY'                                => 'alaaFamily',
     'LIST_ASSIGNMENT_ACCESS'                      => 'listAssignment',
     'INSERT_ASSIGNMENT_ACCESS'                    => 'insertAssignment',
     'EDIT_ASSIGNMENT_ACCESS'                      => 'editAssignment',
@@ -174,6 +176,7 @@ return [
     'INSERT_CONTENT_SET_ACCESS'                   => 'insertContentset',
     'EDIT_CONTENT_SET_ACCESS'                     => 'editContentset',
     'REMOVE_CONTENT_SET_ACCESS'                   => 'removeContentset',
+    'SHOW_SALES_REPORT'                           => 'showSalesReport',
 
 
     //Technician
@@ -465,5 +468,114 @@ return [
 
     'ATTRIBUTE_TYPE_MAIN'                      => 1,
     'ATTRIBUTE_TYPE_EXTRA'                     => 2,
-    'ATTRIBUTE_TYPE_INFORMATION'               => 3
+    'ATTRIBUTE_TYPE_INFORMATION'               => 3,
+    
+    'JALALI_CALENDER'                          => [
+                                [
+                                    'month'       => 'مهر',
+                                    'periodBegin' => '2018-09-23',
+                                    'periodEnd'   => '2018-10-23',
+                                ],
+                                [
+                                    'month'       => 'آبان',
+                                    'periodBegin' => '2018-10-23',
+                                    'periodEnd'   => '2018-11-22',
+                                ],
+                                [
+                                    'month'       => 'آذر',
+                                    'periodBegin' => '2018-11-22',
+                                    'periodEnd'   => '2018-12-22',
+                                ],
+                                [
+                                    'month'       => 'دی',
+                                    'periodBegin' => '2018-12-22',
+                                    'periodEnd'   => '2019-01-21',
+                                ],
+                                [
+                                    'month'       => 'بهمن',
+                                    'periodBegin' => '2019-01-21',
+                                    'periodEnd'   => '2019-02-20',
+                                ],
+                                [
+                                    'month'       => 'اسفند',
+                                    'periodBegin' => '2019-02-20',
+                                    'periodEnd'   => '2019-03-21',
+                                ],
+                                [
+                                    'month'       => 'فروردین',
+                                    'periodBegin' => '2019-03-21',
+                                    'periodEnd'   => '2019-04-21',
+                                ],
+                                [
+                                    'month'       => 'اردیبهشت',
+                                    'periodBegin' => '2019-04-21',
+                                    'periodEnd'   => '2019-05-22',
+                                ],
+                                [
+                                    'month'       => 'خرداد',
+                                    'periodBegin' => '2019-05-22',
+                                    'periodEnd'   => '2019-06-22',
+                                ],
+                                [
+                                    'month'       => 'تیر',
+                                    'periodBegin' => '2019-06-22',
+                                    'periodEnd'   => '2019-07-23',
+                                ],
+                                [
+                                    'month'       => 'مرداد',
+                                    'periodBegin' => '2019-07-23',
+                                    'periodEnd'   => '2019-08-23',
+                                ],
+                                [
+                                    'month'       => 'شهریور',
+                                    'periodBegin' => '2019-08-23',
+                                    'periodEnd'   => '2019-09-23',
+                                ],
+                            ],
+    'JALALI_ALL_MONTHS'                        => [
+                                            'مهر',
+                                            'آبان',
+                                            'آذر',
+                                            'دی',
+                                            'بهمن',
+                                            'اسفند',
+                                            'فروردین',
+                                            'اردیبهشت',
+                                            'خرداد',
+                                            'تیر',
+                                            'مرداد',
+                                            'شهریور',
+                                        ],
+    'ALL_DAYS_OF_MONTH'                        => [
+                                        '1',
+                                        '2',
+                                        '3',
+                                        '4',
+                                        '5',
+                                        '6',
+                                        '7',
+                                        '8',
+                                        '9',
+                                        '10',
+                                        '11',
+                                        '12',
+                                        '13',
+                                        '14',
+                                        '15',
+                                        '16',
+                                        '17',
+                                        '18',
+                                        '19',
+                                        '20',
+                                        '21',
+                                        '22',
+                                        '23',
+                                        '24',
+                                        '25',
+                                        '26',
+                                        '27',
+                                        '28',
+                                        '29',
+                                        '30',
+                                    ]
 ];

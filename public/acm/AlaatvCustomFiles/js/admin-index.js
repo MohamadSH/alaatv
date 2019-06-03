@@ -254,6 +254,38 @@ $(document).on("click", "#userForm-submit", function (){
     });
 });
 
+
+/**
+ * Event Result Admin Ajax
+ */
+$(document).on("click", ".eventResult-portlet .reload", function (){
+    var identifier = $(this).data("role");
+    console.log(identifier);
+    var formData = $("#filter"+identifier+"Form").serialize();
+    $("#"+identifier+"-portlet-loading").removeClass("hidden");
+    $('#'+identifier+'_table > tbody').html("");
+    $.ajax({
+        type: "GET",
+        url: "/eventresult",
+        data : formData ,
+        success: function (result) {
+            // console.log(result);
+            // console.log(result.responseText);
+            var newDataTable =$("#"+identifier+"_table").DataTable();
+            newDataTable.destroy();
+            $('#'+identifier+'_table > tbody').html(result);
+            makeDataTable(identifier+"_table");
+            $("#"+identifier+"-portlet-loading").addClass("hidden");
+        },
+        error: function (result) {
+            // console.log(result);
+            // console.log(result.responseText);
+        }
+    });
+
+    return false;
+});
+
 var userAjax;
 $(document).on("click", "#user-portlet .reload", function (){
     $("#user-portlet-loading").removeClass("d-none");
@@ -598,7 +630,12 @@ function removePermission(url){
     });
 }
 $(document).on("click", "#permissionForm-submit", function (){
-    $('body').modalmanager('loading');
+
+    mApp.block('#responsive-permission', {
+        type: "loader",
+        state: "success",
+    });
+
     var el = $(this);
 
     //initializing form alerts
@@ -637,6 +674,8 @@ $(document).on("click", "#permissionForm-submit", function (){
                 };
                 $("#permission-portlet .reload").trigger("click");
                 $('#permissionForm')[0].reset();
+                $('#responsive-permission').modal('hide');
+                mApp.unblock('#responsive-permission');
                 toastr["success"]("درج دسترسی با موفقیت انجام شد!", "پیام سیستم");
                 // console.log(result);
                 // console.log(result.responseText);
@@ -669,22 +708,28 @@ $(document).on("click", "#permissionForm-submit", function (){
 
                     }
                 });
+                $('#responsive-permission').modal('hide');
+                mApp.unblock('#responsive-permission');
             },
             //The status for when there is error php code
             500: function (response) {
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
+                $('#responsive-permission').modal('hide');
+                mApp.unblock('#responsive-permission');
             },
             //The status for when there is error php code
             503: function (response) {
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+                $('#responsive-permission').modal('hide');
+                mApp.unblock('#responsive-permission');
             }
         },
         cache: false,
         contentType: false,
         processData: false
     });
-    $modal.modal().hide();
-    $modal.modal('toggle');
+    $('#responsive-permission').modal('hide');
+    mApp.unblock('#responsive-permission');
 });
 $(document).on("click", "#permission-portlet .reload", function (){
     $("#permission-portlet-loading").removeClass("d-none");

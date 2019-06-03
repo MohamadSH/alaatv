@@ -24,7 +24,7 @@ trait TeacherTrait
         return Cache::tags(["teachers"])
             ->remember($key, config("constants.CACHE_600"), function () {
                 $authors = User::select()
-                    ->role([config('constants.ROLE_TEACHER')])
+                    ->role([config('constants.ROLE_TEACHER_ID')])
                     ->orderBy('lastName')
                     ->get();
                 

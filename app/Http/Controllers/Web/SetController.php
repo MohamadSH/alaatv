@@ -142,9 +142,12 @@ class SetController extends Controller
 
         if ($contentSet->save()) {
 
-            $products = $request->get('products');
-            if(isset($products))
+            if($request->has('products'))
             {
+                $products = $request->get('products');
+                if(is_null($products))
+                    $products = [];
+
                 $this->syncProducts($products , $contentSet);
             }
             
@@ -163,9 +166,11 @@ class SetController extends Controller
 
         if ($contentSet->update()) {
 
-            $products = $request->get('products');
-            if(isset($products))
+            if($request->has('products'))
             {
+                $products = $request->get('products');
+                if(is_null($products))
+                    $products = [];
                 $this->syncProducts($products , $contentSet);
             }
 

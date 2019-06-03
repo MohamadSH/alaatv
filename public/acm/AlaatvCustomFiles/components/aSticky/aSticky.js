@@ -32,6 +32,10 @@
       wrapperClassName: 'sticky-wrapper',
       center: false,
       container: '',
+      hidePosition: {
+          element: '',
+          topSpace: 0
+      },
       getWidthFrom: '',
       widthFromWrapper: true, // works only when .getWidthFrom is empty
       responsiveWidth: false,
@@ -52,10 +56,26 @@
         var s = sticked[i],
           elementTop = s.stickyWrapper.offset().top,
           etse = elementTop - s.topSpacing - extra,
-          containerScrollPosition = (s.container!=='' && $(s.container).length>0) ? $(s.container).offset().top + $(s.container).height() - s.stickyWrapper.height()*2 : false;
+          containerScrollPosition = false,
+          hidePositionTarget = false;
 
-        //update height in case of dynamic content
+
+        if (s.container!=='' && $(s.container).length>0) {
+            var containerTop = $(s.container).offset().top,
+                containerHeight = $(s.container).height(),
+                stickyWrapperHeight = s.stickyWrapper.height();
+            containerScrollPosition = containerTop + containerHeight - stickyWrapperHeight * 2;
+        }
+
+          //update height in case of dynamic content
         s.stickyWrapper.css('height', s.stickyElement.outerHeight());
+
+
+        if (s.hidePosition.element!=='' && $(s.hidePosition.element).length>0) {
+            var hidePositionTop = $(s.hidePosition.element).offset().top,
+                hidePositionTopSpace = s.hidePosition.topSpace;
+            hidePositionTarget = hidePositionTop - hidePositionTopSpace;
+        }
 
         if (scrollTop <= etse) {
           if (s.currentTop !== null) {
@@ -128,8 +148,14 @@
                   )
               ) ||
               (
-                  containerScrollPosition !== false &&
-                  scrollTop > containerScrollPosition
+                  (
+                      containerScrollPosition !== false &&
+                      scrollTop > containerScrollPosition
+                  ) ||
+                  (
+                      hidePositionTarget !== false &&
+                      scrollTop >= hidePositionTarget
+                  )
               );
 
           if( unstick ) {

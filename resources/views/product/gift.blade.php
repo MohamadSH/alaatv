@@ -11,10 +11,10 @@
     <div class = "m-portlet__body">
 
         {!! Form::open(["method" => "PUT" , 'action'=>['Web\ProductController@addGift' , $product] ]) !!}
-        <div class = "form-inline {{ $errors->has('gift') ? ' has-error' : '' }}">
+        <div class = "form-inline {{ $errors->has('gift') ? ' has-danger' : '' }}">
             @include("admin.filters.productsFilter" , [ "listType"=>"childSelect","name"=>"giftProducts" , "defaultValue"=>["value"=>0 , "caption"=>"انتخاب کنید"]])
             @if ($errors->has('gift'))
-                <span class = "help-block">
+                <span class="form-control-feedback">
                     <strong>{{ $errors->first('gift') }}</strong>
                 </span>
             @endif

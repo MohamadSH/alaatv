@@ -1,11 +1,11 @@
 @if($product->samplePhotos != null)
 
-    <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi m--margin-top-25 productPamphletWarper">
+    <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi m--margin-top-25 productPamphletWarper" id="productPamphletWarper">
         <div class="m-portlet__body m--padding-top-5 m--padding-bottom-5">
     
             <div class="productPamphletTitle">
                 <h3 class="m-portlet__head-text">
-                    نمونه جزوه
+                    @include('product.partials.productInfoNav', ['targetId'=>'samplePamphlet'])
                 </h3>
             </div>
             

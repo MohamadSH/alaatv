@@ -30,38 +30,38 @@
                     <div class = "row">
                         <div class = "col-md-6">
                             <p>{!! Form::text('firstName', null, ['class' => 'form-control', 'id' => 'firstName' , 'placeholder'=>'نام']) !!}
-                                <span class = "help-block">
+                                <span class="form-control-feedback">
                                     <strong></strong>
                                  </span>
                             </p>
                             <p>{!! Form::text('nationalCode', null, ['class' => 'form-control', 'id' => 'nationalCode'  , 'maxlength'=>'10' , 'placeholder'=>'کد ملی']) !!}
-                                <span class = "help-block">
+                                <span class="form-control-feedback">
                                       <strong></strong>
                                 </span>
                             </p>
                         </div>
                         <div class = "col-md-6">
                             <p>{!! Form::text('lastName', null, ['class' => 'form-control', 'id' => 'lastName' , 'placeholder'=>'نام خانوادگی']) !!}
-                                <span class = "help-block">
+                                <span class="form-control-feedback">
                          <strong></strong>
                         </span>
                             </p>
                             <p>{!! Form::text('mobile', null, ['class' => 'form-control', 'id' => 'mobile' , 'maxlength'=>'11' , 'placeholder'=>'موبایل']) !!}
-                                <span class = "help-block">
+                                <span class="form-control-feedback">
                             <strong></strong>
                          </span>
                             </p>
                         </div>
                         <div class = "col-md-6">
                             <p>{!! Form::select('major_id', $majors, null,['class' => 'form-control', 'id' => 'userMajor', 'placeholder' => 'رشته نامشخص']) !!}
-                                <span class = "help-block">
+                                <span class="form-control-feedback">
                                     <strong></strong>
                                 </span>
                             </p>
                         </div>
                         <div class = "col-md-6">
                             <p>{!! Form::select('gender_id', $genders, null,['class' => 'form-control', 'id' => 'userGender', 'placeholder' => 'جنسیت نامشخص']) !!}
-                                <span class = "help-block">
+                                <span class="form-control-feedback">
                                  <strong></strong>
                                 </span>
                             </p>

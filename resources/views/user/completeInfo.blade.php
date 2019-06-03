@@ -102,7 +102,7 @@
                                                 {{--{!! Form::text("firstName" , null , ["class"=>"form-control"]) !!}--}}
                                                 <text class = "form-control-static" style = "margin-top:0px !important;">@if(isset($user)){{$user->firstName}}@else
                                                         - @endif</text>
-                                                <span class = "help-block"></span>
+                                                <span class="form-control-feedback"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -114,7 +114,7 @@
                                                 {{--{!! Form::text("lastName" , null , ["class"=>"form-control"]) !!}--}}
                                                 <text class = "form-control-static" style = "margin-top:0px !important;">@if(isset($user)){{$user->lastName}}@else
                                                         - @endif</text>
-                                                <span class = "help-block"> </span>
+                                                <span class="form-control-feedback"> </span>
                                             </div>
                                         </div>
                                     </div>
@@ -126,7 +126,7 @@
                                                 {{--                                                {!! Form::text("nationalCode" , null , ["class"=>"form-control" , "dir"=>"ltr"]) !!}--}}
                                                 <text class = "form-control-static" style = "margin-top:0px !important;">@if(isset($user)){{$user->nationalCode}}@else
                                                         - @endif</text>
-                                                <span class = "help-block">  </span>
+                                                <span class="form-control-feedback">  </span>
                                             </div>
                                         </div>
                                     </div>
@@ -141,7 +141,7 @@
                                                 @else
                                                     {!! Form::select('gender_id' , $genders, null, ['class' => 'form-control']) !!}
                                                 @endif
-                                                <span class = "help-block"> </span>
+                                                <span class="form-control-feedback"> </span>
                                             </div>
                                         </div>
                                     </div>
@@ -153,7 +153,7 @@
                                                 {{--{!! Form::text("mobile" , null , ["class"=>"form-control" , "dir"=>"ltr"]) !!}--}}
                                                 <text class = "form-control-static" style = "margin-top:0px !important;">@if(isset($user)){{$user->mobile}}@else
                                                         - @endif</text>
-                                                <span class = "help-block">  </span>
+                                                <span class="form-control-feedback">  </span>
                                             </div>
                                         </div>
                                     </div>
@@ -168,7 +168,7 @@
                                                 @else
                                                     {!! Form::text("phone" , null , ["class"=>"form-control" , "dir"=>"ltr"]) !!}
                                                 @endif
-                                                <span class = "help-block"> </span>
+                                                <span class="form-control-feedback"> </span>
                                             </div>
                                         </div>
                                     </div>
@@ -182,7 +182,7 @@
                                                 @else
                                                     {!! Form::text("parentMobiles[father]" , (isset($parentsNumber["father"]))?$parentsNumber["father"]:null , ["class"=>"form-control" , "dir"=>"ltr"]) !!}
                                                 @endif
-                                                <span class = "help-block">  </span>
+                                                <span class="form-control-feedback">  </span>
                                             </div>
                                         </div>
                                     </div>
@@ -196,7 +196,7 @@
                                                 @else
                                                     {!! Form::text("parentMobiles[mother]" , (isset($parentsNumber["mother"]))?$parentsNumber["mother"]:null , ["class"=>"form-control" , "dir"=>"ltr"]) !!}
                                                 @endif
-                                                <span class = "help-block"> </span>
+                                                <span class="form-control-feedback"> </span>
                                             </div>
                                         </div>
                                     </div>
@@ -211,7 +211,7 @@
                                                 @else
                                                     {!! Form::text("province" , null , ["class"=>"form-control"]) !!}
                                                 @endif
-                                                <span class = "help-block"> </span>
+                                                <span class="form-control-feedback"> </span>
                                             </div>
                                         </div>
                                     </div>
@@ -226,7 +226,7 @@
                                                 @else
                                                     {!! Form::text("city" , null , ["class"=>"form-control"]) !!}
                                                 @endif
-                                                <span class = "help-block">  </span>
+                                                <span class="form-control-feedback">  </span>
                                             </div>
                                         </div>
                                     </div>
@@ -241,7 +241,7 @@
                                                 @else
                                                     {!! Form::text("address" , null , ["class"=>"form-control"]) !!}
                                                 @endif
-                                                <span class = "help-block"> </span>
+                                                <span class="form-control-feedback"> </span>
                                             </div>
                                         </div>
                                     </div>
@@ -256,7 +256,7 @@
                                                 @else
                                                     {!! Form::text("postalCode" , null , ["class"=>"form-control"]) !!}
                                                 @endif
-                                                <span class = "help-block">  </span>
+                                                <span class="form-control-feedback">  </span>
                                             </div>
                                         </div>
                                     </div>
@@ -265,7 +265,7 @@
                                         <hr>
                                     </div>
                                     <div class = "col-lg-12 col-md-12 col-sd-12 col-xs-12 text-center">
-                                        <div class = "form-group {{ $errors->has('photo') ? ' has-error' : '' }}">
+                                        <div class = "form-group {{ $errors->has('photo') ? ' has-danger' : '' }}">
                                             <div class = "fileinput fileinput-new" data-provides = "fileinput">
                                                 <div class = "fileinput-new thumbnail" style = "width: 200px; height: 150px;">
                                                     <img src = "{{ $user->photo }}"  alt = "عکس پروفایل"/>
@@ -286,7 +286,7 @@
                                                 <span> دقت نمایید که حجم عکس مورد نظر باید حداکثر ۲۰۰ کیلوبایت و فرمت آن jpg و یا png باشد. </span>
                                             </div>
                                             @if ($errors->has('photo'))
-                                                <span class = "help-block">
+                                                <span class="form-control-feedback">
                                                 <strong>{{ $errors->first('photo') }}</strong>
                                             </span>
                                             @endif
@@ -434,7 +434,7 @@
                                             <br>
                                             <span class = "bold">                                            لطفا در صورت امکان تمام این فایل ها را به صورت <label class = "font-yellow-gold bold">zip</label> یا <label class = "font-yellow-gold bold">rar</label> درآورده و یکجا آپلود نمایید</span>
                                         </p>
-                                        <div class = "form-group {{ $errors->has('file') ? ' has-error' : '' }}">
+                                        <div class = "form-group {{ $errors->has('file') ? ' has-danger' : '' }}">
                                             <label class = "control-label col-md-3 col-lg-3 col-sd-3 col-xs-12"></label>
                                             <div class = "col-md-9 col-lg-9 col-sd-9 col-xs-12">
                                                 <div class = "fileinput fileinput-new" data-provides = "fileinput">
@@ -451,7 +451,7 @@
                                                     </div>
                                                 </div>
 
-                                                <span class = "help-block @if (!$errors->has('file')) m--font-info @endif">
+                                                <span class = "form-control-feedback @if (!$errors->has('file')) m--font-info @endif">
                                                 <strong>@if ($errors->has('file')){{ $errors->first('file') }} @else
                                                         فرمت های مجاز: jpg,jpeg,png,pdf,zip,rar @endif</strong>
                                             </span>

@@ -590,6 +590,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         return $this->hasMany(Eventresult::class);
     }
 
+    public function contracts(){
+        return $this->hasMany(Contract::Class);
+    }
+
     public function firebasetokens()
     {
         return $this->hasMany(Firebasetoken::class);

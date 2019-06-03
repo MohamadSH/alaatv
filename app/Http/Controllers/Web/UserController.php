@@ -864,6 +864,10 @@ class UserController extends Controller
 
         if (in_array("roles", $data) && isset($data["roles"]) && $authenticatedUser->can(config('constants.INSET_USER_ROLE')))
         {
+            $roles = $data['roles'];
+            if(is_null($roles))
+                $roles = [];
+
             $this->syncRoles($data["roles"], $user);
         }
         
@@ -916,15 +920,6 @@ class UserController extends Controller
         if ($file !== false) {
             $this->storePhotoOfUser($user, $file);
         }
-    }
-
-    public function salesReport(Request $request) {
-    
-        $limitStatus = [1, 5, 10, 30, 50, 100, 200, 500, 1000];
-        $coupontype = ['نوع یک', 'نوع دو'];
-        $products = ['محصول یک', 'محصول دو'];
-        
-        return view("user.salesReport", compact('limitStatus', 'coupontype', 'products'));
     }
     
     public function show(Request $request, User $user = null)
@@ -2115,8 +2110,11 @@ class UserController extends Controller
         
         if ($user->update()) {
 
-            $roles = $request->get('roles');
-            if (isset($roles) && $authenticatedUser->can(config('constants.INSET_USER_ROLE'))) {
+            if ($request->has('roles') && $authenticatedUser->can(config('constants.INSET_USER_ROLE'))) {
+                $roles = $request->get('roles');
+                if(is_null($roles))
+                    $roles=[];
+
                 $this->syncRoles($roles, $user);
             }
             

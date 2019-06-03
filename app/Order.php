@@ -146,6 +146,12 @@ class Order extends BaseModel
         'transactions',
         'files',
     ];
+
+    protected $withCount = [
+        'orderproducts',
+    ];
+
+
     /**
      * @var array
      */

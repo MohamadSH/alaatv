@@ -1,64 +1,64 @@
 @if(isset($consultation))
     <div class = "form-body">
-        <div class = "form-group {{ $errors->has('name') ? ' has-error' : '' }}">
+        <div class = "form-group {{ $errors->has('name') ? ' has-danger' : '' }}">
             <div class = "row">
                 <label class = "col-md-3 control-label" for = "name">عنوان</label>
                 <div class = "col-md-9">
                     {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'name' ]) !!}
                     @if ($errors->has('name'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                             <strong>{{ $errors->first('name') }}</strong>
                         </span>
                     @endif
                 </div>
             </div>
         </div>
-        <div class = "form-group {{ $errors->has('videoPageLink') ? ' has-error' : '' }}">
+        <div class = "form-group {{ $errors->has('videoPageLink') ? ' has-danger' : '' }}">
             <div class = "row">
                 <label class = "col-md-3 control-label" for = "videoPageLink">فیلم تجزیه تحلیل</label>
                 <div class = "col-md-9">
                     {!! Form::text('videoPageLink', null, ['class' => 'form-control', 'id' => 'videoPageLink' ]) !!}
                     @if ($errors->has('videoPageLink'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                             <strong>{{ $errors->first('videoPageLink') }}</strong>
                         </span>
                     @endif
                 </div>
             </div>
         </div>
-        <div class = "form-group {{ $errors->has('textScriptLink') ? ' has-error' : '' }}">
+        <div class = "form-group {{ $errors->has('textScriptLink') ? ' has-danger' : '' }}">
             <div class = "row">
                 <label class = "col-md-3 control-label" for = "textScriptLink">فیلم تجزیه تحلیل</label>
                 <div class = "col-md-9">
                     {!! Form::text('textScriptLink', null, ['class' => 'form-control', 'id' => 'textScriptLink' ]) !!}
                     @if ($errors->has('textScriptLink'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                             <strong>{{ $errors->first('textScriptLink') }}</strong>
                         </span>
                     @endif
                 </div>
             </div>
         </div>
-        <div class = "form-group {{ $errors->has('consultationstatus_id') ? ' has-error' : '' }}">
+        <div class = "form-group {{ $errors->has('consultationstatus_id') ? ' has-danger' : '' }}">
             <div class = "row">
                 <label class = "col-md-3 control-label" for = "consultationstatus_id">وضعیت</label>
                 <div class = "col-md-9">
                     {!! Form::select('consultationstatus_id',$consultationStatuses,null,['class' => 'form-control', 'id' => 'consultationstatus']) !!}
                     @if ($errors->has('consultationstatus_id'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                             <strong>{{ $errors->first('consultationstatus_id') }}</strong>
                         </span>
                     @endif
                 </div>
             </div>
         </div>
-        <div class = "form-group {{ $errors->has('majors') ? ' has-error' : '' }}">
+        <div class = "form-group {{ $errors->has('majors') ? ' has-danger' : '' }}">
             <div class = "row">
                 <label class = "col-md-3 control-label" for = "major_id">رشته</label>
                 <div class = "col-md-9">
                     {!! Form::select('majors[]',$majors,$consultationMajors,['multiple' => 'multiple','class' => 'multi-select', 'id' => 'consultation_major' ]) !!}
                     @if ($errors->has('majors'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                             <strong>{{ $errors->first('majors') }}</strong>
                         </span>
                     @endif
@@ -95,13 +95,13 @@
                 </div>
             </div>
         </div>
-        <div class = "form-group {{ $errors->has('description') ? ' has-error' : '' }}">
+        <div class = "form-group {{ $errors->has('description') ? ' has-danger' : '' }}">
             <div class = "row">
                 <label class = "col-md-3 control-label" for = "description">توضیحات</label>
                 <div class = "col-md-9">
                     {!! Form::textarea('description', null, ['class' => 'form-control', 'id' => 'summernote_1' ]) !!}
                     @if ($errors->has('description'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                             <strong>{{ $errors->first('description') }}</strong>
                         </span>
                     @endif
@@ -119,26 +119,26 @@
 @else
     <div class = "col-md-6">
         <div>{!! Form::text('name', null, ['class' => 'form-control', 'id' => 'consultationName' , 'placeholder'=>'عنوان']) !!}
-            <span class = "help-block" id = "consultationNameAlert">
+            <span class="form-control-feedback" id = "consultationNameAlert">
                 <strong></strong>
             </span>
         </div>
         <div>
             {!! Form::select('consultationstatus_id',$consultationStatuses,null,['class' => 'form-control', 'id' => 'consultationstatus_id']) !!}
-            <span class = "help-block" id = "consultationstatusAlert">
+            <span class="form-control-feedback" id = "consultationstatusAlert">
                 <strong></strong>
             </span>
         </div>
         <div>
             {!! Form::text('textScriptLink', null, ['class' => 'form-control','dir' => 'ltr' , 'id' => 'consultationTextScriptLink' , 'placeholder'=> 'لینک فایل متنی']) !!}
-            <span class = "help-block" id = "consultationTextScriptLinkAlert">
+            <span class="form-control-feedback" id = "consultationTextScriptLinkAlert">
                 <strong></strong>
             </span>
         </div>
         <div>
             <label class = "control-label">رشته</label>
             {!! Form::select('majors[]',$majors,null,['multiple' => 'multiple','class' => 'multi-select', 'id' => 'consultation_major']) !!}
-            <span class = "help-block" id = "consultationMajorAlert">
+            <span class="form-control-feedback" id = "consultationMajorAlert">
                 <strong></strong>
             </span>
             <div class = "clearfix margin-top-10">
@@ -150,7 +150,7 @@
     <div class = "col-md-6">
         <p>
             {!! Form::text('videoPageLink', null, ['class' => 'form-control','dir' => 'ltr' , 'id' => 'consultationVideoPageLink' , 'placeholder'=>'لینک فیلم']) !!}
-            <span class = "help-block" id = "consultationVideoPageLinkAlert">
+            <span class="form-control-feedback" id = "consultationVideoPageLinkAlert">
                 <strong></strong>
             </span>
         </p>

@@ -173,6 +173,9 @@
         if (alaaOwlCarouselItemDetailObject.length > 0) {
             aOwlCarouselSlideDetailes.fadeIn();
             alaaOwlCarouselItemDetailObject.slideDown();
+            $([document.documentElement, document.body]).animate({
+                scrollTop: aOwlCarouselSlideDetailes.offset().top
+            }, 300);
         }
     };
 

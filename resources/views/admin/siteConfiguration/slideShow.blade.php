@@ -118,7 +118,7 @@
                                         "placeholder" => "صفحه اسلایدشو"
                                     ])
                                 !!}
-                                <span class = "help-block"></span>
+                                <span class="form-control-feedback"></span>
                             </div>
                         </div>
                     </div>--}}

@@ -1,4 +1,14 @@
-@if(isset($block) && $block !== null)
+@if(
+    isset($block) && $block !== null &&
+    (
+        (!isset($blockType)) ||
+        isset($blockType) &&
+        (
+            ($blockType === 'content' && isset($block->contents) && $block->contents->count() > 0) ||
+            ($blockType === 'product' && isset($block->products) && $block->products->count() > 0)
+        )
+    )
+)
     <div class="row @if(isset($blockCustomClass)) {{ $blockCustomClass }} @endif blockId-{{ $block->id }} {{ $block->class }}"
          @if(isset($blockCustomId))
             id="{{ $blockCustomId }}"
@@ -11,13 +21,17 @@
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
+                                @if(isset($blockUrlDisable) && !$blockUrlDisable)
                                 <a href="{{ $block->url }}" class="m-link">
+                                @endif
                                     @if(isset($blockTitle))
-                                        {{ $blockTitle }}
+                                        {!! $blockTitle !!}
                                     @else
                                         {{ $block->title }}
                                     @endif
+                                @if(isset($blockUrlDisable) && !$blockUrlDisable)
                                 </a>
+                                @endif
                             </h3>
                         </div>
                     </div>
