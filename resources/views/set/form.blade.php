@@ -61,7 +61,7 @@
                         <div class="col-md-10">
                             {!! Form::text('name', ($editForm) ? $set->name : null, ['class' => 'form-control', 'id' => 'name' ]) !!}
                             @if ($errors->has('name'))
-                                <span class="help-block">
+                                <span class="form-control-feedback">
                                     <strong>{{ $errors->first('name') }}</strong>
                                 </span>
                             @endif
@@ -74,7 +74,7 @@
                         <div class="col-md-10">
                             {!! Form::text('small_name', ($editForm) ? $set->small_name : null, ['class' => 'form-control', 'id' => 'name' ]) !!}
                             @if ($errors->has('small_name'))
-                                <span class="help-block">
+                                <span class="form-control-feedback">
                                     <strong>{{ $errors->first('small_name') }}</strong>
                                 </span>
                             @endif
@@ -87,14 +87,14 @@
                         <div class="col-md-10">
                             {!! Form::textarea('description', ($editForm) ? $set->description : null, ['class' => 'form-control', 'id' => 'productShortDescriptionSummerNote' ]) !!}
                             @if ($errors->has('description'))
-                                <span class="help-block">
+                                <span class="form-control-feedback">
                                     <strong>{{ $errors->first('description') }}</strong>
                                 </span>
                             @endif
                         </div>
                     </div>
                 </div>
-                <div class="form-group {{ $errors->has('photo') ? ' has-error' : '' }}">
+                <div class="form-group {{ $errors->has('photo') ? ' has-danger' : '' }}">
                     <div class="row">
                         <label class="control-label col-md-3">عکس</label>
                         <div class="col-md-9">
@@ -123,7 +123,7 @@
                                 </div>
                             </div>
                             @if ($errors->has('photo'))
-                                <span class="help-block">
+                                <span class="form-control-feedback">
                                     <strong>{{ $errors->first('photo') }}</strong>
                                 </span>
                             @endif

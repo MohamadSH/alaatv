@@ -60,13 +60,13 @@
                             <div class = "row">
                                 <div class = "col-md-6">
                                     {!! Form::text('phoneNumber', null, ['class' => 'form-control', 'id' => 'phoneNumber'  , 'placeholder'=>'شماره تلفن']) !!}
-                                    <span class = "help-block" id = "phoneNumberAlert">
+                                    <span class="form-control-feedback" id = "phoneNumberAlert">
                                                 <strong></strong>
                                             </span>
                                 </div>
                                 <div class = "col-md-6">
                                     {!! Form::select('phonetype_id', $phonetypes, null, ['class' => 'form-control', 'id' => 'phoneType']) !!}
-                                    <span class = "help-block" id = "phoneTypeAlert">
+                                    <span class="form-control-feedback" id = "phoneTypeAlert">
                                                 <strong></strong>
                                             </span>
                                 </div>
@@ -74,7 +74,7 @@
                             <div class = "row">
                                 <div class = "col-md-6">
                                     {!! Form::text('priority', null, ['class' => 'form-control', 'id' => 'priority'  , 'placeholder'=>'الویت شماره']) !!}
-                                    <span class = "help-block" id = "priorityAlert">
+                                    <span class="form-control-feedback" id = "priorityAlert">
                                             <strong></strong>
                                         </span>
                                 </div>
@@ -157,15 +157,15 @@
                         $.each(errors, function (index, value) {
                             switch (index) {
                                 case "phoneNumber":
-                                    $("#phoneNumber").parent().addClass("has-error");
+                                    $("#phoneNumber").parent().addClass("has-danger");
                                     $("#phoneNumberAlert > strong").html(value);
                                     break;
                                 case "phonetype_id":
-                                    $("#phoneType").parent().addClass("has-error");
+                                    $("#phoneType").parent().addClass("has-danger");
                                     $("#phoneTypeAlert > strong").html(value);
                                     break;
                                 case "priority":
-                                    $("#priority").parent().addClass("has-error");
+                                    $("#priority").parent().addClass("has-danger");
                                     $("#priorityAlert > strong").html(value);
                                     break;
                             }

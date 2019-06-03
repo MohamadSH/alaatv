@@ -52,7 +52,7 @@
         </ul>
         <div class = "tab-content">
             <div class = "tab-pane active" id = "tab_general">
-                <div class = "form-group {{ $errors->has('validSinceDate') ? ' has-error' : '' }}">
+                <div class = "form-group {{ $errors->has('validSinceDate') ? ' has-danger' : '' }}">
                     <label class = " col-md-4 control-label" for = "validSinceDate">نمایان شدن برای کاربران</label>
                     <div class = "col-md-3">
                         <input id = "validSinceDate" type = "text" class = "form-control" value = "@if(isset($validSinceDate)) {{$validSinceDate}} @else {{old('validSinceDate')}} @endif" dir = "ltr">
@@ -64,33 +64,33 @@
                     </div>
                 </div>
                 <hr>
-                <div class = "form-group {{ $errors->has('name') ? ' has-error' : '' }}">
+                <div class = "form-group {{ $errors->has('name') ? ' has-danger' : '' }}">
                     <label class = "col-md-2 control-label" for = "name">نام :
                         <span class = "required"> * </span>
                     </label>
                     <div class = "col-md-9">
                         {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'name', 'maxlength'=>'100' ]) !!}
                         @if ($errors->has('name'))
-                            <span class = "help-block">
+                            <span class="form-control-feedback">
                                         <strong>{{ $errors->first('name') }}</strong>
                                 </span>
                         @endif
                     </div>
                 </div>
-                {{--<div class="form-group {{ $errors->has('order') ? ' has-error' : '' }}">--}}
+                {{--<div class="form-group {{ $errors->has('order') ? ' has-danger' : '' }}">--}}
                 {{--<label class="col-md-2 control-label" for="order">ترتیب :--}}
                 {{--<span class="required"> * </span>--}}
                 {{--</label>--}}
                 {{--<div class="col-md-9">--}}
                 {{--{!! Form::text('order', null, ['class' => 'form-control', 'id' => 'order']) !!}--}}
                 {{--@if ($errors->has('order'))--}}
-                {{--<span class="help-block">--}}
+                {{--<span class="form-control-feedback">--}}
                 {{--<strong>{{ $errors->first('order') }}</strong>--}}
                 {{--</span>--}}
                 {{--@endif--}}
                 {{--</div>--}}
                 {{--</div>--}}
-                <div class = "form-group {{ $errors->has('description') ? ' has-error' : '' }}">
+                <div class = "form-group {{ $errors->has('description') ? ' has-danger' : '' }}">
                     <label class = "col-md-2 control-label" for = "description">توضیح:
                         {{--<span class="required"> * </span>--}}
                     </label>
@@ -98,7 +98,7 @@
                         {!! Form::textarea('description', null, ['class' => 'form-control', 'id' => 'descriptionSummerNote', 'rows' => '15' ]) !!}
 
                         @if ($errors->has('description'))
-                            <span class = "help-block">
+                            <span class="form-control-feedback">
                                             <strong>{{ $errors->first('description') }}</strong>
                                  </span>
                         @endif
@@ -111,7 +111,7 @@
                     {{--<label class="col-md-1 control-label" for="grades">--}}
                     {{--<span class="required"> * </span>--}}
                     {{--</label>--}}
-                    <div class = "col-md-6 {{ $errors->has('grades') ? ' has-error' : '' }}">
+                    <div class = "col-md-6 {{ $errors->has('grades') ? ' has-danger' : '' }}">
                         {{--{!! Form::select('grades[]', $grades , null, ['class' => 'form-control', 'id' => 'grades' , 'placeholder' => 'انتخاب مقطع' ]) !!}--}}
                         <select class = "mt-multiselect btn btn-default" multiple = "multiple" data-label = "left" data-width = "100%" data-filter = "true" data-height = "200" id = "grades" name = "grades[]" title = "انتخاب مقطع">
                             @foreach($grades as $key=>$value)
@@ -119,7 +119,7 @@
                             @endforeach
                         </select>
                         @if ($errors->has('grades'))
-                            <span class = "help-block">
+                            <span class="form-control-feedback">
                                         <strong>{{ $errors->first('grades') }}</strong>
                                 </span>
                         @endif
@@ -127,7 +127,7 @@
                     {{--<label class="col-md-2 control-label" for="majors">--}}
                     {{--<span class="required"> * </span>--}}
                     {{--</label>--}}
-                    <div class = "col-md-6 {{ $errors->has('majors') ? ' has-error' : '' }}">
+                    <div class = "col-md-6 {{ $errors->has('majors') ? ' has-danger' : '' }}">
                         {{--                        {!! Form::select('majors[]', $majors , null, ['class' => 'form-control', 'id' => 'majors' , 'placeholder' => 'انتخاب رشته' ]) !!}--}}
                         <select class = "mt-multiselect btn btn-default" multiple = "multiple" data-label = "left" data-width = "100%" data-filter = "true" data-height = "200" id = "majors" name = "majors[]" title = "انتخاب رشته">
                             @foreach($majors as $key=>$value)
@@ -135,14 +135,14 @@
                             @endforeach
                         </select>
                         @if ($errors->has('majors'))
-                            <span class = "help-block">
+                            <span class="form-control-feedback">
                                         <strong>{{ $errors->first('majors') }}</strong>
                                 </span>
                         @endif
                     </div>
                 </div>
 
-                <div class = "form-group {{ $errors->has('contenttypes') ? ' has-error' : '' }}">
+                <div class = "form-group {{ $errors->has('contenttypes') ? ' has-danger' : '' }}">
                     {{--<label class="col-md-1 control-label" for="rootContentTypes">--}}
                     {{--<span class="required"> * </span>--}}
                     {{--</label>--}}
@@ -156,14 +156,14 @@
                         {!! Form::select('contenttypes[]', $childContentTypes , null, ['class' => 'form-control', 'id' => 'childContentTypes' , 'placeholder' => 'انتخاب زیر شاخه' , 'disabled' ]) !!}
                     </div>
                     @if ($errors->has('contenttypes'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                                         <strong>{{ $errors->first('contenttypes') }}</strong>
                                 </span>
                     @endif
                 </div>
             </div>
             <div class = "tab-pane" id = "tab_file">
-                <div class = "form-group {{ $errors->has('file') ? ' has-error' : '' }}">
+                <div class = "form-group {{ $errors->has('file') ? ' has-danger' : '' }}">
                     <div class = "col-md-12 text-center">
                         <div class = "fileinput fileinput-new" data-provides = "fileinput">
                                                             <span class = "btn-file">
@@ -177,7 +177,7 @@
                             </div>
                         </div>
                         @if ($errors->has('file'))
-                            <span class = "help-block">
+                            <span class="form-control-feedback">
                                 <strong>{{ $errors->first('file') }}</strong>
                         </span>
                         @endif
@@ -186,7 +186,7 @@
 
                 <hr>
 
-                <div class = "form-group {{ $errors->has('file2') ? ' has-error' : '' }}">
+                <div class = "form-group {{ $errors->has('file2') ? ' has-danger' : '' }}">
                     <div class = "col-md-12 text-center">
                         <div class = "fileinput fileinput-new" data-provides = "fileinput">
                                                             <span class = "btn-file">
@@ -200,7 +200,7 @@
                             </div>
                         </div>
                         @if ($errors->has('file2'))
-                            <span class = "help-block">
+                            <span class="form-control-feedback">
                                         <strong>{{ $errors->first('file2') }}</strong>
                     </span>
                         @endif

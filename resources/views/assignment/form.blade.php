@@ -1,32 +1,32 @@
 @if(isset($assignment))
     <div class = "form-body">
-        <div class = "form-group {{ $errors->has('name') ? ' has-error' : '' }}">
+        <div class = "form-group {{ $errors->has('name') ? ' has-danger' : '' }}">
             <div class = "row">
                 <label class = "col-md-3 control-label" for = "name">عنوان</label>
                 <div class = "col-md-9">
                     {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'name' ]) !!}
                     @if ($errors->has('name'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                         <strong>{{ $errors->first('name') }}</strong>
                     </span>
                     @endif
                 </div>
             </div>
         </div>
-        <div class = "form-group {{ $errors->has('numberOfQuestions') ? ' has-error' : '' }}">
+        <div class = "form-group {{ $errors->has('numberOfQuestions') ? ' has-danger' : '' }}">
             <div class = "row">
                 <label class = "col-md-3 control-label" for = "numberOfQuestions">تعداد سؤالات</label>
                 <div class = "col-md-9">
                     {!! Form::text('numberOfQuestions', null, ['class' => 'form-control', 'id' => 'numberOfQuestions' ]) !!}
                     @if ($errors->has('numberOfQuestions'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                         <strong>{{ $errors->first('numberOfQuestions') }}</strong>
                     </span>
                     @endif
                 </div>
             </div>
         </div>
-        <div class = "form-group {{ $errors->has('questionFile') ? ' has-error' : '' }}">
+        <div class = "form-group {{ $errors->has('questionFile') ? ' has-danger' : '' }}">
             <div class = "row">
                 <label class = "col-md-3 control-label" for = "questionFile">سؤالات</label>
                 <div class = "col-md-9">
@@ -45,14 +45,14 @@
                         </div>
                     </div>
                     @if ($errors->has('questionFile'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                             <strong>{{ $errors->first('questionFile') }}</strong>
                         </span>
                     @endif
                 </div>
             </div>
         </div>
-        <div class = "form-group {{ $errors->has('solutionFile') ? ' has-error' : '' }}">
+        <div class = "form-group {{ $errors->has('solutionFile') ? ' has-danger' : '' }}">
             <div class = "row">
                 <label class = "col-md-3 control-label" for = "solutionFile">پاسخ</label>
                 <div class = "col-md-9">
@@ -71,46 +71,46 @@
                         </div>
                     </div>
                     @if ($errors->has('solutionFile'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                         <strong>{{ $errors->first('solutionFile') }}</strong>
                     </span>
                     @endif
                 </div>
             </div>
         </div>
-        <div class = "form-group {{ $errors->has('analysisVideoLink') ? ' has-error' : '' }}">
+        <div class = "form-group {{ $errors->has('analysisVideoLink') ? ' has-danger' : '' }}">
             <div class = "row">
                 <label class = "col-md-3 control-label" for = "analysisVideoLink">فیلم تجزیه تحلیل</label>
                 <div class = "col-md-9">
                     {!! Form::text('analysisVideoLink', null, ['class' => 'form-control', 'id' => 'analysisVideoLink' ]) !!}
                     @if ($errors->has('analysisVideoLink'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                         <strong>{{ $errors->first('analysisVideoLink') }}</strong>
                     </span>
                     @endif
                 </div>
             </div>
         </div>
-        <div class = "form-group {{ $errors->has('assignmentstatus_id') ? ' has-error' : '' }}">
+        <div class = "form-group {{ $errors->has('assignmentstatus_id') ? ' has-danger' : '' }}">
             <div class = "row">
                 <label class = "col-md-3 control-label" for = "assignmentstatus_id">وضعیت</label>
                 <div class = "col-md-9">
                     {!! Form::select('assignmentstatus_id',$assignmentStatuses,null,['class' => 'form-control', 'id' => 'assignmentstatus']) !!}
                     @if ($errors->has('assignmentstatus_id'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                         <strong>{{ $errors->first('assignmentstatus_id') }}</strong>
                     </span>
                     @endif
                 </div>
             </div>
         </div>
-        <div class = "form-group {{ $errors->has('majors') ? ' has-error' : '' }}">
+        <div class = "form-group {{ $errors->has('majors') ? ' has-danger' : '' }}">
             <div class = "row">
                 <label class = "col-md-3 control-label" for = "majors">رشته</label>
                 <div class = "col-md-9">
                     {!! Form::select('majors[]',$majors,$assignmentMajors,['multiple' => 'multiple','class' => 'multi-select', 'id' => 'assignment_major' ]) !!}
                     @if ($errors->has('majors'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                             <strong>{{ $errors->first('majors') }}</strong>
                         </span>
                     @endif
@@ -122,14 +122,14 @@
                 </div>
             </div>
         </div>
-        <div class = "form-group {{ $errors->has('description') ? ' has-error' : '' }}">
+        <div class = "form-group {{ $errors->has('description') ? ' has-danger' : '' }}">
             <div class = "row">
                 <label class = "col-md-3 control-label" for = "description">توضیحات</label>
                 <div class = "col-md-9">
                     {{--<div name="summernote" id="summernote_1">{!! $assignment->description !!}</div>--}}
                     {!! Form::textarea('description', null, ['class' => 'form-control', 'id' => 'summernote_1' ]) !!}
                     @if ($errors->has('description'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                             <strong>{{ $errors->first('description') }}</strong>
                          </span>
                     @endif
@@ -147,7 +147,7 @@
 @else
     <div class = "col-md-6">
         <div>{!! Form::text('name', null, ['class' => 'form-control', 'id' => 'assignmentName' , 'placeholder'=>'نام']) !!}
-            <span class = "help-block" id = "assignmentName_alert">
+            <span class="form-control-feedback" id = "assignmentName_alert">
                 <strong></strong>
             </span>
         </div>
@@ -171,14 +171,14 @@
         </div>
         <div>
             {!! Form::select('assignmentstatus_id',$assignmentStatuses,null,['class' => 'form-control', 'id' => 'assignmentstatus_id' ]) !!}
-            <span class = "help-block" id = "assignmentstatusAlert">
+            <span class="form-control-feedback" id = "assignmentstatusAlert">
                 <strong></strong>
             </span>
         </div>
         <div>
             <label class = "control-label">رشته</label>
             {!! Form::select('majors[]',$majors,null,['multiple' => 'multiple','class' => 'multi-select', 'id' => 'assignment_major']) !!}
-            <span class = "help-block" id = "assignmentMajorAlert">
+            <span class="form-control-feedback" id = "assignmentMajorAlert">
                 <strong></strong>
             </span>
             <div class = "clearfix margin-top-10">
@@ -189,7 +189,7 @@
     </div>
     <div class = "col-md-6">
         <div>{!! Form::text('numberOfQuestions', null, ['class' => 'form-control', 'id' => 'assignmentNumberOfQuestions' , 'placeholder'=> 'تعداد سؤالات']) !!}
-            <span class = "help-block" id = "assignmentNumberOfQuestionsAlert">
+            <span class="form-control-feedback" id = "assignmentNumberOfQuestionsAlert">
                 <strong></strong>
             </span>
         </div>
@@ -213,7 +213,7 @@
         </div>
         <div>
             {!! Form::text('analysisVideoLink', null, ['class' => 'form-control', 'id' => 'assignmentAnalysisVideoLink', 'dir' => 'ltr' , 'placeholder'=>'لینک فیلم تجزیه تحلیل']) !!}
-            <span class = "help-block" id = "assignmentAnalysisVideoLinkAlert">
+            <span class="form-control-feedback" id = "assignmentAnalysisVideoLinkAlert">
                 <strong></strong>
             </span>
         </div>
@@ -221,7 +221,7 @@
     <div class = "col-md-12">
         <p>{!! Form::textarea('description', null, ['class' => 'form-control', 'id' => 'assignmentSummerNote' , 'placeholder'=>'توضیحات']) !!}
             {{--<p><div name="summernote" id="summernote_1"></div>--}}
-            <span class = "help-block" id = "descriptionAlert">
+            <span class="form-control-feedback" id = "descriptionAlert">
                 <strong></strong>
             </span>
         </p>

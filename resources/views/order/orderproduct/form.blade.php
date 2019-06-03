@@ -28,7 +28,7 @@
                         <small class = "bold">بن محصول جدید را به کاربر بده(اگر دارد)</small>
                     </div>
                     @include("admin.filters.productsFilter" , [ "listType"=>"childSelect", "selectType"=>"searchable" , 'label'=>["caption"=>""] ,"name"=>"newProductId" , "class"=>"newProductSelect" , "id"=>"newProductSelect" , "defaultValue"=>["value"=>0 , "caption"=>"انتخاب کنید"] , "disabled"=>true])
-                    <span class = "help-block bold m--font-info">قیمت: <lable id = "newProductCostLabel">0</lable> تومان</span>
+                    <span class = "form-control-feedback bold m--font-info">قیمت: <lable id = "newProductCostLabel">0</lable> تومان</span>
                     <input type = "hidden" id = "newProductCostInput" name = "newProductCost">
                 </div>
             </div>
@@ -47,7 +47,7 @@
                 <div class = "col-md-8 col-md-8 col-sm-8">
                     {!! Form::text('cost', (isset($orderproduct)?$orderproduct->obtainOrderproductCost(true)['final']:null), ['class' => 'form-control', 'id' => 'cost' , 'dir'=>'ltr' , 'disabled']) !!}
                     @if ($errors->has('cost'))
-                        <span class = "help-block">
+                        <span class="form-control-feedback">
                                 <strong>{{ $errors->first('cost') }}</strong>
                             </span>
                     @endif

@@ -29,7 +29,7 @@
         <div class = "tab-content">
             <div class = "tab-pane active" id = "tab_general">
                 <div class = "form-body">
-                    <div class = "form-group {{ $errors->has('title') ? ' has-error' : '' }}">
+                    <div class = "form-group {{ $errors->has('title') ? ' has-danger' : '' }}">
                         <label class = "col-md-2 control-label" for = "title">عنوان :
                             <span class = "required"> * </span>
                         </label>
@@ -39,26 +39,26 @@
                                 <div id = "progressbar_title" class = "progress-bar" style = "text-align: right; float: right;"></div>
                             </div>
                             @if ($errors->has('title'))
-                                <span class = "help-block">
+                                <span class="form-control-feedback">
                                                         <strong>{{ $errors->first('title') }}</strong>
                                                     </span>
                             @endif
                         </div>
                     </div>
-                    <div class = "form-group {{ $errors->has('order') ? ' has-error' : '' }}">
+                    <div class = "form-group {{ $errors->has('order') ? ' has-danger' : '' }}">
                         <label class = "col-md-2 control-label" for = "order">ترتیب :
                             <span class = "required"> * </span>
                         </label>
                         <div class = "col-md-9">
                             {!! Form::text('order', null, ['class' => 'form-control', 'id' => 'order']) !!}
                             @if ($errors->has('order'))
-                                <span class = "help-block">
+                                <span class="form-control-feedback">
                                         <strong>{{ $errors->first('order') }}</strong>
                                 </span>
                             @endif
                         </div>
                     </div>
-                    <div class = "form-group {{ $errors->has('brief') ? ' has-error' : '' }}">
+                    <div class = "form-group {{ $errors->has('brief') ? ' has-danger' : '' }}">
                         <label class = "col-md-2 control-label" for = "brief">خلاصه:
                             <span class = "required"> * </span>
                         </label>
@@ -68,13 +68,13 @@
                                 <div id = "progressbar_brief" class = "progress-bar" style = "text-align: right; float: right;"></div>
                             </div>
                             @if ($errors->has('brief'))
-                                <span class = "help-block">
+                                <span class="form-control-feedback">
                                                         <strong>{{ $errors->first('brief') }}</strong>
                                                     </span>
                             @endif
                         </div>
                     </div>
-                    <div class = "form-group {{ $errors->has('body') ? ' has-error' : '' }}">
+                    <div class = "form-group {{ $errors->has('body') ? ' has-danger' : '' }}">
                         <label class = "col-md-2 control-label" for = "body">متن مقاله:
                             <span class = "required"> * </span>
                         </label>
@@ -82,20 +82,20 @@
                             {!! Form::textarea('body', null, ['class' => 'form-control', 'id' => 'bodySummerNote', 'rows' => '15' ]) !!}
 
                             @if ($errors->has('body'))
-                                <span class = "help-block">
+                                <span class="form-control-feedback">
                                                         <strong>{{ $errors->first('body') }}</strong>
                                                      </span>
                             @endif
                         </div>
                     </div>
-                    <div class = "form-group {{ $errors->has('articlecategory_id') ? ' has-error' : '' }}">
+                    <div class = "form-group {{ $errors->has('articlecategory_id') ? ' has-danger' : '' }}">
                         <label class = "col-md-2 control-label" for = "articlecategory_id">دسته:
                             <span class = "required"> * </span>
                         </label>
                         <div class = "col-md-9">
                             {!! Form::select('articlecategory_id', $articlecategories , null, ['class' => 'form-control', 'id' => 'articlecategoryId' , 'placeholder' => 'بدون دسته' ]) !!}
                             @if ($errors->has('articlecategory_id'))
-                                <span class = "help-block">
+                                <span class="form-control-feedback">
                                                         <strong>{{ $errors->first('articlecategory_id') }}</strong>
                                                      </span>
                             @endif
@@ -105,15 +105,15 @@
             </div>
             <div class = "tab-pane" id = "tab_meta">
                 <div class = "form-body">
-                    <div class = "form-group {{ $errors->has('keyword') ? ' has-error' : '' }}">
+                    <div class = "form-group {{ $errors->has('keyword') ? ' has-danger' : '' }}">
                         <label class = "col-md-2 control-label" for = "keyword">کلمات کلیدی:</label>
                         <div class = "col-md-9">
                             {!! Form::textarea('keyword', null, ['class' => 'form-control', 'id' => 'keyword', 'maxlength'=>'200','placeholder' => 'کلمات کلیدی رو با , از هم جدا کنید.' ]) !!}
-                            <span class = "help-block">
+                            <span class="form-control-feedback">
                                     <strong>کلمات را با ویرگول از یکدیگر جدا کنید</strong>
                              </span>
                             @if ($errors->has('keyword'))
-                                <span class = "help-block">
+                                <span class="form-control-feedback">
                                         <strong>{{ $errors->first('keyword') }}</strong>
                              </span>
                             @endif
