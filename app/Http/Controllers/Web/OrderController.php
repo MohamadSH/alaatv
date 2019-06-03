@@ -596,7 +596,6 @@ class OrderController extends Controller
      */
     public function update(EditOrderRequest $request, Order $order)
     {
-        $oldOrderStatus = $order->orderstatus_id;
         $user           = $request->user();
         
         if (isset($order->coupon->id)) {

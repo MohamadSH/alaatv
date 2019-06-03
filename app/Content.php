@@ -424,7 +424,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 $previousContentOrder = $this->order - 1;
                 $set                  = $this->set;
                 if (isset($set)) {
-                    $previousContent = $set->contents()
+                    $previousContent = $set->oldContents()
                         ->where('educationalcontents.order', $previousContentOrder)
                         ->get()
                         ->first();
@@ -448,7 +448,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 $nextContentOrder = $this->order + 1;
                 $set              = $this->set;
                 if (isset($set)) {
-                    $nextContent = $set->contents()
+                    $nextContent = $set->oldContents()
                         ->where('educationalcontents.order', $nextContentOrder)
                         ->get()
                         ->first();
@@ -762,7 +762,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 $set     = $content->set ?: new Contentset();
                 if ($set->id != 199) {
                     $adItems = Contentset::findOrFail(199)
-                        ->contents()
+                        ->oldContents()
                         ->where('enable', 1)
                         ->orderBy('order')
                         ->get();

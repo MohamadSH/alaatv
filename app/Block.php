@@ -58,9 +58,9 @@ class Block extends BaseModel
     public static $BLOCK_TYPE_OFFER = 3;
     
     protected static $actionLookupTable = [
-        "1" => "Web\ContentController@index",
-        "2" => "Web\ProductController@index",
-        "3" => null,
+        '1' => 'Web\ContentController@index',
+        '2' => 'Web\ProductController@index',
+        '3' => null,
     ];
     
     protected $isOfferBlock = false;
@@ -242,7 +242,7 @@ class Block extends BaseModel
     private function makeUrl($action, $input = null)
     {
         if ($input) {
-            return urldecode(action($action, ["tags" => $input]));
+            return urldecode(action($action, ['tags' => $input]));
         } else {
             return urldecode(action($action));
         }
@@ -292,24 +292,34 @@ class Block extends BaseModel
     public function contents()
     {
         return $this->morphedByMany('App\Content', 'blockable')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->withPivot(['order'])
+            ->orderBy('blockables.order');
     }
     
     public function sets()
     {
         return $this->morphedByMany('App\Contentset', 'blockable')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->withPivot(['order'])
+            ->orderBy('blockables.order');
     }
     
     public function products()
     {
         return $this->morphedByMany('App\Product', 'blockable')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->withPivot(['order'])
+            ->orderBy('blockables.order');
+
     }
     
     public function banners()
     {
         return $this->morphedByMany('App\Slideshow', 'blockable')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->withPivot(['order'])
+            ->orderBy('blockables.order');
+
     }
 }

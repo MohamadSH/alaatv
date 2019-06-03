@@ -142,11 +142,14 @@ class SetController extends Controller
 
         if ($contentSet->save()) {
 
-//            $products = $request->get('products');
-//            if(isset($products))
-//            {
-//                $this->syncProducts($products , $contentSet);
-//            }
+            if($request->has('products'))
+            {
+                $products = $request->get('products');
+                if(is_null($products))
+                    $products = [];
+
+                $this->syncProducts($products , $contentSet);
+            }
             
             session()->put('success' , 'دسته با موفقیت درج شد');
             return redirect()->back();
@@ -163,11 +166,13 @@ class SetController extends Controller
 
         if ($contentSet->update()) {
 
-//            $products = $request->get('products');
-//            if(isset($products))
-//            {
-//                $this->syncProducts($products , $contentSet);
-//            }
+            if($request->has('products'))
+            {
+                $products = $request->get('products');
+                if(is_null($products))
+                    $products = [];
+                $this->syncProducts($products , $contentSet);
+            }
 
             session()->put('success' , 'دسته با موفقیت اصلاح شد');
             return redirect()->back();

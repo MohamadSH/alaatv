@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Order;
 use App\Orderproduct;
 use App\Repositories\ContentRepository;
 use App\Repositories\ProductRepository;
 use App\Traits\DateTrait;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class SalesReportController extends Controller
 {
@@ -32,53 +35,86 @@ class SalesReportController extends Controller
     public function __invoke(Request $request)
     {
         $limitStatus = [1, 5, 10, 30, 50, 100, 200, 500, 1000];
-        $coupontype = ['نوع یک', 'نوع دو'];
-        $products = ['محصول یک', 'محصول دو'];
+        $coupontype  = ['نوع یک', 'نوع دو'];
+        $products    = ['محصول یک', 'محصول دو'];
+        $talai98Ids  = [306,316,322,318,302,326,312,298,308,328,342];
+
+        /** @var User $user */
+//        dump('start allTime' , Carbon::now());
         $user = $request->user();
+//        $userSlugName = $user->nameSlug;
+//        $setIds = $this->getArray( $this->getContentsetsOfUser($user->id) , 'contentset_id') ;
+//        $productIds = $this->getArray( $this->getProductsOfUser($setIds , $userSlugName) , 'id') ;
+//        $intendedProductIds = array_intersect($talai98Ids, $productIds);
 
-        $setIds = $this->getArray( $this->getContentsetsOfUser($user->id) , 'contentset_id') ;
 
-        $talai98Ids = [306,316,322,318,302,326,312,298,308,328,342];
-        $productIds = $this->getArray( $this->getProductsOfUser($setIds) , 'id') ;
-        $intendedProductIds = array_intersect($talai98Ids, $productIds);
+        $contracts = $user->contracts ;
+        $productIds =  [];
+        foreach ($contracts as $contract) {
+            $productIds[] = $contract->product->id;
+        }
 
-        $allTimeOrderproducts = $this->getPurchasedOrderproducts($intendedProductIds);
+        $allTimeOrderproducts = $this->getPurchasedOrderproducts($productIds);
         $allTimeCount         = $this->countOrderproducts($allTimeOrderproducts);
         $allTimeSum           = $this->calculateTotalPrice($allTimeOrderproducts);
 
+        $thisMonthAllOrderproducts = $this->getThisMonthPurchasedOrderproducts();
+
+//        dump('stop allTime' , Carbon::now());
+        $provinces = $this->getProvinces();
+        foreach ($allTimeOrderproducts as $allTimeOrderproduct) {
+            $user = $allTimeOrderproduct->order->user;
+            $userProvince = $user->province;
+            if(isset($userProvince)){
+                $foundProvince = $provinces->filter(function ($item) use ($userProvince) {
+                    return false !== stristr($item['persianName'], $userProvince);
+                });
+                if($foundProvince->isEmpty()){
+                    $foundProvince =  $provinces->where('name' , 'ir-un');
+                }
+            }else{
+                $foundProvince =  $provinces->where('name' , 'ir-un');
+            }
+            $key = key($foundProvince->toArray());
+            $foundProvince = $foundProvince->first();
+            $foundProvince['count']++;
+            $provinces->put($key, $foundProvince);
+        }
+//        dump('stop before today', Carbon::now());
         /** Today */
-        $todayOrderproducts   = $this->getTodayPurchases($allTimeOrderproducts);
-        $todayCount           = $this->countOrderproducts($todayOrderproducts);
-        $todaySum             = $this->calculateTotalPrice($todayOrderproducts);
-        $todayOveralOrderproducts = $this->getTodayPurchasedOrderproducts();
+        $todayOrderproducts         = $this->getTodayPurchases($allTimeOrderproducts);
+        $todayCount                 = $this->countOrderproducts($todayOrderproducts);
+        $todaySum                   = $this->calculateTotalPrice($todayOrderproducts);
+        $todayOveralOrderproducts   = $this->getTodayPurchases($thisMonthAllOrderproducts);
         $todayOveralSum             = $this->calculateTotalPrice($todayOveralOrderproducts);
         $todayRate = 0;
         if($todayOveralSum != 0)
-            $todayRate = $todaySum/$todayOveralSum;
+            $todayRate = (int)(($todaySum/$todayOveralSum)*100);
 
+//        dump('stop before this week', Carbon::now());
         /** This week */
-        $thisWeekOrderproducts  = $this->getThisWeekPurchases($allTimeOrderproducts);
-        $thisWeekCount          = $this->countOrderproducts($thisWeekOrderproducts);
-        $thisWeekSum            = $this->calculateTotalPrice($thisWeekOrderproducts);
-        $thisWeekOveralOrderproducts   = $this->getThisWeekPurchasedOrderproducts();
-        $thisWeekOveralSum             = $this->calculateTotalPrice($thisWeekOveralOrderproducts);
+        $thisWeekOrderproducts          = $this->getThisWeekPurchases($allTimeOrderproducts);
+        $thisWeekCount                  = $this->countOrderproducts($thisWeekOrderproducts);
+        $thisWeekSum                    = $this->calculateTotalPrice($thisWeekOrderproducts);
+        $thisWeekOveralOrderproducts    = $this->getThisWeekPurchases($thisMonthAllOrderproducts);
+        $thisWeekOveralSum              = $this->calculateTotalPrice($thisWeekOveralOrderproducts);
         $thisWeekRate = 0;
         if($thisWeekOveralSum != 0)
-            $thisWeekRate = $thisWeekSum / $thisWeekOveralSum;
+            $thisWeekRate = (int)(($thisWeekSum / $thisWeekOveralSum)*100);
 
+//        dump('stop before this moonth', Carbon::now());
         /** This month */
-        $thisMonthOrderproducts = $this->getThisMonthPurchases($allTimeOrderproducts);
-        $thisMonthCount         =         $this->countOrderproducts($thisMonthOrderproducts);
-        $thisMonthSum           = $this->calculateTotalPrice($thisMonthOrderproducts);
-        $thisMonthOveralOrderproducts   = $this->getThisMonthPurchasedOrderproducts();
-        $thisMonthOveralSum             = $this->calculateTotalPrice($thisMonthOveralOrderproducts);
+        $thisMonthOrderproducts         = $this->getThisMonthPurchases($allTimeOrderproducts);
+        $thisMonthCount                 = $this->countOrderproducts($thisMonthOrderproducts);
+        $thisMonthSum                   = $this->calculateTotalPrice($thisMonthOrderproducts);
+        $thisMonthOveralSum             = $this->calculateTotalPrice($thisMonthAllOrderproducts);
         $thisMonthRate = 0;
         if($thisMonthOveralSum != 0)
-            $thisMonthRate = $thisMonthSum / $thisMonthOveralSum;
+            $thisMonthRate = (int)(($thisMonthSum / $thisMonthOveralSum)*100);
 
         return view("user.salesReport", compact('limitStatus', 'coupontype', 'products' ,
             'allTimeCount' , 'allTimeSum' , 'thisMonthCount' , 'thisMonthSum' , 'thisWeekCount' , 'thisWeekSum' , 'todayCount' , 'todaySum',
-            'todayRate' , 'thisWeekRate' , 'thisMonthRate'));
+            'todayRate' , 'thisWeekRate' , 'thisMonthRate' , 'provinces'));
 
     }
 
@@ -93,11 +129,14 @@ class SalesReportController extends Controller
 
     /**
      * @param array $setIds
+     * @param string $teacherName
      * @return Collection
      */
-    private function getProductsOfUser(array $setIds): Collection
+    private function getProductsOfUser(array $setIds , string $teacherName): Collection
     {
-        return ProductRepository::getProductsByUserId($setIds)->get();
+        $products1 = ProductRepository::getProductsByUserId($setIds)->get();
+        $products2 = ProductRepository::getProductByTag($teacherName)->get();
+        return $products1->merge($products2);
     }
 
     /**
@@ -165,25 +204,7 @@ class SalesReportController extends Controller
                                         ->whereHas('order', function ($q) {
                                             $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
                                                 ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
-                                        })->get()->load('order');
-    }
-
-    /**
-     * @return Collection
-     */
-    private function getTodayPurchasedOrderproducts():Collection
-    {
-        list($sinceDateTime, $tillDateTime) = $this->getTodayTimePeriod();
-        return $this->getOrderproductsByTimePeriod($sinceDateTime, $tillDateTime);
-    }
-
-    /**
-     * @return Collection
-     */
-    private function getThisWeekPurchasedOrderproducts():Collection
-    {
-        list($sinceDateTime, $tillDateTime) = $this->getThisWeekTimePeriod();
-        return $this->getOrderproductsByTimePeriod($sinceDateTime, $tillDateTime);
+                                        })->get()->load('order')->load('order.transactions');
     }
 
     /**
@@ -222,7 +243,7 @@ class SalesReportController extends Controller
      */
     private function makeSinceDateTime(string $today): string
     {
-        return $today . '00:00:00';
+        return $today . ' 00:00:00';
     }
 
     /**
@@ -231,7 +252,7 @@ class SalesReportController extends Controller
      */
     private function makeTillDateTime(string $today): string
     {
-        return $today . '23:59:59';
+        return $today . ' 23:59:59';
     }
 
     /**
@@ -250,8 +271,26 @@ class SalesReportController extends Controller
     private function calculateTotalPrice(Collection $orderproducts):int{
         $sum = 0;
         foreach ($orderproducts as $orderproduct) {
-            $price = $orderproduct->obtainOrderproductCost(false);
-            $sum += $price['final'];
+            /** @var Orderproduct $orderproduct */
+            $key = 'salesReport:calculateOrderproductPrice:'.$orderproduct->cacheKey();
+            $price = Cache::tags(['salesReport' , 'order' , 'orderproduct'])
+                ->remember($key , config('constants.CACHE_60') , function () use ($orderproduct){
+                    return $orderproduct->obtainOrderproductCost(false);
+            });
+
+            /** @var Order $myOrder */
+            $myOrder = $orderproduct->order;
+            $orderWalletTransactins = $myOrder->transactions->where('paymentmethod_id' , config('constants.PAYMENT_METHOD_WALLET'))
+                                                            ->whereIn('transactionstatus_id' , [config('constants.TRANSACTION_STATUS_SUCCESSFUL') , config('constants.TRANSACTION_STATUS_SUSPENDED')])
+                                                            ->where('cost' , '>' , 0);
+
+            $orderWalletSum = $orderWalletTransactins->sum('cost');
+            if($orderWalletSum == 0){
+                $sum += $price['final'];
+            }else{
+                $walletPerItem =  $orderWalletSum / $myOrder->orderproducts_count ;
+                $sum = $sum + ($price['final'] - $walletPerItem);
+            }
         }
         return $sum;
     }
@@ -302,6 +341,145 @@ class SalesReportController extends Controller
                     ->where('completed_at', '<=', $tillDateTime)
                     ->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
                     ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
-            })->get();
+            })->get()->load('order')->load('order.transactions');
+    }
+
+    /**
+     * Returns a collection of provinces
+     *
+     * @return Collection
+     */
+    private function getProvinces():Collection{
+        return collect([
+            [
+                'name'          =>  'ir-hg',
+                'persianName'   =>  'هرمزگان'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-bs',
+                'persianName'   =>  'بوشهر'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-kb',
+                'persianName'   =>  'کهگیلویه و بویراحمد'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-fa',
+                'persianName'   =>  'فارس'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-es',
+                'persianName'   =>  'اصفهان'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-sm',
+                'persianName'   =>  'سمنان'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-go',
+                'persianName'   =>  'گلستان'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-mn',
+                'persianName'   =>  'مازندران'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-th',
+                'persianName'   =>  'تهران'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-mk',
+                'persianName'   =>  'مرکزی'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-ya',
+                'persianName'   =>  'یزد'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-cm',
+                'persianName'   =>  'چهارمحال بختیاری'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-kz',
+                'persianName'   =>  'خوزستان'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-lo',
+                'persianName'   =>  'لرستان'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-il',
+                'persianName'   =>  'ایلام'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-ar',
+                'persianName'   =>  'اردبیل'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-qm',
+                'persianName'   =>  'قم'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-hd',
+                'persianName'   =>  'همدان'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-za',
+                'persianName'   =>  'زنجان'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-qz',
+                'persianName'   =>  'قزوین'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-wa',
+                'persianName'   =>  'آذربایجان غربی'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-ea',
+                'persianName'   =>  'آذربایجان شرقی'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-bk',
+                'persianName'   =>  'کرمانشاه'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-gi',
+                'persianName'   =>  'گیلان'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-kd',
+                'persianName'   =>  'کردستان'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-kj',
+                'persianName'   =>  'خراسان جنوبی'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-kv',
+                'persianName'   =>  'خراسان رضوی'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-ks',
+                'persianName'   =>  'خراسان شمالی'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-sb',
+                'persianName'   =>  'سیستان و بلوچستان'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-ke',
+                'persianName'   =>  'کرمان'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-al',
+                'persianName'   =>  'البرز'     ,
+                'count'         =>  0 ,],
+            [
+                'name'          =>  'ir-un',
+                'persianName'   =>  'بدون_استان' ,
+                'count'         =>  0 ,],
+
+        ]);
     }
 }
