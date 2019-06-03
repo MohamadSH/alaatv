@@ -8,26 +8,26 @@
         </div>
     </div>
     @if(!$product->hasParents())
-        <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
+        <div class="form-group {{ $errors->has('name') ? ' has-danger' : '' }}">
             <div class="row">
                 <label class="col-md-3 control-label" for="name">نام کالا</label>
                 <div class="col-md-9">
                     {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'name' ]) !!}
                     @if ($errors->has('name'))
-                        <span class="help-block">
+                        <span class="form-control-feedback">
                             <strong>{{ $errors->first('name') }}</strong>
                         </span>
                     @endif
                 </div>
             </div>
         </div>
-        <div class="form-group {{ $errors->has('order') ? ' has-error' : '' }}">
+        <div class="form-group {{ $errors->has('order') ? ' has-danger' : '' }}">
             <div class="row">
                 <label class="col-md-3 control-label" for="name">ترتیب</label>
                 <div class="col-md-9">
                     {!! Form::text('order', null, ['class' => 'form-control', 'placeholder'=>'ترتیب']) !!}
                     @if ($errors->has('order'))
-                        <span class="help-block">
+                        <span class="form-control-feedback">
                             <strong>{{ $errors->first('order') }}</strong>
                         </span>
                     @endif
@@ -35,7 +35,7 @@
             </div>
         </div>
         <div class="form-body">
-            <div class="form-group {{ $errors->has('file') ? ' has-error' : '' }}">
+            <div class="form-group {{ $errors->has('file') ? ' has-danger' : '' }}">
                 <div class="row">
                     <label class="col-md-3 control-label" for="file">کاتالوگ</label>
                     <div class="col-md-9">
@@ -53,14 +53,14 @@
                             </div>
                         </div>
                         @if ($errors->has('file'))
-                            <span class="help-block">
+                            <span class="form-control-feedback">
                                 <strong>{{ $errors->first('file') }}</strong>
                             </span>
                         @endif
                     </div>
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('image') ? ' has-error' : '' }}">
+            <div class="form-group {{ $errors->has('image') ? ' has-danger' : '' }}">
                 <div class="row">
                     <label class="control-label col-md-3">عکس</label>
                     <div class="col-md-9">
@@ -81,7 +81,7 @@
                             </div>
                         </div>
                         @if ($errors->has('image'))
-                            <span class="help-block">
+                            <span class="form-control-feedback">
                                 <strong>{{ $errors->first('image') }}</strong>
                             </span>
                         @endif
@@ -90,13 +90,13 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('introVideo') ? ' has-error' : '' }}">
+            <div class="form-group {{ $errors->has('introVideo') ? ' has-danger' : '' }}">
                 <div class="row">
                     <label class="col-md-3 control-label" for="slogan">لینک فیلم معرفی</label>
                     <div class="col-md-9">
                         {!! Form::text('introVideo', null , ['class' => 'form-control', 'id' => 'introVideo' , 'dir' => 'ltr' ]) !!}
                         @if ($errors->has('introVideo'))
-                            <span class="help-block">
+                            <span class="form-control-feedback">
                             <strong>{{ $errors->first('introVideo') }}</strong>
                         </span>
                         @endif
@@ -118,13 +118,13 @@
                 </div>
             </div>
             <br>
-            <div class="form-group {{ $errors->has('basePrice') ? ' has-error' : '' }}">
+            <div class="form-group {{ $errors->has('basePrice') ? ' has-danger' : '' }}">
                 <div class="row">
                     <label class="col-md-3 control-label" for="basePrice">قیمت پایه</label>
                     <div class="col-md-9">
                         {!! Form::text('basePrice', null, ['class' => 'form-control', 'id' => 'basePrice' , 'dir'=>'ltr' ]) !!}
                         @if ($errors->has('basePrice'))
-                            <span class="help-block">
+                            <span class="form-control-feedback">
                             <strong>{{ $errors->first('basePrice') }}</strong>
                         </span>
                         @endif
@@ -147,72 +147,72 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('discount') ? ' has-error' : '' }}">
+            <div class="form-group {{ $errors->has('discount') ? ' has-danger' : '' }}">
                 <div class="row">
                     <label class="col-md-3 control-label" for="discount">تخفیف (%)</label>
                     <div class="col-md-9">
                         {!! Form::text('discount', null, ['class' => 'form-control', 'id' => 'discount', 'dir'=>'ltr' ]) !!}
                         @if ($errors->has('discount'))
-                            <span class="help-block">
+                            <span class="form-control-feedback">
                             <strong>{{ $errors->first('discount') }}</strong>
                         </span>
                         @endif
                     </div>
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('amount') ? ' has-error' : '' }}">
+            <div class="form-group {{ $errors->has('amount') ? ' has-danger' : '' }}">
                 <div class="row">
                     <label class="col-md-3 control-label" for="amount">تعداد موجود</label>
                     <div class="col-md-9">
                         {!! Form::text('amount', null, ['class' => 'form-control', 'id' => 'amount']) !!}
                         @if ($errors->has('amount'))
-                            <span class="help-block">
+                            <span class="form-control-feedback">
                             <strong>{{ $errors->first('amount') }}</strong>
                         </span>
                         @endif
                     </div>
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('amount') ? ' has-error' : '' }}">
+            <div class="form-group {{ $errors->has('amount') ? ' has-danger' : '' }}">
                 <div class="row">
                     <div class="clearfix margin-top-20 col-md-9 col-md-offset-3">
                         {!! Form::select('amountLimit',$amountLimit, $defaultAmountLimit, ['class' => 'form-control', 'id' => 'amountLimit']) !!}
                     </div>
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('enable') ? ' has-error' : '' }}">
+            <div class="form-group {{ $errors->has('enable') ? ' has-danger' : '' }}">
                 <div class="row">
                     <label class="col-md-3 control-label" for="enable">وضعیت</label>
                     <div class="col-md-9">
                         {!! Form::select('enable',$enableStatus,$defaultEnableStatus,['class' => 'form-control', 'id' => 'enable']) !!}
                         @if ($errors->has('enable'))
-                            <span class="help-block">
+                            <span class="form-control-feedback">
                                 <strong>{{ $errors->first('enable') }}</strong>
                             </span>
                         @endif
                     </div>
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('attributeset_id') ? ' has-error' : '' }}">
+            <div class="form-group {{ $errors->has('attributeset_id') ? ' has-danger' : '' }}">
                 <div class="row">
                     <label class="col-md-3 control-label" for="attributeset_id">دسته صفت</label>
                     <div class="col-md-9">
                         {!! Form::select('attributeset_id',$attributesets,null,['class' => 'form-control', 'id' => 'attributeset_id']) !!}
                         @if ($errors->has('attributeset_id'))
-                            <span class="help-block">
+                            <span class="form-control-feedback">
                             <strong>{{ $errors->first('attributeset_id') }}</strong>
                         </span>
                         @endif
                     </div>
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('slogan') ? ' has-error' : '' }}">
+            <div class="form-group {{ $errors->has('slogan') ? ' has-danger' : '' }}">
                 <div class="row">
                     <label class="col-md-3 control-label" for="slogan">اسلوگان</label>
                     <div class="col-md-9">
                         {!! Form::text('slogan', null, ['class' => 'form-control', 'id' => 'slogan' ]) !!}
                         @if ($errors->has('slogan'))
-                            <span class="help-block">
+                            <span class="form-control-feedback">
                             <strong>{{ $errors->first('slogan') }}</strong>
                         </span>
                         @endif
@@ -221,7 +221,7 @@
             </div>
             @if(isset($bons))
                 {!! Form::hidden('bon_id', $bons->id) !!}
-                <div class="form-group {{ $errors->has('bonPlus') ? ' has-error' : '' }}">
+                <div class="form-group {{ $errors->has('bonPlus') ? ' has-danger' : '' }}">
                     <div class="row">
                         <label class="col-md-3 control-label" for="bonPlus">تعداد بن افزوده محصول</label>
                         <div class="col-md-9">
@@ -231,14 +231,14 @@
                                 {!! Form::text('bonPlus', null, ['class' => 'form-control', 'id' => 'productBonPlus' ]) !!}
                             @endif
                             @if ($errors->has('productBonPlus'))
-                                <span class="help-block">
+                                <span class="form-control-feedback">
                                     <strong>{{ $errors->first('productBonPlus') }}</strong>
                                 </span>
                             @endif
                         </div>
                     </div>
                 </div>
-                <div class="form-group {{ $errors->has('bonDiscount') ? ' has-error' : '' }}">
+                <div class="form-group {{ $errors->has('bonDiscount') ? ' has-danger' : '' }}">
                     <div class="row">
                         <label class="col-md-3 control-label" for="bonDiscount">میزان تخفیف برای هر بن (%)</label>
                         <div class="col-md-9">
@@ -248,7 +248,7 @@
                                 {!! Form::text('bonDiscount', null, ['class' => 'form-control', 'id' => 'productBonDiscount' ]) !!}
                             @endif
                             @if ($errors->has('bonDiscount'))
-                                <span class="help-block">
+                                <span class="form-control-feedback">
                                     <strong>{{ $errors->first('bonDiscount') }}</strong>
                                 </span>
                             @endif
@@ -257,42 +257,42 @@
                 </div>
             @endif
             <br>
-            <div class="form-group {{ $errors->has('shortDescription') ? ' has-error' : '' }}">
+            <div class="form-group {{ $errors->has('shortDescription') ? ' has-danger' : '' }}">
                 <div class="row">
                     <label class="col-md-3 control-label" for="shortDescription">توضیحات مختصر</label>
                     <div class="col-md-9">
                         {{--<div name="summernote" id="summernote_1">{!! $product->description !!}</div>--}}
                         {!! Form::textarea('shortDescription', null, ['class' => 'form-control', 'id' => 'productShortDescriptionSummerNote' ]) !!}
                         @if ($errors->has('shortDescription'))
-                            <span class="help-block">
+                            <span class="form-control-feedback">
                                 <strong>{{ $errors->first('shortDescription') }}</strong>
                              </span>
                         @endif
                     </div>
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('longDescription') ? ' has-error' : '' }}">
+            <div class="form-group {{ $errors->has('longDescription') ? ' has-danger' : '' }}">
                 <div class="row">
                     <label class="col-md-3 control-label" for="longDescription">توضیحات اجمالی</label>
                     <div class="col-md-9">
                         {{--<div name="summernote" id="summernote_1">{!! $product->description !!}</div>--}}
                         {!! Form::textarea('longDescription', null, ['class' => 'form-control', 'id' => 'productLongDescriptionSummerNote' ]) !!}
                         @if ($errors->has('longDescription'))
-                            <span class="help-block">
+                            <span class="form-control-feedback">
                                 <strong>{{ $errors->first('longDescription') }}</strong>
                              </span>
                         @endif
                     </div>
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('specialDescription') ? ' has-error' : '' }}">
+            <div class="form-group {{ $errors->has('specialDescription') ? ' has-danger' : '' }}">
                 <div class="row">
                     <label class="col-md-3 control-label" for="specialDescription">توضیحات خاص</label>
                     <div class="col-md-9">
                         {{--<div name="summernote" id="summernote_1">{!! $product->description !!}</div>--}}
                         {!! Form::textarea('specialDescription', null, ['class' => 'form-control', 'id' => 'productSpecialDescriptionSummerNote' ]) !!}
                         @if ($errors->has('specialDescription'))
-                            <span class="help-block">
+                            <span class="form-control-feedback">
                                 <strong>{{ $errors->first('specialDescription') }}</strong>
                              </span>
                         @endif
@@ -311,13 +311,13 @@
     @else
         {!! Form::hidden("name" , $product->name) !!}
         {!! Form::hidden("attributeset_id" , $product->attributeset_id) !!}
-        <div class="form-group {{ $errors->has('basePrice') ? ' has-error' : '' }}">
+        <div class="form-group {{ $errors->has('basePrice') ? ' has-danger' : '' }}">
             <div class="row">
                 <label class="col-md-3 control-label" for="basePrice">قیمت پایه</label>
                 <div class="col-md-9">
                     {!! Form::text('basePrice', null, ['class' => 'form-control', 'id' => 'basePrice' , 'dir'=>'ltr' ]) !!}
                     @if ($errors->has('basePrice'))
-                        <span class="help-block">
+                        <span class="form-control-feedback">
                                             <strong>{{ $errors->first('basePrice') }}</strong>
                                         </span>
                     @endif
@@ -336,7 +336,7 @@
                 </div>
             </div>
         </div>
-        <div class="form-group {{ $errors->has('image') ? ' has-error' : '' }}">
+        <div class="form-group {{ $errors->has('image') ? ' has-danger' : '' }}">
             <div class="row">
                 <label class="control-label col-md-3">عکس</label>
                 <div class="col-md-9">
@@ -355,7 +355,7 @@
                         </div>
                     </div>
                     @if ($errors->has('image'))
-                        <span class="help-block">
+                        <span class="form-control-feedback">
                             <strong>{{ $errors->first('image') }}</strong>
                         </span>
                     @endif
@@ -364,13 +364,13 @@
                 </div>
             </div>
         </div>
-        <div class="form-group {{ $errors->has('discount') ? ' has-error' : '' }}">
+        <div class="form-group {{ $errors->has('discount') ? ' has-danger' : '' }}">
             <div class="row">
                 <label class="col-md-3 control-label" for="discount">تخفیف (%)</label>
                 <div class="col-md-9">
                     {!! Form::text('discount', null, ['class' => 'form-control', 'id' => 'discount', 'dir'=>'ltr' ]) !!}
                     @if ($errors->has('discount'))
-                        <span class="help-block">
+                        <span class="form-control-feedback">
                             <strong>{{ $errors->first('discount') }}</strong>
                         </span>
                     @endif
@@ -378,26 +378,26 @@
             </div>
         </div>
         <br>
-        <div class="form-group {{ $errors->has('shortDescription') ? ' has-error' : '' }}">
+        <div class="form-group {{ $errors->has('shortDescription') ? ' has-danger' : '' }}">
             <div class="row">
                 <label class="col-md-3 control-label" for="shortDescription">توضیحات مختصر</label>
                 <div class="col-md-9">
                     {!! Form::textarea('shortDescription', null, ['class' => 'form-control', 'id' => 'productShortDescriptionSummerNote' ]) !!}
                     @if ($errors->has('shortDescription'))
-                        <span class="help-block">
+                        <span class="form-control-feedback">
                                             <strong>{{ $errors->first('shortDescription') }}</strong>
                                         </span>
                     @endif
                 </div>
             </div>
         </div>
-        <div class="form-group {{ $errors->has('longDescription') ? ' has-error' : '' }}">
+        <div class="form-group {{ $errors->has('longDescription') ? ' has-danger' : '' }}">
             <div class="row">
                 <label class="col-md-3 control-label" for="longDescription">توضیحات اجمالی</label>
                 <div class="col-md-9">
                     {!! Form::textarea('longDescription', null, ['class' => 'form-control', 'id' => 'productLongDescriptionSummerNote' ]) !!}
                     @if ($errors->has('longDescription'))
-                        <span class="help-block">
+                        <span class="form-control-feedback">
                                             <strong>{{ $errors->first('longDescription') }}</strong>
                                         </span>
                     @endif
@@ -418,7 +418,7 @@
         <div class="col-md-6">
             <p>
                 {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'productName' , 'placeholder'=>'نام کالا']) !!}
-                <span class="help-block" id="productNameAlert">
+                <span class="form-control-feedback" id="productNameAlert">
                 <strong></strong>
             </span>
             </p>
@@ -430,7 +430,7 @@
                 @else
                     {!! Form::text('order', null, ['class' => 'form-control', 'id' => 'productOrder' , 'placeholder'=>'ترتیب']) !!}
                 @endif
-                <span class="help-block" id="productOrderAlert">
+                <span class="form-control-feedback" id="productOrderAlert">
                     <strong></strong>
                 </span>
             </p>
@@ -438,7 +438,7 @@
         <div class="col-md-6">
             <p>
                 {!! Form::text('basePrice', null, ['class' => 'form-control', 'id' => 'productBasePrice' , 'placeholder'=>'قیمت پایه']) !!}
-                <span class="help-block" id="productBasePriceAlert">
+                <span class="form-control-feedback" id="productBasePriceAlert">
                     <strong></strong>
                 </span>
                 <label class="control-label" style="float: right;">
@@ -453,7 +453,7 @@
         <div class="col-md-6">
             <p>
                 {!! Form::text('discount', null, ['class' => 'form-control', 'id' => 'productDiscount' , 'placeholder'=>'تخفیف (%)']) !!}
-                <span class="help-block" id="productDiscountAlert">
+                <span class="form-control-feedback" id="productDiscountAlert">
                     <strong></strong>
                 </span>
             </p>
@@ -461,7 +461,7 @@
         <div class="col-md-6">
             <p>
                 {!! Form::text('slogan', null, ['class' => 'form-control', 'id' => 'productSlogan', 'placeholder'=>'اسلوگان']) !!}
-                <span class="help-block" id="productSloganAlert">
+                <span class="form-control-feedback" id="productSloganAlert">
                     <strong></strong>
                 </span>
             </p>
@@ -469,7 +469,7 @@
         <div class="col-md-6">
             <p>
                 {!! Form::select('attributeset_id',$attributesets,null,['class' => 'form-control', 'id' => 'productAttributeSetID' , 'placeholder'=>'انتخاب دسته صفت']) !!}
-                <span class="help-block" id="productAttributeSetIDAlert">
+                <span class="form-control-feedback" id="productAttributeSetIDAlert">
                     <strong></strong>
                 </span>
             </p>
@@ -477,7 +477,7 @@
         <div class="col-md-6">
             <p>
                 {!! Form::select('enable',$enableStatus, null,['class' => 'form-control', 'id' => 'productEnable']) !!}
-                <span class="help-block" id="productEnableAlert">
+                <span class="form-control-feedback" id="productEnableAlert">
                     <strong></strong>
                 </span>
             </p>
@@ -485,7 +485,7 @@
         <div class="col-md-6">
             <p>
                 {!! Form::text('amount', null, ['class' => 'form-control', 'id' => 'productAmount'  , 'placeholder'=>'تعداد موجود']) !!}
-                <span class="help-block" id="productAmountAlert">
+                <span class="form-control-feedback" id="productAmountAlert">
                             <strong></strong>
                     </span>
             </p>
@@ -499,7 +499,7 @@
         <div class="col-md-6">
             <p>
                 {!! Form::text('bonPlus', null, ['class' => 'form-control', 'id' => 'productBonPlus', 'placeholder' => 'تعداد بن محصول']) !!}
-                <span class="help-block" id="productBonPlusAlert">
+                <span class="form-control-feedback" id="productBonPlusAlert">
                     <strong></strong>
                 </span>
             </p>
@@ -507,7 +507,7 @@
         <div class="col-md-6">
             <p>
                 {!! Form::text('bonDiscount', null, ['class' => 'form-control', 'id' => 'productBonDiscount', 'placeholder' => 'میزان تخفیف برای هر بن (%)']) !!}
-                <span class="help-block" id="productBonDiscountAlert">
+                <span class="form-control-feedback" id="productBonDiscountAlert">
                     <strong></strong>
                 </span>
             </p>
@@ -515,7 +515,7 @@
         <div class="col-md-6">
             <p>
                 {!! Form::select('producttype_id', $productTypes, null, ['class' => 'form-control', 'id' => 'producttypeId', 'placeholder'=>'نوع محصول']) !!}
-                <span class="help-block" id="producttypeIdAlert">
+                <span class="form-control-feedback" id="producttypeIdAlert">
                     <strong></strong>
                 </span>
             </p>
@@ -523,7 +523,7 @@
         <div class="col-md-6">
             <p>
                 {!! Form::text('introVideo', null, ['class' => 'form-control', 'id' => 'productIntroVideo', 'placeholder'=>'لینک فیلم معرفی' , 'dir'=>'ltr']) !!}
-                <span class="help-block" id="productIntroVideoAlert">
+                <span class="form-control-feedback" id="productIntroVideoAlert">
                     <strong></strong>
                 </span>
             </p>
@@ -551,7 +551,7 @@
                     <a href="javascript:" class="input-group-addon btn red fileinput-exists" id="productFile-remove" data-dismiss="fileinput"> حذف</a>
                 </div>
             </div>
-            <span class="help-block" id="productFileAlert">
+            <span class="form-control-feedback" id="productFileAlert">
                 <strong></strong>
             </span>
         </div>
@@ -583,7 +583,7 @@
             <br>
             <p>
                 {!! Form::textarea('shortDescription', null, ['class' => 'form-control', 'id' => 'productShortDescriptionSummerNote' , 'placeholder'=>'توضیح مختصر']) !!}
-                <span class="help-block" id="productShortDescriptionSummerNoteAlert">
+                <span class="form-control-feedback" id="productShortDescriptionSummerNoteAlert">
                     <strong></strong>
                 </span>
             </p>
@@ -593,7 +593,7 @@
             <br>
             <p>
                 {!! Form::textarea('longDescription', null, ['class' => 'form-control', 'id' => 'productLongDescriptionSummerNote' , 'placeholder'=>'توضیح اجمالی']) !!}
-                <span class="help-block" id="productLongDescriptionSummerNoteAlert">
+                <span class="form-control-feedback" id="productLongDescriptionSummerNoteAlert">
                     <strong></strong>
                 </span>
             </p>

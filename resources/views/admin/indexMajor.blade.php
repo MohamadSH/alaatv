@@ -41,29 +41,29 @@
                         {!! Form::hidden('parent', $parentMajor->id) !!}
                         {!! Form::hidden('majortype_id', 2) !!}
                         <div class = "form-body">
-                            <div class = "form-group {{ $errors->has('name') ? ' has-error' : '' }}">
+                            <div class = "form-group {{ $errors->has('name') ? ' has-danger' : '' }}">
                                 <label class = "col-md-3 control-label">نام رشته</label>
                                 <div class = "col-md-6">
                                     <div class = "input-group">
                                         {!! Form::text('name', null, ['class' => 'form-control input-circle']) !!}
-                                        {{--<span class="help-block"> A block of help text. </span>--}}
+                                        {{--<span class="form-control-feedback"> A block of help text. </span>--}}
                                     </div>
                                     @if ($errors->has('name'))
-                                        <span class = "help-block">
+                                        <span class="form-control-feedback">
                                         <strong>{{ $errors->first('name') }}</strong>
                                     </span>
                                     @endif
                                 </div>
                             </div>
-                            <div class = "form-group {{ $errors->has('majorCode') ? ' has-error' : '' }}">
+                            <div class = "form-group {{ $errors->has('majorCode') ? ' has-danger' : '' }}">
                                 <label class = "col-md-3 control-label">کد رشته</label>
                                 <div class = "col-md-6">
                                     <div class = "input-group">
                                         {!! Form::text('majorCode', null, ['class' => 'form-control input-circle' , 'dir'=>'ltr']) !!}
-                                        {{--<span class="help-block"> A block of help text. </span>--}}
+                                        {{--<span class="form-control-feedback"> A block of help text. </span>--}}
                                     </div>
                                     @if ($errors->has('majorCode'))
-                                        <span class = "help-block">
+                                        <span class="form-control-feedback">
                                         <strong>{{ $errors->first('majorCode') }}</strong>
                                     </span>
                                     @endif
@@ -79,29 +79,29 @@
                     {{--<div class="col-md-6">--}}
                     {{--{!! Form::open(['method'=>'POST' , 'action'=>'MajorController@store' , 'class'=>'form-horizontal']) !!}--}}
                     {{--<div class="form-body">--}}
-                    {{--<div class="form-group {{ $errors->has('majorId') ? ' has-error' : '' }}">--}}
+                    {{--<div class="form-group {{ $errors->has('majorId') ? ' has-danger' : '' }}">--}}
                     {{--<label class="col-md-3 control-label">آیدی رشته</label>--}}
                     {{--<div class="col-md-6">--}}
                     {{--<div class="input-group">--}}
                     {{--{!! Form::text('majorId', null, ['class' => 'form-control input-circle']) !!}--}}
-                    {{--<span class="help-block"> A block of help text. </span>--}}
+                    {{--<span class="form-control-feedback"> A block of help text. </span>--}}
                     {{--</div>--}}
                     {{--@if ($errors->has('majorId'))--}}
-                    {{--<span class="help-block">--}}
+                    {{--<span class="form-control-feedback">--}}
                     {{--<strong>{{ $errors->first('majorId') }}</strong>--}}
                     {{--</span>--}}
                     {{--@endif--}}
                     {{--</div>--}}
                     {{--</div>--}}
-                    {{--<div class="form-group {{ $errors->has('نام گرایش') ? ' has-error' : '' }}">--}}
+                    {{--<div class="form-group {{ $errors->has('نام گرایش') ? ' has-danger' : '' }}">--}}
                     {{--<label class="col-md-3 control-label">کد رشته</label>--}}
                     {{--<div class="col-md-6">--}}
                     {{--<div class="input-group">--}}
                     {{--{!! Form::text('majorChildName', null, ['class' => 'form-control input-circle' , 'dir'=>'ltr']) !!}--}}
-                    {{--<span class="help-block"> A block of help text. </span>--}}
+                    {{--<span class="form-control-feedback"> A block of help text. </span>--}}
                     {{--</div>--}}
                     {{--@if ($errors->has('majorChildName'))--}}
-                    {{--<span class="help-block">--}}
+                    {{--<span class="form-control-feedback">--}}
                     {{--<strong>{{ $errors->first('majorChildName') }}</strong>--}}
                     {{--</span>--}}
                     {{--@endif--}}

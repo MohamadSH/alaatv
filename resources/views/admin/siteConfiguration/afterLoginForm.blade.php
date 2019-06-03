@@ -75,7 +75,7 @@
                                                     <label class = "col-md-3 control-label">انتخاب فیلد</label>
                                                     <div class = "col-md-4">
                                                         {!! Form::select('name' , $availableFields, null, ['class' => 'form-control default',]) !!}
-                                                        <span class = "help-block">  </span>
+                                                        <span class="form-control-feedback">  </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -84,7 +84,7 @@
                                                     <label class = "col-md-3 control-label">نام قابل نمایش</label>
                                                     <div class = "col-md-4">
                                                         <input name = "displayName" type = "text" class = "form-control" placeholder = "نامی که کاربر می بیند">
-                                                        <span class = "help-block">  </span>
+                                                        <span class="form-control-feedback">  </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -93,7 +93,7 @@
                                                     <label class = "col-md-3 control-label">ترتیب</label>
                                                     <div class = "col-md-4">
                                                         <input name = "order" type = "text" class = "form-control" placeholder = "ترتیب قرار گرفتن در فرم">
-                                                        <span class = "help-block">  </span>
+                                                        <span class="form-control-feedback">  </span>
                                                     </div>
                                                 </div>
                                             </div>

@@ -2,7 +2,13 @@
 
 @section('page-css')
     <link href="{{ mix('/css/page-landing7.css') }}" rel="stylesheet" type="text/css"/>
+    <style>
+        .m-portlet__head {
+            background: white;
+        }
+    </style>
 @endsection
+
 @section('content')
     <div class="row">
         <div class="col">
@@ -68,8 +74,7 @@
                                 </div>
                                 
                             </div>
-    
-    
+                            
                             <style>
                                 .titleSvg {
                                     position: relative;
@@ -154,65 +159,12 @@
                                 </div>
                             </div>
     
-    
-                            @foreach($blocks as $block)
+                            @foreach($blocks as $blockKey=>$block)
                                 @if($block->products->count() > 0)
-                                    
-                                    <div class="row shopBlock blockId-{{ $block->id }} {{ $block->class }}" >
-                                        <div class="col">
-                                            <div class="m-portlet  m-portlet--bordered OwlCarouselType2-shopPage" id="owlCarousel_{{ $block->id }}">
-                                                <div class="m-portlet__head">
-                                                    <div class="m-portlet__head-caption">
-                                                        <div class="m-portlet__head-title">
-                                                            <h3 class="m-portlet__head-text">
-                                                                <a href="{{ $block->url }}" class="m-link">
-                                                                    {{ $block->title }}
-                                                                </a>
-                                                            </h3>
-                                                        </div>
-                                                    </div>
-                                                    <div class="m-portlet__head-tools">
-                                                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
-                                                            <i class="fa flaticon-shapes"></i>
-                                                        </a>
-                                                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
-                                                            <i class="flaticon-more-v4"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="m-portlet__body m-portlet__body--no-padding">
-                                                    <!--begin::Widget 30-->
-                                                    <div class="m-widget30">
-                                
-                                                        <div class="m-widget_head">
-                                                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
-                                                                @foreach($block->products as $productKey=>$product)
-                                                                    <div class="m-widget_head-owlcarousel-item carousel background-gradient" data-position="{{ $productKey }}">
-                                                                        <a href="{{ $product->url }}" >
-                                                                            <img class="a--owl-carousel-type-2-item-image" src="{{ $product->photo }}">
-                                                                        </a>
-                                                                        <div class="m--font-primary a--owl-carousel-type-2-item-title">
-                                                                            <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                                                                                @if($product->price['final']!=$product->price['base'])
-                                                                                    <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($product->price['base']) }}</span>
-                                                                                    <span class="m-badge m-badge--info a--productDiscount">{{ round((1-($product->price['final']/$product->price['base']))*100) }}%</span>
-                                                                                @endif
-                                                                                {{ number_format($product->price['final']) }} تومان
-                                                                            </span>
-                                                                        </div>
-                                                                        <a href="{{ $product->url }}" target="_blank" class="m-link a--owl-carousel-type-2-item-subtitle">{{ $product->name }}</a>
-                                                                    </div>
-                                                                @endforeach
-                                                            </div>
-                                
-                                                        </div>
-                                                    </div>
-                                                    <!--end::Widget 30-->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
+                                    @include('product.partials.Block.block', [
+                                            'blockCustomClass'=>'landing7Block-'.$blockKey.' a--owl-carousel-type-2 ',
+                                            'blockCustomId'=>$block->class
+                                        ])
                                 @endif
                             @endforeach
                             
@@ -224,16 +176,38 @@
         </div>
     </div>
 @endsection
+
 @section('page-js')
     <script src="{{ mix('/js/page-shop.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/components/aSticky/aSticky.js') }}"></script>
     <script>
+
+
+        var sections = [
+        @foreach($blocks as $blockKey=>$block)
+            @if($block->products->count() > 0)
+                'landing7Block-{{ $blockKey }}',
+            @endif
+        @endforeach
+        ];
+        
         $(document).on('click', '.btnScroll', function (e) {
             e.preventDefault();
             let blockId = $(this).attr('href');
             if ($('.' + blockId).length > 0) {
                 $([document.documentElement, document.body]).animate({
-                    scrollTop: $('.'+blockId).offset().top - 75
+                    scrollTop: $('.'+blockId).offset().top - $('#m_header').height()
                 }, 500);
+            }
+        });
+
+        $(document).ready(function () {
+            for (let section in sections) {
+                $('.'+sections[section]+' .m-portlet__head').sticky({
+                    container: '.'+sections[section],
+                    topSpacing: $('#m_header').height(),
+                    zIndex: 99
+                });
             }
         });
     </script>

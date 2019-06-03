@@ -255,7 +255,7 @@
                 '                   </label>\n' +
                 '                   <div class="col-md-9">\n' +
                 '                       <input type="text" name="name" class="form-control m-input m-input--air"  maxlength="100" >\n' +
-                '                       <span class="help-block">\n' +
+                '                       <span class="form-control-feedback">\n' +
                 '                           <strong></strong>\n' +
                 '                       </span>' +
                 '                   </div>\n' +
@@ -305,10 +305,10 @@
             init: function () {
                 this.on("addedfile", function (file) {
                     // file.previewElement.querySelector('[type="submit"]').disabled=true;
-                    $("#rootContentTypes").parent("div .col-md-2").removeClass("has-error");
+                    $("#rootContentTypes").parent("div .col-md-2").removeClass("has-danger");
 
                     if ($("#rootContentTypes option:selected").val().length === 0) {
-                        $("#rootContentTypes").parent("div .col-md-6").addClass("has-error");
+                        $("#rootContentTypes").parent("div .col-md-6").addClass("has-danger");
                         this.removeFile(file);
                     }
 
@@ -343,22 +343,20 @@
                         clearMaskOnLostFocus: true
                     });
                     // Create the remove button
-                    var removeButton = Dropzone.createElement("<a href="
-                    javascript:;
-                    " class="
-                    btn
-                    red
-                    btn - sm
-                    btn - block
-                    " style="
-                    border - radius
+                    var removeButton = Dropzone.createElement("<a href=";
+                    javascript:
+                    " class=";
+                    btn;
+                    red;
+                    btn - sm;
+                    btn - block;
+                    " style=";
+                    border - radius;
                 :
-                    18
+                    18;
                     px;
-                    ">Remove</a>"
+                    ">Remove</a>";
                 )
-                    ;
-
                     // Capture the Dropzone instance as closure.
                     var _this = this;
 
@@ -378,54 +376,50 @@
                     file.previewElement.querySelector('.dz-file-preview').appendChild(removeButton);
 
                     var rootContentTypeValue = $("#rootContentTypes option:selected").val();
-                    var rootContentTypeHidden = Dropzone.createElement("<input type="
-                    hidden
-                    " name="
-                    contenttype_id
-                    " value="
-                    " + rootContentTypeValue + "
-                    ">"
+                    var rootContentTypeHidden = Dropzone.createElement("<input type=";
+                    hidden;
+                    " name=";
+                    contenttype_id;
+                    " value=";
+                    " + rootContentTypeValue + ";
+                    ">";
                 )
-                    ;
                     file.previewElement.querySelector('.form-horizontal').appendChild(rootContentTypeHidden);
 
                     var contentSetValue = $("#contentSets option:selected").val();
                     if (contentSetValue.length > 0) {
-                        var contentSetHidden = Dropzone.createElement("<input type="
-                        hidden
-                        " name="
-                        contentset_id[]
-                        " value="
-                        " + contentSetValue + "
-                        ">"
+                        var contentSetHidden = Dropzone.createElement("<input type=";
+                        hidden;
+                        " name=";
+                        contentset_id[];
+                        " value=";
+                        " + contentSetValue + ";
+                        ">";
                     )
-                        ;
                         file.previewElement.querySelector('.form-horizontal').appendChild(contentSetHidden);
 
-                        var orderInput = Dropzone.createElement("<input type="
-                        text
-                        " placeholder="
-                        ترتیب
-                        " name="
-                        order
-                        " value="
-                        ">"
+                        var orderInput = Dropzone.createElement("<input type=";
+                        text;
+                        " placeholder=";
+                        ترتیب;
+                        " name=";
+                        order;
+                        " value=";
+                        ">";
                     )
-                        ;
                         file.previewElement.querySelector('.form-horizontal .description-group .description-group-textarea-column').appendChild(orderInput);
                     }
 
                     var authorValue = $("#authors option:selected").val();
                     if (authorValue.length > 0) {
-                        var authorHidden = Dropzone.createElement("<input type="
-                        hidden
-                        " name="
-                        author_id
-                        " value="
-                        " + authorValue + "
-                        ">"
+                        var authorHidden = Dropzone.createElement("<input type=";
+                        hidden;
+                        " name=";
+                        author_id;
+                        " value=";
+                        " + authorValue + ";
+                        ">";
                     )
-                        ;
                         file.previewElement.querySelector('.form-horizontal').appendChild(authorHidden);
                     }
 
@@ -585,37 +579,34 @@
                     //                    files.previewElement.querySelector('.form-horizontal').appendChild(methodInput);
                     if (response.fileName.length > 0) {
                         // files.previewElement.querySelector('[type="submit"]').disabled=false;
-                        var fileNameHidden = Dropzone.createElement("<input type="
-                        hidden
-                        " name="
-                        file[]
-                        " value="
-                        " + response.fileName + "
-                        ">"
+                        var fileNameHidden = Dropzone.createElement("<input type=";
+                        hidden;
+                        " name=";
+                        file[];
+                        " value=";
+                        " + response.fileName + ";
+                        ">";
                     )
-                        ;
                         files.previewElement.querySelector('.form-horizontal').appendChild(fileNameHidden);
                         if ($("#rootContentTypes").data("title") == "video") {
-                            var fileCaptionHidden = Dropzone.createElement("<input type="
-                            hidden
-                            " name="
-                            caption[]
-                            " value="
-                            کیفیت
-                            عالی
-                            ">"
+                            var fileCaptionHidden = Dropzone.createElement("<input type=";
+                            hidden;
+                            " name=";
+                            caption[];
+                            " value=";
+                            کیفیت;
+                            عالی;
+                            ">";
                         )
-                            ;
                             files.previewElement.querySelector('.form-horizontal').appendChild(fileCaptionHidden);
-                            var fileLabelHidden = Dropzone.createElement("<input type="
-                            hidden
-                            " name="
-                            label[]
-                            " value="
-                            hd
-                            ">"
+                            var fileLabelHidden = Dropzone.createElement("<input type=";
+                            hidden;
+                            " name=";
+                            label[];
+                            " value=";
+                            hd;
+                            ">";
                         )
-                            ;
                             files.previewElement.querySelector('.form-horizontal').appendChild(fileLabelHidden);
                         }
                         /**
@@ -624,12 +615,11 @@
                          */
                         $("input[data-role=tagsinput]").tagsinput();
                     } else {
-                        $("#my-awesome-dropzone").append("<span class="
-                        m--
-                        font - danger
-                        ">" + "خطا در آپلود فایل " + files.name + "</span></br>" + response.toString() + "</br>"
+                        $("#my-awesome-dropzone").append("<span class=";
+                        m--;
+                        font - danger;
+                        ">" + "خطا در آپلود فایل " + files.name + "</span></br>" + response.toString() + "</br>";
                     )
-                        ;
                     }
 
 //                    if (typeof(response.sessionData) != "undefined" && response.sessionData != null)
@@ -645,12 +635,11 @@
 //                        });
                 });
                 this.on("error", function (files, response) {
-                    $("#my-awesome-dropzone").append("<span class="
-                    m--
-                    font - danger
-                    ">" + "خطا در آپلود فایل " + files.name + "</span></br>" + response.toString() + "</br>"
+                    $("#my-awesome-dropzone").append("<span class=";
+                    m--;
+                    font - danger;
+                    ">" + "خطا در آپلود فایل " + files.name + "</span></br>" + response.toString() + "</br>";
                 )
-                    ;
                     // Gets triggered when there was an error sending the files.
                     // Maybe show form again, and notify user of error
                 });
@@ -659,9 +648,9 @@
 
         $(document).on('submit', '.contentInformationForm', function (e) {
             e.preventDefault();
-            var loadingImage = "<img src = " / acm / extra / loading - arrow.gif
-            " style="
-            height: 20
+            var loadingImage = "<img src = " / acm / extra / loading - arrow.gif;
+            " style=";
+            20;
             px;
             ">";
             var form = $(this);

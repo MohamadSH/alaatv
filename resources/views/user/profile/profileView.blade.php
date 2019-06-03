@@ -65,7 +65,7 @@
             </div>
             <div class = "col-12">
                 @if(isset($user->birthdate))
-                    <div class = "form-group m-form__group {{ $errors->has('birthdate') ? ' has-error' : '' }}">
+                    <div class = "form-group m-form__group {{ $errors->has('birthdate') ? ' has-danger' : '' }}">
                         <label for = "birthdate">تاریخ تولد</label>
                         <div class = "m-input-icon m-input-icon--left">
                             <i class = "flaticon-calendar-1 float-left m--margin-right-10"></i> {{ $user->Birthdate_Jalali() }}
@@ -99,7 +99,7 @@
         </div>
 
         @if(isset($withBio) && $withBio)
-            <div class = "form-group m-form__group {{ $errors->has('bio') ? ' has-error' : '' }}">
+            <div class = "form-group m-form__group {{ $errors->has('bio') ? ' has-danger' : '' }}">
                 <label for = "bio">درباره ی شما</label>
                 <div class = "m-input-icon m-input-icon--left">
                     {{ $user->bio }}

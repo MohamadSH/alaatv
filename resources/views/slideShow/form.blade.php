@@ -4,7 +4,7 @@
             <label class = "col-md-4 control-label">تیتر اسلاید</label>
             <div class = "col-md-6">
                 {!! Form::text('title' , null, ['class' => 'form-control', 'placeholder'=>'عنوان نمایش داده شده روی عکس']) !!}
-                <span class = "help-block">  </span>
+                <span class="form-control-feedback">  </span>
             </div>
         </div>
     </div>
@@ -13,7 +13,7 @@
             <label class = "col-md-4 control-label">متن اسلاید</label>
             <div class = "col-md-6">
                 {!! Form::text('shortDescription' , null, ['class' => 'form-control', 'placeholder'=>'متن کوتاه زیر عنوان']) !!}
-                <span class = "help-block">  </span>
+                <span class="form-control-feedback">  </span>
             </div>
         </div>
     </div>
@@ -22,7 +22,7 @@
             <label class = "col-md-4 control-label">لینک اسلاید</label>
             <div class = "col-md-6">
                 {!! Form::text('link' , null, ['class' => 'form-control default','placeholder'=>'با کلیک بر روی اسلاید باز می شود']) !!}
-                <span class = "help-block">  </span>
+                <span class="form-control-feedback">  </span>
             </div>
         </div>
     </div>
@@ -38,7 +38,7 @@
                         "class" => "form-control",
                     ])
                 !!}
-                <span class = "help-block"></span>
+                <span class="form-control-feedback"></span>
             </div>
         </div>
     </div>
@@ -47,11 +47,11 @@
             <label class = "col-md-4 control-label">ترتیب</label>
             <div class = "col-md-6">
                 {!! Form::text('order' , null, ['class' => 'form-control', 'placeholder'=>'ترتیب قرار گرفتن در بین اسلایدها']) !!}
-                <span class = "help-block">  </span>
+                <span class="form-control-feedback">  </span>
             </div>
         </div>
     </div>
-    <div class = "form-group {{ $errors->has('photo') ? ' has-error' : '' }}">
+    <div class = "form-group {{ $errors->has('photo') ? ' has-danger' : '' }}">
         <div class = "row">
             <label class = "col-md-4 control-label" for = "questionFile">عکس اسلاید</label>
             <div class = "col-md-6">
@@ -75,17 +75,17 @@
                     </div>
                 </div>
                 @if ($errors->has('photo'))
-                    <span class = "help-block">
+                    <span class="form-control-feedback">
                         <strong>{{ $errors->first('photo') }}</strong>
                     </span>
                 @endif
-                <span class = "help-block bold">
+                <span class = "form-control-feedback bold">
                     <span class = "m-badge m-badge--wide label-sm m-badge--info"><strong>توجه!</strong></span>بهترین اندازه 500*1280 است
                 </span>
             </div>
         </div>
     </div>
-    <div class = "form-group {{ $errors->has('isEnable') ? ' has-error' : '' }}">
+    <div class = "form-group {{ $errors->has('isEnable') ? ' has-danger' : '' }}">
         <div class = "row">
             <div class = "col-md-3"></div>
             <div class = "col-md-9">
