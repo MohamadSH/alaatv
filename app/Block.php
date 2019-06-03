@@ -292,65 +292,34 @@ class Block extends BaseModel
     public function contents()
     {
         return $this->morphedByMany('App\Content', 'blockable')
-            ->withTimestamps()->withPivot(['order']);
+            ->withTimestamps()
+            ->withPivot(['order'])
+            ->orderBy('blockables.order');
     }
     
     public function sets()
     {
         return $this->morphedByMany('App\Contentset', 'blockable')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->withPivot(['order'])
+            ->orderBy('blockables.order');
     }
     
     public function products()
     {
         return $this->morphedByMany('App\Product', 'blockable')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->withPivot(['order'])
+            ->orderBy('blockables.order');
+
     }
     
     public function banners()
     {
         return $this->morphedByMany('App\Slideshow', 'blockable')
-            ->withTimestamps();
-    }
+            ->withTimestamps()
+            ->withPivot(['order'])
+            ->orderBy('blockables.order');
 
-    public function getContentsAttribute(){
-        $block = $this;
-        $key   = 'block:contents:'.$block->cacheKey();
-
-        return Cache::tags(['block'])
-            ->remember($key, config('constants.CACHE_60'), function () use ($block) {
-                return $this->contents()->get()->sortBy('pivot.order');
-            });
-
-    }
-
-    public function getProductsAttribute(){
-        $block = $this;
-        $key   = 'block:products:'.$block->cacheKey();
-
-        return Cache::tags(['block'])
-            ->remember($key, config('constants.60'), function () use ($block) {
-                return $this->products()->get()->sortBy('pivot.order');
-            });
-    }
-
-    public function getSetsAttribute(){
-        $block = $this;
-        $key   = 'block:sets:'.$block->cacheKey();
-
-        return Cache::tags(['block'])
-            ->remember($key, config('constants.60'), function () use ($block) {
-                return $this->sets()->get()->sortBy('pivot.order');
-            });
-    }
-
-    public function getBannersAttribute(){
-        $block = $this;
-        $key   = 'block:banners:'.$block->cacheKey();
-
-        return Cache::tags(['block'])
-            ->remember($key, config('constants.60'), function () use ($block) {
-                return $this->banners()->get()->sortBy('pivot.order');
-            });
     }
 }
