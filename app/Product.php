@@ -783,7 +783,12 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return $this->belongsTo(Block::class);
     }
-    
+
+    public function contracts(){
+        return $this->hasMany(Contract::Class);
+    }
+
+
     /*
     |--------------------------------------------------------------------------
     | Checkers (boolean)

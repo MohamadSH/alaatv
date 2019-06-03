@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Order;
 use App\Orderproduct;
 use App\Repositories\ContentRepository;
 use App\Repositories\ProductRepository;
@@ -11,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class SalesReportController extends Controller
 {
@@ -40,12 +42,19 @@ class SalesReportController extends Controller
         /** @var User $user */
 //        dump('start allTime' , Carbon::now());
         $user = $request->user();
-        $userSlugName = $user->nameSlug;
-        $setIds = $this->getArray( $this->getContentsetsOfUser($user->id) , 'contentset_id') ;
-        $productIds = $this->getArray( $this->getProductsOfUser($setIds , $userSlugName) , 'id') ;
-        $intendedProductIds = array_intersect($talai98Ids, $productIds);
+//        $userSlugName = $user->nameSlug;
+//        $setIds = $this->getArray( $this->getContentsetsOfUser($user->id) , 'contentset_id') ;
+//        $productIds = $this->getArray( $this->getProductsOfUser($setIds , $userSlugName) , 'id') ;
+//        $intendedProductIds = array_intersect($talai98Ids, $productIds);
 
-        $allTimeOrderproducts = $this->getPurchasedOrderproducts($intendedProductIds);
+
+        $contracts = $user->contracts ;
+        $productIds =  [];
+        foreach ($contracts as $contract) {
+            $productIds[] = $contract->product->id;
+        }
+
+        $allTimeOrderproducts = $this->getPurchasedOrderproducts($productIds);
         $allTimeCount         = $this->countOrderproducts($allTimeOrderproducts);
         $allTimeSum           = $this->calculateTotalPrice($allTimeOrderproducts);
 
@@ -195,7 +204,7 @@ class SalesReportController extends Controller
                                         ->whereHas('order', function ($q) {
                                             $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
                                                 ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
-                                        })->get()->load('order');
+                                        })->get()->load('order')->load('order.transactions');
     }
 
     /**
@@ -263,8 +272,25 @@ class SalesReportController extends Controller
         $sum = 0;
         foreach ($orderproducts as $orderproduct) {
             /** @var Orderproduct $orderproduct */
-            $price = $orderproduct->obtainOrderproductCost(false);
-            $sum += $price['final'];
+            $key = 'salesReport:calculateOrderproductPrice:'.$orderproduct->cacheKey();
+            $price = Cache::tags(['salesReport' , 'order' , 'orderproduct'])
+                ->remember($key , config('constants.CACHE_60') , function () use ($orderproduct){
+                    return $orderproduct->obtainOrderproductCost(false);
+            });
+
+            /** @var Order $myOrder */
+            $myOrder = $orderproduct->order;
+            $orderWalletTransactins = $myOrder->transactions->where('paymentmethod_id' , config('constants.PAYMENT_METHOD_WALLET'))
+                                                            ->whereIn('transactionstatus_id' , [config('constants.TRANSACTION_STATUS_SUCCESSFUL') , config('constants.TRANSACTION_STATUS_SUSPENDED')])
+                                                            ->where('cost' , '>' , 0);
+
+            $orderWalletSum = $orderWalletTransactins->sum('cost');
+            if($orderWalletSum == 0){
+                $sum += $price['final'];
+            }else{
+                $walletPerItem =  $orderWalletSum / $myOrder->orderproducts_count ;
+                $sum = $sum + ($price['final'] - $walletPerItem);
+            }
         }
         return $sum;
     }
@@ -315,7 +341,7 @@ class SalesReportController extends Controller
                     ->where('completed_at', '<=', $tillDateTime)
                     ->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
                     ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
-            })->get()->load('order');
+            })->get()->load('order')->load('order.transactions');
     }
 
     /**
