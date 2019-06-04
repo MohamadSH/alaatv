@@ -3,6 +3,17 @@
 @section('page-css')
     <link href="{{ mix('/css/product-show.css') }}" rel="stylesheet" type="text/css"/>
     <style>
+        #productInformation {
+            column-count: 2;
+        }
+
+        /*media query*/
+        @media (max-width: 767.98px) {
+            #productInformation {
+                column-count: 1;
+                padding: 0 15px;
+            }
+        }
         @if(!isset($block) || !isset($block->contents) || $block->contents->count() === 0)
             .productInfoNav-sampleVideo {
             display: none !important;
