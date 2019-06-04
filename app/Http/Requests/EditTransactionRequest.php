@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class EditTransactionRequest extends FormRequest
 {
