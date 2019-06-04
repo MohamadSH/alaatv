@@ -1114,6 +1114,94 @@ class BotsController extends Controller
                 }
             }
 
+            if($request->has('refundwallet')){
+                $walletTransactions = Transaction::where('paymentmethod_id' , config('constants.PAYMENT_METHOD_WALLET'))
+                                                    ->where('transactionstatus_id' , config('constants.TRANSACTION_STATUS_SUSPENDED'))
+                                                    ->get();
+
+                dump('total transactions: '.$walletTransactions->count() );
+                dump('total transactions cost: '.number_format($walletTransactions->sum('cost')));
+                /** @var Transaction $walletTransaction */
+                $totalRefund = 0;
+
+                $depositFlag = false;
+                if($request->has('dorefund')){
+                    $depositFlag = true;
+                }
+
+
+                foreach ($walletTransactions as $walletTransaction) {
+                    /** @var Order $order */
+                    $order = $walletTransaction->order;
+                    /** @var \App\Wallet $wallet */
+                    $wallet = $walletTransaction->wallet;
+                    if(!isset($order)) {
+                        echo('Transaction does not have order: '.$walletTransaction->id);
+                        echo('</br>');
+                        continue;
+                    }
+
+                    if(!isset($wallet)) {
+                        echo('Transaction does not have wallet: '.$walletTransaction->id);
+                        echo('</br>');
+                        continue;
+                    }
+
+                    if($walletTransaction->cost < 0){
+                        echo('Transaction cost is minus: '.$walletTransaction->id);
+                        echo('</br>');
+                        continue;
+                    }
+
+                    if($walletTransaction->cost == 0){
+                        echo('Transaction cost is zero: '.$walletTransaction->id);
+                        echo('</br>');
+                        continue;
+                    }
+
+                    if($order->paymentstatus_id == config('constants.PAYMENT_STATUS_PAID')){
+                        echo('Order status is paid: '.$walletTransaction->id);
+                        echo('</br>');
+                        continue;
+                    }
+
+                    if($order->orderstatus_id != config('constants.ORDER_STATUS_CLOSED') && $order->orderstatus_id != config('constants.ORDER_STATUS_CANCELED')){
+                        echo('Order status is not closed: '.$order->orderstatus_id.' '.$walletTransaction->id);
+                        echo('</br>');
+                        continue;
+                    }
+
+
+                    if($depositFlag){
+                        $result = $walletTransaction->depositThisWalletTransaction();
+                        if($result['result'])
+                        {
+                            $totalRefund += $walletTransaction->cost;
+                            $walletTransaction->delete();
+                        }else{
+                            echo('Could not update wallet '.$wallet->id.' : '.$walletTransaction->id);
+                            echo('</br>');
+                        }
+                    }
+                }
+
+                dd('total refunded : '.number_format($totalRefund));
+            }
+
+            if($request->has('walletquery')){
+                $query = User::whereHas('transactions' , function ($q) {
+                    $q->where('paymentmethod_id', config('constants.PAYMENT_METHOD_WALLET'))
+                        ->where('transactionstatus_id', config('constants.TRANSACTION_STATUS_SUSPENDED'))
+                        ->where('cost', '>', 0)
+                        ->whereHas('order', function ($q2) {
+                            $q2->whereNotIn('paymentstatus_id', [config('constants.PAYMENT_STATUS_PAID')])
+                                ->whereIn('orderstatus_id', [config('constants.ORDER_STATUS_CLOSED'), config('constants.ORDER_STATUS_CANCELED')]);
+                        });
+                })->toSql();
+
+                dd($query);
+            }
+
         } catch (\Exception    $e) {
             $message = "unexpected error";
             

@@ -38,20 +38,21 @@ trait OrderCommon
         $wallets        = $user->wallets->sortByDesc("wallettype_id"); //Chon mikhastim aval az kife poole hedie kam shavad!
         /** @var Wallet $wallet */
         foreach ($wallets as $wallet) {
-            if ($cost < 0) {
+            if ($cost <= 0) {
                 break;
             }
             $amount = $wallet->balance;
-            if ($amount > 0) {
-                if ($cost < $amount) {
-                    $amount = $cost;
-                }
-                
-                $result = $wallet->withdraw($amount, $order->id);
-                if ($result["result"]) {
-                    $cost           = $cost - $amount;
-                    $walletPaidFlag = true;
-                }
+            if($amount <= 0 )
+                continue;
+
+            if ($cost < $amount) {
+                $amount = $cost;
+            }
+
+            $result = $wallet->withdraw($amount, $order->id);
+            if ($result["result"]) {
+                $cost           = $cost - $amount;
+                $walletPaidFlag = true;
             }
         }
         
@@ -60,7 +61,44 @@ trait OrderCommon
             "cost"   => $cost,
         ];
     }
-    
+
+    protected function canPayOrderByWallet(User $user, int $cost)
+    {
+        $canPayByWallet = false;
+        $wallets        = $user->wallets->sortByDesc("wallettype_id"); //Chon mikhastim aval az kife poole hedie kam shavad!
+
+        /** @var Wallet $wallet */
+        foreach ($wallets as $wallet) {
+            if ($cost <= 0) {
+                break;
+            }
+
+            $amount = $wallet->balance;
+            if($amount <= 0 )
+                continue;
+
+            if ($cost < $amount) {
+                $amount = $cost;
+            }
+
+            $canWithDraw = $wallet->canWithdraw($amount);
+            if ($canWithDraw) {
+                $wallet->pending_to_reduce = $amount;
+                if($wallet->update())
+                {
+                    $cost           = $cost - $amount;
+                    $canPayByWallet = true;
+                }
+            }
+        }
+
+        return [
+            "result" => $canPayByWallet,
+            "cost"   => $cost,
+        ];
+    }
+
+
     /**
      * @param  Order         $order
      * @param  Orderproduct  $orderProduct

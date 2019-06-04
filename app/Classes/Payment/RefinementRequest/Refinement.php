@@ -226,11 +226,11 @@ abstract class Refinement
             return ;
         }
 
-        $walletPayResult          = $this->payOrderCostByWallet($this->user, $this->order, $deductibleCostFromWallet);
+//        $walletPayResult          = $this->payOrderCostByWallet($this->user, $this->order, $deductibleCostFromWallet);
+        $walletPayResult          = $this->canPayOrderByWallet($this->user, $deductibleCostFromWallet);
         if ($walletPayResult['result']) {
             $remainedCost = $walletPayResult['cost'];
-            
-            $this->order->close(config('constants.PAYMENT_STATUS_INDEBTED'));
+            $this->order->close();
             $this->order->updateWithoutTimestamp();
         }
         $remainedCost             = $remainedCost + $this->donateCost;

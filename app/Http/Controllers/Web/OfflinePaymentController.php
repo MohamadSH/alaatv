@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Bon;
 use App\User;
 use App\Order;
+use App\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Notifications\InvoicePaid;
@@ -173,7 +174,25 @@ class OfflinePaymentController extends Controller
             case "noPayment":
                 
                 /** Wallet transactions */
-                $order->closeWalletPendingTransactions();
+//                $order->closeWalletPendingTransactions();
+                $wallets = optional($order->user)->wallets;
+                if(isset($wallets))
+                {
+                    /** @var Wallet $wallet */
+                    foreach ($wallets as $wallet) {
+                        if($wallet->balance > 0 && $wallet->pending_to_reduce > 0 )
+                        {
+                            $withdrawResult =  $wallet->withdraw($wallet->pending_to_reduce , $order->id);
+                            if($withdrawResult['result'])
+                            {
+                                $wallet->update([
+                                    'pending_to_reduce' => 0 ,
+                                ]);
+                            }
+                        }
+                    }
+                }
+
                 $order = $order->fresh();
                 /** End */
 

@@ -32,9 +32,9 @@ class OrderIdRefinement extends Refinement
             $this->getOrderCost();
             // ToDo: if sent open order_id user can't use wallet
             $this->donateCost = $this->order->getDonateCost();
-            if ($this->canDeductFromWallet()) {
-                $this->payByWallet();
-            }
+//            if ($this->canDeductFromWallet()) {
+//                $this->payByWallet();
+//            }
 
             if($this->cost > 0)
             {

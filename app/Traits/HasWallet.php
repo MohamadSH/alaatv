@@ -53,12 +53,10 @@ trait HasWallet
      */
     public function getWalletBalance($type = 1)
     {
-        $wallet  = $this->wallets->where("wallettype_id", $type)
-            ->first();
+        $wallet  = $this->wallets->where("wallettype_id", $type)->first();
         $balance = 0;
         if (isset($wallet)) {
-            $balance = $this->wallets->where("wallettype_id", $type)
-                ->first()->balance;
+            $balance = $wallet->balance;
         }
         
         return $balance;
@@ -170,9 +168,9 @@ trait HasWallet
         if (!isset($walletType)) {
             $walletType = config("constants.WALLET_TYPE_MAIN");
         }
-        
-        $wallet = $this->wallets->where("wallettype_id", $walletType)
-            ->first();
+
+        /** @var Wallet $wallet */
+        $wallet = $this->wallets->where("wallettype_id", $walletType)->first();
         if (isset($wallet)) {
             $result = $wallet->withdraw($amount);
             if ($result["result"]) {
@@ -184,21 +182,13 @@ trait HasWallet
             }
         }
         else {
-            $walletController = new WalletController();
-            $request          = new Request();
-            
-            $request->offsetSet("user_id", $this->id);
-            $request->offsetSet("wallettype_id", $walletType);
-            RequestCommon::convertRequestToAjax($request);
-            $response = $walletController->store($request);
-            if ($response->getStatusCode() == 200) {
-                $result = json_decode($response->getContent());
-                $wallet = Wallet::where("id", $result->wallet->id)
-                    ->first();
-                $wallet->deposit(0);
-                $failed = false;
-            }
-            else {
+            $wallet = Wallet::create([
+                    'user_id'   => $this->id,
+                    'wallettype_id' => $walletType
+            ]);
+            $failed = false;
+            if(!isset($wallet))
+            {
                 $failed       = true;
                 $responseText = "CAN_NOT_CREATE_WALLET";
             }

@@ -43,6 +43,7 @@ class PaymentVerifierController extends Controller
         $verificationResult = $paymentClient->verifyPayment($money, $authority);
         $responseMessages = $verificationResult->getMessages();
 
+        /** @var Order $myOrder */
         $myOrder = $transaction->order;
         $myOrder->detachUnusedCoupon();
         if ($verificationResult->isSuccessfulPayment()) {

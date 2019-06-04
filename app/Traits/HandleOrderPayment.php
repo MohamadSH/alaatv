@@ -10,6 +10,7 @@ namespace App\Traits;
 
 use App\Bon;
 use App\Order;
+use App\Wallet;
 use Illuminate\Support\Facades\Cache;
 
 trait HandleOrderPayment
@@ -22,6 +23,24 @@ trait HandleOrderPayment
     protected function handleOrderSuccessPayment(Order $order): void
     {
         $order->closeWalletPendingTransactions();
+
+        $wallets = optional($order->user)->wallets;
+        if(isset($wallets))
+        {
+            /** @var Wallet $wallet */
+            foreach ($wallets as $wallet) {
+                if($wallet->balance > 0 && $wallet->pending_to_reduce > 0 )
+                {
+                    $withdrawResult =  $wallet->withdraw($wallet->pending_to_reduce , $order->id);
+                    if($withdrawResult['result'])
+                    {
+                        $wallet->update([
+                            'pending_to_reduce' => 0 ,
+                        ]);
+                    }
+                }
+            }
+        }
 
         //refreshing order after closing it's wallet transactions
         // issue #1763
