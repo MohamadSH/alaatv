@@ -72,7 +72,7 @@
                                         @endif
                                     </span>
                                 </a>
-                                <a href="{{ asset('/') }}"><img src="{{ asset('/acm/extra/Alaa-logo.gif') }}"
+                                <a href="{{ asset('/') }}"><img src="{{ asset('/acm/extra/Alaa-logo.png') }}"
                                                                 alt="آلاء"></a>
                             </div>
                             <span class="m-invoice__desc">
