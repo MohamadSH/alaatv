@@ -188,7 +188,7 @@ class SalesReportController extends Controller
     {
         return Cache::remember(md5(implode(',', $products)), config('constants.CACHE_1'),
             static function () use ($products) {
-            
+    
                 return Orderproduct::whereIn('product_id', $products)
                     ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
                     ->whereHas('order', function ($q) {
@@ -228,8 +228,14 @@ class SalesReportController extends Controller
      */
     private function filterOrderproductsByCompletionDate(Collection $allTimeOrderproducts, string $sinceDateTime, string $tillDateTime): Collection
     {
-        return $allTimeOrderproducts->where('order.completed_at', '>=', $sinceDateTime)
-            ->where('order.completed_at', '<=', $tillDateTime);
+        $key = implode(',', $allTimeOrderproducts->pluck('id')
+                ->toArray()).'-'.$sinceDateTime.'-'.$tillDateTime;
+        $key = md5($key);
+        return Cache::remember($key, config('constants.CACHE_1'),
+            static function () use ($allTimeOrderproducts, $sinceDateTime, $tillDateTime) {
+                return $allTimeOrderproducts->where('order.completed_at', '>=', $sinceDateTime)
+                    ->where('order.completed_at', '<=', $tillDateTime);
+            });
     }
     
     /**
@@ -271,7 +277,7 @@ class SalesReportController extends Controller
                     $myOrder                = $orderproduct->order;
                     $orderWalletTransactins = $myOrder->transactions()
                         ->where('paymentmethod_id',
-                        config('constants.PAYMENT_METHOD_WALLET'))
+                            config('constants.PAYMENT_METHOD_WALLET'))
                         ->whereIn('transactionstatus_id', [
                             config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
                             config('constants.TRANSACTION_STATUS_SUSPENDED'),
@@ -286,7 +292,7 @@ class SalesReportController extends Controller
                         $walletPerItem = $orderWalletSum / $myOrder->orderproducts_count;
                         $myValue       = ($price['final'] - $walletPerItem);
                     }
-        
+    
                     return $myValue;
                 });
     
@@ -346,7 +352,7 @@ class SalesReportController extends Controller
             })
             ->with(['order', 'order.transactions'])
             ->get();
-            
+    
     }
     
     /**
