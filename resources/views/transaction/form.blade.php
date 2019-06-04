@@ -21,7 +21,7 @@
                     <div class="row">
                         <label class="col-md-3 control-label" for="cost">لینک اصلاح سفارش</label>
                         <div class="col-md-6">
-                            <a target="_blank" href="{{action('Web\OrderController@edit' , $order)}}">کلیک کنید</a>
+                            <a target="_blank" href="{{action('Web\OrderController@edit' , $transaction->order)}}">کلیک کنید</a>
                         </div>
                     </div>
                 </div>
