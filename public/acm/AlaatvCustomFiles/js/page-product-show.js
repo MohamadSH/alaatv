@@ -300,7 +300,7 @@ jQuery(document).ready(function() {
             topSpace: $('#m_header').height()
         },
         topSpacing: $('#m_header').height(),
-        zIndex: 99
+        zIndex: 98
     });
 
     $('.productPamphletWarper .productPamphletTitle').sticky({
@@ -310,7 +310,7 @@ jQuery(document).ready(function() {
             topSpace: $('#m_header').height()
         },
         topSpacing: $('#m_header').height(),
-        zIndex: 99
+        zIndex: 98
     });
 
     $('.productDetailes .m-portlet__head').sticky({
@@ -320,13 +320,13 @@ jQuery(document).ready(function() {
             topSpace: $('#m_header').height()
         },
         topSpacing: $('#m_header').height(),
-        zIndex: 99
+        zIndex: 98
     });
 
     $('.relatedProduct .m-portlet__head').sticky({
         container: '.relatedProduct',
         topSpacing: $('#m_header').height(),
-        zIndex: 99
+        zIndex: 98
     });
 
 
