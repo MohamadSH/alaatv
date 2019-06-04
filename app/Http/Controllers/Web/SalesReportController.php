@@ -186,7 +186,7 @@ class SalesReportController extends Controller
      */
     private function getPurchasedOrderproducts(array $products): Collection
     {
-        return Cache::remember(md5(implode(',', $products)), config('constants.CACHE_1'),
+        return Cache::remember(md5(implode(',', $products)), config('constants.CACHE_5'),
             static function () use ($products) {
     
                 return Orderproduct::whereIn('product_id', $products)
@@ -231,7 +231,7 @@ class SalesReportController extends Controller
         $key = implode(',', $allTimeOrderproducts->pluck('id')
                 ->toArray()).'-'.$sinceDateTime.'-'.$tillDateTime;
         $key = md5($key);
-        return Cache::remember($key, config('constants.CACHE_1'),
+        return Cache::remember($key, config('constants.CACHE_5'),
             static function () use ($allTimeOrderproducts, $sinceDateTime, $tillDateTime) {
                 return $allTimeOrderproducts->where('order.completed_at', '>=', $sinceDateTime)
                     ->where('order.completed_at', '<=', $tillDateTime);
