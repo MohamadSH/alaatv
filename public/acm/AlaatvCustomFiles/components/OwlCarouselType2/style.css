@@ -231,9 +231,8 @@
     background: none !important;
 }
 .a--block-widget-1 .m-portlet__head {
-    height: 45px;
+    height: 50px;
     position: relative;
-    top: 10px;
 }
 .a--block-widget-1 .m-widget30 .m-widget_head {
     margin-bottom: 0;
