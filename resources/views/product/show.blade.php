@@ -4,10 +4,10 @@
     <link href="{{ mix('/css/product-show.css') }}" rel="stylesheet" type="text/css"/>
     <style>
     
-        /*.btnAddToCart {*/
-        /*    font-size: 1.2rem;*/
-        /*    background-color: #00cc1b;*/
-        /*}*/
+        .btnAddToCart {
+            font-size: 1.2rem;
+            background-color: #00cc1b;
+        }
     
         @if(!isset($block) || !isset($block->contents) || $block->contents->count() === 0)
             .productInfoNav-sampleVideo {
