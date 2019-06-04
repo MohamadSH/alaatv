@@ -37,7 +37,16 @@
     @include("systemMessage.flash")
 
     <div class="row">
-        <div class="col-md-6 ">
+        <div class="
+            @if(
+                isset( $product->sets ) && $product->sets->count() > 0
+                ||
+                $product->hasChildren()
+                )
+                    col-md-6
+            @else
+                col-md-12
+            @endif">
             <!-- BEGIN SAMPLE FORM PORTLET-->
             <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
                 <div class="m-portlet__head">
@@ -69,6 +78,11 @@
         </div>
         </div>
         </div>--}}
+        @if(
+            isset( $product->sets ) && $product->sets->count() > 0
+            ||
+            $product->hasChildren()
+            )
         <div class="col-md-6 ">
             @if(isset( $product->sets ) && $product->sets->count() > 0)
                 <div class="m-portlet m-portlet--mobile">
@@ -120,6 +134,7 @@
             @endif
         @endpermission
         </div>
+        @endif
 
         @permission((config('constants.LIST_PRODUCT_FILE_ACCESS')))
             <div class="col-md-12">

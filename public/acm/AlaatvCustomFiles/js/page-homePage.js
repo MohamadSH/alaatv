@@ -30,6 +30,6 @@ for (let section in sections) {
     $('.'+sections[section]+'.dasboardLessons .a--owl-carousel-head').sticky({
         container: '.'+sections[section]+'.dasboardLessons > .col > .m-portlet',
         topSpacing: $('#m_header').height(),
-        zIndex: 99
+        zIndex: 98
     });
 }
