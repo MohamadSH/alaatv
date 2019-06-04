@@ -3,6 +3,12 @@
 @section('page-css')
     <link href="{{ mix('/css/product-show.css') }}" rel="stylesheet" type="text/css"/>
     <style>
+    
+        .btnAddToCart {
+            font-size: 1.2rem;
+            background-color: #00cc1b;
+        }
+    
         @if(!isset($block) || !isset($block->contents) || $block->contents->count() === 0)
             .productInfoNav-sampleVideo {
             display: none !important;
@@ -59,7 +65,7 @@
     <div class="row" id="a_top_section">
         <div class="col">
             <!--begin::Portlet-->
-            <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet">
                 <div class="m-portlet__body">
                     <!--begin::Section-->
                     <div class="m-section m-section--last">
@@ -98,7 +104,7 @@
                                         @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count()>0 ||  optional(optional( optional($product->attributes)->get('main'))->where('control', 'simple'))->count()>0)
                                             <div class="col">
 
-                                                <div class="m-portlet m-portlet--bordered m-portlet--full-height">
+                                                <div class="m-portlet m-portlet--bordered m-portlet--full-height productAttributes">
                                                     <div class="m-portlet__head">
                                                         <div class="m-portlet__head-caption">
                                                             <div class="m-portlet__head-title">
@@ -201,7 +207,7 @@
                                         @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'checkBox'))->count())
                                             <div class="col">
 
-                                                <div class="m-portlet m-portlet--bordered m-portlet--full-height">
+                                                <div class="m-portlet m-portlet--bordered m-portlet--full-height productInformation">
                                                     <div class="m-portlet__head">
                                                         <div class="m-portlet__head-caption">
                                                             <div class="m-portlet__head-title">
@@ -375,9 +381,9 @@
                                             <span id="a_product-discount"></span>
                                         </h5>
 
-                                        <button class="btn m-btn--pill m-btn--air btn-primary btn-lg m-btn--icon btnAddToCart">
+                                        <button class="btn m-btn--air btn-success m-btn--icon btnAddToCart">
                                             <span>
-                                                <i class="flaticon-bag"></i>
+                                                <i class="fa fa-cart-arrow-down"></i>
                                                 <i class="fas fa-sync-alt fa-spin m--hide"></i>
                                                 <span>افزودن به سبد خرید</span>
                                             </span>
@@ -392,6 +398,8 @@
                                     @endif
 
                                 </div>
+    
+                                @if( isset($product->introVideo) || (isset($product->gift) && $product->gift->isNotEmpty()))
                                 <div class="col-lg-4">
 
                                     <div class="m-portlet m-portlet--bordered-semi m-portlet--rounded-force m--margin-bottom-45 videoPlayerPortlet @if(!isset($product->introVideo)) m--hide @endif">
@@ -487,6 +495,7 @@
                                         </div>
                                     @endif
                                 </div>
+                                @endif
                             </div>
                             <!--end::Preview-->
                         </div>
@@ -510,10 +519,14 @@
     {{--نمونه جزوه--}}
     @include('product.partials.pamphlet')
     
-    @if(isset($product->specialDescription))
-        <div class="row">
-            {!! $product->specialDescription !!}
+    @if(isset($product->specialDescription) && mb_strlen(trim(strip_tags($product->specialDescription))) > 0)
+    
+        <div class="m-portlet m-portlet--tabs m--margin-bottom-10">
+            <div class="m-portlet__body">
+                {!! $product->specialDescription !!}
+            </div>
         </div>
+        
     @endif
     
     @if(mb_strlen(trim(strip_tags($product->shortDescription))) > 0 || mb_strlen(trim(strip_tags($product->longDescription))) > 0)
@@ -533,9 +546,9 @@
                                 <li class="m-portlet__nav-item">
                                     <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon">
                                         
-                                        <button class="btn m-btn--pill m-btn--air btn-primary btn-sm m-btn--icon btnAddToCart">
+                                        <button class="btn m-btn--air btn-success m-btn--icon btnAddToCart">
                                             <span>
-                                                <i class="flaticon-bag"></i>
+                                                <i class="fa fa-cart-arrow-down"></i>
                                                 <i class="fas fa-sync-alt fa-spin m--hide"></i>
                                                 <span>افزودن به سبد خرید</span>
                                             </span>
@@ -559,7 +572,6 @@
                         </div>
                     </div>
                 </div>
-    
             </div>
         </div>
     @endif

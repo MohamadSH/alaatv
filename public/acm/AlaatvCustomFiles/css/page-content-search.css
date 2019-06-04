@@ -81,6 +81,12 @@
     padding-left: 15px;
     padding-right: 15px;
 }
+
+#pamphlet-vertical-widget.m-widget4 .m-widget4__item,
+#article-vertical-tabpanel.m-widget4 .m-widget4__item {
+    min-width: 100%;
+}
+
 @media only screen and (min-width: 1190px)  {
     .ProductAndSetAndVideoWraper {
         max-width: 75%;
