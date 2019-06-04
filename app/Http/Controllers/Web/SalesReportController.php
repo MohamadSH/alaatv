@@ -44,12 +44,7 @@ class SalesReportController extends Controller
         /** @var User $user */
 //        dump('start allTime' , Carbon::now());
         $user = $request->user();
-//        $userSlugName = $user->nameSlug;
-//        $setIds = $this->getArray( $this->getContentsetsOfUser($user->id) , 'contentset_id') ;
-//        $productIds = $this->getArray( $this->getProductsOfUser($setIds , $userSlugName) , 'id') ;
-//        $intendedProductIds = array_intersect($talai98Ids, $productIds);
-        
-        
+
         $contracts  = $user->contracts;
         $productIds = [];
         foreach ($contracts as $contract) {
@@ -116,38 +111,12 @@ class SalesReportController extends Controller
         if ($thisMonthOveralSum != 0) {
             $thisMonthRate = (int) (($thisMonthSum / $thisMonthOveralSum) * 100);
         }
-        
+
         return view('user.salesReport', compact('limitStatus', 'coupontype', 'products',
             'allTimeCount', 'allTimeSum', 'thisMonthCount', 'thisMonthSum', 'thisWeekCount', 'thisWeekSum',
             'todayCount', 'todaySum',
             'todayRate', 'thisWeekRate', 'thisMonthRate', 'provinces'));
         
-    }
-    
-    /**
-     * @param  int  $userId
-     *
-     * @return Collection
-     */
-    private function getContentsetsOfUser(int $userId): Collection
-    {
-        return ContentRepository::getContentsetByUserId($userId)
-            ->get();
-    }
-    
-    /**
-     * @param  array   $setIds
-     * @param  string  $teacherName
-     *
-     * @return Collection
-     */
-    private function getProductsOfUser(array $setIds, string $teacherName): Collection
-    {
-        $products1 = ProductRepository::getProductsByUserId($setIds)
-            ->get();
-        $products2 = ProductRepository::getProductByTag($teacherName)
-            ->get();
-        return $products1->merge($products2);
     }
     
     /**
@@ -285,18 +254,6 @@ class SalesReportController extends Controller
     }
     
     /**
-     * @param  Collection  $collection
-     * @param  string      $pluck
-     *
-     * @return array
-     */
-    private function getArray(Collection $collection, string $pluck): array
-    {
-        return $collection->pluck($pluck)
-            ->toArray();
-    }
-    
-    /**
      * @param  Collection  $orderproducts
      *
      * @return int
@@ -307,27 +264,31 @@ class SalesReportController extends Controller
         foreach ($orderproducts as $orderproduct) {
             /** @var Orderproduct $orderproduct */
             $key   = 'salesReport:calculateOrderproductPrice:'.$orderproduct->cacheKey();
-            $price = Cache::tags(['salesReport', 'order', 'orderproduct'])
-                ->remember($key, config('constants.CACHE_60'), function () use ($orderproduct) {
-                    return $orderproduct->obtainOrderproductCost(false);
+            $toAdd = Cache::tags(['salesReport', 'order', 'orderproduct'])
+                ->remember($key, config('constants.CACHE_60'), function () use ($orderproduct ) {
+                    $price =  $orderproduct->obtainOrderproductCost(false);
+
+                    /** @var Order $myOrder */
+                    $myOrder                = $orderproduct->order;
+                    $orderWalletTransactins = $myOrder->transactions->where('paymentmethod_id',
+                        config('constants.PAYMENT_METHOD_WALLET'))
+                        ->whereIn('transactionstatus_id', [
+                            config('constants.TRANSACTION_STATUS_SUCCESSFUL'), config('constants.TRANSACTION_STATUS_SUSPENDED'),
+                        ])
+                        ->where('cost', '>', 0);
+
+                    $orderWalletSum = $orderWalletTransactins->sum('cost');
+                    if ($orderWalletSum == 0) {
+                        $myValue = $price['final'];
+                    } else {
+                        $walletPerItem = $orderWalletSum / $myOrder->orderproducts_count;
+                        $myValue  = ($price['final'] - $walletPerItem);
+                    }
+
+                    return $myValue;
                 });
-            
-            /** @var Order $myOrder */
-            $myOrder                = $orderproduct->order;
-            $orderWalletTransactins = $myOrder->transactions->where('paymentmethod_id',
-                config('constants.PAYMENT_METHOD_WALLET'))
-                ->whereIn('transactionstatus_id', [
-                    config('constants.TRANSACTION_STATUS_SUCCESSFUL'), config('constants.TRANSACTION_STATUS_SUSPENDED'),
-                ])
-                ->where('cost', '>', 0);
-            
-            $orderWalletSum = $orderWalletTransactins->sum('cost');
-            if ($orderWalletSum == 0) {
-                $sum += $price['final'];
-            } else {
-                $walletPerItem = $orderWalletSum / $myOrder->orderproducts_count;
-                $sum           += ($price['final'] - $walletPerItem);
-            }
+
+            $sum += $toAdd;
         }
         return $sum;
     }
