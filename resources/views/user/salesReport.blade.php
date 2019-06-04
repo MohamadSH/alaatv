@@ -70,7 +70,7 @@
     
     <div class="row">
         <div class="col">
-            <h1>به دلیل کش سرورها، آمار ها حداکثر دارای 3 ساعت تاخیر هستند.</h1>
+            <h1>به دلیل کش سرورها، آمار ها حداکثر دارای 3.5 ساعت تاخیر هستند.</h1>
             <div class="row topReport">
                 <div class="col-md-6 totalReportInNumber">
                     <div class="m-portlet ">
