@@ -48,7 +48,7 @@
     border-bottom: double 4px #c9c9c9;
     position: absolute;
     top: -30%;
-    left: 0px;
+    left: 0;
     width: 100%;
     height: 100%;
     z-index: 1;
@@ -165,19 +165,15 @@
 }
 
 .a--login-item .a--login-title {
-    text-align: center;
     line-height: 0;
     vertical-align: middle;
     padding: 0;
     color: #333;
     display: table-cell;
     height: 100%;
-    vertical-align: middle;
     text-align: right;
     font-size: 1.1rem;
-    line-height: 0;
 }
-
 
 /*.a-widget19.m-widget19 .m-widget19__content .m-widget19__header {*/
 /*    display: flex;*/
