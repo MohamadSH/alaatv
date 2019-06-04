@@ -21,7 +21,7 @@ class SalesReportController extends Controller
      */
     public function __construct()
     {
-//        $this->middleware('permission:'.config('constants.SHOW_SALES_REPORT'));
+        $this->middleware('permission:'.config('constants.SHOW_SALES_REPORT'));
     }
     
     
