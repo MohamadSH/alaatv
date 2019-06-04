@@ -92,16 +92,16 @@
                                                 تعداد:
                                                 {{$todayCount}}
                                             </span>
-                                            <div class="m--space-10"></div>
-                                            <div class="progress m-progress--sm">
-                                                <div class="progress-bar m--bg-danger" role="progressbar" style="width: {{$todayRate}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <span class="m-widget24__change">
-                                                نسبت به دیگران
-                                            </span>
-                                            <span class="m-widget24__number">
-                                                {{$todayRate}}
-                                            </span>
+{{--                                            <div class="m--space-10"></div>--}}
+{{--                                            <div class="progress m-progress--sm">--}}
+{{--                                                <div class="progress-bar m--bg-danger" role="progressbar" style="width: {{$todayRate}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>--}}
+{{--                                            </div>--}}
+{{--                                            <span class="m-widget24__change">--}}
+{{--                                                نسبت به دیگران--}}
+{{--                                            </span>--}}
+{{--                                            <span class="m-widget24__number">--}}
+{{--                                                {{$todayRate}}--}}
+{{--                                            </span>--}}
                                         </div>
                                     </div>
         
@@ -123,16 +123,16 @@
                                                 تعداد:
                                                 {{$thisWeekCount}}
                                             </span>
-                                            <div class="m--space-10"></div>
-                                            <div class="progress m-progress--sm">
-                                                <div class="progress-bar m--bg-info" role="progressbar" style="width: {{$thisWeekRate}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <span class="m-widget24__change">
-                                                نسبت به دیگران
-                                            </span>
-                                            <span class="m-widget24__number">
-                                                {{$thisWeekRate}}
-                                            </span>
+{{--                                            <div class="m--space-10"></div>--}}
+{{--                                            <div class="progress m-progress--sm">--}}
+{{--                                                <div class="progress-bar m--bg-info" role="progressbar" style="width: {{$thisWeekRate}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>--}}
+{{--                                            </div>--}}
+{{--                                            <span class="m-widget24__change">--}}
+{{--                                                نسبت به دیگران--}}
+{{--                                            </span>--}}
+{{--                                            <span class="m-widget24__number">--}}
+{{--                                                {{$thisWeekRate}}--}}
+{{--                                            </span>--}}
                                         </div>
                                     </div>
         
@@ -154,16 +154,16 @@
                                                 تعداد
                                                 {{$thisMonthCount}}
                                             </span>
-                                            <div class="m--space-10"></div>
-                                            <div class="progress m-progress--sm">
-                                                <div class="progress-bar m--bg-success" role="progressbar" style="width: {{$thisMonthRate}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <span class="m-widget24__change">
-                                                نسبت به دیگران
-                                            </span>
-                                            <span class="m-widget24__number">
-                                                {{$thisMonthRate}}
-                                            </span>
+{{--                                            <div class="m--space-10"></div>--}}
+{{--                                            <div class="progress m-progress--sm">--}}
+{{--                                                <div class="progress-bar m--bg-success" role="progressbar" style="width: {{$thisMonthRate}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>--}}
+{{--                                            </div>--}}
+{{--                                            <span class="m-widget24__change">--}}
+{{--                                                نسبت به دیگران--}}
+{{--                                            </span>--}}
+{{--                                            <span class="m-widget24__number">--}}
+{{--                                                {{$thisMonthRate}}--}}
+{{--                                            </span>--}}
                                         </div>
                                     </div>
         
