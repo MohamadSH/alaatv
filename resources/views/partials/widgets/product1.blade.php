@@ -21,14 +21,17 @@
         <div class="m-portlet__body">
             <div class="m-widget19 m--align-center">
                 <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides">
-                    <img src="{{ $widgetPic }}" alt=" {{ $widgetTitle }}"/>
+                    <a href="{{ $widgetLink }}">
+                        <img src="{{ $widgetPic }}" alt="{{ $widgetTitle }}" class="a--full-width"/>
+                    </a>
                     <div class="m-widget19__shadow"></div>
                 </div>
-                <div class="m-widget19__content ">
-                    <div class="m--font-primary m--icon-font-size-sm1 m--font-bolder m--margin-top-15">
-                        <span>{{ $widgetPrice }}</span>
-                    </div>
+                <div class="m-widget19__content m--padding-top-10">
+                    
+                    @include('product.partials.price', ['price'=>$widgetPrice])
+                    <hr>
                     <h2 class="m--icon-font-size-sm2">{{ $widgetTitle }}</h2>
+                    <hr>
                 </div>
                 <div class="m-widget19__action">
                     <a href="{{ $widgetLink }}"

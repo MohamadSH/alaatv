@@ -88,7 +88,6 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="user-orderList" role="tabpanel">
     
-{{--                            {{ dd($orders>transaction()) }}--}}
                             @if(!isset($orders) || count($orders)===0)
                                 <div class="alert alert-info" role="alert">
                                     <strong>شما تاکنون سفارشی ثبت نکرده اید</strong>
@@ -544,15 +543,15 @@
                                                 @if(isset($transaction->cost) && strlen($transaction->cost)>0)
                                                     @if($transaction->cost >= 0)
                                                         <span id="instalmentCost_{{$transaction->id}}">
-                                                                {{number_format($transaction->cost)}}
-                                                            </span>
+                                                            {{number_format($transaction->cost)}}
+                                                        </span>
                                                     @else
                                                         {{number_format(-$transaction->cost)}}
                                                     @endif
                                                 @else
                                                     <span class="m-badge m-badge--wide m-badge--rounded m-badge--danger">
-                                                            درج نشده
-                                                        </span>
+                                                        درج نشده
+                                                    </span>
                                                 @endif
                                             </td>
                                             <td>
@@ -569,8 +568,8 @@
                                                     {{ $transaction->DeadlineAt_Jalali() }}
                                                 @else
                                                     <span class="m-badge m-badge--wide m-badge--rounded m-badge--danger">
-                                                            نامشخص
-                                                        </span>
+                                                        نامشخص
+                                                    </span>
                                                 @endif
                                             </td>
                                         </tr>
@@ -633,20 +632,16 @@
                             <span class="m-badge m-badge--success m-badge--wide m-badge--rounded orderCostReport"></span>
                         </div>
                     </div>
-                    {{--<div class="row static-info margin-top-20" style="text-align: center;">--}}
-                    {{--<button type="submit"  class="btn green btn-outline">پرداخت</button>--}}
-                    {{--</div>--}}
-
-                                </div>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn m-btn--pill m-btn--air btn-outline-brand m-btn m-btn--custom"
                             data-dismiss="modal">
-                                        بستن
-                                    </button>
+                        بستن
+                    </button>
                     <button type="submit" class="btn m-btn--pill m-btn--air btn-outline-success m-btn m-btn--custom">
-                                        انتقال به درگاه پرداخت
-                                    </button>
-                                </div>
+                        انتقال به درگاه پرداخت
+                    </button>
+                </div>
                 {!! Form::close() !!}
             </div>
         </div>

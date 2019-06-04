@@ -329,11 +329,10 @@ jQuery(document).ready(function() {
         zIndex: 98
     });
 
-
     $(document).on('click', '.productInfoNav', function () {
         var targetId = $(this).data('tid');
         $([document.documentElement, document.body]).animate({
-            scrollTop: $('#'+targetId).offset().top - 70
+            scrollTop: $('#'+targetId).offset().top - $('#m_header').height() + 5
         }, 1000);
     });
 

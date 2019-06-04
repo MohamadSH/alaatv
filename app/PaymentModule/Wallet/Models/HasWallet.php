@@ -3,6 +3,7 @@
 namespace App\PaymentModule\Wallet\Models;
 
 use App\PaymentModule\Wallet\WalletRepo;
+use App\Wallet;
 
 trait HasWallet
 {
@@ -152,6 +153,12 @@ trait HasWallet
             
             return $this->respond(false, 'failed to withdraw', $wallet);
         }
+
+        $wallet = Wallet::create([
+            'user_id'   => $this->id,
+            'wallettype_id' => $walletType
+        ]);
+        return $this->respond(true, 'SUCCESSFUL', $wallet);
 
 //        return $this->createAndDepositeInWallet($amount = 0, $walletType, $wallet);
     }

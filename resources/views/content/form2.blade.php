@@ -198,6 +198,18 @@
         </div>
         <div class="form-group">
             <div class="row">
+                <label class="col-md-2 control-label" for="name">ترتیب :
+                </label>
+                <div class="col-md-9">
+                    {!! Form::text('order', null, ['class' => 'form-control', 'id' => 'order', 'maxlength'=>'100' ]) !!}
+                    <span class="form-control-feedback">
+                               <strong></strong>
+                   </span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
                 <label class="col-md-2 control-label" for="name">نام :
                     <span class="required"> * </span>
                 </label>

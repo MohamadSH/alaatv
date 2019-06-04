@@ -47,9 +47,9 @@ class TransactionRefinement extends Refinement
         $this->orderUniqueId = $order->id.Carbon::now()->timestamp;
         $this->user  = $this->order->user;
         $this->cost  = $this->transaction->cost;
-        if ($this->canDeductFromWallet()) {
-            $this->payByWallet();
-        }
+//        if ($this->canDeductFromWallet()) {
+//            $this->payByWallet();
+//        }
         $this->statusCode  = Response::HTTP_OK;
         $this->description .= $this->getDescription();
         
