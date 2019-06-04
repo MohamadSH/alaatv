@@ -7,7 +7,7 @@ $(document).ready(function () {
 
     $('.a--userCartList .m-portlet__head').sticky({
         topSpacing: $('#m_header').height(),
-        zIndex: 99
+        zIndex: 98
     });
 
     $(document).on('click', '.btnRemoveOrderproduct', function () {
