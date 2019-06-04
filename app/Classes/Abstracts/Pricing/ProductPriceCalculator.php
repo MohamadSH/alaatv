@@ -168,7 +168,7 @@ abstract class ProductPriceCalculator
      */
     protected function getBonDiscount(): int
     {
-        return $this->getBonTotalPercentage() * $this->rawCost;
+        return $this->getBonTotalPercentage() * ($this->rawCost - $this->getProductDiscount());
     }
     
     /**
