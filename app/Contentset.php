@@ -226,8 +226,8 @@ class Contentset extends BaseModel implements Taggable
     
     public function products()
     {
-        return $this->belongsToMany('App\Product')
-            ->using('App\ProductSet')
+        return $this->belongsToMany(Product::class)
+            ->using(ProductSet::class)
             ->as('productSet')
             ->withPivot([
                 'order',
@@ -269,8 +269,8 @@ class Contentset extends BaseModel implements Taggable
         $tags = null;
         if (!empty($value)) {
             $tags = json_encode([
-                "bucket" => "contentset",
-                "tags"   => $value,
+                'bucket' => 'contentset',
+                'tags'   => $value,
             ], JSON_UNESCAPED_UNICODE);
         }
         
@@ -281,49 +281,49 @@ class Contentset extends BaseModel implements Taggable
     {
         $content   = $this->getLastActiveContent();
         $contentId = !is_null($content) ? $content->id : null;
-        
-        return isset($contentId) ? action("Web\ContentController@show", $contentId) : "";
+    
+        return isset($contentId) ? action("Web\ContentController@show", $contentId) : '';
     }
     
     public function getLastActiveContent(): Content
     {
-        $key = "ContentSet:getLastActiveContent".$this->cacheKey();
+        $key = 'ContentSet:getLastActiveContent'.$this->cacheKey();
         
         return Cache::tags('set')
-            ->remember($key, config("constants.CACHE_300"), function () {
+            ->remember($key, config('constants.CACHE_300'), function () {
                 
                 $r = $this->getActiveContents();
-                
-                return $r->sortByDesc("order")
+        
+                return $r->sortByDesc('order')
                     ->first() ?: new Content();
             });
     }
 
     public function getLastContent(): Content
     {
-        $key = "ContentSet:getLastContent".$this->cacheKey();
+        $key = 'ContentSet:getLastContent'.$this->cacheKey();
 
         return Cache::tags('set')
-            ->remember($key, config("constants.CACHE_300"), function () {
+            ->remember($key, config('constants.CACHE_300'), function () {
 
                 $r = $this->getContents();
-
-                return $r->sortByDesc("order")
+        
+                return $r->sortByDesc('order')
                     ->first() ?: new Content();
             });
     }
 
     public function getActiveContents(): ContentCollection
     {
-        $key = "ContentSet:getActiveContents".$this->cacheKey();
+        $key = 'ContentSet:getActiveContents'.$this->cacheKey();
         
         return Cache::tags('set')
-            ->remember($key, config("constants.CACHE_300"), function () {
+            ->remember($key, config('constants.CACHE_300'), function () {
                 
-                $oldContentCollection = $this->contents()
+                $oldContentCollection = $this->oldContents()
                     ->active()
                     ->get() ?: new ContentCollection();
-                $newContentCollection = $this->contents2()
+                $newContentCollection = $this->contents()
                     ->active()
                     ->get() ?: new ContentCollection();
                 return $oldContentCollection->merge($newContentCollection);
@@ -333,29 +333,29 @@ class Contentset extends BaseModel implements Taggable
 
     public function getContents(): ContentCollection
     {
-        $key = "ContentSet:getContents".$this->cacheKey();
+        $key = 'ContentSet:getContents'.$this->cacheKey();
 
         return Cache::tags('set')
-            ->remember($key, config("constants.CACHE_300"), function () {
+            ->remember($key, config('constants.CACHE_300'), function () {
 
-                $oldContentCollection = $this->contents()
+                $oldContentCollection = $this->oldContents()
                     ->get() ?: new ContentCollection();
-                $newContentCollection = $this->contents2()
+                $newContentCollection = $this->contents()
                     ->get() ?: new ContentCollection();
                 return $oldContentCollection->merge($newContentCollection);
 
             });
     }
 
-    public function contents()
+    public function oldContents()
     {
-        return $this->belongsToMany("\App\Content", "contentset_educationalcontent", "contentset_id", "edc_id")
-            ->withPivot("order", "isDefault");
+        return $this->belongsToMany(Content::class, 'contentset_educationalcontent', 'contentset_id', 'edc_id')
+            ->withPivot('order', 'isDefault');
     }
     
-    public function contents2()
+    public function contents()
     {
-        return $this->hasMany('\App\Content');
+        return $this->hasMany(Content::class);
     }
     
     public function getApiUrlAttribute($value): array

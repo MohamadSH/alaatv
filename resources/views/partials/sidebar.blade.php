@@ -334,7 +334,7 @@
                         </a>
                     </li>
                     @endability
-                    @role((config("constants.ROLE_TEACHER")))
+                    @permission((config("constants.SHOW_SALES_REPORT")))
                     <li class="m-menu__item" aria-haspopup="true" m-menu-link-redirect="1">
                         <a href="{{ action("Web\SalesReportController") }}" class="m-menu__link ">
                             <span class="m-menu__item-here"></span>
@@ -342,7 +342,7 @@
                             <span class="m-menu__link-text">گزارش فروش</span>
                         </a>
                     </li>
-                    @endability
+                    @endpermission
                 @endpermission
             @endif
         </ul>
