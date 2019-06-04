@@ -64,9 +64,15 @@
                 <div class="row">
                     <label class="control-label col-md-3">عکس</label>
                     <div class="col-md-9">
-                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                        <style>
+                            .productFormFileinput .thumbnail img {
+                                max-width: 100%;
+                                height: auto;
+                            }
+                        </style>
+                        <div class="fileinput fileinput-new productFormFileinput" data-provides="fileinput">
                             <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
-                                <img src="{{ $product->photo }}" {{--alt="عکس خدمت" onerror="this.src='http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image';"/> </div>--}}@if(strlen($product->name)>0) alt="{{$product->name}}" @else alt="عکس محصول" @endif/>
+                                <img class="a--full-width" src="{{ $product->photo }}" {{--alt="عکس خدمت" onerror="this.src='http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image';"/> </div>--}}@if(strlen($product->name)>0) alt="{{$product->name}}" @else alt="عکس محصول" @endif/>
                             </div>
                             <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
                             <div>

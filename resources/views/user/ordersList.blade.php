@@ -103,9 +103,9 @@
                                                 <tr>
                                                     <th>شماره سفارش</th>
                                                     <th>وضعیت سفارش</th>
-                                                    <th class="d-none d-md-table-cell d-lg-table-cell">وضعیت پرداخت</th>
+                                                    <th>وضعیت پرداخت</th>
                                                     <th>مبلغ(تومان)</th>
-                                                    <th class="d-none d-md-table-cell d-lg-table-cell">پرداخت
+                                                    <th>پرداخت
                                                         شده(تومان)
                                                     </th>
                                                     <th>تاریخ ثبت نهایی</th>
@@ -131,7 +131,7 @@
                                                                     {{$order->orderstatus->displayName}}
                                                                 </span>
                                                         </td>
-                                                        <td class="d-none d-md-table-cell d-lg-table-cell text-center">
+                                                        <td>
     
                                                             @if(isset($order->paymentstatus->id) && $order->paymentstatus->id == config("constants.PAYMENT_STATUS_PAID"))
                                                                 <span class="m-badge m-badge--wide m-badge--success">
@@ -183,7 +183,7 @@
                                                                 <span class="label m-badge--info">بدون مبلغ</span>
                                                             @endif
                                                         </td>
-                                                        <td class="d-none d-md-table-cell d-lg-table-cell">
+                                                        <td>
                                                             @if(isset($order->cost) || isset($order->costwithoutcoupon))
                                                                 {{number_format($order->totalPaidCost() + $order->totalRefund())}}
                                                             @else
