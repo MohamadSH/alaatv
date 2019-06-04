@@ -175,7 +175,7 @@
 }
 .is-sticky .productInfoNav.this {
     color: #333;
-    background: #00ffbf;
+    background: #e1e1e1;
     padding: 10px 0 10px 5px;
     margin-right: 5px;
     border-radius: 0;
@@ -194,11 +194,14 @@
 .productAttributes .m-portlet__head,
 .productAttributes .m-portlet__head {
     background: #f2f3f8;
+    height: 45px; !important;
 }
+
 .btnAddToCart {
     font-size: 1.2rem;
     background-color: #00cc1b;
 }
+
 .btnAddToCart .fa.fa-cart-arrow-down {
     font-size: 2rem !important;
     color: white !important;
@@ -231,5 +234,8 @@
     #productInformation {
         column-count: 1;
         padding: 0 15px;
+    }
+    .m-portlet.m-portlet--tabs .m-portlet__head .m-portlet__head-caption {
+        display: flex;
     }
 }

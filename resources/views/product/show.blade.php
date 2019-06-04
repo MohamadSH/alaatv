@@ -3,6 +3,12 @@
 @section('page-css')
     <link href="{{ mix('/css/product-show.css') }}" rel="stylesheet" type="text/css"/>
     <style>
+    
+        /*.btnAddToCart {*/
+        /*    font-size: 1.2rem;*/
+        /*    background-color: #00cc1b;*/
+        /*}*/
+    
         @if(!isset($block) || !isset($block->contents) || $block->contents->count() === 0)
             .productInfoNav-sampleVideo {
             display: none !important;
@@ -513,10 +519,14 @@
     {{--نمونه جزوه--}}
     @include('product.partials.pamphlet')
     
-    @if(isset($product->specialDescription))
-        <div class="row">
-            {!! $product->specialDescription !!}
+    @if(isset($product->specialDescription) && mb_strlen(trim(strip_tags($product->specialDescription))) > 0)
+    
+        <div class="m-portlet m-portlet--tabs m--margin-bottom-10">
+            <div class="m-portlet__body">
+                {!! $product->specialDescription !!}
+            </div>
         </div>
+        
     @endif
     
     @if(mb_strlen(trim(strip_tags($product->shortDescription))) > 0 || mb_strlen(trim(strip_tags($product->longDescription))) > 0)
@@ -562,7 +572,6 @@
                         </div>
                     </div>
                 </div>
-    
             </div>
         </div>
     @endif
