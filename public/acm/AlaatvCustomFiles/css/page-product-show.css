@@ -187,6 +187,23 @@
     height: 50px;
 }
 
+#productInformation {
+    column-count: 2;
+}
+
+.productAttributes .m-portlet__head,
+.productAttributes .m-portlet__head {
+    background: #f2f3f8;
+}
+.btnAddToCart {
+    font-size: 1.2rem;
+    background-color: #00cc1b;
+}
+.btnAddToCart .fa.fa-cart-arrow-down {
+    font-size: 2rem !important;
+    color: white !important;
+}
+
 /*media query*/
 @media (max-width: 767.98px) {
     .productInfoNav {
@@ -210,5 +227,9 @@
     }
     .m-portlet .m-portlet__head .m-portlet__head-tools .m-portlet__nav .m-portlet__nav-item .btn span span {
         display: none;
+    }
+    #productInformation {
+        column-count: 1;
+        padding: 0 15px;
     }
 }
