@@ -33,6 +33,9 @@
     "persian-datepicker": "^1.1.5",
     "select2": "^4.0.6-rc.1",
     "slick-carousel": "^1.8.1",
+    "video.js": "^7.5.4",
+    "videojs-flash": "^2.2.0",
+    "videojs-swf": "^5.4.2",
     "yarn": "^1.15.2"
   }
 }
