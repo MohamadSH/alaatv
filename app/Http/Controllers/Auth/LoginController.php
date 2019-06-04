@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\{Controller};
-use App\Traits\CharacterCommon;
-use App\Traits\RedirectTrait;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use App\Traits\RedirectTrait;
 use Illuminate\Http\Response;
+use App\Traits\CharacterCommon;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
@@ -98,8 +98,8 @@ class LoginController extends Controller
      */
     public function login(Request $request, RegisterController $registerController)
     {
-        $request->offsetSet("nationalCode", substr($request->get("password"), 0, 10));
-        $request->offsetSet("userstatus_id", 1);
+        $request->offsetSet('nationalCode', substr($request->get('password'), 0, 10));
+        $request->offsetSet('userstatus_id', 1);
         /**
          * Validating mobile and password strings
          */
@@ -123,14 +123,13 @@ class LoginController extends Controller
                     ->user()->userstatus_id == 1) {
                 return $this->sendLoginResponse($request);
             }
-            else {
-                return redirect()
-                    ->back()
-                    ->withInput($request->only('mobile', 'remember'))
-                    ->withErrors([
-                        'inActive' => 'حساب کاربری شما غیر فعال شده است!',
-                    ], "login");
-            }
+    
+            return redirect()
+                ->back()
+                ->withInput($request->only('mobile', 'remember'))
+                ->withErrors([
+                    'inActive' => 'حساب کاربری شما غیر فعال شده است!',
+                ], 'login');
         }
         
         // If the login attempt was unsuccessful we will increment the number of attempts
