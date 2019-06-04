@@ -48,6 +48,7 @@ class Wallet extends BaseModel
         'user_id',
         'wallettype_id',
         'balance',
+        'pending_to_reduce',
     ];
     
     /**
@@ -55,7 +56,7 @@ class Wallet extends BaseModel
      */
     public function user()
     {
-        return $this->belongsTo("\App\User");
+        return $this->belongsTo('\App\User');
     }
     
     /**
@@ -84,50 +85,47 @@ class Wallet extends BaseModel
         /**
          * unused variable
          */ /*$failed = true;*/
-        /*$responseText = "";*/
+        /*$responseText = '';*/
         
         $accepted = $shouldAccept ? $this->canWithdraw($amount) : true;
-        
-        if ($accepted) {
-            $newBalance    = $this->balance - $amount;
-            $this->balance = $newBalance;
-            $result        = $this->update();
-            if ($result) {
-                if ($amount > 0) {
-                    $completed_at = Carbon::now();
-                    if (isset($orderId)) {
-                        $transactionStatus = config("constants.TRANSACTION_STATUS_SUSPENDED");
-                    }
-                    else {
-                        $transactionStatus = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
-                    }
-                    $paymentMethod = config("constants.PAYMENT_METHOD_WALLET");
+
+        if ($amount > 0) {
+            if ($accepted) {
+                $newBalance    = $this->balance - $amount;
+                $this->balance = $newBalance;
+                $result        = $this->update();
+                if ($result) {
+                    $completed_at = Carbon::now()->setTimezone('Asia/Tehran');
                     $this->transactions()
                         ->create([
                             'order_id'             => $orderId,
                             'wallet_id'            => $this->id,
                             'cost'                 => $amount,
-                            'transactionstatus_id' => $transactionStatus,
-                            'paymentmethod_id'     => $paymentMethod,
+                            'transactionstatus_id' => config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
+                            'paymentmethod_id'     => config('constants.PAYMENT_METHOD_WALLET'),
                             'completed_at'         => $completed_at,
                         ]);
+                    $responseText = 'SUCCESSFUL';
+                    $failed       = false;
                 }
-                $responseText = "SUCCESSFUL";
-                $failed       = false;
+                else {
+                    $failed       = true;
+                    $responseText = 'CAN_NOT_UPDATE_WALLET';
+                }
             }
             else {
                 $failed       = true;
-                $responseText = "CAN_NOT_UPDATE_WALLET";
+                $responseText = 'CAN_NOT_WITHDRAW';
             }
-        }
-        else {
+
+        }else{
             $failed       = true;
-            $responseText = "CAN_NOT_WITHDRAW";
+            $responseText = 'CAN_NOT_WITHDRAW';
         }
-        
+
         return [
-            "result"       => !$failed,
-            "responseText" => $responseText,
+            'result'       => !$failed,
+            'responseText' => $responseText,
         ];
     }
     
@@ -148,7 +146,7 @@ class Wallet extends BaseModel
      */
     public function transactions()
     {
-        return $this->hasMany("\App\Transaction");
+        return $this->hasMany('\App\Transaction');
     }
     
     /**
@@ -164,33 +162,48 @@ class Wallet extends BaseModel
         /**
          * unused variable
          */
-        
-        $newBalance    = $this->balance + $amount;
-        $this->balance = $newBalance;
-        $result        = $this->update();
-        if ($result) {
-            if ($amount > 0 && !$withoutTransaction) {
-                $completed_at      = Carbon::now();
-                $transactionStatus = config("constants.TRANSACTION_STATUS_SUCCESSFUL");
-                $this->transactions()
-                    ->create([
-                        'wallet_id'            => $this->id,
-                        'cost'                 => -$amount,
-                        'transactionstatus_id' => $transactionStatus,
-                        'completed_at'         => $completed_at,
-                    ]);
+
+        if($amount > 0)
+        {
+            $newBalance    = $this->balance + $amount;
+            $this->balance = $newBalance;
+            $result        = $this->update();
+            if ($result) {
+                if (!$withoutTransaction) {
+                    $completed_at      = Carbon::now()->setTimezone('Asia/Tehran');
+                    $transactionStatus = config('constants.TRANSACTION_STATUS_SUCCESSFUL');
+                    $transaction = $this->transactions()
+                                            ->create([
+                                                'wallet_id'            => $this->id,
+                                                'cost'                 => -$amount,
+                                                'transactionstatus_id' => $transactionStatus,
+                                                'completed_at'         => $completed_at,
+                                            ]);
+
+                    if(isset($transaction)){
+                        $responseText = 'SUCCESSFUL';
+                        $failed       = false;
+                    }else{
+                        $failed       = true;
+                        $responseText = 'CAN_NOT_UPDATE_WALLET';
+                    }
+                }else{
+                    $responseText = 'SUCCESSFUL';
+                    $failed       = false;
+                }
             }
-            $responseText = "SUCCESSFUL";
-            $failed       = false;
-        }
-        else {
+            else {
+                $failed       = true;
+                $responseText = 'CAN_NOT_UPDATE_WALLET';
+            }
+        }else{
             $failed       = true;
-            $responseText = "CAN_NOT_UPDATE_WALLET";
+            $responseText = 'WRONG_AMOUNT';
         }
         
         return [
-            "result"       => !$failed,
-            "responseText" => $responseText,
+            'result'       => !$failed,
+            'responseText' => $responseText,
         ];
     }
     
