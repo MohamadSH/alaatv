@@ -51,7 +51,7 @@ class SalesReportController extends Controller
         $allTimeCount         = $this->countOrderproducts($allTimeOrderproducts);
         $allTimeSum           = $this->calculateTotalPrice($allTimeOrderproducts);
         
-        $thisMonthAllOrderproducts = $this->getThisMonthPurchasedOrderproducts();
+//        $thisMonthAllOrderproducts = $this->getThisMonthPurchasedOrderproducts();
 
 //        dump('stop allTime' , Carbon::now());
         $provinces = $this->getProvinces();
@@ -78,36 +78,36 @@ class SalesReportController extends Controller
         $todayOrderproducts       = $this->getTodayPurchases($allTimeOrderproducts);
         $todayCount               = $this->countOrderproducts($todayOrderproducts);
         $todaySum                 = $this->calculateTotalPrice($todayOrderproducts);
-        $todayOveralOrderproducts = $this->getTodayPurchases($thisMonthAllOrderproducts);
-        $todayOveralSum           = $this->calculateTotalPrice($todayOveralOrderproducts);
-        $todayRate                = 0;
-        if ($todayOveralSum != 0) {
-            $todayRate = (int) (($todaySum / $todayOveralSum) * 100);
-        }
+//        $todayOveralOrderproducts = $this->getTodayPurchases($thisMonthAllOrderproducts);
+//        $todayOveralSum           = $this->calculateTotalPrice($todayOveralOrderproducts);
+//        $todayRate                = 0;
+//        if ($todayOveralSum != 0) {
+//            $todayRate = (int) (($todaySum / $todayOveralSum) * 100);
+//        }
 
 //        dump('stop before this week', Carbon::now());
         /** This week */
         $thisWeekOrderproducts       = $this->getThisWeekPurchases($allTimeOrderproducts);
         $thisWeekCount               = $this->countOrderproducts($thisWeekOrderproducts);
         $thisWeekSum                 = $this->calculateTotalPrice($thisWeekOrderproducts);
-        $thisWeekOveralOrderproducts = $this->getThisWeekPurchases($thisMonthAllOrderproducts);
-        $thisWeekOveralSum           = $this->calculateTotalPrice($thisWeekOveralOrderproducts);
-        $thisWeekRate                = 0;
-        if ($thisWeekOveralSum != 0) {
-            $thisWeekRate = (int) (($thisWeekSum / $thisWeekOveralSum) * 100);
-        }
+//        $thisWeekOveralOrderproducts = $this->getThisWeekPurchases($thisMonthAllOrderproducts);
+//        $thisWeekOveralSum           = $this->calculateTotalPrice($thisWeekOveralOrderproducts);
+//        $thisWeekRate                = 0;
+//        if ($thisWeekOveralSum != 0) {
+//            $thisWeekRate = (int) (($thisWeekSum / $thisWeekOveralSum) * 100);
+//        }
 
 //        dump('stop before this moonth', Carbon::now());
         /** This month */
         $thisMonthOrderproducts = $this->getThisMonthPurchases($allTimeOrderproducts);
         $thisMonthCount         = $this->countOrderproducts($thisMonthOrderproducts);
         $thisMonthSum           = $this->calculateTotalPrice($thisMonthOrderproducts);
-        $thisMonthOveralSum     = $this->calculateTotalPrice($thisMonthAllOrderproducts);
-        $thisMonthRate          = 0;
-        if ($thisMonthOveralSum != 0) {
-            $thisMonthRate = (int) (($thisMonthSum / $thisMonthOveralSum) * 100);
-        }
-    
+//        $thisMonthOveralSum     = $this->calculateTotalPrice($thisMonthAllOrderproducts);
+//        $thisMonthRate          = 0;
+//        if ($thisMonthOveralSum != 0) {
+//            $thisMonthRate = (int) (($thisMonthSum / $thisMonthOveralSum) * 100);
+//        }
+
         return view('user.salesReport', compact('limitStatus', 'coupontype', 'products',
             'allTimeCount', 'allTimeSum', 'thisMonthCount', 'thisMonthSum', 'thisWeekCount', 'thisWeekSum',
             'todayCount', 'todaySum',
@@ -153,11 +153,11 @@ class SalesReportController extends Controller
      */
     private function getThisWeekDate(): array
     {
-        $firstDayOfWeekDate = Carbon::now()
+        $firstDayOfWeekDate = Carbon::now()->setTimezone('Asia/Tehran')
             ->startOfWeek()
             ->subDays(2)
             ->format('Y-m-d');
-        $endDayOfWeekDate   = Carbon::now()
+        $endDayOfWeekDate   = Carbon::now()->setTimezone('Asia/Tehran')
             ->endOfWeek()
             ->subDays(2)
             ->format('Y-m-d');
@@ -306,8 +306,8 @@ class SalesReportController extends Controller
      */
     private function getTodayTimePeriod(): array
     {
-        $today         = Carbon::today()
-            ->format('Y-m-d');
+        $today         = Carbon::today()->setTimezone('Asia/Tehran')->format('Y-m-d');
+
         $sinceDateTime = $this->makeSinceDateTime($today);
         $tillDateTime  = $this->makeTillDateTime($today);
         return [$sinceDateTime, $tillDateTime];
