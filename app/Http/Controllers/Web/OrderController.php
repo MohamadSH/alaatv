@@ -567,8 +567,7 @@ class OrderController extends Controller
         $offlineTransactionPaymentMethods = Paymentmethod::where('id', '<>', config('constants.PAYMENT_METHOD_ONLINE'))
             ->pluck('displayName', 'id')
             ->toArray();
-        $transactionStatuses              = Transactionstatus::where('name', '<>', 'transferredToPay')
-            ->orderBy('order')
+        $transactionStatuses              = Transactionstatus::orderBy('order')
             ->pluck('displayName', 'id')
             ->toArray();
     
