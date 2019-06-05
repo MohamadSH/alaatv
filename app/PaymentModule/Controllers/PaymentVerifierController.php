@@ -103,6 +103,7 @@ class PaymentVerifierController extends Controller
             $order->close(config('constants.PAYMENT_STATUS_UNPAID'), config('constants.ORDER_STATUS_CANCELED'));
             $order->update();
         }
+        //ToDo : Deprecated
         $order->refundWalletTransaction();
     }
 
