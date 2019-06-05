@@ -182,10 +182,10 @@
         <div class="row">
             <label class="col-md-3 control-label" for="referenceNumber">شماره تراکنش(آنلاین): </label>
             <div class="col-md-6">
-                {!! Form::text('transactionId',old('transactionId'),['class' => 'form-control', 'dir'=>'ltr' ]) !!}
-                @if ($errors->has('transactionId'))
+                {!! Form::text('transactionID',old('transactionID'),['class' => 'form-control', 'dir'=>'ltr' ]) !!}
+                @if ($errors->has('transactionID'))
                     <span class="form-control-feedback">
-                        <strong>{{ $errors->first('transactionId') }}</strong>
+                        <strong>{{ $errors->first('transactionID') }}</strong>
                     </span>
                 @endif
             </div>
