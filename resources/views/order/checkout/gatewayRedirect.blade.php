@@ -1365,7 +1365,7 @@
                 </div>
                 
                 <div class="col-6 col-sm-5 col-md-4 col-lg-3 mx-auto align-self-center text-center">
-                    <img src="{{ asset('acm/extra/Alaa-logo.gif') }}" class="a--full-width">
+                    <img src="{{ asset('/acm/extra/Alaa-logo.png') }}" class="a--full-width">
                 </div>
             </div>
         </div>

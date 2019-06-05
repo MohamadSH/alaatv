@@ -70,8 +70,8 @@ var Alaasearch = function () {
             name: data.author.firstName,
             full_name: data.author.full_name
         };
-
         var widgetLink = data.url;
+        widgetPic += '?w=444&h=250';
         return '<div class = \"item\"> \
     <!--begin:: Widgets/Blog--> \
     <div class = \"m-portlet m-portlet--bordered-semi m-portlet--rounded-force\"> \
@@ -197,12 +197,17 @@ var Alaasearch = function () {
         var widgetActionLink = data.url;
         var widgetTitle = data.name;
         var widgetThumbnail = data.thumbnail;
+        var widgetAuthorPhoto = '';
         var widgetAuthor = {
             photo: (data.author!==null) ? data.author.photo : '',
             name: (data.author!==null) ? data.author.firstName : '',
             full_name: (data.author!==null) ? data.author.full_name : ''
         };
-        if (widgetThumbnail !== null && widgetThumbnail.length !== 0) {
+        if (
+            typeof widgetThumbnail !== 'undefined' &&
+            widgetThumbnail !== null &&
+            widgetThumbnail.length !== 0
+        ) {
             widgetThumbnail =
                 '<div class="m-widget4__img m-widget4__img--pic">\n' +
                 '    <img src="' + widgetThumbnail + '" alt="' + widgetTitle + '">\n' +
@@ -210,11 +215,21 @@ var Alaasearch = function () {
         } else {
             widgetThumbnail = '';
         }
+        if (
+            typeof widgetAuthor.photo !== 'undefined' &&
+            widgetAuthor.photo !== null &&
+            widgetAuthor.photo.length !== 0
+        ) {
+            widgetAuthorPhoto =
+                '    <div class="m-widget4__img m-widget4__img--pic">\n' +
+                '        <img src="' + widgetAuthor.photo + '" alt="">\n' +
+                '    </div>\n';
+        } else {
+            widgetAuthorPhoto = '';
+        }
         return '\n' +
             '<div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">\n' +
-            '    <div class="m-widget4__img m-widget4__img--pic">\n' +
-            '        <img src="' + widgetAuthor.photo + '" alt="">\n' +
-            '    </div>\n' +
+            widgetAuthorPhoto +
             '    <div class="m-widget4__info">\n' +
             '            <span class="m-widget4__title">\n' +
             '                <a href="' + widgetActionLink + '" class="m-link">\n' +
@@ -231,7 +246,6 @@ var Alaasearch = function () {
             widgetThumbnail +
             '</div>';
     }
-
 
     function makeWidgetFromJsonResponse(data, type) {
         switch (type) {
