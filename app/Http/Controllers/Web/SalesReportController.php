@@ -11,11 +11,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class SalesReportController extends Controller
 {
     use DateTrait;
-    
+
     /**
      * SalesReportController constructor.
      */
@@ -23,8 +24,8 @@ class SalesReportController extends Controller
     {
         $this->middleware('permission:'.config('constants.SHOW_SALES_REPORT'));
     }
-    
-    
+
+
     /**
      * Handle the incoming request.
      *
@@ -38,83 +39,79 @@ class SalesReportController extends Controller
         $coupontype  = ['نوع یک', 'نوع دو'];
         $products    = ['محصول یک', 'محصول دو'];
         $talai98Ids  = [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342];
-        
+
         /** @var User $user */
-//        dump('start allTime' , Carbon::now());
         $user = $request->user();
-    
-        $contracts  = $user->contracts;
-        $productIds = $contracts->pluck('product_id')
-            ->toArray();
-        
+
+//        dump('start query allTime' , Carbon::now());
+        $productIds = $this->getUserProducts($user);
+
         $allTimeOrderproducts = $this->getPurchasedOrderproducts($productIds);
         $allTimeCount         = $this->countOrderproducts($allTimeOrderproducts);
+
+        $userRank = $this->calculateUserRank($allTimeCount , array_diff($talai98Ids, $productIds));
+
+//        dump('start calculating allTime' , Carbon::now());
         $allTimeSum           = $this->calculateTotalPrice($allTimeOrderproducts);
-        
-//        $thisMonthAllOrderproducts = $this->getThisMonthPurchasedOrderproducts();
 
-//        dump('stop allTime' , Carbon::now());
-        $provinces = $this->getProvinces();
-        foreach ($allTimeOrderproducts as $allTimeOrderproduct) {
-            $user         = $allTimeOrderproduct->order->user;
-            $userProvince = $user->province;
-            if (isset($userProvince)) {
-                $foundProvince = $provinces->filter(static function ($item) use ($userProvince) {
-                    return false !== stripos($item['persianName'], $userProvince);
-                });
-                if ($foundProvince->isEmpty()) {
-                    $foundProvince = $provinces->where('name', 'ir-un');
-                }
-            } else {
-                $foundProvince = $provinces->where('name', 'ir-un');
-            }
-            $key           = key($foundProvince->toArray());
-            $foundProvince = $foundProvince->first();
-            $foundProvince['count']++;
-            $provinces->put($key, $foundProvince);
-        }
-//        dump('stop before today', Carbon::now());
+        $provinces = $this->setLocation($allTimeOrderproducts);
+
+//        dump('start today', Carbon::now());
         /** Today */
-        $todayOrderproducts       = $this->getTodayPurchases($allTimeOrderproducts);
-        $todayCount               = $this->countOrderproducts($todayOrderproducts);
-        $todaySum                 = $this->calculateTotalPrice($todayOrderproducts);
-//        $todayOveralOrderproducts = $this->getTodayPurchases($thisMonthAllOrderproducts);
-//        $todayOveralSum           = $this->calculateTotalPrice($todayOveralOrderproducts);
-//        $todayRate                = 0;
-//        if ($todayOveralSum != 0) {
-//            $todayRate = (int) (($todaySum / $todayOveralSum) * 100);
-//        }
+        [$todayCount, $todaySum] = $this->todayPurchases($allTimeOrderproducts);
 
-//        dump('stop before this week', Carbon::now());
+//        dump('start this week', Carbon::now());
         /** This week */
-        $thisWeekOrderproducts       = $this->getThisWeekPurchases($allTimeOrderproducts);
-        $thisWeekCount               = $this->countOrderproducts($thisWeekOrderproducts);
-        $thisWeekSum                 = $this->calculateTotalPrice($thisWeekOrderproducts);
-//        $thisWeekOveralOrderproducts = $this->getThisWeekPurchases($thisMonthAllOrderproducts);
-//        $thisWeekOveralSum           = $this->calculateTotalPrice($thisWeekOveralOrderproducts);
-//        $thisWeekRate                = 0;
-//        if ($thisWeekOveralSum != 0) {
-//            $thisWeekRate = (int) (($thisWeekSum / $thisWeekOveralSum) * 100);
-//        }
+        [$thisWeekCount, $thisWeekSum] = $this->thisWeekPurchases($allTimeOrderproducts);
 
-//        dump('stop before this moonth', Carbon::now());
+//        dump('start this moonth', Carbon::now());
         /** This month */
-        $thisMonthOrderproducts = $this->getThisMonthPurchases($allTimeOrderproducts);
-        $thisMonthCount         = $this->countOrderproducts($thisMonthOrderproducts);
-        $thisMonthSum           = $this->calculateTotalPrice($thisMonthOrderproducts);
-//        $thisMonthOveralSum     = $this->calculateTotalPrice($thisMonthAllOrderproducts);
-//        $thisMonthRate          = 0;
-//        if ($thisMonthOveralSum != 0) {
-//            $thisMonthRate = (int) (($thisMonthSum / $thisMonthOveralSum) * 100);
-//        }
+        [$thisMonthCount, $thisMonthSum] = $this->thisMonthPurchases($allTimeOrderproducts);
 
         return view('user.salesReport', compact('limitStatus', 'coupontype', 'products',
             'allTimeCount', 'allTimeSum', 'thisMonthCount', 'thisMonthSum', 'thisWeekCount', 'thisWeekSum',
             'todayCount', 'todaySum',
-            'todayRate', 'thisWeekRate', 'thisMonthRate', 'provinces'));
-        
+            'todayRate', 'thisWeekRate', 'thisMonthRate', 'provinces' , 'userRank'));
+
     }
-    
+
+
+    /**
+     * @param Collection $allTimeOrderproducts
+     * @return array
+     */
+    private function todayPurchases(Collection $allTimeOrderproducts): array
+    {
+        $todayOrderproducts = $this->getTodayPurchases($allTimeOrderproducts);
+        $todayCount = $this->countOrderproducts($todayOrderproducts);
+        $todaySum = $this->calculateTotalPrice($todayOrderproducts);
+        return [$todayCount, $todaySum];
+    }
+
+    /**
+     * @param Collection $allTimeOrderproducts
+     * @return array
+     */
+    private function thisWeekPurchases(Collection $allTimeOrderproducts): array
+    {
+        $thisWeekOrderproducts = $this->getThisWeekPurchases($allTimeOrderproducts);
+        $thisWeekCount = $this->countOrderproducts($thisWeekOrderproducts);
+        $thisWeekSum = $this->calculateTotalPrice($thisWeekOrderproducts);
+        return [$thisWeekCount, $thisWeekSum];
+    }
+
+    /**
+     * @param Collection $allTimeOrderproducts
+     * @return array
+     */
+    private function thisMonthPurchases(Collection $allTimeOrderproducts): array
+    {
+        $thisMonthOrderproducts = $this->getThisMonthPurchases($allTimeOrderproducts);
+        $thisMonthCount = $this->countOrderproducts($thisMonthOrderproducts);
+        $thisMonthSum = $this->calculateTotalPrice($thisMonthOrderproducts);
+        return [$thisMonthCount, $thisMonthSum];
+    }
+
     /**
      * @param  Collection  $allTimeOrderproducts
      *
@@ -125,7 +122,7 @@ class SalesReportController extends Controller
         [$sinceDateTime, $tillDateTime] = $this->getTodayTimePeriod();
         return $this->filterOrderproductsByCompletionDate($allTimeOrderproducts, $sinceDateTime, $tillDateTime);
     }
-    
+
     /**
      * @param  Collection  $allTimeOrderproducts
      *
@@ -136,7 +133,7 @@ class SalesReportController extends Controller
         [$sinceDateTime, $tillDateTime] = $this->getThisWeekTimePeriod();
         return $this->filterOrderproductsByCompletionDate($allTimeOrderproducts, $sinceDateTime, $tillDateTime);
     }
-    
+
     /**
      * @param  Collection  $allTimeOrderproducts
      *
@@ -147,7 +144,7 @@ class SalesReportController extends Controller
         [$sinceDateTime, $tillDateTime] = $this->getThisMonthTimePeriod();
         return $this->filterOrderproductsByCompletionDate($allTimeOrderproducts, $sinceDateTime, $tillDateTime);
     }
-    
+
     /**
      * @return array
      */
@@ -163,7 +160,7 @@ class SalesReportController extends Controller
             ->format('Y-m-d');
         return [$firstDayOfWeekDate, $endDayOfWeekDate];
     }
-    
+
     /**
      * @return array
      */
@@ -178,7 +175,7 @@ class SalesReportController extends Controller
         $lastDayDate              = $monthPeriod['periodEnd'];
         return [$firstDayDate, $lastDayDate];
     }
-    
+
     /**
      * @param  array  $products
      *
@@ -186,9 +183,9 @@ class SalesReportController extends Controller
      */
     private function getPurchasedOrderproducts(array $products): Collection
     {
-        return Cache::remember(md5(implode(',', $products)), config('constants.CACHE_5'),
+        return Cache::remember('salesReport:getPurchasedOrderproducts:'.md5(implode(',', $products)), config('constants.CACHE_5'),
             static function () use ($products) {
-    
+
                 return Orderproduct::whereIn('product_id', $products)
                     ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
                     ->whereHas('order', function ($q) {
@@ -199,16 +196,46 @@ class SalesReportController extends Controller
                     ->get();
             });
     }
-    
+
     /**
-     * @return Collection
+     * @param array $otherProducts
+     * @return mixed
      */
-    private function getThisMonthPurchasedOrderproducts(): Collection
+    private function getPurchasedGroupedOrderproducts(array $otherProducts)
     {
-        [$sinceDateTime, $tillDateTime] = $this->getThisMonthTimePeriod();
-        return $this->getOrderproductsByTimePeriod($sinceDateTime, $tillDateTime);
+        return Cache::remember('salesReport:getPurchasedGroupedOrderproducts:'.md5(implode(',', $otherProducts)), config('constants.CACHE_5'),
+            static function () use ($otherProducts) {
+                return Orderproduct::select(DB::raw('COUNT("*") as count'))->whereIn('product_id', $otherProducts)
+                    ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
+                    ->whereHas('order', function ($q) {
+                        $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
+                            ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
+                    })->groupBy('product_id')->get();
+            });
     }
-    
+
+    /**
+     * @param User $user
+     * @return mixed
+     */
+    private function getUserProducts(User $user)
+    {
+        return $user->contracts->pluck('product_id')
+            ->toArray();
+    }
+
+    /**
+     * Calculates user rank
+     *
+     * @param int $userAllTimeCount
+     * @param array $otherProducts
+     * @return int
+     */
+    private function calculateUserRank(int $userAllTimeCount, array $otherProducts):int{
+        $saleRecords = $this->getOrderprodutsCount($otherProducts);
+        return rankInArray( $saleRecords , $userAllTimeCount );
+    }
+
     /**
      * @param  Collection  $allTimeOrderproducts
      *
@@ -218,7 +245,7 @@ class SalesReportController extends Controller
     {
         return $allTimeOrderproducts->count();
     }
-    
+
     /**
      * @param  Collection  $allTimeOrderproducts
      * @param  string      $sinceDateTime
@@ -237,7 +264,7 @@ class SalesReportController extends Controller
                     ->where('order.completed_at', '<=', $tillDateTime);
             });
     }
-    
+
     /**
      * @param  string  $today
      *
@@ -247,7 +274,7 @@ class SalesReportController extends Controller
     {
         return $today.' 00:00:00';
     }
-    
+
     /**
      * @param  string  $today
      *
@@ -257,7 +284,7 @@ class SalesReportController extends Controller
     {
         return $today.' 23:59:59';
     }
-    
+
     /**
      * @param  Collection  $orderproducts
      *
@@ -270,7 +297,7 @@ class SalesReportController extends Controller
             /** @var Orderproduct $orderproduct */
             $key   = 'salesReport:calculateOrderproductPrice:'.$orderproduct->cacheKey();
             $toAdd = Cache::tags(['salesReport', 'order', 'orderproduct'])
-                ->remember($key, config('constants.CACHE_60'), function () use ($orderproduct) {
+                ->remember($key, config('constants.CACHE_600'), function () use ($orderproduct) {
                     $price = $orderproduct->obtainOrderproductCost(false);
                     
                     /** @var Order $myOrder */
@@ -284,7 +311,7 @@ class SalesReportController extends Controller
                         ])
                         ->where('cost', '>', 0)
                         ->get();
-                    
+
                     $orderWalletSum = $orderWalletTransactins->sum('cost');
                     if ($orderWalletSum == 0) {
                         $myValue = $price['final'];
@@ -292,15 +319,15 @@ class SalesReportController extends Controller
                         $walletPerItem = $orderWalletSum / $myOrder->orderproducts_count;
                         $myValue       = ($price['final'] - $walletPerItem);
                     }
-    
+
                     return $myValue;
                 });
-    
+
             $sum += $toAdd;
         }
         return $sum;
     }
-    
+
     /**
      * @return array
      */
@@ -312,7 +339,7 @@ class SalesReportController extends Controller
         $tillDateTime  = $this->makeTillDateTime($today);
         return [$sinceDateTime, $tillDateTime];
     }
-    
+
     /**
      * @return array
      */
@@ -323,7 +350,7 @@ class SalesReportController extends Controller
         $tillDateTime  = $this->makeTillDateTime($endDayOfWeekDate);
         return [$sinceDateTime, $tillDateTime];
     }
-    
+
     /**
      * @return array
      */
@@ -334,27 +361,7 @@ class SalesReportController extends Controller
         $tillDateTime  = $this->makeTillDateTime($lastDayDate);
         return [$sinceDateTime, $tillDateTime];
     }
-    
-    /**
-     * @param $sinceDateTime
-     * @param $tillDateTime
-     *
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
-     */
-    private function getOrderproductsByTimePeriod($sinceDateTime, $tillDateTime)
-    {
-        return Orderproduct::where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
-            ->whereHas('order', function ($q) use ($sinceDateTime, $tillDateTime) {
-                $q->where('completed_at', '>=', $sinceDateTime)
-                    ->where('completed_at', '<=', $tillDateTime)
-                    ->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
-                    ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
-            })
-            ->with(['order', 'order.transactions'])
-            ->get();
-    
-    }
-    
+
     /**
      * Returns a collection of provinces
      *
@@ -523,7 +530,45 @@ class SalesReportController extends Controller
                 'persianName' => 'بدون_استان',
                 'count'       => 0,
             ],
-        
+
         ]);
+    }
+
+    /**
+     * @param Collection $allTimeOrderproducts
+     * @return Collection
+     */
+    private function setLocation(Collection $allTimeOrderproducts): Collection
+    {
+        $provinces = $this->getProvinces();
+        foreach ($allTimeOrderproducts as $allTimeOrderproduct) {
+            $user = $allTimeOrderproduct->order->user;
+            $userProvince = $user->province;
+            if (isset($userProvince)) {
+                $foundProvince = $provinces->filter(static function ($item) use ($userProvince) {
+                    return false !== stripos($item['persianName'], $userProvince);
+                });
+                if ($foundProvince->isEmpty()) {
+                    $foundProvince = $provinces->where('name', 'ir-un');
+                }
+            } else {
+                $foundProvince = $provinces->where('name', 'ir-un');
+            }
+            $key = key($foundProvince->toArray());
+            $foundProvince = $foundProvince->first();
+            $foundProvince['count']++;
+            $provinces->put($key, $foundProvince);
+        }
+        return $provinces;
+    }
+
+    /**
+     * @param array $otherProducts
+     * @return mixed
+     */
+    private function getOrderprodutsCount(array $otherProducts): array
+    {
+        $orderproducts = $this->getPurchasedGroupedOrderproducts($otherProducts);
+        return $orderproducts->pluck('count')->toArray();
     }
 }

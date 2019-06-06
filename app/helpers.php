@@ -50,3 +50,28 @@ if (!function_exists('convertTagStringToArray')) {
     }
 
 }
+if (!function_exists('rankInArray')) {
+    function rankInArray(array $array , $value): int
+    {
+        $rank = 0;
+        sort($array);
+        foreach ($array as $key => $item) {
+            if($value > $item )
+                continue;
+
+            if($value == $item)
+            {
+                $rank = $key;
+                continue;
+            }
+
+            if($value < $item)
+            {
+                $rank = $key - 1;
+                continue;
+            }
+        }
+        return $rank+1;
+    }
+
+}
