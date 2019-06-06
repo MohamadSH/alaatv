@@ -190,7 +190,7 @@
                                             <span class="m-widget24__desc">
                                                 <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">
                                                     رتبه شما:
-                                                    10
+                                                    {{$userRank}}
                                                 </span>
                                             </span>
                                             <div class="m--space-10"></div>
