@@ -197,14 +197,19 @@
     height: 45px; !important;
 }
 
+.btnAddToCart .fa.fa-cart-arrow-down {
+    font-size: 2rem !important;
+    color: white !important;
+}
+
 .btnAddToCart {
     font-size: 1.2rem;
     background-color: #00cc1b;
 }
 
-.btnAddToCart .fa.fa-cart-arrow-down {
-    font-size: 2rem !important;
-    color: white !important;
+#productDetailes.m-portlet .m-portlet__head .m-portlet__head-tools .m-portlet__nav .m-portlet__nav-item .m-portlet__nav-link {
+    margin: 0;
+    padding: 0;
 }
 
 /*media query*/
