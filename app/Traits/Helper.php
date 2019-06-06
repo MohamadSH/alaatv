@@ -113,9 +113,9 @@ trait Helper
     public function timeFilterQuery($list, $sinceDate, $tillDate, $by = 'created_at', $sinceTime = "00:00:00", $tillTime = "23:59:59", $timeZoneConvert = true)
     {
         $sinceDate = Carbon::parse($sinceDate)
-                ->format('Y-m-d')." ".$sinceTime;
+                ->setTimezone('Asia/Tehran')->format('Y-m-d')." ".$sinceTime;
         $tillDate  = Carbon::parse($tillDate)
-                ->format('Y-m-d')." ".$tillTime;
+                ->setTimezone('Asia/Tehran')->format('Y-m-d')." ".$tillTime;
 
         if ($timeZoneConvert) {
             $sinceDate = Carbon::parse($sinceDate, "Asia/Tehran");

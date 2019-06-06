@@ -468,6 +468,11 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         return $user;
     }
 
+    public static function roleFilter($users ,$rolesId){
+        $users =  $users->whereHas('roles', function($q) use ($rolesId) {$q->whereIn("id", $rolesId);});
+        return $users;
+    }
+
     public function getAppToken()
     {
         $tokenResult = $this->createToken('Alaa App.');

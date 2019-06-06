@@ -15,7 +15,7 @@ use App\Http\Controllers\Controller;
 use League\Flysystem\Sftp\SftpAdapter;
 use App\Console\Commands\CategoryTree\Ensani;
 use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Support\Facades\{File, Input, Route, Config, Storage};
+use Illuminate\Support\Facades\{DB, File, Input, Route, Config, Storage};
 use App\{
     User,
     Event,
@@ -101,22 +101,17 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        $user = User::find(37222);
-        $talai98Ids = [306,316,322,318,302,326,312,298,308,328,342];
-        $setIds = \App\Content::select('educationalcontents.contentset_id')
-                                ->where('author_id' , $user->id)
-                                ->where('isFree' , 0)
-                                ->groupby('contentset_id')
-                                ->get()
-                                ->pluck('contentset_id')
-                                ->toArray();
+        $talai98Ids  = [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342];
+        $orderproducts = \App\Orderproduct::select(DB::raw('COUNT("*") as count'))->whereIn('product_id', $talai98Ids)
+                        ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
+                        ->whereHas('order', function ($q) {
+                            $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
+                                ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
+                        })->groupBy('product_id');
+        $a = $orderproducts->get()->pluck('count')->toArray();
+        rsort($a);
+        dd($a);
 
-        $productIds = Product::whereHas('sets' , function ($q) use ($setIds){
-            $q->whereIn('contentset_id' , $setIds)
-                ->whereNotNull('grand_id');
-        })->get()->pluck('name')->toArray();
-        $intendedProductIds = array_intersect($talai98Ids, $productIds);
-        dd($intendedProductIds);
         return (array) optional($request->user('alaatv'))->id;
     }
     
