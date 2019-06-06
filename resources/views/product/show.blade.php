@@ -66,7 +66,7 @@
             @include('systemMessage.flash')
         </div>
     </div>
-
+    
     <div class="row" id="a_top_section">
         <div class="col">
             <!--begin::Portlet-->
@@ -520,8 +520,22 @@
         'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
         'blockCustomId'=>'Block-sampleVideo'
         ])
+
+{{--    @if(isset($product->sets) && $product->sets->count() > 0)--}}
+{{--        @foreach($product->sets as $set)--}}
+{{--            --}}{{--نمونه فیلم--}}
+{{--            @include('product.partials.Block.block', [--}}
+{{--                'blockTitle'=>$set->title,--}}
+{{--                'blockUrlDisable'=>true,--}}
+{{--                'blockType'=>'content',--}}
+{{--                'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',--}}
+{{--                'blockCustomId'=>'Block-sampleVideo'--}}
+{{--                ])--}}
+{{--        @endforeach--}}
+{{--    @endif--}}
     
-    {{--نمونه جزوه--}}
+    
+        {{--نمونه جزوه--}}
     @include('product.partials.pamphlet')
     
     @if(isset($product->specialDescription) && mb_strlen(trim(strip_tags($product->specialDescription))) > 0)

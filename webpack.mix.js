@@ -122,6 +122,20 @@ mix.babel(
 
 mix.babel(
     [
+        'public/acm/videojs/video.min.js',
+        'public/acm/videojs/plugins/pip/videojs.pip.min.js',
+        'public/acm/videojs/nuevo.min.js',
+        'public/acm/videojs/plugins/videojs.p2p.min.js',
+        'public/acm/videojs/plugins/videojs.hotkeys.min.js',
+        'public/acm/videojs/plugins/seek-to-point.js',
+        'public/acm/videojs/lang/fa.js',
+        'public/acm/AlaatvCustomFiles/js/product-content-embed.js',
+    ],
+    'public/js/product-content-embed.js'
+).version();
+
+mix.babel(
+    [
         'node_modules/jquery-sticky/jquery.sticky.js',
         'public/acm/AlaatvCustomFiles/js/UserCart.js',
         'public/acm/AlaatvCustomFiles/js/page-checkout-review.js'
@@ -225,6 +239,17 @@ mix.styles(
         'public/acm/AlaatvCustomFiles/css/page-product-show.css',
     ],
     'public/css/product-show.css'
+).version();
+
+mix.styles(
+    [
+        'public/acm/videojs/skins/alaa-theme/videojs.css',
+        'public/acm/videojs/plugins/pip/videojs.pip.min.css',
+        'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
+        'public/acm/videojs/plugins/seek-to-point.css',
+        'public/acm/AlaatvCustomFiles/css/product-content-embed.css',
+    ],
+    'public/css/product-content-embed.css'
 ).version();
 
 mix.styles(
