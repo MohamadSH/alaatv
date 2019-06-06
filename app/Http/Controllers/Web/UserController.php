@@ -2087,8 +2087,8 @@ class UserController extends Controller
             $user = $authenticatedUser;
         }
 
-        if($user->isUserProfileLocked())
-            return response([] , Response::HTTP_LOCKED);
+        if($user->isUserProfileLocked() && !$authenticatedUser->can(config('constants.EDIT_USER_ACCESS')))
+            return response(['message'=>'User profile is locked'] , Response::HTTP_LOCKED);
         
         try {
             $this->fillContentFromRequest($request->all(), $authenticatedUser, config('constants.EDIT_USER_ACCESS'),
@@ -2102,7 +2102,7 @@ class UserController extends Controller
                 ],
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        
+
         //ToDo : place in UserObserver
         if ($user->checkUserProfileForLocking()) {
             $user->lockHisProfile();
