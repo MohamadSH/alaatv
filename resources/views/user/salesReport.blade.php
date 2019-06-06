@@ -70,7 +70,7 @@
     
     <div class="row">
         <div class="col">
-            <h1>به دلیل کش سرورها، آمار ها حداکثر دارای 3.5 ساعت تاخیر هستند.</h1>
+{{--            <h1>به دلیل کش سرورها، آمار ها حداکثر دارای 3.5 ساعت تاخیر هستند.</h1>--}}
             <div class="row topReport">
                 <div class="col-md-6 totalReportInNumber">
                     <div class="m-portlet ">
@@ -184,6 +184,14 @@
                                             <span class="m-widget24__stats m--font-brand">
                                                 تعداد:
                                                 {{$allTimeCount}}
+                                            </span>
+                                            <div class="m--space-10"></div>
+    
+                                            <span class="m-widget24__desc">
+                                                <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">
+                                                    رتبه شما:
+                                                    {{$userRank}}
+                                                </span>
                                             </span>
                                             <div class="m--space-10"></div>
                                             {{--<div class="progress m-progress--sm">

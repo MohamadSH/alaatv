@@ -120,11 +120,11 @@
                                                                 @endif
                                                             </span>
                                                         </div>
-                                                        @if($simpleOrderProductItem->userbons->count() > 0)
+                                                        @if($simpleOrderProductItem->attached_bons_number > 0)
                                                             <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">
                                                                 <i class="flaticon-interface-9"></i>
                                                                 تعداد بن مصرفی:
-                                                                {{ $simpleOrderProductItem->userbons->count() }}
+                                                                {{ $simpleOrderProductItem->attached_bons_number }}
                                                             </span>
                                                         @endif
                                                     </div>
@@ -283,11 +283,11 @@
                                                             <div class="clearfix"></div>
     
     
-                                                            @if($orderProductItemChild->userbons->count() > 0)
+                                                            @if($orderProductItemChild->attached_bons_number > 0)
                                                                 <span class="m-badge m-badge--info m-badge--wide m-badge--rounded m--margin-top-5">
                                                                     <i class="flaticon-interface-9"></i>
                                                                     تعداد بن مصرفی:
-                                                                    {{ $orderProductItemChild->userbons->count() }}
+                                                                    {{ $orderProductItemChild->attached_bons_number }}
                                                                 </span>
                                                             @endif
                                                             
