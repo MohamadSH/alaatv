@@ -521,16 +521,21 @@
         'blockCustomId'=>'Block-sampleVideo'
         ])
 
-    {{--دسته های این محصول--}}
-    @include('product.partials.Block.block', [
-        'blockTitle'=>'دسته های این محصول',
-        'blockUrlDisable'=>true,
-        'blockType'=>'content',
-        'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
-        'blockCustomId'=>'Block-sampleVideo'
-        ])
+{{--    @if(isset($product->sets) && $product->sets->count() > 0)--}}
+{{--        @foreach($product->sets as $set)--}}
+{{--            --}}{{--نمونه فیلم--}}
+{{--            @include('product.partials.Block.block', [--}}
+{{--                'blockTitle'=>$set->title,--}}
+{{--                'blockUrlDisable'=>true,--}}
+{{--                'blockType'=>'content',--}}
+{{--                'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',--}}
+{{--                'blockCustomId'=>'Block-sampleVideo'--}}
+{{--                ])--}}
+{{--        @endforeach--}}
+{{--    @endif--}}
     
-    {{--نمونه جزوه--}}
+    
+        {{--نمونه جزوه--}}
     @include('product.partials.pamphlet')
     
     @if(isset($product->specialDescription) && mb_strlen(trim(strip_tags($product->specialDescription))) > 0)
