@@ -544,7 +544,7 @@
                         <div class="m-portlet__head-tools">
                             <ul class="m-portlet__nav">
                                 <li class="m-portlet__nav-item">
-                                    <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <p class="m-portlet__nav-link m-portlet__nav-link--icon">
                                         
                                         <button class="btn m-btn--air btn-success m-btn--icon btnAddToCart">
                                             <span>
@@ -554,7 +554,7 @@
                                             </span>
                                         </button>
                                         
-                                    </a>
+                                    </p>
                                 </li>
                             </ul>
                         </div>
