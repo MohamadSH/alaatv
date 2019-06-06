@@ -54,16 +54,44 @@
                                         @include('product.partials.Block.product')
                                     @endforeach
                                 @endif
+                                
+                                
+                                
+                                {{-- old content block loop --}}
                                 @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->contents))
                                     @foreach($block->contents as $contentKey=>$content)
                                         @include('product.partials.Block.content')
                                     @endforeach
                                 @endif
+                                
+                                
+                                
+                                
+                                
+                                {{-- new content block loop --}}
+                                @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->sets) && $block->sets->count() > 0)
+                                    @foreach($block->sets->first()->contents as $contentKey=>$content)
+                                        @include('product.partials.Block.content')
+                                    @endforeach
+                                @endif
+    
+                                
+                                
+                                
+                                
+                                
+                                
+                                {{-- set block loop (under constructure) --}}
 {{--                                @if(((isset($blockType) && $blockType === 'set') || !isset($blockType)) && isset($block->sets))--}}
 {{--                                    @foreach($block->sets as $setKey=>$set)--}}
 {{--                                        @include('product.partials.Block.set')--}}
 {{--                                    @endforeach--}}
 {{--                                @endif--}}
+                            
+                            
+                            
+                            
+                            
                             </div>
                         </div>
                     </div>
