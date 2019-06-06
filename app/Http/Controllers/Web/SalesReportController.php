@@ -306,7 +306,7 @@ class SalesReportController extends Controller
      */
     private function getTodayTimePeriod(): array
     {
-        $today         = Carbon::today()->setTimezone('Asia/Tehran')->format('Y-m-d');
+        $today         = Carbon::now()->setTimezone('Asia/Tehran')->format('Y-m-d');
 
         $sinceDateTime = $this->makeSinceDateTime($today);
         $tillDateTime  = $this->makeTillDateTime($today);
