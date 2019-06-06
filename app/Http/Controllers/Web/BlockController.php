@@ -14,9 +14,19 @@ class BlockController extends Controller
         
         return ($request->expectsJson() ? response()->json($blocks) : $blocks);
     }
-
+ 
+    public function adminBlock(Request $request)
+    {
+        $pageName = 'indexBlock';
+        return view('admin.indexBlock', compact(['pageName']));
+    }
+    
     public function show(Request $request, Block $block)
     {
         return ($request->expectsJson() ? response()->json($block) : $block);
+    }
+    
+    public function store(Request $request)
+    {
     }
 }

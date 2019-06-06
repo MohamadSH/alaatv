@@ -186,6 +186,14 @@
                                                 {{$allTimeCount}}
                                             </span>
                                             <div class="m--space-10"></div>
+    
+                                            <span class="m-widget24__desc">
+                                                <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">
+                                                    رتبه شما:
+                                                    10
+                                                </span>
+                                            </span>
+                                            <div class="m--space-10"></div>
                                             {{--<div class="progress m-progress--sm">
                                                 <div class="progress-bar m--bg-brand" role="progressbar" style="width: 78%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>

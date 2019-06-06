@@ -51,7 +51,7 @@ var SnippetContentShow = function(){
                 // overlay: "//domain.com/overlay.html" //(undefined) - overlay URL to display html on each pause event example: https://www.nuevolab.com/videojs/tryit/overlay
 
             });
-            console.log('player: ', player);
+
             player.hotkeys({
                 enableVolumeScroll: false,
                 volumeStep: 0.1,
@@ -61,7 +61,6 @@ var SnippetContentShow = function(){
             player.pic2pic();
             player.on('resolutionchange', function () {
                 var last_resolution = param.label;
-                console.log(last_resolution);
             });
         }
 

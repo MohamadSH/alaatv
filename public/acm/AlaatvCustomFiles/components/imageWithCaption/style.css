@@ -15,7 +15,7 @@
     height: 100%;
     top: 0px;
     left: 0px;
-    display: table;
+    display: flex;
     background-color: #ff9000;
     opacity: 0;
     -webkit-transition: opacity .35s ease-out;
@@ -24,12 +24,16 @@
 }
 
 .a--imageWithCaption .a--imageCaptionWarper .a--imageCaptionContent {
-    display: table-cell;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     vertical-align: middle;
     text-align: center;
 }
 
 .a--imageWithCaption .a--imageCaptionTitle {
+    display: flex;
+    align-items: flex-end;
     position: relative;
     bottom: 70px;
     opacity: 0;
@@ -38,6 +42,9 @@
 }
 
 .a--imageWithCaption .a--imageCaptionDescription {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 5px;
     position: relative;
     opacity: 0;
     top: 70px;

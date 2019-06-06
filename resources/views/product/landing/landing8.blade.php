@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('page-css')
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/imageWithCaption/style.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/acm/AlaatvCustomFiles/components/imageWithCaption/style.css') }}?v=1" rel="stylesheet" type="text/css"/>
     <style>
         .sideItems .m-widget24__title {
             font-size: 30px !important;
