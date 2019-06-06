@@ -59,6 +59,11 @@
                                         @include('product.partials.Block.content')
                                     @endforeach
                                 @endif
+                                @if(((isset($blockType) && $blockType === 'set') || !isset($blockType)) && isset($block->sets))
+                                    @foreach($block->sets as $setKey=>$set)
+                                        @include('product.partials.Block.set')
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
                     </div>

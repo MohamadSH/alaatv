@@ -66,7 +66,7 @@
             @include('systemMessage.flash')
         </div>
     </div>
-
+    
     <div class="row" id="a_top_section">
         <div class="col">
             <!--begin::Portlet-->
@@ -515,6 +515,15 @@
     {{--نمونه فیلم--}}
     @include('product.partials.Block.block', [
         'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo']),
+        'blockUrlDisable'=>true,
+        'blockType'=>'content',
+        'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
+        'blockCustomId'=>'Block-sampleVideo'
+        ])
+
+    {{--دسته های این محصول--}}
+    @include('product.partials.Block.block', [
+        'blockTitle'=>'دسته های این محصول',
         'blockUrlDisable'=>true,
         'blockType'=>'content',
         'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
