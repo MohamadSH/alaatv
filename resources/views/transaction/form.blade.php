@@ -180,21 +180,6 @@
 <div class="row static-info margin-top-20">
     <div class="col form-group {{ $errors->has('referenceNumber') ? ' has-danger' : '' }}">
         <div class="row">
-            <label class="col-md-3 control-label" for="referenceNumber">شماره تراکنش(آنلاین): </label>
-            <div class="col-md-6">
-                {!! Form::text('transactionId',old('transactionId'),['class' => 'form-control', 'dir'=>'ltr' ]) !!}
-                @if ($errors->has('transactionId'))
-                    <span class="form-control-feedback">
-                        <strong>{{ $errors->first('transactionId') }}</strong>
-                    </span>
-                @endif
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row static-info margin-top-20">
-    <div class="col form-group {{ $errors->has('referenceNumber') ? ' has-danger' : '' }}">
-        <div class="row">
             <label class="col-md-3 control-label" for="referenceNumber">شماره مرجع:</label>
             <div class="col-md-6">
                 {!! Form::text('referenceNumber',old('referenceNumber'),['class' => 'form-control', 'dir'=>'ltr' ]) !!}
@@ -227,7 +212,7 @@
     <div class="row static-info margin-top-20">
         <div class="col form-group {{ $errors->has('authority') ? ' has-danger' : '' }}">
             <div class="row">
-                <label class="col-md-3 control-label" for="transactionID">Authority(برای پرداخت آنلاین):</label>
+                <label class="col-md-3 control-label" for="authority">Authority(برای پرداخت آنلاین):</label>
                 <div class="col-md-6">
                     {!! Form::text('authority',old('authority'),['class' => 'form-control', 'dir'=>'ltr' ]) !!}
                     @if ($errors->has('authority'))
@@ -240,23 +225,21 @@
         </div>
     </div>
 @endif
-@if(isset($transaction))
-    <div class="row static-info margin-top-20">
-        <div class="col form-group {{ $errors->has('transactionID') ? ' has-danger' : '' }}">
-            <div class="row">
-                <label class="col-md-3 control-label" for="transactionID">شماره تراکنش(برای آنلاین):</label>
-                <div class="col-md-6">
-                    {!! Form::text('transactionID',old('transactionID'),['class' => 'form-control', 'dir'=>'ltr' ]) !!}
-                    @if ($errors->has('transactionID'))
-                        <span class="form-control-feedback">
-                    <strong>{{ $errors->first('transactionID') }}</strong>
-                </span>
-                    @endif
-                </div>
+<div class="row static-info margin-top-20">
+    <div class="col form-group {{ $errors->has('transactionID') ? ' has-danger' : '' }}">
+        <div class="row">
+            <label class="col-md-3 control-label" for="transactionID">شماره تراکنش(برای آنلاین):</label>
+            <div class="col-md-6">
+                {!! Form::text('transactionID',old('transactionID'),['class' => 'form-control', 'dir'=>'ltr' ]) !!}
+                @if ($errors->has('transactionID'))
+                    <span class="form-control-feedback">
+                <strong>{{ $errors->first('transactionID') }}</strong>
+            </span>
+                @endif
             </div>
         </div>
     </div>
-@endif
+</div>
 @if(!isset($excluded) || !in_array("paycheckNumber" , $excluded))
     <div class="row static-info margin-top-20">
         <div class="col form-group {{ $errors->has('paycheckNumber') ? ' has-danger' : '' }}">

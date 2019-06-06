@@ -11,8 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
-use App\Repositories\ContentRepository;
-use App\Repositories\ProductRepository;
 
 class SalesReportController extends Controller
 {
@@ -44,23 +42,16 @@ class SalesReportController extends Controller
         /** @var User $user */
 //        dump('start allTime' , Carbon::now());
         $user = $request->user();
-//        $userSlugName = $user->nameSlug;
-//        $setIds = $this->getArray( $this->getContentsetsOfUser($user->id) , 'contentset_id') ;
-//        $productIds = $this->getArray( $this->getProductsOfUser($setIds , $userSlugName) , 'id') ;
-//        $intendedProductIds = array_intersect($talai98Ids, $productIds);
-        
-        
+    
         $contracts  = $user->contracts;
-        $productIds = [];
-        foreach ($contracts as $contract) {
-            $productIds[] = $contract->product->id;
-        }
+        $productIds = $contracts->pluck('product_id')
+            ->toArray();
         
         $allTimeOrderproducts = $this->getPurchasedOrderproducts($productIds);
         $allTimeCount         = $this->countOrderproducts($allTimeOrderproducts);
         $allTimeSum           = $this->calculateTotalPrice($allTimeOrderproducts);
         
-        $thisMonthAllOrderproducts = $this->getThisMonthPurchasedOrderproducts();
+//        $thisMonthAllOrderproducts = $this->getThisMonthPurchasedOrderproducts();
 
 //        dump('stop allTime' , Carbon::now());
         $provinces = $this->getProvinces();
@@ -87,67 +78,41 @@ class SalesReportController extends Controller
         $todayOrderproducts       = $this->getTodayPurchases($allTimeOrderproducts);
         $todayCount               = $this->countOrderproducts($todayOrderproducts);
         $todaySum                 = $this->calculateTotalPrice($todayOrderproducts);
-        $todayOveralOrderproducts = $this->getTodayPurchases($thisMonthAllOrderproducts);
-        $todayOveralSum           = $this->calculateTotalPrice($todayOveralOrderproducts);
-        $todayRate                = 0;
-        if ($todayOveralSum != 0) {
-            $todayRate = (int) (($todaySum / $todayOveralSum) * 100);
-        }
+//        $todayOveralOrderproducts = $this->getTodayPurchases($thisMonthAllOrderproducts);
+//        $todayOveralSum           = $this->calculateTotalPrice($todayOveralOrderproducts);
+//        $todayRate                = 0;
+//        if ($todayOveralSum != 0) {
+//            $todayRate = (int) (($todaySum / $todayOveralSum) * 100);
+//        }
 
 //        dump('stop before this week', Carbon::now());
         /** This week */
         $thisWeekOrderproducts       = $this->getThisWeekPurchases($allTimeOrderproducts);
         $thisWeekCount               = $this->countOrderproducts($thisWeekOrderproducts);
         $thisWeekSum                 = $this->calculateTotalPrice($thisWeekOrderproducts);
-        $thisWeekOveralOrderproducts = $this->getThisWeekPurchases($thisMonthAllOrderproducts);
-        $thisWeekOveralSum           = $this->calculateTotalPrice($thisWeekOveralOrderproducts);
-        $thisWeekRate                = 0;
-        if ($thisWeekOveralSum != 0) {
-            $thisWeekRate = (int) (($thisWeekSum / $thisWeekOveralSum) * 100);
-        }
+//        $thisWeekOveralOrderproducts = $this->getThisWeekPurchases($thisMonthAllOrderproducts);
+//        $thisWeekOveralSum           = $this->calculateTotalPrice($thisWeekOveralOrderproducts);
+//        $thisWeekRate                = 0;
+//        if ($thisWeekOveralSum != 0) {
+//            $thisWeekRate = (int) (($thisWeekSum / $thisWeekOveralSum) * 100);
+//        }
 
 //        dump('stop before this moonth', Carbon::now());
         /** This month */
         $thisMonthOrderproducts = $this->getThisMonthPurchases($allTimeOrderproducts);
         $thisMonthCount         = $this->countOrderproducts($thisMonthOrderproducts);
         $thisMonthSum           = $this->calculateTotalPrice($thisMonthOrderproducts);
-        $thisMonthOveralSum     = $this->calculateTotalPrice($thisMonthAllOrderproducts);
-        $thisMonthRate          = 0;
-        if ($thisMonthOveralSum != 0) {
-            $thisMonthRate = (int) (($thisMonthSum / $thisMonthOveralSum) * 100);
-        }
-        
+//        $thisMonthOveralSum     = $this->calculateTotalPrice($thisMonthAllOrderproducts);
+//        $thisMonthRate          = 0;
+//        if ($thisMonthOveralSum != 0) {
+//            $thisMonthRate = (int) (($thisMonthSum / $thisMonthOveralSum) * 100);
+//        }
+
         return view('user.salesReport', compact('limitStatus', 'coupontype', 'products',
             'allTimeCount', 'allTimeSum', 'thisMonthCount', 'thisMonthSum', 'thisWeekCount', 'thisWeekSum',
             'todayCount', 'todaySum',
             'todayRate', 'thisWeekRate', 'thisMonthRate', 'provinces'));
         
-    }
-    
-    /**
-     * @param  int  $userId
-     *
-     * @return Collection
-     */
-    private function getContentsetsOfUser(int $userId): Collection
-    {
-        return ContentRepository::getContentsetByUserId($userId)
-            ->get();
-    }
-    
-    /**
-     * @param  array   $setIds
-     * @param  string  $teacherName
-     *
-     * @return Collection
-     */
-    private function getProductsOfUser(array $setIds, string $teacherName): Collection
-    {
-        $products1 = ProductRepository::getProductsByUserId($setIds)
-            ->get();
-        $products2 = ProductRepository::getProductByTag($teacherName)
-            ->get();
-        return $products1->merge($products2);
     }
     
     /**
@@ -188,11 +153,11 @@ class SalesReportController extends Controller
      */
     private function getThisWeekDate(): array
     {
-        $firstDayOfWeekDate = Carbon::now()
+        $firstDayOfWeekDate = Carbon::now()->setTimezone('Asia/Tehran')
             ->startOfWeek()
             ->subDays(2)
             ->format('Y-m-d');
-        $endDayOfWeekDate   = Carbon::now()
+        $endDayOfWeekDate   = Carbon::now()->setTimezone('Asia/Tehran')
             ->endOfWeek()
             ->subDays(2)
             ->format('Y-m-d');
@@ -221,15 +186,18 @@ class SalesReportController extends Controller
      */
     private function getPurchasedOrderproducts(array $products): Collection
     {
-        return Orderproduct::whereIn('product_id', $products)
-            ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
-            ->whereHas('order', function ($q) {
-                $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
-                    ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
-            })
-            ->get()
-            ->load('order')
-            ->load('order.transactions');
+        return Cache::remember(md5(implode(',', $products)), config('constants.CACHE_5'),
+            static function () use ($products) {
+    
+                return Orderproduct::whereIn('product_id', $products)
+                    ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
+                    ->whereHas('order', function ($q) {
+                        $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
+                            ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
+                    })
+                    ->with(['order', 'order.transactions'])
+                    ->get();
+            });
     }
     
     /**
@@ -237,7 +205,7 @@ class SalesReportController extends Controller
      */
     private function getThisMonthPurchasedOrderproducts(): Collection
     {
-        list($sinceDateTime, $tillDateTime) = $this->getThisMonthTimePeriod();
+        [$sinceDateTime, $tillDateTime] = $this->getThisMonthTimePeriod();
         return $this->getOrderproductsByTimePeriod($sinceDateTime, $tillDateTime);
     }
     
@@ -260,8 +228,14 @@ class SalesReportController extends Controller
      */
     private function filterOrderproductsByCompletionDate(Collection $allTimeOrderproducts, string $sinceDateTime, string $tillDateTime): Collection
     {
-        return $allTimeOrderproducts->where('order.completed_at', '>=', $sinceDateTime)
-            ->where('order.completed_at', '<=', $tillDateTime);
+        $key = implode(',', $allTimeOrderproducts->pluck('id')
+                ->toArray()).'-'.$sinceDateTime.'-'.$tillDateTime;
+        $key = md5($key);
+        return Cache::remember($key, config('constants.CACHE_5'),
+            static function () use ($allTimeOrderproducts, $sinceDateTime, $tillDateTime) {
+                return $allTimeOrderproducts->where('order.completed_at', '>=', $sinceDateTime)
+                    ->where('order.completed_at', '<=', $tillDateTime);
+            });
     }
     
     /**
@@ -285,18 +259,6 @@ class SalesReportController extends Controller
     }
     
     /**
-     * @param  Collection  $collection
-     * @param  string      $pluck
-     *
-     * @return array
-     */
-    private function getArray(Collection $collection, string $pluck): array
-    {
-        return $collection->pluck($pluck)
-            ->toArray();
-    }
-    
-    /**
      * @param  Collection  $orderproducts
      *
      * @return int
@@ -307,27 +269,34 @@ class SalesReportController extends Controller
         foreach ($orderproducts as $orderproduct) {
             /** @var Orderproduct $orderproduct */
             $key   = 'salesReport:calculateOrderproductPrice:'.$orderproduct->cacheKey();
-            $price = Cache::tags(['salesReport', 'order', 'orderproduct'])
+            $toAdd = Cache::tags(['salesReport', 'order', 'orderproduct'])
                 ->remember($key, config('constants.CACHE_60'), function () use ($orderproduct) {
-                    return $orderproduct->obtainOrderproductCost(false);
+                    $price = $orderproduct->obtainOrderproductCost(false);
+                    
+                    /** @var Order $myOrder */
+                    $myOrder                = $orderproduct->order;
+                    $orderWalletTransactins = $myOrder->transactions()
+                        ->where('paymentmethod_id',
+                            config('constants.PAYMENT_METHOD_WALLET'))
+                        ->whereIn('transactionstatus_id', [
+                            config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
+                            config('constants.TRANSACTION_STATUS_SUSPENDED'),
+                        ])
+                        ->where('cost', '>', 0)
+                        ->get();
+                    
+                    $orderWalletSum = $orderWalletTransactins->sum('cost');
+                    if ($orderWalletSum == 0) {
+                        $myValue = $price['final'];
+                    } else {
+                        $walletPerItem = $orderWalletSum / $myOrder->orderproducts_count;
+                        $myValue       = ($price['final'] - $walletPerItem);
+                    }
+    
+                    return $myValue;
                 });
-            
-            /** @var Order $myOrder */
-            $myOrder                = $orderproduct->order;
-            $orderWalletTransactins = $myOrder->transactions->where('paymentmethod_id',
-                config('constants.PAYMENT_METHOD_WALLET'))
-                ->whereIn('transactionstatus_id', [
-                    config('constants.TRANSACTION_STATUS_SUCCESSFUL'), config('constants.TRANSACTION_STATUS_SUSPENDED'),
-                ])
-                ->where('cost', '>', 0);
-            
-            $orderWalletSum = $orderWalletTransactins->sum('cost');
-            if ($orderWalletSum == 0) {
-                $sum += $price['final'];
-            } else {
-                $walletPerItem = $orderWalletSum / $myOrder->orderproducts_count;
-                $sum           += ($price['final'] - $walletPerItem);
-            }
+    
+            $sum += $toAdd;
         }
         return $sum;
     }
@@ -337,8 +306,8 @@ class SalesReportController extends Controller
      */
     private function getTodayTimePeriod(): array
     {
-        $today         = Carbon::today()
-            ->format('Y-m-d');
+        $today         = Carbon::today()->setTimezone('Asia/Tehran')->format('Y-m-d');
+
         $sinceDateTime = $this->makeSinceDateTime($today);
         $tillDateTime  = $this->makeTillDateTime($today);
         return [$sinceDateTime, $tillDateTime];
@@ -349,7 +318,7 @@ class SalesReportController extends Controller
      */
     private function getThisWeekTimePeriod(): array
     {
-        list($firstDayOfWeekDate, $endDayOfWeekDate) = $this->getThisWeekDate();
+        [$firstDayOfWeekDate, $endDayOfWeekDate] = $this->getThisWeekDate();
         $sinceDateTime = $this->makeSinceDateTime($firstDayOfWeekDate);
         $tillDateTime  = $this->makeTillDateTime($endDayOfWeekDate);
         return [$sinceDateTime, $tillDateTime];
@@ -360,7 +329,7 @@ class SalesReportController extends Controller
      */
     private function getThisMonthTimePeriod(): array
     {
-        list($firstDayDate, $lastDayDate) = $this->getThisMonthDate();
+        [$firstDayDate, $lastDayDate] = $this->getThisMonthDate();
         $sinceDateTime = $this->makeSinceDateTime($firstDayDate);
         $tillDateTime  = $this->makeTillDateTime($lastDayDate);
         return [$sinceDateTime, $tillDateTime];
@@ -381,9 +350,9 @@ class SalesReportController extends Controller
                     ->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
                     ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
             })
-            ->get()
-            ->load('order')
-            ->load('order.transactions');
+            ->with(['order', 'order.transactions'])
+            ->get();
+    
     }
     
     /**

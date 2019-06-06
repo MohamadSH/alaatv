@@ -291,11 +291,11 @@ class ProductController extends Controller
     public function show(Request $request, Product $product)
     {
         if (isset($product->redirectUrl)) {
-            return redirect($product->redirectUrl, 301, $request->headers->all());
+            return redirect($product->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
         }
         
         if ($product->grandParent != null) {
-            return redirect($product->grandParent->url, 301, $request->headers->all());
+            return redirect($product->grandParent->url, Response::HTTP_MOVED_PERMANENTLY, $request->headers->all());
         }
         
         $this->generateSeoMetaTags($product);

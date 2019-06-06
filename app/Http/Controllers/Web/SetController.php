@@ -151,7 +151,7 @@ class SetController extends Controller
                 $this->syncProducts($products , $contentSet);
             }
             
-            session()->put('success' , 'دسته با موفقیت درج شد');
+            session()->put('success' , 'دسته با موفقیت درج شد . شماره دسته : '.$contentSet->id);
             return redirect()->back();
         }
         else {

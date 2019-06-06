@@ -192,7 +192,7 @@
 }
 
 .productAttributes .m-portlet__head,
-.productAttributes .m-portlet__head {
+.productInformation .m-portlet__head {
     background: #f2f3f8;
     height: 45px; !important;
 }

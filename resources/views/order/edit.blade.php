@@ -50,7 +50,61 @@
 @endsection
 
 @section('content')
-    
+    <!--begin::Modal-->
+    <div class="modal fade" id="responsive-transaction" tabindex="-1" role="dialog"
+         aria-labelledby="orderproductExchangeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderproductExchangeModalLabel">
+                        افزودن تراکنش جدید
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\TransactionController@store'], 'class'=>'nobottommargin' ]) !!}
+                <div class="modal-body">
+                    @include('transaction.form' , ["class"=>["paymentmethod"=>"paymentMethodName"] , "name"=>["paymentmethod"=>"paymentMethodName"] , "id"=>["paymentmethod"=>"paymentMethodName"]])
+                    {{--<span class="form-control-feedback m--font-info">( دقت شود از میان اطلاعات شماره مرجع ، شماره پیگیری و شماره چک که اطلاعات بانکی یک تراکنش محسوب می شوند ، تمامی آنها برای هر تراکنش وجود ندارد و نیاز به وارد نمودن همه ی آنها نیست)</span>--}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="userForm-close">بستن</button>
+                    <button type="submit" class="btn btn-primary">ذخیره</button>
+                </div>
+                {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+    <!--end::Modal-->
+    <!--begin::Modal-->
+    <div class="modal fade" id="deleteTransactionConfirmationModal" tabindex="-1" role="dialog"
+         aria-labelledby="orderproductExchangeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderproductExchangeModalLabel">
+                        حذف تراکنش
+                        <span id="deleteTransactionFullName"></span>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p> آیا مطمئن هستید؟</p>
+                    {!! Form::hidden('transaction_id', null) !!}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                    <button type="submit" class="btn btn-primary" onclick="removeTransaction()">بله</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end::Modal-->
     @include('systemMessage.flash')
     
     <div class="row">
@@ -75,7 +129,7 @@
                             <li class="nav-item m-tabs__item">
                                 <a class="nav-link m-tabs__link" data-toggle="tab" href="#portlet_tab3" role="tab">
                                     <i class="flaticon-coins"></i>
-                                    تراکنش های سفارش
+                                    تراکنش های موفق سفارش
                                 </a>
                             </li>
                             <li class="nav-item m-tabs__item">
@@ -611,20 +665,20 @@
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
                                 <span></span>
                             </div>
-                            <div class="table-toolbar">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="btn-group">
-                                            {{--@permission((config('constants.INSERT_USER_ACCESS')))--}}
-                                            <a class="btn m-btn--air btn-info m--margin-bottom-10 insertTransaction-button"
-                                               data-toggle="modal" href="#responsive-transaction">
-                                                <i class="fa fa-plus"></i>
-                                                افزودن تراکنش
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+{{--                            <div class="table-toolbar">--}}
+{{--                                <div class="row">--}}
+{{--                                    <div class="col-md-6">--}}
+{{--                                        <div class="btn-group">--}}
+{{--                                            --}}{{--@permission((config('constants.INSERT_USER_ACCESS')))--}}
+{{--                                            <a class="btn m-btn--air btn-info m--margin-bottom-10 insertTransaction-button"--}}
+{{--                                               data-toggle="modal" href="#responsive-transaction">--}}
+{{--                                                <i class="fa fa-plus"></i>--}}
+{{--                                                افزودن تراکنش--}}
+{{--                                            </a>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover table-bordered" id="sample_editable_2">
                                     <thead>
@@ -742,7 +796,6 @@
                             </div>
                         </div>
                         <div class="tab-pane" id="portlet_tab5" role="tabpanel">
-        
                             <table class="table table-striped table-bordered table-hover table-checkable order-column"
                                    id="sample_1">
                                 <thead>
@@ -806,8 +859,6 @@
                                 <tbody>
             
                                 @foreach($order->orderproducts()->withTrashed()->get() as $orderproduct)
-                                    {{--                                    {{ dd($orderproduct) }}--}}
-                                    {{--                                    {{ dd($orderproduct->discountPercentage) }}--}}
                                     <tr class="odd gradeX">
                                         <td>
                                             {{ $orderproduct->id }}
@@ -902,163 +953,6 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                            <div class="row">
-                                <div class="col-md-12 text-center">
-                                    <button class="btn btn-warning m-btn m-btn--icon m-btn--wide mt-sweetalert"
-                                            id="detachOrderproducts" disabled data-title="آیا مطمئن هستید؟"
-                                            data-type="warning" data-allow-outside-click="true"
-                                            data-show-confirm-button="true" data-show-cancel-button="true"
-                                            data-cancel-button-class="btn-danger" data-cancel-button-text="خیر"
-                                            data-confirm-button-text="بله" data-confirm-button-class="btn-info">
-                                        ساختن سفارش از انتخاب شده ها
-                                    </button>
-                                    <button class="btn btn-primary m-btn m-btn--icon m-btn--wide"
-                                            id="orderproductExchangeButton" data-toggle="modal"
-                                            data-target="#orderproductExchange" disabled="">
-                                        تعویض آیتم های انتخاب شده
-                                    </button>
-                
-                                    <!--begin::Modal-->
-                                    <div class="modal fade" id="orderproductExchange" tabindex="-1" role="dialog"
-                                         aria-labelledby="orderproductExchangeModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="orderproductExchangeModalLabel">تعویض
-                                                        آیتم های انتخاب شده</h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                {!! Form::open(['action' => ['Web\OrderController@exchangeOrderproduct' , $order] , 'method'=>'POST' ,'class'=>'form-horizontal form-row-seperated']) !!}
-                                                <div class="modal-body">
-                                                    <div class="form-body">
-                                                        @foreach($order->orderproducts as $orderproduct)
-                                                            <div class="row orderproductDiv"
-                                                                 id="orderproductDiv_{{$orderproduct->id}}"
-                                                                 style="display: none">
-                                                                <div class="col-md-4">
-                                                                    محصول فعلی:
-                                                                    <text class="form-control-static m--font-info">{{$orderproduct->product->name}}</text>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    پرداخت شده:
-                                                                    <text class="form-control-static m--font-info"
-                                                                          id="orderproductExchangeOriginalCost_{{$orderproduct->id}}">{{$orderproduct->obtainOrderproductCost(true)["final"]}}</text>
-                                                                </div>
-                                                                <div class="col-md-4">
-                                                                    <div class="row">
-                                                                        <label class="col-md-4 control-label ">
-                                                                            محصول جدید
-                                                                        </label>
-                                                                        <div class="col-md-8">
-                                                                            @include("admin.filters.productsFilter" , [ "listType"=>"childSelect" , "selectType"=>"searchable", "name"=>"exchange-a[".$orderproduct->id."][orderproductExchangeNewProduct]" , "class"=>"orderproductExchangeNewProductSelect" , "dataRole"=>$orderproduct->id , "defaultValue"=>["value"=>0 , "caption"=>"انتخاب کنید"]])
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <div>
-                                                                        {!! Form::text('exchange-a['.$orderproduct->id.'][orderproductExchangeNewCost]',null,['class' => 'orderproductExchangeNewCost form-control' ,'id' =>'orderproductExchangeNewCost_'.$orderproduct->id  , 'disabled', 'dir'=>'ltr' , 'data-role'=>$orderproduct->id , 'placeholder'=>'قیمت جدید' ]) !!}
-                                                                    </div>
-                                                                    <div>
-                                                                        {!! Form::text('exchange-a['.$orderproduct->id.'][orderproductExchangeNewDiscountAmount]',null,['class' => 'orderproductExchangeNewDiscountAmount form-control' ,'id' =>'orderproductExchangeNewDiscountAmount_'.$orderproduct->id  , 'disabled', 'dir'=>'ltr' , 'placeholder'=>'تخفیف جدید' ]) !!}
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-12">
-                                                                    <hr>
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <h4 class="bold text-center">
-                                                                    بدهی به کاربر:
-                                                                    <span id="orderproductExchangeDebt">0</span>
-                                                                    تومان
-                                                                </h4>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <hr>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group mt-repeater">
-                                                                    <div data-repeater-list="exchange-b">
-                                                                        <div data-repeater-item
-                                                                             class="mt-repeater-item mt-overflow">
-                                                                            {{--<label class="control-label"></label>--}}
-                                                                            <div class="mt-repeater-cell">
-                                                                                <div class="row">
-                                                                                    <div class="col-md-7">
-                                                                                        @include("admin.filters.productsFilter" , ["listType"=>"childSelect", "name"=>"newOrderproductProduct" , "class"=>"orderproductExchange-newOrderproductProduct" , "defaultValue"=>["value"=>0 , "caption"=>"انتخاب کنید"]])
-                                                                                    </div>
-                                                                                    <div class="col-md-3">
-                                                                                        {!! Form::text('neworderproductCost',null,['class' => 'form-control neworderproductCost'  , 'dir'=>'ltr' ]) !!}
-                                                                                    </div>
-                                                                                    <div class="col-md-2">
-                                                                                        <a href="javascript:"
-                                                                                           data-repeater-delete
-                                                                                           class="m--padding-5 a--full-width btn btn-danger m-btn m-btn--icon mt-repeater-delete mt-repeater-del-right mt-repeater-btn-inline">
-                                                                                            <i class="flaticon-delete"></i>
-                                                                                        </a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <a href="javascript:" data-repeater-create
-                                                                       class="btn btn-success mt-repeater-add">
-                                                                        <i class="fa fa-plus"></i>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6"
-                                                                 style="   border-right: #eeeeef solid 1px;">
-                                                                <div class="mt-checkbox-list">
-                                                                    <label class="mt-checkbox mt-checkbox-outline">
-                                                                        <input name="orderproductExchangeTransacctionCheckbox"
-                                                                               class="icheck" value="1" type="checkbox"
-                                                                               id="orderproductExchangeTransacctionCheckbox">
-                                                                        ثبت تراکنش
-                                                                        <span></span>
-                                                                    </label>
-                                                                </div>
-                                                                <fieldset id="orderproductExchangeTransacction"
-                                                                          disabled>
-                                                                    @include("transaction.form" , ["transactionPaymentmethods"=>$offlineTransactionPaymentMethods , "excluded"=>["authority" , "paycheckNumber" , "order_id" , "deadline_at" , "completed_at" ] , "defaultValues"=>["transactionstatus"=>config("constants.TRANSACTION_STATUS_SUCCESSFUL")] , "id"=>["cost"=>"orderproductExchangeTransactionCost"] ])
-                                                                </fieldset>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">بستن
-                                                    </button>
-                                                    <button type="submit" class="btn btn-primary">ذخیره</button>
-                                                </div>
-                                                {!! Form::close() !!}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--end::Modal-->
-            
-                                </div>
-                            </div>
-                            <hr>
-                            <h4 class="bold">آیتم های افزوده سفارش</h4>
-                            <span class="form-control-feedback m--font-danger"> قیمت این آیتم ها به قیمت کل سبد اضافه می شود</span>
-                            <ul>
-                                @foreach($order->orderproducts as $orderproduct)
-                                    @if($orderproduct->attributevalues->where("pivot.extraCost" , ">" , "0")->isNotEmpty())
-                                        @foreach($orderproduct->attributevalues->where("pivot.extraCost" , ">" , "0") as $attributevalue)
-                                            <li>{{$attributevalue->name}}
-                                                : {{number_format($attributevalue->pivot->extraCost)}} تومان
-                                            </li>
-                                        @endforeach
-                                    @endif
-                                @endforeach
-                            </ul>
                         </div>
                         <div class="tab-pane" id="portlet_tab6" role="tabpanel">
                             
@@ -1144,72 +1038,11 @@
                         
                         </div>
                     </div>
-    
-    
-                    <!--begin::Modal-->
-                    <div class="modal fade" id="responsive-transaction" tabindex="-1" role="dialog"
-                         aria-labelledby="orderproductExchangeModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="orderproductExchangeModalLabel">
-                                        افزودن تراکنش جدید
-                                    </h5>
-                                    <button type="button" class="close" data-dismiss="modal"
-                                            aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\TransactionController@store'], 'class'=>'nobottommargin' ]) !!}
-                                <div class="modal-body">
-                                    @include('transaction.form' , ["class"=>["paymentmethod"=>"paymentMethodName"] , "name"=>["paymentmethod"=>"paymentMethodName"] , "id"=>["paymentmethod"=>"paymentMethodName"]])
-                                    {{--<span class="form-control-feedback m--font-info">( دقت شود از میان اطلاعات شماره مرجع ، شماره پیگیری و شماره چک که اطلاعات بانکی یک تراکنش محسوب می شوند ، تمامی آنها برای هر تراکنش وجود ندارد و نیاز به وارد نمودن همه ی آنها نیست)</span>--}}
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="userForm-close">بستن</button>
-                                    <button type="submit" class="btn btn-primary">ذخیره</button>
-                                </div>
-                                {!! Form::close() !!}
-                            </div>
-                        </div>
-                    </div>
-                    <!--end::Modal-->
-    
-                    <!--begin::Modal-->
-                    <div class="modal fade" id="deleteTransactionConfirmationModal" tabindex="-1" role="dialog"
-                         aria-labelledby="orderproductExchangeModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="orderproductExchangeModalLabel">
-                                        حذف تراکنش
-                                        <span id="deleteTransactionFullName"></span>
-                                    </h5>
-                                    <button type="button" class="close" data-dismiss="modal"
-                                            aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p> آیا مطمئن هستید؟</p>
-                                    {!! Form::hidden('transaction_id', null) !!}
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
-                                    <button type="submit" class="btn btn-primary" onclick="removeTransaction()">بله</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end::Modal-->
-
-                    
                 </div>
             </div>
         
         </div>
     </div>
-
 @endsection
 
 

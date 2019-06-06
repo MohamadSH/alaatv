@@ -3,6 +3,7 @@
 namespace  App\PaymentModule\Controllers;
 
 use AlaaTV\Gateways\Contracts\OnlinePaymentVerificationResponseInterface;
+use App\Notifications\InvoicePaid;
 use App\Order;
 use AlaaTV\Gateways\Money;
 use App\PaymentModule\Responses;
@@ -42,22 +43,26 @@ class PaymentVerifierController extends Controller
         $verificationResult = $paymentClient->verifyPayment($money, $authority);
         $responseMessages = $verificationResult->getMessages();
 
-        $transaction->order->detachUnusedCoupon();
+        /** @var Order $myOrder */
+        $myOrder = $transaction->order;
+        $myOrder->detachUnusedCoupon();
         if ($verificationResult->isSuccessfulPayment()) {
             TransactionRepo::handleTransactionStatus(
                 $transaction,
                 $verificationResult->getRefId(),
                 $verificationResult->getCardPanMask()
             );
-            $this->handleOrderSuccessPayment($transaction->order);
+            $this->handleOrderSuccessPayment($myOrder);
             $assetLink = '
             <a href="'.route('user.asset').'" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">
                 دانلودهای من
             </a>';
             $responseMessages[]= 'برای دانلود محصولاتی که خریده اید به صفحه روبرو بروید: '.$assetLink;
             $responseMessages[]= 'توجه کنید که محصولات پیش خرید شده در تاریخ مقرر شده برای دانلود قرار داده می شوند';
+
+            $myOrder->user->notify(new InvoicePaid($myOrder));
         } else {
-            $this->handleOrderCanceledPayment($transaction->order);
+            $this->handleOrderCanceledPayment($myOrder);
             $this->handleOrderCanceledTransaction($transaction);
             $transaction->update();
             $myOrdersPage = '
@@ -70,7 +75,7 @@ class PaymentVerifierController extends Controller
         setcookie('cartItems', '', time() - 3600, '/');
 
         /*
-        if (isset($transaction->order_id)) {} else { if (isset($transaction->wallet_id)) { if ($result['status']) { $this->handleWalletChargingSuccessPayment($gatewayVerify['RefID'], $transaction, $gatewayVerify['cardPanMask']); } else { $this->handleWalletChargingCanceledPayment($transaction); } } } */
+        if (isset($myOrder_id)) {} else { if (isset($transaction->wallet_id)) { if ($result['status']) { $this->handleWalletChargingSuccessPayment($gatewayVerify['RefID'], $transaction, $gatewayVerify['cardPanMask']); } else { $this->handleWalletChargingCanceledPayment($transaction); } } } */
 
         Request::session()->flash('verifyResult', [
             'messages' => $responseMessages,
@@ -98,6 +103,7 @@ class PaymentVerifierController extends Controller
             $order->close(config('constants.PAYMENT_STATUS_UNPAID'), config('constants.ORDER_STATUS_CANCELED'));
             $order->update();
         }
+        //ToDo : Deprecated
         $order->refundWalletTransaction();
     }
 
