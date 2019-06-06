@@ -8,7 +8,12 @@
             font-size: 1.2rem;
             background-color: #00cc1b;
         }
-    
+
+        #productDetailes.m-portlet .m-portlet__head .m-portlet__head-tools .m-portlet__nav .m-portlet__nav-item .m-portlet__nav-link {
+            margin: 0;
+            padding: 0;
+        }
+        
         @if(!isset($block) || !isset($block->contents) || $block->contents->count() === 0)
             .productInfoNav-sampleVideo {
             display: none !important;
