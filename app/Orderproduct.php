@@ -434,6 +434,16 @@ class Orderproduct extends BaseModel
         return $this->belongsToMany(Userbon::class)
             ->withPivot('usageNumber', 'discount');
     }
+
+    public function getAttachedBonsNumberAttribute(){
+        $orderproduct = $this;
+        $key          = 'orderproduct:attachedBonsNumber:'.$orderproduct->cacheKey();
+
+        return Cache::tags(['orderproduct'])
+            ->remember($key, config('constants.CACHE_60'), function () use ($orderproduct) {
+                return $orderproduct->userbons->sum('usedNumber');
+            });
+    }
     
     /**
      * @param       $userBons
@@ -594,4 +604,5 @@ class Orderproduct extends BaseModel
                 return optional($this->product->grand)->photo;
             });
     }
+
 }
