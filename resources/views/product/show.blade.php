@@ -8,7 +8,12 @@
             font-size: 1.2rem;
             background-color: #00cc1b;
         }
-    
+
+        #productDetailes.m-portlet .m-portlet__head .m-portlet__head-tools .m-portlet__nav .m-portlet__nav-item .m-portlet__nav-link {
+            margin: 0;
+            padding: 0;
+        }
+        
         @if(!isset($block) || !isset($block->contents) || $block->contents->count() === 0)
             .productInfoNav-sampleVideo {
             display: none !important;
@@ -544,7 +549,7 @@
                         <div class="m-portlet__head-tools">
                             <ul class="m-portlet__nav">
                                 <li class="m-portlet__nav-item">
-                                    <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                    <p class="m-portlet__nav-link m-portlet__nav-link--icon">
                                         
                                         <button class="btn m-btn--air btn-success m-btn--icon btnAddToCart">
                                             <span>
@@ -554,7 +559,7 @@
                                             </span>
                                         </button>
                                         
-                                    </a>
+                                    </p>
                                 </li>
                             </ul>
                         </div>
