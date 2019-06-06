@@ -108,7 +108,9 @@ class HomeController extends Controller
                             $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
                                 ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
                         })->groupBy('product_id');
-        dd($orderproducts->get()->pluck('count')->toArray());
+        $a = $orderproducts->get()->pluck('count')->toArray();
+        rsort($a);
+        dd($a);
 
         return (array) optional($request->user('alaatv'))->id;
     }

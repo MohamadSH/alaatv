@@ -54,21 +54,12 @@ if (!function_exists('rankInArray')) {
     function rankInArray(array $array , $value): int
     {
         $rank = 0;
-        sort($array);
+        rsort($array);
         foreach ($array as $key => $item) {
-            if($value > $item )
-                continue;
-
-            if($value == $item)
+            if($value >= $item )
             {
                 $rank = $key;
-                continue;
-            }
-
-            if($value < $item)
-            {
-                $rank = $key - 1;
-                continue;
+                break;
             }
         }
         return $rank+1;
