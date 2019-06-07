@@ -5,6 +5,7 @@
         isset($blockType) &&
         (
             ($blockType === 'content' && isset($block->contents) && $block->contents->count() > 0) ||
+            ($blockType === 'content' && optional(optional(optional($block->sets)->first())->contents)->count() > 0) ||
             ($blockType === 'product' && isset($block->products) && $block->products->count() > 0)
         )
     )
