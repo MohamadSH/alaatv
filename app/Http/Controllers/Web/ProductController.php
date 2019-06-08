@@ -1017,6 +1017,9 @@ class ProductController extends Controller
             338,
             339,
             340,
+            210,
+            213,
+            222
         ];
 
 
@@ -1197,7 +1200,8 @@ class ProductController extends Controller
             318,
             322,
             326,
-            328
+            328,
+            342
         ];
 
         
