@@ -83,10 +83,14 @@ class SalesReportController extends Controller
      */
     private function todayPurchases(Collection $allTimeOrderproducts): array
     {
-        $todayOrderproducts = $this->getTodayPurchases($allTimeOrderproducts);
-        $todayCount         = $this->countOrderproducts($todayOrderproducts);
-        $todaySum           = $this->calculateTotalPrice($todayOrderproducts);
-        return [$todayCount, $todaySum];
+        return Cache::remember('SR-todayPurchases-'.md5(implode(',', $allTimeOrderproducts->pluck('id')
+                ->toArray())), config('constants.CACHE_3'), function () use ($allTimeOrderproducts) {
+            $todayOrderproducts = $this->getTodayPurchases($allTimeOrderproducts);
+            $todayCount         = $this->countOrderproducts($todayOrderproducts);
+            $todaySum           = $this->calculateTotalPrice($todayOrderproducts);
+            return [$todayCount, $todaySum];
+        });
+        
     }
     
     /**
@@ -96,10 +100,14 @@ class SalesReportController extends Controller
      */
     private function thisWeekPurchases(Collection $allTimeOrderproducts): array
     {
-        $thisWeekOrderproducts = $this->getThisWeekPurchases($allTimeOrderproducts);
-        $thisWeekCount         = $this->countOrderproducts($thisWeekOrderproducts);
-        $thisWeekSum           = $this->calculateTotalPrice($thisWeekOrderproducts);
-        return [$thisWeekCount, $thisWeekSum];
+        return Cache::remember('SR-thisWeekPurchases-'.md5(implode(',', $allTimeOrderproducts->pluck('id')
+                ->toArray())), config('constants.CACHE_3'), function () use ($allTimeOrderproducts) {
+            $thisWeekOrderproducts = $this->getThisWeekPurchases($allTimeOrderproducts);
+            $thisWeekCount         = $this->countOrderproducts($thisWeekOrderproducts);
+            $thisWeekSum           = $this->calculateTotalPrice($thisWeekOrderproducts);
+            return [$thisWeekCount, $thisWeekSum];
+        });
+        
     }
     
     /**
@@ -109,10 +117,14 @@ class SalesReportController extends Controller
      */
     private function thisMonthPurchases(Collection $allTimeOrderproducts): array
     {
-        $thisMonthOrderproducts = $this->getThisMonthPurchases($allTimeOrderproducts);
-        $thisMonthCount         = $this->countOrderproducts($thisMonthOrderproducts);
-        $thisMonthSum           = $this->calculateTotalPrice($thisMonthOrderproducts);
-        return [$thisMonthCount, $thisMonthSum];
+        return Cache::remember('SR-thisMonthPurchases-'.md5(implode(',', $allTimeOrderproducts->pluck('id')
+                ->toArray())), config('constants.CACHE_3'), function () use ($allTimeOrderproducts) {
+            $thisMonthOrderproducts = $this->getThisMonthPurchases($allTimeOrderproducts);
+            $thisMonthCount         = $this->countOrderproducts($thisMonthOrderproducts);
+            $thisMonthSum           = $this->calculateTotalPrice($thisMonthOrderproducts);
+            return [$thisMonthCount, $thisMonthSum];
+        });
+        
     }
     
     /**
@@ -351,13 +363,15 @@ class SalesReportController extends Controller
      */
     private function getTodayTimePeriod(): array
     {
-        $today = Carbon::now()
-            ->setTimezone('Asia/Tehran')
-            ->format('Y-m-d');
+        return Cache::remember('SR-getTodayTimePeriod', config('constants.CACHE_3'), function () {
+            $today = Carbon::now()
+                ->setTimezone('Asia/Tehran')
+                ->format('Y-m-d');
         
-        $sinceDateTime = $this->makeSinceDateTime($today);
-        $tillDateTime  = $this->makeTillDateTime($today);
-        return [$sinceDateTime, $tillDateTime];
+            $sinceDateTime = $this->makeSinceDateTime($today);
+            $tillDateTime  = $this->makeTillDateTime($today);
+            return [$sinceDateTime, $tillDateTime];
+        });
     }
     
     /**
@@ -365,10 +379,13 @@ class SalesReportController extends Controller
      */
     private function getThisWeekTimePeriod(): array
     {
-        [$firstDayOfWeekDate, $endDayOfWeekDate] = $this->getThisWeekDate();
-        $sinceDateTime = $this->makeSinceDateTime($firstDayOfWeekDate);
-        $tillDateTime  = $this->makeTillDateTime($endDayOfWeekDate);
-        return [$sinceDateTime, $tillDateTime];
+        return Cache::remember('SR-getThisWeekTimePeriod', config('constants.CACHE_3'), function () {
+            [$firstDayOfWeekDate, $endDayOfWeekDate] = $this->getThisWeekDate();
+            $sinceDateTime = $this->makeSinceDateTime($firstDayOfWeekDate);
+            $tillDateTime  = $this->makeTillDateTime($endDayOfWeekDate);
+            return [$sinceDateTime, $tillDateTime];
+        });
+        
     }
     
     /**
@@ -376,10 +393,13 @@ class SalesReportController extends Controller
      */
     private function getThisMonthTimePeriod(): array
     {
-        [$firstDayDate, $lastDayDate] = $this->getThisMonthDate();
-        $sinceDateTime = $this->makeSinceDateTime($firstDayDate);
-        $tillDateTime  = $this->makeTillDateTime($lastDayDate);
-        return [$sinceDateTime, $tillDateTime];
+        return Cache::remember('SR-getThisMonthTimePeriod', config('constants.CACHE_3'), function () {
+            [$firstDayDate, $lastDayDate] = $this->getThisMonthDate();
+            $sinceDateTime = $this->makeSinceDateTime($firstDayDate);
+            $tillDateTime  = $this->makeTillDateTime($lastDayDate);
+            return [$sinceDateTime, $tillDateTime];
+        });
+        
     }
     
     /**
