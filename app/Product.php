@@ -341,6 +341,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public static function getProductsHaveBestOffer(): ProductCollection
     {
+        return new ProductCollection();
         return Product::find([
             294,
             330,
