@@ -7,7 +7,7 @@ use Exception;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\{Request, Response};
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Support\{Arr, Collection, Facades\File, Facades\Input, Facades\Storage};
+use Illuminate\Support\{Arr, Collection, Facades\File, Facades\Cache, Facades\Input, Facades\Storage};
 use App\{Bon,
     Block,
     Product,
@@ -117,7 +117,7 @@ class ProductController extends Controller
         $products = $productResult;
         
         $url = $request->url();
-        $this->generateSeoMetaTags(new SeoDummyTags("محصولات ".$this->setting->site->name,
+        $this->generateSeoMetaTags(new SeoDummyTags('محصولات '.$this->setting->site->name,
             'کارگاه تست کنکور، همایش، جمع بندی و اردوطلایی نوروز آلاء', $url,
             $url, route('image', [
                 'category' => '11',
@@ -133,8 +133,8 @@ class ProductController extends Controller
                     'tags'   => $tags,
                 ]);
         }
-        
-        return view("pages.product-search", compact("products", 'tags'));
+    
+        return view('pages.product-search', compact('products', 'tags'));
     }
     
     
@@ -222,7 +222,7 @@ class ProductController extends Controller
         $done = [];
         foreach ($files as $key => $file) {
             $extension  = $file->getClientOriginalExtension();
-            $fileName   = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            $fileName   = basename($file->getClientOriginalName(), '.'.$extension).'_'.date('YmdHis').'.'.$extension;
             $done[$key] = false;
             if (Storage::disk(config('constants.DISK5'))
                 ->put($fileName, File::get($file))) {
@@ -248,7 +248,7 @@ class ProductController extends Controller
         $done = [];
         foreach ($files as $key => $file) {
             $extension  = $file->getClientOriginalExtension();
-            $fileName   = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            $fileName   = basename($file->getClientOriginalName(), '.'.$extension).'_'.date('YmdHis').'.'.$extension;
             $done[$key] = false;
             if (Storage::disk(config('constants.DISK4'))
                 ->put($fileName, File::get($file))) {
@@ -342,22 +342,22 @@ class ProductController extends Controller
             $bons = Bon::ofName($bonName)
                 ->first();
         }
-        
-        $productFiles             = $product->productfiles->sortBy("order");
+    
+        $productFiles             = $product->productfiles->sortBy('order');
         $defaultProductFileOrders = $product->productFileTypesOrder();
         
         $productFileTypes = Productfiletype::makeSelectArray();
         
         $products    = $this->makeProductCollection();
         $producttype = $product->producttype->displayName;
-        
-        $productPhotos = $product->photos->sortByDesc("order");
+    
+        $productPhotos = $product->photos->sortByDesc('order');
         if ($productPhotos->isNotEmpty()) {
             $defaultProductPhotoOrder = $productPhotos->first()->order + 1;
         }
         
         $tags = optional($product->tags)->tags;
-        $tags = implode(",", isset($tags) ? $tags : []);
+        $tags = implode(',', isset($tags) ? $tags : []);
         
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
@@ -380,7 +380,7 @@ class ProductController extends Controller
         } else {
             $bonDiscount = $request->get('bonDiscount');
         }
-        $childrenPriceEqualizer = $request->has("changeChildrenPrice");
+        $childrenPriceEqualizer = $request->has('changeChildrenPrice');
         
         $this->fillProductFromRequest($request->all(), $product);
         
@@ -480,7 +480,7 @@ class ProductController extends Controller
                 foreach ($product->attributevalues as $attributevalue) {
                     if ($parent->attributevalues->contains($attributevalue) == false) {
                         if (isset($attributevalue->pivot->extraCost) && $attributevalue->pivot->extraCost > 0) {
-                            $attributevalueDescription = "+".number_format($attributevalue->pivot->extraCost).'تومان';
+                            $attributevalueDescription = '+'.number_format($attributevalue->pivot->extraCost).'تومان';
                         } else {
                             $attributevalueDescription = null;
                         }
@@ -511,7 +511,7 @@ class ProductController extends Controller
         $attributeCollection = collect();
         $attributeGroups     = $product->attributeset->attributeGroups;
         foreach ($attributeGroups as $attributeGroup) {
-            $attributeType = Attributetype::where("name", "main")
+            $attributeType = Attributetype::where('name', 'main')
                 ->get()
                 ->first();
             $attributes    = $product->attributeset->attributes()
@@ -574,9 +574,9 @@ class ProductController extends Controller
                 $attributevalue = Attributevalue::findOrFail($attributevalueId);
                 $product->attributevalues()
                     ->attach($attributevalue, [
-                        "extraCost"   => $extraCost,
-                        "order"       => $order,
-                        "description" => $description,
+                        'extraCost'   => $extraCost,
+                        'order'       => $order,
+                        'description' => $description,
                     ]);
                 if (strcmp($attributevalue->attribute->attributecontrol->name, 'groupedCheckbox') == 0) {
                     $array[] = $attributevalue->id;
@@ -602,7 +602,7 @@ class ProductController extends Controller
         
         foreach ($array as $item) {
             foreach ($productConfigurations as $productConfig) {
-                $newProductConfig        = $productConfig.",".$item;
+                $newProductConfig        = $productConfig.','.$item;
                 $productConfigurations[] = $newProductConfig;
             }
         }
@@ -642,9 +642,9 @@ class ProductController extends Controller
                     
                     $childProduct->attributevalues()
                         ->attach($attributevalue, [
-                            "extraCost"   => $extraCost,
-                            "order"       => $order,
-                            "description" => $description,
+                            'extraCost'   => $extraCost,
+                            'order'       => $order,
+                            'description' => $description,
                         ]);
                 }
             } else {
@@ -708,7 +708,7 @@ class ProductController extends Controller
     {
         dd($request->all());
         $product->attributevalues()
-            ->detach($product->attributevalues->pluck("id")
+            ->detach($product->attributevalues->pluck('id')
                 ->toArray());
         $newAttributevalues = $request->get('attributevalues');
         $newExtraCost       = $request->get('extraCost');
@@ -724,20 +724,20 @@ class ProductController extends Controller
             }
             if ($product->attributevalues()
                 ->attach($attributevalueId, [
-                    "extraCost"   => $extraCost,
-                    "description" => $description,
+                    'extraCost'   => $extraCost,
+                    'description' => $description,
                 ])) {
                 $children = $product->children()
-                    ->whereHas("attributevalues", function ($q) use ($attributevalueId) {
-                        $q->where("id", $attributevalueId);
+                    ->whereHas('attributevalues', function ($q) use ($attributevalueId) {
+                        $q->where('id', $attributevalueId);
                     })
                     ->get();
                 foreach ($children as $child) {
                     $child->attributevalues()
-                        ->where("id", $attributevalueId)
+                        ->where('id', $attributevalueId)
                         ->updateExistingPivot($attributevalueId, [
-                            "extraCost"   => $extraCost,
-                            "description" => $description,
+                            'extraCost'   => $extraCost,
+                            'description' => $description,
                         ]);
                 }
             }
@@ -821,7 +821,7 @@ class ProductController extends Controller
      */
     public function removeGift(Request $request, Product $product)
     {
-        $gift = Product::where("id", $request->get('giftId'))
+        $gift = Product::where('id', $request->get('giftId'))
             ->get()
             ->first();
         if (!isset($gift)) {
@@ -847,7 +847,7 @@ class ProductController extends Controller
      */
     public function landing1(Request $request)
     {
-        return redirect("/landing/6", 302);
+        return redirect('/landing/6', 302);
         
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags('آلاء| جمع بندی نیم سال اول',
@@ -875,20 +875,20 @@ class ProductController extends Controller
             $majors = [];
             if (isset($attribute)) {
                 $majors = $product->attributevalues->where('attribute_id', $attribute->id)
-                    ->pluck("name")
+                    ->pluck('name')
                     ->toArray();
             }
             
             $landingProducts->push([
-                "product" => $product,
-                "majors"  => $majors,
+                'product' => $product,
+                'majors'  => $majors,
             ]);
         }
 
 //        $costCollection = $this->makeCostCollection($products);
         $costCollection = null;
-        
-        return view("product.landing.landing1", compact('landingProducts', 'costCollection', 'withFilter'));
+    
+        return view('product.landing.landing1', compact('landingProducts', 'costCollection', 'withFilter'));
     }
     
     /**
@@ -906,10 +906,10 @@ class ProductController extends Controller
         if (Input::has('utm_term')) {
             $utm_term = Input::get('utm_term');
             switch ($utm_term) {
-                case "700":
+                case '700':
                     $gheireHozoori = config('constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER');
                     break;
-                case "260":
+                case '260':
                     $gheireHozoori = config('constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_DEFAULT');
                     break;
                 default:
@@ -918,7 +918,7 @@ class ProductController extends Controller
         }
         
         $products = Product::whereIn('id', config('constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT'))
-            ->orwhereIn("id",
+            ->orwhereIn('id',
                 config('constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT'))
             ->orderBy('order')
             ->where('enable', 1)
@@ -1035,15 +1035,19 @@ class ProductController extends Controller
             240,
             238,
         ];
+    
+    
+        $products = Cache::remember('landing-5-products', config('constants.CACHE_600'),
+            function () use ($product_ids) {
+                return Product::whereIn('id', $product_ids)
+                    ->orderBy('order')
+                    ->enable()
+                    ->get();
+            });
         
-        
-        $products = Product::whereIn('id', $product_ids)
-            ->orderBy('order')
-            ->enable()
-            ->get();
 //        $costCollection = $this->makeCostCollection($products);
-        
-        $reshteIdArray = [
+    
+        /*$reshteIdArray = [
             334 => 'riazi',
             335 => 'riazi',
             336 => 'riazi',
@@ -1051,6 +1055,19 @@ class ProductController extends Controller
             340 => 'tajrobi',
             338 => 'tajrobi',
             339 => 'tajrobi',
+            222 => 'tajrobi',
+            210 => 'tajrobi',
+            213 => 'tajrobi',
+        ];*/
+        $reshteIdArray = [
+        
+            242 => 'riazi',
+            240 => 'riazi',
+            238 => 'riazi',
+            236 => 'riazi',
+            230 => 'tajrobi',
+            234 => 'tajrobi',
+            232 => 'tajrobi',
             222 => 'tajrobi',
             210 => 'tajrobi',
             213 => 'tajrobi',
@@ -1087,8 +1104,8 @@ class ProductController extends Controller
         }
         
         $products = $productsDataForView;
-        
-        return view("product.landing.landing5", compact("products"));
+    
+        return view('product.landing.landing5', compact('products'));
     }
     
     /**
@@ -1409,7 +1426,7 @@ class ProductController extends Controller
                     $childComplementarities = $child->complimentaryproducts;
                     $intersects             = $childComplementarities->intersect($children);
                     foreach ($intersects as $intersect) {
-                        $correspondingChild         = Product::where("id", $correspondenceArray[$child->id])
+                        $correspondingChild         = Product::where('id', $correspondenceArray[$child->id])
                             ->get()
                             ->first();
                         $correspondingComplimentary = $correspondenceArray[$intersect->id];
