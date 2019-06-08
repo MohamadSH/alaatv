@@ -582,7 +582,6 @@ body.vjs-full-window {
     -ms-user-select: none;
     user-select: none;
     outline: 0;
-    background: #364eff30;
     border-radius: 50px;
 }
 
@@ -594,28 +593,31 @@ body.vjs-full-window {
     background-color: rgba(255, 255, 255, .3);
     content: '';
     height: 4px;
-    left: 2%;
+    left: 0;
+    /*left: 2%;*/
     position: absolute;
     top: 10px;
-    width: 96%;
+    width: 100%;
+    /*width: 96%;*/
     border: 0
 }
 
 .video-js .vjs-progress-control .vjs-load-progress,
 .vjs-progress-control .vjs-play-progress {
-    height: 4px;
-    /*left: 2%;*/
-    left: 0;
     position: absolute;
     top: 10px;
+    height: 4px;
+    left: 0;
+    /*left: 2%;*/
+    /*margin-left: 2%;*/
+    /*margin-right: 2%;*/
+    max-width: 100% !important;
+    /*max-width: calc(100% - 4%) !important;*/
     transition: all .2s ease 0s;
     -webkit-transition: all .2s ease 0s;
     -moz-transition: all .2s ease 0s;
     -o-transition: all .2s ease 0s;
     -ms-transition: all .2s ease 0s;
-    margin-left: 2%;
-    margin-right: 2%;
-    max-width: calc(100% - 4%) !important;
 }
 
 .video-js .vjs-progress-control .vjs-load-progress {

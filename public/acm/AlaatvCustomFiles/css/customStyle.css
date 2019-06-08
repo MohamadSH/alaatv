@@ -216,3 +216,25 @@
 .majorIcon img {
     width: 40px;
 }
+
+
+.m-header-menu .m-menu__nav > .m-menu__item.m-menu__item--rel .m-menu__link-icon {
+    display: none;
+}
+.m-header-menu .m-menu__nav > .m-menu__item {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.m-header-menu.m-header-menu--submenu-skin-light .m-menu__nav > .m-menu__item .m-menu__submenu > .m-menu__subnav {
+    background-color: transparent;
+}
+.m-header-menu.m-header-menu--submenu-skin-light .m-menu__nav > .m-menu__item .m-menu__submenu > .m-menu__subnav > .m-menu__item.m-menu__item--hover, .m-header-menu.m-header-menu--submenu-skin-light .m-menu__nav > .m-menu__item .m-menu__submenu > .m-menu__subnav > .m-menu__item:hover {
+    background-color: #ffc67c;
+}
+.m-header-menu .m-menu__nav > .m-menu__item .m-menu__submenu > .m-menu__subnav > .m-menu__item {
+    background: white;
+    margin: 1px 0;
+}
+.m-header-menu .m-menu__nav > .m-menu__item .m-menu__submenu.m-menu__submenu--classic > .m-menu__subnav {
+    padding: 0;
+}

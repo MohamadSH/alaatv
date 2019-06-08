@@ -77,13 +77,15 @@ Route::group(['prefix' => 'orderproduct'], function () {
 });
 
 Route::group(['prefix' => 'landing'], function () {
+    
+    Route::get('7' , 'Web\ProductController@landing7')->name('landing.7');
+    Route::get('9' , 'Web\ProductController@landing9')->name('landing.9');
+    Route::get('10' , 'Web\ProductController@landing10')->name('landing.10');
+    Route::get('11' , 'Web\ProductController@landing11')->name('landing.11');
+    
     Route::get('8' , [
         'as'   => 'landing.8',
         'uses' => 'Web\ProductController@landing8',
-    ]);
-    Route::get('7' , [
-        'as'   => 'landing.7',
-        'uses' => 'Web\ProductController@landing7',
     ]);
     Route::get('6' , [
         'as'   => 'landing.6',

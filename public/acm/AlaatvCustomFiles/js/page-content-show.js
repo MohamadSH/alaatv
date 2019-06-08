@@ -37,7 +37,7 @@ var SnippetContentShow = function(){
                 resume:true, // (false) enable/disable resume option to start video playback from last time position it was left
                 // theaterButton: true,
                 timetooltip: true,
-                mousedisplay: false,
+                mousedisplay: true,
                 endAction: 'related', // (undefined) If defined (share/related) either sharing panel or related panel will display when video ends.
                 container: "inline",
 
