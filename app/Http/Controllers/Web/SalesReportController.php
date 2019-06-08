@@ -155,13 +155,11 @@ class SalesReportController extends Controller
     {
         $firstDayOfWeekDate = Carbon::now()
             ->setTimezone('Asia/Tehran')
-            ->startOfWeek()
-            ->subDays(2)
+            ->startOfWeek(Carbon::SATURDAY)
             ->format('Y-m-d');
         $endDayOfWeekDate   = Carbon::now()
             ->setTimezone('Asia/Tehran')
-            ->endOfWeek()
-            ->subDays(2)
+            ->endOfWeek(Carbon::SATURDAY)
             ->format('Y-m-d');
         return [$firstDayOfWeekDate, $endDayOfWeekDate];
     }
