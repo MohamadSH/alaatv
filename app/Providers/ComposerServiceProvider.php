@@ -33,6 +33,8 @@ class ComposerServiceProvider extends ServiceProvider
             'user.dashboard',
             'product.landing.landing7',
             'product.landing.landing8',
+            'product.landing.landing9',
+            'product.landing.landing10',
             'pages.dashboard1',
             'user.salesReport',
         ], function ($view) {

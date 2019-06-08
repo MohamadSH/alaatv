@@ -212,6 +212,10 @@
     padding: 0;
 }
 
+#productDetailes.m-portlet .m-portlet__head .m-portlet__head-tools .m-portlet__nav .m-portlet__nav-item .m-portlet__nav-link.m-portlet__nav-link--icon i {
+    color: white;
+}
+
 /*media query*/
 @media (max-width: 767.98px) {
     .productInfoNav {

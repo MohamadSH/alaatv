@@ -98,6 +98,13 @@ select.form-control {
     z-index: 1061;
 }
 
+.m-badge.a-badge--square {
+    border-radius: 0;
+}
+.m-header-menu .m-menu__nav > .m-menu__item .m-menu__submenu {
+    width: 285px;
+}
+
 /*media query*/
 @media (max-width: 767.98px) {
     .m-portlet__body {
