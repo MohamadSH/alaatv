@@ -22,7 +22,7 @@
     @include('partials.slideShow1' ,['marginBottom'=>'25'])
     <div class="m--clearfix"></div>
     <!--begin:: Widgets/Stats-->
-    <div class="m-portlet ">
+    <div class="m-portlet shopNavItemsWraper">
         <div class="m-portlet__body  m-portlet__body--no-padding">
             <div class="row m-row--no-padding m-row--col-separator-xl shopNavItems">
                 <div class="col m--bg-danger shopNavItem">
