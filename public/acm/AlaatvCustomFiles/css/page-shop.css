@@ -41,18 +41,24 @@
 }
 .shopNavItems .shopNavItem .btn.m-btn {
     border: none;
+    min-width: 85%;
+    max-width: 85%;
+}
+.shopNavItems .shopNavItem.m--bg-danger .btn.m-btn {
+    background: #e63232;
+    background: linear-gradient(-135deg,#e63232 30%,#f98585 100%)
 }
 .shopNavItems .shopNavItem.m--bg-warning .btn.m-btn {
     background: #ff9000;
     background: linear-gradient(-135deg,#ff9000 30%,#ffd522 100%);
 }
-.shopNavItems .shopNavItem.m--bg-accent .btn.m-btn {
-    background: #00b2ec;
-    background: linear-gradient(-135deg,#00b2ec 30%,#00e6ef 100%);
-}
 .shopNavItems .shopNavItem.m--bg-success .btn.m-btn {
     background: #289f87;
     background: linear-gradient(-135deg,#289f87 30%,#22e1bb 100%);
+}
+.shopNavItems .shopNavItem.m--bg-accent .btn.m-btn {
+    background: #00b2ec;
+    background: linear-gradient(-135deg,#00b2ec 30%,#00e6ef 100%);
 }
 .shopNavItems .shopNavItem.m--bg-info .btn.m-btn {
     background: #3676f7;
