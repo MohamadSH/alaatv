@@ -153,15 +153,17 @@ class SalesReportController extends Controller
      */
     private function getThisWeekDate(): array
     {
-        $firstDayOfWeekDate = Carbon::now()
-            ->setTimezone('Asia/Tehran')
-            ->startOfWeek(Carbon::SATURDAY)
-            ->format('Y-m-d');
-        $endDayOfWeekDate   = Carbon::now()
-            ->setTimezone('Asia/Tehran')
-            ->endOfWeek(Carbon::SATURDAY)
-            ->format('Y-m-d');
-        return [$firstDayOfWeekDate, $endDayOfWeekDate];
+        return Cache::remember('Sr-getThisWeekDate', config('constants.CACHE_60'), function () {
+            $firstDayOfWeekDate = Carbon::now()
+                ->setTimezone('Asia/Tehran')
+                ->startOfWeek(Carbon::SATURDAY)
+                ->format('Y-m-d');
+            $endDayOfWeekDate   = Carbon::now()
+                ->setTimezone('Asia/Tehran')
+                ->endOfWeek(Carbon::SATURDAY)
+                ->format('Y-m-d');
+            return [$firstDayOfWeekDate, $endDayOfWeekDate];
+        });
     }
     
     /**
@@ -169,14 +171,16 @@ class SalesReportController extends Controller
      */
     private function getThisMonthDate(): array
     {
-        $jalaliCalender = collect(config('constants.JALALI_CALENDER'));
-        [$currentJalaliYear, $currentJalaliMonth, $currentJalaliDay] = $this->todayJalaliSplittedDate();
-        $currentJalaliMonthString = $this->convertToJalaliMonth($currentJalaliMonth);
-        $monthPeriod              = $jalaliCalender->where('month', $currentJalaliMonthString)
-            ->first();
-        $firstDayDate             = $monthPeriod['periodBegin'];
-        $lastDayDate              = $monthPeriod['periodEnd'];
-        return [$firstDayDate, $lastDayDate];
+        return Cache::remember('Sr-getThisMonthDate', config('constants.CACHE_60'), function () {
+            $jalaliCalender = collect(config('constants.JALALI_CALENDER'));
+            [$currentJalaliYear, $currentJalaliMonth, $currentJalaliDay] = $this->todayJalaliSplittedDate();
+            $currentJalaliMonthString = $this->convertToJalaliMonth($currentJalaliMonth);
+            $monthPeriod              = $jalaliCalender->where('month', $currentJalaliMonthString)
+                ->first();
+            $firstDayDate             = $monthPeriod['periodBegin'];
+            $lastDayDate              = $monthPeriod['periodEnd'];
+            return [$firstDayDate, $lastDayDate];
+        });
     }
     
     /**
