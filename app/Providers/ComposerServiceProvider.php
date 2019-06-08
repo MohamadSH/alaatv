@@ -37,6 +37,7 @@ class ComposerServiceProvider extends ServiceProvider
             'product.landing.landing10',
             'pages.dashboard1',
             'user.salesReport',
+            'pages.sharifLanding',
         ], function ($view) {
             $closedSideBar = true;
             $view->with(compact('closedSideBar'));
