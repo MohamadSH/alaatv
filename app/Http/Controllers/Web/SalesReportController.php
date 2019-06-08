@@ -232,7 +232,7 @@ class SalesReportController extends Controller
      */
     private function getUserProducts(User $user)
     {
-        return Cache::remember('sr-' - $user->cacheKey(), config('constants.CACHE_600'), function () use ($user) {
+        return Cache::remember('sr-'.$user->cacheKey(), config('constants.CACHE_600'), function () use ($user) {
             return $user->contracts->pluck('product_id')
                 ->toArray();
         });
