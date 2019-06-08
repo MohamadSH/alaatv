@@ -210,8 +210,13 @@
                                 </div>
                             </div>
                         </div>
+                        <h5 style="direction:ltr">ساعت : {{$now}}</h5>
+                        <h5>به دلیل کش سرورها، آمار ها حداکثر دارای 5 دقیقه تاخیر هستند.</h5>
+
                     </div>
+
                 </div>
+
                 <div class="col-md-6">
                     <div id="mapContainer"></div>
                 </div>

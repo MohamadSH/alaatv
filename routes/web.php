@@ -1,6 +1,8 @@
 <?php
 
 
+use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\LandingPageController;
 use App\Http\Controllers\Web\PaymentStatusController;
 use App\Http\Controllers\Web\SalesReportController;
 use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
@@ -40,7 +42,8 @@ Route::get('image/{category}/{w}/{h}/{filename}', [
     'as'   => 'image',
     'uses' => 'Web\HomeController@getImage',
 ]);
-Route::get("sharif", "Web\HomeController@schoolRegisterLanding");
+Route::get("sharif", ['\\'.HomeController::class , 'schoolRegisterLanding']);
+Route::get("sharifLanding", ['\\'.LandingPageController::class , 'sharifLanding']);
 Route::post("registerForSanatiSharifHighSchool", "Web\UserController@registerForSanatiSharifHighSchool");
 
 Route::get('sitemap.xml', 'Web\HomeController@siteMapXML');
