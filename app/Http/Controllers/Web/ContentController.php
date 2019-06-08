@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Educationalcontent;
 use App\User;
 use Exception;
 use App\Content;
-use Carbon\Carbon;
 use App\Contentset;
 use App\Contenttype;
 use App\Websitesetting;
+use App\Educationalcontent;
 use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\{Cache};
-use Illuminate\Routing\Redirector;
 use App\Http\Controllers\Controller;
 use App\Collection\ProductCollection;
 use App\Classes\Search\ContentSearch;
@@ -66,20 +64,20 @@ class ContentController extends Controller
     {
         if ($agent->isRobot()) {
             $authException = [
-                "index",
-                "show",
-                "embed",
+                'index',
+                'show',
+                'embed',
             ];
         } else {
-            $authException = ["index"];
+            $authException = ['index'];
         }
         //TODO:// preview(Telegram)
         $authException = [
-            "index",
-            "show",
-            "search",
-            "embed",
-            "attachContentToContentSet",
+            'index',
+            'show',
+            'search',
+            'embed',
+            'attachContentToContentSet',
         ];
         
         return $authException;
@@ -98,13 +96,13 @@ class ContentController extends Controller
                 'create2',
             ],
         ]);
-        $this->middleware('permission:'.config("constants.EDIT_EDUCATIONAL_CONTENT"), [
+        $this->middleware('permission:'.config('constants.EDIT_EDUCATIONAL_CONTENT'), [
             'only' => [
                 'update',
                 'edit',
             ],
         ]);
-        $this->middleware('permission:'.config("constants.REMOVE_EDUCATIONAL_CONTENT_ACCESS"),
+        $this->middleware('permission:'.config('constants.REMOVE_EDUCATIONAL_CONTENT_ACCESS'),
             ['only' => 'destroy']);
         $this->middleware('convert:order|title', [
             'only' => [
@@ -263,8 +261,8 @@ class ContentController extends Controller
         }elseif(isset($setId)){
             session()->flash('error' , 'ست مورد نظر شما یافت نشد');
         }
-
-        $view = view("content.create3", compact('contenttypes' , 'lastContent'));
+    
+        $view = view('content.create3', compact('contenttypes', 'lastContent'));
         return httpResponse(null, $view);
     }
     
@@ -358,14 +356,14 @@ class ContentController extends Controller
     {
         $validSinceTime = optional($content->validSince)->format('H:i:s');
         $tags           = optional($content->tags)->tags;
-        $tags           = implode(",", isset($tags) ? $tags : []);
+        $tags           = implode(',', isset($tags) ? $tags : []);
         $contentset     = $content->set;
     
         $result = compact('content', 'rootContentTypes', 'validSinceTime', 'tags',
             'contentset'//            "rootContentTypes"
         );
-
-        $view = view("content.edit", $result);
+    
+        $view = view('content.edit', $result);
         return httpResponse(null, $view);
     }
     
