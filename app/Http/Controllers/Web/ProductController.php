@@ -151,12 +151,14 @@ class ProductController extends Controller
         $product = new Product();
         
         $bonPlus = $request->get('bonPlus');
-        if ($this->strIsEmpty($bonPlus))
+        if ($this->strIsEmpty($bonPlus)) {
             $bonPlus = 0;
+        }
         
         $bonDiscount = $request->get('bonDiscount');
-        if ($this->strIsEmpty($bonDiscount))
+        if ($this->strIsEmpty($bonDiscount)) {
             $bonDiscount = 0;
+        }
         
         $bonId = $request->get('bon_id');
         
@@ -174,30 +176,33 @@ class ProductController extends Controller
     }
     
     /**
-     * @param  array  $inputData
-     * @param  Product      $product
+     * @param  array    $inputData
+     * @param  Product  $product
      *
      * @return void
      * @throws FileNotFoundException
      */
     private function fillProductFromRequest(array $inputData, Product $product): void
     {
-        $files     = Arr::has($inputData , 'files') ? [Arr::get($inputData,'files')] : [];
-        $images    = Arr::has($inputData , 'image') ? [Arr::get($inputData,'image')] : [];
-        $isFree    = Arr::has($inputData , 'isFree');
-        $tagString = Arr::get($inputData,'tags');
+        $files     = Arr::has($inputData, 'files') ? [Arr::get($inputData, 'files')] : [];
+        $images    = Arr::has($inputData, 'image') ? [Arr::get($inputData, 'image')] : [];
+        $isFree    = Arr::has($inputData, 'isFree');
+        $tagString = Arr::get($inputData, 'tags');
         
         $product->fill($inputData);
-        
-        if(strlen($tagString)>0)
+    
+        if (strlen($tagString) > 0) {
             $product->tags = convertTagStringToArray($tagString);
-        
-        if ($this->strIsEmpty($product->discount))
+        }
+    
+        if ($this->strIsEmpty($product->discount)) {
             $product->discount = 0;
+        }
         
         $product->isFree = $isFree;
-        
-        $product->intro_videos = $this->setIntroVideos(Arr::get($inputData, 'introVideo'), Arr::get($inputData, 'introVideoThumbnail'));
+    
+        $product->intro_videos = $this->setIntroVideos(Arr::get($inputData, 'introVideo'),
+            Arr::get($inputData, 'introVideoThumbnail'));
         
         //Storing product's catalog
         $storeFileResult = $this->storeCatalogOfProduct($product, $files);
@@ -308,8 +313,8 @@ class ProductController extends Controller
         }
         
         $block = optional($product)->block;
-        
-        return view('product.show', compact('product' , 'block'));
+    
+        return view('product.show', compact('product', 'block'));
     }
     
     public function edit(Product $product)
@@ -894,7 +899,7 @@ class ProductController extends Controller
     /**
      * Products Special Landing Page
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return Response
      */
@@ -1044,7 +1049,7 @@ class ProductController extends Controller
                     ->enable()
                     ->get();
             });
-        
+
 //        $costCollection = $this->makeCostCollection($products);
     
         /*$reshteIdArray = [
@@ -1060,7 +1065,7 @@ class ProductController extends Controller
             213 => 'tajrobi',
         ];*/
         $reshteIdArray = [
-        
+    
             242 => 'riazi',
             240 => 'riazi',
             238 => 'riazi',
@@ -1117,7 +1122,7 @@ class ProductController extends Controller
      */
     public function landing6(Request $request)
     {
-        return redirect()->route('landing.7', $request->all());
+        return redirect()->route('landing.9', $request->all());
         
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags('آلاء| جمع بندی نیم سال اول',
@@ -1141,10 +1146,13 @@ class ProductController extends Controller
         
         $productIds = $producIds;
 //        $productIds = config("constants.HAMAYESH_PRODUCT");
-        $products = Product::whereIn('id', $productIds)
-            ->orderBy('order')
-            ->where('enable', 1)
-            ->get();
+        $products = Cache::remember('landing-5-products', config('constants.CACHE_600'),
+            function () use ($product_ids) {
+                return Product::whereIn('id', $product_ids)
+                    ->orderBy('order')
+                    ->enable()
+                    ->get();
+            });
         
         $attribute  = Attribute::where('name', 'major')
             ->get()
@@ -1195,8 +1203,9 @@ class ProductController extends Controller
         $blocksIdArray = [16, 7, 10, 6];
         foreach ($blocksIdArray as $blockId) {
             $block = Block::find($blockId);
-            if(isset($block))
+            if (isset($block)) {
                 $blocks->push($block);
+            }
         }
         
         return view('product.landing.landing7', compact('landingProducts', 'costCollection', 'withFilter', 'blocks'));
@@ -1222,11 +1231,12 @@ class ProductController extends Controller
             ]), '100', '100', null));
         
         $blocks        = new BlockCollection();
-        $blocksIdArray = [10,16,6];
+        $blocksIdArray = [10, 16, 6];
         foreach ($blocksIdArray as $blockId) {
             $block = Block::find($blockId);
-            if(isset($block))
+            if (isset($block)) {
                 $blocks->push($block);
+            }
         }
         
         return view('product.landing.landing9', compact('landingProducts', 'costCollection', 'withFilter', 'blocks'));
@@ -1252,11 +1262,12 @@ class ProductController extends Controller
             ]), '100', '100', null));
         
         $blocks        = new BlockCollection();
-        $blocksIdArray = [6,16,10];
+        $blocksIdArray = [6, 16, 10];
         foreach ($blocksIdArray as $blockId) {
             $block = Block::find($blockId);
-            if(isset($block))
+            if (isset($block)) {
                 $blocks->push($block);
+            }
         }
         
         return view('product.landing.landing10', compact('landingProducts', 'costCollection', 'withFilter', 'blocks'));
@@ -1292,36 +1303,40 @@ class ProductController extends Controller
             322,
             326,
             328,
-            342
+            342,
         ];
         
         
         $productIds = $producIds;
 //        $productIds = config("constants.HAMAYESH_PRODUCT");
-        $products = Product::whereIn('id', $productIds)
-            ->orderBy('order')
-            ->where('enable', 1)
-            ->get();
-        
-        $attribute  = Attribute::where('name', 'major')
-            ->get()
-            ->first();
-        $withFilter = true;
-        
-        $landingProducts = collect();
-        foreach ($products as $product) {
-            $majors = [];
-            if (isset($attribute)) {
-                $majors = $product->attributevalues->where('attribute_id', $attribute->id)
-                    ->pluck('name')
-                    ->toArray();
-            }
+        [$products, $landingProducts] = Cache::remember('landing-8-products', config('constants.CACHE_600'),
+            static function () use ($productIds) {
+                $products  = Product::whereIn('id', $productIds)
+                    ->orderBy('order')
+                    ->enable()
+                    ->get();
+                $attribute = Attribute::where('name', 'major')
+                    ->get()
+                    ->first();
             
-            $landingProducts->push([
-                'product' => $product,
-                'majors'  => $majors,
-            ]);
-        }
+                $landingProducts = collect();
+                foreach ($products as $product) {
+                    $majors = [];
+                    if (isset($attribute)) {
+                        $majors = $product->attributevalues->where('attribute_id', $attribute->id)
+                            ->pluck('name')
+                            ->toArray();
+                    }
+                
+                    $landingProducts->push([
+                        'product' => $product,
+                        'majors'  => $majors,
+                    ]);
+                }
+                return [$products, $landingProducts];
+            });
+    
+        $withFilter = true;
         
         $costCollection = $this->makeCostCollection($products);
         
@@ -1459,6 +1474,7 @@ class ProductController extends Controller
     /**
      * @param $introVideo
      * @param $introVideoThumbnail
+     *
      * @return Collection
      */
     private function setIntroVideos($introVideo, $introVideoThumbnail)
@@ -1477,11 +1493,12 @@ class ProductController extends Controller
     }
     
     /**
-     * @param array $videos
-     * @param array $thumbnail
+     * @param  array  $videos
+     * @param  array  $thumbnail
+     *
      * @return Collection
      */
-    private function makeIntroVideoCollection(array $videos=null , array $thumbnail=null): Collection
+    private function makeIntroVideoCollection(array $videos = null, array $thumbnail = null): Collection
     {
         $introVideos = collect();
         $introVideos->push([
@@ -1493,7 +1510,8 @@ class ProductController extends Controller
     }
     
     /**
-     * @param string $thumbnailLink
+     * @param  string  $thumbnailLink
+     *
      * @return array
      */
     private function makeIntroVideoThumbnail(string $thumbnailLink): array
@@ -1501,12 +1519,14 @@ class ProductController extends Controller
         $thumbnailUrl       = $thumbnailLink;
         $thumbnailPath      = parse_url($thumbnailUrl)['path'];
         $thumbnailExtension = pathinfo($thumbnailPath, PATHINFO_EXTENSION);
-        $thumbnail          = $this->makeVideoFileThumbnailStdClass(config('constants.DISK_FREE_CONTENT'), $thumbnailUrl, $thumbnailPath, $thumbnailExtension);
+        $thumbnail          = $this->makeVideoFileThumbnailStdClass(config('constants.DISK_FREE_CONTENT'),
+            $thumbnailUrl, $thumbnailPath, $thumbnailExtension);
         return $thumbnail;
     }
     
     /**
-     * @param string $videoLink
+     * @param  string  $videoLink
+     *
      * @return array
      */
     private function makeIntroVideos(string $videoLink): array
@@ -1514,7 +1534,8 @@ class ProductController extends Controller
         $videoUrl       = $videoLink;
         $videoPath      = parse_url($videoUrl)['path'];
         $videoExtension = pathinfo($videoPath, PATHINFO_EXTENSION);
-        $hqVideo        = $this->makeIntroVideoFileStdClass(config('constants.DISK_FREE_CONTENT'), $videoUrl, $videoPath, $videoExtension, null, 'کیفیت بالا', '480p');
+        $hqVideo        = $this->makeIntroVideoFileStdClass(config('constants.DISK_FREE_CONTENT'), $videoUrl,
+            $videoPath, $videoExtension, null, 'کیفیت بالا', '480p');
         $videos         = $this->mekeIntroVideosArray($hqVideo);
         return $videos;
     }
