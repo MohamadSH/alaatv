@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Web;
 
-use Exception;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use SEO;
+use Exception;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\{Request, Response};
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\{Arr, Collection, Facades\File, Facades\Input, Facades\Storage};
-use App\{Block,
-    Bon,
-    Collection\BlockCollection,
+use App\{Bon,
+    Block,
     Product,
     Attribute,
     Attributeset,
@@ -26,6 +25,7 @@ use App\{Block,
     Traits\RequestCommon,
     Traits\CharacterCommon,
     Classes\SEO\SeoDummyTags,
+    Collection\BlockCollection,
     Classes\Search\ProductSearch,
     Http\Requests\EditProductRequest,
     Http\Requests\ProductIndexRequest,
@@ -149,15 +149,15 @@ class ProductController extends Controller
     public function store(InsertProductRequest $request)
     {
         $product = new Product();
-
+        
         $bonPlus = $request->get('bonPlus');
         if ($this->strIsEmpty($bonPlus))
             $bonPlus = 0;
-
+        
         $bonDiscount = $request->get('bonDiscount');
         if ($this->strIsEmpty($bonDiscount))
             $bonDiscount = 0;
-
+        
         $bonId = $request->get('bon_id');
         
         $this->fillProductFromRequest($request->all(), $product);
@@ -169,7 +169,7 @@ class ProductController extends Controller
             
             return $this->response->setStatusCode(Response::HTTP_OK);
         }
-    
+        
         return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
     }
     
@@ -186,20 +186,20 @@ class ProductController extends Controller
         $images    = Arr::has($inputData , 'image') ? [Arr::get($inputData,'image')] : [];
         $isFree    = Arr::has($inputData , 'isFree');
         $tagString = Arr::get($inputData,'tags');
-
+        
         $product->fill($inputData);
-
+        
         if(strlen($tagString)>0)
-            $product->tags       = convertTagStringToArray($tagString);
-
+            $product->tags = convertTagStringToArray($tagString);
+        
         if ($this->strIsEmpty($product->discount))
-            $product->discount  = 0;
-
+            $product->discount = 0;
+        
         $product->isFree = $isFree;
-
+        
         $product->intro_videos = $this->setIntroVideos(Arr::get($inputData, 'introVideo'), Arr::get($inputData, 'introVideoThumbnail'));
         
-            //Storing product's catalog
+        //Storing product's catalog
         $storeFileResult = $this->storeCatalogOfProduct($product, $files);
         //ToDo : delete the file if it is an update
         
@@ -306,9 +306,9 @@ class ProductController extends Controller
             return $this->response->setStatusCode(Response::HTTP_OK)
                 ->setContent($product);
         }
-
+        
         $block = optional($product)->block;
-
+        
         return view('product.show', compact('product' , 'block'));
     }
     
@@ -347,7 +347,7 @@ class ProductController extends Controller
         $defaultProductFileOrders = $product->productFileTypesOrder();
         
         $productFileTypes = Productfiletype::makeSelectArray();
-    
+        
         $products    = $this->makeProductCollection();
         $producttype = $product->producttype->displayName;
         
@@ -355,10 +355,10 @@ class ProductController extends Controller
         if ($productPhotos->isNotEmpty()) {
             $defaultProductPhotoOrder = $productPhotos->first()->order + 1;
         }
-
-        $tags           = optional($product->tags)->tags;
-        $tags           = implode(",", isset($tags) ? $tags : []);
-
+        
+        $tags = optional($product->tags)->tags;
+        $tags = implode(",", isset($tags) ? $tags : []);
+        
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
                 'attributesets', 'bons', 'productFiles',
@@ -391,7 +391,7 @@ class ProductController extends Controller
         if ($bonPlus || $bonDiscount) {
             $this->attachBonToProduct($product, $bonId, $bonDiscount, $bonPlus);
         }
-
+        
         if ($product->update()) {
             session()->put('success', 'اصلاح محصول با موفقیت انجام شد');
         } else {
@@ -421,16 +421,16 @@ class ProductController extends Controller
             if ($done) {
                 return $this->response->setStatusCode(Response::HTTP_OK);
             }
-    
+            
             return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
         }
-    
+        
         if ($done) {
             session()->put('success', 'محصول با موفقیت اصلاح شد');
         } else {
             session()->put('error', 'خطای پایگاه داده');
         }
-    
+        
         return redirect()->back();
     }
     
@@ -530,7 +530,7 @@ class ProductController extends Controller
                 ]);
             }
         }
-    
+        
         return view('product.configureProduct.createConfiguration', compact('product', 'attributeCollection'));
     }
     
@@ -547,7 +547,7 @@ class ProductController extends Controller
         
         $matrix = [];
         $array  = []; // checkbox attribute values
-    
+        
         $attributeIds = $request->get('attributevalues');
         $extraCosts   = $request->get('extraCost');
         $orders       = $request->get('order');
@@ -587,7 +587,7 @@ class ProductController extends Controller
             }
             $i++;
         }
-    
+        
         if (count($matrix) == 0) {
             return redirect()->back();
         }
@@ -783,7 +783,7 @@ class ProductController extends Controller
         $product->complimentaryproducts()
             ->detach($complimentary);
         session()->put('success', 'حذف اشانتیون با موفقیت انجام شد');
-    
+        
         return response()->json();
     }
     
@@ -848,7 +848,7 @@ class ProductController extends Controller
     public function landing1(Request $request)
     {
         return redirect("/landing/6", 302);
-
+        
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags('آلاء| جمع بندی نیم سال اول',
             'همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف', $url,
@@ -887,10 +887,10 @@ class ProductController extends Controller
 
 //        $costCollection = $this->makeCostCollection($products);
         $costCollection = null;
-    
+        
         return view("product.landing.landing1", compact('landingProducts', 'costCollection', 'withFilter'));
     }
-
+    
     /**
      * Products Special Landing Page
      *
@@ -901,7 +901,7 @@ class ProductController extends Controller
     public function landing2(Request $request)
     {
         return redirect()->route('landing.5', $request->all());
-
+        
         $gheireHozoori = config('constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER');
         if (Input::has('utm_term')) {
             $utm_term = Input::get('utm_term');
@@ -916,7 +916,7 @@ class ProductController extends Controller
                     break;
             }
         }
-    
+        
         $products = Product::whereIn('id', config('constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT'))
             ->orwhereIn("id",
                 config('constants.ORDOO_HOZOORI_NOROOZ_97_PRODUCT'))
@@ -929,7 +929,7 @@ class ProductController extends Controller
             $landingProducts->push(['product' => $product]);
         }
         $costCollection = $this->makeCostCollection($products);
-    
+        
         return view('product.landing.landing2',
             compact('landingProducts', 'costCollection', 'utm_term', 'gheireHozoori'));
     }
@@ -944,7 +944,7 @@ class ProductController extends Controller
     public function landing3(Request $request)
     {
         return redirect()->route('landing.5', $request->all());
-
+        
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags('آلاء | همایش های طلایی کنکور 97',
             'وقتی همه کنکوری ها گیج و سرگردانند، شما مرور کنید. چالشی ترین نکات کنکوری در همایش های آلاء', $url, $url,
@@ -954,7 +954,7 @@ class ProductController extends Controller
                 'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-    
+        
         return view('product.landing.landing3');
     }
     
@@ -978,7 +978,7 @@ class ProductController extends Controller
                 'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-    
+        
         return view('product.landing.landing4');
     }
     
@@ -1011,7 +1011,7 @@ class ProductController extends Controller
                 'width'  => 100,
             ]);
         
-        $product_ids = [
+        /*$product_ids = [
             334,
             335,
             336,
@@ -1022,10 +1022,22 @@ class ProductController extends Controller
             210,
             213,
             222
+        ];*/
+        $product_ids = [
+            230,
+            222,
+            213,
+            210,
+            232,
+            234,
+            336,
+            242,
+            240,
+            238,
         ];
-
-
-        $products    = Product::whereIn('id', $product_ids)
+        
+        
+        $products = Product::whereIn('id', $product_ids)
             ->orderBy('order')
             ->enable()
             ->get();
@@ -1070,7 +1082,7 @@ class ProductController extends Controller
                 ]),
                 'name'              => $value->name,
                 'link'              => action('Web\ProductController@show', $value->id)
-//                'link'              => null,
+                //                'link'              => null,
             ];
         }
         
@@ -1089,7 +1101,7 @@ class ProductController extends Controller
     public function landing6(Request $request)
     {
         return redirect()->route('landing.7', $request->all());
-
+        
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags('آلاء| جمع بندی نیم سال اول',
             'همایش ویژه دی ماه آلاء حمع بندی کنکور اساتید آلاء تست درسنامه تخفیف', $url,
@@ -1099,7 +1111,7 @@ class ProductController extends Controller
                 'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-
+        
         $producIds = [
             271,
             270,
@@ -1116,7 +1128,7 @@ class ProductController extends Controller
             ->orderBy('order')
             ->where('enable', 1)
             ->get();
-    
+        
         $attribute  = Attribute::where('name', 'major')
             ->get()
             ->first();
@@ -1138,7 +1150,7 @@ class ProductController extends Controller
         }
         
         $costCollection = $this->makeCostCollection($products);
-    
+        
         return view('product.landing.landing1', compact('landingProducts', 'costCollection', 'withFilter'));
     }
     
@@ -1151,6 +1163,7 @@ class ProductController extends Controller
      */
     public function landing7(Request $request)
     {
+        return redirect()->route('landing.9', $request->all());
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags('از پایه تا کنکور با آلاء',
             'از پایه تا کنکور با همایش های دانلودی آلا', $url,
@@ -1160,16 +1173,15 @@ class ProductController extends Controller
                 'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-
-        $blocks = new BlockCollection();
-        $blocksIdArray = [16,7,10,6];
-        foreach ($blocksIdArray as $blockId)
-        {
+        
+        $blocks        = new BlockCollection();
+        $blocksIdArray = [16, 7, 10, 6];
+        foreach ($blocksIdArray as $blockId) {
             $block = Block::find($blockId);
             if(isset($block))
                 $blocks->push($block);
         }
-
+        
         return view('product.landing.landing7', compact('landingProducts', 'costCollection', 'withFilter', 'blocks'));
     }
     
@@ -1192,10 +1204,9 @@ class ProductController extends Controller
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
         
-        $blocks = new BlockCollection();
+        $blocks        = new BlockCollection();
         $blocksIdArray = [10,16,6];
-        foreach ($blocksIdArray as $blockId)
-        {
+        foreach ($blocksIdArray as $blockId) {
             $block = Block::find($blockId);
             if(isset($block))
                 $blocks->push($block);
@@ -1223,10 +1234,9 @@ class ProductController extends Controller
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
         
-        $blocks = new BlockCollection();
+        $blocks        = new BlockCollection();
         $blocksIdArray = [6,16,10];
-        foreach ($blocksIdArray as $blockId)
-        {
+        foreach ($blocksIdArray as $blockId) {
             $block = Block::find($blockId);
             if(isset($block))
                 $blocks->push($block);
@@ -1267,7 +1277,7 @@ class ProductController extends Controller
             328,
             342
         ];
-
+        
         
         $productIds = $producIds;
 //        $productIds = config("constants.HAMAYESH_PRODUCT");
@@ -1414,21 +1424,21 @@ class ProductController extends Controller
                     $child->forceDelete();
                 }
                 $newProduct->forceDelete();
-    
+                
                 return response()->json(['message' => 'خطا در کپی از الجاقی محصول . لطفا دوباره اقدام نمایید'],
                     Response::HTTP_SERVICE_UNAVAILABLE);
             }
-    
+            
             return response()->json([
                 'message'      => 'عملیات کپی با موفقیت انجام شد.',
                 'newProductId' => $newProduct->id,
             ]);
         }
-    
+        
         return response()->json(['message' => 'خطا در کپی از اطلاعات پایه ای محصول . لطفا دوباره اقدام نمایید'],
             Response::HTTP_SERVICE_UNAVAILABLE);
     }
-
+    
     /**
      * @param $introVideo
      * @param $introVideoThumbnail
@@ -1440,12 +1450,12 @@ class ProductController extends Controller
         if (isset($introVideo)) {
             $videos = $this->makeIntroVideos($introVideo);
         }
-
+        
         $thumbnail = null;
         if (isset($introVideoThumbnail)) {
             $thumbnail = $this->makeIntroVideoThumbnail($introVideoThumbnail);
         }
-
+        
         return $this->makeIntroVideoCollection($videos, $thumbnail);
     }
     
@@ -1458,37 +1468,37 @@ class ProductController extends Controller
     {
         $introVideos = collect();
         $introVideos->push([
-            'video' => $videos,
+            'video'     => $videos,
             'thumbnail' => $thumbnail,
         ]);
-
+        
         return $introVideos;
     }
-
+    
     /**
      * @param string $thumbnailLink
      * @return array
      */
     private function makeIntroVideoThumbnail(string $thumbnailLink): array
     {
-        $thumbnailUrl = $thumbnailLink;
-        $thumbnailPath = parse_url($thumbnailUrl)['path'];
+        $thumbnailUrl       = $thumbnailLink;
+        $thumbnailPath      = parse_url($thumbnailUrl)['path'];
         $thumbnailExtension = pathinfo($thumbnailPath, PATHINFO_EXTENSION);
-        $thumbnail = $this->makeVideoFileThumbnailStdClass(config('constants.DISK_FREE_CONTENT'), $thumbnailUrl, $thumbnailPath, $thumbnailExtension);
+        $thumbnail          = $this->makeVideoFileThumbnailStdClass(config('constants.DISK_FREE_CONTENT'), $thumbnailUrl, $thumbnailPath, $thumbnailExtension);
         return $thumbnail;
     }
-
+    
     /**
      * @param string $videoLink
      * @return array
      */
     private function makeIntroVideos(string $videoLink): array
     {
-        $videoUrl = $videoLink;
-        $videoPath = parse_url($videoUrl)['path'];
+        $videoUrl       = $videoLink;
+        $videoPath      = parse_url($videoUrl)['path'];
         $videoExtension = pathinfo($videoPath, PATHINFO_EXTENSION);
-        $hqVideo = $this->makeIntroVideoFileStdClass(config('constants.DISK_FREE_CONTENT'), $videoUrl, $videoPath, $videoExtension, null, 'کیفیت بالا', '480p');
-        $videos = $this->mekeIntroVideosArray($hqVideo);
+        $hqVideo        = $this->makeIntroVideoFileStdClass(config('constants.DISK_FREE_CONTENT'), $videoUrl, $videoPath, $videoExtension, null, 'کیفیت بالا', '480p');
+        $videos         = $this->mekeIntroVideosArray($hqVideo);
         return $videos;
     }
 }
