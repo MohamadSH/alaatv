@@ -9,7 +9,7 @@ use App\PaymentModule\Controllers\RedirectAPIUserToPaymentRoute;
 
 Route::get('embed/c/{content}', "Web\ContentController@embed");
 Route::get('/', 'Web\IndexPageController');
-Route::get('shop', 'Web\ShopPageController');
+Route::get('shop', 'Web\ShopPageController')->name('shop');
 Route::get('home', 'Web\HomeController@home');
 Route::get('404', 'Web\HomeController@error404');
 Route::get('403', 'Web\HomeController@error403');
@@ -77,14 +77,13 @@ Route::group(['prefix' => 'orderproduct'], function () {
 });
 
 Route::group(['prefix' => 'landing'], function () {
-    Route::get('8' , [
-        'as'   => 'landing.8',
-        'uses' => 'Web\ProductController@landing8',
-    ]);
-    Route::get('7' , [
-        'as'   => 'landing.7',
-        'uses' => 'Web\ProductController@landing7',
-    ]);
+    
+    Route::get('7' , 'Web\ProductController@landing7')->name('landing.7');
+    Route::get('9' , 'Web\ProductController@landing9')->name('landing.9');
+    Route::get('10' , 'Web\ProductController@landing10')->name('landing.10');
+    
+    Route::get('8' , 'Web\ProductController@landing8')->name('landing.8');
+    
     Route::get('6' , [
         'as'   => 'landing.6',
         'uses' => 'Web\ProductController@landing6',

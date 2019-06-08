@@ -13,6 +13,18 @@
             margin: 0;
             padding: 0;
         }
+
+        /*media query*/
+        @media (max-width: 768px) {
+            .m-portlet.m-portlet--tabs .m-portlet__head,
+            .m-portlet.m-portlet--tabs .m-portlet__head .m-portlet__head-caption,
+            .m-portlet.m-portlet--tabs .m-portlet__head .m-portlet__head-tools {
+                display: flex;
+            }
+            .m-portlet.m-portlet--tabs .m-portlet__head .m-portlet__head-tools {
+                margin-top: 0;
+            }
+        }
         
         @if(!isset($block) || !isset($block->contents) || $block->contents->count() === 0)
             .productInfoNav-sampleVideo {
@@ -386,7 +398,7 @@
                                             <span id="a_product-discount"></span>
                                         </h5>
 
-                                        <button class="btn m-btn--air btn-success m-btn--icon btnAddToCart">
+                                        <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart">
                                             <span>
                                                 <i class="fa fa-cart-arrow-down"></i>
                                                 <i class="fas fa-sync-alt fa-spin m--hide"></i>
@@ -540,7 +552,7 @@
     
     @if(isset($product->specialDescription) && mb_strlen(trim(strip_tags($product->specialDescription))) > 0)
     
-        <div class="m-portlet m-portlet--tabs m--margin-bottom-10">
+        <div class="m-portlet m-portlet--tabs m--margin-bottom-10 m--margin-top-10">
             <div class="m-portlet__body">
                 {!! $product->specialDescription !!}
             </div>
@@ -549,7 +561,7 @@
     @endif
     
     @if(mb_strlen(trim(strip_tags($product->shortDescription))) > 0 || mb_strlen(trim(strip_tags($product->longDescription))) > 0)
-        <div class="row">
+        <div class="row m--margin-top-10">
             <div class="col m--margin-bottom-25">
                 <div class="m-portlet m-portlet--tabs productDetailes" id="productDetailes">
                     <div class="m-portlet__head">
