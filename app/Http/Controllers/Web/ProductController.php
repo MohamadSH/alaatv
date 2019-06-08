@@ -100,6 +100,8 @@ class ProductController extends Controller
                 'landing6',
                 'landing7',
                 'landing8',
+                'landing9',
+                'landing10',
             ],
         ]);
     }
@@ -1169,6 +1171,68 @@ class ProductController extends Controller
         }
 
         return view('product.landing.landing7', compact('landingProducts', 'costCollection', 'withFilter', 'blocks'));
+    }
+    
+    /**
+     * Products Special Landing Page
+     *
+     * @param  Request  $request
+     *
+     * @return Response
+     */
+    public function landing9(Request $request)
+    {
+        $url = $request->url();
+        $this->generateSeoMetaTags(new SeoDummyTags('همایش های تفتان آلاء',
+            'جمع بندی دروس پایه کنکور', $url,
+            $url, route('image', [
+                'category' => '11',
+                'w'        => '100',
+                'h'        => '100',
+                'filename' => $this->setting->site->siteLogo,
+            ]), '100', '100', null));
+        
+        $blocks = new BlockCollection();
+        $blocksIdArray = [10,16,6];
+        foreach ($blocksIdArray as $blockId)
+        {
+            $block = Block::find($blockId);
+            if(isset($block))
+                $blocks->push($block);
+        }
+        
+        return view('product.landing.landing9', compact('landingProducts', 'costCollection', 'withFilter', 'blocks'));
+    }
+    
+    /**
+     * Products Special Landing Page
+     *
+     * @param  Request  $request
+     *
+     * @return Response
+     */
+    public function landing10(Request $request)
+    {
+        $url = $request->url();
+        $this->generateSeoMetaTags(new SeoDummyTags('همایش های 1+5 آلاء',
+            'جمع بندی نیم سال اول پایه دوازدهم', $url,
+            $url, route('image', [
+                'category' => '11',
+                'w'        => '100',
+                'h'        => '100',
+                'filename' => $this->setting->site->siteLogo,
+            ]), '100', '100', null));
+        
+        $blocks = new BlockCollection();
+        $blocksIdArray = [6,16,10];
+        foreach ($blocksIdArray as $blockId)
+        {
+            $block = Block::find($blockId);
+            if(isset($block))
+                $blocks->push($block);
+        }
+        
+        return view('product.landing.landing10', compact('landingProducts', 'costCollection', 'withFilter', 'blocks'));
     }
     
     /**

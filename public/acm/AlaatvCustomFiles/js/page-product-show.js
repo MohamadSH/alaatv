@@ -497,7 +497,7 @@ jQuery(document).ready(function() {
             }
         },
         grid: {
-            columnClass: 'col-12 col-sm-6 col-md-2 gridItem'
+            columnClass: 'col-12 col-sm-6 col-md-3 gridItem'
         },
         defaultView: 'OwlCarousel', // OwlCarousel or grid
         childCountHideOwlCarousel: 4
@@ -532,8 +532,8 @@ jQuery(document).ready(function() {
         rateMenu: true,
         resume: true, // (false) enable/disable resume option to start video playback from last time position it was left
         // theaterButton: true,
-        timetooltip: true,
-        mousedisplay: true,
+        // timetooltip: true,
+        // mousedisplay: true,
         endAction: 'related', // (undefined) If defined (share/related) either sharing panel or related panel will display when video ends.
         container: "inline",
 
