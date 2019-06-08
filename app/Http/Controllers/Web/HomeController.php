@@ -101,17 +101,6 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        $talai98Ids  = [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342];
-        $orderproducts = \App\Orderproduct::select(DB::raw('COUNT("*") as count'))->whereIn('product_id', $talai98Ids)
-                        ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
-                        ->whereHas('order', function ($q) {
-                            $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
-                                ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
-                        })->groupBy('product_id');
-        $a = $orderproducts->get()->pluck('count')->toArray();
-        rsort($a);
-        dd($a);
-
         return (array) optional($request->user('alaatv'))->id;
     }
     
