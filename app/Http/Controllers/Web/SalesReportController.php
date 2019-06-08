@@ -561,7 +561,7 @@ class SalesReportController extends Controller
     {
         $provinces = $this->getProvinces();
         foreach ($allTimeOrderproducts as $allTimeOrderproduct) {
-            [$key, $foundProvince] = Cache::remember('sr-SetLocation-OP:'.$allTimeOrderproducts->id,
+            [$key, $foundProvince] = Cache::remember('sr-SetLocation-OP:'.$allTimeOrderproduct->id,
                 config('constants.CACHE_600'), function () use ($allTimeOrderproduct, $provinces) {
                     $user         = $allTimeOrderproduct->order->user;
                     $userProvince = $user->province;
