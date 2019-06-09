@@ -1189,6 +1189,49 @@ jQuery(document).ready(function () {
 
     var owl = jQuery('.a--owl-carousel-type-1');
     owl.each(function () {
+        var itemId = $(this).attr('id');
+        var responsive = {
+            0:{
+                items:1,
+            },
+            400:{
+                items:2,
+            },
+            600:{
+                items:4,
+            },
+            800:{
+                items:5,
+            },
+            1190:{
+                items:4
+            },
+            1400:{
+                items:5
+            }
+        };
+        if (itemId === 'product-carousel') {
+            responsive = {
+                0:{
+                    items:1,
+                },
+                400:{
+                    items:2,
+                },
+                600:{
+                    items:7,
+                },
+                800:{
+                    items:9,
+                },
+                1190:{
+                    items:7
+                },
+                1400:{
+                    items:9
+                }
+            };
+        }
         $(this).owlCarousel({
             stagePadding: 0,
             loop: false,
@@ -1200,26 +1243,7 @@ jQuery(document).ready(function () {
             touchDrag: true,
             pullDrag: true,
             responsiveClass:true,
-            responsive:{
-                0:{
-                    items:1,
-                },
-                400:{
-                    items:2,
-                },
-                600:{
-                    items:3,
-                },
-                800:{
-                    items:4,
-                },
-                1190:{
-                    items:3
-                },
-                1400:{
-                    items:4
-                }
-            }
+            responsive: responsive
         });
     });
 
