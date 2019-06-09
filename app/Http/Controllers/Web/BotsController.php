@@ -1204,7 +1204,7 @@ class BotsController extends Controller
             }
 
             if($request->has('teacherrank')){
-                $otherProducts = [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342 , 328];
+                $otherProducts = [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342];
                     $orderproducts = Orderproduct::select(DB::raw('COUNT("*") as count , product_id'))
                         ->whereIn('product_id', $otherProducts)
                         ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))

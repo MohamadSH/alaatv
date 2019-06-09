@@ -48,7 +48,7 @@ class SalesReportController extends Controller
     
         $allTimeOrderproducts = $this->getPurchasedOrderproducts($productIds);
         $allTimeCount         = $this->countOrderproducts($allTimeOrderproducts);
-    
+
         $userRank = $this->calculateUserRank($allTimeCount, array_diff($talai98Ids, $productIds));
 
 //        dump('start calculating allTime' , Carbon::now());
@@ -619,7 +619,7 @@ class SalesReportController extends Controller
      */
     private function getOrderprodutsCount(array $otherProducts): array
     {
-        return Cache::remember('sr-getOrderprodutsCount'.md5(implode(',', $otherProducts)),
+        return Cache::remember('sr-getOrderprodutsCount:'.md5(implode(',', $otherProducts)),
             config('constants.CACHE_5'), function () use ($otherProducts) {
                 $orderproducts = $this->getPurchasedGroupedOrderproducts($otherProducts);
                 return $orderproducts->pluck('count')
