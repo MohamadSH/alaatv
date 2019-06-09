@@ -426,7 +426,8 @@
                         <div id="playListScroller"
                              class="m-scrollable11"
                              data-scrollable="true"
-                             data-height="{{ min($videosWithSameSet->count(),(optional($content->template)->name == "video1" ?  11 : 4)) * 103 }}"
+{{--                             data-height="{{ min($videosWithSameSet->count(),(optional($content->template)->name == "video1" ?  11 : 4)) * 103 }}"--}}
+                             data-height="360"
                              data-scrollbar-shown="true">
                             <div class="m-portlet__body-progress">Loading</div>
                         
