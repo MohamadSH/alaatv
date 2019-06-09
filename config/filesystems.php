@@ -166,7 +166,7 @@ return [
             'root'       => "/alaa_media/cdn/",
             'timeout'    => env('SFTP_TIMEOUT', '10'),
             'prefix'     => null,
-            'dHost'      => "cdn.sanatisharif.ir",
+            'dHost'      => "cdn.alaatv.com",
             'dProtocol'  => "https://",
         ],
 

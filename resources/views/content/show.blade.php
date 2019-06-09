@@ -467,6 +467,12 @@
                     </div>
                 </div>
                 <!--end::Portlet-->
+                <div>
+                    <a href="https://alaatv.com/product/312" data-tooltip-content="همایش طلایی شیمی کنکور">
+                        <img src="http://uupload.ir/files/u8r8_banner-1.gif" alt="همایش طلایی شیمی کنکور"
+                             class="m--img-centered a--full-width"/>
+                    </a>
+                </div>
             </div>
         @endif
     </div>
