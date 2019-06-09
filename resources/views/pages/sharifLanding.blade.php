@@ -105,8 +105,9 @@
         });
 
         $('.faregotahsil').each(function(){
+            var itemId = $(this).attr('id');
             $(this).find('.a--owl-carousel-head').sticky({
-                container: '.'+sections[section]+'.dasboardLessons > .col > .m-portlet',
+                container: '#'+itemId+' > .col > .m-portlet',
                 topSpacing: $('#m_header').height(),
                 zIndex: 98
             });
