@@ -43,7 +43,7 @@
                                     'customClass' => 'faregotahsil faregotahsil-sharif',
                                     'customId' => 'faregotahsil-sharif',
                                     'users' => $sharifStudents,
-                                    'title' => 'فارغ التحصیلان دانشگاه شریف',
+                                    'title' => 'قبول های دانشگاه شریف',
                                 ])
                             @endif
                             @if($amirKabirStudents->count() > 0)
@@ -51,7 +51,7 @@
                                     'customClass' => 'faregotahsil faregotahsil-amirKabir',
                                     'customId' => 'faregotahsil-amirKabir',
                                     'users' => $amirKabirStudents,
-                                    'title' => 'فارغ التحصیلان دانشگاه امیر کبیر',
+                                    'title' => 'قبولی های دانشگاه امیر کبیر',
                                 ])
                             @endif
                             @if($tehranStudents->count() > 0)
@@ -59,7 +59,7 @@
                                     'customClass' => 'faregotahsil faregotahsil-tehran',
                                     'customId' => 'faregotahsil-tehran',
                                     'users' => $tehranStudents,
-                                    'title' => 'فارغ التحصیلان دانشگاه تهران',
+                                    'title' => 'قبولی های دانشگاه تهران',
                                 ])
                             @endif
                             @if($beheshtiStudents->count() > 0)
@@ -67,7 +67,7 @@
                                     'customClass' => 'faregotahsil faregotahsil-beheshti',
                                     'customId' => 'faregotahsil-beheshti',
                                     'users' => $beheshtiStudents,
-                                    'title' => 'فارغ التحصیلان دانشگاه شهید بهشتی',
+                                    'title' => 'قبولی های دانشگاه شهید بهشتی',
                                 ])
                             @endif
                         </div>
