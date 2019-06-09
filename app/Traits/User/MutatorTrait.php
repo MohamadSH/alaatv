@@ -254,6 +254,19 @@ trait mutatorTrait
         
         return $profileImage;
     }
+
+    public function getCustomSizePhoto(int $width , int $height){
+        $value = $this->getOriginal('photo');
+        $profileImage = ($value != null ? $value : config('constants.PROFILE_DEFAULT_IMAGE'));
+        $profileImage = route('image', [
+            'category' => '1',
+            'w'        => $width,
+            'h'        => $height,
+            'filename' => $profileImage,
+        ]);
+
+        return $profileImage;
+    }
     
     public function getShortNameAttribute()
     {
