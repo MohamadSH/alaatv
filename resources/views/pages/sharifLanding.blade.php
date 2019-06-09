@@ -3,6 +3,9 @@
 @section('page-css')
     <link href="{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css') }}" rel="stylesheet" type="text/css"/>
     <style>
+        .m-portlet__head {
+            background: white;
+        }
         .m-portlet.m-portlet--head-overlay > .m-portlet__body.sharifLandingBody {
             margin-top: 0;
         }
@@ -81,7 +84,7 @@
     <script src="{{ asset('/acm/AlaatvCustomFiles/components/aSticky/aSticky.js') }}"></script>
     <script>
         $('.faregotahsil').each(function(){
-            $(this).find('.a--owl-carousel-type-2').OwlCarouselType2({
+            $(this).OwlCarouselType2({
                 OwlCarousel: {
                     responsive: {
                         0: {
@@ -111,7 +114,7 @@
 
         $('.faregotahsil').each(function(){
             var itemId = $(this).attr('id');
-            $(this).find('.a--owl-carousel-head').sticky({
+            $('#'+itemId+' .m-portlet__head').sticky({
                 container: '#'+itemId+' > .col > .m-portlet',
                 topSpacing: $('#m_header').height(),
                 zIndex: 98
