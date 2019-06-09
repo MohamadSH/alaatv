@@ -45,6 +45,7 @@ public/js/user-orders.js
 public/js/product-show.js
 public/js/user-profile.js
 public/js/content-show.js
+public/js/content-search.js
 public/js/user-dashboard.js
 public/js/content-search.js
 public/js/checkout-review.js
@@ -61,6 +62,7 @@ public/css/user-profile.css
 public/css/product-show.css
 public/css/page-landing7.css
 public/css/page-homePage.css
+public/css/content-search.css
 public/css/page-contactUs.css
 public/css/user-dashboard.css
 public/css/checkout-review.css

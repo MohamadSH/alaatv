@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Web;
 
 use Carbon\Carbon;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\{Input};
+use Illuminate\Support\Facades\{DB, Input};
 use Maatwebsite\ExcelLight\Excel;
 use App\Http\Controllers\Controller;
 use App\Console\Commands\CategoryTree\Riazi;
@@ -1201,6 +1201,23 @@ class BotsController extends Controller
                 })->toSql();
 
                 dd($query);
+            }
+
+            if($request->has('teacherrank')){
+                $otherProducts = [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342 , 328];
+                    $orderproducts = Orderproduct::select(DB::raw('COUNT("*") as count , product_id'))
+                        ->whereIn('product_id', $otherProducts)
+                        ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
+                        ->whereHas('order', function ($q) {
+                            $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
+                                ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
+                        })
+                        ->groupBy('product_id')
+                        ->get()
+                        ->pluck('count' , 'product_id')
+                        ->toArray();
+
+                    dd($orderproducts);
             }
 
         } catch (\Exception    $e) {
