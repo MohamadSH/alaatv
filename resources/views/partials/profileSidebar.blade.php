@@ -34,7 +34,7 @@
                     {!! Form::close() !!}
                 @endif
 
-                <img src = "{{$user->photo}}" class = "imgUserProfileImage" id = "profilePhoto" alt = "عکس پروفایل">
+                <img src = "{{$user->getCustomSizePhoto(250,250)}}" class = "imgUserProfileImage" id = "profilePhoto" alt = "عکس پروفایل">
 
                 <h3 class = "m-widget19__title m--font-light userFullname">
                     @if(isset($withRegisterationDate) && $withRegisterationDate)

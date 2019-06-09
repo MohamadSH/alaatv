@@ -46,7 +46,7 @@
                             <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2">
                                 @foreach($users as $userKey=>$user)
                                     <div class="m-widget_head-owlcarousel-item carousel background-gradient" data-position="{{ $userKey }}">
-                                        <img class="a--owl-carousel-type-2-item-image" src="{{ $user->photo }}?w=253&h=142" alt="{{ $user->full_name }}">
+                                        <img class="a--owl-carousel-type-2-item-image" src="{{ $user->getCustomSizePhoto(250,250) }}" alt="{{ $user->full_name }}">
                                         <p class="userFullname">
                                             {{ $user->full_name }}
                                         </p>
