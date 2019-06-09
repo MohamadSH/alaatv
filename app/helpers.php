@@ -53,7 +53,7 @@ if (!function_exists('convertTagStringToArray')) {
 if (!function_exists('rankInArray')) {
     function rankInArray(array $array , $value): int
     {
-        $rank = 0;
+        $rank = count($array);
         rsort($array);
         foreach ($array as $key => $item) {
             if($value >= $item )
