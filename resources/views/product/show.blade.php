@@ -26,7 +26,10 @@
             }
         }
         
-        @if(!isset($block) || !isset($block->contents) || $block->contents->count() === 0)
+        @if(
+            (!isset($block) || !isset($block->contents) || $block->contents->count() === 0) &&
+            (!isset($block) || !isset($block->sets) || $block->sets->count() === 0)
+        )
             .productInfoNav-sampleVideo {
             display: none !important;
         }
