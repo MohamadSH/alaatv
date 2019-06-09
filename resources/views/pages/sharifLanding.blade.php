@@ -2,6 +2,11 @@
 
 @section('page-css')
     <link href="{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css') }}" rel="stylesheet" type="text/css"/>
+    <style>
+        .m-portlet.m-portlet--head-overlay > .m-portlet__body.sharifLandingBody {
+            margin-top: 0;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -12,7 +17,7 @@
                 <div>
                     <img src="https://alaatv.com/image/9/1280/500/BIG-SLIDE-5_20190604170740.jpg" class="a--full-width">
                 </div>
-                <div class="m-portlet__body">
+                <div class="m-portlet__body sharifLandingBody">
                     <div class="m-widget27 m-portlet-fit--sides">
                         <div class="m-widget27__container">
                             <div class="container-fluid m--padding-right-40 m--padding-left-40">
@@ -105,8 +110,9 @@
         });
 
         $('.faregotahsil').each(function(){
+            var itemId = $(this).attr('id');
             $(this).find('.a--owl-carousel-head').sticky({
-                container: '.'+sections[section]+'.dasboardLessons > .col > .m-portlet',
+                container: '#'+itemId+' > .col > .m-portlet',
                 topSpacing: $('#m_header').height(),
                 zIndex: 98
             });
