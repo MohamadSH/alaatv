@@ -1035,7 +1035,7 @@ class ProductController extends Controller
             210,
             232,
             234,
-            336,
+            236,
             242,
             240,
             238,
@@ -1051,7 +1051,7 @@ class ProductController extends Controller
             });
 
 //        $costCollection = $this->makeCostCollection($products);
-    
+
         /*$reshteIdArray = [
             334 => 'riazi',
             335 => 'riazi',
@@ -1065,16 +1065,15 @@ class ProductController extends Controller
             213 => 'tajrobi',
         ];*/
         $reshteIdArray = [
-    
             242 => 'riazi',
-            240 => 'riazi',
-            238 => 'riazi',
-            236 => 'riazi',
-            230 => 'tajrobi',
+            240 => 'tajrobi',
+            238 => 'riazi tajrobi ensani',
+            236 => 'riazi tajrobi ensani',
+            230 => 'riazi tajrobi',
             234 => 'tajrobi',
-            232 => 'tajrobi',
-            222 => 'tajrobi',
-            210 => 'tajrobi',
+            232 => 'riazi tajrobi',
+            222 => 'ensani',
+            210 => 'riazi tajrobi ensani',
             213 => 'tajrobi',
         ];
         
