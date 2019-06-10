@@ -128,8 +128,7 @@
         </div>
 
     </div>
-
-
+    
     <div class="row">
         <div class="col pageTags">
             @include("partials.search.tagLabel" , ["tags"=>$tags])

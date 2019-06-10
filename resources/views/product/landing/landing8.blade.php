@@ -197,7 +197,7 @@
                                                     <div class="text-center">
                                                         <a href="{{$product["product"]->url ?? '#'}}">
                                                             <button type="button" class="btn btn-sm m-btn--air btn-accent a--full-width m--margin-bottom-10">
-                                                                خرید همایش
+                                                                اطلاعات بیشتر
                                                             </button>
                                                         </a>
                                                     </div>

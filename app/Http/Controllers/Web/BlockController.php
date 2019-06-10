@@ -14,7 +14,15 @@ class BlockController extends Controller
         
         return ($request->expectsJson() ? response()->json($blocks) : $blocks);
     }
- 
+    
+    public function adminIndex(Request $request)
+    {
+//        $perPage = (isset($request->get('length'))) ? $request->get('length') : 10;
+        $blocks = Block::paginate(10);
+        
+        return ($request->expectsJson() ? response()->json($blocks) : $blocks);
+    }
+    
     public function adminBlock(Request $request)
     {
         $pageName = 'indexBlock';
