@@ -136,15 +136,11 @@ class TransactionController extends Controller
                 $products = Product::whereIn('id', $productsId)
                     ->get();
                 foreach ($products as $product) {
-                    if ($product->producttype_id == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
-                        if ($product->hasChildren()) {
+                    if ($product->producttype_id != config("constants.PRODUCT_TYPE_SIMPLE")) {
                             $productsId = array_merge($productsId,
-                                Product::whereHas('parents', function ($q) use ($productsId) {
-                                    $q->whereIn("parent_id", $productsId);
-                                })
-                                    ->pluck("id")
-                                    ->toArray());
-                        }
+                                $product->getAllChildren()
+                                        ->pluck("id")
+                                        ->toArray());
                     }
                 }
                 if ($request->has("checkoutStatusEnable")) {
@@ -251,7 +247,7 @@ class TransactionController extends Controller
                     }
                     else {
                         $transactionOrderproducts = $transaction->order->orderproducts()
-                            ->WhereNull("orderproducttype_id")
+                            ->Where("orderproducttype_id" , config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
                             ->whereIn("product_id",
                                 $productsId)
                             ->get();

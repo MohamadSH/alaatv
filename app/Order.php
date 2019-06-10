@@ -281,8 +281,7 @@ class Order extends BaseModel
         return $this->hasMany('App\Orderproduct')
             ->where(function ($q) {
                 /** @var QueryBuilder $q */
-                $q->whereNull("orderproducttype_id")
-                    ->orWhere("orderproducttype_id", config("constants.ORDER_PRODUCT_TYPE_DEFAULT"));
+                $q->Where("orderproducttype_id", config("constants.ORDER_PRODUCT_TYPE_DEFAULT"));
             });
     }
     
@@ -304,8 +303,7 @@ class Order extends BaseModel
                 $relation = $this->hasMany('App\Orderproduct')
                     ->where(function ($q) use ($type) {
                         /** @var QueryBuilder $q */
-                        $q->where("orderproducttype_id", $type)
-                            ->orWhereNull("orderproducttype_id");
+                        $q->where("orderproducttype_id", $type);
                     });
             } else {
                 $relation = $this->hasMany('App\Orderproduct')
