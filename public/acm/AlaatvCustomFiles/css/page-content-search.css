@@ -89,7 +89,7 @@
 
 @media only screen and (min-width: 1190px)  {
     .ProductAndSetAndVideoWraper {
-        max-width: 75%;
+        /*max-width: 75%;*/
     }
     .PamphletAndArticleWraper {
         max-width: 25%;

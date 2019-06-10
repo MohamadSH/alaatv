@@ -1,13 +1,20 @@
 @extends('app')
 
 @section('page-css')
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css') }}?v=1" rel="stylesheet" type="text/css"/>
     <style>
         .m-portlet__head {
             background: white;
         }
         .m-portlet.m-portlet--head-overlay > .m-portlet__body.sharifLandingBody {
             margin-top: 0;
+        }
+        .a--owl-carousel-type-2 .owl-stage-outer .owl-stage .owl-item .m-widget_head-owlcarousel-item.carousel {
+            margin-top: 31px;
+            margin-bottom: 0px;
+        }
+        .a--owl-carousel-type-2 .carousel .a--owl-carousel-type-2-item-image {
+            height: 140px;
         }
     </style>
 @endsection
