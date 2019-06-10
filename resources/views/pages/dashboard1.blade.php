@@ -104,9 +104,12 @@
         @include('product.partials.Block.block', [
             'blockCustomClass'=>$block->class.' a--content-carousel-1 dasboardLessons',
             'blockCustomId'=>'sectionId-'.$block->class,
-            'blockType'=>(isset($block->sets))?'set':(isset($block->products)?'product':'content'),
+            'blockType'=>(isset($block->sets) && $block->sets->count()>0)?'set':(isset($block->products) && $block->products->count()>0?'product':'content'),
             'blockUrlDisable'=>false,
         ])
+        {{--            @foreach($section["ads"] as $image => $link)--}}
+        {{--                @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])--}}
+        {{--            @endforeach--}}
     @endforeach
     
 {{--    @foreach($sections as $section)--}}
