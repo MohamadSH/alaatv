@@ -80,8 +80,9 @@
                                     <div class = "col text-center m--margin-bottom-15">
                                         <div class = "m-btn-group m-btn-group--pill btn-group" role = "group" aria-label = "First group">
                                             <button type = "button" class = "m-btn btn btn-danger btnShowRiazi">ریاضی</button>
-                                            <button type = "button" class = "m-btn btn btn-warning btnShowRiaziVaTajrobi">ریاضی و تجربی</button>
                                             <button type = "button" class = "m-btn btn btn-info btnShowTajrobi">تجربی</button>
+                                            <button type = "button" class = "m-btn btn btn-success btnShowEnsani">انسانی</button>
+                                            <button type = "button" class = "m-btn btn btn-warning btnAllMajor">همه رشته ها</button>
                                         </div>
                                     </div>
                                 </div>
@@ -194,18 +195,26 @@
 @section('page-js')
 
     <script>
+        
         jQuery(document).ready(function () {
             $(document).on('click', '.btnShowRiazi', function () {
                 $('.a--imageWithCaption.tajrobi').fadeOut();
-                $('.a--imageWithCaption.riazi').fadeIn();
-            });
-            $(document).on('click', '.btnShowRiaziVaTajrobi', function () {
-                $('.a--imageWithCaption.tajrobi').fadeIn();
+                $('.a--imageWithCaption.ensani').fadeOut();
                 $('.a--imageWithCaption.riazi').fadeIn();
             });
             $(document).on('click', '.btnShowTajrobi', function () {
-                $('.a--imageWithCaption.tajrobi').fadeIn();
                 $('.a--imageWithCaption.riazi').fadeOut();
+                $('.a--imageWithCaption.ensani').fadeOut();
+                $('.a--imageWithCaption.tajrobi').fadeIn();
+            });
+            $(document).on('click', '.btnShowEnsani', function () {
+                $('.a--imageWithCaption.riazi').fadeOut();
+                $('.a--imageWithCaption.tajrobi').fadeOut();
+                $('.a--imageWithCaption.ensani').fadeIn();
+            });
+            $(document).on('click', '.btnAllMajor', function () {
+                $('.a--imageWithCaption.tajrobi').fadeIn();
+                $('.a--imageWithCaption.riazi').fadeIn();
             });
         });
     </script>
