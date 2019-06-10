@@ -17,10 +17,9 @@ class BlockController extends Controller
     
     public function adminIndex(Request $request)
     {
-//        $perPage = (isset($request->get('length'))) ? $request->get('length') : 10;
-        $blocks = Block::paginate(10);
-        
-        return ($request->expectsJson() ? response()->json($blocks) : $blocks);
+        $perPage = ($request->has('length')) ? $request->get('length') : 10;
+        $blocks = Block::paginate($perPage);
+        return $blocks;
     }
     
     public function adminBlock(Request $request)
@@ -32,6 +31,12 @@ class BlockController extends Controller
     public function show(Request $request, Block $block)
     {
         return ($request->expectsJson() ? response()->json($block) : $block);
+    }
+    
+    public function edit(Request $request, Block $block)
+    {
+        return $block;
+        return view('block.edit', compact(['block']));
     }
     
     public function store(Request $request)
