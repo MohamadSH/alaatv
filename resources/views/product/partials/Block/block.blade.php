@@ -23,7 +23,7 @@
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
-                                @if(isset($blockUrlDisable) && !$blockUrlDisable)
+                                @if(!isset($blockUrlDisable) || !$blockUrlDisable)
                                     <a href="{{ $block->url }}" class="m-link">
                                 @endif
                                     @if(isset($blockTitle))
