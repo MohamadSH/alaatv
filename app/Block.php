@@ -76,6 +76,7 @@ class Block extends BaseModel
         'order',
         'enable',
         'type',
+        'customUrl',
     ];
     
     protected $appends = [
