@@ -236,6 +236,8 @@ class Block extends BaseModel
      */
     public function getUrlAttribute($value): ?string
     {
+        if(isset($this->customUrl))
+            return $this->customUrl;
         return isset(self::$actionLookupTable[$this->type]) ? $this->makeUrl(self::$actionLookupTable[$this->type],
             $this->tags) : null;
     }
