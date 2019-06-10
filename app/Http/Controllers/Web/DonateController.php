@@ -263,8 +263,7 @@ class DonateController extends Controller
     {
         $maxDonates = Orderproduct::whereIn("order_id", $thisMonthDonates)
             ->where(function ($q) {
-                $q->where("orderproducttype_id", config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
-                    ->orWhereNull("orderproducttype_id");
+                $q->where("orderproducttype_id", config('constants.ORDER_PRODUCT_TYPE_DEFAULT'));
             })
             ->whereIn("product_id", $donateProductArray)
             ->orderBy("cost", "DESC")
