@@ -270,6 +270,19 @@
                                             </span>
                                         </a>
                                     </li>
+                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
+                                        <a href="{{ route('landing.5') }}" class="m-menu__link ">
+                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
+                                            <span class="m-menu__link-title">
+                                                <span class="m-menu__link-wrap">
+                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
+                                                    <span class="m-menu__link-text">
+                                                        <b>همایش های نظام قدیم</b>
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>
