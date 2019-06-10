@@ -31,7 +31,7 @@
                                     @else
                                         {{ $block->title }}
                                     @endif
-                                @if(isset($blockUrlDisable) && !$blockUrlDisable)
+                                @if((isset($blockUrlDisable) && !$blockUrlDisable) || !isset($blockUrlDisable))
                                 </a>
                                 @endif
                             </h3>

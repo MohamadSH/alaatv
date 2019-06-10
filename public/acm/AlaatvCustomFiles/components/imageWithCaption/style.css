@@ -29,6 +29,7 @@
     justify-content: center;
     vertical-align: middle;
     text-align: center;
+    width: 100%;
 }
 
 .a--imageWithCaption .a--imageCaptionTitle {
@@ -39,6 +40,8 @@
     opacity: 0;
     -webkit-transition: bottom .35s ease-out, opacity .35s ease-out;
     transition: bottom .35s ease-out, opacity .35s ease-out;
+    width: 100%;
+    justify-content: center;
 }
 
 .a--imageWithCaption .a--imageCaptionDescription {
@@ -50,6 +53,8 @@
     top: 70px;
     -webkit-transition: top .35s ease-out, opacity .35s ease-out;
     transition: top .35s ease-out, opacity .35s ease-out;
+    width: 100%;
+    justify-content: center;
 }
 
 .a--imageWithCaption:hover .a--imageCaptionTitle {
