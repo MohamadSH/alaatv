@@ -58,7 +58,7 @@
                                                href="{{action("Web\ContentController@edit" , $content->id)}}">{{ $content->id }}</a>
                                         </td>
                                         <td>
-                                            <img src="{{ $content->thumbnail }}" class="img-responsive a--full-width"/>
+                                            <img src="{{ $content->thumbnail }}?w=400&h=235" class="img-responsive a--full-width"/>
                                         </td>
                                         <td> {{ $content->order }}</td>
                                         <td> {{ $content->name }}</td>
