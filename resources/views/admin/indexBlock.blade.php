@@ -191,30 +191,19 @@
                     </div>
                     <!--end::Modal-->
             
-                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="block_table">
+                    <table class="table table-striped table-bordered table-hover" width="100%" id="block_table">
                         <thead>
                             <tr>
                                 <th></th>
-                                <th class="all"> نام کالا</th>
-                                <th class="all">قیمت پایه</th>
-                                <th class="desktop">تخفیف</th>
-                                <th class="min-tablet">عکس</th>
-                                <th class="desktop"> توضیحات کوتاه</th>
-                                <th class="none"> توضیحات اجمالی</th>
-                                <th class="desktop">نوع</th>
-                                <th class="desktop">فعال/غیر فعال</th>
-                                <th class="none">تعداد موجود</th>
-    {{--                            <th class="none">کاتالوگ</th>--}}
-                                <th class="none">اسلوگان</th>
-                                <th class="none">ترتیب</th>
-                                <th class="none">دسته صفت ها</th>
-                                <th class="none">معتبر از</th>
-                                <th class="none">معتبر تا</th>
-                                <th class="none">تاریخ ایجاد</th>
-                                <th class="none">تاریخ اصلاح</th>
-                                <th class="none">تعداد بن</th>
-                                <th class="none">تخفیف هر بن(٪)</th>
-                                <th class="all">عملیات</th>
+                                <th>#</th>
+                                <th>عنوان</th>
+                                <th>ترتیب</th>
+                                <th>تعداد پیشنهادها</th>
+                                <th>تعداد محتوا</th>
+                                <th>تعداد دسته ها</th>
+                                <th>تعداد محصولات</th>
+                                <th>تعداد بنرها</th>
+                                <th>عملیات</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -263,6 +252,7 @@
             $('#block_table > tbody').html("");
             let defaultContent = "<span class=\"m-badge m-badge--wide label-sm m-badge--danger\"> درج نشده </span>";
             let columns = [
+                {data: "res", title: "", defaultContent: ' '},
                 {data: "id", title: "#", defaultContent: defaultContent},
                 {data: "title", title: "عنوان", defaultContent: defaultContent},
                 {data: "order", title: "ترتیب", defaultContent: defaultContent},
@@ -341,10 +331,6 @@
                             '    <a class="btn btn-danger btnDeleteOrder" remove-link="' + generateRemoveBlockLink(row.id) + '" data-block-name="' + row.title + '">\n' +
                             '        <i class="fa fa-remove" aria-hidden="true"></i> حذف \n' +
                             '    </a>\n';
-                        html +=
-                            '    <a class="btn btn-info copyBlock" href="'+row.url+'">\n' +
-                            '        <i class="fa fa-envelope" aria-hidden="true"></i> مشاهده\n' +
-                            '    </a>\n';
                         html += '</div>';
                         
                         return html;
@@ -354,8 +340,8 @@
             
             let dataFilter = function(data){
                 let json = jQuery.parseJSON( data );
-                json.recordsTotal = json.result.total;
-                json.recordsFiltered = json.result.total;
+                json.recordsTotal = json.total;
+                json.recordsFiltered = json.total;
                 // for (let index in json.data) {
                 //     if(!isNaN(index)) {
                 //         json.data[index]['full_name'] =
@@ -374,12 +360,12 @@
                 return data;
             };
             let dataSrc = function (json) {
-                console.log('json.result.data: ', json.result.data);
+                console.log('json.data: ', json.data);
                 $("#block-portlet-loading").addClass("d-none");
                 mApp.unblock('#block_table_wrapper');
-                return json.result.data;
+                return json.data;
             };
-            let url = '/block';
+            let url = '/blockAdmin/list';
             if (dontLoadAjax) {
                 url = null;
             } else {

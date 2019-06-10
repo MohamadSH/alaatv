@@ -1,23 +1,52 @@
-<div class="m-widget_head-owlcarousel-item carousel" data-position="{{ $setKey }}">
-    <a href="{{ $set->url }}" >
-        <img class="a--owl-carousel-type-2-item-image" src="{{ $content->thumbnail }}">
-    </a>
-    <div class="a--owl-carousel-type-2-item-title">
-        @if($content->price['base']>0)
-            <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                @if($content->price['final']!=$content->price['base'])
-                    <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($content->price['base']) }}</span>
-                @endif
-                {{ number_format($content->price['final']) }} تومان
-                @if($content->price['final']!==$content->price['base'])
-                    <span class="m-badge m-badge--info a--productDiscount">{{ round((1-($content->price['final']/$content->price['base']))*100) }}%</span>
-                @endif
-            </span>
-        @endif
-        <div class="a--content-info">
-            <div class="a--content-name">
-                <a href="{{ $content->url }}" target="_blank" class="m-link">{{ $content->name }}</a>
+<div class="item carousel">
+    <!--begin:: Widgets/Blog-->
+    <div class="m-portlet m-portlet--bordered-semi m-portlet--rounded-force">
+        <div class="m-portlet__body">
+            <div class="a-widget19 m-widget19">
+                <div class="m-widget19__pic m-portlet-fit--sides" >
+                    <a href="{{ $set->url }}" class="btn btn-sm m-btn--pill btn-brand btnViewMore">
+                        <i class="fa fa-play"></i> / <i class="fa fa-cloud-download-alt"></i>
+                    </a>
+                    <a href="{{ $set->url }}">
+                        <img src="{{ $set->photo }}?w=253&h=142" alt="{{ $set->small_name }}" class="a--full-width"/>
+                    </a>
+                    <div class="m-widget19__shadow"></div>
+                </div>
+                <div class="m-widget19__content">
+                    <div class="owl-carousel-fileTitle">
+                        <a href="{{ $set->url }}" class="m-link">
+                            <h6>
+                                <span class="m-badge m-badge--info m-badge--dot"></span>
+                                {{ $set->small_name }}
+                            </h6>
+                        </a>
+                    </div>
+                    
+                    <div class="m-widget19__header">
+                        <div class="m-widget19__user-img">
+                            <img class="m-widget19__img" src="{{ $set->author->photo }}" alt="{{ $set->author->full_name }}">
+                        </div>
+                        <div class="m-widget19__info">
+                            <span class="m-widget19__username">
+                                {{ $set->author->full_name }}
+                            </span>
+                            <br>
+                            <span class="m-widget19__time">
+                                موسسه غیرتجاری آلاء
+                            </span>
+                        </div>
+                        <div class="m-widget19__stats">
+                            <span class="m-widget19__number m--font-brand">
+                                {{ $set->contents_count }}
+                            </span>
+                            <span class="m-widget19__comment">
+                                محتوا
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <!--end:: Widgets/Blog-->
 </div>

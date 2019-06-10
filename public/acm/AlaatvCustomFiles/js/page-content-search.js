@@ -1219,16 +1219,16 @@ jQuery(document).ready(function () {
                     items:2,
                 },
                 600:{
-                    items:7,
+                    items:6,
                 },
                 800:{
-                    items:9,
+                    items:8,
                 },
                 1190:{
-                    items:7
+                    items:6
                 },
                 1400:{
-                    items:9
+                    items:8
                 }
             };
         }
