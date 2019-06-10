@@ -5,8 +5,9 @@
         isset($blockType) &&
         (
             ($blockType === 'content' && isset($block->contents) && $block->contents->count() > 0) ||
-            ($blockType === 'content' && optional(optional(optional($block->sets)->first())->contents)->count() > 0) ||
-            ($blockType === 'product' && isset($block->products) && $block->products->count() > 0)
+            // ($blockType === 'content' && optional(optional(optional($block->sets)->first())->contents)->count() > 0) ||
+            ($blockType === 'product' && isset($block->products) && $block->products->count() > 0) ||
+            ($blockType === 'set' && isset($block->sets) && $block->sets->count() > 0)
         )
     )
 )
@@ -23,7 +24,7 @@
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
                                 @if(isset($blockUrlDisable) && !$blockUrlDisable)
-                                <a href="{{ $block->url }}" class="m-link">
+                                <a href="{{ (isset($block->customUrl)&&strlen($block->customUrl)>0)?$block->customUrl:$block->url }}" class="m-link">
                                 @endif
                                     @if(isset($blockTitle))
                                         {!! $blockTitle !!}
@@ -50,6 +51,8 @@
                     <div class="m-widget30">
                         <div class="m-widget_head">
                             <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
+                                
+                                
                                 @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
                                     @foreach($block->products as $productKey=>$product)
                                         @include('product.partials.Block.product')
@@ -69,28 +72,20 @@
                                 
                                 
                                 
-                                {{-- new content block loop --}}
-                                @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->sets) && $block->sets->count() > 0)
-                                    @foreach($block->sets->first()->contents as $contentKey=>$content)
-                                        @include('product.partials.Block.content')
-                                    @endforeach
-                                @endif
-    
-                                
-                                
-                                
-                                
-                                
-                                
-                                {{-- set block loop (under constructure) --}}
-{{--                                @if(((isset($blockType) && $blockType === 'set') || !isset($blockType)) && isset($block->sets))--}}
-{{--                                    @foreach($block->sets as $setKey=>$set)--}}
-{{--                                        @include('product.partials.Block.set')--}}
+{{--                                --}}{{-- new content block loop --}}
+{{--                                @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->sets) && $block->sets->count() > 0)--}}
+{{--                                    @foreach($block->sets->first()->contents as $contentKey=>$content)--}}
+{{--                                        @include('product.partials.Block.content')--}}
 {{--                                    @endforeach--}}
 {{--                                @endif--}}
+    
+                                @if(((isset($blockType) && $blockType === 'set') || !isset($blockType)) && isset($block->sets))
+                                    @foreach($block->sets as $setsKey=>$set)
+                                        @include('product.partials.Block.set')
+                                    @endforeach
+                                @endif
                             
-                            
-                            
+                                
                             
                             
                             </div>

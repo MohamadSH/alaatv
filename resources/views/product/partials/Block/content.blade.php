@@ -18,14 +18,6 @@
             <div class="a--content-name">
                 <a href="{{ $content->url }}" target="_blank" class="m-link">{{ $content->name }}</a>
             </div>
-{{--            <div class="a--content-author">--}}
-{{--                <div class="a--content-author-photo">--}}
-{{--                    <img src="{{ $content->author->photo }}" alt="{{ $content->author->firstName }} {{ $content->author->lastName }}">--}}
-{{--                </div>--}}
-{{--                <div class="a--content-author-name">--}}
-{{--                    {{ $content->author->firstName }} {{ $content->author->lastName }}--}}
-{{--                </div>--}}
-{{--            </div>--}}
         </div>
     </div>
 </div>
