@@ -24,7 +24,7 @@
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
                                 @if(isset($blockUrlDisable) && !$blockUrlDisable)
-                                <a href="{{ $block->url }}" class="m-link">
+                                <a href="{{ (isset($block->customUrl)&&strlen($block->customUrl)>0)?$block->customUrl:$block->url }}" class="m-link">
                                 @endif
                                     @if(isset($blockTitle))
                                         {!! $blockTitle !!}
