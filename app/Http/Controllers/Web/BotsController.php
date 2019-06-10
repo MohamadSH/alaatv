@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Web;
 
 use Carbon\Carbon;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\{Input};
+use Illuminate\Support\Facades\{DB, Input};
 use Maatwebsite\ExcelLight\Excel;
 use App\Http\Controllers\Controller;
 use App\Console\Commands\CategoryTree\Riazi;
 use App\Console\Commands\CategoryTree\Tajrobi;
 use Maatwebsite\ExcelLight\Spout\{Row, Sheet, Reader, Writer};
 use App\{Bon,
+    Orderproduct,
     User,
     Order,
     Content,
@@ -1202,6 +1203,41 @@ class BotsController extends Controller
                 dd($query);
             }
 
+            if($request->has('teacherrank')){
+                $otherProducts = [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342];
+                    $orderproducts = Orderproduct::select(DB::raw('COUNT("*") as count , product_id'))
+                        ->whereIn('product_id', $otherProducts)
+                        ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
+                        ->whereHas('order', function ($q) {
+                            $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
+                                ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
+                        })
+                        ->groupBy('product_id')
+                        ->get()
+                        ->pluck('count' , 'product_id')
+                        ->toArray();
+
+                    dd($orderproducts);
+            }
+
+            if($request->has('query')){
+                $users = User::whereHas('orders' , function ($q){
+                    $q->whereIn('orderstatus_id' , [2,5])
+                        ->whereIn('paymentstatus_id' , [3 , 4])
+                        ->whereHas('orderproducts' , function ($q2){
+                            $q2->whereIn('product_id' , [281,282,283,284,292,287,293,285,286,288,289,290,291]);
+                        });
+                })->whereDoesntHave('orders', function ($q3) {
+                    $q3->whereIn('orderstatus_id' , [2,5])
+                        ->whereIn('paymentstatus_id' , [3 , 4])
+                        ->whereHas('orderproducts' , function ($q2){
+                            $q2->whereIn('product_id' , [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342 , 328]);
+                        });
+                });
+
+                dd($users->toSql());
+            }
+
         } catch (\Exception    $e) {
             $message = "unexpected error";
             
@@ -1866,66 +1902,68 @@ class BotsController extends Controller
     public function pointBot(Request $request)
     {
         abort(404);
-        /** Points for Hamayesh Talai lottery */ //        $hamayeshTalai = [ 210 , 211 ,212 ,213 , 214,216,217,218,219,220,221, 222 ];
-        //
-        //        $orderproducts = Orderproduct::whereHas("order" , function ($q) use ($hamayeshTalai){
-        //                                $q->whereIn("orderstatus_id" , [2,5,7])
-        //                                  ->whereIn("paymentstatus_id" , [3]);
-        //                            })->whereIn("product_id" , $hamayeshTalai)
-        //                              ->get();
-        //        $users = [];
-        //        $successCounter = 0;
-        //        $failedCounter = 0 ;
-        //        $warningCounter = 0 ;
-        //        foreach ($orderproducts as $orderproduct)
-        //        {
-        //            if(isset($orderproduct->order->user->id))
-        //            {
-        //                $user = $orderproduct->order->user ;
-        //                if(isset($users[$user->id]))
-        //                {
-        //                    $users[$user->id]++;
-        //                }
-        //                else
-        //                {
-        //                    $users[$user->id] = 1 ;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                dump("User was not found for orderproduct ".$orderproduct->id);
-        //                $warningCounter++;
-        //            }
-        //        }
-        //
-        //        // USERS WITH PLUS POINTS
-        //        $orders = Order::where("completed_at" , "<" , "2018-05-18")
-        //                        ->whereIn("orderstatus_id" , [2,5,7])
-        //                        ->whereIn("paymentstatus_id" , [3])
-        //                        ->whereHas("orderproducts" , function ($q) use ($hamayeshTalai){
-        //                            $q->whereIn("product_id" , $hamayeshTalai);
-        //                        })
-        //                        ->pluck("user_id")
-        //                        ->toArray();
-        //
-        //        $usersPlus = [];
-        //        foreach ($orders as $userId)
-        //        {
-        //            if(in_array($userId , $usersPlus))
-        //                continue;
-        //            else
-        //                array_push($usersPlus , $userId) ;
-        //
-        //            if(isset($users[$userId]))
-        //            {
-        //                $users[$userId]++ ;
-        //            }
-        //            else
-        //            {
-        //                $users[$userId] = 1 ;
-        //            }
-        //
-        //        } /** Points for Hamayesh Talai lottery */
+        /** Points for Hamayesh Talai lottery */
+                /*$hamayeshTalai = [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342];
+
+                $orderproducts = Orderproduct::whereHas("order" , function ($q) use ($hamayeshTalai){
+                                        $q->whereIn("orderstatus_id" , [config('constants.ORDER_STATUS_CLOSED'),config('constants.ORDER_STATUS_POSTED'),config('constants.ORDER_STATUS_READY_TO_POST')])
+                                          ->whereIn("paymentstatus_id" , [config('constants.PAYMENT_STATUS_PAID')]);
+                                    })->whereIn("product_id" , $hamayeshTalai)
+                                      ->get();
+                $users = [];
+                $successCounter = 0;
+                $failedCounter = 0 ;
+                $warningCounter = 0 ;
+                foreach ($orderproducts as $orderproduct)
+                {
+                    if(isset($orderproduct->order->user->id))
+                    {
+                        $user = $orderproduct->order->user ;
+                        if(isset($users[$user->id]))
+                        {
+                            $users[$user->id]++;
+                        }
+                        else
+                        {
+                            $users[$user->id] = 1 ;
+                        }
+                    }
+                    else
+                    {
+                        dump("User was not found for orderproduct ".$orderproduct->id);
+                        $warningCounter++;
+                    }
+                }
+
+                // USERS WITH PLUS POINTS
+                $orders = Order::where("completed_at" , "<" , "2018-05-18")
+                                ->whereIn("orderstatus_id" , [config('constants.ORDER_STATUS_CLOSED'),config('constants.ORDER_STATUS_POSTED'),config('constants.ORDER_STATUS_READY_TO_POST')])
+                                ->whereIn("paymentstatus_id" , [config('constants.PAYMENT_STATUS_PAID')])
+                                ->whereHas("orderproducts" , function ($q) use ($hamayeshTalai){
+                                    $q->whereIn("product_id" , $hamayeshTalai);
+                                })
+                                ->pluck("user_id")
+                                ->toArray();
+
+                $usersPlus = [];
+                foreach ($orders as $userId)
+                {
+                    if(in_array($userId , $usersPlus))
+                        continue;
+                    else
+                        array_push($usersPlus , $userId) ;
+
+                    if(isset($users[$userId]))
+                    {
+                        $users[$userId]++ ;
+                    }
+                    else
+                    {
+                        $users[$userId] = 1 ;
+                    }
+
+                }*/
+        // /** Points for Hamayesh Talai lottery */
         
         /** Points for Eide Fetr lottery */
         $transactions = Transaction::whereHas("order", function ($q) {
@@ -1968,38 +2006,38 @@ class BotsController extends Controller
             }
         }
         
-        //        $users = $users->where("point"  , ">" , 0);
+//        $users = $users->where("point"  , ">" , 0);
         
         dd("STOP");
-        //        $userbons = Userbon::where("bon_id" , 2)
-        //                            ->where("created_at" , ">" , "2018-05-24 00:00:00")
-        //                            ->where("totalNumber" , ">=" , "3")
-        //                            ->get();
-        //
-        //        foreach ($userbons as $userbon)
-        //        {
-        //            $user = $userbon->user;
-        //            $successfulTransactions = $user->orderTransactions
-        //                                        ->where("completed_at" , ">" , "2018-05-24 20:00:00")
-        //                                        ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-        //                                        ->whereIn("paymentmethod_id" , [
-        //                                            config("constants.PAYMENT_METHOD_ONLINE") ,
-        //                                            config("constants.PAYMENT_METHOD_ATM")
-        //                                        ])
-        //                                        ->where("cost" , ">" , 0);
-        //            if($successfulTransactions->isNotEmpty())
-        //            {
-        //                $userRecord = $users->where("user_id" , $user->id)->first();
-        //                if(!isset($userRecord))
-        //                {
-        //                    $users->push([
-        //                        "user_id" => $user->id,
-        //                        "totalAmount" => -1 ,
-        //                        "point" => 1 ,
-        //                    ]);
-        //                }
-        //            }
-        //        }
+        /*$userbons = Userbon::where("bon_id" , 2)
+                            ->where("created_at" , ">" , "2018-05-24 00:00:00")
+                            ->where("totalNumber" , ">=" , "3")
+                            ->get();
+
+        foreach ($userbons as $userbon)
+        {
+            $user = $userbon->user;
+            $successfulTransactions = $user->orderTransactions
+                                        ->where("completed_at" , ">" , "2018-05-24 20:00:00")
+                                        ->where("transactionstatus_id" , config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                        ->whereIn("paymentmethod_id" , [
+                                            config("constants.PAYMENT_METHOD_ONLINE") ,
+                                            config("constants.PAYMENT_METHOD_ATM")
+                                        ])
+                                        ->where("cost" , ">" , 0);
+            if($successfulTransactions->isNotEmpty())
+            {
+                $userRecord = $users->where("user_id" , $user->id)->first();
+                if(!isset($userRecord))
+                {
+                    $users->push([
+                        "user_id" => $user->id,
+                        "totalAmount" => -1 ,
+                        "point" => 1 ,
+                    ]);
+                }
+            }
+        }*/
         $bonName = config("constants.BON2");
         $bon     = Bon::where("name", $bonName)
             ->first();
@@ -2026,14 +2064,14 @@ class BotsController extends Controller
             $userBon->userbonstatus_id = 1;
             $bonResult                 = $userBon->save();
             if ($bonResult) {
-                //                $message = "شما در قرعه کشی 10 تیر شرکت داده خواهید شد.";
-                //                $message .= "\n";
-                //                $message .= "امتیاز شما:";
-                //                $message .= $points;
-                //                $message .= "\n";
-                //                $message .= "آلاء";
+//                $message = "شما در قرعه کشی 10 تیر شرکت داده خواهید شد.";
+//                $message .= "\n";
+//                $message .= "امتیاز شما:";
+//                $message .= $points;
+//                $message .= "\n";
+//                $message .= "آلاء";
                 $user = $userBon->user;
-                //                $user->notify(new GeneralNotice($message));
+//                $user->notify(new GeneralNotice($message));
                 echo "<span style='color:green'>";
                 echo "User ".$userId." notified , ".$user->mobile;
                 echo "</span>";

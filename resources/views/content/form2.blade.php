@@ -3,7 +3,7 @@
     
         <label class="mt-checkbox mt-checkbox-outline">
             <div class="md-checkbox">
-                @if(Auth::user()->can('constants.CHANGE_TO_PAID_CONTENT'))
+                @if(Auth::user()->can(config('constants.CHANGE_TO_PAID_CONTENT')))
                 {!!
                     Form::checkbox(
                         'isFree',
@@ -196,6 +196,15 @@
                 </div>
             </div>
         </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-4 control-label" for="author_id">آیدی دبیر</label>
+                <div class="col-md-8">
+                    {!! Form::text('author_id', (isset($content)?($content->author_id):null), ['class' => 'form-control m-input m-input--air', 'placeholder'=>'آی دی دبیر' , 'id'=>'author_id', 'dir'=>'ltr']) !!}
+                </div>
+            </div>
+        </div>
+
         <div class="form-group">
             <div class="row">
                 <label class="col-md-2 control-label" for="name">ترتیب :
