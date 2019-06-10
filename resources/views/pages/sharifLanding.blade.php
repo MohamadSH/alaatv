@@ -22,7 +22,7 @@
             <div class="m-portlet m-portlet--head-overlay m-portlet--full-height  m-portlet--rounded-force">
 
                 <div>
-                    <img src="https://alaatv.com/image/9/1280/500/BIG-SLIDE-5_20190604170740.jpg" class="a--full-width">
+                    <img src="/acm/extra/sharif_landing.jpg" class="a--full-width">
                 </div>
                 <div class="m-portlet__body sharifLandingBody">
                     <div class="m-widget27 m-portlet-fit--sides">
