@@ -13,9 +13,6 @@
             margin-top: 31px;
             margin-bottom: 0px;
         }
-        .a--owl-carousel-type-2 .carousel .a--owl-carousel-type-2-item-image {
-            height: 140px;
-        }
     </style>
 @endsection
 
@@ -25,7 +22,7 @@
             <div class="m-portlet m-portlet--head-overlay m-portlet--full-height  m-portlet--rounded-force">
 
                 <div>
-                    <img src="https://alaatv.com/image/9/1280/500/BIG-SLIDE-5_20190604170740.jpg" class="a--full-width">
+                    <img src="/acm/extra/sharif_landing.jpg" class="a--full-width">
                 </div>
                 <div class="m-portlet__body sharifLandingBody">
                     <div class="m-widget27 m-portlet-fit--sides">
@@ -37,9 +34,9 @@
                                         <h3 class="text-center">
                                            <span
                                             class="m--font-primary">
-                                               👈دبیرستان دانشگاه صنعتی شریف در سال 1383 تاسیس و زیر نظر دانشگاه صنعتی شریف فعالیت خود را آغاز کرد.
+                                               دبیرستان دانشگاه صنعتی شریف در سال 1383 تاسیس و زیر نظر دانشگاه صنعتی شریف فعالیت خود را آغاز کرد.
                                                <br>
-                                               فعالیت های آموزشی آلاء با نظارت دبیرستان دانشگاه شریف انجام می شود.👉
+                                               فعالیت های آموزشی آلاء با نظارت دبیرستان دانشگاه شریف انجام می شود.
                                            </span>
                                         </h3>
                                     </div>
@@ -50,7 +47,7 @@
                                     'customClass' => 'faregotahsil faregotahsil-sharif',
                                     'customId' => 'faregotahsil-sharif',
                                     'users' => $sharifStudents,
-                                    'title' => 'قبول های دانشگاه شریف',
+                                    'title' => 'پذیرفته شدگان دانشگاه صنعتی شریف',
                                 ])
                             @endif
                             @if($amirKabirStudents->count() > 0)
@@ -58,7 +55,7 @@
                                     'customClass' => 'faregotahsil faregotahsil-amirKabir',
                                     'customId' => 'faregotahsil-amirKabir',
                                     'users' => $amirKabirStudents,
-                                    'title' => 'قبولی های دانشگاه امیر کبیر',
+                                    'title' => 'پذیرفته شدگان دانشگاه امیر کبیر',
                                 ])
                             @endif
                             @if($tehranStudents->count() > 0)
@@ -66,7 +63,7 @@
                                     'customClass' => 'faregotahsil faregotahsil-tehran',
                                     'customId' => 'faregotahsil-tehran',
                                     'users' => $tehranStudents,
-                                    'title' => 'قبولی های دانشگاه تهران',
+                                    'title' => 'پذیرفته شدگان دانشگاه تهران',
                                 ])
                             @endif
                             @if($beheshtiStudents->count() > 0)
@@ -74,7 +71,7 @@
                                     'customClass' => 'faregotahsil faregotahsil-beheshti',
                                     'customId' => 'faregotahsil-beheshti',
                                     'users' => $beheshtiStudents,
-                                    'title' => 'قبولی های دانشگاه شهید بهشتی',
+                                    'title' => 'پذیرفته شدگان دانشگاه شهید بهشتی',
                                 ])
                             @endif
                         </div>
