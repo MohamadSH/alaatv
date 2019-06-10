@@ -378,16 +378,18 @@ class ContentController extends Controller
         if($isFree)
         {
             [$files , $thumbnail] = $this->makeFreeContentFiles($contenttypeId, $fileName, $contentsetId);
-            if(isset($thumbnail))
-                $content->thumbnail = $thumbnail;
         }else{
             $contentset = Contentset::find($contentsetId);
             $productId = optional($contentset->products->first())->id;
             if(!isset($productId))
                 return response()->json(['No product found for this set'], Response::HTTP_BAD_REQUEST);
 
-            $files = $this->makePaidContentFiles($contenttypeId, $fileName , $productId);
+            [$files , $thumbnail] = $this->makePaidContentFiles($contenttypeId, $fileName , $productId , $contentsetId);
         }
+
+        if(isset($thumbnail))
+            $content->thumbnail = $thumbnail;
+
 
 
         $request->offsetSet('files', $files);
@@ -518,32 +520,35 @@ class ContentController extends Controller
 
     /**
      * @param int $contenttypeId
-     * @param int $isFree
      * @param string $fileName
-     * @param int $contentsetId
      * @param int $productId
+     * @param int $contentsetId
      * @return array
      */
-    private function makePaidContentFiles(int $contenttypeId,  string $fileName, int $productId): array
+    private function makePaidContentFiles(int $contenttypeId,  string $fileName, int $productId , int $contentsetId): array
     {
+        $thumbnail = null;
         $files = [];
         if ($contenttypeId == config('constants.CONTENT_TYPE_VIDEO')) {
-            $files = $this->makeVideoFilesForPaidContent($fileName, $productId);
+            [$files, $thumbnail] = $this->makeVideoFilesForPaidContent($fileName, $productId , $contentsetId);
         } elseif ($contenttypeId == config('constants.CONTENT_TYPE_PAMPHLET')) {
             $files = $this->makePahmphletFilesForPaidContent($fileName, $productId);
         }
-        return $files;
+        return [$files , $thumbnail];
     }
 
     /**
      * @param string $fileName
      * @param int $productId
+     * @param int $contentsetId
      * @return array
      */
-    private function makeVideoFilesForPaidContent(string $fileName, int $productId): array
+    private function makeVideoFilesForPaidContent(string $fileName, int $productId , int $contentsetId): array
     {
         $files = $this->makePaidVideoFileArray($fileName, config('constants.DISK_PRODUCT_CONTENT'), $productId);
-        return $files;
+        $thumbnailUrl = $this->makeThumbnailUrlFromFileName($fileName, $contentsetId);
+        $thumbnail = $this->makeThumbanilFile($thumbnailUrl);
+        return [$files, $thumbnail];
     }
 
     /**
@@ -556,7 +561,7 @@ class ContentController extends Controller
         $files = $this->makeFreeVideoFileArray($fileName, config('constants.DISK_FREE_CONTENT'), $contentsetId);
         $thumbnailUrl = $this->makeThumbnailUrlFromFileName($fileName, $contentsetId);
         $thumbnail = $this->makeThumbanilFile($thumbnailUrl);
-        return array($files, $thumbnail);
+        return [$files, $thumbnail];
     }
 
     /**
