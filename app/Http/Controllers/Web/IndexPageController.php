@@ -59,6 +59,6 @@ class IndexPageController extends Controller
         }
         $sections = $blockCollectionFormatter->format($blocks);
         $pageName = "dashboard";
-        return view('pages.dashboard1', compact('pageName', 'sections', 'slides'));
+        return view('pages.dashboard1', compact('pageName', 'sections', 'slides' , 'blocks'));
     }
 }

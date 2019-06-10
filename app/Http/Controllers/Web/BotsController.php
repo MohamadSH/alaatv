@@ -1220,6 +1220,24 @@ class BotsController extends Controller
                     dd($orderproducts);
             }
 
+            if($request->has('query')){
+                $users = User::whereHas('orders' , function ($q){
+                    $q->whereIn('orderstatus_id' , [2,5])
+                        ->whereIn('paymentstatus_id' , [3 , 4])
+                        ->whereHas('orderproducts' , function ($q2){
+                            $q2->whereIn('product_id' , [281,282,283,284,292,287,293,285,286,288,289,290,291]);
+                        });
+                })->whereDoesntHave('orders', function ($q3) {
+                    $q3->whereIn('orderstatus_id' , [2,5])
+                        ->whereIn('paymentstatus_id' , [3 , 4])
+                        ->whereHas('orderproducts' , function ($q2){
+                            $q2->whereIn('product_id' , [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342 , 328]);
+                        });
+                });
+
+                dd($users->toSql());
+            }
+
         } catch (\Exception    $e) {
             $message = "unexpected error";
             
