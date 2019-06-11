@@ -68,7 +68,7 @@ class SalesReportController extends Controller
         /** This month */
         [$thisMonthCount, $thisMonthSum] = $this->thisMonthPurchases($allTimeOrderproducts);
 
-        $now = Carbon::now()->setTimezone('Asia/Tehran')->format('Y-m-d');
+        $now = Carbon::now()->setTimezone('Asia/Tehran')->format('Y-m-d H:m:s');
         return view('user.salesReport', compact('limitStatus', 'coupontype', 'products',
             'allTimeCount', 'allTimeSum', 'thisMonthCount', 'thisMonthSum', 'thisWeekCount', 'thisWeekSum',
             'todayCount', 'todaySum',
@@ -583,7 +583,7 @@ class SalesReportController extends Controller
     {
         $provinces = $this->getProvinces();
         foreach ($allTimeOrderproducts as $allTimeOrderproduct) {
-            [$key, $foundProvince] = Cache::remember('sr-SetLocation-OP:'.$allTimeOrderproduct->id,
+            $foundProvince = Cache::remember('sr-SetLocation-OP:'.$allTimeOrderproduct->id,
                 config('constants.CACHE_600'), function () use ($allTimeOrderproduct, $provinces) {
                     $user         = $allTimeOrderproduct->order->user;
                     $userProvince = $user->province;
@@ -597,15 +597,13 @@ class SalesReportController extends Controller
                     } else {
                         $foundProvince = $provinces->where('name', 'ir-un');
                     }
-                    $key           = key($foundProvince->toArray());
-                    $foundProvince = $foundProvince->first();
-                    $foundProvince['count']++;
-                    return [
-                        $key,
-                        $foundProvince,
-                    ];
+
+                    return $foundProvince;
                 });
-            
+
+            $key           = key($foundProvince->toArray());
+            $foundProvince = $foundProvince->first();
+            $foundProvince['count']++;
             
             $provinces->put($key, $foundProvince);
         }
