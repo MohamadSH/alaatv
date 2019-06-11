@@ -190,6 +190,7 @@ mix.babel(
 
 mix.styles(
     [
+        'node_modules/animate.css/animate.css',
         'node_modules/persian-datepicker/dist/css/persian-datepicker.css',
         'node_modules/bootstrap-fileinput/css/fileinput.css',
         'node_modules/bootstrap-fileinput/css/fileinput-rtl.css',
@@ -261,6 +262,7 @@ mix.styles(
 ).version();
 mix.styles(
     [
+        'node_modules/animate.css/animate.css',
         'node_modules/slick-carousel/slick/slick.css',
         'node_modules/slick-carousel/slick/slick-theme.css',
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
