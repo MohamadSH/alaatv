@@ -3,14 +3,6 @@
     <!-- begin::Head -->
     <head>
         @include('partials.html-head')
-        <style>
-            /*media query*/
-            @media only screen and (max-width: 1024px) {
-                .m-header-menu .m-menu__nav > .m-menu__item .m-menu__submenu > .m-menu__subnav > .m-menu__item {
-                    background: transparent;
-                }
-            }
-        </style>
     </head>
     <!-- end::Head -->
     

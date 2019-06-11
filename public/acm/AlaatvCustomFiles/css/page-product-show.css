@@ -248,3 +248,15 @@
         display: flex;
     }
 }
+
+/*media query*/
+@media (max-width: 768px) {
+    .m-portlet.m-portlet--tabs .m-portlet__head,
+    .m-portlet.m-portlet--tabs .m-portlet__head .m-portlet__head-caption,
+    .m-portlet.m-portlet--tabs .m-portlet__head .m-portlet__head-tools {
+        display: flex;
+    }
+    .m-portlet.m-portlet--tabs .m-portlet__head .m-portlet__head-tools {
+        margin-top: 0;
+    }
+}

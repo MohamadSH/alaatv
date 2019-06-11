@@ -87,6 +87,17 @@
     min-width: 100%;
 }
 
+#contentSearchFilter.lockActiveStep .selectorItem[data-select-active="true"]:after {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #80808080;
+    cursor: not-allowed;
+}
+
 @media only screen and (min-width: 1190px)  {
     .ProductAndSetAndVideoWraper {
         /*max-width: 75%;*/
