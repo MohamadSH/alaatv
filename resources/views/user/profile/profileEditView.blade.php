@@ -71,6 +71,32 @@
 
         {!! Form::model($user,['method' => 'POST','url' => [(isset($formAction))?$formAction:route('web.authenticatedUser.profile.update')] , 'role'=>'form' , 'id' => 'profileForm-setting']) !!}
         {!! Form::hidden('updateType',"profile") !!}
+        @if(!isset($user->firstName))
+                <div class = "form-group m-form__group {{ $errors->has('firstName') ? ' has-danger' : '' }}">
+                    <label for = "firstName">نام</label>
+                    <div class = "m-input-icon m-input-icon--left">
+                        <input type = "text" name = "firstName" id = "firstName" class = "form-control m-input m-input--air" placeholder = "نام" @if(isset($user->firstName))value = "{{ $user->firstName }}"@endif>
+                        <span class = "m-input-icon__icon m-input-icon__icon--left">
+                        <span>
+                            <i class = "la la-user"></i>
+                        </span>
+                    </span>
+                    </div>
+                </div>
+        @endif
+        @if(!isset($user->lastName))
+                <div class = "form-group m-form__group {{ $errors->has('lastName') ? ' has-danger' : '' }}">
+                    <label for = "lastName">نام خانوادگی</label>
+                    <div class = "m-input-icon m-input-icon--left">
+                        <input type = "text" name = "lastName" id = "lastName" class = "form-control m-input m-input--air" placeholder = "نام خانوادگی" @if(isset($user->lastName))value = "{{ $user->lastName }}"@endif>
+                        <span class = "m-input-icon__icon m-input-icon__icon--left">
+                        <span>
+                            <i class = "la la-user"></i>
+                        </span>
+                    </span>
+                    </div>
+                </div>
+        @endif
         <div class = "form-group m-form__group {{ $errors->has('province') ? ' has-danger' : '' }}">
             <label for = "province">استان</label>
             <div class = "m-input-icon m-input-icon--left">
