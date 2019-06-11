@@ -1,4 +1,4 @@
-@permission((config('constants.SHOW_PRODUCT_ACCESS')))@extends('app',['pageName'=>'admin'])
+@extends('app',['pageName'=>'admin'])
 
 @section('page-css')
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
@@ -31,11 +31,12 @@
 @section('content')
     
     @include("systemMessage.flash")
-
+    
     <div class="row">
         <div class="col">
             <!-- BEGIN SAMPLE FORM PORTLET-->
             <div class="m-portlet">
+                {!! Form::model($block,['method' => 'PUT','action' => ['Web\BlockController@update',$block]]) !!}
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
@@ -45,12 +46,14 @@
                             </h3>
                         </div>
                     </div>
+                    <div class="m-portlet__head-tools">
+                        <button type="submit" class="btn m-btn--pill m-btn--air btn-warning">اصلاح</button>
+                    </div>
                 </div>
                 <div class="m-portlet__body">
-{{--                    {!! Form::model($product,['files'=>true,'method' => 'PUT','action' => ['Web\ProductController@update',$product], 'class'=>'form-horizontal']) !!}--}}
-{{--                        @include('product.form' )--}}
-{{--                    {!! Form::close() !!}--}}
+                    @include('block.form' )
                 </div>
+                {!! Form::close() !!}
             </div>
             <!-- END SAMPLE FORM PORTLET-->
         </div>
@@ -110,4 +113,3 @@
     </script>
     <script src="public/acm/AlaatvCustomFiles/js/admin-product.js" type="text/javascript"></script>
 @endsection
-@endpermission

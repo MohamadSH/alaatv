@@ -324,11 +324,11 @@
                     "render": function ( data, type, row ) {
                         let html = '<div class="btn-group">\n';
                         html +=
-                            '    <a target="_blank" class="btn btn-success" href="' + generateEditBlockLink(row.id) + '">\n' +
+                            '    <a target="_blank" class="btn btn-success" href="' + row.editLink + '">\n' +
                             '        <i class="fa fa-pencil"></i> اصلاح \n' +
                             '    </a>\n';
                         html +=
-                            '    <a class="btn btn-danger btnDeleteOrder" remove-link="' + generateRemoveBlockLink(row.id) + '" data-block-name="' + row.title + '">\n' +
+                            '    <a class="btn btn-danger btnDeleteOrder" remove-link="' + row.removeLink + '" data-block-name="' + row.title + '">\n' +
                             '        <i class="fa fa-remove" aria-hidden="true"></i> حذف \n' +
                             '    </a>\n';
                         html += '</div>';

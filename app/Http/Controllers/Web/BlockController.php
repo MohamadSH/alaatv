@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Block;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Arr;
 
 class BlockController extends Controller
 {
@@ -33,10 +34,15 @@ class BlockController extends Controller
         return ($request->expectsJson() ? response()->json($block) : $block);
     }
     
-    public function edit(Request $request, Block $block)
+    public function edit(Request $request, $block)
     {
-        return $block;
+        $block = Block::find($block);
         return view('block.edit', compact(['block']));
+    }
+    
+    public function update(Request $request, Block $block)
+    {
+        dd($block);
     }
     
     public function store(Request $request)

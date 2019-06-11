@@ -6,48 +6,52 @@ use App\Collection\SetCollection;
 use App\Collection\BlockCollection;
 use App\Collection\ProductCollection;
 use App\Collection\ContentCollection;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 /**
  * App\Block
  *
- * @property int                             $id
- * @property string|null                     $title
- * @property string|null                     $tags
- * @property int                             $order
- * @property int                             $enable
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null                                $updated_at
- * @property-read \App\Collection\ContentCollection|\App\Content[]          $contents
- * @property-read \App\Collection\ProductCollection|\App\Product[]          $products
- * @property-read \App\Collection\SetCollection|\App\Contentset[]           $sets
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Block active()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Block enable()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereEnable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereTags($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereUpdatedAt($value)
- * @mixin \Eloquent
- * @property string|null                                                    $class
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereClass($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Block newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Block newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Block query()
- * @property int                                                            $type
- * @property \Illuminate\Support\Carbon|null                                $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Slideshow[] $banners
- * @property-read string                                                    $url
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Block main()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Block shop()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property mixed                                                          $offer
- * @property-read mixed                                                     $cache_cooldown_seconds
+ * @property int                              $id
+ * @property string|null                      $title
+ * @property string|null                      $tags
+ * @property int                              $order
+ * @property int                              $enable
+ * @property Carbon|null                      $created_at
+ * @property Carbon|null                      $updated_at
+ * @property-read ContentCollection|Content[] $contents
+ * @property-read ProductCollection|Product[] $products
+ * @property-read SetCollection|Contentset[]  $sets
+ * @method static Builder|Block active()
+ * @method static Builder|Block enable()
+ * @method static Builder|Block whereCreatedAt($value)
+ * @method static Builder|Block whereEnable($value)
+ * @method static Builder|Block whereId($value)
+ * @method static Builder|Block whereOrder($value)
+ * @method static Builder|Block whereTags($value)
+ * @method static Builder|Block whereTitle($value)
+ * @method static Builder|Block whereUpdatedAt($value)
+ * @mixin Eloquent
+ * @property string|null                                           $class
+ * @method static Builder|Block whereClass($value)
+ * @method static Builder|Block newModelQuery()
+ * @method static Builder|Block newQuery()
+ * @method static Builder|Block query()
+ * @property int                                                       $type
+ * @property Carbon|null                           $deleted_at
+ * @property-read Collection|Slideshow[] $banners
+ * @property-read string                                               $url
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|Block main()
+ * @method static Builder|Block shop()
+ * @method static Builder|Block whereDeletedAt($value)
+ * @method static Builder|Block whereType($value)
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
+ * @property mixed                                                     $offer
+ * @property-read mixed                                                $cache_cooldown_seconds
  */
 class Block extends BaseModel
 {
@@ -82,6 +86,8 @@ class Block extends BaseModel
     protected $appends = [
         'url',
         'offer',
+        'editLink',
+        'removeLink',
     ];
     
     protected $hidden = [
@@ -115,7 +121,7 @@ class Block extends BaseModel
     }
     
     /**
-     * @return \App\Block
+     * @return Block
      */
     protected static function getOfferBlock(): Block
     {
@@ -198,9 +204,9 @@ class Block extends BaseModel
     /**
      * Scope a query to only blocks for shop.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  Builder  $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeShop($query)
     {
@@ -210,9 +216,9 @@ class Block extends BaseModel
     /**
      * Scope a query to only blocks for HomePage.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  Builder  $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeMain($query)
     {
@@ -269,9 +275,9 @@ class Block extends BaseModel
     /**
      * Scope a query to only include enable Blocks.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  Builder  $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeEnable($query)
     {
@@ -281,9 +287,9 @@ class Block extends BaseModel
     /**
      * Scope a query to only include active Contents.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  Builder  $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeActive($query)
     {
@@ -322,5 +328,21 @@ class Block extends BaseModel
             ->withPivot(['order'])
             ->orderBy('blockables.order');
 
+    }
+    
+    public function getEditLinkAttribute()
+    {
+//        if (hasAuthenticatedUserPermission(config('constants.EDIT_BLOCK_ACCESS')))
+            return action('Web\BlockController@edit', $this->id);
+        
+        return null;
+    }
+    
+    public function getRemoveLinkAttribute()
+    {
+//        if (hasAuthenticatedUserPermission(config('constants.REMOVE_BLOCK_ACCESS')))
+//            return action('Web\BlockController@destroy', $this->id);
+        
+        return null;
     }
 }
