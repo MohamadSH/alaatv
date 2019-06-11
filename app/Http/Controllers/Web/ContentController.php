@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Product;
 use App\User;
 use Exception;
 use App\Content;
@@ -304,11 +305,23 @@ class ContentController extends Controller
         
         $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
         $apiResponse       = response()->json($content, Response::HTTP_OK);
+    
+        $productsHasThisContentThroughBlock = Content::select('products.id', 'products.name')
+            ->join('blockables', 'educationalcontents.contentset_id', '=', 'blockables.blockable_id')
+            ->join('products', 'blockables.block_id', '=', 'products.block_id')
+            ->where('blockables.blockable_type', 'App\Contentset')
+            ->where('educationalcontents.id', $content->id)
+            ->get();
+        $productsHasThisContentThroughBlockCollection = new ProductCollection();
+        foreach ($productsHasThisContentThroughBlock as $item) {
+            $productsHasThisContentThroughBlockCollection->push(Product::find($item->id));
+        }
         $viewResponse      = view('content.show',
             compact('seenCount', 'author', 'content', 'contentsWithSameSet', 'videosWithSameSet',
                 'pamphletsWithSameSet', 'contentSetName', 'tags',
                 'userCanSeeCounter', 'adItems', 'videosWithSameSetL', 'videosWithSameSetR',
-                'productsThatHaveThisContent', 'user_can_see_content', 'message'));
+                'productsThatHaveThisContent', 'user_can_see_content', 'message', 'productsHasThisContentThroughBlockCollection'));
+        
         return httpResponse($apiResponse, $viewResponse);
     }
     

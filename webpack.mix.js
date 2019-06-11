@@ -57,6 +57,8 @@ mix.babel(
 
         'public/acm/AlaatvCustomFiles/components/summarizeText/js.js',
 
+        'public/acm/AlaatvCustomFiles/js/UserCart.js',
+
         'public/acm/AlaatvCustomFiles/js/page-content-show.js'
     ],
     'public/js/content-show.js'
