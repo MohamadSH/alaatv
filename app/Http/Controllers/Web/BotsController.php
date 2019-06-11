@@ -112,8 +112,7 @@ class BotsController extends Controller
                 ])
                     ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
                     ->whereDoesntHave("orderproducts", function ($q) {
-                        $q->whereNull("orderproducttype_id")
-                            ->orWhere("orderproducttype_id", config("constants.ORDER_PRODUCT_TYPE_DEFAULT"));
+                        $q->Where("orderproducttype_id", config("constants.ORDER_PRODUCT_TYPE_DEFAULT"));
                     })
                     ->get();
                 dd($orders->pluck("id")
@@ -183,56 +182,6 @@ class BotsController extends Controller
                 echo "<span style='color:green'>Number of processed orders: ".$counter."</span>";
                 echo "<br>";
                 dd("DONE!");
-            }
-            
-            if ($request->has("smsarabi")) {
-                $hamayeshTalai = [
-                    210,
-                    211,
-                    212,
-                    213,
-                    214,
-                    215,
-                    216,
-                    217,
-                    218,
-                    219,
-                    220,
-                    221,
-                    222,
-                ];
-                $users         = User::whereHas("orderproducts", function ($q) use ($hamayeshTalai) {
-                    $q->whereHas("order", function ($q) use ($hamayeshTalai) {
-                        $q->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
-                            ->whereIn("paymentstatus_id", [
-                                config("constants.PAYMENT_STATUS_PAID"),
-                            ]);
-                    })
-                        ->whereIn("product_id", [214]);
-                    //                        ->havingRaw('COUNT(*) > 0');
-                })
-                    ->whereDoesntHave("orderproducts", function ($q) use ($hamayeshTalai) {
-                        $q->whereHas("order", function ($q) use ($hamayeshTalai) {
-                            $q->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
-                                ->whereIn("paymentstatus_id", [
-                                    config("constants.PAYMENT_STATUS_PAID"),
-                                ]);
-                        })
-                            ->where("product_id", 223);
-                    })
-                    ->get();
-                
-                echo "Number of users:".$users->count();
-                dd("stop");
-                
-                foreach ($users as $user) {
-                    $message = "آلایی عزیز تا جمعه ظهر فرصت دارید تا حضور خود در همایش  حضوری عربی را اعلام کنید";
-                    $message .= "\n";
-                    $message .= "sanatisharif.ir/user/".$user->id;
-                    $user->notify(new GeneralNotice($message));
-                }
-                
-                dd("Done");
             }
             
             if ($request->has("coupon")) {
@@ -1223,19 +1172,27 @@ class BotsController extends Controller
             if($request->has('query')){
                 $users = User::whereHas('orders' , function ($q){
                     $q->whereIn('orderstatus_id' , [2,5])
-                        ->whereIn('paymentstatus_id' , [3 , 4])
+                        ->whereIn('paymentstatus_id' , [3,4])
                         ->whereHas('orderproducts' , function ($q2){
                             $q2->whereIn('product_id' , [281,282,283,284,292,287,293,285,286,288,289,290,291]);
                         });
-                })->whereDoesntHave('orders', function ($q3) {
+                })->whereHas('orders', function ($q3) {
                     $q3->whereIn('orderstatus_id' , [2,5])
-                        ->whereIn('paymentstatus_id' , [3 , 4])
+                        ->whereIn('paymentstatus_id' , [3,4])
                         ->whereHas('orderproducts' , function ($q2){
-                            $q2->whereIn('product_id' , [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342 , 328]);
+                            $q2->whereIn('product_id' , [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342]);
                         });
                 });
 
-                dd($users->toSql());
+                $orderproducts = Orderproduct::select(DB::raw('COUNT("*") as count'))
+                            ->whereIn('product_id' , [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342 ])
+                            ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
+                            ->whereHas('order', function ($q3) {
+                                $q3->whereIn('orderstatus_id' , [2,5])
+                                    ->whereIn('paymentstatus_id' , [3,4]);
+                            });
+
+                dd($orderproducts->get()->first()->count);
             }
 
         } catch (\Exception    $e) {
@@ -1511,7 +1468,7 @@ class BotsController extends Controller
          * foreach ($products as $product)
          * {
          * $orders = \App\Order::whereHas("orderproducts" , function ($q2) use ($product){
-         * $q2->where("product_id" , $product->id)->whereNull("orderproducttype_id");
+         * $q2->where("product_id" , $product->id)->where("orderproducttype_id", config('constants.ORDER_PRODUCT_TYPE_DEFAULT'));
          * })->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED") , Config::get("constants.ORDER_STATUS_POSTED") , Config::get("constants.ORDER_STATUS_READY_TO_POST")])
          * ->whereIn("paymentstatus_id" , [Config::get("constants.PAYMENT_STATUS_INDEBTED") , Config::get("constants.PAYMENT_STATUS_PAID")])->get();
          *
@@ -1901,7 +1858,6 @@ class BotsController extends Controller
     
     public function pointBot(Request $request)
     {
-        abort(404);
         /** Points for Hamayesh Talai lottery */
                 /*$hamayeshTalai = [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342];
 
@@ -1968,18 +1924,20 @@ class BotsController extends Controller
         /** Points for Eide Fetr lottery */
         $transactions = Transaction::whereHas("order", function ($q) {
             $q->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
-                ->where("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"));
+                ->where("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"))
+            ->whereHas('orderproducts' , function ($q2){
+                $q2->whereNotIn('product_id' , [Product::CUSTOM_DONATE_PRODUCT , Product::DONATE_PRODUCT_5_HEZAR , Product::ASIATECH_PRODUCT]) ;
+            });
         })
-            ->whereBetween("completed_at", [
-                "2018-06-14 21:30:00",
-                "2018-06-30 19:30:00",
-            ])
-            ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-            ->where("cost", ">", 0)
-            ->get();
-        
+        ->where("created_at" , '>=', "2019-05-16 00:00:00")
+        ->where('created_at' , '<=', "2019-06-09 23:59:59")
+        ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+        ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+        ->where("cost", ">", 0)
+        ->get();
+        dd($transactions->count() , number_format($transactions->sum('cost')) , number_format($transactions->sum('cost')/50000));
         $users          = collect();
-        $amountUnit     = 40000;
+        $amountUnit     = 50000;
         $successCounter = 0;
         $failedCounter  = 0;
         $warningCounter = 0;

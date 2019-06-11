@@ -200,6 +200,7 @@ trait ContentControllerResponseTrait
      */
     private function makeThumbnailUrlFromFileName(string $fileName, int $contentset_id): string
     {
+        //ToDo : Hard code
         $baseUrl = "https://cdn.sanatisharif.ir/media/";
         //thumbnail
         $thumbnailFileName = pathinfo($fileName, PATHINFO_FILENAME).".jpg";

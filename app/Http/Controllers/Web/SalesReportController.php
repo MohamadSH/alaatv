@@ -38,7 +38,7 @@ class SalesReportController extends Controller
         $limitStatus = [1, 5, 10, 30, 50, 100, 200, 500, 1000];
         $coupontype  = ['نوع یک', 'نوع دو'];
         $products    = ['محصول یک', 'محصول دو'];
-        $talai98Ids  = [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342 , 328];
+        $talai98Ids  = [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342];
     
         /** @var User $user */
         $user = $request->user();
@@ -68,7 +68,7 @@ class SalesReportController extends Controller
         /** This month */
         [$thisMonthCount, $thisMonthSum] = $this->thisMonthPurchases($allTimeOrderproducts);
 
-        $now = Carbon::now()->setTimezone('Asia/Tehran')->format('H:m:s');
+        $now = Carbon::now()->setTimezone('Asia/Tehran')->format('Y-m-d');
         return view('user.salesReport', compact('limitStatus', 'coupontype', 'products',
             'allTimeCount', 'allTimeSum', 'thisMonthCount', 'thisMonthSum', 'thisWeekCount', 'thisWeekSum',
             'todayCount', 'todaySum',
