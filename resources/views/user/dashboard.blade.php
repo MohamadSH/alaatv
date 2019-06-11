@@ -51,7 +51,7 @@
                     <div class="m-widget30">
                         @if($user->completion() < 60)
                             <div class="alert alert-warning" role="alert">
-                                <strong>برای دانلود محصولات خریداری شده ، درصد تکمیل پروفایل شما باید بیشتر از 60 درصد باشد </strong>
+                                <strong>برای دانلود محصولات خریداری شده ، درصد تکمیل پروفایل شما باید حداقل 60 درصد باشد </strong>
                                 <a href="{{action('Web\UserController@show' , $user)}}" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">تکمیل پروفایل</a>
                             </div>
                         @else
