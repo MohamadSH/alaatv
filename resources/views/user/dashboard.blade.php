@@ -49,133 +49,138 @@
                 <div class="m-portlet__body m-portlet__body--no-padding">
                     <!--begin::Widget 30-->
                     <div class="m-widget30">
-                        
-                        <div class="m-widget_head">
-                            
-                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">
-                                @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
-{{--                                    @if($userAsset->title === 'محصولات من')--}}
-                                        @foreach($userAsset->products as $productKey=>$product)
-                                            @if($product->sets->count()===0)
-                                                <div class="m-widget_head-owlcarousel-item carousel background-gradient"
-                                                     data-position="{{ $productKey }}">
-                                                    <a href="{{ $product->url }}">
+                        @if($user->completion() < 60)
+                            <div class="alert alert-warning" role="alert">
+                                <strong>برای دانلود محصولات خریداری شده ، درصد تکمیل پروفایل شما باید بیشتر از 60 درصد باشد </strong>
+                                <a href="{{action('Web\UserController@show' , $user)}}" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">تکمیل پروفایل</a>
+                            </div>
+                        @else
+                            <div class="m-widget_head">
+
+                                <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">
+                                    @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
+    {{--                                    @if($userAsset->title === 'محصولات من')--}}
+                                            @foreach($userAsset->products as $productKey=>$product)
+                                                @if($product->sets->count()===0)
+                                                    <div class="m-widget_head-owlcarousel-item carousel background-gradient"
+                                                         data-position="{{ $productKey }}">
+                                                        <a href="{{ $product->url }}">
+                                                            <img class="a--owl-carousel-type-2-item-image"
+                                                                 src="{{ $product->photo }}" alt="{{ $product->name }}">
+                                                        </a>
+                                                        <br>
+                                                        <a href="{{ $product->url }}" target="_blank" class="m-link">
+                                                            {{ $product->name }}
+                                                        </a>
+                                                    </div>
+                                                @elseif($product->sets->count()===1)
+                                                    <div class="m-widget_head-owlcarousel-item carousel background-gradient"
+                                                         data-position="{{ $productKey }}">
                                                         <img class="a--owl-carousel-type-2-item-image"
                                                              src="{{ $product->photo }}" alt="{{ $product->name }}">
-                                                    </a>
-                                                    <br>
-                                                    <a href="{{ $product->url }}" target="_blank" class="m-link">
+                                                        <br>
                                                         {{ $product->name }}
-                                                    </a>
-                                                </div>
-                                            @elseif($product->sets->count()===1)
-                                                <div class="m-widget_head-owlcarousel-item carousel background-gradient"
-                                                     data-position="{{ $productKey }}">
-                                                    <img class="a--owl-carousel-type-2-item-image"
-                                                         src="{{ $product->photo }}" alt="{{ $product->name }}">
-                                                    <br>
-                                                    {{ $product->name }}
-                                                    <hr>
-                                                    <div class="m-btn-group m-btn-group--pill btn-group btn-group-sm m--margin-bottom-5"
-                                                         role="group" aria-label="Small button group">
-                                                        <button type="button" class="btn btn-warning btnViewPamphlet"
-                                                                data-content-type="pamphlet"
-                                                                data-content-url="{{ $product->sets->first()->contentUrl }}">
-                                                            <i class="flaticon-edit-1"></i>
-                                                            جزوات
-                                                        </button>
-                                                        <button type="button" class="btn btn-success btnViewVideo"
-                                                                data-content-type="video"
-                                                                data-content-url="{{ $product->sets->first()->contentUrl }}">
-                                                            <i class="la la-film"></i>
-                                                            فیلم ها
-                                                        </button>
+                                                        <hr>
+                                                        <div class="m-btn-group m-btn-group--pill btn-group btn-group-sm m--margin-bottom-5"
+                                                             role="group" aria-label="Small button group">
+                                                            <button type="button" class="btn btn-warning btnViewPamphlet"
+                                                                    data-content-type="pamphlet"
+                                                                    data-content-url="{{ $product->sets->first()->contentUrl }}">
+                                                                <i class="flaticon-edit-1"></i>
+                                                                جزوات
+                                                            </button>
+                                                            <button type="button" class="btn btn-success btnViewVideo"
+                                                                    data-content-type="video"
+                                                                    data-content-url="{{ $product->sets->first()->contentUrl }}">
+                                                                <i class="la la-film"></i>
+                                                                فیلم ها
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            @else
-                                                <div class="m-widget_head-owlcarousel-item carousel"
-                                                     data-position="{{ $productKey }}">
-                                                    <img class="a--owl-carousel-type-2-item-image"
-                                                         src="{{ $product->photo }}" alt="{{ $product->name }}">
-                                                    <br>
-                                                    <a href="{{ $product->url }}" target="_blank"
-                                                       class="m-link">{{ $product->name }}</a>
-                                                    <hr>
-                                                    <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-type-2-show-detailes m--margin-bottom-5">
-                                                        <i class="flaticon-more-v6"></i>
-                                                    </a>
+                                                @else
+                                                    <div class="m-widget_head-owlcarousel-item carousel"
+                                                         data-position="{{ $productKey }}">
+                                                        <img class="a--owl-carousel-type-2-item-image"
+                                                             src="{{ $product->photo }}" alt="{{ $product->name }}">
+                                                        <br>
+                                                        <a href="{{ $product->url }}" target="_blank"
+                                                           class="m-link">{{ $product->name }}</a>
+                                                        <hr>
+                                                        <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-type-2-show-detailes m--margin-bottom-5">
+                                                            <i class="flaticon-more-v6"></i>
+                                                        </a>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+    {{--                                    @endif--}}
+                                    @endforeach
+                                </div>
+
+                                @if(count($userAssetsCollection->filter(function ($value, $key) {return $value->title === 'محصولات من'; })->all())===0)
+                                    <div class="alert alert-info" role="alert">
+                                        <strong> هنوز از آلاء خرید نکرده اید. </strong>
+                                        بعد از اینکه از آلاء خرید کنید، امکان مشاهده خریدهای شما در این قسمت فراهم می شود.
+                                    </div>
+                                @endif
+
+                            </div>
+                            <div class="m-portlet a--owl-carousel-type-2-slide-detailes">
+                                <div class="m-portlet__head">
+                                    <div class="m-portlet__head-caption">
+                                        <div class="m-portlet__head-title">
+                                            <h3 class="m-portlet__head-text">
+                                                مجموعه های محصول خریداری شده
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="m-portlet__head-tools">
+                                        <a class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-type-2-hide-detailes">
+                                            <i class="la la-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
+                                    @if($userAsset->title === 'محصولات من')
+                                        @foreach($userAsset->products as $productKey=>$product)
+                                            @if(count($product->sets)>1)
+                                                <div class="m-portlet__body subCategoryWarper a--owl-carousel-type-2-slide-iteDetail-{{ $productKey }}">
+                                                    <div class="row justify-content-center">
+                                                        @foreach($product->sets as $setKey=>$set)
+                                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                                                                <div class="subCategoryItem">
+                                                                    <div class="subCategoryItem-title">
+                                                                        {{ $set->name }}
+                                                                    </div>
+                                                                    <hr>
+                                                                    <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
+                                                                         role="group" aria-label="Small button group">
+                                                                        <button type="button"
+                                                                                class="btn btn-warning btnViewPamphlet"
+                                                                                data-content-type="pamphlet"
+                                                                                data-content-url="{{ $set->contentUrl }}">
+                                                                            <i class="flaticon-edit-1"></i>
+                                                                            جزوات
+                                                                        </button>
+                                                                        <button type="button"
+                                                                                class="btn btn-success btnViewVideo"
+                                                                                data-content-type="video"
+                                                                                data-content-url="{{ $set->contentUrl }}">
+                                                                            <i class="la la-film"></i>
+                                                                            فیلم ها
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
                                                 </div>
                                             @endif
                                         @endforeach
-{{--                                    @endif--}}
+                                    @endif
                                 @endforeach
                             </div>
-                            
-                            @if(count($userAssetsCollection->filter(function ($value, $key) {return $value->title === 'محصولات من'; })->all())===0)
-                                <div class="alert alert-info" role="alert">
-                                    <strong> هنوز از آلاء خرید نکرده اید. </strong>
-                                    بعد از اینکه از آلاء خرید کنید، امکان مشاهده خریدهای شما در این قسمت فراهم می شود.
-                                </div>
-                            @endif
-                        
-                        </div>
-                        <div class="m-portlet a--owl-carousel-type-2-slide-detailes">
-                            <div class="m-portlet__head">
-                                <div class="m-portlet__head-caption">
-                                    <div class="m-portlet__head-title">
-                                        <h3 class="m-portlet__head-text">
-                                            مجموعه های محصول خریداری شده
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="m-portlet__head-tools">
-                                    <a class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-type-2-hide-detailes">
-                                        <i class="la la-times"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            
-                            @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
-                                @if($userAsset->title === 'محصولات من')
-                                    @foreach($userAsset->products as $productKey=>$product)
-                                        @if(count($product->sets)>1)
-                                            <div class="m-portlet__body subCategoryWarper a--owl-carousel-type-2-slide-iteDetail-{{ $productKey }}">
-                                                <div class="row justify-content-center">
-                                                    @foreach($product->sets as $setKey=>$set)
-                                                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                                                            <div class="subCategoryItem">
-                                                                <div class="subCategoryItem-title">
-                                                                    {{ $set->name }}
-                                                                </div>
-                                                                <hr>
-                                                                <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
-                                                                     role="group" aria-label="Small button group">
-                                                                    <button type="button"
-                                                                            class="btn btn-warning btnViewPamphlet"
-                                                                            data-content-type="pamphlet"
-                                                                            data-content-url="{{ $set->contentUrl }}">
-                                                                        <i class="flaticon-edit-1"></i>
-                                                                        جزوات
-                                                                    </button>
-                                                                    <button type="button"
-                                                                            class="btn btn-success btnViewVideo"
-                                                                            data-content-type="video"
-                                                                            data-content-url="{{ $set->contentUrl }}">
-                                                                        <i class="la la-film"></i>
-                                                                        فیلم ها
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        @endif
-                                    @endforeach
-                                @endif
-                            @endforeach
-                        </div>
-                    
+                        @endif
                     </div>
                     <!--end::Widget 30-->
                 </div>
