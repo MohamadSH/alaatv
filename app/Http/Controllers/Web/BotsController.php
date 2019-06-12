@@ -1174,6 +1174,18 @@ class BotsController extends Controller
                     $q->whereIn('orderstatus_id' , [2,5])
                         ->whereIn('paymentstatus_id' , [3,4])
                         ->whereHas('orderproducts' , function ($q2){
+                            $q2->whereIn('product_id' , [312]);
+                        });
+                });
+
+                dd($users->toSql());
+
+
+
+                $users = User::whereHas('orders' , function ($q){
+                    $q->whereIn('orderstatus_id' , [2,5])
+                        ->whereIn('paymentstatus_id' , [3,4])
+                        ->whereHas('orderproducts' , function ($q2){
                             $q2->whereIn('product_id' , [281,282,283,284,292,287,293,285,286,288,289,290,291]);
                         });
                 })->whereHas('orders', function ($q3) {
@@ -1920,53 +1932,93 @@ class BotsController extends Controller
 
                 }*/
         // /** Points for Hamayesh Talai lottery */
-        
-        /** Points for Eide Fetr lottery */
-        $transactions = Transaction::whereHas("order", function ($q) {
-            $q->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
-                ->where("paymentstatus_id", config("constants.PAYMENT_STATUS_PAID"))
-            ->whereHas('orderproducts' , function ($q2){
-                $q2->whereNotIn('product_id' , [Product::CUSTOM_DONATE_PRODUCT , Product::DONATE_PRODUCT_5_HEZAR , Product::ASIATECH_PRODUCT]) ;
-            });
-        })
-        ->where("created_at" , '>=', "2019-05-16 00:00:00")
-        ->where('created_at' , '<=', "2019-06-09 23:59:59")
-        ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-        ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
-        ->where("cost", ">", 0)
-        ->get();
-        dd($transactions->count() , number_format($transactions->sum('cost')) , number_format($transactions->sum('cost')/50000));
+
+        if($request->has('5khordad'))
+        {
+            /** Points for Eide Fetr lottery */
+            $transactions = Transaction::whereHas("order", function ($q) {
+                $q->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                    ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID") , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')])
+                    ->whereHas('orderproducts' , function ($q2){
+                        $q2->whereNotIn('product_id' , [Product::CUSTOM_DONATE_PRODUCT , Product::DONATE_PRODUCT_5_HEZAR , Product::ASIATECH_PRODUCT]) ;
+                    });
+            })
+                ->where("created_at" , '>=', "2019-05-15 19:30:00") // 16 ordibehesht 98 saat 12 tehran
+                ->where('created_at' , '<=', "2019-05-26 19:29:59") // 5 khordad 98 saat 23:59
+                ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                ->where("cost", ">", 0)
+                ->get();
+            $pointMultiply = 3;// 5 khordad 98
+        }elseif($request->has('10khordad')){
+
+            $transactions = Transaction::whereHas("order", function ($q) {
+                $q->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                    ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID") , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')])
+                    ->whereHas('orderproducts' , function ($q2){
+                        $q2->whereNotIn('product_id' , [Product::CUSTOM_DONATE_PRODUCT , Product::DONATE_PRODUCT_5_HEZAR , Product::ASIATECH_PRODUCT]) ;
+                    });
+            })
+                ->where("created_at" , '>=', "2019-05-26 19:30:00") // 5 khordad 98 saat 12 tehran
+                ->where('created_at' , '<=', "2019-05-31 19:29:59") // 10 khordad 98 saat 23:59
+                ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                ->where("cost", ">", 0)
+                ->get();
+            $pointMultiply = 2;// 10 khordad 98
+        }elseif($request->has('19khordad')){
+            $transactions = Transaction::whereHas("order", function ($q) {
+                $q->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                    ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID") , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')])
+                    ->whereHas('orderproducts' , function ($q2){
+                        $q2->whereNotIn('product_id' , [Product::CUSTOM_DONATE_PRODUCT , Product::DONATE_PRODUCT_5_HEZAR , Product::ASIATECH_PRODUCT]) ;
+                    });
+            })
+                ->where("created_at" , '>=', "2019-05-31 19:30:00") // 10 khordad 98 saat 12 tehran
+                ->where('created_at' , '<=', "2019-06-09 07:00:00") // 19 khordad 98 saat 11:30
+                ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                ->where("cost", ">", 0)
+                ->get();
+            $pointMultiply = 1;// 19 khordad 98
+        }else{
+            dd('Bad Request');
+        }
+
+
         $users          = collect();
         $amountUnit     = 50000;
         $successCounter = 0;
         $failedCounter  = 0;
         $warningCounter = 0;
+
         foreach ($transactions as $transaction) {
             $user = $transaction->order->user;
             if (isset($user)) {
-                $userRecord = $users->where("user_id", $user->id)
-                    ->first();
+                $userRecord = $users->where("user_id", $user->id)->first();
+
                 if (isset($userRecord)) {
                     $userRecord["totalAmount"] += $transaction->cost;
                     $point                     = (int) ($userRecord["totalAmount"] / $amountUnit);
-                    $userRecord["point"]       = $point;
+                    $userRecord["point"]       = $point * $pointMultiply;
                 } else {
                     $point = (int) ($transaction->cost / $amountUnit);
                     $users->push([
                         "user_id"     => $user->id,
                         "totalAmount" => $transaction->cost,
-                        "point"       => $point,
+                        "point"       => $point * $pointMultiply,
                     ]);
                 }
             } else {
-                dump("User was not found for transaction ".$transaction->id);
+                dump("Warning: User was not found for transaction ".$transaction->id);
                 $warningCounter++;
             }
         }
         
-//        $users = $users->where("point"  , ">" , 0);
-        
-        dd("STOP");
+        $users = $users->where("point"  , ">" , 0);
+//        dump($users->count());
+//        dd("STOP points");
+        /** Extra point */
         /*$userbons = Userbon::where("bon_id" , 2)
                             ->where("created_at" , ">" , "2018-05-24 00:00:00")
                             ->where("totalNumber" , ">=" , "3")
@@ -1997,8 +2049,7 @@ class BotsController extends Controller
             }
         }*/
         $bonName = config("constants.BON2");
-        $bon     = Bon::where("name", $bonName)
-            ->first();
+        $bon     = Bon::where("name", $bonName)->first();
         if (!isset($bon)) {
             dd("Bon not found");
         }
@@ -2031,13 +2082,13 @@ class BotsController extends Controller
                 $user = $userBon->user;
 //                $user->notify(new GeneralNotice($message));
                 echo "<span style='color:green'>";
-                echo "User ".$userId." notified , ".$user->mobile;
+                echo "User ".$userId." get $points points , ".$user->mobile;
                 echo "</span>";
                 echo "<br>";
                 $successCounter++;
             } else {
                 $failedCounter++;
-                dump("Userbon for user ".$userId." was not created");
+                dump("Error: Userbon for user ".$userId." was not created");
             }
         }
         dump("number of successfully processed users: ".$successCounter);
