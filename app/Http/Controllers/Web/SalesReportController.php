@@ -583,8 +583,8 @@ class SalesReportController extends Controller
     {
         $provinces = $this->getProvinces();
         foreach ($allTimeOrderproducts as $allTimeOrderproduct) {
-            $foundProvince = Cache::remember('sr-SetLocation-OP:'.$allTimeOrderproduct->id,
-                config('constants.CACHE_600'), function () use ($allTimeOrderproduct, $provinces) {
+//            $foundProvince = Cache::remember('sr-SetLocation-OP:'.$allTimeOrderproduct->id,
+//                config('constants.CACHE_600'), function () use ($allTimeOrderproduct, $provinces) {
                     $user         = $allTimeOrderproduct->order->user;
                     $userProvince = $user->province;
                     if (isset($userProvince)) {
@@ -598,8 +598,8 @@ class SalesReportController extends Controller
                         $foundProvince = $provinces->where('name', 'ir-un');
                     }
 
-                    return $foundProvince;
-                });
+//                    return $foundProvince;
+//                });
 
             $key           = key($foundProvince->toArray());
             $foundProvince = $foundProvince->first();
