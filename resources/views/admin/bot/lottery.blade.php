@@ -31,7 +31,7 @@
                     <span class = "bold" style = "font-size: larger">
                         1.
                     </span> &nbsp;&nbsp;
-                    <a class = "btn btn-default" href = "{{action("Web\HomeController@pointBot")}}" {{(isset($params["pointGiven"]) && $params["pointGiven"])?"disabled":""}} target = "_blank">
+                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}" {{(isset($params["pointGiven"]) && $params["pointGiven"])?"disabled":""}} target = "_blank">
                         اهدای امتیاز به کاربران
                     </a>
                     <hr>

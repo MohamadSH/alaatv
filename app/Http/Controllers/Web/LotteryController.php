@@ -25,11 +25,11 @@ class LotteryController extends Controller
 
     /**
      * Holding the lottery
-     *
+     * @param Request $request
+     * @return Response
      */
     public function holdLottery(Request $request)
     {
-        abort(404);
         try {
             // Setup
             $lotteryName = "";
@@ -37,8 +37,7 @@ class LotteryController extends Controller
                 $lotteryName = $request->get("lottery");
             }
             
-            $lottery = Lottery::where("name", $lotteryName)
-                ->first();
+            $lottery = Lottery::where("name", $lotteryName)->first();
             if (!isset($lottery)) {
                 dd("Lottery not found!");
             }
@@ -57,7 +56,7 @@ class LotteryController extends Controller
                 ->where("userbonstatus_id", 1)
                 ->get();
             
-            dump("Number of participants: ".$participants->count());
+            dump("Number of userbons: ".$participants->count());
             dump("Sum of total points: ".$participants->sum("totalNumber"));
             
             $participantArray = [];
@@ -78,7 +77,7 @@ class LotteryController extends Controller
                 }
             }
             dump($luckyBox);
-            dd("stop");
+//            dd("stop");
             // Draw
             $counter        = 0;
             $successCounter = 0;
@@ -88,13 +87,8 @@ class LotteryController extends Controller
             while (!$luckyBox->isEmpty()) {
                 $card   = $luckyBox->draw();
                 $cardId = $card->getId();
-                
-                if (in_array($cardId, $winners)) {
-                    continue;
-                }
-                
-                $user = \App\User::where("id", $cardId)
-                    ->first();
+
+                $user = \App\User::where("id", $cardId)->first();
                 if (isset($user)) {
                     $userbon = $user->userbons->where("bon_id", $bon->id)
                         ->where("userbonstatus_id", 1)
@@ -105,11 +99,11 @@ class LotteryController extends Controller
                         $userbon->usedNumber       = $userbon->totalNumber;
                         $userbon->update();
                     }
-                    else {
-                        dump("Warning! Userbon not found for user: ".$user->id);
-                        $warningCounter++;
+
+                    if (in_array($cardId, $winners)) {
+                        continue;
                     }
-                    
+
                     $userlotteries = $user->lotteries->where("lottery_id", $lottery->id);
                     if ($userlotteries->isEmpty()) {
                         $counter++;
@@ -136,7 +130,7 @@ class LotteryController extends Controller
                             $warningCounter++;
                         }
                         else {
-                            dump("Failed : User ".$user->id." had been participated in lottery with rank > 0");
+                            dump("Error : User ".$user->id." had been participated in lottery with rank > 0");
                             $failedCounter++;
                         }
                     }
@@ -173,7 +167,6 @@ class LotteryController extends Controller
      */
     public function givePrizes(Request $request)
     {
-        abort("404");
         try {
             $lotteryName = "";
             if ($request->has("lottery")) {
@@ -185,7 +178,8 @@ class LotteryController extends Controller
             if (!isset($lottery)) {
                 dd("Lottery not found!");
             }
-            
+
+            /** @var Lottery $lottery */
             $userlotteries = $lottery->users->sortBy("pivot.rank");
             
             $successCounter = 0;
@@ -207,8 +201,8 @@ class LotteryController extends Controller
                     $responseText  = $depositResult["responseText"];
                     
                     if ($done) {
-                        $userlottery->notify(new GiftGiven($amount));
-                        echo "<span style='color:green' >"."Notification sent to user :".$userlottery->lastName."</span>";
+//                        $userlottery->notify(new GiftGiven($amount));
+                        echo "<span style='color:green' >"."Wallet notification sent to user :".$userlottery->lastName."</span>";
                         echo "<br>";
                         
                         $objectId  = $depositResult["wallet"];
@@ -230,7 +224,7 @@ class LotteryController extends Controller
                 
                 if ($done) {
                     if (strlen($prizeName) == 0) {
-                        $userlottery->notify(new LotteryWinner($lottery, $rank, $prizeName, $memorial));
+//                        $userlottery->notify(new LotteryWinner($lottery, $rank, $prizeName, $memorial));
                         echo "<span style='color:green;font-weight: bolder'>User ".$userlottery->mobile." with rank ".$rank." notified</span>";
                         echo "<br>";
                     }
