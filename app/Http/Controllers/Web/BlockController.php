@@ -19,7 +19,12 @@ class BlockController extends Controller
     public function adminIndex(Request $request)
     {
         $perPage = ($request->has('length')) ? $request->get('length') : 10;
-        $blocks = Block::paginate($perPage);
+        $blocks = Block::
+        withCount('products')->
+        withCount('sets')->
+        withCount('contents')->
+        withCount('banners')->
+        paginate($perPage);
         return $blocks;
     }
     

@@ -20,7 +20,7 @@
     <label for="input-block-enable" class="col-2 col-form-label">وضعیت:</label>
     <div class="col-10">
         <label class="m-checkbox m-checkbox--state-success">
-            <input type="checkbox" value="{{ $block->enable }}" id="input-block-customUrl" name="enable"> فعال
+            <input type="checkbox" id="input-block-customUrl" name="enable" @if($block->enable) checked="checked" @endif> فعال
             <span></span>
         </label>
     </div>

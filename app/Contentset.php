@@ -3,6 +3,10 @@
 namespace App;
 
 use App\Classes\Taggable;
+use App\Collection\UserCollection;
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Laravel\Scout\Searchable;
 use App\Traits\favorableTraits;
 use App\Collection\SetCollection;
@@ -17,47 +21,47 @@ use App\Collection\ContentCollection;
  * @property int                                                   $id
  * @property string|null                                           $name        نام
  * @property string|null                                           $description توضیح
- * @property string|null                                           $photo       عکس پوستر
- * @property string|null                                           $tags        تگ ها
- * @property int                                                   $enable      فعال/غیرفعال
- * @property int                                                   $display     نمایش/عدم نمایش
- * @property \Carbon\Carbon|null                                   $created_at
- * @property \Carbon\Carbon|null                                   $updated_at
- * @property \Carbon\Carbon|null                                   $deleted_at
- * @property-read \App\Collection\ContentCollection|\App\Content[] $contents
+ * @property string|null                      $photo       عکس پوستر
+ * @property string|null                      $tags        تگ ها
+ * @property int                              $enable      فعال/غیرفعال
+ * @property int                              $display     نمایش/عدم نمایش
+ * @property Carbon|null              $created_at
+ * @property Carbon|null              $updated_at
+ * @property Carbon|null              $deleted_at
+ * @property-read ContentCollection|Content[] $contents
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Contentset onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Contentset onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereDisplay($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereEnable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset wherePhoto($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereTags($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Contentset withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Contentset withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset active()
- * @property-read \App\Collection\UserCollection|\App\User[]       $favoriteBy
- * @property string|null                                           $small_name
- * @property-read mixed                                            $short_name
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset whereSmallName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset query()
- * @property-read mixed                                            $author
- * @property-read mixed                                            $url
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed                                            $api_url
- * @property-read mixed                                            $content_url
- * @property-read mixed                                            $cache_cooldown_seconds
- * @property-read \App\Collection\ContentCollection|\App\Content[] $contents2
- * @property-read \App\Collection\ProductCollection|\App\Product[] $products
+ * @method static Builder|Contentset whereCreatedAt($value)
+ * @method static Builder|Contentset whereDeletedAt($value)
+ * @method static Builder|Contentset whereDescription($value)
+ * @method static Builder|Contentset whereDisplay($value)
+ * @method static Builder|Contentset whereEnable($value)
+ * @method static Builder|Contentset whereId($value)
+ * @method static Builder|Contentset whereName($value)
+ * @method static Builder|Contentset wherePhoto($value)
+ * @method static Builder|Contentset whereTags($value)
+ * @method static Builder|Contentset whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Contentset withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Contentset withoutTrashed()
+ * @mixin Eloquent
+ * @method static Builder|Contentset active()
+ * @property-read UserCollection|User[] $favoriteBy
+ * @property string|null                                $small_name
+ * @property-read mixed                                 $short_name
+ * @method static Builder|Contentset whereSmallName($value)
+ * @method static Builder|Contentset newModelQuery()
+ * @method static Builder|Contentset newQuery()
+ * @method static Builder|Contentset query()
+ * @property-read mixed                                 $author
+ * @property-read mixed                                 $url
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed                       $api_url
+ * @property-read mixed                       $content_url
+ * @property-read mixed                       $cache_cooldown_seconds
+ * @property-read ContentCollection|Content[] $contents2
+ * @property-read ProductCollection|Product[] $products
  */
 class Contentset extends BaseModel implements Taggable
 {
@@ -170,9 +174,9 @@ class Contentset extends BaseModel implements Taggable
     /**
      * Scope a query to only include active Contentsets.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  Builder  $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeActive($query)
     {
@@ -398,5 +402,21 @@ class Contentset extends BaseModel implements Taggable
         }
         
         return false;
+    }
+    
+    public function getEditLinkAttribute()
+    {
+//        if (hasAuthenticatedUserPermission(config('constants.EDIT_BLOCK_ACCESS')))
+        return action('Web\SetController@edit', $this->id);
+        
+        return null;
+    }
+    
+    public function getRemoveLinkAttribute()
+    {
+//        if (hasAuthenticatedUserPermission(config('constants.REMOVE_BLOCK_ACCESS')))
+//            return action('Web\BlockController@destroy', $this->id);
+        
+        return null;
     }
 }

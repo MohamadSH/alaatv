@@ -30,7 +30,7 @@
     <div class="row">
         <div class="col">
             <!-- BEGIN BLOCK TABLE PORTLET-->
-            <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="block-portlet">
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--head-sm" m-portlet="true" id="block-portlet">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
@@ -48,11 +48,6 @@
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
                                     <i class="la la-refresh"></i>
-                                </a>
-                            </li>
-                            <li class="m-portlet__nav-item">
-                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
@@ -191,7 +186,7 @@
                     </div>
                     <!--end::Modal-->
             
-                    <table class="table table-striped table-bordered table-hover" width="100%" id="block_table">
+                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="block_table">
                         <thead>
                             <tr>
                                 <th></th>
@@ -221,7 +216,7 @@
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>--}}
     {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>--}}
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
@@ -251,6 +246,7 @@
             
             $('#block_table > tbody').html("");
             let defaultContent = "<span class=\"m-badge m-badge--wide label-sm m-badge--danger\"> درج نشده </span>";
+            let zeroContent = "<span class=\"m-badge m-badge--wide label-sm m-badge--warning\"> خالی </span>";
             let columns = [
                 {data: "res", title: "", defaultContent: ' '},
                 {data: "id", title: "#", defaultContent: defaultContent},
@@ -274,9 +270,10 @@
                     "title": "تعداد محتوا",
                     defaultContent: defaultContent,
                     "render": function ( data, type, row ) {
-                        var contents = row.contents;
-                        if (typeof contents !== 'undefined' && contents !== null && contents !== false) {
-                            return contents.length;
+                        if (row.contents_count > 0) {
+                            return row.contents_count;
+                        } else {
+                            return zeroContent;
                         }
                     },
                 },
@@ -286,9 +283,10 @@
                     "title": "تعداد دسته ها",
                     defaultContent: defaultContent,
                     "render": function ( data, type, row ) {
-                        var sets = row.sets;
-                        if (typeof sets !== 'undefined' && sets !== null && sets !== false) {
-                            return sets.length;
+                        if (row.sets_count > 0) {
+                            return row.sets_count;
+                        } else {
+                            return zeroContent;
                         }
                     },
                 },
@@ -298,9 +296,10 @@
                     "title": "تعداد محصولات",
                     defaultContent: defaultContent,
                     "render": function ( data, type, row ) {
-                        var products = row.products;
-                        if (typeof products !== 'undefined' && products !== null && products !== false) {
-                            return products.length;
+                        if (row.products_count > 0) {
+                            return row.products_count;
+                        } else {
+                            return zeroContent;
                         }
                     },
                 },
@@ -310,9 +309,10 @@
                     "title": "تعداد بنرها",
                     defaultContent: defaultContent,
                     "render": function ( data, type, row ) {
-                        var banners = row.banners;
-                        if (typeof banners !== 'undefined' && banners !== null && banners !== false) {
-                            return banners.length;
+                        if (row.banners_count > 0) {
+                            return row.banners_count;
+                        } else {
+                            return zeroContent;
                         }
                     },
                 },
@@ -355,12 +355,11 @@
                     type: "loader",
                     state: "info",
                 });
-                data.blockPage = getNextPageParam(data.start, data.length);
+                data.page = getNextPageParam(data.start, data.length);
                 delete data.columns;
                 return data;
             };
             let dataSrc = function (json) {
-                console.log('json.data: ', json.data);
                 $("#block-portlet-loading").addClass("d-none");
                 mApp.unblock('#block_table_wrapper');
                 return json.data;
