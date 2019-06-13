@@ -274,7 +274,7 @@
                                 <i class="m-menu__link-icon flaticon-medal"></i>
                                 <span class="m-menu__link-title">
                                     <span class="m-menu__link-wrap">
-                                        <span class="m-menu__link-text">همایش</span>
+                                        <span class="m-menu__link-text">همایش دانلودی</span>
                                         <span class="m-menu__link-badge">
                                         </span>
                                     </span>
@@ -293,7 +293,9 @@
                                                     <span class="m-menu__link-text">
                                                         <b>طلایی</b>
                                                         -
-                                                        جمع بندی 80% کنکور
+                                                        80% کنکور
+                                                        -
+                                                        جمع بندی کامل
                                                     </span>
                                                 </span>
                                             </span>

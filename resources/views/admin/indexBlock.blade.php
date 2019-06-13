@@ -136,7 +136,9 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <h4 class="modal-title">آیا مطمئن هستید؟</h4>
+                                    <h4 class="modal-title">
+                                        آیا از حذف این بلاک اطمینان دارید؟
+                                    </h4>
                                     <input type="hidden" id="block-removeLink" value="removeLink">
                                 </div>
                                 <div class="modal-footer">
@@ -328,7 +330,7 @@
                             '        <i class="fa fa-pencil"></i> اصلاح \n' +
                             '    </a>\n';
                         html +=
-                            '    <a class="btn btn-danger btnDeleteOrder" remove-link="' + row.removeLink + '" data-block-name="' + row.title + '">\n' +
+                            '    <a class="btn btn-danger btnDeleteBlock" remove-link="' + row.removeLink + '" data-block-name="' + row.title + '">\n' +
                             '        <i class="fa fa-remove" aria-hidden="true"></i> حذف \n' +
                             '    </a>\n';
                         html += '</div>';
@@ -393,6 +395,44 @@
             $('#copyBlockModalModalLabel').html(blockName);
             $('#copyBlockModal').modal('show');
         }
+
+        function removeBlock(){
+            mApp.block('#removeBlockModal', {
+                type: "loader",
+                state: "success",
+            });
+            var remove_link = $('#block-removeLink').val();
+            $.ajax({
+                type: 'DELETE',
+                url: remove_link,
+                data:{_method: 'delete'},
+                success: function (result) {
+                    toastr.options = {
+                        "closeButton": true,
+                        "debug": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "showDuration": "1000",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+                    toastr["success"]("بلاک با موفقیت حذف شد!", "پیام سیستم");
+                    $('#removeBlockModal').modal('hide');
+                    mApp.unblock('#removeBlockModal');
+
+                    makeDataTable_loadWithAjax_blocks();
+                },
+                error: function (result) {
+                    mApp.unblock('#removeBlockModal');
+                    makeDataTable_loadWithAjax_blocks();
+                }
+            });
+        }
         
         jQuery(document).ready(function () {
 
@@ -406,7 +446,7 @@
                $('#showBlockPhotoInModal').modal('show');
             });
 
-            $(document).on('click', '.btnDeleteOrder', function (e) {
+            $(document).on('click', '.btnDeleteBlock', function (e) {
                 e.preventDefault();
                 let removeLink = $(this).attr('remove-link');
                 let name = $(this).data('block-name');
@@ -415,35 +455,7 @@
                $('#block-removeLink').val(removeLink);
                $('#removeBlockModal').modal('show');
             });
-            /*
-             validdSince
-             */
-            $("#couponValidSince").persianDatepicker({
-                altField: '#couponValidSinceAlt',
-                altFormat: "YYYY MM DD",
-                observer: true,
-                format: 'YYYY/MM/DD',
-                altFieldFormatter: function (unixDate) {
-                    var d = new Date(unixDate).toISOString();
-                    return d;
-                }
-            });
-
-            /*
-             validUntil
-             */
-            $("#couponValidUntil").persianDatepicker({
-                altField: '#couponValidUntilAlt',
-                altFormat: "YYYY MM DD",
-                observer: true,
-                format: 'YYYY/MM/DD',
-                altFieldFormatter: function (unixDate) {
-                    var d = new Date(unixDate).toISOString();
-                    return d;
-                }
-            });
-
-
+            
             $(document).on("click", "#block-portlet .reload", function (){
                 $("#block-portlet-loading").removeClass("d-none");
                 $('#block_table > tbody').html("");
@@ -452,9 +464,6 @@
             });
             
             $("#block-portlet .reload").trigger("click");
-            $("#block-expand").trigger("click");
-            $('#blockShortDescriptionSummerNote').summernote({height: 200});
-            $('#blockLongDescriptionSummerNote').summernote({height: 200});
 
         });
 

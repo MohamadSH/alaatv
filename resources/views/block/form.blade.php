@@ -20,7 +20,7 @@
     <label for="input-block-enable" class="col-2 col-form-label">وضعیت:</label>
     <div class="col-10">
         <label class="m-checkbox m-checkbox--state-success">
-            <input type="checkbox" id="input-block-customUrl" name="enable" @if($block->enable) checked="checked" @endif> فعال
+            <input type="checkbox" value="1" id="input-block-customUrl" name="enable" @if($block->enable) checked="checked" @endif> فعال
             <span></span>
         </label>
     </div>
@@ -29,6 +29,16 @@
     <label for="input-block-order" class="col-2 col-form-label">ترتیب:</label>
     <div class="col-10">
         <input class="form-control m-input" type="number" value="{{ $block->order }}" id="input-block-customUrl" name="order">
+    </div>
+</div>
+<div class="form-group m-form__group row">
+    <label for="input-block-order" class="col-2 col-form-label">نوع:</label>
+    <div class="col-10">
+        <select name="type">
+            @foreach($blockTypes as $blockType)
+                <option value="{{ $blockType['value'] }}">{{ $blockType['name'] }}</option>
+            @endforeach
+        </select>
     </div>
 </div>
 

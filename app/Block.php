@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Iatstuti\Database\Support\CascadeSoftDeletes;
 
 /**
  * App\Block
@@ -55,6 +57,8 @@ use Illuminate\Support\Facades\Cache;
  */
 class Block extends BaseModel
 {
+    use SoftDeletes, CascadeSoftDeletes;
+    
     public static $BLOCK_TYPE_MAIN = 1;
     
     public static $BLOCK_TYPE_SHOP = 2;
@@ -73,6 +77,8 @@ class Block extends BaseModel
         'blockables',
     ];
     
+    protected $dates = ['deleted_at'];
+    
     protected $fillable = [
         'title',
         'tags',
@@ -86,8 +92,6 @@ class Block extends BaseModel
     protected $appends = [
         'url',
         'offer',
-        'editLink',
-        'removeLink',
     ];
     
     protected $hidden = [
@@ -343,7 +347,7 @@ class Block extends BaseModel
     public function getRemoveLinkAttribute()
     {
 //        if (hasAuthenticatedUserPermission(config('constants.REMOVE_BLOCK_ACCESS')))
-//            return action('Web\BlockController@destroy', $this->id);
+            return action('Web\BlockController@destroy', $this->id);
         
         return null;
     }

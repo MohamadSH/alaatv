@@ -10,6 +10,7 @@
     <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css" rel="stylesheet" type="text/css"/>
     <style>
         .operations {
@@ -49,6 +50,7 @@
         <div class="col">
             <!--begin::Portlet-->
             <div class="m-portlet m-portlet--tabs m-portlet--success m-portlet--head-solid-bg m-portlet--bordered">
+                {!! Form::model($block,['method' => 'PUT','action' => ['Web\BlockController@update',$block]]) !!}
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-tools">
                         <ul class="nav nav-tabs m-tabs-line m-tabs-line--primary" role="tablist">
@@ -86,19 +88,34 @@
                                     <span class="m-badge m-badge--info">{{ $block->banners()->count() }}</span>
                                 </a>
                             </li>
+                            <li class="nav-item m-tabs__item">
+                                <button type="submit" class="btn m-btn--pill m-btn--air btn-warning">اصلاح</button>
+                            </li>
                         </ul>
                     </div>
                 </div>
                 <div class="m-portlet__body">
                     <div class="tab-content">
                         <div class="tab-pane active" id="m_tabs_12_1" role="tabpanel">
-                            {!! Form::model($block,['method' => 'PUT','action' => ['Web\BlockController@update',$block]]) !!}
-                                @include('block.form' )
-                                <button type="submit" class="btn m-btn--pill m-btn--air btn-warning">اصلاح</button>
-                            {!! Form::close() !!}
+                            @include('block.form' )
                         </div>
                         <div class="tab-pane" id="m_tabs_12_2" role="tabpanel">
+                            <div>
+        
+                                <div class="m-divider m--margin-top-50">
+                                    <span></span>
+                                    <span>افزودن محصول جدید به این بلاک</span>
+                                    <span></span>
+                                </div>
+        
+                                @include('admin.filters.productsFilter', [
+                                    "id" => "block-products",
+                                    "name" => "block-products",
+                                    'everyProduct'=>false,
+                                    'title'=>'انتخاب محصول'
+                                ])
     
+                            </div>
                             <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="block_product_table">
                                 <thead>
                                     <tr>
@@ -131,6 +148,40 @@
                             </table>
                         </div>
                         <div class="tab-pane" id="m_tabs_12_3" role="tabpanel">
+                            <div>
+        
+                                <div class="m-divider m--margin-top-50">
+                                    <span></span>
+                                    <span>افزودن دسته جدید به این بلاک</span>
+                                    <span></span>
+                                </div>
+                                <select class="mt-multiselect btn btn-default a--full-width"
+                                        multiple="multiple"
+                                        data-label="left"
+                                        data-width="100%"
+                                        data-filter="true"
+                                        data-height="200"
+                                        id="block-sets"
+                                        name="block-sets[]"
+                                        title="انتخاب دسته">
+                                    @foreach($sets as $set)
+                                        <option value="{{$set->id}}"
+                                                @if($blockSets->contains('id', $set->id))
+                                                class="bold"
+                                                selected="selected"
+                                                @endif>
+                                            #{{$set->id}}-{{$set->name}}
+                                        </option>
+                                    @endforeach
+                                </select>
+    
+                            </div>
+                            <div>
+                                <button type="button" class="btn m-btn--pill m-btn--air btn-info">
+                                    افزودن
+                                    دسته
+                                </button>
+                            </div>
                             <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="block_set_table">
                                 <thead>
                                 <tr>
@@ -140,7 +191,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($block->sets()->get() as $set)
+                                @foreach($blockSets as $set)
                                     <tr>
                                         <td class="itemId">{{ $set->id }}</td>
                                         <td>{{ $set->name }}</td>
@@ -163,6 +214,34 @@
                             </table>
                         </div>
                         <div class="tab-pane" id="m_tabs_12_4" role="tabpanel">
+                            <div>
+        
+                                <div class="m-divider m--margin-top-50">
+                                    <span></span>
+                                    <span>افزودن محتوا جدید به این بلاک</span>
+                                    <span></span>
+                                </div>
+                                <select class="mt-multiselect btn btn-default a--full-width"
+                                        multiple="multiple"
+                                        data-label="left"
+                                        data-width="100%"
+                                        data-filter="true"
+                                        data-height="200"
+                                        id="block-contents"
+                                        name="block-contents[]"
+                                        title="انتخاب محتوا">
+                                    @foreach($contents as $content)
+                                        <option value="{{$content->id}}"
+                                                @if($blockContents->contains('id', $content->id))
+                                                class="bold"
+                                                selected="selected"
+                                                @endif>
+                                            #{{$content->id}}-{{$content->name}}
+                                        </option>
+                                    @endforeach
+                                </select>
+    
+                            </div>
                             <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="block_content_table">
                                 <thead>
                                 <tr>
@@ -172,7 +251,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($block->contents()->get() as $content)
+                                @foreach($blockContents as $content)
                                     <tr>
                                         <td class="itemId">{{ $content->id }}</td>
                                         <td>{{ $content->name }}</td>
@@ -195,6 +274,12 @@
                             </table>
                         </div>
                         <div class="tab-pane" id="m_tabs_12_5" role="tabpanel">
+                            <div>
+                                <button type="button" class="btn m-btn--pill m-btn--air btn-info">
+                                    افزودن
+                                    بنر
+                                </button>
+                            </div>
                             <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="block_banner_table">
                                 <thead>
                                 <tr>
@@ -228,6 +313,7 @@
                         </div>
                     </div>
                 </div>
+                {!! Form::close() !!}
             </div>
             <!--end::Portlet-->
         </div>
@@ -253,7 +339,9 @@
     <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-bootstrap-multiselect.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/js/admin-makeDataTable.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type="text/javascript"></script>
     <script>
 
         $("input.productTags").tagsinput({
