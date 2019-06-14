@@ -298,7 +298,8 @@ class ProductController extends Controller
     
     public function show(Request $request, Product $product)
     {
-         $user = $request->user();
+        //$user = $request->user();
+        $user = null;
          if ($user) {
              $purchasedProductIdArray = $this->searchInUserAssetsCollection($product, $user);
              $allChildIsPurchased = $this->allChildIsPurchased($product, $purchasedProductIdArray);
