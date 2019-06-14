@@ -36,9 +36,10 @@
                     </a>
                 </div>
                 <div class="col text-center">
-                    <a onclick = 'window.open("https://logo.samandehi.ir/Verify.aspx?id=129649&p=rfthuiwkpfvlgvkaaodspfvl", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")'>
-                        <img class="img-fluid m--img-centered certificatesLogo" src="{{ asset('/acm/extra/samandehi-noghrei.png') }}" alt="لوگو ساماندهی آلاء" data-name="samandehi">
-                    </a>
+{{--                    <a onclick = 'window.open("https://logo.samandehi.ir/Verify.aspx?id=146279&p=rfthaodsgvkauiwkjyoepfvl", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")'>--}}
+{{--                        <img class="img-fluid m--img-centered certificatesLogo" src="{{ asset('/acm/extra/samandehi-noghrei.png') }}" alt="لوگو ساماندهی آلاء" data-name="samandehi">--}}
+{{--                    </a>--}}
+                    <img id = 'jxlzwlaofukznbqejzpesizp' style = 'cursor:pointer' onclick = 'window.open("https://logo.samandehi.ir/Verify.aspx?id=146279&p=rfthaodsgvkauiwkjyoepfvl", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")' alt = 'logo-samandehi' src = 'https://logo.samandehi.ir/logo.aspx?id=146279&p=nbpdshwlwlbqodrfyndtbsiy' />
                 </div>
             </div>
         </div>
