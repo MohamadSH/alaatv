@@ -140,20 +140,20 @@
                                                                 <span class="m-badge m-badge--wide m-badge--warning">
                                                                         {{$order->paymentstatus->displayName}}
                                                                     </span>
-                                                                @if(isset($order->orderstatus->id) &&
-                                                                    (
-                                                                        $order->orderstatus->id == config("constants.ORDER_STATUS_CLOSED") ||
-                                                                        $order->orderstatus->id == config("constants.ORDER_STATUS_POSTED")
-                                                                    )
-                                                                )
-                                                                    <button type="button"
-                                                                            class="btn btn-sm m-btn--pill m-btn--air btn-accent btnOnlinePayment"
-                                                                            data-order-id="{{$order->id}}"
-                                                                            data-transaction-id="-"
-                                                                            data-cost="{{$order->debt}}">
-                                                                        پرداخت
-                                                                    </button>
-                                                                @endif
+{{--                                                                @if(isset($order->orderstatus->id) &&--}}
+{{--                                                                    (--}}
+{{--                                                                        $order->orderstatus->id == config("constants.ORDER_STATUS_CLOSED") ||--}}
+{{--                                                                        $order->orderstatus->id == config("constants.ORDER_STATUS_POSTED")--}}
+{{--                                                                    )--}}
+{{--                                                                )--}}
+{{--                                                                    <button type="button"--}}
+{{--                                                                            class="btn btn-sm m-btn--pill m-btn--air btn-accent btnOnlinePayment"--}}
+{{--                                                                            data-order-id="{{$order->id}}"--}}
+{{--                                                                            data-transaction-id="-"--}}
+{{--                                                                            data-cost="{{$order->debt}}">--}}
+{{--                                                                        پرداخت--}}
+{{--                                                                    </button>--}}
+{{--                                                                @endif--}}
                                                             @elseif(
                                                             isset($order->paymentstatus->id) &&
                                                                   $order->paymentstatus->id == config("constants.PAYMENT_STATUS_INDEBTED")
