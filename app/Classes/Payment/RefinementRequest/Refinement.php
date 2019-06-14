@@ -14,6 +14,7 @@ use App\Order;
 use App\Traits\OrderCommon;
 use App\Transaction;
 use App\User;
+use App\Wallet;
 use Illuminate\Http\Response;
 
 abstract class Refinement
@@ -236,5 +237,18 @@ abstract class Refinement
         $remainedCost             = $remainedCost + $this->donateCost;
         $this->cost               = $remainedCost;
         $this->paidFromWalletCost = $deductibleCostFromWallet - $remainedCost;
+    }
+
+
+    protected function resetWalletPendingCredit():void
+    {
+        $wallets        = $this->user->wallets->sortByDesc("wallettype_id"); //Chon mikhastim aval az kife poole hedie kam shavad!
+
+        /** @var Wallet $wallet */
+        foreach ($wallets as $wallet) {
+            $wallet->update([
+                'pending_to_reduce' => 0,
+            ]);
+        }
     }
 }
