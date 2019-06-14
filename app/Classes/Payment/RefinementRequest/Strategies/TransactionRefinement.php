@@ -50,6 +50,8 @@ class TransactionRefinement extends Refinement
 //        if ($this->canDeductFromWallet()) {
 //            $this->payByWallet();
 //        }
+
+        $this->resetWalletPendingCredit();
         $this->statusCode  = Response::HTTP_OK;
         $this->description .= $this->getDescription();
         
