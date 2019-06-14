@@ -583,18 +583,27 @@ class SalesReportController extends Controller
     {
         $provinces = $this->getProvinces();
         foreach ($allTimeOrderproducts as $allTimeOrderproduct) {
+            $unknown = false;
 //            $foundProvince = Cache::remember('sr-SetLocation-OP:'.$allTimeOrderproduct->id,
 //                config('constants.CACHE_600'), function () use ($allTimeOrderproduct, $provinces) {
                     $user         = $allTimeOrderproduct->order->user;
                     $userProvince = $user->province;
+                    $userCity = $user->city;
                     if (isset($userProvince)) {
                         $foundProvince = $provinces->filter(static function ($item) use ($userProvince) {
-                            return false !== stripos($item['persianName'], $userProvince);
+                            return false !== stripos($userProvince , $item['persianName']);
                         });
                         if ($foundProvince->isEmpty()) {
-                            $foundProvince = $provinces->where('name', 'ir-un');
+                            $foundProvince = $provinces->filter(static function ($item) use ($userCity) {
+                                return false !== stripos($userCity , $item['persianName'] );
+                            });
+                            if ($foundProvince->isEmpty()) {
+                                $unknown=true;
+                                $foundProvince = $provinces->where('name', 'ir-un');
+                            }
                         }
                     } else {
+                        $unknown = true;
                         $foundProvince = $provinces->where('name', 'ir-un');
                     }
 
@@ -604,7 +613,11 @@ class SalesReportController extends Controller
             $key           = key($foundProvince->toArray());
             $foundProvince = $foundProvince->first();
             $foundProvince['count']++;
-            
+//            if($unknown)
+//            {
+//                echo($userProvince);
+//                echo('</br>');
+//            }
             $provinces->put($key, $foundProvince);
         }
         return $provinces;

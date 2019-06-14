@@ -36,6 +36,8 @@ class OrderIdRefinement extends Refinement
 //                $this->payByWallet();
 //            }
 
+            $this->resetWalletPendingCredit();
+
             if($this->cost > 0)
             {
                 $result = $this->getNewTransaction();
