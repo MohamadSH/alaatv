@@ -7,7 +7,7 @@
 @section('content')
     <div class="errorPage">
         <div class="background">
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;background:rgba(255, 255, 255, 0);display:block;z-index:1;position:relative" width="1366" height="500" preserveAspectRatio="xMidYMid" viewBox="0 0 1366 500">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;background:rgba(255, 255, 255, 0);display:block;z-index:1;position:relative" preserveAspectRatio="xMidYMid" viewBox="0 0 1366 500">
                 <g transform="">
                     <linearGradient id="lg-0.6590519274487807" x1="0" x2="1" y1="0" y2="0">
                         <stop stop-color="#ff9000" offset="0"></stop>

@@ -25,6 +25,8 @@ function makeDataTable(id) {
             "zeroRecords": "نتیجه ای برای جستجو یافت نشد"
         },
 
+        "autoWidth": false,
+
         // Or you can use remote translation file
         //"language": {
         //   url: '//cdn.datatables.net/plug-ins/3cfcc339e89/i18n/Portuguese.json'

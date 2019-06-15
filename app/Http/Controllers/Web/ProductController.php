@@ -16,6 +16,7 @@ use App\{Bon,
     Attributetype,
     Traits\Helper,
     Attributevalue,
+    User,
     Websitesetting,
     Productfiletype,
     Traits\MathCommon,
@@ -297,6 +298,16 @@ class ProductController extends Controller
     
     public function show(Request $request, Product $product)
     {
+        //$user = $request->user();
+        $user = null;
+         if ($user) {
+             $purchasedProductIdArray = $this->searchInUserAssetsCollection($product, $user);
+             $allChildIsPurchased = $this->allChildIsPurchased($product, $purchasedProductIdArray);
+         } else {
+             $purchasedProductIdArray = [];
+             $allChildIsPurchased = false;
+         }
+        
         if (isset($product->redirectUrl)) {
             return redirect($product->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
         }
@@ -314,7 +325,51 @@ class ProductController extends Controller
         
         $block = optional($product)->block;
     
-        return view('product.show', compact('product', 'block'));
+        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased'));
+    }
+    
+    private function searchInUserAssetsCollection(Product $product, User $user) {
+        
+        $purchasedProductIdArray = [];
+        $userAssetsCollection = $user->getDashboardBlocks()->pluck('products');
+        foreach ($userAssetsCollection as $blockProducts) {
+            foreach ($blockProducts as $product1) {
+                $this->iterateProductAndChildren($product1->id, $product, $purchasedProductIdArray);
+            }
+        }
+        
+        return $purchasedProductIdArray;
+    }
+    
+    private function allChildIsPurchased(Product $product, $purchasedProductIdArray) {
+        if ($product->children->count() > 0) {
+            foreach ($product->children as $productChild) {
+                if (array_search($product->id, $purchasedProductIdArray) === false) {
+                    $res = $this->allChildIsPurchased($productChild, $purchasedProductIdArray);
+                    if (!$res) {
+                        return false;
+                    }
+                }
+            }
+        } elseif (array_search($product->id, $purchasedProductIdArray) === false) {
+            return false;
+        } else {
+            return true;
+        }
+        return true;
+    }
+    
+    private function iterateProductAndChildren($searchProductId, Product $product, array & $purchasedProductIdArray) {
+        
+        if ($searchProductId === $product->id) {
+            $purchasedProductIdArray[] = $product->id;
+        }
+        
+        if ($product->children->count() > 0) {
+            foreach ($product->children as $key=>$childProduct) {
+                $this->iterateProductAndChildren($searchProductId, $childProduct, $purchasedProductIdArray);
+            }
+        }
     }
     
     public function edit(Product $product)
@@ -1538,5 +1593,35 @@ class ProductController extends Controller
             $videoPath, $videoExtension, null, 'کیفیت بالا', '480p');
         $videos         = $this->mekeIntroVideosArray($hqVideo);
         return $videos;
+    }
+    
+    /**
+     * @param  Product  $product
+     * @param  User     $user
+     *
+     * @return bool
+     */
+    private function checkUserPurchasedProduct(Product $product, User $user): bool
+    {
+//        $contentColletion = collect();
+        $userAssetsCollection    = null;
+        $productHasBeenPurchased = false;
+        if ($user) {
+            $userAssetsCollection = $user->getDashboardBlocks();
+            $userAssetsCollection = $userAssetsCollection->pluck('products');
+            foreach ($userAssetsCollection as $blockProducts) {
+//                $blockProductsNotPluck = $blockProducts;
+                $productHasBeenPurchased = $blockProducts->pluck('id')
+                    ->contains($product->id);
+                if ($productHasBeenPurchased) {
+//                    foreach ($blockProductsNotPluck->pluck('sets') as $item) {
+//                        $contentColletion->push($item);
+//                    }
+                    break;
+                }
+            }
+        }
+//        dd($contentColletion);
+        return $productHasBeenPurchased;
     }
 }
