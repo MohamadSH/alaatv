@@ -1,4 +1,14 @@
-<div class="m-widget_head-owlcarousel-item carousel background-gradient" data-position="{{ $productKey }}">
+<div class="m-widget_head-owlcarousel-item carousel noHoverEffect background-gradient" data-position="{{ $productKey }}">
+    
+    @if($product->price['final']!=$product->price['base'])
+        <div class="ribbon">
+            <span>
+                <div class="glow">&nbsp;</div>
+                {{ round((1-($product->price['final']/$product->price['base']))*100) }}%
+            </span>
+        </div>
+    @endif
+    
     <a href="{{ $product->url }}" >
         <img class="a--owl-carousel-type-2-item-image" src="{{ $product->photo }}?w=253&h=142">
     </a>

@@ -147,6 +147,14 @@
     -ms-transform: scale(1.13);
     transform: scale(1.13);
 }
+.a--owl-carousel-type-2-gridViewWarper .carousel.noHoverEffect:hover > a img.a--owl-carousel-type-2-item-image,
+.a--owl-carousel-type-2-gridViewWarper .carousel.noHoverEffect:hover > img.a--owl-carousel-type-2-item-image {
+    -moz-transform: none;
+    -webkit-transform: none;
+    -o-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
 
 .a--owl-carousel-type-2 .carousel .a--owl-carousel-type-2-item-title,
 .a--owl-carousel-type-2 .carousel .a--owl-carousel-type-2-item-subtitle {
@@ -202,6 +210,14 @@
 }
 
 
+.ribbon {
+    top: calc(20px - 46px);
+    right: calc(5% - 5px);
+}
+.a--owl-carousel-type-2-gridViewWarper .ribbon {
+    top: calc(20px - 32px);
+    right: calc(20px - 11px);
+}
 
 
 

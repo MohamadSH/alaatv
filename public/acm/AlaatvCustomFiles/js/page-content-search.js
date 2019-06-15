@@ -12,17 +12,25 @@ var Alaasearch = function () {
         var widgetPic = data.photo;
         var widgetTitle = data.name;
         var price = data.price;
+        var discount = Math.round((1 - (price.final / price.base)) * 100);
+        var discountRibbon = '';
         var priceHtml = '<span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">';
         if (price.base !== price.final) {
             priceHtml += '    <span class = "m-badge m-badge--warning a--productRealPrice">' + price.base.toLocaleString('fa') + '</span>\n';
+            priceHtml += '    <span class = "m-badge m-badge--info a--productDiscount">' + discount + '%</span>\n';
+            discountRibbon = '\n' +
+                '        <div class="ribbon">\n' +
+                '            <span>\n' +
+                '                <div class="glow">&nbsp;</div>\n' +
+                '                '+ discount +'%\n' +
+                '            </span>\n' +
+                '        </div>';
         }
         priceHtml += '    ' + price.final.toLocaleString('fa') + ' تومان \n';
-        if (price.base !== price.final) {
-            priceHtml += '    <span class = "m-badge m-badge--info a--productDiscount">' + Math.round((1 - (price.final / price.base)) * 100) + '%</span>\n';
-        }
         priceHtml += '</span>';
 
         return '<div class = "item">\n' +
+            discountRibbon +
             '    <!--begin:: Widgets/Blog-->\n' +
             '    <div class = "m-portlet m-portlet--bordered-semi m-portlet--rounded-force">\n' +
             '   <div class="m-portlet__head m-portlet__head--fit"> \

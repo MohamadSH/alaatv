@@ -238,6 +238,7 @@ mix.styles(
         'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
         'public/acm/videojs/plugins/seek-to-point.css',
         'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
+        'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
         'public/acm/AlaatvCustomFiles/css/page-product-show.css',
     ],
@@ -267,6 +268,7 @@ mix.styles(
         'node_modules/animate.css/animate.css',
         'node_modules/slick-carousel/slick/slick.css',
         'node_modules/slick-carousel/slick/slick-theme.css',
+        'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
         'public/acm/AlaatvCustomFiles/css/page-user-dashboard.css',
     ],
@@ -377,6 +379,7 @@ mix.styles(
     [
         'node_modules/slick-carousel/slick/slick.css',
         'node_modules/slick-carousel/slick/slick-theme.css',
+        'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
 
         'public/acm/videojs/skins/alaa-theme/videojs.css',
@@ -394,6 +397,7 @@ mix.styles(
 
 mix.styles(
     [
+        'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
         'public/acm/AlaatvCustomFiles/components/MultiLevelSearch/style.css',
         'public/acm/AlaatvCustomFiles/css/page-content-search.css'
@@ -405,6 +409,7 @@ mix.styles(
     [
         'node_modules/slick-carousel/slick/slick.css',
         'node_modules/slick-carousel/slick/slick-theme.css',
+        'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
         'public/acm/AlaatvCustomFiles/css/certificates.css',
         'public/acm/AlaatvCustomFiles/css/page-shop.css',
@@ -425,6 +430,7 @@ mix.styles(
 mix.styles(
     [
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
+        'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
         'public/acm/AlaatvCustomFiles/css/certificates.css',
         'public/acm/AlaatvCustomFiles/css/page-homePage.css',
     ],
