@@ -478,6 +478,8 @@ jQuery(document).ready(function() {
 
     $('.productShowBlock').OwlCarouselType2({
         OwlCarousel: {
+            center: false,
+            loop: false,
             responsive: {
                 0: {
                     items: 1

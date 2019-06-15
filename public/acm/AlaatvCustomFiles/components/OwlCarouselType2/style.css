@@ -253,7 +253,10 @@
     box-shadow: none;
     border: none;
 }
-
+.owl-carousel .owl-nav button.owl-next, .owl-carousel .owl-nav button.owl-prev, .owl-carousel button.owl-dot {
+    -webkit-text-stroke: 3px #ff9000;
+    font-size: 8rem !important;
+}
 
 
 
