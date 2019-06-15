@@ -150,7 +150,7 @@
                                     <span class="m-menu__link-wrap">
                                         <span class="m-menu__link-text">کنکور</span>
                                         <span class="m-menu__link-badge">
-                                            <span class="m-badge m-badge--brand m-badge--wide">جدید و قدیم</span>
+                                            <span class="m-badge m-badge--brand m-badge--wide">نظام جدید</span>
                                         </span>
                                     </span>
                                 </span>
@@ -160,7 +160,7 @@
                             <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left a-major-menu__submenu">
                                 <ul class="m-menu__subnav">
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ urldecode(route('content.index', 'tags[]=کنکور&tags[]=رشته_ریاضی')) }}" class="m-menu__link ">
+                                        <a href="{{ urldecode(route('content.index', 'tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=نظام_آموزشی_جدید')) }}" class="m-menu__link ">
 {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
@@ -171,7 +171,7 @@
                                         </a>
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ urldecode(route('content.index', 'tags[]=کنکور&tags[]=رشته_تجربی')) }}" class="m-menu__link ">
+                                        <a href="{{ urldecode(route('content.index', 'tags[]=کنکور&tags[]=رشته_تجربی&tags[]=نظام_آموزشی_جدید')) }}" class="m-menu__link ">
 {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
@@ -182,8 +182,71 @@
                                         </a>
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ urldecode(route('content.index', 'tags[]=کنکور&tags[]=رشته_انسانی')) }}" class="m-menu__link ">
+                                        <a href="{{ urldecode(route('content.index', 'tags[]=کنکور&tags[]=رشته_انسانی&tags[]=نظام_آموزشی_جدید')) }}" class="m-menu__link ">
 {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
+                                            <span class="m-menu__link-title">
+                                                <span class="m-menu__link-wrap">
+                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
+                                                    <span class="m-menu__link-text">رشته انسانی</span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
+                                        <a href="{{ route('shop') }}" class="m-menu__link ">
+                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
+                                            <span class="m-menu__link-title">
+                                                <span class="m-menu__link-wrap">
+                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
+                                                    <span class="m-menu__link-text">جمع بندی و جزوه</span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
+                            <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم و جزوه کنکور آلاء">
+                                <i class="m-menu__link-icon flaticon-medal"></i>
+                                <span class="m-menu__link-title">
+                                    <span class="m-menu__link-wrap">
+                                        <span class="m-menu__link-text">کنکور</span>
+                                        <span class="m-menu__link-badge">
+                                            <span class="m-badge m-badge--brand m-badge--wide">نظام قدیم</span>
+                                        </span>
+                                    </span>
+                                </span>
+                                <i class="m-menu__hor-arrow la la-angle-down"></i>
+                                <i class="m-menu__ver-arrow la la-angle-right"></i>
+                            </a>
+                            <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left a-major-menu__submenu">
+                                <ul class="m-menu__subnav">
+                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
+                                        <a href="{{ urldecode(route('content.index', 'tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=نظام_آموزشی_قدیم')) }}" class="m-menu__link ">
+                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>--}}
+                                            <span class="m-menu__link-title">
+                                                <span class="m-menu__link-wrap">
+                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
+                                                    <span class="m-menu__link-text">رشته ریاضی</span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
+                                        <a href="{{ urldecode(route('content.index', 'tags[]=کنکور&tags[]=رشته_تجربی&tags[]=نظام_آموزشی_قدیم')) }}" class="m-menu__link ">
+                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>--}}
+                                            <span class="m-menu__link-title">
+                                                <span class="m-menu__link-wrap">
+                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
+                                                    <span class="m-menu__link-text">رشته تجربی</span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
+                                        <a href="{{ urldecode(route('content.index', 'tags[]=کنکور&tags[]=رشته_انسانی&tags[]=نظام_آموزشی_قدیم')) }}" class="m-menu__link ">
+                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
                                                     <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
@@ -211,7 +274,7 @@
                                 <i class="m-menu__link-icon flaticon-medal"></i>
                                 <span class="m-menu__link-title">
                                     <span class="m-menu__link-wrap">
-                                        <span class="m-menu__link-text">همایش</span>
+                                        <span class="m-menu__link-text">همایش دانلودی</span>
                                         <span class="m-menu__link-badge">
                                         </span>
                                     </span>
@@ -230,7 +293,9 @@
                                                     <span class="m-menu__link-text">
                                                         <b>طلایی</b>
                                                         -
-                                                        جمع بندی 80% کنکور
+                                                        80% کنکور
+                                                        -
+                                                        جمع بندی کامل
                                                     </span>
                                                 </span>
                                             </span>

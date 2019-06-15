@@ -249,7 +249,7 @@
                                                                                     <td>وضعیت سفارش:</td>
                                                                                     <td class="orderDetailes-orderStatus"></td>
                                                                                 </tr>
-                                                                                <tr>
+                                                                                <tr id="postedProductCodeReportWraper">
                                                                                     <td>کد مرسوله پست شده:</td>
                                                                                     <td class="orderDetailes-orderPostingInfo"></td>
                                                                                 </tr>

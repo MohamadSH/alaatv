@@ -615,7 +615,7 @@
                         <div class="col-12 text-center">
                             <input type="hidden" id="pamphletContentNextPageUrl">
                             <button type="button"
-                                    class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-info m-btn--gradient-to-warning btnLoadMoreInModal"
+                                    class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-info m-btn--gradient-to-warning btnLoadMoreInModal animated infinite heartBeat"
                                     data-content-type="pamphlet">
                                 بیشتر ...
                             </button>
@@ -666,7 +666,7 @@
                         <div class="col-12 text-center">
                             <input type="hidden" id="videoContentNextPageUrl">
                             <button type="button"
-                                    class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-info m-btn--gradient-to-warning btnLoadMoreInModal"
+                                    class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-info m-btn--gradient-to-warning btnLoadMoreInModal animated infinite heartBeat"
                                     data-content-type="video">
                                 بیشتر ...
                             </button>

@@ -89,7 +89,7 @@ var UserAssets = function () {
     function createList(data, contentType) {
         let list = '';
         if (data === null) {
-            return '<div class="alert alert-warning text-center" role="alert"><strong>موردی یافت نشد!</strong></div>';
+            return '<div class="alert alert-warning text-center" role="alert"><strong>تاکنون موردی منتشر نشده است!</strong></div>';
         }
         for (let index in data.data) {
             if (isNaN(index)) {

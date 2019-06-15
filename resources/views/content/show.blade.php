@@ -125,6 +125,24 @@
                                         </ul>
                                     </nav>
                                 @endif
+                                @if($productsHasThisContentThroughBlockCollection->count() > 0)
+                                    @foreach($productsHasThisContentThroughBlockCollection as $product)
+                                        @if($product->type['type'] === 'simple')
+                                            <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart" data-pid="{{ $product->id }}">
+                                                <span>
+                                                    <i class="fa fa-cart-arrow-down"></i>
+                                                    <i class="fas fa-sync-alt fa-spin m--hide"></i>
+                                                    <span>افزودن {{ $product->name }} به سبد خرید</span>
+                                                </span>
+                                            </button>
+                                        @else
+                                            <a class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent btnViewProductPage">
+                                                مشاهده
+                                                {{ $product->name }}
+                                            </a>
+                                        @endif
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -537,18 +555,18 @@
     <script>
         var related_videos = [
             @if(!is_null(min(13,$videosWithSameSet->count())))
-            @foreach($videosWithSameSet->random( min(13,$videosWithSameSet->count())) as $item)
-            @if($item["content"]->id != $content->id)
-            {!!
-                json_encode([
-                    'thumb' => (isset($item["thumbnail"]))?$item["thumbnail"]:"",
-                    'url' => action("Web\ContentController@show" , $item["content"]),
-                    'title' => ($item["content"]->display_name),
-                    'duration' => '20:00'
-                ])
-            !!},
-            @endif
-            @endforeach
+                @foreach($videosWithSameSet->random( min(13,$videosWithSameSet->count())) as $item)
+                    @if($item["content"]->id != $content->id)
+                        {!!
+                            json_encode([
+                                'thumb' => (isset($item["thumbnail"]))?$item["thumbnail"]:"",
+                                'url' => action("Web\ContentController@show" , $item["content"]),
+                                'title' => ($item["content"]->display_name),
+                                'duration' => '20:00'
+                            ])
+                        !!},
+                    @endif
+                @endforeach
             @endif
         ];
     </script>

@@ -3,29 +3,6 @@
 @section('page-css')
     <link href="{{ mix('/css/product-show.css') }}" rel="stylesheet" type="text/css"/>
     <style>
-    
-        .btnAddToCart {
-            font-size: 1.2rem;
-            background-color: #00cc1b;
-        }
-
-        #productDetailes.m-portlet .m-portlet__head .m-portlet__head-tools .m-portlet__nav .m-portlet__nav-item .m-portlet__nav-link {
-            margin: 0;
-            padding: 0;
-        }
-
-        /*media query*/
-        @media (max-width: 768px) {
-            .m-portlet.m-portlet--tabs .m-portlet__head,
-            .m-portlet.m-portlet--tabs .m-portlet__head .m-portlet__head-caption,
-            .m-portlet.m-portlet--tabs .m-portlet__head .m-portlet__head-tools {
-                display: flex;
-            }
-            .m-portlet.m-portlet--tabs .m-portlet__head .m-portlet__head-tools {
-                margin-top: 0;
-            }
-        }
-        
         @if(
             (!isset($block) || !isset($block->contents) || $block->contents->count() === 0) &&
             (!isset($block) || !isset($block->sets) || $block->sets->count() === 0)
@@ -122,7 +99,10 @@
                                     {{--ویژگی ها و دارای --}}
                                     <div class="row">
                                         @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count()>0 ||  optional(optional( optional($product->attributes)->get('main'))->where('control', 'simple'))->count()>0)
-                                            <div class="col">
+                                            <div class="col-12
+                                            @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'checkBox'))->count())
+                                                    col-md-6
+                                            @endif">
 
                                                 <div class="m-portlet m-portlet--bordered m-portlet--full-height productAttributes">
                                                     <div class="m-portlet__head">
@@ -225,7 +205,10 @@
                                             </div>
                                         @endif
                                         @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'checkBox'))->count())
-                                            <div class="col">
+                                            <div class="col-12
+                                            @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count()>0 ||  optional(optional( optional($product->attributes)->get('main'))->where('control', 'simple'))->count()>0)
+                                                    col-md-6
+                                            @endif">
 
                                                 <div class="m-portlet m-portlet--bordered m-portlet--full-height productInformation">
                                                     <div class="m-portlet__head">
@@ -319,19 +302,19 @@
                                                 </div>
                                             </div>
                                             <div class="m-portlet__body">
-
+                                                
                                                 <ul class="m-nav m-nav--active-bg" id="m_nav" role="tablist">
                                                     @if(isset($product->children) && !empty($product->children))
                                                         @foreach($product->children as $p)
-                                                            @include('product.partials.showChildren',['product' => $p , 'color' => 1])
+                                                            @include('product.partials.showChildren',['product' => $p , 'color' => 1, 'childIsPurchased' => (array_search($product->id, $purchasedProductIdArray) !== false)])
                                                         @endforeach
                                                     @endif
                                                 </ul>
 
                                             </div>
                                         </div>
-                                    @elseif(in_array($product->type['id'] ,[Config::get("constants.PRODUCT_TYPE_SIMPLE")]))
-                                    @elseif(in_array($product->type['id'], [Config::get("constants.PRODUCT_TYPE_CONFIGURABLE")]))
+                                    @elseif(in_array($product->type['id'] ,[config("constants.PRODUCT_TYPE_SIMPLE")]))
+                                    @elseif(in_array($product->type['id'], [config("constants.PRODUCT_TYPE_CONFIGURABLE")]))
                                         <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi">
                                             <div class="m-portlet__head">
                                                 <div class="m-portlet__head-caption col">
@@ -389,31 +372,47 @@
 
                                     {{--دکمه افزودن به سبد خرید--}}
                                     @if($product->enable)
-                                        <h5 class="m--font-danger">
+        
+        
+                                        @if($allChildIsPurchased)
+                                            <div class="alert alert-info" role="alert">
+                                                <strong>شما این محصول را خریده اید</strong>
+                                            </div>
+                                        @else
+                                            <h5 class="m--font-danger">
                                                 <span id="a_product-price">
                                                     @if($product->priceText['discount'] == 0 )
-                                                         {{ $product->priceText['basePriceText'] }}
+                                                        {{ $product->priceText['basePriceText'] }}
                                                     @else
                                                         قیمت محصول: <strike>{{ $product->priceText['basePriceText'] }} </strike><br>
                                                         قیمت برای مشتری:  {{ $product->priceText['finalPriceText'] }}
                                                     @endif
                                                 </span>
-                                            <span id="a_product-discount"></span>
-                                        </h5>
-
-                                        <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart">
+                                                <span id="a_product-discount"></span>
+                                            </h5>
+                                        @endif
+                                    
+                                    
+                                        @if($allChildIsPurchased)
+                                            <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
+                                                <i class="fa fa-play-circle"></i>
+                                                مشاهده در صفحه فیلم ها و جزوه های من
+                                            </a>
+                                        @else
+                                            <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart">
                                             <span>
                                                 <i class="fa fa-cart-arrow-down"></i>
                                                 <i class="fas fa-sync-alt fa-spin m--hide"></i>
                                                 <span>افزودن به سبد خرید</span>
                                             </span>
-                                        </button>
+                                            </button>
+                                        @endif
                                     @else
                                         <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
-                                                    <span>
-                                                        <i class="flaticon-shopping-basket"></i>
-                                                        <span>این محصول غیر فعال است.</span>
-                                                    </span>
+                                            <span>
+                                                <i class="flaticon-shopping-basket"></i>
+                                                <span>این محصول غیر فعال است.</span>
+                                            </span>
                                         </button>
                                     @endif
 
@@ -579,14 +578,25 @@
                             <ul class="m-portlet__nav">
                                 <li class="m-portlet__nav-item">
                                     <p class="m-portlet__nav-link m-portlet__nav-link--icon">
+    
+    
+                                        @if($allChildIsPurchased)
+                                            <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
+                                                <i class="fa fa-play-circle"></i>
+                                                <span class="d-none d-sm-none d-md-inline-block d-lg-inline-block">
+                                                    مشاهده در صفحه فیلم ها و جزوه های من
+                                                </span>
+                                            </a>
+                                        @else
+                                            <button class="btn m-btn--air btn-success m-btn--icon btnAddToCart">
+                                                <span>
+                                                    <i class="fa fa-cart-arrow-down"></i>
+                                                    <i class="fas fa-sync-alt fa-spin m--hide"></i>
+                                                    <span>افزودن به سبد خرید</span>
+                                                </span>
+                                            </button>
+                                        @endif
                                         
-                                        <button class="btn m-btn--air btn-success m-btn--icon btnAddToCart">
-                                            <span>
-                                                <i class="fa fa-cart-arrow-down"></i>
-                                                <i class="fas fa-sync-alt fa-spin m--hide"></i>
-                                                <span>افزودن به سبد خرید</span>
-                                            </span>
-                                        </button>
                                         
                                     </p>
                                 </li>

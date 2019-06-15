@@ -261,7 +261,7 @@ var MultiLevelSearch = function () {
             var order = $(selectorItem).data('select-order');
             var selectValue = $(selectorItem).attr('data-select-value');
             var selectActive = $(selectorItem).attr('data-select-active');
-            var selectedText = null;
+            var selectedText = '';
             if(
                 typeof selectValue !== 'undefined' &&
                 typeof selectActive !== 'undefined' &&
