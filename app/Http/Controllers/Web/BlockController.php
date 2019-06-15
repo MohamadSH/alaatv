@@ -41,19 +41,14 @@ class BlockController extends Controller
         return $blocks;
     }
     
-    public function adminBlock(Request $request)
-    {
-        $pageName = 'indexBlock';
-        return view('admin.indexBlock', compact(['pageName']));
-    }
-    
     public function show(Request $request, Block $block)
     {
         return ($request->expectsJson() ? response()->json($block) : $block);
     }
     
-    public function edit(Request $request, $block)
+    public function edit(Request $request, Block $block)
     {
+        //ToDo : put in view composer
         $blockTypes = [
             [
                 'value' => '1',
@@ -68,7 +63,6 @@ class BlockController extends Controller
                 'name' => 'صفحه محصول',
             ]
         ];
-        $block = Block::find($block);
         $products = $this->makeProductCollection();
         $sets = Contentset::all();
         $contents = Content::all();
@@ -123,8 +117,6 @@ class BlockController extends Controller
     public function destroy(Response $response, Block $block)
     {
         $done = false;
-        $block = Block::find($block->id);
-        
         if ($block->delete()) {
             $done = true;
         }
