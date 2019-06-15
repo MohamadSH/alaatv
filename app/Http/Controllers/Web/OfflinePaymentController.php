@@ -45,20 +45,21 @@ class OfflinePaymentController extends Controller
         // We had middleware called OfflineVerifyPayment for this,
         //but after reconsidering about queries in middleware I put the code in here
         $getOrder = $this->getOrder($request , $user);
-        if ($getOrder["error"])
-            return response($getOrder["text"], $getOrder["httpStatusCode"]);
+        if ($getOrder['error']) {
+            return response($getOrder['text'], $getOrder['httpStatusCode']);
+        }
 
 
         /** @var Order $order */
-        $order = $getOrder["data"]["order"];
+        $order = $getOrder['data']['order'];
 
         $check = $this->checkOrder($order , $user);
-        if ($check["error"])
-            return response($check["text"] , $check["httpStatusCode"]);
+        if ($check['error'])
+            return response($check['text'], $check['httpStatusCode']);
 
         
         if (!$this->processVerification($order, $paymentMethod , $customerDescription))
-            return response( ["message" => "Invalid inputs"] , Response::HTTP_BAD_REQUEST);
+            return response(['message' => 'Invalid inputs'], Response::HTTP_BAD_REQUEST);
 
 
         $assetLink = '<a href="'.route('user.asset').'">دانلودهای من</a>';
@@ -73,6 +74,8 @@ class OfflinePaymentController extends Controller
                 'cardPanMask' => null,
                 'RefID'       => null,
                 'isCanceled'  => false,
+                'orderId'     => $order->id,
+                'paidPrice'   => 1,
             ]);
         return redirect()->route('showOnlinePaymentStatus', [
             'status'        => 'successful',
@@ -89,7 +92,7 @@ class OfflinePaymentController extends Controller
      */
     private function getOrder(Request $request , User $user): array
     {
-        if ($request->has("coi")) {
+        if ($request->has('coi')) {
             $order = Order::Find($request->coi);
         }
         else{
@@ -107,7 +110,7 @@ class OfflinePaymentController extends Controller
         $result = [
             'error'          => $error,
             'httpStatusCode' => $response,
-            'text'           => isset($text) ? $text : "",
+            'text'           => isset($text) ? $text : '',
             'data'           => [
                 'order' => isset($order) ? $order : null,
             ],
@@ -119,22 +122,22 @@ class OfflinePaymentController extends Controller
     private function checkOrder(Order $order , User $user): array
     {
         $result = [
-            "error" => false,
+            'error' => false,
         ];
         if (isset($order)) {
             if (!$order->doesBelongToThisUser($user)) {
                 $result = [
-                    "error"          => true,
-                    "httpStatusCode" => Response::HTTP_UNAUTHORIZED,
-                    "text"           => "Order doesn't belong to you",
+                    'error'          => true,
+                    'httpStatusCode' => Response::HTTP_UNAUTHORIZED,
+                    'text'           => "Order doesn't belong to you",
                 ];
             }
         }
         else {
             $result = [
-                "error"          => true,
-                "httpStatusCode" => Response::HTTP_NOT_FOUND,
-                "text"           => "Order not found",
+                'error'          => true,
+                'httpStatusCode' => Response::HTTP_NOT_FOUND,
+                'text'           => 'Order not found',
             ];
         }
         
@@ -151,8 +154,8 @@ class OfflinePaymentController extends Controller
     {
         $done = true;
         switch ($paymentMethod) {
-            case "inPersonPayment" :
-            case "offlinePayment":
+            case 'inPersonPayment' :
+            case 'offlinePayment':
                 $usedCoupon = $order->hasProductsThatUseItsCoupon();
                 if (!$usedCoupon) {
                     /** if order has not used coupon reverse it    */
@@ -165,13 +168,13 @@ class OfflinePaymentController extends Controller
                         }
                     }
                 }
-                
-                $orderPaymentStatus = config("constants.PAYMENT_STATUS_UNPAID");
+        
+                $orderPaymentStatus = config('constants.PAYMENT_STATUS_UNPAID');
                 $order->close($orderPaymentStatus);
                 
                 break;
-            case "wallet":
-            case "noPayment":
+            case 'wallet':
+            case 'noPayment':
                 
                 /** Wallet transactions */
 //                $order->closeWalletPendingTransactions();
@@ -200,8 +203,8 @@ class OfflinePaymentController extends Controller
                     $cost = $order->totalCost() - $order->totalPaidCost();
                     if ($cost == 0) {
                         /** Attaching user bons for this order */
-                        $bonName = config("constants.BON1");
-                        $bon     = Bon::where("name", $bonName)
+                        $bonName = config('constants.BON1');
+                        $bon     = Bon::where('name', $bonName)
                             ->first();
                         if (isset($bon))
                             [
@@ -210,8 +213,8 @@ class OfflinePaymentController extends Controller
                             ] = $order->giveUserBons($bonName);
 
                         /** End */
-
-                        $order->paymentstatus_id = config("constants.PAYMENT_STATUS_PAID");
+    
+                        $order->paymentstatus_id = config('constants.PAYMENT_STATUS_PAID');
                         if(strlen($customerDescription)>0)
                         {
                             $order->customerDescription = $customerDescription;
