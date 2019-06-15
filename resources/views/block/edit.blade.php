@@ -230,15 +230,15 @@
                                         id="block-contents"
                                         name="block-contents[]"
                                         title="انتخاب محتوا">
-                                    @foreach($contents as $content)
-                                        <option value="{{$content->id}}"
-                                                @if($blockContents->contains('id', $content->id))
-                                                class="bold"
-                                                selected="selected"
-                                                @endif>
-                                            #{{$content->id}}-{{$content->name}}
-                                        </option>
-                                    @endforeach
+{{--                                    @foreach($contents as $content)--}}
+{{--                                        <option value="{{$content->id}}"--}}
+{{--                                                @if($blockContents->contains('id', $content->id))--}}
+{{--                                                class="bold"--}}
+{{--                                                selected="selected"--}}
+{{--                                                @endif>--}}
+{{--                                            #{{$content->id}}-{{$content->name}}--}}
+{{--                                        </option>--}}
+{{--                                    @endforeach--}}
                                 </select>
     
                             </div>

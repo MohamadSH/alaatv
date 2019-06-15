@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Block;
+use App\Product;
 use App\Content;
 use App\Contentset;
 use App\Traits\ProductCommon;
@@ -78,16 +79,24 @@ class BlockController extends Controller
     
     public function update(Request $request, Block $block)
     {
-        $tags =convertTagStringToArray($request->get('tags'));
-        $block->title = $request->get('title');
-        $block->customUrl = $request->get('customUrl');
-        $block->class = $request->get('class');
-        $block->order = $request->get('order');
-        $block->enable = $request->get('enable');
-        $block->type = $request->get('type');
-        $block->tags = $tags;
-        $block->update();
-        dd($request->all());
+//        $tags =convertTagStringToArray($request->get('tags'));
+//        $block->title = $request->get('title');
+//        $block->customUrl = $request->get('customUrl');
+//        $block->class = $request->get('class');
+//        $block->order = $request->get('order');
+//        $block->enable = $request->get('enable');
+//        $block->type = $request->get('type');
+//        $block->tags = $tags;
+//        $block->update();
+    
+//        $productArray = [
+//            40, 35, 242, 232, 234, 240
+//        ];
+//        foreach ($productArray as $productId) {
+//            $product = Product::find($productId);
+//            $block->products()->save($product);
+//        }
+//        dd('$product saved');
     }
     
     private function checkArray($array) {
