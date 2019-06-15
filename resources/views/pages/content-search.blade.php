@@ -135,19 +135,6 @@
         </div>
     </div>
     
-    <style>
-        #contentSearchFilter.lockActiveStep .selectorItem[data-select-active="true"]:after {
-            content: ' ';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #80808080;
-            cursor: not-allowed;
-        }
-    </style>
-    
 @endsection
 
 @section('page-js')

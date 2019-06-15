@@ -2,10 +2,14 @@
 
 namespace App;
 
+use App\Collection\UserCollection;
+use Eloquent;
 use Exception;
 use Carbon\Carbon;
 use App\Classes\Taggable;
 use App\Classes\Advertisable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Scout\Searchable;
 use App\Classes\LinkGenerator;
 use App\Traits\favorableTraits;
@@ -36,81 +40,81 @@ use Illuminate\Support\Facades\{Cache, Artisan};
  * @property string|null $metaTitle       متا تایتل محتوا
  * @property string|null $metaDescription متا دیسکریپشن محتوا
  * @property string|null $metaKeywords    متای کلمات کلیدی محتوا
- * @property string|null                                                      $tags            تگ ها
- * @property string|null                                                      $context         محتوا
- * @property int                                                              $order           ترتیب
- * @property int                                                              $enable          فعال یا غیر فعال بودن
+ * @property string|null                                                 $tags            تگ ها
+ * @property string|null                                                 $context         محتوا
+ * @property int                                                         $order           ترتیب
+ * @property int                                                         $enable          فعال یا غیر فعال بودن
  *           محتوا
- * @property string|null                                                      $validSince      تاریخ شروع استفاده از
+ * @property string|null                                                 $validSince      تاریخ شروع استفاده از
  *           محتوا
- * @property \Carbon\Carbon|null                                              $created_at
- * @property \Carbon\Carbon|null                                              $updated_at
- * @property \Carbon\Carbon|null                                              $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contentset[]  $contentsets
- * @property-read \App\Contenttype|null                                       $contenttype
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contenttype[] $contenttypes
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\File[]        $files
- * @property mixed                                                            $file
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Grade[]       $grades
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Major[]       $majors
- * @property-read \App\Template|null                                          $template
- * @property-read \App\User|null                                              $user
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content active()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content enable($enable = 1)
+ * @property Carbon|null                                                 $created_at
+ * @property Carbon|null                                                 $updated_at
+ * @property Carbon|null                                                 $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|Contentset[]  $contentsets
+ * @property-read Contenttype|null                                       $contenttype
+ * @property-read \Illuminate\Database\Eloquent\Collection|Contenttype[] $contenttypes
+ * @property-read \Illuminate\Database\Eloquent\Collection|File[]        $files
+ * @property mixed                                                       $file
+ * @property-read \Illuminate\Database\Eloquent\Collection|Grade[]       $grades
+ * @property-read \Illuminate\Database\Eloquent\Collection|Major[]       $majors
+ * @property-read Template|null                                          $template
+ * @property-read User|null                                              $user
+ * @method static Builder|Content active()
+ * @method static Builder|Content enable($enable = 1)
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Content onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Content onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content soon()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content valid()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereAuthorId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereContenttypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereContext($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereEnable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereMetaDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereMetaKeywords($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereMetaTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereTags($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereTemplateId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereValidSince($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Content withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Content withoutTrashed()
- * @mixin \Eloquent
+ * @method static Builder|Content soon()
+ * @method static Builder|Content valid()
+ * @method static Builder|Content whereAuthorId($value)
+ * @method static Builder|Content whereContenttypeId($value)
+ * @method static Builder|Content whereContext($value)
+ * @method static Builder|Content whereCreatedAt($value)
+ * @method static Builder|Content whereDeletedAt($value)
+ * @method static Builder|Content whereDescription($value)
+ * @method static Builder|Content whereEnable($value)
+ * @method static Builder|Content whereId($value)
+ * @method static Builder|Content whereMetaDescription($value)
+ * @method static Builder|Content whereMetaKeywords($value)
+ * @method static Builder|Content whereMetaTitle($value)
+ * @method static Builder|Content whereName($value)
+ * @method static Builder|Content whereOrder($value)
+ * @method static Builder|Content whereTags($value)
+ * @method static Builder|Content whereTemplateId($value)
+ * @method static Builder|Content whereUpdatedAt($value)
+ * @method static Builder|Content whereValidSince($value)
+ * @method static \Illuminate\Database\Query\Builder|Content withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Content withoutTrashed()
+ * @mixin Eloquent
  * @property-read mixed                                                       $display_name
  * @property string                                                           $duration        مدت زمان فیلم
  * @property array|null|string                                                $thumbnail       عکس هر محتوا
  * @property int                                                              $isFree          عکس هر محتوا
  * @property-read mixed                                                       $contentset
  * @property-read mixed                                                       $session
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereDuration($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereFile($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereIsFree($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereThumbnail($value)
+ * @method static Builder|Content whereDuration($value)
+ * @method static Builder|Content whereFile($value)
+ * @method static Builder|Content whereIsFree($value)
+ * @method static Builder|Content whereThumbnail($value)
  * @property-read mixed                                                       $author
  * @property-read mixed                                                       $meta_description
  * @property-read mixed                                                       $meta_title
  * @property-read mixed                                                       $title
  * @property int|null                                                         $contentset_id
  * @property string|null                                                      $slug            slug
- * @property-read \App\Collection\UserCollection|\App\User[]                  $favoriteBy
- * @property-read \App\Contentset|null                                        $set
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereContentsetId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content whereSlug($value)
+ * @property-read UserCollection|User[]                       $favoriteBy
+ * @property-read Contentset|null                                             $set
+ * @method static Builder|Content whereContentsetId($value)
+ * @method static Builder|Content whereSlug($value)
  * @property mixed                                                            $page_view
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content wherePageView($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content query()
+ * @method static Builder|Content wherePageView($value)
+ * @method static Builder|Content newModelQuery()
+ * @method static Builder|Content newQuery()
+ * @method static Builder|Content query()
  * @property-read mixed                                                       $author_name
  * @property-read mixed                                                       $url
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                       $api_url
  * @property mixed                                                            next_content
  * @property mixed                                                            previous_content
@@ -344,10 +348,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     /**
      * Scope a query to only include enable(or disable) Contents.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  Builder  $query
      * @param  int                                    $enable
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeEnable($query, $enable = 1)
     {
@@ -357,9 +361,9 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     /**
      * Scope a query to only include Valid Contents.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  Builder  $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeValid($query)
     {
@@ -371,9 +375,9 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     /**
      * Scope a query to only include active Contents.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  Builder  $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeActive($query)
     {
@@ -389,9 +393,9 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     /**
      * Scope a query to only include Contents that will come soon.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  Builder  $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeSoon($query)
     {
@@ -888,7 +892,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     /**
      * every products that have this content.
      *
-     * @return \App\Collection\ProductCollection
+     * @return ProductCollection
      */
     public function activeProducts(): ProductCollection
     {
@@ -920,7 +924,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     /**
      * every products that have this content.
      *
-     * @return \App\Collection\ProductCollection
+     * @return ProductCollection
      */
     public function allProducts(): ProductCollection
     {
@@ -1008,7 +1012,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     /**
      * Get the content's contentset .
      *
-     * @return Contentset|\Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return Contentset|BelongsTo
      */
     public function set()
     {
@@ -1212,6 +1216,23 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         }
         
         return false;
+    }
+    
+    
+    public function getEditLinkAttribute()
+    {
+//        if (hasAuthenticatedUserPermission(config('constants.EDIT_BLOCK_ACCESS')))
+        return action('Web\ContentController@edit', $this->id);
+        
+        return null;
+    }
+    
+    public function getRemoveLinkAttribute()
+    {
+//        if (hasAuthenticatedUserPermission(config('constants.REMOVE_BLOCK_ACCESS')))
+//            return action('Web\ContentController@destroy', $this->id);
+        
+        return null;
     }
     
 }

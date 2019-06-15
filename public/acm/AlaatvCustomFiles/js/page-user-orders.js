@@ -38,7 +38,14 @@ $(document).ready(function () {
         $('.orderDetailes-paidPrice').html(orders[index].paidPrice.toLocaleString('fa') + ' تومان ');
         $('.orderDetailes-completed_at').html(new persianDate(Date.parse(orders[index].completed_at)).format("dddd, DD MMMM YYYY"));
 
-        $('.orderDetailes-orderPostingInfo').html((typeof orders[index].orderPostingInfo[0] !== 'undefined') ? orders[index].orderPostingInfo[0].postCode : 'پست نشده');
+        if (typeof orders[index].orderPostingInfo[0] !== 'undefined') {
+            $('#postedProductCodeReportWraper').fadeIn();
+            $('.orderDetailes-orderPostingInfo').html(orders[index].orderPostingInfo[0].postCode);
+        } else {
+            $('.orderDetailes-orderPostingInfo').html('پست نشده');
+            $('#postedProductCodeReportWraper').fadeOut();
+        }
+
         $('.orderDetailes-debt').html(orders[index].debt.toLocaleString('fa') + ' تومان ');
 
         let hideAllDiscountInfo = true;

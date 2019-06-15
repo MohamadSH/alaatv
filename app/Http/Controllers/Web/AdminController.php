@@ -957,4 +957,10 @@ class AdminController extends Controller
         return view('admin.insertUserAndOrderproduct', compact('majors', 'genders', 'pageName'));
     }
 
+    public function adminBlock(Request $request)
+    {
+        $pageName = 'indexBlock';
+        return view('admin.indexBlock', compact(['pageName']));
+    }
+
 }

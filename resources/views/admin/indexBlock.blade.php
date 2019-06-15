@@ -30,7 +30,7 @@
     <div class="row">
         <div class="col">
             <!-- BEGIN BLOCK TABLE PORTLET-->
-            <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="block-portlet">
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--head-sm" m-portlet="true" id="block-portlet">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
@@ -48,11 +48,6 @@
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
                                     <i class="la la-refresh"></i>
-                                </a>
-                            </li>
-                            <li class="m-portlet__nav-item">
-                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
@@ -141,7 +136,9 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <h4 class="modal-title">آیا مطمئن هستید؟</h4>
+                                    <h4 class="modal-title">
+                                        آیا از حذف این بلاک اطمینان دارید؟
+                                    </h4>
                                     <input type="hidden" id="block-removeLink" value="removeLink">
                                 </div>
                                 <div class="modal-footer">
@@ -191,7 +188,7 @@
                     </div>
                     <!--end::Modal-->
             
-                    <table class="table table-striped table-bordered table-hover" width="100%" id="block_table">
+                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="block_table">
                         <thead>
                             <tr>
                                 <th></th>
@@ -221,7 +218,7 @@
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>--}}
     {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>--}}
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
@@ -251,6 +248,7 @@
             
             $('#block_table > tbody').html("");
             let defaultContent = "<span class=\"m-badge m-badge--wide label-sm m-badge--danger\"> درج نشده </span>";
+            let zeroContent = "<span class=\"m-badge m-badge--wide label-sm m-badge--warning\"> خالی </span>";
             let columns = [
                 {data: "res", title: "", defaultContent: ' '},
                 {data: "id", title: "#", defaultContent: defaultContent},
@@ -274,9 +272,10 @@
                     "title": "تعداد محتوا",
                     defaultContent: defaultContent,
                     "render": function ( data, type, row ) {
-                        var contents = row.contents;
-                        if (typeof contents !== 'undefined' && contents !== null && contents !== false) {
-                            return contents.length;
+                        if (row.contents_count > 0) {
+                            return row.contents_count;
+                        } else {
+                            return zeroContent;
                         }
                     },
                 },
@@ -286,9 +285,10 @@
                     "title": "تعداد دسته ها",
                     defaultContent: defaultContent,
                     "render": function ( data, type, row ) {
-                        var sets = row.sets;
-                        if (typeof sets !== 'undefined' && sets !== null && sets !== false) {
-                            return sets.length;
+                        if (row.sets_count > 0) {
+                            return row.sets_count;
+                        } else {
+                            return zeroContent;
                         }
                     },
                 },
@@ -298,9 +298,10 @@
                     "title": "تعداد محصولات",
                     defaultContent: defaultContent,
                     "render": function ( data, type, row ) {
-                        var products = row.products;
-                        if (typeof products !== 'undefined' && products !== null && products !== false) {
-                            return products.length;
+                        if (row.products_count > 0) {
+                            return row.products_count;
+                        } else {
+                            return zeroContent;
                         }
                     },
                 },
@@ -310,9 +311,10 @@
                     "title": "تعداد بنرها",
                     defaultContent: defaultContent,
                     "render": function ( data, type, row ) {
-                        var banners = row.banners;
-                        if (typeof banners !== 'undefined' && banners !== null && banners !== false) {
-                            return banners.length;
+                        if (row.banners_count > 0) {
+                            return row.banners_count;
+                        } else {
+                            return zeroContent;
                         }
                     },
                 },
@@ -324,11 +326,11 @@
                     "render": function ( data, type, row ) {
                         let html = '<div class="btn-group">\n';
                         html +=
-                            '    <a target="_blank" class="btn btn-success" href="' + generateEditBlockLink(row.id) + '">\n' +
+                            '    <a target="_blank" class="btn btn-success" href="' + row.editLink + '">\n' +
                             '        <i class="fa fa-pencil"></i> اصلاح \n' +
                             '    </a>\n';
                         html +=
-                            '    <a class="btn btn-danger btnDeleteOrder" remove-link="' + generateRemoveBlockLink(row.id) + '" data-block-name="' + row.title + '">\n' +
+                            '    <a class="btn btn-danger btnDeleteBlock" remove-link="' + row.removeLink + '" data-block-name="' + row.title + '">\n' +
                             '        <i class="fa fa-remove" aria-hidden="true"></i> حذف \n' +
                             '    </a>\n';
                         html += '</div>';
@@ -355,12 +357,11 @@
                     type: "loader",
                     state: "info",
                 });
-                data.blockPage = getNextPageParam(data.start, data.length);
+                data.page = getNextPageParam(data.start, data.length);
                 delete data.columns;
                 return data;
             };
             let dataSrc = function (json) {
-                console.log('json.data: ', json.data);
                 $("#block-portlet-loading").addClass("d-none");
                 mApp.unblock('#block_table_wrapper');
                 return json.data;
@@ -394,6 +395,44 @@
             $('#copyBlockModalModalLabel').html(blockName);
             $('#copyBlockModal').modal('show');
         }
+
+        function removeBlock(){
+            mApp.block('#removeBlockModal', {
+                type: "loader",
+                state: "success",
+            });
+            var remove_link = $('#block-removeLink').val();
+            $.ajax({
+                type: 'DELETE',
+                url: remove_link,
+                data:{_method: 'delete'},
+                success: function (result) {
+                    toastr.options = {
+                        "closeButton": true,
+                        "debug": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "showDuration": "1000",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+                    toastr["success"]("بلاک با موفقیت حذف شد!", "پیام سیستم");
+                    $('#removeBlockModal').modal('hide');
+                    mApp.unblock('#removeBlockModal');
+
+                    makeDataTable_loadWithAjax_blocks();
+                },
+                error: function (result) {
+                    mApp.unblock('#removeBlockModal');
+                    makeDataTable_loadWithAjax_blocks();
+                }
+            });
+        }
         
         jQuery(document).ready(function () {
 
@@ -407,7 +446,7 @@
                $('#showBlockPhotoInModal').modal('show');
             });
 
-            $(document).on('click', '.btnDeleteOrder', function (e) {
+            $(document).on('click', '.btnDeleteBlock', function (e) {
                 e.preventDefault();
                 let removeLink = $(this).attr('remove-link');
                 let name = $(this).data('block-name');
@@ -416,35 +455,7 @@
                $('#block-removeLink').val(removeLink);
                $('#removeBlockModal').modal('show');
             });
-            /*
-             validdSince
-             */
-            $("#couponValidSince").persianDatepicker({
-                altField: '#couponValidSinceAlt',
-                altFormat: "YYYY MM DD",
-                observer: true,
-                format: 'YYYY/MM/DD',
-                altFieldFormatter: function (unixDate) {
-                    var d = new Date(unixDate).toISOString();
-                    return d;
-                }
-            });
-
-            /*
-             validUntil
-             */
-            $("#couponValidUntil").persianDatepicker({
-                altField: '#couponValidUntilAlt',
-                altFormat: "YYYY MM DD",
-                observer: true,
-                format: 'YYYY/MM/DD',
-                altFieldFormatter: function (unixDate) {
-                    var d = new Date(unixDate).toISOString();
-                    return d;
-                }
-            });
-
-
+            
             $(document).on("click", "#block-portlet .reload", function (){
                 $("#block-portlet-loading").removeClass("d-none");
                 $('#block_table > tbody').html("");
@@ -453,9 +464,6 @@
             });
             
             $("#block-portlet .reload").trigger("click");
-            $("#block-expand").trigger("click");
-            $('#blockShortDescriptionSummerNote').summernote({height: 200});
-            $('#blockLongDescriptionSummerNote').summernote({height: 200});
 
         });
 

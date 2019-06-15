@@ -11,6 +11,10 @@
     cursor: pointer;
 }
 
+.m-body .m-content {
+    padding: 10px 30px 30px 30px;
+}
+
 /*missed css*/
 .m-widget4__item.m-widget4__item--last, .m-widget4__item:last-child {
     border-bottom: 0;
@@ -106,8 +110,14 @@ select.form-control {
 }
 
 /*media query*/
-@media (max-width: 767.98px) {
+@media only screen and (max-width: 767.98px) {
     .m-portlet__body {
         padding: 5px !important;
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .m-header-menu .m-menu__nav > .m-menu__item .m-menu__submenu > .m-menu__subnav > .m-menu__item {
+        background: transparent;
     }
 }
