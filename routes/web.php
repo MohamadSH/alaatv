@@ -125,7 +125,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('blockAdmin', 'Web\BlockController@adminBlock')->name('blockAdmin');
     Route::get('blockAdmin/list', 'Web\BlockController@adminIndex');
     Route::resource('blockAdmin', 'Web\BlockController',
-        array('except' => array('index'))
+        [
+            'except' => ['index'],
+            'names' => [
+                'edit' => 'blockAdmin.edit'
+            ]
+        ]
     );
     
     Route::get('ordersAdmin', 'Web\AdminController@adminOrder');

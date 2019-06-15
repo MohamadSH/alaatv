@@ -12,17 +12,25 @@ var Alaasearch = function () {
         var widgetPic = data.photo;
         var widgetTitle = data.name;
         var price = data.price;
+        var discount = Math.round((1 - (price.final / price.base)) * 100);
+        var discountRibbon = '';
         var priceHtml = '<span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">';
         if (price.base !== price.final) {
             priceHtml += '    <span class = "m-badge m-badge--warning a--productRealPrice">' + price.base.toLocaleString('fa') + '</span>\n';
+            priceHtml += '    <span class = "m-badge m-badge--info a--productDiscount">' + discount + '%</span>\n';
+            discountRibbon = '\n' +
+                '        <div class="ribbon">\n' +
+                '            <span>\n' +
+                '                <div class="glow">&nbsp;</div>\n' +
+                '                '+ discount +'%\n' +
+                '            </span>\n' +
+                '        </div>';
         }
         priceHtml += '    ' + price.final.toLocaleString('fa') + ' تومان \n';
-        if (price.base !== price.final) {
-            priceHtml += '    <span class = "m-badge m-badge--info a--productDiscount">' + Math.round((1 - (price.final / price.base)) * 100) + '%</span>\n';
-        }
         priceHtml += '</span>';
 
         return '<div class = "item">\n' +
+            discountRibbon +
             '    <!--begin:: Widgets/Blog-->\n' +
             '    <div class = "m-portlet m-portlet--bordered-semi m-portlet--rounded-force">\n' +
             '   <div class="m-portlet__head m-portlet__head--fit"> \
@@ -733,7 +741,6 @@ var CustomInitMultiLevelSearch = function () {
         return tagValue;
     }
 
-
     function getUrlParams(url, param) {
         var res = url.match(/(\?|\&)([^=]+)\=([^&]+)/g);
         var params = [];
@@ -780,7 +787,7 @@ var CustomInitMultiLevelSearch = function () {
         for (var tagsIndex in tags) {
             for (var nezamIndex in filterData.nezam) {
                 var item = filterData.nezam[nezamIndex];
-                if (item.value === tags[tagsIndex]) {
+                if (item.value === decodeURI(tags[tagsIndex])) {
                     selectedVal = item;
                     activeFilter('maghtaSelector');
                     existInTags = true;
@@ -809,7 +816,7 @@ var CustomInitMultiLevelSearch = function () {
         for (var tagsIndex in tags) {
             for (var maghtaIndex in filterData[selectedNezam.maghtaKey]) {
                 var item = filterData[selectedNezam.maghtaKey][maghtaIndex];
-                if (item.value === tags[tagsIndex]) {
+                if (item.value === decodeURI(tags[tagsIndex])) {
                     selectedMaghta = item;
                     activeFilter('majorSelector');
                     existInTags = true;
@@ -836,7 +843,9 @@ var CustomInitMultiLevelSearch = function () {
         for (var tagsIndex in tags) {
             for (var majorIndex in filterData.major) {
                 var value = filterData.major[majorIndex].value;
-                if (value === tags[tagsIndex]) {
+                console.log('setSelectedMajorFromTags->value: ', value);
+                console.log('setSelectedMajorFromTags->tags[tagsIndex]: ', decodeURI(tags[tagsIndex]));
+                if (value === decodeURI(tags[tagsIndex])) {
                     selectedVal = filterData.major[majorIndex];
                     activeFilter('lessonSelector');
                     existInTags = true;
@@ -864,7 +873,7 @@ var CustomInitMultiLevelSearch = function () {
         for (var tagsIndex in tags) {
             for (var lessonIndex in filterData[selectedMajor.lessonKey]) {
                 var item = filterData[selectedMajor.lessonKey][lessonIndex];
-                if (item.value === tags[tagsIndex]) {
+                if (item.value === decodeURI(tags[tagsIndex])) {
                     selectedLesson = item;
                     activeFilter('teacherSelector');
                     existInTags = true;
@@ -892,7 +901,7 @@ var CustomInitMultiLevelSearch = function () {
         for (var tagsIndex in tags) {
             for (var teacherIndex in filterData.lessonTeacher[selectedLesson]) {
                 var item = filterData.lessonTeacher[selectedLesson][teacherIndex];
-                if (item.value === tags[tagsIndex]) {
+                if (item.value === decodeURI(tags[tagsIndex])) {
                     selectedTeacher = item;
                     activeFilter('teacherSelector');
                     existInTags = true;
@@ -929,6 +938,8 @@ var CustomInitMultiLevelSearch = function () {
         var selectedValue = setSelectedMaghtaFromTags();
         var maghta = selectedVlues.nezam.maghtaKey;
         var filterDataArray = filterData[maghta];
+        console.log('filterDataArray: ', filterDataArray);
+        console.log('maghta: ', maghta);
         initSelectorItem(selectorClass, selectedValue, filterDataArray);
         setSelectedMaghtaFromTags();
     }
@@ -1065,6 +1076,7 @@ var GetAjaxData = function () {
         $(pageTagsListBadge).find('.m-list-badge__item').remove();
 
         var searchFilterData = MultiLevelSearch.getSelectedData();
+        console.log('searchFilterData: ', searchFilterData);
         var url = document.location.href.split('?')[0];
         var tagsValue = '';
         for (var index in searchFilterData) {
@@ -1081,7 +1093,7 @@ var GetAjaxData = function () {
         if (tagsValue !== '') {
             tagsValue = tagsValue.substr(1);
         }
-
+        console.log('tagsValue: ', tagsValue);
         url += '?' + tagsValue;
         window.addEventListener('popstate', function(event) {
             console.log('popstate fired!');
@@ -1254,10 +1266,12 @@ jQuery(document).ready(function () {
     MultiLevelSearch.init({
         selectorId: 'contentSearchFilter'
     }, function () {
+        console.log('after callback');
         GetAjaxData.refreshTags(contentSearchFilterData);
         CustomInitMultiLevelSearch.initFilters(contentSearchFilterData);
         GetAjaxData.getNewDataBaseOnTags(contentSearchFilterData);
     },  function () {
+        console.log('before callback');
         GetAjaxData.refreshTags(contentSearchFilterData);
         CustomInitMultiLevelSearch.initFilters(contentSearchFilterData);
     });

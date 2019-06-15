@@ -2,6 +2,8 @@ $('.OwlCarouselType2-shopPage').each(function(){
     let id = $(this).attr('id');
     $('#'+id).OwlCarouselType2({
         OwlCarousel: {
+            center: false,
+            loop: false,
             responsive: {
                 0: {
                     items: 1
