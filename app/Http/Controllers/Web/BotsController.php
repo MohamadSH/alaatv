@@ -910,7 +910,7 @@ class BotsController extends Controller
             }
 
             if($request->has('checkghesdi')){
-                $orders = Order::where('paymentstatus_id', config('constants.PAYMENT_STATUS_INDEBTED'))
+                $orders = Order::whereIn('paymentstatus_id', [config('constants.PAYMENT_STATUS_INDEBTED') ,config('constants.PAYMENT_STATUS_UNPAID') ])
                                 ->whereDoesntHave('orderproducts' , function ($q){
                                     $q->where('product_id' , Product::CUSTOM_DONATE_PRODUCT);
                                 });
