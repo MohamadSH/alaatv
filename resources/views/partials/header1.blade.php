@@ -256,7 +256,7 @@
                                         </a>
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ route('shop') }}" class="m-menu__link ">
+                                        <a href="{{ route('landing.5') }}" class="m-menu__link ">
                                             {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">

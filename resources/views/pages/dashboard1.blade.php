@@ -2,6 +2,22 @@
 
 @section('page-css')
     <link href="{{ mix('/css/page-homePage.css') }}" rel="stylesheet" type="text/css"/>
+    <style>
+        .ribbon {
+            top: calc(20px - 46px) !important;
+            right: calc(5% - 5px) !important;
+        }
+        .a--owl-carousel-type-2-gridViewWarper .ribbon {
+            top: calc(20px - 32px) !important;
+            right: calc(5% - 5px) !important;
+        }
+        /*media query*/
+        @media (max-width: 767.98px) {
+            .homePageNavigation .row[class*="m-row--col-separator-"] > div:last-child {
+                border-bottom: 1px solid #ebedf2;
+            }
+        }
+    </style>
 @endsection
 
 @section("content")
@@ -9,7 +25,7 @@
     
     <div class="m--clearfix"></div>
     <!--begin:: Widgets/Stats-->
-    <div class="m-portlet ">
+    <div class="m-portlet homePageNavigation">
         <div class="m-portlet__body  m-portlet__body--no-padding">
             <div class="row m-row--no-padding m-row--col-separator-xl shopNavItems">
                 <div class="col-6 col-md-3 m--bg-warning shopNavItem">
@@ -80,6 +96,50 @@
                                 <button class="btn m-btn m-btn--pill m-btn--air" type="button">
                                     <h2 class="m-widget24__title">
                                         پایه دهم
+                                    </h2>
+                                </button>
+                                <br>
+                                <span class="m--font-light">
+                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20">
+				                </span>
+                                <div class="m--space-10"></div>
+                            </div>
+                        </div>
+                        <!--end::Total Profit-->
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="m-portlet__body  m-portlet__body--no-padding m--padding-top-5">
+            <div class="row m-row--no-padding m-row--col-separator-xl shopNavItems">
+                <div class="col-12 col-md-6 m--bg-info shopNavItem">
+                    <a target="_self" href="{{ route('landing.5') }}">
+                        <!--begin::Total Profit-->
+                        <div class="m-widget24 m--align-center">
+                            <div class="m-widget24__item">
+                                <button class="btn m-btn m-btn--pill m-btn--air" type="button">
+                                    <h2 class="m-widget24__title">
+                                        همایش های دانلودی نظام قدیم
+                                    </h2>
+                                </button>
+                                <br>
+                                <span class="m--font-light">
+                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20">
+				                </span>
+                                <div class="m--space-10"></div>
+                            </div>
+                        </div>
+                        <!--end::Total Profit-->
+                    </a>
+                </div>
+                <div class="col-12 col-md-6 m--bg-accent shopNavItem">
+                    <a target="_self" href="{{ route('landing.8') }}">
+                        <!--begin::Total Profit-->
+                        <div class="m-widget24 m--align-center">
+                            <div class="m-widget24__item">
+                                <button class="btn m-btn m-btn--pill m-btn--air" type="button">
+                                    <h2 class="m-widget24__title">
+                                        همایش های دانلودی نظام جدید
                                     </h2>
                                 </button>
                                 <br>
