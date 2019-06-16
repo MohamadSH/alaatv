@@ -2,22 +2,6 @@
 
 @section('page-css')
     <link href="{{ mix('/css/page-homePage.css') }}" rel="stylesheet" type="text/css"/>
-    <style>
-        .ribbon {
-            top: calc(20px - 46px) !important;
-            right: calc(5% - 5px) !important;
-        }
-        .a--owl-carousel-type-2-gridViewWarper .ribbon {
-            top: calc(20px - 32px) !important;
-            right: calc(5% - 5px) !important;
-        }
-        /*media query*/
-        @media (max-width: 767.98px) {
-            .homePageNavigation .row[class*="m-row--col-separator-"] > div:last-child {
-                border-bottom: 1px solid #ebedf2;
-            }
-        }
-    </style>
 @endsection
 
 @section("content")
