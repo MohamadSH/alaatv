@@ -141,11 +141,7 @@
                                                                         {{$order->paymentstatus->displayName}}
                                                                     </span>
 {{--                                                                $order->orderstatus->id == config("constants.ORDER_STATUS_CLOSED") ||--}}
-                                                                @if(isset($order->orderstatus->id) &&
-                                                                    (
-                                                                        $order->orderstatus->id == config("constants.ORDER_STATUS_POSTED")
-                                                                    )
-                                                                )
+                                                                @if(isset($order->orderstatus->id) && ($order->orderstatus->id == config("constants.ORDER_STATUS_POSTED")))
                                                                     <button type="button"
                                                                             class="btn btn-sm m-btn--pill m-btn--air btn-accent btnOnlinePayment"
                                                                             data-order-id="{{$order->id}}"
@@ -154,13 +150,10 @@
                                                                         پرداخت
                                                                     </button>
                                                                 @endif
-                                                            @elseif(
-                                                            isset($order->paymentstatus->id) &&
-                                                                  $order->paymentstatus->id == config("constants.PAYMENT_STATUS_INDEBTED")
-                                                            )
+                                                            @elseif(isset($order->paymentstatus->id) && ($order->paymentstatus->id == config("constants.PAYMENT_STATUS_INDEBTED") || $order->paymentstatus->id == config("constants.PAYMENT_STATUS_VERIFIED_INDEBTED")))
                                                                 <span class="m-badge m-badge--wide m-badge--warning">
-                                                                        {{$order->paymentstatus->displayName}}
-                                                                    </span>
+                                                                    {{$order->paymentstatus->displayName}}
+                                                                </span>
                                                                 <button type="button"
                                                                         class="btn btn-sm m-btn--pill m-btn--air btn-accent btnOnlinePayment"
                                                                         data-order-id="{{$order->id}}"
@@ -245,44 +238,44 @@
                                                                         <div class="col col-md-6">
                                                                             <table class="table table-sm m-table">
                                                                                 <tbody>
-                                                                                <tr>
-                                                                                    <td>وضعیت سفارش:</td>
-                                                                                    <td class="orderDetailes-orderStatus"></td>
-                                                                                </tr>
-                                                                                <tr id="postedProductCodeReportWraper">
-                                                                                    <td>کد مرسوله پست شده:</td>
-                                                                                    <td class="orderDetailes-orderPostingInfo"></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td>تاریخ ایجاد اولیه:</td>
-                                                                                    <td class="orderDetailes-created_at"></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td>تاریخ ثبت نهایی:</td>
-                                                                                    <td class="orderDetailes-completed_at"></td>
-                                                                                </tr>
+                                                                                    <tr>
+                                                                                        <td>وضعیت سفارش:</td>
+                                                                                        <td class="orderDetailes-orderStatus"></td>
+                                                                                    </tr>
+                                                                                    <tr id="postedProductCodeReportWraper">
+                                                                                        <td>کد مرسوله پست شده:</td>
+                                                                                        <td class="orderDetailes-orderPostingInfo"></td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>تاریخ ایجاد اولیه:</td>
+                                                                                        <td class="orderDetailes-created_at"></td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>تاریخ ثبت نهایی:</td>
+                                                                                        <td class="orderDetailes-completed_at"></td>
+                                                                                    </tr>
                                                                                 </tbody>
                                                                             </table>
                                                                         </div>
                                                                         <div class="col col-md-6">
                                                                             <table class="table table-sm m-table">
                                                                                 <tbody>
-                                                                                <tr>
-                                                                                    <td>وضعیت پرداخت:</td>
-                                                                                    <td class="orderDetailes-paymentStatus"></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td>مبلغ(تومان):</td>
-                                                                                    <td class="orderDetailes-price"></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td>پرداخت شده(تومان):</td>
-                                                                                    <td class="orderDetailes-paidPrice"></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td>بدهی(تومان):</td>
-                                                                                    <td class="orderDetailes-debt"></td>
-                                                                                </tr>
+                                                                                    <tr>
+                                                                                        <td>وضعیت پرداخت:</td>
+                                                                                        <td class="orderDetailes-paymentStatus"></td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>مبلغ(تومان):</td>
+                                                                                        <td class="orderDetailes-price"></td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>پرداخت شده(تومان):</td>
+                                                                                        <td class="orderDetailes-paidPrice"></td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>بدهی(تومان):</td>
+                                                                                        <td class="orderDetailes-debt"></td>
+                                                                                    </tr>
                                                                                 </tbody>
                                                                             </table>
                                                                         </div>

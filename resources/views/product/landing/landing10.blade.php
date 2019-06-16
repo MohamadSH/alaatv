@@ -1,10 +1,15 @@
 @extends('app')
 
 @section('page-css')
-    <link href="{{ mix('/css/page-landing7.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/acm/AlaatvCustomFiles/components/ribbon/style.css') }}?v=1" rel="stylesheet" type="text/css"/>
+    <link href="{{ mix('/css/page-landing7.css') }}?v=2" rel="stylesheet" type="text/css"/>
     <style>
         .m-portlet__head {
             background: white;
+        }
+        .a--owl-carousel-type-2-gridViewWarper .ribbon {
+            top: calc(20px - 32px);
+            right: calc(5% - 5px);
         }
     </style>
 @endsection
