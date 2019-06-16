@@ -5,6 +5,7 @@
             <span>
                 <div class="glow">&nbsp;</div>
                 {{ round((1-($product->price['final']/$product->price['base']))*100) }}%
+                <span>تخفیف</span>
             </span>
         </div>
     @endif

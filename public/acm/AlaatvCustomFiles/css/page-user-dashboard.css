@@ -47,4 +47,7 @@
         width: 100%;
         display: block;
     }
+    .homePageNavigation .row[class*="m-row--col-separator-"] > div:last-child {
+        border-bottom: 1px solid #ebedf2;
+    }
 }
