@@ -120,3 +120,19 @@
     </div>
 
 @endsection
+
+@section('page-js')
+    <input id="js-var-order-id" class="m--hide" type="hidden" value='{{ $result['orderId'] ?? -1 }}'>
+    <input id="js-var-paid-price" class="m--hide" type="hidden" value='{{ $result['paidPrice'] ?? 1 }}'>
+    <script>
+        jQuery(document).ready(function () {
+            var orderIdValue = $('#js-var-order-id').val();
+            var paidPriceValue = $('#js-var-paid-price').val();
+            dataLayer.push(
+                {
+                    'orderId': orderIdValue,
+                    'paidPrice': paidPriceValue,
+                });
+        });
+    </script>
+@endsection

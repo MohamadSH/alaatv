@@ -70,7 +70,7 @@
                 <div class="m-portlet__body">
                     <div class="m-widget27 m-portlet-fit--sides">
                         <div class="m-widget27__pic">
-                            <img src="/acm/extra/landing1/img/rally2.jpg" alt="">
+                            <img src="/acm/extra/landing1/img/rally3.jpg" alt="">
                             <h3 class="m-widget27__title m--font-light">
                             
                             </h3>

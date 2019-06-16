@@ -59,7 +59,7 @@ class Lottery extends BaseModel
         $prizeName = "";
         $amount    = 0;
         $memorial  = "";
-        if ($this->id == 4) {
+        if ($this->id == 5) {
             if ($rank == 1) {//nafare aval
                 $prizeName = "یک دستگاه پلی استیشن 4";
             }
