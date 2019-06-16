@@ -1,6 +1,6 @@
 <div class="m-widget_head-owlcarousel-item carousel noHoverEffect background-gradient" data-position="{{ $productKey }}">
     
-    @if($product->price['final']!=$product->price['base'])
+    @if($product->price['final'] !== $product->price['base'])
         <div class="ribbon">
             <span>
                 <div class="glow">&nbsp;</div>
