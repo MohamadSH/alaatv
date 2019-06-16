@@ -2,6 +2,7 @@
 
 @section('page-css')
     <link href="{{ asset('/acm/AlaatvCustomFiles/components/imageWithCaption/style.css') }}?v=1" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/acm/AlaatvCustomFiles/components/ribbon/style.css') }}?v=1" rel="stylesheet" type="text/css"/>
     <style>
         .sideItems .m-widget24__title {
             font-size: 30px !important;
@@ -38,6 +39,9 @@
         .m-widget27 .m-widget27__pic > img {
             width: 100%;
             height: auto;
+        }
+        .productItem {
+            position: relative;
         }
         /*media query*/
         @media only screen and (max-width: 767px) {
@@ -165,42 +169,57 @@
                                             @foreach( $landingProducts as $product)
         
                                                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 m--padding-left-5 m--padding-right-5 m--margin-top-5">
-                                                    <div class="a--imageWithCaption">
-                                                        @if(isset($product["product"]->image[0]))
-                                                            <img src="{{$product["product"]->photo}}" alt="عکس محصول@if(isset($product["product"]->name[0])) {{$product["product"]->name}} @endif" class="img-thumbnail">
+    
+                                                    <div class="productItem">
+                                                        
+                                                        @if($product['product']->price['final'] !== $product['product']->price['base'])
+                                                            <div class="ribbon">
+                                                                <span>
+                                                                    <div class="glow">&nbsp;</div>
+                                                                    {{ round((1-($product['product']->price['final']/$product['product']->price['base']))*100) }}%
+                                                                </span>
+                                                            </div>
                                                         @endif
-                
-                
-                                                        <a href="{{$product["product"]->url ?? '#'}}">
-                                                            <div class="a--imageCaptionWarper">
-                                                                <div class="a--imageCaptionContent">
-                                                                    <div class="a--imageCaptionTitle">
-                                                                        {{$product["product"]->name ?? '--'}}
-                                                                    </div>
-                                                                    <div class="a--imageCaptionDescription">
-                                                                        <br>
-                                                                        @if($product["product"]->isFree)
-                                                                            <div class="cbp-l-caption-desc  bold m--font-danger product-potfolio-free">رایگان</div>
-                                                                        @elseif($product["product"]->basePrice == 0)
-                                                                            <div class="cbp-l-caption-desc  bold m--font-info product-potfolio-no-cost">قیمت: پس از انتخاب محصول</div>
-                                                                        @elseif($product["product"]->price['discount'] > 0)
-                                                                            @include('product.partials.price',['price' => $product["product"]->price])
-                                                                        @else
-                                                                            @include('product.partials.price',['price' => $product["product"]->price])
-                                                                        @endif
+    
+                                                        <div class="a--imageWithCaption">
+                                                            @if(isset($product['product']->image[0]))
+                                                                <img src="{{$product['product']->photo}}" alt="عکس محصول@if(isset($product['product']->name[0])) {{$product['product']->name}} @endif" class="img-thumbnail">
+                                                            @endif
+        
+        
+                                                            <a href="{{$product['product']->url ?? '#'}}">
+                                                                <div class="a--imageCaptionWarper">
+                                                                    <div class="a--imageCaptionContent">
+                                                                        <div class="a--imageCaptionTitle">
+                                                                            {{$product['product']->name ?? '--'}}
+                                                                        </div>
+                                                                        <div class="a--imageCaptionDescription">
+                                                                            <br>
+                                                                            @if($product['product']->isFree)
+                                                                                <div class="cbp-l-caption-desc  bold m--font-danger product-potfolio-free">رایگان</div>
+                                                                            @elseif($product['product']->basePrice == 0)
+                                                                                <div class="cbp-l-caption-desc  bold m--font-info product-potfolio-no-cost">قیمت: پس از انتخاب محصول</div>
+                                                                            @elseif($product['product']->price['discount'] > 0)
+                                                                                @include('product.partials.price',['price' => $product['product']->price])
+                                                                            @else
+                                                                                @include('product.partials.price',['price' => $product['product']->price])
+                                                                            @endif
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </a>
+                                                            </a>
+                                                        </div>
+    
+                                                        <div class="text-center">
+                                                            <a href="{{$product['product']->url ?? '#'}}">
+                                                                <button type="button" class="btn btn-sm m-btn--air btn-accent a--full-width m--margin-bottom-10">
+                                                                    اطلاعات بیشتر
+                                                                </button>
+                                                            </a>
+                                                        </div>
+                                                        
                                                     </div>
-            
-                                                    <div class="text-center">
-                                                        <a href="{{$product["product"]->url ?? '#'}}">
-                                                            <button type="button" class="btn btn-sm m-btn--air btn-accent a--full-width m--margin-bottom-10">
-                                                                اطلاعات بیشتر
-                                                            </button>
-                                                        </a>
-                                                    </div>
+                                                    
                                                 </div>
                                             @endforeach
                                         </div>
