@@ -1084,6 +1084,7 @@ class ProductController extends Controller
             222
         ];*/
         $product_ids = [
+            328,
             230,
             222,
             213,
@@ -1130,6 +1131,7 @@ class ProductController extends Controller
             222 => 'ensani',
             210 => 'riazi tajrobi ensani',
             213 => 'tajrobi',
+            328 => 'tajrobi',
         ];
         
         $productsDataForView = [];
