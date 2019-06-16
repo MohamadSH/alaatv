@@ -429,8 +429,8 @@ mix.styles(
 
 mix.styles(
     [
-        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
         'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
+        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
         'public/acm/AlaatvCustomFiles/css/certificates.css',
         'public/acm/AlaatvCustomFiles/css/page-homePage.css',
     ],
