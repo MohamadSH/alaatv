@@ -126,7 +126,7 @@
     <input id="js-var-paid-price" class="m--hide" type="hidden" value='{{ $result['paidPrice'] ?? 1 }}'>
     <script>
         jQuery(document).ready(function () {
-            var orderIdValue = $('#js-var-order-id').val();
+            var orderIdValue = parseInt($('#js-var-order-id').val());
             var paidPriceValue = parseFloat($('#js-var-paid-price').val());
             dataLayer.push(
                 {
