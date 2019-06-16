@@ -122,10 +122,6 @@
                                         همایش های دانلودی نظام قدیم
                                     </h2>
                                 </button>
-                                <br>
-                                <span class="m--font-light">
-                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20">
-				                </span>
                                 <div class="m--space-10"></div>
                             </div>
                         </div>
@@ -142,10 +138,6 @@
                                         همایش های دانلودی نظام جدید
                                     </h2>
                                 </button>
-                                <br>
-                                <span class="m--font-light">
-                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20">
-				                </span>
                                 <div class="m--space-10"></div>
                             </div>
                         </div>
