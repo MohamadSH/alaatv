@@ -147,5 +147,20 @@
 
 @section('page-js')
     <script src="{{ mix('/js/page-shop.js') }}"></script>
+    <script>
+        var gtmEecImpressions = [
+            @foreach($blocks as $block)
+                @foreach($block->products as $productKey=>$product)
+                    {
+                        id: '{{ $product->id }}',
+                        name: '{{ $product->name }}',
+                        category: '-',
+                        list: '{{ $block->title }}',
+                        position: '{{ $productKey }}'
+                    },
+            @endforeach
+        @endforeach
+        ];
+    </script>
 @endsection
 

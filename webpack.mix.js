@@ -32,6 +32,7 @@ mix.babel(
 
         // 'public/acm/cubeportfolio/js/jquery.cubeportfolio.min.js',
 
+        'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
         'public/acm/custom-js-app.js',
         'public/acm/AlaatvCustomFiles/js/mLayout.js'
     ],
@@ -110,7 +111,6 @@ mix.babel(
         'public/acm/AlaatvCustomFiles/js/UserCart.js',
         'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-        'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
 
         'public/acm/AlaatvCustomFiles/js/page-product-show.js',
     ],
@@ -135,7 +135,6 @@ mix.babel(
     [
         'node_modules/jquery-sticky/jquery.sticky.js',
         'public/acm/AlaatvCustomFiles/js/UserCart.js',
-        'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
         'public/acm/AlaatvCustomFiles/js/page-checkout-review.js'
     ],
     'public/js/checkout-review.js'
@@ -144,7 +143,6 @@ mix.babel(
 mix.babel(
     [
         'public/acm/AlaatvCustomFiles/js/UserCart.js',
-        'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
         'public/acm/AlaatvCustomFiles/js/page-checkout-payment.js',
     ],
     'public/js/checkout-payment.js'
@@ -152,7 +150,6 @@ mix.babel(
 
 mix.babel(
     [
-        'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
         'public/acm/AlaatvCustomFiles/js/page-checkout-verification.js',
     ],
     'public/js/checkout-verification.js'
@@ -160,7 +157,6 @@ mix.babel(
 
 mix.babel(
     [
-        'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
         'public/acm/AlaatvCustomFiles/js/page-checkout-auth.js',
     ],
     'public/js/checkout-auth.js'
@@ -168,7 +164,6 @@ mix.babel(
 
 mix.babel(
     [
-        'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
         'public/acm/AlaatvCustomFiles/js/page-checkout-completeInfo.js',
     ],
     'public/js/checkout-completeInfo.js'

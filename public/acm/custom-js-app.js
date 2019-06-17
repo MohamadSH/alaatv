@@ -69,4 +69,16 @@ jQuery(document).ready( function() {
         "hideMethod": "fadeOut"
     };
 
+
+    $(document).on('click' ,'.gtm-eec-product-impression-click', function(){
+        var actionFieldList = $(this).data('actionFieldList');
+        var product = {
+            id: $(this).data('gtm-eec-product-id'),
+            name: $(this).data('gtm-eec-product-name'),
+            category: $(this).data('gtm-eec-product-category'),
+            position: $(this).data('gtm-eec-product-position')
+        };
+        GAEE.impression_click(actionFieldList, product);
+    });
+
 });

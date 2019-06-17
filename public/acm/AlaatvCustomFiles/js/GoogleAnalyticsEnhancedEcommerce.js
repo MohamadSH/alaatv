@@ -5,7 +5,7 @@ var GAEE = function () {
         return window.dataLayer;
     }
 
-    function productDetailViews(actionFieldList, product) {
+    function action_productDetailViews(actionFieldList, product) {
         window.dataLayer.push({
             event: 'eec.detail',
             ecommerce: {
@@ -28,7 +28,7 @@ var GAEE = function () {
         //(String) ddddddddddddddddddddddddd Example: ddddddddddddddddddddddddd
     }
 
-    function productAddToCart(actionFieldList, products) {
+    function action_productAddToCart(actionFieldList, products) {
         window.dataLayer.push({
             event: 'eec.add',
             ecommerce: {
@@ -42,7 +42,7 @@ var GAEE = function () {
         });
     }
 
-    function productRemoveFromCart(actionFieldList, products) {
+    function action_productRemoveFromCart(actionFieldList, products) {
         window.dataLayer.push({
             event: 'eec.remove',
             ecommerce: {
@@ -56,7 +56,7 @@ var GAEE = function () {
         });
     }
 
-    function checkout(step, option, products) {
+    function action_checkout(step, option, products) {
         window.dataLayer.push({
             event: 'eec.checkout',
             ecommerce: {
@@ -71,7 +71,7 @@ var GAEE = function () {
         });
     }
 
-    function checkoutOption(step, option) {
+    function action_checkoutOption(step, option) {
         window.dataLayer.push({
             event: 'eec.checkout_option',
             ecommerce: {
@@ -85,7 +85,7 @@ var GAEE = function () {
         });
     }
 
-    function purchase(actionField, products) {
+    function action_purchase(actionField, products) {
         window.dataLayer.push({
             event: 'eec.purchase',
             ecommerce: {
@@ -98,30 +98,63 @@ var GAEE = function () {
         });
     }
 
+    function impression_view(impressions) {
+        window.dataLayer.push({
+            event: 'eec.impressionView',
+            ecommerce: {
+                impressions: impressions
+            }
+        });
+    }
+
+    function impression_click(actionFieldList, product) {
+        window.dataLayer.push({
+            event: 'eec.impressionClick',
+            ecommerce: {
+                click: {
+                    actionField: {
+                        list: actionFieldList
+                    },
+                    products: [product]
+                }
+            }
+        });
+    }
+
     return {
         productDetailViews: function (actionFieldList, product) {
             getDataLayer();
-            productDetailViews(actionFieldList, product);
+            action_productDetailViews(actionFieldList, product);
         },
         productAddToCart: function (actionFieldList, products) {
             getDataLayer();
-            productAddToCart(actionFieldList, products);
+            action_productAddToCart(actionFieldList, products);
         },
         productRemoveFromCart: function (actionFieldList, products) {
             getDataLayer();
-            productRemoveFromCart(actionFieldList, products);
+            action_productRemoveFromCart(actionFieldList, products);
         },
         checkout: function (step, option, products) {
             getDataLayer();
-            checkout(step, option, products);
+            action_checkout(step, option, products);
         },
         checkoutOption: function (step, option) {
             getDataLayer();
-            checkoutOption(step, option);
+            action_checkoutOption(step, option);
         },
         purchase: function (actionField, products) {
             getDataLayer();
-            purchase(actionField, products);
+            action_purchase(actionField, products);
+        },
+
+
+        impressionView: function (impressions) {
+            getDataLayer();
+            impression_view(impressions);
+        },
+        impression_click: function (actionFieldList, product) {
+            getDataLayer();
+            impression_click(actionFieldList, product);
         },
 
 

@@ -175,6 +175,19 @@
             @endif
         @endforeach
         ];
+        var gtmEecImpressions = [
+            @foreach($blocks as $block)
+                @foreach($block->products as $productKey=>$product)
+                {
+                    id: '{{ $product->id }}',
+                    name: '{{ $product->name }}',
+                    category: '-',
+                    list: '{{ $block->title }}',
+                    position: '{{ $productKey }}'
+                },
+                @endforeach
+            @endforeach
+        ];
     </script>
     <script src="{{ mix('/js/page-homePage.js') }}"></script>
 @endsection
