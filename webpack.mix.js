@@ -99,10 +99,7 @@ mix.babel(
         'node_modules/lightgallery/modules/lg-share.min.js',
         'node_modules/lightgallery/modules/lg-video.min.js',
         'node_modules/lightgallery/modules/lg-zoom.min.js',
-        // 'node_modules/jquery-sticky/jquery.sticky.js',
-
         'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
-
         'public/acm/videojs/video.min.js',
         'public/acm/videojs/plugins/pip/videojs.pip.min.js',
         'public/acm/videojs/nuevo.min.js',
@@ -110,12 +107,10 @@ mix.babel(
         'public/acm/videojs/plugins/videojs.hotkeys.min.js',
         'public/acm/videojs/plugins/seek-to-point.js',
         'public/acm/videojs/lang/fa.js',
-
         'public/acm/AlaatvCustomFiles/js/UserCart.js',
-
         'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
-
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+        'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
 
         'public/acm/AlaatvCustomFiles/js/page-product-show.js',
     ],
@@ -140,6 +135,7 @@ mix.babel(
     [
         'node_modules/jquery-sticky/jquery.sticky.js',
         'public/acm/AlaatvCustomFiles/js/UserCart.js',
+        'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
         'public/acm/AlaatvCustomFiles/js/page-checkout-review.js'
     ],
     'public/js/checkout-review.js'
@@ -148,9 +144,34 @@ mix.babel(
 mix.babel(
     [
         'public/acm/AlaatvCustomFiles/js/UserCart.js',
+        'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
         'public/acm/AlaatvCustomFiles/js/page-checkout-payment.js',
     ],
     'public/js/checkout-payment.js'
+).version();
+
+mix.babel(
+    [
+        'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
+        'public/acm/AlaatvCustomFiles/js/page-checkout-verification.js',
+    ],
+    'public/js/checkout-verification.js'
+).version();
+
+mix.babel(
+    [
+        'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
+        'public/acm/AlaatvCustomFiles/js/page-checkout-auth.js',
+    ],
+    'public/js/checkout-auth.js'
+).version();
+
+mix.babel(
+    [
+        'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
+        'public/acm/AlaatvCustomFiles/js/page-checkout-completeInfo.js',
+    ],
+    'public/js/checkout-completeInfo.js'
 ).version();
 
 mix.babel(

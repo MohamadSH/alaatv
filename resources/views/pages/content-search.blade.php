@@ -62,6 +62,7 @@
                 'carouselType' => 'a--owl-carousel-type-1',
                 'widgetId'=>'product-carousel',
                 'type' => 'product',
+                'perPage' => 9,
                 'loadChild' => false
                 ])
             </div>
@@ -142,5 +143,8 @@
         var contentData = {!! json_encode($result) !!};
         var tags = {!! json_encode($tags) !!};
     </script>
-    <script src="{{ mix('/js/content-search.js') }}"></script>
+{{--    <script src="{{ mix('/js/content-search.js') }}"></script>--}}
+    <script src="{{ asset('/acm/AlaatvCustomFiles/components/MultiLevelSearch/js.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-content-search-filter-data.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-content-search.js') }}"></script>
 @endsection
