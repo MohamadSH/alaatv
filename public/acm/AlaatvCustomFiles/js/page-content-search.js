@@ -23,6 +23,7 @@ var Alaasearch = function () {
                 '            <span>\n' +
                 '                <div class="glow">&nbsp;</div>\n' +
                 '                '+ discount +'%\n' +
+                '                <span>تخفیف</span>\n' +
                 '            </span>\n' +
                 '        </div>';
         }
