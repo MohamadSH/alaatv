@@ -378,14 +378,20 @@ var Alaasearch = function () {
 
     function load(event, nextPageUrl, owl, owlType, callback) {
 
-
         if (owlType === 'product' || owlType === 'video' || owlType === 'set') {
             var perPage = typeof (owl.data("per-page")) === "number" ? owl.data("per-page") : 6;
 
             if (
-                nextPageUrl !== null && nextPageUrl.length !== 0
-                && event.namespace && event.property.name === 'position'
-                && event.property.value >= event.relatedTarget.items().length - perPage
+                nextPageUrl !== null && nextPageUrl.length !== 0 &&
+                (
+                    (
+                        event.namespace && event.property.name === 'position' &&
+                        event.property.value >= event.relatedTarget.items().length - perPage
+                    ) ||
+                    (
+                        event === '5moreProduct'
+                    )
+                )
             ) {
                 lockAjax(owlType);
                 addLoadingItem(owl, owlType);
@@ -412,6 +418,7 @@ var Alaasearch = function () {
 
     function initProduct(data) {
         loadProductFromJson(data);
+        load5moreProductInInit();
         $('#product-carousel.owl-carousel').on('change.owl.carousel', function (event) {
             var owlType = 'product';
             var nextPageUrl = $('#owl--js-var-next-page-product-carousel-url');
@@ -426,6 +433,21 @@ var Alaasearch = function () {
                 });
             }
         });
+    }
+
+    function load5moreProductInInit() {
+        var owlType = 'product';
+        var nextPageUrl = $('#owl--js-var-next-page-product-carousel-url');
+        var owl = $('#product-carousel.owl-carousel');
+        if (!productAjaxLock && nextPageUrl.val() !== "null") {
+            load('5moreProduct', nextPageUrl.val(), owl, owlType, function (newPageUrl) {
+                if (newPageUrl === null) {
+                    newPageUrl = '';
+                }
+                $('#owl--js-var-next-page-product-carousel-url').val(decodeURI(newPageUrl));
+                unLockAjax(owlType);
+            });
+        }
     }
 
     function loadVideoFromJson(data) {
@@ -844,8 +866,6 @@ var CustomInitMultiLevelSearch = function () {
         for (var tagsIndex in tags) {
             for (var majorIndex in filterData.major) {
                 var value = filterData.major[majorIndex].value;
-                console.log('setSelectedMajorFromTags->value: ', value);
-                console.log('setSelectedMajorFromTags->tags[tagsIndex]: ', decodeURI(tags[tagsIndex]));
                 if (value === decodeURI(tags[tagsIndex])) {
                     selectedVal = filterData.major[majorIndex];
                     activeFilter('lessonSelector');
@@ -939,8 +959,6 @@ var CustomInitMultiLevelSearch = function () {
         var selectedValue = setSelectedMaghtaFromTags();
         var maghta = selectedVlues.nezam.maghtaKey;
         var filterDataArray = filterData[maghta];
-        console.log('filterDataArray: ', filterDataArray);
-        console.log('maghta: ', maghta);
         initSelectorItem(selectorClass, selectedValue, filterDataArray);
         setSelectedMaghtaFromTags();
     }
@@ -1077,7 +1095,6 @@ var GetAjaxData = function () {
         $(pageTagsListBadge).find('.m-list-badge__item').remove();
 
         var searchFilterData = MultiLevelSearch.getSelectedData();
-        console.log('searchFilterData: ', searchFilterData);
         var url = document.location.href.split('?')[0];
         var tagsValue = '';
         for (var index in searchFilterData) {
@@ -1094,11 +1111,7 @@ var GetAjaxData = function () {
         if (tagsValue !== '') {
             tagsValue = tagsValue.substr(1);
         }
-        console.log('tagsValue: ', tagsValue);
         url += '?' + tagsValue;
-        window.addEventListener('popstate', function(event) {
-            console.log('popstate fired!');
-        });
 
         // window.history.pushState('data to be passed', 'Title of the page', url);
         // The above will add a new entry to the history so you can press Back button to go to the previous state.
@@ -1267,12 +1280,10 @@ jQuery(document).ready(function () {
     MultiLevelSearch.init({
         selectorId: 'contentSearchFilter'
     }, function () {
-        console.log('after callback');
         GetAjaxData.refreshTags(contentSearchFilterData);
         CustomInitMultiLevelSearch.initFilters(contentSearchFilterData);
         GetAjaxData.getNewDataBaseOnTags(contentSearchFilterData);
     },  function () {
-        console.log('before callback');
         GetAjaxData.refreshTags(contentSearchFilterData);
         CustomInitMultiLevelSearch.initFilters(contentSearchFilterData);
     });
