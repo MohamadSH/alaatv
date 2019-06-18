@@ -1,12 +1,20 @@
-@extends("app" , ["pageName"=>$pageName])
+@extends('app' , ['pageName'=>$pageName])
 
 @section('page-css')
     <link href="{{ mix('/css/page-homePage.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
-@section("content")
-    @include("partials.slideShow1" ,["marginBottom"=>"25"])
-    
+@section('content')
+    @include('partials.slideShow1' ,['marginBottom'=>'25', 'positionOfSlideShow'=>'صفحه اصلی'])
+
+    <div class="row">
+        <div class="col text-center m--margin-bottom-5">
+            <a href="{{ route('landing.8') }}" >
+                <img src="{{ asset('/acm/extra/ads/gif/970-90.gif') }}">
+            </a>
+        </div>
+    </div>
+
     <div class="m--clearfix"></div>
     <!--begin:: Widgets/Stats-->
     <div class="m-portlet homePageNavigation">
@@ -133,9 +141,6 @@
     </div>
     <!--end:: Widgets/Stats-->
     
-    
-
-
     @foreach($blocks as $block)
         @include('product.partials.Block.block', [
             'blockCustomClass'=>$block->class.' a--content-carousel-1 dasboardLessons',
@@ -163,7 +168,7 @@
 {{--        @endif--}}
 {{--    @endforeach--}}
     
-    @include("partials.certificates")
+    @include('partials.certificates')
 @endsection
 
 @section('page-js')

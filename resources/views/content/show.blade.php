@@ -146,6 +146,16 @@
                             </div>
                         </div>
                     </div>
+    
+                    <div class="row">
+                        <div class="col text-center m--margin-bottom-5">
+                            <a href="{{ route('landing.5') }}" >
+                                <img src="{{ asset('/acm/extra/ads/gif/970-90.gif') }}" class="a--full-width">
+                                {{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
+                            </a>
+                        </div>
+                    </div>
+                
                     <div class="m-portlet m-portlet--mobile">
                         <div class="m-portlet__body a--nuevo-alaa-theme">
                     
@@ -288,6 +298,15 @@
                         </div>
                     </div>
                     <!--end::Portlet-->
+    
+                    <div class="row">
+                        <div class="col text-center m--margin-bottom-5">
+                            <a href="{{ route('landing.5') }}" >
+                                <img src="{{ asset('/acm/extra/ads/gif/970-90.gif') }}" class="a--full-width">
+                                {{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
+                            </a>
+                        </div>
+                    </div>
                     
                     @if(isset($content->description[0]))
                     <!--begin::Portlet-->
@@ -354,6 +373,15 @@
                         </div>
                     </div>
                     <!--end::Portlet-->
+    
+                    <div class="row">
+                        <div class="col text-center m--margin-bottom-5">
+                            <a href="{{ route('landing.5') }}" >
+                                <img src="{{ asset('/acm/extra/ads/gif/970-90.gif') }}" class="a--full-width">
+                                {{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
+                            </a>
+                        </div>
+                    </div>
                 @endif
             @else
                 <div class="alert alert-danger" role="alert">
@@ -425,6 +453,15 @@
         @if(isset($videosWithSameSet) and $videosWithSameSet->count() > 0)
             <div class="col-12 col-sm-12 col-md-12 col-lg-4">
                 <!--begin::Portlet-->
+    
+                <div class="row">
+                    <div class="col text-center m--margin-bottom-5">
+                        <a href="{{ route('landing.8') }}" >
+                            <img src="{{ asset('/acm/extra/ads/gif/970-90(1).gif') }}" class="a--full-width">
+                            {{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
+                        </a>
+                    </div>
+                </div>
                 <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">
