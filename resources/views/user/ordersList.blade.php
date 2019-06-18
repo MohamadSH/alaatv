@@ -140,8 +140,8 @@
                                                                 <span class="m-badge m-badge--wide m-badge--warning">
                                                                         {{$order->paymentstatus->displayName}}
                                                                     </span>
-{{--                                                                $order->orderstatus->id == config("constants.ORDER_STATUS_CLOSED") ||--}}
-                                                                @if(isset($order->orderstatus->id) && ($order->orderstatus->id == config("constants.ORDER_STATUS_POSTED")))
+
+                                                                @if(isset($order->orderstatus->id) && ($order->orderstatus->id == config("constants.ORDER_STATUS_CLOSED") || $order->orderstatus->id == config("constants.ORDER_STATUS_POSTED")))
                                                                     <button type="button"
                                                                             class="btn btn-sm m-btn--pill m-btn--air btn-accent btnOnlinePayment"
                                                                             data-order-id="{{$order->id}}"
