@@ -19,7 +19,7 @@
 @endsection
 
 @section('content')
-    @include('partials.slideShow1' ,['marginBottom'=>'25'])
+    @include('partials.slideShow1' ,['marginBottom'=>'25', 'positionOfSlideShow'=>'صفحه فروشگاه'])
     <div class="m--clearfix"></div>
     <!--begin:: Widgets/Stats-->
     <div class="m-portlet shopNavItemsWraper">
@@ -160,6 +160,16 @@
                     },
             @endforeach
         @endforeach
+        ];
+        var gtmEecPromotions = [
+                @foreach($slides as $slideKey=>$slide)
+            {
+                id: '{{ $slide->id }}',
+                name: '{{ $slide->title }}',
+                creative: 'اسلایدر صفحه فروشگاه',
+                position: '{{ $slideKey }}'
+            },
+            @endforeach
         ];
     </script>
 @endsection

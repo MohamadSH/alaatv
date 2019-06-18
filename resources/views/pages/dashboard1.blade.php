@@ -193,6 +193,16 @@
                 @endforeach
             @endforeach
         ];
+        var gtmEecPromotions = [
+            @foreach($slides as $slideKey=>$slide)
+                {
+                    id: '{{ $slide->id }}',
+                    name: '{{ $slide->title }}',
+                    creative: 'اسلایدر صفحه اصلی',
+                    position: '{{ $slideKey }}'
+                },
+            @endforeach
+        ];
     </script>
     <script src="{{ mix('/js/page-homePage.js') }}"></script>
 @endsection

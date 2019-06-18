@@ -524,7 +524,13 @@
                 </div>
                 <!--end::Portlet-->
                 <div>
-                    <a href="https://alaatv.com/product/312" data-tooltip-content="همایش طلایی شیمی کنکور">
+                    <a href="https://alaatv.com/product/312"
+                       data-tooltip-content="همایش طلایی شیمی کنکور"
+                       class="gtm-eec-promotion-click"
+                       data-gtm-eec-promotion-id="contentShowPage-leftSide-0"
+                       data-gtm-eec-promotion-name="همایش طلایی شیمی کنکور"
+                       data-gtm-eec-promotion-creative="گیف صفحه کانتنت"
+                       data-gtm-eec-promotion-position="0">
                         <img src="http://uupload.ir/files/u8r8_banner-1.gif" alt="همایش طلایی شیمی کنکور"
                              class="m--img-centered a--full-width"/>
                     </a>

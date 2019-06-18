@@ -25,7 +25,6 @@ var GAEE = function () {
                 }
             }
         });
-        //(String) ddddddddddddddddddddddddd Example: ddddddddddddddddddddddddd
     }
 
     function action_productAddToCart(actionFieldList, products) {
@@ -121,6 +120,28 @@ var GAEE = function () {
         });
     }
 
+    function promotion_view(promotions) {
+        window.dataLayer.push({
+            event: 'eec.promotionView',
+            ecommerce: {
+                promoView: {
+                    promotions: promotions
+                }
+            }
+        });
+    }
+
+    function promotion_click(promotion) {
+        window.dataLayer.push({
+            event: 'eec.promotionClick',
+            ecommerce: {
+                promoClick: {
+                    promotions: [promotion]
+                }
+            }
+        });
+    }
+
     return {
         productDetailViews: function (actionFieldList, product) {
             getDataLayer();
@@ -147,16 +168,23 @@ var GAEE = function () {
             action_purchase(actionField, products);
         },
 
-
         impressionView: function (impressions) {
             getDataLayer();
             impression_view(impressions);
         },
-        impression_click: function (actionFieldList, product) {
+        impressionClick: function (actionFieldList, product) {
             getDataLayer();
             impression_click(actionFieldList, product);
         },
 
+        promotionView: function (promotions) {
+            getDataLayer();
+            promotion_view(promotions);
+        },
+        promotionClick: function (promotion) {
+            getDataLayer();
+            promotion_click(promotion);
+        },
 
     };
 }();

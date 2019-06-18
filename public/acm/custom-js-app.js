@@ -70,15 +70,27 @@ jQuery(document).ready( function() {
     };
 
 
-    $(document).on('click' ,'.gtm-eec-product-impression-click', function(){
-        var actionFieldList = $(this).data('actionFieldList');
+    $(document).on('click' ,'.gtm-eec-product-impression-click', function(e){
+        var actionFieldList = $(this).data('gtm-eec-actionFieldList');
         var product = {
-            id: $(this).data('gtm-eec-product-id'),
-            name: $(this).data('gtm-eec-product-name'),
-            category: $(this).data('gtm-eec-product-category'),
-            position: $(this).data('gtm-eec-product-position')
+            id: $(this).data('gtm-eec-product-id'), // (String) The SKU of the product. Example: 'P12345'
+            name: $(this).data('gtm-eec-product-name'), // (String) The name of the product. Example: 'T-Shirt'
+            category: $(this).data('gtm-eec-product-category'), // (String) Product category of the item. Can have maximum five levels of hierarchy. Example: 'clothes/shirts/t-shirts'
+            position: $(this).data('gtm-eec-product-position'), // (Integer) The position of the impression that was clicked. Example: 1
+            // variant: $(this).data('gtm-eec-product-variant'), // (String) What variant of the main product this is. Example: 'Large'
+            // brand: $(this).data('gtm-eec-product-brand'), // (String) The brand name of the product. Example: 'NIKE'
         };
-        GAEE.impression_click(actionFieldList, product);
+        GAEE.impressionClick(actionFieldList, product);
+    });
+
+    $(document).on('click' ,'.gtm-eec-promotion-click', function(e){
+        var promotion = {
+            id: $(this).data('gtm-eec-promotion-id'), // (String) Unique identifier for the promotion. Example: 'summer_campaign'
+            name: $(this).data('gtm-eec-promotion-name'), // (String) The name of the promotion. Example: 'Summer Campaign 2019'
+            creative: $(this).data('gtm-eec-promotion-creative'), // (String) A name for the creative where the promotion was clicked. Example: 'front_page_banner_1'
+            position: $(this).data('gtm-eec-promotion-position') // (String) Some way to distinguish the position of the promotion in the creative (e.g. second slide of a carousel). Example: 'slot_2'
+        };
+        GAEE.promotionClick(promotion);
     });
 
 });
