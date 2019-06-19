@@ -14,10 +14,15 @@ var Alaasearch = function () {
         var price = data.price;
         var discount = Math.round((1 - (price.final / price.base)) * 100);
         var discountRibbon = '';
-        var priceHtml = '<span class = "m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">';
+        var countOfExistingProductInCarousel = $('#product-carousel.owl-carousel').find('.item').length;
+        var gtmEecProductId = data.id;
+        var gtmEecProductName = data.name;
+        var gtmEecProductCategory = data.type['hint'];
+        var gtmEecProductPosition = countOfExistingProductInCarousel;
+        var priceHtml = '<span class="m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">';
         if (price.base !== price.final) {
-            priceHtml += '    <span class = "m-badge m-badge--warning a--productRealPrice">' + price.base.toLocaleString('fa') + '</span>\n';
-            priceHtml += '    <span class = "m-badge m-badge--info a--productDiscount">' + discount + '%</span>\n';
+            priceHtml += '    <span class="m-badge m-badge--warning a--productRealPrice">' + price.base.toLocaleString('fa') + '</span>\n';
+            priceHtml += '    <span class="m-badge m-badge--info a--productDiscount">' + discount + '%</span>\n';
             discountRibbon = '\n' +
                 '        <div class="ribbon">\n' +
                 '            <span>\n' +
@@ -30,33 +35,42 @@ var Alaasearch = function () {
         priceHtml += '    ' + price.final.toLocaleString('fa') + ' تومان \n';
         priceHtml += '</span>';
 
-        return '<div class = "item">\n' +
+        return '<div class="item">\n' +
             discountRibbon +
             '    <!--begin:: Widgets/Blog-->\n' +
-            '    <div class = "m-portlet m-portlet--bordered-semi m-portlet--rounded-force">\n' +
+            '    <div class="m-portlet m-portlet--bordered-semi m-portlet--rounded-force">\n' +
             '   <div class="m-portlet__head m-portlet__head--fit"> \
                     <div class="m-portlet__head-caption"> \
                         <div class="m-portlet__head-action"> \
                         </div> \
                     </div> \
                 </div> ' +
-            '        <div class = "m-portlet__body">\n' +
-            '            <div class = "a-widget19 m-widget19">\n' +
-            '                <div class = "m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" >\n' +
-            '                    <a href="' + widgetActionLink + '" class = "btn btn-sm m-btn--pill btn-brand btnViewMore">' + widgetActionName + '</a>\n' +
-            '                    <img src = "' + widgetPic + '" alt = "' + widgetTitle + '"/>\n' +
-            '                    <div class = "m-widget19__shadow"></div>\n' +
+            '        <div class="m-portlet__body">\n' +
+            '            <div class="a-widget19 m-widget19">\n' +
+            '                <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" >\n' +
+            '                    <a href="' + widgetActionLink + '"' +
+            '                       class="btn btn-sm m-btn--pill btn-brand btnViewMore gtm-eec-product-impression-click"' +
+            '                       data-gtm-eec-product-id="'+gtmEecProductId+'"' +
+            '                       data-gtm-eec-product-name="'+gtmEecProductName+'"' +
+            '                       data-gtm-eec-product-category="'+gtmEecProductCategory+'"' +
+            '                       data-gtm-eec-product-position="'+gtmEecProductPosition+'">' + widgetActionName + '</a>\n' +
+            '                    <img src="' + widgetPic + '" alt="' + widgetTitle + '"/>\n' +
+            '                    <div class="m-widget19__shadow"></div>\n' +
             '                </div>\n' +
-            '                <div class = "m-widget19__content">\n' +
+            '                <div class="m-widget19__content">\n' +
             '                    <div class="owl-carousel-fileTitle">\n' +
-            '                        <a href = "' + widgetActionLink + '" class = "m-link">\n' +
+            '                        <a href="' + widgetActionLink + '" class="m-link gtm-eec-product-impression-click"' +
+            '                           data-gtm-eec-product-id="'+gtmEecProductId+'"\n' +
+            '                           data-gtm-eec-product-name="'+gtmEecProductName+'"\n' +
+            '                           data-gtm-eec-product-category="'+gtmEecProductCategory+'"\n' +
+            '                           data-gtm-eec-product-position="'+gtmEecProductPosition+'">\n' +
             '                            <h6>\n' +
             '                                <span class="m-badge m-badge--info m-badge--dot"></span> ' + widgetTitle + '\n' +
             '                            </h6>\n' +
             '                        </a>\n' +
             '                    </div>\n' +
-            '                    <div class = "m-widget19__header">\n' +
-            '                        <div class = "m-widget19__info">\n' +
+            '                    <div class="m-widget19__header">\n' +
+            '                        <div class="m-widget19__info">\n' +
             priceHtml +
             '                        </div>\n' +
             '                    </div>\n' +
@@ -99,7 +113,7 @@ var Alaasearch = function () {
                 </div> \
                 <div class = \"m-widget19__content\"> \n' +
             '                    <div class="owl-carousel-fileTitle">\n' +
-            '                        <a href = "' + widgetActionLink + '" class = "m-link">\n' +
+            '                        <a href="' + widgetActionLink + '" class="m-link">\n' +
             '                            <h6>\n' +
             '                                <span class="m-badge m-badge--info m-badge--dot"></span> ' + widgetTitle + '\n' +
             '                            </h6>\n' +
@@ -162,7 +176,7 @@ var Alaasearch = function () {
                 </div> \
                 <div class = \"m-widget19__content\"> \n' +
             '                    <div class="owl-carousel-fileTitle">\n' +
-            '                        <a href = "' + widgetActionLink + '" class = "m-link">\n' +
+            '                        <a href="' + widgetActionLink + '" class="m-link">\n' +
             '                            <h6>\n' +
             '                                <span class="m-badge m-badge--info m-badge--dot"></span> ' + widgetTitle + '\n' +
             '                            </h6>\n' +
@@ -378,14 +392,20 @@ var Alaasearch = function () {
 
     function load(event, nextPageUrl, owl, owlType, callback) {
 
-
         if (owlType === 'product' || owlType === 'video' || owlType === 'set') {
             var perPage = typeof (owl.data("per-page")) === "number" ? owl.data("per-page") : 6;
 
             if (
-                nextPageUrl !== null && nextPageUrl.length !== 0
-                && event.namespace && event.property.name === 'position'
-                && event.property.value >= event.relatedTarget.items().length - perPage
+                nextPageUrl !== null && nextPageUrl.length !== 0 &&
+                (
+                    (
+                        event.namespace && event.property.name === 'position' &&
+                        event.property.value >= event.relatedTarget.items().length - perPage
+                    ) ||
+                    (
+                        event === '5moreProduct'
+                    )
+                )
             ) {
                 lockAjax(owlType);
                 addLoadingItem(owl, owlType);
@@ -410,8 +430,12 @@ var Alaasearch = function () {
         $('#owl--js-var-next-page-product-carousel-url').val(decodeURI(data.next_page_url));
     }
 
-    function initProduct(data) {
+    function initProduct(data, isInit) {
         loadProductFromJson(data);
+        if (isInit) {
+            load5moreProductInInit();
+        }
+
         $('#product-carousel.owl-carousel').on('change.owl.carousel', function (event) {
             var owlType = 'product';
             var nextPageUrl = $('#owl--js-var-next-page-product-carousel-url');
@@ -428,6 +452,22 @@ var Alaasearch = function () {
         });
     }
 
+    function load5moreProductInInit() {
+        var owlType = 'product';
+        var nextPageUrl = $('#owl--js-var-next-page-product-carousel-url');
+        var owl = $('#product-carousel.owl-carousel');
+        if (!productAjaxLock && nextPageUrl.val() !== "null") {
+            load('5moreProduct', nextPageUrl.val(), owl, owlType, function (newPageUrl) {
+                if (newPageUrl === null) {
+                    newPageUrl = '';
+                }
+                $('#owl--js-var-next-page-product-carousel-url').val(decodeURI(newPageUrl));
+                unLockAjax(owlType);
+                GtmEecImpression.view();
+            });
+        }
+    }
+
     function loadVideoFromJson(data) {
         if (data === null) {
             return false;
@@ -439,7 +479,7 @@ var Alaasearch = function () {
     function initVideo(data) {
         loadVideoFromJson(data);
         $('#video-carousel.owl-carousel').on('change.owl.carousel', function(event) {
-            var owlType = "video";
+            var owlType="video";
             var nextPageUrl = $('#owl--js-var-next-page-video-url');
             var owl = $(this);
 
@@ -461,7 +501,7 @@ var Alaasearch = function () {
     function initSet(data) {
         loadSetFromJson(data);
         $('#set-carousel.owl-carousel').on('change.owl.carousel', function(event) {
-            var owlType = "set";
+            var owlType="set";
             var nextPageUrl = $('#owl--js-var-next-page-set-url');
             var owl = $(this);
             if( !setAjaxLock && nextPageUrl.val() !== "null") {
@@ -578,12 +618,12 @@ var Alaasearch = function () {
         // });
     }
 
-    function loadAjaxContent(contentData) {
+    function loadAjaxContent(contentData, isInit) {
         var hasPamphletOrArticle = false;
         var hasItem = false;
         var hasPamphlet = false;
         if (typeof contentData.product !== 'undefined' && contentData.product !== null && contentData.product.total>0) {
-            initProduct(contentData.product);
+            initProduct(contentData.product, isInit);
             $('#product-carousel-warper').fadeIn();
             hasItem = true;
         } else {
@@ -698,7 +738,10 @@ var Alaasearch = function () {
 
     return {
         init: function (contentData) {
-            loadAjaxContent(contentData);
+            loadAjaxContent(contentData, true);
+        },
+        loadData: function (contentData) {
+            loadAjaxContent(contentData, false);
         },
         clearFields: function () {
             clearOwlcarousel($('#product-carousel-warper .a--owl-carousel-type-1'));
@@ -844,8 +887,6 @@ var CustomInitMultiLevelSearch = function () {
         for (var tagsIndex in tags) {
             for (var majorIndex in filterData.major) {
                 var value = filterData.major[majorIndex].value;
-                console.log('setSelectedMajorFromTags->value: ', value);
-                console.log('setSelectedMajorFromTags->tags[tagsIndex]: ', decodeURI(tags[tagsIndex]));
                 if (value === decodeURI(tags[tagsIndex])) {
                     selectedVal = filterData.major[majorIndex];
                     activeFilter('lessonSelector');
@@ -939,8 +980,6 @@ var CustomInitMultiLevelSearch = function () {
         var selectedValue = setSelectedMaghtaFromTags();
         var maghta = selectedVlues.nezam.maghtaKey;
         var filterDataArray = filterData[maghta];
-        console.log('filterDataArray: ', filterDataArray);
-        console.log('maghta: ', maghta);
         initSelectorItem(selectorClass, selectedValue, filterDataArray);
         setSelectedMaghtaFromTags();
     }
@@ -1077,7 +1116,6 @@ var GetAjaxData = function () {
         $(pageTagsListBadge).find('.m-list-badge__item').remove();
 
         var searchFilterData = MultiLevelSearch.getSelectedData();
-        console.log('searchFilterData: ', searchFilterData);
         var url = document.location.href.split('?')[0];
         var tagsValue = '';
         for (var index in searchFilterData) {
@@ -1094,11 +1132,7 @@ var GetAjaxData = function () {
         if (tagsValue !== '') {
             tagsValue = tagsValue.substr(1);
         }
-        console.log('tagsValue: ', tagsValue);
         url += '?' + tagsValue;
-        window.addEventListener('popstate', function(event) {
-            console.log('popstate fired!');
-        });
 
         // window.history.pushState('data to be passed', 'Title of the page', url);
         // The above will add a new entry to the history so you can press Back button to go to the previous state.
@@ -1163,7 +1197,7 @@ var GetAjaxData = function () {
 
 
                 } else {
-                    Alaasearch.init(data.result);
+                    Alaasearch.loadData(data.result);
                 }
                 stopWaiting();
             },
@@ -1190,6 +1224,37 @@ var GetAjaxData = function () {
         },
         getNewDataBaseOnTags: function (contentSearchFilterData) {
             getNewDataBaseOnTags(contentSearchFilterData);
+        }
+    };
+}();
+
+var GtmEecImpression = function () {
+
+    function view() {
+        var countOfExistingProductInCarousel = $('#product-carousel.owl-carousel').find('.owl-item').length;
+        if (countOfExistingProductInCarousel <= 5) {
+            return;
+        }
+        var gtmEecImpressions = [];
+        $('#product-carousel.owl-carousel').find('.owl-item.active .m-widget19__content .gtm-eec-product-impression-click').each(function (index, value) {
+            var id = $(this).data('gtm-eec-product-id');
+            var name = $(this).data('gtm-eec-product-name');
+            var category = $(this).data('gtm-eec-product-category');
+            var position = $(this).data('gtm-eec-product-position');
+            gtmEecImpressions.push({
+                id: id,
+                name: name,
+                category: category,
+                list: 'لیست محصولات در صفحه سرچ کانتنت',
+                position: position
+            });
+        });
+        GAEE.impressionView(gtmEecImpressions);
+    }
+
+    return {
+        view: function () {
+            view();
         }
     };
 }();
@@ -1223,7 +1288,23 @@ jQuery(document).ready(function () {
                 items:5
             }
         };
+        var config = {
+            stagePadding: 0,
+            loop: false,
+            rtl:true,
+            nav: true,
+            dots: false,
+            margin:10,
+            mouseDrag: true,
+            touchDrag: true,
+            pullDrag: true,
+            responsiveClass:true,
+            responsive: responsive
+        };
         if (itemId === 'product-carousel') {
+            function slideChanged(event) {
+                GtmEecImpression.view();
+            }
             responsive = {
                 0:{
                     items:1,
@@ -1244,21 +1325,11 @@ jQuery(document).ready(function () {
                     items:8
                 }
             };
+            config.onTranslated = slideChanged;
         }
-        $(this).owlCarousel({
-            stagePadding: 0,
-            loop: false,
-            rtl:true,
-            nav: true,
-            dots: false,
-            margin:10,
-            mouseDrag: true,
-            touchDrag: true,
-            pullDrag: true,
-            responsiveClass:true,
-            responsive: responsive
-        });
+        $(this).owlCarousel(config);
     });
+
 
     Alaasearch.init(contentData);
 
@@ -1267,12 +1338,10 @@ jQuery(document).ready(function () {
     MultiLevelSearch.init({
         selectorId: 'contentSearchFilter'
     }, function () {
-        console.log('after callback');
         GetAjaxData.refreshTags(contentSearchFilterData);
         CustomInitMultiLevelSearch.initFilters(contentSearchFilterData);
         GetAjaxData.getNewDataBaseOnTags(contentSearchFilterData);
     },  function () {
-        console.log('before callback');
         GetAjaxData.refreshTags(contentSearchFilterData);
         CustomInitMultiLevelSearch.initFilters(contentSearchFilterData);
     });

@@ -39,6 +39,7 @@
 @endsection
 
 @section('page-js')
+    c
     @if(!empty($errors->getBags()))
         <script>
             jQuery(document).ready(function () {

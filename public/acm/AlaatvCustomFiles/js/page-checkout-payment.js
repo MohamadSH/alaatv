@@ -29,6 +29,8 @@ var CheckoutPaymentUi = function () {
         $('.PaymentType').slideUp();
         $('#PaymentType-' + radioPaymentType).slideDown();
 
+        GAEE.checkoutOption(4, 'checkout-payment-PaymentType-'+radioPaymentType);
+
         // if (radioPaymentType==1) {
         //     $('#PaymentType-online').slideDown();
         //     $('#PaymentType-hozoori').slideUp();
@@ -130,6 +132,7 @@ var CheckoutPaymentUi = function () {
                     }
                     mApp.unblock('.addDonateWarper');
                     lockDonateAjax = false;
+                    GAEE.checkoutOption(4, 'checkout-payment-HasDonate');
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     lockDonateAjax = true;
@@ -167,6 +170,7 @@ var CheckoutPaymentUi = function () {
                     }
                     mApp.unblock('.addDonateWarper');
                     lockDonateAjax = false;
+                    GAEE.checkoutOption(4, "checkout-payment-Hasn'tDonate");
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     lockDonateAjax = true;
@@ -188,6 +192,7 @@ var CheckoutPaymentUi = function () {
         btnSaveDiscountCodeValue.prop('disabled', false);
         discountCodeValue.prop('readonly', false);
         btnSaveDiscountCodeValue.prop('readonly', false);
+        GAEE.checkoutOption(4, 'checkout-payment-HasDiscountCode-'+$('#discountCodeValue').val());
     }
     function setUiHasntDiscountCode() {
         $("#hasntDiscountCode").bootstrapSwitch('state', true);
@@ -200,6 +205,7 @@ var CheckoutPaymentUi = function () {
         discountCodeValue.prop('readonly', true);
         btnSaveDiscountCodeValue.prop('readonly', true);
         discountCodeValue.val('');
+        GAEE.checkoutOption(4, 'checkout-payment-HasntDiscountCode');
     }
     function refreshUiBasedOnHasntDiscountCodeStatus() {
         $('#discountCodeValue').val((getCouponCode()));
@@ -267,6 +273,7 @@ var CheckoutPaymentUi = function () {
                     PrintnotIncludedProductsInCoupon(data.notIncludedProductsInCoupon);
 
                     toastr.success('کد تخفیف شما ثبت شد.');
+                    GAEE.checkoutOption(4, 'checkout-payment-SaveDiscountCode-'+discountCodeValue);
                 }
                 mApp.unblock('.discountCodeValueWarper, .hasntDiscountCodeWraper');
             },
@@ -279,7 +286,7 @@ var CheckoutPaymentUi = function () {
 
                 let message = '';
 
-                if (statusCode == 500) {
+                if (statusCode === 500) {
                     message = 'خطایی رخ داده است.';
                 } else {
                     message = 'کد وارد شده معتبر نیست';
@@ -402,11 +409,16 @@ var CheckoutPaymentUi = function () {
 
 var lockDonateAjaxForSliderInit = true;
 
-jQuery(document).ready(function () {
+$(document).ready(function () {
+
+    CheckoutPaymentUi.PrintnotIncludedProductsInCoupon(notIncludedProductsInCoupon);
+
     let n = document.getElementById('m_nouislider_1_input');
     let e = document.getElementById('m_nouislider_1');
 
     let action = $('input[type="radio"][name="radioBankType"]:checked').val();
+
+    GAEE.checkout(4, 'payment', []);
     $('#frmGotoGateway').attr('action', action);
 
     CheckoutPaymentUi.initUi();
@@ -417,6 +429,7 @@ jQuery(document).ready(function () {
 
     $(document).on('click', '#btnRemoveDiscountCodeValue', function() {
         CheckoutPaymentUi.detachCoupon(true);
+        GAEE.checkoutOption(4, 'checkout-payment-RemoveDiscountCode');
     });
 
     $(document).on('change', 'input[type="radio"][name="radioPaymentType"]', function () {
@@ -433,7 +446,9 @@ jQuery(document).ready(function () {
 
     $(document).on('change', 'input[type="radio"][name="radioBankType"]', function (e) {
         let action = $('input[type="radio"][name="radioBankType"]:checked').val();
+        let bankType = $('input[type="radio"][name="radioBankType"]:checked').data('bank-type');
         $('#frmGotoGateway').attr('action', action);
+        GAEE.checkoutOption(4, "checkout-payment-BankType-"+bankType);
     });
 
     noUiSlider.create(e, {
