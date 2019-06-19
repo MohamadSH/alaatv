@@ -1,8 +1,4 @@
 $(document).ready(function () {
-
-    GAEE.impressionView(gtmEecImpressions);
-    GAEE.promotionView(gtmEecPromotions);
-
     $('.dasboardLessons').OwlCarouselType2({
         OwlCarousel: {
             center: false,
