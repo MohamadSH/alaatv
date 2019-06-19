@@ -1003,7 +1003,7 @@ class UserController extends Controller
         $orders = Cache::tags('user')->remember($key, config("constants.CACHE_60"), function () use ($user) {
             return $user->closedOrders()
                 ->get()
-                ->append('created_at')
+//                ->append('created_at')
                 ->sortByDesc("completed_at");
         });
         
