@@ -11,7 +11,15 @@
         )
     )
 )
-    <div class="row @if(isset($blockCustomClass)) {{ $blockCustomClass }} @endif blockId-{{ $block->id }} {{ $block->class }}"
+    <div class="row blockWraper
+                @if(isset($blockCustomClass))
+                    {{ $blockCustomClass }}
+                @endif
+                blockId-{{ $block->id }}
+                {{ $block->class }}
+                @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
+                blockWraper-hasProduct
+                @endif"
          @if(isset($blockCustomId))
             id="{{ $blockCustomId }}"
          @else

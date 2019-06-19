@@ -638,9 +638,9 @@
             id : '{{ $product->id }}',
             name : '{{ $product->name }}',
             quantity: 1,
-            category : '{{ implode(',',$product->tags->tags) }}',
+            category : '{{ implode(',',optional($product->tags)->tags) }}',
             variant : '{{ $product->type['hint'] }}'
         };
-        var parentProductTags = '{{ implode(',',$product->tags->tags) }}';
+        var parentProductTags = '{{ implode(',',optional($product->tags)->tags) }}';
     </script>
 @endsection

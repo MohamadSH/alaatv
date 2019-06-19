@@ -127,6 +127,7 @@
             });
         </script>
         @yield('page-js')
+        <script src="{{ mix('/js/loadGtmEecForPages.js') }}" type="text/javascript"></script>
     </body>
     <!-- end::Body -->
 </html>
