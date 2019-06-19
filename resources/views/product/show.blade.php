@@ -399,7 +399,7 @@
                                                 مشاهده در صفحه فیلم ها و جزوه های من
                                             </a>
                                         @else
-                                            <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart">
+                                            <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart gta-track-add-to-card">
                                             <span>
                                                 <i class="fa fa-cart-arrow-down"></i>
                                                 <i class="fas fa-sync-alt fa-spin m--hide"></i>
@@ -588,7 +588,7 @@
                                                 </span>
                                             </a>
                                         @else
-                                            <button class="btn m-btn--air btn-success m-btn--icon btnAddToCart">
+                                            <button class="btn m-btn--air btn-success m-btn--icon btnAddToCart gta-track-add-to-card">
                                                 <span>
                                                     <i class="fa fa-cart-arrow-down"></i>
                                                     <i class="fas fa-sync-alt fa-spin m--hide"></i>
@@ -632,4 +632,15 @@
 
 @section('page-js')
     <script src="{{ mix('/js/product-show.js') }}"></script>
+    <script>
+        var TotalQuantityAddedToCart = 0;
+        var parentProduct = {
+            id : '{{ $product->id }}',
+            name : '{{ $product->name }}',
+            quantity: 1,
+            category : '{{ implode(',',$product->tags->tags) }}',
+            variant : '{{ $product->type['hint'] }}'
+        };
+        var parentProductTags = '{{ implode(',',$product->tags->tags) }}';
+    </script>
 @endsection

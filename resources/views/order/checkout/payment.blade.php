@@ -78,13 +78,13 @@
                                                         <div class="m-form__group form-group text-center m--margin-top-10">
                                                             <div class="m-radio-inline">
                                                                 <label class="m-radio m-radio--solid m-radio--state-info">
-                                                                    <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}" >
+                                                                    <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}" data-bank-type="zarinpal" >
                                                                     <img src="/acm/extra/payment/gateway/zarinpal-logo.png"
                                                                          class="img-thumbnail bankLogo" alt="bank-logo">
                                                                     <span></span>
                                                                 </label>
                                                                 <label class = "m-radio m-radio--solid m-radio--state-info">
-                                                                    <input type = "radio" name = "radioBankType" value = "{{route('redirectToBank', ['paymentMethod'=>'mellat', 'device'=>'web'])}}" checked>
+                                                                    <input type = "radio" name = "radioBankType" value = "{{route('redirectToBank', ['paymentMethod'=>'mellat', 'device'=>'web'])}}" data-bank-type="mellat" checked>
                                                                     <img src = "/acm/extra/payment/gateway/mellat-logo.png" class = "img-thumbnail bankLogo" alt = "bank-logo">
                                                                     <span></span>
                                                                 </label>
@@ -369,12 +369,8 @@
 @endsection
 
 @section('page-js')
-    <script src="{{ mix('/js/checkout-payment.js') }}"></script>
-    
     <script>
-        $(document).ready(function () {
-            let notIncludedProductsInCoupon = {!! json_encode($notIncludedProductsInCoupon) !!};
-            CheckoutPaymentUi.PrintnotIncludedProductsInCoupon(notIncludedProductsInCoupon);
-        });
+        var notIncludedProductsInCoupon = {!! json_encode($notIncludedProductsInCoupon) !!};
     </script>
+    <script src="{{ mix('/js/checkout-payment.js') }}"></script>
 @endsection

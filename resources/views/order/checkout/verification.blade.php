@@ -122,6 +122,11 @@
 @endsection
 
 @section('page-js')
+    <script>
+        var gtmEec = {!! json_encode($gtmEec) !!};
+    </script>
+    <script src="{{ mix('/js/checkout-verification.js') }}"></script>
+    
     <input id="js-var-order-id" class="m--hide" type="hidden" value='{{ $result['orderId'] ?? -1 }}'>
     <input id="js-var-paid-price" class="m--hide" type="hidden" value='{{ $result['paidPrice'] ?? 1 }}'>
     <script>

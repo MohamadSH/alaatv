@@ -10,7 +10,6 @@
 
 @section("content")
     
-    
     @include("partials.checkoutSteps" , ["step"=>1])
     
     @include('systemMessage.flash')
@@ -51,15 +50,8 @@
     </div>
 @endsection
 
-@section("footerPageLevelPlugin")
-    {{--    <script src="{{ mix('/js/footer_Page_Level_Plugin.js') }}" type="text/javascript"></script>--}}
-@endsection
-
-@section("footerPageLevelScript")
-    {{--    <script src="{{ mix('/js/Page_Level_Script_all.js') }}" type="text/javascript"></script>--}}
-@endsection
-
-@section("extraJS")
+@section('page-js')
+    <script src="{{ mix('/js/checkout-completeInfo.js') }}"></script>
     @if(!empty($errors->getBags()))
         <script>
             jQuery(document).ready(function () {

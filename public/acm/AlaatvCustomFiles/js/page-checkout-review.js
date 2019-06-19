@@ -1,5 +1,7 @@
 $(document).ready(function () {
 
+    GAEE.checkout(3, 'review', checkoutReviewProducts);
+
     if ($('#js-var-userId').val()) {
         $('.Step-warper').fadeIn();
     }
@@ -22,6 +24,16 @@ $(document).ready(function () {
             type: "loader",
             state: "success",
         });
+
+        var products = [{
+            id : $(this).data('productid'),
+            name : $(this).data('name'),
+            quantity: 1,
+            category : $(this).data('category'),
+            variant : $(this).data('variant')
+        }];
+
+        GAEE.productRemoveFromCart('order.checkoutReview', products);
 
         if ($('#js-var-userId').val()) {
             $.ajax({
