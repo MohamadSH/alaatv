@@ -638,9 +638,21 @@
             id : '{{ $product->id }}',
             name : '{{ $product->name }}',
             quantity: 1,
-            category : '{{ implode(',',optional($product->tags)->tags) }}',
+            category :
+            @if($product->tags !== null)
+            '{{ implode(',',$product->tags->tags) }}'
+            @else
+            '-'
+            @endif
+            ,
             variant : '{{ $product->type['hint'] }}'
         };
-        var parentProductTags = '{{ implode(',',optional($product->tags)->tags) }}';
+        var parentProductTags =
+        @if($product->tags !== null)
+        '{{ implode(',',optional($product->tags)->tags) }}';
+        @else
+        '-';
+        @endif
+        
     </script>
 @endsection
