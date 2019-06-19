@@ -149,7 +149,12 @@
     
                     <div class="row">
                         <div class="col text-center m--margin-bottom-5">
-                            <a href="{{ route('landing.5') }}" >
+                            <a href="{{ route('landing.5') }}"
+                               class="gtm-eec-promotion-click"
+                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"
+                               data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
+                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"
+                               data-gtm-eec-promotion-position="0">
                                 <img src="{{ asset('/acm/extra/ads/gif/970-90.gif') }}" class="a--full-width">
                                 {{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
                             </a>
@@ -213,38 +218,68 @@
                                 <h3 class="m--regular-font-size-lg4 m--font-boldest2 m--font-focus">
                                     لینک های مستقیم دانلود این فیلم
                                 </h3>
-                                @if(isset($content->file) and $content->file->isNotEmpty())
-                                    <div class="col-xl-4 text-justify">
-                                
-                                        <p>
-                                            با IDM یا ADM و یا wget دانلود کنید.
-                                        </p>
-                                    @foreach($content->file->get('video') as $file)
-                                        <!--begin::m-widget4-->
-                                            <div class="m-widget4">
-                                                <div class="m-widget4__item">
-                                                    <div class="m-widget4__img m-widget4__img--icon">
-                                                        <img src="/assets/app/media/img/files/mp4.svg" alt="mp4">
-                                                    </div>
-                                                    <div class="m-widget4__info">
-                                                        <a href="{{ $file->link }}?download=1" class="m-link">
-                                                <span class="m-widget4__text">
-                                                دانلود فایل {{$file->caption}}{{ isset($file->size[0]) ? "(".$file->size. ")":""  }}
-                                                </span>
-                                                        </a>
-                                                    </div>
-                                                    <div class="m-widget4__ext">
-                                                        <a href="{{ $file->link }}?download=1" class="m-widget4__icon">
-                                                            <i class="la la-download"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
+                                <div class="row">
+                                    @if(isset($content->file) and $content->file->isNotEmpty())
+                                        <div class="col-md-4 text-justify">
                                     
+                                            <p>
+                                                با IDM یا ADM و یا wget دانلود کنید.
+                                            </p>
+                                        @foreach($content->file->get('video') as $file)
+                                            <!--begin::m-widget4-->
+                                                <div class="m-widget4">
+                                                    <div class="m-widget4__item">
+                                                        <div class="m-widget4__img m-widget4__img--icon">
+                                                            <img src="/assets/app/media/img/files/mp4.svg" alt="mp4">
+                                                        </div>
+                                                        <div class="m-widget4__info">
+                                                            <a href="{{ $file->link }}?download=1" class="m-link">
+                                                    <span class="m-widget4__text">
+                                                    دانلود فایل {{$file->caption}}{{ isset($file->size[0]) ? "(".$file->size. ")":""  }}
+                                                    </span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="m-widget4__ext">
+                                                            <a href="{{ $file->link }}?download=1" class="m-widget4__icon">
+                                                                <i class="la la-download"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                        
+                                                </div>
+                                                <!--end::Widget 4-->
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                    <div class="col-md-8">
+                                        
+                                        <div class="row">
+                                            <div class="col-md-6 text-center m--margin-bottom-5">
+                                                <a href="{{ route('landing.8') }}"
+                                                   class="gtm-eec-promotion-click"
+                                                   data-gtm-eec-promotion-id="contentShowPage-rightSide-1"
+                                                   data-gtm-eec-promotion-name="قرعه کشی گوشی"
+                                                   data-gtm-eec-promotion-creative="جلوی لینک های مستقیم دانلود این فیلم"
+                                                   data-gtm-eec-promotion-position="0">
+                                                    <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">
+                                                    {{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
+                                                </a>
                                             </div>
-                                            <!--end::Widget 4-->
-                                        @endforeach
+                                            <div class="col-md-6 text-center m--margin-bottom-5">
+                                                <a href="{{ route('landing.5') }}"
+                                                   class="gtm-eec-promotion-click"
+                                                   data-gtm-eec-promotion-id="contentShowPage-rightSide-2"
+                                                   data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
+                                                   data-gtm-eec-promotion-creative="جلوی لینک های مستقیم دانلود این فیلم"
+                                                   data-gtm-eec-promotion-position="1">
+                                                    <img src="{{ asset('/acm/extra/ads/gif/300-251.gif') }}" class="a--full-width">
+                                                    {{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
+                                                </a>
+                                            </div>
+                                        </div>
+                                        
                                     </div>
-                                @endif
+                                </div>
                             @endif
                     
                             <div class="m-separator m-separator--space m-separator--dashed"></div>
@@ -301,9 +336,13 @@
     
                     <div class="row">
                         <div class="col text-center m--margin-bottom-5">
-                            <a href="{{ route('landing.5') }}" >
+                            <a href="{{ route('landing.5') }}"
+                               class="gtm-eec-promotion-click"
+                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"
+                               data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
+                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"
+                               data-gtm-eec-promotion-position="0">
                                 <img src="{{ asset('/acm/extra/ads/gif/970-90.gif') }}" class="a--full-width">
-                                {{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
                             </a>
                         </div>
                     </div>
@@ -376,9 +415,13 @@
     
                     <div class="row">
                         <div class="col text-center m--margin-bottom-5">
-                            <a href="{{ route('landing.5') }}" >
+                            <a href="{{ route('landing.5') }}"
+                               class="gtm-eec-promotion-click"
+                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"
+                               data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
+                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"
+                               data-gtm-eec-promotion-position="0">
                                 <img src="{{ asset('/acm/extra/ads/gif/970-90.gif') }}" class="a--full-width">
-                                {{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
                             </a>
                         </div>
                     </div>
@@ -456,9 +499,13 @@
     
                 <div class="row">
                     <div class="col text-center m--margin-bottom-5">
-                        <a href="{{ route('landing.8') }}" >
+                        <a href="{{ route('landing.8') }}"
+                           class="gtm-eec-promotion-click"
+                           data-gtm-eec-promotion-id="shop-ghorekeshi3"
+                           data-gtm-eec-promotion-name="قرعه کشی گوشی"
+                           data-gtm-eec-promotion-creative="سمت چپ صفحه بالای لیست کانتنت های مشابه"
+                           data-gtm-eec-promotion-position="0">
                             <img src="{{ asset('/acm/extra/ads/gif/970-90(1).gif') }}" class="a--full-width">
-                            {{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
                         </a>
                     </div>
                 </div>
@@ -527,9 +574,9 @@
                     <a href="https://alaatv.com/product/312"
                        data-tooltip-content="همایش طلایی شیمی کنکور"
                        class="gtm-eec-promotion-click"
-                       data-gtm-eec-promotion-id="contentShowPage-leftSide-0"
+                       data-gtm-eec-promotion-id="contentShowPage-leftSide-1"
                        data-gtm-eec-promotion-name="همایش طلایی شیمی کنکور"
-                       data-gtm-eec-promotion-creative="گیف صفحه کانتنت"
+                       data-gtm-eec-promotion-creative="سمت چپ صفحه پایین لیست کانتنت های مشابه"
                        data-gtm-eec-promotion-position="0">
                         <img src="http://uupload.ir/files/u8r8_banner-1.gif" alt="همایش طلایی شیمی کنکور"
                              class="m--img-centered a--full-width"/>
@@ -542,7 +589,7 @@
     @if($productsThatHaveThisContent->isNotEmpty())
         <div class="row">
             <div class="col">
-                <div class="m-portlet  m-portlet--bordered" id="owlCarouselParentProducts">
+                <div class="m-portlet  m-portlet--bordered blockWraper-hasProduct" id="owlCarouselParentProducts">
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">
                             <div class="m-portlet__head-title">
@@ -570,8 +617,13 @@
         
                                 <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 parentProducts">
                                     @foreach($productsThatHaveThisContent as $productKey=>$product)
-                                        <div class="m-widget_head-owlcarousel-item carousel background-gradient"
-                                             data-position="{{ $productKey }}">
+                                        <div class="m-widget_head-owlcarousel-item carousel block-product-item"
+                                             data-gtm-eec-product-id="{{ $product->id }}"
+                                             data-gtm-eec-product-name="{{ $product->name }}"
+                                             data-gtm-eec-product-category="{{ $product->type['hint'] }}"
+                                             data-gtm-eec-product-position="{{ $productKey }}"
+                                             data-position="{{ $productKey }}"
+                                             data-gtm-eec-list=" محصولاتی که شامل این محتوا هستند - {{ $content->displayName }} ">
                                             <a href="{{ $product->url }}">
                                                 <img class="a--owl-carousel-type-2-item-image"
                                                      src="{{ $product->photo }}" alt="{{ $product->name }}">

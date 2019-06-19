@@ -39,6 +39,13 @@ mix.babel(
     'public/js/all.js'
 ).version();
 
+mix.babel(
+    [
+        'public/acm/AlaatvCustomFiles/js/loadGtmEecForPages.js',
+    ],
+    'public/js/loadGtmEecForPages.js'
+).version();
+
 mix.scripts(
     ['public/acm/login.js'],
     'public/js/login.js'
@@ -358,7 +365,7 @@ mix.babel(
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
         'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
         'public/acm/AlaatvCustomFiles/js/certificates.js',
-        'public/acm/AlaatvCustomFiles/js/page-homePage.js',
+        // 'public/acm/AlaatvCustomFiles/js/page-homePage.js',
     ],
     'public/js/page-homePage.js'
 );

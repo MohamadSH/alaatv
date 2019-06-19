@@ -72,7 +72,7 @@
                             {{--@endif--}}
                         @endif
                         <div class="m--padding-5">
-                            <span class="childProductName">
+                            <span class="childProductName-{{ $product->id }}">
                                 {{$product->name}}
                             </span>
                             
