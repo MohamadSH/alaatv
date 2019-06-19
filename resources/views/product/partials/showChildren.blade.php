@@ -72,7 +72,9 @@
                             {{--@endif--}}
                         @endif
                         <div class="m--padding-5">
-                            {{$product->name}}
+                            <span class="childProductName">
+                                {{$product->name}}
+                            </span>
                             
                             {{--@if((int)$product->cost > 0)--}}
                             <span class="m-nav__link-badge float-right">

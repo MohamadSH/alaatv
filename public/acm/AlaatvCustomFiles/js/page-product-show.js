@@ -255,6 +255,21 @@ var ProductShowPage = function () {
         }).get();
     }
 
+    function getSelectedProductObject()
+    {
+        return $('input[type=checkbox][name="products[]"]:checked').map(function () {
+            if ($(this).val()) {
+                var name = $(this).parents('.m-nav__link-text').find('.childProductName').html();
+                name = name.replace('\n', '').trim();
+                return {
+                    id: $(this).val(),
+                    name: name,
+                    quantity: 1
+                };
+            }
+        }).get();
+    }
+
     return {
         disableBtnAddToCart: function () {
             disableBtnAddToCart();
@@ -279,10 +294,16 @@ var ProductShowPage = function () {
         getProductSelectValues: function () {
             return getProductSelectValues();
         },
+
+        getSelectedProductObject: function () {
+            return getSelectedProductObject();
+        },
     };
 }();
 
 jQuery(document).ready(function() {
+
+    GAEE.productDetailViews('product.show', parentProduct);
 
     let childLevel = ProductSwitch.init();
 
@@ -367,15 +388,6 @@ jQuery(document).ready(function() {
         // $("html, body").animate({ scrollTop: 0 }, "slow");
     });
 
-    $(document).on('change', "input[name='products[]'].product", function() {
-        let thisValue = this.defaultValue;
-        let hasChildren = $(this).hasClass('hasChildren');
-        if(hasChildren) {
-            ProductSwitch.changeChildCheckStatus(thisValue, $(this).prop('checked'));
-        }
-        ProductSwitch.updateSelectedProductsStatus(childLevel,callBack );
-    });
-
     $(document).on('click', '.btnAddToCart', function () {
 
         ProductShowPage.disableBtnAddToCart();
@@ -383,6 +395,17 @@ jQuery(document).ready(function() {
         let mainAttributeStates = ProductShowPage.getMainAttributeStates();
         let extraAttributeStates = ProductShowPage.getExtraAttributeStates();
         let productSelectValues = ProductShowPage.getProductSelectValues() ;
+        let selectedProductObject = ProductShowPage.getSelectedProductObject() ;
+
+
+        for (var index in selectedProductObject) {
+            selectedProductObject[index].category = parentProductTags;
+            selectedProductObject[index].variant = 'simple';
+        }
+        selectedProductObject.push(parentProduct);
+        TotalQuantityAddedToCart = selectedProductObject.length;
+        GAEE.productAddToCart('product.addToCart', selectedProductObject);
+
 
         if ($('#js-var-userId').val()) {
 
@@ -459,6 +482,15 @@ jQuery(document).ready(function() {
             }, 2000);
         }
 
+    });
+
+    $(document).on('change', "input[name='products[]'].product", function() {
+        let thisValue = this.defaultValue;
+        let hasChildren = $(this).hasClass('hasChildren');
+        if(hasChildren) {
+            ProductSwitch.changeChildCheckStatus(thisValue, $(this).prop('checked'));
+        }
+        ProductSwitch.updateSelectedProductsStatus(childLevel,callBack );
     });
 
     $(document).on("ifChanged change", ".attribute", function () {

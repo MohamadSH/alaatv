@@ -20,8 +20,6 @@
     window.Laravel = {!! json_encode([
         'csrfToken' => csrf_token(),
     ]) !!};
-
-    window.dataLayer = window.dataLayer || [];
 </script>
 
 <!--begin::Global Theme Styles -->

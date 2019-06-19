@@ -52,7 +52,10 @@
                                                     <div class="m-widget5__content">
                                                         <div class="m-widget5__pic btnRemoveOrderproduct-desktop-warper">
                                                             <button type="button"
-                                                                    data-action="{{action("Web\OrderproductController@destroy",$simpleOrderProductItem->id)}}"
+                                                                    data-action="{{ action("Web\OrderproductController@destroy",$simpleOrderProductItem->id) }}"
+                                                                    data-name="{{ $simpleOrderProductItem->product->name  }}"
+                                                                    data-category="-"
+                                                                    data-variant="-"
                                                                     data-productid="{{ $simpleOrderProductItem->product->id }}"
                                                                     class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 btnRemoveOrderproduct">
                                                                     <span>
@@ -145,6 +148,9 @@
                                                         <div class="m-widget5__stats2">
                                                             <a href="#"
                                                                data-action="{{action("Web\OrderproductController@destroy",$simpleOrderProductItem->id)}}"
+                                                               data-name="{{ $simpleOrderProductItem->product->name  }}"
+                                                               data-category="-"
+                                                               data-variant="-"
                                                                data-productid="{{ $simpleOrderProductItem->product->id }}"
                                                                class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill btnRemoveOrderproduct">
                                                                 <i class="la la-close"></i>
@@ -249,6 +255,9 @@
                                                             <div class="childRemoveBtnWarper">
                                                                 <button type="button"
                                                                         data-action="{{action("Web\OrderproductController@destroy", $orderProductItemChild->id)}}"
+                                                                        data-name="{{ $orderProductItemChild->product->name  }}"
+                                                                        data-category="-"
+                                                                        data-variant="-"
                                                                         data-productid="{{ $orderProductItemChild->product->id }}"
                                                                         class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 btnRemoveOrderproduct">
                                                                 <span>
@@ -260,6 +269,9 @@
                                                             
                                                             <button type="button"
                                                                     data-action="{{action("Web\OrderproductController@destroy", $orderProductItemChild->id)}}"
+                                                                    data-name="{{ $orderProductItemChild->product->name  }}"
+                                                                    data-category="-"
+                                                                    data-variant="-"
                                                                     data-productid="{{ $orderProductItemChild->product->id }}"
                                                                     class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill btnRemoveOrderproduct btnRemoveOrderproduct-child">
                                                                 <i class="la la-close"></i>
@@ -435,5 +447,29 @@
 @endsection
 
 @section('page-js')
+    <script>
+        var checkoutReviewProducts = [
+            @foreach($invoiceInfo['items'] as $key=>$orderProductItem)
+                @if($orderProductItem['grand']!==null)
+                    {
+                        id : '{{ $orderProductItem['grand']->id  }}',
+                        name : '{{ $orderProductItem['grand']->name  }}',
+                        quantity: 1,
+                        category : '-',
+                        variant : '-'
+                    },
+                @endIf
+                @foreach($orderProductItem['orderproducts'] as $key=>$simpleOrderProductItem)
+                    {
+                        id : '{{ $simpleOrderProductItem->product->id  }}',
+                        name : '{{ $simpleOrderProductItem->product->name  }}',
+                        quantity: 1,
+                        category : '-',
+                        variant : '-'
+                    },
+                @endforeach
+            @endforeach
+        ];
+    </script>
     <script src="{{ mix('/js/checkout-review.js') }}"></script>
 @endsection
