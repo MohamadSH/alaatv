@@ -199,6 +199,7 @@ class OfflinePaymentController extends Controller
                 $order = $order->fresh();
                 /** End */
 
+                $order->orderstatus_id= config('constants.ORDER_STATUS_CLOSED');
                 if ($order->hasCost()) {
                     $cost = $order->totalCost() - $order->totalPaidCost();
                     if ($cost == 0) {
@@ -220,13 +221,11 @@ class OfflinePaymentController extends Controller
                             $order->customerDescription = $customerDescription;
                         }
 
-                        if ($order->update())
-                        {
-                            $order->user->notify(new InvoicePaid($order));
-                        }
-
+                        $order->user->notify(new InvoicePaid($order));
                     }
                 }
+
+                $order->update();
                 break;
             default :
                 $done = false;

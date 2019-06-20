@@ -8,7 +8,7 @@
     
     @include('systemMessage.flash')
     
-    @include("partials.checkoutSteps" , ["step"=>2])
+{{--    @include("partials.checkoutSteps" , ["step"=>2])--}}
     
     @if(isset($invoiceInfo['orderproductCount']) && $invoiceInfo['orderproductCount']>0)
         <div class="row">
@@ -469,7 +469,7 @@
                                             </div>
                                             <div class="col m--align-right">
                                                 <span class="m-widget1__number m--font-danger" id="finalPriceValue">
-                                                     {{ number_format($invoiceInfo['price']['final']) }} تومان
+                                                     {{ number_format($invoiceInfo['price']['final'] - $fromWallet) }} تومان
                                                 </span>
                                             </div>
                                         </div>
@@ -676,26 +676,28 @@
         @endif
         ;
         var checkoutReviewProducts = [
-            @foreach($invoiceInfo['items'] as $key=>$orderProductItem)
-                @if($orderProductItem['grand']!==null)
-                    {
-                        id : '{{ $orderProductItem['grand']->id  }}',
-                        name : '{{ $orderProductItem['grand']->name  }}',
-                        quantity: 1,
-                        category : '-',
-                        variant : '-'
-                    },
-                @endIf
-                @foreach($orderProductItem['orderproducts'] as $key=>$simpleOrderProductItem)
-                    {
-                        id : '{{ $simpleOrderProductItem->product->id  }}',
-                        name : '{{ $simpleOrderProductItem->product->name  }}',
-                        quantity: 1,
-                        category : '-',
-                        variant : '-'
-                    },
+            @if(isset($invoiceInfo['items']))
+                @foreach($invoiceInfo['items'] as $key=>$orderProductItem)
+                    @if($orderProductItem['grand']!==null)
+                        {
+                            id : '{{ $orderProductItem['grand']->id  }}',
+                            name : '{{ $orderProductItem['grand']->name  }}',
+                            quantity: 1,
+                            category : '-',
+                            variant : '-'
+                        },
+                    @endIf
+                    @foreach($orderProductItem['orderproducts'] as $key=>$simpleOrderProductItem)
+                        {
+                            id : '{{ $simpleOrderProductItem->product->id  }}',
+                            name : '{{ $simpleOrderProductItem->product->name  }}',
+                            quantity: 1,
+                            category : '-',
+                            variant : '-'
+                        },
+                    @endforeach
                 @endforeach
-            @endforeach
+            @endif
         ];
     </script>
     <script src="{{ mix('/js/checkout-review.js') }}"></script>

@@ -33,22 +33,6 @@ trait RedirectTrait
             $redirectTo = $targetUrl;
         }
         
-        if (auth()
-                ->user()
-                ->completion("afterLoginForm") != 100) {
-            if (strcmp(URL::previous(), action("Web\OrderController@checkoutAuth")) == 0) {
-                $redirectTo = action("Web\OrderController@checkoutCompleteInfo");
-            }
-            else {
-                if ($request->expectsJson()) {
-                    $redirectTo = action("Web\IndexPageController");
-                }
-                else {
-                    $redirectTo = action("Web\UserController@completeRegister", ["redirect" => $redirectTo]);
-                }
-            }
-        }
-        
         return $redirectTo;
     }
 }

@@ -85,13 +85,13 @@
                                                              role="group" aria-label="Small button group">
                                                             <button type="button" class="btn btn-warning btnViewPamphlet"
                                                                     data-content-type="pamphlet"
-                                                                    data-content-url="{{ $product->sets->first()->contentUrl }}">
+                                                                    data-content-url="{{ $product->sets->first()->contentUrl.'&orderBy=order' }}">
                                                                 <i class="flaticon-edit-1"></i>
                                                                 جزوات
                                                             </button>
                                                             <button type="button" class="btn btn-success btnViewVideo"
                                                                     data-content-type="video"
-                                                                    data-content-url="{{ $product->sets->first()->contentUrl }}">
+                                                                    data-content-url="{{ $product->sets->first()->contentUrl.'&orderBy=order' }}">
                                                                 <i class="la la-film"></i>
                                                                 فیلم ها
                                                             </button>
@@ -158,14 +158,14 @@
                                                                         <button type="button"
                                                                                 class="btn btn-warning btnViewPamphlet"
                                                                                 data-content-type="pamphlet"
-                                                                                data-content-url="{{ $set->contentUrl }}">
+                                                                                data-content-url="{{ $set->contentUrl.'&orderBy=order' }}">
                                                                             <i class="flaticon-edit-1"></i>
                                                                             جزوات
                                                                         </button>
                                                                         <button type="button"
                                                                                 class="btn btn-success btnViewVideo"
                                                                                 data-content-type="video"
-                                                                                data-content-url="{{ $set->contentUrl }}">
+                                                                                data-content-url="{{ $set->contentUrl.'&orderBy=order' }}">
                                                                             <i class="la la-film"></i>
                                                                             فیلم ها
                                                                         </button>
