@@ -207,16 +207,14 @@ var CheckoutPaymentUi = function () {
         discountCodeValue.val('');
         GAEE.checkoutOption(4, 'checkout-payment-HasntDiscountCode');
     }
-    function refreshUiBasedOnHasntDiscountCodeStatus() {
-        $('#discountCodeValue').val((getCouponCode()));
-        if(!$('#hasntDiscountCode').prop('checked')) {
-            setUiHasDiscountCode();
+    function initUiBasedOnHasntDiscountCodeStatus(notIncludedProductsInCoupon) {
+        var strLen = $('#discountCodeValue').val().length;
+        if (strLen > 0) {
+            $('#btnSaveDiscountCodeValue').prop('disabled', false);
         } else {
-            if (getCouponCode().trim().length > 0) {
-                detachCoupon(false);
-            }
-            setUiHasntDiscountCode();
+            $('#btnSaveDiscountCodeValue').prop('disabled', true);
         }
+        PrintnotIncludedProductsInCoupon(notIncludedProductsInCoupon);
     }
 
     function attachCoupon() {
@@ -357,17 +355,14 @@ var CheckoutPaymentUi = function () {
     }
 
     return {
-        initUi: function () {
+        initUi: function (notIncludedProductsInCoupon) {
             lockDonateAjax = true;
             lockCouponAjax = true;
             // refreshUiBasedOnPaymentType();
             refreshUiBasedOnDonateStatus(true);
-            // refreshUiBasedOnHasntDiscountCodeStatus();
+            initUiBasedOnHasntDiscountCodeStatus(notIncludedProductsInCoupon);
             lockDonateAjax = false;
             lockCouponAjax = false;
-        },
-        refreshUiBasedOnHasntDiscountCodeStatus:function () {
-            refreshUiBasedOnHasntDiscountCodeStatus();
         },
         refreshUiBasedOnPaymentType:function () {
             refreshUiBasedOnPaymentType();
@@ -395,7 +390,7 @@ $(document).ready(function () {
         $('.Step-warper').fadeIn();
     }
 
-    CheckoutPaymentUi.initUi();
+    CheckoutPaymentUi.initUi(notIncludedProductsInCoupon);
 
     $('.a--userCartList .m-portlet__head').sticky({
         topSpacing: $('#m_header').height(),

@@ -370,10 +370,10 @@
                                     <div class="input-group">
                                         <input type="text" class="form-control" placeholder="مثال: codetakhfif" id="discountCodeValue">
                                         <div class="input-group-prepend">
-                                            <button class="btn btn-success" type="button" id="btnSaveDiscountCodeValue">
+                                            <button class="btn btn-success @if(isset($coupon)) a--d-none @endif" type="button" id="btnSaveDiscountCodeValue">
                                                 ثبت کد تخفیف
                                             </button>
-                                            <button class="btn btn-danger @if (!isset($coupon)) a--d-none @endif" type="button" id="btnRemoveDiscountCodeValue">
+                                            <button class="btn btn-danger @if(!isset($coupon)) a--d-none @endif" type="button" id="btnRemoveDiscountCodeValue">
                                                 حذف کد تخفیف
                                             </button>
                                         </div>
@@ -381,7 +381,7 @@
                                 </div>
     
     
-                                <div class="alert alert-success alert-dismissible fade show couponReportWarper @if (!isset($coupon)) a--d-none @endif"
+                                <div class="alert alert-success alert-dismissible fade show couponReportWarper @if(!isset($coupon)) a--d-none @endif"
                                      role="alert">
                                     {{--<button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>--}}
                                     <div class="couponReport">
@@ -625,6 +625,7 @@
 
 @section('page-js')
     <script>
+        var notIncludedProductsInCoupon = {!! json_encode($notIncludedProductsInCoupon) !!};
         var checkoutReviewProducts = [
             @foreach($invoiceInfo['items'] as $key=>$orderProductItem)
                 @if($orderProductItem['grand']!==null)
