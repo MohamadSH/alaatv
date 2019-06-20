@@ -281,6 +281,7 @@ mix.styles(
 
 mix.styles(
     [
+        'node_modules/animate.css/animate.css',
         'public/acm/AlaatvCustomFiles/components/step/step.css',
         'public/acm/AlaatvCustomFiles/css/page-checkout-review.css',
     ],

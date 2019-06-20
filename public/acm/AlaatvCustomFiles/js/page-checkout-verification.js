@@ -1,3 +1,5 @@
 $(document).ready(function () {
-    GAEE.purchase(gtmEec.actionField, gtmEec.products);
+    if (paymentStatus) {
+        GAEE.purchase(gtmEec.actionField, gtmEec.products);
+    }
 });

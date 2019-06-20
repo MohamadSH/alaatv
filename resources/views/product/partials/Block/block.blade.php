@@ -31,8 +31,15 @@
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
+    
+                                @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
+                                    <span class="redSquare"></span>
+                                @else
+                                    <span class="blueSquare"></span>
+                                @endif
+    
                                 @if(!isset($blockUrlDisable) || !$blockUrlDisable)
-                                    <a href="{{ $block->url }}" class="m-link">
+                                <a href="{{ $block->url }}" class="m-link">
                                 @endif
                                     @if(isset($blockTitle))
                                         {!! $blockTitle !!}
@@ -77,9 +84,6 @@
                                 @endif
                                 
                                 
-                                
-                                
-                                
 {{--                                 new content block loop --}}
                                 @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->sets) && $block->sets->count() > 0)
                                     @foreach($block->sets->first()->contents as $contentKey=>$content)
@@ -92,8 +96,6 @@
                                         @include('product.partials.Block.set')
                                     @endforeach
                                 @endif
-                            
-                                
                             
                             
                             </div>
