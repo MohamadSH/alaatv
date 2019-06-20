@@ -296,6 +296,10 @@ class Coupon extends BaseModel
      */
     public function hasProduct(Product $product): bool
     {
+
+        if(in_array($product->id, [Product::CUSTOM_DONATE_PRODUCT , Product::DONATE_PRODUCT_5_HEZAR]))
+            return false;
+
         $flag = true;
         if ($this->coupontype->id == config('constants.COUPON_TYPE_PARTIAL')) {
             $couponProducts = $this->products;
