@@ -1,8 +1,8 @@
 @extends('app')
 
 @section('page-css')
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/imageWithCaption/style.css') }}?v=2" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/ribbon/style.css') }}?v=2" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/acm/AlaatvCustomFiles/components/imageWithCaption/style.css') }}?v=3" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/acm/AlaatvCustomFiles/components/ribbon/style.css') }}?v=3" rel="stylesheet" type="text/css"/>
     <style>
         .sideItems .m-widget24__title {
             font-size: 30px !important;

@@ -1,8 +1,5 @@
 $(document).ready(function () {
 
-    GAEE.impressionView(gtmEecImpressions);
-    GAEE.promotionView(gtmEecPromotions);
-
     $('.OwlCarouselType2-shopPage').each(function(){
         let id = $(this).attr('id');
         $('#'+id).OwlCarouselType2({

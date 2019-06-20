@@ -2,6 +2,11 @@
 
 @section('page-css')
     <link href="{{ mix('/css/checkout-payment.css') }}" rel="stylesheet" type="text/css"/>
+    <style>
+        .m-widget27 .m-widget27__pic > img {
+            height: 150px;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -257,12 +262,14 @@
                             <img src="/assets/app/media/img//bg/bg-4.jpg" alt="">
                             <h3 class="m-widget27__title text-center paymentAndWalletValue m--font-light">
                                 <span>
+                                    <s class="finalPriceValue">{{ number_format($invoiceInfo['price']['base']) }}</s>
+                                    <br>
                                     مبلغ قابل پرداخت:
                                     <br>
                                     <b class="finalPriceValue">{{ number_format($invoiceInfo['price']['final']) }}</b>
                                     تومان
                                     <hr>
-                                    <small>
+                                    <small class="d-none">
                                         کیف پول شما:
                                         <br>
                                         {{ number_format($credit) }} تومان

@@ -142,15 +142,6 @@
     background: white;
     opacity: 0.85;
 }
-.redSquare {
-    width: 10px;
-    height: 10px;
-    background: red;
-    margin-left: 0px;
-    position: relative;
-    margin-right: 10px;
-    display: inline-block;
-}
 .productDetailes,
 .sampleVideo > .col > .m-portlet {
     margin-bottom: 0;
