@@ -25,9 +25,9 @@ class TransactionGatewayRepo
      * @return Transactiongateway|Builder
      */
     public static function getTransactionGateways(array $filters = []){
-        $transactions = Transactiongateway::query();
-        self::filter($filters, $transactions);
-        return $transactions;
+        $gateways = Transactiongateway::query();
+        self::filter($filters, $gateways);
+        return $gateways;
     }
 
     /**
