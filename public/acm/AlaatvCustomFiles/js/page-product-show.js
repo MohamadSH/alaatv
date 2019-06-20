@@ -92,7 +92,6 @@ var ProductSwitch = function () {
             if(isNaN(index)) {
                 continue;
             }
-            console.log(items[index].defaultValue);
             changeChildCheckStatus(items[index].defaultValue, true);
         }
     }
@@ -259,7 +258,7 @@ var ProductShowPage = function () {
     {
         return $('input[type=checkbox][name="products[]"]:checked').map(function () {
             if ($(this).val()) {
-                var name = $(this).parents('.m-nav__link-text').find('.childProductName').html();
+                var name = $('.childProductName-'+$(this).val()).html();
                 name = name.replace('\n', '').trim();
                 return {
                     id: $(this).val(),
@@ -388,7 +387,7 @@ jQuery(document).ready(function() {
         // $("html, body").animate({ scrollTop: 0 }, "slow");
     });
 
-    $(document).on('click', '.btnAddToCart', function () {
+    $(document).on('click', '.btnAddToCart', function (e) {
 
         ProductShowPage.disableBtnAddToCart();
         var product = $("input[name=product_id]").val();
@@ -396,7 +395,6 @@ jQuery(document).ready(function() {
         let extraAttributeStates = ProductShowPage.getExtraAttributeStates();
         let productSelectValues = ProductShowPage.getProductSelectValues() ;
         let selectedProductObject = ProductShowPage.getSelectedProductObject() ;
-
 
         for (var index in selectedProductObject) {
             selectedProductObject[index].category = parentProductTags;

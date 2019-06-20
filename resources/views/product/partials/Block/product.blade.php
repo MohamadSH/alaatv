@@ -1,4 +1,14 @@
-<div class="m-widget_head-owlcarousel-item carousel noHoverEffect background-gradient" data-position="{{ $productKey }}">
+<div class="m-widget_head-owlcarousel-item carousel noHoverEffect block-product-item"
+     data-position="{{ $productKey }}"
+     data-gtm-eec-product-id="{{ $product->id }}"
+     data-gtm-eec-product-name="{{ $product->name }}"
+     data-gtm-eec-product-category="{{ $product->type['hint'] }}"
+     data-gtm-eec-product-position="{{ $productKey }}"
+     @if(isset($blockTitle))
+     data-gtm-eec-list="{!! $blockTitle !!}"
+     @else
+     data-gtm-eec-list="{{ $block->title }}"
+     @endif >
     
     @if($product->price['final'] !== $product->price['base'])
         <div class="ribbon">

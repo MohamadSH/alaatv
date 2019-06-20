@@ -1,0 +1,141 @@
+function gtmEecImpressionViewProductBlocks() {
+    var bloks = [];
+    $('.blockWraper-hasProduct').each(function () {
+        var owl = $(this);
+        gtmEecImpressionViewCarousel(owl);
+    });
+}
+
+function gtmEecImpressionViewCarousel(owl) {
+    var carousel = owl.find('.a--owl-carousel-type-2').not('.a--owl-carousel-type-2-gridViewWarper').data('owl.carousel');
+    var isGridView = true;
+    var impressionViewCarousel = owl.find('.a--owl-carousel-type-2.a--owl-carousel-type-2-gridViewWarper').find('.block-product-item');
+    if (typeof carousel !== 'undefined') {
+        isGridView = false;
+        impressionViewCarousel = carousel._items.filter(function (e) {
+            if (e.hasClass('active')) {
+                return e;
+            }
+        });
+    }
+    var gtmEecImpressionView = [];
+    for (let i = 0; i < impressionViewCarousel.length; i++) {
+        var childObjectItem = $(impressionViewCarousel[i]);
+        if (!isGridView) {
+            childObjectItem = $(impressionViewCarousel[i]).find('.block-product-item');
+        }
+        gtmEecImpressionView.push({
+            id: childObjectItem.data('gtm-eec-product-id'),
+            name: childObjectItem.data('gtm-eec-product-name'),
+            category: childObjectItem.data('gtm-eec-product-category'),
+            position: childObjectItem.data('gtm-eec-product-position'),
+            list: childObjectItem.data('gtm-eec-list'),
+        });
+    }
+    console.log('gtmEecImpressionViewCarousel: ', gtmEecImpressionView);
+    GAEE.impressionView(gtmEecImpressionView);
+}
+
+function gtmEecPromotionViewCarousel() {
+    var activeCarousel = $("#carouselMainSlideShow").find('.carousel-item.active');
+    if (activeCarousel.length === 0) {
+        return false;
+    }
+    var gtmEecPromotions = [
+        {
+            id: activeCarousel.data('gtm-eec-promotion-id'),
+            name: activeCarousel.data('gtm-eec-promotion-name'),
+            creative: activeCarousel.data('gtm-eec-promotion-creative'),
+            position: activeCarousel.data('gtm-eec-promotion-position')
+        }
+    ];
+    console.log('gtmEecPromotionViewCarousel: ', gtmEecPromotions);
+    GAEE.promotionView(gtmEecPromotions);
+}
+
+function gtmEecPromotionViewBanner() {
+    var ads = $('.gtm-eec-promotion-click').not('.gtm-eec-promotion-slideShow');
+    var adsLength = ads.length;
+    if (adsLength === 0) {
+        return false;
+    }
+    var gtmEecPromotionViewBanner = [];
+    for (let i = 0; i < adsLength; i++) {
+        gtmEecPromotionViewBanner.push({
+            id: $(ads[i]).data('gtm-eec-promotion-id'),
+            name: $(ads[i]).data('gtm-eec-promotion-name'),
+            creative: $(ads[i]).data('gtm-eec-promotion-creative'),
+            position: $(ads[i]).data('gtm-eec-promotion-position')
+        });
+    }
+    console.log('gtmEecPromotionViewBanner: ', gtmEecPromotionViewBanner);
+    GAEE.promotionView(gtmEecPromotionViewBanner);
+}
+
+jQuery(document).ready( function() {
+
+    // Impression View
+    gtmEecImpressionViewProductBlocks();
+    $('.blockWraper-hasProduct').find('.a--owl-carousel-type-2').on('translated.owl.carousel', function(event) {
+        let currentSlide_children = event.relatedTarget.$stage.children();
+        var childObject = [];
+        for (let i = event.item.index; i < event.item.index + event.page.size; i++) {
+            childObject.push(currentSlide_children[i])
+        }
+        var gtmEecImpressionView = [];
+        for (let i = 0; i < childObject.length; i++) {
+            var childObjectItem = $(childObject[i]).find('.block-product-item');
+            gtmEecImpressionView.push({
+                id: childObjectItem.data('gtm-eec-product-id'),
+                name: childObjectItem.data('gtm-eec-product-name'),
+                category: childObjectItem.data('gtm-eec-product-category'),
+                position: childObjectItem.data('gtm-eec-product-position'),
+                list: childObjectItem.data('gtm-eec-list'),
+            });
+        }
+        console.log('gtmEecImpressionViewCarousel: ', gtmEecImpressionView);
+        GAEE.impressionView(gtmEecImpressionView);
+    });
+
+    // Impression Click
+    $(document).on('click' ,'.gtm-eec-product-impression-click', function(e){
+        var actionFieldList = $(this).data('gtm-eec-actionFieldList');
+        var product = {
+            id: $(this).data('gtm-eec-product-id'), // (String) The SKU of the product. Example: 'P12345'
+            name: $(this).data('gtm-eec-product-name'), // (String) The name of the product. Example: 'T-Shirt'
+            category: $(this).data('gtm-eec-product-category'), // (String) Product category of the item. Can have maximum five levels of hierarchy. Example: 'clothes/shirts/t-shirts'
+            position: $(this).data('gtm-eec-product-position'), // (Integer) The position of the impression that was clicked. Example: 1
+            // variant: $(this).data('gtm-eec-product-variant'), // (String) What variant of the main product this is. Example: 'Large'
+            // brand: $(this).data('gtm-eec-product-brand'), // (String) The brand name of the product. Example: 'NIKE'
+        };
+        GAEE.impressionClick(actionFieldList, product);
+    });
+
+    // Promotion View
+    gtmEecPromotionViewBanner();
+    gtmEecPromotionViewCarousel();
+    $("#carouselMainSlideShow").on('slid.bs.carousel', function (e) {
+        var gtmEecPromotions = [
+            {
+                id: $(e.relatedTarget).data('gtm-eec-promotion-id'),
+                name: $(e.relatedTarget).data('gtm-eec-promotion-name'),
+                creative: $(e.relatedTarget).data('gtm-eec-promotion-creative'),
+                position: $(e.relatedTarget).data('gtm-eec-promotion-position')
+            }
+        ];
+        console.log('gtmEecPromotionViewCarousel: ', gtmEecPromotions);
+        GAEE.promotionView(gtmEecPromotions);
+    });
+
+    // Promotion Click
+    $(document).on('click' ,'.gtm-eec-promotion-click', function(e){
+        var promotion = {
+            id: $(this).data('gtm-eec-promotion-id'), // (String) Unique identifier for the promotion. Example: 'summer_campaign'
+            name: $(this).data('gtm-eec-promotion-name'), // (String) The name of the promotion. Example: 'Summer Campaign 2019'
+            creative: $(this).data('gtm-eec-promotion-creative'), // (String) A name for the creative where the promotion was clicked. Example: 'front_page_banner_1'
+            position: $(this).data('gtm-eec-promotion-position') // (String) Some way to distinguish the position of the promotion in the creative (e.g. second slide of a carousel). Example: 'slot_2'
+        };
+        GAEE.promotionClick(promotion);
+    });
+
+});

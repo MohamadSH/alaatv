@@ -7,16 +7,23 @@
                         @foreach($slides as $key => $slide)
                             <li data-target="#carouselMainSlideShow" data-slide-to="{{$key}}" class="@if($key == 0) active @endif"></li>
                         @endforeach
-
                     </ol>
                 @endif
 
                 <div class="carousel-inner">
                     @foreach($slides as $key => $slide)
-                        <div class="carousel-item @if($key == 0) active @endif">
+                        <div class="carousel-item @if($key == 0) active @endif"
+                             data-gtm-eec-promotion-id="{{ $slide->id }}"
+                             data-gtm-eec-promotion-name="{{ $slide->title }}"
+                             @if(isset($positionOfSlideShow))
+                             data-gtm-eec-promotion-creative="اسلاید شو - {{ $positionOfSlideShow }}"
+                             @else
+                             data-gtm-eec-promotion-creative="اسلاید شو"
+                             @endif
+                             data-gtm-eec-promotion-position="{{ $key }}">
                             @if(isset($slide->link) && strlen($slide->link)>0)
                                 <a href="{{$slide->link}}"
-                                   class="gtm-eec-promotion-click"
+                                   class="gtm-eec-promotion-click gtm-eec-promotion-slideShow"
                                    data-gtm-eec-promotion-id="slideShow1-{{ $slide->id }}"
                                    data-gtm-eec-promotion-name="{{ $slide->title }}"
                                    @if(isset($positionOfSlideShow))

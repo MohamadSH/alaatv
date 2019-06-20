@@ -5,15 +5,8 @@
 @endsection
 
 @section('content')
+    
     @include('partials.slideShow1' ,['marginBottom'=>'25', 'positionOfSlideShow'=>'صفحه اصلی'])
-
-    <div class="row">
-        <div class="col text-center m--margin-bottom-5">
-            <a href="{{ route('landing.8') }}" >
-                <img src="{{ asset('/acm/extra/ads/gif/970-90.gif') }}">
-            </a>
-        </div>
-    </div>
 
     <div class="m--clearfix"></div>
     <!--begin:: Widgets/Stats-->
@@ -142,6 +135,53 @@
     <!--end:: Widgets/Stats-->
     
     @foreach($blocks as $block)
+        @if($block->class === 'konkoor1')
+            <div class="row">
+                <div class="col-12 col-md-6 text-center m--margin-bottom-5">
+                    <a href="{{ route('landing.5') }}"
+                       class="gtm-eec-promotion-click"
+                       data-gtm-eec-promotion-id="homepage-downloadi1"
+                       data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
+                       data-gtm-eec-promotion-creative="قبل از بلاک کنکور نظام قدیم"
+                       data-gtm-eec-promotion-position="سمت راست">
+                        <img src="{{ asset('/acm/extra/ads/gif/728-180(2).gif') }}" alt="همایش های دانلودی آلاء" class="a--full-width">
+                    </a>
+                </div>
+                <div class="col-12 col-md-6 text-center m--margin-bottom-5">
+                    <a href="{{ route('landing.8') }}"
+                       class="gtm-eec-promotion-click"
+                       data-gtm-eec-promotion-id="homepage-ghorekeshi1"
+                       data-gtm-eec-promotion-name="قرعه کشی گوشی"
+                       data-gtm-eec-promotion-creative="قبل از بلاک کنکور نظام قدیم"
+                       data-gtm-eec-promotion-position="سمت چپ">
+                        <img src="{{ asset('/acm/extra/ads/gif/728-180.gif') }}" alt="قرعه کشی گوشی" class="a--full-width">
+                    </a>
+                </div>
+            </div>
+        @elseif($block->class === 'dahom')
+            <div class="row">
+                <div class="col-12 col-md-6 text-center m--margin-bottom-5">
+                    <a href="{{ route('landing.8') }}"
+                       class="gtm-eec-promotion-click"
+                       data-gtm-eec-promotion-id="homepage-ghorekeshi1"
+                       data-gtm-eec-promotion-name="قرعه کشی گوشی"
+                       data-gtm-eec-promotion-creative="قبل از بلاک پایه دهم"
+                       data-gtm-eec-promotion-position="سمت راست">
+                        <img src="{{ asset('/acm/extra/ads/gif/728-180.gif') }}" alt="قرعه کشی گوشی" class="a--full-width">
+                    </a>
+                </div>
+                <div class="col-12 col-md-6 text-center m--margin-bottom-5">
+                    <a href="{{ route('landing.5') }}"
+                       class="gtm-eec-promotion-click"
+                       data-gtm-eec-promotion-id="homepage-downloadi1"
+                       data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
+                       data-gtm-eec-promotion-creative="قبل از بلاک پایه دهم"
+                       data-gtm-eec-promotion-position="سمت چپ">
+                        <img src="{{ asset('/acm/extra/ads/gif/728-180(2).gif') }}" alt="همایش های دانلودی آلاء" class="a--full-width">
+                    </a>
+                </div>
+            </div>
+        @endif
         @include('product.partials.Block.block', [
             'blockCustomClass'=>$block->class.' a--content-carousel-1 dasboardLessons',
             'blockCustomId'=>'sectionId-'.$block->class,
@@ -152,6 +192,18 @@
         {{--                @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])--}}
         {{--            @endforeach--}}
     @endforeach
+    <div class="row">
+        <div class="col text-center m--margin-bottom-5">
+            <a href="{{ route('landing.8') }}"
+               class="gtm-eec-promotion-click"
+               data-gtm-eec-promotion-id="homepage-ghorekeshi2"
+               data-gtm-eec-promotion-name="قرعه کشی گوشی"
+               data-gtm-eec-promotion-creative="پایین همه بلاک ها"
+               data-gtm-eec-promotion-position="وسط">
+                <img src="{{ asset('/acm/extra/ads/gif/970-90(1).gif') }}" alt="همایش های دانلودی آلاء" class="a--full-width">
+            </a>
+        </div>
+    </div>
     
 {{--    @foreach($sections as $section)--}}
 {{--        @if($section['lessons']->count() > 0)--}}
@@ -205,4 +257,5 @@
         ];
     </script>
     <script src="{{ mix('/js/page-homePage.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-homePage.js') }}"></script>
 @endsection

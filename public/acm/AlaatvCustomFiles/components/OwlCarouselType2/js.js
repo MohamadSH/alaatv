@@ -181,6 +181,7 @@
 
     $.fn.OwlCarouselType2.owlCarouseldefaultOptions = {
         OwlCarousel: {
+            stagePadding: 0,
             center: true,
             rtl: true,
             loop: true,
