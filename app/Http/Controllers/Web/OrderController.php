@@ -888,7 +888,7 @@ class OrderController extends Controller
             $response = response([], Response::HTTP_OK);
         }
         
-        if ($request->expectsJson() || true) {
+        if ($request->expectsJson()) {
             return $response;
         }
     
