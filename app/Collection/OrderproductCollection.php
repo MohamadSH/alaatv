@@ -11,6 +11,7 @@ namespace App\Collection;
 use App\Classes\Abstracts\Pricing\OrderproductPriceCalculator;
 use App\Classes\Checkout\Alaa\GroupOrderproductCheckout;
 use App\Orderproduct;
+use App\Product;
 use App\Traits\JsonResponseFormat;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -201,8 +202,8 @@ class OrderproductCollection extends Collection
      */
     public function getPurchasedProducts(){
         $products = new ProductCollection();
-        $orderproducts = $this->whereNotIn('product_id' , [180 , 182]);
-        foreach ($orderproducts as $orderproduct) {
+//        $orderproducts = $this->whereNotIn('product_id' , [Product::DONATE_PRODUCT_5_HEZAR , Product::CUSTOM_DONATE_PRODUCT]);
+        foreach ($this as $orderproduct) {
             $products->push($orderproduct->product);
         }
 
