@@ -894,7 +894,7 @@ class OrderController extends Controller
     
         $pageName = 'review';
         return view('order.checkout.review',
-        compact('invoiceInfo' , 'orderProductCount', 'gateways', 'coupon', 'notIncludedProductsInCoupon', 'orderHasDonate', 'credit', 'pageName'));
+        compact('invoiceInfo' , 'orderProductCount', 'gateways', 'coupon', 'notIncludedProductsInCoupon', 'orderHasDonate', 'credit' , 'fromWallet', 'pageName'));
 
     }
     
