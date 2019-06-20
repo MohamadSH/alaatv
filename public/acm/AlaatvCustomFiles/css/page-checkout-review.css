@@ -31,7 +31,7 @@
     border-bottom: .07rem dashed #ebedf2;
     border-radius: 7px;
     padding-top: 20px;
-    margin: -20px -15px 15px;
+    margin: -20px 0px 15px 0px;
     position: relative;
 }
 
@@ -113,6 +113,38 @@
 
 .Step-warper {
     display: none;
+}
+
+
+.discountCodeWraper {
+    margin-bottom: 0.5rem;
+}
+.bankLogo {
+    max-width: 60px;
+    border-radius: 4px;
+}
+.m-widget1 .m-widget1__item:first-child {
+    padding: 0;
+}
+.m-widget1 .m-widget1__item {
+    padding: 0.5rem 0;
+    position: relative;
+}
+.bootstrap-switch {
+    border-color: #9f9f9f;
+}
+.baseCostWraper .m-widget1__title {
+    font-weight: 900 !important;
+}
+.yourProfitWraper .m-widget1__title span {
+    color: gray;font-size: 1rem;
+}
+.costReportWraper.m-widget1 .m-widget1__item .m-widget1__title,
+.costReportWraper.m-widget1 .m-widget1__item .m-widget1__number {
+    font-weight: normal;
+}
+.useWalletReportWraper {
+    border-bottom: .07rem dashed #848484;
 }
 
 /*media query*/

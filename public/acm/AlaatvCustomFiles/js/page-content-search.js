@@ -17,7 +17,7 @@ var Alaasearch = function () {
         var countOfExistingProductInCarousel = $('#product-carousel.owl-carousel').find('.item').length;
         var gtmEecProductId = data.id;
         var gtmEecProductName = data.name;
-        var gtmEecProductCategory = data.type['hint'];
+        var gtmEecProductCategory = '-';
         var gtmEecProductPosition = countOfExistingProductInCarousel;
         var priceHtml = '<span class="m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">';
         if (price.base !== price.final) {
