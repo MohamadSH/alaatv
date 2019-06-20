@@ -404,7 +404,6 @@
                                 
                             </div>
                             <div class="m-widget1__item">
-        
                                 <div class="row align-items-center">
                                     <div class="col text-center addDonateWarper">
                                         <span>
@@ -428,14 +427,6 @@
                                             <img src="/acm/extra/sad.gif" class="face-sad" alt="face-sad" width="40">
                                             <img src="/acm/extra/happy.gif" class="face-happy" alt="face-happy" width="40">
                                         </span>
-                                        <input type="hidden" id="addDonateUrl" value="{{ action('Web\OrderController@addOrderproduct' , 180) }}">
-                                        <input type="hidden" id="removeDonateUrl" value="{{ action('Web\OrderController@removeOrderproduct' , 180) }}">
-                                        <input type="hidden" id="orderHasDonate"
-                                               @if(isset($orderHasDonate) && $orderHasDonate)
-                                               value="1"
-                                               @else
-                                               value="0"
-                                               @endif>
                                     </div>
                                 </div>
                             </div>
@@ -475,29 +466,29 @@
                                     </div>
                                     <div class="col m--align-right">
                                         <span class="m-widget1__number m--font-success">
-                                            {{ number_format($invoiceInfo['price']['base']-$invoiceInfo['price']['final']) }} تومان
+                                            {{ number_format($invoiceInfo['price']['discount']) }} تومان
                                         </span>
                                     </div>
                                 </div>
                             </div>
                             @if(optional(Auth::user())->id !== null)
-                                <div class="m-widget1__item useWalletReportWraper">
-                                    <div class="row m-row--no-padding align-items-center">
-                                        <div class="col">
-                                            <h3 class="m-widget1__title">
-                                                استفاده از کیف پول:
-                                            </h3>
-                                            <span class="m-widget1__desc"></span>
-                                        </div>
-                                        <div class="col m--align-right">
-                                            @if(isset($invoiceInfo['price']['final']))
+                                @if(isset($fromWallet))
+                                    <div class="m-widget1__item useWalletReportWraper">
+                                        <div class="row m-row--no-padding align-items-center">
+                                            <div class="col">
+                                                <h3 class="m-widget1__title">
+                                                    استفاده از کیف پول:
+                                                </h3>
+                                                <span class="m-widget1__desc"></span>
+                                            </div>
+                                            <div class="col m--align-right">
                                                 <span class="m-widget1__number m--font-success">
-                                                     {{ number_format($invoiceInfo['price']['final']) }} تومان
+                                                     {{ number_format($fromWallet) }} تومان
                                                 </span>
-                                            @endif
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                @endif
                                 <div class="m-widget1__item">
                                     <div class="row m-row--no-padding align-items-center">
                                         <div class="col">
@@ -622,7 +613,14 @@
     
     <input type="hidden" id="OrderController-submitCoupon" value="{{ action('Web\OrderController@submitCoupon') }}">
     <input type="hidden" id="OrderController-removeCoupon" value="{{ action('Web\OrderController@removeCoupon') }}">
-
+    <input type="hidden" id="addDonateUrl" value="{{ action('Web\OrderController@addOrderproduct' , 180) }}">
+    <input type="hidden" id="removeDonateUrl" value="{{ action('Web\OrderController@removeOrderproduct' , 180) }}">
+    <input type="hidden" id="orderHasDonate"
+           @if(isset($orderHasDonate) && $orderHasDonate)
+           value="1"
+           @else
+           value="0"
+           @endif>
 @endsection
 
 @section('page-js')
