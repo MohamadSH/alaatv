@@ -995,13 +995,15 @@ class UserController extends Controller
 //        $debitCard = Bankaccount::all()
 //            ->where("user_id", 2)
 //            ->first();
-        
+
+        /** @var User $user */
         $user = $request->user();
         
         $key    = "user:orders:".$user->cacheKey();
         $orders = Cache::tags('user')->remember($key, config("constants.CACHE_60"), function () use ($user) {
             return $user->closedOrders()
                 ->get()
+//                ->append('created_at')
                 ->sortByDesc("completed_at");
         });
         

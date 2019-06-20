@@ -139,7 +139,7 @@
     <script>
         jQuery(document).ready(function () {
             var orderIdValue = $('#js-var-order-id').val();
-            var paidPriceValue = $('#js-var-paid-price').val();
+            var paidPriceValue = parseFloat($('#js-var-paid-price').val());
             dataLayer.push(
                 {
                     'orderId': orderIdValue,
