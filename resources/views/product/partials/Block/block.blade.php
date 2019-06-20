@@ -31,8 +31,13 @@
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
+    
+                                @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
+                                    <span class="redSquare"></span>
+                                @endif
+    
                                 @if(!isset($blockUrlDisable) || !$blockUrlDisable)
-                                    <a href="{{ $block->url }}" class="m-link">
+                                <a href="{{ $block->url }}" class="m-link">
                                 @endif
                                     @if(isset($blockTitle))
                                         {!! $blockTitle !!}
