@@ -14,12 +14,13 @@ var CheckoutPaymentUi = function () {
         }
     }
     function refreshPrice(cost) {
-        $('#baseCostValue').html(cost.base.toLocaleString('fa') + 'تومان');
-        $('#yourProfitValue').html(cost.discount.toLocaleString('fa') + 'تومان');
-        $('#finalPriceValue').html(cost.final.toLocaleString('fa') + 'تومان');
-
         var userCredit = parseInt($('#userCredit').val());
         var useWalletValue = Math.min(cost.payableByWallet, userCredit);
+
+        $('#baseCostValue').html(cost.base.toLocaleString('fa') + 'تومان');
+        $('#yourProfitValue').html(cost.discount.toLocaleString('fa') + 'تومان');
+        $('#finalPriceValue').html((parseInt(cost.final) - useWalletValue).toLocaleString('fa') + 'تومان');
+
         $('#useWalletValue').html(useWalletValue.toLocaleString('fa') + 'تومان');
     }
 
