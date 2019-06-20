@@ -869,7 +869,7 @@ class OrderController extends Controller
                 $response =  response([
                                 'invoiceInfo'                 => $invoiceInfo,
                                 'fromWallet'                  => $fromWallet,
-                                'walletBalance'               => $credit,
+                                'credit'                      => $credit,
                                 'couponInfo'                  => $coupon,
                                 'notIncludedProductsInCoupon' => $notIncludedProductsInCoupon,
                                 'orderHasDonate'              => $orderHasDonate,
