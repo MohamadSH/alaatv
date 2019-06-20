@@ -2,7 +2,7 @@
      data-position="{{ $productKey }}"
      data-gtm-eec-product-id="{{ $product->id }}"
      data-gtm-eec-product-name="{{ $product->name }}"
-     data-gtm-eec-product-category="{{ $product->type['hint'] }}"
+     data-gtm-eec-product-category="-"
      data-gtm-eec-product-position="{{ $productKey }}"
      @if(isset($blockTitle))
      data-gtm-eec-list="{!! $blockTitle !!}"
@@ -24,7 +24,7 @@
        class="gtm-eec-product-impression-click"
        data-gtm-eec-product-id="{{ $product->id }}"
        data-gtm-eec-product-name="{{ $product->name }}"
-       data-gtm-eec-product-category="{{ $product->type['hint'] }}"
+       data-gtm-eec-product-category="-"
        data-gtm-eec-product-position="{{ $productKey }}"
        @if(isset($blockTitle))
         data-gtm-eec-actionFieldList="{!! $blockTitle !!}"
@@ -41,7 +41,7 @@
        class="m-link a--owl-carousel-type-2-item-subtitle gtm-eec-product-impression-click"
        data-gtm-eec-product-id="{{ $product->id }}"
        data-gtm-eec-product-name="{{ $product->name }}"
-       data-gtm-eec-product-category="{{ $product->type['hint'] }}"
+       data-gtm-eec-product-category="-"
        data-gtm-eec-product-position="{{ $productKey }}"
        @if(isset($blockTitle))
        data-gtm-eec-actionFieldList="{!! $blockTitle !!}"

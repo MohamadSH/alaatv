@@ -36,6 +36,7 @@ public/mix-manifest.json
 public/phpinfo.php
 public/test.php
 
+
 public/js/all.js
 public/js/login.js
 public/js/page-shop.js
@@ -45,13 +46,16 @@ public/js/user-orders.js
 public/js/product-show.js
 public/js/user-profile.js
 public/js/content-show.js
+public/js/checkout-auth.js
 public/js/content-search.js
 public/js/user-dashboard.js
 public/js/checkout-review.js
 public/js/checkout-payment.js
 public/js/landing5-alljs.min.js
 public/js/admin-content-create.js
+public/js/checkout-verification.js
 public/js/product-content-embed.js
+public/js/checkout-completeInfo.js
 
 public/css/all.css
 public/css/page-shop.css

@@ -76,13 +76,13 @@ class OrderController extends Controller
         $this->middleware('permission:'.config('constants.SHOW_ORDER_ACCESS'), ['only' => 'edit', 'show']);
         $this->middleware('permission:'.config('constants.INSERT_ORDER_ACCESS'), ['only' => 'exitAdminInsertOrder']);
         $this->middleware([
-            'completeInfo',
+//            'completeInfo',
             'OrderCheckoutReview',
         ], ['only' => ['checkoutReview',],]);
-        $this->middleware([
-            'completeInfo',
-            'OrderCheckoutPayment',
-        ], ['only' => ['checkoutPayment'],]);
+//        $this->middleware([
+//            'completeInfo',
+//            'OrderCheckoutPayment',
+//        ], ['only' => ['checkoutPayment'],]);
         $this->middleware('SubmitOrderCoupon', ['only' => ['submitCoupon'],]);
         $this->middleware('RemoveOrderCoupon', ['only' => ['removeCoupon'],]);
         $this->setting = $setting->setting;
@@ -834,10 +834,49 @@ class OrderController extends Controller
             $order = Order::Find($request->order_id);
             
             if (isset($order)) {
+                /** checkout payment */
+                $credit         = optional($order->user)->getTotalWalletBalance();
+                $orderHasDonate = $order->hasTheseProducts([
+                    Product::CUSTOM_DONATE_PRODUCT,
+                    Product::DONATE_PRODUCT_5_HEZAR,
+                ]);
+                $gateways       = Transactiongateway::enable()
+                    ->get()
+                    ->sortBy('order')
+                    ->pluck('displayName', 'name');
+
+                $coupon                 = $order->coupon;
+                $couponValidationStatus = optional($coupon)->validateCoupon();
+                if (in_array($couponValidationStatus, [
+                    Coupon::COUPON_VALIDATION_STATUS_DISABLED,
+                    Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN,
+                    Coupon::COUPON_VALIDATION_STATUS_EXPIRED,
+                ])) {
+                    $order->detachCoupon();
+                    if ($order->updateWithoutTimestamp()) {
+                        $coupon->decreaseUseNumber();
+                        $coupon->update();
+                    }
+
+                    $order = $order->fresh();
+                }
+                $coupon                      = $order->coupon_info;
+                $notIncludedProductsInCoupon = $order->reviewCouponProducts();
+                /** checkout payment */
+
                 $invoiceInfo    = $invoiceGenerator->generateOrderInvoice($order);
-                $responseStatus = Response::HTTP_OK;
+                $fromWallet = min($invoiceInfo['price']['payableByWallet'] , $credit);
+                $response =  response([
+                                'invoiceInfo'                 => $invoiceInfo,
+                                'fromWallet'                  => $fromWallet,
+                                'credit'                      => $credit,
+                                'couponInfo'                  => $coupon,
+                                'notIncludedProductsInCoupon' => $notIncludedProductsInCoupon,
+                                'orderHasDonate'              => $orderHasDonate,
+                            ], Response::HTTP_OK);
+
             } else {
-                $responseStatus = Response::HTTP_BAD_REQUEST;
+                $response = response(['message' => 'Order not found'], Response::HTTP_BAD_REQUEST);
             }
         } else {
             if (isset($_COOKIE['cartItems']) && strlen($_COOKIE['cartItems']) > 0) {
@@ -846,16 +885,17 @@ class OrderController extends Controller
                 $invoiceInfo         = $invoiceGenerator->generateFakeOrderproductsInvoice($fakeOrderproducts);
             }
             
-            $responseStatus = Response::HTTP_OK;
+            $response = response([], Response::HTTP_OK);
         }
         
         if ($request->expectsJson()) {
-            return response($invoiceInfo, $responseStatus);
+            return $response;
         }
     
         $pageName = 'review';
-    
-        return view('order.checkout.review', compact('invoiceInfo', 'orderProductCount', 'pageName'));
+        return view('order.checkout.review',
+        compact('invoiceInfo' , 'orderProductCount', 'gateways', 'coupon', 'notIncludedProductsInCoupon', 'orderHasDonate', 'credit' , 'fromWallet', 'pageName'));
+
     }
     
     /**
@@ -913,6 +953,7 @@ class OrderController extends Controller
      */
     public function checkoutInvoice(Request $request)
     {
+        return redirect(action("Web\OrderController@checkoutReview"));
         if (!Auth::check()) {
             return redirect(action("Web\OrderController@checkoutAuth"));
         }
@@ -960,6 +1001,7 @@ class OrderController extends Controller
      */
     public function checkoutPayment(Request $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
+        return redirect(action("Web\OrderController@checkoutReview"));
 //        Cache::tags('order')->flush();
 //        Cache::tags('orderproduct')->flush();
 

@@ -217,7 +217,6 @@
     width: 40px;
 }
 
-
 .m-header-menu .m-menu__nav > .m-menu__item.m-menu__item--rel .m-menu__link-icon {
     display: none;
 }
@@ -237,6 +236,28 @@
 }
 .m-header-menu .m-menu__nav > .m-menu__item .m-menu__submenu.m-menu__submenu--classic > .m-menu__subnav {
     padding: 0;
+}
+
+.redSquare {
+    width: 10px;
+    height: 10px;
+    background: red;
+    margin-left: 0px;
+    position: relative;
+    margin-right: 10px;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.blueSquare {
+    width: 10px;
+    height: 10px;
+    background: #36a3f7;
+    margin-left: 0px;
+    position: relative;
+    margin-right: 10px;
+    display: inline-block;
+    margin-left: 10px;
 }
 
 /*media query*/
