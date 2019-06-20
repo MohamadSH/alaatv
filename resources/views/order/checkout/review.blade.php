@@ -1,41 +1,7 @@
 @extends('app' , ["pageName"=>$pageName])
 
 @section('page-css')
-{{--    <link href="{{ mix('/css/checkout-review.css') }}" rel="stylesheet" type="text/css"/>--}}
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/step/step.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/css/page-checkout-review.css') }}" rel="stylesheet" type="text/css"/>
-    <style>
-        .discountCodeWraper {
-            margin-bottom: 0.5rem;
-        }
-        .bankLogo {
-            max-width: 60px;
-            border-radius: 4px;
-        }
-        .m-widget1 .m-widget1__item:first-child {
-            padding: 0;
-        }
-        .m-widget1 .m-widget1__item {
-            padding: 0.5rem 0;
-            position: relative;
-        }
-        .bootstrap-switch {
-            border-color: #9f9f9f;
-        }
-        .baseCostWraper .m-widget1__title {
-            font-weight: 900 !important;
-        }
-        .yourProfitWraper .m-widget1__title span {
-            color: gray;font-size: 1rem;
-        }
-        .costReportWraper.m-widget1 .m-widget1__item .m-widget1__title,
-        .costReportWraper.m-widget1 .m-widget1__item .m-widget1__number {
-            font-weight: normal;
-        }
-        .useWalletReportWraper {
-            border-bottom: .07rem dashed #848484;
-        }
-    </style>
+    <link href="{{ mix('/css/checkout-review.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('content')
@@ -168,7 +134,7 @@
                                                     <div class="m-widget5__content">
     
     
-                                                        <span class="m-badge m-badge--primary m-badge--wide m-badge--rounded notIncludedProductsInCoupon-{{ $simpleOrderProductItem->product->id }} a--d-none">شامل کد تخفیف نمی شود</span>
+                                                        <span class="m-badge m-badge--primary m-badge--wide m-badge--rounded notIncludedProductsInCoupon notIncludedProductsInCoupon-{{ $simpleOrderProductItem->product->id }} a--d-none">شامل کد تخفیف نمی شود</span>
                                                         <div class="m-widget5__stats1">
                                                             <span class="m-nav__link-badge">
                                                                 <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
@@ -331,7 +297,7 @@
                                                             </div>
                                                             
                                                             <div class="clearfix"></div>
-                                                            <span class="m-badge m-badge--primary m-badge--wide m-badge--rounded notIncludedProductsInCoupon-{{ $orderProductItemChild->product->id }} float-right a--d-none">شامل کد تخفیف نمی شود</span>
+                                                            <span class="m-badge m-badge--primary m-badge--wide m-badge--rounded notIncludedProductsInCoupon notIncludedProductsInCoupon-{{ $orderProductItemChild->product->id }} float-right a--d-none">شامل کد تخفیف نمی شود</span>
                                                             <div class="clearfix"></div>
                                                             
                                                             @if($orderProductItemChild->attached_bons_number > 0)
@@ -358,205 +324,270 @@
                 <!--end:: Widgets/Best Sellers-->
             </div>
             <div class="col-xl-4">
-                <!--begin:: Widgets/Authors Profit-->
-                <div class="m-portlet m-portlet--bordered-semi CheckoutReviewTotalPriceWarper">
-                    <div class="m-portlet__body">
-                        <div class="m-widget1 m--padding-5 costReportWraper">
     
-                            @if(optional(Auth::user())->id !== null)
-                            <div class="m-widget1__item">
-                                
-                                <div class="form-group m-form__group discountCodeWraper">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="مثال: codetakhfif" id="discountCodeValue">
-                                        <div class="input-group-prepend">
-                                            <button class="btn btn-success @if(isset($coupon)) a--d-none @endif" type="button" id="btnSaveDiscountCodeValue">
-                                                ثبت کد تخفیف
-                                            </button>
-                                            <button class="btn btn-danger @if(!isset($coupon)) a--d-none @endif" type="button" id="btnRemoveDiscountCodeValue">
-                                                حذف کد تخفیف
-                                            </button>
+                <form method="GET" action="" id="frmGotoGateway">
+                    <!--begin:: Widgets/Authors Profit-->
+                    <div class="m-portlet m-portlet--bordered-semi CheckoutReviewTotalPriceWarper">
+                        <div class="m-portlet__body" @if(optional(Auth::user())->id === null) style="padding-bottom: 0px !important;" @endif>
+                            <div class="m-widget1 m--padding-5 costReportWraper">
+        
+                                @if(optional(Auth::user())->id !== null)
+                                <div class="m-widget1__item">
+                                    <div class="form-group m-form__group discountCodeWraper">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="مثال: codetakhfif" id="discountCodeValue"
+                                                   @if(isset($coupon)) value="{{ $coupon['code'] }}" @endif>
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-success @if(isset($coupon)) a--d-none @endif" type="button" id="btnSaveDiscountCodeValue">
+                                                    ثبت کد تخفیف
+                                                </button>
+                                                <button class="btn btn-danger @if(!isset($coupon)) a--d-none @endif" type="button" id="btnRemoveDiscountCodeValue">
+                                                    حذف کد تخفیف
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+        
+                                    <div class="alert alert-success alert-dismissible fade show couponReportWarper @if(!isset($coupon)) a--d-none @endif"
+                                         role="alert">
+                                        {{--<button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>--}}
+                                        <div class="couponReport">
+                                            @if(isset($coupon) && $coupon['type'] == config('constants.DISCOUNT_TYPE_COST'))
+                                                کپن تخفیف
+                                                <strong>{{$coupon['name']}}</strong>
+                                                با
+                                                {{number_format($coupon['discount'])}}
+                                                تومان تخفیف برای سفارش شما ثبت شد.
+                                            @elseif(isset($coupon))
+                                                کپن تخفیف
+                                                <strong>{{$coupon['name']}}</strong>
+                                                با
+                                                {{$coupon['discount']}}
+                                                % تخفیف برای
+                                                سفارش شما ثبت شده است.
+                                            @endif
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="m-widget1__item">
+                                    <div class="row align-items-center">
+                                        <div class="col text-center addDonateWarper">
+                                            <span>
+                                                5،000 تومان به آلاء کمک
+                                            </span>
+    {{--                                        {{ dd($orderHasDonate) }}--}}
+                                            <span class="m-bootstrap-switch m-bootstrap-switch--pill">
+                                                <input type="checkbox" data-switch="true"
+                                                       @if(isset($orderHasDonate) && $orderHasDonate)
+                                                       @else
+                                                       checked=""
+                                                       @endif
+                                                       data-on-text="نمی کنم"
+                                                       data-on-color="danger"
+                                                       data-off-text="می کنم"
+                                                       data-off-color="success"
+                                                       data-size="small"
+                                                       {{--data-handle-width="40"--}}
+                                                       id="hasntDonate">
+                                            </span>
+                                            <span>
+                                                <img src="/acm/extra/sad.gif" class="face-sad" alt="face-sad" width="40">
+                                                <img src="/acm/extra/happy.gif" class="face-happy" alt="face-happy" width="40">
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
-    
-    
-                                <div class="alert alert-success alert-dismissible fade show couponReportWarper @if(!isset($coupon)) a--d-none @endif"
-                                     role="alert">
-                                    {{--<button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>--}}
-                                    <div class="couponReport">
-                                        @if(isset($coupon) && $coupon['type'] == config('constants.DISCOUNT_TYPE_COST'))
-                                            کپن تخفیف
-                                            <strong>{{$coupon['name']}}</strong>
-                                            با
-                                            {{number_format($coupon['discount'])}}
-                                            تومان تخفیف برای سفارش شما ثبت شد.
-                                        @elseif(isset($coupon))
-                                            کپن تخفیف
-                                            <strong>{{$coupon['name']}}</strong>
-                                            با
-                                            {{$coupon['discount']}}
-                                            % تخفیف برای
-                                            سفارش شما ثبت شده است.
-                                        @endif
+                                @endif
+                                <div class="m-widget1__item baseCostWraper">
+                                    <div class="row m-row--no-padding align-items-center">
+                                        <div class="col">
+                                            <h3 class="m-widget1__title">
+                                                مبلغ خام :
+                                            </h3>
+    {{--                                        @if(isset($invoiceInfo['orderproductCount']))--}}
+    {{--                                            <span class="m-widget1__desc">--}}
+    {{--                                                شما {{ $invoiceInfo['orderproductCount'] }} محصول انتخاب کرده اید--}}
+    {{--                                            </span>--}}
+    {{--                                        @endif--}}
+                                        </div>
+                                        <div class="col m--align-right">
+                                            @if(isset($invoiceInfo['price']['base']))
+                                                <span class="m-widget1__number m--font-primary" id="baseCostValue">
+                                                    {{ number_format($invoiceInfo['price']['base']) }} تومان
+                                                </span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
-                                
-                            </div>
-                            <div class="m-widget1__item">
-                                <div class="row align-items-center">
-                                    <div class="col text-center addDonateWarper">
-                                        <span>
-                                            5،000 تومان به آلاء کمک
-                                        </span>
-                                        <span class="m-bootstrap-switch m-bootstrap-switch--pill">
-                                            <input type="checkbox" data-switch="true"
-                                                   @if(isset($orderHasDonate) && $orderHasDonate)
-                                                   @else
-                                                   checked=""
-                                                   @endif
-                                                   data-on-text="نمی کنم"
-                                                   data-on-color="danger"
-                                                   data-off-text="می کنم"
-                                                   data-off-color="success"
-                                                   data-size="small"
-                                                   {{--data-handle-width="40"--}}
-                                                   id="hasntDonate">
-                                        </span>
-                                        <span>
-                                            <img src="/acm/extra/sad.gif" class="face-sad" alt="face-sad" width="40">
-                                            <img src="/acm/extra/happy.gif" class="face-happy" alt="face-happy" width="40">
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            @endif
-                            <div class="m-widget1__item baseCostWraper">
-                                <div class="row m-row--no-padding align-items-center">
-                                    <div class="col">
-                                        <h3 class="m-widget1__title">
-                                            مبلغ خام :
-                                        </h3>
-{{--                                        @if(isset($invoiceInfo['orderproductCount']))--}}
-{{--                                            <span class="m-widget1__desc">--}}
-{{--                                                شما {{ $invoiceInfo['orderproductCount'] }} محصول انتخاب کرده اید--}}
-{{--                                            </span>--}}
-{{--                                        @endif--}}
-                                    </div>
-                                    <div class="col m--align-right">
-                                        @if(isset($invoiceInfo['price']['base']))
-                                            <span class="m-widget1__number m--font-primary">
-                                                {{ number_format($invoiceInfo['price']['base']) }} تومان
+                                <div class="m-widget1__item yourProfitWraper">
+                                    <div class="row m-row--no-padding align-items-center">
+                                        <div class="col">
+                                            <h3 class="m-widget1__title">
+                                                سود شما از خرید
+                                                <span>[تخفیف]</span>
+                                                :
+                                            </h3>
+                                            {{--                                        <span class="m-widget1__desc">--}}
+                                            {{--                                            شما در مجموع {{ round((1-($invoiceInfo['price']['final']/$invoiceInfo['price']['base']))*100, 2) }}% تخفیف گرفته اید--}}
+                                            {{--                                        </span>--}}
+                                        </div>
+                                        <div class="col m--align-right">
+                                            <span class="m-widget1__number m--font-success" id="yourProfitValue">
+                                                {{ number_format($invoiceInfo['price']['discount']) }} تومان
                                             </span>
-                                        @endif
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="m-widget1__item yourProfitWraper">
-                                <div class="row m-row--no-padding align-items-center">
-                                    <div class="col">
-                                        <h3 class="m-widget1__title">
-                                            سود شما از خرید
-                                            <span>[تخفیف]</span>
-                                            :
-                                        </h3>
-                                        {{--                                        <span class="m-widget1__desc">--}}
-                                        {{--                                            شما در مجموع {{ round((1-($invoiceInfo['price']['final']/$invoiceInfo['price']['base']))*100, 2) }}% تخفیف گرفته اید--}}
-                                        {{--                                        </span>--}}
-                                    </div>
-                                    <div class="col m--align-right">
-                                        <span class="m-widget1__number m--font-success">
-                                            {{ number_format($invoiceInfo['price']['discount']) }} تومان
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            @if(optional(Auth::user())->id !== null)
-                                @if(isset($fromWallet))
-                                    <div class="m-widget1__item useWalletReportWraper">
+                                @if(optional(Auth::user())->id !== null)
+                                    @if(isset($fromWallet))
+                                        <div class="m-widget1__item useWalletReportWraper">
+                                            <div class="row m-row--no-padding align-items-center">
+                                                <div class="col">
+                                                    <h3 class="m-widget1__title">
+                                                        استفاده از کیف پول:
+                                                    </h3>
+                                                    <span class="m-widget1__desc"></span>
+                                                </div>
+                                                <div class="col m--align-right">
+                                                    <span class="m-widget1__number m--font-success" id="useWalletValue">
+                                                         {{ number_format($fromWallet) }} تومان
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <div class="m-widget1__item">
                                         <div class="row m-row--no-padding align-items-center">
                                             <div class="col">
                                                 <h3 class="m-widget1__title">
-                                                    استفاده از کیف پول:
+                                                    <i class="la la-money m--icon-font-size-lg3"></i>
+                                                    پرداخت از درگاه بانک:
                                                 </h3>
                                                 <span class="m-widget1__desc"></span>
                                             </div>
                                             <div class="col m--align-right">
-                                                <span class="m-widget1__number m--font-success">
-                                                     {{ number_format($fromWallet) }} تومان
+                                                <span class="m-widget1__number m--font-danger" id="finalPriceValue">
+                                                     {{ number_format($invoiceInfo['price']['final']) }} تومان
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="m-widget1__item">
+                                        <div class="m-form__group form-group text-center m--margin-top-10">
+                                            <div class="m-radio-inline">
+                                                <label class="m-radio m-radio--check-bold m-radio--state-info">
+                                                    <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}" data-bank-type="zarinpal">
+                                                    <img src="/acm/extra/payment/gateway/zarinpal-logo.png" class="img-thumbnail bankLogo" alt="bank-logo" width="60">
+                                                    <span></span>
+                                                </label>
+                                                <label class="m-radio m-radio--check-bold m-radio--state-info">
+                                                    <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'mellat', 'device'=>'web'])}}" data-bank-type="mellat" checked>
+                                                    <img src="/acm/extra/payment/gateway/mellat-logo.png" class="img-thumbnail bankLogo" alt="bank-logo" width="60">
+                                                    <span></span>
+                                                </label>
+                                                {{--                                            <label class="m-radio m-radio--check-bold m-radio--state-info">--}}
+                                                {{--                                                <input type="radio" name="radioBankType" value="3">--}}
+                                                {{--                                                <img src="/acm/extra/payment/gateway/pasargad-logo.jpg" class="img-thumbnail bankLogo" alt="bank-logo" width="60">--}}
+                                                {{--                                                <span></span>--}}
+                                                {{--                                            </label>--}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="m-widget1__item">
+                                        <div class="row m-row--no-padding align-items-center">
+                                            <div class="col">
+                                                <h3 class="m-widget1__title">
+                                                    <i class="la la-money m--icon-font-size-lg3"></i>
+                                                    مبلغ قابل پرداخت:
+                                                </h3>
+                                                <span class="m-widget1__desc"></span>
+                                            </div>
+                                            <div class="col m--align-right">
+                                                @if(isset($invoiceInfo['price']['final']))
+                                                    <span class="m-widget1__number m--font-danger">
+                                                         {{ number_format($invoiceInfo['price']['final']) }} تومان
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endif
-                                <div class="m-widget1__item">
-                                    <div class="row m-row--no-padding align-items-center">
-                                        <div class="col">
-                                            <h3 class="m-widget1__title">
-                                                <i class="la la-money m--icon-font-size-lg3"></i>
-                                                پرداخت از درگاه بانک:
-                                            </h3>
-                                            <span class="m-widget1__desc"></span>
-                                        </div>
-                                        <div class="col m--align-right">
-                                            @if(isset($invoiceInfo['price']['final']))
-                                                <span class="m-widget1__number m--font-danger">
-                                                     {{ number_format($invoiceInfo['price']['final']) }} تومان
-                                                </span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            @else
-                                <div class="m-widget1__item">
-                                    <div class="row m-row--no-padding align-items-center">
-                                        <div class="col">
-                                            <h3 class="m-widget1__title">
-                                                <i class="la la-money m--icon-font-size-lg3"></i>
-                                                مبلغ قابل پرداخت:
-                                            </h3>
-                                            <span class="m-widget1__desc"></span>
-                                        </div>
-                                        <div class="col m--align-right">
-                                            @if(isset($invoiceInfo['price']['final']))
-                                                <span class="m-widget1__number m--font-primary">
-                                                     {{ number_format($invoiceInfo['price']['final']) }} تومان
-                                                </span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
+                                
+                            </div>
+                            @if(optional(Auth::user())->id !== null)
+                            <button type="submit"
+                                    onclick="mApp.block('.CheckoutReviewTotalPriceWarper, .a--userCartList', {type: 'loader',state: 'info',});"
+                                    class="btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent btnGotoCheckoutPayment-desktop btnGotoCheckoutPayment">
+                                ادامه و ثبت سفارش
+                            </button>
                             @endif
-                            <div class="m-widget1__item">
-                                <div class="m-form__group form-group text-center m--margin-top-10">
-                                    <div class="m-radio-inline">
-                                        <label class="m-radio m-radio--check-bold m-radio--state-info">
-                                            <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}" data-bank-type="zarinpal">
-                                            <img src="/acm/extra/payment/gateway/zarinpal-logo.png" class="img-thumbnail bankLogo" alt="bank-logo" width="60">
-                                            <span></span>
-                                        </label>
-                                        <label class="m-radio m-radio--check-bold m-radio--state-info">
-                                            <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'mellat', 'device'=>'web'])}}" data-bank-type="mellat" checked>
-                                            <img src="/acm/extra/payment/gateway/mellat-logo.png" class="img-thumbnail bankLogo" alt="bank-logo" width="60">
-                                            <span></span>
-                                        </label>
-                                        <label class="m-radio m-radio--check-bold m-radio--state-info">
-                                            <input type="radio" name="radioBankType" value="3">
-                                            <img src="/acm/extra/payment/gateway/pasargad-logo.jpg" class="img-thumbnail bankLogo" alt="bank-logo" width="60">
-                                            <span></span>
-                                        </label>
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
+                    <!--end:: Widgets/Authors Profit-->
+    
+                    @if(optional(Auth::user())->id !== null)
+                        <div class="form-group m-form__group">
+                            <label for="customerDescription">اگر توضیحی در مورد سفارش خود دارید اینجا
+                                بنویسید:</label>
+                            <div class="m-input-icon m-input-icon--left">
+                                <textarea id="customerDescription" class="form-control m-input m-input--air"
+                                          placeholder="توضیح شما..." rows="2" name="customerDescription"
+                                          cols="50"></textarea>
                             </div>
                         </div>
-                        <button type="button"
-                                onclick="window.location.href='{{action('Web\OrderController@checkoutPayment')}}';mApp.block('.CheckoutReviewTotalPriceWarper', {type: 'loader',state: 'info',});"
-                                class="btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent btnGotoCheckoutPayment-desktop btnGotoCheckoutPayment">
-                            ادامه و ثبت سفارش
-                        </button>
+                    @endif
+                </form>
+    
+                @if(optional(Auth::user())->id === null)
+        
+                    <div class="m-portlet m-portlet--bordered-semi CheckoutReviewTotalPriceWarper">
+                        <div class="m-portlet__body">
+                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                پیش از ثبت سفارش وارد حساب کاربری خود شوید.
+                                <br>
+                                با کد ملی ایران نیازی به ثبت نام نیست.
+                            </div>
+                            
+                            <form class="m-login__form m-form" action="{{ action("Auth\LoginController@login") }}" method="post">
+                                @if($errors->login->has('validation'))
+                                    <div class="alert alert-danger">
+                                        <button class="close" data-close="alert"></button>
+                                        <span><strong>{{$errors->login->first('validation')}}</strong></span>
+                                    </div>
+                                @elseif($errors->login->has('credential'))
+                                    <div class="alert alert-danger">
+                                        <button class="close" data-close="alert"></button>
+                                        <span><strong>{{$errors->login->first('credential')}}</strong></span>
+                                    </div>
+                                @elseif($errors->login->has('inActive'))
+                                    <div class="alert alert-danger" dir="rtl">
+                                        <button class="close" data-close="alert"></button>
+                                        <span><strong>{{$errors->login->first('inActive')}}</strong></span>
+                                    </div>
+                                @endif
+                                {{ csrf_field() }}
+                                <div id="m-login__form_mobile" class="form-group m-form__group {{ $errors->has('mobile') ? ' has-danger' : '' }}">
+                                    <input class="form-control m-input" type="text" placeholder="شماره موبایل" value="{{ old('mobile') }}" name="mobile" autocomplete="off">
+                                    @if ($errors->has('mobile'))
+                                        <div class="form-control-feedback">{{ $errors->first('mobile') }}</div>
+                                    @endif
+                                </div>
+                                <div id="m-login__form_code" class="form-group m-form__group {{ $errors->has('nationalCode') ? ' has-danger' : '' }}">
+                                    <input class="form-control m-input m-login__form-input--last " type="password" placeholder="کد ملی" value="{{ old('password') }}" name="password">
+                                    @if ($errors->has('nationalCode'))
+                                        <div class="form-control-feedback">{{ $errors->first('nationalCode') }}</div>
+                                    @endif
+                                </div>
+                                <div class="m-login__form-action">
+                                    <button id="m_login_signin_submit animated infinite heartBeat" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air animated infinite heartBeat" type="submit">ورود</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
-                <!--end:: Widgets/Authors Profit-->
+                @endif
             </div>
         </div>
     @else
@@ -589,7 +620,7 @@
             <div class="row">
                 <div class="col-6">
                     <button type="button"
-                            onclick="window.location.href='{{action('Web\OrderController@checkoutPayment')}}';mApp.block('.btnGotoCheckoutPayment_mobile', {type: 'loader',state: 'info',});"
+                            onclick="$('#frmGotoGateway').submit();mApp.block('.btnGotoCheckoutPayment_mobile, .a--userCartList', {type: 'loader',state: 'info',});"
                             class="btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent btnGotoCheckoutPayment">
                         ثبت سفارش
                     </button>
@@ -610,13 +641,25 @@
             </div>
         </div>
     </div>
-    
-    <input type="hidden" id="OrderController-submitCoupon" value="{{ action('Web\OrderController@submitCoupon') }}">
-    <input type="hidden" id="OrderController-removeCoupon" value="{{ action('Web\OrderController@removeCoupon') }}">
+
+    <input type="hidden" id="userCredit"
+           @if(isset($credit))
+           value="{{ $credit }}"
+           @else
+           value="0"
+           @endif>
     <input type="hidden" id="addDonateUrl" value="{{ action('Web\OrderController@addOrderproduct' , 180) }}">
     <input type="hidden" id="removeDonateUrl" value="{{ action('Web\OrderController@removeOrderproduct' , 180) }}">
+    <input type="hidden" id="OrderController-submitCoupon" value="{{ action('Web\OrderController@submitCoupon') }}">
+    <input type="hidden" id="OrderController-removeCoupon" value="{{ action('Web\OrderController@removeCoupon') }}">
     <input type="hidden" id="orderHasDonate"
            @if(isset($orderHasDonate) && $orderHasDonate)
+           value="1"
+           @else
+           value="0"
+           @endif>
+    <input type="hidden" id="orderHasCoupon"
+           @if(isset($coupon))
            value="1"
            @else
            value="0"
@@ -625,7 +668,13 @@
 
 @section('page-js')
     <script>
-        var notIncludedProductsInCoupon = {!! json_encode($notIncludedProductsInCoupon) !!};
+        var notIncludedProductsInCoupon =
+        @if(isset($notIncludedProductsInCoupon))
+                {!! json_encode($notIncludedProductsInCoupon) !!}
+        @else
+            []
+        @endif
+        ;
         var checkoutReviewProducts = [
             @foreach($invoiceInfo['items'] as $key=>$orderProductItem)
                 @if($orderProductItem['grand']!==null)
@@ -650,5 +699,4 @@
         ];
     </script>
     <script src="{{ mix('/js/checkout-review.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-checkout-review.js') }}"></script>
 @endsection

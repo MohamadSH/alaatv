@@ -13,6 +13,15 @@ var CheckoutPaymentUi = function () {
             $('#invoiceInfo-totalCost').html(parseInt(finalCost));
         }
     }
+    function refreshPrice(cost) {
+        $('#baseCostValue').html(cost.base.toLocaleString('fa') + 'تومان');
+        $('#yourProfitValue').html(cost.discount.toLocaleString('fa') + 'تومان');
+        $('#finalPriceValue').html(cost.final.toLocaleString('fa') + 'تومان');
+
+        var userCredit = parseInt($('#userCredit').val());
+        var useWalletValue = Math.min(cost.payableByWallet, userCredit);
+        $('#useWalletValue').html(useWalletValue.toLocaleString('fa') + 'تومان');
+    }
 
     function getCouponCode() {
         return $('#invoiceInfo-couponCode').val();
@@ -87,6 +96,17 @@ var CheckoutPaymentUi = function () {
         return switchStatus === 1;
     }
 
+    function orderHasCoupon() {
+        // let switchStatus = $('#hasntDonate').prop('checked');
+        // if (switchStatus) {
+        //     return false;
+        // } else {
+        //     return true;
+        // }
+        let status = parseInt($('#orderHasCoupon').val());
+        return status === 1;
+    }
+
     function setTotalCostWithDonate(donateValue) {
         let calcTotalCost = getFinalCost() + (parseInt(donateValue) * 1000);
         setFinalCost(calcTotalCost);
@@ -106,7 +126,7 @@ var CheckoutPaymentUi = function () {
             if (lockDonateAjax) {
                 return false;
             }
-            mApp.block('.addDonateWarper', {
+            mApp.block('.addDonateWarper, .a--userCartList', {
                 type: 'loader',
                 state: 'info',
             });
@@ -130,16 +150,17 @@ var CheckoutPaymentUi = function () {
                         // donate();
                         setTotalCostWithDonate(donateValue);
                     }
-                    mApp.unblock('.addDonateWarper');
+                    mApp.unblock('.addDonateWarper, .a--userCartList');
                     lockDonateAjax = false;
                     GAEE.checkoutOption(4, 'checkout-payment-HasDonate');
+                    window.location.reload();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     lockDonateAjax = true;
                     dontdonate(isInit);
                     donateValue = 0;
                     toastr.warning('مشکلی رخ داده است. مجدد سعی کنید.');
-                    mApp.unblock('.addDonateWarper');
+                    mApp.unblock('.addDonateWarper, .a--userCartList');
                     lockDonateAjax = false;
                 }
             });
@@ -149,7 +170,7 @@ var CheckoutPaymentUi = function () {
             if (lockDonateAjax) {
                 return false;
             }
-            mApp.block('.addDonateWarper', {
+            mApp.block('.addDonateWarper, .a--userCartList', {
                 type: 'loader',
                 state: 'info',
             });
@@ -168,15 +189,16 @@ var CheckoutPaymentUi = function () {
                         // dontdonate();
                         setTotalCostWithDonate(donateValue);
                     }
-                    mApp.unblock('.addDonateWarper');
+                    mApp.unblock('.addDonateWarper, .a--userCartList');
                     lockDonateAjax = false;
                     GAEE.checkoutOption(4, "checkout-payment-Hasn'tDonate");
+                    window.location.reload();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     lockDonateAjax = true;
                     donate(isInit);
                     toastr.warning('مشکلی رخ داده است. مجدد سعی کنید.');
-                    mApp.unblock('.addDonateWarper');
+                    mApp.unblock('.addDonateWarper, .a--userCartList');
                     lockDonateAjax = false;
                 }
             });
@@ -214,7 +236,12 @@ var CheckoutPaymentUi = function () {
         } else {
             $('#btnSaveDiscountCodeValue').prop('disabled', true);
         }
-        PrintnotIncludedProductsInCoupon(notIncludedProductsInCoupon);
+        console.log('orderHasCoupon(): ', orderHasCoupon());
+        if (orderHasCoupon()) {
+            PrintnotIncludedProductsInCoupon(notIncludedProductsInCoupon);
+            $('#discountCodeValue').prop('disabled', true);
+        }
+
     }
 
     function attachCoupon() {
@@ -268,7 +295,8 @@ var CheckoutPaymentUi = function () {
                     $('#btnRemoveDiscountCodeValue').fadeIn();
                     $('#discountCodeValue').prop('disabled', true);
 
-                    setFinalCost(data.price.final);
+                    // setFinalCost(data.price.final);
+                    refreshPrice(data.price);
                     PrintnotIncludedProductsInCoupon(data.notIncludedProductsInCoupon);
 
                     toastr.success('کد تخفیف شما ثبت شد.');
@@ -329,7 +357,8 @@ var CheckoutPaymentUi = function () {
                     $('#btnSaveDiscountCodeValue').fadeIn();
                     $('#discountCodeValue').val('');
 
-                    setFinalCost(data.price.final);
+                    // setFinalCost(data.price.final);
+                    refreshPrice(data.price);
                     PrintnotIncludedProductsInCoupon([]);
                     setCouponCode('');
                     if (showMessage === true) {
@@ -337,6 +366,7 @@ var CheckoutPaymentUi = function () {
                     }
                     $('#discountCodeValue').prop('disabled', false);
                     $('#btnSaveDiscountCodeValue').prop('disabled', true);
+                    PrintnotIncludedProductsInCoupon([]);
                 }
                 mApp.unblock('.discountCodeWraper, .hasntDiscountCodeWraper');
             },
@@ -351,7 +381,15 @@ var CheckoutPaymentUi = function () {
             for (let index in notIncludedProductsInCoupon) {
                 $('.notIncludedProductsInCoupon-'+notIncludedProductsInCoupon[index].id).fadeIn();
             }
+        } else {
+            $('.notIncludedProductsInCoupon').fadeOut();
         }
+    }
+
+    function initUiBasedOnGateway() {
+        let action = $('input[type="radio"][name="radioBankType"]:checked').val();
+        let bankType = $('input[type="radio"][name="radioBankType"]:checked').data('bank-type');
+        $('#frmGotoGateway').attr('action', action);
     }
 
     return {
@@ -359,6 +397,7 @@ var CheckoutPaymentUi = function () {
             lockDonateAjax = true;
             lockCouponAjax = true;
             // refreshUiBasedOnPaymentType();
+            initUiBasedOnGateway();
             refreshUiBasedOnDonateStatus(true);
             initUiBasedOnHasntDiscountCodeStatus(notIncludedProductsInCoupon);
             lockDonateAjax = false;
