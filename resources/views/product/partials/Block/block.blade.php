@@ -34,6 +34,8 @@
     
                                 @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
                                     <span class="redSquare"></span>
+                                @else
+                                    <span class="blueSquare"></span>
                                 @endif
     
                                 @if(!isset($blockUrlDisable) || !$blockUrlDisable)

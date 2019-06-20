@@ -249,6 +249,17 @@
     margin-left: 10px;
 }
 
+.blueSquare {
+    width: 10px;
+    height: 10px;
+    background: blue;
+    margin-left: 0px;
+    position: relative;
+    margin-right: 10px;
+    display: inline-block;
+    margin-left: 10px;
+}
+
 /*media query*/
 @media only screen and (max-width: 1024px) {
     .m-header-menu .m-menu__nav > .m-menu__item .m-menu__submenu > .m-menu__subnav > .m-menu__item {
