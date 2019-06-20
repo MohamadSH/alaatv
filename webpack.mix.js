@@ -142,7 +142,7 @@ mix.babel(
     [
         'node_modules/jquery-sticky/jquery.sticky.js',
         'public/acm/AlaatvCustomFiles/js/UserCart.js',
-        'public/acm/AlaatvCustomFiles/js/page-checkout-review.js'
+        // 'public/acm/AlaatvCustomFiles/js/page-checkout-review.js'
     ],
     'public/js/checkout-review.js'
 ).version();
