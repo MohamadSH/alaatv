@@ -77,9 +77,6 @@
                                 @endif
                                 
                                 
-                                
-                                
-                                
 {{--                                 new content block loop --}}
                                 @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->sets) && $block->sets->count() > 0)
                                     @foreach($block->sets->first()->contents as $contentKey=>$content)
@@ -92,8 +89,6 @@
                                         @include('product.partials.Block.set')
                                     @endforeach
                                 @endif
-                            
-                                
                             
                             
                             </div>

@@ -620,7 +620,7 @@
                                         <div class="m-widget_head-owlcarousel-item carousel block-product-item"
                                              data-gtm-eec-product-id="{{ $product->id }}"
                                              data-gtm-eec-product-name="{{ $product->name }}"
-                                             data-gtm-eec-product-category="{{ $product->type['hint'] }}"
+                                             data-gtm-eec-product-category="-"
                                              data-gtm-eec-product-position="{{ $productKey }}"
                                              data-position="{{ $productKey }}"
                                              data-gtm-eec-list=" محصولاتی که شامل این محتوا هستند - {{ $content->displayName }} ">

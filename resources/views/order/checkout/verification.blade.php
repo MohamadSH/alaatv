@@ -124,6 +124,13 @@
 @section('page-js')
     <script>
         var gtmEec = {!! json_encode($gtmEec) !!};
+        var paymentStatus =
+        @if($status==='successful')
+            true;
+        @else
+            false
+        @endif
+        ;
     </script>
     <script src="{{ mix('/js/checkout-verification.js') }}"></script>
     
