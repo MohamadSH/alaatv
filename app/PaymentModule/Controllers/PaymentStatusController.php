@@ -50,9 +50,9 @@ class PaymentStatusController extends Controller
             $orderproducts = $order->products();
             $gtmEec        = [
                 'actionField' => [
-                    'id'          => $order->id,
+                    'id'          => $result['orderId'] ?? -1,
                     'affiliation' => $device,
-                    'revenue'     => $order->price,
+                    'Drevenue'    => $result['paidPrice'] ?? 1,
                     'tax'         => 0,
                     'shipping'    => 0,
                     'coupon'      => optional($order->coupon)->code
