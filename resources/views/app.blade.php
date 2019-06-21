@@ -8,9 +8,9 @@
     
     <!-- begin::Body -->
     <body class="m-page--fluid m--skin- m-content--skin-light2 m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--fixed m-aside-left--offcanvas m-aside-right--enabled m-footer--push m-aside--offcanvas-default {{ isset($closedSideBar) && $closedSideBar ? 'm-aside-left--hide':''  }}">
-        
         @include('partials.gtm-body')
-        
+        <input id="js-var-userIp" class="m--hide" type="hidden" value='{{ $userIpAddress }}'>
+        <input id="js-var-userId" class="m--hide" type="hidden" value='{{ optional(Auth::user())->id }}'>
         <!-- begin:: Page -->
         <div class="m-grid m-grid--hor m-grid--root m-page">
         @section('body')
@@ -77,8 +77,6 @@
                 @include("partials.footer1")
             @show
             @show
-            <input id="js-var-userIp" class="m--hide" type="hidden" value='{{ $userIpAddress }}'>
-            <input id="js-var-userId" class="m--hide" type="hidden" value='{{ optional(Auth::user())->id }}'>
         </div>
         <!-- end:: Page -->
         
@@ -114,6 +112,8 @@
         <!--begin::Global Theme Bundle -->
         <script src="{{ mix('/js/all.js') }}" type="text/javascript"></script>
         <!--end::Global Theme Bundle -->
+        @yield('data-layer')
+        
         <script>
             $(function () {
                 /**
