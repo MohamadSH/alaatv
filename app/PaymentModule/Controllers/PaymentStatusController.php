@@ -21,7 +21,7 @@ class PaymentStatusController extends Controller
     {
         $result = Request::session()->pull('verifyResult');
     
-        $gtmEec = $this->generateGtmEec($device, $result);
+//        $gtmEec = $this->generateGtmEec($device, $result);
         
         Cache::tags('bon')->flush();
         Cache::tags('order')->flush();
