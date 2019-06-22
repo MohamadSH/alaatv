@@ -123,10 +123,13 @@ trait Helper
             $tillDate = Carbon::parse($tillDate, "Asia/Tehran");
             $tillDate->setTimezone('UTC');
         }
-        $list = $list->whereBetween($by, [
-            $sinceDate,
-            $tillDate,
-        ]);
+
+        $list = $list->where($by , '>=' , $sinceDate)
+                    ->where($by , '<=' , $tillDate ) ;
+//        $list = $list->whereBetween($by, [
+//            $sinceDate,
+//            $tillDate,
+//        ]);
 
         return $list;
     }
