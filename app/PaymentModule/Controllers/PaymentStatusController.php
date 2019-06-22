@@ -62,7 +62,7 @@ class PaymentStatusController extends Controller
             foreach ($orderproducts as $product) {
                 $gtmEec['products'][] = [
                     'id'       => $product->id,
-                    'name'     => $product->ame,
+                    'name'     => $product->name,
                     'category' => '-',
                     'variant'  => '-',
                     'brand'    => 'آلاء',

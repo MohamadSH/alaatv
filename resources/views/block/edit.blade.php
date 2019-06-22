@@ -116,6 +116,7 @@
                                 ])
     
                             </div>
+                            
                             <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="block_product_table">
                                 <thead>
                                     <tr>
@@ -176,12 +177,6 @@
                                 </select>
     
                             </div>
-                            <div>
-                                <button type="button" class="btn m-btn--pill m-btn--air btn-info">
-                                    افزودن
-                                    دسته
-                                </button>
-                            </div>
                             <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="block_set_table">
                                 <thead>
                                 <tr>
@@ -221,25 +216,15 @@
                                     <span>افزودن محتوا جدید به این بلاک</span>
                                     <span></span>
                                 </div>
-                                <select class="mt-multiselect btn btn-default a--full-width"
-                                        multiple="multiple"
-                                        data-label="left"
-                                        data-width="100%"
-                                        data-filter="true"
-                                        data-height="200"
-                                        id="block-contents"
-                                        name="block-contents[]"
-                                        title="انتخاب محتوا">
-{{--                                    @foreach($contents as $content)--}}
-{{--                                        <option value="{{$content->id}}"--}}
-{{--                                                @if($blockContents->contains('id', $content->id))--}}
-{{--                                                class="bold"--}}
-{{--                                                selected="selected"--}}
-{{--                                                @endif>--}}
-{{--                                            #{{$content->id}}-{{$content->name}}--}}
-{{--                                        </option>--}}
-{{--                                    @endforeach--}}
-                                </select>
+    
+                                <div class="row">
+                                    <label class="col-md-2 control-label" for="tags">
+                                        شماره محتوا را وارد کنید:
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input name="contents" type="text" class="form-control input-large contents" value="{{ implode(',',$blockContents->pluck('id')->toArray()) }}">
+                                    </div>
+                                </div>
     
                             </div>
                             <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="block_content_table">
@@ -345,6 +330,9 @@
     <script>
 
         $("input.productTags").tagsinput({
+            tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
+        });
+        $("input.contents").tagsinput({
             tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
         });
         /**
