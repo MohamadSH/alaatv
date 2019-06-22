@@ -52,7 +52,7 @@ class PaymentStatusController extends Controller
                 'actionField' => [
                     'id'          => $order->id,
                     'affiliation' => $device,
-                    'revenue'     => $order->price,
+                    'revenue'     => $result['paidPrice'] ?? 1,
                     'tax'         => 0,
                     'shipping'    => 0,
                     'coupon'      => optional($order->coupon)->code
@@ -62,7 +62,7 @@ class PaymentStatusController extends Controller
             foreach ($orderproducts as $product) {
                 $gtmEec['products'][] = [
                     'id'       => $product->id,
-                    'name'     => $product->ame,
+                    'name'     => $product->name,
                     'category' => '-',
                     'variant'  => '-',
                     'brand'    => 'آلاء',

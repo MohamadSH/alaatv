@@ -51,6 +51,7 @@ public/js/content-search.js
 public/js/user-dashboard.js
 public/js/checkout-review.js
 public/js/checkout-payment.js
+public/js/loadGtmEecForPages.js
 public/js/landing5-alljs.min.js
 public/js/admin-content-create.js
 public/js/checkout-verification.js

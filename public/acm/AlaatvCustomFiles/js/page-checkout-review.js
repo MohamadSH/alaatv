@@ -14,7 +14,7 @@ var CheckoutPaymentUi = function () {
         }
     }
     function refreshPrice(cost) {
-        var userCredit = parseInt($('#userCredit').val());
+        var userCredit = parseInt(window.userCredit);
         var useWalletValue = Math.min(cost.payableByWallet, userCredit);
 
         $('#baseCostValue').html(cost.base.toLocaleString('fa') + 'تومان');
@@ -66,7 +66,7 @@ var CheckoutPaymentUi = function () {
         $('.face-sad').fadeOut(0);
         $('.face-happy').fadeIn(0);
         $('.visibleInDonate').css({'visibility': 'visible'});
-        $('#orderHasDonate').val(1);
+        window.orderHasDonate = 1;
         if (!isInit) {
             UesrCart.increaseOneProductNumber();
         }
@@ -79,7 +79,7 @@ var CheckoutPaymentUi = function () {
         $('.face-sad').fadeIn(0);
         $('.face-happy').fadeOut(0);
         $('.visibleInDonate').css({'visibility': 'hidden'});
-        $('#orderHasDonate').val(0);
+        window.orderHasDonate = 0;
         if (!isInit) {
             UesrCart.reduceOneProductNumber();
         }
@@ -93,7 +93,7 @@ var CheckoutPaymentUi = function () {
         // } else {
         //     return true;
         // }
-        let switchStatus = parseInt($('#orderHasDonate').val());
+        let switchStatus = parseInt(window.orderHasDonate);
         return switchStatus === 1;
     }
 
@@ -104,7 +104,7 @@ var CheckoutPaymentUi = function () {
         // } else {
         //     return true;
         // }
-        let status = parseInt($('#orderHasCoupon').val());
+        let status = parseInt(window.orderHasCoupon);
         return status === 1;
     }
 
@@ -127,13 +127,13 @@ var CheckoutPaymentUi = function () {
             if (lockDonateAjax) {
                 return false;
             }
-            mApp.block('.addDonateWarper, .a--userCartList', {
+            mApp.block('.addDonateWarper, .a--userCartList, .btnGotoCheckoutPayment', {
                 type: 'loader',
                 state: 'info',
             });
             $.ajax({
                 type: 'POST',
-                url: $('#addDonateUrl').val(),
+                url: window.addDonateUrl,
                 data: {
                     mode: 'normal'
                 },
@@ -151,7 +151,7 @@ var CheckoutPaymentUi = function () {
                         // donate();
                         setTotalCostWithDonate(donateValue);
                     }
-                    mApp.unblock('.addDonateWarper, .a--userCartList');
+                    // mApp.unblock('.addDonateWarper, .a--userCartList');
                     lockDonateAjax = false;
                     GAEE.checkoutOption(4, 'checkout-payment-HasDonate');
                     window.location.reload();
@@ -171,13 +171,13 @@ var CheckoutPaymentUi = function () {
             if (lockDonateAjax) {
                 return false;
             }
-            mApp.block('.addDonateWarper, .a--userCartList', {
+            mApp.block('.addDonateWarper, .a--userCartList, .btnGotoCheckoutPayment', {
                 type: 'loader',
                 state: 'info',
             });
             $.ajax({
                 type: 'DELETE',
-                url: $('#removeDonateUrl').val(),
+                url: window.removeDonateUrl,
                 data: {
                     mode: 'normal'
                 },
@@ -190,7 +190,7 @@ var CheckoutPaymentUi = function () {
                         // dontdonate();
                         setTotalCostWithDonate(donateValue);
                     }
-                    mApp.unblock('.addDonateWarper, .a--userCartList');
+                    // mApp.unblock('.addDonateWarper, .a--userCartList');
                     lockDonateAjax = false;
                     GAEE.checkoutOption(4, "checkout-payment-Hasn'tDonate");
                     window.location.reload();
@@ -237,7 +237,6 @@ var CheckoutPaymentUi = function () {
         } else {
             $('#btnSaveDiscountCodeValue').prop('disabled', true);
         }
-        console.log('orderHasCoupon(): ', orderHasCoupon());
         if (orderHasCoupon()) {
             PrintnotIncludedProductsInCoupon(notIncludedProductsInCoupon);
             $('#discountCodeValue').prop('disabled', true);
@@ -263,7 +262,7 @@ var CheckoutPaymentUi = function () {
         });
         $.ajax({
             type: 'POST',
-            url: $('#OrderController-submitCoupon').val(),
+            url: window.OrderControllerSubmitCoupon,
             data: {
                 code: discountCodeValue
             },
@@ -340,7 +339,7 @@ var CheckoutPaymentUi = function () {
         });
         $.ajax({
             type: 'GET',
-            url: $('#OrderController-removeCoupon').val(),
+            url: window.OrderControllerRemoveCoupon,
             data: {},
             success: function (data) {
                 if (data.error) {

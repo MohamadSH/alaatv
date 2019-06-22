@@ -136,8 +136,7 @@
         jQuery(document).ready(function () {
             var orderIdValue = $('#js-var-order-id').val();
             var paidPriceValue = parseFloat($('#js-var-paid-price').val());
-            dataLayer.push(
-                {
+            dataLayer.push({
                     event: 'thank-you-page',
                     order: {
                         'Id': orderIdValue,

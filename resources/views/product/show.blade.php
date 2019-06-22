@@ -531,6 +531,7 @@
         'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo']),
         'blockUrlDisable'=>true,
         'blockType'=>'content',
+        'squareSing'=>false,
         'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
         'blockCustomId'=>'Block-sampleVideo'
         ])
@@ -624,6 +625,7 @@
         'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'relatedProduct']),
         'blockUrlDisable'=>true,
         'blockType'=>'product',
+        'squareSing'=>false,
         'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock relatedProduct',
         'blockCustomId'=>'Block-relatedProduct'
         ])
