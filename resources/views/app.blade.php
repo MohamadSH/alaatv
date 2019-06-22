@@ -8,7 +8,10 @@
     
     <!-- begin::Body -->
     <body class="m-page--fluid m--skin- m-content--skin-light2 m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--fixed m-aside-left--offcanvas m-aside-right--enabled m-footer--push m-aside--offcanvas-default {{ isset($closedSideBar) && $closedSideBar ? 'm-aside-left--hide':''  }}">
+    @if(config('gtm.GTM'))
         @include('partials.gtm-body')
+    @endif
+
         <input id="js-var-userIp" class="m--hide" type="hidden" value='{{ $userIpAddress }}'>
         <input id="js-var-userId" class="m--hide" type="hidden" value='{{ optional(Auth::user())->id }}'>
         <!-- begin:: Page -->

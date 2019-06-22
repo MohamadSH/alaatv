@@ -32,4 +32,6 @@
     <link rel="shortcut icon" href="{{route('image', ['category'=>'11','w'=>'150' , 'h'=>'150' ,  'filename' =>  $wSetting->site->favicon ])}}"/>
 @endif
 
-@include('partials.gtm-head')
+@if(config('gtm.GTM'))
+    @include('partials.gtm-head')
+@endif
