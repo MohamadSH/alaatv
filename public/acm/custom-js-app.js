@@ -40,6 +40,7 @@ jQuery(document).ready( function() {
     /*
      * Google TagManager
      */
+    window.dataLayer = window.dataLayer || [];
     var userIpDimensionValue = $('#js-var-userIp').val();
     var userIdDimensionValue = $('#js-var-userId').val();
     dataLayer.push(
