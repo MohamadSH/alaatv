@@ -139,7 +139,7 @@
             <div class="row">
                 <div class="col-12 col-md-6 text-center m--margin-bottom-5">
                     <a href="{{ route('landing.5') }}"
-                       class="gtm-eec-promotion-click"
+                       class="gtm-eec-promotion-click scrollSensitiveOnScreen"
                        data-gtm-eec-promotion-id="homepage-downloadi1"
                        data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
                        data-gtm-eec-promotion-creative="قبل از بلاک کنکور نظام قدیم"
@@ -149,7 +149,7 @@
                 </div>
                 <div class="col-12 col-md-6 text-center m--margin-bottom-5">
                     <a href="{{ route('landing.8') }}"
-                       class="gtm-eec-promotion-click"
+                       class="gtm-eec-promotion-click scrollSensitiveOnScreen"
                        data-gtm-eec-promotion-id="homepage-ghorekeshi1"
                        data-gtm-eec-promotion-name="قرعه کشی گوشی"
                        data-gtm-eec-promotion-creative="قبل از بلاک کنکور نظام قدیم"
@@ -162,7 +162,7 @@
             <div class="row">
                 <div class="col-12 col-md-6 text-center m--margin-bottom-5">
                     <a href="{{ route('landing.8') }}"
-                       class="gtm-eec-promotion-click"
+                       class="gtm-eec-promotion-click scrollSensitiveOnScreen"
                        data-gtm-eec-promotion-id="homepage-ghorekeshi1"
                        data-gtm-eec-promotion-name="قرعه کشی گوشی"
                        data-gtm-eec-promotion-creative="قبل از بلاک پایه دهم"
@@ -172,7 +172,7 @@
                 </div>
                 <div class="col-12 col-md-6 text-center m--margin-bottom-5">
                     <a href="{{ route('landing.5') }}"
-                       class="gtm-eec-promotion-click"
+                       class="gtm-eec-promotion-click scrollSensitiveOnScreen"
                        data-gtm-eec-promotion-id="homepage-downloadi1"
                        data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
                        data-gtm-eec-promotion-creative="قبل از بلاک پایه دهم"
@@ -195,7 +195,7 @@
     <div class="row">
         <div class="col text-center m--margin-bottom-5">
             <a href="{{ route('landing.8') }}"
-               class="gtm-eec-promotion-click"
+               class="gtm-eec-promotion-click scrollSensitiveOnScreen"
                data-gtm-eec-promotion-id="homepage-ghorekeshi2"
                data-gtm-eec-promotion-name="قرعه کشی گوشی"
                data-gtm-eec-promotion-creative="پایین همه بلاک ها"
