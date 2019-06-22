@@ -1,0 +1,44 @@
+.m-widget27.m-portlet-fit--sides .m-widget27__pic:before {
+    background: none;
+}
+
+.m-widget27.m-portlet-fit--sides .m-widget27__pic {
+    text-align: center;
+    background: -webkit-gradient(linear, right top, left top, color-stop(20%, #909), color-stop(120%, #4f30a2));
+    background: linear-gradient(to left, #909 20%, #4f30a2 120%);
+    height: 280px;
+    display: flex;
+}
+
+.m-widget27.m-portlet-fit--sides .m-widget27__pic img {
+    width: 300px;
+    height: auto;
+    margin: auto;
+}
+
+.a--imageCaptionDescription .m-badge {
+    font-size: 20px;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.ftco-animate .icon i {
+    font-size: 90px;
+}
+
+.lastSection .lastSectionItem {
+    text-align: center;
+}
+
+.lastSection .lastSectionItem .icon {
+    height: 135px;
+}
+
+.lastSection .lastSectionItem .icon i {
+    font-size: 90px;
+    height: 135px;
+    line-height: 135px;
+}
+
+.lastSection .lastSectionItem .text {
+}

@@ -1,17 +1,7 @@
 @extends('app')
 
 @section('page-css')
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/ribbon/style.css') }}?v=1" rel="stylesheet" type="text/css"/>
-    <link href="{{ mix('/css/page-landing7.css') }}?v=2" rel="stylesheet" type="text/css"/>
-    <style>
-        .m-portlet__head {
-            background: white;
-        }
-        .a--owl-carousel-type-2-gridViewWarper .ribbon {
-            top: calc(20px - 32px);
-            right: calc(5% - 5px);
-        }
-    </style>
+    <link href="{{ mix('/css/page-landing9.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('content')
@@ -73,7 +63,7 @@
                             @foreach($blocks as $blockKey=>$block)
                                 @if($block->products->count() > 0)
                                     @include('product.partials.Block.block', [
-                                            'blockCustomClass'=>'landing7Block-'.$blockKey.' a--owl-carousel-type-2 ',
+                                            'blockCustomClass'=>'landing7Block-'.$blockKey.' a--owl-carousel-type-2 OwlCarouselType2-landing9',
                                             'blockCustomId'=>$block->class
                                         ])
                                 @endif
@@ -89,11 +79,7 @@
 @endsection
 
 @section('page-js')
-    <script src="{{ mix('/js/page-shop.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/components/aSticky/aSticky.js') }}"></script>
     <script>
-
-
         var sections = [
         @foreach($blocks as $blockKey=>$block)
             @if($block->products->count() > 0)
@@ -101,25 +87,6 @@
             @endif
         @endforeach
         ];
-        
-        $(document).on('click', '.btnScroll', function (e) {
-            e.preventDefault();
-            let blockId = $(this).attr('href');
-            if ($('.' + blockId).length > 0) {
-                $([document.documentElement, document.body]).animate({
-                    scrollTop: $('.'+blockId).offset().top - $('#m_header').height()
-                }, 500);
-            }
-        });
-
-        $(document).ready(function () {
-            for (let section in sections) {
-                $('.'+sections[section]+' .m-portlet__head').sticky({
-                    container: '.'+sections[section],
-                    topSpacing: $('#m_header').height(),
-                    zIndex: 99
-                });
-            }
-        });
     </script>
+    <script src="{{ mix('/js/page-landing9.js') }}"></script>
 @endsection

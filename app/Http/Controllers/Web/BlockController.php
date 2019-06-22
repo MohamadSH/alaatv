@@ -73,6 +73,10 @@ class BlockController extends Controller
     
     public function update(Request $request, Block $block)
     {
+        $contents =convertTagStringToArray($request->get('contents'));
+        $sets = $request->get('block-sets');
+        $products = $request->get('block-products');
+        dd($request->all());
 //        $tags =convertTagStringToArray($request->get('tags'));
 //        $block->title = $request->get('title');
 //        $block->customUrl = $request->get('customUrl');

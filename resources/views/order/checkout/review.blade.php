@@ -474,6 +474,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if( ($invoiceInfo['price']['final'] - $fromWallet) > 0)
                                     <div class="m-widget1__item">
                                         <div class="m-form__group form-group text-center m--margin-top-10">
                                             <div class="m-radio-inline">
@@ -492,6 +493,19 @@
                                                 {{--                                                <img src="/acm/extra/payment/gateway/pasargad-logo.jpg" class="img-thumbnail bankLogo" alt="bank-logo" width="60">--}}
                                                 {{--                                                <span></span>--}}
                                                 {{--                                            </label>--}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endif
+                                    <div class="m-widget1__item">
+                                        <div class="form-group m-form__group">
+                                            <label for="customerDescription">
+                                                اگر توضیحی در مورد سفارش خود دارید اینجا بنویسید:
+                                            </label>
+                                            <div class="m-input-icon m-input-icon--left">
+                                                <textarea id="customerDescription" class="form-control m-input m-input--air"
+                                                          placeholder="توضیح شما..." rows="2" name="customerDescription"
+                                                          cols="50"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -527,18 +541,6 @@
                         </div>
                     </div>
                     <!--end:: Widgets/Authors Profit-->
-    
-                    @if(optional(Auth::user())->id !== null)
-                        <div class="form-group m-form__group">
-                            <label for="customerDescription">اگر توضیحی در مورد سفارش خود دارید اینجا
-                                بنویسید:</label>
-                            <div class="m-input-icon m-input-icon--left">
-                                <textarea id="customerDescription" class="form-control m-input m-input--air"
-                                          placeholder="توضیح شما..." rows="2" name="customerDescription"
-                                          cols="50"></textarea>
-                            </div>
-                        </div>
-                    @endif
                 </form>
     
                 @if(optional(Auth::user())->id === null)
@@ -641,33 +643,30 @@
             </div>
         </div>
     </div>
-
-    <input type="hidden" id="userCredit"
-           @if(isset($credit))
-           value="{{ $credit }}"
-           @else
-           value="0"
-           @endif>
-    <input type="hidden" id="addDonateUrl" value="{{ action('Web\OrderController@addOrderproduct' , 180) }}">
-    <input type="hidden" id="removeDonateUrl" value="{{ action('Web\OrderController@removeOrderproduct' , 180) }}">
-    <input type="hidden" id="OrderController-submitCoupon" value="{{ action('Web\OrderController@submitCoupon') }}">
-    <input type="hidden" id="OrderController-removeCoupon" value="{{ action('Web\OrderController@removeCoupon') }}">
-    <input type="hidden" id="orderHasDonate"
-           @if(isset($orderHasDonate) && $orderHasDonate)
-           value="1"
-           @else
-           value="0"
-           @endif>
-    <input type="hidden" id="orderHasCoupon"
-           @if(isset($coupon))
-           value="1"
-           @else
-           value="0"
-           @endif>
+    
 @endsection
 
 @section('page-js')
     <script>
+        var addDonateUrl = '{{ action('Web\OrderController@addOrderproduct' , 180) }}';
+        var removeDonateUrl = '{{ action('Web\OrderController@removeOrderproduct' , 180) }}';
+        var OrderControllerSubmitCoupon = '{{ action('Web\OrderController@submitCoupon') }}';
+        var OrderControllerRemoveCoupon = '{{ action('Web\OrderController@removeCoupon') }}';
+        var userCredit = @if(isset($credit))
+            {{ $credit }}
+        @else
+            0
+        @endif;
+        var orderHasDonate = @if(isset($orderHasDonate) && $orderHasDonate)
+            1;
+        @else
+            0
+        @endif;
+        var orderHasCoupon = @if(isset($coupon))
+            1;
+        @else
+            0
+        @endif;
         var notIncludedProductsInCoupon =
         @if(isset($notIncludedProductsInCoupon))
                 {!! json_encode($notIncludedProductsInCoupon) !!}

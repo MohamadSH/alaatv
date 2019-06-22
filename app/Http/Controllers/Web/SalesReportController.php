@@ -68,7 +68,7 @@ class SalesReportController extends Controller
         /** This month */
         [$thisMonthCount, $thisMonthSum] = $this->thisMonthPurchases($allTimeOrderproducts);
 
-        $now = Carbon::now()->setTimezone('Asia/Tehran')->format('Y-m-d H:m:s');
+        $now = Carbon::now()->setTimezone('Asia/Tehran')->format('Y-m-d H:i:s');
         return view('user.salesReport', compact('limitStatus', 'coupontype', 'products',
             'allTimeCount', 'allTimeSum', 'thisMonthCount', 'thisMonthSum', 'thisWeekCount', 'thisWeekSum',
             'todayCount', 'todaySum',

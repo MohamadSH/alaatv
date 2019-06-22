@@ -50,7 +50,7 @@ class PaymentStatusController extends Controller
             $orderproducts = $order->products();
             $gtmEec        = [
                 'actionField' => [
-                    'id'          => $result['orderId'] ?? -1,
+                    'id'          => $order->id,
                     'affiliation' => $device,
                     'revenue'     => $result['paidPrice'] ?? 1,
                     'tax'         => 0,
@@ -62,7 +62,7 @@ class PaymentStatusController extends Controller
             foreach ($orderproducts as $product) {
                 $gtmEec['products'][] = [
                     'id'       => $product->id,
-                    'name'     => $product->ame,
+                    'name'     => $product->name,
                     'category' => '-',
                     'variant'  => '-',
                     'brand'    => 'آلاء',

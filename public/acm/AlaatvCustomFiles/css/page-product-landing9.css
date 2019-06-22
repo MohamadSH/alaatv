@@ -1,0 +1,7 @@
+.m-portlet__head {
+    background: white;
+}
+.a--owl-carousel-type-2-gridViewWarper .ribbon {
+    top: calc(20px - 32px);
+    right: calc(5% - 5px);
+}

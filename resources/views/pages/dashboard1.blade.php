@@ -257,5 +257,4 @@
         ];
     </script>
     <script src="{{ mix('/js/page-homePage.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-homePage.js') }}"></script>
 @endsection

@@ -450,32 +450,39 @@ class Order extends BaseModel
      */
     public function products(array $orderproductTypes = [])
     {
-        $result = DB::table('products')
-            ->join('orderproducts', function ($join) use ($orderproductTypes) {
-                if (empty($orderproductTypes)) {
-                    $join->on('products.id', '=', 'orderproducts.product_id')
-                        ->whereNull('orderproducts.deleted_at');
-                } else {
-                    $join->on('products.id', '=', 'orderproducts.product_id')
-                        ->whereNull('orderproducts.deleted_at')
-                        ->whereIn("orderproducttype_id",
-                            $orderproductTypes);
-                }
-            })
-            ->join('orders', function ($join) {
-                $join->on('orders.id', '=', 'orderproducts.order_id')
-                    ->whereNull('orders.deleted_at');
-            })
-            ->select([
-                "products.*",
-            ])
-            ->where('orders.id', '=', $this->getKey())
-            ->whereNull('products.deleted_at')
-            ->distinct()
-            ->get();
-        $result = Product::hydrate($result->toArray());
-        
-        return $result;
+        $order = $this;
+        $key   = "order:products:".$order->cacheKey();
+
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_5"), function () use ($order,$orderproductTypes) {
+                $result = DB::table('products')
+                    ->join('orderproducts', function ($join) use ($orderproductTypes) {
+                        if (empty($orderproductTypes)) {
+                            $join->on('products.id', '=', 'orderproducts.product_id')
+                                ->whereNull('orderproducts.deleted_at');
+                        } else {
+                            $join->on('products.id', '=', 'orderproducts.product_id')
+                                ->whereNull('orderproducts.deleted_at')
+                                ->whereIn("orderproducttype_id",
+                                    $orderproductTypes);
+                        }
+                    })
+                    ->join('orders', function ($join) {
+                        $join->on('orders.id', '=', 'orderproducts.order_id')
+                            ->whereNull('orders.deleted_at');
+                    })
+                    ->select([
+                        "products.*",
+                    ])
+                    ->where('orders.id', '=', $this->getKey())
+                    ->whereNull('products.deleted_at')
+                    ->distinct()
+                    ->get();
+                $result = Product::hydrate($result->toArray());
+
+                return $result;
+
+            });
     }
     
     public function refreshCost()
