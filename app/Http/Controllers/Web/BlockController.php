@@ -76,7 +76,7 @@ class BlockController extends Controller
         $contents =convertTagStringToArray($request->get('contents'));
         $sets = $request->get('block-sets');
         $products = $request->get('block-products');
-        dd($products);
+        dd($request->all());
 //        $tags =convertTagStringToArray($request->get('tags'));
 //        $block->title = $request->get('title');
 //        $block->customUrl = $request->get('customUrl');

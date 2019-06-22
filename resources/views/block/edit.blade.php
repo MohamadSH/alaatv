@@ -116,6 +116,7 @@
                                 ])
     
                             </div>
+                            
                             <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="block_product_table">
                                 <thead>
                                     <tr>
