@@ -12,14 +12,14 @@
     )
 )
     <div class="row blockWraper
-                @if(isset($blockCustomClass))
-                    {{ $blockCustomClass }}
-                @endif
-                blockId-{{ $block->id }}
-                {{ $block->class }}
-                @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
-                blockWraper-hasProduct
-                @endif"
+        @if(isset($blockCustomClass))
+            {{ $blockCustomClass }}
+        @endif
+        blockId-{{ $block->id }}
+        {{ $block->class }}
+        @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
+        blockWraper-hasProduct
+        @endif "
          @if(isset($blockCustomId))
             id="{{ $blockCustomId }}"
          @else
@@ -32,10 +32,12 @@
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
     
-                                @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
-                                    <span class="redSquare"></span>
-                                @else
-                                    <span class="blueSquare"></span>
+                                @if((isset($squareSing) && $squareSing === true) || !isset($squareSing))
+                                    @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
+                                        <span class="redSquare"></span>
+                                    @else
+                                        <span class="blueSquare"></span>
+                                    @endif
                                 @endif
     
                                 @if(!isset($blockUrlDisable) || !$blockUrlDisable)
