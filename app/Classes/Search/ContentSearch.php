@@ -29,7 +29,8 @@ class ContentSearch extends SearchAbstract
         'createdAtSince',
         'createdAtTill',
         'isFree',
-        'free'
+        'free',
+        'orderBy'
     ];
     
     public function get(array ...$params)
@@ -84,7 +85,6 @@ class ContentSearch extends SearchAbstract
             ->remember($key, $this->cacheTime, function () use ($filters) {
                 //            dump("in cache");
                 $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
-                
                 return $this->getResults($query)
                     ->appends($filters);
             });

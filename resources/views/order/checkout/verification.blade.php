@@ -124,16 +124,12 @@
 @section('page-js')
     <script>
         var gtmEec = {!! json_encode($gtmEec) !!};
-        var paymentStatus =
-        @if($status==='successful')
-            true;
-        @else
-            false
-        @endif
-        ;
+        var paymentStatus = Boolean({{ $status==='successful' ? true : false }});
     </script>
     <script src="{{ mix('/js/checkout-verification.js') }}"></script>
-    
+@endsection
+
+@section('data-layer')
     <input id="js-var-order-id" class="m--hide" type="hidden" value='{{ $result['orderId'] ?? -1 }}'>
     <input id="js-var-paid-price" class="m--hide" type="hidden" value='{{ $result['paidPrice'] ?? 1 }}'>
     <script>
@@ -142,8 +138,12 @@
             var paidPriceValue = parseFloat($('#js-var-paid-price').val());
             dataLayer.push(
                 {
-                    'orderId': orderIdValue,
-                    'paidPrice': paidPriceValue,
+                    event: 'thank-you-page',
+                    order: {
+                        'Id': orderIdValue,
+                        'Price': paidPriceValue,
+                        'Method': '{{ $paymentMethod }}',
+                    }
                 });
         });
     </script>

@@ -52,7 +52,7 @@ class PaymentStatusController extends Controller
                 'actionField' => [
                     'id'          => $order->id,
                     'affiliation' => $device,
-                    'revenue'     => $order->price,
+                    'revenue'     => $result['paidPrice'] ?? 1,
                     'tax'         => 0,
                     'shipping'    => 0,
                     'coupon'      => optional($order->coupon)->code

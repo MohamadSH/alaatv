@@ -231,8 +231,8 @@ abstract class Refinement
         $walletPayResult          = $this->canPayOrderByWallet($this->user, $deductibleCostFromWallet);
         if ($walletPayResult['result']) {
             $remainedCost = $walletPayResult['cost'];
-            $this->order->close();
-            $this->order->updateWithoutTimestamp();
+//            $this->order->close();
+//            $this->order->updateWithoutTimestamp();
         }
         $remainedCost             = $remainedCost + $this->donateCost;
         $this->cost               = $remainedCost;

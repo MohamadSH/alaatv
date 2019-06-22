@@ -76,13 +76,13 @@ class OrderController extends Controller
         $this->middleware('permission:'.config('constants.SHOW_ORDER_ACCESS'), ['only' => 'edit', 'show']);
         $this->middleware('permission:'.config('constants.INSERT_ORDER_ACCESS'), ['only' => 'exitAdminInsertOrder']);
         $this->middleware([
-            'completeInfo',
+//            'completeInfo',
             'OrderCheckoutReview',
         ], ['only' => ['checkoutReview',],]);
-        $this->middleware([
-            'completeInfo',
-            'OrderCheckoutPayment',
-        ], ['only' => ['checkoutPayment'],]);
+//        $this->middleware([
+//            'completeInfo',
+//            'OrderCheckoutPayment',
+//        ], ['only' => ['checkoutPayment'],]);
         $this->middleware('SubmitOrderCoupon', ['only' => ['submitCoupon'],]);
         $this->middleware('RemoveOrderCoupon', ['only' => ['removeCoupon'],]);
         $this->setting = $setting->setting;
@@ -869,7 +869,7 @@ class OrderController extends Controller
                 $response =  response([
                                 'invoiceInfo'                 => $invoiceInfo,
                                 'fromWallet'                  => $fromWallet,
-                                'walletBalance'               => $credit,
+                                'credit'                      => $credit,
                                 'couponInfo'                  => $coupon,
                                 'notIncludedProductsInCoupon' => $notIncludedProductsInCoupon,
                                 'orderHasDonate'              => $orderHasDonate,
@@ -953,6 +953,7 @@ class OrderController extends Controller
      */
     public function checkoutInvoice(Request $request)
     {
+        return redirect(action("Web\OrderController@checkoutReview"));
         if (!Auth::check()) {
             return redirect(action("Web\OrderController@checkoutAuth"));
         }
@@ -1000,6 +1001,7 @@ class OrderController extends Controller
      */
     public function checkoutPayment(Request $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
+        return redirect(action("Web\OrderController@checkoutReview"));
 //        Cache::tags('order')->flush();
 //        Cache::tags('orderproduct')->flush();
 
