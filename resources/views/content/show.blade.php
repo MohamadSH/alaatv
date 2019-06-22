@@ -150,7 +150,7 @@
                     <div class="row">
                         <div class="col text-center m--margin-bottom-5">
                             <a href="{{ route('landing.5') }}"
-                               class="gtm-eec-promotion-click"
+                               class="gtm-eec-promotion-click scrollSensitiveOnScreen"
                                data-gtm-eec-promotion-id="contentShowPage-rightSide-0"
                                data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
                                data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"
@@ -256,7 +256,7 @@
                                         <div class="row">
                                             <div class="col-md-6 text-center m--margin-bottom-5">
                                                 <a href="{{ route('landing.8') }}"
-                                                   class="gtm-eec-promotion-click"
+                                                   class="gtm-eec-promotion-click scrollSensitiveOnScreen"
                                                    data-gtm-eec-promotion-id="contentShowPage-rightSide-1"
                                                    data-gtm-eec-promotion-name="قرعه کشی گوشی"
                                                    data-gtm-eec-promotion-creative="جلوی لینک های مستقیم دانلود این فیلم"
@@ -267,7 +267,7 @@
                                             </div>
                                             <div class="col-md-6 text-center m--margin-bottom-5">
                                                 <a href="{{ route('landing.5') }}"
-                                                   class="gtm-eec-promotion-click"
+                                                   class="gtm-eec-promotion-click scrollSensitiveOnScreen"
                                                    data-gtm-eec-promotion-id="contentShowPage-rightSide-2"
                                                    data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
                                                    data-gtm-eec-promotion-creative="جلوی لینک های مستقیم دانلود این فیلم"
@@ -337,7 +337,7 @@
                     <div class="row">
                         <div class="col text-center m--margin-bottom-5">
                             <a href="{{ route('landing.5') }}"
-                               class="gtm-eec-promotion-click"
+                               class="gtm-eec-promotion-click scrollSensitiveOnScreen"
                                data-gtm-eec-promotion-id="contentShowPage-rightSide-0"
                                data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
                                data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"
@@ -416,7 +416,7 @@
                     <div class="row">
                         <div class="col text-center m--margin-bottom-5">
                             <a href="{{ route('landing.5') }}"
-                               class="gtm-eec-promotion-click"
+                               class="gtm-eec-promotion-click scrollSensitiveOnScreen"
                                data-gtm-eec-promotion-id="contentShowPage-rightSide-0"
                                data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
                                data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"
@@ -500,7 +500,7 @@
                 <div class="row">
                     <div class="col text-center m--margin-bottom-5">
                         <a href="{{ route('landing.8') }}"
-                           class="gtm-eec-promotion-click"
+                           class="gtm-eec-promotion-click scrollSensitiveOnScreen"
                            data-gtm-eec-promotion-id="shop-ghorekeshi3"
                            data-gtm-eec-promotion-name="قرعه کشی گوشی"
                            data-gtm-eec-promotion-creative="سمت چپ صفحه بالای لیست کانتنت های مشابه"
@@ -573,7 +573,7 @@
                 <div>
                     <a href="https://alaatv.com/product/312"
                        data-tooltip-content="همایش طلایی شیمی کنکور"
-                       class="gtm-eec-promotion-click"
+                       class="gtm-eec-promotion-click scrollSensitiveOnScreen"
                        data-gtm-eec-promotion-id="contentShowPage-leftSide-1"
                        data-gtm-eec-promotion-name="همایش طلایی شیمی کنکور"
                        data-gtm-eec-promotion-creative="سمت چپ صفحه پایین لیست کانتنت های مشابه"

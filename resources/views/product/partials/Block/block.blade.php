@@ -19,6 +19,7 @@
         {{ $block->class }}
         @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
         blockWraper-hasProduct
+        scrollSensitiveOnScreen
         @endif "
          @if(isset($blockCustomId))
             id="{{ $blockCustomId }}"
