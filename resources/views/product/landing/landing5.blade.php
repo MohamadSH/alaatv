@@ -1,54 +1,9 @@
 @extends('app')
 
 @section('page-css')
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/imageWithCaption/style.css') }}" rel="stylesheet" type="text/css"/>
-    <style>
-        .m-widget27.m-portlet-fit--sides .m-widget27__pic:before {
-            background: none;
-        }
-
-        .m-widget27.m-portlet-fit--sides .m-widget27__pic {
-            text-align: center;
-            background: -webkit-gradient(linear, right top, left top, color-stop(20%, #909), color-stop(120%, #4f30a2));
-            background: linear-gradient(to left, #909 20%, #4f30a2 120%);
-            height: 280px;
-            display: flex;
-        }
-
-        .m-widget27.m-portlet-fit--sides .m-widget27__pic img {
-            width: 300px;
-            height: auto;
-            margin: auto;
-        }
-
-        .a--imageCaptionDescription .m-badge {
-            font-size: 20px;
-            padding: 10px;
-            margin-top: 10px;
-        }
-
-        .ftco-animate .icon i {
-            font-size: 90px;
-        }
-
-        .lastSection .lastSectionItem {
-            text-align: center;
-        }
-
-        .lastSection .lastSectionItem .icon {
-            height: 135px;
-        }
-
-        .lastSection .lastSectionItem .icon i {
-            font-size: 90px;
-            height: 135px;
-            line-height: 135px;
-        }
-
-        .lastSection .lastSectionItem .text {
-        }
-    </style>
+    <link href="{{ mix('/css/page-landing5.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
+
 @section('content')
     <div class="row">
         <div class="col">
@@ -208,30 +163,7 @@
         </div>
     </div>
 @endsection
-@section('page-js')
 
-    <script>
-        
-        jQuery(document).ready(function () {
-            $(document).on('click', '.btnShowRiazi', function () {
-                $('.a--imageWithCaption.tajrobi').fadeOut();
-                $('.a--imageWithCaption.ensani').fadeOut();
-                $('.a--imageWithCaption.riazi').fadeIn();
-            });
-            $(document).on('click', '.btnShowTajrobi', function () {
-                $('.a--imageWithCaption.riazi').fadeOut();
-                $('.a--imageWithCaption.ensani').fadeOut();
-                $('.a--imageWithCaption.tajrobi').fadeIn();
-            });
-            $(document).on('click', '.btnShowEnsani', function () {
-                $('.a--imageWithCaption.riazi').fadeOut();
-                $('.a--imageWithCaption.tajrobi').fadeOut();
-                $('.a--imageWithCaption.ensani').fadeIn();
-            });
-            $(document).on('click', '.btnAllMajor', function () {
-                $('.a--imageWithCaption.tajrobi').fadeIn();
-                $('.a--imageWithCaption.riazi').fadeIn();
-            });
-        });
-    </script>
+@section('page-js')
+    <script src="{{ mix('/js/page-landing5.js') }}"></script>
 @endsection
