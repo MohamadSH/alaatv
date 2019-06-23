@@ -65,44 +65,67 @@ class BlockController extends Controller
         ];
         $products = $this->makeProductCollection();
         $sets = Contentset::all();
-        $contents = Content::all();
+        // $contents = Content::all();
         $blockSets = $block->sets()->get();
         $blockContents = $block->contents()->get();
-        return view('block.edit', compact(['block', 'products', 'sets', 'blockSets', 'contents', 'blockContents', 'blockTypes']));
+        $blockProductsId = $block->products()->get()->pluck('id');
+        return view('block.edit', compact(['block', 'products', 'sets', 'blockSets', 'blockContents', 'blockProductsId', 'blockTypes']));
     }
     
     public function update(Request $request, Block $block)
     {
-        $contents =convertTagStringToArray($request->get('contents'));
-        $sets = $request->get('block-sets');
-        $products = $request->get('block-products');
-        dd($request->all());
-//        $tags =convertTagStringToArray($request->get('tags'));
-//        $block->title = $request->get('title');
-//        $block->customUrl = $request->get('customUrl');
-//        $block->class = $request->get('class');
-//        $block->order = $request->get('order');
-//        $block->enable = $request->get('enable');
-//        $block->type = $request->get('type');
-//        $block->tags = $tags;
-//        $block->update();
+        $productsId = $request->get('block-products');
+        $setsId = $request->get('block-sets');
+        $contentsId =convertTagStringToArray($request->get('contents'));
+        $tags =convertTagStringToArray($request->get('tags'));
     
-//        $productArray = [
-//            40, 35, 242, 232, 234, 240
-//        ];
-//        foreach ($productArray as $productId) {
-//            $product = Product::find($productId);
-//            $block->products()->save($product);
-//        }
-//        dd('$product saved');
+        $productsId = isset($productsId) ? $productsId : [];
+        $contentsId = isset($contentsId) ? $contentsId : [];
+        $setsId = isset($setsId) ? $setsId : [];
+        
+        $this->fillBlock($request, $block, $tags);
+        
+        $block->update();
+        
+        $this->attachProducts($block, $productsId);
+    
+        $this->attachSets($block, $setsId);
+    
+        $this->attachContents($block, $contentsId);
+    
+        session()->put('success', 'اصلاح بلاک با موفقیت انجام شد');
+        
+        return redirect()->back();
     }
     
-    private function checkArray($array) {
-        if ($array === null || !is_array($array)) {
-            return [];
-        } else {
-            return $array;
-        }
+    /**
+     * @param  Block  $block
+     * @param  array  $productsId
+     */
+    public function attachProducts(Block $block, array $productsId): void
+    {
+        $block->products()->detach();
+        $block->products()->saveMany(Product::whereIn('id', $productsId)->get());
+    }
+    
+    /**
+     * @param  Block  $block
+     * @param  array  $setsId
+     */
+    public function attachSets(Block $block, array $setsId): void
+    {
+        $block->sets()->detach();
+        $block->sets()->saveMany(Contentset::whereIn('id', $setsId)->get());
+    }
+    
+    /**
+     * @param  Block  $block
+     * @param  array  $contentsId
+     */
+    public function attachContents(Block $block, array $contentsId): void
+    {
+        $block->contents()->detach();
+        $block->contents()->saveMany(Content::whereIn('id', $contentsId)->get());
     }
     
     public function store(Request $request)
@@ -130,5 +153,44 @@ class BlockController extends Controller
         }
     
         return $response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
+    }
+    
+    /**
+     * @param  Request  $request
+     * @param  Block    $block
+     * @param  array    $tags
+     */
+    private function fillBlock(Request $request, Block $block, array $tags): void
+    {
+        $block->title     = $request->get('title');
+        $block->customUrl = $request->get('customUrl');
+        $block->class     = $request->get('class');
+        $block->order     = $request->get('order');
+        $block->enable    = $request->get('enable');
+        $block->type      = $request->get('type');
+        $block->tags      = json_encode($tags);
+    }
+    
+    public function detachFromBlock(Block $block, string $type, int $id) {
+        $detachType = [
+            'product' => 'detachProduct',
+            'set' => 'detachSet',
+            'content' => 'detachContent'
+        ];
+        $methodName = $detachType[$type];
+        $this->$methodName($block, $id);
+        return redirect()->back();
+    }
+    
+    private function detachProduct(Block $block, int $id) {
+        $block->products()->detach(Product::find($id));
+    }
+    
+    private function detachSet(Block $block, int $id) {
+        $block->sets()->detach(Contentset::find($id));
+    }
+    
+    private function detachContent(Block $block, int $id) {
+        $block->contents()->detach(Content::find($id));
     }
 }
