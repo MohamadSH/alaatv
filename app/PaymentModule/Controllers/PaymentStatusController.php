@@ -52,7 +52,7 @@ class PaymentStatusController extends Controller
                 'actionField' => [
                     'id'          => $order->id,
                     'affiliation' => $device,
-                    'revenue'     => $result['paidPrice'] ?? 1,
+                    'revenue'     => number_format($result['paidPrice'] ?? 1, 2, '.', ''),
                     'tax'         => 0,
                     'shipping'    => 0,
                     'coupon'      => optional($order->coupon)->code
@@ -67,7 +67,7 @@ class PaymentStatusController extends Controller
                     'variant'  => '-',
                     'brand'    => 'آلاء',
                     'quantity' => 1,
-                    'price'    => $product->price['final']
+                    'price'    => number_format($product->price['final'] ?? 0, 2, '.', ''),
                 ];
             }
         }
