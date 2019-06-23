@@ -512,3 +512,10 @@ mix.styles(
     ],
     'public/css/page-landing10.css'
 ).version();
+
+mix.styles(
+    [
+        'public/acm/AlaatvCustomFiles/css/page-auth-login.css',
+    ],
+    'public/css/auth-login.css'
+).version();
