@@ -6,10 +6,12 @@ use App\Bon;
 use App\User;
 use App\Order;
 use App\Wallet;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Notifications\InvoicePaid;
 use App\Http\Controllers\Controller;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request as RequestFcade;
 
@@ -31,7 +33,7 @@ class OfflinePaymentController extends Controller
      * @param  string   $paymentMethod
      * @param  string   $device
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return RedirectResponse|Redirector
      */
     public function verifyPayment(Request $request, string $paymentMethod, string $device)
     {
@@ -61,8 +63,11 @@ class OfflinePaymentController extends Controller
         if (!$this->processVerification($order, $paymentMethod , $customerDescription))
             return response(['message' => 'Invalid inputs'], Response::HTTP_BAD_REQUEST);
 
-
-        $assetLink = '<a href="'.route('user.asset').'">دانلودهای من</a>';
+        $assetLink          = '
+            <a href="'.route('user.asset').'" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent animated infinite heartBeat">
+                دانلودهای من
+            </a>';
+        
         $responseMessages = [
             'سفارش شما با موفقیت ثبت شد',
             'برای دانلود محصولاتی که خریده اید به صفحه روبرو بروید: '.$assetLink,
