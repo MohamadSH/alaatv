@@ -23,7 +23,7 @@
        data-gtm-eec-product-category="-"
        data-gtm-eec-product-position="{{ $productKey }}"
        data-gtm-eec-actionFieldList="{{ $block->title }}">
-        <img class="a--owl-carousel-type-2-item-image" src="{{ $product->photo }}?w=253&h=142">
+        <img class="a--owl-carousel-type-2-item-image owl-lazy lazy-image" data-src="{{ $product->photo }}?w=253&h=142">
     </a>
     <div class="m--font-primary a--owl-carousel-type-2-item-title">
         @include('product.partials.price', ['price'=>$product->price])
