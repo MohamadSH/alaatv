@@ -1,7 +1,7 @@
 @if($slides->count() > 0)
     <div class="row m--margin-bottom-20">
         <div class="col-xl-12">
-            <div id="carouselMainSlideShow" class="carousel slide" data-ride="carousel">
+            <div id="carouselMainSlideShow" class="carousel slide scrollSensitiveOnScreen" data-ride="carousel">
                 @if($slides->count() > 1)
                     <ol class="carousel-indicators">
                         @foreach($slides as $key => $slide)
