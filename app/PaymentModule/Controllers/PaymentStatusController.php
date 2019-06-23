@@ -53,9 +53,9 @@ class PaymentStatusController extends Controller
                     'id'          => $order->id,
                     'affiliation' => $device,
                     'revenue'     => number_format($result['paidPrice'] ?? 1, 2, '.', ''),
-                    'tax'         => 0,
-                    'shipping'    => 0,
-                    'coupon'      => optional($order->coupon)->code
+                    'tax'         => '0',
+                    'shipping'    => '0',
+                    'coupon'      => optional($order->coupon)->code ?? '',
                 ],
                 'products'    => []
             ];

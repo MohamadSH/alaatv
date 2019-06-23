@@ -2,18 +2,18 @@
 
 namespace App;
 
-use App\Classes\Taggable;
-use App\Collection\UserCollection;
-use Carbon\Carbon;
 use Eloquent;
-use Illuminate\Database\Eloquent\Builder;
+use Carbon\Carbon;
+use App\Classes\Taggable;
 use Laravel\Scout\Searchable;
 use App\Traits\favorableTraits;
 use App\Collection\SetCollection;
+use App\Collection\UserCollection;
 use App\Traits\Set\TaggableSetTrait;
 use App\Collection\ProductCollection;
 use Illuminate\Support\Facades\Cache;
 use App\Collection\ContentCollection;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * App\Contentset
@@ -336,8 +336,13 @@ class Contentset extends BaseModel implements Taggable
     }
 
     public function getActiveContents2(){
-        return $this->contents()
-            ->active();
+        $key = 'ContentSet:getActiveContents2'.$this->cacheKey();
+        return Cache::tags('set')
+            ->remember($key, config('constants.CACHE_300'), function () {
+                return $this->contents()
+                    ->active()
+                    ->get();
+            });
     }
 
     public function getContents(): ContentCollection

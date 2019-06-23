@@ -4,28 +4,28 @@
         (!isset($blockType)) ||
         isset($blockType) &&
         (
-            ($blockType === 'content' && !is_null($block->getActiveContent()->get()) && $block->getActiveContent()->get()->count() > 0) ||
-            ($blockType === 'content' && optional(optional(optional($block->sets)->first())->getActiveContents2()->get())->count() > 0) ||
-            ($blockType === 'product' && !is_null($block->getActiveProducts()->get()) && $block->getActiveProducts()->get()->count() > 0) ||
-            ($blockType === 'set' && !is_null($block->getActiveSets()->get()) && $block->getActiveSets()->get()->count() > 0)
+            ($blockType === 'content' && !is_null($block->getActiveContent()) && $block->getActiveContent()->count() > 0) ||
+            ($blockType === 'content' && optional(optional(optional($block->sets)->first())->getActiveContents2())->count() > 0) ||
+            ($blockType === 'product' && !is_null($block->getActiveProducts()) && $block->getActiveProducts()->count() > 0) ||
+            ($blockType === 'set' && !is_null($block->getActiveSets()) && $block->getActiveSets()->count() > 0)
         )
     )
 )
     <div class="row blockWraper
         @if(isset($blockCustomClass))
-            {{ $blockCustomClass }}
-        @endif
-        blockId-{{ $block->id }}
-        {{ $block->class }}
-        @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
-        blockWraper-hasProduct
-        scrollSensitiveOnScreen
-        @endif "
+    {{ $blockCustomClass }}
+    @endif
+            blockId-{{ $block->id }}
+    {{ $block->class }}
+    @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
+            blockWraper-hasProduct
+            scrollSensitiveOnScreen
+@endif "
          @if(isset($blockCustomId))
-            id="{{ $blockCustomId }}"
+         id="{{ $blockCustomId }}"
          @else
-            id="{{ $block->class }}"
-         @endif>
+         id="{{ $block->class }}"
+            @endif>
         <div class="col">
             <div class="m-portlet  m-portlet--bordered OwlCarouselType2-shopPage" id="owlCarousel_{{ $block->id }}">
                 <div class="m-portlet__head">
@@ -42,24 +42,26 @@
                                 @endif
     
                                 @if(!isset($blockUrlDisable) || !$blockUrlDisable)
-                                <a href="{{ $block->url }}" class="m-link">
-                                @endif
-                                    @if(isset($blockTitle))
-                                        {!! $blockTitle !!}
-                                    @else
-                                        {{ $block->title }}
-                                    @endif
-                                @if((isset($blockUrlDisable) && !$blockUrlDisable) || !isset($blockUrlDisable))
-                                </a>
+                                    <a href="{{ $block->url }}" class="m-link">
+                                        @endif
+                                        @if(isset($blockTitle))
+                                            {!! $blockTitle !!}
+                                        @else
+                                            {{ $block->title }}
+                                        @endif
+                                        @if((isset($blockUrlDisable) && !$blockUrlDisable) || !isset($blockUrlDisable))
+                                    </a>
                                 @endif
                             </h3>
                         </div>
                     </div>
                     <div class="m-portlet__head-tools">
-                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewGrid">
+                        <a href="#"
+                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewGrid">
                             <i class="fa flaticon-shapes"></i>
                         </a>
-                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
+                        <a href="#"
+                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
                             <i class="flaticon-more-v4"></i>
                         </a>
                     </div>
@@ -72,7 +74,7 @@
                                 
                                 
                                 @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
-                                    @foreach($block->getActiveProducts()->get() as $productKey=>$product)
+                                    @foreach($block->getActiveProducts() as $productKey=>$product)
                                         @include('product.partials.Block.product')
                                     @endforeach
                                 @endif
@@ -81,21 +83,21 @@
                                 
                                 {{-- old content block loop --}}
                                 @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->contents))
-                                    @foreach($block->getActiveContent()->get() as $contentKey=>$content)
+                                    @foreach($block->getActiveContent() as $contentKey=>$content)
                                         @include('product.partials.Block.content')
                                     @endforeach
                                 @endif
-                                
-                                
-{{--                                 new content block loop --}}
+    
+    
+                                {{--                                 new content block loop --}}
                                 @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->sets) && $block->sets->count() > 0)
-                                    @foreach($block->sets->first()->getActiveContents2()->get() as $contentKey=>$content)
+                                    @foreach(optional($block->sets->first()->getActiveContents2())->get() as $contentKey=>$content)
                                         @include('product.partials.Block.content')
                                     @endforeach
                                 @endif
     
                                 @if(((isset($blockType) && $blockType === 'set') || !isset($blockType)) && isset($block->sets))
-                                    @foreach($block->getActiveSets()->get() as $setsKey=>$set)
+                                    @foreach($block->getActiveSets() as $setsKey=>$set)
                                         @include('product.partials.Block.set')
                                     @endforeach
                                 @endif
