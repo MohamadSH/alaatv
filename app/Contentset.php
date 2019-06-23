@@ -335,6 +335,12 @@ class Contentset extends BaseModel implements Taggable
             });
     }
 
+    public function getActiveContents2(){
+        return $this->contents()
+            ->active()
+            ->get();
+    }
+
     public function getContents(): ContentCollection
     {
         $key = 'ContentSet:getContents'.$this->cacheKey();
