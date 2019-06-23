@@ -2,27 +2,27 @@
 
 namespace App;
 
+use Eloquent;
+use Illuminate\Support\Carbon;
 use App\Collection\SetCollection;
 use App\Collection\BlockCollection;
 use App\Collection\ProductCollection;
 use App\Collection\ContentCollection;
-use Eloquent;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 
 /**
  * App\Block
  *
- * @property int                              $id
- * @property string|null                      $title
- * @property string|null                      $tags
- * @property int                              $order
- * @property int                              $enable
- * @property Carbon|null                      $created_at
+ * @property int         $id
+ * @property string|null $title
+ * @property string|null $tags
+ * @property int         $order
+ * @property int         $enable
+ * @property Carbon|null $created_at
  * @property Carbon|null                      $updated_at
  * @property-read ContentCollection|Content[] $contents
  * @property-read ProductCollection|Product[] $products
@@ -304,7 +304,7 @@ class Block extends BaseModel
     
     public function contents()
     {
-        return $this->morphedByMany('App\Content', 'blockable')
+        return $this->morphedByMany(Content::class, 'blockable')
             ->withTimestamps()
             ->withPivot(['order'])
             ->orderBy('blockables.order');
@@ -312,7 +312,7 @@ class Block extends BaseModel
     
     public function sets()
     {
-        return $this->morphedByMany('App\Contentset', 'blockable')
+        return $this->morphedByMany(Contentset::class, 'blockable')
             ->withTimestamps()
             ->withPivot(['order'])
             ->orderBy('blockables.order');
@@ -320,26 +320,26 @@ class Block extends BaseModel
     
     public function products()
     {
-        return $this->morphedByMany('App\Product', 'blockable')
+        return $this->morphedByMany(Product::class, 'blockable')
             ->withTimestamps()
             ->withPivot(['order'])
             ->orderBy('blockables.order');
-
+        
     }
     
     public function banners()
     {
-        return $this->morphedByMany('App\Slideshow', 'blockable')
+        return $this->morphedByMany(Slideshow::class, 'blockable')
             ->withTimestamps()
             ->withPivot(['order'])
             ->orderBy('blockables.order');
-
+        
     }
     
     public function getEditLinkAttribute()
     {
 //        if (hasAuthenticatedUserPermission(config('constants.EDIT_BLOCK_ACCESS')))
-            return action('Web\BlockController@edit', $this->id);
+        return action('Web\BlockController@edit', $this->id);
         
         return null;
     }
@@ -347,20 +347,35 @@ class Block extends BaseModel
     public function getRemoveLinkAttribute()
     {
 //        if (hasAuthenticatedUserPermission(config('constants.REMOVE_BLOCK_ACCESS')))
-            return action('Web\BlockController@destroy', $this->id);
+        return action('Web\BlockController@destroy', $this->id);
         
         return null;
     }
-
-    public function getActiveContent(){
-        return $this->contents()->active();
+    
+    public function getActiveContent(): ContentCollection
+    {
+        return Cache::remember('block-getActiveContent-'.$this->cacheKey(), config('constants.CACHE_60'), function () {
+            return $this->contents()
+                ->active()
+                ->get();
+        });
     }
-
-    public function getActiveSets(){
-        return $this->sets()->active();
+    
+    public function getActiveSets(): SetCollection
+    {
+        return Cache::remember('block-getActiveSets-'.$this->cacheKey(), config('constants.CACHE_60'), function () {
+            return $this->sets()
+                ->active()
+                ->get();
+        });
     }
-
-    public function getActiveProducts(){
-        return $this->products()->active();
+    
+    public function getActiveProducts(): ProductCollection
+    {
+        return Cache::remember('block-getActiveProducts-'.$this->cacheKey(), config('constants.CACHE_60'), function () {
+            return $this->products()
+                ->active()
+                ->get();
+        });
     }
 }
