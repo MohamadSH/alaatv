@@ -1,42 +1,7 @@
 @extends('app' , ['pageName'=>'login'])
 
 @section('page-css')
-{{--    <link href="{{ mix('/css/auth-login.css') }}" rel="stylesheet" type="text/css"/>--}}
-    <style>
-        .loginFormBackgroundForMobileAndTablet {
-            display: none;
-        }
-        .loginFormUsername, .loginFormPassword {
-            padding-right: 10px !important;
-        }
-        /*media query*/
-        @media only screen and (max-width: 1024px) {
-            .loginFormInputsAndLogos {
-                position: relative;
-                z-index: 1;
-            }
-            .loginFormBackgroundForMobileAndTablet {
-                display: block;
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                z-index: 0;
-            }
-            .loginFormBackgroundForMobileAndTablet svg {
-                height: 370px;
-                width: auto;
-                height: 370px;
-                width: auto;
-                position: absolute !important;
-                left: 0;
-                top: 0;
-            }
-            .loginPicture {
-                display: none !important;
-            }
-        }
-    </style>
+    <link href="{{ mix('/css/auth-login.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('body')

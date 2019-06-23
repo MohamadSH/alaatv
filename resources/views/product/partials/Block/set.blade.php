@@ -8,7 +8,7 @@
                         <i class="fa fa-play"></i> / <i class="fa fa-cloud-download-alt"></i>
                     </a>
                     <a href="{{ $set->url }}">
-                        <img src="{{ $set->photo }}?w=253&h=142" alt="{{ $set->small_name }}" class="a--full-width"/>
+                        <img data-src="{{ $set->photo }}?w=253&h=142" alt="{{ $set->small_name }}" class="a--full-width owl-lazy lazy-image"/>
                     </a>
                     <div class="m-widget19__shadow"></div>
                 </div>
@@ -24,7 +24,7 @@
                     
                     <div class="m-widget19__header">
                         <div class="m-widget19__user-img">
-                            <img class="m-widget19__img" src="{{ $set->author->photo }}" alt="{{ $set->author->full_name }}">
+                            <img class="m-widget19__img owl-lazy lazy-image" data-src="{{ $set->author->photo }}" alt="{{ $set->author->full_name }}">
                         </div>
                         <div class="m-widget19__info">
                             <span class="m-widget19__username">

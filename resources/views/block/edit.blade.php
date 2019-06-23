@@ -99,7 +99,7 @@
                         <div class="tab-pane active" id="m_tabs_12_1" role="tabpanel">
                             @include('block.form' )
                         </div>
-                        <div class="tab-pane" id="m_tabs_12_2" role="tabpanel">
+                        <div class="tab-pane blockProductsPane" id="m_tabs_12_2" role="tabpanel">
                             <div>
         
                                 <div class="m-divider m--margin-top-50">
@@ -110,7 +110,7 @@
         
                                 @include('admin.filters.productsFilter', [
                                     "id" => "block-products",
-                                    "name" => "block-products",
+                                    "name" => "block-products[]",
                                     'everyProduct'=>false,
                                     'title'=>'انتخاب محصول'
                                 ])
@@ -136,7 +136,7 @@
                                                         <i class="la la-pencil"></i>
                                                         ویرایش
                                                     </a>
-                                                    <button type="button" class="m-btn btn btn-danger">
+                                                    <button type="button" class="m-btn btn btn-danger btnDetachProduct" data-detach-link="{{ action('Web\BlockController@detachFromBlock', [$block->id, 'product', $product->id]) }}" data-name="{{ $product->name }}">
                                                         <i class="la la-paperclip"></i>
                                                         حذف
                                                     </button>
@@ -196,7 +196,7 @@
                                                     <i class="la la-pencil"></i>
                                                     ویرایش
                                                 </a>
-                                                <button type="button" class="m-btn btn btn-danger">
+                                                <button type="button" class="m-btn btn btn-danger btnDetachSet" data-detach-link="{{ action('Web\BlockController@detachFromBlock', [$block->id, 'set', $set->id]) }}" data-name="{{ $set->name }}">
                                                     <i class="la la-paperclip"></i>
                                                     حذف
                                                 </button>
@@ -246,7 +246,7 @@
                                                     <i class="la la-pencil"></i>
                                                     ویرایش
                                                 </a>
-                                                <button type="button" class="m-btn btn btn-danger">
+                                                <button type="button" class="m-btn btn btn-danger btnDetachContent" data-detach-link="{{ action('Web\BlockController@detachFromBlock', [$block->id, 'content', $content->id]) }}" data-name="{{ $content->name }}">
                                                     <i class="la la-paperclip"></i>
                                                     حذف
                                                 </button>
@@ -304,6 +304,31 @@
         </div>
     </div>
 
+
+    <!--begin::Modal-->
+    <div class="modal fade" id="detachModal" tabindex="-1" role="dialog" aria-labelledby="detachModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detachModalLabel">حذف</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modalMessage"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                    <form action="" method="GET">
+                        <button type="submit" class="btn btn-primary" id="assignmentForm-submit">بله</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end::Modal-->
+    
 @endsection
 
 @section('page-js')
@@ -315,8 +340,8 @@
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>--}}
     <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
     <script src="public/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js" type="text/javascript"></script>
@@ -329,6 +354,8 @@
     <script src="/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type="text/javascript"></script>
     <script>
 
+        var blockProductsId = {!! json_encode($blockProductsId) !!};
+        
         $("input.productTags").tagsinput({
             tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
         });
@@ -339,6 +366,7 @@
          * Start up jquery
          */
         jQuery(document).ready(function () {
+            
             makeDataTable("block_product_table");
             makeDataTable("block_set_table");
             makeDataTable("block_content_table");
@@ -361,12 +389,39 @@
             $('#productLongDescriptionSummerNote').summernote({height: 300});
             $('#productSpecialDescriptionSummerNote').summernote({height: 300});
 
+            $(document).on("change", "#productFileTypeSelect", function () {
+                var lastOrder = $("#lastProductFileOrder_" + $(this).val()).val();
+                $("#productFileOrder").val(lastOrder);
+            });
 
+
+
+            $(document).on('click', '.btnDetachProduct, .btnDetachSet, .btnDetachContent ', function () {
+                var detachLink = $(this).data('detach-link');
+                var name = $(this).data('name');
+                $('#detachModal .modalMessage').html(' آیا از حذف ' + name + ' اطمینان دارید؟ ');
+                $('#detachModal form').attr('action', detachLink);
+                $('#detachModal').modal('show');
+            });
+
+
+
+            // $('.blockProductsPane ul.multiselect-container input[type="checkbox"]').each(function () {
+            $('#block-products option').each(function () {
+                // if (blockProductsId.indexOf(parseInt($(this).val())) !== -1) {
+                //     $(this).prop('checked', true);
+                //     $(this).parents('li').addClass('active');
+                // }
+                if (blockProductsId.indexOf(parseInt($(this).val())) !== -1) {
+                    $(this).prop('selected', true);
+                }
+            });
+
+            $('#block-products').multiselect('refresh');
+
+            
         });
 
-        $(document).on("change", "#productFileTypeSelect", function () {
-            var lastOrder = $("#lastProductFileOrder_" + $(this).val()).val();
-            $("#productFileOrder").val(lastOrder);
-        });
+        
     </script>
 @endsection
