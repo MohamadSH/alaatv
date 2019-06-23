@@ -91,7 +91,7 @@
     
                                 {{--                                 new content block loop --}}
                                 @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->sets) && $block->sets->count() > 0)
-                                    @foreach(optional($block->sets->first()->getActiveContents2())->get() as $contentKey=>$content)
+                                        @foreach($block->sets->first()->getActiveContents2() as $contentKey=>$content)
                                         @include('product.partials.Block.content')
                                     @endforeach
                                 @endif
