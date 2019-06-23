@@ -337,8 +337,7 @@ class Contentset extends BaseModel implements Taggable
 
     public function getActiveContents2(){
         return $this->contents()
-            ->active()
-            ->get();
+            ->active();
     }
 
     public function getContents(): ContentCollection

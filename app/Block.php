@@ -353,14 +353,14 @@ class Block extends BaseModel
     }
 
     public function getActiveContent(){
-        return $this->contents()->active()->get();
+        return $this->contents()->active();
     }
 
     public function getActiveSets(){
-        return $this->sets()->active()->get();
+        return $this->sets()->active();
     }
 
     public function getActiveProducts(){
-        return $this->products()->active()->get();
+        return $this->products()->active();
     }
 }
