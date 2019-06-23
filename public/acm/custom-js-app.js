@@ -70,15 +70,15 @@ jQuery(document).ready( function() {
     };
 
 
-    let lazyImages = [...document.querySelectorAll('.lazy-image')];
+    let lazyImages = $('.lazy-image');
     let inAdvance = 300;
     function lazyLoad() {
-        lazyImages.forEach(image=>{
-            if (image.offsetTop < window.innerHeight + window.pageYOffset + inAdvance) {
-                image.src = image.data.src;
+        lazyImages.each(function () {
+            if ($(this).offset().top < window.innerHeight + window.pageYOffset + inAdvance) {
+                $(this).attr('src', $(this).data('src'));
             }
         });
     }
-    window.addEventListener('scroll', _.throttle(lazyLoad, 50));
-    window.addEventListener('resize', _.throttle(lazyLoad, 50));
+    window.addEventListener('scroll', throttle(50, lazyLoad));
+    window.addEventListener('resize', throttle(50, lazyLoad));
 });

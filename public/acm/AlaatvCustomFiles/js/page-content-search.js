@@ -525,7 +525,7 @@ var Alaasearch = function () {
         addContentToVerticalWidget($(pamphletverticalWidget), data.data, 'pamphlet');
         // $(pamphletverticalWidget).append('<div class="pamphlet-lastITemSensor"></div>');
         if (data.next_page_url !== null) {
-            $(pamphletverticalWidget).append('<div class="pamphlet-wraperShowMore text-center"><button class="btn m-btn--pill m-btn--air btn-primary pamphlet-btnShowMore">نمایش بیشتر</button></div>');
+            $(pamphletverticalWidget).append('<div class="pamphlet-wraperShowMore text-center"><button class="btn m-btn--pill m-btn--air btn-primary pamphlet-btnShowMore animated infinite heartBeat">نمایش بیشتر</button></div>');
         }
         $('#vertical-widget--js-var-next-page-pamphlet-url').val(decodeURI(data.next_page_url));
     }
@@ -576,7 +576,7 @@ var Alaasearch = function () {
         $('.article-wraperShowMore').remove();
         addContentToVerticalWidget($(articleVerticalWidget), data.data, 'article');
         if (data.next_page_url !== null) {
-            $(articleVerticalWidget).append('<div class="article-wraperShowMore text-center"><button class="btn m-btn--pill m-btn--air btn-primary article-btnShowMore">نمایش بیشتر</button></div>');
+            $(articleVerticalWidget).append('<div class="article-wraperShowMore text-center"><button class="btn m-btn--pill m-btn--air btn-primary article-btnShowMore animated infinite heartBeat">نمایش بیشتر</button></div>');
         }
         $('#vertical-widget--js-var-next-page-article-url').val(decodeURI(data.next_page_url));
         // $('#pamphlet-vertical-widget').append('<div class="article-lastITemSensor"></div>');
@@ -741,7 +741,7 @@ var Alaasearch = function () {
             loadAjaxContent(contentData, true);
         },
         loadData: function (contentData) {
-            loadAjaxContent(contentData, false);
+            loadAjaxContent(contentData, true);
         },
         clearFields: function () {
             clearOwlcarousel($('#product-carousel-warper .a--owl-carousel-type-1'));
@@ -1298,6 +1298,7 @@ jQuery(document).ready(function () {
             mouseDrag: true,
             touchDrag: true,
             pullDrag: true,
+            lazyLoad:false,
             responsiveClass:true,
             responsive: responsive
         };
@@ -1326,6 +1327,8 @@ jQuery(document).ready(function () {
                 }
             };
             config.onTranslated = slideChanged;
+            config.responsive = responsive;
+            config.lazyLoad = true;
         }
         $(this).owlCarousel(config);
     });
