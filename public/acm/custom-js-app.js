@@ -51,7 +51,6 @@ jQuery(document).ready( function() {
             'user_id': userIdDimensionValue
         });
 
-
     toastr.options = {
         "closeButton": false,
         "debug": false,
@@ -69,4 +68,17 @@ jQuery(document).ready( function() {
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
     };
+
+
+    let lazyImages = [...document.querySelectorAll('.lazy-image')];
+    let inAdvance = 300;
+    function lazyLoad() {
+        lazyImages.forEach(image=>{
+            if (image.offsetTop < window.innerHeight + window.pageYOffset + inAdvance) {
+                image.src = image.data.src;
+            }
+        });
+    }
+    window.addEventListener('scroll', _.throttle(lazyLoad, 50));
+    window.addEventListener('resize', _.throttle(lazyLoad, 50));
 });

@@ -187,6 +187,7 @@
             loop: true,
             nav: true,
             margin: 10,
+            lazyLoad:true,
             responsive: {
                 0: {
                     items: 1

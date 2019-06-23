@@ -423,7 +423,7 @@ var CheckoutPaymentUi = function () {
 
 $(document).ready(function () {
 
-    GAEE.checkout(3, 'review', checkoutReviewProducts);
+    GAEE.checkout(1, 'reviewAndPayment', checkoutReviewProducts);
 
     if ($('#js-var-userId').val()) {
         $('.Step-warper').fadeIn();
