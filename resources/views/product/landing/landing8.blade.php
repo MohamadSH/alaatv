@@ -1,57 +1,7 @@
 @extends('app')
 
 @section('page-css')
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/imageWithCaption/style.css') }}?v=3" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/ribbon/style.css') }}?v=3" rel="stylesheet" type="text/css"/>
-    <style>
-        .sideItems .m-widget24__title {
-            font-size: 30px !important;
-        }
-        
-        .sideItems .m-widget24__desc {
-            font-size: 15px !important;
-        }
-        
-        .sideItems .flaticon-pie-chart {
-            font-size: 30px !important;
-        }
-        .m-widget24 .m-widget24__item .m-widget24__stats {
-            margin-top: 3.21rem;
-        }
-        .m-portlet.m-portlet--bordered.m-portlet--unair.portlet--lastPart .m-widget24__title {
-            font-size: 1.5em !important;
-        }
-
-
-        .m-portlet--creative .m-portlet__head-caption {
-            width: 100%;
-            text-align: center;
-        }
-        .m-portlet--creative .m-portlet__head {
-            height: 0px !important;
-        }
-        .m-widget27 .m-widget27__pic::before {
-            background: none;
-        }
-        .m-portlet.m-portlet--creative.m-portlet--first {
-            border: solid 1px #aeaeae4d;
-        }
-        .m-widget27 .m-widget27__pic > img {
-            width: 100%;
-            height: auto;
-        }
-        .productItem {
-            position: relative;
-        }
-        /*media query*/
-        @media only screen and (max-width: 767px) {
-            .m-portlet .m-portlet-fit--sides {
-                margin-right: -0.4rem;
-                margin-left: -0.4rem;
-                margin-top: -0.4rem;
-            }
-        }
-    </style>
+    <link href="{{ mix('/css/page-landing8.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 @section('content')
     <div class="row">
@@ -70,7 +20,7 @@
                 <div class="m-portlet__body">
                     <div class="m-widget27 m-portlet-fit--sides">
                         <div class="m-widget27__pic">
-                            <img src="/acm/extra/landing1/img/rally3.jpg" alt="">
+                            <img src="/acm/extra/landing1/img/rally4.jpg" alt="">
                             <h3 class="m-widget27__title m--font-light">
                             
                             </h3>

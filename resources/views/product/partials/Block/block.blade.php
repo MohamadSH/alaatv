@@ -4,22 +4,23 @@
         (!isset($blockType)) ||
         isset($blockType) &&
         (
-            ($blockType === 'content' && isset($block->contents) && $block->contents->count() > 0) ||
-            ($blockType === 'content' && optional(optional(optional($block->sets)->first())->contents)->count() > 0) ||
-            ($blockType === 'product' && isset($block->products) && $block->products->count() > 0) ||
-            ($blockType === 'set' && isset($block->sets) && $block->sets->count() > 0)
+            ($blockType === 'content' && !is_null($block->getActiveContent()->get()) && $block->getActiveContent()->get()->count() > 0) ||
+            ($blockType === 'content' && optional(optional(optional($block->sets)->first())->getActiveContents2()->get())->count() > 0) ||
+            ($blockType === 'product' && !is_null($block->getActiveProducts()->get()) && $block->getActiveProducts()->get()->count() > 0) ||
+            ($blockType === 'set' && !is_null($block->getActiveSets()->get()) && $block->getActiveSets()->get()->count() > 0)
         )
     )
 )
     <div class="row blockWraper
-                @if(isset($blockCustomClass))
-                    {{ $blockCustomClass }}
-                @endif
-                blockId-{{ $block->id }}
-                {{ $block->class }}
-                @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
-                blockWraper-hasProduct
-                @endif"
+        @if(isset($blockCustomClass))
+            {{ $blockCustomClass }}
+        @endif
+        blockId-{{ $block->id }}
+        {{ $block->class }}
+        @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
+        blockWraper-hasProduct
+        scrollSensitiveOnScreen
+        @endif "
          @if(isset($blockCustomId))
             id="{{ $blockCustomId }}"
          @else
@@ -32,10 +33,12 @@
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
     
-                                @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
-                                    <span class="redSquare"></span>
-                                @else
-                                    <span class="blueSquare"></span>
+                                @if((isset($squareSing) && $squareSing === true) || !isset($squareSing))
+                                    @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
+                                        <span class="redSquare"></span>
+                                    @else
+                                        <span class="blueSquare"></span>
+                                    @endif
                                 @endif
     
                                 @if(!isset($blockUrlDisable) || !$blockUrlDisable)
@@ -69,7 +72,7 @@
                                 
                                 
                                 @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
-                                    @foreach($block->products as $productKey=>$product)
+                                    @foreach($block->getActiveProducts()->get() as $productKey=>$product)
                                         @include('product.partials.Block.product')
                                     @endforeach
                                 @endif
@@ -78,7 +81,7 @@
                                 
                                 {{-- old content block loop --}}
                                 @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->contents))
-                                    @foreach($block->contents as $contentKey=>$content)
+                                    @foreach($block->getActiveContent()->get() as $contentKey=>$content)
                                         @include('product.partials.Block.content')
                                     @endforeach
                                 @endif
@@ -86,13 +89,13 @@
                                 
 {{--                                 new content block loop --}}
                                 @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->sets) && $block->sets->count() > 0)
-                                    @foreach($block->sets->first()->contents as $contentKey=>$content)
+                                    @foreach($block->sets->first()->getActiveContents2()->get() as $contentKey=>$content)
                                         @include('product.partials.Block.content')
                                     @endforeach
                                 @endif
     
                                 @if(((isset($blockType) && $blockType === 'set') || !isset($blockType)) && isset($block->sets))
-                                    @foreach($block->sets as $setsKey=>$set)
+                                    @foreach($block->getActiveSets()->get() as $setsKey=>$set)
                                         @include('product.partials.Block.set')
                                     @endforeach
                                 @endif

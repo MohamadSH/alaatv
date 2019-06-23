@@ -834,6 +834,7 @@ class OrderController extends Controller
             $order = Order::Find($request->order_id);
             
             if (isset($order)) {
+                Cache::tags('order')->flush();
                 /** checkout payment */
                 $credit         = optional($order->user)->getTotalWalletBalance();
                 $orderHasDonate = $order->hasTheseProducts([
@@ -1002,8 +1003,6 @@ class OrderController extends Controller
     public function checkoutPayment(Request $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
         return redirect(action("Web\OrderController@checkoutReview"));
-//        Cache::tags('order')->flush();
-//        Cache::tags('orderproduct')->flush();
 
         $this->generateCustomMeta([
             'title'       => 'آلاء|پرداخت',

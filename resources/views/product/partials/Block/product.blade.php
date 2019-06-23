@@ -4,11 +4,7 @@
      data-gtm-eec-product-name="{{ $product->name }}"
      data-gtm-eec-product-category="-"
      data-gtm-eec-product-position="{{ $productKey }}"
-     @if(isset($blockTitle))
-     data-gtm-eec-list="{!! $blockTitle !!}"
-     @else
-     data-gtm-eec-list="{{ $block->title }}"
-     @endif >
+     data-gtm-eec-list="{{ $block->title }}" >
     
     @if($product->price['final'] !== $product->price['base'])
         <div class="ribbon">
@@ -26,12 +22,8 @@
        data-gtm-eec-product-name="{{ $product->name }}"
        data-gtm-eec-product-category="-"
        data-gtm-eec-product-position="{{ $productKey }}"
-       @if(isset($blockTitle))
-        data-gtm-eec-actionFieldList="{!! $blockTitle !!}"
-       @else
-        data-gtm-eec-actionFieldList="{{ $block->title }}"
-       @endif>
-        <img class="a--owl-carousel-type-2-item-image" src="{{ $product->photo }}?w=253&h=142">
+       data-gtm-eec-actionFieldList="{{ $block->title }}">
+        <img class="a--owl-carousel-type-2-item-image owl-lazy lazy-image" data-src="{{ $product->photo }}?w=253&h=142">
     </a>
     <div class="m--font-primary a--owl-carousel-type-2-item-title">
         @include('product.partials.price', ['price'=>$product->price])
@@ -43,9 +35,5 @@
        data-gtm-eec-product-name="{{ $product->name }}"
        data-gtm-eec-product-category="-"
        data-gtm-eec-product-position="{{ $productKey }}"
-       @if(isset($blockTitle))
-       data-gtm-eec-actionFieldList="{!! $blockTitle !!}"
-       @else
-       data-gtm-eec-actionFieldList="{{ $block->title }}"
-       @endif>{{ $product->name }}</a>
+       data-gtm-eec-actionFieldList="{{ $block->title }}">{{ $product->name }}</a>
 </div>

@@ -40,6 +40,7 @@ jQuery(document).ready( function() {
     /*
      * Google TagManager
      */
+    window.dataLayer = window.dataLayer || [];
     var userIpDimensionValue = $('#js-var-userIp').val();
     var userIdDimensionValue = $('#js-var-userId').val();
     dataLayer.push(
@@ -49,7 +50,6 @@ jQuery(document).ready( function() {
             'userId': userIdDimensionValue,
             'user_id': userIdDimensionValue
         });
-
 
     toastr.options = {
         "closeButton": false,
@@ -68,4 +68,17 @@ jQuery(document).ready( function() {
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
     };
+
+
+    let lazyImages = $('.lazy-image');
+    let inAdvance = 300;
+    function lazyLoad() {
+        lazyImages.each(function () {
+            if ($(this).offset().top < window.innerHeight + window.pageYOffset + inAdvance) {
+                $(this).attr('src', $(this).data('src'));
+            }
+        });
+    }
+    window.addEventListener('scroll', throttle(50, lazyLoad));
+    window.addEventListener('resize', throttle(50, lazyLoad));
 });

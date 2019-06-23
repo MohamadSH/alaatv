@@ -104,12 +104,17 @@ var UserAssets = function () {
     function makeListItemBasedOnContentType(content, contentType) {
         let listItem = '';
         let title = content.name;
+
+        if (contentType === 'video') {
+            title += '<br>' + ' جلسه: ' + content.order;
+        }
         let viewLink = content.url;
         let thumbnail = content.thumbnail;
         let downloadLinks = [];
         for (let index in content.file[contentType]) {
             downloadLinks.push({
                 title: content.file[contentType][index].caption,
+                // title: ' جلسه شماره: ' + content.order,
                 url: content.file[contentType][index].link
             });
         }

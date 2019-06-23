@@ -46,3 +46,10 @@
     -ms-transform: none;
     transform: none;
 }
+
+/*media query*/
+@media only screen and (max-width: 767.98px) {
+    .shopNavItems.row[class*="m-row--col-separator-"] > div:last-child {
+        border-bottom: 1px solid #ebedf2;
+    }
+}
