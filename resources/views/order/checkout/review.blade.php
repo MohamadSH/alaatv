@@ -474,8 +474,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @if( ($invoiceInfo['price']['final'] - $fromWallet) > 0)
-                                    <div class="m-widget1__item">
+                                    <div class="m-widget1__item
+
+                                    @if( ($invoiceInfo['price']['final'] - $fromWallet) <= 0) d-none @endif">
                                         <div class="m-form__group form-group text-center m--margin-top-10">
                                             <div class="m-radio-inline">
                                                 <label class="m-radio m-radio--check-bold m-radio--state-info">
@@ -496,7 +497,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @endif
+                                    
                                     <div class="m-widget1__item">
                                         <div class="form-group m-form__group">
                                             <label for="customerDescription">
