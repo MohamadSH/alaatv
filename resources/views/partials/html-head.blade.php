@@ -29,7 +29,8 @@
 @yield('page-css')
 
 @if(isset($wSetting->site->favicon))
-    <link rel="shortcut icon" href="{{route('image', ['category'=>'11','w'=>'150' , 'h'=>'150' ,  'filename' =>  $wSetting->site->favicon ])}}"/>
+{{--    <link rel="shortcut icon" href="{{route('image', ['category'=>'11','w'=>'150' , 'h'=>'150' ,  'filename' =>  $wSetting->site->favicon ])}}"/>--}}
+    <link rel="shortcut icon" href="https://cdn.alaatv.com/upload/favicon2_20190508061941_20190512113140.ico"/>
 @endif
 
 @if(config('gtm.GTM'))
