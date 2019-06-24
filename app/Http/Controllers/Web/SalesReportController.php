@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Product;
 use App\Repositories\OrderproductRepo;
 use App\User;
 use App\Order;
@@ -218,7 +219,7 @@ class SalesReportController extends Controller
                         $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
                             ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
                     })
-                    ->with(['order', 'order.transactions'])
+                    ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])
                     ->get();
             });
     }
@@ -351,6 +352,8 @@ class SalesReportController extends Controller
 
                     /** @var Order $myOrder */
                     $myOrder                = $orderproduct->order;
+                    $orderproducts = $myOrder->normalOrderproducts->whereNotIn('product_id' , [Product::DONATE_PRODUCT_5_HEZAR , Product::CUSTOM_DONATE_PRODUCT]);
+                    $orderproductCount = $orderproducts->count();
                     $orderWalletTransactins = $myOrder->transactions
                         ->where('paymentmethod_id',
                             config('constants.PAYMENT_METHOD_WALLET'))
@@ -364,7 +367,7 @@ class SalesReportController extends Controller
                     if ($orderWalletSum == 0) {
                         $myValue = $finalPrice;
                     } else {
-                        $walletPerItem = $orderWalletSum / $myOrder->orderproducts_count;
+                        $walletPerItem = $orderWalletSum / $orderproductCount;
                         $myValue       = ($finalPrice - $walletPerItem);
                     }
     
