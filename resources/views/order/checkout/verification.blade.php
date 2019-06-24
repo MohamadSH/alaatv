@@ -123,6 +123,7 @@
 
 @section('page-js')
     <script>
+        var gtmEecPaymentMethod = '{{ $paymentMethod }}';
         var gtmEec = {!! json_encode($gtmEec) !!};
         var paymentStatus = Boolean({{ $status==='successful' ? true : false }});
     </script>

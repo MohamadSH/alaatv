@@ -685,7 +685,5 @@
 @endsection
 
 @section('page-js')
-{{--    <script src="{{ mix('/js/user-dashboard.js') }}"></script>--}}
-    <script src="{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js') }}?v=20"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-user-dashboard.js') }}?v=20"></script>
+    <script src="{{ mix('/js/user-dashboard.js') }}"></script>
 @endsection
