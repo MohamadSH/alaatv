@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Cache;
 class SalesReportController extends Controller
 {
     use DateTrait;
+
+    private $authUserId;
     
     /**
      * SalesReportController constructor.
@@ -44,6 +46,7 @@ class SalesReportController extends Controller
     
         /** @var User $user */
         $user = $request->user();
+        $this->authUserId = $user->id;
 
 //        dump('start query allTime' , Carbon::now());
         $productIds = $this->getUserProducts($user);
@@ -333,7 +336,7 @@ class SalesReportController extends Controller
             $key   = 'salesReport:calculateOrderproductPrice:'.$orderproduct->cacheKey();
             $toAdd = Cache::tags(['salesReport'])
                 ->remember($key, config('constants.CACHE_600'), function () use ($orderproduct , $cacheCounter) {
-                    if(Auth::user()->id == 1)
+                    if($this->authUserId == 1)
                         dump('in cache');
                     if(isset($orderproduct->tmp_final_cost))
                     {
