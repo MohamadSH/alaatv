@@ -10,6 +10,7 @@ use App\Orderproduct;
 use App\Traits\DateTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
@@ -326,11 +327,14 @@ class SalesReportController extends Controller
     {
         $sum = 0;
 //        dump($orderproducts->count());
+        $cacheCounter = 0;
         foreach ($orderproducts as $orderproduct) {
             /** @var Orderproduct $orderproduct */
             $key   = 'salesReport:calculateOrderproductPrice:'.$orderproduct->cacheKey();
-            $toAdd = Cache::tags(['salesReport' , 'orderproduct:'.$orderproduct->id])
-                ->remember($key, config('constants.CACHE_600'), function () use ($orderproduct) {
+            $toAdd = Cache::tags(['salesReport'])
+                ->remember($key, config('constants.CACHE_600'), function () use ($orderproduct , $cacheCounter) {
+                    if(Auth::user()->id == 1)
+                        dump('in cache');
                     if(isset($orderproduct->tmp_final_cost))
                     {
                         $finalPrice    = $orderproduct->tmp_final_cost;
