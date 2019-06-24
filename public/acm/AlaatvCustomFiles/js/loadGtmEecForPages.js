@@ -1,5 +1,3 @@
-var reportGtmEecOnConsole = true;
-
 function gtmEecImpressionViewProductBlocks() {
     if ($('.scrollSensitiveOnScreen.targetInScreen.blockWraper-hasProduct').data('gtm-data-sent') == 1) {
         return;
@@ -41,7 +39,7 @@ function gtmEecImpressionViewCarousel(owl) {
             position: childObjectItem.data('gtm-eec-product-position'),
         });
     }
-    if (reportGtmEecOnConsole) {
+    if (GAEE.reportGtmEecOnConsole()) {
         console.log('gtmEecImpressionViewCarousel: ', gtmEecImpressionView);
     }
     GAEE.impressionView(gtmEecImpressionView);
@@ -63,7 +61,7 @@ function gtmEecPromotionViewCarousel() {
             position: activeCarousel.data('gtm-eec-promotion-position')
         }
     ];
-    if (reportGtmEecOnConsole) {
+    if (GAEE.reportGtmEecOnConsole()) {
         console.log('gtmEecPromotionViewCarousel: ', gtmEecPromotions);
     }
     GAEE.promotionView(gtmEecPromotions);
@@ -88,7 +86,7 @@ function gtmEecPromotionViewBanner() {
             position: $(ads[i]).data('gtm-eec-promotion-position')
         });
     }
-    if (reportGtmEecOnConsole) {
+    if (GAEE.reportGtmEecOnConsole()) {
         console.log('gtmEecPromotionViewBanner: ', gtmEecPromotionViewBanner);
     }
     GAEE.promotionView(gtmEecPromotionViewBanner);
@@ -162,7 +160,7 @@ jQuery(document).ready( function() {
                 position: childObjectItem.data('gtm-eec-product-position'),
             });
         }
-        if (reportGtmEecOnConsole) {
+        if (GAEE.reportGtmEecOnConsole()) {
             console.log('gtmEecImpressionViewCarousel: ', gtmEecImpressionView);
         }
         GAEE.impressionView(gtmEecImpressionView);
@@ -199,7 +197,7 @@ jQuery(document).ready( function() {
         var pageY = headerHeight + window.scrollY;
         if (detectElementScrollOnScreen(pageY, $("#carouselMainSlideShow"))) {
             GAEE.promotionView(gtmEecPromotions);
-            if (reportGtmEecOnConsole) {
+            if (GAEE.reportGtmEecOnConsole()) {
                 console.log('gtmEecPromotionViewCarousel: ', gtmEecPromotions);
             }
         }
