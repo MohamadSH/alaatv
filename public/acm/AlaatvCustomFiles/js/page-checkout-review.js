@@ -39,7 +39,7 @@ var CheckoutPaymentUi = function () {
         $('.PaymentType').slideUp();
         $('#PaymentType-' + radioPaymentType).slideDown();
 
-        GAEE.checkoutOption(4, 'checkout-payment-PaymentType-'+radioPaymentType);
+        GAEE.checkoutOption(1, 'checkout-payment-PaymentType-'+radioPaymentType);
 
         // if (radioPaymentType==1) {
         //     $('#PaymentType-online').slideDown();
@@ -153,7 +153,7 @@ var CheckoutPaymentUi = function () {
                     }
                     // mApp.unblock('.addDonateWarper, .a--userCartList');
                     lockDonateAjax = false;
-                    GAEE.checkoutOption(4, 'checkout-payment-HasDonate');
+                    GAEE.checkoutOption(1, 'checkout-payment-HasDonate');
                     window.location.reload();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -192,7 +192,7 @@ var CheckoutPaymentUi = function () {
                     }
                     // mApp.unblock('.addDonateWarper, .a--userCartList');
                     lockDonateAjax = false;
-                    GAEE.checkoutOption(4, "checkout-payment-Hasn'tDonate");
+                    GAEE.checkoutOption(1, "checkout-payment-Hasn'tDonate");
                     window.location.reload();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -215,7 +215,7 @@ var CheckoutPaymentUi = function () {
         btnSaveDiscountCodeValue.prop('disabled', false);
         discountCodeValue.prop('readonly', false);
         btnSaveDiscountCodeValue.prop('readonly', false);
-        GAEE.checkoutOption(4, 'checkout-payment-HasDiscountCode-'+$('#discountCodeValue').val());
+        GAEE.checkoutOption(1, 'checkout-payment-HasDiscountCode-'+$('#discountCodeValue').val());
     }
     function setUiHasntDiscountCode() {
         $("#hasntDiscountCode").bootstrapSwitch('state', true);
@@ -228,7 +228,7 @@ var CheckoutPaymentUi = function () {
         discountCodeValue.prop('readonly', true);
         btnSaveDiscountCodeValue.prop('readonly', true);
         discountCodeValue.val('');
-        GAEE.checkoutOption(4, 'checkout-payment-HasntDiscountCode');
+        GAEE.checkoutOption(1, 'checkout-payment-HasntDiscountCode');
     }
     function initUiBasedOnHasntDiscountCodeStatus(notIncludedProductsInCoupon) {
         var strLen = $('#discountCodeValue').val().length;
@@ -300,7 +300,7 @@ var CheckoutPaymentUi = function () {
                     PrintnotIncludedProductsInCoupon(data.notIncludedProductsInCoupon);
 
                     toastr.success('کد تخفیف شما ثبت شد.');
-                    GAEE.checkoutOption(4, 'checkout-payment-SaveDiscountCode-'+discountCodeValue);
+                    GAEE.checkoutOption(1, 'checkout-payment-SaveDiscountCode-'+discountCodeValue);
                 }
                 mApp.unblock('.discountCodeWraper, .hasntDiscountCodeWraper');
             },
@@ -425,6 +425,10 @@ $(document).ready(function () {
 
     GAEE.checkout(1, 'reviewAndPayment', checkoutReviewProducts);
 
+    if (GAEE.reportGtmEecOnConsole()) {
+        console.log('reviewAndPayment: ', checkoutReviewProducts);
+    }
+
     if ($('#js-var-userId').val()) {
         $('.Step-warper').fadeIn();
     }
@@ -449,15 +453,15 @@ $(document).ready(function () {
             state: "success",
         });
 
-        var products = [{
-            id : $(this).data('productid'),
-            name : $(this).data('name'),
+        var product = {
+            id : $(this).data('productid').toString(),
+            name : $(this).data('name').toString(),
             quantity: 1,
-            category : $(this).data('category'),
-            variant : $(this).data('variant')
-        }];
+            category : $(this).data('category').toString(),
+            variant : $(this).data('variant').toString()
+        };
 
-        GAEE.productRemoveFromCart('order.checkoutReview', products);
+        GAEE.productRemoveFromCart('order.checkoutReview', product);
 
         if ($('#js-var-userId').val()) {
             $.ajax({
@@ -517,7 +521,7 @@ $(document).ready(function () {
 
     $(document).on('click', '#btnRemoveDiscountCodeValue', function() {
         CheckoutPaymentUi.detachCoupon(true);
-        GAEE.checkoutOption(4, 'checkout-payment-RemoveDiscountCode');
+        GAEE.checkoutOption(1, 'checkout-payment-RemoveDiscountCode');
     });
 
     $(document).on('keyup', '#discountCodeValue', function(){
@@ -537,6 +541,9 @@ $(document).ready(function () {
         let action = $('input[type="radio"][name="radioBankType"]:checked').val();
         let bankType = $('input[type="radio"][name="radioBankType"]:checked').data('bank-type');
         $('#frmGotoGateway').attr('action', action);
-        GAEE.checkoutOption(4, "checkout-payment-BankType-"+bankType);
+        GAEE.checkoutOption(1, "checkout-payment-BankType-"+bankType);
+        if (GAEE.reportGtmEecOnConsole()) {
+            console.log('checkout-payment-BankType: ', bankType);
+        }
     });
 });

@@ -18,6 +18,7 @@ var Alaasearch = function () {
         var gtmEecProductId = data.id;
         var gtmEecProductName = data.name;
         var gtmEecProductCategory = '-';
+        var gtmEecProductVariant = '-';
         var gtmEecProductPosition = countOfExistingProductInCarousel;
         var priceHtml = '<span class="m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">';
         if (price.base !== price.final) {
@@ -52,7 +53,11 @@ var Alaasearch = function () {
             '                       class="btn btn-sm m-btn--pill btn-brand btnViewMore gtm-eec-product-impression-click"' +
             '                       data-gtm-eec-product-id="'+gtmEecProductId+'"' +
             '                       data-gtm-eec-product-name="'+gtmEecProductName+'"' +
+            '                       data-gtm-eec-product-price="'+priceToStringWithTwoDecimal(price.final)+'"' +
+            '                       data-gtm-eec-product-brand="آلاء"' +
             '                       data-gtm-eec-product-category="'+gtmEecProductCategory+'"' +
+            '                       data-gtm-eec-product-variant="'+gtmEecProductVariant+'"' +
+            '                       data-gtm-eec-product-list="محصولات صفحه سرچ"' +
             '                       data-gtm-eec-product-position="'+gtmEecProductPosition+'">' + widgetActionName + '</a>\n' +
             '                    <img src="' + widgetPic + '" alt="' + widgetTitle + '"/>\n' +
             '                    <div class="m-widget19__shadow"></div>\n' +
@@ -62,7 +67,11 @@ var Alaasearch = function () {
             '                        <a href="' + widgetActionLink + '" class="m-link gtm-eec-product-impression-click"' +
             '                           data-gtm-eec-product-id="'+gtmEecProductId+'"\n' +
             '                           data-gtm-eec-product-name="'+gtmEecProductName+'"\n' +
+            '                           data-gtm-eec-product-price="'+priceToStringWithTwoDecimal(price.final)+'"\n' +
+            '                           data-gtm-eec-product-brand="آلاء"\n' +
             '                           data-gtm-eec-product-category="'+gtmEecProductCategory+'"\n' +
+            '                           data-gtm-eec-product-variant="'+gtmEecProductVariant+'"\n' +
+            '                           data-gtm-eec-product-list="محصولات صفحه سرچ"\n' +
             '                           data-gtm-eec-product-position="'+gtmEecProductPosition+'">\n' +
             '                            <h6>\n' +
             '                                <span class="m-badge m-badge--info m-badge--dot"></span> ' + widgetTitle + '\n' +
@@ -80,6 +89,10 @@ var Alaasearch = function () {
             '    </div>\n' +
             '    <!--end:: Widgets/Blog-->\n' +
             '</div>';
+    }
+
+    function priceToStringWithTwoDecimal(price) {
+        return parseFloat((Math.round(price * 100) / 100).toString()).toFixed(2);
     }
 
     function getVideoCarouselItem(data) {
@@ -1237,16 +1250,15 @@ var GtmEecImpression = function () {
         }
         var gtmEecImpressions = [];
         $('#product-carousel.owl-carousel').find('.owl-item.active .m-widget19__content .gtm-eec-product-impression-click').each(function (index, value) {
-            var id = $(this).data('gtm-eec-product-id');
-            var name = $(this).data('gtm-eec-product-name');
-            var category = $(this).data('gtm-eec-product-category');
-            var position = $(this).data('gtm-eec-product-position');
             gtmEecImpressions.push({
-                id: id,
-                name: name,
-                category: category,
-                list: 'لیست محصولات در صفحه سرچ کانتنت',
-                position: position
+                id:       $(this).data('gtm-eec-product-id'),      // (String) The SKU of the product. Example: 'P12345'
+                name:     $(this).data('gtm-eec-product-name'),    // (String) The name of the product. Example: 'T-Shirt'
+                price:    $(this).data('gtm-eec-product-price'),
+                brand:    $(this).data('gtm-eec-product-brand'),   // (String) The brand name of the product. Example: 'NIKE'
+                category: $(this).data('gtm-eec-product-category'),// (String) Product category of the item. Can have maximum five levels of hierarchy. Example: 'clothes/shirts/t-shirts'
+                variant:  $(this).data('gtm-eec-product-variant'), // (String) What variant of the main product this is. Example: 'Large'
+                list:     $(this).data('gtm-eec-product-list'),
+                position: $(this).data('gtm-eec-product-position'),// (Integer) The position of the impression that was clicked. Example: 1
             });
         });
         GAEE.impressionView(gtmEecImpressions);

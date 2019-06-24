@@ -29,14 +29,19 @@ function gtmEecImpressionViewCarousel(owl) {
             childObjectItem = $(impressionViewCarousel[i]).find('.block-product-item');
         }
         gtmEecImpressionView.push({
-            id: childObjectItem.data('gtm-eec-product-id'),
-            name: childObjectItem.data('gtm-eec-product-name'),
-            category: childObjectItem.data('gtm-eec-product-category'),
+            id:       childObjectItem.data('gtm-eec-product-id').toString(),
+            name:     childObjectItem.data('gtm-eec-product-name').toString(),
+            price:    childObjectItem.data('gtm-eec-product-price').toString(),
+            brand:    childObjectItem.data('gtm-eec-product-brand').toString(),
+            category: childObjectItem.data('gtm-eec-product-category').toString(),
+            variant:  childObjectItem.data('gtm-eec-product-variant').toString(),
+            list:     childObjectItem.data('gtm-eec-product-list').toString(),
             position: childObjectItem.data('gtm-eec-product-position'),
-            list: childObjectItem.data('gtm-eec-list'),
         });
     }
-    // console.log('gtmEecImpressionViewCarousel: ', gtmEecImpressionView);
+    if (GAEE.reportGtmEecOnConsole()) {
+        console.log('gtmEecImpressionViewCarousel: ', gtmEecImpressionView);
+    }
     GAEE.impressionView(gtmEecImpressionView);
 }
 
@@ -50,13 +55,15 @@ function gtmEecPromotionViewCarousel() {
     }
     var gtmEecPromotions = [
         {
-            id: activeCarousel.data('gtm-eec-promotion-id'),
-            name: activeCarousel.data('gtm-eec-promotion-name'),
-            creative: activeCarousel.data('gtm-eec-promotion-creative'),
+            id: activeCarousel.data('gtm-eec-promotion-id').toString(),
+            name: activeCarousel.data('gtm-eec-promotion-name').toString(),
+            creative: activeCarousel.data('gtm-eec-promotion-creative').toString(),
             position: activeCarousel.data('gtm-eec-promotion-position')
         }
     ];
-    // console.log('gtmEecPromotionViewCarousel: ', gtmEecPromotions);
+    if (GAEE.reportGtmEecOnConsole()) {
+        console.log('gtmEecPromotionViewCarousel: ', gtmEecPromotions);
+    }
     GAEE.promotionView(gtmEecPromotions);
     $("#carouselMainSlideShow.targetInScreen").data('gtm-data-sent', 1);
 }
@@ -73,13 +80,15 @@ function gtmEecPromotionViewBanner() {
     var gtmEecPromotionViewBanner = [];
     for (let i = 0; i < adsLength; i++) {
         gtmEecPromotionViewBanner.push({
-            id: $(ads[i]).data('gtm-eec-promotion-id'),
-            name: $(ads[i]).data('gtm-eec-promotion-name'),
-            creative: $(ads[i]).data('gtm-eec-promotion-creative'),
+            id: $(ads[i]).data('gtm-eec-promotion-id').toString(),
+            name: $(ads[i]).data('gtm-eec-promotion-name').toString(),
+            creative: $(ads[i]).data('gtm-eec-promotion-creative').toString(),
             position: $(ads[i]).data('gtm-eec-promotion-position')
         });
     }
-    // console.log('gtmEecPromotionViewBanner: ', gtmEecPromotionViewBanner);
+    if (GAEE.reportGtmEecOnConsole()) {
+        console.log('gtmEecPromotionViewBanner: ', gtmEecPromotionViewBanner);
+    }
     GAEE.promotionView(gtmEecPromotionViewBanner);
     $('.gtm-eec-promotion-click.scrollSensitiveOnScreen.targetInScreen').data('gtm-data-sent', 1);
 }
@@ -141,14 +150,19 @@ jQuery(document).ready( function() {
         for (let i = 0; i < childObject.length; i++) {
             var childObjectItem = $(childObject[i]).find('.block-product-item');
             gtmEecImpressionView.push({
-                id: childObjectItem.data('gtm-eec-product-id'),
-                name: childObjectItem.data('gtm-eec-product-name'),
-                category: childObjectItem.data('gtm-eec-product-category'),
+                id:       childObjectItem.data('gtm-eec-product-id').toString(),
+                name:     childObjectItem.data('gtm-eec-product-name').toString(),
+                price:    childObjectItem.data('gtm-eec-product-price').toString(),
+                brand:    childObjectItem.data('gtm-eec-product-brand').toString(),
+                category: childObjectItem.data('gtm-eec-product-category').toString(),
+                variant:  childObjectItem.data('gtm-eec-product-variant').toString(),
+                list:     childObjectItem.data('gtm-eec-product-list').toString(),
                 position: childObjectItem.data('gtm-eec-product-position'),
-                list: childObjectItem.data('gtm-eec-list'),
             });
         }
-        // console.log('gtmEecImpressionViewCarousel: ', gtmEecImpressionView);
+        if (GAEE.reportGtmEecOnConsole()) {
+            console.log('gtmEecImpressionViewCarousel: ', gtmEecImpressionView);
+        }
         GAEE.impressionView(gtmEecImpressionView);
     });
 
@@ -156,12 +170,14 @@ jQuery(document).ready( function() {
     $(document).on('click' ,'.gtm-eec-product-impression-click', function(e){
         var actionFieldList = $(this).data('gtm-eec-actionFieldList');
         var product = {
-            id: $(this).data('gtm-eec-product-id'), // (String) The SKU of the product. Example: 'P12345'
-            name: $(this).data('gtm-eec-product-name'), // (String) The name of the product. Example: 'T-Shirt'
-            category: $(this).data('gtm-eec-product-category'), // (String) Product category of the item. Can have maximum five levels of hierarchy. Example: 'clothes/shirts/t-shirts'
-            position: $(this).data('gtm-eec-product-position'), // (Integer) The position of the impression that was clicked. Example: 1
-            // variant: $(this).data('gtm-eec-product-variant'), // (String) What variant of the main product this is. Example: 'Large'
-            // brand: $(this).data('gtm-eec-product-brand'), // (String) The brand name of the product. Example: 'NIKE'
+            id:       $(this).data('gtm-eec-product-id').toString(),      // (String) The SKU of the product. Example: 'P12345'
+            name:     $(this).data('gtm-eec-product-name').toString(),    // (String) The name of the product. Example: 'T-Shirt'
+            price:    $(this).data('gtm-eec-product-price').toString(),
+            brand:    $(this).data('gtm-eec-product-brand').toString(),   // (String) The brand name of the product. Example: 'NIKE'
+            category: $(this).data('gtm-eec-product-category').toString(),// (String) Product category of the item. Can have maximum five levels of hierarchy. Example: 'clothes/shirts/t-shirts'
+            variant:  $(this).data('gtm-eec-product-variant').toString(), // (String) What variant of the main product this is. Example: 'Large'
+            list:     $(this).data('gtm-eec-product-list').toString(),
+            position: $(this).data('gtm-eec-product-position'),           // (Integer) The position of the impression that was clicked. Example: 1
         };
         GAEE.impressionClick(actionFieldList, product);
     });
@@ -170,23 +186,30 @@ jQuery(document).ready( function() {
     $("#carouselMainSlideShow").on('slid.bs.carousel', function (e) {
         var gtmEecPromotions = [
             {
-                id: $(e.relatedTarget).data('gtm-eec-promotion-id'),
-                name: $(e.relatedTarget).data('gtm-eec-promotion-name'),
-                creative: $(e.relatedTarget).data('gtm-eec-promotion-creative'),
+                id: $(e.relatedTarget).data('gtm-eec-promotion-id').toString(),
+                name: $(e.relatedTarget).data('gtm-eec-promotion-name').toString(),
+                creative: $(e.relatedTarget).data('gtm-eec-promotion-creative').toString(),
                 position: $(e.relatedTarget).data('gtm-eec-promotion-position')
             }
         ];
-        // console.log('gtmEecPromotionViewCarousel: ', gtmEecPromotions);
-        GAEE.promotionView(gtmEecPromotions);
+
+        var headerHeight = $('#m_header').height();
+        var pageY = headerHeight + window.scrollY;
+        if (detectElementScrollOnScreen(pageY, $("#carouselMainSlideShow"))) {
+            GAEE.promotionView(gtmEecPromotions);
+            if (GAEE.reportGtmEecOnConsole()) {
+                console.log('gtmEecPromotionViewCarousel: ', gtmEecPromotions);
+            }
+        }
     });
 
     // Promotion Click
     $(document).on('click' ,'.gtm-eec-promotion-click', function(e){
         var promotion = {
-            id: $(this).data('gtm-eec-promotion-id'), // (String) Unique identifier for the promotion. Example: 'summer_campaign'
-            name: $(this).data('gtm-eec-promotion-name'), // (String) The name of the promotion. Example: 'Summer Campaign 2019'
-            creative: $(this).data('gtm-eec-promotion-creative'), // (String) A name for the creative where the promotion was clicked. Example: 'front_page_banner_1'
-            position: $(this).data('gtm-eec-promotion-position') // (String) Some way to distinguish the position of the promotion in the creative (e.g. second slide of a carousel). Example: 'slot_2'
+            id: $(this).data('gtm-eec-promotion-id').toString(),             // (String) Unique identifier for the promotion. Example: 'summer_campaign'
+            name: $(this).data('gtm-eec-promotion-name').toString(),         // (String) The name of the promotion. Example: 'Summer Campaign 2019'
+            creative: $(this).data('gtm-eec-promotion-creative').toString(), // (String) A name for the creative where the promotion was clicked. Example: 'front_page_banner_1'
+            position: $(this).data('gtm-eec-promotion-position')             // (String) Some way to distinguish the position of the promotion in the creative (e.g. second slide of a carousel). Example: 'slot_2'
         };
         GAEE.promotionClick(promotion);
     });

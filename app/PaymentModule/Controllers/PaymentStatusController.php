@@ -50,24 +50,24 @@ class PaymentStatusController extends Controller
             $orderproducts = $order->products();
             $gtmEec        = [
                 'actionField' => [
-                    'id'          => $order->id,
+                    'id'          => (string)$order->id,
                     'affiliation' => $device,
-                    'revenue'     => number_format($result['paidPrice'] ?? 1, 2, '.', ''),
-                    'tax'         => '0',
-                    'shipping'    => '0',
-                    'coupon'      => optional($order->coupon)->code ?? '',
+                    'revenue'     => (string)number_format($result['paidPrice'] ?? 1, 2, '.', ''),
+                    'tax'         => '0.00',
+                    'shipping'    => '0.00',
+                    'coupon'      => (string)optional($order->coupon)->code ?? '',
                 ],
                 'products'    => []
             ];
             foreach ($orderproducts as $product) {
                 $gtmEec['products'][] = [
-                    'id'       => $product->id,
+                    'id'       => (string)$product->id,
                     'name'     => $product->name,
                     'category' => '-',
                     'variant'  => '-',
                     'brand'    => 'آلاء',
                     'quantity' => 1,
-                    'price'    => number_format($product->price['final'] ?? 0, 2, '.', ''),
+                    'price'    => (string)number_format($product->price['final'] ?? 0, 2, '.', ''),
                 ];
             }
         }

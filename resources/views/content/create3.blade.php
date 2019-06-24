@@ -279,6 +279,7 @@
             $('#order').val(data.order+1);
             $('#name').val(data.name);
             $('#author_id').val(data.author.id);
+            $('#checkbox_isFree_enable').prop('checked', data.isFree);
             $('#descriptionSummerNote').summernote('code', data.description);
             $("input[data-role=tagsinput]").tagsinput('destroy');
             if (typeof data.tags !== 'undefined' && data.tags !== null) {
