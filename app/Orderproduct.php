@@ -84,6 +84,8 @@ class Orderproduct extends BaseModel
         'product_id',
         'quantity',
         'cost',
+        'tmp_final_cost',
+        'tmp_extra_cost',
         'discountPercentage',
         'discountAmount',
         'includedInCoupon',
