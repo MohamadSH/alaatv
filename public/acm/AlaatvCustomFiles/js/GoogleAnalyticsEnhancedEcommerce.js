@@ -88,7 +88,8 @@ var GAEE = function () {
         window.dataLayer.push({
             event: 'eec.purchase',
             ecommerce: {
-                currencyCode: 'IRR',
+                //currencyCode: 'IRR',
+                currencyCode: 'USD',
                 purchase: {
                     actionField: actionField,
                     products: products
