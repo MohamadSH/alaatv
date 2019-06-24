@@ -336,8 +336,8 @@ class SalesReportController extends Controller
             $key   = 'salesReport:calculateOrderproductPrice:'.$orderproduct->cacheKey();
             $toAdd = Cache::tags(['salesReport'])
                 ->remember($key, config('constants.CACHE_600'), function () use ($orderproduct , $cacheCounter) {
-                    if($this->authUserId == 1)
-                        dump('in cache');
+//                    if($this->authUserId == 1)
+//                        dump('in cache');
                     if(isset($orderproduct->tmp_final_cost))
                     {
                         $finalPrice    = $orderproduct->tmp_final_cost;
