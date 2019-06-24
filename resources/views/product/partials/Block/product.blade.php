@@ -2,9 +2,12 @@
      data-position="{{ $productKey }}"
      data-gtm-eec-product-id="{{ $product->id }}"
      data-gtm-eec-product-name="{{ $product->name }}"
+     data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"
+     data-gtm-eec-product-brand="آلاء"
      data-gtm-eec-product-category="-"
+     data-gtm-eec-product-variant="-"
      data-gtm-eec-product-position="{{ $productKey }}"
-     data-gtm-eec-list="{{ $block->title }}" >
+     data-gtm-eec-product-list="{{ $block->title }}" >
     
     @if($product->price['final'] !== $product->price['base'])
         <div class="ribbon">
@@ -20,9 +23,12 @@
        class="gtm-eec-product-impression-click"
        data-gtm-eec-product-id="{{ $product->id }}"
        data-gtm-eec-product-name="{{ $product->name }}"
+       data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"
+       data-gtm-eec-product-brand="آلاء"
        data-gtm-eec-product-category="-"
+       data-gtm-eec-product-variant="-"
        data-gtm-eec-product-position="{{ $productKey }}"
-       data-gtm-eec-actionFieldList="{{ $block->title }}">
+       data-gtm-eec-product-list="{{ $block->title }}">
         <img class="a--owl-carousel-type-2-item-image owl-lazy lazy-image" data-src="{{ $product->photo }}?w=253&h=142">
     </a>
     <div class="m--font-primary a--owl-carousel-type-2-item-title">
@@ -33,7 +39,12 @@
        class="m-link a--owl-carousel-type-2-item-subtitle gtm-eec-product-impression-click"
        data-gtm-eec-product-id="{{ $product->id }}"
        data-gtm-eec-product-name="{{ $product->name }}"
+       data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"
+       data-gtm-eec-product-brand="آلاء"
        data-gtm-eec-product-category="-"
+       data-gtm-eec-product-variant="-"
        data-gtm-eec-product-position="{{ $productKey }}"
-       data-gtm-eec-actionFieldList="{{ $block->title }}">{{ $product->name }}</a>
+       data-gtm-eec-product-list="{{ $block->title }}">
+        {{ $product->name }}
+    </a>
 </div>

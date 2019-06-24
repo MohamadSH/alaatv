@@ -1,4 +1,5 @@
-@permission((Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS')))@extends("app",["pageName"=>"admin"])
+@permission((Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS')))
+@extends("app",["pageName"=>"admin"])
 
 @section('page-css')
     <link href = "{{ mix('/css/admin-content-create.css') }}" rel = "stylesheet" type = "text/css"/>
@@ -27,7 +28,6 @@
         }
     </style>
 @endsection
-
 
 @section('pageBar')
 
@@ -149,7 +149,6 @@
     <script src = "/assets/pages/scripts/form-icheck.min.js" type = "text/javascript"></script>
     {{--<script src="/assets/pages/scripts/components-bootstrap-multiselect.min.js" type="text/javascript"></script>--}}
 @endsection
-
 
 @section('page-js')
     <script src = "{{ mix('/js/admin-content-create.js') }}"></script>
@@ -344,7 +343,6 @@
                     });
                     // Create the remove button
                     var removeButton = Dropzone.createElement("<a href=";
-                    javascript:
                     " class=";
                     btn;
                     red;
