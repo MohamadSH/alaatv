@@ -331,17 +331,17 @@ class SalesReportController extends Controller
             $key   = 'salesReport:calculateOrderproductPrice:'.$orderproduct->cacheKey();
             $toAdd = Cache::tags(['salesReport'])
                 ->remember($key, config('constants.CACHE_600'), function () use ($orderproduct) {
-                    if(isset($orderproduct->tmp_final_cost))
-                    {
-                        $finalPrice    = $orderproduct->tmp_final_cost;
-                    }else{
-                        dump('in obtain');
+//                    if(isset($orderproduct->tmp_final_cost))
+//                    {
+//                        $finalPrice    = $orderproduct->tmp_final_cost;
+//                    }else{
+//                        dump('in obtain');
                         $price = $orderproduct->obtainOrderproductCost(false);
                         $finalPrice    = $price['final'];
                         $extraCost     = $price['extraCost'];
 
-                        OrderproductRepo::refreshOrderproductTmpPrice($orderproduct, $finalPrice , $extraCost);
-                    }
+//                        OrderproductRepo::refreshOrderproductTmpPrice($orderproduct, $finalPrice , $extraCost);
+//                    }
 
                     /** @var Order $myOrder */
                     $myOrder                = $orderproduct->order;
