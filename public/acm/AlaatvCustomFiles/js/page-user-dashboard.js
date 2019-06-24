@@ -104,8 +104,9 @@ var UserAssets = function () {
     function makeListItemBasedOnContentType(content, contentType) {
         let listItem = '';
         let title = content.name;
+
         if (contentType === 'video') {
-            title = ' جلسه: ' + content.order;
+            title += '<br>' + ' جلسه: ' + content.order;
         }
         let viewLink = content.url;
         let thumbnail = content.thumbnail;
