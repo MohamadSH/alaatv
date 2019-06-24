@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Repositories\OrderproductRepo;
 use App\User;
 use App\Order;
 use Carbon\Carbon;
@@ -69,6 +70,7 @@ class SalesReportController extends Controller
         [$thisMonthCount, $thisMonthSum] = $this->thisMonthPurchases($allTimeOrderproducts);
 
         $now = Carbon::now()->setTimezone('Asia/Tehran')->format('Y-m-d H:i:s');
+//        dd('stop ', Carbon::now());
         return view('user.salesReport', compact('limitStatus', 'coupontype', 'products',
             'allTimeCount', 'allTimeSum', 'thisMonthCount', 'thisMonthSum', 'thisWeekCount', 'thisWeekSum',
             'todayCount', 'todaySum',
@@ -323,31 +325,41 @@ class SalesReportController extends Controller
     private function calculateTotalPrice(Collection $orderproducts): int
     {
         $sum = 0;
+//        dump($orderproducts->count());
         foreach ($orderproducts as $orderproduct) {
             /** @var Orderproduct $orderproduct */
             $key   = 'salesReport:calculateOrderproductPrice:'.$orderproduct->cacheKey();
-            $toAdd = Cache::tags(['salesReport', 'order', 'orderproduct'])
+            $toAdd = Cache::tags(['salesReport'])
                 ->remember($key, config('constants.CACHE_600'), function () use ($orderproduct) {
-                    $price = $orderproduct->obtainOrderproductCost(false);
-                    
+                    if(isset($orderproduct->tmp_final_cost))
+                    {
+                        $finalPrice    = $orderproduct->tmp_final_cost;
+                    }else{
+                        dump('in obtain');
+                        $price = $orderproduct->obtainOrderproductCost(false);
+                        $finalPrice    = $price['final'];
+                        $extraCost     = $price['extraCost'];
+
+                        OrderproductRepo::refreshOrderproductTmpPrice($orderproduct, $finalPrice , $extraCost);
+                    }
+
                     /** @var Order $myOrder */
                     $myOrder                = $orderproduct->order;
-                    $orderWalletTransactins = $myOrder->transactions()
+                    $orderWalletTransactins = $myOrder->transactions
                         ->where('paymentmethod_id',
                             config('constants.PAYMENT_METHOD_WALLET'))
                         ->whereIn('transactionstatus_id', [
                             config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
                             config('constants.TRANSACTION_STATUS_SUSPENDED'),
                         ])
-                        ->where('cost', '>', 0)
-                        ->get();
+                        ->where('cost', '>', 0);
     
                     $orderWalletSum = $orderWalletTransactins->sum('cost');
                     if ($orderWalletSum == 0) {
-                        $myValue = $price['final'];
+                        $myValue = $finalPrice;
                     } else {
                         $walletPerItem = $orderWalletSum / $myOrder->orderproducts_count;
-                        $myValue       = ($price['final'] - $walletPerItem);
+                        $myValue       = ($finalPrice - $walletPerItem);
                     }
     
                     return $myValue;
