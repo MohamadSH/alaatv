@@ -639,15 +639,11 @@
         var parentProduct = {
             id : '{{ $product->id }}',
             name : '{{ $product->name }}',
-            quantity: 1,
-            category :
-            @if($product->tags !== null)
-            '{{ implode(',',$product->tags->tags) }}'
-            @else
-            '-'
-            @endif
-            ,
-            variant : '{{ $product->type['hint'] }}'
+            price : '{{ number_format($product->price['final'], 2, '.', '') }}',
+            brand: 'آلاء',
+            category : '-',
+            variant : '{{ $product->type['hint'] }}',
+            quantity: 1
         };
         var parentProductTags =
         @if($product->tags !== null)

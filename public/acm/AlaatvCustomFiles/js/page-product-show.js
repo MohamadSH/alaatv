@@ -258,12 +258,14 @@ var ProductShowPage = function () {
     {
         return $('input[type=checkbox][name="products[]"]:checked').map(function () {
             if ($(this).val()) {
-                var name = $('.childProductName-'+$(this).val()).html();
-                name = name.replace('\n', '').trim();
                 return {
-                    id: $(this).val(),
-                    name: name,
-                    quantity: 1
+                    id:       $(this).data('gtm-eec-product-id').toString(),      // (String) The SKU of the product. Example: 'P12345'
+                    name:     $(this).data('gtm-eec-product-name').toString(),    // (String) The name of the product. Example: 'T-Shirt'
+                    price:    $(this).data('gtm-eec-product-price').toString(),
+                    brand:    $(this).data('gtm-eec-product-brand').toString(),   // (String) The brand name of the product. Example: 'NIKE'
+                    category: $(this).data('gtm-eec-product-category').toString(),// (String) Product category of the item. Can have maximum five levels of hierarchy. Example: 'clothes/shirts/t-shirts'
+                    variant:  $(this).data('gtm-eec-product-variant').toString(), // (String) What variant of the main product this is. Example: 'Large'
+                    quantity: $(this).data('gtm-eec-product-quantity'),
                 };
             }
         }).get();
@@ -303,6 +305,9 @@ var ProductShowPage = function () {
 jQuery(document).ready(function() {
 
     GAEE.productDetailViews('product.show', parentProduct);
+    if (GAEE.reportGtmEecOnConsole()) {
+        console.log('product.show', parentProduct);
+    }
 
     let childLevel = ProductSwitch.init();
 
@@ -396,14 +401,16 @@ jQuery(document).ready(function() {
         let productSelectValues = ProductShowPage.getProductSelectValues() ;
         let selectedProductObject = ProductShowPage.getSelectedProductObject() ;
 
-        for (var index in selectedProductObject) {
-            selectedProductObject[index].category = parentProductTags;
-            selectedProductObject[index].variant = 'simple';
-        }
+        // for (var index in selectedProductObject) {
+        //     selectedProductObject[index].category = parentProductTags;
+        //     selectedProductObject[index].variant = 'simple';
+        // }
         selectedProductObject.push(parentProduct);
         TotalQuantityAddedToCart = selectedProductObject.length;
         GAEE.productAddToCart('product.addToCart', selectedProductObject);
-
+        if (GAEE.reportGtmEecOnConsole()) {
+            console.log('product.addToCart', selectedProductObject);
+        }
 
         if ($('#js-var-userId').val()) {
 
