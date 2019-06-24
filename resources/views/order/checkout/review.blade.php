@@ -57,6 +57,15 @@
                                                                     data-category="-"
                                                                     data-variant="-"
                                                                     data-productid="{{ $simpleOrderProductItem->product->id }}"
+
+                                                                    data-gtm-eec-product-id="{{ $simpleOrderProductItem->product->id }}"
+                                                                    data-gtm-eec-product-name="{{ $simpleOrderProductItem->product->name }}"
+                                                                    data-gtm-eec-product-price="{{ number_format($simpleOrderProductItem->product->price['final'], 2, '.', '') }}"
+                                                                    data-gtm-eec-product-brand="آلاء"
+                                                                    data-gtm-eec-product-category="-"
+                                                                    data-gtm-eec-product-variant="-"
+                                                                    data-gtm-eec-product-quantity="1"
+                                                                    
                                                                     class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 btnRemoveOrderproduct">
                                                                     <span>
                                                                         <i class="flaticon-circle"></i>
@@ -682,18 +691,22 @@
                         {
                             id : '{{ $orderProductItem['grand']->id  }}',
                             name : '{{ $orderProductItem['grand']->name  }}',
-                            quantity: 1,
+                            price : '{{ number_format($orderProductItem['grand']->price['final'], 2, '.', '')   }}',
+                            brand : 'آلاء',
                             category : '-',
-                            variant : '-'
+                            variant : '-',
+                            quantity: 1,
                         },
                     @endIf
                     @foreach($orderProductItem['orderproducts'] as $key=>$simpleOrderProductItem)
                         {
                             id : '{{ $simpleOrderProductItem->product->id  }}',
                             name : '{{ $simpleOrderProductItem->product->name  }}',
-                            quantity: 1,
+                            price : '{{ number_format($simpleOrderProductItem->product->price['final'], 2, '.', '')   }}',
+                            brand : 'آلاء',
                             category : '-',
-                            variant : '-'
+                            variant : '-',
+                            quantity: 1,
                         },
                     @endforeach
                 @endforeach

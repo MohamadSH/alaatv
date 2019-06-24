@@ -16,9 +16,10 @@ var GAEE = function () {
                     products: [{
                         id : product.id,//(String) The SKU of the product. I recommend sending any variant IDs using a Product-scoped Custom Dimension. Example: 'P12345'
                         name : product.name,//(String) The name of the product. Any variant name can be sent with the variant key. Example: 'T-Shirt'
+                        price : product.price,
+                        brand : product.brand,//(String) The brand name of the product. Example: 'NIKE'
                         category : product.category, //(String) Product category of the item. Can have maximum five levels of hierarchy. Example: 'clothes/shirts/t-shirts'
                         variant : product.variant, //(String) What variant of the main product this is. Example: 'Large'
-                        brand : 'آلاء',//(String) The brand name of the product. Example: 'NIKE'
                         // dimensionN : product.dimensionN,//(String) A Product-scoped Custom Dimension for index number N. Example: 'Blue'
                         // metricN : product.metricN, //(Integer) A Product-scoped Custom Metric for index number N. Example: 3
                     }]
@@ -41,7 +42,7 @@ var GAEE = function () {
         });
     }
 
-    function action_productRemoveFromCart(actionFieldList, products) {
+    function action_productRemoveFromCart(actionFieldList, product) {
         window.dataLayer.push({
             event: 'eec.remove',
             ecommerce: {
@@ -49,7 +50,7 @@ var GAEE = function () {
                     actionField: {
                         list: actionFieldList
                     },
-                    products: [products]
+                    products: [product]
                 }
             }
         });
@@ -144,6 +145,11 @@ var GAEE = function () {
     }
 
     return {
+
+        reportGtmEecOnConsole: function () {
+            return false;
+        },
+
         productDetailViews: function (actionFieldList, product) {
             getDataLayer();
             action_productDetailViews(actionFieldList, product);
@@ -152,9 +158,9 @@ var GAEE = function () {
             getDataLayer();
             action_productAddToCart(actionFieldList, products);
         },
-        productRemoveFromCart: function (actionFieldList, products) {
+        productRemoveFromCart: function (actionFieldList, product) {
             getDataLayer();
-            action_productRemoveFromCart(actionFieldList, products);
+            action_productRemoveFromCart(actionFieldList, product);
         },
         checkout: function (step, option, products) {
             getDataLayer();
@@ -186,6 +192,7 @@ var GAEE = function () {
             getDataLayer();
             promotion_click(promotion);
         },
+
 
     };
 }();
