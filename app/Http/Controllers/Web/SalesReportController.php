@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Product;
+use App\Repositories\OrderproductRepo;
 use App\User;
 use App\Order;
 use Carbon\Carbon;
@@ -9,6 +11,7 @@ use App\Orderproduct;
 use App\Traits\DateTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
@@ -16,6 +19,8 @@ use Illuminate\Support\Facades\Cache;
 class SalesReportController extends Controller
 {
     use DateTrait;
+
+    private $authUserId;
     
     /**
      * SalesReportController constructor.
@@ -42,6 +47,7 @@ class SalesReportController extends Controller
     
         /** @var User $user */
         $user = $request->user();
+        $this->authUserId = $user->id;
 
 //        dump('start query allTime' , Carbon::now());
         $productIds = $this->getUserProducts($user);
@@ -69,6 +75,7 @@ class SalesReportController extends Controller
         [$thisMonthCount, $thisMonthSum] = $this->thisMonthPurchases($allTimeOrderproducts);
 
         $now = Carbon::now()->setTimezone('Asia/Tehran')->format('Y-m-d H:i:s');
+//        dd('stop ', Carbon::now());
         return view('user.salesReport', compact('limitStatus', 'coupontype', 'products',
             'allTimeCount', 'allTimeSum', 'thisMonthCount', 'thisMonthSum', 'thisWeekCount', 'thisWeekSum',
             'todayCount', 'todaySum',
@@ -83,7 +90,7 @@ class SalesReportController extends Controller
      */
     private function todayPurchases(Collection $allTimeOrderproducts): array
     {
-        return Cache::remember('SR-todayPurchases-'.md5(implode(',', $allTimeOrderproducts->pluck('id')
+        return Cache::tags(['salesReport'])->remember('SR-todayPurchases-'.md5(implode(',', $allTimeOrderproducts->pluck('id')
                 ->toArray())), config('constants.CACHE_3'), function () use ($allTimeOrderproducts) {
             $todayOrderproducts = $this->getTodayPurchases($allTimeOrderproducts);
             $todayCount         = $this->countOrderproducts($todayOrderproducts);
@@ -100,7 +107,7 @@ class SalesReportController extends Controller
      */
     private function thisWeekPurchases(Collection $allTimeOrderproducts): array
     {
-        return Cache::remember('SR-thisWeekPurchases-'.md5(implode(',', $allTimeOrderproducts->pluck('id')
+        return Cache::tags(['salesReport'])->remember('SR-thisWeekPurchases-'.md5(implode(',', $allTimeOrderproducts->pluck('id')
                 ->toArray())), config('constants.CACHE_3'), function () use ($allTimeOrderproducts) {
             $thisWeekOrderproducts = $this->getThisWeekPurchases($allTimeOrderproducts);
             $thisWeekCount         = $this->countOrderproducts($thisWeekOrderproducts);
@@ -117,7 +124,7 @@ class SalesReportController extends Controller
      */
     private function thisMonthPurchases(Collection $allTimeOrderproducts): array
     {
-        return Cache::remember('SR-thisMonthPurchases-'.md5(implode(',', $allTimeOrderproducts->pluck('id')
+        return Cache::tags(['salesReport'])->remember('SR-thisMonthPurchases-'.md5(implode(',', $allTimeOrderproducts->pluck('id')
                 ->toArray())), config('constants.CACHE_3'), function () use ($allTimeOrderproducts) {
             $thisMonthOrderproducts = $this->getThisMonthPurchases($allTimeOrderproducts);
             $thisMonthCount         = $this->countOrderproducts($thisMonthOrderproducts);
@@ -165,7 +172,7 @@ class SalesReportController extends Controller
      */
     private function getThisWeekDate(): array
     {
-        return Cache::remember('Sr-getThisWeekDate', config('constants.CACHE_60'), function () {
+        return Cache::tags(['salesReport'])->remember('Sr-getThisWeekDate', config('constants.CACHE_60'), function () {
             $firstDayOfWeekDate = Carbon::now()
                 ->setTimezone('Asia/Tehran')
                 ->startOfWeek(Carbon::SATURDAY)
@@ -183,7 +190,7 @@ class SalesReportController extends Controller
      */
     private function getThisMonthDate(): array
     {
-        return Cache::remember('Sr-getThisMonthDate', config('constants.CACHE_60'), function () {
+        return Cache::tags(['salesReport'])->remember('Sr-getThisMonthDate', config('constants.CACHE_60'), function () {
             $jalaliCalender = collect(config('constants.JALALI_CALENDER'));
             [$currentJalaliYear, $currentJalaliMonth, $currentJalaliDay] = $this->todayJalaliSplittedDate();
             $currentJalaliMonthString = $this->convertToJalaliMonth($currentJalaliMonth);
@@ -202,7 +209,7 @@ class SalesReportController extends Controller
      */
     private function getPurchasedOrderproducts(array $products): Collection
     {
-        return Cache::remember('sr:getPurchasedOrderproducts:'.md5(implode(',', $products)),
+        return Cache::tags(['salesReport'])->remember('sr:getPurchasedOrderproducts:'.md5(implode(',', $products)),
             config('constants.CACHE_5'),
             static function () use ($products) {
     
@@ -212,7 +219,7 @@ class SalesReportController extends Controller
                         $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
                             ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
                     })
-                    ->with(['order', 'order.transactions'])
+                    ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])
                     ->get();
             });
     }
@@ -224,7 +231,7 @@ class SalesReportController extends Controller
      */
     private function getPurchasedGroupedOrderproducts(array $otherProducts)
     {
-        return Cache::remember('sr:getPurchasedGroupedOrderproducts:'.md5(implode(',', $otherProducts)),
+        return Cache::tags(['salesReport'])->remember('sr:getPurchasedGroupedOrderproducts:'.md5(implode(',', $otherProducts)),
             config('constants.CACHE_5'),
             static function () use ($otherProducts) {
                 return Orderproduct::select(DB::raw('COUNT("*") as count'))
@@ -246,7 +253,7 @@ class SalesReportController extends Controller
      */
     private function getUserProducts(User $user)
     {
-        return Cache::remember('sr-'.$user->cacheKey(), config('constants.CACHE_600'), function () use ($user) {
+        return Cache::tags(['salesReport'])->remember('sr-'.$user->cacheKey(), config('constants.CACHE_600'), function () use ($user) {
             return $user->contracts->pluck('product_id')
                 ->toArray();
         });
@@ -288,7 +295,7 @@ class SalesReportController extends Controller
         $key = implode(',', $allTimeOrderproducts->pluck('id')
                 ->toArray()).'-'.$sinceDateTime.'-'.$tillDateTime;
         $key = md5($key);
-        return Cache::remember($key, config('constants.CACHE_5'),
+        return Cache::tags(['salesReport'])->remember($key, config('constants.CACHE_5'),
             static function () use ($allTimeOrderproducts, $sinceDateTime, $tillDateTime) {
                 return $allTimeOrderproducts->where('order.completed_at', '>=', $sinceDateTime)
                     ->where('order.completed_at', '<=', $tillDateTime);
@@ -323,31 +330,45 @@ class SalesReportController extends Controller
     private function calculateTotalPrice(Collection $orderproducts): int
     {
         $sum = 0;
+//        dump($orderproducts->count());
+        $cacheCounter = 0;
         foreach ($orderproducts as $orderproduct) {
             /** @var Orderproduct $orderproduct */
             $key   = 'salesReport:calculateOrderproductPrice:'.$orderproduct->cacheKey();
-            $toAdd = Cache::tags(['salesReport', 'order', 'orderproduct'])
-                ->remember($key, config('constants.CACHE_600'), function () use ($orderproduct) {
-                    $price = $orderproduct->obtainOrderproductCost(false);
-                    
+            $toAdd = Cache::tags(['salesReport'])
+                ->remember($key, config('constants.CACHE_600'), function () use ($orderproduct , $cacheCounter) {
+//                    if($this->authUserId == 1)
+//                        dump('in cache');
+                    if(isset($orderproduct->tmp_final_cost))
+                    {
+                        $finalPrice    = $orderproduct->tmp_final_cost;
+                    }else{
+                        $price = $orderproduct->obtainOrderproductCost(false);
+                        $finalPrice    = $price['final'];
+                        $extraCost     = $price['extraCost'];
+
+                        OrderproductRepo::refreshOrderproductTmpPrice($orderproduct, $finalPrice , $extraCost);
+                    }
+
                     /** @var Order $myOrder */
                     $myOrder                = $orderproduct->order;
-                    $orderWalletTransactins = $myOrder->transactions()
+                    $orderproducts = $myOrder->normalOrderproducts->whereNotIn('product_id' , [Product::DONATE_PRODUCT_5_HEZAR , Product::CUSTOM_DONATE_PRODUCT]);
+                    $orderproductCount = $orderproducts->count();
+                    $orderWalletTransactins = $myOrder->transactions
                         ->where('paymentmethod_id',
                             config('constants.PAYMENT_METHOD_WALLET'))
                         ->whereIn('transactionstatus_id', [
                             config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
                             config('constants.TRANSACTION_STATUS_SUSPENDED'),
                         ])
-                        ->where('cost', '>', 0)
-                        ->get();
+                        ->where('cost', '>', 0);
     
                     $orderWalletSum = $orderWalletTransactins->sum('cost');
                     if ($orderWalletSum == 0) {
-                        $myValue = $price['final'];
+                        $myValue = $finalPrice;
                     } else {
-                        $walletPerItem = $orderWalletSum / $myOrder->orderproducts_count;
-                        $myValue       = ($price['final'] - $walletPerItem);
+                        $walletPerItem = $orderWalletSum / $orderproductCount;
+                        $myValue       = ($finalPrice - $walletPerItem);
                     }
     
                     return $myValue;
@@ -363,7 +384,7 @@ class SalesReportController extends Controller
      */
     private function getTodayTimePeriod(): array
     {
-        return Cache::remember('SR-getTodayTimePeriod', config('constants.CACHE_3'), function () {
+        return Cache::tags(['salesReport'])->remember('SR-getTodayTimePeriod', config('constants.CACHE_3'), function () {
             $today = Carbon::now()
                 ->setTimezone('Asia/Tehran')
                 ->format('Y-m-d');
@@ -379,7 +400,7 @@ class SalesReportController extends Controller
      */
     private function getThisWeekTimePeriod(): array
     {
-        return Cache::remember('SR-getThisWeekTimePeriod', config('constants.CACHE_3'), function () {
+        return Cache::tags(['salesReport'])->remember('SR-getThisWeekTimePeriod', config('constants.CACHE_3'), function () {
             [$firstDayOfWeekDate, $endDayOfWeekDate] = $this->getThisWeekDate();
             $sinceDateTime = $this->makeSinceDateTime($firstDayOfWeekDate);
             $tillDateTime  = $this->makeTillDateTime($endDayOfWeekDate);
@@ -393,7 +414,7 @@ class SalesReportController extends Controller
      */
     private function getThisMonthTimePeriod(): array
     {
-        return Cache::remember('SR-getThisMonthTimePeriod', config('constants.CACHE_3'), function () {
+        return Cache::tags(['salesReport'])->remember('SR-getThisMonthTimePeriod', config('constants.CACHE_3'), function () {
             [$firstDayDate, $lastDayDate] = $this->getThisMonthDate();
             $sinceDateTime = $this->makeSinceDateTime($firstDayDate);
             $tillDateTime  = $this->makeTillDateTime($lastDayDate);
@@ -584,7 +605,7 @@ class SalesReportController extends Controller
         $provinces = $this->getProvinces();
         foreach ($allTimeOrderproducts as $allTimeOrderproduct) {
             $unknown = false;
-//            $foundProvince = Cache::remember('sr-SetLocation-OP:'.$allTimeOrderproduct->id,
+//            $foundProvince = Cache::tags(['salesReport'])->remember('sr-SetLocation-OP:'.$allTimeOrderproduct->id,
 //                config('constants.CACHE_600'), function () use ($allTimeOrderproduct, $provinces) {
                     $user         = $allTimeOrderproduct->order->user;
                     $userProvince = $user->province;
@@ -630,7 +651,7 @@ class SalesReportController extends Controller
      */
     private function getOrderprodutsCount(array $otherProducts): array
     {
-        return Cache::remember('sr-getOrderprodutsCount:'.md5(implode(',', $otherProducts)),
+        return Cache::tags(['salesReport'])->remember('sr-getOrderprodutsCount:'.md5(implode(',', $otherProducts)),
             config('constants.CACHE_5'), function () use ($otherProducts) {
                 $orderproducts = $this->getPurchasedGroupedOrderproducts($otherProducts);
                 return $orderproducts->pluck('count')

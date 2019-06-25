@@ -582,6 +582,35 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 return $fileCollection->count() > 0 ? $fileCollection->groupBy('type') : null;
             });
     }
+
+    /**
+     * Get the content's files for admin.
+     *
+     * @param $value
+     *
+     * @return Collection
+     */
+
+    public function getFileForAdminAttribute(): ?Collection
+    {
+        $value = $this->getOriginal('file');
+        $fileCollection = collect(json_decode($value));
+        $fileCollection->transform(function ($item) {
+//                dd($item);
+            $l          = new LinkGenerator($item);
+            $item->link = $this->isFree ? $l->getLinks() : $l->getLinks([
+                'content_id' => $this->id,
+            ]);
+
+            if ($item->type === 'pamphlet') {
+                unset($item->res);
+            }
+            return $item;
+        });
+
+
+        return $fileCollection->count() > 0 ? $fileCollection->groupBy('type') : null;
+    }
     
     /**
      * Get the content's thumbnail .
