@@ -128,7 +128,15 @@
                                 @if($productsHasThisContentThroughBlockCollection->count() > 0)
                                     @foreach($productsHasThisContentThroughBlockCollection as $product)
                                         @if($product->type['type'] === 'simple')
-                                            <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart" data-pid="{{ $product->id }}">
+                                            <button
+                                                data-gtm-eec-product-id="{{$product->id}}"
+                                                data-gtm-eec-product-name="{{$product->name}}"
+                                                data-gtm-eec-product-price = "@if($product->price){{$product->price['final']}}@endif"
+                                                data-gtm-eec-product-brand = "آلاء"
+                                                data-gtm-eec-product-category = "-"
+                                                data-gtm-eec-product-variant = "-"
+                                                data-gtm-eec-product-quantity = "1"
+                                                class="btn m-btn--air btn-succ  ess m-btn--icon m--margin-bottom-5 btnAddToCart" data-pid="{{ $product->id }}">
                                                 <span>
                                                     <i class="fa fa-cart-arrow-down"></i>
                                                     <i class="fas fa-sync-alt fa-spin m--hide"></i>
@@ -665,6 +673,17 @@
             @endif
         ];
     </script>
-    <script src="{{ mix("/js/content-show.js") }}" type="text/javascript"></script>
+{{--    <script src="{{ mix("/js/content-show.js") }}" type="text/javascript"></script>--}}
+    <script src="{{asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/videojs/video.min.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/videojs/plugins/pip/videojs.pip.min.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/videojs/nuevo.min.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/videojs/plugins/videojs.p2p.min.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/videojs/plugins/videojs.hotkeys.min.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/videojs/plugins/seek-to-point.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/videojs/lang/fa.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/AlaatvCustomFiles/components/summarizeText/js.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/AlaatvCustomFiles/js/UserCart.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/AlaatvCustomFiles/js/page-content-show.js')}}"  type="text/javascript"></script>
 @endsection
 
