@@ -70,15 +70,38 @@ jQuery(document).ready( function() {
     };
 
 
-    let lazyImages = $('.lazy-image');
-    let inAdvance = 300;
-    function lazyLoad() {
-        lazyImages.each(function () {
-            if ($(this).offset().top < window.innerHeight + window.pageYOffset + inAdvance) {
-                $(this).attr('src', $(this).data('src'));
+    const images = document.querySelectorAll('.lazy-image');
+
+    observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.intersectionRatio > 0) {
+                // console.log('in the view', entry.target);
+                $(entry.target).attr('src', $(this).data('src'));
+                // entry.target.classList.add('fancy');
+            } else {
+                // entry.target.classList.remove('fancy');
             }
         });
-    }
-    window.addEventListener('scroll', throttle(50, lazyLoad));
-    window.addEventListener('resize', throttle(50, lazyLoad));
+    });
+
+    images.forEach(image => {
+        observer.observe(image);
+    });
+
+
+
+
+    //
+    //
+    // let lazyImages = $('.lazy-image');
+    // let inAdvance = 300;
+    // function lazyLoad() {
+    //     lazyImages.each(function () {
+    //         if ($(this).offset().top < window.innerHeight + window.pageYOffset + inAdvance) {
+    //             $(this).attr('src', $(this).data('src'));
+    //         }
+    //     });
+    // }
+    // window.addEventListener('scroll', throttle(50, lazyLoad));
+    // window.addEventListener('resize', throttle(50, lazyLoad));
 });

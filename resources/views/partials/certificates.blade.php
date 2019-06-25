@@ -32,7 +32,7 @@
                 </div>
                 <div class="col text-center">
                     <a onclick = 'window.open("https://trustseal.enamad.ir/Verify.aspx?id=125806&amp;p=WKrjprEcDOOQQtpD", "Popup","toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30")'>
-                        <img class="img-fluid m--img-centered certificatesLogo" src="{{ asset('/acm/extra/enamad-logo0.png') }}" alt="enamad.ir" data-name="enamad">
+                        <img class="img-fluid m--img-centered certificatesLogo" src="{{ asset('/acm/extra/enamad-logo1.png') }}" alt="enamad.ir" data-name="enamad">
                     </a>
 {{--                    <img src="https://trustseal.enamad.ir/logo.aspx?id=125806&amp;p=WKrjprEcDOOQQtpD" alt="" onclick='window.open("https://trustseal.enamad.ir/Verify.aspx?id=125806&amp;p=WKrjprEcDOOQQtpD", "Popup","toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30")' style="cursor:pointer" id="WKrjprEcDOOQQtpD">--}}
 

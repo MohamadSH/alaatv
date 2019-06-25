@@ -25,7 +25,7 @@
                                 </button>
                                 <br>
                                 <span class="m--font-light">
-                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20">
+                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20" alt="آلاء">
 				                </span>
                                 <div class="m--space-10"></div>
                             </div>
