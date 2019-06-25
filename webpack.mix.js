@@ -371,6 +371,14 @@ mix.babel(
 
 mix.babel(
     [
+        'node_modules/flipclock/dist/flipclock.js',
+        'public/acm/AlaatvCustomFiles/js/page-product-landing8.js',
+    ],
+    'public/js/page-landing8.js'
+);
+
+mix.babel(
+    [
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
         'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
         'public/acm/AlaatvCustomFiles/js/page-product-landing9.js',
@@ -482,6 +490,7 @@ mix.styles(
 
 mix.styles(
     [
+        'node_modules/flipclock/dist/flipclock.css',
         'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
         'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
         'public/acm/AlaatvCustomFiles/css/page-product-landing8.css',
