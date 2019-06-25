@@ -673,6 +673,17 @@
             @endif
         ];
     </script>
-    <script src="{{ mix("/js/content-show.js") }}" type="text/javascript"></script>
+{{--    <script src="{{ mix("/js/content-show.js") }}" type="text/javascript"></script>--}}
+    <script src="{{asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/videojs/video.min.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/videojs/plugins/pip/videojs.pip.min.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/videojs/nuevo.min.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/videojs/plugins/videojs.p2p.min.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/videojs/plugins/videojs.hotkeys.min.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/videojs/plugins/seek-to-point.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/videojs/lang/fa.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/AlaatvCustomFiles/components/summarizeText/js.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/AlaatvCustomFiles/js/UserCart.js')}}"  type="text/javascript"></script>
+    <script src="{{asset('/acm/AlaatvCustomFiles/js/page-content-show.js')}}"  type="text/javascript"></script>
 @endsection
 
