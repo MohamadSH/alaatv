@@ -105,6 +105,7 @@ class HomeController extends Controller
         {
             $product = Product::find($request->get('product'));
             $contents = \App\Content::whereIn('id' , $request->get('contents'))->get();
+            dump($contents->pluck('id')->toArray());
             foreach ($contents as $content) {
                 $params = [
                     "tags" => json_encode(['c-'.$content->id], JSON_UNESCAPED_UNICODE),
@@ -115,7 +116,7 @@ class HomeController extends Controller
 
                 $response = $this->sendRequest(config("constants.TAG_API_URL")."id/relatedproduct/".$product->id, "PUT",
                     $params);
-                dump($response);
+                dump($content->id , $response);
             }
             dd('done');
 
