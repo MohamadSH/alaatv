@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Classes\Search\RelatedProductSearch;
 use App\Product;
 use App\User;
 use Exception;
@@ -267,7 +268,7 @@ class ContentController extends Controller
         return httpResponse(null, $view);
     }
     
-    public function show(Request $request, Content $content)
+    public function show(Request $request, Content $content, RelatedProductSearch $relatedProductSearch)
     {
         if (!$content->isActive()) {
             abort(Response::HTTP_LOCKED, 'Deactivated!');
@@ -305,17 +306,21 @@ class ContentController extends Controller
         
         $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
         $apiResponse       = response()->json($content, Response::HTTP_OK);
-    
-//        $productsHasThisContentThroughBlock = Content::select('products.id', 'products.name')
-//            ->join('blockables', 'educationalcontents.contentset_id', '=', 'blockables.blockable_id')
-//            ->join('products', 'blockables.block_id', '=', 'products.block_id')
-//            ->where('blockables.blockable_type', 'App\Contentset')
-//            ->where('educationalcontents.id', $content->id)
-//            ->get();
-        $productsHasThisContentThroughBlockCollection = new ProductCollection();
-//        foreach ($productsHasThisContentThroughBlock as $item) {
-//            $productsHasThisContentThroughBlockCollection->push(Product::find($item->id));
-//        }
+
+        $key = 'relatedProduct:content:'.$content->cacheKey();
+        $productsHasThisContentThroughBlockCollection =
+            Cache::tags(['relatedProduct'])->remember($key , config('constants.CACHE_600'),function () use ($content , $relatedProductSearch){
+            $filters      = [
+                'tags'  => ['c-'.$content->id]
+            ];
+            $result = $relatedProductSearch->get($filters);
+            $products = new ProductCollection();
+            foreach ($result as $product) {
+                $products->push($product);
+            }
+            return $products;
+        });
+
         $viewResponse      = view('content.show',
             compact('seenCount', 'author', 'content', 'contentsWithSameSet', 'videosWithSameSet',
                 'pamphletsWithSameSet', 'contentSetName', 'tags',

@@ -90,13 +90,26 @@ jQuery(document).ready( function() {
     });
 
     $(document).on('click', '.btnAddToCart', function () {
-
         mApp.block('.btnAddToCart', {
             type: "loader",
             state: "info",
         });
 
         let productId = $(this).data('pid');
+
+        let selectedProductObject = {
+            id:       $(this).data('gtm-eec-product-id').toString(),      // (String) The SKU of the product. Example: 'P12345'
+            name:     $(this).data('gtm-eec-product-name').toString(),    // (String) The name of the product. Example: 'T-Shirt'
+            price:    $(this).data('gtm-eec-product-price').toString(),
+            brand:    $(this).data('gtm-eec-product-brand').toString(),   // (String) The brand name of the product. Example: 'NIKE'
+            category: $(this).data('gtm-eec-product-category').toString(),// (String) Product category of the item. Can have maximum five levels of hierarchy. Example: 'clothes/shirts/t-shirts'
+            variant:  $(this).data('gtm-eec-product-variant').toString(), // (String) What variant of the main product this is. Example: 'Large'
+            quantity: $(this).data('gtm-eec-product-quantity')
+        };
+        GAEE.productAddToCart('product.addToCart', selectedProductObject);
+        if (GAEE.reportGtmEecOnConsole()) {
+            console.log('product.addToCart', selectedProductObject);
+        }
 
         if ($('#js-var-userId').val()) {
 
