@@ -341,7 +341,7 @@ class Contentset extends BaseModel implements Taggable
             ->remember($key, config('constants.CACHE_300'), function () {
                 return $this->contents()
                     ->active()
-                    ->get();
+                    ->get()->sortBy('order');
             });
     }
 
