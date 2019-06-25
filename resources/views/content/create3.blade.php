@@ -49,7 +49,7 @@
                                                 نمایش اطلاعات آخرین محتوا
                                             </button>
                                         </div>
-                                        <input type="text" name="contentset_id" id="setId" class="form-control m-input m-input--air" placeholder="شماره درس" dir="ltr">
+                                        <input type="text" value="{{isset($lastContent->contentset_id)?$lastContent->contentset_id:''}}" name="contentset_id" id="setId" class="form-control m-input m-input--air" placeholder="شماره درس" dir="ltr">
                                     </div>
                                     <div class="lastContentName">
                                         @if(isset($lastContent))
@@ -65,19 +65,34 @@
                             <div class="col-12">
                                 <label class="mt-checkbox mt-checkbox-outline">
                                     <div class="md-checkbox">
-                                        {!!
-                                            Form::checkbox(
-                                                'isFree',
-                                                1,
-                                                null,
-                                                [
-                                                    'value' => '1',
-                                                    'id' => 'checkbox_isFree_enable',
-                                                    'class'=>'md-check',
-                                                    'checked'
-                                                ]
-                                            )
-                                        !!}
+                                        @if(isset($lastContent) && $lastContent->isFree)
+                                            {!!
+                                                Form::checkbox(
+                                                    'isFree',
+                                                    1,
+                                                    null,
+                                                    [
+                                                        'value' => '1',
+                                                        'id' => 'checkbox_isFree_enable',
+                                                        'class'=>'md-check',
+                                                        'checked'
+                                                    ]
+                                                )
+                                            !!}
+                                        @else
+                                            {!!
+                                                Form::checkbox(
+                                                    'isFree',
+                                                    1,
+                                                    null,
+                                                    [
+                                                        'value' => '1',
+                                                        'id' => 'checkbox_isFree_enable',
+                                                        'class'=>'md-check',
+                                                    ]
+                                                )
+                                            !!}
+                                        @endif
                                         <label for="checkbox_isFree_enable">
                                             <span></span>
                                             <span class="check"></span>

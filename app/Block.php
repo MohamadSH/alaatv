@@ -357,7 +357,7 @@ class Block extends BaseModel
         return Cache::remember('block-getActiveContent-'.$this->cacheKey(), config('constants.CACHE_60'), function () {
             return $this->contents()
                 ->active()
-                ->get();
+                ->get()->sortBy('pivot.order');
         });
     }
     
@@ -366,7 +366,7 @@ class Block extends BaseModel
         return Cache::remember('block-getActiveSets-'.$this->cacheKey(), config('constants.CACHE_60'), function () {
             return $this->sets()
                 ->active()
-                ->get();
+                ->get()->sortBy('pivot.order');
         });
     }
     
@@ -375,7 +375,7 @@ class Block extends BaseModel
         return Cache::remember('block-getActiveProducts-'.$this->cacheKey(), config('constants.CACHE_60'), function () {
             return $this->products()
                 ->active()
-                ->get();
+                ->get()->sortBy('pivot.order');
         });
     }
 }
