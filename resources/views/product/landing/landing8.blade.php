@@ -3,6 +3,7 @@
 @section('page-css')
     <link href="{{ mix('/css/page-landing8.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
+
 @section('content')
     <div class="row">
         <div class="col">
@@ -34,6 +35,13 @@
                             <div class="container-fluid">
                                 <div class="row">
                                     <div class="col-md-4 order-2 order-sm-2 order-md-1 order-lg-1 sideItems">
+    
+    
+                                        <div class="row justify-content-center d-none d-sm-none d-md-block d-xl-block d-lg-block">
+                                            <div class="col m--margin-bottom-30">
+                                                <img src="{{ asset('/acm/extra/landing8/image/STORY-7.jpg') }}" alt="زمان مورد نیاز همایش ها"  class="a--full-width">
+                                            </div>
+                                        </div>
                                         
                                         <div class="m-portlet m-portlet--creative m-portlet--first m-portlet--bordered-semi">
                                             <div class="m-portlet__head">
@@ -114,7 +122,21 @@
                                         
                                     </div>
                                     <div class="col-md-8 order-1 order-sm-1 order-md-2 order-lg-2">
-                                        
+                                        <div class="row justify-content-center">
+                                            <div class="col text-center">
+                                                <div class="m-divider m--margin-bottom-30">
+                                                    <span></span>
+                                                    <span>تا شروع کنکور</span>
+                                                    <span></span>
+                                                </div>
+                                                <div class="konkourTimer"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row justify-content-center d-block d-sm-block d-md-none d-xl-none d-lg-none">
+                                            <div class="col m--margin-bottom-10">
+                                                <img src="{{ asset('/acm/extra/landing8/image/STORY-7.jpg') }}" alt="زمان مورد نیاز همایش ها"  class="a--full-width">
+                                            </div>
+                                        </div>
                                         <div class="row justify-content-center">
                                             @foreach( $landingProducts as $product)
         
@@ -187,4 +209,8 @@
         
         </div>
     </div>
+@endsection
+
+@section('page-js')
+    <script src="{{ mix('/js/page-landing8.js') }}"></script>
 @endsection
