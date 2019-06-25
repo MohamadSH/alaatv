@@ -75,12 +75,12 @@
         <ul class="list-group margin-top-20 text-center">
             <li class="list-group-item bold" style="font-size: small">فایل های موجود
             </li>
-            @if(isset($content->file) and $content->file->isNotEmpty())
-                @if(!is_null($content->file->get('video')))
-                    @foreach($content->file->get('video') as $file)
+            @if(isset($content->file_for_admin) and $content->file_for_admin->isNotEmpty())
+                @if(!is_null($content->file_for_admin->get('video')))
+                    @foreach($content->file_for_admin->get('video') as $file)
                         <li class="list-group-item" style="font-size: small">
                             <div class="row margin-bottom-5">
-                                <span class="badge badge-danger" dir="ltr"> {{basename($file->link, "." . pathinfo($file->link, PATHINFO_EXTENSION)) }}</span>
+                                <span class="badge badge-danger" dir="ltr">{{$file->fileName}} </span>
                                 <span class="badge badge-info" dir="ltr">{{$file->caption}} </span>
                             </div>
                             <div class="input-group input-group-sm">
@@ -104,11 +104,11 @@
                         </li>
                     @endforeach
                 @endif
-                    @if(!is_null($content->file->get('pamphlet')))
-                        @foreach($content->file->get('pamphlet') as $file)
+                    @if(!is_null($content->file_for_admin->get('pamphlet')))
+                        @foreach($content->file_for_admin->get('pamphlet') as $file)
                             <li class="list-group-item" style="font-size: small">
                                 <div class="row margin-bottom-5">
-                                    <span class="badge badge-danger" dir="ltr"> {{basename($file->link, "." . pathinfo($file->link, PATHINFO_EXTENSION)) }}</span>
+                                    <span class="badge badge-danger" dir="ltr">{{$file->fileName}}</span>
                                     <span class="badge badge-info" dir="ltr">{{$file->caption}} </span>
                                 </div>
                                 <div class="input-group input-group-sm">
