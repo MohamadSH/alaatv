@@ -237,7 +237,7 @@ class SetController extends Controller
     
     public function indexContent (\App\Http\Requests\Request $request, Contentset $set){
         $contents = optional($set->contents)->sortBy('order');
-        return view('listTest',compact('set','contents'));
+        return view('set.listContents',compact('set','contents'));
     }
     
     private function syncProducts(array $products , Contentset $contentset){
