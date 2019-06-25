@@ -25,7 +25,7 @@
                         </div>
                     </div>
                     <div class="m-portlet__head-tools">
-                        <a href="{{ action('Web\ContentController@create2', ['set'=>$set->id]) }}">
+                        <a target="_blank" href="{{ action('Web\ContentController@create2', ['set'=>$set->id]) }}">
                             <button type="button" class="btn m-btn--pill m-btn--air btn-primary">افزودن محتوا</button>
                         </a>
                         <a href="{{ action('Web\SetController@edit', ['set'=>$set->id]) }}">
