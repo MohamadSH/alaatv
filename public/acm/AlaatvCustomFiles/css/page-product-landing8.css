@@ -38,11 +38,41 @@
 .productItem {
     position: relative;
 }
+
+
+.flip-clock {
+    font-family: IRANSans;
+    justify-content: center;
+}
+.konkourTimer, .konkourTimer * {
+    direction: ltr;
+}
+.flip-clock .flip-clock-group .flip-clock-list .flip-clock-list-item-inner > .bottom,
+.flip-clock .flip-clock-group .flip-clock-list .flip-clock-list-item-inner > .top {
+    background: #a7bb51;
+}
+.flip-clock .flip-clock-group .flip-clock-list {
+    color: #e82525;
+}
+
 /*media query*/
 @media only screen and (max-width: 767px) {
     .m-portlet .m-portlet-fit--sides {
         margin-right: -0.4rem;
         margin-left: -0.4rem;
         margin-top: -0.4rem;
+    }
+
+
+    .flip-clock .flip-clock-group .flip-clock-label {
+        font-size: 3em;
+    }
+    .flip-clock .flip-clock-group .flip-clock-list .flip-clock-list-item-inner > .bottom,
+    .flip-clock .flip-clock-group .flip-clock-list .flip-clock-list-item-inner > .top {
+        font-size: 7.5em;
+    }
+    .flip-clock .flip-clock-group .flip-clock-list {
+        width: 8em;
+        height: 10em;
     }
 }
