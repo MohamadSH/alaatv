@@ -106,7 +106,7 @@ jQuery(document).ready( function() {
             variant:  $(this).data('gtm-eec-product-variant').toString(), // (String) What variant of the main product this is. Example: 'Large'
             quantity: $(this).data('gtm-eec-product-quantity')
         };
-        GAEE.productAddToCart('product.addToCart', selectedProductObject);
+        GAEE.productAddToCart('sampleVideo.addToCart', selectedProductObject);
         if (GAEE.reportGtmEecOnConsole()) {
             console.log('product.addToCart', selectedProductObject);
         }
