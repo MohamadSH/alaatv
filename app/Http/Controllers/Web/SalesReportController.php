@@ -216,7 +216,7 @@ class SalesReportController extends Controller
                 return Orderproduct::whereIn('product_id', $products)
                     ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
                     ->whereHas('order', function ($q) {
-                        $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
+                        $q->whereIn('orderstatus_id', [config('constants.ORDER_STATUS_CLOSED') , config('constants.ORDER_STATUS_POSTED')])
                             ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
                     })
                     ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])
@@ -337,8 +337,6 @@ class SalesReportController extends Controller
             $key   = 'salesReport:calculateOrderproductPrice:'.$orderproduct->cacheKey();
             $toAdd = Cache::tags(['salesReport'])
                 ->remember($key, config('constants.CACHE_600'), function () use ($orderproduct , $cacheCounter) {
-//                    if($this->authUserId == 1)
-//                        dump('in cache');
                     if(isset($orderproduct->tmp_final_cost))
                     {
                         $finalPrice    = $orderproduct->tmp_final_cost;
@@ -352,7 +350,7 @@ class SalesReportController extends Controller
 
                     /** @var Order $myOrder */
                     $myOrder                = $orderproduct->order;
-                    $orderproducts = $myOrder->normalOrderproducts->whereNotIn('product_id' , [Product::DONATE_PRODUCT_5_HEZAR , Product::CUSTOM_DONATE_PRODUCT]);
+                    $orderproducts = $myOrder->normalOrderproducts->whereNotIn('product_id' , [Product::DONATE_PRODUCT_5_HEZAR , Product::CUSTOM_DONATE_PRODUCT , Product::ASIATECH_PRODUCT]);
                     $orderproductCount = $orderproducts->count();
                     $orderWalletTransactins = $myOrder->transactions
                         ->where('paymentmethod_id',
@@ -362,7 +360,22 @@ class SalesReportController extends Controller
                             config('constants.TRANSACTION_STATUS_SUSPENDED'),
                         ])
                         ->where('cost', '>', 0);
-    
+
+
+                    if(isset($myOrder->coupon_id) && $orderproduct->includedInCoupon){
+                        $orderCouponDiscount = $myOrder->coupon_discount_type;
+                        if($orderCouponDiscount  !== false)
+                        {
+                            $couponDiscount = $orderCouponDiscount['discount'];
+                            if($orderCouponDiscount['typeHint'] == 'percentage'){
+                                $finalPrice = (int)($finalPrice * (1 - ($couponDiscount/100)));
+                            }else{
+                                $finalPrice = $finalPrice - ($couponDiscount/$orderproductCount);
+                            }
+                        }
+                    }
+
+                    $finalPrice = $finalPrice -  ($myOrder->discount/$orderproductCount);
                     $orderWalletSum = $orderWalletTransactins->sum('cost');
                     if ($orderWalletSum == 0) {
                         $myValue = $finalPrice;
