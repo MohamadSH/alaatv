@@ -147,11 +147,6 @@ class Order extends BaseModel
         'files',
     ];
 
-    protected $withCount = [
-        'orderproducts',
-    ];
-
-
     /**
      * @var array
      */
