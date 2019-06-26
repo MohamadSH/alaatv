@@ -364,11 +364,14 @@ class SalesReportController extends Controller
 
                     if(isset($myOrder->coupon_id) && $orderproduct->includedInCoupon){
                         $orderCouponDiscount = $myOrder->coupon_discount_type;
-                        $couponDiscount = $orderCouponDiscount['discount'];
-                        if($orderCouponDiscount['typeHint'] == 'percentage'){
-                            $finalPrice = (int)($finalPrice * (1 - ($couponDiscount/100)));
-                        }else{
-                            $finalPrice = $finalPrice - ($couponDiscount/$orderproductCount);
+                        if($orderCouponDiscount  !== false)
+                        {
+                            $couponDiscount = $orderCouponDiscount['discount'];
+                            if($orderCouponDiscount['typeHint'] == 'percentage'){
+                                $finalPrice = (int)($finalPrice * (1 - ($couponDiscount/100)));
+                            }else{
+                                $finalPrice = $finalPrice - ($couponDiscount/$orderproductCount);
+                            }
                         }
                     }
 
