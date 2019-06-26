@@ -2,6 +2,11 @@
 
 @section('page-css')
     <link href="{{ mix('/css/page-homePage.css') }}" rel="stylesheet" type="text/css"/>
+    <style>
+        .dasboardLessons .m-portlet__head {
+            background: white;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -226,10 +231,8 @@
 @section('page-js')
     <script>
         var sections = [
-        @foreach($sections as $section)
-            @if($section['lessons']->count() > 0)
-                    '{{ $section["class"] }}',
-            @endif
+        @foreach($blocks as $block)
+            '{{ $block->class }}',
         @endforeach
         ];
         var gtmEecImpressions = [
@@ -256,5 +259,9 @@
             @endforeach
         ];
     </script>
-    <script src="{{ mix('/js/page-homePage.js') }}"></script>
+{{--    <script src="{{ mix('/js/page-homePage.js') }}"></script>--}}
+    <script src="{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/components/aSticky/aSticky.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/certificates.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-homePage.js') }}"></script>
 @endsection
