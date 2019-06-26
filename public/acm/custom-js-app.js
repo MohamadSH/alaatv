@@ -1,41 +1,14 @@
 jQuery(document).ready( function() {
-    // var owl = jQuery('.a--owl-carousel-type-1.owl-carousel');
-    // owl.each(function () {
-    //     $(this).owlCarousel({
-    //         stagePadding: 40,
-    //         loop: false,
-    //         rtl:true,
-    //         nav: true,
-    //         dots: false,
-    //         margin:15,
-    //         mouseDrag: true,
-    //         touchDrag: true,
-    //         pullDrag: true,
-    //         responsiveClass:true,
-    //         responsive:{
-    //             0:{
-    //                 items:1,
-    //             },
-    //             600:{
-    //                 items:3,
-    //             },
-    //             1200:{
-    //                 items:3
-    //             },
-    //             1600:{
-    //                 items: 4
-    //             }
-    //         }
-    //     });
-    //     /*$(this).on('mousewheel', '.owl-stage', function (e) {
-    //         if (e.deltaY>0) {
-    //             $(this).trigger('next.owl');
-    //         } else {
-    //             $(this).trigger('prev.owl');
-    //         }
-    //         e.preventDefault();
-    //     });*/
-    // });
+
+    $('#carouselMainSlideShow img').each(function () {
+        let dataWidth = $(this).data('width');
+        let dataHeight = $(this).data('height');
+        if (typeof dataWidth !== 'undefined' && typeof dataHeight !== 'undefined') {
+            let windowWidth = $( window ).width();
+            let minHeight = (windowWidth * dataHeight) / dataWidth;
+            $(this).css({'min-height':minHeight+'px'});
+        }
+    });
 
     /*
      * Google TagManager
@@ -87,21 +60,4 @@ jQuery(document).ready( function() {
     images.forEach(image => {
         observer.observe(image);
     });
-
-
-
-
-    //
-    //
-    // let lazyImages = $('.lazy-image');
-    // let inAdvance = 300;
-    // function lazyLoad() {
-    //     lazyImages.each(function () {
-    //         if ($(this).offset().top < window.innerHeight + window.pageYOffset + inAdvance) {
-    //             $(this).attr('src', $(this).data('src'));
-    //         }
-    //     });
-    // }
-    // window.addEventListener('scroll', throttle(50, lazyLoad));
-    // window.addEventListener('resize', throttle(50, lazyLoad));
 });

@@ -146,20 +146,26 @@
 @endsection
 
 @section('page-js')
-    <script src="{{ mix('/js/page-shop.js') }}"></script>
     <script>
-        var gtmEecImpressions = [
+        var carousels = [
             @foreach($blocks as $block)
-                @foreach($block->products as $productKey=>$product)
-                    {
-                        id: '{{ $product->id }}',
-                        name: '{{ $product->name }}',
-                        category: '-',
-                        list: '{{ $block->title }}',
-                        position: '{{ $productKey }}'
-                    },
+                    @if($block->products->count() > 0)
+                '{{ $block->class }}',
+            @endif
             @endforeach
-        @endforeach
+        ];
+        var gtmEecImpressions = [
+                @foreach($blocks as $block)
+                @foreach($block->products as $productKey=>$product)
+            {
+                id: '{{ $product->id }}',
+                name: '{{ $product->name }}',
+                category: '-',
+                list: '{{ $block->title }}',
+                position: '{{ $productKey }}'
+            },
+            @endforeach
+            @endforeach
         ];
         var gtmEecPromotions = [
                 @foreach($slides as $slideKey=>$slide)
@@ -172,5 +178,6 @@
             @endforeach
         ];
     </script>
+    <script src="{{ mix('/js/page-shop.js') }}"></script>
 @endsection
 

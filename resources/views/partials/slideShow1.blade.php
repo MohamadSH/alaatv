@@ -33,7 +33,7 @@
                                    @endif
                                    data-gtm-eec-promotion-position="{{ $key }}">
                             @endif
-                                    <img class="d-block w-100" src="{{ $slide->url }}" alt="عکس اسلاید @if(isset($slide->title[0])) {{ $slide->title }} @endif">
+                                    <img class="d-block w-100" src="{{ $slide->url }}" alt="عکس اسلاید @if(isset($slide->title[0])) {{ $slide->title }} @endif" id="{{ $slide->id }}" data-width="1280" data-height="500">
                                     <div class="carousel-caption d-none d-md-block">
                                         @if(isset($slide->title[0]))
                                             <h4 class="bold">{{ $slide->title  }}</h4>

@@ -49,10 +49,13 @@
 }
 .flip-clock .flip-clock-group .flip-clock-list .flip-clock-list-item-inner > .bottom,
 .flip-clock .flip-clock-group .flip-clock-list .flip-clock-list-item-inner > .top {
-    background: #a7bb51;
+    background: #a2eea9;
 }
 .flip-clock .flip-clock-group .flip-clock-list {
     color: #e82525;
+}
+.flip-clock .flip-clock-group .flip-clock-list .flip-clock-list-item-inner > .bottom, .flip-clock .flip-clock-group .flip-clock-list .flip-clock-list-item-inner > .top {
+    box-shadow: none;
 }
 
 /*media query*/

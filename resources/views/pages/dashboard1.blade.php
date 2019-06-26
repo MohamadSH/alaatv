@@ -2,11 +2,6 @@
 
 @section('page-css')
     <link href="{{ mix('/css/page-homePage.css') }}" rel="stylesheet" type="text/css"/>
-    <style>
-        .dasboardLessons .m-portlet__head {
-            background: white;
-        }
-    </style>
 @endsection
 
 @section('content')
@@ -30,7 +25,7 @@
                                 </button>
                                 <br>
                                 <span class="m--font-light">
-                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20" alt="آلاء">
+                                    <img data-src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20" class="lazy-image" alt="آلاء">
 				                </span>
                                 <div class="m--space-10"></div>
                             </div>
@@ -50,7 +45,7 @@
                                 </button>
                                 <br>
                                 <span class="m--font-light">
-                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20">
+                                    <img data-src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20" class="lazy-image">
 				                </span>
                                 <div class="m--space-10"></div>
                             </div>
@@ -70,7 +65,7 @@
                                 </button>
                                 <br>
                                 <span class="m--font-light">
-                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20">
+                                    <img data-src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20" class="lazy-image">
 				                </span>
                                 <div class="m--space-10"></div>
                             </div>
@@ -90,7 +85,7 @@
                                 </button>
                                 <br>
                                 <span class="m--font-light">
-                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20">
+                                    <img data-src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20" class="lazy-image">
 				                </span>
                                 <div class="m--space-10"></div>
                             </div>
@@ -149,7 +144,7 @@
                        data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
                        data-gtm-eec-promotion-creative="قبل از بلاک کنکور نظام قدیم"
                        data-gtm-eec-promotion-position="سمت راست">
-                        <img src="{{ asset('/acm/extra/ads/gif/728-180(2).gif') }}" alt="همایش های دانلودی آلاء" class="a--full-width">
+                        <img data-src="{{ asset('/acm/extra/ads/gif/728-180(2).gif') }}" alt="همایش های دانلودی آلاء" class="a--full-width lazy-image">
                     </a>
                 </div>
                 <div class="col-12 col-md-6 text-center m--margin-bottom-5">
@@ -159,7 +154,7 @@
                        data-gtm-eec-promotion-name="قرعه کشی گوشی"
                        data-gtm-eec-promotion-creative="قبل از بلاک کنکور نظام قدیم"
                        data-gtm-eec-promotion-position="سمت چپ">
-                        <img src="{{ asset('/acm/extra/ads/gif/728-180.gif') }}" alt="قرعه کشی گوشی" class="a--full-width">
+                        <img data-src="{{ asset('/acm/extra/ads/gif/728-180.gif') }}" alt="قرعه کشی گوشی" class="a--full-width lazy-image">
                     </a>
                 </div>
             </div>
@@ -172,7 +167,7 @@
                        data-gtm-eec-promotion-name="قرعه کشی گوشی"
                        data-gtm-eec-promotion-creative="قبل از بلاک پایه دهم"
                        data-gtm-eec-promotion-position="سمت راست">
-                        <img src="{{ asset('/acm/extra/ads/gif/728-180.gif') }}" alt="قرعه کشی گوشی" class="a--full-width">
+                        <img data-src="{{ asset('/acm/extra/ads/gif/728-180.gif') }}" alt="قرعه کشی گوشی" class="a--full-width lazy-image">
                     </a>
                 </div>
                 <div class="col-12 col-md-6 text-center m--margin-bottom-5">
@@ -182,7 +177,7 @@
                        data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
                        data-gtm-eec-promotion-creative="قبل از بلاک پایه دهم"
                        data-gtm-eec-promotion-position="سمت چپ">
-                        <img src="{{ asset('/acm/extra/ads/gif/728-180(2).gif') }}" alt="همایش های دانلودی آلاء" class="a--full-width">
+                        <img data-src="{{ asset('/acm/extra/ads/gif/728-180(2).gif') }}" alt="همایش های دانلودی آلاء" class="a--full-width lazy-image">
                     </a>
                 </div>
             </div>
@@ -205,7 +200,7 @@
                data-gtm-eec-promotion-name="قرعه کشی گوشی"
                data-gtm-eec-promotion-creative="پایین همه بلاک ها"
                data-gtm-eec-promotion-position="وسط">
-                <img src="{{ asset('/acm/extra/ads/gif/970-90(1).gif') }}" alt="همایش های دانلودی آلاء" class="a--full-width">
+                <img data-src="{{ asset('/acm/extra/ads/gif/970-90(1).gif') }}" alt="همایش های دانلودی آلاء" class="a--full-width lazy-image">
             </a>
         </div>
     </div>

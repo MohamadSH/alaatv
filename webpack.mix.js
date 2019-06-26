@@ -338,6 +338,7 @@ mix.babel(
 mix.babel(
     [
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+        'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
         'public/acm/AlaatvCustomFiles/js/certificates.js',
         'public/acm/AlaatvCustomFiles/js/page-shop.js',
     ],
