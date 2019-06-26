@@ -41,7 +41,7 @@
 
 
 .flip-clock {
-    font-family: IRANSans;
+    font-family: IRANSans, Arial;
     justify-content: center;
 }
 .konkourTimer, .konkourTimer * {

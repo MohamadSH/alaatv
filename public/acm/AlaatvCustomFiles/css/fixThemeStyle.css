@@ -22,7 +22,7 @@
 
 /*fix IRANSans font for select input*/
 .form-control {
-    font-family: IRANSans;
+    font-family: IRANSans, Arial;
     font-size: 11px;
 }
 select.form-control {

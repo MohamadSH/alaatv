@@ -6,8 +6,13 @@ jQuery(document).ready( function() {
         if (typeof dataWidth !== 'undefined' && typeof dataHeight !== 'undefined') {
             let windowWidth = $( window ).width();
             let minHeight = (windowWidth * dataHeight) / dataWidth;
-            $(this).css({'min-height':minHeight+'px'});
+            $(this).parents('.carousel-item').css({'min-height':minHeight+'px'});
         }
+    });
+
+    // Bootstrap 4 carousel lazy load
+    $("#carouselMainSlideShow").on('slid.bs.carousel', function (e) {
+        $(e.relatedTarget).find('img.imageSlideOfSlideshow').attr('src', $(e.relatedTarget).find('img.imageSlideOfSlideshow').data('src'));
     });
 
     /*
@@ -48,11 +53,7 @@ jQuery(document).ready( function() {
     observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.intersectionRatio > 0) {
-                // console.log('in the view', entry.target);
-                $(entry.target).attr('src', $(this).data('src'));
-                // entry.target.classList.add('fancy');
-            } else {
-                // entry.target.classList.remove('fancy');
+                $(entry.target).attr('src', $(entry.target).data('src'));
             }
         });
     });

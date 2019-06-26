@@ -21,7 +21,7 @@
                 <div class="m-portlet__body">
                     <div class="m-widget27 m-portlet-fit--sides">
                         <div class="m-widget27__pic">
-                            <img src="/acm/extra/landing1/img/rally4.jpg" alt="">
+                            <img src="/acm/extra/landing1/img/rally4.jpg" alt="" class="lazy-image">
                             <h3 class="m-widget27__title m--font-light">
                             
                             </h3>
@@ -39,7 +39,7 @@
     
                                         <div class="row justify-content-center d-none d-sm-none d-md-block d-xl-block d-lg-block">
                                             <div class="col m--margin-bottom-30">
-                                                <img src="{{ asset('/acm/extra/landing8/image/STORY-7.jpg') }}" alt="زمان مورد نیاز همایش ها"  class="a--full-width">
+                                                <img src="{{ asset('/acm/extra/landing8/image/STORY-7.jpg') }}" alt="زمان مورد نیاز همایش ها"  class="a--full-width lazy-image">
                                             </div>
                                         </div>
                                         
@@ -134,7 +134,7 @@
                                         </div>
                                         <div class="row justify-content-center d-block d-sm-block d-md-none d-xl-none d-lg-none">
                                             <div class="col m--margin-bottom-10">
-                                                <img src="{{ asset('/acm/extra/landing8/image/STORY-7.jpg') }}" alt="زمان مورد نیاز همایش ها"  class="a--full-width">
+                                                <img src="{{ asset('/acm/extra/landing8/image/STORY-7.jpg') }}" alt="زمان مورد نیاز همایش ها"  class="a--full-width lazy-image">
                                             </div>
                                         </div>
                                         <div class="row justify-content-center">
