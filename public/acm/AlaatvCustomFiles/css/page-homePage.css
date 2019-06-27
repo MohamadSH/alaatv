@@ -47,6 +47,10 @@
     transform: none;
 }
 
+.dasboardLessons .m-portlet__head {
+    background: white;
+}
+
 /*media query*/
 @media only screen and (max-width: 767.98px) {
     .shopNavItems.row[class*="m-row--col-separator-"] > div:last-child {

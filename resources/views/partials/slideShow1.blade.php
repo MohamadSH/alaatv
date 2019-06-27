@@ -12,7 +12,7 @@
 
                 <div class="carousel-inner">
                     @foreach($slides as $key => $slide)
-                        <div class="carousel-item @if($key == 0) active @endif"
+                        <div class="carousel-item @if($key == 0) active @endif text-center"
                              data-gtm-eec-promotion-id="{{ $slide->id }}"
                              data-gtm-eec-promotion-name="{{ $slide->title }}"
                              @if(isset($positionOfSlideShow))
@@ -33,7 +33,8 @@
                                    @endif
                                    data-gtm-eec-promotion-position="{{ $key }}">
                             @endif
-                                    <img class="d-block w-100" src="{{ $slide->url }}" alt="عکس اسلاید @if(isset($slide->title[0])) {{ $slide->title }} @endif">
+                                    <img src="/acm/extra/loader.gif" alt="loading" class="loadingSlideshow">
+                                    <img class="d-block w-100 imageSlideOfSlideshow lazy-image" data-src="{{ $slide->url }}" alt="عکس اسلاید @if(isset($slide->title[0])) {{ $slide->title }} @endif" id="slideshowid-{{ $slide->id }}" data-width="1280" data-height="500">
                                     <div class="carousel-caption d-none d-md-block">
                                         @if(isset($slide->title[0]))
                                             <h4 class="bold">{{ $slide->title  }}</h4>
