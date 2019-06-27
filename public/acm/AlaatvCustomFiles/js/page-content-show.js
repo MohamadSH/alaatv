@@ -82,7 +82,18 @@ var SnippetContentShow = function(){
 }();
 jQuery(document).ready( function() {
     SnippetContentShow.init(related_videos);
-    $('#owlCarouselParentProducts').OwlCarouselType2();
+    $('#owlCarouselParentProducts').OwlCarouselType2({
+        OwlCarousel: {
+            btnSwfitchEvent: function() {
+                LazyLoad.image();
+            }
+        },
+        grid: {
+            btnSwfitchEvent: function() {
+                LazyLoad.image();
+            }
+        },
+    });
     $(document).on('click', '.scrollToOwlCarouselParentProducts', function(){
         $([document.documentElement, document.body]).animate({
             scrollTop: ($("#owlCarouselParentProducts").offset().top - 80)
@@ -106,7 +117,7 @@ jQuery(document).ready( function() {
             variant:  $(this).data('gtm-eec-product-variant').toString(), // (String) What variant of the main product this is. Example: 'Large'
             quantity: $(this).data('gtm-eec-product-quantity')
         };
-        GAEE.productAddToCart('product.addToCart', selectedProductObject);
+        GAEE.productAddToCart('sampleVideo.addToCart', selectedProductObject);
         if (GAEE.reportGtmEecOnConsole()) {
             console.log('product.addToCart', selectedProductObject);
         }

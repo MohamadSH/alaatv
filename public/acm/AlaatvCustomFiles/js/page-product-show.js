@@ -533,10 +533,16 @@ jQuery(document).ready(function() {
                 1000: {
                     items: 5
                 }
+            },
+            btnSwfitchEvent: function() {
+                LazyLoad.image();
             }
         },
         grid: {
-            columnClass: 'col-12 col-sm-6 col-md-3 gridItem'
+            columnClass: 'col-12 col-sm-6 col-md-3 gridItem',
+            btnSwfitchEvent: function() {
+                LazyLoad.image();
+            }
         },
         defaultView: 'OwlCarousel', // OwlCarousel or grid
         childCountHideOwlCarousel: 4
@@ -616,6 +622,3 @@ jQuery(document).ready(function() {
     // });
 
 });
-
-
-
