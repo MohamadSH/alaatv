@@ -157,15 +157,15 @@
     
                     <div class="row">
                         <div class="col text-center m--margin-bottom-5">
-                            <a href="{{ route('landing.5') }}"
-                               class="gtm-eec-promotion-click scrollSensitiveOnScreen"
-                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"
-                               data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
-                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"
-                               data-gtm-eec-promotion-position="0">
-                                <img src="{{ asset('/acm/extra/ads/gif/970-90.gif') }}" class="a--full-width">
-                                {{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
-                            </a>
+{{--                            <a href="{{ route('landing.5') }}"--}}
+{{--                               class="gtm-eec-promotion-click scrollSensitiveOnScreen"--}}
+{{--                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"--}}
+{{--                               data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
+{{--                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"--}}
+{{--                               data-gtm-eec-promotion-position="0">--}}
+{{--                                <img src="{{ asset('/acm/extra/ads/gif/970-90.gif') }}" class="a--full-width">--}}
+{{--                                --}}{{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
+{{--                            </a>--}}
                         </div>
                     </div>
                 
@@ -274,15 +274,15 @@
                                                 </a>
                                             </div>
                                             <div class="col-md-6 text-center m--margin-bottom-5">
-                                                <a href="{{ route('landing.5') }}"
-                                                   class="gtm-eec-promotion-click scrollSensitiveOnScreen"
-                                                   data-gtm-eec-promotion-id="contentShowPage-rightSide-2"
-                                                   data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
-                                                   data-gtm-eec-promotion-creative="جلوی لینک های مستقیم دانلود این فیلم"
-                                                   data-gtm-eec-promotion-position="1">
-                                                    <img src="{{ asset('/acm/extra/ads/gif/300-251.gif') }}" class="a--full-width">
-                                                    {{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
-                                                </a>
+{{--                                                <a href="{{ route('landing.5') }}"--}}
+{{--                                                   class="gtm-eec-promotion-click scrollSensitiveOnScreen"--}}
+{{--                                                   data-gtm-eec-promotion-id="contentShowPage-rightSide-2"--}}
+{{--                                                   data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
+{{--                                                   data-gtm-eec-promotion-creative="جلوی لینک های مستقیم دانلود این فیلم"--}}
+{{--                                                   data-gtm-eec-promotion-position="1">--}}
+{{--                                                    <img src="{{ asset('/acm/extra/ads/gif/300-251.gif') }}" class="a--full-width">--}}
+{{--                                                    --}}{{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
+{{--                                                </a>--}}
                                             </div>
                                         </div>
                                         
@@ -579,14 +579,24 @@
                 </div>
                 <!--end::Portlet-->
                 <div>
+{{--                    <a href="https://alaatv.com/product/312"--}}
+{{--                       data-tooltip-content="همایش طلایی شیمی کنکور"--}}
+{{--                       class="gtm-eec-promotion-click scrollSensitiveOnScreen"--}}
+{{--                       data-gtm-eec-promotion-id="contentShowPage-leftSide-1"--}}
+{{--                       data-gtm-eec-promotion-name="همایش طلایی شیمی کنکور"--}}
+{{--                       data-gtm-eec-promotion-creative="سمت چپ صفحه پایین لیست کانتنت های مشابه"--}}
+{{--                       data-gtm-eec-promotion-position="0">--}}
+{{--                        <img src="http://uupload.ir/files/u8r8_banner-1.gif" alt="همایش طلایی شیمی کنکور"--}}
+{{--                             class="m--img-centered a--full-width"/>--}}
+{{--                    </a>--}}
                     <a href="https://alaatv.com/product/312"
-                       data-tooltip-content="همایش طلایی شیمی کنکور"
+                       data-tooltip-content="همایش طلایی ریاضی تجربی کنکور"
                        class="gtm-eec-promotion-click scrollSensitiveOnScreen"
                        data-gtm-eec-promotion-id="contentShowPage-leftSide-1"
-                       data-gtm-eec-promotion-name="همایش طلایی شیمی کنکور"
+                       data-gtm-eec-promotion-name="همایش طلایی ریاضی تجربی کنکور"
                        data-gtm-eec-promotion-creative="سمت چپ صفحه پایین لیست کانتنت های مشابه"
                        data-gtm-eec-promotion-position="0">
-                        <img src="http://uupload.ir/files/u8r8_banner-1.gif" alt="همایش طلایی شیمی کنکور"
+                        <img src="https://cdn.alaatv.com/upload/riaziTajrobiKonkurNabakhte.gif" alt="همایش طلایی ریاضی تجربی کنکور"
                              class="m--img-centered a--full-width"/>
                     </a>
                 </div>
