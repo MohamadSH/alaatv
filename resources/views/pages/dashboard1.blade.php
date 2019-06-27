@@ -138,14 +138,14 @@
         @if($block->class === 'konkoor1')
             <div class="row">
                 <div class="col-12 col-md-6 text-center m--margin-bottom-5">
-                    <a href="{{ route('landing.5') }}"
-                       class="gtm-eec-promotion-click scrollSensitiveOnScreen"
-                       data-gtm-eec-promotion-id="homepage-downloadi1"
-                       data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
-                       data-gtm-eec-promotion-creative="قبل از بلاک کنکور نظام قدیم"
-                       data-gtm-eec-promotion-position="سمت راست">
-                        <img data-src="{{ asset('/acm/extra/ads/gif/728-180(2).gif') }}" alt="همایش های دانلودی آلاء" class="a--full-width lazy-image">
-                    </a>
+{{--                    <a href="{{ route('landing.5') }}"--}}
+{{--                       class="gtm-eec-promotion-click scrollSensitiveOnScreen"--}}
+{{--                       data-gtm-eec-promotion-id="homepage-downloadi1"--}}
+{{--                       data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
+{{--                       data-gtm-eec-promotion-creative="قبل از بلاک کنکور نظام قدیم"--}}
+{{--                       data-gtm-eec-promotion-position="سمت راست">--}}
+{{--                        <img data-src="{{ asset('/acm/extra/ads/gif/728-180(2).gif') }}" alt="همایش های دانلودی آلاء" class="a--full-width lazy-image">--}}
+{{--                    </a>--}}
                 </div>
                 <div class="col-12 col-md-6 text-center m--margin-bottom-5">
                     <a href="{{ route('landing.8') }}"
@@ -171,14 +171,14 @@
                     </a>
                 </div>
                 <div class="col-12 col-md-6 text-center m--margin-bottom-5">
-                    <a href="{{ route('landing.5') }}"
-                       class="gtm-eec-promotion-click scrollSensitiveOnScreen"
-                       data-gtm-eec-promotion-id="homepage-downloadi1"
-                       data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
-                       data-gtm-eec-promotion-creative="قبل از بلاک پایه دهم"
-                       data-gtm-eec-promotion-position="سمت چپ">
-                        <img data-src="{{ asset('/acm/extra/ads/gif/728-180(2).gif') }}" alt="همایش های دانلودی آلاء" class="a--full-width lazy-image">
-                    </a>
+{{--                    <a href="{{ route('landing.5') }}"--}}
+{{--                       class="gtm-eec-promotion-click scrollSensitiveOnScreen"--}}
+{{--                       data-gtm-eec-promotion-id="homepage-downloadi1"--}}
+{{--                       data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
+{{--                       data-gtm-eec-promotion-creative="قبل از بلاک پایه دهم"--}}
+{{--                       data-gtm-eec-promotion-position="سمت چپ">--}}
+{{--                        <img data-src="{{ asset('/acm/extra/ads/gif/728-180(2).gif') }}" alt="همایش های دانلودی آلاء" class="a--full-width lazy-image">--}}
+{{--                    </a>--}}
                 </div>
             </div>
         @endif

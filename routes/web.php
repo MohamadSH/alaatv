@@ -134,6 +134,8 @@ Route::group(['middleware' => 'auth'], function () {
         ]
     );
     
+    Route::get('sales-report', 'Web\AdminController@salesReport')->name('user.asset');
+    
     Route::get('ordersAdmin', 'Web\AdminController@adminOrder');
     Route::get('smsAdmin', 'Web\AdminController@adminSMS');
     Route::get('botAdmin', 'Web\BotsController@adminBot');
