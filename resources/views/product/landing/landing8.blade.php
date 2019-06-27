@@ -73,7 +73,7 @@
                                                         </table>
                                                     </div>
                                                     <div class="lessonsTimesWraper-footer">
-                                                        <div class="lessonsTimesWraper-footer-slogan animated infinite heartBeat">
+                                                        <div class="lessonsTimesWraper-footer-slogan animated infinite pulse">
                                                             قرعه کشی
                                                             <br>
                                                             Galaxy S9
