@@ -330,6 +330,7 @@ class Order extends BaseModel
         if ($this->couponDiscount > 0) {
             return [
                 'type'     => config('constants.DISCOUNT_TYPE_PERCENTAGE'),
+                //ToDo constants
                 'typeHint' => 'percentage',
                 'discount' => $this->couponDiscount,
             ];

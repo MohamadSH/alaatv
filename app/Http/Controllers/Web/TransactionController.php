@@ -159,8 +159,7 @@ class TransactionController extends Controller
                     }
                 }
                 else {
-                    $transactions = $transactions->whereIn('order_id', Orderproduct::whereIn('product_id', $productsId)
-                        ->pluck('order_id'));
+                    $transactions = $transactions->whereIn('order_id', Orderproduct::whereIn('product_id', $productsId)->pluck('order_id'));
                 }
             }
             else {
@@ -246,8 +245,7 @@ class TransactionController extends Controller
                         }
                     }
                     else {
-                        $transactionOrderproducts = $transaction->order->orderproducts()
-                            ->Where("orderproducttype_id" , config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
+                        $transactionOrderproducts = $transaction->order->normalOrderproducts()
                             ->whereIn("product_id",
                                 $productsId)
                             ->get();
@@ -261,7 +259,7 @@ class TransactionController extends Controller
                             Product::CUSTOM_DONATE_PRODUCT,
                             Product::DONATE_PRODUCT_5_HEZAR,
                         ];
-                        $numOfOrderproducts         = $transaction->order->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
+                        $numOfOrderproducts         = $transaction->order->normalOrderproducts()
                             ->whereNotIn("product_id",
                                 $donateProducts)
                             ->count();
@@ -283,9 +281,14 @@ class TransactionController extends Controller
                         
                         $orderWalletTransactionSum = 0;
                         if (!empty($paymentMethodsDiff)) {
-                            $orderWalletTransactionSum = $orderSuccessfulTransaction->where("paymentmethod_id",
-                                config("constants.PAYMENT_METHOD_WALLET"))
-                                ->sum("cost");
+                            $orderWalletTransactionSum = $orderSuccessfulTransaction
+                                ->where('paymentmethod_id',
+                                    config('constants.PAYMENT_METHOD_WALLET'))
+                                ->whereIn('transactionstatus_id', [
+                                    config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
+                                    config('constants.TRANSACTION_STATUS_SUSPENDED'),
+                                ])
+                                ->where('cost', '>', 0);
                         }
                         
                         if (isset($transactionStatusFilter)) {
@@ -327,8 +330,7 @@ class TransactionController extends Controller
                             
                             if (isset($extraAttributevaluesId)) {
                                 $extraCost = $orderproduct->getExtraCost($extraAttributevaluesId);
-                            }
-                            else {
+                            } else {
                                 $extraCost = $orderproduct->getExtraCost();
                             }
                             
