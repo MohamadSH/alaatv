@@ -37,9 +37,49 @@
                                     <div class="col-md-4 order-2 order-sm-2 order-md-1 order-lg-1 sideItems">
     
     
-                                        <div class="row justify-content-center d-none d-sm-none d-md-block d-xl-block d-lg-block">
+                                        <div class="row justify-content-center">
                                             <div class="col m--margin-bottom-30">
-                                                <img src="{{ asset('/acm/extra/landing8/image/STORY-7.jpg') }}" alt="زمان مورد نیاز همایش ها"  class="a--full-width lazy-image">
+                                                <div class="lessonsTimesWraper">
+                                                    <div class="lessonsTimesWraper-header">
+                                                        <div class="lessonsTimesWraper-header-top">
+                                                            <img src="{{ asset('/acm/extra/Alaa-logo2.png') }}" alt="آلاء">
+                                                        </div>
+                                                        <div class="lessonsTimesWraper-header-bottom">
+                                                            <h2>همایش های طلایی آلاء</h2>
+                                                            <br>
+                                                            <span class="lessonsTimesWraper-header-bottom-slogan">
+                                                                کمترین زمان ممکن برای طلایی ترین نتیجه
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="lessonsTimesWraper-body">
+                                                        <table>
+                                                            <tbody>
+                                                                @foreach( $productHoures as $item)
+                                                                    <tr onclick="window.location.href = '{{ $item['url'] }}';">
+                                                                        <td>
+                                                                            <a href="{{ $item['url'] }}">
+                                                                                {{ $item['name'] }}:
+                                                                            </a>
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="{{ $item['url'] }}">
+                                                                                {{ $item['hours'] }} ساعت
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="lessonsTimesWraper-footer">
+                                                        <div class="lessonsTimesWraper-footer-slogan animated infinite heartBeat">
+                                                            قرعه کشی
+                                                            <br>
+                                                            Galaxy S9
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         
@@ -121,7 +161,7 @@
                                         </div>
                                         
                                     </div>
-                                    <div class="col-md-8 order-1 order-sm-1 order-md-2 order-lg-2">
+                                    <div class="col-md-8 order-1 order-sm-1 order-md-2 order-lg-2 mainItems">
                                         <div class="row justify-content-center">
                                             <div class="col text-center">
                                                 <div class="m-divider m--margin-bottom-30">
@@ -132,9 +172,50 @@
                                                 <div class="konkourTimer"></div>
                                             </div>
                                         </div>
-                                        <div class="row justify-content-center d-block d-sm-block d-md-none d-xl-none d-lg-none">
+                                        
+                                        <div class="row justify-content-center">
                                             <div class="col m--margin-bottom-10">
-                                                <img src="{{ asset('/acm/extra/landing8/image/STORY-7.jpg') }}" alt="زمان مورد نیاز همایش ها"  class="a--full-width lazy-image">
+                                                <div class="lessonsTimesWraper">
+                                                    <div class="lessonsTimesWraper-header">
+                                                        <div class="lessonsTimesWraper-header-top">
+                                                            <img src="{{ asset('/acm/extra/Alaa-logo2.png') }}" alt="آلاء">
+                                                        </div>
+                                                        <div class="lessonsTimesWraper-header-bottom">
+                                                            <h2>همایش های طلایی آلاء</h2>
+                                                            <br>
+                                                            <span class="lessonsTimesWraper-header-bottom-slogan">
+                                                                کمترین زمان ممکن برای طلایی ترین نتیجه
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="lessonsTimesWraper-body">
+                                                        <table>
+                                                            <tbody>
+                                                                @foreach( $productHoures as $item)
+                                                                    <tr onclick="window.location.href = '{{ $item['url'] }}';">
+                                                                        <td>
+                                                                            <a href="{{ $item['url'] }}">
+                                                                                {{ $item['name'] }}:
+                                                                            </a>
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="{{ $item['url'] }}">
+                                                                                {{ $item['hours'] }} ساعت
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="lessonsTimesWraper-footer">
+                                                        <div class="lessonsTimesWraper-footer-slogan animated infinite heartBeat">
+                                                            قرعه کشی
+                                                            <br>
+                                                            Galaxy S9
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row justify-content-center">

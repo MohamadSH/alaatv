@@ -13,9 +13,6 @@ mix.styles(
         'public/acm/AlaatvCustomFiles/css/owl-carousel.css',
         'public/acm/AlaatvCustomFiles/css/customStyle.css',
         'public/acm/AlaatvCustomFiles/css/fixThemeStyle.css',
-
-
-
     ],
     'public/css/all.css')
     .version();
@@ -33,6 +30,7 @@ mix.babel(
         // 'public/acm/cubeportfolio/js/jquery.cubeportfolio.min.js',
 
         'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
+        'public/acm/AlaatvCustomFiles/js/lazyLoad.js',
         'public/acm/custom-js-app.js',
         'public/acm/AlaatvCustomFiles/js/mLayout.js'
     ],
@@ -62,11 +60,8 @@ mix.babel(
         'public/acm/videojs/plugins/videojs.hotkeys.min.js',
         'public/acm/videojs/plugins/seek-to-point.js',
         'public/acm/videojs/lang/fa.js',
-
         'public/acm/AlaatvCustomFiles/components/summarizeText/js.js',
-
         'public/acm/AlaatvCustomFiles/js/UserCart.js',
-
         'public/acm/AlaatvCustomFiles/js/page-content-show.js'
     ],
     'public/js/content-show.js'

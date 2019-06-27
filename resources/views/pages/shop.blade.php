@@ -149,32 +149,32 @@
     <script>
         var carousels = [
             @foreach($blocks as $block)
-                    @if($block->products->count() > 0)
-                '{{ $block->class }}',
-            @endif
+                @if($block->products->count() > 0)
+                    '{{ $block->class }}',
+                @endif
             @endforeach
         ];
         var gtmEecImpressions = [
-                @foreach($blocks as $block)
+            @foreach($blocks as $block)
                 @foreach($block->products as $productKey=>$product)
-            {
-                id: '{{ $product->id }}',
-                name: '{{ $product->name }}',
-                category: '-',
-                list: '{{ $block->title }}',
-                position: '{{ $productKey }}'
-            },
-            @endforeach
+                    {
+                        id: '{{ $product->id }}',
+                        name: '{{ $product->name }}',
+                        category: '-',
+                        list: '{{ $block->title }}',
+                        position: '{{ $productKey }}'
+                    },
+                @endforeach
             @endforeach
         ];
         var gtmEecPromotions = [
-                @foreach($slides as $slideKey=>$slide)
-            {
-                id: '{{ $slide->id }}',
-                name: '{{ $slide->title }}',
-                creative: 'اسلایدر صفحه فروشگاه',
-                position: '{{ $slideKey }}'
-            },
+            @foreach($slides as $slideKey=>$slide)
+                {
+                    id: '{{ $slide->id }}',
+                    name: '{{ $slide->title }}',
+                    creative: 'اسلایدر صفحه فروشگاه',
+                    position: '{{ $slideKey }}'
+                },
             @endforeach
         ];
     </script>

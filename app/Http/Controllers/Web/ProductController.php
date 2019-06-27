@@ -1363,6 +1363,69 @@ class ProductController extends Controller
             294
         ];
         
+        $productHoures = [
+            294 => [
+                'name' => 'الماس عربی',
+                'url' => action('Web\ProductController@show', 294),
+                'hours' => 2
+            ],
+            298 => [
+                'name' => 'همایش عربی',
+                'url' => action('Web\ProductController@show', 298),
+                'hours' => 5
+            ],
+            342 => [
+                'name' => 'همایش ادبیات',
+                'url' => action('Web\ProductController@show', 342),
+                'hours' => 10
+            ],
+            302 => [
+                'name' => 'همایش دین و زندگی',
+                'url' => action('Web\ProductController@show', 302),
+                'hours' => 12
+            ],
+            308 => [
+                'name' => 'همایش زبان انگلیسی',
+                'url' => action('Web\ProductController@show', 308),
+                'hours' => 12
+            ],
+            326 => [
+                'name' => 'همایش زیست',
+                'url' => action('Web\ProductController@show', 326),
+                'hours' => 23
+            ],
+            318 => [
+                'name' => 'همایش 45 تست کنکور ریاضی',
+                'url' => action('Web\ProductController@show', 318),
+                'hours' => 25
+            ],
+            328 => [
+                'name' => 'همایش ریاضی تجربی(آقای نباخته)',
+                'url' => action('Web\ProductController@show', 328),
+                'hours' => 11
+            ],
+            316 => [
+                'name' => 'همایش ریاضی تجربی(آقای امینی)',
+                'url' => action('Web\ProductController@show', 316),
+                'hours' => 15
+            ],
+            322 => [
+                'name' => 'همایش ریاضی تجربی(آقای ثابتی)',
+                'url' => action('Web\ProductController@show', 322),
+                'hours' => 17
+            ],
+            306 => [
+                'name' => 'همایش فیزیک',
+                'url' => action('Web\ProductController@show', 306),
+                'hours' => 16
+            ],
+            312 => [
+                'name' => 'همایش شیمی',
+                'url' => action('Web\ProductController@show', 312),
+                'hours' => 18
+            ],
+        ];
+        
         
         $productIds = $producIds;
 //        $productIds = config("constants.HAMAYESH_PRODUCT");
@@ -1397,7 +1460,7 @@ class ProductController extends Controller
         
         $costCollection = $this->makeCostCollection($products);
         
-        return view('product.landing.landing8', compact('landingProducts', 'costCollection', 'withFilter'));
+        return view('product.landing.landing8', compact('landingProducts', 'costCollection', 'withFilter', 'productHoures'));
     }
     
     /**

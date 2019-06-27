@@ -31,6 +31,7 @@
                 $([document.documentElement, document.body]).animate({
                     scrollTop: $this.offset().top - $('#m_header').height()
                 }, 300);
+                $.fn.OwlCarouselType2.owlCarouselOptions.grid.btnSwfitchEvent();
             });
             $($this).on('click', '.btn-viewOwlCarousel', function (event) {
                 let $this = $('#' + $(this).attr('data-owlcarousel-type-2-id'));
@@ -62,6 +63,7 @@
                 $([document.documentElement, document.body]).animate({
                     scrollTop: $this.offset().top - $('#m_header').height()
                 }, 300);
+                $.fn.OwlCarouselType2.owlCarouselOptions.OwlCarousel.btnSwfitchEvent();
             });
             $($this).on('click', '.a--owl-carousel-type-2-hide-detailes', function () {
                 let $this = $('#' + $(this).attr('data-owlcarousel-type-2-id'));
@@ -206,9 +208,11 @@
                 }
             },
             // onDragged: this.callback,
-            onTranslated: $.fn.OwlCarouselType2.showAlaaOwlCarouselItemDetail
+            onTranslated: $.fn.OwlCarouselType2.showAlaaOwlCarouselItemDetail,
+            btnSwfitchEvent: function() {},
         },
         grid: {
+            btnSwfitchEvent: function() {},
             columnClass: 'col-12 col-sm-6 col-md-3'
         },
         defaultView: 'OwlCarousel', // or grid

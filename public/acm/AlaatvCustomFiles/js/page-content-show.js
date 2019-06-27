@@ -82,7 +82,18 @@ var SnippetContentShow = function(){
 }();
 jQuery(document).ready( function() {
     SnippetContentShow.init(related_videos);
-    $('#owlCarouselParentProducts').OwlCarouselType2();
+    $('#owlCarouselParentProducts').OwlCarouselType2({
+        OwlCarousel: {
+            btnSwfitchEvent: function() {
+                LazyLoad.image();
+            }
+        },
+        grid: {
+            btnSwfitchEvent: function() {
+                LazyLoad.image();
+            }
+        },
+    });
     $(document).on('click', '.scrollToOwlCarouselParentProducts', function(){
         $([document.documentElement, document.body]).animate({
             scrollTop: ($("#owlCarouselParentProducts").offset().top - 80)

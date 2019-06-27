@@ -225,10 +225,22 @@ var UserAssets = function () {
 
 
 $(document).ready(function () {
-    $('#owlCarouselMyProduct').OwlCarouselType2();
-    $('#owlCarouselMyFavoritSet').OwlCarouselType2();
-    $('#owlCarouselMyFavoritContent').OwlCarouselType2();
-    $('#owlCarouselMyFavoritProducts').OwlCarouselType2();
+    var OwlCarouselType2Option = {
+        OwlCarousel: {
+            btnSwfitchEvent: function() {
+                LazyLoad.image();
+            }
+        },
+        grid: {
+            btnSwfitchEvent: function() {
+                LazyLoad.image();
+            }
+        },
+    };
+    $('#owlCarouselMyProduct').OwlCarouselType2(OwlCarouselType2Option);
+    $('#owlCarouselMyFavoritSet').OwlCarouselType2(OwlCarouselType2Option);
+    $('#owlCarouselMyFavoritContent').OwlCarouselType2(OwlCarouselType2Option);
+    $('#owlCarouselMyFavoritProducts').OwlCarouselType2(OwlCarouselType2Option);
     $(document).on('click', '.btnViewVideo, .btnViewPamphlet', function () {
         let contentType = $(this).data('content-type');
         let contentUrl = $(this).data('content-url');

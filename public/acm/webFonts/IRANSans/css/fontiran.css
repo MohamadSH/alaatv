@@ -17,7 +17,7 @@ This set of fonts are used in this project under the license: (.....)
 *	
 **/
 @font-face {
-	font-family: IRANSans, Arial;
+	font-family: IRANSans;
 	font-style: normal;
 	font-weight: bold;
 	src: url('../fonts/eot/IRANSansWeb_Bold.eot');
@@ -27,7 +27,7 @@ This set of fonts are used in this project under the license: (.....)
 		 url('/acm/webFonts/IRANSans/fonts/ttf/IRANSansWeb_Bold.ttf') format('truetype');
 }
 @font-face {
-	font-family: IRANSans, Arial;
+	font-family: IRANSans;
 	font-style: normal;
 	font-weight: 500;
 	src: url('/acm/webFonts/IRANSans/fonts/eot/IRANSansWeb_Medium.eot');
@@ -37,7 +37,7 @@ This set of fonts are used in this project under the license: (.....)
 		 url('/acm/webFonts/IRANSans/fonts/ttf/IRANSansWeb_Medium.ttf') format('truetype');
 }
 @font-face {
-	font-family: IRANSans, Arial;
+	font-family: IRANSans;
 	font-style: normal;
 	font-weight: 300;
 	src: url('/acm/webFonts/IRANSans/fonts/eot/IRANSansWeb_Light.eot');
@@ -47,7 +47,7 @@ This set of fonts are used in this project under the license: (.....)
 		 url('/acm/webFonts/IRANSans/fonts/ttf/IRANSansWeb_Light.ttf') format('truetype');
 }
 @font-face {
-	font-family: IRANSans, Arial;
+	font-family: IRANSans;
 	font-style: normal;
 	font-weight: 200;
 	src: url('/acm/webFonts/IRANSans/fonts/eot/IRANSansWeb_UltraLight.eot');
@@ -57,7 +57,7 @@ This set of fonts are used in this project under the license: (.....)
 		 url('/acm/webFonts/IRANSans/fonts/ttf/IRANSansWeb_UltraLight.ttf') format('truetype');
 }
 @font-face {
-	font-family: IRANSans, Arial;
+	font-family: IRANSans;
 	font-style: normal;
 	font-weight: normal;
 	src: url('/acm/webFonts/IRANSans/fonts/eot/IRANSansWeb.eot');
@@ -67,7 +67,7 @@ This set of fonts are used in this project under the license: (.....)
 		 url('/acm/webFonts/IRANSans/fonts/ttf/IRANSansWeb.ttf') format('truetype');
 }
 @font-face {
-	font-family: IRANSans, Arial;
+	font-family: IRANSans;
 	font-style: normal;
 	font-weight: bold;
 	src: url('/acm/webFonts/IRANSans/farsi_numeral/eot/IRANSansWeb(FaNum)_Bold.eot');
@@ -77,7 +77,7 @@ This set of fonts are used in this project under the license: (.....)
 	url('/acm/webFonts/IRANSans/farsi_numeral/ttf/IRANSansWeb(FaNum)_Bold.ttf') format('truetype');
 }
 @font-face {
-	font-family: IRANSans, Arial;
+	font-family: IRANSans;
 	font-style: normal;
 	font-weight: 500;
 	src: url('/acm/webFonts/IRANSans/farsi_numeral/eot/IRANSansWeb(FaNum)_Medium.eot');
@@ -87,7 +87,7 @@ This set of fonts are used in this project under the license: (.....)
 	url('/acm/webFonts/IRANSans/farsi_numeral/ttf/IRANSansWeb(FaNum)_Medium.ttf') format('truetype');
 }
 @font-face {
-	font-family: IRANSans, Arial;
+	font-family: IRANSans;
 	font-style: normal;
 	font-weight: 300;
 	src: url('/acm/webFonts/IRANSans/farsi_numeral/eot/IRANSansWeb(FaNum)_Light.eot');
@@ -97,7 +97,7 @@ This set of fonts are used in this project under the license: (.....)
 	url('/acm/webFonts/IRANSans/farsi_numeral/ttf/IRANSansWeb(FaNum)_Light.ttf') format('truetype');
 }
 @font-face {
-	font-family: IRANSans, Arial;
+	font-family: IRANSans;
 	font-style: normal;
 	font-weight: 200;
 	src: url('/acm/webFonts/IRANSans/farsi_numeral/eot/IRANSansWeb(FaNum)_UltraLight.eot');
@@ -107,7 +107,7 @@ This set of fonts are used in this project under the license: (.....)
 	url('/acm/webFonts/IRANSans/farsi_numeral/ttf/IRANSansWeb(FaNum)_UltraLight.ttf') format('truetype');
 }
 @font-face {
-	font-family: IRANSans, Arial;
+	font-family: IRANSans;
 	font-style: normal;
 	font-weight: normal;
 	src: url('/acm/webFonts/IRANSans/farsi_numeral/eot/IRANSansWeb(FaNum).eot');

@@ -24,10 +24,16 @@ function loadCarousels() {
                             1000: {
                                 items: 4
                             }
+                        },
+                        btnSwfitchEvent: function() {
+                            LazyLoad.image();
                         }
                     },
                     grid: {
-                        columnClass: 'col-12 col-sm-6 col-md-3 gridItem'
+                        columnClass: 'col-12 col-sm-6 col-md-3 gridItem',
+                        btnSwfitchEvent: function() {
+                            LazyLoad.image();
+                        }
                     },
                     defaultView: 'OwlCarousel', // OwlCarousel or grid
                     childCountHideOwlCarousel: 4
