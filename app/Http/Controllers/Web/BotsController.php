@@ -1170,41 +1170,37 @@ class BotsController extends Controller
             }
 
             if($request->has('query')){
-                $users = User::whereHas('orders' , function ($q){
-                    $q->whereIn('orderstatus_id' , [2,5])
-                        ->whereIn('paymentstatus_id' , [3,4])
-                        ->whereHas('orderproducts' , function ($q2){
-                            $q2->whereIn('product_id' , [312]);
-                        });
-                });
+                $orders = Order::where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'))
+                                ->where('paymentstatus_id' , config('constants.PAYMENT_STATUS_INDEBTED'))
+                                ->whereDoesntHave('transactions' , function ($q){
+                                    $q->where('transactionstatus_id' , config('constants.TRANSACTION_STATUS_SUCCESSFUL'));
+                                });
 
-                dd($users->toSql());
+                dd($orders->toSql());
+            }
 
+            if($request->has('product') && $request->has('contents'))
+            {
+                $product = Product::find($request->get('product'));
+                $contents = \App\Content::whereIn('id' , $request->get('contents'))->get();
+                $tags = [];
+                foreach ($contents as $content) {
+                    array_push($tags , 'c-'.$content->id);
+                }
 
+                $params = [
+                    "tags" => json_encode($tags, JSON_UNESCAPED_UNICODE),
+                ];
 
-                $users = User::whereHas('orders' , function ($q){
-                    $q->whereIn('orderstatus_id' , [2,5])
-                        ->whereIn('paymentstatus_id' , [3,4])
-                        ->whereHas('orderproducts' , function ($q2){
-                            $q2->whereIn('product_id' , [281,282,283,284,292,287,293,285,286,288,289,290,291]);
-                        });
-                })->whereHas('orders', function ($q3) {
-                    $q3->whereIn('orderstatus_id' , [2,5])
-                        ->whereIn('paymentstatus_id' , [3,4])
-                        ->whereHas('orderproducts' , function ($q2){
-                            $q2->whereIn('product_id' , [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342]);
-                        });
-                });
+                if (isset($product->created_at) && strlen($product->created_at) > 0) {
+                    $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $product->created_at)->timestamp;
+                }
 
-                $orderproducts = Orderproduct::select(DB::raw('COUNT("*") as count'))
-                            ->whereIn('product_id' , [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342 ])
-                            ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
-                            ->whereHas('order', function ($q3) {
-                                $q3->whereIn('orderstatus_id' , [2,5])
-                                    ->whereIn('paymentstatus_id' , [3,4]);
-                            });
+                $response = $this->sendRequest(config("constants.TAG_API_URL")."id/relatedproduct/".$product->id, "PUT", $params);
+                dump($response);
 
-                dd($orderproducts->get()->first()->count);
+                dd('done');
+
             }
 
         } catch (\Exception    $e) {
@@ -3169,5 +3165,22 @@ class BotsController extends Controller
         $zarinpal = new Zarinpal(config('Zarinpal.merchantID'));
         $result = $zarinpal->verify($cost, $authority);
         dd($result);
+    }
+
+    public function salesReportBot(Request $request){
+        $product = Product::Find($request->product);
+        if(!isset($product)){
+            return response()->json(['message'=>'Product not found'],Response::HTTP_BAD_REQUEST);
+        }
+
+        //Query to get orderproducts
+
+        //foreach on orderproducts
+
+
+        return response()->json([
+            'totalNumber'   => $totalNubmer,
+            'totalSale'     => $totalSalse,
+        ]);
     }
 }

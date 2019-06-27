@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Product;
 use App\Repositories\OrderproductRepo;
+use App\Repositories\ProductRepository;
 use App\User;
 use App\Order;
 use Carbon\Carbon;
@@ -75,7 +76,6 @@ class SalesReportController extends Controller
         [$thisMonthCount, $thisMonthSum] = $this->thisMonthPurchases($allTimeOrderproducts);
 
         $now = Carbon::now()->setTimezone('Asia/Tehran')->format('Y-m-d H:i:s');
-//        dd('stop ', Carbon::now());
         return view('user.salesReport', compact('limitStatus', 'coupontype', 'products',
             'allTimeCount', 'allTimeSum', 'thisMonthCount', 'thisMonthSum', 'thisWeekCount', 'thisWeekSum',
             'todayCount', 'todaySum',
@@ -333,6 +333,7 @@ class SalesReportController extends Controller
         $sum = 0;
 //        dump($orderproducts->count());
         $cacheCounter = 0;
+        $toFixOrders = [];
         foreach ($orderproducts as $orderproduct) {
             /** @var Orderproduct $orderproduct */
             $key   = 'salesReport:calculateOrderproductPrice:'.$orderproduct->cacheKey();
@@ -351,45 +352,17 @@ class SalesReportController extends Controller
 
                     /** @var Order $myOrder */
                     $myOrder                = $orderproduct->order;
-                    //Todo
-                    $myOrderproducts = $myOrder->normalOrderproducts->whereNotIn('product_id' , [Product::DONATE_PRODUCT_5_HEZAR , Product::CUSTOM_DONATE_PRODUCT , Product::ASIATECH_PRODUCT]);
-                    $myOrderproductCount = $myOrderproducts->count();
-                    //ToDo
-                    $orderWalletTransactins = $myOrder->transactions
-                        ->where('paymentmethod_id',
-                            config('constants.PAYMENT_METHOD_WALLET'))
-                        ->whereIn('transactionstatus_id', [
-                            config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
-                            config('constants.TRANSACTION_STATUS_SUSPENDED'),
-                        ])
-                        ->where('cost', '>', 0);
 
-
-                    if(isset($myOrder->coupon_id) && $orderproduct->includedInCoupon){
-                        $orderCouponDiscount = $myOrder->coupon_discount_type;
-                        if($orderCouponDiscount  !== false)
-                        {
-                            //Todo method in orderproduct
-                            $couponDiscount = $orderCouponDiscount['discount'];
-                            if($orderCouponDiscount['typeHint'] == 'percentage'){
-                                $finalPrice = ($finalPrice * (1 - ($couponDiscount/100)));
-                            }else{
-                                $finalPrice = $finalPrice - ($couponDiscount/$myOrderproductCount);
-                            }
-                        }
+                    if(isset($myOrder->coupon_id)){
+                        $finalPrice = $orderproduct->affectCouponOnPrice($finalPrice);
                     }
 
-                    $finalPrice = $finalPrice -  ($myOrder->discount/$myOrderproductCount);
+                    $orderPrice = $myOrder->obtainOrderCost();
 
-                    $orderWalletSum = $orderWalletTransactins->sum('cost');
-                    if ($orderWalletSum == 0) {
-                        $myValue = $finalPrice;
-                    } else {
-                        $walletPerItem = $orderWalletSum / $myOrderproductCount;
-                        $myValue       = ($finalPrice - $walletPerItem);
-                    }
-    
-                    return $myValue;
+                    //ToDo put share in tmp in mysql
+                    $shareOfOrder = $orderPrice['totalCost'] == 0 ? 0 : (double)$finalPrice /  $orderPrice['totalCost'];
+
+                    return $shareOfOrder * $myOrder->none_wallet_successful_transactions->sum('cost') ;
                 });
     
             $sum += $toAdd;
