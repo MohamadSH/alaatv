@@ -197,17 +197,17 @@
                     url: ajaxActionUrl,
                     type: 'POST',
                     data: {
-                        productId: $('#productId').val(),
-                        sinceDate: $('#dateFilterCreatedSinceAlt').val(),
-                        tillDate: $('#dateFilterCreatedTillAlt').val()
+                        product_id: $('#productId').val(),
+                        since: $('#dateFilterCreatedSinceAlt').val(),
+                        till: $('#dateFilterCreatedTillAlt').val()
                     },
                     dataType: 'json',
                     success: function (data) {
-                        if (data.report1) {
+                        if (data.totalNumber) {
 
                             $('.reportOfFilter').fadeIn();
-                            $('.report1').html(data.report1);
-                            $('.report2').html(data.report2);
+                            $('.report1').html('تعداد کل: ' + data.totalNumber);
+                            $('.report2').html('فروش کل: ' + data.totalSale);
 
                         } else {
 
