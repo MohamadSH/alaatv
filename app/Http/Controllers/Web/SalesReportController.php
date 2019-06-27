@@ -217,7 +217,8 @@ class SalesReportController extends Controller
                     ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
                     ->whereHas('order', function ($q) {
                         $q->whereIn('orderstatus_id', [config('constants.ORDER_STATUS_CLOSED') , config('constants.ORDER_STATUS_POSTED')])
-                            ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
+                            ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'))
+                            ->where('completed_at' , '>=' ,'2019-04-21 00:00:00'); //avale ordibehesh 98
                     })
                     ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])
                     ->get();
@@ -350,8 +351,10 @@ class SalesReportController extends Controller
 
                     /** @var Order $myOrder */
                     $myOrder                = $orderproduct->order;
-                    $orderproducts = $myOrder->normalOrderproducts->whereNotIn('product_id' , [Product::DONATE_PRODUCT_5_HEZAR , Product::CUSTOM_DONATE_PRODUCT , Product::ASIATECH_PRODUCT]);
-                    $orderproductCount = $orderproducts->count();
+                    //Todo
+                    $myOrderproducts = $myOrder->normalOrderproducts->whereNotIn('product_id' , [Product::DONATE_PRODUCT_5_HEZAR , Product::CUSTOM_DONATE_PRODUCT , Product::ASIATECH_PRODUCT]);
+                    $myOrderproductCount = $myOrderproducts->count();
+                    //ToDo
                     $orderWalletTransactins = $myOrder->transactions
                         ->where('paymentmethod_id',
                             config('constants.PAYMENT_METHOD_WALLET'))
@@ -366,21 +369,23 @@ class SalesReportController extends Controller
                         $orderCouponDiscount = $myOrder->coupon_discount_type;
                         if($orderCouponDiscount  !== false)
                         {
+                            //Todo method in orderproduct
                             $couponDiscount = $orderCouponDiscount['discount'];
                             if($orderCouponDiscount['typeHint'] == 'percentage'){
-                                $finalPrice = (int)($finalPrice * (1 - ($couponDiscount/100)));
+                                $finalPrice = ($finalPrice * (1 - ($couponDiscount/100)));
                             }else{
-                                $finalPrice = $finalPrice - ($couponDiscount/$orderproductCount);
+                                $finalPrice = $finalPrice - ($couponDiscount/$myOrderproductCount);
                             }
                         }
                     }
 
-                    $finalPrice = $finalPrice -  ($myOrder->discount/$orderproductCount);
+                    $finalPrice = $finalPrice -  ($myOrder->discount/$myOrderproductCount);
+
                     $orderWalletSum = $orderWalletTransactins->sum('cost');
                     if ($orderWalletSum == 0) {
                         $myValue = $finalPrice;
                     } else {
-                        $walletPerItem = $orderWalletSum / $orderproductCount;
+                        $walletPerItem = $orderWalletSum / $myOrderproductCount;
                         $myValue       = ($finalPrice - $walletPerItem);
                     }
     
