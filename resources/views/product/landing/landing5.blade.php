@@ -52,7 +52,7 @@
 
 
                                                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 m--padding-left-5 m--padding-right-5 m--margin-top-5 a--imageWithCaption {{ $product['type']  }}">
-                                                    <img src="{{ $product['image']  }}" alt="{{ $product['name']  }}" class="img-thumbnail">
+                                                    <img src="{{ $product['image']  }}" alt="{{ $product['name']  }}" class="img-thumbnail lazy-image">
                                                     <a href="{{ $product['link']  }}">
                                                         <div class="a--imageCaptionWarper">
                                                             <div class="a--imageCaptionContent">

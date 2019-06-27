@@ -138,7 +138,7 @@
                                                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 m--padding-left-5 m--padding-right-5 m--margin-top-5">
                                                     <div class="a--imageWithCaption">
                                                         @if(isset($product["product"]->image[0]))
-                                                            <img src="{{$product["product"]->photo}}" alt="عکس محصول@if(isset($product["product"]->name[0])) {{$product["product"]->name}} @endif" class="img-thumbnail">
+                                                            <img src="{{$product["product"]->photo}}" alt="عکس محصول@if(isset($product["product"]->name[0])) {{$product["product"]->name}} @endif" class="img-thumbnail lazy-image">
                                                         @endif
         
                                                         
