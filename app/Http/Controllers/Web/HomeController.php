@@ -101,30 +101,6 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        if($request->has('product') && $request->has('contents'))
-        {
-            $product = Product::find($request->get('product'));
-            $contents = \App\Content::whereIn('id' , $request->get('contents'))->get();
-            $tags = [];
-            foreach ($contents as $content) {
-                array_push($tags , 'c-'.$content->id);
-            }
-
-            $params = [
-                "tags" => json_encode($tags, JSON_UNESCAPED_UNICODE),
-            ];
-
-            if (isset($product->created_at) && strlen($product->created_at) > 0) {
-                $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $product->created_at)->timestamp;
-            }
-
-            $response = $this->sendRequest(config("constants.TAG_API_URL")."id/relatedproduct/".$product->id, "PUT", $params);
-            dump($response);
-
-            dd('done');
-
-        }
-
         return (array) optional($request->user('alaatv'))->id;
     }
     

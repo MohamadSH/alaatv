@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Repositories\ProductRepository;
 use DB;
 use Auth;
 use Carbon\Carbon;
@@ -534,12 +535,13 @@ class Order extends BaseModel
         $priceInfo = $alaaCashierFacade->checkout();
 
         return [
-            'sumOfOrderproductsRawCost' => $priceInfo['totalPriceInfo']['sumOfOrderproductsRawCost'],
-            'rawCostWithDiscount'       => $priceInfo['totalPriceInfo']['totalRawPriceWhichHasDiscount'],
-            'rawCostWithoutDiscount'    => $priceInfo['totalPriceInfo']['totalRawPriceWhichDoesntHaveDiscount'],
-            'totalCost'                 => $priceInfo['totalPriceInfo']['finalPrice'],
-            'payableAmountByWallet'     => $priceInfo['totalPriceInfo']['payableAmountByWallet'],
-            'calculatedOrderproducts'   => $priceInfo['orderproductsInfo']['calculatedOrderproducts'],
+            'sumOfOrderproductsRawCost'     => $priceInfo['totalPriceInfo']['sumOfOrderproductsRawCost'],
+            'rawCostWithDiscount'           => $priceInfo['totalPriceInfo']['totalRawPriceWhichHasDiscount'],
+            'rawCostWithoutDiscount'        => $priceInfo['totalPriceInfo']['totalRawPriceWhichDoesntHaveDiscount'],
+            'totalCost'                     => $priceInfo['totalPriceInfo']['finalPrice'],
+            'totalCostWithoutOrderDiscount' => $priceInfo['totalPriceInfo']['totalPrice'],
+            'payableAmountByWallet'         => $priceInfo['totalPriceInfo']['payableAmountByWallet'],
+            'calculatedOrderproducts'       => $priceInfo['orderproductsInfo']['calculatedOrderproducts'],
         ];
     }
     
@@ -865,6 +867,19 @@ class Order extends BaseModel
                 
                 return array_merge($coupon->toArray(), $this->coupon_discount_type);
             });
+    }
+
+    public function getWalletSuccessfulTransactionsAttribute(){
+       return $this->transactions
+                    ->where('paymentmethod_id', config('constants.PAYMENT_METHOD_WALLET'))
+                    ->whereIn('transactionstatus_id', config('constants.TRANSACTION_STATUS_SUCCESSFUL'))
+                    ->where('cost', '>', 0);
+    }
+
+    public function getNoneWalletSuccessfulTransactionsAttribute(){
+        return $this->transactions
+                    ->where('paymentmethod_id', '<>' ,config('constants.PAYMENT_METHOD_WALLET'))
+                    ->where('transactionstatus_id', config('constants.TRANSACTION_STATUS_SUCCESSFUL'));
     }
     
     public function coupon()
@@ -1354,5 +1369,13 @@ class Order extends BaseModel
             return action('Web\OrderController@destroy', $this->id);
 
         return null;
+    }
+
+    public function getPurchasedOrderproducts(){
+        return $this->normalOrderproducts->whereNotIn('product_id' , ProductRepository::getUnPurchasableProducts());
+    }
+
+    public function getPurchasedOrderproductsCountAttribute(){
+        $this->purchased_orderproducts->count();
     }
 }

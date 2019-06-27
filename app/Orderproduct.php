@@ -607,4 +607,23 @@ class Orderproduct extends BaseModel
             });
     }
 
+    public function affectCouponOnPrice($finalPrice){
+        if($this->includedInCoupon)
+        {
+            $myOrder = $this->order;
+            $orderCouponDiscount = $myOrder->coupon_discount_type;
+            if($orderCouponDiscount  !== false)
+            {
+                $myOrderproductCount = $myOrder->get_purchased_orderproducts_count;
+                $couponDiscount = $orderCouponDiscount['discount'];
+                if($orderCouponDiscount['typeHint'] == 'percentage'){
+                    $finalPrice = ($finalPrice * (1 - ($couponDiscount/100)));
+                }else{
+                    $finalPrice = $finalPrice - ($couponDiscount/$myOrderproductCount);
+                }
+            }
+        }
+
+        return $finalPrice;
+    }
 }
