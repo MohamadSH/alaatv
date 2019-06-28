@@ -473,6 +473,16 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         return $users;
     }
 
+    public static function majorFilter($users ,$majorsId){
+
+        if (in_array(0, $majorsId))
+            $users = $users->whereDoesntHave("major");
+        else
+            $users = $users->whereIn("major_id", $majorsId);
+
+        return $users;
+    }
+
     public function getAppToken()
     {
         $tokenResult = $this->createToken('Alaa App.');
