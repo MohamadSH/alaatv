@@ -1378,4 +1378,16 @@ class Order extends BaseModel
     public function getPurchasedOrderproductsCountAttribute(){
         $this->purchased_orderproducts->count();
     }
+
+    /**
+     * @param Order $myOrder
+     * @return int
+     */
+    public function getDonateSum(): int
+    {
+        $key = 'getDonateSum:'.$this->cacheKey();
+        return Cache::remember($key, config("constants.CACHE_5"), function () {
+                return $this->orderproducts->whereIn('product_id', ProductRepository::getDonateProducts())->sum('cost');
+            });
+    }
 }
