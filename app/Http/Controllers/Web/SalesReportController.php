@@ -359,10 +359,12 @@ class SalesReportController extends Controller
 
                     $orderPrice = $myOrder->obtainOrderCost();
 
-                    //ToDo put share in tmp in mysql
-                    $shareOfOrder = $orderPrice['totalCost'] == 0 ? 0 : (double)$finalPrice /  $orderPrice['totalCost'];
+                    $donateOrderproductSum = $myOrder->getDonateSum();
 
-                    return $shareOfOrder * $myOrder->none_wallet_successful_transactions->sum('cost') ;
+                    //ToDo put share in tmp in mysql
+                    $shareOfOrder = $orderPrice['totalCost'] == 0 ? 0 : (double)$finalPrice /  ($orderPrice['totalCost']-$donateOrderproductSum);
+
+                    return $shareOfOrder * ($myOrder->none_wallet_successful_transactions->sum('cost') - $donateOrderproductSum ) ;
                 });
     
             $sum += $toAdd;
