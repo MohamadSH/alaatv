@@ -278,6 +278,13 @@
     z-index: 0;
 }
 
+.carousel-indicators {
+    bottom: -30px;
+}
+
+.carousel-indicators li {
+    background-color: #ff9000;
+}
 /*media query*/
 @media only screen and (max-width: 1024px) {
     .m-header-menu .m-menu__nav > .m-menu__item .m-menu__submenu > .m-menu__subnav > .m-menu__item {
