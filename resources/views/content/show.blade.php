@@ -151,6 +151,33 @@
                                         @endif
                                     @endforeach
                                 @endif
+    
+                                @if(!$user_can_see_content && $productsThatHaveThisContent->isNotEmpty())
+                                    @foreach($productsThatHaveThisContent as $productKey=>$product)
+                                        @if($product->type['type'] === 'simple')
+                                            <button
+                                                    data-gtm-eec-product-id="{{$product->id}}"
+                                                    data-gtm-eec-product-name="{{$product->name}}"
+                                                    data-gtm-eec-product-price = "@if($product->price){{$product->price['final']}}@endif"
+                                                    data-gtm-eec-product-brand = "آلاء"
+                                                    data-gtm-eec-product-category = "-"
+                                                    data-gtm-eec-product-variant = "-"
+                                                    data-gtm-eec-product-quantity = "1"
+                                                    class="btn m-btn--air btn-succ  ess m-btn--icon m--margin-bottom-5 btnAddToCart" data-pid="{{ $product->id }}">
+                                            <span>
+                                                <i class="fa fa-cart-arrow-down"></i>
+                                                <i class="fas fa-sync-alt fa-spin m--hide"></i>
+                                                <span>افزودن {{ $product->name }} به سبد خرید</span>
+                                            </span>
+                                            </button>
+                                        @else
+                                            <a class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent btnViewProductPage">
+                                                مشاهده
+                                                {{ $product->name }}
+                                            </a>
+                                        @endif
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
                     </div>
