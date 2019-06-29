@@ -70,6 +70,9 @@
 .shopNavItems .m-widget24 .m-widget24__item .m-widget24__title {
     color: inherit;
 }
+.OwlCarouselType2-shopPage .m-portlet__head {
+    background: white;
+}
 /*media query*/
 @media only screen and (max-width: 767px) {
     .shopNavItemsWraper {

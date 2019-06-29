@@ -963,4 +963,10 @@ class AdminController extends Controller
         return view('admin.indexBlock', compact(['pageName']));
     }
 
+    public function salesReport(Request $request) {
+        $pageName = 'adminSalesReport';
+        $products   = Product::all();
+        $ajaxActionUrl = '';
+        return view('admin.salesReport', compact('products', 'pageName', 'ajaxActionUrl'));
+    }
 }
