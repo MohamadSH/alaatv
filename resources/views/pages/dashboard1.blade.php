@@ -254,5 +254,9 @@
             @endforeach
         ];
     </script>
-    <script src="{{ mix('/js/page-homePage.js') }}"></script>
+{{--    <script src="{{ mix('/js/page-homePage.js') }}"></script>--}}
+    <script src="{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/components/aSticky/aSticky.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/certificates.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-homePage.js') }}"></script>
 @endsection

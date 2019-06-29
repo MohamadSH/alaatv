@@ -9,6 +9,7 @@ var LazyLoad = function () {
             entries.forEach(entry => {
                 if (entry.intersectionRatio > 0) {
                     $(entry.target).attr('src', $(entry.target).data('src'));
+                    $(entry.target).attr('a-lazyload', 1);
                 }
             });
         });
@@ -42,16 +43,36 @@ var LazyLoad = function () {
         });
     }
 
+    function loadImage_newVersion() {
+
+        let images = image_getImages();
+
+        observer = image_initIntersectionObserver();
+
+        image_disconnectObserver(observer);
+
+        image_observerEachImage(images, observer);
+    }
+
+    function loadImage_oldVersion() {
+
+        let lazyImages = $('.lazy-image');
+        let inAdvance = 0;
+        lazyImages.each(function () {
+            if (parseInt($(this).attr('a-lazyload')) !== 1 && $(this).offset().top < window.innerHeight + window.pageYOffset + inAdvance) {
+                $(this).attr('src', $(this).data('src'));
+                $(this).attr('a-lazyload', 1);
+            }
+        });
+        window.addEventListener('scroll', throttle(50, lazyLoadImages));
+        window.addEventListener('resize', throttle(50, lazyLoadImages));
+    }
+
     return {
 
         image: function () {
-            let images = image_getImages();
-
-            observer = image_initIntersectionObserver();
-
-            image_disconnectObserver(observer);
-
-            image_observerEachImage(images, observer);
+            loadImage_newVersion();
+            loadImage_oldVersion();
         },
 
         carousel: function () {
