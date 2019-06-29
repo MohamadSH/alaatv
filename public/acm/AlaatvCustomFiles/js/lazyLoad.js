@@ -30,8 +30,9 @@ var LazyLoad = function () {
             let dataWidth = $(this).data('width');
             let dataHeight = $(this).data('height');
             if (typeof dataWidth !== 'undefined' && typeof dataHeight !== 'undefined') {
-                let windowWidth = $( window ).width();
-                let minHeight = (windowWidth * dataHeight) / dataWidth;
+                // let windowWidth = $( window ).width();
+                let carouselMainSlideShowWidth = $('#carouselMainSlideShow').width();
+                let minHeight = (carouselMainSlideShowWidth * dataHeight) / dataWidth;
                 $(this).parents('.carousel-item').css({'min-height':minHeight+'px'});
             }
         });

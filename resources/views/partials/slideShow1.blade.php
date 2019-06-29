@@ -1,6 +1,6 @@
 @if($slides->count() > 0)
     <div class="row m--margin-bottom-20">
-        <div class="col-xl-12">
+        <div class="col">
             <div id="carouselMainSlideShow" class="carousel slide scrollSensitiveOnScreen" data-ride="carousel">
                 @if($slides->count() > 1)
                     <ol class="carousel-indicators">
@@ -44,6 +44,7 @@
                                          @else
                                          data-height="500"
                                          @endif>
+                                    @if(isset($slide->title[0]) && isset($slide->shortDescription[0]))
                                     <div class="carousel-caption d-none d-md-block">
                                         @if(isset($slide->title[0]))
                                             <h4 class="bold">{{ $slide->title  }}</h4>
@@ -52,6 +53,7 @@
                                             <p class="bold">{{ $slide->shortDescription  }}</p>
                                         @endif
                                     </div>
+                                    @endif
                             @if(isset($slide->link) && strlen($slide->link)>0)
                                 </a>
                             @endif
@@ -68,7 +70,6 @@
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="sr-only">قبلی</span>
                     </a>
-
                 @endif
             </div>
             @if(isset($withDownArrow) && $withDownArrow)

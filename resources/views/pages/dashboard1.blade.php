@@ -205,21 +205,6 @@
         </div>
     </div>
     
-{{--    @foreach($sections as $section)--}}
-{{--        @if($section['lessons']->count() > 0)--}}
-{{--            @include('product.partials.owl-carousel.widget1', [--}}
-{{--                'contentCustomClass'=>$section["class"].' a--content-carousel-1 dasboardLessons',--}}
-{{--                'contentCustomId'=>'sectionId-'.$section["class"],--}}
-{{--                'contentTitle'=>$section["descriptiveName"],--}}
-{{--                'contentUrl'=>urldecode(action("Web\ContentController@index" , ["tags" => $section["tags"]])),--}}
-{{--                'contentSets'=>$section["lessons"]--}}
-{{--            ])--}}
-{{--            @foreach($section["ads"] as $image => $link)--}}
-{{--                @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])--}}
-{{--            @endforeach--}}
-{{--        @endif--}}
-{{--    @endforeach--}}
-    
     @include('partials.certificates')
 @endsection
 
@@ -254,9 +239,5 @@
             @endforeach
         ];
     </script>
-{{--    <script src="{{ mix('/js/page-homePage.js') }}"></script>--}}
-    <script src="{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/components/aSticky/aSticky.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/certificates.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-homePage.js') }}"></script>
+    <script src="{{ mix('/js/page-homePage.js') }}"></script>
 @endsection
