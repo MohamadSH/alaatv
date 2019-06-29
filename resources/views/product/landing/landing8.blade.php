@@ -178,7 +178,7 @@
                                                 <div class="lessonsTimesWraper">
                                                     <div class="lessonsTimesWraper-header">
                                                         <div class="lessonsTimesWraper-header-top">
-                                                            <img src="{{ asset('/acm/extra/Alaa-logo2.png') }}" alt="آلاء">
+                                                            <img src="https://cdn.alaatv.com/upload/Alaa-logo-free.png" alt="آلاء">
                                                         </div>
                                                         <div class="lessonsTimesWraper-header-bottom">
                                                             <h2>همایش های طلایی آلاء</h2>
