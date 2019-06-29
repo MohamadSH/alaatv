@@ -1397,7 +1397,7 @@ class ProductController extends Controller
             318 => [
                 'name' => 'همایش 45 تست کنکور ریاضی',
                 'url' => action('Web\ProductController@show', 318),
-                'hours' => 25
+                'hours' => 30
             ],
             328 => [
                 'name' => 'همایش ریاضی تجربی(آقای نباخته)',
@@ -1412,7 +1412,7 @@ class ProductController extends Controller
             322 => [
                 'name' => 'همایش ریاضی تجربی(آقای ثابتی)',
                 'url' => action('Web\ProductController@show', 322),
-                'hours' => 17
+                'hours' => 18
             ],
             306 => [
                 'name' => 'همایش فیزیک',
