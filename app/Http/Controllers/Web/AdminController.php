@@ -959,8 +959,23 @@ class AdminController extends Controller
 
     public function adminBlock(Request $request)
     {
+        //ToDo : put in view composer
+        $blockTypes = [
+            [
+                'value' => '1',
+                'name' => 'صفحه اصلی',
+            ],
+            [
+                'value' => '2',
+                'name' => 'فروشگاه',
+            ],
+            [
+                'value' => '3',
+                'name' => 'صفحه محصول',
+            ]
+        ];
         $pageName = 'indexBlock';
-        return view('admin.indexBlock', compact(['pageName']));
+        return view('admin.indexBlock', compact(['pageName', 'blockTypes']));
     }
 
     public function salesReport(Request $request) {

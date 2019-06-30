@@ -34,6 +34,7 @@
 @endsection
 
 @section('content')
+    
     @include("systemMessage.flash")
 
     <div class="row">
