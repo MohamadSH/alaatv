@@ -11,7 +11,7 @@
         )
     )
 )
-    <div class="row blockWraper
+    <div class="row blockWraper a--owl-carousel-row
         @if(isset($blockCustomClass))
     {{ $blockCustomClass }}
     @endif
@@ -27,7 +27,7 @@
          id="{{ $block->class }}"
             @endif>
         <div class="col">
-            <div class="m-portlet  m-portlet--bordered OwlCarouselType2-shopPage" id="owlCarousel_{{ $block->id }}">
+            <div class="m-portlet a--owl-carousel-Wraper OwlCarouselType2-shopPage" id="owlCarousel_{{ $block->id }}">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
