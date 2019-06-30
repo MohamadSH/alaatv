@@ -102,7 +102,7 @@ class HomeController extends Controller
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
         $orderproducts = \App\Orderproduct::whereHas('order' , function ($q){
-           $q->where('orderstatus_id' , 2)->whereNot('paymentstatus_id' , 3)->whereNotNull('coupon_id');
+           $q->where('orderstatus_id' , 2)->where('paymentstatus_id' , '<>' , 3)->whereNotNull('coupon_id');
         })->whereIn('product_id' , [180,182])->where('includedInCoupon' , 1)->get();
 
         foreach ($orderproducts as $orderproduct) {
