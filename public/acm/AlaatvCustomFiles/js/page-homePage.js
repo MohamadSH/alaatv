@@ -1,10 +1,11 @@
+//for ios lower than 12
 function lazyLoadBlocks() {
     let blocks = $('.dasboardLessons');
     let inAdvance = 0;
     blocks.each(function () {
         if (parseInt($(this).attr('a-lazyload')) !== 1 && $(this).offset().top < window.innerHeight + window.pageYOffset + inAdvance) {
 
-            $(entry.target).OwlCarouselType2({
+            $(this).OwlCarouselType2({
                 OwlCarousel: {
                     center: false,
                     loop: false,
