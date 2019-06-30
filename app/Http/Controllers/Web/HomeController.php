@@ -101,47 +101,6 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        $orderproducts = \App\Orderproduct::whereHas('order' , function ($q){
-           $q->where('orderstatus_id' ,'<>' ,  1)->whereNotNull('coupon_id');
-        })->whereIn('product_id' , [180,182])->where('includedInCoupon' , 1)->get();
-
-        foreach ($orderproducts as $orderproduct) {
-            $order = $orderproduct->order;
-            $couponDiscount = $order->couponDiscount;
-            if($couponDiscount == 0)
-            {
-                dump('zaro couponDiscount for #'.$orderproduct->id);
-                continue;
-            }
-
-            $newCost = $orderproduct->cost * (1 - ($couponDiscount / 100));
-            $orderproduct->cost = $newCost;
-            $orderproduct->tmp_final_cost = $newCost;
-            $orderproduct->includedInCoupon = 0 ;
-            $orderproduct->product_id = 182;
-            $result = $orderproduct->update();
-            if(!$result)
-                dump('orderproduct #'.$orderproduct->id .' was not updated');
-        }
-
-        dd('Done');
-
-
-
-        $users = User::whereHas('orders' , function ($q){
-           $q->whereHas('orderproducts' , function ($q2){
-               $q2->whereNotIn('product_id' , \App\Repositories\ProductRepository::getDonateProducts());
-           })
-           ->whereHas('transactions' , function ($q3){
-               $q3->where('transactionstatus_id' , 3)->where('paymentmethod_id' , '<>' , 5);
-           })
-           ->whereIn('orderstatus_id' , [2,5])
-           ->where('paymentstatus_id' , 3)
-           ->where('completed_at' , '>=' , '2019-05-22 00:00:00');
-        })->toSql();
-
-        dd($users);
-
         return (array) optional($request->user('alaatv'))->id;
     }
     
