@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Block;
+use App\Http\Requests\SaveNewBlockRequest;
 use App\Product;
 use App\Content;
 use App\Contentset;
@@ -74,16 +75,16 @@ class BlockController extends Controller
     
     public function update(Request $request, Block $block)
     {
+        
         $productsId = $request->get('block-products');
         $setsId = $request->get('block-sets');
-        $contentsId =convertTagStringToArray($request->get('contents'));
-        $tags =convertTagStringToArray($request->get('tags'));
+        $contentsId = convertTagStringToArray($request->get('contents'));
     
         $productsId = isset($productsId) ? $productsId : [];
         $contentsId = isset($contentsId) ? $contentsId : [];
         $setsId = isset($setsId) ? $setsId : [];
-        
-        $this->fillBlock($request, $block, $tags);
+    
+        $this->fillBlock($request, $block);
         
         $block->update();
         
@@ -128,8 +129,31 @@ class BlockController extends Controller
         $block->contents()->saveMany(Content::whereIn('id', $contentsId)->get());
     }
     
-    public function store(Request $request)
+    public function store(SaveNewBlockRequest $request)
     {
+        $block = new Block();
+        
+        $productsId = $request->get('block-products');
+        $setsId = $request->get('block-sets');
+        $contentsId =convertTagStringToArray($request->get('contents'));
+    
+        $productsId = isset($productsId) ? $productsId : [];
+        $contentsId = isset($contentsId) ? $contentsId : [];
+        $setsId = isset($setsId) ? $setsId : [];
+    
+        $this->fillBlock($request, $block);
+    
+        $block->save();
+    
+        $this->attachProducts($block, $productsId);
+    
+        $this->attachSets($block, $setsId);
+    
+        $this->attachContents($block, $contentsId);
+    
+        session()->put('success', 'ایجاد بلاک با موفقیت انجام شد');
+    
+        return redirect()->back();
     }
     
     /**
@@ -158,10 +182,10 @@ class BlockController extends Controller
     /**
      * @param  Request  $request
      * @param  Block    $block
-     * @param  array    $tags
      */
-    private function fillBlock(Request $request, Block $block, array $tags): void
+    private function fillBlock(Request $request, Block $block): void
     {
+        $tags =convertTagStringToArray($request->get('tags'));
         $block->title     = $request->get('title');
         $block->customUrl = $request->get('customUrl');
         $block->class     = $request->get('class');
