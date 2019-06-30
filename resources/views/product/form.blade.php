@@ -306,6 +306,7 @@
                 </div>
             </div>
             @include('product.partials.tagsInput' )
+            @include('product.partials.productBlock' )
             <div class="form-actions">
                 <div class="row">
                     <div class="col-md-offset-3 col-md-9">
@@ -411,6 +412,9 @@
             </div>
         </div>
         @include('product.partials.tagsInput' )
+        @include('product.partials.productBlock' )
+        
+        
         <div class="form-actions">
             <div class="row">
                 <div class="col-md-offset-3 col-md-9">

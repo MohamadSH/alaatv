@@ -355,8 +355,9 @@
     <script>
 
         var blockProductsId = {!! json_encode($blockProductsId) !!};
+        var blockType = {!! $block->type !!};
         
-        $("input.productTags").tagsinput({
+        $("input.blockTags").tagsinput({
             tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
         });
         $("input.contents").tagsinput({
@@ -385,17 +386,6 @@
                 }
             });
 
-            $('#productShortDescriptionSummerNote').summernote({height: 300});
-            $('#productLongDescriptionSummerNote').summernote({height: 300});
-            $('#productSpecialDescriptionSummerNote').summernote({height: 300});
-
-            $(document).on("change", "#productFileTypeSelect", function () {
-                var lastOrder = $("#lastProductFileOrder_" + $(this).val()).val();
-                $("#productFileOrder").val(lastOrder);
-            });
-
-
-
             $(document).on('click', '.btnDetachProduct, .btnDetachSet, .btnDetachContent ', function () {
                 var detachLink = $(this).data('detach-link');
                 var name = $(this).data('name');
@@ -403,8 +393,6 @@
                 $('#detachModal form').attr('action', detachLink);
                 $('#detachModal').modal('show');
             });
-
-
 
             // $('.blockProductsPane ul.multiselect-container input[type="checkbox"]').each(function () {
             $('#block-products option').each(function () {
@@ -419,6 +407,12 @@
 
             $('#block-products').multiselect('refresh');
 
+            $('#blockType option').each(function () {
+                if (parseInt(blockType) === parseInt($(this).val())) {
+                    console.log('blockType selected: ', $(this).val());
+                    $(this).attr('selected', 'selected');
+                }
+            });
             
         });
 
