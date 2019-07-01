@@ -135,7 +135,7 @@
                         
                         </span>
                         <br>
-                        <span class="m-badge m-badge--info m-badge--wide m-badge--rounded report2">
+                        <span class="report2">
                         
                         </span>
                     </div>
@@ -207,7 +207,7 @@
 
                             $('.reportOfFilter').fadeIn();
                             $('.report1').html('تعداد کل: ' + data.totalNumber);
-                            $('.report2').html('فروش کل: ' + data.totalSale);
+                            $('.report2').html('فروش کل(تومان): ' + data.totalSale);
 
                         } else {
 

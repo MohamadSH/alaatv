@@ -216,8 +216,8 @@ class SalesReportController extends Controller
                     ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
                     ->whereHas('order', function ($q) {
                         $q->whereIn('orderstatus_id', [config('constants.ORDER_STATUS_CLOSED') , config('constants.ORDER_STATUS_POSTED')])
-                            ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'))
-                            ->where('completed_at' , '>=' ,'2019-04-21 00:00:00'); //avale ordibehesh 98
+                            ->whereIn('paymentstatus_id', [config('constants.PAYMENT_STATUS_PAID') , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')]);
+//                            ->where('completed_at' , '>=' ,'2019-04-21 00:00:00'); //avale ordibehesh 98
                     })
                     ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])
                     ->get();
