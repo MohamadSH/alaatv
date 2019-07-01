@@ -371,14 +371,14 @@
     
                     <div class="row">
                         <div class="col text-center m--margin-bottom-5">
-                            <a href="{{ route('landing.5') }}"
-                               class="gtm-eec-promotion-click scrollSensitiveOnScreen"
-                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"
-                               data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
-                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"
-                               data-gtm-eec-promotion-position="0">
-                                <img src="{{ asset('/acm/extra/ads/gif/970-90.gif') }}" class="a--full-width">
-                            </a>
+{{--                            <a href="{{ route('landing.5') }}"--}}
+{{--                               class="gtm-eec-promotion-click scrollSensitiveOnScreen"--}}
+{{--                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"--}}
+{{--                               data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
+{{--                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"--}}
+{{--                               data-gtm-eec-promotion-position="0">--}}
+{{--                                <img src="{{ asset('/acm/extra/ads/gif/970-90.gif') }}" class="a--full-width">--}}
+{{--                            </a>--}}
                         </div>
                     </div>
                     
@@ -450,14 +450,14 @@
     
                     <div class="row">
                         <div class="col text-center m--margin-bottom-5">
-                            <a href="{{ route('landing.5') }}"
-                               class="gtm-eec-promotion-click scrollSensitiveOnScreen"
-                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"
-                               data-gtm-eec-promotion-name="همایش های دانلودی آلاء"
-                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"
-                               data-gtm-eec-promotion-position="0">
-                                <img src="{{ asset('/acm/extra/ads/gif/970-90.gif') }}" class="a--full-width">
-                            </a>
+{{--                            <a href="{{ route('landing.5') }}"--}}
+{{--                               class="gtm-eec-promotion-click scrollSensitiveOnScreen"--}}
+{{--                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"--}}
+{{--                               data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
+{{--                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"--}}
+{{--                               data-gtm-eec-promotion-position="0">--}}
+{{--                                <img src="{{ asset('/acm/extra/ads/gif/970-90.gif') }}" class="a--full-width">--}}
+{{--                            </a>--}}
                         </div>
                     </div>
                 @endif
