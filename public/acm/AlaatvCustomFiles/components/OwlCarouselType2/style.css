@@ -274,6 +274,17 @@
     font-size: 8rem !important;
 }
 
+.a--owl-carousel-row .a--owl-carousel-Wraper {
+    border: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background-color: transparent;
+}
+.a--owl-carousel-Wraper .a--owl-carousel-type-2 .owl-stage .owl-item .block-product-item {
+    background: white;
+    margin-bottom: 0;
+}
+
 
 
 

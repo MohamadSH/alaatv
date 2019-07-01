@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div class="m-portlet__head-tools">
-                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
+                        <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewGrid">
                             <i class="fa flaticon-shapes"></i>
                         </a>
                         <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">

@@ -6,6 +6,7 @@
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css"/>
+    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jplayer/dist/skin/blue.monday/css/jplayer.blue.monday.min.css" rel="stylesheet" type="text/css"/>
     <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel="stylesheet" type="text/css"/>
@@ -27,6 +28,9 @@
 @endsection
 
 @section('content')
+    
+    @include("systemMessage.flash")
+    
     <div class="row">
         <div class="col">
             <!-- BEGIN BLOCK TABLE PORTLET-->
@@ -76,23 +80,25 @@
                                     <div class="modal fade" id="responsive-block" tabindex="-1" role="dialog" aria-labelledby="responsive-blockModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-lg" role="document">
                                             <div class="modal-content">
+                                                {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\BlockController@store'], 'class'=>'nobottommargin' , 'id'=>'blockForm']) !!}
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="responsive-blockModalLabel">افزودن بلاک جدید</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
-                                                {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\BlockController@store'], 'class'=>'nobottommargin' , 'id'=>'blockForm']) !!}
                                                 <div class="modal-body">
                                                     <div class="row">
-{{--                                                        @include('block.form')--}}
+                                                        <div class="col">
+                                                            @include('block.form' )
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                {!! Form::close() !!}
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
-                                                    <button type="button" class="btn btn-primary" id="blockForm-submit">ذخیره</button>
+                                                    <button type="submit" class="btn btn-primary" id="blockForm-submit">ذخیره</button>
                                                 </div>
+                                                {!! Form::close() !!}
                                             </div>
                                         </div>
                                     </div>
@@ -230,17 +236,22 @@
     {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-extended-modals.min.js" type="text/javascript"></script>--}}
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js" type="text/javascript"></script>
     <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript"></script>
 
     <script type="text/javascript">
+
+        $("input.blockTags").tagsinput({
+            tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
+        });
+        
         function generateRemoveBlockLink(blockId) {
             return '{{ asset('/') }}/blockRemove/'+blockId;
         }
         function generateEditBlockLink(blockId) {
             return '{{ asset('/') }}/blockEdit/'+blockId;
         }
-        
         function makeDataTable_loadWithAjax_blocks(dontLoadAjax) {
 
             var newDataTable =$("#block_table").DataTable();
@@ -395,7 +406,6 @@
             $('#copyBlockModalModalLabel').html(blockName);
             $('#copyBlockModal').modal('show');
         }
-
         function removeBlock(){
             mApp.block('#removeBlockModal', {
                 type: "loader",
@@ -410,7 +420,7 @@
                     toastr.options = {
                         "closeButton": true,
                         "debug": false,
-                        "positionClass": "toast-top-center",
+                        "positionClass": "toast-bottom-center",
                         "onclick": null,
                         "showDuration": "1000",
                         "hideDuration": "1000",
@@ -429,6 +439,22 @@
                 },
                 error: function (result) {
                     mApp.unblock('#removeBlockModal');
+                    toastr.options = {
+                        "closeButton": true,
+                        "debug": false,
+                        "positionClass": "toast-bottom-center",
+                        "onclick": null,
+                        "showDuration": "1000",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+                    toastr["warning"]("مشکلی در حذف بلاک رخ داده است.", "پیام سیستم");
+                    $('#removeBlockModal').modal('hide');
                     makeDataTable_loadWithAjax_blocks();
                 }
             });

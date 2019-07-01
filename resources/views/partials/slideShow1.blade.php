@@ -36,7 +36,7 @@
                                     <img src="/acm/extra/loader.gif" alt="loading" class="loadingSlideshow">
                                     <img class="d-block w-100 imageSlideOfSlideshow lazy-image"
                                          data-src="{{ $slide->url }}"
-                                         alt="عکس اسلاید @if(isset($slide->title[0])) {{ $slide->title }} @endif"
+                                         alt="عکس اسلاید @if(isset($slide->title[0])) {{ $slide->title }} @endif "
                                          id="slideshowid-{{ $slide->id }}"
                                          data-width="1280"
                                          @if($pageName === 'shop')
