@@ -17,7 +17,7 @@ class TagsCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'alaatv:tag';
+    protected $signature = 'alaaTv:tag';
     
     /**
      * The console command description.

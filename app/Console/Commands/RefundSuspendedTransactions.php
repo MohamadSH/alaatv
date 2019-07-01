@@ -13,7 +13,7 @@ class RefundSuspendedTransactions extends Command
      *
      * @var string
      */
-    protected $signature = 'alaatv:refundTransaction';
+    protected $signature = 'alaaTv:refundTransaction';
 
     /**
      * The console command description.

@@ -1,4 +1,4 @@
-@if($product->attributes->get('extra') !== null)
+@if(optional($product->attributes)->get('extra') !== null)
     @foreach(optional($product->attributes->get('extra'))->where('control', 'dropDown') as $dropdown)
         <div class = "form-group m-form__group">
             <label for = "exampleSelect1">{{ $dropdown->title }}</label>
