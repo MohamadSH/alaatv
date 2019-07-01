@@ -13,6 +13,7 @@ use App\Console\Commands\CategoryTree\Tajrobi;
 use Maatwebsite\ExcelLight\Spout\{Row, Sheet, Reader, Writer};
 use App\{Bon,
     Orderproduct,
+    Repositories\OrderproductRepo,
     User,
     Order,
     Content,
@@ -63,7 +64,7 @@ class BotsController extends Controller
     public function __construct(Response $response, Websitesetting $setting)
     {
         $this->middleware('role:admin', [
-            'only' => ['bot', 'smsBot', 'checkDisableContentTagBot', 'tagBot', 'pointBot',],
+            'only' => ['bot', 'smsBot', 'checkDisableContentTagBot', 'tagBot', 'pointBot','ZarinpalVerifyPaymentBot','salesReportBot'],
         ]);
         $this->response = $response;
         $this->setting  = $setting->setting;
@@ -3168,19 +3169,62 @@ class BotsController extends Controller
     }
 
     public function salesReportBot(Request $request){
-        $product = Product::Find($request->product);
+        $product = $request->get('product_id');
         if(!isset($product)){
             return response()->json(['message'=>'Product not found'],Response::HTTP_BAD_REQUEST);
         }
 
-        //Query to get orderproducts
+        $orderproducts =  Orderproduct::whereIn('product_id', [$product])
+            ->where(function ($q2){
+                $q2->where('checkoutstatus_id' , config('constants.ORDERPRODUCT_CHECKOUT_STATUS_UNPAID'))
+                    ->orWhereNull('checkoutstatus_id');
+            })
+            ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
+            ->whereHas('order', function ($q) {
+                $q->whereIn('orderstatus_id', [config('constants.ORDER_STATUS_CLOSED') , config('constants.ORDER_STATUS_POSTED')])
+                    ->whereIn('paymentstatus_id', [config('constants.PAYMENT_STATUS_PAID') , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')]);
+            })
+            ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])
+            ->get();
 
-        //foreach on orderproducts
+        $totalNubmer = $orderproducts->count();
 
+        $totalSale = 0;
+        foreach ($orderproducts as $orderproduct) {
+            /** @var Orderproduct $orderproduct */
+            if(isset($orderproduct->tmp_final_cost))
+            {
+                $finalPrice    = $orderproduct->tmp_final_cost;
+            }else{
+                $price = $orderproduct->obtainOrderproductCost(false);
+                $finalPrice    = $price['final'];
+                $extraCost     = $price['extraCost'];
+
+                OrderproductRepo::refreshOrderproductTmpPrice($orderproduct, $finalPrice , $extraCost);
+            }
+
+            /** @var Order $myOrder */
+            $myOrder                = $orderproduct->order;
+
+            if(isset($myOrder->coupon_id)){
+                $finalPrice = $orderproduct->affectCouponOnPrice($finalPrice);
+            }
+
+            $orderPrice = $myOrder->obtainOrderCost();
+
+            $donateOrderproductSum = $myOrder->getDonateSum();
+
+            //ToDo put share in tmp in mysql
+            $shareOfOrder = $orderPrice['totalCost'] == 0 ? 0 : (double)$finalPrice /  ($orderPrice['totalCost']-$donateOrderproductSum);
+
+            $toAdd = $shareOfOrder * ($myOrder->none_wallet_successful_transactions->sum('cost') - $donateOrderproductSum ) ;
+
+            $totalSale += $toAdd;
+        }
 
         return response()->json([
             'totalNumber'   => $totalNubmer,
-            'totalSale'     => $totalSalse,
+            'totalSale'     => number_format((int)$totalSale),
         ]);
     }
 }
