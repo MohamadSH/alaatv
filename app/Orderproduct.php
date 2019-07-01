@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Repositories\OrderproductRepo;
 use App\Traits\ProductCommon;
 use Illuminate\Support\Facades\Cache;
 use App\Collection\OrderproductCollection;
@@ -86,6 +87,7 @@ class Orderproduct extends BaseModel
         'cost',
         'tmp_final_cost',
         'tmp_extra_cost',
+        'tmp_share_order',
         'discountPercentage',
         'discountAmount',
         'includedInCoupon',
@@ -614,16 +616,76 @@ class Orderproduct extends BaseModel
             $orderCouponDiscount = $myOrder->coupon_discount_type;
             if($orderCouponDiscount  !== false)
             {
-                $myOrderproductCount = $myOrder->get_purchased_orderproducts_count;
                 $couponDiscount = $orderCouponDiscount['discount'];
                 if($orderCouponDiscount['typeHint'] == 'percentage'){
                     $finalPrice = ($finalPrice * (1 - ($couponDiscount/100)));
-                }else{
-                    $finalPrice = $finalPrice - ($couponDiscount/$myOrderproductCount);
                 }
             }
         }
 
         return $finalPrice;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function setTmpFinalCost():array
+    {
+        $price = $this->obtainOrderproductCost(false);
+        $finalPrice = $price['final'];
+        $extraCost = $price['extraCost'];
+
+        OrderproductRepo::refreshOrderproductTmpPrice($this, $finalPrice, $extraCost);
+
+        return  [$finalPrice , $extraCost]  ;
+    }
+
+    /**
+     * @param $finalPrice
+     * @param $donateOrderproductSum
+     * @return float|int
+     */
+    public function setShareCost( $finalPrice )
+    {
+        $myOrder = $this->order;
+
+        if(!isset($myOrder))
+            return 0;
+
+        if (isset($myOrder->coupon_id)) {
+            $finalPrice = $this->affectCouponOnPrice($finalPrice);
+        }
+        $orderPrice = $myOrder->obtainOrderCost();
+
+        $donateOrderproductSum = $this->order->getDonateSum();
+
+        $shareOfOrder =   ($orderPrice['totalCost'] == 0 || $orderPrice['totalCost'] == $donateOrderproductSum) ? 0 : (double)$finalPrice / ($orderPrice['totalCost'] - $donateOrderproductSum);
+        OrderproductRepo::refreshOrderproductTmpShare($this, $shareOfOrder);
+
+        return $shareOfOrder;
+    }
+
+    public function getTmpFinalCostAttribute($value){
+        if (isset($value)) {
+            $finalPrice = $value;
+        } else {
+            [$finalPrice , $extraCost] = $this->setTmpFinalCost();
+        }
+
+        return $finalPrice;
+    }
+
+    public function getTmpShareOrderAttribute($value){
+        if(isset($value))
+        {
+            $shareOfOrder =  $value;
+        }else {
+            $finalPrice = $this->tmp_final_cost;
+
+            $shareOfOrder = $this->setShareCost($finalPrice);
+        }
+
+        return $shareOfOrder;
     }
 }
