@@ -212,8 +212,15 @@ class SalesReportController extends Controller
         return Cache::tags(['salesReport'])->remember('sr:getPurchasedOrderproducts:'.md5(implode(',', $products)),
             config('constants.CACHE_5'),
             static function () use ($products) {
-                $since = '2019-04-21 00:00:00';
-                return OrderproductRepo::getPurchasedOrderproducts($products, $since)->get();
+                return Orderproduct::whereIn('product_id', $products)
+                    ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
+                    ->whereHas('order', function ($q) {
+                        $q->whereIn('orderstatus_id', [config('constants.ORDER_STATUS_CLOSED') , config('constants.ORDER_STATUS_POSTED')])
+                            ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'))
+                            ->where('completed_at' , '>=' ,'2019-04-21 00:00:00'); //avale ordibehesh 98
+                    })
+                    ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])
+                    ->get();
             });
     }
     
