@@ -1,4 +1,4 @@
-@if($product->attributes->get('extra') !== null)
+@if(optional($product->attributes)->get('extra') !== null)
     @foreach(optional($product->attributes->get('extra'))->where('control', 'checkBox') as $checkboxArray)
 
         <label class = "m-checkbox m-checkbox--air m-checkbox--state-success">

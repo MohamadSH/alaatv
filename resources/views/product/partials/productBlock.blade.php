@@ -23,6 +23,7 @@
     <span>انتخاب بلاک جدید</span>
     <span></span>
 </div>
+@if(isset($blocks))
 <select class="mt-multiselect btn btn-default a--full-width"
         data-label="left"
         data-width="100%"
@@ -38,4 +39,5 @@
     </option>
     @endforeach
 </select>
+@endif
 @endif
