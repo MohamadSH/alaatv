@@ -414,6 +414,9 @@ return [
     'PAYMENT_STATUS_PAID'                      => 3,
     'PAYMENT_STATUS_VERIFIED_INDEBTED'         => 4,
 
+    'ORDERPRODUCT_CHECKOUT_STATUS_UNPAID'      =>1,
+    'ORDERPRODUCT_CHECKOUT_STATUS_PAID'        =>2,
+
     //USER BON STATUSES CONSTANTS
     'USERBON_STATUS_ACTIVE'                    => 1,
     'USERBON_STATUS_EXPIRED'                   => 2,
