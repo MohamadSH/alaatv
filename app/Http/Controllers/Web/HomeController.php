@@ -16,7 +16,7 @@ use League\Flysystem\Sftp\SftpAdapter;
 use App\Console\Commands\CategoryTree\Ensani;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\{DB, File, Input, Route, Config, Storage};
-use App\{
+use App\{Repositories\OrderproductRepo,
     User,
     Event,
     Major,

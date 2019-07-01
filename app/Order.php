@@ -1371,12 +1371,12 @@ class Order extends BaseModel
         return null;
     }
 
-    public function getPurchasedOrderproducts(){
+    public function getPurchasedOrderproductsAttribute(){
         return $this->normalOrderproducts->whereNotIn('product_id' , ProductRepository::getUnPurchasableProducts());
     }
 
     public function getPurchasedOrderproductsCountAttribute(){
-        $this->purchased_orderproducts->count();
+        return $this->purchased_orderproducts->count();
     }
 
     /**

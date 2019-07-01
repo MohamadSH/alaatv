@@ -332,39 +332,18 @@ class SalesReportController extends Controller
     {
         $sum = 0;
 //        dump($orderproducts->count());
-        $cacheCounter = 0;
-        $toFixOrders = [];
         foreach ($orderproducts as $orderproduct) {
             /** @var Orderproduct $orderproduct */
             $key   = 'salesReport:calculateOrderproductPrice:'.$orderproduct->cacheKey();
             $toAdd = Cache::tags(['salesReport'])
-                ->remember($key, config('constants.CACHE_600'), function () use ($orderproduct , $cacheCounter) {
-                    if(isset($orderproduct->tmp_final_cost))
-                    {
-                        $finalPrice    = $orderproduct->tmp_final_cost;
-                    }else{
-                        $price = $orderproduct->obtainOrderproductCost(false);
-                        $finalPrice    = $price['final'];
-                        $extraCost     = $price['extraCost'];
-
-                        OrderproductRepo::refreshOrderproductTmpPrice($orderproduct, $finalPrice , $extraCost);
-                    }
-
+                ->remember($key, config('constants.CACHE_600'), function () use ($orderproduct) {
                     /** @var Order $myOrder */
-                    $myOrder                = $orderproduct->order;
-
-                    if(isset($myOrder->coupon_id)){
-                        $finalPrice = $orderproduct->affectCouponOnPrice($finalPrice);
-                    }
-
-                    $orderPrice = $myOrder->obtainOrderCost();
-
+                    $myOrder = $orderproduct->order;
                     $donateOrderproductSum = $myOrder->getDonateSum();
 
-                    //ToDo put share in tmp in mysql
-                    $shareOfOrder = $orderPrice['totalCost'] == 0 ? 0 : (double)$finalPrice /  ($orderPrice['totalCost']-$donateOrderproductSum);
+                    $shareOfOrder = $orderproduct->tmp_share_order;
 
-                    return $shareOfOrder * ($myOrder->none_wallet_successful_transactions->sum('cost') - $donateOrderproductSum ) ;
+                    return $shareOfOrder * ($myOrder->none_wallet_successful_transactions->sum('cost') - $donateOrderproductSum);
                 });
     
             $sum += $toAdd;

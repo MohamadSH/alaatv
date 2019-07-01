@@ -12,7 +12,7 @@ class Eidi98 extends Command
      *
      * @var string
      */
-    protected $signature = 'alaatv:eidi98';
+    protected $signature = 'alaaTv:eidi98';
     
     /**
      * The console command description.
