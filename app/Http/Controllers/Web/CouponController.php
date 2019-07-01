@@ -185,7 +185,11 @@ class CouponController extends Controller
         if ($coupon->maxCost == '') {
             $coupon->maxCost = null;
         }
-    
+
+        $couponType = $coupon->coupon_discount_type;
+        if($couponType['type'] != config('constants.DISCOUNT_TYPE_PERCENTAGE'))
+            dd('پیاده سازی نشده است');
+
         if (!$coupon->save()) {
             return response()->json([
                 'message' => 'خطا در درج کد',
