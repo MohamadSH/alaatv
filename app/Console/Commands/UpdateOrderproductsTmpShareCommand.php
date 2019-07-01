@@ -39,13 +39,17 @@ class UpdateOrderproductsTmpShareCommand extends Command
      */
     public function handle()
     {
+        $orderproducts = Orderproduct::whereHas('order' , function ($q){
+            $q->whereNotIn('orderstatus_id' , [config('constants.ORDER_STATUS_OPEN' , config('constants.ORDER_STATUS_OPEN_DONATE'))]);
+        });
+
         if ($this->confirm('Do you want to process all of orderproducts or just new ones? type yes if you want all of them', true)) {
             // Process all of orderproducts
-            $orderproducts = Orderproduct::all(); //ToDo : improve performance , pagination could help
+            $orderproducts = $orderproducts->get();
         }else{
             // Process new orderproducts with no cache
-            $orderproducts = Orderproduct::whereNull('tmp_share_order')->get();
-        };
+            $orderproducts = $orderproducts->whereNull('tmp_share_order')->get();
+        }
 
         if ($this->confirm('Found '.$orderproducts->count().' orderproducts , Do you want to proceed?', true)) {
             $bar = $this->output->createProgressBar($orderproducts->count());

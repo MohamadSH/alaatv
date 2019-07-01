@@ -616,12 +616,9 @@ class Orderproduct extends BaseModel
             $orderCouponDiscount = $myOrder->coupon_discount_type;
             if($orderCouponDiscount  !== false)
             {
-                $myOrderproductCount = $myOrder->get_purchased_orderproducts_count;
                 $couponDiscount = $orderCouponDiscount['discount'];
                 if($orderCouponDiscount['typeHint'] == 'percentage'){
                     $finalPrice = ($finalPrice * (1 - ($couponDiscount/100)));
-                }else{
-                    $finalPrice = $finalPrice - ($couponDiscount/$myOrderproductCount);
                 }
             }
         }
@@ -663,7 +660,7 @@ class Orderproduct extends BaseModel
 
         $donateOrderproductSum = $this->order->getDonateSum();
 
-        $shareOfOrder =  $orderPrice['totalCost'] == 0 ? 0 : (double)$finalPrice / ($orderPrice['totalCost'] - $donateOrderproductSum);
+        $shareOfOrder =   ($orderPrice['totalCost'] == 0 || $orderPrice['totalCost'] == $donateOrderproductSum) ? 0 : (double)$finalPrice / ($orderPrice['totalCost'] - $donateOrderproductSum);
         OrderproductRepo::refreshOrderproductTmpShare($this, $shareOfOrder);
 
         return $shareOfOrder;
