@@ -626,7 +626,6 @@ class Orderproduct extends BaseModel
         return $finalPrice;
     }
 
-
     /**
      * @return array
      */
@@ -687,5 +686,15 @@ class Orderproduct extends BaseModel
         }
 
         return $shareOfOrder;
+    }
+
+    public function getSharedCostOfTransactionAttribute(){
+        $myOrder = $this->order;
+        $donateOrderproductSum = $myOrder->getDonateSum();
+
+        $shareOfOrder = $this->tmp_share_order;
+
+        return $shareOfOrder * ($myOrder->none_wallet_successful_transactions->sum('cost') - $donateOrderproductSum);
+
     }
 }

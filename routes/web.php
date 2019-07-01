@@ -134,7 +134,7 @@ Route::group(['middleware' => 'auth'], function () {
         ]
     );
     
-    Route::get('sales-report', 'Web\AdminController@salesReport')->name('user.asset');
+    Route::get('sales-report', 'Web\AdminController@adminSalesReport')->name('admin.salesReport');
     
     Route::get('ordersAdmin', 'Web\AdminController@adminOrder');
     Route::get('smsAdmin', 'Web\AdminController@adminSMS');
@@ -170,6 +170,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post("walletBot", "Web\BotsController@walletBot");
     Route::post("excelBot", "Web\BotsController@excelBot");
     Route::get("zarinpalbot", "Web\BotsController@ZarinpalVerifyPaymentBot");
+    Route::post("salesReportBot", "Web\BotsController@salesReportBot");
     Route::post("registerUserAndGiveOrderproduct", "Web\AdminController@registerUserAndGiveOrderproduct");
     Route::get("specialAddUser", "Web\AdminController@specialAddUser");
     Route::get("v/asiatech", "Web\UserController@voucherRequest");
