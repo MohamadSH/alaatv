@@ -133,8 +133,7 @@ class TransactionController extends Controller
             $transactionOrderproductTotalCost      = 0;
             $transactionOrderproductTotalExtraCost = 0;
             if (isset($productsId) && !in_array(0, $productsId)) {
-                $products = Product::whereIn('id', $productsId)
-                    ->get();
+                $products = Product::whereIn('id', $productsId)->get();
                 foreach ($products as $product) {
                     if ($product->producttype_id != config("constants.PRODUCT_TYPE_SIMPLE")) {
                             $productsId = array_merge($productsId,
@@ -161,8 +160,7 @@ class TransactionController extends Controller
                 else {
                     $transactions = $transactions->whereIn('order_id', Orderproduct::whereIn('product_id', $productsId)->pluck('order_id'));
                 }
-            }
-            else {
+            } else {
                 if ($request->has("checkoutStatusEnable")) {
                     $checkoutStatuses = $request->get("checkoutStatuses");
                     if (in_array(0, $checkoutStatuses)) {
@@ -186,7 +184,6 @@ class TransactionController extends Controller
                         ->pluck('order_id'));
             }
             
-            //        if(isset($paymentMethodsId) && !in_array(0, $paymentMethodsId)){
             if ($request->has('paymentMethods')) {
                 $paymentMethodsId = $request->get('paymentMethods');
                 $transactions     = $transactions->whereIn('paymentmethod_id', $paymentMethodsId);
@@ -227,28 +224,22 @@ class TransactionController extends Controller
                     if ($request->has("checkoutStatusEnable")) {
                         $checkoutStatuses = $request->get("checkoutStatuses");
                         if (in_array(0, $checkoutStatuses)) {
-                            $transactionOrderproducts = $transaction->order->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                                ->where(function ($q
-                                ) use ($productsId) {
+                            $transactionOrderproducts = $transaction->order->normalOrderproducts()
+                                ->where(function ($q) use ($productsId) {
                                     $q->whereIn("product_id", $productsId)
                                         ->whereNull("checkoutstatus_id");
-                                })
-                                ->get();
+                                })->get();
                         }
-                        else {
-                            $transactionOrderproducts = $transaction->order->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-                                ->where(function ($q
-                                ) use ($productsId) {
+                        else{
+                            $transactionOrderproducts = $transaction->order->normalOrderproducts()
+                                ->where(function ($q) use ($productsId) {
                                     $q->whereIn("product_id", $productsId);
-                                })
-                                ->get();
+                                })->get();
                         }
                     }
-                    else {
+                    else{
                         $transactionOrderproducts = $transaction->order->normalOrderproducts()
-                            ->whereIn("product_id",
-                                $productsId)
-                            ->get();
+                            ->whereIn("product_id", $productsId)->get();
                     }
                     
                     $cost      = 0;
