@@ -82,6 +82,7 @@ class AdminController extends Controller
                 'adminLottery',
                 'registerUserAndGiveOrderproduct',
                 'specialAddUser',
+                'adminSalesReport',
             ],
         ]);
 
@@ -982,8 +983,8 @@ class AdminController extends Controller
         $pageName = 'adminSalesReport';
         $products   = Product::orderBy('created_at' , 'desc')->get();
         $ajaxActionUrl = 'salesReportBot';
-        $checkoutStatuses       = Checkoutstatus::pluck('displayName', 'id')
-            ->toArray();
+        $checkoutStatuses       = Checkoutstatus::pluck('displayName', 'id')->toArray();
+        $checkoutStatuses[0]   = 'همه';
         $checkoutStatuses       = array_sort_recursive($checkoutStatuses);
 
         return view('admin.salesReport', compact('products', 'pageName', 'ajaxActionUrl' , 'checkoutStatuses'));
