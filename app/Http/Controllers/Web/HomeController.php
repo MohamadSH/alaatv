@@ -1185,6 +1185,24 @@ class HomeController extends Controller
         return view('admin.topicsTree.index', compact('mote2', 'treePathData', 'htmlPrint', 'lastUpdatedByLernito'));
     }
 
+    public function live(Request $request){
+        $now = Carbon::now();
+        $start = Carbon::createFromFormat('Y-m-d H:i:s', '2019-02-07 20:00:00');
+        $finish = Carbon::createFromFormat('Y-m-d H:i:s', '2019-02-07 22:00:00');
+
+//        dump($start , $now , $finish , $now->between($start, $finish,true));
+        if($now < $start) {
+            $live = 'off';
+        }elseif($now >= $start && $now < $finish){
+            $live = 'on';
+        }else{
+            $live = 'finished';
+        }
+
+        $live = false;
+        return view('pages.liveView' , compact('product' , 'live'));
+    }
+
     private function getLastUpdatedByLernito(): array
     {
         $Riazi                = new Riazi();
