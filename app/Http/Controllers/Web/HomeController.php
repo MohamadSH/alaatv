@@ -1207,23 +1207,23 @@ class HomeController extends Controller
                 $live = 'on';
                 $message = '';
             }else{
-                $fullVideo = [
-                    [
-                        'src' => 'https://cdn.sanatisharif.ir/media/528/HD_720p/528066seve.mp4',
-                        'res' => '720p',
-                        'label' => 'کیفیت عالی',
-                    ],
-                    [
-                        'src' => 'https://cdn.sanatisharif.ir/media/528/hq/528066seve.mp4',
-                        'res' => '480p',
-                        'label' => 'کیفیت بالا',
-                    ],
-                    [
-                        'src' => 'https://cdn.sanatisharif.ir/media/528/240p/528066seve.mp4',
-                        'res' => '240p',
-                        'label' => 'کیفیت متوسط',
-                    ]
-                ];
+//                $fullVideo = [
+//                    [
+//                        'src' => 'https://cdn.sanatisharif.ir/media/528/HD_720p/528066seve.mp4',
+//                        'res' => '720p',
+//                        'label' => 'کیفیت عالی',
+//                    ],
+//                    [
+//                        'src' => 'https://cdn.sanatisharif.ir/media/528/hq/528066seve.mp4',
+//                        'res' => '480p',
+//                        'label' => 'کیفیت بالا',
+//                    ],
+//                    [
+//                        'src' => 'https://cdn.sanatisharif.ir/media/528/240p/528066seve.mp4',
+//                        'res' => '240p',
+//                        'label' => 'کیفیت متوسط',
+//                    ]
+//                ];
                 $message = 'پخش آنلاید به اتمام رسیده است.';
 //                $live = 'finished';
                 $live = 'off';
