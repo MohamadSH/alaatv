@@ -1188,7 +1188,7 @@ class HomeController extends Controller
     public function live(Request $request){
         $user = $request->user();
         $now = Carbon::now('Asia/Tehran');
-        $start = Carbon::parse('2019-07-02 20:00:00','Asia/Tehran');
+        $start = Carbon::parse('2019-07-02 20:15:00','Asia/Tehran');
         $finish = Carbon::parse('2019-07-02 22:01:30','Asia/Tehran');
 
         if($user->hasRole('admin'))
