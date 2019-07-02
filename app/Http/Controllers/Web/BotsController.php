@@ -3169,6 +3169,8 @@ class BotsController extends Controller
     }
 
     public function salesReportBot(Request $request){
+        $timeFilterEnable = $request->dateFilterEnable;
+        $checkoutEnable = $request->checkoutEnable;
         $product = $request->get('product_id');
         if(!isset($product)){
             return response()->json(['message'=>'Product not found'],Response::HTTP_BAD_REQUEST);
@@ -3187,10 +3189,9 @@ class BotsController extends Controller
 //            ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])
 //            ->get();
 
-        $timeFilterEnable = $request->dateFilterEnable;
         $since = null;
         $till = null ;
-        if(isset($timeFilterEnable))
+        if($timeFilterEnable)
         {
             $since = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ' , $request->since)[0].' 00:00:00');
             $till = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ' , $request->till)[0].' 23:59:59');
@@ -3208,9 +3209,15 @@ class BotsController extends Controller
             $totalSale += $toAdd;
         }
 
+        $checkoutResult = false;
+        if($checkoutEnable){
+            $checkoutResult = Orderproduct::whereIn('id' , $orderproducts->pluck('id')->toArray())->update(['checkoutstatus_id' => config('constants.ORDERPRODUCT_CHECKOUT_STATUS_PAID')]);
+        }
+
         return response()->json([
             'totalNumber'   => $totalNubmer,
             'totalSale'     => number_format((int)$totalSale),
+            'checkoutResult'    =>  $checkoutResult,
         ]);
     }
 }
