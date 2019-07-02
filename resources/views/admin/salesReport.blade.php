@@ -127,7 +127,30 @@
                             </div>
                         </div>
                     </div>
-    
+
+{{--                    <div class="form-group">--}}
+{{--                        <div class="row">--}}
+{{--                                <label class = "control-label" style = "float: right;">--}}
+{{--                                    <label class = "mt-checkbox mt-checkbox-outline">--}}
+{{--                                        @include("admin.filters.checkoutStatusFilter" , ["dropdownId"=>"checkoutStatus" , "checkboxId"=>"checkoutStatusEnable"])--}}
+{{--                                        <span class = "bg-grey-cararra"></span>--}}
+{{--                                    </label>--}}
+{{--                                </label>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+
+                    <div class="form-group">
+                        <div class="row">
+                                <label class = "control-label" style = "float: right;">
+                                    <label class = "mt-checkbox mt-checkbox-outline">
+                                        فیلتر شده ها را تسویه حساب کن
+                                        <input type = "checkbox" id = "checkoutEnable" value = "1" name = "checkoutEnable">
+                                        <span class = "bg-grey-cararra"></span>
+                                    </label>
+                                </label>
+                        </div>
+                    </div>
+
                     <button type="button" class="btn m-btn--pill m-btn--air btn-info btnFilter">فیلتر</button>
                     
                     <div class="reportOfFilter">
@@ -137,6 +160,10 @@
                         <br>
                         <span class="report2">
                         
+                        </span>
+                        <br>
+                        <span class="report3">
+
                         </span>
                     </div>
                     
@@ -192,11 +219,16 @@
                     state: "success",
                 });
 
-                var dateFilterEnable = null;
+                var dateFilterEnable = 0;
                 if($('#dateFilterCreatedTimeEnable').is(':checked')){
                     dateFilterEnable = 1;
                 }
-                
+
+                var checkoutEnable = 0;
+                if($('#checkoutEnable').is(':checked')){
+                    checkoutEnable = 1;
+                }
+
                 $.ajax({
                     url: ajaxActionUrl,
                     type: 'POST',
@@ -205,14 +237,26 @@
                         since: $('#dateFilterCreatedSinceAlt').val(),
                         till: $('#dateFilterCreatedTillAlt').val(),
                         dateFilterEnable: dateFilterEnable,
+                        checkoutEnable : checkoutEnable,
                     },
                     dataType: 'json',
                     success: function (data) {
-                        if (data.totalNumber) {
+                        if (data.totalNumber != null && data.totalNumber != undefined) {
 
                             $('.reportOfFilter').fadeIn();
                             $('.report1').html('تعداد کل: ' + data.totalNumber);
                             $('.report2').html('فروش کل(تومان): ' + data.totalSale);
+
+                            if(data.checkoutResult == null || data.checkoutResult== undefined )
+                            {
+                                $('.report3').html('وضعیت تسویه نامشخص');
+                            }
+                            else if(data.checkoutResult)
+                            {
+                                $('.report3').html('تسویه با موفقیت انجام شد');
+                            }else{
+                                $('.report3').html('تسویه ای انجام نشد');
+                            }
 
                         } else {
 
