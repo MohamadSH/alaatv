@@ -978,10 +978,14 @@ class AdminController extends Controller
         return view('admin.indexBlock', compact(['pageName', 'blockTypes']));
     }
 
-    public function salesReport(Request $request) {
+    public function adminSalesReport(Request $request) {
         $pageName = 'adminSalesReport';
-        $products   = Product::all();
-        $ajaxActionUrl = '';
-        return view('admin.salesReport', compact('products', 'pageName', 'ajaxActionUrl'));
+        $products   = Product::orderBy('created_at' , 'desc')->get();
+        $ajaxActionUrl = 'salesReportBot';
+        $checkoutStatuses       = Checkoutstatus::pluck('displayName', 'id')
+            ->toArray();
+        $checkoutStatuses       = array_sort_recursive($checkoutStatuses);
+
+        return view('admin.salesReport', compact('products', 'pageName', 'ajaxActionUrl' , 'checkoutStatuses'));
     }
 }

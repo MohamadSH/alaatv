@@ -13,6 +13,7 @@ use App\Console\Commands\CategoryTree\Tajrobi;
 use Maatwebsite\ExcelLight\Spout\{Row, Sheet, Reader, Writer};
 use App\{Bon,
     Orderproduct,
+    Repositories\OrderproductRepo,
     User,
     Order,
     Content,
@@ -63,7 +64,7 @@ class BotsController extends Controller
     public function __construct(Response $response, Websitesetting $setting)
     {
         $this->middleware('role:admin', [
-            'only' => ['bot', 'smsBot', 'checkDisableContentTagBot', 'tagBot', 'pointBot',],
+            'only' => ['bot', 'smsBot', 'checkDisableContentTagBot', 'tagBot', 'pointBot','ZarinpalVerifyPaymentBot','salesReportBot'],
         ]);
         $this->response = $response;
         $this->setting  = $setting->setting;
@@ -1170,41 +1171,37 @@ class BotsController extends Controller
             }
 
             if($request->has('query')){
-                $users = User::whereHas('orders' , function ($q){
-                    $q->whereIn('orderstatus_id' , [2,5])
-                        ->whereIn('paymentstatus_id' , [3,4])
-                        ->whereHas('orderproducts' , function ($q2){
-                            $q2->whereIn('product_id' , [312]);
-                        });
-                });
+                $orders = Order::where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'))
+                                ->where('paymentstatus_id' , config('constants.PAYMENT_STATUS_INDEBTED'))
+                                ->whereDoesntHave('transactions' , function ($q){
+                                    $q->where('transactionstatus_id' , config('constants.TRANSACTION_STATUS_SUCCESSFUL'));
+                                });
 
-                dd($users->toSql());
+                dd($orders->toSql());
+            }
 
+            if($request->has('product') && $request->has('contents'))
+            {
+                $product = Product::find($request->get('product'));
+                $contents = \App\Content::whereIn('id' , $request->get('contents'))->get();
+                $tags = [];
+                foreach ($contents as $content) {
+                    array_push($tags , 'c-'.$content->id);
+                }
 
+                $params = [
+                    "tags" => json_encode($tags, JSON_UNESCAPED_UNICODE),
+                ];
 
-                $users = User::whereHas('orders' , function ($q){
-                    $q->whereIn('orderstatus_id' , [2,5])
-                        ->whereIn('paymentstatus_id' , [3,4])
-                        ->whereHas('orderproducts' , function ($q2){
-                            $q2->whereIn('product_id' , [281,282,283,284,292,287,293,285,286,288,289,290,291]);
-                        });
-                })->whereHas('orders', function ($q3) {
-                    $q3->whereIn('orderstatus_id' , [2,5])
-                        ->whereIn('paymentstatus_id' , [3,4])
-                        ->whereHas('orderproducts' , function ($q2){
-                            $q2->whereIn('product_id' , [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342]);
-                        });
-                });
+                if (isset($product->created_at) && strlen($product->created_at) > 0) {
+                    $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $product->created_at)->timestamp;
+                }
 
-                $orderproducts = Orderproduct::select(DB::raw('COUNT("*") as count'))
-                            ->whereIn('product_id' , [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342 ])
-                            ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
-                            ->whereHas('order', function ($q3) {
-                                $q3->whereIn('orderstatus_id' , [2,5])
-                                    ->whereIn('paymentstatus_id' , [3,4]);
-                            });
+                $response = $this->sendRequest(config("constants.TAG_API_URL")."id/relatedproduct/".$product->id, "PUT", $params);
+                dump($response);
 
-                dd($orderproducts->get()->first()->count);
+                dd('done');
+
             }
 
         } catch (\Exception    $e) {
@@ -3169,5 +3166,58 @@ class BotsController extends Controller
         $zarinpal = new Zarinpal(config('Zarinpal.merchantID'));
         $result = $zarinpal->verify($cost, $authority);
         dd($result);
+    }
+
+    public function salesReportBot(Request $request){
+        $timeFilterEnable = $request->dateFilterEnable;
+        $checkoutEnable = $request->checkoutEnable;
+        $product = $request->get('product_id');
+        if(!isset($product)){
+            return response()->json(['message'=>'Product not found'],Response::HTTP_BAD_REQUEST);
+        }
+
+//        $orderproducts =  Orderproduct::whereIn('product_id', [$product])
+//            ->where(function ($q2){
+//                $q2->where('checkoutstatus_id' , config('constants.ORDERPRODUCT_CHECKOUT_STATUS_UNPAID'))
+//                    ->orWhereNull('checkoutstatus_id');
+//            })
+//            ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
+//            ->whereHas('order', function ($q) {
+//                $q->whereIn('orderstatus_id', [config('constants.ORDER_STATUS_CLOSED') , config('constants.ORDER_STATUS_POSTED')])
+//                    ->whereIn('paymentstatus_id', [config('constants.PAYMENT_STATUS_PAID') , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')]);
+//            })
+//            ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])
+//            ->get();
+
+        $since = null;
+        $till = null ;
+        if($timeFilterEnable)
+        {
+            $since = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ' , $request->since)[0].' 00:00:00');
+            $till = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ' , $request->till)[0].' 23:59:59');
+        }
+
+        $orderproducts = OrderproductRepo::getPurchasedOrderproducts([$product] , $since , $till , OrderproductRepo::NOT_CHECKEDOUT_ORDERPRODUCT)
+            ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])
+            ->get();
+
+        $totalNubmer = $orderproducts->count();
+
+        $totalSale = 0;
+        foreach ($orderproducts as $orderproduct) {
+            $toAdd = $orderproduct->shared_cost_of_transaction ;
+            $totalSale += $toAdd;
+        }
+
+        $checkoutResult = false;
+        if($checkoutEnable){
+            $checkoutResult = Orderproduct::whereIn('id' , $orderproducts->pluck('id')->toArray())->update(['checkoutstatus_id' => config('constants.ORDERPRODUCT_CHECKOUT_STATUS_PAID')]);
+        }
+
+        return response()->json([
+            'totalNumber'   => $totalNubmer,
+            'totalSale'     => number_format((int)$totalSale),
+            'checkoutResult'    =>  $checkoutResult,
+        ]);
     }
 }

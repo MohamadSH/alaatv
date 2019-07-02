@@ -16,7 +16,7 @@ use League\Flysystem\Sftp\SftpAdapter;
 use App\Console\Commands\CategoryTree\Ensani;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\{DB, File, Input, Route, Config, Storage};
-use App\{
+use App\{Repositories\OrderproductRepo,
     User,
     Event,
     Major,
@@ -101,30 +101,6 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        if($request->has('product') && $request->has('contents'))
-        {
-            $product = Product::find($request->get('product'));
-            $contents = \App\Content::whereIn('id' , $request->get('contents'))->get();
-            $tags = [];
-            foreach ($contents as $content) {
-                array_push($tags , 'c-'.$content->id);
-            }
-
-            $params = [
-                "tags" => json_encode($tags, JSON_UNESCAPED_UNICODE),
-            ];
-
-            if (isset($product->created_at) && strlen($product->created_at) > 0) {
-                $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $product->created_at)->timestamp;
-            }
-
-            $response = $this->sendRequest(config("constants.TAG_API_URL")."id/relatedproduct/".$product->id, "PUT", $params);
-            dump($response);
-
-            dd('done');
-
-        }
-
         return (array) optional($request->user('alaatv'))->id;
     }
     
@@ -1207,6 +1183,24 @@ class HomeController extends Controller
         $htmlPrint .= '</ul>';
         
         return view('admin.topicsTree.index', compact('mote2', 'treePathData', 'htmlPrint', 'lastUpdatedByLernito'));
+    }
+
+    public function live(Request $request){
+        $now = Carbon::now();
+        $start = Carbon::createFromFormat('Y-m-d H:i:s', '2019-02-07 20:00:00');
+        $finish = Carbon::createFromFormat('Y-m-d H:i:s', '2019-02-07 22:00:00');
+
+//        dump($start , $now , $finish , $now->between($start, $finish,true));
+        if($now < $start) {
+            $live = 'off';
+        }elseif($now >= $start && $now < $finish){
+            $live = 'on';
+        }else{
+            $live = 'finished';
+        }
+
+        $live = false;
+        return view('pages.liveView' , compact('product' , 'live'));
     }
 
     private function getLastUpdatedByLernito(): array

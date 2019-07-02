@@ -28,4 +28,12 @@ class ProductRepository
     {
         return Product::where('tags', 'like', '%' . $teacherName . '%');
     }
+
+    public static function getUnPurchasableProducts(){
+        return [Product::DONATE_PRODUCT_5_HEZAR , Product::CUSTOM_DONATE_PRODUCT , Product::ASIATECH_PRODUCT];
+    }
+
+    public static function getDonateProducts(){
+        return [Product::DONATE_PRODUCT_5_HEZAR , Product::CUSTOM_DONATE_PRODUCT ];
+    }
 }

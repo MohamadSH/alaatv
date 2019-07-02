@@ -137,8 +137,7 @@ class ProductController extends Controller
     
         return view('pages.product-search', compact('products', 'tags'));
     }
-    
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -1397,7 +1396,7 @@ class ProductController extends Controller
             318 => [
                 'name' => 'همایش 45 تست کنکور ریاضی',
                 'url' => action('Web\ProductController@show', 318),
-                'hours' => 25
+                'hours' => 30
             ],
             328 => [
                 'name' => 'همایش ریاضی تجربی(آقای نباخته)',
@@ -1412,7 +1411,7 @@ class ProductController extends Controller
             322 => [
                 'name' => 'همایش ریاضی تجربی(آقای ثابتی)',
                 'url' => action('Web\ProductController@show', 322),
-                'hours' => 17
+                'hours' => 18
             ],
             306 => [
                 'name' => 'همایش فیزیک',
@@ -1659,34 +1658,5 @@ class ProductController extends Controller
         $videos         = $this->mekeIntroVideosArray($hqVideo);
         return $videos;
     }
-    
-    /**
-     * @param  Product  $product
-     * @param  User     $user
-     *
-     * @return bool
-     */
-    private function checkUserPurchasedProduct(Product $product, User $user): bool
-    {
-//        $contentColletion = collect();
-        $userAssetsCollection    = null;
-        $productHasBeenPurchased = false;
-        if ($user) {
-            $userAssetsCollection = $user->getDashboardBlocks();
-            $userAssetsCollection = $userAssetsCollection->pluck('products');
-            foreach ($userAssetsCollection as $blockProducts) {
-//                $blockProductsNotPluck = $blockProducts;
-                $productHasBeenPurchased = $blockProducts->pluck('id')
-                    ->contains($product->id);
-                if ($productHasBeenPurchased) {
-//                    foreach ($blockProductsNotPluck->pluck('sets') as $item) {
-//                        $contentColletion->push($item);
-//                    }
-                    break;
-                }
-            }
-        }
-//        dd($contentColletion);
-        return $productHasBeenPurchased;
-    }
+
 }
