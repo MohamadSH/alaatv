@@ -982,6 +982,10 @@ class AdminController extends Controller
         $pageName = 'adminSalesReport';
         $products   = Product::orderBy('created_at' , 'desc')->get();
         $ajaxActionUrl = 'salesReportBot';
-        return view('admin.salesReport', compact('products', 'pageName', 'ajaxActionUrl'));
+        $checkoutStatuses       = Checkoutstatus::pluck('displayName', 'id')
+            ->toArray();
+        $checkoutStatuses       = array_sort_recursive($checkoutStatuses);
+
+        return view('admin.salesReport', compact('products', 'pageName', 'ajaxActionUrl' , 'checkoutStatuses'));
     }
 }
