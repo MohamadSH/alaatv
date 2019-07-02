@@ -3174,16 +3174,29 @@ class BotsController extends Controller
             return response()->json(['message'=>'Product not found'],Response::HTTP_BAD_REQUEST);
         }
 
-        $orderproducts =  Orderproduct::whereIn('product_id', [$product])
-            ->where(function ($q2){
-                $q2->where('checkoutstatus_id' , config('constants.ORDERPRODUCT_CHECKOUT_STATUS_UNPAID'))
-                    ->orWhereNull('checkoutstatus_id');
-            })
-            ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
-            ->whereHas('order', function ($q) {
-                $q->whereIn('orderstatus_id', [config('constants.ORDER_STATUS_CLOSED') , config('constants.ORDER_STATUS_POSTED')])
-                    ->whereIn('paymentstatus_id', [config('constants.PAYMENT_STATUS_PAID') , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')]);
-            })
+//        $orderproducts =  Orderproduct::whereIn('product_id', [$product])
+//            ->where(function ($q2){
+//                $q2->where('checkoutstatus_id' , config('constants.ORDERPRODUCT_CHECKOUT_STATUS_UNPAID'))
+//                    ->orWhereNull('checkoutstatus_id');
+//            })
+//            ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
+//            ->whereHas('order', function ($q) {
+//                $q->whereIn('orderstatus_id', [config('constants.ORDER_STATUS_CLOSED') , config('constants.ORDER_STATUS_POSTED')])
+//                    ->whereIn('paymentstatus_id', [config('constants.PAYMENT_STATUS_PAID') , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')]);
+//            })
+//            ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])
+//            ->get();
+
+        $timeFilterEnable = $request->dateFilterEnable;
+        $since = null;
+        $till = null ;
+        if(isset($timeFilterEnable))
+        {
+            $since = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ' , $request->since)[0].' 00:00:00');
+            $till = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ' , $request->till)[0].' 23:59:59');
+        }
+
+        $orderproducts = OrderproductRepo::getPurchasedOrderproducts([$product] , $since , $till , OrderproductRepo::NOT_CHECKEDOUT_ORDERPRODUCT)
             ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])
             ->get();
 
@@ -3191,34 +3204,7 @@ class BotsController extends Controller
 
         $totalSale = 0;
         foreach ($orderproducts as $orderproduct) {
-            /** @var Orderproduct $orderproduct */
-            if(isset($orderproduct->tmp_final_cost))
-            {
-                $finalPrice    = $orderproduct->tmp_final_cost;
-            }else{
-                $price = $orderproduct->obtainOrderproductCost(false);
-                $finalPrice    = $price['final'];
-                $extraCost     = $price['extraCost'];
-
-                OrderproductRepo::refreshOrderproductTmpPrice($orderproduct, $finalPrice , $extraCost);
-            }
-
-            /** @var Order $myOrder */
-            $myOrder                = $orderproduct->order;
-
-            if(isset($myOrder->coupon_id)){
-                $finalPrice = $orderproduct->affectCouponOnPrice($finalPrice);
-            }
-
-            $orderPrice = $myOrder->obtainOrderCost();
-
-            $donateOrderproductSum = $myOrder->getDonateSum();
-
-            //ToDo put share in tmp in mysql
-            $shareOfOrder = $orderPrice['totalCost'] == 0 ? 0 : (double)$finalPrice /  ($orderPrice['totalCost']-$donateOrderproductSum);
-
-            $toAdd = $shareOfOrder * ($myOrder->none_wallet_successful_transactions->sum('cost') - $donateOrderproductSum ) ;
-
+            $toAdd = $orderproduct->shared_cost_of_transaction ;
             $totalSale += $toAdd;
         }
 
