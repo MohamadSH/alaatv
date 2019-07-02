@@ -212,20 +212,9 @@ class SalesReportController extends Controller
         return Cache::tags(['salesReport'])->remember('sr:getPurchasedOrderproducts:'.md5(implode(',', $products)),
             config('constants.CACHE_5'),
             static function () use ($products) {
-//                return Orderproduct::whereIn('product_id', $products)
-//                    ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
-//                    ->whereHas('order', function ($q) {
-//                        $q->whereIn('orderstatus_id', [config('constants.ORDER_STATUS_CLOSED') , config('constants.ORDER_STATUS_POSTED')])
-//                            ->whereIn('paymentstatus_id', [config('constants.PAYMENT_STATUS_PAID') , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')]);
-////                            ->where('completed_at' , '>=' ,'2019-04-21 00:00:00'); //avale ordibehesh 98
-//                    })
-//                    ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])
-//                    ->get();
-
                 return OrderproductRepo::getPurchasedOrderproducts($products)
                     ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])
                     ->get();
-
             });
     }
     
@@ -342,32 +331,6 @@ class SalesReportController extends Controller
             $toAdd = Cache::tags(['salesReport'])
                 ->remember($key, config('constants.CACHE_600'), function () use ($orderproduct) {
                     return $orderproduct->shared_cost_of_transaction ;
-//                    if(isset($orderproduct->tmp_final_cost))
-//                    {
-//                        $finalPrice    = $orderproduct->tmp_final_cost;
-//                    }else{
-//                        $price = $orderproduct->obtainOrderproductCost(false);
-//                        $finalPrice    = $price['final'];
-//                        $extraCost     = $price['extraCost'];
-//
-//                        OrderproductRepo::refreshOrderproductTmpPrice($orderproduct, $finalPrice , $extraCost);
-//                    }
-//
-//                    /** @var Order $myOrder */
-//                    $myOrder                = $orderproduct->order;
-//
-//                    if(isset($myOrder->coupon_id)){
-//                        $finalPrice = $orderproduct->affectCouponOnPrice($finalPrice);
-//                    }
-//
-//                    $orderPrice = $myOrder->obtainOrderCost();
-//
-//                    $donateOrderproductSum = $myOrder->getDonateSum();
-//
-//                    //ToDo put share in tmp in mysql
-//                    $shareOfOrder = $orderPrice['totalCost'] == 0 ? 0 : (double)$finalPrice /  ($orderPrice['totalCost']-$donateOrderproductSum);
-//
-//                    return $shareOfOrder * ($myOrder->none_wallet_successful_transactions->sum('cost') - $donateOrderproductSum ) ;
                 });
     
             $sum += $toAdd;
