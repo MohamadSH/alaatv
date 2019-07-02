@@ -1,4 +1,4 @@
-@extends("app")
+@extends('app')
 
 @section('page-css')
     <link href="{{ mix('/css/page-error.css') }}" rel="stylesheet" type="text/css"/>
@@ -21,24 +21,99 @@
 @section("content")
 @if(in_array($live,['on' , 'finished']))
     <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
+        <div class="col-12 col-md-8 mx-auto">
+    
+    
+            <div class="m-portlet m-portlet--primary m-portlet--head-solid-bg">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+{{--                            <span class="m-portlet__head-icon">--}}
+{{--                                <i class="flaticon-line-graph"></i>--}}
+{{--                            </span>--}}
+                            <h3 class="m-portlet__head-text">
+                                @if($live == 'on')
+                                    پخش آنلاین آقای ثابتی
+                                @else
+                                    دانلود
+                                @endif
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="m-portlet__head-tools">
+    
+                        @if($live == 'on')
+                        
+                        @else
+                            <ul class="m-portlet__nav">
+                                <li class="m-portlet__nav-item m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push" m-dropdown-toggle="hover">
+                                    <a href="#" class="m-portlet__nav-link m-dropdown__toggle dropdown-toggle btn btn-sm  btn-light m-btn m-btn--pill">
+                                        دانلود
+                                    </a>
+                                    <div class="m-dropdown__wrapper">
+                                        <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
+                                        <div class="m-dropdown__inner">
+                                            <div class="m-dropdown__body">
+                                                <div class="m-dropdown__content">
+                                                    <ul class="m-nav">
+                                                        <li class="m-nav__section m-nav__section--first">
+                                                            <span class="m-nav__section-text">Quick Actions</span>
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a href="" class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-share"></i>
+                                                                <span class="m-nav__link-text">Activity</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a href="" class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-chat-1"></i>
+                                                                <span class="m-nav__link-text">Messages</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a href="" class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-info"></i>
+                                                                <span class="m-nav__link-text">FAQ</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a href="" class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-lifebuoy"></i>
+                                                                <span class="m-nav__link-text">Support</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-nav__separator m-nav__separator--fit">
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a href="#" class="btn btn-outline-danger m-btn m-btn--pill m-btn--wide btn-sm">Cancel</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        @endif
+                        
+                    </div>
+                </div>
+                <div class="m-portlet__body">
+                
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            
+            
             <div class="m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage profileMenuPage-filmVaJozve">
                     <div class="m-portlet__head text-center" >
-                        @if($live == 'on')
-                            <h4  style="width: 100%">
-                              <i class="fa fa-video-camera font-dark"></i>
-                              <span class="caption-subject font-dark sbold uppercase"> پخش آنلاین آقای ثابتی</span>
-                            </h4>
-                        @else
-{{--                            <h4  style="width: 100%">--}}
-{{--                            <i class="fa fa-cloud-download font-dark"></i>--}}
-{{--                            <span class="caption-subject font-dark sbold uppercase"> دانلود</span>--}}
-{{--                            </h4>--}}
-                        @endif
                     </div>
               <div class="m-portlet__body form">
-                <iframe src="http://sanatisharif.ir/SanatiSharif-Video/11/26/6203" height="467" width="710" style="border: hidden;" frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
                 @if($live == 'on')
                     <div class="row">
                         <div class="col-md-1"></div>
