@@ -1191,18 +1191,23 @@ class HomeController extends Controller
         $start = Carbon::parse('2019-07-02 20:00:00','Asia/Tehran');
         $finish = Carbon::parse('2019-07-02 22:00:00','Asia/Tehran');
 
-        if($now < $start) {
-            $live = 'off';
-        }elseif($now >= $start && $now < $finish){
-            $live = 'on';
-        }else{
-            $live = 'finished';
-        }
-
         if($user->hasRole('admin'))
         {
-            $live = 'on';
+            if($now->isBefore($start) || $now->between($start, $finish)) {
+                $live = 'on';
+            }elseif($now->isAfter($finish)) {
+                $live = 'finished';
+            }
+        }else{
+            if($now->isBefore($start)) {
+                $live = 'off';
+            }elseif($now->between($start, $finish)){
+                $live = 'on';
+            }else{
+                $live = 'finished';
+            }
         }
+
         return view('pages.liveView' , compact('product' , 'live'));
     }
 
