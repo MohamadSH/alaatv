@@ -215,7 +215,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('RemoveCoupon', "Web\OrderController@removeCoupon");
     });
     Route::group(['prefix' => 'product'], function () {
-        Route::get('{product}/live', 'Web\ProductController@showLive');
         Route::get('{product}/createConfiguration', 'Web\ProductController@createConfiguration');
         Route::post('{product}/makeConfiguration', 'Web\ProductController@makeConfiguration');
         Route::get('{product}/editAttributevalues', 'Web\ProductController@editAttributevalues');
@@ -242,7 +241,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('attributeset', 'Web\AttributesetController');
     Route::resource('attributegroup', 'Web\AttributegroupController');
     Route::resource('userupload', 'Web\UseruploadController');
-//    Route::resource('verificationmessage', 'Web\VerificationmessageController');
+//  Route::resource('verificationmessage', 'Web\VerificationmessageController');
     Route::resource('contact', 'Web\ContactController');
     Route::resource('phone', 'Web\PhoneController');
     Route::resource('afterloginformcontrol', 'Web\AfterLoginFormController');
@@ -276,6 +275,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('listContents/{set}', "Web\SetController@indexContent");
     Route::resource('set', 'Web\SetController');
+
+    Route::get('live' , [HomeController::class, 'live']);
 });
 
 Route::group(['prefix' => 'c'], function () {
