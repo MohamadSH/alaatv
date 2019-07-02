@@ -3169,6 +3169,7 @@ class BotsController extends Controller
     }
 
     public function salesReportBot(Request $request){
+        $checkoutEnable = $request->checkoutEnable;
         $product = $request->get('product_id');
         if(!isset($product)){
             return response()->json(['message'=>'Product not found'],Response::HTTP_BAD_REQUEST);
@@ -3208,9 +3209,15 @@ class BotsController extends Controller
             $totalSale += $toAdd;
         }
 
+        $checkoutResult = false;
+        if(isset($checkoutEnable) && $checkoutEnable){
+            $checkoutResult = Orderproduct::whereIn('id' , $orderproducts->pluck('id')->toArray())->update(['checkoutstatus_id' => 1]);
+        }
+
         return response()->json([
             'totalNumber'   => $totalNubmer,
             'totalSale'     => number_format((int)$totalSale),
+            'checkoutResult'    =>  $checkoutResult,
         ]);
     }
 }
