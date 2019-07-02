@@ -1203,7 +1203,7 @@ class HomeController extends Controller
         }else{
             if($now->isBefore($start)) {
                 $live = 'off';
-                $message = 'پخش آنلاین امشب (۱۱ خرداد) ساعت 20:00 آغاز خواهد شد';
+                $message = 'پخش آنلاین امشب (۱۱ خرداد) ساعت 20:15 آغاز خواهد شد';
             }elseif($now->between($start, $finish)){
                 $live = 'on';
                 $message = '';
