@@ -650,16 +650,20 @@ class Orderproduct extends BaseModel
         $myOrder = $this->order;
 
         if(!isset($myOrder))
+        {
+            OrderproductRepo::refreshOrderproductTmpShare($this, 0);
             return 0;
+        }
 
         if (isset($myOrder->coupon_id)) {
             $finalPrice = $this->affectCouponOnPrice($finalPrice);
         }
         $orderPrice = $myOrder->obtainOrderCost();
 
-        $donateOrderproductSum = $this->order->getDonateSum();
+        $donateOrderproductSum = $myOrder->getDonateSum();
 
         $shareOfOrder =   ($orderPrice['totalCost'] == 0 || $orderPrice['totalCost'] == $donateOrderproductSum) ? 0 : (double)$finalPrice / ($orderPrice['totalCost'] - $donateOrderproductSum);
+//        $shareOfOrder = $orderPrice['totalCost'] == 0 ? 0 : (double)$finalPrice /  ($orderPrice['totalCost']-$donateOrderproductSum);
         OrderproductRepo::refreshOrderproductTmpShare($this, $shareOfOrder);
 
         return $shareOfOrder;
@@ -695,6 +699,5 @@ class Orderproduct extends BaseModel
         $shareOfOrder = $this->tmp_share_order;
 
         return $shareOfOrder * ($myOrder->none_wallet_successful_transactions->sum('cost') - $donateOrderproductSum);
-
     }
 }
