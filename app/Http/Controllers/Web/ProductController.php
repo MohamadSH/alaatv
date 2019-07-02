@@ -137,8 +137,7 @@ class ProductController extends Controller
     
         return view('pages.product-search', compact('products', 'tags'));
     }
-    
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -1659,34 +1658,5 @@ class ProductController extends Controller
         $videos         = $this->mekeIntroVideosArray($hqVideo);
         return $videos;
     }
-    
-    /**
-     * @param  Product  $product
-     * @param  User     $user
-     *
-     * @return bool
-     */
-    private function checkUserPurchasedProduct(Product $product, User $user): bool
-    {
-//        $contentColletion = collect();
-        $userAssetsCollection    = null;
-        $productHasBeenPurchased = false;
-        if ($user) {
-            $userAssetsCollection = $user->getDashboardBlocks();
-            $userAssetsCollection = $userAssetsCollection->pluck('products');
-            foreach ($userAssetsCollection as $blockProducts) {
-//                $blockProductsNotPluck = $blockProducts;
-                $productHasBeenPurchased = $blockProducts->pluck('id')
-                    ->contains($product->id);
-                if ($productHasBeenPurchased) {
-//                    foreach ($blockProductsNotPluck->pluck('sets') as $item) {
-//                        $contentColletion->push($item);
-//                    }
-                    break;
-                }
-            }
-        }
-//        dd($contentColletion);
-        return $productHasBeenPurchased;
-    }
+
 }
