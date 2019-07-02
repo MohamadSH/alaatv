@@ -79,6 +79,14 @@ var LazyLoad = function () {
             // Bootstrap 4 carousel lazy load
             carousel_loadHeightOfImageAndLoading();
             carousel_loadImageSrc();
+            if ($('#carouselMainSlideShow').length === 1) {
+                $('#m_aside_left_hide_toggle').on('click', function() {
+                    carousel_loadHeightOfImageAndLoading();
+                });
+                $(window).on('resize', function() {
+                    carousel_loadHeightOfImageAndLoading();
+                });
+            }
         },
 
 
