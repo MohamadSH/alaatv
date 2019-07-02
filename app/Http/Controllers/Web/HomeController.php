@@ -1186,11 +1186,11 @@ class HomeController extends Controller
     }
 
     public function live(Request $request){
-        $now = Carbon::now();
-        $start = Carbon::createFromFormat('Y-m-d H:i:s', '2019-02-07 20:00:00');
-        $finish = Carbon::createFromFormat('Y-m-d H:i:s', '2019-02-07 22:00:00');
+        $user = $request->user();
+        $now = Carbon::now('Asia/Tehran');
+        $start = Carbon::parse('2019-07-02 20:00:00','Asia/Tehran');
+        $finish = Carbon::parse('2019-07-02 22:00:00','Asia/Tehran');
 
-//        dump($start , $now , $finish , $now->between($start, $finish,true));
         if($now < $start) {
             $live = 'off';
         }elseif($now >= $start && $now < $finish){
@@ -1199,7 +1199,10 @@ class HomeController extends Controller
             $live = 'finished';
         }
 
-        $live = false;
+        if($user->hasRole('admin'))
+        {
+            $live = 'on';
+        }
         return view('pages.liveView' , compact('product' , 'live'));
     }
 
