@@ -14,7 +14,7 @@ class AlterTableOrderproductsAddTmpshare extends Migration
     public function up()
     {
         Schema::table('orderproducts', function (Blueprint $table) {
-            $table->integer('tmp_share_order')->nullable()->after('tmp_extra_cost')->comment('مبلغی که سهم این آبتم از قیمت کل است');
+            $table->double('tmp_share_order')->nullable()->after('tmp_extra_cost')->comment('مبلغی که سهم این آبتم از قیمت کل است');
         });
     }
 
